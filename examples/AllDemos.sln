@@ -97,6 +97,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "HelloWorld\He
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformAbstract", "..\PlatformAbstract\PlatformAbstract.csproj", "{3E4AABA8-D85F-4922-88C6-5C1B2D2308FB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "a_MyMini", "a_MyMini", "{9460D9F0-F598-4C18-B118-EC5D72536D3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mini", "..\my_mini\Mini\Mini.csproj", "{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg", "..\my_mini\MiniAgg\MiniAgg.csproj", "{4D5CE655-58FA-4523-8E46-738B941E9E47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -800,6 +806,36 @@ Global
 		{3E4AABA8-D85F-4922-88C6-5C1B2D2308FB}.Release64|Mixed Platforms.ActiveCfg = Release64|Any CPU
 		{3E4AABA8-D85F-4922-88C6-5C1B2D2308FB}.Release64|Mixed Platforms.Build.0 = Release64|Any CPU
 		{3E4AABA8-D85F-4922-88C6-5C1B2D2308FB}.Release64|x86.ActiveCfg = Release64|Any CPU
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Debug|x86.ActiveCfg = Debug|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Debug|x86.Build.0 = Debug|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release|Any CPU.ActiveCfg = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release|Mixed Platforms.Build.0 = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release|x86.ActiveCfg = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release|x86.Build.0 = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release64|Any CPU.ActiveCfg = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release64|Mixed Platforms.ActiveCfg = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release64|Mixed Platforms.Build.0 = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release64|x86.ActiveCfg = Release|x86
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}.Release64|x86.Build.0 = Release|x86
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release64|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release64|Any CPU.Build.0 = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release64|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release64|Mixed Platforms.Build.0 = Release|Any CPU
+		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release64|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -836,6 +872,8 @@ Global
 		{E4A36D88-953C-4587-A445-B63F626BDC8A} = {CB0173EF-5564-4835-8BBB-07124D7357AD}
 		{8DEE954D-1DCF-4C08-8C81-E847C8A48E80} = {CB0173EF-5564-4835-8BBB-07124D7357AD}
 		{6944B672-ED03-4A8E-BA31-804EEB788507} = {CB0173EF-5564-4835-8BBB-07124D7357AD}
+		{A634550F-EDAD-4A1D-872C-730C2FD8C1C9} = {9460D9F0-F598-4C18-B118-EC5D72536D3C}
+		{4D5CE655-58FA-4523-8E46-738B941E9E47} = {9460D9F0-F598-4C18-B118-EC5D72536D3C}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = DemoRunner\DemoRunner.csproj
