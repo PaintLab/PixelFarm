@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
+using MatterHackers.Agg.Image; 
 
 namespace Mini
 {
@@ -41,31 +41,22 @@ namespace Mini
             }
             graphics2D.PushTransform();
             return graphics2D;
-        }
+        } 
         void OnInitialize(int width, int height)
         {
             bitmapBackBuffer.Initialize(width, height, 32);
-            NewGraphics2D().Clear(new RGBA_Floats(1, 1, 1, 1));
-        }
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            this.isMouseDown = true;
-            base.OnMouseDown(e);
+            NewGraphics2D().Clear(new RGBA_Floats(1, 1, 1, 1)); 
         }
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            this.isMouseDown = false;
             base.OnMouseUp(e);
+        }
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
-
-            if (this.isMouseDown)
-            {
-                lion.MoveTheLion(e.X, e.Y);
-                Invalidate();
-            }
-
             base.OnMouseMove(e);
         }
         protected override void OnPaint(PaintEventArgs e)
