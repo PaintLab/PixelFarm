@@ -14,7 +14,7 @@ namespace Mini
 {
     public partial class Form1 : Form
     {
-
+        bool isMouseDown;
         Lion lion;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
         public Form1()
@@ -42,20 +42,30 @@ namespace Mini
             }
             graphics2D.PushTransform();
             return graphics2D;
-        }
-
+        } 
         void OnInitialize(int width, int height)
         {
             bitmapBackBuffer.Initialize(width, height, 32);
-            NewGraphics2D().Clear(new RGBA_Floats(1, 1, 1, 1));
-
+            NewGraphics2D().Clear(new RGBA_Floats(1, 1, 1, 1)); 
+        }
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+        }
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
         }
         protected override void OnPaint(PaintEventArgs e)
         {
             int width = 800;
-            int height = 600; 
-            var graphics = bitmapBackBuffer.backingImageBufferByte.NewGraphics2D(); 
-            lion.OnDraw(graphics); 
+            int height = 600;
+            var graphics = bitmapBackBuffer.backingImageBufferByte.NewGraphics2D();
+            lion.OnDraw(graphics);
 
             RectangleInt intRect = new RectangleInt(0, 0, width, height);
             Graphics g1 = e.Graphics;

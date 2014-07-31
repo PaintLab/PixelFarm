@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
-      <HintPath>..\..\AggTests\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\AggTests\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -143,9 +143,9 @@
     <Compile Include="VertexSource\VertexSourceIO.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\VectorMath\VectorMath.csproj">
-      <Project>{D3E41B4E-BFBB-44CA-94C8-95C00F754FDD}</Project>
-      <Name>VectorMath</Name>
+    <ProjectReference Include="..\MiniVectorMath\MiniVectorMath.csproj">
+      <Project>{16026D20-5321-4FFB-AEF7-4A1C9AEC32B2}</Project>
+      <Name>MiniVectorMath</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
