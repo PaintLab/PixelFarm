@@ -37,7 +37,7 @@ namespace MatterHackers.Agg
 {
     public class MiniWidget
     {
-        
+
         public virtual void OnDraw(Graphics2D graphics2D)
         {
             //for (int i = 0; i < Children.Count; i++)
@@ -144,8 +144,8 @@ namespace MatterHackers.Agg
             //alphaSlider.ValueChanged += new EventHandler(alphaSlider_ValueChanged);
             //alphaSlider.Text = "Alpha {0:F3}";
             //alphaSlider.Value = 0.1;
-            this.Width = 100;
-            this.Height = 100;
+            this.Width = 500;
+            this.Height = 500;
         }
         public int Width { get; set; }
         public int Height { get; set; }
@@ -190,29 +190,18 @@ namespace MatterHackers.Agg
             lionScale = Math.Sqrt(y * y + x * x) / 100.0;
         }
 
-        //protected bool MoveTheLion(MouseEventArgs mouseEvent)
-        //{
-        //    double x = mouseEvent.X;
-        //    double y = mouseEvent.Y;
-        //    if (mouseEvent.Button == MouseButtons.Left)
-        //    {
-        //        int width = (int)Width;
-        //        int height = (int)Height;
-        //        UpdateTransform(width, height, x, y);
-        //        Invalidate();
-        //        return true;
-        //    }
+        public bool MoveTheLion(int mouseX, int mouseY)
+        {
+            double x = mouseX;
+            double y = mouseY;
 
-        //    if (mouseEvent.Button == MouseButtons.Right)
-        //    {
-        //        skewX = x;
-        //        skewY = y;
-        //        Invalidate();
-        //        return true;
-        //    }
+            int width = (int)Width;
+            int height = (int)Height;
+            UpdateTransform(width, height, x, y);
 
-        //    return false;
-        //}
+            return true;
+
+        }
 
         //public override void OnMouseDown(MouseEventArgs mouseEvent)
         //{
