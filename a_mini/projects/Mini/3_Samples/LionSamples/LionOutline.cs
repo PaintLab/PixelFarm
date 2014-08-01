@@ -68,13 +68,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
         {
             this.Width = 500;
             this.Height = 500;
-        }
-
-        //public override void OnParentChanged(EventArgs e)
-        //{
-
-        //}
-
+        } 
         void NeedsRedraw(object sender, EventArgs e)
         {
 
@@ -132,71 +126,6 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
             base.OnDraw(graphics2D);
         }
-
-
-        void DoTransform(double width, double height, double x, double y)
-        {
-            x -= width / 2;
-            y -= height / 2;
-            angle = Math.Atan2(y, x);
-            spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
-        }
-        public bool MoveTheLion(int mouseX, int mouseY)
-        {
-            double x = mouseX;
-            double y = mouseY;
-
-            int width = (int)Width;
-            int height = (int)Height;
-            UpdateTransform(width, height, x, y);
-            return true;
-        }
-        void UpdateTransform(double width, double height, double x, double y)
-        {
-            x -= width / 2;
-            y -= height / 2;
-            angle = Math.Atan2(y, x);
-            spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
-        }
-        //public bool MoveTheLion(MouseEventArgs mouseEvent)
-        //{
-        //    double x = mouseEvent.X;
-        //    double y = mouseEvent.Y;
-        //    if (mouseEvent.Button == MouseButtons.Left)
-        //    {
-        //        int width = (int)Width;
-        //        int height = (int)Height;
-        //        DoTransform(width, height, x, y);
-        //        Invalidate();
-        //        return true;
-        //    }
-
-        //    if (mouseEvent.Button == MouseButtons.Right)
-        //    {
-        //        skewX = x;
-        //        skewY = y;
-        //        Invalidate();
-        //        return true;
-        //    }
-        //    return false;
-        //}
-        //public override void OnMouseDown(MouseEventArgs mouseEvent)
-        //{
-        //    base.OnMouseDown(mouseEvent);
-
-        //    if (Focused && MouseCaptured)
-        //    {
-        //        MoveTheLion(mouseEvent);
-        //    }
-        //}
-
-        //public override void OnMouseMove(MouseEventArgs mouseEvent)
-        //{
-        //    base.OnMouseMove(mouseEvent);
-        //    if (Focused && MouseCaptured)
-        //    {
-        //        MoveTheLion(mouseEvent);
-        //    }
-        //}
+         
     }
 }

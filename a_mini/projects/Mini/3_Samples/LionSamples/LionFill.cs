@@ -56,30 +56,49 @@ namespace MatterHackers.Agg.Sample_LionFill
     public class LionFill : BasicSprite
     {
 
+
         LionShape lionShape = new LionShape();
+        Affine transform = Affine.NewIdentity();
+        VertexSourceApplyTransform transformedPathStorage;
+
         public LionFill()
         {
             this.Width = 500;
             this.Height = 500;
+
+
+            //---------------------------------------------
+            //change alpha
+            byte alpha = 255;// (byte)(alphaSlider.Value * 255); 
+            int j = lionShape.NumPaths;
+            var colorBuffer = lionShape.Colors;
+            for (int i = lionShape.NumPaths - 1; i >= 0; --i)
+            {
+                colorBuffer[i].Alpha0To255 = alpha;
+            }
+            //---------------------------------------------
+        }
+        
+        public override bool Move(int mouseX, int mouseY)
+        {
+            bool result = base.Move(mouseX, mouseY);
+            transformedPathStorage = null;        
+            return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            // (byte)(alphaSlider.Value * 255);
-            byte alpha = 255;
-            for (int i = 0; i < lionShape.NumPaths; i++)
+
+            if (transformedPathStorage == null)
             {
-                lionShape.Colors[i].Alpha0To255 = alpha;
+                transform = Affine.NewIdentity();
+                transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
+                transform *= Affine.NewScaling(spriteScale, spriteScale);
+                transform *= Affine.NewRotation(angle + Math.PI);
+                transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
+                transform *= Affine.NewTranslation(Width / 2, Height / 2);
+                transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
             }
 
-            Affine transform = Affine.NewIdentity();
-            transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-            transform *= Affine.NewScaling(spriteScale, spriteScale);
-            transform *= Affine.NewRotation(angle + Math.PI);
-            transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-            transform *= Affine.NewTranslation(Width / 2, Height / 2);
-
-            // This code renders the lion:
-            VertexSourceApplyTransform transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
             graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndex, lionShape.NumPaths);
 
             base.OnDraw(graphics2D);

@@ -196,7 +196,8 @@ namespace MatterHackers.Agg.VertexSource
 
                     if (m_coord_x != null)
                     {
-                        for (int i = 0; i < m_num_vertices; i++)
+                        //copy old buffer to new buffer 
+                        for (int i = m_num_vertices - 1; i >= 0; --i)
                         {
                             newX[i] = m_coord_x[i];
                             newY[i] = m_coord_y[i];
@@ -246,7 +247,7 @@ namespace MatterHackers.Agg.VertexSource
         }
 
         public void remove_all() { vertices.remove_all(); iteratorIndex = 0; }
-        public void free_all()   { vertices.free_all();   iteratorIndex = 0; }
+        public void free_all() { vertices.free_all(); iteratorIndex = 0; }
 
         public bool Equals(IVertexSource other, double maxError = .0001, bool oldStyle = true)
         {
@@ -326,7 +327,7 @@ namespace MatterHackers.Agg.VertexSource
         //--------------------------------------------------------------------
         public int start_new_path()
         {
-            if(!ShapePath.is_stop(vertices.last_command()))
+            if (!ShapePath.is_stop(vertices.last_command()))
             {
                 vertices.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandStop);
             }
@@ -336,11 +337,11 @@ namespace MatterHackers.Agg.VertexSource
 
         public void rel_to_abs(ref double x, ref double y)
         {
-            if(vertices.total_vertices() != 0)
+            if (vertices.total_vertices() != 0)
             {
                 double x2;
                 double y2;
-                if(ShapePath.is_vertex(vertices.last_vertex(out x2, out y2)))
+                if (ShapePath.is_vertex(vertices.last_vertex(out x2, out y2)))
                 {
                     x += x2;
                     y += y2;
@@ -433,8 +434,8 @@ namespace MatterHackers.Agg.VertexSource
         /// <param name="yControl"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void curve3(double xControl, double yControl, 
-                                   double x,   double y)
+        public void curve3(double xControl, double yControl,
+                                   double x, double y)
         {
             vertices.AddVertex(xControl, yControl, ShapePath.FlagsAndCommand.CommandCurve3);
             vertices.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve3);
@@ -450,7 +451,7 @@ namespace MatterHackers.Agg.VertexSource
         public void curve3_rel(double dx_ctrl, double dy_ctrl, double dx_to, double dy_to)
         {
             rel_to_abs(ref dx_ctrl, ref dy_ctrl);
-            rel_to_abs(ref dx_to,   ref dy_to);
+            rel_to_abs(ref dx_to, ref dy_to);
             vertices.AddVertex(dx_ctrl, dy_ctrl, ShapePath.FlagsAndCommand.CommandCurve3);
             vertices.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve3);
         }
@@ -466,12 +467,12 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x0;
             double y0;
-            if(ShapePath.is_vertex(vertices.last_vertex(out x0, out y0)))
+            if (ShapePath.is_vertex(vertices.last_vertex(out x0, out y0)))
             {
                 double x_ctrl;
                 double y_ctrl;
                 ShapePath.FlagsAndCommand cmd = vertices.prev_vertex(out x_ctrl, out y_ctrl);
-                if(ShapePath.is_curve(cmd))
+                if (ShapePath.is_curve(cmd))
                 {
                     x_ctrl = x0 + x0 - x_ctrl;
                     y_ctrl = y0 + y0 - y_ctrl;
@@ -498,18 +499,18 @@ namespace MatterHackers.Agg.VertexSource
             curve3(dx_to, dy_to);
         }
 
-        public void curve4(double x_ctrl1, double y_ctrl1, 
-                                   double x_ctrl2, double y_ctrl2, 
-                                   double x_to,    double y_to)
+        public void curve4(double x_ctrl1, double y_ctrl1,
+                                   double x_ctrl2, double y_ctrl2,
+                                   double x_to, double y_to)
         {
             vertices.AddVertex(x_ctrl1, y_ctrl1, ShapePath.FlagsAndCommand.CommandCurve4);
             vertices.AddVertex(x_ctrl2, y_ctrl2, ShapePath.FlagsAndCommand.CommandCurve4);
             vertices.AddVertex(x_to, y_to, ShapePath.FlagsAndCommand.CommandCurve4);
         }
 
-        public void curve4_rel(double dx_ctrl1, double dy_ctrl1, 
-                                       double dx_ctrl2, double dy_ctrl2, 
-                                       double dx_to,    double dy_to)
+        public void curve4_rel(double dx_ctrl1, double dy_ctrl1,
+                                       double dx_ctrl2, double dy_ctrl2,
+                                       double dx_to, double dy_to)
         {
             rel_to_abs(ref dx_ctrl1, ref dy_ctrl1);
             rel_to_abs(ref dx_ctrl2, ref dy_ctrl2);
@@ -519,17 +520,17 @@ namespace MatterHackers.Agg.VertexSource
             vertices.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve4);
         }
 
-        public void curve4(double x_ctrl2, double y_ctrl2, 
-                                   double x_to,    double y_to)
+        public void curve4(double x_ctrl2, double y_ctrl2,
+                                   double x_to, double y_to)
         {
             double x0;
             double y0;
-            if(ShapePath.is_vertex(last_vertex(out x0, out y0)))
+            if (ShapePath.is_vertex(last_vertex(out x0, out y0)))
             {
                 double x_ctrl1;
                 double y_ctrl1;
                 ShapePath.FlagsAndCommand cmd = prev_vertex(out x_ctrl1, out y_ctrl1);
-                if(ShapePath.is_curve(cmd))
+                if (ShapePath.is_curve(cmd))
                 {
                     x_ctrl1 = x0 + x0 - x_ctrl1;
                     y_ctrl1 = y0 + y0 - y_ctrl1;
@@ -543,11 +544,11 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void curve4_rel(double dx_ctrl2, double dy_ctrl2, 
-                                       double dx_to,    double dy_to)
+        public void curve4_rel(double dx_ctrl2, double dy_ctrl2,
+                                       double dx_to, double dy_to)
         {
             rel_to_abs(ref dx_ctrl2, ref dy_ctrl2);
-            rel_to_abs(ref dx_to,    ref dy_to);
+            rel_to_abs(ref dx_to, ref dy_to);
             curve4(dx_ctrl2, dy_ctrl2, dx_to, dy_to);
         }
 
@@ -639,30 +640,30 @@ namespace MatterHackers.Agg.VertexSource
         //--------------------------------------------------------------------
         public int arrange_polygon_orientation(int start, ShapePath.FlagsAndCommand orientation)
         {
-            if(orientation == ShapePath.FlagsAndCommand.FlagNone) return start;
-            
+            if (orientation == ShapePath.FlagsAndCommand.FlagNone) return start;
+
             // Skip all non-vertices at the beginning
-            while(start < vertices.total_vertices() && 
+            while (start < vertices.total_vertices() &&
                   !ShapePath.is_vertex(vertices.command(start))) ++start;
 
             // Skip all insignificant move_to
-            while(start+1 < vertices.total_vertices() && 
+            while (start + 1 < vertices.total_vertices() &&
                   ShapePath.is_move_to(vertices.command(start)) &&
-                  ShapePath.is_move_to(vertices.command(start+1))) ++start;
+                  ShapePath.is_move_to(vertices.command(start + 1))) ++start;
 
             // Find the last vertex
             int end = start + 1;
-            while(end < vertices.total_vertices() && 
+            while (end < vertices.total_vertices() &&
                   !ShapePath.is_next_poly(vertices.command(end))) ++end;
 
-            if(end - start > 2)
+            if (end - start > 2)
             {
-                if(perceive_polygon_orientation(start, end) != orientation)
+                if (perceive_polygon_orientation(start, end) != orientation)
                 {
                     // Invert polygon, set orientation flag, and skip all end_poly
                     invert_polygon(start, end);
                     ShapePath.FlagsAndCommand PathAndFlags;
-                    while(end < vertices.total_vertices() &&
+                    while (end < vertices.total_vertices() &&
                           ShapePath.is_end_poly(PathAndFlags = vertices.command(end)))
                     {
                         vertices.modify_command(end++, PathAndFlags | orientation);// Path.set_orientation(cmd, orientation));
@@ -674,12 +675,12 @@ namespace MatterHackers.Agg.VertexSource
 
         public int arrange_orientations(int start, ShapePath.FlagsAndCommand orientation)
         {
-            if(orientation != ShapePath.FlagsAndCommand.FlagNone)
+            if (orientation != ShapePath.FlagsAndCommand.FlagNone)
             {
-                while(start < vertices.total_vertices())
+                while (start < vertices.total_vertices())
                 {
                     start = arrange_polygon_orientation(start, orientation);
-                    if(ShapePath.is_stop(vertices.command(start)))
+                    if (ShapePath.is_stop(vertices.command(start)))
                     {
                         ++start;
                         break;
@@ -691,10 +692,10 @@ namespace MatterHackers.Agg.VertexSource
 
         public void arrange_orientations_all_paths(ShapePath.FlagsAndCommand orientation)
         {
-            if(orientation != ShapePath.FlagsAndCommand.FlagNone)
+            if (orientation != ShapePath.FlagsAndCommand.FlagNone)
             {
                 int start = 0;
-                while(start < vertices.total_vertices())
+                while (start < vertices.total_vertices())
                 {
                     start = arrange_orientations(start, orientation);
                 }
@@ -708,7 +709,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             int i;
             double x, y;
-            for(i = 0; i < vertices.total_vertices(); i++)
+            for (i = 0; i < vertices.total_vertices(); i++)
             {
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(i, out x, out y);
                 if (ShapePath.is_vertex(PathAndFlags))
@@ -722,7 +723,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             int i;
             double x, y;
-            for(i = 0; i < vertices.total_vertices(); i++)
+            for (i = 0; i < vertices.total_vertices(); i++)
             {
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(i, out x, out y);
                 if (ShapePath.is_vertex(PathAndFlags))
@@ -796,7 +797,7 @@ namespace MatterHackers.Agg.VertexSource
                     ShapePath.FlagsAndCommand PathAndFlags0 = last_vertex(out x0, out y0);
                     if (ShapePath.is_vertex(PathAndFlags0))
                     {
-                        if(agg_math.calc_distance(x, y, x0, y0) > agg_math.vertex_dist_epsilon)
+                        if (agg_math.calc_distance(x, y, x0, y0) > agg_math.vertex_dist_epsilon)
                         {
                             if (ShapePath.is_move_to(PathAndFlags)) PathAndFlags = ShapePath.FlagsAndCommand.CommandLineTo;
                             vertices.AddVertex(x, y, PathAndFlags);
@@ -851,7 +852,7 @@ namespace MatterHackers.Agg.VertexSource
         public void translate(double dx, double dy, int path_id)
         {
             int num_ver = vertices.total_vertices();
-            for(; path_id < num_ver; path_id++)
+            for (; path_id < num_ver; path_id++)
             {
                 double x, y;
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(path_id, out x, out y);
@@ -890,7 +891,7 @@ namespace MatterHackers.Agg.VertexSource
         public void transform(Transform.Affine trans, int path_id)
         {
             int num_ver = vertices.total_vertices();
-            for(; path_id < num_ver; path_id++)
+            for (; path_id < num_ver; path_id++)
             {
                 double x, y;
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(path_id, out x, out y);

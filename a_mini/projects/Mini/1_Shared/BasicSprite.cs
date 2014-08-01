@@ -43,7 +43,7 @@ namespace MatterHackers.Agg
         protected double spriteScale = 1.0;
         protected double skewX = 0;
         protected double skewY = 0;
-        
+
         public int Width { get; set; }
         public int Height { get; set; }
 
@@ -142,7 +142,7 @@ namespace MatterHackers.Agg
             spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
         }
 
-        public bool Move(int mouseX, int mouseY)
+        public virtual bool Move(int mouseX, int mouseY)
         {
             double x = mouseX;
             double y = mouseY;
@@ -154,5 +154,5 @@ namespace MatterHackers.Agg
             return true;
 
         }
-    } 
+    }
 }
