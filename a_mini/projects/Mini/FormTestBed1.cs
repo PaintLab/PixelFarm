@@ -7,27 +7,30 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MatterHackers.Agg;
-using MatterHackers.Agg.Image; 
+using MatterHackers.Agg.Image;
 
 namespace Mini
 {
-    public partial class Form1 : Form
+    public partial class FormTestBed1 : Form
     {
         bool isMouseDown;
-        Lion lion;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
-        public Form1()
+        ExampleBase exampleBase;
+
+        public FormTestBed1()
         {
             InitializeComponent();
-            lion = new Lion();
             this.Load += new EventHandler(Form1_Load);
         }
-
         void Form1_Load(object sender, EventArgs e)
         {
             OnInitialize(800, 600);
         }
-
+        public void LoadExample(ExampleBase exampleBase)
+        {
+            this.exampleBase = exampleBase;
+            exampleBase.Init();
+        }
         Graphics2D NewGraphics2D()
         {
             Graphics2D graphics2D;
@@ -41,22 +44,30 @@ namespace Mini
             }
             graphics2D.PushTransform();
             return graphics2D;
-        } 
+        }
         void OnInitialize(int width, int height)
         {
             bitmapBackBuffer.Initialize(width, height, 32);
-            NewGraphics2D().Clear(new RGBA_Floats(1, 1, 1, 1)); 
-        }
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
+            NewGraphics2D().Clear(new RGBA_Floats(1, 1, 1, 1));
         }
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            this.isMouseDown = true;
             base.OnMouseDown(e);
+        }
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            this.isMouseDown = false;
+            base.OnMouseUp(e);
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            if (this.isMouseDown)
+            {
+                exampleBase.MouseDrag(e.X, e.Y);
+                
+                Invalidate();
+            }
             base.OnMouseMove(e);
         }
         protected override void OnPaint(PaintEventArgs e)
@@ -64,11 +75,12 @@ namespace Mini
             int width = 800;
             int height = 600;
             var graphics = bitmapBackBuffer.backingImageBufferByte.NewGraphics2D();
-            lion.OnDraw(graphics);
 
+            //--------------------------------
+            exampleBase.Draw(graphics);
+            //--------------------------------
             RectangleInt intRect = new RectangleInt(0, 0, width, height);
             Graphics g1 = e.Graphics;
-
             bitmapBackBuffer.UpdateHardwareSurface(intRect);
 
             //WidgetForWindowsFormsBitmap.copyTime.Restart();

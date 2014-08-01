@@ -39,7 +39,7 @@ using MatterHackers.Agg;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.RasterizerScanline;
 
-namespace Mini 
+namespace Mini
 {
     internal class WindowsFormsBitmapBackBuffer
     {
@@ -76,7 +76,8 @@ namespace Mini
                 if (!externallyLocked && !currentlyLocked)
                 {
                     currentlyLocked = true;
-                    bitmapData = windowsBitmap.LockBits(new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
+                    bitmapData = windowsBitmap.LockBits(
+                        new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
                 }
                 int backBufferStrideInBytes = backingImageBufferByte.StrideInBytes();
                 int backBufferStrideInInts = backBufferStrideInBytes / 4;
@@ -125,16 +126,22 @@ namespace Mini
                                 {
                                     byte* pSource = pSourceFixed;
                                     byte* pDestBuffer = bitmapDataScan0 + bitmapDataStride * backBufferHeightMinusOne;
-                                    for (int y = rect.Bottom; y < rect.Top; y++)
+
+                                    int rect_bottom = rect.Bottom;
+                                    int rect_top = rect.Top;
+                                    int rect_left = rect.Left;
+                                    int rect_right = rect.Right; 
+
+                                    for (int y = rect_bottom; y < rect_top; y++)
                                     {
                                         int* pSourceInt = (int*)pSource;
                                         pSourceInt += (backBufferStrideInBytes * y / 4);
-                                        
+
                                         int* pDestBufferInt = (int*)pDestBuffer;
                                         pDestBufferInt -= (bitmapDataStride * y / 4);
-                                        
-                                        for (int x = rect.Left; x < rect.Right; x++)
-                                        {
+
+                                        for (int x = rect_left; x < rect_right; x++)
+                                        {   
                                             pDestBufferInt[x] = pSourceInt[x];
                                         }
                                     }
