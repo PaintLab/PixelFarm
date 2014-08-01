@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="1_Shared\ExampleBase.cs" />
+    <Compile Include="3_Samples\DrawSamples\DrawSample.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>

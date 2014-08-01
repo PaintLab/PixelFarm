@@ -15,7 +15,7 @@ namespace Mini
 
     public abstract class ExampleBase
     {
-        public abstract void Init();
+        public virtual void Init() { }
         public abstract void Draw(MatterHackers.Agg.Graphics2D g);
         public virtual void MouseDrag(int x, int y) { }
     }
