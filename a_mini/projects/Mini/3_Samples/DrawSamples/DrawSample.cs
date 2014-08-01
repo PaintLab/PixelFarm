@@ -13,6 +13,8 @@ using MatterHackers.Agg.Font;
 using MatterHackers.VectorMath;
 using MatterHackers.Agg.Transform;
 
+using LayoutFarm.Canvas2dExtension;
+
 namespace MatterHackers.Agg.Sample_Draw
 {
     //from Agg's DrawAndSave    
@@ -34,10 +36,14 @@ namespace MatterHackers.Agg.Sample_Draw
                 g.Line(10, 100, 520, 50, new RGBA_Bytes(20, 200, 200));
                 // draw a filled box
                 g.FillRectangle(60, 260, 200, 280, RGBA_Bytes.Yellow);
+
                 // and an outline around it
                 g.Rectangle(60, 260, 200, 280, RGBA_Bytes.Magenta);
+                
                 // draw some text
                 g.DrawString("A Simple Example", 300, 400, 20);
+
+                g.DrawString2("A Simple Example2", 300, 350, 20);
             }
         }
     }
@@ -58,9 +64,12 @@ namespace MatterHackers.Agg.Sample_Draw
             Ellipse ellipseTest = new Ellipse(0, 0, 100, 50);
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
-                VertexSourceApplyTransform rotatedTransform = new VertexSourceApplyTransform(ellipseTest, Affine.NewRotation(MathHelper.DegreesToRadians(angleDegrees)));
+                
+                VertexSourceApplyTransform rotatedTransform = new VertexSourceApplyTransform(
+                    ellipseTest, Affine.NewRotation(MathHelper.DegreesToRadians(angleDegrees)));
                 VertexSourceApplyTransform rotatedAndTranslatedTransform = new VertexSourceApplyTransform(
                     rotatedTransform, Affine.NewTranslation(width / 2, 150));
+
                 g.Render(rotatedAndTranslatedTransform, RGBA_Bytes.Yellow);
                 Stroke ellipseOutline = new Stroke(rotatedAndTranslatedTransform, 3);
                 g.Render(ellipseOutline, RGBA_Bytes.Blue);
@@ -76,7 +85,9 @@ namespace MatterHackers.Agg.Sample_Draw
             g.Render(littlePoly, RGBA_Bytes.Cyan);
 
             // draw some text
-            TypeFacePrinter textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
+
+            var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
+
             IVertexSource translatedText = new VertexSourceApplyTransform(textPrinter, Affine.NewTranslation(
                 new Vector2(width / 2, height / 4 * 3)));
             g.Render(translatedText, RGBA_Bytes.Red);

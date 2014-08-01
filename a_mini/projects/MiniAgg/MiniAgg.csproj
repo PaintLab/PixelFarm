@@ -70,6 +70,8 @@
     <Compile Include="Array2D.cs" />
     <Compile Include="BorderDouble.cs" />
     <Compile Include="FloodFiller.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
     <Compile Include="Font\LiberationSansFont.cs" />
     <Compile Include="Font\StyledTypeFace.cs" />
     <Compile Include="Font\TextWrapping.cs" />
@@ -148,6 +150,7 @@
       <Name>MiniVectorMath</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

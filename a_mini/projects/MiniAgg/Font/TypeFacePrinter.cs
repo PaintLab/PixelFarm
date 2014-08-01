@@ -32,6 +32,8 @@ namespace MatterHackers.Agg.Font
     public enum Justification { Left, Center, Right };
     public enum Baseline { BoundsTop, BoundsCenter, TextCenter, Text, BoundsBottom };
 
+
+
     public class TypeFacePrinter : IVertexSource
     {
         StyledTypeFace typeFaceStyle;

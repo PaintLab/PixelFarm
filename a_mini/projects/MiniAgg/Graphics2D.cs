@@ -148,9 +148,9 @@ namespace MatterHackers.Agg
             Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public abstract void Render(IImageByte imageSource, 
-            double x, double y, 
-            double angleRadians, 
+        public abstract void Render(IImageByte imageSource,
+            double x, double y,
+            double angleRadians,
             double scaleX, double ScaleY);
 
         public abstract void Render(IImageFloat imageSource,
@@ -184,23 +184,31 @@ namespace MatterHackers.Agg
         public abstract void Clear(IColorType color);
 
         public void DrawString(string Text, double x, double y, double pointSize = 12,
-            Justification justification = Justification.Left, Baseline baseline = Baseline.Text, 
-            RGBA_Bytes color = new RGBA_Bytes(), bool drawFromHintedCach = false, RGBA_Bytes backgroundColor = new RGBA_Bytes())
+            Justification justification = Justification.Left,
+            Baseline baseline = Baseline.Text,
+            RGBA_Bytes color = new RGBA_Bytes(),
+            bool drawFromHintedCache = false,
+            RGBA_Bytes backgroundColor = new RGBA_Bytes())
         {
+
             TypeFacePrinter stringPrinter = new TypeFacePrinter(Text, pointSize, new Vector2(x, y), justification, baseline);
             if (color.Alpha0To255 == 0)
             {
                 color = RGBA_Bytes.Black;
             }
 
-            if(backgroundColor.Alpha0To255 != 0)
+            if (backgroundColor.Alpha0To255 != 0)
             {
                 FillRectangle(stringPrinter.LocalBounds, backgroundColor);
             }
 
-            stringPrinter.DrawFromHintedCache = drawFromHintedCach;
+            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
             stringPrinter.Render(this, color);
         }
+
+        
+
+
 
         public void Circle(Vector2 origin, double radius, RGBA_Bytes color)
         {
@@ -280,5 +288,13 @@ namespace MatterHackers.Agg
             throw new Exception("DEBUG is defined and should not be!");
 #endif
         }
+
+
+
+
+
+
+
+
     }
 }
