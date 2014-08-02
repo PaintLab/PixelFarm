@@ -43,6 +43,7 @@
     <Compile Include="0_Start\ExampleBase.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo.cs" />
+    <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\08_Blur\BlurSample.cs" />
     <Compile Include="3_Samples\10_PolygonClippingSample\clipping_lib\cliper.cs" />
     <Compile Include="3_Samples\10_PolygonClippingSample\GreateBritainPathStorage.cs" />
