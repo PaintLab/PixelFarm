@@ -11,9 +11,9 @@ using Mini;
 namespace MatterHackers.Agg
 {
 
-    [ExInfo(OrderCode = "06")]
-    [ExInfo("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
-    public class ComponentRendering : ExampleBase
+    [Info(OrderCode = "06")]
+    [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
+    public class ComponentRendering : DemoBase
     {
 
         public ComponentRendering()
@@ -21,13 +21,13 @@ namespace MatterHackers.Agg
             this.AlphaValue = 255;
         }
 
-        [ExConfig(MaxValue = 255)]
+        [DemoConfig(MaxValue = 255)]
         public int AlphaValue
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool UseBlackBlackground
         {
             get;

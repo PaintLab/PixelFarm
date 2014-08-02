@@ -15,9 +15,9 @@ using Mini;
 
 namespace MatterHackers.Agg.Sample_LionAlphaMask2
 {
-    [ExInfo(OrderCode = "05")]
-    [ExInfo(ExampleCategory.Bitmap, "Clipping to multiple rectangle regions")]
-    public class alpha_mask2_application : ExampleBase
+    [Info(OrderCode = "05")]
+    [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
+    public class alpha_mask2_application : DemoBase
     {
         byte[] alphaByteArray;
         int maskAlphaSliderValue = 100;
@@ -120,7 +120,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         }
 
 
-        [ExConfig(MinValue = 0, MaxValue = 255)]
+        [DemoConfig(MinValue = 0, MaxValue = 255)]
         public int MaskAlphaSliderValue
         {
             get

@@ -39,7 +39,7 @@ namespace Mini
         {
             //load examples
             Type[] allTypes = this.GetType().Assembly.GetTypes();
-            Type exBase = typeof(Mini.ExampleBase);
+            Type exBase = typeof(Mini.DemoBase);
             int j = allTypes.Length;
             List<ExampleAndDesc> exlist = new List<ExampleAndDesc>();
             for (int i = 0; i < j; ++i)

@@ -1,5 +1,7 @@
-﻿using System;
+﻿//2014 BSD,WinterDev
+//MatterHackers
 
+using System; 
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
@@ -8,12 +10,11 @@ using MatterHackers.Agg.RasterizerScanline;
 using Mini;
 namespace MatterHackers.Agg.Sample_TransCurve
 {
-    [ExInfo(OrderCode = "11")]
-    [ExInfo("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
-    public class trans_curve1_application : ExampleBase
+    [Info(OrderCode = "11")]
+    [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
+    public class trans_curve1_application : DemoBase
     {
-        PolygonEditWidget m_poly;
-
+        PolygonEditWidget m_poly; 
 
         double[] m_dx = new double[6];
         double[] m_dy = new double[6];
@@ -55,31 +56,31 @@ namespace MatterHackers.Agg.Sample_TransCurve
             //AddChild(m_animate);
         }
 
-        [ExConfig(MinValue = 10, MaxValue = 400)]
+        [DemoConfig(MinValue = 10, MaxValue = 400)]
         public int NumPoints
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool Animate
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool FixedLength
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool Close
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool PreserveXScale
         {
             get;

@@ -40,7 +40,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_Start\ExampleBase.cs" />
+    <Compile Include="0_Start\DemoBase.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
@@ -53,6 +53,7 @@
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
     <Compile Include="3_Samples\07_GouraudSample\GouraudSample.cs" />
+    <Compile Include="4_Samples_2\30_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -15,8 +15,8 @@ namespace MatterHackers.Agg.Sample_Blur
 {
 
 
-    [ExInfo(OrderCode = "08")]
-    [ExInfo(ExampleCategory.Bitmap, @"Now you can blur rendered images rather fast! There two algorithms are used: 
+    [Info(OrderCode = "08")]
+    [Info(DemoCategory.Bitmap, @"Now you can blur rendered images rather fast! There two algorithms are used: 
     Stack Blur by Mario Klingemann and Fast Recursive Gaussian Filter, described 
     here and here (PDF). The speed of both methods does not depend on the filter radius. 
     Mario's method works 3-5 times faster; it doesn't produce exactly Gaussian response, 
@@ -24,7 +24,7 @@ namespace MatterHackers.Agg.Sample_Blur
     point arithmetic and works slower. But it is true Gaussian filter, with theoretically 
     infinite impulse response. The radius (actually 2*sigma value) can be fractional 
     and the filter produces quite adequate result.")]
-    public class blur : ExampleBase
+    public class blur : DemoBase
     {
         //RadioButtonGroup m_method;
         //Slider m_radius;
@@ -81,37 +81,37 @@ namespace MatterHackers.Agg.Sample_Blur
             m_shadow_ctrl.line_color(new RGBA_Floats(0, 0.3, 0.5, 0.3));
         }
 
-        [ExConfig]
+        [DemoConfig]
         public bool FlattenCurveCheck
         {
             get;
             set;
         }
-        [ExConfig(MaxValue = 40)]
+        [DemoConfig(MaxValue = 40)]
         public double BlurRadius
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public BlurMethod BlurMethod
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool ChannelRedChecked
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool ChannelGreenCheced
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool ChannelBlueChecked
         {
             get;

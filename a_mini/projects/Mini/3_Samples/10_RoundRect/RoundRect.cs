@@ -9,8 +9,8 @@ using MatterHackers.VectorMath;
 using Mini;
 namespace MatterHackers.Agg.Sample_RoundRect
 {
-    [ExInfo(OrderCode = "10")]
-    [ExInfo("Yet another example dedicated to Gamma Correction. If you have a CRT monitor: The rectangle looks bad - "
+    [Info(OrderCode = "10")]
+    [Info("Yet another example dedicated to Gamma Correction. If you have a CRT monitor: The rectangle looks bad - "
                 + " the rounded corners are thicker than its side lines. First try to drag the “subpixel offset” control "
                 + "— it simply adds some fractional value to the coordinates. When dragging you will see that the rectangle"
                 + "is 'blinking'. Then increase 'Gamma' to about 1.5. The result will look almost perfect — the visual "
@@ -20,7 +20,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
                 + "value of gamma will be closer to 1.0 in both cases — black on white or white on black. There's no "
                 + "perfection in this world, but at least you can control Gamma in Anti-Grain Geometry :-).")]
 
-    public class rounded_rect_application : ExampleBase
+    public class rounded_rect_application : DemoBase
     {
         double[] m_x = new double[2];
         double[] m_y = new double[2];
@@ -77,31 +77,31 @@ namespace MatterHackers.Agg.Sample_RoundRect
             this.Gamma = 1.8;
 
         }
-        [ExConfig]
+        [DemoConfig]
         public bool FillRoundRect
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public bool WhiteOnBlack
         {
             get;
             set;
         }
-        [ExConfig(MaxValue = 50)]
+        [DemoConfig(MaxValue = 50)]
         public double Radius
         {
             get;
             set;
         }
-        [ExConfig(MaxValue = 3)]
+        [DemoConfig(MaxValue = 3)]
         public double Gamma
         {
             get;
             set;
         }
-        [ExConfig(MinValue = -2, MaxValue = 3)]
+        [DemoConfig(MinValue = -2, MaxValue = 3)]
         public double SubPixelOffset
         {
             get;

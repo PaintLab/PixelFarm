@@ -13,7 +13,7 @@ namespace Mini
 {
     partial class FormTestBed1 : Form
     {
-        ExampleBase exampleBase;
+        DemoBase exampleBase;
         List<ExampleConfigDesc> configList;
         public FormTestBed1()
         {
@@ -25,7 +25,7 @@ namespace Mini
         }
         public void LoadExample(ExampleAndDesc exAndDesc)
         {
-            ExampleBase exBase = Activator.CreateInstance(exAndDesc.Type) as ExampleBase;
+            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
             if (exBase == null)
             {
                 return;
@@ -61,7 +61,7 @@ namespace Mini
                     ExampleConfigDesc config = configList[i];
                     switch (config.PresentaionHint)
                     {
-                        case ExConfigPresentaionHint.CheckBox:
+                        case DemoConfigPresentaionHint.CheckBox:
                             {
                                 CheckBox checkBox = new CheckBox();
                                 checkBox.Text = config.Name;
@@ -78,7 +78,7 @@ namespace Mini
 
                                 this.flowLayoutPanel1.Controls.Add(checkBox);
                             } break;
-                        case ExConfigPresentaionHint.SlideBarDiscrete:
+                        case DemoConfigPresentaionHint.SlideBarDiscrete:
                             {
 
                                 Label descLabel = new Label();
@@ -105,7 +105,7 @@ namespace Mini
                                 };
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
                             } break;
-                        case ExConfigPresentaionHint.SlideBarContinuous:
+                        case DemoConfigPresentaionHint.SlideBarContinuous:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
@@ -139,7 +139,7 @@ namespace Mini
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
 
                             } break;
-                        case ExConfigPresentaionHint.OptionBoxes:
+                        case DemoConfigPresentaionHint.OptionBoxes:
                             {
 
                                 List<ExampleConfigValue> optionFields = config.GetOptionFields();
@@ -180,7 +180,7 @@ namespace Mini
 
                                 this.flowLayoutPanel1.Controls.Add(panelOption);
                             } break;
-                        case ExConfigPresentaionHint.TextBox:
+                        case DemoConfigPresentaionHint.TextBox:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;

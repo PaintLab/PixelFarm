@@ -9,9 +9,9 @@ using MatterHackers.VectorMath;
 using Mini;
 namespace MatterHackers.Agg.Sample_FloodFill
 {
-    [ExInfo(OrderCode = "09")]
-    [ExInfo(ExampleCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
-    public class FloodFillDemo : ExampleBase
+    [Info(OrderCode = "09")]
+    [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
+    public class FloodFillDemo : DemoBase
     {
         ImageBuffer imageToFillOn;
         Point2D imageOffset = new Point2D(20, 60);
@@ -39,13 +39,13 @@ namespace MatterHackers.Agg.Sample_FloodFill
             this.PixelSize = 32;
             this.Gamma = 1;
         }
-        [ExConfig(MinValue = 8, MaxValue = 100)]
+        [DemoConfig(MinValue = 8, MaxValue = 100)]
         public int PixelSize
         {
             get;
             set;
         }
-        [ExConfig(MaxValue = 3)]
+        [DemoConfig(MaxValue = 3)]
         public double Gamma
         {
             get;

@@ -36,12 +36,12 @@ using MatterHackers.VectorMath;
 using Mini;
 namespace MatterHackers.Agg.Sample_LionFill
 {
-    [ExInfo(OrderCode = "03")]
-    [ExInfo("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
+    [Info(OrderCode = "03")]
+    [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
       + " left mouse button. Right mouse button adds “skewing” transformations, proportional to the “X” "
       + "coordinate. The image is drawn over the old one with a cetrain opacity value. Change “Alpha” "
       + "to draw funny looking “lions”. Change window size to clear the window.")]
-    public class LionFillExample : ExampleBase
+    public class LionFillExample : DemoBase
     {
         LionFill lionFill;
         public override void Init()
@@ -57,7 +57,7 @@ namespace MatterHackers.Agg.Sample_LionFill
             lionFill.Move(x, y);
         }
 
-        [ExConfig(MaxValue = 255)]
+        [DemoConfig(MaxValue = 255)]
         public int AlphaValue
         {
             get { return lionFill.AlphaValue; }

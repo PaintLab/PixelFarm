@@ -12,8 +12,8 @@ using MatterHackers.Agg.RasterizerScanline;
 using Mini;
 namespace MatterHackers.Agg.Sample_Gouraud
 {
-    [ExInfo(OrderCode = "07")]
-    [ExInfo("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"
+    [Info(OrderCode = "07")]
+    [Info("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"
                 + ", there're just 6 triangles. You define a triangle and colors in its vertices. When rendering, the "
                 + "colors will be linearly interpolated. But there's a problem that appears when drawing adjacent "
                 + "triangles with Anti-Aliasing. Anti-Aliased polygons do not 'dock' to each other correctly, there "
@@ -22,7 +22,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
                 + "the gamma-correction value. But it's tricky, because the values depend on the opacity of the polygons."
                 + " In this example you can change the opacity, the dilation value and gamma. Also you can drag the "
                 + "Red, Green and Blue corners of the “cube”.")]
-    public class gouraud_application : ExampleBase
+    public class gouraud_application : DemoBase
     {
         double[] m_x = new double[3];
         double[] m_y = new double[3];
@@ -45,20 +45,20 @@ namespace MatterHackers.Agg.Sample_Gouraud
             this.AlphaValue = 1;
         }
 
-        [ExConfig(MaxValue = 1)]
+        [DemoConfig(MaxValue = 1)]
         public double DilationValue
         {
             get;
             set;
         }
 
-        [ExConfig(MaxValue = 1)]
+        [DemoConfig(MaxValue = 1)]
         public double LinearGamma
         {
             get;
             set;
         }
-        [ExConfig(MaxValue = 1)]
+        [DemoConfig(MaxValue = 1)]
         public double AlphaValue
         {
             get;
