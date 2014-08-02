@@ -40,14 +40,20 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_Start\ExampleBase.cs" />
+    <Compile Include="0_Start\DemoBase.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo.cs" />
-    <Compile Include="3_Samples\10_PolygonClippingSample\clipping_lib\cliper.cs" />
-    <Compile Include="3_Samples\10_PolygonClippingSample\GreateBritainPathStorage.cs" />
-    <Compile Include="3_Samples\10_PolygonClippingSample\PolygonClipping.cs" />
+    <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
+    <Compile Include="3_Samples\08_Blur\BlurSample.cs" />
+    <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
+    <Compile Include="3_Samples\10_RoundRect\RoundRect.cs" />
+    <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\clipping_lib\cliper.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
     <Compile Include="3_Samples\07_GouraudSample\GouraudSample.cs" />
+    <Compile Include="4_Samples_2\30_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>

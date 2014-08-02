@@ -1,4 +1,7 @@
-﻿#define USE_CLIPPING_ALPHA_MASK
+﻿//2014 BSD,WinterDev
+//MatterHackers
+
+#define USE_CLIPPING_ALPHA_MASK
 
 using System;
 
@@ -12,9 +15,9 @@ using Mini;
 
 namespace MatterHackers.Agg.Sample_LionAlphaMask2
 {
-    [ExInfo(OrderCode = "05")]
-    [ExInfo(ExampleCategory.Bitmap, "Clipping to multiple rectangle regions")]
-    public class alpha_mask2_application : ExampleBase
+    [Info(OrderCode = "05")]
+    [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
+    public class alpha_mask2_application : DemoBase
     {
         byte[] alphaByteArray;
         int maskAlphaSliderValue = 100;
@@ -117,7 +120,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         }
 
 
-        [ExConfig(MinValue = 0, MaxValue = 255)]
+        [DemoConfig(MinValue = 0, MaxValue = 255)]
         public int MaskAlphaSliderValue
         {
             get
@@ -281,10 +284,9 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             }
             alphaMaskImageBuffer.DettachBuffer();
         }
-        public override void MouseDown(int x, int y)
+        public override void MouseDown(int x, int y, bool isRightButton)
         {
-            doTransform(this.Width, this.Height, x, y);
-            base.MouseDown(x, y);
+            doTransform(this.Width, this.Height, x, y); 
         }
         public override void MouseDrag(int x, int y)
         {

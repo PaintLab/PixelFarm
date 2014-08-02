@@ -17,7 +17,7 @@ namespace Mini
     {
         bool isMouseDown;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
-        ExampleBase exampleBase;
+        DemoBase exampleBase;
         int myWidth = 800;
         int myHeight = 600;
 
@@ -30,7 +30,7 @@ namespace Mini
         {
             OnInitialize(myWidth, myHeight);
         }
-        public void LoadExample(ExampleBase exBase)
+        public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;
             exBase.RequestNewGfx2d += () => NewGraphics2D();
@@ -59,7 +59,7 @@ namespace Mini
         {
             this.isMouseDown = true;
 
-            exampleBase.MouseDown(e.X, myHeight - e.Y);
+            exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
             base.OnMouseDown(e);
             Invalidate();
         }

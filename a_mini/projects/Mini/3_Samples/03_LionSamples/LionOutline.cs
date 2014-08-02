@@ -39,15 +39,15 @@ using Mini;
 
 namespace MatterHackers.Agg.Sample_LionOutline
 {
-    [ExInfo(OrderCode = "03")]
-    [ExInfo("The example demonstrates Maxim's algorithm of drawing Anti-Aliased lines. " +
+    [Info(OrderCode = "03")]
+    [Info("The example demonstrates Maxim's algorithm of drawing Anti-Aliased lines. " +
             "The algorithm works about 2.5 times faster than the scanline rasterizer but has" +
             " some restrictions, particularly, line joins can be only of the �miter� type, " +
             "and when so called miter limit is exceded, they are not as accurate as generated " +
             "by the stroke converter (conv_stroke). To see the difference, maximize the window" +
             " and try to rotate and scale the �lion� with and without using the scanline " +
             "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")] 
-    public class LionFillOutlineExample : ExampleBase
+    public class LionFillOutlineExample : DemoBase
     {
         lion_outline lionFill;
         public override void Init()
@@ -63,7 +63,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
             lionFill.Move(x, y);
         }
 
-        [ExConfig]
+        [DemoConfig]
         public bool RenderAsScanline
         {
             get
@@ -76,7 +76,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
             }
         }
 
-        [ExConfig]
+        [DemoConfig]
         public bool RenderAccurateJoins
         {
             get

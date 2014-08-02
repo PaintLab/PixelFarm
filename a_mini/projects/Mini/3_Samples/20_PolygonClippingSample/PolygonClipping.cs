@@ -43,8 +43,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
     }
 
 
-    [ExInfo(OrderCode = "10")]
-    public class PolygonClippingDemo : ExampleBase
+    [Info(OrderCode = "20")]
+    public class PolygonClippingDemo : DemoBase
     {
         PathStorage CombinePaths(IVertexSource a, IVertexSource b, ClipType clipType)
         {
@@ -135,13 +135,13 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             this.Width = 800;
             this.Height = 600;
         }
-        [ExConfig]
+        [DemoConfig]
         public PolygonExampleSet PolygonSet
         {
             get;
             set;
         }
-        [ExConfig]
+        [DemoConfig]
         public OperationOption OpOption
         {
             get;
@@ -412,7 +412,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_x = x;
             m_y = y;
         }
-        public override void MouseDown(int x, int y)
+        public override void MouseDown(int x, int y,bool isRightoy)
         {
             m_x = x;
             m_y = y;

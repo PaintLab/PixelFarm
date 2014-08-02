@@ -75,13 +75,13 @@ namespace MatterHackers.Agg
         }
     }
 
-    [ExInfo(OrderCode = "02")]
-    [ExInfo("Demonstration of the Anti-Aliasing principle with Subpixel Accuracy. The triangle "
+    [Info(OrderCode = "02")]
+    [Info("Demonstration of the Anti-Aliasing principle with Subpixel Accuracy. The triangle "
                     + "is rendered two times, with its “natural” size (at the bottom-left) and enlarged. "
                     + "To draw the enlarged version there is a special scanline renderer written (see "
                     + "class renderer_enlarged in the source code). You can drag the whole triangle as well "
                     + "as each vertex of it. Also change “Gamma” to see how it affects the quality of Anti-Aliasing.")]
-    public class aa_demo : ExampleBase
+    public class aa_demo : DemoBase
     {
         double[] m_x = new double[3];
         double[] m_y = new double[3];
@@ -102,13 +102,13 @@ namespace MatterHackers.Agg
             this.GammaValue = 1;
         }
 
-        [ExConfig(MinValue = 8, MaxValue = 100)]
+        [DemoConfig(MinValue = 8, MaxValue = 100)]
         public double PixelSize
         {
             get;
             set;
         }
-        [ExConfig(MinValue = 0, MaxValue = 3)]
+        [DemoConfig(MinValue = 0, MaxValue = 3)]
         public double GammaValue
         {
             get;
@@ -165,7 +165,7 @@ namespace MatterHackers.Agg
 
 
         }
-        public override void MouseDown(int mx, int my)
+        public override void MouseDown(int mx, int my,  bool isRightButton)
         {
             double x = mx;
             double y = my;

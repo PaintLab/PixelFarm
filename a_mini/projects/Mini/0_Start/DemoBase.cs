@@ -10,39 +10,39 @@ namespace Mini
 
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class ExInfoAttribute : Attribute
+    public class InfoAttribute : Attribute
     {
-        public ExInfoAttribute()
+        public InfoAttribute()
         {
         }
-        public ExInfoAttribute(ExampleCategory catg)
+        public InfoAttribute(DemoCategory catg)
         {
             this.Category = catg;
         }
-        public ExInfoAttribute(string desc)
+        public InfoAttribute(string desc)
         {
             this.Description = desc;
         }
-        public ExInfoAttribute(ExampleCategory catg, string desc)
+        public InfoAttribute(DemoCategory catg, string desc)
         {
             this.Category = catg;
             this.Description = desc;
         }
         public string Description { get; private set; }
-        public ExampleCategory Category { get; private set; }
+        public DemoCategory Category { get; private set; }
         public string OrderCode { get; set; }
     }
 
-    public enum ExampleCategory
+    public enum DemoCategory
     {
         Vector,
         Bitmap
     }
     public delegate Graphics2D RequestNewGraphic2DDelegate();
 
-    public abstract class ExampleBase
+    public abstract class DemoBase
     {
-        public ExampleBase()
+        public DemoBase()
         {
             this.Width = 800;
             this.Height = 600;
@@ -51,8 +51,9 @@ namespace Mini
 
         public abstract void Draw(MatterHackers.Agg.Graphics2D g);
         public virtual void Init() { }
+
         public virtual void MouseDrag(int x, int y) { }
-        public virtual void MouseDown(int x, int y) { }
+        public virtual void MouseDown(int x, int y, bool isRightButton) { }
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }
@@ -71,13 +72,13 @@ namespace Mini
 
     }
 
-    public class ExConfigAttribute : Attribute
+    public class DemoConfigAttribute : Attribute
     {
-        public ExConfigAttribute()
+        public DemoConfigAttribute()
         {
 
         }
-        public ExConfigAttribute(string name)
+        public DemoConfigAttribute(string name)
         {
             this.Name = name;
         }
@@ -88,7 +89,7 @@ namespace Mini
         public int MaxValue { get; set; }
 
     }
-    enum ExConfigPresentaionHint
+    enum DemoConfigPresentaionHint
     {
         TextBox,
         CheckBox,
@@ -115,7 +116,7 @@ namespace Mini
         System.Reflection.PropertyInfo property;
         List<ExampleConfigValue> optionFields;
 
-        public ExampleConfigDesc(ExConfigAttribute config, System.Reflection.PropertyInfo property)
+        public ExampleConfigDesc(DemoConfigAttribute config, System.Reflection.PropertyInfo property)
         {
             this.property = property;
             this.OriginalConfigAttribute = config;
@@ -132,11 +133,11 @@ namespace Mini
             Type propType = property.PropertyType;
             if (propType == typeof(bool))
             {
-                this.PresentaionHint = ExConfigPresentaionHint.CheckBox;
+                this.PresentaionHint = DemoConfigPresentaionHint.CheckBox;
             }
             else if (propType.IsEnum)
             {
-                this.PresentaionHint = Mini.ExConfigPresentaionHint.OptionBoxes;
+                this.PresentaionHint = Mini.DemoConfigPresentaionHint.OptionBoxes;
                 //find option
                 var enumFields = propType.GetFields();
 
@@ -161,15 +162,15 @@ namespace Mini
             }
             else if (propType == typeof(Int32))
             {
-                this.PresentaionHint = Mini.ExConfigPresentaionHint.SlideBarDiscrete;
+                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarDiscrete;
             }
             else if (propType == typeof(double))
             {
-                this.PresentaionHint = Mini.ExConfigPresentaionHint.SlideBarContinuous;
+                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous;
             }
             else
             {
-                this.PresentaionHint = ExConfigPresentaionHint.TextBox;
+                this.PresentaionHint = DemoConfigPresentaionHint.TextBox;
             }
 
         }
@@ -178,12 +179,12 @@ namespace Mini
             get;
             private set;
         }
-        public ExConfigAttribute OriginalConfigAttribute
+        public DemoConfigAttribute OriginalConfigAttribute
         {
             get;
             private set;
         }
-        public ExConfigPresentaionHint PresentaionHint
+        public DemoConfigPresentaionHint PresentaionHint
         {
             get;
             private set;
@@ -203,8 +204,8 @@ namespace Mini
     }
     class ExampleAndDesc
     {
-        static Type exConfig = typeof(ExConfigAttribute);
-        static Type exInfoAttrType = typeof(ExInfoAttribute);
+        static Type exConfig = typeof(DemoConfigAttribute);
+        static Type exInfoAttrType = typeof(InfoAttribute);
 
         List<ExampleConfigDesc> configList = new List<ExampleConfigDesc>();
 
@@ -215,7 +216,7 @@ namespace Mini
             this.OrderCode = "";
             var p1 = t.GetProperties();
 
-            ExInfoAttribute[] exInfoList = t.GetCustomAttributes(exInfoAttrType, false) as ExInfoAttribute[];
+            InfoAttribute[] exInfoList = t.GetCustomAttributes(exInfoAttrType, false) as InfoAttribute[];
             int m = exInfoList.Length;
 
 
@@ -224,7 +225,7 @@ namespace Mini
 
                 for (int n = 0; n < m; ++n)
                 {
-                    ExInfoAttribute info = exInfoList[n];
+                    InfoAttribute info = exInfoList[n];
                     if (!string.IsNullOrEmpty(info.OrderCode))
                     {
                         this.OrderCode = info.OrderCode;
@@ -252,7 +253,7 @@ namespace Mini
                     if (foundAttrs.Length > 0)
                     {
                         //this is configurable attrs
-                        configList.Add(new ExampleConfigDesc((ExConfigAttribute)foundAttrs[0], property));
+                        configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
                     }
                 }
 

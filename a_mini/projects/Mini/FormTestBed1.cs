@@ -13,7 +13,7 @@ namespace Mini
 {
     partial class FormTestBed1 : Form
     {
-        ExampleBase exampleBase;
+        DemoBase exampleBase;
         List<ExampleConfigDesc> configList;
         public FormTestBed1()
         {
@@ -25,7 +25,7 @@ namespace Mini
         }
         public void LoadExample(ExampleAndDesc exAndDesc)
         {
-            ExampleBase exBase = Activator.CreateInstance(exAndDesc.Type) as ExampleBase;
+            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
             if (exBase == null)
             {
                 return;
@@ -36,15 +36,15 @@ namespace Mini
             this.softAggControl2.LoadExample(exampleBase);
             this.Text = exAndDesc.ToString();
 
-
             //-------------------------------------------
             //description:
             if (!string.IsNullOrEmpty(exAndDesc.Description))
             {
                 TextBox tt = new TextBox();
-                tt.Width = this.flowLayoutPanel1.Width;
+                tt.Width = this.flowLayoutPanel1.Width - 5;
                 tt.Text = exAndDesc.Description;
                 tt.Multiline = true;
+                tt.ScrollBars = ScrollBars.Vertical;
                 tt.Height = 250;
                 tt.BackColor = Color.Gainsboro;
                 tt.Font = new Font("tahoma", 10);
@@ -61,7 +61,7 @@ namespace Mini
                     ExampleConfigDesc config = configList[i];
                     switch (config.PresentaionHint)
                     {
-                        case ExConfigPresentaionHint.CheckBox:
+                        case DemoConfigPresentaionHint.CheckBox:
                             {
                                 CheckBox checkBox = new CheckBox();
                                 checkBox.Text = config.Name;
@@ -78,7 +78,7 @@ namespace Mini
 
                                 this.flowLayoutPanel1.Controls.Add(checkBox);
                             } break;
-                        case ExConfigPresentaionHint.SlideBarDiscrete:
+                        case DemoConfigPresentaionHint.SlideBarDiscrete:
                             {
 
                                 Label descLabel = new Label();
@@ -93,7 +93,8 @@ namespace Mini
                                 hscrollBar.Maximum = originalConfig.MaxValue + 10;
                                 hscrollBar.SmallChange = 1;
                                 //current value
-                                hscrollBar.Value = (int)config.InvokeGet(exampleBase);
+                                int value = (int)config.InvokeGet(exampleBase);
+                                hscrollBar.Value = value;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + hscrollBar.Value;
                                 hscrollBar.ValueChanged += (s, e) =>
@@ -104,7 +105,7 @@ namespace Mini
                                 };
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
                             } break;
-                        case ExConfigPresentaionHint.SlideBarContinuous:
+                        case DemoConfigPresentaionHint.SlideBarContinuous:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
@@ -114,7 +115,7 @@ namespace Mini
                                 var originalConfig = config.OriginalConfigAttribute;
                                 HScrollBar hscrollBar = new HScrollBar();
 
-                                //100 for scale factor 
+                                //100 => for scale factor 
 
                                 hscrollBar.Width = flowLayoutPanel1.Width;
                                 hscrollBar.Minimum = originalConfig.MinValue * 100;
@@ -122,21 +123,23 @@ namespace Mini
                                 hscrollBar.SmallChange = 1;
 
                                 //current value
+
                                 double doubleValue = ((double)config.InvokeGet(exampleBase) * 100);
                                 hscrollBar.Value = (int)doubleValue;
 
                                 //-------------
-                                descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
                                 hscrollBar.ValueChanged += (s, e) =>
                                 {
-                                    config.InvokeSet(exampleBase, hscrollBar.Value / 100);
-                                    descLabel.Text = config.Name + ":" + (hscrollBar.Value / 100);
+                                    double value = (double)hscrollBar.Value / 100d;
+                                    config.InvokeSet(exampleBase, value);
+                                    descLabel.Text = config.Name + ":" + value.ToString();
                                     InvalidateSampleViewPort();
                                 };
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
 
                             } break;
-                        case ExConfigPresentaionHint.OptionBoxes:
+                        case DemoConfigPresentaionHint.OptionBoxes:
                             {
 
                                 List<ExampleConfigValue> optionFields = config.GetOptionFields();
@@ -177,7 +180,7 @@ namespace Mini
 
                                 this.flowLayoutPanel1.Controls.Add(panelOption);
                             } break;
-                        case ExConfigPresentaionHint.TextBox:
+                        case DemoConfigPresentaionHint.TextBox:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;

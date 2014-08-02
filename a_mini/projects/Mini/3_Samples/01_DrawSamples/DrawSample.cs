@@ -19,9 +19,9 @@ using Mini;
 namespace MatterHackers.Agg.Sample_Draw
 {
    
-    [ExInfo(OrderCode = "01")]
-    [ExInfo("from MatterHackers' Agg DrawAndSave")]
-    public class DrawSample01 : ExampleBase
+    [Info(OrderCode = "01")]
+    [Info("from MatterHackers' Agg DrawAndSave")]
+    public class DrawSample01 : DemoBase
     {
         public override void Init()
         {
@@ -60,9 +60,9 @@ namespace MatterHackers.Agg.Sample_Draw
     }
 
 
-    [ExInfo(OrderCode = "01")]
-    [ExInfo("from MatterHackers' Agg DrawAndSave")]
-    public class DrawSample02 : ExampleBase
+    [Info(OrderCode = "01")]
+    [Info("from MatterHackers' Agg DrawAndSave")]
+    public class DrawSample02 : DemoBase
     {
         public override void Init()
         {

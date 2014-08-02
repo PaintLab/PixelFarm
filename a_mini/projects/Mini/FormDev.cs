@@ -17,7 +17,10 @@ namespace Mini
             InitializeComponent();
             this.Load += new EventHandler(DevForm_Load);
             this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick);
-         
+
+            this.Text = "DevForm: Double Click The Example!";
+
+
         } 
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
@@ -36,7 +39,7 @@ namespace Mini
         {
             //load examples
             Type[] allTypes = this.GetType().Assembly.GetTypes();
-            Type exBase = typeof(Mini.ExampleBase);
+            Type exBase = typeof(Mini.DemoBase);
             int j = allTypes.Length;
             List<ExampleAndDesc> exlist = new List<ExampleAndDesc>();
             for (int i = 0; i < j; ++i)
