@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using MatterHackers.Agg;
 
 
 namespace Mini
@@ -16,6 +17,8 @@ namespace Mini
         public string Description { get; set; }
     }
 
+    public delegate Graphics2D RequestNewGraphic2DDelegate();
+
     public abstract class ExampleBase
     {
         public ExampleBase()
@@ -23,6 +26,8 @@ namespace Mini
             this.Width = 800;
             this.Height = 600;
         }
+        public event RequestNewGraphic2DDelegate RequestNewGfx2d;
+
         public abstract void Draw(MatterHackers.Agg.Graphics2D g);
         public virtual void Init() { }
         public virtual void MouseDrag(int x, int y) { }
@@ -30,6 +35,18 @@ namespace Mini
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }
+
+        protected Graphics2D NewGraphics2D()
+        {
+            if (RequestNewGfx2d == null)
+            {
+                throw new NotSupportedException();
+            }
+            else
+            {
+                return RequestNewGfx2d();
+            }
+        }
 
     }
 
@@ -52,10 +69,12 @@ namespace Mini
     }
     enum PresentaionHint
     {
-        CheckBox,
-        SlideBar,
         TextBox,
-        OptionBoxes
+        CheckBox,
+        OptionBoxes,
+        SlideBarDiscrete,
+        SlideBarContinuous
+
     }
 
 
@@ -122,8 +141,11 @@ namespace Mini
             }
             else if (propType == typeof(Int32))
             {
-                this.PresentaionHint = Mini.PresentaionHint.SlideBar;
-
+                this.PresentaionHint = Mini.PresentaionHint.SlideBarDiscrete;
+            }
+            else if (propType == typeof(double))
+            {
+                this.PresentaionHint = Mini.PresentaionHint.SlideBarContinuous;
             }
             else
             {

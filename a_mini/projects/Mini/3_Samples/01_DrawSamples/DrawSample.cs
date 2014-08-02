@@ -15,10 +15,12 @@ using MatterHackers.Agg.Transform;
 
 using LayoutFarm.Canvas2dExtension;
 
+using Mini;
 namespace MatterHackers.Agg.Sample_Draw
 {
     //from Agg's DrawAndSave    
-    public class DrawSample01 : Mini.ExampleBase
+    [Note("from MatterHackers' Agg DrawAndSave")]
+    public class DrawSample01 : ExampleBase
     {
         public override void Init()
         {

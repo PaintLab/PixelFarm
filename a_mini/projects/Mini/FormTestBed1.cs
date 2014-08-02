@@ -29,6 +29,7 @@ namespace Mini
 
             if (exBase != null)
             {
+
                 this.exampleBase = exBase;
                 exampleBase.Init();
                 this.softAggControl2.LoadExample(exampleBase);
@@ -60,9 +61,8 @@ namespace Mini
 
                                     this.flowLayoutPanel1.Controls.Add(checkBox);
                                 } break;
-                            case PresentaionHint.SlideBar:
+                            case PresentaionHint.SlideBarDiscrete:
                                 {
-
 
                                     Label descLabel = new Label();
                                     descLabel.Width = 400;
@@ -82,10 +82,40 @@ namespace Mini
                                     hscrollBar.ValueChanged += (s, e) =>
                                     {
                                         config.InvokeSet(exampleBase, hscrollBar.Value);
-                                        descLabel.Text = config.Name + ":" + hscrollBar.Value; 
-                                        InvalidateSampleViewPort(); 
+                                        descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                        InvalidateSampleViewPort();
                                     };
+                                    this.flowLayoutPanel1.Controls.Add(hscrollBar);
+                                } break;
+                            case PresentaionHint.SlideBarContinuous:
+                                {
+                                    Label descLabel = new Label();
+                                    descLabel.Width = 400;
 
+                                    this.flowLayoutPanel1.Controls.Add(descLabel);
+
+                                    var originalConfig = config.OriginalConfigAttribute;
+                                    HScrollBar hscrollBar = new HScrollBar();
+
+                                    //100 for scale factor 
+
+                                    hscrollBar.Width = flowLayoutPanel1.Width;
+                                    hscrollBar.Minimum = originalConfig.MinValue * 100;
+                                    hscrollBar.Maximum = (originalConfig.MaxValue * 100) + 10;
+                                    hscrollBar.SmallChange = 1;
+
+                                    //current value
+                                    double doubleValue = ((double)config.InvokeGet(exampleBase) * 100);
+                                    hscrollBar.Value = (int)doubleValue;
+
+                                    //-------------
+                                    descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                    hscrollBar.ValueChanged += (s, e) =>
+                                    {
+                                        config.InvokeSet(exampleBase, hscrollBar.Value / 100);
+                                        descLabel.Text = config.Name + ":" + (hscrollBar.Value / 100);
+                                        InvalidateSampleViewPort();
+                                    };
                                     this.flowLayoutPanel1.Controls.Add(hscrollBar);
 
                                 } break;

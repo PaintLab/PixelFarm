@@ -1,4 +1,6 @@
-﻿
+﻿//2014 BSD,WinterDev
+//MatterHackers
+
 using System;
 
 using MatterHackers.Agg.Transform;
