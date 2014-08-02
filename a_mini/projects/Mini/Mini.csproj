@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mini</RootNamespace>
+    <AssemblyName>Mini</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="0_Start\ExampleBase.cs" />
+    <Compile Include="3_Samples\DrawSamples\DrawSample.cs" />
+    <Compile Include="FormDev.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDev.Designer.cs">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTestBed1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTestBed1.Designer.cs">
+      <DependentUpon>FormTestBed1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="3_Samples\LionSamples\LionFill.cs" />
+    <Compile Include="3_Samples\LionSamples\LionOutline.cs" />
+    <Compile Include="1_Shared\LionShape.cs" />
+    <Compile Include="3_Samples\PerspectiveSamples\Perspective.cs" />
+    <Compile Include="1_Shared\BasicSprite.cs" />
+    <Compile Include="0_Start\Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="2_Platform\WindowsFormsBitmapBackBuffer.cs" />
+    <Compile Include="SoftAggControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SoftAggControl.Designer.cs">
+      <DependentUpon>SoftAggControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="FormDev.resx">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTestBed1.resx">
+      <DependentUpon>FormTestBed1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="SoftAggControl.resx">
+      <DependentUpon>SoftAggControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
+      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniVectorMath\MiniVectorMath.csproj">
+      <Project>{16026D20-5321-4FFB-AEF7-4A1C9AEC32B2}</Project>
+      <Name>MiniVectorMath</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
