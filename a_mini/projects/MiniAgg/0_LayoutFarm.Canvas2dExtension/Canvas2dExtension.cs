@@ -36,15 +36,21 @@ namespace LayoutFarm.Canvas2dExtension
     public static class Canvas2dExtension
     {
 
-        public static void DrawString2(this Graphics2D gx, string Text, double x, double y, double pointSize = 12,
+        public static void DrawString2(this Graphics2D gx, string text, double x, double y, double pointSize = 12,
            Justification justification = Justification.Left,
            Baseline baseline = Baseline.Text,
            RGBA_Bytes color = new RGBA_Bytes(),
            bool drawFromHintedCache = false,
            RGBA_Bytes backgroundColor = new RGBA_Bytes())
         {
+
+            //1. parse text 
             
-            var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(Text, pointSize, new Vector2(x, y), justification, baseline);
+            var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
+                text,
+                pointSize,
+                new Vector2(x, y), justification, baseline);
+
             if (color.Alpha0To255 == 0)
             {
                 color = RGBA_Bytes.Black;
@@ -59,8 +65,34 @@ namespace LayoutFarm.Canvas2dExtension
             stringPrinter.Render(gx, color);
         }
 
+        public static void DrawString3(this Graphics2D gx, string Text,
+           double x, double y,
+           double pointSize = 12,
+           Justification justification = Justification.Left,
+           Baseline baseline = Baseline.Text,
+           RGBA_Bytes color = new RGBA_Bytes(),
+           bool drawFromHintedCache = false,
+           RGBA_Bytes backgroundColor = new RGBA_Bytes())
+        {
 
+            var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
+                Text,
+                pointSize,
+                new Vector2(x, y),
+                justification, baseline);
+
+            if (color.Alpha0To255 == 0)
+            {
+                color = RGBA_Bytes.Black;
+            }
+
+            if (backgroundColor.Alpha0To255 != 0)
+            {
+                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
+            }
+
+            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
+            stringPrinter.Render(gx, color);
+        }
     }
-
-
 }

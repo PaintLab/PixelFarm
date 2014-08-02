@@ -1,35 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+
+using System.Text;
+using System.Windows.Forms;
 
 using System.Drawing;
 
 using System.Text;
-using System.Windows.Forms;
 using MatterHackers.Agg;
 using MatterHackers.Agg.Image;
 
+
 namespace Mini
 {
-    public partial class FormTestBed1 : Form
+    public partial class SoftAggControl : UserControl
     {
         bool isMouseDown;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
         ExampleBase exampleBase;
-
-        public FormTestBed1()
+        public SoftAggControl()
         {
             InitializeComponent();
-            this.Load += new EventHandler(Form1_Load);
+            this.Load += new EventHandler(SoftAggControl_Load);
         }
-        void Form1_Load(object sender, EventArgs e)
+        void SoftAggControl_Load(object sender, EventArgs e)
         {
             OnInitialize(800, 600);
         }
-        public void LoadExample(ExampleBase exampleBase)
+        public void LoadExample(ExampleBase exBase)
         {
-            this.exampleBase = exampleBase;
-            exampleBase.Init();
+            this.exampleBase = exBase;
         }
         Graphics2D NewGraphics2D()
         {
@@ -65,13 +68,18 @@ namespace Mini
             if (this.isMouseDown)
             {
                 exampleBase.MouseDrag(e.X, e.Y);
-                
+
                 Invalidate();
             }
             base.OnMouseMove(e);
         }
         protected override void OnPaint(PaintEventArgs e)
-        {
+        {   
+            if(this.exampleBase == null)
+            {
+                base.OnPaint(e);
+                return;
+            }
             int width = 800;
             int height = 600;
             var graphics = bitmapBackBuffer.backingImageBufferByte.NewGraphics2D();
@@ -139,5 +147,6 @@ namespace Mini
             int nYSrc,          // y-coordinate of source upper-left corner
             System.Int32 dwRop  // raster operation code
             );
+
     }
 }

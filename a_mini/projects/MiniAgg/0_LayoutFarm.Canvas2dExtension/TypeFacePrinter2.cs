@@ -36,10 +36,8 @@ namespace LayoutFarm.Agg.Font
 
     public class TypeFacePrinter2 : IVertexSource
     {
-        StyledTypeFace typeFaceStyle;
-
-        String text = "";
-
+        StyledTypeFace typeFaceStyle; 
+        String text = ""; 
         Vector2 totalSizeCach;
 
         public Justification Justification { get; set; }
@@ -77,8 +75,10 @@ namespace LayoutFarm.Agg.Font
         public TypeFacePrinter2(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
             : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
         {
-        }
 
+
+
+        }
         public TypeFacePrinter2(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
         {
             this.typeFaceStyle = typeFaceStyle;

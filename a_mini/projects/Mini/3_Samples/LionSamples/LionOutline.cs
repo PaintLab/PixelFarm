@@ -35,9 +35,11 @@ using MatterHackers.Agg.VertexSource;
 using MatterHackers.Agg.RasterizerScanline;
 using MatterHackers.VectorMath;
 
+using Mini;
+
 namespace MatterHackers.Agg.Sample_LionOutline
 {
-    public class LionFillOutlineExample : Mini.ExampleBase
+    public class LionFillOutlineExample : ExampleBase
     {
         lion_outline lionFill;
         public override void Init()
@@ -52,8 +54,34 @@ namespace MatterHackers.Agg.Sample_LionOutline
         {
             lionFill.Move(x, y);
         }
-    }
 
+        [ExConfig]
+        public bool RenderAsScanline
+        {
+            get
+            {
+                return this.lionFill.RenderAsScanline;
+            }
+            set
+            {
+                this.lionFill.RenderAsScanline = value;
+            }
+        }
+
+        [ExConfig]
+        public bool RenderAccurateJoins
+        {
+            get
+            {
+                return this.lionFill.RenderAccurateJoins;
+            }
+            set
+            {
+                this.lionFill.RenderAccurateJoins = value;
+            }
+        }
+
+    }
     //--------------------------------------------------
     public class lion_outline : BasicSprite
     {
@@ -61,19 +89,27 @@ namespace MatterHackers.Agg.Sample_LionOutline
         ScanlineRasterizer rasterizer = new ScanlineRasterizer();
         ScanlineCachePacked8 scanlineCache = new ScanlineCachePacked8();
 
-        bool renderAsScanlineCheckBox = false;
-        bool renderAccurateJoinsCheckBox = false;
-
+        //special option 
         public lion_outline()
         {
             this.Width = 500;
             this.Height = 500;
-        } 
+        }
         void NeedsRedraw(object sender, EventArgs e)
         {
 
         }
 
+        public bool RenderAsScanline
+        {
+            get;
+            set;
+        }
+        public bool RenderAccurateJoins
+        {
+            get;
+            set;
+        }
         public override void OnDraw(Graphics2D graphics2D)
         {
             ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
@@ -95,7 +131,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
             transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
             transform *= Affine.NewTranslation(width / 2, height / 2);
 
-            if (renderAsScanlineCheckBox)
+            if (RenderAsScanline)
             {
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
@@ -114,7 +150,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
                 rasterizer_outline_aa rasterizer = new rasterizer_outline_aa(outlineRenderer);
 
-                rasterizer.line_join(renderAccurateJoinsCheckBox ?
+                rasterizer.line_join(RenderAccurateJoins ?
                     rasterizer_outline_aa.outline_aa_join_e.outline_miter_accurate_join
                     : rasterizer_outline_aa.outline_aa_join_e.outline_round_join);
                 rasterizer.round_cap(true);
@@ -126,6 +162,6 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
             base.OnDraw(graphics2D);
         }
-         
+
     }
 }

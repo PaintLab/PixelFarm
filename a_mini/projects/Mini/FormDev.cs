@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Mini
 {
-    public partial class FormDev : Form
+    partial class FormDev : Form
     {
         public FormDev()
         {
@@ -24,15 +24,11 @@ namespace Mini
             //load sample form
             ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
             if (exAndDesc != null)
-            {
-                ExampleBase exBase = Activator.CreateInstance(exAndDesc.Type) as ExampleBase;
-                if (exBase != null)
-                {
-                    FormTestBed1 testBed = new FormTestBed1();
-                    testBed.WindowState = FormWindowState.Maximized;
-                    testBed.Show();
-                    testBed.LoadExample(exBase);
-                }
+            { 
+                FormTestBed1 testBed = new FormTestBed1();
+                testBed.WindowState = FormWindowState.Maximized;
+                testBed.Show();
+                testBed.LoadExample(exAndDesc);  
             }
 
         }
@@ -59,19 +55,7 @@ namespace Mini
                 this.listBox1.Items.Add(exlist[i]);
             }
         }
-        class ExampleAndDesc
-        {
-            public ExampleAndDesc(Type t, string desc)
-            {
-                this.Type = t;
-                this.Desc = desc;
-            }
-            public Type Type { get; set; }
-            public string Desc { get; set; }
-            public override string ToString()
-            {
-                return this.Desc;
-            }
-        }
+
+
     }
 }

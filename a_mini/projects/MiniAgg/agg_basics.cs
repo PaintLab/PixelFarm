@@ -205,7 +205,8 @@ namespace MatterHackers.Agg
         }
 
         public static bool is_equal_eps(double v1, double v2, double epsilon)
-        {
+        {   
+           
             return Math.Abs(v1 - v2) <= (double)(epsilon);
         }
 

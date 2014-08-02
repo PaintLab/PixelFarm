@@ -259,6 +259,7 @@ namespace MatterHackers.Agg.Font
 
         public ImageBuffer GetImageForCharacter(char character, double xFraction, double yFraction)
         {
+
             if (xFraction > 1 || xFraction < 0 || yFraction > 1 || yFraction < 0)
             {
                 throw new ArgumentException("The x and y fractions must both be between 0 and 1.");

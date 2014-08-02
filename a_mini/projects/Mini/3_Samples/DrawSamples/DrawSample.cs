@@ -39,11 +39,21 @@ namespace MatterHackers.Agg.Sample_Draw
 
                 // and an outline around it
                 g.Rectangle(60, 260, 200, 280, RGBA_Bytes.Magenta);
-                
+
+
+
                 // draw some text
                 g.DrawString("A Simple Example", 300, 400, 20);
 
-                g.DrawString2("A Simple Example2", 300, 350, 20);
+                g.DrawString2("A Simple Example2", 300, 350, 20, drawFromHintedCache: true);
+
+                g.DrawString2("A Simple Example3", 300, 300, 20);
+
+                g.DrawString2("A Simple Example4", 300, 250, 20);
+                //---------------------------------------------------
+
+
+
             }
         }
     }
@@ -64,7 +74,7 @@ namespace MatterHackers.Agg.Sample_Draw
             Ellipse ellipseTest = new Ellipse(0, 0, 100, 50);
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
-                
+
                 VertexSourceApplyTransform rotatedTransform = new VertexSourceApplyTransform(
                     ellipseTest, Affine.NewRotation(MathHelper.DegreesToRadians(angleDegrees)));
                 VertexSourceApplyTransform rotatedAndTranslatedTransform = new VertexSourceApplyTransform(
