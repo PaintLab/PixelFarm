@@ -157,8 +157,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
         void render_gpc(Graphics2D graphics2D)
         {
-
-
+             
             switch (this.PolygonSet)
             {
                 case PolygonExampleSet.TwoSimplePaths:

@@ -8,15 +8,32 @@ using MatterHackers.Agg;
 namespace Mini
 {
 
-    public class ExDescAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class)]
+    public class ExInfoAttribute : Attribute
     {
-        public ExDescAttribute(string desc)
+        public ExInfoAttribute(ExampleCategory catg)
+        {
+            this.Category = catg;
+        }
+        public ExInfoAttribute(string desc)
         {
             this.Description = desc;
         }
-        public string Description { get; set; }
+       
+        public ExInfoAttribute(ExampleCategory catg, string desc)
+        {
+            this.Category = catg;
+            this.Description = desc;
+        }
+        public string Description { get; private set; }
+        public ExampleCategory Category { get; private set; }
     }
 
+    public enum ExampleCategory
+    {
+        Vector,
+        Bitmap
+    }
     public delegate Graphics2D RequestNewGraphic2DDelegate();
 
     public abstract class ExampleBase
@@ -67,15 +84,16 @@ namespace Mini
         public int MaxValue { get; set; }
 
     }
-    enum PresentaionHint
+    enum ExConfigPresentaionHint
     {
         TextBox,
         CheckBox,
         OptionBoxes,
         SlideBarDiscrete,
         SlideBarContinuous
-
     }
+
+
 
 
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
@@ -92,8 +110,6 @@ namespace Mini
     {
         System.Reflection.PropertyInfo property;
         List<ExampleConfigValue> optionFields;
-
-
 
         public ExampleConfigDesc(ExConfigAttribute config, System.Reflection.PropertyInfo property)
         {
@@ -112,11 +128,11 @@ namespace Mini
             Type propType = property.PropertyType;
             if (propType == typeof(bool))
             {
-                this.PresentaionHint = PresentaionHint.CheckBox;
+                this.PresentaionHint = ExConfigPresentaionHint.CheckBox;
             }
             else if (propType.IsEnum)
             {
-                this.PresentaionHint = Mini.PresentaionHint.OptionBoxes;
+                this.PresentaionHint = Mini.ExConfigPresentaionHint.OptionBoxes;
                 //find option
                 var enumFields = propType.GetFields();
 
@@ -141,15 +157,15 @@ namespace Mini
             }
             else if (propType == typeof(Int32))
             {
-                this.PresentaionHint = Mini.PresentaionHint.SlideBarDiscrete;
+                this.PresentaionHint = Mini.ExConfigPresentaionHint.SlideBarDiscrete;
             }
             else if (propType == typeof(double))
             {
-                this.PresentaionHint = Mini.PresentaionHint.SlideBarContinuous;
+                this.PresentaionHint = Mini.ExConfigPresentaionHint.SlideBarContinuous;
             }
             else
             {
-                this.PresentaionHint = PresentaionHint.TextBox;
+                this.PresentaionHint = ExConfigPresentaionHint.TextBox;
             }
 
         }
@@ -163,7 +179,7 @@ namespace Mini
             get;
             private set;
         }
-        public PresentaionHint PresentaionHint
+        public ExConfigPresentaionHint PresentaionHint
         {
             get;
             private set;
@@ -217,11 +233,10 @@ namespace Mini
             return this.configList;
         }
     }
-
     class ExampleConfigValue
     {
 
-        internal System.Reflection.FieldInfo fieldInfo;
+        System.Reflection.FieldInfo fieldInfo;
         System.Reflection.PropertyInfo property;
         public ExampleConfigValue(System.Reflection.PropertyInfo property, System.Reflection.FieldInfo fieldInfo, string name)
         {

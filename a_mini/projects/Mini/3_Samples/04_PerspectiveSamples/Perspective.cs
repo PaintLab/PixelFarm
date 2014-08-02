@@ -12,7 +12,7 @@ using MatterHackers.VectorMath;
 using Mini;
 namespace MatterHackers.Agg.Sample_Perspective
 {
-    [Note("Perspective and bilinear transformations. In general, these classes can transform an arbitrary quadrangle "
+    [ExInfo("Perspective and bilinear transformations. In general, these classes can transform an arbitrary quadrangle "
             + " to another arbitrary quadrangle (with some restrictions). The example demonstrates how to transform "
             + "a rectangle to a quadrangle defined by 4 vertices. You can drag the 4 corners of the quadrangle, "
             + "as well as its boundaries. Note, that the perspective transformations don't work correctly if "

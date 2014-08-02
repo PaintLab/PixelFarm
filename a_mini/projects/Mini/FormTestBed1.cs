@@ -44,7 +44,7 @@ namespace Mini
                         ExampleConfigDesc config = configList[i];
                         switch (config.PresentaionHint)
                         {
-                            case PresentaionHint.CheckBox:
+                            case ExConfigPresentaionHint.CheckBox:
                                 {
                                     CheckBox checkBox = new CheckBox();
                                     checkBox.Text = config.Name;
@@ -61,7 +61,7 @@ namespace Mini
 
                                     this.flowLayoutPanel1.Controls.Add(checkBox);
                                 } break;
-                            case PresentaionHint.SlideBarDiscrete:
+                            case ExConfigPresentaionHint.SlideBarDiscrete:
                                 {
 
                                     Label descLabel = new Label();
@@ -87,7 +87,7 @@ namespace Mini
                                     };
                                     this.flowLayoutPanel1.Controls.Add(hscrollBar);
                                 } break;
-                            case PresentaionHint.SlideBarContinuous:
+                            case ExConfigPresentaionHint.SlideBarContinuous:
                                 {
                                     Label descLabel = new Label();
                                     descLabel.Width = 400;
@@ -119,7 +119,7 @@ namespace Mini
                                     this.flowLayoutPanel1.Controls.Add(hscrollBar);
 
                                 } break;
-                            case PresentaionHint.OptionBoxes:
+                            case ExConfigPresentaionHint.OptionBoxes:
                                 {
 
                                     List<ExampleConfigValue> optionFields = config.GetOptionFields();
@@ -160,7 +160,7 @@ namespace Mini
 
                                     this.flowLayoutPanel1.Controls.Add(panelOption);
                                 } break;
-                            case PresentaionHint.TextBox:
+                            case ExConfigPresentaionHint.TextBox:
                                 {
                                     Label descLabel = new Label();
                                     descLabel.Width = 400;
