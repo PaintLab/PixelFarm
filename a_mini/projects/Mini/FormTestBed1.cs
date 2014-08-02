@@ -19,6 +19,10 @@ namespace Mini
         {
             InitializeComponent();
         }
+        void InvalidateSampleViewPort()
+        {
+            this.softAggControl2.Invalidate();
+        }
         public void LoadExample(ExampleAndDesc exAndDesc)
         {
             ExampleBase exBase = Activator.CreateInstance(exAndDesc.Type) as ExampleBase;
@@ -46,12 +50,12 @@ namespace Mini
                                     checkBox.Width = 400;
 
                                     bool currentValue = (bool)config.InvokeGet(exampleBase);
-                                    checkBox.Checked = currentValue; 
+                                    checkBox.Checked = currentValue;
 
                                     checkBox.CheckedChanged += (s, e) =>
                                     {
                                         config.InvokeSet(exBase, checkBox.Checked);
-                                        this.softAggControl2.Invalidate();
+                                        InvalidateSampleViewPort();
                                     };
 
                                     this.flowLayoutPanel1.Controls.Add(checkBox);
@@ -60,15 +64,79 @@ namespace Mini
                                 {
 
 
+                                    Label descLabel = new Label();
+                                    descLabel.Width = 400;
 
+                                    this.flowLayoutPanel1.Controls.Add(descLabel);
+
+                                    var originalConfig = config.OriginalConfigAttribute;
+                                    HScrollBar hscrollBar = new HScrollBar();
+                                    hscrollBar.Width = flowLayoutPanel1.Width;
+                                    hscrollBar.Minimum = originalConfig.MinValue;
+                                    hscrollBar.Maximum = originalConfig.MaxValue + 10;
+                                    hscrollBar.SmallChange = 1;
+                                    //current value
+                                    hscrollBar.Value = (int)config.InvokeGet(exampleBase);
+                                    //-------------
+                                    descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                    hscrollBar.ValueChanged += (s, e) =>
+                                    {
+                                        config.InvokeSet(exampleBase, hscrollBar.Value);
+                                        descLabel.Text = config.Name + ":" + hscrollBar.Value; 
+                                        InvalidateSampleViewPort(); 
+                                    };
+
+                                    this.flowLayoutPanel1.Controls.Add(hscrollBar);
+
+                                } break;
+                            case PresentaionHint.OptionBoxes:
+                                {
+
+                                    List<ExampleConfigValue> optionFields = config.GetOptionFields();
+                                    FlowLayoutPanel panelOption = new FlowLayoutPanel();
+                                    int totalHeight = 0;
+                                    int m = optionFields.Count;
+
+                                    //current value 
+                                    int currentValue = (int)config.InvokeGet(exampleBase);
+
+                                    for (int n = 0; n < m; ++n)
+                                    {
+
+                                        ExampleConfigValue ofield = optionFields[n];
+
+                                        RadioButton radio = new RadioButton();
+                                        panelOption.Controls.Add(radio);
+                                        radio.Text = ofield.Name;
+                                        radio.Width = 400;
+                                        radio.Checked = ofield.ValueAsInt32 == currentValue;
+
+                                        radio.Click += (s, e) =>
+                                        {
+                                            if (radio.Checked)
+                                            {
+                                                ofield.InvokeSet(this.exampleBase);
+                                                InvalidateSampleViewPort();
+                                            }
+                                        };
+                                        totalHeight += radio.Height + 10;
+                                    }
+
+
+
+
+                                    panelOption.Height = totalHeight;
+                                    panelOption.FlowDirection = FlowDirection.TopDown;
+
+                                    this.flowLayoutPanel1.Controls.Add(panelOption);
                                 } break;
                             case PresentaionHint.TextBox:
                                 {
                                     Label descLabel = new Label();
                                     descLabel.Width = 400;
                                     descLabel.Text = config.Name;
-
                                     this.flowLayoutPanel1.Controls.Add(descLabel);
+
                                     TextBox textBox = new TextBox();
                                     textBox.Width = 400;
                                     this.flowLayoutPanel1.Controls.Add(textBox);

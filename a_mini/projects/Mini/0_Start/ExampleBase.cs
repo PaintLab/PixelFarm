@@ -1,4 +1,6 @@
-﻿using System;
+﻿//BSD 2014, WinterDev
+
+using System;
 using System.Collections.Generic;
 
 
@@ -19,6 +21,11 @@ namespace Mini
         public abstract void Draw(MatterHackers.Agg.Graphics2D g);
         public virtual void Init() { }
         public virtual void MouseDrag(int x, int y) { }
+        public virtual void MouseDown(int x, int y) { }
+        public virtual void MouseUp(int x, int y) { }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
     }
 
     public class ExConfigAttribute : Attribute
@@ -32,24 +39,86 @@ namespace Mini
             this.Name = name;
         }
         public string Name { get; set; }
+
+
+        public int MinValue { get; set; }
+        public int MaxValue { get; set; }
+
     }
     enum PresentaionHint
     {
         CheckBox,
         SlideBar,
-        TextBox
+        TextBox,
+        OptionBoxes
     }
+
+
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
+    public class NoteAttribute : Attribute
+    {
+        public NoteAttribute(string desc)
+        {
+            this.Desc = desc;
+        }
+        public string Desc { get; set; }
+    }
+
     class ExampleConfigDesc
     {
         System.Reflection.PropertyInfo property;
-        public ExampleConfigDesc(System.Reflection.PropertyInfo property, string name)
+        List<ExampleConfigValue> optionFields;
+
+
+
+        public ExampleConfigDesc(ExConfigAttribute config, System.Reflection.PropertyInfo property)
         {
             this.property = property;
-            this.Name = name;
+            this.OriginalConfigAttribute = config;
+            if (!string.IsNullOrEmpty(config.Name))
+            {
+                this.Name = config.Name;
+            }
+            else
+            {
+                this.Name = property.Name;
+            }
 
-            if (property.PropertyType == typeof(bool))
+
+            Type propType = property.PropertyType;
+            if (propType == typeof(bool))
             {
                 this.PresentaionHint = PresentaionHint.CheckBox;
+            }
+            else if (propType.IsEnum)
+            {
+                this.PresentaionHint = Mini.PresentaionHint.OptionBoxes;
+                //find option
+                var enumFields = propType.GetFields();
+
+                int j = enumFields.Length;
+                optionFields = new List<ExampleConfigValue>(j);
+                for (int i = 0; i < j; ++i)
+                {
+                    var enumField = enumFields[i];
+                    if (enumField.IsStatic)
+                    {
+                        //use field name or note that assoc with its field name
+
+                        string fieldNameOrNote = enumField.Name;
+                        var foundNotAttr = enumField.GetCustomAttributes(typeof(NoteAttribute), false);
+                        if (foundNotAttr.Length > 0)
+                        {
+                            fieldNameOrNote = ((NoteAttribute)foundNotAttr[0]).Desc;
+                        }
+                        optionFields.Add(new ExampleConfigValue(property, enumField, fieldNameOrNote));
+                    }
+                }
+            }
+            else if (propType == typeof(Int32))
+            {
+                this.PresentaionHint = Mini.PresentaionHint.SlideBar;
+
             }
             else
             {
@@ -60,14 +129,18 @@ namespace Mini
         public string Name
         {
             get;
-            set;
+            private set;
+        }
+        public ExConfigAttribute OriginalConfigAttribute
+        {
+            get;
+            private set;
         }
         public PresentaionHint PresentaionHint
         {
             get;
-            set;
+            private set;
         }
-
         public void InvokeSet(object target, object value)
         {
             this.property.GetSetMethod().Invoke(target, new object[] { value });
@@ -75,6 +148,10 @@ namespace Mini
         public object InvokeGet(object target)
         {
             return this.property.GetGetMethod().Invoke(target, null);
+        }
+        public List<ExampleConfigValue> GetOptionFields()
+        {
+            return this.optionFields;
         }
     }
     class ExampleAndDesc
@@ -96,7 +173,7 @@ namespace Mini
                     if (foundAttrs.Length > 0)
                     {
                         //this is configurable attrs
-                        configList.Add(new ExampleConfigDesc(property, property.Name));
+                        configList.Add(new ExampleConfigDesc((ExConfigAttribute)foundAttrs[0], property));
                     }
                 }
 
@@ -111,6 +188,29 @@ namespace Mini
         public List<ExampleConfigDesc> GetConfigList()
         {
             return this.configList;
+        }
+    }
+
+    class ExampleConfigValue
+    {
+
+        internal System.Reflection.FieldInfo fieldInfo;
+        System.Reflection.PropertyInfo property;
+        public ExampleConfigValue(System.Reflection.PropertyInfo property, System.Reflection.FieldInfo fieldInfo, string name)
+        {
+            this.property = property;
+            this.fieldInfo = fieldInfo;
+            this.Name = name;
+            this.ValueAsInt32 = (int)fieldInfo.GetValue(null);
+
+        }
+        public string Name { get; set; }
+        public int ValueAsInt32 { get; private set; }
+
+        public void InvokeSet(object target)
+        {
+
+            this.property.GetSetMethod().Invoke(target, new object[] { ValueAsInt32 });
         }
     }
 }

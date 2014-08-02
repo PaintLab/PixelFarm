@@ -36,14 +36,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\ExampleBase.cs" />
-    <Compile Include="3_Samples\DrawSamples\DrawSample.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
+    <Compile Include="3_Samples\04_PolygonClippingSample\clipping_lib\cliper.cs" />
+    <Compile Include="3_Samples\04_PolygonClippingSample\GreateBritainPathStorage.cs" />
+    <Compile Include="3_Samples\04_PolygonClippingSample\PolygonClipping.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -56,10 +58,10 @@
     <Compile Include="FormTestBed1.Designer.cs">
       <DependentUpon>FormTestBed1.cs</DependentUpon>
     </Compile>
-    <Compile Include="3_Samples\LionSamples\LionFill.cs" />
-    <Compile Include="3_Samples\LionSamples\LionOutline.cs" />
+    <Compile Include="3_Samples\02_LionSamples\LionFill.cs" />
+    <Compile Include="3_Samples\02_LionSamples\LionOutline.cs" />
     <Compile Include="1_Shared\LionShape.cs" />
-    <Compile Include="3_Samples\PerspectiveSamples\Perspective.cs" />
+    <Compile Include="3_Samples\03_PerspectiveSamples\Perspective.cs" />
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
