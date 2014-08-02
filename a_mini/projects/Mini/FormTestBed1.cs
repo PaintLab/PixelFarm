@@ -44,6 +44,7 @@ namespace Mini
                 tt.Width = this.flowLayoutPanel1.Width - 5;
                 tt.Text = exAndDesc.Description;
                 tt.Multiline = true;
+                tt.ScrollBars = ScrollBars.Vertical;
                 tt.Height = 250;
                 tt.BackColor = Color.Gainsboro;
                 tt.Font = new Font("tahoma", 10);
