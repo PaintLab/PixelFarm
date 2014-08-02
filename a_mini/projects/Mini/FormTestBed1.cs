@@ -26,127 +26,172 @@ namespace Mini
         public void LoadExample(ExampleAndDesc exAndDesc)
         {
             ExampleBase exBase = Activator.CreateInstance(exAndDesc.Type) as ExampleBase;
-
-            if (exBase != null)
+            if (exBase == null)
             {
-                this.exampleBase = exBase;
-                exampleBase.Init();
-                this.softAggControl2.LoadExample(exampleBase);
+                return;
+            }
 
-                //-------------------------------------------
-                this.configList = exAndDesc.GetConfigList();
-                if (configList != null)
+            this.exampleBase = exBase;
+            exampleBase.Init();
+            this.softAggControl2.LoadExample(exampleBase);
+            this.Text = exAndDesc.ToString();
+
+
+            //-------------------------------------------
+            //description:
+            if (!string.IsNullOrEmpty(exAndDesc.Description))
+            {
+                TextBox tt = new TextBox();
+                tt.Width = this.flowLayoutPanel1.Width;
+                tt.Text = exAndDesc.Description;
+                tt.Multiline = true;
+                tt.Height = 250;
+                tt.BackColor = Color.Gainsboro;
+                tt.Font = new Font("tahoma", 10);
+
+                this.flowLayoutPanel1.Controls.Add(tt);
+            }
+            //-------------------------------------------
+            this.configList = exAndDesc.GetConfigList();
+            if (configList != null)
+            {
+                int j = configList.Count;
+                for (int i = 0; i < j; ++i)
                 {
-                    int j = configList.Count;
-                    for (int i = 0; i < j; ++i)
+                    ExampleConfigDesc config = configList[i];
+                    switch (config.PresentaionHint)
                     {
-                        ExampleConfigDesc config = configList[i];
-                        switch (config.PresentaionHint)
-                        {
-                            case PresentaionHint.CheckBox:
+                        case ExConfigPresentaionHint.CheckBox:
+                            {
+                                CheckBox checkBox = new CheckBox();
+                                checkBox.Text = config.Name;
+                                checkBox.Width = 400;
+
+                                bool currentValue = (bool)config.InvokeGet(exampleBase);
+                                checkBox.Checked = currentValue;
+
+                                checkBox.CheckedChanged += (s, e) =>
                                 {
-                                    CheckBox checkBox = new CheckBox();
-                                    checkBox.Text = config.Name;
-                                    checkBox.Width = 400;
+                                    config.InvokeSet(exBase, checkBox.Checked);
+                                    InvalidateSampleViewPort();
+                                };
 
-                                    bool currentValue = (bool)config.InvokeGet(exampleBase);
-                                    checkBox.Checked = currentValue;
+                                this.flowLayoutPanel1.Controls.Add(checkBox);
+                            } break;
+                        case ExConfigPresentaionHint.SlideBarDiscrete:
+                            {
 
-                                    checkBox.CheckedChanged += (s, e) =>
-                                    {
-                                        config.InvokeSet(exBase, checkBox.Checked);
-                                        InvalidateSampleViewPort();
-                                    };
+                                Label descLabel = new Label();
+                                descLabel.Width = 400;
 
-                                    this.flowLayoutPanel1.Controls.Add(checkBox);
-                                } break;
-                            case PresentaionHint.SlideBar:
+                                this.flowLayoutPanel1.Controls.Add(descLabel);
+
+                                var originalConfig = config.OriginalConfigAttribute;
+                                HScrollBar hscrollBar = new HScrollBar();
+                                hscrollBar.Width = flowLayoutPanel1.Width;
+                                hscrollBar.Minimum = originalConfig.MinValue;
+                                hscrollBar.Maximum = originalConfig.MaxValue + 10;
+                                hscrollBar.SmallChange = 1;
+                                //current value
+                                hscrollBar.Value = (int)config.InvokeGet(exampleBase);
+                                //-------------
+                                descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                hscrollBar.ValueChanged += (s, e) =>
                                 {
-
-
-                                    Label descLabel = new Label();
-                                    descLabel.Width = 400;
-
-                                    this.flowLayoutPanel1.Controls.Add(descLabel);
-
-                                    var originalConfig = config.OriginalConfigAttribute;
-                                    HScrollBar hscrollBar = new HScrollBar();
-                                    hscrollBar.Width = flowLayoutPanel1.Width;
-                                    hscrollBar.Minimum = originalConfig.MinValue;
-                                    hscrollBar.Maximum = originalConfig.MaxValue + 10;
-                                    hscrollBar.SmallChange = 1;
-                                    //current value
-                                    hscrollBar.Value = (int)config.InvokeGet(exampleBase);
-                                    //-------------
+                                    config.InvokeSet(exampleBase, hscrollBar.Value);
                                     descLabel.Text = config.Name + ":" + hscrollBar.Value;
-                                    hscrollBar.ValueChanged += (s, e) =>
-                                    {
-                                        config.InvokeSet(exampleBase, hscrollBar.Value);
-                                        descLabel.Text = config.Name + ":" + hscrollBar.Value; 
-                                        InvalidateSampleViewPort(); 
-                                    };
+                                    InvalidateSampleViewPort();
+                                };
+                                this.flowLayoutPanel1.Controls.Add(hscrollBar);
+                            } break;
+                        case ExConfigPresentaionHint.SlideBarContinuous:
+                            {
+                                Label descLabel = new Label();
+                                descLabel.Width = 400;
 
-                                    this.flowLayoutPanel1.Controls.Add(hscrollBar);
+                                this.flowLayoutPanel1.Controls.Add(descLabel);
 
-                                } break;
-                            case PresentaionHint.OptionBoxes:
+                                var originalConfig = config.OriginalConfigAttribute;
+                                HScrollBar hscrollBar = new HScrollBar();
+
+                                //100 for scale factor 
+
+                                hscrollBar.Width = flowLayoutPanel1.Width;
+                                hscrollBar.Minimum = originalConfig.MinValue * 100;
+                                hscrollBar.Maximum = (originalConfig.MaxValue * 100) + 10;
+                                hscrollBar.SmallChange = 1;
+
+                                //current value
+                                double doubleValue = ((double)config.InvokeGet(exampleBase) * 100);
+                                hscrollBar.Value = (int)doubleValue;
+
+                                //-------------
+                                descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                hscrollBar.ValueChanged += (s, e) =>
+                                {
+                                    config.InvokeSet(exampleBase, hscrollBar.Value / 100);
+                                    descLabel.Text = config.Name + ":" + (hscrollBar.Value / 100);
+                                    InvalidateSampleViewPort();
+                                };
+                                this.flowLayoutPanel1.Controls.Add(hscrollBar);
+
+                            } break;
+                        case ExConfigPresentaionHint.OptionBoxes:
+                            {
+
+                                List<ExampleConfigValue> optionFields = config.GetOptionFields();
+                                FlowLayoutPanel panelOption = new FlowLayoutPanel();
+                                int totalHeight = 0;
+                                int m = optionFields.Count;
+
+                                //current value 
+                                int currentValue = (int)config.InvokeGet(exampleBase);
+
+                                for (int n = 0; n < m; ++n)
                                 {
 
-                                    List<ExampleConfigValue> optionFields = config.GetOptionFields();
-                                    FlowLayoutPanel panelOption = new FlowLayoutPanel();
-                                    int totalHeight = 0;
-                                    int m = optionFields.Count;
+                                    ExampleConfigValue ofield = optionFields[n];
 
-                                    //current value 
-                                    int currentValue = (int)config.InvokeGet(exampleBase);
+                                    RadioButton radio = new RadioButton();
+                                    panelOption.Controls.Add(radio);
+                                    radio.Text = ofield.Name;
+                                    radio.Width = 400;
+                                    radio.Checked = ofield.ValueAsInt32 == currentValue;
 
-                                    for (int n = 0; n < m; ++n)
+                                    radio.Click += (s, e) =>
                                     {
-
-                                        ExampleConfigValue ofield = optionFields[n];
-
-                                        RadioButton radio = new RadioButton();
-                                        panelOption.Controls.Add(radio);
-                                        radio.Text = ofield.Name;
-                                        radio.Width = 400;
-                                        radio.Checked = ofield.ValueAsInt32 == currentValue;
-
-                                        radio.Click += (s, e) =>
+                                        if (radio.Checked)
                                         {
-                                            if (radio.Checked)
-                                            {
-                                                ofield.InvokeSet(this.exampleBase);
-                                                InvalidateSampleViewPort();
-                                            }
-                                        };
-                                        totalHeight += radio.Height + 10;
-                                    }
+                                            ofield.InvokeSet(this.exampleBase);
+                                            InvalidateSampleViewPort();
+                                        }
+                                    };
+                                    totalHeight += radio.Height + 10;
+                                }
 
 
 
 
-                                    panelOption.Height = totalHeight;
-                                    panelOption.FlowDirection = FlowDirection.TopDown;
+                                panelOption.Height = totalHeight;
+                                panelOption.FlowDirection = FlowDirection.TopDown;
 
-                                    this.flowLayoutPanel1.Controls.Add(panelOption);
-                                } break;
-                            case PresentaionHint.TextBox:
-                                {
-                                    Label descLabel = new Label();
-                                    descLabel.Width = 400;
-                                    descLabel.Text = config.Name;
-                                    this.flowLayoutPanel1.Controls.Add(descLabel);
+                                this.flowLayoutPanel1.Controls.Add(panelOption);
+                            } break;
+                        case ExConfigPresentaionHint.TextBox:
+                            {
+                                Label descLabel = new Label();
+                                descLabel.Width = 400;
+                                descLabel.Text = config.Name;
+                                this.flowLayoutPanel1.Controls.Add(descLabel);
 
-                                    TextBox textBox = new TextBox();
-                                    textBox.Width = 400;
-                                    this.flowLayoutPanel1.Controls.Add(textBox);
+                                TextBox textBox = new TextBox();
+                                textBox.Width = 400;
+                                this.flowLayoutPanel1.Controls.Add(textBox);
 
-                                } break;
-                        }
-
+                            } break;
                     }
-
                 }
+
             }
         }
 

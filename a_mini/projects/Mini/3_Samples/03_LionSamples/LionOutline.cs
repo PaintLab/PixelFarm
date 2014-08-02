@@ -39,7 +39,8 @@ using Mini;
 
 namespace MatterHackers.Agg.Sample_LionOutline
 {
-    [Note("The example demonstrates Maxim's algorithm of drawing Anti-Aliased lines. " +
+    [ExInfo(OrderCode = "03")]
+    [ExInfo("The example demonstrates Maxim's algorithm of drawing Anti-Aliased lines. " +
             "The algorithm works about 2.5 times faster than the scanline rasterizer but has" +
             " some restrictions, particularly, line joins can be only of the �miter� type, " +
             "and when so called miter limit is exceded, they are not as accurate as generated " +

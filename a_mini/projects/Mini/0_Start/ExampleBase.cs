@@ -2,22 +2,53 @@
 
 using System;
 using System.Collections.Generic;
+using MatterHackers.Agg;
 
 
 namespace Mini
 {
 
-    public class ExDescAttribute : Attribute
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ExInfoAttribute : Attribute
     {
-        public ExDescAttribute(string desc)
+        public ExInfoAttribute()
+        {
+        }
+        public ExInfoAttribute(ExampleCategory catg)
+        {
+            this.Category = catg;
+        }
+        public ExInfoAttribute(string desc)
         {
             this.Description = desc;
         }
-        public string Description { get; set; }
+        public ExInfoAttribute(ExampleCategory catg, string desc)
+        {
+            this.Category = catg;
+            this.Description = desc;
+        }
+        public string Description { get; private set; }
+        public ExampleCategory Category { get; private set; }
+        public string OrderCode { get; set; }
     }
+
+    public enum ExampleCategory
+    {
+        Vector,
+        Bitmap
+    }
+    public delegate Graphics2D RequestNewGraphic2DDelegate();
 
     public abstract class ExampleBase
     {
+        public ExampleBase()
+        {
+            this.Width = 800;
+            this.Height = 600;
+        }
+        public event RequestNewGraphic2DDelegate RequestNewGfx2d;
+
         public abstract void Draw(MatterHackers.Agg.Graphics2D g);
         public virtual void Init() { }
         public virtual void MouseDrag(int x, int y) { }
@@ -25,6 +56,18 @@ namespace Mini
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }
+
+        protected Graphics2D NewGraphics2D()
+        {
+            if (RequestNewGfx2d == null)
+            {
+                throw new NotSupportedException();
+            }
+            else
+            {
+                return RequestNewGfx2d();
+            }
+        }
 
     }
 
@@ -45,13 +88,16 @@ namespace Mini
         public int MaxValue { get; set; }
 
     }
-    enum PresentaionHint
+    enum ExConfigPresentaionHint
     {
-        CheckBox,
-        SlideBar,
         TextBox,
-        OptionBoxes
+        CheckBox,
+        OptionBoxes,
+        SlideBarDiscrete,
+        SlideBarContinuous
     }
+
+
 
 
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
@@ -68,8 +114,6 @@ namespace Mini
     {
         System.Reflection.PropertyInfo property;
         List<ExampleConfigValue> optionFields;
-
-
 
         public ExampleConfigDesc(ExConfigAttribute config, System.Reflection.PropertyInfo property)
         {
@@ -88,11 +132,11 @@ namespace Mini
             Type propType = property.PropertyType;
             if (propType == typeof(bool))
             {
-                this.PresentaionHint = PresentaionHint.CheckBox;
+                this.PresentaionHint = ExConfigPresentaionHint.CheckBox;
             }
             else if (propType.IsEnum)
             {
-                this.PresentaionHint = Mini.PresentaionHint.OptionBoxes;
+                this.PresentaionHint = Mini.ExConfigPresentaionHint.OptionBoxes;
                 //find option
                 var enumFields = propType.GetFields();
 
@@ -117,12 +161,15 @@ namespace Mini
             }
             else if (propType == typeof(Int32))
             {
-                this.PresentaionHint = Mini.PresentaionHint.SlideBar;
-
+                this.PresentaionHint = Mini.ExConfigPresentaionHint.SlideBarDiscrete;
+            }
+            else if (propType == typeof(double))
+            {
+                this.PresentaionHint = Mini.ExConfigPresentaionHint.SlideBarContinuous;
             }
             else
             {
-                this.PresentaionHint = PresentaionHint.TextBox;
+                this.PresentaionHint = ExConfigPresentaionHint.TextBox;
             }
 
         }
@@ -136,7 +183,7 @@ namespace Mini
             get;
             private set;
         }
-        public PresentaionHint PresentaionHint
+        public ExConfigPresentaionHint PresentaionHint
         {
             get;
             private set;
@@ -157,13 +204,45 @@ namespace Mini
     class ExampleAndDesc
     {
         static Type exConfig = typeof(ExConfigAttribute);
+        static Type exInfoAttrType = typeof(ExInfoAttribute);
 
         List<ExampleConfigDesc> configList = new List<ExampleConfigDesc>();
-        public ExampleAndDesc(Type t, string desc)
+
+        public ExampleAndDesc(Type t, string name)
         {
             this.Type = t;
-            this.Desc = desc;
+            this.Name = name;
+            this.OrderCode = "";
             var p1 = t.GetProperties();
+
+            ExInfoAttribute[] exInfoList = t.GetCustomAttributes(exInfoAttrType, false) as ExInfoAttribute[];
+            int m = exInfoList.Length;
+
+
+            if (m > 0)
+            {
+
+                for (int n = 0; n < m; ++n)
+                {
+                    ExInfoAttribute info = exInfoList[n];
+                    if (!string.IsNullOrEmpty(info.OrderCode))
+                    {
+                        this.OrderCode = info.OrderCode;
+                    }
+
+                    if (!string.IsNullOrEmpty(info.Description))
+                    {
+                        this.Description += " " + info.Description;
+                    }
+                }
+
+            }
+            if (string.IsNullOrEmpty(this.Description))
+            {
+                this.Description = this.Name;
+            }
+
+
 
             foreach (var property in t.GetProperties())
             {
@@ -180,21 +259,30 @@ namespace Mini
             }
         }
         public Type Type { get; set; }
-        public string Desc { get; set; }
+        public string Name { get; set; }
         public override string ToString()
         {
-            return this.Desc;
+            return this.OrderCode + " : " + this.Name;
         }
         public List<ExampleConfigDesc> GetConfigList()
         {
             return this.configList;
         }
+        public string Description
+        {
+            get;
+            private set;
+        }
+        public string OrderCode
+        {
+            get;
+            set;
+        }
     }
-
     class ExampleConfigValue
     {
 
-        internal System.Reflection.FieldInfo fieldInfo;
+        System.Reflection.FieldInfo fieldInfo;
         System.Reflection.PropertyInfo property;
         public ExampleConfigValue(System.Reflection.PropertyInfo property, System.Reflection.FieldInfo fieldInfo, string name)
         {

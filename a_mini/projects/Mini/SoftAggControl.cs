@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
- 
+
 
 using System.Text;
 using System.Windows.Forms;
- 
+
 using MatterHackers.Agg;
 using MatterHackers.Agg.Image;
 
@@ -20,7 +20,7 @@ namespace Mini
         ExampleBase exampleBase;
         int myWidth = 800;
         int myHeight = 600;
-        
+
         public SoftAggControl()
         {
             InitializeComponent();
@@ -33,6 +33,8 @@ namespace Mini
         public void LoadExample(ExampleBase exBase)
         {
             this.exampleBase = exBase;
+            exBase.RequestNewGfx2d += () => NewGraphics2D();
+
         }
         Graphics2D NewGraphics2D()
         {

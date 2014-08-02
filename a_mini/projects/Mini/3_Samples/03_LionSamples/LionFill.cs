@@ -36,7 +36,8 @@ using MatterHackers.VectorMath;
 using Mini;
 namespace MatterHackers.Agg.Sample_LionFill
 {
-    [Note("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
+    [ExInfo(OrderCode = "03")]
+    [ExInfo("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
       + " left mouse button. Right mouse button adds “skewing” transformations, proportional to the “X” "
       + "coordinate. The image is drawn over the old one with a cetrain opacity value. Change “Alpha” "
       + "to draw funny looking “lions”. Change window size to clear the window.")]
@@ -55,6 +56,16 @@ namespace MatterHackers.Agg.Sample_LionFill
         {
             lionFill.Move(x, y);
         }
+
+        [ExConfig(MaxValue = 255)]
+        public int AlphaValue
+        {
+            get { return lionFill.AlphaValue; }
+            set
+            {
+                lionFill.AlphaValue = (byte)value;
+            }
+        }
     }
 
     //--------------------------------------------------
@@ -64,22 +75,31 @@ namespace MatterHackers.Agg.Sample_LionFill
         LionShape lionShape = new LionShape();
         Affine transform = Affine.NewIdentity();
         VertexSourceApplyTransform transformedPathStorage;
+        byte alpha;
         public LionFill()
         {
             this.Width = 500;
             this.Height = 500;
 
+            AlphaValue = 255;
 
-            //---------------------------------------------
-            //change alpha
-            byte alpha = 255;// (byte)(alphaSlider.Value * 255); 
-            int j = lionShape.NumPaths;
-            var colorBuffer = lionShape.Colors;
-            for (int i = lionShape.NumPaths - 1; i >= 0; --i)
+        }
+        public byte AlphaValue
+        {
+            get { return this.alpha; }
+            set
             {
-                colorBuffer[i].Alpha0To255 = alpha;
+
+                this.alpha = value;
+
+                //change alpha value
+                int j = lionShape.NumPaths;
+                var colorBuffer = lionShape.Colors;
+                for (int i = lionShape.NumPaths - 1; i >= 0; --i)
+                {
+                    colorBuffer[i].Alpha0To255 = alpha;
+                }
             }
-            //---------------------------------------------
         }
 
         public override bool Move(int mouseX, int mouseY)
