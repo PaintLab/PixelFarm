@@ -7,7 +7,7 @@ using MatterHackers.Agg.RasterizerScanline;
 using MatterHackers.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Sample_FloodFill
 {
     [ExInfo(OrderCode = "09")]
     [ExInfo(ExampleCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
@@ -57,7 +57,7 @@ namespace MatterHackers.Agg
             get;
             set;
         }
-         
+
         public override void Draw(Graphics2D graphics2D)
         {
             graphics2D.Render(imageToFillOn, imageOffset);

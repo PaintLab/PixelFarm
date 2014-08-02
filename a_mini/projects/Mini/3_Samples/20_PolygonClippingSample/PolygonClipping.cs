@@ -43,7 +43,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
     }
 
 
-    [ExInfo(OrderCode = "10")]
+    [ExInfo(OrderCode = "20")]
     public class PolygonClippingDemo : ExampleBase
     {
         PathStorage CombinePaths(IVertexSource a, IVertexSource b, ClipType clipType)
