@@ -165,7 +165,7 @@ namespace MatterHackers.Agg
 
 
         }
-        public override void MouseDown(int mx, int my)
+        public override void MouseDown(int mx, int my,  bool isRightButton)
         {
             double x = mx;
             double y = my;

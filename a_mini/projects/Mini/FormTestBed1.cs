@@ -36,13 +36,12 @@ namespace Mini
             this.softAggControl2.LoadExample(exampleBase);
             this.Text = exAndDesc.ToString();
 
-
             //-------------------------------------------
             //description:
             if (!string.IsNullOrEmpty(exAndDesc.Description))
             {
                 TextBox tt = new TextBox();
-                tt.Width = this.flowLayoutPanel1.Width;
+                tt.Width = this.flowLayoutPanel1.Width - 5;
                 tt.Text = exAndDesc.Description;
                 tt.Multiline = true;
                 tt.Height = 250;
@@ -114,7 +113,7 @@ namespace Mini
                                 var originalConfig = config.OriginalConfigAttribute;
                                 HScrollBar hscrollBar = new HScrollBar();
 
-                                //100 for scale factor 
+                                //100 => for scale factor 
 
                                 hscrollBar.Width = flowLayoutPanel1.Width;
                                 hscrollBar.Minimum = originalConfig.MinValue * 100;
@@ -122,15 +121,17 @@ namespace Mini
                                 hscrollBar.SmallChange = 1;
 
                                 //current value
+
                                 double doubleValue = ((double)config.InvokeGet(exampleBase) * 100);
                                 hscrollBar.Value = (int)doubleValue;
 
                                 //-------------
-                                descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
                                 hscrollBar.ValueChanged += (s, e) =>
                                 {
-                                    config.InvokeSet(exampleBase, hscrollBar.Value / 100);
-                                    descLabel.Text = config.Name + ":" + (hscrollBar.Value / 100);
+                                    double value = (double)hscrollBar.Value / 100d;
+                                    config.InvokeSet(exampleBase, value);
+                                    descLabel.Text = config.Name + ":" + value.ToString();
                                     InvalidateSampleViewPort();
                                 };
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);

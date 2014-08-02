@@ -51,8 +51,9 @@ namespace Mini
 
         public abstract void Draw(MatterHackers.Agg.Graphics2D g);
         public virtual void Init() { }
+
         public virtual void MouseDrag(int x, int y) { }
-        public virtual void MouseDown(int x, int y) { }
+        public virtual void MouseDown(int x, int y, bool isRightButton) { }
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }

@@ -412,7 +412,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_x = x;
             m_y = y;
         }
-        public override void MouseDown(int x, int y)
+        public override void MouseDown(int x, int y,bool isRightoy)
         {
             m_x = x;
             m_y = y;

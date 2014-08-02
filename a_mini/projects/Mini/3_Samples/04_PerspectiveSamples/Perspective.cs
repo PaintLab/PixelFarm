@@ -178,11 +178,11 @@ namespace MatterHackers.Agg.Sample_Perspective
             //m_trans_type.Render(g_rasterizer, g_scanline, clippingProxy);
             //base.OnDraw(graphics2D);
         }
-        public override void MouseDown(int x, int y)
+        public override void MouseDown(int x, int y, bool isRightButton)
         {
             var mouseEvent = new UI.MouseEventArgs(UI.MouseButtons.Left, 1, x, y, 0);
             quadPolygonControl.OnMouseDown(mouseEvent);
-            base.MouseDown(x, y);
+        
         }
         public override void MouseDrag(int x, int y)
         {

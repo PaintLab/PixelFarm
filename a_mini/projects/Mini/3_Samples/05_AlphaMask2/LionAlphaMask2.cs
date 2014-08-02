@@ -1,4 +1,7 @@
-﻿#define USE_CLIPPING_ALPHA_MASK
+﻿//2014 BSD,WinterDev
+//MatterHackers
+
+#define USE_CLIPPING_ALPHA_MASK
 
 using System;
 
@@ -281,10 +284,9 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             }
             alphaMaskImageBuffer.DettachBuffer();
         }
-        public override void MouseDown(int x, int y)
+        public override void MouseDown(int x, int y, bool isRightButton)
         {
-            doTransform(this.Width, this.Height, x, y);
-            base.MouseDown(x, y);
+            doTransform(this.Width, this.Height, x, y); 
         }
         public override void MouseDrag(int x, int y)
         {

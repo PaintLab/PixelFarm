@@ -59,7 +59,7 @@ namespace Mini
         {
             this.isMouseDown = true;
 
-            exampleBase.MouseDown(e.X, myHeight - e.Y);
+            exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
             base.OnMouseDown(e);
             Invalidate();
         }
