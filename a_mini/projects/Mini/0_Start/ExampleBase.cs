@@ -1,4 +1,6 @@
-﻿using System;
+﻿//BSD 2014, WinterDev
+
+using System;
 using System.Collections.Generic;
 
 
@@ -21,7 +23,8 @@ namespace Mini
         public virtual void MouseDrag(int x, int y) { }
         public virtual void MouseDown(int x, int y) { }
         public virtual void MouseUp(int x, int y) { }
-
+        public int Width { get; set; }
+        public int Height { get; set; }
 
     }
 
@@ -36,6 +39,11 @@ namespace Mini
             this.Name = name;
         }
         public string Name { get; set; }
+
+
+        public int MinValue { get; set; }
+        public int MaxValue { get; set; }
+
     }
     enum PresentaionHint
     {
@@ -60,10 +68,20 @@ namespace Mini
         List<ExampleConfigValue> optionFields;
 
 
-        public ExampleConfigDesc(System.Reflection.PropertyInfo property, string name)
+
+        public ExampleConfigDesc(ExConfigAttribute config, System.Reflection.PropertyInfo property)
         {
             this.property = property;
-            this.Name = name;
+            this.OriginalConfigAttribute = config;
+            if (!string.IsNullOrEmpty(config.Name))
+            {
+                this.Name = config.Name;
+            }
+            else
+            {
+                this.Name = property.Name;
+            }
+
 
             Type propType = property.PropertyType;
             if (propType == typeof(bool))
@@ -95,6 +113,11 @@ namespace Mini
                     }
                 }
             }
+            else if (propType == typeof(Int32))
+            {
+                this.PresentaionHint = Mini.PresentaionHint.SlideBar;
+
+            }
             else
             {
                 this.PresentaionHint = PresentaionHint.TextBox;
@@ -104,12 +127,17 @@ namespace Mini
         public string Name
         {
             get;
-            set;
+            private set;
+        }
+        public ExConfigAttribute OriginalConfigAttribute
+        {
+            get;
+            private set;
         }
         public PresentaionHint PresentaionHint
         {
             get;
-            set;
+            private set;
         }
         public void InvokeSet(object target, object value)
         {
@@ -143,7 +171,7 @@ namespace Mini
                     if (foundAttrs.Length > 0)
                     {
                         //this is configurable attrs
-                        configList.Add(new ExampleConfigDesc(property, property.Name));
+                        configList.Add(new ExampleConfigDesc((ExConfigAttribute)foundAttrs[0], property));
                     }
                 }
 

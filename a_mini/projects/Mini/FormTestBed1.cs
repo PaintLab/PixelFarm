@@ -64,6 +64,29 @@ namespace Mini
                                 {
 
 
+                                    Label descLabel = new Label();
+                                    descLabel.Width = 400;
+
+                                    this.flowLayoutPanel1.Controls.Add(descLabel);
+
+                                    var originalConfig = config.OriginalConfigAttribute;
+                                    HScrollBar hscrollBar = new HScrollBar();
+                                    hscrollBar.Width = flowLayoutPanel1.Width;
+                                    hscrollBar.Minimum = originalConfig.MinValue;
+                                    hscrollBar.Maximum = originalConfig.MaxValue + 10;
+                                    hscrollBar.SmallChange = 1;
+                                    //current value
+                                    hscrollBar.Value = (int)config.InvokeGet(exampleBase);
+                                    //-------------
+                                    descLabel.Text = config.Name + ":" + hscrollBar.Value;
+                                    hscrollBar.ValueChanged += (s, e) =>
+                                    {
+                                        config.InvokeSet(exampleBase, hscrollBar.Value);
+                                        descLabel.Text = config.Name + ":" + hscrollBar.Value; 
+                                        InvalidateSampleViewPort(); 
+                                    };
+
+                                    this.flowLayoutPanel1.Controls.Add(hscrollBar);
 
                                 } break;
                             case PresentaionHint.OptionBoxes:
@@ -80,7 +103,7 @@ namespace Mini
                                     for (int n = 0; n < m; ++n)
                                     {
 
-                                        ExampleConfigValue ofield = optionFields[n];                                        
+                                        ExampleConfigValue ofield = optionFields[n];
 
                                         RadioButton radio = new RadioButton();
                                         panelOption.Controls.Add(radio);
@@ -112,8 +135,8 @@ namespace Mini
                                     Label descLabel = new Label();
                                     descLabel.Width = 400;
                                     descLabel.Text = config.Name;
-
                                     this.flowLayoutPanel1.Controls.Add(descLabel);
+
                                     TextBox textBox = new TextBox();
                                     textBox.Width = 400;
                                     this.flowLayoutPanel1.Controls.Add(textBox);

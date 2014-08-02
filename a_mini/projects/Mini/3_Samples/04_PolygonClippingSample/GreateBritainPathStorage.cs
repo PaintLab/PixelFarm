@@ -1,4 +1,7 @@
-﻿using System;
+﻿//2014 BSD, WinterDev
+//MatterHackers
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

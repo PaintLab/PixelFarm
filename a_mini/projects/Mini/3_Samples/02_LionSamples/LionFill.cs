@@ -54,13 +54,11 @@ namespace MatterHackers.Agg.Sample_LionFill
     }
     //--------------------------------------------------
     public class LionFill : BasicSprite
-    {
-
+    {  
 
         LionShape lionShape = new LionShape();
         Affine transform = Affine.NewIdentity();
-        VertexSourceApplyTransform transformedPathStorage;
-
+        VertexSourceApplyTransform transformedPathStorage; 
         public LionFill()
         {
             this.Width = 500;

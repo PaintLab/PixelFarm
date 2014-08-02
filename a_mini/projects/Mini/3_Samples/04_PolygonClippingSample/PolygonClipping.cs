@@ -1,4 +1,7 @@
-﻿using System;
+﻿//2014 BSD, WinterDev
+//MatterHackers
+
+using System;
 using System.Collections.Generic;
 
 using MatterHackers.Agg.Image;
@@ -142,8 +145,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             get;
             set;
         }
-        public int Width { get; set; }
-        public int Height { get; set; }
+       
         public override void Draw(Graphics2D g)
         {
             if (BackgroundColor.Alpha0To255 > 0)
