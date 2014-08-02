@@ -45,9 +45,10 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\08_Blur\BlurSample.cs" />
-    <Compile Include="3_Samples\10_PolygonClippingSample\clipping_lib\cliper.cs" />
-    <Compile Include="3_Samples\10_PolygonClippingSample\GreateBritainPathStorage.cs" />
-    <Compile Include="3_Samples\10_PolygonClippingSample\PolygonClipping.cs" />
+    <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\clipping_lib\cliper.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
     <Compile Include="3_Samples\07_GouraudSample\GouraudSample.cs" />
     <Compile Include="FormDev.cs">

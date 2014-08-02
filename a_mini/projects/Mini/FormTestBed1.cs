@@ -93,7 +93,8 @@ namespace Mini
                                 hscrollBar.Maximum = originalConfig.MaxValue + 10;
                                 hscrollBar.SmallChange = 1;
                                 //current value
-                                hscrollBar.Value = (int)config.InvokeGet(exampleBase);
+                                int value = (int)config.InvokeGet(exampleBase);
+                                hscrollBar.Value = value;
                                 //-------------
                                 descLabel.Text = config.Name + ":" + hscrollBar.Value;
                                 hscrollBar.ValueChanged += (s, e) =>
