@@ -18,6 +18,11 @@ namespace Mini
 
     public abstract class ExampleBase
     {
+        public ExampleBase()
+        {
+            this.Width = 800;
+            this.Height = 600;
+        }
         public abstract void Draw(MatterHackers.Agg.Graphics2D g);
         public virtual void Init() { }
         public virtual void MouseDrag(int x, int y) { }
