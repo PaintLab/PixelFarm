@@ -19,6 +19,10 @@ namespace Mini
         {
             InitializeComponent();
         }
+        void InvalidateSampleViewPort()
+        {
+            this.softAggControl2.Invalidate();
+        }
         public void LoadExample(ExampleAndDesc exAndDesc)
         {
             ExampleBase exBase = Activator.CreateInstance(exAndDesc.Type) as ExampleBase;
@@ -46,12 +50,12 @@ namespace Mini
                                     checkBox.Width = 400;
 
                                     bool currentValue = (bool)config.InvokeGet(exampleBase);
-                                    checkBox.Checked = currentValue; 
+                                    checkBox.Checked = currentValue;
 
                                     checkBox.CheckedChanged += (s, e) =>
                                     {
                                         config.InvokeSet(exBase, checkBox.Checked);
-                                        this.softAggControl2.Invalidate();
+                                        InvalidateSampleViewPort();
                                     };
 
                                     this.flowLayoutPanel1.Controls.Add(checkBox);
@@ -61,6 +65,47 @@ namespace Mini
 
 
 
+                                } break;
+                            case PresentaionHint.OptionBoxes:
+                                {
+
+                                    List<ExampleConfigValue> optionFields = config.GetOptionFields();
+                                    FlowLayoutPanel panelOption = new FlowLayoutPanel();
+                                    int totalHeight = 0;
+                                    int m = optionFields.Count;
+
+                                    //current value 
+                                    int currentValue = (int)config.InvokeGet(exampleBase);
+
+                                    for (int n = 0; n < m; ++n)
+                                    {
+
+                                        ExampleConfigValue ofield = optionFields[n];                                        
+
+                                        RadioButton radio = new RadioButton();
+                                        panelOption.Controls.Add(radio);
+                                        radio.Text = ofield.Name;
+                                        radio.Width = 400;
+                                        radio.Checked = ofield.ValueAsInt32 == currentValue;
+
+                                        radio.Click += (s, e) =>
+                                        {
+                                            if (radio.Checked)
+                                            {
+                                                ofield.InvokeSet(this.exampleBase);
+                                                InvalidateSampleViewPort();
+                                            }
+                                        };
+                                        totalHeight += radio.Height + 10;
+                                    }
+
+
+
+
+                                    panelOption.Height = totalHeight;
+                                    panelOption.FlowDirection = FlowDirection.TopDown;
+
+                                    this.flowLayoutPanel1.Controls.Add(panelOption);
                                 } break;
                             case PresentaionHint.TextBox:
                                 {

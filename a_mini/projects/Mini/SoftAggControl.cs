@@ -21,6 +21,9 @@ namespace Mini
         bool isMouseDown;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
         ExampleBase exampleBase;
+        int myWidth = 800;
+        int myHeight = 600;
+        
         public SoftAggControl()
         {
             InitializeComponent();
@@ -28,7 +31,7 @@ namespace Mini
         }
         void SoftAggControl_Load(object sender, EventArgs e)
         {
-            OnInitialize(800, 600);
+            OnInitialize(myWidth, myHeight);
         }
         public void LoadExample(ExampleBase exBase)
         {
@@ -56,26 +59,32 @@ namespace Mini
         protected override void OnMouseDown(MouseEventArgs e)
         {
             this.isMouseDown = true;
+
+            exampleBase.MouseDown(e.X, myHeight - e.Y);
             base.OnMouseDown(e);
+            Invalidate();
         }
         protected override void OnMouseUp(MouseEventArgs e)
         {
             this.isMouseDown = false;
+
+            exampleBase.MouseUp(e.X, myHeight - e.Y);
             base.OnMouseUp(e);
+            Invalidate();
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (this.isMouseDown)
             {
-                exampleBase.MouseDrag(e.X, e.Y);
 
+                exampleBase.MouseDrag(e.X, myHeight - e.Y);
                 Invalidate();
             }
             base.OnMouseMove(e);
         }
         protected override void OnPaint(PaintEventArgs e)
-        {   
-            if(this.exampleBase == null)
+        {
+            if (this.exampleBase == null)
             {
                 base.OnPaint(e);
                 return;
