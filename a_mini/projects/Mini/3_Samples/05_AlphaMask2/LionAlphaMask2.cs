@@ -12,6 +12,7 @@ using Mini;
 
 namespace MatterHackers.Agg.Sample_LionAlphaMask2
 {
+    [ExInfo(OrderCode = "05")]
     [ExInfo(ExampleCategory.Bitmap, "Clipping to multiple rectangle regions")]
     public class alpha_mask2_application : ExampleBase
     {

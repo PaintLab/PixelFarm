@@ -18,7 +18,8 @@ using LayoutFarm.Canvas2dExtension;
 using Mini;
 namespace MatterHackers.Agg.Sample_Draw
 {
-    //from Agg's DrawAndSave    
+   
+    [ExInfo(OrderCode = "01")]
     [ExInfo("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample01 : ExampleBase
     {
@@ -54,13 +55,14 @@ namespace MatterHackers.Agg.Sample_Draw
                 g.DrawString2("A Simple Example4", 300, 250, 20);
                 //---------------------------------------------------
 
-
-
             }
         }
     }
 
-    public class DrawSample02 : Mini.ExampleBase
+
+    [ExInfo(OrderCode = "01")]
+    [ExInfo("from MatterHackers' Agg DrawAndSave")]
+    public class DrawSample02 : ExampleBase
     {
         public override void Init()
         {

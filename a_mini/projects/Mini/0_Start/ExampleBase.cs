@@ -8,9 +8,13 @@ using MatterHackers.Agg;
 namespace Mini
 {
 
-    [AttributeUsage(AttributeTargets.Class)]
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ExInfoAttribute : Attribute
     {
+        public ExInfoAttribute()
+        {
+        }
         public ExInfoAttribute(ExampleCategory catg)
         {
             this.Category = catg;
@@ -19,7 +23,6 @@ namespace Mini
         {
             this.Description = desc;
         }
-       
         public ExInfoAttribute(ExampleCategory catg, string desc)
         {
             this.Category = catg;
@@ -27,6 +30,7 @@ namespace Mini
         }
         public string Description { get; private set; }
         public ExampleCategory Category { get; private set; }
+        public string OrderCode { get; set; }
     }
 
     public enum ExampleCategory
@@ -200,13 +204,45 @@ namespace Mini
     class ExampleAndDesc
     {
         static Type exConfig = typeof(ExConfigAttribute);
+        static Type exInfoAttrType = typeof(ExInfoAttribute);
 
         List<ExampleConfigDesc> configList = new List<ExampleConfigDesc>();
-        public ExampleAndDesc(Type t, string desc)
+
+        public ExampleAndDesc(Type t, string name)
         {
             this.Type = t;
-            this.Desc = desc;
+            this.Name = name;
+            this.OrderCode = "";
             var p1 = t.GetProperties();
+
+            ExInfoAttribute[] exInfoList = t.GetCustomAttributes(exInfoAttrType, false) as ExInfoAttribute[];
+            int m = exInfoList.Length;
+
+
+            if (m > 0)
+            {
+
+                for (int n = 0; n < m; ++n)
+                {
+                    ExInfoAttribute info = exInfoList[n];
+                    if (!string.IsNullOrEmpty(info.OrderCode))
+                    {
+                        this.OrderCode = info.OrderCode;
+                    }
+
+                    if (!string.IsNullOrEmpty(info.Description))
+                    {
+                        this.Description += " " + info.Description;
+                    }
+                }
+
+            }
+            if (string.IsNullOrEmpty(this.Description))
+            {
+                this.Description = this.Name;
+            }
+
+
 
             foreach (var property in t.GetProperties())
             {
@@ -223,14 +259,24 @@ namespace Mini
             }
         }
         public Type Type { get; set; }
-        public string Desc { get; set; }
+        public string Name { get; set; }
         public override string ToString()
         {
-            return this.Desc;
+            return this.OrderCode + " : " + this.Name;
         }
         public List<ExampleConfigDesc> GetConfigList()
         {
             return this.configList;
+        }
+        public string Description
+        {
+            get;
+            private set;
+        }
+        public string OrderCode
+        {
+            get;
+            set;
         }
     }
     class ExampleConfigValue

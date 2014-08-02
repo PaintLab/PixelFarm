@@ -42,6 +42,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         SprialAndGlyph
     }
 
+
+    [ExInfo(OrderCode = "10")]
     public class PolygonClippingDemo : ExampleBase
     {
         PathStorage CombinePaths(IVertexSource a, IVertexSource b, ClipType clipType)
@@ -145,7 +147,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             get;
             set;
         }
-       
+
         public override void Draw(Graphics2D g)
         {
             if (BackgroundColor.Alpha0To255 > 0)
@@ -157,7 +159,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
         void render_gpc(Graphics2D graphics2D)
         {
-             
+
             switch (this.PolygonSet)
             {
                 case PolygonExampleSet.TwoSimplePaths:

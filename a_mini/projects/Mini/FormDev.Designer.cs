@@ -39,13 +39,13 @@
             this.listBox1.Size = new System.Drawing.Size(234, 433);
             this.listBox1.TabIndex = 0;
             // 
-            // DevForm
+            // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(693, 463);
             this.Controls.Add(this.listBox1);
-            this.Name = "DevForm";
+            this.Name = "FormDev";
             this.Text = "DevForm";
             this.ResumeLayout(false);
 
