@@ -7,9 +7,16 @@
 //using MatterHackers.Agg.RasterizerScanline;
 //using MatterHackers.VectorMath;
 
+//using Mini;
 //namespace MatterHackers.Agg
 //{
-//    public class perspective_application : MiniWidget
+//    [Note("Perspective and bilinear transformations. In general, these classes can transform an arbitrary quadrangle "
+//            + " to another arbitrary quadrangle (with some restrictions). The example demonstrates how to transform "
+//            + "a rectangle to a quadrangle defined by 4 vertices. You can drag the 4 corners of the quadrangle, "
+//            + "as well as its boundaries. Note, that the perspective transformations don't work correctly if "
+//            + "the destination quadrangle is concave. Bilinear thansformations give a different result, but "
+//            + "remain valid with any shape of the destination quadrangle.")]
+//    public class perspective_application : ExampleBase
 //    {
 //        MatterHackers.Agg.ScanlineRasterizer g_rasterizer = new ScanlineRasterizer();
 //        ScanlineCachePacked8 g_scanline = new ScanlineCachePacked8();
@@ -20,7 +27,7 @@
 
 //        public perspective_application()
 //        {
-//            AnchorAll();
+             
 //            quadPolygonControl = new MatterHackers.Agg.UI.PolygonEditWidget(4, 5.0);
 //            transformationTypeRadioButton = new MatterHackers.Agg.UI.RadioButtonGroup(new Vector2(420, 5.0), new Vector2(130.0, 50.0));
 //            transformationTypeRadioButton.SelectionChanged += new EventHandler(NeedsRedraw);

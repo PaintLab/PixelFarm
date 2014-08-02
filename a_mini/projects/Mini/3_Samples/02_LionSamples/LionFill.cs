@@ -36,6 +36,10 @@ using MatterHackers.VectorMath;
 using Mini;
 namespace MatterHackers.Agg.Sample_LionFill
 {
+    [Note("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
+      + " left mouse button. Right mouse button adds “skewing” transformations, proportional to the “X” "
+      + "coordinate. The image is drawn over the old one with a cetrain opacity value. Change “Alpha” "
+      + "to draw funny looking “lions”. Change window size to clear the window.")]
     public class LionFillExample : ExampleBase
     {
         LionFill lionFill;
@@ -52,13 +56,14 @@ namespace MatterHackers.Agg.Sample_LionFill
             lionFill.Move(x, y);
         }
     }
+
     //--------------------------------------------------
     public class LionFill : BasicSprite
-    {  
+    {
 
         LionShape lionShape = new LionShape();
         Affine transform = Affine.NewIdentity();
-        VertexSourceApplyTransform transformedPathStorage; 
+        VertexSourceApplyTransform transformedPathStorage;
         public LionFill()
         {
             this.Width = 500;
@@ -76,11 +81,11 @@ namespace MatterHackers.Agg.Sample_LionFill
             }
             //---------------------------------------------
         }
-        
+
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-            transformedPathStorage = null;        
+            transformedPathStorage = null;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)

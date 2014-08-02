@@ -53,6 +53,8 @@ namespace Mini
         OptionBoxes
     }
 
+
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class NoteAttribute : Attribute
     {
         public NoteAttribute(string desc)
