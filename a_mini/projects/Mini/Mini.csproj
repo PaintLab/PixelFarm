@@ -42,7 +42,8 @@
   <ItemGroup>
     <Compile Include="0_Start\DemoBase.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test1.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\08_Blur\BlurSample.cs" />
     <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
@@ -53,7 +54,7 @@
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
     <Compile Include="3_Samples\07_GouraudSample\GouraudSample.cs" />
-    <Compile Include="4_Samples_2\30_ScanlineBoolean\ScanlineBooleanSample.cs" />
+    <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>

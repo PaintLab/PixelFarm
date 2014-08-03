@@ -10,7 +10,7 @@ using MatterHackers.Agg.RasterizerScanline;
 using MatterHackers.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Sample_AADemoTest2
 {
     public class square
     {
@@ -34,18 +34,16 @@ namespace MatterHackers.Agg
         }
     }
 
-    class renderer_enlarged : ScanlineRenderer
+    class renderer_enlarged_test2 : ScanlineRenderer
     {
         double m_size;
         square m_square;
         scanline_unpacked_8 m_sl = new scanline_unpacked_8();
-        public renderer_enlarged(double size)
+        public renderer_enlarged_test2(double size)
         {
             m_size = size;
             m_square = new square(size);
-        }
-
-
+        } 
         protected override void RenderSolidSingleScanLine(IImageByte destImage, IScanlineCache scanLineCache, RGBA_Bytes color)
         {
             int y = scanLineCache.y();
@@ -81,7 +79,7 @@ namespace MatterHackers.Agg
                     + "To draw the enlarged version there is a special scanline renderer written (see "
                     + "class renderer_enlarged in the source code). You can drag the whole triangle as well "
                     + "as each vertex of it. Also change “Gamma” to see how it affects the quality of Anti-Aliasing.")]
-    public class aa_demo : DemoBase
+    public class aa_demo_test2 : DemoBase
     {
         double[] m_x = new double[3];
         double[] m_y = new double[3];
@@ -90,7 +88,7 @@ namespace MatterHackers.Agg
         int m_idx;
 
 
-        public aa_demo()
+        public aa_demo_test2()
         {
             m_idx = -1;
             m_x[0] = 57; m_y[0] = 100;
@@ -124,6 +122,7 @@ namespace MatterHackers.Agg
             ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
+
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();
             IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
             ImageBuffer rasterGamma = new ImageBuffer();
@@ -138,7 +137,7 @@ namespace MatterHackers.Agg
 
             int size_mul = (int)this.PixelSize;
 
-            renderer_enlarged ren_en = new renderer_enlarged(size_mul);
+            renderer_enlarged_test2 ren_en = new renderer_enlarged_test2(size_mul);
 
             rasterizer.reset();
             rasterizer.move_to_d(m_x[0] / size_mul, m_y[0] / size_mul);
@@ -149,6 +148,7 @@ namespace MatterHackers.Agg
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, RGBA_Bytes.Black);
 
+            //-----------------------------------------------------------------------------------------------------------
             rasterizer.gamma(new gamma_none());
 
             PathStorage ps = new PathStorage();
