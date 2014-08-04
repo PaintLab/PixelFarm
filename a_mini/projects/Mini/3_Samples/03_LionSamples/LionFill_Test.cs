@@ -131,22 +131,22 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
 
             if (!IsFreezed)
             {
-                var destImage = graphics2D.DestImage;
-                var buffer = destImage.GetBuffer();
-                var w = destImage.Width;
-                var h = destImage.Height;
+                //var destImage = graphics2D.DestImage;
+                //var buffer = destImage.GetBuffer();
+                //var w = destImage.Width;
+                //var h = destImage.Height;
 
-                //snap to bmp
-                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h);
-                BitmapHelper.CopyToWindowsBitmap(buffer, 0,
-                    destImage.StrideInBytes(),
-                    destImage.Height,
-                    destImage.BitDepth,
-                    bmp, new RectangleInt(0, 0, w, h));
+                ////snap to bmp
+                //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h);
+                //BitmapHelper.CopyToWindowsBitmap(buffer, 0,
+                //    destImage.StrideInBytes(),
+                //    destImage.Height,
+                //    destImage.BitDepth,
+                //    bmp, new RectangleInt(0, 0, w, h));
 
-                bmp.Save("d:\\WImageTest\\01.bmp");
+                //bmp.Save("d:\\WImageTest\\01.bmp");
 
-                this.Freeze();
+                //this.Freeze();
                 //var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h),
                 //     System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 //     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
