@@ -30,25 +30,39 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
+
+using MatterHackers.Agg;
 using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 
-namespace MatterHackers.Agg
+namespace LayoutFarm.MiniCinema
 {
-    public abstract class BasicSprite
+    public abstract class SimpleSprite
     {
         protected double angle = 0;
         protected double spriteScale = 1.0;
         protected double skewX = 0;
         protected double skewY = 0;
 
+        bool isFreeze;
         public int Width { get; set; }
         public int Height { get; set; }
 
+        public void Freeze()
+        {
+            this.isFreeze = true;
+        }
+        public bool IsFreezed
+        {
+            get
+            {
+                return this.isFreeze;
+            }
+        }
         public virtual void OnDraw(Graphics2D graphics2D)
-        { 
+        {
         }
         protected void UpdateTransform(double width, double height, double x, double y)
         {

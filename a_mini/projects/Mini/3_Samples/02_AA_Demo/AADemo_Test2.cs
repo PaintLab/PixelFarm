@@ -10,6 +10,9 @@ using MatterHackers.Agg.RasterizerScanline;
 using MatterHackers.VectorMath;
 
 using Mini;
+
+
+
 namespace MatterHackers.Agg.Sample_AADemoTest2
 {
     public class square
@@ -39,11 +42,14 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
         double m_size;
         square m_square;
         scanline_unpacked_8 m_sl = new scanline_unpacked_8();
+
+      
+
         public renderer_enlarged_test2(double size)
         {
             m_size = size;
             m_square = new square(size);
-        } 
+        }
         protected override void RenderSolidSingleScanLine(IImageByte destImage, IScanlineCache scanLineCache, RGBA_Bytes color)
         {
             int y = scanLineCache.y();
@@ -119,6 +125,10 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
         public void OnDraw(Graphics2D graphics2D)
         {
+
+
+
+
             ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
@@ -165,7 +175,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
 
         }
-        public override void MouseDown(int mx, int my,  bool isRightButton)
+        public override void MouseDown(int mx, int my, bool isRightButton)
         {
             double x = mx;
             double y = my;

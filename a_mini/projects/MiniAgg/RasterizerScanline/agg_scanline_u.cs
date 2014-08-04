@@ -192,7 +192,7 @@ namespace MatterHackers.Agg.RasterizerScanline
             for (int i = 0; i < len; i++)
             {
                 m_covers.Array[x + i] = (byte)cover;
-            }
+            } 
 
             if (x == m_last_x + 1)
             {
