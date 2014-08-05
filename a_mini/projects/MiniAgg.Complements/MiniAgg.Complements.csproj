@@ -31,14 +31,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AggTests\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
     <Compile Include="Canvas2DExtension.cs" />
-    <Compile Include="Extensions\Ellipse.cs" />
-    <Compile Include="Extensions\RoundedRect.cs" />
+    <Compile Include="StringHelper.cs" />
+    <Compile Include="TimedLock.cs" />
+    <Compile Include="VertexSource\Arc.cs" />
+    <Compile Include="VertexSource\Contour.cs" />
+    <Compile Include="VertexSource\ContourGenerator.cs" />
+    <Compile Include="VertexSource\Ellipse.cs" />
+    <Compile Include="VertexSource\RoundedRect.cs" />
     <Compile Include="Font\LiberationSansFont.cs" />
     <Compile Include="Font\StyledTypeFace.cs" />
     <Compile Include="Font\TextWrapping.cs" />

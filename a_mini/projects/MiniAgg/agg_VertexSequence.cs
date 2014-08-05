@@ -102,17 +102,17 @@ namespace MatterHackers.Agg
             }
         }
 
-        internal VertexDistance prev(int idx)
+        public VertexDistance prev(int idx)
         {
             return this[(idx + currentSize - 1) % currentSize];
         }
 
-        internal VertexDistance curr(int idx)
+        public VertexDistance curr(int idx)
         {
             return this[idx];
         }
 
-        internal VertexDistance next(int idx)
+        public VertexDistance next(int idx)
         {
             return this[(idx + 1) % currentSize];
         }

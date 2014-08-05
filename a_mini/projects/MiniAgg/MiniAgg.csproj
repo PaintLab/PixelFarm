@@ -93,7 +93,6 @@
     <Compile Include="IMarkers.cs" />
     <Compile Include="IScanline.cs" />
     <Compile Include="IVertexDest.cs" />
-    <Compile Include="KDTree.cs" />
     <Compile Include="OutlineRenderer.cs" />
     <Compile Include="PluginFinder.cs" />
     <Compile Include="Point2D.cs" />
@@ -107,9 +106,7 @@
     <Compile Include="ScanlineRasterizer.cs" />
     <Compile Include="ScanlineRenderer.cs" />
     <Compile Include="ShapePath.cs" />
-    <Compile Include="StringHelper.cs" />
     <Compile Include="Tests\UnitTests.cs" />
-    <Compile Include="TimedLock.cs" />
     <Compile Include="Transform\Affine.cs" />
     <Compile Include="Transform\Bilinear.cs" />
     <Compile Include="Transform\ITransform.cs" />
@@ -121,9 +118,6 @@
     <Compile Include="VertexSource\agg_span_gouraud.cs" />
     <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
     <Compile Include="VertexSource\ApplyTransform.cs" />
-    <Compile Include="VertexSource\Arc.cs" />
-    <Compile Include="VertexSource\Contour.cs" />
-    <Compile Include="VertexSource\ContourGenerator.cs" />
     <Compile Include="VertexSource\IGenerator.cs" />
     <Compile Include="VertexSource\IVertexSource.cs" />
     <Compile Include="VertexSource\PathStorage.cs" />
