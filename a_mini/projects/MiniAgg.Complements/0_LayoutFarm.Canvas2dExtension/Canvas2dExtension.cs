@@ -34,7 +34,8 @@ using MatterHackers.Agg.Font;
 namespace MatterHackers.Agg
 {
     public static class Canvas2dExtension
-    {
+    {   
+
         public static void DrawString(this Graphics2D gx, string Text, double x, double y, double pointSize = 12,
             Justification justification = Justification.Left,
             Baseline baseline = Baseline.Text,
@@ -156,6 +157,15 @@ namespace MatterHackers.Agg
             }
             RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
             gx.Render(rect, fillColor.GetAsRGBA_Bytes());
+        }
+        public static void Circle(this Agg.Graphics2D g, double x, double y, double radius, RGBA_Bytes color)
+        {
+            Ellipse elipse = new Ellipse(x, y, radius, radius);
+            g.Render(elipse, color);
+        }
+        public static void Circle(this Agg.Graphics2D g, Vector2 origin, double radius, RGBA_Bytes color)
+        {
+            Circle(g, origin.x, origin.y, radius, color);
         }
     }
 }

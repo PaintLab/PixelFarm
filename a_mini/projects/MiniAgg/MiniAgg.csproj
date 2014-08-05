@@ -69,24 +69,18 @@
     <Compile Include="agg_VertexSequence.cs" />
     <Compile Include="Array2D.cs" />
     <Compile Include="BorderDouble.cs" />
-    <Compile Include="FlattenCurve.cs" />
     <Compile Include="FloodFiller.cs" />
     <Compile Include="GammaLookUpTable.cs" />
     <Compile Include="Graphics2D.cs" />
     <Compile Include="IColorType.cs" />
     <Compile Include="ImageLineRenderer.cs" />
     <Compile Include="Image\agg_alpha_mask_u8.cs" />
-    <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\ClippingProxy.cs" />
-    <Compile Include="Image\Gray.cs" />
     <Compile Include="Image\IImage.cs" />
     <Compile Include="Image\ImageBuffer.cs" />
     <Compile Include="Image\ImageBufferFloat.cs" />
     <Compile Include="Image\ImageGraphics2D.cs" />
     <Compile Include="Image\ImageProxy.cs" />
-    <Compile Include="Image\ImageSequence.cs" />
-    <Compile Include="Image\ImageTgaIO.cs" />
-    <Compile Include="Image\RecursiveBlur.cs" />
     <Compile Include="Image\rgb.cs" />
     <Compile Include="Image\rgba.cs" />
     <Compile Include="Image\Transposer.cs" />
@@ -113,10 +107,6 @@
     <Compile Include="Transform\Perspective.cs" />
     <Compile Include="Transform\Viewport.cs" />
     <Compile Include="VectorClipper.cs" />
-    <Compile Include="VertexSource\agg_curves.cs" />
-    <Compile Include="VertexSource\agg_gsv_text.cs" />
-    <Compile Include="VertexSource\agg_span_gouraud.cs" />
-    <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
     <Compile Include="VertexSource\ApplyTransform.cs" />
     <Compile Include="VertexSource\IGenerator.cs" />
     <Compile Include="VertexSource\IVertexSource.cs" />
@@ -125,7 +115,6 @@
     <Compile Include="VertexSource\StrokeGenerator.cs" />
     <Compile Include="VertexSource\StrokeMath.cs" />
     <Compile Include="VertexSource\VertexSourceAdapter.cs" />
-    <Compile Include="VertexSource\VertexSourceIO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniVectorMath\MiniVectorMath.csproj">

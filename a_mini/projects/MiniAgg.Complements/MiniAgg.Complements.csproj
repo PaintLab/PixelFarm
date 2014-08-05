@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,13 +42,21 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
-    <Compile Include="Canvas2DExtension.cs" />
+    <Compile Include="Image\AlphaMaskAdaptor.cs" />
+    <Compile Include="Image\Gray.cs" />
+    <Compile Include="Image\ImageSequence.cs" />
+    <Compile Include="Image\ImageTgaIO.cs" />
+    <Compile Include="Image\RecursiveBlur.cs" />
     <Compile Include="StringHelper.cs" />
-    <Compile Include="TimedLock.cs" />
+    <Compile Include="VertexSource\agg_curves.cs" />
+    <Compile Include="VertexSource\agg_gsv_text.cs" />
+    <Compile Include="VertexSource\agg_span_gouraud.cs" />
+    <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
     <Compile Include="VertexSource\Arc.cs" />
     <Compile Include="VertexSource\Contour.cs" />
     <Compile Include="VertexSource\ContourGenerator.cs" />
     <Compile Include="VertexSource\Ellipse.cs" />
+    <Compile Include="VertexSource\FlattenCurve.cs" />
     <Compile Include="VertexSource\RoundedRect.cs" />
     <Compile Include="Font\LiberationSansFont.cs" />
     <Compile Include="Font\StyledTypeFace.cs" />
@@ -57,6 +66,7 @@
     <Compile Include="Font\UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests.cs" />
+    <Compile Include="VertexSource\VertexSourceIO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">

@@ -67,6 +67,7 @@
     <Compile Include="SystemWindow\AbstractOsMappingWidget.cs" />
     <Compile Include="SystemWindow\OsMappingWidgetFactory.cs" />
     <Compile Include="SystemWindow\SystemWindow.cs" />
+    <Compile Include="TimedLock.cs" />
     <Compile Include="UiThread.cs" />
     <Compile Include="WidgetClosingEnventArgs.cs" />
   </ItemGroup>
