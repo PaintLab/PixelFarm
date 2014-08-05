@@ -69,15 +69,8 @@
     <Compile Include="agg_VertexSequence.cs" />
     <Compile Include="Array2D.cs" />
     <Compile Include="BorderDouble.cs" />
+    <Compile Include="FlattenCurve.cs" />
     <Compile Include="FloodFiller.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
-    <Compile Include="Font\LiberationSansFont.cs" />
-    <Compile Include="Font\StyledTypeFace.cs" />
-    <Compile Include="Font\TextWrapping.cs" />
-    <Compile Include="Font\TypeFace.cs" />
-    <Compile Include="Font\TypeFacePrinter.cs" />
-    <Compile Include="Font\UnitTests.cs" />
     <Compile Include="GammaLookUpTable.cs" />
     <Compile Include="Graphics2D.cs" />
     <Compile Include="IColorType.cs" />
@@ -97,7 +90,6 @@
     <Compile Include="Image\rgb.cs" />
     <Compile Include="Image\rgba.cs" />
     <Compile Include="Image\Transposer.cs" />
-    <Compile Include="Image\UnitTests.cs" />
     <Compile Include="IMarkers.cs" />
     <Compile Include="IScanline.cs" />
     <Compile Include="IVertexDest.cs" />
@@ -132,12 +124,9 @@
     <Compile Include="VertexSource\Arc.cs" />
     <Compile Include="VertexSource\Contour.cs" />
     <Compile Include="VertexSource\ContourGenerator.cs" />
-    <Compile Include="VertexSource\Ellipse.cs" />
-    <Compile Include="VertexSource\FlattenCurve.cs" />
     <Compile Include="VertexSource\IGenerator.cs" />
     <Compile Include="VertexSource\IVertexSource.cs" />
     <Compile Include="VertexSource\PathStorage.cs" />
-    <Compile Include="VertexSource\RoundedRect.cs" />
     <Compile Include="VertexSource\Stroke.cs" />
     <Compile Include="VertexSource\StrokeGenerator.cs" />
     <Compile Include="VertexSource\StrokeMath.cs" />

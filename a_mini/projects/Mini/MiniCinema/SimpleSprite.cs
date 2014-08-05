@@ -63,9 +63,11 @@ namespace LayoutFarm.MiniCinema
         }
         public virtual void OnDraw(Graphics2D graphics2D)
         {
+
         }
+
         protected void UpdateTransform(double width, double height, double x, double y)
-        {
+        {    
             x -= width / 2;
             y -= height / 2;
             angle = Math.Atan2(y, x);

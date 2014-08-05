@@ -29,13 +29,34 @@ using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 using MatterHackers.Agg.Font;
-using LayoutFarm.Agg.Font;
+//using LayoutFarm.Agg.Font;
 
-namespace LayoutFarm.Canvas2dExtension
+namespace MatterHackers.Agg
 {
     public static class Canvas2dExtension
     {
+        public static void DrawString(this Graphics2D gx, string Text, double x, double y, double pointSize = 12,
+            Justification justification = Justification.Left,
+            Baseline baseline = Baseline.Text,
+            RGBA_Bytes color = new RGBA_Bytes(),
+            bool drawFromHintedCache = false,
+            RGBA_Bytes backgroundColor = new RGBA_Bytes())
+        {
 
+            TypeFacePrinter stringPrinter = new TypeFacePrinter(Text, pointSize, new Vector2(x, y), justification, baseline);
+            if (color.Alpha0To255 == 0)
+            {
+                color = RGBA_Bytes.Black;
+            }
+
+            if (backgroundColor.Alpha0To255 != 0)
+            {
+                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
+            }
+
+            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
+            stringPrinter.Render(gx, color);
+        }
         public static void DrawString2(this Graphics2D gx, string text, double x, double y, double pointSize = 12,
            Justification justification = Justification.Left,
            Baseline baseline = Baseline.Text,
@@ -45,7 +66,7 @@ namespace LayoutFarm.Canvas2dExtension
         {
 
             //1. parse text 
-            
+
             var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
                 text,
                 pointSize,
@@ -93,6 +114,48 @@ namespace LayoutFarm.Canvas2dExtension
 
             stringPrinter.DrawFromHintedCache = drawFromHintedCache;
             stringPrinter.Render(gx, color);
+        }
+        public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, RGBA_Bytes color, double strokeWidth = 1)
+        {
+            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
+            Stroke rectOutline = new Stroke(rect, strokeWidth);
+
+            gx.Render(rectOutline, color);
+        }
+
+        public static void Rectangle(this Graphics2D gx, RectangleDouble rect, RGBA_Bytes color, double strokeWidth = 1)
+        {
+            gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color, strokeWidth);
+        }
+
+        public static void Rectangle(this Graphics2D gx, RectangleInt rect, RGBA_Bytes color)
+        {
+            gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color);
+        }
+
+        public static void FillRectangle(this Graphics2D gx, RectangleDouble rect, IColorType fillColor)
+        {
+            gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
+        }
+
+        public static void FillRectangle(this Graphics2D gx, RectangleInt rect, IColorType fillColor)
+        {
+            gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
+        }
+
+        public static void FillRectangle(this Graphics2D gx, Vector2 leftBottom, Vector2 rightTop, IColorType fillColor)
+        {
+            gx.FillRectangle(leftBottom.x, leftBottom.y, rightTop.x, rightTop.y, fillColor);
+        }
+
+        public static void FillRectangle(this Graphics2D gx, double left, double bottom, double right, double top, IColorType fillColor)
+        {
+            if (right < left || top < bottom)
+            {
+                throw new ArgumentException();
+            }
+            RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
+            gx.Render(rect, fillColor.GetAsRGBA_Bytes());
         }
     }
 }
