@@ -164,24 +164,25 @@ namespace MatterHackers.Agg
 
             int npaths = 0;
             string[] splitOnNL = g_lion.Split('\n');
-            foreach(string LineString in splitOnNL)
+            foreach (string line in splitOnNL)
             {
-                int c;
-                if (LineString.Length > 0
-                    && LineString[0] != 'M'
-                    && Int32.TryParse(LineString, NumberStyles.HexNumber, null, out c))
+                int newColor;
+                if (line.Length > 0
+                    && line[0] != 'M'
+                    && Int32.TryParse(line, NumberStyles.HexNumber, null, out newColor))
                 {
                     // New color. Every new color creates new path in the path object.
                     path.ClosePolygon();
-                    colors[npaths] = RGBA_Bytes.rgb8_packed((int)c);
+
+                    colors[npaths] = RGBA_Bytes.rgb8_packed((int)newColor);
                     path_idx[npaths] = path.start_new_path();
                     npaths++;
                 }
                 else
                 {
                     bool startedPoly = false;
-                    string[] splitOnSpace = LineString.Split(' ');
-                    for(int i=0; i<splitOnSpace.Length; i++)
+                    string[] splitOnSpace = line.Split(' ');
+                    for (int i = 0; i < splitOnSpace.Length; i++)
                     {
                         string[] splitOnComma = splitOnSpace[i].Split(',');
                         if (splitOnComma.Length > 1)
