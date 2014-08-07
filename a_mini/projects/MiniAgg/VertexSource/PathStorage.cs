@@ -42,14 +42,18 @@ namespace MatterHackers.Agg.VertexSource
         {
             int m_num_vertices;
             int m_allocated_vertices;
-            double[] m_coord_x;
-            double[] m_coord_y;
+
+
+            //easy to transfer back to unmanaged part!
+            double[] m_coord_xy;
             ShapePath.FlagsAndCommand[] m_CommandAndFlags;
 
             public void free_all()
             {
-                m_coord_x = null;
-                m_coord_y = null;
+                //m_coord_x = null;
+                //m_coord_y = null;
+                m_coord_xy = null;
+
                 m_CommandAndFlags = null;
 
                 m_num_vertices = 0;
@@ -72,8 +76,9 @@ namespace MatterHackers.Agg.VertexSource
             public void AddVertex(double x, double y, ShapePath.FlagsAndCommand CommandAndFlags)
             {
                 allocate_if_required(m_num_vertices);
-                m_coord_x[m_num_vertices] = x;
-                m_coord_y[m_num_vertices] = y;
+
+                m_coord_xy[m_num_vertices << 1] = x;
+                m_coord_xy[(m_num_vertices << 1) + 1] = y;
                 m_CommandAndFlags[m_num_vertices] = CommandAndFlags;
 
                 m_num_vertices++;
@@ -81,14 +86,17 @@ namespace MatterHackers.Agg.VertexSource
 
             public void modify_vertex(int index, double x, double y)
             {
-                m_coord_x[index] = x;
-                m_coord_y[index] = y;
+                m_coord_xy[index << 1] = x;
+                m_coord_xy[(index << 1) + 1] = y;
             }
 
             public void modify_vertex(int index, double x, double y, ShapePath.FlagsAndCommand CommandAndFlags)
             {
-                m_coord_x[index] = x;
-                m_coord_y[index] = y;
+                //m_coord_x[index] = x;
+                //m_coord_y[index] = y;
+                m_coord_xy[index << 1] = x;
+                m_coord_xy[(index << 1) + 1] = y;
+
                 m_CommandAndFlags[index] = CommandAndFlags;
             }
 
@@ -99,10 +107,21 @@ namespace MatterHackers.Agg.VertexSource
 
             public void swap_vertices(int v1, int v2)
             {
-                double val;
+                //double val;
+                //val = m_coord_x[v1]; m_coord_x[v1] = m_coord_x[v2]; m_coord_x[v2] = val;  
+                //val = m_coord_y[v1]; m_coord_y[v1] = m_coord_y[v2]; m_coord_y[v2] = val; 
 
-                val = m_coord_x[v1]; m_coord_x[v1] = m_coord_x[v2]; m_coord_x[v2] = val;
-                val = m_coord_y[v1]; m_coord_y[v1] = m_coord_y[v2]; m_coord_y[v2] = val;
+                double x_tmp, y_tmp;
+                x_tmp = m_coord_xy[v1 << 1];
+                y_tmp = m_coord_xy[(v1 << 1) + 1];
+
+                m_coord_xy[v1 << 1] = m_coord_xy[v2 << 1];//x
+                m_coord_xy[(v1 << 1) + 1] = m_coord_xy[(v2 << 1) + 1];//y
+
+                m_coord_xy[v2 << 1] = x_tmp;
+                m_coord_xy[(v2 << 1) + 1] = y_tmp;
+
+
                 ShapePath.FlagsAndCommand cmd = m_CommandAndFlags[v1];
                 m_CommandAndFlags[v1] = m_CommandAndFlags[v2];
                 m_CommandAndFlags[v2] = cmd;
@@ -147,7 +166,7 @@ namespace MatterHackers.Agg.VertexSource
                 if (m_num_vertices > 0)
                 {
                     int index = (int)(m_num_vertices - 1);
-                    return m_coord_x[index];
+                    return m_coord_xy[index << 1];
                 }
 
                 return new double();
@@ -158,7 +177,7 @@ namespace MatterHackers.Agg.VertexSource
                 if (m_num_vertices > 0)
                 {
                     int index = (int)(m_num_vertices - 1);
-                    return m_coord_y[index];
+                    return m_coord_xy[(index << 1) + 1];
                 }
                 return new double();
             }
@@ -170,8 +189,9 @@ namespace MatterHackers.Agg.VertexSource
 
             public ShapePath.FlagsAndCommand vertex(int index, out double x, out double y)
             {
-                x = m_coord_x[index];
-                y = m_coord_y[index];
+                var i = index << 1;
+                x = m_coord_xy[i];
+                y = m_coord_xy[i + 1];
                 return m_CommandAndFlags[index];
             }
 
@@ -190,23 +210,26 @@ namespace MatterHackers.Agg.VertexSource
                 while (indexToAdd >= m_allocated_vertices)
                 {
                     int newSize = m_allocated_vertices + 256;
-                    double[] newX = new double[newSize];
-                    double[] newY = new double[newSize];
-                    ShapePath.FlagsAndCommand[] newCmd = new ShapePath.FlagsAndCommand[newSize];
 
-                    if (m_coord_x != null)
+                    double[] new_xy = new double[newSize << 1];
+                    ShapePath.FlagsAndCommand[] newCmd = new ShapePath.FlagsAndCommand[newSize];
+                    if (m_coord_xy != null)
                     {
                         //copy old buffer to new buffer 
+                        int actualLen = m_num_vertices << 1;
+                        for (int i = actualLen - 1; i >= 0; )
+                        {
+                            //use array blob copy ?
+                            new_xy[i] = m_coord_xy[i];
+                            new_xy[i - 1] = m_coord_xy[i - 1];
+                            i -= 2;
+                        }
                         for (int i = m_num_vertices - 1; i >= 0; --i)
                         {
-                            newX[i] = m_coord_x[i];
-                            newY[i] = m_coord_y[i];
                             newCmd[i] = m_CommandAndFlags[i];
                         }
                     }
-
-                    m_coord_x = newX;
-                    m_coord_y = newY;
+                    m_coord_xy = new_xy;
                     m_CommandAndFlags = newCmd;
 
                     m_allocated_vertices = newSize;
