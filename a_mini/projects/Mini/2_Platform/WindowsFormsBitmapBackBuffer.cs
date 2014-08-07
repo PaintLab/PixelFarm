@@ -47,117 +47,25 @@ namespace Mini
         internal ImageBufferFloat backingImageBufferFloat;
         internal Bitmap windowsBitmap;
 
-        BitmapData bitmapData = null;
-        bool externallyLocked = false;
-        bool currentlyLocked = false;
-
+         
         public WindowsFormsBitmapBackBuffer()
         {
 
         }
-        internal void Lock()
-        {
-            bitmapData = windowsBitmap.LockBits(new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
-            externallyLocked = true;
-        }
-
-        internal void Unlock()
-        {
-            windowsBitmap.UnlockBits(bitmapData);
-            externallyLocked = false;
-        }
+        
 
         int numInFunction = 0;
         internal void UpdateHardwareSurface(RectangleInt rect)
         {
+
             numInFunction++;
             if (backingImageBufferByte != null)
             {
-                if (!externallyLocked && !currentlyLocked)
-                {
-                    currentlyLocked = true;
-                    bitmapData = windowsBitmap.LockBits(
-                        new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
-                }
-                int backBufferStrideInBytes = backingImageBufferByte.StrideInBytes();
-                int backBufferStrideInInts = backBufferStrideInBytes / 4;
-                int backBufferHeight = backingImageBufferByte.Height;
-                int backBufferHeightMinusOne = backBufferHeight - 1;
-                int bitmapDataStride = bitmapData.Stride;
-                int offset;
-                byte[] buffer = backingImageBufferByte.GetBuffer(out offset);
-                switch (backingImageBufferByte.BitDepth)
-                {
-                    case 24:
-                        {
-                            unsafe
-                            {
-                                byte* bitmapDataScan0 = (byte*)bitmapData.Scan0;
-                                fixed (byte* pSourceFixed = &buffer[offset])
-                                {
-                                    byte* pSource = pSourceFixed;
-                                    byte* pDestBuffer = bitmapDataScan0 + bitmapDataStride * backBufferHeightMinusOne;
-                                    for (int y = 0; y < backBufferHeight; y++)
-                                    {
-                                        int* pSourceInt = (int*)pSource;
-                                        int* pDestBufferInt = (int*)pDestBuffer;
-                                        for (int x = 0; x < backBufferStrideInInts; x++)
-                                        {
-                                            pDestBufferInt[x] = pSourceInt[x];
-                                        }
-                                        for (int x = backBufferStrideInInts * 4; x < backBufferStrideInBytes; x++)
-                                        {
-                                            pDestBuffer[x] = pSource[x];
-                                        }
-                                        pDestBuffer -= bitmapDataStride;
-                                        pSource += backBufferStrideInBytes;
-                                    }
-                                }
-                            }
-                        }
-                        break;
 
-                    case 32:
-                        {
-                            unsafe
-                            {
-                                byte* bitmapDataScan0 = (byte*)bitmapData.Scan0;
-                                fixed (byte* pSourceFixed = &buffer[offset])
-                                {
-                                    byte* pSource = pSourceFixed;
-                                    byte* pDestBuffer = bitmapDataScan0 + bitmapDataStride * backBufferHeightMinusOne;
-
-                                    int rect_bottom = rect.Bottom;
-                                    int rect_top = rect.Top;
-                                    int rect_left = rect.Left;
-                                    int rect_right = rect.Right; 
-
-                                    for (int y = rect_bottom; y < rect_top; y++)
-                                    {
-                                        int* pSourceInt = (int*)pSource;
-                                        pSourceInt += (backBufferStrideInBytes * y / 4);
-
-                                        int* pDestBufferInt = (int*)pDestBuffer;
-                                        pDestBufferInt -= (bitmapDataStride * y / 4);
-
-                                        for (int x = rect_left; x < rect_right; x++)
-                                        {   
-                                            pDestBufferInt[x] = pSourceInt[x];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-                if (!externallyLocked)
-                {
-                    windowsBitmap.UnlockBits(bitmapData);
-                    currentlyLocked = false;
-                }
+                BitmapHelper.CopyToWindowsBitmap(
+                    this.backingImageBufferByte,
+                    this.windowsBitmap,
+                    rect);
             }
             else
             {
@@ -165,7 +73,7 @@ namespace Mini
                 {
                     case 128:
                         {
-                            BitmapData bitmapData = windowsBitmap.LockBits(new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
+                            BitmapData bitmapData1 = windowsBitmap.LockBits(new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
                             int index = 0;
                             unsafe
                             {
@@ -177,7 +85,7 @@ namespace Mini
                                     {
                                         for (int y = 0; y < backingImageBufferFloat.Height; y++)
                                         {
-                                            byte* pDestBuffer = (byte*)bitmapData.Scan0 + (bitmapData.Stride * (backingImageBufferFloat.Height - 1 - y));
+                                            byte* pDestBuffer = (byte*)bitmapData1.Scan0 + (bitmapData1.Stride * (backingImageBufferFloat.Height - 1 - y));
                                             for (int x = 0; x < backingImageBufferFloat.Width; x++)
                                             {
 #if true
@@ -198,7 +106,7 @@ namespace Mini
                                 }
                             }
 
-                            windowsBitmap.UnlockBits(bitmapData);
+                            windowsBitmap.UnlockBits(bitmapData1);
                         }
                         break;
 

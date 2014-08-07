@@ -21,7 +21,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    class Vector2Container : VectorPOD<Vector2>, IVertexDest
+   public class Vector2Container : VectorPOD<Vector2>, IVertexDest
     {
 
     }
@@ -30,25 +30,25 @@ namespace MatterHackers.Agg.VertexSource
     class StrokeGenerator : IGenerator
     {
         StrokeMath m_stroker;
-        
+
         VertexSequence m_src_vertices;
         Vector2Container m_out_vertices;
 
-        double                 m_shorten;
-        int                   m_closed;
+        double m_shorten;
+        int m_closed;
         StrokeMath.status_e m_status;
         StrokeMath.status_e m_prev_status;
 
-        int                   m_src_vertex;
-        int                   m_out_vertex;
+        int m_src_vertex;
+        int m_out_vertex;
 
-		public StrokeGenerator()
-		{
+        public StrokeGenerator()
+        {
             m_stroker = new StrokeMath();
             m_src_vertices = new VertexSequence();
             m_out_vertices = new Vector2Container();
             m_status = StrokeMath.status_e.initial;
-		}
+        }
 
         public void line_cap(LineCap lc) { m_stroker.line_cap(lc); }
         public void line_join(LineJoin lj) { m_stroker.line_join(lj); }
@@ -76,52 +76,52 @@ namespace MatterHackers.Agg.VertexSource
         public double shorten() { return m_shorten; }
 
         // Vertex Generator Interface
-		public void RemoveAll()
-		{
-			m_src_vertices.remove_all();
-			m_closed = 0;
+        public void RemoveAll()
+        {
+            m_src_vertices.remove_all();
+            m_closed = 0;
             m_status = StrokeMath.status_e.initial;
-		}
+        }
 
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
-		{
+        {
             m_status = StrokeMath.status_e.initial;
-			if(ShapePath.is_move_to(cmd))
-			{
-				m_src_vertices.modify_last(new VertexDistance(x, y));
-			}
-			else
-			{
-				if(ShapePath.is_vertex(cmd))
-				{
-					m_src_vertices.add(new VertexDistance(x, y));
-				}
-				else
-				{
-					m_closed = (int)ShapePath.get_close_flag(cmd);
-				}
-			}
-		}
+            if (ShapePath.is_move_to(cmd))
+            {
+                m_src_vertices.modify_last(new VertexDistance(x, y));
+            }
+            else
+            {
+                if (ShapePath.is_vertex(cmd))
+                {
+                    m_src_vertices.add(new VertexDistance(x, y));
+                }
+                else
+                {
+                    m_closed = (int)ShapePath.get_close_flag(cmd);
+                }
+            }
+        }
 
         // Vertex Source Interface
-		public void Rewind(int idx)
-		{
+        public void Rewind(int idx)
+        {
             if (m_status == StrokeMath.status_e.initial)
-			{
-				m_src_vertices.close(m_closed != 0);
-				ShapePath.shorten_path(m_src_vertices, m_shorten, m_closed);
-				if(m_src_vertices.size() < 3) m_closed = 0;
-			}
+            {
+                m_src_vertices.close(m_closed != 0);
+                ShapePath.shorten_path(m_src_vertices, m_shorten, m_closed);
+                if (m_src_vertices.size() < 3) m_closed = 0;
+            }
             m_status = StrokeMath.status_e.ready;
-			m_src_vertex = 0;
-			m_out_vertex = 0;
-		}
+            m_src_vertex = 0;
+            m_out_vertex = 0;
+        }
 
         public ShapePath.FlagsAndCommand Vertex(ref double x, ref double y)
-		{
+        {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandLineTo;
-			while(!ShapePath.is_stop(cmd))
-			{
+            while (!ShapePath.is_stop(cmd))
+            {
                 switch (m_status)
                 {
                     case StrokeMath.status_e.initial:
@@ -245,8 +245,8 @@ namespace MatterHackers.Agg.VertexSource
                         cmd = ShapePath.FlagsAndCommand.CommandStop;
                         break;
                 }
-			}
-			return cmd;
-		}
+            }
+            return cmd;
+        }
     }
 }

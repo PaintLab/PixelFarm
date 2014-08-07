@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}</ProjectGuid>
+    <ProjectGuid>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniGui</RootNamespace>
-    <AssemblyName>MiniGui</AssemblyName>
+    <RootNamespace>MiniAgg.Complements</RootNamespace>
+    <AssemblyName>MiniAgg.Complements</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,52 +32,43 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\AggTests\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="agg_bezier_ctrl.cs" />
-    <Compile Include="agg_gamma_ctrl.cs" />
-    <Compile Include="agg_gamma_spline.cs" />
-    <Compile Include="agg_spline_ctrl.cs" />
-    <Compile Include="AppWidgetFactory.cs" />
-    <Compile Include="Clipboard\Clipboard.cs" />
-    <Compile Include="DefaultViewFactory.cs" />
-    <Compile Include="FileDropEventArgs.cs" />
-    <Compile Include="FlowLayoutWidget.cs" />
-    <Compile Include="GUIWidget.cs" />
-    <Compile Include="ImageSequenceWidget.cs" />
-    <Compile Include="ImageWidget.cs" />
-    <Compile Include="InvalidateEventArgs.cs" />
-    <Compile Include="Keyboard.cs" />
-    <Compile Include="KeyEventArgs.cs" />
-    <Compile Include="KeyPressEventArgs.cs" />
-    <Compile Include="Keys.cs" />
-    <Compile Include="LayoutEngines\LayoutEngine.cs" />
-    <Compile Include="LayoutEngines\LayoutEngineFlow.cs" />
-    <Compile Include="LayoutEngines\LayoutEngineSimpleAlign.cs" />
-    <Compile Include="LayoutEventArgs.cs" />
-    <Compile Include="LayoutPannel.cs" />
-    <Compile Include="MouseButtons.cs" />
-    <Compile Include="MouseEventArgs.cs" />
-    <Compile Include="PluginFinder.cs" />
-    <Compile Include="PolygonWidget.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
+    <Compile Include="Image\AlphaMaskAdaptor.cs" />
+    <Compile Include="Image\Gray.cs" />
+    <Compile Include="Image\ImageSequence.cs" />
+    <Compile Include="Image\ImageTgaIO.cs" />
+    <Compile Include="Image\RecursiveBlur.cs" />
+    <Compile Include="StringHelper.cs" />
+    <Compile Include="VertexSource\agg_curves.cs" />
+    <Compile Include="VertexSource\agg_gsv_text.cs" />
+    <Compile Include="VertexSource\agg_span_gouraud.cs" />
+    <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
+    <Compile Include="VertexSource\Arc.cs" />
+    <Compile Include="VertexSource\Contour.cs" />
+    <Compile Include="VertexSource\ContourGenerator.cs" />
+    <Compile Include="VertexSource\Ellipse.cs" />
+    <Compile Include="VertexSource\FlattenCurve.cs" />
+    <Compile Include="VertexSource\RoundedRect.cs" />
+    <Compile Include="Font\LiberationSansFont.cs" />
+    <Compile Include="Font\StyledTypeFace.cs" />
+    <Compile Include="Font\TextWrapping.cs" />
+    <Compile Include="Font\TypeFace.cs" />
+    <Compile Include="Font\TypeFacePrinter.cs" />
+    <Compile Include="Font\UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RootedObjectEventHandler.cs" />
-    <Compile Include="SimpleVertexSourceWidget.cs" />
-    <Compile Include="StringEventArgs.cs" />
-    <Compile Include="SystemWindow\AbstractOsMappingWidget.cs" />
-    <Compile Include="SystemWindow\OsMappingWidgetFactory.cs" />
-    <Compile Include="SystemWindow\SystemWindow.cs" />
-    <Compile Include="TimedLock.cs" />
-    <Compile Include="UiThread.cs" />
-    <Compile Include="WidgetClosingEnventArgs.cs" />
+    <Compile Include="UnitTests.cs" />
+    <Compile Include="VertexSource\VertexSourceIO.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">
-      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
-      <Name>MiniAgg.Complements</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>

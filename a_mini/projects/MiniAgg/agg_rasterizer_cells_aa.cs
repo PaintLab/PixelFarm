@@ -46,7 +46,8 @@ namespace MatterHackers.Agg
         public int y;
         public int cover;
         public int area;
-        public int left, right;
+        public int left;
+        public int right; 
 
         public void initial()
         {
@@ -68,7 +69,7 @@ namespace MatterHackers.Agg
             right = cellB.right;
         }
 
-        public void style(cell_aa cellB) 
+        public void style(cell_aa cellB)
         {
             left = cellB.left;
             right = cellB.right;
@@ -552,21 +553,21 @@ namespace MatterHackers.Agg
         private int m_x;
         private bool m_hit;
 
-        public scanline_hit_test(int x) 
+        public scanline_hit_test(int x)
         {
             m_x = x;
             m_hit = false;
         }
 
-        public void ResetSpans() {}
-        public void finalize(int nothing) {}
+        public void ResetSpans() { }
+        public void finalize(int nothing) { }
         public void add_cell(int x, int nothing)
         {
-            if(m_x == x) m_hit = true;
+            if (m_x == x) m_hit = true;
         }
         public void add_span(int x, int len, int nothing)
         {
-            if(m_x >= x && m_x < x+len) m_hit = true;
+            if (m_x >= x && m_x < x + len) m_hit = true;
         }
         public int num_spans() { return 1; }
         public bool hit() { return m_hit; }

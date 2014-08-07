@@ -41,8 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\DemoBase.cs" />
+    <Compile Include="2_Platform\BitmapHelper.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test1.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
+    <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\08_Blur\BlurSample.cs" />
     <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
@@ -53,7 +56,7 @@
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
     <Compile Include="3_Samples\07_GouraudSample\GouraudSample.cs" />
-    <Compile Include="4_Samples_2\30_ScanlineBoolean\ScanlineBooleanSample.cs" />
+    <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +75,7 @@
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
+    <Compile Include="MiniCinema\SimpleSprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="2_Platform\WindowsFormsBitmapBackBuffer.cs" />
     <Compile Include="SoftAggControl.cs">
@@ -109,6 +113,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
+      <Name>MiniAgg.Complements</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>

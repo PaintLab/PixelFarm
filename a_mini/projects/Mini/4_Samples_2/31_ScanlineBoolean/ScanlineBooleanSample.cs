@@ -10,7 +10,7 @@ using MatterHackers.Agg.RasterizerScanline;
 using Mini;
 namespace MatterHackers.Agg.Sample_ScanlineBoolean
 {
-    [Info(OrderCode = "30")]
+    [Info(OrderCode = "31")]
     public class ScanlineBoolean : DemoBase
     {   
         public override void Draw(Graphics2D g)

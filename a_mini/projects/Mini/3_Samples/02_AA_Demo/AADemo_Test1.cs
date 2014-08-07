@@ -10,7 +10,7 @@ using MatterHackers.Agg.RasterizerScanline;
 using MatterHackers.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Sample_AADemoTest1
 {
     public class square
     {
@@ -34,12 +34,12 @@ namespace MatterHackers.Agg
         }
     }
 
-    class renderer_enlarged : ScanlineRenderer
+    class renderer_enlarged_test1 : ScanlineRenderer
     {
         double m_size;
         square m_square;
         scanline_unpacked_8 m_sl = new scanline_unpacked_8();
-        public renderer_enlarged(double size)
+        public renderer_enlarged_test1(double size)
         {
             m_size = size;
             m_square = new square(size);
@@ -81,7 +81,7 @@ namespace MatterHackers.Agg
                     + "To draw the enlarged version there is a special scanline renderer written (see "
                     + "class renderer_enlarged in the source code). You can drag the whole triangle as well "
                     + "as each vertex of it. Also change “Gamma” to see how it affects the quality of Anti-Aliasing.")]
-    public class aa_demo : DemoBase
+    public class aa_demo_test1 : DemoBase
     {
         double[] m_x = new double[3];
         double[] m_y = new double[3];
@@ -90,7 +90,7 @@ namespace MatterHackers.Agg
         int m_idx;
 
 
-        public aa_demo()
+        public aa_demo_test1()
         {
             m_idx = -1;
             m_x[0] = 57; m_y[0] = 100;
@@ -138,7 +138,7 @@ namespace MatterHackers.Agg
 
             int size_mul = (int)this.PixelSize;
 
-            renderer_enlarged ren_en = new renderer_enlarged(size_mul);
+            renderer_enlarged_test1 ren_en = new renderer_enlarged_test1(size_mul);
 
             rasterizer.reset();
             rasterizer.move_to_d(m_x[0] / size_mul, m_y[0] / size_mul);
@@ -165,7 +165,7 @@ namespace MatterHackers.Agg
 
 
         }
-        public override void MouseDown(int mx, int my,  bool isRightButton)
+        public override void MouseDown(int mx, int my, bool isRightButton)
         {
             double x = mx;
             double y = my;
