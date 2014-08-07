@@ -219,10 +219,10 @@ namespace MatterHackers.Agg.VertexSource
                         int actualLen = m_num_vertices << 1;
                         for (int i = actualLen - 1; i >= 0; )
                         {
-                            //use array blob copy ?
                             new_xy[i] = m_coord_xy[i];
-                            new_xy[i - 1] = m_coord_xy[i - 1];
-                            i -= 2;
+                            i--;
+                            new_xy[i] = m_coord_xy[i];
+                            i--;
                         }
                         for (int i = m_num_vertices - 1; i >= 0; --i)
                         {
