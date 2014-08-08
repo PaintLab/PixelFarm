@@ -21,7 +21,7 @@ namespace Mini
             this.Text = "DevForm: Double Click The Example!";
 
 
-        } 
+        }
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //load sample form
@@ -63,6 +63,81 @@ namespace Mini
             {
                 this.listBox1.Items.Add(exlist[i]);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //--------------
+            System.Diagnostics.Debugger.Break();
+
+            //test01
+            var lionShape = new MatterHackers.Agg.LionShape();
+            lionShape.ParseLion();
+
+            //test path serialize to binary stream
+            using (var fs = new System.IO.FileStream("d:\\WImageTest9\\lion_stream.bin", System.IO.FileMode.Create))
+            {
+                var writer = new System.IO.BinaryWriter(fs);
+
+
+                //1. all coords and commands
+                MatterHackers.Agg.VertexSource.VertexSourceIO.WriteToStream(
+                    writer,
+                    lionShape.Path);
+
+                //2. colors
+                MatterHackers.Agg.VertexSource.VertexSourceIO.WriteColorsToStream(
+                   writer, lionShape.Colors
+                   );
+                //---------------------------------------
+                //3. num paths, & path index 
+                int npath = lionShape.NumPaths;
+                MatterHackers.Agg.VertexSource.VertexSourceIO.WritePathIndexListToStream(
+                  writer, lionShape.PathIndexList,
+                  npath
+                  );
+
+                writer.Close();
+                fs.Close();
+            }
+            //--------------
+            //test load path from binary stream
+            using (var fs = new System.IO.FileStream("d:\\WImageTest9\\lion_stream.bin", System.IO.FileMode.Open))
+            {
+                var reader = new System.IO.BinaryReader(fs);
+                var lionShape2 = new MatterHackers.Agg.LionShape();
+
+                MatterHackers.Agg.VertexSource.PathStorage path;
+                MatterHackers.Agg.RGBA_Bytes[] colors;
+                int[] pathIndexList;
+
+                //1. path and command
+                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
+                  reader, out path
+                  );
+                //2. colors
+                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
+                  reader, out colors
+                  );
+                //3. path indice
+                int npaths;
+                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
+                  reader, out npaths, out pathIndexList
+                 );
+
+                MatterHackers.Agg.LionShape.UnsafeDirectSetData(
+                     lionShape2,
+                     npaths,
+                     path, colors, pathIndexList);
+
+                fs.Close();
+            }
+            //------------
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
 
 

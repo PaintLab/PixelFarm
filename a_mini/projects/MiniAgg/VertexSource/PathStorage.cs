@@ -42,8 +42,6 @@ namespace MatterHackers.Agg.VertexSource
         {
             int m_num_vertices;
             int m_allocated_vertices;
-
-
             //easy to transfer back to unmanaged part!
             double[] m_coord_xy;
             ShapePath.FlagsAndCommand[] m_CommandAndFlags;
@@ -107,9 +105,6 @@ namespace MatterHackers.Agg.VertexSource
 
             public void swap_vertices(int v1, int v2)
             {
-                //double val;
-                //val = m_coord_x[v1]; m_coord_x[v1] = m_coord_x[v2]; m_coord_x[v2] = val;  
-                //val = m_coord_y[v1]; m_coord_y[v1] = m_coord_y[v2]; m_coord_y[v2] = val; 
 
                 double x_tmp, y_tmp;
                 x_tmp = m_coord_xy[v1 << 1];
@@ -155,12 +150,10 @@ namespace MatterHackers.Agg.VertexSource
                 {
                     return vertex((int)(m_num_vertices - 2), out x, out y);
                 }
-
                 x = new double();
                 y = new double();
                 return ShapePath.FlagsAndCommand.CommandStop;
             }
-
             public double last_x()
             {
                 if (m_num_vertices > 0)
@@ -168,10 +161,8 @@ namespace MatterHackers.Agg.VertexSource
                     int index = (int)(m_num_vertices - 1);
                     return m_coord_xy[index << 1];
                 }
-
                 return new double();
             }
-
             public double last_y()
             {
                 if (m_num_vertices > 0)
@@ -235,6 +226,36 @@ namespace MatterHackers.Agg.VertexSource
                     m_allocated_vertices = newSize;
                 }
             }
+
+
+            //----------------------------------------------------------
+            internal static void UnsafeDirectSetData(
+                VertexStorage vstore,                
+                int m_allocated_vertices,
+                int m_num_vertices,
+                double[] m_coord_xy,
+                ShapePath.FlagsAndCommand[] m_CommandAndFlags)
+            {
+                vstore.m_num_vertices = m_num_vertices;
+                vstore.m_allocated_vertices = m_allocated_vertices;
+                vstore.m_coord_xy = m_coord_xy;
+                vstore.m_CommandAndFlags = m_CommandAndFlags;
+            }
+            internal static void UnsafeDirectGetData(
+                VertexStorage vstore,
+                out int m_allocated_vertices,
+                out int m_num_vertices,               
+                out double[] m_coord_xy,
+                out ShapePath.FlagsAndCommand[] m_CommandAndFlags)
+            {
+
+                m_num_vertices = vstore.m_num_vertices;
+                m_allocated_vertices = vstore.m_allocated_vertices;
+                m_coord_xy = vstore.m_coord_xy;
+                m_CommandAndFlags = vstore.m_CommandAndFlags;
+            }
+
+            //----------------------------------------------------------
         }
         #endregion
 
@@ -265,6 +286,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             get
             {
+
                 throw new NotImplementedException("make this work");
             }
         }
@@ -1006,5 +1028,39 @@ namespace MatterHackers.Agg.VertexSource
         {
             vertices = pathStorageToShareFrom.vertices;
         }
+
+
+        //----------------------------------------------------------
+
+        public static void UnsafeDirectSetData(
+            PathStorage pathStore,
+            int m_allocated_vertices,
+            int m_num_vertices,            
+            double[] m_coord_xy,
+            ShapePath.FlagsAndCommand[] m_CommandAndFlags)
+        {
+
+            VertexStorage.UnsafeDirectSetData(
+                pathStore.vertices,
+                m_allocated_vertices,
+                m_num_vertices,                
+                m_coord_xy,
+                m_CommandAndFlags); 
+        }
+        public static void UnsafeDirectGetData(
+            PathStorage pathStore,
+            out int m_allocated_vertices,
+            out int m_num_vertices,            
+            out double[] m_coord_xy,
+            out ShapePath.FlagsAndCommand[] m_CommandAndFlags)
+        {
+            VertexStorage.UnsafeDirectGetData(
+                pathStore.vertices,
+                out m_allocated_vertices,
+                out m_num_vertices,                
+                out m_coord_xy,
+                out m_CommandAndFlags);             
+        }
+
     }
 }

@@ -72,17 +72,18 @@ namespace MatterHackers.Agg.Sample_LionFill
     public class LionFill : BasicSprite
     {
 
-        LionShape lionShape = new LionShape();
+        LionShape lionShape;
         Affine transform = Affine.NewIdentity();
+
         VertexSourceApplyTransform transformedPathStorage;
         byte alpha;
         public LionFill()
         {
+            lionShape = new LionShape();
+            lionShape.ParseLion();
             this.Width = 500;
-            this.Height = 500;
-
-            AlphaValue = 255;
-
+            this.Height = 500; 
+            AlphaValue = 255; 
         }
         public byte AlphaValue
         {
@@ -122,7 +123,7 @@ namespace MatterHackers.Agg.Sample_LionFill
                 transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
             }
 
-            graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndex, lionShape.NumPaths);
+            graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
             base.OnDraw(graphics2D);
         }

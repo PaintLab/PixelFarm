@@ -22,7 +22,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         byte[] alphaByteArray;
         int maskAlphaSliderValue = 100;
 
-        LionShape lionShape = new LionShape();
+        LionShape lionShape;
         MatterHackers.Agg.ScanlineRasterizer rasterizer = new ScanlineRasterizer();
         ScanlineCachePacked8 scanlineCache = new ScanlineCachePacked8();
         double angle = 0;
@@ -36,6 +36,9 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
         public alpha_mask2_application()
         {
+            lionShape = new LionShape();
+            lionShape.ParseLion();
+
             this.Width = 800;
             this.Height = 600;
 
@@ -191,7 +194,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
                 // Render the lion
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-                scanlineRenderer.RenderSolidAllPaths(alphaMaskClippingProxy, rasterizer, scanlineCache, trans, lionShape.Colors, lionShape.PathIndex, lionShape.NumPaths);
+                scanlineRenderer.RenderSolidAllPaths(alphaMaskClippingProxy, rasterizer, scanlineCache, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
                 /*
                 // Render random Bresenham lines and markers

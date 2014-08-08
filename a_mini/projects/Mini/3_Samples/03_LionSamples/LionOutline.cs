@@ -93,13 +93,15 @@ namespace MatterHackers.Agg.Sample_LionOutline
     //--------------------------------------------------
     public class lion_outline : BasicSprite
     {
-        private LionShape lionShape = new LionShape();
+        private LionShape lionShape;
         ScanlineRasterizer rasterizer = new ScanlineRasterizer();
         ScanlineCachePacked8 scanlineCache = new ScanlineCachePacked8();
 
         //special option 
         public lion_outline()
         {
+            lionShape = new LionShape();
+            lionShape.ParseLion();
             this.Width = 500;
             this.Height = 500;
         }
@@ -148,7 +150,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 stroke.line_join(LineJoin.Round);
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke, transform);
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-                scanlineRenderer.RenderSolidAllPaths(imageClippingProxy, rasterizer, scanlineCache, trans, lionShape.Colors, lionShape.PathIndex, lionShape.NumPaths);
+                scanlineRenderer.RenderSolidAllPaths(imageClippingProxy, rasterizer, scanlineCache, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
             }
             else
             {
@@ -165,7 +167,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
 
-                rasterizer.RenderAllPaths(trans, lionShape.Colors, lionShape.PathIndex, lionShape.NumPaths);
+                rasterizer.RenderAllPaths(trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
             }
 
             base.OnDraw(graphics2D);

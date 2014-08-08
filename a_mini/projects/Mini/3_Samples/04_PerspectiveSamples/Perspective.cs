@@ -25,11 +25,12 @@ namespace MatterHackers.Agg.Sample_Perspective
         ScanlineCachePacked8 g_scanline = new ScanlineCachePacked8();
 
         UI.PolygonEditWidget quadPolygonControl;
-        private LionShape lionShape = new LionShape();
+        private LionShape lionShape;
 
         public perspective_application()
         {
-           
+            lionShape = new LionShape();
+            lionShape.ParseLion();
 
             quadPolygonControl = new MatterHackers.Agg.UI.PolygonEditWidget(4, 5.0); 
             quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
@@ -118,7 +119,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //
                     VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, tr);
 
-                    scanlineRenderer.RenderSolidAllPaths(clippingProxy, g_rasterizer, g_scanline, trans, lionShape.Colors, lionShape.PathIndex, lionShape.NumPaths);
+                    scanlineRenderer.RenderSolidAllPaths(clippingProxy, g_rasterizer, g_scanline, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
                     //--------------------------
 
 
@@ -150,7 +151,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     // Render transformed lion
                     VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, tr);
 
-                    scanlineRenderer.RenderSolidAllPaths(clippingProxy, g_rasterizer, g_scanline, trans, lionShape.Colors, lionShape.PathIndex, lionShape.NumPaths);
+                    scanlineRenderer.RenderSolidAllPaths(clippingProxy, g_rasterizer, g_scanline, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
                     // Render transformed ellipse
                     VertexSource.Ellipse FilledEllipse = new MatterHackers.Agg.VertexSource.Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
