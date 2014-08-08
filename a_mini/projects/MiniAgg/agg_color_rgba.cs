@@ -31,12 +31,12 @@ namespace MatterHackers.Agg
 {
     // Supported byte orders for RGB and RGBA pixel formats
     //=======================================================================
-    struct order_rgb  { enum rgb_e  { R=0, G=1, B=2, rgb_tag }; };       //----order_rgb
-    struct order_bgr  { enum bgr_e  { B=0, G=1, R=2, rgb_tag }; };       //----order_bgr
-    struct order_rgba { enum rgba_e { R=0, G=1, B=2, A=3, rgba_tag }; }; //----order_rgba
-    struct order_argb { enum argb_e { A=0, R=1, G=2, B=3, rgba_tag }; }; //----order_argb
-    struct order_abgr { enum abgr_e { A=0, B=1, G=2, R=3, rgba_tag }; }; //----order_abgr
-    struct order_bgra { enum bgra_e { B=0, G=1, R=2, A=3, rgba_tag }; }; //----order_bgra
+    struct order_rgb { enum rgb_e { R = 0, G = 1, B = 2, rgb_tag }; };       //----order_rgb
+    struct order_bgr { enum bgr_e { B = 0, G = 1, R = 2, rgb_tag }; };       //----order_bgr
+    struct order_rgba { enum rgba_e { R = 0, G = 1, B = 2, A = 3, rgba_tag }; }; //----order_rgba
+    struct order_argb { enum argb_e { A = 0, R = 1, G = 2, B = 3, rgba_tag }; }; //----order_argb
+    struct order_abgr { enum abgr_e { A = 0, B = 1, G = 2, R = 3, rgba_tag }; }; //----order_abgr
+    struct order_bgra { enum bgra_e { B = 0, G = 1, R = 2, A = 3, rgba_tag }; }; //----order_bgra
 
     public struct RGBA_Floats : IColorType
     {
@@ -146,7 +146,7 @@ namespace MatterHackers.Agg
             g = lightness0To1;
             b = lightness0To1;
             v = lightness0To1 + saturation0To1 - lightness0To1 * saturation0To1;
-            if(lightness0To1 <= 0.5)
+            if (lightness0To1 <= 0.5)
             {
                 v = lightness0To1 * (1.0 + saturation0To1);
             }
@@ -540,7 +540,7 @@ namespace MatterHackers.Agg
             t.red = (float)Math.Pow(t.red * s, gamma);
             t.green = (float)Math.Pow(t.green * s, gamma);
             t.blue = (float)Math.Pow(t.blue * s, gamma);
-            
+
             return t;
         }
 
@@ -632,8 +632,8 @@ namespace MatterHackers.Agg
     public struct RGBA_Bytes : IColorType
     {
         public const int cover_shift = 8;
-        public const int cover_size  = 1 << cover_shift;  //----cover_size 
-        public const int cover_mask  = cover_size - 1;    //----cover_mask 
+        public const int cover_size = 1 << cover_shift;  //----cover_size 
+        public const int cover_mask = cover_size - 1;    //----cover_mask 
         //public const int cover_none  = 0,                 //----cover_none 
         //public const int cover_full  = cover_mask         //----cover_full 
 
@@ -675,11 +675,11 @@ namespace MatterHackers.Agg
 
         public RGBA_Bytes(int r_, int g_, int b_)
             : this(r_, g_, b_, base_mask)
-        {}
+        { }
 
         public RGBA_Bytes(int r_, int g_, int b_, int a_)
         {
-            red = (byte)Math.Min(Math.Max(r_, 0),255);
+            red = (byte)Math.Min(Math.Max(r_, 0), 255);
             green = (byte)Math.Min(Math.Max(g_, 0), 255);
             blue = (byte)Math.Min(Math.Max(b_, 0), 255);
             alpha = (byte)Math.Min(Math.Max(a_, 0), 255);
@@ -838,9 +838,9 @@ namespace MatterHackers.Agg
         public void add(RGBA_Bytes c, int cover)
         {
             int cr, cg, cb, ca;
-            if(cover == cover_mask)
+            if (cover == cover_mask)
             {
-                if(c.Alpha0To255 == base_mask) 
+                if (c.Alpha0To255 == base_mask)
                 {
                     this = c;
                 }
@@ -854,10 +854,10 @@ namespace MatterHackers.Agg
             }
             else
             {
-                cr = Red0To255 + ((c.Red0To255 * cover + cover_mask/2) >> cover_shift);
-                cg = Green0To255 + ((c.Green0To255 * cover + cover_mask/2) >> cover_shift);
-                cb = Blue0To255 + ((c.Blue0To255 * cover + cover_mask/2) >> cover_shift);
-                ca = Alpha0To255 + ((c.Alpha0To255 * cover + cover_mask/2) >> cover_shift);
+                cr = Red0To255 + ((c.Red0To255 * cover + cover_mask / 2) >> cover_shift);
+                cg = Green0To255 + ((c.Green0To255 * cover + cover_mask / 2) >> cover_shift);
+                cb = Blue0To255 + ((c.Blue0To255 * cover + cover_mask / 2) >> cover_shift);
+                ca = Alpha0To255 + ((c.Alpha0To255 * cover + cover_mask / 2) >> cover_shift);
                 Red0To255 = (cr > (int)(base_mask)) ? (int)(base_mask) : cr;
                 Green0To255 = (cg > (int)(base_mask)) ? (int)(base_mask) : cg;
                 Blue0To255 = (cb > (int)(base_mask)) ? (int)(base_mask) : cb;
@@ -867,12 +867,12 @@ namespace MatterHackers.Agg
 
         public void apply_gamma_dir(GammaLookUpTable gamma)
         {
-        	Red0To255 = gamma.dir((byte)Red0To255);
+            Red0To255 = gamma.dir((byte)Red0To255);
             Green0To255 = gamma.dir((byte)Green0To255);
             Blue0To255 = gamma.dir((byte)Blue0To255);
         }
-        
-        public static IColorType no_color() { return new RGBA_Bytes(0,0,0,0); }
+
+        public static IColorType no_color() { return new RGBA_Bytes(0, 0, 0, 0); }
 
         //-------------------------------------------------------------rgb8_packed
         static public RGBA_Bytes rgb8_packed(int v)
@@ -886,5 +886,12 @@ namespace MatterHackers.Agg
             result = this * (1 - weight) + other * weight;
             return result;
         }
+#if DEBUG
+        public override string ToString()
+        {
+            return "r:" + this.red + ",g:" + this.green + ",b:" + this.blue + ",a:" + this.alpha;
+        }
+#endif
+
     }
 }

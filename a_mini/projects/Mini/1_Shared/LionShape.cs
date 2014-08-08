@@ -221,10 +221,9 @@ namespace MatterHackers.Agg
 
         RectangleDouble boundingRect;
         Vector2 center;
-
         public LionShape()
         {
-            ParseLion();
+
         }
 
         public PathStorage Path
@@ -233,6 +232,8 @@ namespace MatterHackers.Agg
             {
                 return path;
             }
+
+
         }
 
         public int NumPaths
@@ -257,14 +258,16 @@ namespace MatterHackers.Agg
             {
                 return colors;
             }
+
         }
 
-        public int[] PathIndex
+        public int[] PathIndexList
         {
             get
             {
                 return pathIndex;
             }
+
         }
 
         public Vector2 Center
@@ -283,5 +286,24 @@ namespace MatterHackers.Agg
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
+        public static void UnsafeDirectSetData(LionShape lion,
+            int numPaths,
+            PathStorage pathStore,
+            RGBA_Bytes[] colors,
+            int[] pathIndice)
+        {
+            lion.path = pathStore;
+            lion.colors = colors;
+            lion.pathIndex = pathIndice;
+            lion.numPaths = numPaths;
+            lion.UpdateBoundingRect(); 
+        }
+        void UpdateBoundingRect()
+        {
+            MatterHackers.Agg.bounding_rect.get_bounding_rect(path, pathIndex, 0, numPaths, out boundingRect);
+            center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
+            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0; 
+        }
+
     }
 }

@@ -75,16 +75,57 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
     public class LionFill : SimpleSprite
     {
 
-        LionShape lionShape = new LionShape();
+        LionShape lionShape;
         Affine transform = Affine.NewIdentity();
         VertexSourceApplyTransform transformedPathStorage;
         byte alpha;
         public LionFill()
         {
+            lionShape = new LionShape();
+            TestLoadLionFromBinaryFile();
+
+
             this.Width = 500;
             this.Height = 500;
-
             AlphaValue = 255;
+
+        }
+        void TestLoadLionFromBinaryFile()
+        {
+            System.Diagnostics.Debugger.Break();
+
+            using (var fs = new System.IO.FileStream("d:\\WImageTest9\\lion_stream.bin", System.IO.FileMode.Open))
+            {
+                var reader = new System.IO.BinaryReader(fs);
+                var lionShape2 = new MatterHackers.Agg.LionShape();
+
+                MatterHackers.Agg.VertexSource.PathStorage path;
+                MatterHackers.Agg.RGBA_Bytes[] colors;
+                int[] pathIndexList;
+                //1. path and command
+                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
+                  reader, out path
+                  );
+                //2. colors
+                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
+                  reader, out colors
+                  );
+                //3. path indice
+                int npaths;
+                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
+                  reader, out npaths, out pathIndexList
+                 );
+
+                //------------------------------ 
+                LionShape.UnsafeDirectSetData(lionShape2,
+                    npaths,
+                    path, colors, pathIndexList);
+                //---------------------------------
+
+                fs.Close();
+
+                this.lionShape = lionShape2;
+            }
 
         }
         public byte AlphaValue
@@ -127,7 +168,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
                 transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
             }
 
-            graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndex, lionShape.NumPaths);
+            graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
             if (!IsFreezed)
             {

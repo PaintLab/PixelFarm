@@ -8,8 +8,9 @@ namespace MatterHackers.Agg
     public static class ShapePath
     {
         [Flags]
-        public enum FlagsAndCommand
+        public enum FlagsAndCommand : byte
         {
+            //first lower 4 bits compact flags
             CommandStop = 0x00,
             CommandMoveTo = 0x01,
             CommandLineTo = 0x02,
@@ -17,11 +18,12 @@ namespace MatterHackers.Agg
             CommandCurve4 = 0x04,
             CommandEndPoly = 0x0F,
             CommandsMask = 0x0F,
-
+            //-----------------------
+            //upper 4 bits
             FlagNone = 0x00,
-            FlagCCW = 0x10,
-            FlagCW = 0x20,
-            FlagClose = 0x40,
+            FlagCCW = 1 << (5 - 1),
+            FlagCW = 1 << (6 - 1),
+            FlagClose = 1 << (7 - 1),
             FlagsMask = 0xF0
         };
 
