@@ -71,23 +71,20 @@ namespace Mini.GraphicCore
             base.OnPaint(e);
             if (isReady)
             {
-                //1. clear background
-
+                //1. clear background 
                 nativeCanvas.ClearBackground();
                 //2. load sample bitmap
                 if (nativeBmp != null)
                 {
-                    int x1 = 100;
-                    int y1 = 100;
+                    int x1 = 10;
+                    int y1 = 400;
 
                     nativeCanvas.DrawImage(this.nativeBmp,
                       x1, y1);
 
                     nativeCanvas.DrawImage(this.nativeBmp,
                       x1 + 200, y1 + 200, 400, 300);
-                }
-
-
+                } 
                 //2. 
                 nativeCanvas.Render();
             }

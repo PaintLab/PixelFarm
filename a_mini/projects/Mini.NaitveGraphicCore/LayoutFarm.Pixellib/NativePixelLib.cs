@@ -52,7 +52,7 @@ namespace LayoutFarm.NativePixelLib
     static class NativePixelLibInterOp
     {
         //-------------------------------------------------
-        
+
         static NativeModuleLoader nativeModuleLoader;
         //------------------------------------------------- 
         [NativeFunc]
@@ -89,7 +89,7 @@ namespace LayoutFarm.NativePixelLib
                 {
                     return;
                 }
- 
+
 
                 nativeModuleLoader = new NativeModuleLoader("pixellib01", "pixellib01.dll");
                 if (!nativeModuleLoader.LoadRequestProcs(typeof(NativePixelLibInterOp)))
@@ -129,14 +129,14 @@ namespace LayoutFarm.NativePixelLib
         }
         public static void DrawImage(IntPtr canvasPtr, NativeBmp nativeBmp, int x, int y, int w, int h)
         {
-            int height = 600;
+
             int x1 = x;
             int y1 = y;
             int x2 = x1 + w;
-            int y2 = y1 + h;
+            int y2 = y1 - h;
             //flip coord
             NativePixelLibInterOp.drawImage(canvasPtr,
-                nativeBmp.Handle, x1, height - y1, x2, height - y2);
+                nativeBmp.Handle, x1, y1, x2, y2);
         }
     }
 
@@ -173,13 +173,13 @@ namespace LayoutFarm.NativePixelLib
         {
             NativePixelLibInterOp.DrawImage(
                        this.nativeCanvasPtr, bmp,
-                       x, y, bmp.Width, bmp.Height);
+                       x, y, bmp.Width, this.h - bmp.Height);
         }
         public void DrawImage(NativeBmp bmp, int x, int y, int w, int h)
         {
             NativePixelLibInterOp.DrawImage(
                        this.nativeCanvasPtr, bmp,
-                       x, y, w, h);
+                       x, y, w, this.h - h);
         }
         public void DrawImage(NativeBmp bmp, Point[] fourCorners)
         {

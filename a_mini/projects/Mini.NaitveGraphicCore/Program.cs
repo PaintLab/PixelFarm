@@ -13,8 +13,8 @@ namespace NativeV8
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Mini.GraphicCore.Form2());
-            Application.Run(new Mini.GraphicCore.Form3()); 
+            Application.Run(new Mini.GraphicCore.Form2());
+            //Application.Run(new Mini.GraphicCore.Form3()); 
         }
     }
      

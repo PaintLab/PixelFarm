@@ -167,8 +167,7 @@ namespace LayoutFarm.NativeInterop
                 var nativeNameAttrs = field.GetCustomAttributes(nativeNameAttrType, false);
 
                 if (nativeNameAttrs.Length > 0)
-                {
-
+                {   
                     //only 1
                     NativeFunc natName = (NativeFunc)nativeNameAttrs[0];
                     Type fieldType = field.FieldType;
@@ -186,8 +185,7 @@ namespace LayoutFarm.NativeInterop
                     {
                         importFuncs[procName] = nativeMethodMap;
                         field.SetValue(null, nativeMethodMap.GetCacheDelegate());
-                    }
-
+                    } 
                 }
             }
             return true;
