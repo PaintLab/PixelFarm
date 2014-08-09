@@ -52,7 +52,7 @@ namespace LayoutFarm.NativePixelLib
     static class NativePixelLibInterOp
     {
         //-------------------------------------------------
-        static IntPtr hModule;
+        
         static NativeModuleLoader nativeModuleLoader;
         //------------------------------------------------- 
         [NativeFunc]
@@ -89,16 +89,13 @@ namespace LayoutFarm.NativePixelLib
                 {
                     return;
                 }
+ 
 
-                IntPtr nativeModule = UnsafeMethods.LoadLibrary(@"pixellib01.dll");
-                hModule = nativeModule;
-                if (nativeModule == IntPtr.Zero)
+                nativeModuleLoader = new NativeModuleLoader("pixellib01", "pixellib01.dll");
+                if (!nativeModuleLoader.LoadRequestProcs(typeof(NativePixelLibInterOp)))
                 {
                     return;
                 }
-
-                nativeModuleLoader = new NativeModuleLoader("pixellib01", hModule);
-                nativeModuleLoader.LoadRequestProcs(typeof(NativePixelLibInterOp));
                 //-------------------------------
                 //1. get version                 
                 int version = libGetVersion();

@@ -59,9 +59,7 @@ namespace LayoutFarm.NativeAgg
 
     static class NativeAggInterOp
     {
-        static NativeModuleLoader nativeModuleLoader;
-        //------------------------------------------------- 
-        static IntPtr hModule;
+        static NativeModuleLoader nativeModuleLoader; 
         //-------------------------------------------------
         static ManagedListenerDel managedListener;
         static bool initOnce;
@@ -111,26 +109,21 @@ namespace LayoutFarm.NativeAgg
                 //change location of dll ...
                 //or embeded as resource file
                 //-------------------------- 
-                IntPtr nativeModule = UnsafeMethods.LoadLibrary(
-                    @"lion.dll");
-                hModule = nativeModule;
-
-                if (nativeModule == IntPtr.Zero)
+                 
+                nativeModuleLoader = new NativeModuleLoader("libagg", "lion.dll");
+                if (!nativeModuleLoader.LoadRequestProcs(typeof(NativeAggInterOp)))
                 {
                     return;
                 }
 
-                nativeModuleLoader = new NativeModuleLoader("libagg", nativeModule);
-                nativeModuleLoader.LoadRequestProcs(typeof(NativeAggInterOp));
-                 
                 //1. get version
-                int version = libGetVersion(); 
+                int version = libGetVersion();
                 //2. callback for pixellib  
                 managedListener = new ManagedListenerDel(HandleCallFromNativePixelLib);
                 unmangedCallBack = System.Runtime.InteropServices.Marshal.GetFunctionPointerForDelegate(managedListener);
                 int regResult = registerMxCallBack(unmangedCallBack, 0);
                 //3. test call back 
-                var result2 = testCallBack(); 
+                var result2 = testCallBack();
                 initOnce = true;
             }
 
@@ -145,7 +138,7 @@ namespace LayoutFarm.NativeAgg
         }
 
 
-       
+
 
         public static int CallServerService(ServerServiceName serviceName)
         {

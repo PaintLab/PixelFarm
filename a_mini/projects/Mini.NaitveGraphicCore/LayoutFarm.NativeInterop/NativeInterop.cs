@@ -84,11 +84,10 @@ namespace LayoutFarm.NativeInterop
         }
     }
 
-
     [System.Runtime.InteropServices.StructLayout(LayoutKind.Sequential)]
     class MethodCallingArgs
     {
-        public int numArgs;//ระบุจำนวน arg ที่ส่งไป 
+        public int numArgs;
     }
 
     enum ManagedCallbackKind : int
@@ -131,14 +130,32 @@ namespace LayoutFarm.NativeInterop
     {
         IntPtr nativeModule;
         Dictionary<string, NativeMethodMap> importFuncs = new Dictionary<string, NativeMethodMap>();
-
+        string loadModuleFileName;
         public NativeModuleLoader(string moduleName, IntPtr nativeModule)
         {
             this.nativeModule = nativeModule;
-            this.ModuleName = moduleName; 
+            this.ModuleName = moduleName;
         }
-        public void LoadRequestProcs(Type holderType)
+        public NativeModuleLoader(string moduleName, string libFilename)
         {
+            this.loadModuleFileName = libFilename;
+            this.ModuleName = moduleName;
+        }
+        public bool LoadRequestProcs(Type holderType)
+        {
+            //1. load module 
+            //2. load procedure
+            if (!string.IsNullOrEmpty(this.loadModuleFileName))
+            {
+                this.nativeModule = UnsafeMethods.LoadLibrary(this.loadModuleFileName);
+                if (nativeModule == IntPtr.Zero)
+                {
+                    return false;
+                }
+            }
+            //---------------------------------------------------
+
+
             var allFields = holderType.GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
             int j = allFields.Length;
             Type nativeNameAttrType = typeof(NativeFunc);
@@ -156,13 +173,12 @@ namespace LayoutFarm.NativeInterop
                     NativeFunc natName = (NativeFunc)nativeNameAttrs[0];
                     Type fieldType = field.FieldType;
                     string procName = fieldType.Name;
-
+                    //------------------------------------------------------------
                     if (!string.IsNullOrEmpty(natName.NativeName))
                     {
                         //use field name
                         procName = natName.NativeName;
-                    }
-
+                    } 
                     //------------------------------------------------------------
                     //find-resolve-assign
                     NativeMethodMap nativeMethodMap = new NativeMethodMap(procName);
@@ -174,6 +190,7 @@ namespace LayoutFarm.NativeInterop
 
                 }
             }
+            return true;
         }
         public string ModuleName { get; private set; }
         public T GetNativeDel<T>(string funcName)
