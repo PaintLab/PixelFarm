@@ -3,13 +3,7 @@
  
 IBITMAP *picture, *zaka;
 
-void drawing3(
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void drawing3(IVideo* winVideo)
 {
 	static double theta = 0.0, x = 320;
 	static int count = 0, mode = 0;
@@ -65,16 +59,9 @@ void drawing3(
 //! lib: .
 //! link: pixel
 //! win: 
-int main3(
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int main3(IVideo* winVideo)
 {
-	int retval;
-	 
+	int retval; 
  
 	if ((retval = iscreen_init(1024, 600, 32,winVideo->hWnd,winVideo)) != 0) {
 		printf("error init\n");

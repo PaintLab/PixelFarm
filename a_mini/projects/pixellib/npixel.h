@@ -87,53 +87,17 @@ extern int iscreen_closing;		// ÊÇ·ñ¹Ø±Õ
 
 
 
-int iscreen_init(int w, int h, int bpp,HWND importHwnd,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int iscreen_init(int w, int h, int bpp,HWND importHwnd, IVideo* winVideo);
 
-void iscreen_quit(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+void iscreen_quit( IVideo* winVideo);
 
-int iscreen_lock(
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int iscreen_lock( IVideo* winVideo);
 
-int iscreen_unlock(
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int iscreen_unlock( IVideo* winVideo);
 
-int iscreen_update(int *rect, int n,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int iscreen_update(int *rect, int n, IVideo* winVideo);
 
-int iscreen_convert(int *rect, int n,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int iscreen_convert(int *rect, int n, IVideo* winVideo);
 
 int iscreen_keyon(int keycode);
 
@@ -149,13 +113,7 @@ void iscreen_sleep(long millisecond);
 
 void iscreen_caption(const char *text);
 
-void iscreen_vsync(int mode,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+void iscreen_vsync(int mode, IVideo* winVideo);
 
 
 //=====================================================================

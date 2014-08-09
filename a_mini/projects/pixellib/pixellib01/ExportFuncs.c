@@ -3,28 +3,10 @@
 
 del02 managedListner;
 
-int main2( ); 
-int main4(
-	#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
-int drawing2(
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
-int drawing4(
- #ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int main2(); 
+int main4(IVideo* winVideo);
+int drawing2(IVideo* winVideo);
+int drawing4(IVideo* winVideo);
 
 int LibGetVersion()
 {	
@@ -56,13 +38,7 @@ int TestCallBack()
 
 
 
-int CallServices(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-		,int serviceNumber)
+int CallServices( IVideo* winVideo,int serviceNumber)
 {
 	switch(serviceNumber)
 	{
@@ -101,26 +77,15 @@ int CallServices(
 	return 0;
 }
  
-#ifdef __unix
-	IVideoPrivateX11* 
-#else
-	IVideoPrivateWin* 
-#endif
-SetupMainWindow(HWND importHwnd)
+IVideo* SetupMainWindow(HWND importHwnd)
 {   
-	IVideoPrivateWin* win = (IVideoPrivateWin*)malloc(sizeof(IVideoPrivateWin));
-	memset(win,0,sizeof(IVideoPrivateWin)); 
+	IVideo* win = (IVideo*)malloc(sizeof(IVideo));
+	memset(win,0,sizeof(IVideo)); 
 	win->hWnd = importHwnd;
 	 
 	return win;
 } 
-int ShutdownMainWindow(HWND importHwnd,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int ShutdownMainWindow(HWND importHwnd,IVideo* winVideo)
 {	
 	iscreen_quit(winVideo);
 	 
@@ -131,14 +96,7 @@ int ShutdownMainWindow(HWND importHwnd,
  
 int myUseExternalWindow;
 
-int DrawImage( 
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	,
-	IBITMAP* bmp,	
+int DrawImage(IVideo* winVideo,	IBITMAP* bmp,	
 	int x1,int y1,int x2,int y2
 	)
 {	 

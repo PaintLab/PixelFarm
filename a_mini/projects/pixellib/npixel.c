@@ -130,13 +130,7 @@ static void iscreen_init_index(iColorIndex *index)
 }
 int total01=0;
 
-int iscreen_init_main(int w, int h, int bpp,HWND importHwnd,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int iscreen_init_main(int w, int h, int bpp,HWND importHwnd, IVideo* winVideo)
 {
 	
 
@@ -261,13 +255,7 @@ int iscreen_init_main(int w, int h, int bpp,HWND importHwnd,
 }
 
 
-int iscreen_init(int w, int h, int bpp,HWND importHwnd,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int iscreen_init(int w, int h, int bpp,HWND importHwnd, IVideo* winVideo)
 {
 	init_allocator();
 #ifdef __x86__
@@ -277,13 +265,7 @@ int iscreen_init(int w, int h, int bpp,HWND importHwnd,
 	return iscreen_init_main(w, h, bpp,importHwnd, winVideo);
 }
 
-void iscreen_quit(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void iscreen_quit(IVideo* winVideo)
 {
 	if(total01==0){return;}
 	if (iscreen_inited == 0) return;
@@ -314,25 +296,13 @@ void iscreen_quit(
 	 
 }
 
-static void iscreen_atexit_hook(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+static void iscreen_atexit_hook( IVideo* winVideo)
 {
 	//iscreen_quit(winVideo);
 }
 
 
-int iscreen_lock(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int iscreen_lock( IVideo* winVideo)
 {
 	if (iscreen_inited == 0) return -100;
 	#ifdef _WIN32
@@ -356,13 +326,7 @@ int iscreen_lock(
 	return 0;
 }
 
-int iscreen_unlock(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int iscreen_unlock( IVideo* winVideo)
 {
 	if (iscreen_inited == 0) return -100;
 	iscreen_locked--;
@@ -376,13 +340,7 @@ int iscreen_unlock(
 	return 0;
 }
 
-int iscreen_update(int *rect, int n,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int iscreen_update(int *rect, int n,IVideo* winVideo )
 {
 	int fullwindow[4];
 	if (iscreen_inited == 0) return -100;
@@ -414,13 +372,7 @@ int iscreen_update(int *rect, int n,
 	return 0;
 }
 
-int iscreen_convert(int *rect, int n,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int iscreen_convert(int *rect, int n, IVideo* winVideo)
 {
 	int fullwindow[4];
 	int i;
@@ -487,13 +439,7 @@ void iscreen_caption(const char *text)
 	ikitwin_set_caption(text);
 }
 
-void iscreen_vsync(int mode,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void iscreen_vsync(int mode, IVideo* winVideo)
 {
 	if (iscreen_inited == 0) return;
 #ifdef _WIN32

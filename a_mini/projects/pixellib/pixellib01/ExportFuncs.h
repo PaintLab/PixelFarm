@@ -12,31 +12,13 @@ MY_DLL_EXPORT int CallServices(int serviceNumber);
 MY_DLL_EXPORT IBITMAP* MakeBitmapWrapper(int bmpW,int bmpH,int stride,int bpp,void* rawPixelData);
 
 
-MY_DLL_EXPORT int DrawImage(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	,
+MY_DLL_EXPORT int DrawImage(IVideo* winVideo,
 	IBITMAP* bmp,
 	int x1,int y1,int x2,int y2);
  
 
 MY_DLL_EXPORT 
-#ifdef __unix
-	IVideoPrivateX11* 
-#else
-	IVideoPrivateWin* 
-#endif
-	SetupMainWindow(HWND mainWindow);
+IVideo* SetupMainWindow(HWND mainWindow);
 
-MY_DLL_EXPORT int ShutdownMainWindow(HWND importHwnd,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	
-	); 
+MY_DLL_EXPORT int ShutdownMainWindow(HWND importHwnd,IVideo* winVideo	); 
  

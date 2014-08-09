@@ -1063,29 +1063,7 @@ static int x11_set_caption(IVideoPrivateX11 *self, const char *caption)
 //=====================================================================
 // Windows  
 //=====================================================================
-//typedef struct
-//{
-//	HWND hWnd;
-//	HBITMAP hBitmap;
-//	HPALETTE hPalette;
-//	BITMAPINFO *info;
-//	LOGPALETTE *pal;
-//	LPRGBQUAD palette;
-//	HDC hDC;
-//	char *windowid;
-//	int screen_w;
-//	int screen_h;
-//	int w;
-//	int h;
-//	int depth;		// screen depth
-//	long pitch;
-//	unsigned char *pixel;
-//	void *parent;
-//	unsigned int rmask;
-//	unsigned int gmask;
-//	unsigned int bmask;
-//	unsigned int amask;
-//}	IVideoPrivateWin;
+ 
 
 
 
@@ -1532,7 +1510,7 @@ int mswin_register(const char *name, unsigned long style, void *hInst)
 	return 0;
 }
 
-static int mswin_create_window(IVideoPrivateWin *self)
+static int mswin_create_window(IVideo *self)
 {
 	mswin_register("ADI_APP",CS_BYTEALIGNCLIENT, 0);
 	if (self->windowid) {
@@ -1561,8 +1539,8 @@ static int mswin_create_window(IVideoPrivateWin *self)
 	return 0;
 }
 //------------------------------------------------------------
-//plersoft_ext
-static int mswin_create_window2_psext(IVideoPrivateWin *self,HWND importHwnd)
+ 
+static int mswin_create_window2_psext(IVideo *self,HWND importHwnd)
 {
 	/*mswin_register("ADI_APP",CS_BYTEALIGNCLIENT, 0);
 	if (self->windowid) {
@@ -1597,7 +1575,7 @@ static int mswin_create_window2_psext(IVideoPrivateWin *self,HWND importHwnd)
 
 
 //------------------------------------------------------------
-static void mswin_destroy_window(IVideoPrivateWin *self)
+static void mswin_destroy_window(IVideo *self)
 {
 	if (self->windowid == NULL) {
 		DestroyWindow(self->hWnd);
@@ -1791,7 +1769,7 @@ static LRESULT mswin_message_handle(void *current, HWND hWnd,
 	return 0;
 }
 
-static int mswin_dispatch(IVideoPrivateWin *self)
+static int mswin_dispatch(IVideo *self)
 {
 	MSG msg;
 	if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
@@ -1809,7 +1787,7 @@ static void mswin_WinPaint(void *current, HDC hdc, HWND hwnd)
 	BitBlt(hdc, 0, 0, self->w, self->h, self->hDC, 0, 0, SRCCOPY);
 }
 
-static int mswin_init(IVideoPrivateWin *self, const char *windowid,HWND importHwnd)
+static int mswin_init(IVideo *self, const char *windowid,HWND importHwnd)
 {
 	//memset(self, 0, sizeof(IVideoPrivateWin));
 
@@ -1886,7 +1864,7 @@ static int mswin_init(IVideoPrivateWin *self, const char *windowid,HWND importHw
 	return 0;
 }
 
-static void mswin_release_mode(IVideoPrivateWin *self) 
+static void mswin_release_mode(IVideo *self) 
 {
 	if (self->hDC) {
 		DeleteDC(self->hDC);
@@ -1909,7 +1887,7 @@ static void mswin_release_mode(IVideoPrivateWin *self)
 }
 
 static int 
-mswin_set_mode(IVideoPrivateWin *self, int w, int h, int bpp, int f)
+mswin_set_mode(IVideo *self, int w, int h, int bpp, int f)
 {
 	BITMAPINFO *info;
 	HDC hdc;
@@ -2043,7 +2021,7 @@ mswin_set_mode(IVideoPrivateWin *self, int w, int h, int bpp, int f)
 	return 0;
 }
 
-static int mswin_update_image(IVideoPrivateWin *self, const int *rect, int n)
+static int mswin_update_image(IVideo *self, const int *rect, int n)
 {
 	HDC hdc;
 	int i;
@@ -2060,7 +2038,7 @@ static int mswin_update_image(IVideoPrivateWin *self, const int *rect, int n)
 	return 0;
 }
 
-static void mswin_quit(IVideoPrivateWin *self)
+static void mswin_quit(IVideo *self)
 {
 
 	mswin_release_mode(self);
@@ -2075,17 +2053,17 @@ static void mswin_quit(IVideoPrivateWin *self)
 	}
 }
 
-static int mswin_lock_image(IVideoPrivateWin *self)
+static int mswin_lock_image(IVideo *self)
 {
 	return 0;
 }
 
-static int mswin_unlock_image(IVideoPrivateWin *self)
+static int mswin_unlock_image(IVideo *self)
 {
 	return 0;
 }
 
-static int mswin_set_caption(IVideoPrivateWin *self, const char *text)
+static int mswin_set_caption(IVideo *self, const char *text)
 {
 #ifdef _WIN32_WCE
 	int nlen = strlen(text) + 1;
@@ -2102,13 +2080,7 @@ static int mswin_set_caption(IVideoPrivateWin *self, const char *text)
 #endif 
   
 
-int ikitwin_init(HWND importHwnd,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int ikitwin_init(HWND importHwnd, IVideo* winVideo)
 {
 	char *windowid = ikitwin_windowid[0]? ikitwin_windowid : NULL;
 	int retval;
@@ -2126,13 +2098,7 @@ int ikitwin_init(HWND importHwnd,
 	return 0;
 }
  
-void ikitwin_quit(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void ikitwin_quit( IVideo* winVideo)
 {	
 	 
 	winVideo->inited =0;
@@ -2155,13 +2121,7 @@ void ikitwin_quit(
 }
  
 int ikitwin_set_mode(
-	int w, int h, int bpp, int flag,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+	int w, int h, int bpp, int flag, IVideo* winVideo)
 {
 	int retval;
  
@@ -2184,21 +2144,12 @@ int ikitwin_set_mode(
 	return 0;
 }
 
-void ikitwin_release_mode(
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void ikitwin_release_mode(IVideo* winVideo)
 {
 	if(winVideo->inited ==0)
 	{
 		return;
-	}
-	 
-	 
-		 
+	} 
 	if(winVideo->modeset ==0)
 	{
 		return;
@@ -2234,13 +2185,7 @@ int ikitwin_set_caption(const char *title)
 	return 0;
 }
 
-int ikitwin_update(const int *rect, int n,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int ikitwin_update(const int *rect, int n, IVideo* winVideo)
 {
 	int fullwindow[4];
 	if(winVideo->inited ==0)
@@ -2264,13 +2209,7 @@ int ikitwin_update(const int *rect, int n,
 	return 0;
 }
 
-int ikitwin_lock(void **pixel, long *pitch,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int ikitwin_lock(void **pixel, long *pitch, IVideo* winVideo)
 {
 	int retval;
 	#ifdef __unix
@@ -2285,13 +2224,7 @@ int ikitwin_lock(void **pixel, long *pitch,
 	return retval;
 }
 
-void ikitwin_unlock(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void ikitwin_unlock( IVideo* winVideo)
 {
 	#ifdef __unix
 	x11_unlock_image(winVideo);
@@ -2300,13 +2233,7 @@ void ikitwin_unlock(
 	#endif
 }
 
-int ikitwin_depth(int *rmask, int *gmask, int *bmask,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int ikitwin_depth(int *rmask, int *gmask, int *bmask, IVideo* winVideo)
 { 
 	if (rmask) *rmask = winVideo->rmask;
 	if (gmask) *gmask = winVideo->gmask;

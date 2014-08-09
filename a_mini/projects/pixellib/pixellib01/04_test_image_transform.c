@@ -3,13 +3,7 @@
  
 //
 
-void drawing4(
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void drawing4(IVideo* winVideo)
 {	
 
 	/*IBITMAP *picture;
@@ -94,13 +88,7 @@ void drawing4(
 //! lib: .
 //! link: pixel
 //! win: 
-int main4(
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int main4(IVideo* winVideo)
 {	
 	//prepare screen*
 

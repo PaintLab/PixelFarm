@@ -1,14 +1,6 @@
-#include "../npixel.h"
+#include "../npixel.h" 
 
-
-
-void drawing1(
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void drawing1(IVideo* winVideo)
 {
 	ipixel_point_t pts[3] = { { 100, 80 }, { 110, 120 }, { 210, 110 } };
 	int i;
@@ -43,13 +35,7 @@ void drawing1(
 //! lib: .
 //! link: pixel
 //! win: 
-int main1( 
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int main1( IVideo* winVideo	)
 {
 	int retval;
 	

@@ -51,12 +51,10 @@ typedef long long IINT64;
 
 
 #ifdef __unix
-	
-#else
-
-
-typedef struct IPAINT  ipaint_t;
-
+typedef IVideoPrivateX11 IVideo; 
+ 
+#else 
+typedef struct IPAINT  ipaint_t; 
 typedef struct
 {
 	HWND hWnd;
@@ -90,8 +88,10 @@ typedef struct
 	int iscreen_dx;
 
 }	IVideoPrivateWin;
-#endif
 
+typedef IVideoPrivateWin IVideo;
+
+#endif 
 #ifdef __cplusplus
 
 extern "C" {
@@ -101,72 +101,26 @@ extern "C" {
 //=====================================================================
  
 //=====================================================================
-//int ikitwin_init(HWND importHwnd);
-int ikitwin_init(HWND importHwnd,
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+ 
+int ikitwin_init(HWND importHwnd, IVideo* winVideo);
 
 
 void ikitwin_quit(void);
 
-int ikitwin_set_mode(int w, int h, int bpp, int flag,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int ikitwin_set_mode(int w, int h, int bpp, int flag,IVideo* winVideo);
 
-void ikitwin_release_mode(
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int ikitwin_lock(void **pixel, long *pitch,IVideo* winVideo);
 
-int ikitwin_update(const int *rect, int n,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+void ikitwin_unlock( IVideo* winVideo);
 
-int ikitwin_lock(void **pixel, long *pitch,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
-
-void ikitwin_unlock(
-#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-		);
-
-int ikitwin_depth(int *rmask, int *gmask, int *bmask,
-	#ifdef __unix
-	IVideoPrivateX11* winVideo 
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	);
+int ikitwin_depth(int *rmask, int *gmask, int *bmask, IVideo* winVideo);
 
 void ikitwin_info(int *screenw, int *screenh, int *screenbpp);
 
 int ikitwin_dispatch(void);
 
 int ikitwin_set_caption(const char *title);
-
+void ikitwin_release_mode(IVideo* winVideo);
 
 //---------------------------------------------------------------------
 //timer

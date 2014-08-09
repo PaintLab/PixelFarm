@@ -2,13 +2,7 @@
 
  
 
-void drawing2(
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+void drawing2(IVideo* winVideo)
 {
 	ipixel_point_t pts[3] = { { 100, 80 }, { 110, 120 }, { 210, 110 } };
 	int i;
@@ -41,13 +35,7 @@ void drawing2(
 //! lib: .
 //! link: pixel
 //! win: 
-int main2( 
-#ifdef __unix
-	IVideoPrivateX11* winVideo
-#else
-	IVideoPrivateWin* winVideo
-#endif
-	)
+int main2(IVideo* winVideo)
 {
 	int retval; 
 	if ((retval = iscreen_init(800, 600, 32,winVideo->hWnd,winVideo)) != 0) {
