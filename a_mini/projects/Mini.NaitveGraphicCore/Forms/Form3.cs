@@ -138,11 +138,7 @@ namespace Mini.GraphicCore
             appCanvas.RenderTo(hdc);
             //-----------------------------
             e.Graphics.ReleaseHdc(hdc);
-            //if (isReady)
-            //{
-            //    NativeAggInterOp.CallServerService(ServerServiceName.Draw4);
-            //    NativeAggInterOp.CallServerService(ServerServiceName.RefreshScreen);
-            //}
+            
         }
         protected override void OnClosing(CancelEventArgs e)
         {

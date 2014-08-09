@@ -93,8 +93,8 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
         void TestLoadLionFromBinaryFile()
         {
             System.Diagnostics.Debugger.Break();
-
-            using (var fs = new System.IO.FileStream("d:\\WImageTest9\\lion_stream.bin", System.IO.FileMode.Open))
+            //test load raw buffer 
+            using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
             {
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new MatterHackers.Agg.LionShape();
