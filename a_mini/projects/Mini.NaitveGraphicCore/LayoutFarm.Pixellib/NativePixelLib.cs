@@ -46,13 +46,21 @@ namespace LayoutFarm.NativePixelLib
 
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    delegate void SetBrushColor(IntPtr nativeWinVideo, byte r, byte g, byte b, byte a);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    delegate void SetLineWidth(IntPtr nativeWinVideo, double w);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    delegate void DrawLine(IntPtr nativeWinVideo,double x1,double y1,double x2,double y2);
+
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate IntPtr MakeBitmapWrapper(int bmpW, int bmpH, int stride, int bpp, IntPtr pixels);
 
 
     static class NativePixelLibInterOp
     {
-        //-------------------------------------------------
-
+        //------------------------------------------------- 
         static NativeModuleLoader nativeModuleLoader;
         //------------------------------------------------- 
         [NativeFunc]
@@ -73,7 +81,12 @@ namespace LayoutFarm.NativePixelLib
         static RegisterManagedCallBack registerMxCallBack;
         [NativeFunc]
         static TestCallBack testCallBack;
-
+        [NativeFunc]
+        internal static SetBrushColor setBrushColor;
+        [NativeFunc]
+        internal static SetLineWidth setLineWidth;
+        [NativeFunc]
+        internal static DrawLine drawLine;
 
         static IntPtr myCallBackDelegate;
 
@@ -184,6 +197,20 @@ namespace LayoutFarm.NativePixelLib
         public void DrawImage(NativeBmp bmp, Point[] fourCorners)
         {
 
+        }
+        public void SetLineWidth(double lineWidth)
+        {
+            NativePixelLibInterOp.setLineWidth(this.nativeCanvasPtr, lineWidth);
+        }
+        public void SetBrushColor(Color c)
+        {
+            NativePixelLibInterOp.setBrushColor(this.nativeCanvasPtr,
+                c.R, c.B, c.B, c.A);
+        }
+        public void DrawLine(double x1, double y1, double x2, double y2)
+        {
+            NativePixelLibInterOp.drawLine(this.nativeCanvasPtr,
+                x1, y1, x2, y2);
         }
         public void Render()
         {

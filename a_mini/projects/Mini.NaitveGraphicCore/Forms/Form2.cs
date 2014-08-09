@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
- 
+
 using System.Drawing;
 using System.Text;
 
@@ -81,11 +81,17 @@ namespace Mini.GraphicCore
 
                     nativeCanvas.DrawImage(this.nativeBmp,
                       x1, y1);
+                    
+                    nativeCanvas.SetLineWidth(2);
+                    nativeCanvas.SetBrushColor(Color.Red);
+                    nativeCanvas.DrawLine(10, 10, 500, 500);
 
                     nativeCanvas.DrawImage(this.nativeBmp,
                       x1 + 200, y1 + 200, 400, 300);
                 } 
-                //2. 
+
+                
+
                 nativeCanvas.Render();
             }
         }

@@ -96,7 +96,7 @@ int ShutdownMainWindow(HWND importHwnd,IVideo* winVideo)
  
 int myUseExternalWindow;
 
-int DrawImage(IVideo* winVideo,	IBITMAP* bmp,	
+void  DrawImage(IVideo* winVideo,	IBITMAP* bmp,	
 	int x1,int y1,int x2,int y2
 	)
 {	 
@@ -107,7 +107,7 @@ int DrawImage(IVideo* winVideo,	IBITMAP* bmp,
 	ipaint_raster(winVideo->paint, pts, bmp, NULL, 0xffffffff, 0);
 	
 	//ipaint_raster(winVideo->paint, pts, picture, NULL, 0xffffffff, 0);
-	return 0;
+	 
 }
  
 IBITMAP* MakeBitmapWrapper(int bmpW,int bmpH,int stride, int bpp,void* rawPixelSrcData)
@@ -116,4 +116,14 @@ IBITMAP* MakeBitmapWrapper(int bmpW,int bmpH,int stride, int bpp,void* rawPixelS
 	//copy data from src to new destination**
 	memcpy_s(bmp->pixel,(bmpH * stride),rawPixelSrcData,(bmpH * stride));
 	return bmp;
+}
+ 
+void SetBrushColor(IVideo* winVideo,char r,char g, char b,char a){
+	ipaint_set_color(winVideo->paint, IRGBA_TO_A8R8G8B8(r, g, b, a));
+}
+void  SetLineWidth(IVideo* winVideo,double w){
+	ipaint_line_width(winVideo->paint, w); 
+}
+void DrawLine(IVideo* winVideo,double x1,double y1,double x2,double y2){
+	ipaint_draw_line(winVideo->paint, x1, y1, x2,y2);
 }

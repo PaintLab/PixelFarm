@@ -12,8 +12,7 @@ using MatterHackers.Agg.VertexSource;
 using MatterHackers.Agg.Font;
 using MatterHackers.VectorMath;
 using MatterHackers.Agg.Transform;
-
-//using LayoutFarm.Canvas2dExtension;
+ 
 
 using Mini;
 namespace MatterHackers.Agg.Sample_Draw

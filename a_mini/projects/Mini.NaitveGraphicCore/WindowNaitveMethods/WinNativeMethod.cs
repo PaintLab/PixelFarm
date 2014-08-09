@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 
 using LayoutFarm.NativeInterop;
+
 namespace LayoutFarm.NativeWindows
 {
     public static class WinNative
