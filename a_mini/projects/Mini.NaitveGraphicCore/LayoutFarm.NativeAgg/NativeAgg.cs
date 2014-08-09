@@ -112,7 +112,7 @@ namespace LayoutFarm.NativeAgg
                 //or embeded as resource file
                 //-------------------------- 
                 IntPtr nativeModule = UnsafeMethods.LoadLibrary(
-                    @"..\..\..\NativeAgg\myagg\examples\win32_api\lion\Debug\lion.dll");
+                    @"lion.dll");
                 hModule = nativeModule;
 
                 if (nativeModule == IntPtr.Zero)
