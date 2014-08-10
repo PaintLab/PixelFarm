@@ -1,0 +1,5 @@
+Thumbs.db
+*.suo
+*.user
+obj/
+bin/
