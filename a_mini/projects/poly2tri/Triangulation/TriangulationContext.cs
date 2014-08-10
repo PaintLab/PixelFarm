@@ -33,10 +33,12 @@ using System.Collections.Generic;
 
 namespace Poly2Tri {
 	public abstract class TriangulationContext {
+
 		public TriangulationDebugContext DebugContext { get; protected set; }
 
 		public readonly List<DelaunayTriangle> Triangles = new List<DelaunayTriangle>();
 		public readonly List<TriangulationPoint> Points = new List<TriangulationPoint>(200);
+
 		public TriangulationMode TriangulationMode { get; protected set; }
 		public Triangulatable Triangulatable { get; private set; }
 
