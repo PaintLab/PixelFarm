@@ -119,7 +119,7 @@ namespace OpenTkEssTest
             #endregion GL States
 
             #region Load Texture
-            Bitmap bitmap = new Bitmap("Data/Textures/logo-dark.jpg");
+            Bitmap bitmap = new Bitmap("../../Data/Textures/logo-dark.jpg");
             bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
             GL.GenTextures(1, out Texture);

@@ -129,7 +129,6 @@ int ibitmap_clipex(const IBITMAP *dst, int *dx, int *dy, const IBITMAP *src,
 	return 0;
 }
 
-// 混色绘制
 void ibitmap_blend(IBITMAP *dst, int dx, int dy, const IBITMAP *src, int sx, 
 	int sy, int w, int h, IUINT32 color, const IRECT *clip, int flags)
 {
@@ -175,8 +174,9 @@ void ibitmap_blend(IBITMAP *dst, int dx, int dy, const IBITMAP *src, int sx,
 	}
 }
 
-// 格式转换
-void ibitmap_convert(IBITMAP *dst, int dx, int dy, const IBITMAP *src,
+ 
+void ibitmap_convert(IBITMAP *dst, int dx, int dy, 
+	const IBITMAP *src,
 	int sx, int sy, int w, int h, const IRECT *clip, int flags)
 {
 	unsigned char _buffer[IBITMAP_STACK_BUFFER];
@@ -226,7 +226,7 @@ void ibitmap_convert(IBITMAP *dst, int dx, int dy, const IBITMAP *src,
 }
 
 
-// 猜测颜色格式
+ 
 int ibitmap_pixfmt_guess(const IBITMAP *src)
 {
 	int fmt;

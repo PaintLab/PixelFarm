@@ -141,8 +141,7 @@ namespace LayoutFarm.NativePixelLib
             return callServices(nativeWinVideo, (int)serviceName);
         }
         public static void DrawImage(IntPtr canvasPtr, NativeBmp nativeBmp, int x, int y, int w, int h)
-        {
-
+        {   
             int x1 = x;
             int y1 = y;
             int x2 = x1 + w;
@@ -153,6 +152,9 @@ namespace LayoutFarm.NativePixelLib
         }
     }
 
+
+
+
     public class NativeCanvas
     {
         IntPtr nativeCanvasPtr;
@@ -162,8 +164,10 @@ namespace LayoutFarm.NativePixelLib
         {
             this.nativeCanvasPtr = nativeCanvasPtr;
         }
+
         public static NativeCanvas CreateNativeCanvas(IntPtr windowPtr, int w, int h)
         {
+        
             IntPtr ptr = NativePixelLibInterOp.setupMainWindow(windowPtr);
             NativeCanvas nativeCanvas = new NativeCanvas(ptr);
             nativeCanvas.w = w;
@@ -178,6 +182,7 @@ namespace LayoutFarm.NativePixelLib
         }
         public int Width { get { return this.w; } }
         public int Height { get { return this.h; } }
+
         public void ClearBackground()
         {
             NativePixelLibInterOp.CallServerService(nativeCanvasPtr, ServerServiceName.Draw4);
@@ -196,7 +201,13 @@ namespace LayoutFarm.NativePixelLib
         }
         public void DrawImage(NativeBmp bmp, Point[] fourCorners)
         {
-
+            NativePixelLibInterOp.drawImage2(this.nativeCanvasPtr,
+               bmp.Handle,
+               fourCorners[0].X, fourCorners[0].Y,
+               fourCorners[1].X, fourCorners[1].Y,
+               fourCorners[2].X, fourCorners[2].Y,
+               fourCorners[3].X, fourCorners[3].Y);
+             
         }
         public void SetLineWidth(double lineWidth)
         {
@@ -212,8 +223,11 @@ namespace LayoutFarm.NativePixelLib
             NativePixelLibInterOp.drawLine(this.nativeCanvasPtr,
                 x1, y1, x2, y2);
         }
+
+        
         public void Render()
         {
+            //render content to viewport
             NativePixelLibInterOp.CallServerService(nativeCanvasPtr, ServerServiceName.RefreshScreen);
         }
         public void Dispose()

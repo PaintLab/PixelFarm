@@ -30,13 +30,11 @@ namespace LayoutFarm.NativeAgg
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate IntPtr AggCreateCanvas();
 
-
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate int AggApp_Paint(IntPtr nativeAggApp, IntPtr hdc);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate void AggApp_Move(IntPtr nativeAggApp, float x, float y);
-
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate IntPtr CreateSprite();
@@ -45,10 +43,9 @@ namespace LayoutFarm.NativeAgg
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate void CanvasClearBackground(IntPtr canvas);
 
-
+    //-----------------------------------------------------------
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate void SpriteDraw(IntPtr sprite, IntPtr canvas);
-
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate void SpriteMove(IntPtr sprite, double x, double y);
@@ -56,10 +53,10 @@ namespace LayoutFarm.NativeAgg
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate IntPtr SpriteGetInternalPathStore(IntPtr sprite);
-
+    //-----------------------------------------------------------
     static class NativeAggInterOp
     {
-        static NativeModuleLoader nativeModuleLoader; 
+        static NativeModuleLoader nativeModuleLoader;
         //-------------------------------------------------
         static ManagedListenerDel managedListener;
         static bool initOnce;
@@ -72,9 +69,9 @@ namespace LayoutFarm.NativeAgg
         [NativeFunc]
         internal static AggCreateCanvas aggCreateCanvas;
         [NativeFunc]
-        static AggApp_Paint aggCanvasPaint;
+        internal static AggApp_Paint aggCanvasPaint;
         [NativeFunc]
-        static AggApp_Move aggMove;
+        internal static AggApp_Move aggMove;
         [NativeFunc]
         static CreateSprite createSprite;
         [NativeFunc]
@@ -109,7 +106,7 @@ namespace LayoutFarm.NativeAgg
                 //change location of dll ...
                 //or embeded as resource file
                 //-------------------------- 
-                 
+
                 nativeModuleLoader = new NativeModuleLoader("libagg", "lion.dll");
                 if (!nativeModuleLoader.LoadRequestProcs(typeof(NativeAggInterOp)))
                 {
@@ -144,24 +141,14 @@ namespace LayoutFarm.NativeAgg
         {
             return callServices((int)serviceName);
         }
-        public static void AggPaint(IntPtr nativePtr, IntPtr hdc)
-        {
-            //paint svg content
-            aggCanvasPaint(nativePtr, hdc);
-        }
 
-
-
-        public static void AggMove(IntPtr nativePtr, float x, float y)
-        {
-            aggMove(nativePtr, x, y);
-        }
         public static IntPtr AggCreateSprite()
         {
             return createSprite();
         }
 
     }
+  
     public class AggSprite
     {
         IntPtr nativePtr;
@@ -171,8 +158,8 @@ namespace LayoutFarm.NativeAgg
         {
             this.nativePtr = nativePtr;
         }
-        public virtual void Draw(AppCanvas canvas)
-        {
+        public virtual void Draw(AggCanvas canvas)
+        {               
             NativeAggInterOp.spriteDraw(this.nativePtr, canvas.NaitveHandle);
         }
         public void SetLocation(double x, double y)
@@ -195,11 +182,7 @@ namespace LayoutFarm.NativeAgg
             {
                 return this.y;
             }
-        }
-        public static AggSprite CreateNewSprite()
-        {
-            return new AggSprite(NativeAggInterOp.AggCreateSprite());
-        }
+        } 
         internal IntPtr NaitveHandle
         {
             get
@@ -207,30 +190,34 @@ namespace LayoutFarm.NativeAgg
                 return this.nativePtr;
             }
         }
-
+        public static AggSprite CreateNewSprite()
+        {
+            return new AggSprite(NativeAggInterOp.AggCreateSprite());
+        }
     }
-    public class AppCanvas
+
+    public class AggCanvas
     {
         IntPtr nativePtr;
-        private AppCanvas(IntPtr nativePtr)
+        private AggCanvas(IntPtr nativePtr)
         {
             this.nativePtr = nativePtr;
         }
         public void RenderTo(IntPtr hdc)
         {
-            NativeAggInterOp.AggPaint(this.nativePtr, hdc);
+            NativeAggInterOp.aggCanvasPaint(this.nativePtr, hdc);
         }
         public void ClearBackground()
         {
             NativeAggInterOp.canvasClearBackground(this.nativePtr);
         }
-        public static AppCanvas CreateAppController()
+        public static AggCanvas CreateCanvas()
         {
-            return new AppCanvas(NativeAggInterOp.aggCreateCanvas());
+            return new AggCanvas(NativeAggInterOp.aggCreateCanvas());
         }
         public void Resize(float x, float y)
         {
-            NativeAggInterOp.AggMove(this.nativePtr, x, y);
+            NativeAggInterOp.aggMove(this.nativePtr, x, y);
         }
         internal IntPtr NaitveHandle
         {

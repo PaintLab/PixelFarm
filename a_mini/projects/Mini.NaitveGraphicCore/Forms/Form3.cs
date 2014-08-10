@@ -14,7 +14,7 @@ namespace Mini.GraphicCore
     {
         bool isMouseDown;
         bool isReady = false;
-        AppCanvas appCanvas;
+        AggCanvas appCanvas;
 
         List<AggSprite> sprites = new List<AggSprite>();
         bool animationReady = false;
@@ -29,11 +29,11 @@ namespace Mini.GraphicCore
             base.OnLoad(e);
 
             NativeAggInterOp.LoadLib();
-            appCanvas = AppCanvas.CreateAppController();
+            appCanvas = AggCanvas.CreateCanvas();
             for (int i = 0; i < 5; ++i)
             {
                 var sprite = AggSprite.CreateNewSprite();
-                sprite.SetLocation(200 + (i * 20), 300);
+                sprite.SetLocation(200 + (i * 100), 300);
                 sprites.Add(sprite);
             }
 

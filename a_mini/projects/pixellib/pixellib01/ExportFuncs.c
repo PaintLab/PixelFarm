@@ -96,20 +96,28 @@ int ShutdownMainWindow(HWND importHwnd,IVideo* winVideo)
  
 int myUseExternalWindow;
 
-void  DrawImage(IVideo* winVideo,	IBITMAP* bmp,	
+void  DrawImage(IVideo* winVideo,IBITMAP* bmp,	
 	int x1,int y1,int x2,int y2
 	)
 {	 
-	IBITMAP *picture;
+	 
 	ipixel_point_t pts[4] = 
-		{ { x1, y2 }, { x1, y1 }, { x2, y1 }, { x2, y2 } };
-
-	ipaint_raster(winVideo->paint, pts, bmp, NULL, 0xffffffff, 0);
-	
+		{ { x1, y2 }, { x1, y1 }, { x2, y1 }, { x2, y2 } }; 
+	ipaint_raster(winVideo->paint, pts, bmp, NULL, 0xffffffff, 0); 
 	//ipaint_raster(winVideo->paint, pts, picture, NULL, 0xffffffff, 0);
 	 
 }
- 
+
+void DrawImage2(IVideo* winVideo,
+	IBITMAP* bmp,
+	int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4){	
+	
+		ipixel_point_t pts[4] = 
+		{ { x1, y1 }, { x2, y2 }, { x3, y3 }, { x4, y4 } };  
+	    ipaint_raster(winVideo->paint, pts, bmp, NULL, 0xffffffff, 0);  
+}
+
+
 IBITMAP* MakeBitmapWrapper(int bmpW,int bmpH,int stride, int bpp,void* rawPixelSrcData)
 {
 	IBITMAP* bmp= ibitmap_create(bmpW,bmpH,bpp);

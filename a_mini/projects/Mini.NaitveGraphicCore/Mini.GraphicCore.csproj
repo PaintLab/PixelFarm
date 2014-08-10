@@ -49,13 +49,13 @@
     <Compile Include="Forms\Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
-    <Compile Include="LayoutFarm.NativeAgg\AggCanvas.cs" />
+    <Compile Include="LayoutFarm.NativeAgg\Canvas.cs" />
     <Compile Include="LayoutFarm.NativeAgg\NativeAgg.cs" />
-    <Compile Include="LayoutFarm.NativeInterop\NativeInterop.cs" />
+    <Compile Include="0_LayoutFarm.NativeInterop\NativeInterop.cs" />
     <Compile Include="LayoutFarm.Pixellib\NativePixelLib.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WindowNaitveMethods\WinNativeMethod.cs" />
+    <Compile Include="0_LayoutFarm.NativeInterop\WinNativeMethod.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\Form3.resx">

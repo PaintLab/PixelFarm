@@ -15,6 +15,10 @@ MY_DLL_EXPORT IBITMAP* MakeBitmapWrapper(int bmpW,int bmpH,int stride,int bpp,vo
 MY_DLL_EXPORT void DrawImage(IVideo* winVideo,
 	IBITMAP* bmp,
 	int x1,int y1,int x2,int y2);
+
+MY_DLL_EXPORT void DrawImage2(IVideo* winVideo,
+	IBITMAP* bmp,
+	int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4);
  
 MY_DLL_EXPORT void SetBrushColor(IVideo* winVideo,char r,char g, char b,char a);	 
 MY_DLL_EXPORT void SetLineWidth(IVideo* winVideo,double w);

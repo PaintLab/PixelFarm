@@ -137,6 +137,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\agg_image_filters.cpp" />
     <ClCompile Include="..\..\..\src\agg_trans_affine.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\BasicCanvas.h" />
+    <ClInclude Include="..\..\..\include\agg_image_accessors.h" />
     <ClInclude Include="..\..\..\include\agg_pixfmt_rgba.h" />
     <ClInclude Include="ExportFuncs.h" />
   </ItemGroup>

@@ -355,15 +355,36 @@ int iscreen_update(int *rect, int n,IVideo* winVideo )
 	//if use DirectDraw Surface
 		int i;
 		while (iscreen_locked) iscreen_unlock(winVideo);
-		for (i = 0; i < n; i++) {
-			int x = rect[i * 4 + 0];
-			int y = rect[i * 4 + 1];
-			int w = rect[i * 4 + 2];
-			int h = rect[i * 4 + 3];
-			 
-			DDrawSurfaceBlit(winVideo->dxdesktop, x, y, w, h, winVideo->dxscreen, 
+		switch(n)
+		{
+			case 0:
+			{
+			}break;
+			case 1:
+			{	
+				int x = rect[0];
+				int y = rect[1];
+				int w = rect[2];
+				int h = rect[3]; 
+
+				DDrawSurfaceBlit(winVideo->dxdesktop, x, y, w, h, winVideo->dxscreen, 
 				x, y, w, h, DDBLIT_NOWAIT);
+
+			}break;
+			default:
+			{
+				for (i = 0; i < n; i++) {
+				int x = rect[i * 4 + 0];
+					int y = rect[i * 4 + 1];
+					int w = rect[i * 4 + 2];
+					int h = rect[i * 4 + 3];			 
+					DDrawSurfaceBlit(winVideo->dxdesktop, x, y, w, h, winVideo->dxscreen, 
+						x, y, w, h, DDBLIT_NOWAIT);
+				}
+			}break;
+		
 		}
+		
 		return 0;
 	}
 	#endif
@@ -381,7 +402,9 @@ int iscreen_convert(int *rect, int n, IVideo* winVideo)
 	fullwindow[1] = 0;
 	fullwindow[2] = winVideo->iscreen->w;
 	fullwindow[3] = winVideo->iscreen->h;
+
 	if (rect == NULL) rect = fullwindow;
+	
 	iscreen_lock(winVideo);
 	for (i = 0; i < n; i++, rect += 4) {
 		int x = rect[0];

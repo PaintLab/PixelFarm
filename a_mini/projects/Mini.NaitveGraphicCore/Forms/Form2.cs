@@ -82,12 +82,17 @@ namespace Mini.GraphicCore
                     nativeCanvas.DrawImage(this.nativeBmp,
                       x1, y1);
                     
-                    nativeCanvas.SetLineWidth(2);
+                    nativeCanvas.SetLineWidth(1);
                     nativeCanvas.SetBrushColor(Color.Red);
                     nativeCanvas.DrawLine(10, 10, 500, 500);
 
                     nativeCanvas.DrawImage(this.nativeBmp,
-                      x1 + 200, y1 + 200, 400, 300);
+                        new Point[]{
+                            new Point(10+200,10),
+                            new Point(200+200,10),
+                            new Point(200+50+200,300),
+                            new Point(10+50+200,300)});
+
                 } 
 
                 
