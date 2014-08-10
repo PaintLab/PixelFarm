@@ -1,4 +1,6 @@
-﻿/* Poly2Tri
+﻿//BSD 2014,WinterDev
+
+/* Poly2Tri
  * Copyright (c) 2009-2010, Poly2Tri Contributors
  * http://code.google.com/p/poly2tri/
  *
@@ -32,9 +34,16 @@
 /// Changes from the Java version
 ///   Turned DTSweepEdgeEvent into a value type
 
-namespace Poly2Tri {
-	public class DTSweepEdgeEvent {
-		public DTSweepConstraint ConstrainedEdge;
-		public bool Right;
-	}
+namespace Poly2Tri
+{
+    public struct DTSweepEdgeEvent
+    {
+        public readonly DTSweepConstraint ConstrainedEdge;
+        public readonly bool Right;
+        public DTSweepEdgeEvent(DTSweepConstraint c, bool right)
+        {
+            this.ConstrainedEdge = c;
+            this.Right = right;
+        }
+    }
 }

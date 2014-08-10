@@ -28,17 +28,38 @@
 // * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // */
-///**
-// * Forces a triangle edge between two points p and q
-// * when triangulating. For example used to enforce
-// * Polygon Edges during a polygon triangulation.
-// * 
-// * @author Thomas Åhlén, thahlen@gmail.com
-// */
 
-//namespace Poly2Tri {
-//    public class TriangulationConstraint {
-//        public TriangulationPoint P;
-//        public TriangulationPoint Q;
+//using System.Collections.Generic;
+
+//namespace Poly2Tri
+//{
+//    public class DTSweepPointComparator : IComparer<TriangulationPoint>
+//    {
+//        public int Compare(TriangulationPoint p1, TriangulationPoint p2)
+//        {
+//            if (p1.Y < p2.Y)
+//            {
+//                return -1;
+//            }
+//            else if (p1.Y > p2.Y)
+//            {
+//                return 1;
+//            }
+//            else
+//            {
+//                if (p1.X < p2.X)
+//                {
+//                    return -1;
+//                }
+//                else if (p1.X > p2.X)
+//                {
+//                    return 1;
+//                }
+//                else
+//                {
+//                    return 0;
+//                }
+//            }
+//        }
 //    }
 //}

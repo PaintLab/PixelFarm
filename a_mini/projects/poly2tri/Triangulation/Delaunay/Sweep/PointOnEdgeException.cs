@@ -1,4 +1,6 @@
-﻿/* Poly2Tri
+﻿//BSD 2014, WinterDev
+
+/* Poly2Tri
  * Copyright (c) 2009-2010, Poly2Tri Contributors
  * http://code.google.com/p/poly2tri/
  *
@@ -31,16 +33,19 @@
 
 using System;
 
-namespace Poly2Tri {
-	public class PointOnEdgeException : NotImplementedException {
-		public readonly TriangulationPoint A,B,C;
-
-		public PointOnEdgeException( string message, TriangulationPoint a, TriangulationPoint b, TriangulationPoint c )
-			: base(message)
-		{
-			A=a;
-			B=b;
-			C=c;
-		}
-	}
+namespace Poly2Tri
+{
+    public class PointOnEdgeException : Exception
+    {   
+        public readonly TriangulationPoint A, B, C;
+        public PointOnEdgeException(string message,
+            TriangulationPoint a, TriangulationPoint b,
+            TriangulationPoint c)
+            : base(message)
+        {
+            A = a;
+            B = b;
+            C = c;
+        }
+    }
 }

@@ -1,4 +1,6 @@
-﻿/* Poly2Tri
+﻿//BSD 2014, WinterDev
+
+/* Poly2Tri
  * Copyright (c) 2009-2010, Poly2Tri Contributors
  * http://code.google.com/p/poly2tri/
  *
@@ -31,16 +33,30 @@
 
 namespace Poly2Tri
 {
-    public class DTSweepConstraint : TriangulationConstraint
+    public struct DTSweepConstraint
     {
-        /// <summary>
-        /// Give two points in any order. Will always be ordered so
-        /// that q.y > p.y and q.x > p.x if same y value 
-        /// </summary>
+        public readonly TriangulationPoint P;
+        public readonly TriangulationPoint Q;
         public DTSweepConstraint(TriangulationPoint p1, TriangulationPoint p2)
         {
             P = p1;
             Q = p2;
+        }
+        public static readonly DTSweepConstraint Empty = new DTSweepConstraint();
+
+    }
+    public static class DTSweepConstraintMaker
+    {
+
+
+        /// <summary>
+        /// Give two points in any order. Will always be ordered so
+        /// that q.y > p.y and q.x > p.x if same y value 
+        /// </summary> 
+        public static void BuildConstraint(TriangulationPoint p1, TriangulationPoint p2)
+        {
+            var P = p1;
+            var Q = p2;
             if (p1.Y > p2.Y)
             {
                 Q = p1;
@@ -60,7 +76,9 @@ namespace Poly2Tri
                     //                return;
                 }
             }
-            Q.AddEdge(this);
+            Q.AddEdge(new DTSweepConstraint(P, Q));
         }
+
+
     }
 }

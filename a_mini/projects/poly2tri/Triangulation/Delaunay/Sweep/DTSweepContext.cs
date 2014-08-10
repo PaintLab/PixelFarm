@@ -1,4 +1,6 @@
-﻿/* Poly2Tri
+﻿//BSD 2014, WinterDev
+
+/* Poly2Tri
  * Copyright (c) 2009-2010, Poly2Tri Contributors
  * http://code.google.com/p/poly2tri/
  *
@@ -40,16 +42,22 @@ namespace Poly2Tri
     {
         // Inital triangle factor, seed triangle will extend 30% of 
         // PointSet width to both left and right.
-        private readonly float ALPHA = 0.3f;
+        private const float ALPHA = 0.3f;
 
         public AdvancingFront Front;
         public TriangulationPoint Head { get; set; }
         public TriangulationPoint Tail { get; set; }
 
-        public DTSweepBasin Basin = new DTSweepBasin();
-        public DTSweepEdgeEvent EdgeEvent = new DTSweepEdgeEvent();
+        //----------------------------------
+        //basin
+        public AdvancingFrontNode BasinLeftNode;
+        public AdvancingFrontNode BasinBottomNode;
+        public AdvancingFrontNode BasinRightNode;
+        public double BasinWidth;
+        public bool BasinLeftHighest;
+        //----------------------------------
 
-        private DTSweepPointComparator _comparator = new DTSweepPointComparator();
+        public DTSweepEdgeEvent EdgeEvent;
 
         public DTSweepContext()
         {
@@ -95,11 +103,28 @@ namespace Poly2Tri
                 triangle.IsInterior = true;
                 Triangulatable.AddTriangle(triangle);
 
-                for (int i = 0; i < 3; i++)
-                    if (!triangle.EdgeIsConstrained[i])
-                    {
-                        MeshCleanReq(triangle.Neighbors[i]);
-                    }
+                //0
+                if (!triangle.C0)
+                {
+                    MeshCleanReq(triangle.N0);
+                }
+                //1
+                if (!triangle.C1)
+                {
+                    MeshCleanReq(triangle.N1);
+                }
+                //2
+                if (!triangle.C2)
+                {
+                    MeshCleanReq(triangle.N2);
+                }
+                //for (int i = 0; i < 3; i++)
+                //{
+                //    if (!triangle.EdgeIsConstrained[i])
+                //    {
+                //        MeshCleanReq(triangle.Neighbors[i]);
+                //    }
+                //}
             }
         }
 
@@ -135,17 +160,17 @@ namespace Poly2Tri
             DelaunayTriangle iTriangle = new DelaunayTriangle(Points[0], Tail, Head);
             Triangles.Add(iTriangle);
 
-            head = new AdvancingFrontNode(iTriangle.Points[1]);
+            head = new AdvancingFrontNode(iTriangle.P1);
             head.Triangle = iTriangle;
-            middle = new AdvancingFrontNode(iTriangle.Points[0]);
+            middle = new AdvancingFrontNode(iTriangle.P0);
             middle.Triangle = iTriangle;
-            tail = new AdvancingFrontNode(iTriangle.Points[2]);
+            tail = new AdvancingFrontNode(iTriangle.P2);
 
             Front = new AdvancingFront(head, tail);
             Front.AddNode(middle);
 
             // TODO: I think it would be more intuitive if head is middles next and not previous
-            //       so swap head and tail
+            //so swap head and tail
             Front.Head.Next = middle;
             middle.Next = Front.Tail;
             middle.Prev = Front.Head;
@@ -162,12 +187,29 @@ namespace Poly2Tri
         /// </summary>
         public void MapTriangleToNodes(DelaunayTriangle t)
         {
-            for (int i = 0; i < 3; i++)
-                if (t.Neighbors[i] == null)
-                {
-                    AdvancingFrontNode n = Front.LocatePoint(t.PointCWFrom(t.Points[i]));
-                    if (n != null) n.Triangle = t;
-                }
+            //for (int i = 0; i < 3; i++)
+            //    if (t.Neighbors[i] == null)
+            //    {
+            //        AdvancingFrontNode n = Front.LocatePoint(t.PointCWFrom(t.Points[i]));
+            //        if (n != null) n.Triangle = t;
+            //    }
+
+            if (t.N0 == null)
+            {
+                AdvancingFrontNode n = Front.LocatePoint(t.PointCWFrom(t.P0));
+                if (n != null) n.Triangle = t;
+            }
+            if (t.N1 == null)
+            {
+                AdvancingFrontNode n = Front.LocatePoint(t.PointCWFrom(t.P1));
+                if (n != null) n.Triangle = t;
+            }
+            if (t.N2 == null)
+            {
+                AdvancingFrontNode n = Front.LocatePoint(t.PointCWFrom(t.P2));
+                if (n != null) n.Triangle = t;
+            }
+
         }
 
         public override void PrepareTriangulation(Triangulatable t)
@@ -197,12 +239,38 @@ namespace Poly2Tri
             Head = p1;
             Tail = p2;
 
-            //        long time = System.nanoTime();
-            // Sort the points along y-axis
-            Points.Sort(_comparator);
-            //        logger.info( "Triangulation setup [{}ms]", ( System.nanoTime() - time ) / 1e6 );
-        }
+            //long time = System.nanoTime();
+            //Sort the points along y-axis
+            Points.Sort(Compare);
 
+            //logger.info( "Triangulation setup [{}ms]", ( System.nanoTime() - time ) / 1e6 );
+        }
+        static int Compare(TriangulationPoint p1, TriangulationPoint p2)
+        {
+            if (p1.Y < p2.Y)
+            {
+                return -1;
+            }
+            else if (p1.Y > p2.Y)
+            {
+                return 1;
+            }
+            else
+            {
+                if (p1.X < p2.X)
+                {
+                    return -1;
+                }
+                else if (p1.X > p2.X)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
 
         public void FinalizeTriangulation()
         {
@@ -210,11 +278,18 @@ namespace Poly2Tri
             Triangles.Clear();
         }
 
-        public override TriangulationConstraint NewConstraint(TriangulationPoint a, TriangulationPoint b)
+        public override void MakeNewConstraint(TriangulationPoint a, TriangulationPoint b)
         {
-            return new DTSweepConstraint(a, b);
+            //new DTSweepConstraint(a, b);
+            DTSweepConstraintMaker.BuildConstraint(a, b);
         }
 
-        public override TriangulationAlgorithm Algorithm { get { return TriangulationAlgorithm.DTSweep; } }
+        public override TriangulationAlgorithm Algorithm
+        {
+            get { return TriangulationAlgorithm.DTSweep; }
+        }
+
+
+
     }
 }

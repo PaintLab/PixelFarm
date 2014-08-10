@@ -29,63 +29,75 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Poly2Tri {
-	public static class P2T {
-		private static TriangulationAlgorithm _defaultAlgorithm = TriangulationAlgorithm.DTSweep;
+namespace Poly2Tri
+{
+    public static class P2T
+    {
+        private static TriangulationAlgorithm _defaultAlgorithm = TriangulationAlgorithm.DTSweep;
 
-		public static void Triangulate(PolygonSet ps) {
-			TriangulationContext tcx = CreateContext(_defaultAlgorithm);
-			foreach (Polygon p in ps.Polygons) {
-				tcx.PrepareTriangulation(p);
-				Triangulate(tcx);
-				tcx.Clear();
-			}
-		}
+        public static void Triangulate(PolygonSet ps)
+        {
+            TriangulationContext tcx = CreateContext(_defaultAlgorithm);
+            foreach (Polygon p in ps.Polygons)
+            {
+                tcx.PrepareTriangulation(p);
+                Triangulate(tcx);
+                tcx.Clear();
+            }
+        }
 
-		public static void Triangulate(Polygon p) {
-			Triangulate(_defaultAlgorithm, p);
-		}
+        public static void Triangulate(Polygon p)
+        {
+            Triangulate(_defaultAlgorithm, p);
+        }
 
-		public static void Triangulate(ConstrainedPointSet cps) {
-			Triangulate(_defaultAlgorithm, cps);
-		}
+        public static void Triangulate(ConstrainedPointSet cps)
+        {
+            Triangulate(_defaultAlgorithm, cps);
+        }
 
-		public static void Triangulate(PointSet ps) {
-			Triangulate(_defaultAlgorithm, ps);
-		}
+        public static void Triangulate(PointSet ps)
+        {
+            Triangulate(_defaultAlgorithm, ps);
+        }
 
-		public static TriangulationContext CreateContext(TriangulationAlgorithm algorithm) {
-			switch (algorithm) {
-			case TriangulationAlgorithm.DTSweep:
-			default:
-				return new DTSweepContext();
-			}
-		}
+        public static TriangulationContext CreateContext(TriangulationAlgorithm algorithm)
+        {
+            switch (algorithm)
+            {
+                case TriangulationAlgorithm.DTSweep:
+                default:
+                    return new DTSweepContext();
+            }
+        }
 
-		public static void Triangulate(TriangulationAlgorithm algorithm, Triangulatable t) {
-			TriangulationContext tcx;
+        public static void Triangulate(TriangulationAlgorithm algorithm, Triangulatable t)
+        {
+            TriangulationContext tcx;
 
-			//        long time = System.nanoTime();
-			tcx = CreateContext(algorithm);
-			tcx.PrepareTriangulation(t);
-			Triangulate(tcx);
-			//        logger.info( "Triangulation of {} points [{}ms]", tcx.getPoints().size(), ( System.nanoTime() - time ) / 1e6 );
-		}
+            //long time = System.nanoTime();
+            tcx = CreateContext(algorithm);
+            tcx.PrepareTriangulation(t);
+            Triangulate(tcx);
+            //logger.info( "Triangulation of {} points [{}ms]", tcx.getPoints().size(), ( System.nanoTime() - time ) / 1e6 );
+        }
+        public static void Triangulate(TriangulationContext tcx)
+        {
+            switch (tcx.Algorithm)
+            {
+                case TriangulationAlgorithm.DTSweep:
+                default:
+                    DTSweep.Triangulate((DTSweepContext)tcx);
+                    break;
+            }
+        }
 
-		public static void Triangulate(TriangulationContext tcx) {
-			switch (tcx.Algorithm) {
-			case TriangulationAlgorithm.DTSweep:
-			default:
-				DTSweep.Triangulate((DTSweepContext)tcx);
-				break;
-			}
-		}
 
-
-		/// <summary>
-		/// Will do a warmup run to let the JVM optimize the triangulation code -- or would if this were Java --MM
-		/// </summary>
-		public static void Warmup() {
+        /// <summary>
+        /// Will do a warmup run to let the JVM optimize the triangulation code -- or would if this were Java --MM
+        /// </summary>
+        public static void Warmup()
+        {
 #if false
 			/*
 			 * After a method is run 10000 times, the Hotspot compiler will compile
@@ -97,6 +109,6 @@ namespace Poly2Tri {
 			TriangulationProcess process = new TriangulationProcess();
 			process.triangulate(poly);
 #endif
-		}
-	}
+        }
+    }
 }

@@ -61,12 +61,12 @@
     <Compile Include="Triangulation\Delaunay\Sweep\AdvancingFront.cs" />
     <Compile Include="Triangulation\Delaunay\Sweep\AdvancingFrontNode.cs" />
     <Compile Include="Triangulation\Delaunay\Sweep\DTSweep.cs" />
-    <Compile Include="Triangulation\Delaunay\Sweep\DTSweepBasin.cs" />
+    <Compile Include="x_notused\DTSweepBasin.cs" />
     <Compile Include="Triangulation\Delaunay\Sweep\DTSweepConstraint.cs" />
     <Compile Include="Triangulation\Delaunay\Sweep\DTSweepContext.cs" />
     <Compile Include="Triangulation\Delaunay\Sweep\DTSweepDebugContext.cs" />
     <Compile Include="Triangulation\Delaunay\Sweep\DTSweepEdgeEvent.cs" />
-    <Compile Include="Triangulation\Delaunay\Sweep\DTSweepPointComparator.cs" />
+    <Compile Include="x_notused\DTSweepPointComparator.cs" />
     <Compile Include="Triangulation\Delaunay\Sweep\PointOnEdgeException.cs" />
     <Compile Include="Triangulation\Orientation.cs" />
     <Compile Include="Triangulation\Sets\ConstrainedPointSet.cs" />
@@ -81,8 +81,8 @@
     <Compile Include="Triangulation\TriangulationUtil.cs" />
     <Compile Include="Triangulation\Util\PointGenerator.cs" />
     <Compile Include="Triangulation\Util\PolygonGenerator.cs" />
-    <Compile Include="Utility\FixedArray3.cs" />
-    <Compile Include="Utility\FixedBitArray3.cs" />
+    <Compile Include="x_notused\FixedArray3.cs" />
+    <Compile Include="x_notused\FixedBitArray3.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

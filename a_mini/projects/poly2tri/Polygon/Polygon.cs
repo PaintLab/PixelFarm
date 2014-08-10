@@ -44,13 +44,13 @@ using System.Collections.Generic;
 
 namespace Poly2Tri
 {
-    public class Polygon : Triangulatable
+    public sealed class Polygon : Triangulatable
     {
-        protected List<TriangulationPoint> _points = new List<TriangulationPoint>();
-        protected List<TriangulationPoint> _steinerPoints;
-        protected List<Polygon> _holes;
-        protected List<DelaunayTriangle> _triangles;
-        protected PolygonPoint _last;
+        List<TriangulationPoint> _points;
+        List<TriangulationPoint> _steinerPoints;
+        List<Polygon> _holes;
+        List<DelaunayTriangle> _triangles;
+        PolygonPoint _last;
 
         /// <summary>
         /// Create a polygon from a list of at least 3 points with no duplicates.
@@ -58,6 +58,8 @@ namespace Poly2Tri
         /// <param name="points">A list of unique points</param>
         public Polygon(IList<PolygonPoint> points)
         {
+            this._points = new List<TriangulationPoint>();
+
             if (points.Count < 3) throw new ArgumentException("List has fewer than 3 points", "points");
 
             // Lets do one sanity check that first and last point hasn't got same position
@@ -67,22 +69,16 @@ namespace Poly2Tri
             //_points.AddRange(points.Cast<TriangulationPoint>());
             _points.AddRange(GetPointIter(points));
         }
+
+        private Polygon()
+        {
+        }
         public static IEnumerable<TriangulationPoint> GetPointIter(IList<PolygonPoint> plist)
         {
             foreach (var p in plist)
             {
                 yield return (TriangulationPoint)p;
             }
-        }
-        /// <summary>
-        /// Create a polygon from a list of at least 3 points with no duplicates.
-        /// </summary>
-        /// <param name="points">A list of unique points.</param>
-        public Polygon(IEnumerable<PolygonPoint> points)
-            : this((points as IList<PolygonPoint>)
-                ?? MakeArray(points))
-        {
-
         }
         static PolygonPoint[] MakeArray(IEnumerable<PolygonPoint> points)
         {
@@ -93,6 +89,35 @@ namespace Poly2Tri
             }
             return polygonPoints.ToArray();
 
+        }
+        public Polygon CleanClone()
+        {
+
+            //clone ctor 
+            Polygon newPolygon = new Polygon();
+            List<TriangulationPoint> myPoints = this._points;
+
+            int j = myPoints.Count;
+            List<TriangulationPoint> clonePoints = new List<TriangulationPoint>(j);
+            newPolygon._points = clonePoints;
+
+            for (int i = 0; i < j; ++i)
+            {
+                var p = myPoints[i];
+                clonePoints.Add(new PolygonPoint(p.X, p.Y));
+            }
+            //-----------------------------------------------------------------
+            List<Polygon> myHoles = this._holes; 
+            if (myHoles != null)
+            {
+                j = myHoles.Count;
+                List<Polygon> cloneHoles = new List<Polygon>(j);
+                for (int i = 0; i < j; ++i)
+                {
+                    cloneHoles.Add(myHoles[i].CleanClone());
+                }
+            } 
+            return newPolygon;
         }
         /// <summary>
         /// Create a polygon from a list of at least 3 points with no duplicates.
@@ -237,10 +262,10 @@ namespace Poly2Tri
             // Outer constraints
             for (int i = 0; i < _points.Count - 1; i++)
             {
-                tcx.NewConstraint(_points[i], _points[i + 1]);
+                tcx.MakeNewConstraint(_points[i], _points[i + 1]);
             }
 
-            tcx.NewConstraint(_points[0], _points[_points.Count - 1]);
+            tcx.MakeNewConstraint(_points[0], _points[_points.Count - 1]);
             tcx.Points.AddRange(_points);
 
             // Hole constraints
@@ -250,10 +275,10 @@ namespace Poly2Tri
                 {
                     for (int i = 0; i < p._points.Count - 1; i++)
                     {
-                        tcx.NewConstraint(p._points[i], p._points[i + 1]);
+                        tcx.MakeNewConstraint(p._points[i], p._points[i + 1]);
                     }
 
-                    tcx.NewConstraint(p._points[0], p._points[p._points.Count - 1]);
+                    tcx.MakeNewConstraint(p._points[0], p._points[p._points.Count - 1]);
                     tcx.Points.AddRange(p._points);
                 }
             }
