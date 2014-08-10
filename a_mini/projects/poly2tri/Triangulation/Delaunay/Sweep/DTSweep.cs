@@ -108,11 +108,17 @@ namespace Poly2Tri
 
                 node = PointEvent(tcx, point);
 
-                if (point.HasEdges) foreach (DTSweepConstraint e in point.Edges)
+                if (point.HasEdges)
+                {
+                    foreach (DTSweepConstraint e in point.GetEdgeIter())
                     {
-                        if (tcx.IsDebugEnabled) tcx.DTDebugContext.ActiveConstraint = e;
+                        if (tcx.IsDebugEnabled)
+                        {
+                            tcx.DTDebugContext.ActiveConstraint = e;
+                        }
                         EdgeEvent(tcx, e, node);
                     }
+                }
                 tcx.Update(null);
             }
         }
@@ -563,7 +569,8 @@ namespace Poly2Tri
         {
 
             //DTSweepConstraint edge = eq.Edges.First(e => e.Q == ep || e.P == ep);
-            DTSweepConstraint edge = FindFirst(eq.Edges, ep);//.First(e => e.Q == ep || e.P == ep);
+            //DTSweepConstraint edge = FindFirst(eq.Edges, ep);//.First(e => e.Q == ep || e.P == ep);
+            DTSweepConstraint edge = eq.FindFirst(ep);
             edge.P = p;
             new DTSweepConstraint(ep, p); // Et tu, Brute? --MM
 
@@ -571,18 +578,6 @@ namespace Poly2Tri
             //          newEdgeEvent( tcx, edge, triangle, point );
             //          // Continue with new edge
             //          newEdgeEvent( tcx, edge, triangle, p2 );
-        }
-
-        static DTSweepConstraint FindFirst(List<DTSweepConstraint> list, TriangulationPoint eq)
-        {
-            foreach (var e in list)
-            {
-                if (e.Q == eq || e.P == eq)
-                {
-                    return e;
-                }
-            }
-            return null;
         }
 
         private static void FlipEdgeEvent(DTSweepContext tcx, TriangulationPoint ep, TriangulationPoint eq, DelaunayTriangle t, TriangulationPoint p)

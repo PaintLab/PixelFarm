@@ -31,26 +31,65 @@
 
 using System.Collections.Generic;
 
-namespace Poly2Tri {
-	public class TriangulationPoint {
-		// List of edges this point constitutes an upper ending point (CDT)
-		public List<DTSweepConstraint> Edges { get; private set; }
+namespace Poly2Tri
+{
+    public class TriangulationPoint
+    {
+        // List of edges this point constitutes an upper ending point (CDT)
 
-		public TriangulationPoint( double x, double y ) { X=x; Y=y; }
 
-		public override string ToString() {
-			return "[" + X + "," + Y + "]";
-		}
+        public readonly double X, Y;
+        List<DTSweepConstraint> myEdges;
 
-		public double X,Y;
-		public float Xf { get { return (float)X; } set { X=value; } }
-		public float Yf { get { return (float)Y; } set { Y=value; } }
+        public TriangulationPoint(double x, double y)
+        {
+            X = x; Y = y;
+        }
 
-		public void AddEdge(DTSweepConstraint e) {
-			if (Edges == null) Edges = new List<DTSweepConstraint>();
-			Edges.Add(e);
-		}
+        public override string ToString()
+        {
+            return "[" + X + "," + Y + "]";
+        }
+        public float Xf
+        {
+            get { return (float)X; }
+        }
+        public float Yf
+        {
+            get { return (float)Y; }
+        }
 
-		public bool HasEdges { get { return Edges != null; } }
-	}
+        public void AddEdge(DTSweepConstraint e)
+        {
+            if (myEdges == null) myEdges = new List<DTSweepConstraint>();
+            myEdges.Add(e);
+        }
+
+        public DTSweepConstraint FindFirst(TriangulationPoint eq)
+        {
+            int j = myEdges.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                var e = myEdges[i];
+                if (e.Q == eq || e.P == eq)
+                {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public IEnumerable<DTSweepConstraint> GetEdgeIter()
+        {
+            List<DTSweepConstraint> edges = this.myEdges;
+            if (edges != null)
+            {
+                foreach (var e in edges)
+                {
+                    yield return e;
+                }
+            }
+        }
+        public bool HasEdges { get { return myEdges != null; } }
+    }
 }
