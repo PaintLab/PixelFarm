@@ -68,14 +68,16 @@ namespace Mini
         private void button1_Click(object sender, EventArgs e)
         {
             //--------------
-            System.Diagnostics.Debugger.Break();
+             
 
             //test01
             var lionShape = new MatterHackers.Agg.LionShape();
             lionShape.ParseLion();
 
             //test path serialize to binary stream
-            using (var fs = new System.IO.FileStream("d:\\WImageTest9\\lion_stream.bin", System.IO.FileMode.Create))
+            System.Diagnostics.Debugger.Break();
+
+            using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Create))
             {
                 var writer = new System.IO.BinaryWriter(fs);
 
@@ -102,7 +104,7 @@ namespace Mini
             }
             //--------------
             //test load path from binary stream
-            using (var fs = new System.IO.FileStream("d:\\WImageTest9\\lion_stream.bin", System.IO.FileMode.Open))
+            using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
             {
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new MatterHackers.Agg.LionShape();

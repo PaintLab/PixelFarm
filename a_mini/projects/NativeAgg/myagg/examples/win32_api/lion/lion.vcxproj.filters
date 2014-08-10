@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{07e4abc2-f489-4953-a485-9fe53ef9e22b}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{03eebc99-18c9-42f5-8705-86604b4a02bd}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{48361848-1e39-4484-94ef-0e313e63df7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\Binders">
+      <UniqueIdentifier>{8d7c2089-70c0-4e76-a45d-3a1ae4e3fb3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="agg_tools">
+      <UniqueIdentifier>{126cc5a5-38d0-43e0-9dfe-ae601d66a81e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platforms">
+      <UniqueIdentifier>{fb846ee3-82ba-414c-aa25-3a9f4ae81faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules">
+      <UniqueIdentifier>{639ca91a-20bb-419d-99af-0f992df4632a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules\classic_lion">
+      <UniqueIdentifier>{8c305bc9-4884-41a9-a6c1-747310e05b44}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="modules\image_perspective">
+      <UniqueIdentifier>{b0d14e64-55c0-448c-af9a-a75603b69bfd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\lion.cpp">
+      <Filter>modules\classic_lion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\parse_lion.cpp">
+      <Filter>modules\classic_lion</Filter>
+    </ClCompile>
+    <ClCompile Include="ExportFuncs.c">
+      <Filter>App\Binders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\agg_trans_affine.cpp">
+      <Filter>agg_tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\agg_vcgen_stroke.cpp">
+      <Filter>agg_tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\agg_win32_bmp.cpp">
+      <Filter>platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="platform_support2.cpp">
+      <Filter>platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\agg_image_filters.cpp">
+      <Filter>agg_tools</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\agg_pixfmt_rgba.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExportFuncs.h">
+      <Filter>App\Binders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BasicCanvas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\agg_image_accessors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
