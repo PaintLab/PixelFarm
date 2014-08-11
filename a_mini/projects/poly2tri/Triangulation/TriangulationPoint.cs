@@ -31,26 +31,67 @@
 
 using System.Collections.Generic;
 
-namespace Poly2Tri {
-	public class TriangulationPoint {
-		// List of edges this point constitutes an upper ending point (CDT)
-		public List<DTSweepConstraint> Edges { get; private set; }
+namespace Poly2Tri
+{
+    public class TriangulationPoint
+    {
 
-		public TriangulationPoint( double x, double y ) { X=x; Y=y; }
 
-		public override string ToString() {
-			return "[" + X + "," + Y + "]";
-		}
+        // List of edges this point constitutes an upper ending point (CDT) 
+        public readonly double X;
+        public readonly double Y;
+        internal byte tempName;
+        List<DTSweepConstraint> myEdges = new List<DTSweepConstraint>();
 
-		public double X,Y;
-		public float Xf { get { return (float)X; } set { X=value; } }
-		public float Yf { get { return (float)Y; } set { Y=value; } }
 
-		public void AddEdge(DTSweepConstraint e) {
-			if (Edges == null) Edges = new List<DTSweepConstraint>();
-			Edges.Add(e);
-		}
+        public TriangulationPoint(double x, double y)
+        {
+            X = x; Y = y;
+        }
+        public override string ToString()
+        {
+            return "[" + X + "," + Y + "]";
+        }
+        public float Xf
+        {
+            get { return (float)X; }
+        }
+        public float Yf
+        {
+            get { return (float)Y; }
+        }
 
-		public bool HasEdges { get { return Edges != null; } }
-	}
+        public void AddEdge(DTSweepConstraint e)
+        {
+            //if (myEdges == null)
+            //{
+            //    myEdges = new List<DTSweepConstraint>();
+            //}
+            myEdges.Add(e);
+        }
+        //public IEnumerable<DTSweepConstraint> GetEdgeIter()
+        //{
+        //    List<DTSweepConstraint> edges = this.myEdges;
+        //    if (edges != null)
+        //    {
+        //        foreach (var e in edges)
+        //        {
+        //            yield return e;
+        //        }
+        //    }
+        //}
+        internal List<DTSweepConstraint> GetInternalEdgeList()
+        {
+            return this.myEdges;
+        }
+        public bool HasEdges { get { return myEdges != null; } }
+
+        //------------------------------------------------------------
+#if DEBUG
+        public static bool dbugIsEqualPointCoord(TriangulationPoint a, TriangulationPoint b)
+        {
+            return a.X == b.X && a.Y == b.Y;
+        }
+#endif
+    }
 }

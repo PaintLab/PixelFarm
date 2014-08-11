@@ -31,36 +31,46 @@
 
 using System.Collections.Generic;
 
-namespace Poly2Tri {
-	public class PointSet : Triangulatable {
-		public IList<TriangulationPoint> Points { get; private set; }
-		public IList<DelaunayTriangle> Triangles { get; private set; }
+namespace Poly2Tri
+{
+    public class PointSet : Triangulatable
+    {
+        public IList<TriangulationPoint> Points { get; private set; }
+        public IList<DelaunayTriangle> Triangles { get; private set; }
 
-		public PointSet(List<TriangulationPoint> points) {
-			Points = new List<TriangulationPoint>(points);
-		}
+        public PointSet(List<TriangulationPoint> points)
+        {
+            Points = new List<TriangulationPoint>(points);
+        }
 
-		public virtual TriangulationMode TriangulationMode { get { return TriangulationMode.Unconstrained; }}
+        public virtual TriangulationMode TriangulationMode { get { return TriangulationMode.Unconstrained; } }
 
-		public void AddTriangle(DelaunayTriangle t) {
-			Triangles.Add(t);
-		}
+        public void AddTriangle(DelaunayTriangle t)
+        {
+            Triangles.Add(t);
+        }
 
-		public void AddTriangles(IEnumerable<DelaunayTriangle> list) {
-			foreach ( var tri in list ) Triangles.Add(tri);
-		}
+        public void AddTriangles(IEnumerable<DelaunayTriangle> list)
+        {
+            foreach (var tri in list) Triangles.Add(tri);
+        }
 
-		public void ClearTriangles() {
-			Triangles.Clear();
-		}
+        public void ClearTriangles()
+        {
+            Triangles.Clear();
+        }
 
-		public virtual void Prepare(TriangulationContext tcx) {
-			if (Triangles == null) {
-				Triangles = new List<DelaunayTriangle>(Points.Count);
-			} else {
-				Triangles.Clear();
-			}
-			tcx.Points.AddRange(Points);
-		}
-	}
+        public virtual void Prepare(TriangulationContext tcx)
+        {
+            if (Triangles == null)
+            {
+                Triangles = new List<DelaunayTriangle>(Points.Count);
+            }
+            else
+            {
+                Triangles.Clear();
+            }
+            tcx.Points.AddRange(Points);
+        }
+    }
 }

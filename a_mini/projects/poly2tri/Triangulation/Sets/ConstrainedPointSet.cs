@@ -30,32 +30,37 @@
  */
 
 using System.Collections.Generic;
-namespace Poly2Tri {
-	/*
-	 * Extends the PointSet by adding some Constraints on how it will be triangulated<br>
-	 * A constraint defines an edge between two points in the set, these edges can not
-	 * be crossed. They will be enforced triangle edges after a triangulation.
-	 * <p>
-	 * 
-	 * 
-	 * @author Thomas Åhlén, thahlen@gmail.com
-	 */
-	public class ConstrainedPointSet : PointSet {
-		public int[] EdgeIndex { get; private set; }
+namespace Poly2Tri
+{
+    /*
+     * Extends the PointSet by adding some Constraints on how it will be triangulated<br>
+     * A constraint defines an edge between two points in the set, these edges can not
+     * be crossed. They will be enforced triangle edges after a triangulation.
+     * <p>
+     * 
+     * 
+     * @author Thomas Åhlén, thahlen@gmail.com
+     */
+    public class ConstrainedPointSet : PointSet
+    {
+        public int[] EdgeIndex { get; private set; }
 
-		public ConstrainedPointSet(List<TriangulationPoint> points, int[] index)
-			: base(points) {
-			EdgeIndex = index;
-		}
+        public ConstrainedPointSet(List<TriangulationPoint> points, int[] index)
+            : base(points)
+        {
+            EdgeIndex = index;
+        }
 
-		public override TriangulationMode TriangulationMode { get { return TriangulationMode.Constrained; } }
+        public override TriangulationMode TriangulationMode { get { return TriangulationMode.Constrained; } }
 
-		public override void Prepare(TriangulationContext tcx) {
-			base.Prepare(tcx);
-			for (int i = 0; i < EdgeIndex.Length; i += 2) {
-				// XXX: must change!!
-				tcx.NewConstraint(Points[EdgeIndex[i]], Points[EdgeIndex[i + 1]]);
-			}
-		}
-	}
+        public override void Prepare(TriangulationContext tcx)
+        {
+            base.Prepare(tcx);
+            for (int i = 0; i < EdgeIndex.Length; i += 2)
+            {
+                // XXX: must change!!
+                tcx.MakeNewConstraint(Points[EdgeIndex[i]], Points[EdgeIndex[i + 1]]);
+            }
+        }
+    }
 }
