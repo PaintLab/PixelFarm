@@ -36,7 +36,7 @@ namespace Poly2Tri
      */
     public class TriangulationUtil
     {
-        public static double EPSILON = 1e-12;
+        public const double EPSILON = 1e-12;
         /// <summary>
         ///   Requirements:
         /// 1. a,b and c form a triangle.
@@ -61,7 +61,7 @@ namespace Poly2Tri
         /// <param name="pc">triangle point</param>
         /// <param name="pd">point opposite a</param>
         /// <returns>true if d is inside circle, false if on circle edge</returns>
-        public static bool SmartIncircle(TriangulationPoint pa, TriangulationPoint pb, TriangulationPoint pc, TriangulationPoint pd)
+        public static bool SmartInCircle(TriangulationPoint pa, TriangulationPoint pb, TriangulationPoint pc, TriangulationPoint pd)
         {
             double pdx = pd.X;
             double pdy = pd.Y;
@@ -122,11 +122,14 @@ namespace Poly2Tri
             double adxcdy = adx * cdy;
             double ocad = cdxady - adxcdy;
             //      ocad = orient2d(pc,pa,pd);
-            if (ocad <= 0)
-            {
-                return false;
-            }
-            return true;
+
+            return ocad > 0;
+
+            //if (ocad <= 0)
+            //{
+            //    return false;
+            //}
+            //return true;
         }
 
         /// Forumla to calculate signed area

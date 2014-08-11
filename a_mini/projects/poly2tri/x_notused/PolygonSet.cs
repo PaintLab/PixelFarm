@@ -29,13 +29,31 @@
 // * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // */
 
+///// Changes from the Java version
+/////   Replaced getPolygons with attribute
+///// Future possibilities
+/////   Replace Add(Polygon) with exposed container?
+/////   Replace entire class with HashSet<Polygon> ?
+
+//using System.Collections.Generic;
+
 //namespace Poly2Tri
 //{
-//    public class DTSweepBasin
+//    public class PolygonSet
 //    {
-//        public AdvancingFrontNode leftNode;
-//        public AdvancingFrontNode bottomNode;
-//        public AdvancingFrontNode rightNode;
-//        public double width;
-//        public bool leftHighest;
+//        List<Polygon> _polygons = new List<Polygon>();
+
+//        public PolygonSet() { } 
+//        public PolygonSet(Polygon polygon)
+//        {
+//            _polygons.Add(polygon);
+//        }
+
+//        public void Add(Polygon polygon)
+//        {
+//            _polygons.Add(polygon);
+//        }
+
+//        public IEnumerable<Polygon> Polygons { get { return _polygons; } }
+//    }
 //}

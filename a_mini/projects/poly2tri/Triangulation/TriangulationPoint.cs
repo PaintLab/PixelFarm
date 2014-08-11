@@ -35,14 +35,18 @@ namespace Poly2Tri
 {
     public class TriangulationPoint
     {
+
+
         // List of edges this point constitutes an upper ending point (CDT) 
-        public readonly double X, Y;
-        List<DTSweepConstraint> myEdges;
+        public readonly double X;
+        public readonly double Y;
+        internal byte tempName;
+        List<DTSweepConstraint> myEdges = new List<DTSweepConstraint>();
+
 
         public TriangulationPoint(double x, double y)
         {
             X = x; Y = y;
-            myEdges = null;
         }
         public override string ToString()
         {
@@ -59,22 +63,26 @@ namespace Poly2Tri
 
         public void AddEdge(DTSweepConstraint e)
         {
-            if (myEdges == null)
-            {
-                myEdges = new List<DTSweepConstraint>();
-            }
+            //if (myEdges == null)
+            //{
+            //    myEdges = new List<DTSweepConstraint>();
+            //}
             myEdges.Add(e);
-        } 
-        public IEnumerable<DTSweepConstraint> GetEdgeIter()
+        }
+        //public IEnumerable<DTSweepConstraint> GetEdgeIter()
+        //{
+        //    List<DTSweepConstraint> edges = this.myEdges;
+        //    if (edges != null)
+        //    {
+        //        foreach (var e in edges)
+        //        {
+        //            yield return e;
+        //        }
+        //    }
+        //}
+        internal List<DTSweepConstraint> GetInternalEdgeList()
         {
-            List<DTSweepConstraint> edges = this.myEdges;
-            if (edges != null)
-            {
-                foreach (var e in edges)
-                {
-                    yield return e;
-                }
-            }
+            return this.myEdges;
         }
         public bool HasEdges { get { return myEdges != null; } }
 

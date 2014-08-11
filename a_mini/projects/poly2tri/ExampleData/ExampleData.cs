@@ -41,7 +41,7 @@ namespace Poly2Tri
     {
         public static Polygon LoadDat(string filename, bool xflip, bool yflip)
         {
-            var points = new List<PolygonPoint>();
+            List<PolygonPoint> points = new List<PolygonPoint>();
             foreach (var line_ in File.ReadAllLines(filename))
             {
                 string line = line_.Trim();
@@ -49,9 +49,8 @@ namespace Poly2Tri
                 var xy = line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
                 points.Add(new PolygonPoint((xflip ? -1 : +1) * double.Parse(xy[0], CultureInfo.InvariantCulture), (yflip ? -1 : +1) * double.Parse(xy[1], CultureInfo.InvariantCulture)));
             }
-            return new Polygon(points);
+            return new Polygon(points.ToArray());
         }
-
         public static Polygon LoadDat(string filename) { return LoadDat(filename, false, false); }
 
         static readonly Dictionary<string, Polygon> DatCache = new Dictionary<string, Polygon>();
@@ -86,20 +85,20 @@ namespace Poly2Tri
                 if (!ImageCache.ContainsKey(@"Data\dude.dat"))
                 {
                     var p = CacheLoadDat(@"Data\dude.dat");
-                    p.AddHole(new Polygon
-                        (new PolygonPoint(325, 437)
+                    p.AddHole(new Polygon(
+                         new PolygonPoint[]{new PolygonPoint(325, 437)
                         , new PolygonPoint(320, 423)
                         , new PolygonPoint(329, 413)
                         , new PolygonPoint(332, 423)
-                        ));
-                    p.AddHole(new Polygon
-                        (new PolygonPoint(320.72342, 480)
+                        }));
+                    p.AddHole(new Polygon(
+                        new PolygonPoint[]{new PolygonPoint(320.72342, 480)
                         , new PolygonPoint(338.90617, 465.96863)
                         , new PolygonPoint(347.99754, 480.61584)
                         , new PolygonPoint(329.8148, 510.41534)
                         , new PolygonPoint(339.91632, 480.11077)
                         , new PolygonPoint(334.86556, 478.09046)
-                        ));
+                        }));
                 }
                 return CacheLoadDat(@"Data\dude.dat");
             }
