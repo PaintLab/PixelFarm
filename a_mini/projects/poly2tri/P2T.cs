@@ -62,8 +62,9 @@ namespace Poly2Tri
         }
 
         //static DTSweepContext context = new DTSweepContext();
-        
-        static System.Collections.Generic.Stack<DTSweepContext> contextStacks = new System.Collections.Generic.Stack<DTSweepContext>();
+
+
+        static System.Collections.Generic.List<DTSweepContext> contextStacks = new System.Collections.Generic.List<DTSweepContext>();
 
         static TriangulationContext GetFreeTcxContext(TriangulationAlgorithm algorithm)
         {
@@ -78,7 +79,10 @@ namespace Poly2Tri
                     }
                     else
                     {
-                        return contextStacks.Pop();
+                        int last_index = contextStacks.Count - 1;
+                        TriangulationContext result = contextStacks[last_index];
+                        contextStacks.RemoveAt(last_index);
+                        return result;
                     }
             }
         }
@@ -87,7 +91,7 @@ namespace Poly2Tri
             var dtSweepContext = sweepContext as DTSweepContext;
             if (dtSweepContext != null)
             {
-                contextStacks.Push(dtSweepContext);
+                contextStacks.Add(dtSweepContext);
             }
         }
         public static void Triangulate(TriangulationAlgorithm algorithm, Triangulatable t)

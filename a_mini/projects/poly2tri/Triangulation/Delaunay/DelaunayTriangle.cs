@@ -284,7 +284,7 @@ namespace Poly2Tri
             //1. clear points of this
             P0.tempName = P1.tempName = P2.tempName = 3;
             //2. assign tempName for t
-            t.P0.tempName = 0; t.P1.tempName = 1; t.P2.tempName = 2; 
+            t.P0.tempName = 0; t.P1.tempName = 1; t.P2.tempName = 2;
 
             bool a = P0.tempName != 3;
             bool b = P1.tempName != 3;
@@ -301,7 +301,11 @@ namespace Poly2Tri
         /// <param name="p">The point in t that isn't shared between the triangles</param>
         public TriangulationPoint OppositePoint(DelaunayTriangle t, TriangulationPoint p)
         {
-            Debug.Assert(t != this, "self-pointer error");
+            // Debug.Assert(t != this, "self-pointer error");
+            if (t == this)
+            {
+                throw new NotSupportedException("self-pointer error");
+            }
             return PointCWFrom(t.PointCWFrom(p));
         }
         public TriangulationPoint OppositePoint(DelaunayTriangle t,
@@ -309,7 +313,7 @@ namespace Poly2Tri
             out int foundAtIndex,
             out bool related_ec, out bool related_ed)
         {
-            Debug.Assert(t != this, "self-pointer error");
+            // Debug.Assert(t != this, "self-pointer error");
             //----
             //note original function 
             //PointCWFrom(t.PointCWFrom(p));
@@ -953,7 +957,7 @@ namespace Poly2Tri
 
             //return -1;
         }
-        
+
     }
 
 
