@@ -528,9 +528,10 @@ namespace Tesselate
             double c1 = intersectionVertex.C_1;
             double c2 = intersectionVertex.C_2;
 
-            intersectionVertex.clientIndex = -1;
+            intersectionVertex.clientIndex = 0;
             tess.CallCombine(c0, c1, c2, vertexIndexArray, vertexWeights, out intersectionVertex.clientIndex);
-            if (intersectionVertex.clientIndex == -1)
+
+            if (intersectionVertex.clientIndex == 0)
             {
                 if (!needed)
                 {

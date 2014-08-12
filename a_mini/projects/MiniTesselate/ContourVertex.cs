@@ -54,7 +54,8 @@ namespace Tesselate
         public int clientIndex;		/* client's data */
 
         /* Internal data (keep hidden) */
-        //public double[] coords = new double[3];	/* vertex location in 3D */
+        /* vertex location in 3D */
+
         internal double C_0;
         internal double C_1;
         internal double C_2;
@@ -62,7 +63,7 @@ namespace Tesselate
         public double x, y;		/* projection onto the sweep plane */
         public RefItem<ContourVertex> priorityQueueHandle;	/* to allow deletion from priority queue */
 
-        
+
         public int CompareTo(ContourVertex otherVertex)
         {
             if (VertEq(otherVertex))

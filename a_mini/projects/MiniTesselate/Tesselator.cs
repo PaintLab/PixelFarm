@@ -142,7 +142,7 @@ namespace Tesselate
 
             this.processingState = ProcessingState.Dormant;
 
-            this.windingRule = Tesselator.WindingRuleType.NonZero;
+            this.windingRule = Tesselator.WindingRuleType.Odd;//default
             this.boundaryOnly = false;
         }
 
@@ -405,7 +405,6 @@ namespace Tesselate
                 }
                 EmptyCache();
             }
-
             AddVertex(clamped[0], clamped[1], data);
         }
 

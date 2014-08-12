@@ -590,14 +590,17 @@ namespace Tesselate
         */
         class EdgePair
         {
-            public HalfEdge e = new HalfEdge();
-            public HalfEdge eSym = new HalfEdge();
+            public readonly HalfEdge e = new HalfEdge();
+            public readonly HalfEdge eSym = new HalfEdge();
+#if DEBUG
             static int debugIndex;
-
+#endif
             public EdgePair()
             {
+#if DEBUG
                 e.debugIndex = debugIndex++;
                 eSym.debugIndex = debugIndex++;
+#endif
             }
         };
 
@@ -608,12 +611,11 @@ namespace Tesselate
         static HalfEdge MakeEdge(HalfEdge eNext)
         {
             HalfEdge ePrev;
-            EdgePair pair = new EdgePair();
-
+            EdgePair pair = new EdgePair(); 
             /* Make sure eNext points to the first edge of the edge pair */
-            if (eNext.otherHalfOfThisEdge.isFirstHalfEdge) 
+            if (eNext.otherHalfOfThisEdge.isFirstHalfEdge)
             {
-                eNext = eNext.otherHalfOfThisEdge; 
+                eNext = eNext.otherHalfOfThisEdge;
             }
 
             /* Insert in circular doubly-linked list before eNext.
