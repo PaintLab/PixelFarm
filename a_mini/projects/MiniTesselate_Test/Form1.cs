@@ -26,8 +26,7 @@ namespace TessTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //test heap
-
+           
 
             var alist = new MiniCollection.MaxFirstList<int>();
             alist.Add(16);
@@ -50,8 +49,7 @@ namespace TessTest
             alist.Add(3);
             alist.Add(2);
             alist.Add(8);
-            alist.Add(1);
-
+            alist.Add(1); 
 
             var a = alist.FindMin();
         }
