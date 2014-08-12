@@ -64,12 +64,12 @@ namespace Tesselate
             public double y;
         }
 
-        public struct VertexAndIndex
-        {
-            public double x;
-            public double y;
-            public int vertexIndex;
-        }
+        //public struct VertexAndIndex
+        //{
+        //    public double x;
+        //    public double y;
+        //    public int vertexIndex;
+        //}
 
         public enum TriangleListType
         {
@@ -132,7 +132,8 @@ namespace Tesselate
 
         bool emptyCache;		/* empty cache on next vertex() call */
         public int cacheCount;		/* number of cached vertices */
-        public Tesselator.VertexAndIndex[] simpleVertexCache = new VertexAndIndex[MAX_CACHE_SIZE];	/* the vertex data */
+        public Vertex[] simpleVertexCache = new Vertex[MAX_CACHE_SIZE];	/* the vertex data */
+        int[] indexCached = new int[MAX_CACHE_SIZE];
 
         public Tesselator()
         {
@@ -348,13 +349,15 @@ namespace Tesselate
 
         void EmptyCache()
         {
-            VertexAndIndex[] v = this.simpleVertexCache;
+            Vertex[] vCaches = this.simpleVertexCache;
+            int[] index_caches = this.indexCached;
 
             this.mesh = new Mesh();
 
             for (int i = 0; i < this.cacheCount; i++)
             {
-                this.AddVertex(v[i].x, v[i].y, v[i].vertexIndex);
+                Vertex v = vCaches[i];
+                this.AddVertex(v.x, v.y, index_caches[i]);
             }
             this.cacheCount = 0;
             this.emptyCache = false;
@@ -362,9 +365,15 @@ namespace Tesselate
 
         void CacheVertex(double[] coords3, int data)
         {
-            this.simpleVertexCache[this.cacheCount].vertexIndex = data;
-            this.simpleVertexCache[this.cacheCount].x = coords3[0];
-            this.simpleVertexCache[this.cacheCount].y = coords3[1];
+            Vertex v = new Vertex();
+            v.x = coords3[0];
+            v.y = coords3[1];
+            this.simpleVertexCache[this.cacheCount] = v;
+            this.indexCached[cacheCount] = data;
+
+            //this.simpleVertexCache[this.cacheCount].vertexIndex = data;
+            //this.simpleVertexCache[this.cacheCount].x = coords3[0];
+            //this.simpleVertexCache[this.cacheCount].y = coords3[1];
             ++this.cacheCount;
         }
 
@@ -893,8 +902,8 @@ namespace Tesselate
         * SIGN_INCONSISTENT.
         */
         {
-            Tesselator.VertexAndIndex[] vCache = this.simpleVertexCache;
-            Tesselator.VertexAndIndex v0 = vCache[0];
+            var vCache = this.simpleVertexCache;
+            Vertex v0 = vCache[0];
             int vcIndex;
             double dot, xc, yc, xp, yp;
             double[] n = new double[3];
@@ -962,8 +971,9 @@ namespace Tesselate
         */
         public bool RenderCache()
         {
-            Tesselator.VertexAndIndex[] vCache = this.simpleVertexCache;
-            Tesselator.VertexAndIndex v0 = vCache[0];
+            var vCache = this.simpleVertexCache;
+            var v0 = vCache[0];
+
             double[] norm3 = new double[3];
             int sign;
 
@@ -1009,19 +1019,20 @@ namespace Tesselate
                 : (this.cacheCount > 3) ? Tesselator.TriangleListType.TriangleFan
                 : Tesselator.TriangleListType.Triangles);
 
-            this.CallVertex(v0.vertexIndex);
+            this.CallVertex(this.indexCached[0]);
+
             if (sign > 0)
             {
                 for (int vcIndex = 1; vcIndex < this.cacheCount; ++vcIndex)
                 {
-                    this.CallVertex(vCache[vcIndex].vertexIndex);
+                    this.CallVertex(indexCached[vcIndex]);
                 }
             }
             else
             {
                 for (int vcIndex = this.cacheCount - 1; vcIndex > 0; --vcIndex)
                 {
-                    this.CallVertex(vCache[vcIndex].vertexIndex);
+                    this.CallVertex(indexCached[vcIndex]);
                 }
             }
             this.CallEnd();
