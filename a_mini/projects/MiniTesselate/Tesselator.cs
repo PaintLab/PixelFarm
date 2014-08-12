@@ -353,8 +353,8 @@ namespace Tesselate
             int[] index_caches = this.indexCached;
 
             this.mesh = new Mesh();
-
-            for (int i = 0; i < this.cacheCount; i++)
+            int count = this.cacheCount;
+            for (int i = 0; i < count; i++)
             {
                 Vertex v = vCaches[i];
                 this.AddVertex(v.x, v.y, index_caches[i]);
@@ -363,26 +363,29 @@ namespace Tesselate
             this.emptyCache = false;
         }
 
-        void CacheVertex(double[] coords3, int data)
+        void CacheVertex(double x, double y, double z, int data)
         {
             Vertex v = new Vertex();
-            v.x = coords3[0];
-            v.y = coords3[1];
+            v.x = x;
+            v.y = y;
             this.simpleVertexCache[this.cacheCount] = v;
             this.indexCached[cacheCount] = data;
-
-            //this.simpleVertexCache[this.cacheCount].vertexIndex = data;
-            //this.simpleVertexCache[this.cacheCount].x = coords3[0];
-            //this.simpleVertexCache[this.cacheCount].y = coords3[1];
             ++this.cacheCount;
         }
-
-        public void AddVertex(double[] coords3, int data)
+        void CacheVertex(double x, double y, int data)
         {
-            int i;
-            double x;
+            Vertex v = new Vertex();
+            v.x = x;
+            v.y = y;
+            this.simpleVertexCache[this.cacheCount] = v;
+            this.indexCached[cacheCount] = data;
+            ++this.cacheCount;
+        }
+        public void AddVertex(double x, double y, double z, int data)
+        {
+        
+            double tmp;
             double[] clamped = new double[3];
-
             RequireState(ProcessingState.InContour);
 
             if (emptyCache)
@@ -390,31 +393,51 @@ namespace Tesselate
                 EmptyCache();
                 lastHalfEdge = null;
             }
-
-            for (i = 0; i < 3; ++i)
+            //=============================
+            //expand to 3 times
+            tmp = x;
+            if (tmp < -MAX_COORD)
             {
-                x = coords3[i];
-                if (x < -MAX_COORD)
-                {
-                    throw new Exception("Your coordinate exceeded -" + MAX_COORD.ToString() + ".");
-                }
-                if (x > MAX_COORD)
-                {
-                    throw new Exception("Your coordinate exceeded " + MAX_COORD.ToString() + ".");
-                }
-                clamped[i] = x;
+                throw new Exception("Your coordinate exceeded -" + MAX_COORD.ToString() + ".");
             }
+            if (tmp > MAX_COORD)
+            {
+                throw new Exception("Your coordinate exceeded " + MAX_COORD.ToString() + ".");
+            }
+
+            //=============================
+            tmp = y;
+            if (tmp < -MAX_COORD)
+            {
+                throw new Exception("Your coordinate exceeded -" + MAX_COORD.ToString() + ".");
+            }
+            if (tmp > MAX_COORD)
+            {
+                throw new Exception("Your coordinate exceeded " + MAX_COORD.ToString() + ".");
+            }
+            //=============================
+            tmp = z;
+            if (tmp < -MAX_COORD)
+            {
+                throw new Exception("Your coordinate exceeded -" + MAX_COORD.ToString() + ".");
+            }
+            if (tmp > MAX_COORD)
+            {
+                throw new Exception("Your coordinate exceeded " + MAX_COORD.ToString() + ".");
+            }
+            //=============================
+
 
             if (mesh == null)
             {
                 if (cacheCount < MAX_CACHE_SIZE)
                 {
-                    CacheVertex(clamped, data);
+                    CacheVertex(x, y, data);
                     return;
                 }
                 EmptyCache();
             }
-            AddVertex(clamped[0], clamped[1], data);
+            AddVertex(x, y, data);
         }
 
         public void EndContour()
@@ -931,8 +954,9 @@ namespace Tesselate
             xc = v.x - v0.x;
             yc = v.y - v0.y;
 
-            while (++vcIndex < this.cacheCount)
-            {   
+            int c_count = this.cacheCount;
+            while (++vcIndex < c_count)
+            {
                 xp = xc; yp = yc;
                 v = vCache[vcIndex];
                 xc = v.x - v0.x;
@@ -1027,7 +1051,8 @@ namespace Tesselate
 
             if (sign > 0)
             {
-                for (int vcIndex = 1; vcIndex < this.cacheCount; ++vcIndex)
+                int c_count = this.cacheCount;
+                for (int vcIndex = 1; vcIndex < c_count; ++vcIndex)
                 {
                     this.CallVertex(indexCached[vcIndex]);
                 }

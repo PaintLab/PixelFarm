@@ -521,10 +521,8 @@ namespace MatterHackers.Agg.Tests
                         double x = Convert.ToDouble(instructionStream[curInstruction + 1]);
                         double y = Convert.ToDouble(instructionStream[curInstruction + 2]);
                         curInstruction += 2;
-                        double[] coords = new double[3];
-                        coords[0] = x;
-                        coords[1] = y;
-                        tesselator.AddVertex(coords, m_VertexList.Count);
+
+                        tesselator.AddVertex(x, y, 0, m_VertexList.Count);
                         m_VertexList.Add(new Vertex(x, y));
                         break;
 

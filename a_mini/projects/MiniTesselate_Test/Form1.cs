@@ -151,10 +151,10 @@ namespace TessTest
 
             List<Vertex> vertexts = new List<Vertex>()
             {
-                new Vertex(-1, 3 ),
+                new Vertex(-1, 3),
                 new Vertex(0, 0),
-                new Vertex(1 ,3 ),
-                new Vertex(0 ,2 ),               
+                new Vertex(1 ,3),
+                new Vertex(0 ,2),               
             };
             t01.Connect(vertexts, tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
 
@@ -166,7 +166,7 @@ namespace TessTest
             for (int i = 0; i < j; ++i)
             {
                 Vertex v = vertexts[i];
-                tess.AddVertex(new double[] { v.m_X, v.m_Y, 0 }, i);
+                tess.AddVertex(v.m_X, v.m_Y, 0, i);
             }
             tess.EndContour();
             tess.EndPolygon();
@@ -248,7 +248,7 @@ namespace TessTest
             for (int i = start_at; i < endBefore; ++i)
             {
                 Vertex v = vertexts[i];
-                tess.AddVertex(new double[] { v.m_X, v.m_Y, 0 }, i);
+                tess.AddVertex(v.m_X, v.m_Y, 0, i);
             }
             tess.EndContour();
             //------------------------------------
@@ -259,7 +259,7 @@ namespace TessTest
             for (int i = start_at; i < endBefore; ++i)
             {
                 Vertex v = vertexts[i];
-                tess.AddVertex(new double[] { v.m_X, v.m_Y, 0 }, i);
+                tess.AddVertex(v.m_X, v.m_Y, 0, i);
             }
             tess.EndContour();
 
@@ -357,11 +357,11 @@ namespace TessTest
             for (int i = start_at; i < endBefore; ++i)
             {
                 Vertex v = vertexts[i];
-                tess.AddVertex(new double[] { v.m_X, v.m_Y, 0 }, i);
+                tess.AddVertex(v.m_X, v.m_Y, 0, i);
             }
             tess.EndContour();
             //------------------------------------
-            
+
             tess.EndPolygon();
             //---------------------------
             //save final images
