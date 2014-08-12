@@ -893,7 +893,7 @@ namespace Tesselate
 
         const int SIGN_INCONSISTENT = 2;
 
-        int ComputeNormal(double[] norm3)
+        int ComputeNormal(ref double nx, ref double ny, ref double nz)
         /*
         * Check that each triangle in the fan from v0 has a
         * consistent orientation with respect to norm3[].  If triangles are
@@ -906,7 +906,11 @@ namespace Tesselate
             Vertex v0 = vCache[0];
             int vcIndex;
             double dot, xc, yc, xp, yp;
-            double[] n = new double[3];
+            double n0;
+            double n1;
+            double n2;
+
+
             int sign = 0;
 
             /* Find the polygon normal.  It is important to get a reasonable
@@ -923,20 +927,23 @@ namespace Tesselate
             * case.
             */
             vcIndex = 1;
-            xc = vCache[vcIndex].x - v0.x;
-            yc = vCache[vcIndex].y - v0.y;
+            var v = vCache[vcIndex];
+            xc = v.x - v0.x;
+            yc = v.y - v0.y;
+
             while (++vcIndex < this.cacheCount)
-            {
+            {   
                 xp = xc; yp = yc;
-                xc = vCache[vcIndex].x - v0.x;
-                yc = vCache[vcIndex].y - v0.y;
+                v = vCache[vcIndex];
+                xc = v.x - v0.x;
+                yc = v.y - v0.y;
 
                 /* Compute (vp - v0) cross (vc - v0) */
-                n[0] = 0;
-                n[1] = 0;
-                n[2] = xp * yc - yp * xc;
+                n0 = 0;
+                n1 = 0;
+                n2 = xp * yc - yp * xc;
 
-                dot = n[0] * norm3[0] + n[1] * norm3[1] + n[2] * norm3[2];
+                dot = n0 * nx + n1 * ny + n2 * nz;
                 if (dot != 0)
                 {
                     /* Check the new orientation for consistency with previous triangles */
@@ -971,10 +978,8 @@ namespace Tesselate
         */
         public bool RenderCache()
         {
-            var vCache = this.simpleVertexCache;
-            var v0 = vCache[0];
 
-            double[] norm3 = new double[3];
+
             int sign;
 
             if (this.cacheCount < 3)
@@ -982,12 +987,11 @@ namespace Tesselate
                 /* Degenerate contour -- no output */
                 return true;
             }
+            double normal_x = 0;
+            double normal_y = 0;
+            double normal_z = 1;
 
-            norm3[0] = 0;
-            norm3[1] = 0;
-            norm3[2] = 1;
-
-            sign = this.ComputeNormal(norm3);
+            sign = this.ComputeNormal(ref normal_x, ref normal_y, ref normal_z);
             if (sign == SIGN_INCONSISTENT)
             {
                 // Fan triangles did not have a consistent orientation
