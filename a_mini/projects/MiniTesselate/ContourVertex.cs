@@ -55,13 +55,14 @@ namespace Tesselate
 
         /* Internal data (keep hidden) */
         //public double[] coords = new double[3];	/* vertex location in 3D */
-        internal double C_0; 
+        internal double C_0;
         internal double C_1;
         internal double C_2;
 
         public double x, y;		/* projection onto the sweep plane */
-        public IPriorityQueueHandle<ContourVertex> priorityQueueHandle;	/* to allow deletion from priority queue */
+        public RefItem<ContourVertex> priorityQueueHandle;	/* to allow deletion from priority queue */
 
+        
         public int CompareTo(ContourVertex otherVertex)
         {
             if (VertEq(otherVertex))
@@ -167,6 +168,7 @@ namespace Tesselate
              */
             return (u.x * (v.y - w.y) + v.x * (w.y - u.y) + w.x * (u.y - v.y)) >= 0;
         }
+
 #if DEBUG
         public override string ToString()
         {

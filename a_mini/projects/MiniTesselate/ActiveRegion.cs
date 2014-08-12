@@ -522,16 +522,15 @@ namespace Tesselate
 
         static void CallCombine(Tesselator tess, ContourVertex intersectionVertex, int[] vertexIndexArray, double[] vertexWeights, bool needed)
         {
-            // double[] coords = new double[3];
 
             /* Copy coord data in case the callback changes it. */
             double c0 = intersectionVertex.C_0;
             double c1 = intersectionVertex.C_1;
             double c2 = intersectionVertex.C_2;
 
-            intersectionVertex.clientIndex = 0;
+            intersectionVertex.clientIndex = -1;
             tess.CallCombine(c0, c1, c2, vertexIndexArray, vertexWeights, out intersectionVertex.clientIndex);
-            if (intersectionVertex.clientIndex == 0)
+            if (intersectionVertex.clientIndex == -1)
             {
                 if (!needed)
                 {
@@ -1096,7 +1095,7 @@ namespace Tesselate
             Mesh.meshSplice(eLo.Oprev, eUp);
             eUp.originVertex.x = isect.x;
             eUp.originVertex.y = isect.y;
-            tess.vertexPriorityQue.Add(ref eUp.originVertex.priorityQueueHandle, eUp.originVertex); /* __gl_pqSortInsert */
+            tess.vertexPriorityQue.Add(out eUp.originVertex.priorityQueueHandle, eUp.originVertex); /* __gl_pqSortInsert */
             GetIntersectData(tess, eUp.originVertex, orgUp, dstUp, orgLo, dstLo);
             regUp.RegionAbove().dirty = regUp.dirty = regLo.dirty = true;
             return false;
@@ -1617,12 +1616,12 @@ namespace Tesselate
          * order in which vertices cross the sweep line.
          */
         {
-            MiniCollection.MaxFirstQueue<ContourVertex> priorityQue = tess.vertexPriorityQue = new MiniCollection.MaxFirstQueue<ContourVertex>();
+            MiniCollection.MaxFirstList<ContourVertex> priorityQue = tess.vertexPriorityQue = new MiniCollection.MaxFirstList<ContourVertex>();
 
             ContourVertex vertexHead = tess.mesh.vertexHead;
             for (ContourVertex curVertex = vertexHead.nextVertex; curVertex != vertexHead; curVertex = curVertex.nextVertex)
             {
-                priorityQue.Add(ref curVertex.priorityQueueHandle, curVertex);
+                priorityQue.Add(out curVertex.priorityQueueHandle, curVertex);
             }
         }
 

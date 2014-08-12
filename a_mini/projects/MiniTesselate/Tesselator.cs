@@ -96,7 +96,7 @@ namespace Tesselate
 
         public Dictionary edgeDictionary;		/* edge dictionary for sweep line */
 
-        public MiniCollection.MaxFirstQueue<ContourVertex> vertexPriorityQue = new MiniCollection.MaxFirstQueue<ContourVertex>();
+        public MiniCollection.MaxFirstList<ContourVertex> vertexPriorityQue = new MiniCollection.MaxFirstList<ContourVertex>();
 
         public ContourVertex currentSweepVertex;		/* current sweep event being processed */
 
