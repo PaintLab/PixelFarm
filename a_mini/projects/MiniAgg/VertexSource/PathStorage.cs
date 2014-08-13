@@ -193,11 +193,11 @@ namespace MatterHackers.Agg.VertexSource
 
             private void allocate_if_required(int indexToAdd)
             {
-                if (indexToAdd < m_num_vertices)
+                if (indexToAdd < m_allocated_vertices)
                 {
                     return;
                 }
-
+                
                 while (indexToAdd >= m_allocated_vertices)
                 {
                     int newSize = m_allocated_vertices + 256;

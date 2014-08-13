@@ -67,7 +67,8 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
                     int a = (ManagedCoversArray[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                             destImage.NewGraphics2D().Rasterizer, m_sl, destImage,
-                            new RGBA_Bytes(color.Red0To255, color.Green0To255, color.Blue0To255, a),
+                            new RGBA_Bytes(color.Red0To255,
+                            color.Green0To255, color.Blue0To255, a),
                             x, y);
                     ++x;
                 }

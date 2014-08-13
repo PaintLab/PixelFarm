@@ -195,9 +195,11 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public void gamma(IGammaFunction gamma_function)
         {
+            
              for (int i = 0; i < (int)aa_scale_e.aa_scale; i++)
              {
-             	m_gamma[i] = (int)agg_basics.uround(gamma_function.GetGamma((double)(i) / (int)aa_scale_e.aa_mask) * (int)aa_scale_e.aa_mask);
+             	m_gamma[i] = (int)agg_basics.uround(
+                    gamma_function.GetGamma((double)(i) / (int)aa_scale_e.aa_mask) * (int)aa_scale_e.aa_mask);
              }
         }
 
