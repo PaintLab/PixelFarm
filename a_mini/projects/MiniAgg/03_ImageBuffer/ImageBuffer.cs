@@ -50,6 +50,8 @@ namespace MatterHackers.Agg.Image
         int[] xTableArray;
         byte[] m_ByteBuffer;
 
+
+
         int bufferOffset; // the beggining of the image in this buffer
         int bufferFirstPixel; // Pointer to first pixel depending on strideInBytes and image position
 

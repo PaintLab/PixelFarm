@@ -45,7 +45,8 @@ namespace Mini
             }
             else
             {
-                graphics2D = bitmapBackBuffer.backingImageBufferFloat.NewGraphics2D();
+                throw new NotSupportedException(); 
+                //graphics2D = bitmapBackBuffer.backingImageBufferFloat.NewGraphics2D();
             }
             graphics2D.PushTransform();
             return graphics2D;

@@ -7,46 +7,13 @@ namespace MatterHackers.Agg
 
     public class NativeBufferMan
     {
-        byte[] mmm; 
+        byte[] mmm;
         int totalAllocSize;
-        int currentIndex; 
+        int currentIndex;
         public NativeBufferMan(int initSize)
         {
             this.mmm = new byte[initSize];
             this.totalAllocSize = initSize;
-        }
-        public void Clear()
-        {
-            //clear with zero
-
-            MemSet(0, 0, totalAllocSize);
-        }
-        public void Clear(byte b)
-        {
-            //clear with zero
-            MemSet(0, b, totalAllocSize);
-        }
-        public void MemSet(int startAt, byte value, int count)
-        {
-            unsafe
-            {
-                fixed (byte* head = &mmm[0])
-                {
-                    memset(head, 0, 100);
-                }
-            }
-        }
-        public void MemCopy(int startAt, int len, byte[] outputBuffer, int outputStartAt)
-        {
-            unsafe
-            {
-                fixed (byte* head_dest = &outputBuffer[outputStartAt])
-                fixed (byte* head_src = &mmm[startAt])
-                {
-                    memcpy(head_dest, head_src, len);
-                }
-            }
-
         }
         public int TotalAllocSize
         {
@@ -55,6 +22,44 @@ namespace MatterHackers.Agg
                 return this.totalAllocSize;
             }
         }
+        public void Clear()
+        {
+            //clear with zero
+
+            MemSet(this.mmm, 0, 0, totalAllocSize);
+        }
+        public void Clear(byte b)
+        {
+            //clear with zero
+            MemSet(this.mmm, 0, b, totalAllocSize);
+        }
+
+
+
+        //-------------------------------------------------------------------------
+        public static void MemSet(byte[] dest, int startAt, byte value, int count)
+        {
+            unsafe
+            {
+                fixed (byte* head = &dest[0])
+                {
+                    memset(head, 0, 100);
+                }
+            }
+        }
+        public static void MemCopy(byte[] dest_buffer, int outputStartAt, byte[] src_buffer, int src_index, int len)
+        {
+            unsafe
+            {
+                fixed (byte* head_dest = &dest_buffer[outputStartAt])
+                fixed (byte* head_src = &src_buffer[src_index])
+                {
+                    memcpy(head_dest, head_src, len);
+                }
+            }
+
+        }
+
 
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
         static unsafe extern void memset(byte* dest, byte c, int byteCount);
@@ -64,6 +69,10 @@ namespace MatterHackers.Agg
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
         static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
 
+
+
     }
+
+
 
 }

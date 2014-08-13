@@ -209,8 +209,12 @@ namespace MatterHackers.Agg.Image
     public sealed class BlenderBGRA : BlenderBaseBGRA, IRecieveBlenderByte
     {
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
-        {
-            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR], buffer[bufferOffset + ImageBuffer.OrderG], buffer[bufferOffset + ImageBuffer.OrderB], buffer[bufferOffset + ImageBuffer.OrderA]);
+        {   
+            return new RGBA_Bytes(
+                buffer[bufferOffset + ImageBuffer.OrderR],
+                buffer[bufferOffset + ImageBuffer.OrderG], 
+                buffer[bufferOffset + ImageBuffer.OrderB], 
+                buffer[bufferOffset + ImageBuffer.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, RGBA_Bytes sourceColor, int count)

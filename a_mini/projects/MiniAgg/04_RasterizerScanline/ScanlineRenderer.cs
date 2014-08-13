@@ -129,32 +129,32 @@ namespace MatterHackers.Agg
             }
         }
 
-        private void GenerateAndRenderSingleScanline(IScanlineCache scanLineCache, IImageFloat destImageFloat, span_allocator alloc, ISpanGeneratorFloat span_gen)
-        {
-            int y = scanLineCache.y();
-            int num_spans = scanLineCache.num_spans();
-            ScanlineSpan scanlineSpan = scanLineCache.begin();
+        //private void GenerateAndRenderSingleScanline(IScanlineCache scanLineCache, IImageFloat destImageFloat, span_allocator alloc, ISpanGeneratorFloat span_gen)
+        //{
+        //    int y = scanLineCache.y();
+        //    int num_spans = scanLineCache.num_spans();
+        //    ScanlineSpan scanlineSpan = scanLineCache.begin();
 
-            byte[] ManagedCoversArray = scanLineCache.GetCovers();
-            for (; ; )
-            {
-                int x = scanlineSpan.x;
-                int len = scanlineSpan.len;
-                if (len < 0) len = -len;
+        //    byte[] ManagedCoversArray = scanLineCache.GetCovers();
+        //    for (; ; )
+        //    {
+        //        int x = scanlineSpan.x;
+        //        int len = scanlineSpan.len;
+        //        if (len < 0) len = -len;
 
-                if (tempSpanColorsFloats.Capacity() < len)
-                {
-                    tempSpanColorsFloats.Capacity(len);
-                }
+        //        if (tempSpanColorsFloats.Capacity() < len)
+        //        {
+        //            tempSpanColorsFloats.Capacity(len);
+        //        }
 
-                span_gen.generate(tempSpanColorsFloats.Array, 0, x, y, len);
-                bool useFirstCoverForAll = scanlineSpan.len < 0;
-                destImageFloat.blend_color_hspan(x, y, len, tempSpanColorsFloats.Array, 0, ManagedCoversArray, scanlineSpan.cover_index, useFirstCoverForAll);
+        //        span_gen.generate(tempSpanColorsFloats.Array, 0, x, y, len);
+        //        bool useFirstCoverForAll = scanlineSpan.len < 0;
+        //        destImageFloat.blend_color_hspan(x, y, len, tempSpanColorsFloats.Array, 0, ManagedCoversArray, scanlineSpan.cover_index, useFirstCoverForAll);
 
-                if (--num_spans == 0) break;
-                scanlineSpan = scanLineCache.GetNextScanlineSpan();
-            }
-        }
+        //        if (--num_spans == 0) break;
+        //        scanlineSpan = scanLineCache.GetNextScanlineSpan();
+        //    }
+        //}
 
         public void GenerateAndRender(IRasterizer rasterizer, IScanlineCache scanlineCache, IImageByte destImage, span_allocator spanAllocator, ISpanGenerator spanGenerator)
         {
@@ -169,18 +169,18 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void GenerateAndRender(IRasterizer rasterizer, IScanlineCache scanlineCache, IImageFloat destImage, span_allocator spanAllocator, ISpanGeneratorFloat spanGenerator)
-        {
-            if (rasterizer.rewind_scanlines())
-            {
-                scanlineCache.reset(rasterizer.min_x(), rasterizer.max_x());
-                spanGenerator.prepare();
-                while (rasterizer.sweep_scanline(scanlineCache))
-                {
-                    GenerateAndRenderSingleScanline(scanlineCache, destImage, spanAllocator, spanGenerator);
-                }
-            }
-        }
+        //public void GenerateAndRender(IRasterizer rasterizer, IScanlineCache scanlineCache, IImageFloat destImage, span_allocator spanAllocator, ISpanGeneratorFloat spanGenerator)
+        //{
+        //    if (rasterizer.rewind_scanlines())
+        //    {
+        //        scanlineCache.reset(rasterizer.min_x(), rasterizer.max_x());
+        //        spanGenerator.prepare();
+        //        while (rasterizer.sweep_scanline(scanlineCache))
+        //        {
+        //            GenerateAndRenderSingleScanline(scanlineCache, destImage, spanAllocator, spanGenerator);
+        //        }
+        //    }
+        //}
 
         public void RenderCompound(rasterizer_compound_aa ras, IScanlineCache sl_aa, IScanlineCache sl_bin, IImageByte imageFormat, span_allocator alloc, IStyleHandler sh)
         {

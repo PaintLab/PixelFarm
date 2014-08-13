@@ -44,15 +44,15 @@ namespace Mini
     internal class WindowsFormsBitmapBackBuffer
     {
         internal ImageBuffer backingImageBufferByte;
-        internal ImageBufferFloat backingImageBufferFloat;
+        //internal ImageBufferFloat backingImageBufferFloat;
         internal Bitmap windowsBitmap;
 
-         
+
         public WindowsFormsBitmapBackBuffer()
         {
 
         }
-        
+
 
         int numInFunction = 0;
         internal void UpdateHardwareSurface(RectangleInt rect)
@@ -69,50 +69,51 @@ namespace Mini
             }
             else
             {
-                switch (backingImageBufferFloat.BitDepth)
-                {
-                    case 128:
-                        {
-                            BitmapData bitmapData1 = windowsBitmap.LockBits(new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
-                            int index = 0;
-                            unsafe
-                            {
-                                unchecked
-                                {
-                                    int offset;
-                                    float[] buffer = backingImageBufferFloat.GetBuffer(out offset);
-                                    fixed (float* pSource = &buffer[offset])
-                                    {
-                                        for (int y = 0; y < backingImageBufferFloat.Height; y++)
-                                        {
-                                            byte* pDestBuffer = (byte*)bitmapData1.Scan0 + (bitmapData1.Stride * (backingImageBufferFloat.Height - 1 - y));
-                                            for (int x = 0; x < backingImageBufferFloat.Width; x++)
-                                            {
-#if true
-                                                pDestBuffer[x * 4 + 0] = (byte)(pSource[index * 4 + 0] * 255);
-                                                pDestBuffer[x * 4 + 1] = (byte)(pSource[index * 4 + 1] * 255);
-                                                pDestBuffer[x * 4 + 2] = (byte)(pSource[index * 4 + 2] * 255);
-                                                pDestBuffer[x * 4 + 3] = (byte)(pSource[index * 4 + 3] * 255);
-                                                index++;
-#else
-                                                pDestBuffer[x * 4 + 0] = (byte)255;
-                                                pDestBuffer[x * 4 + 1] = (byte)0;
-                                                pDestBuffer[x * 4 + 2] = (byte)128;
-                                                pDestBuffer[x * 4 + 3] = (byte)255;
-#endif
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                throw new NotImplementedException();
+                //                switch (backingImageBufferFloat.BitDepth)
+                //                {
+                //                    case 128:
+                //                        {
+                //                            BitmapData bitmapData1 = windowsBitmap.LockBits(new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
+                //                            int index = 0;
+                //                            unsafe
+                //                            {
+                //                                unchecked
+                //                                {
+                //                                    int offset;
+                //                                    float[] buffer = backingImageBufferFloat.GetBuffer(out offset);
+                //                                    fixed (float* pSource = &buffer[offset])
+                //                                    {
+                //                                        for (int y = 0; y < backingImageBufferFloat.Height; y++)
+                //                                        {
+                //                                            byte* pDestBuffer = (byte*)bitmapData1.Scan0 + (bitmapData1.Stride * (backingImageBufferFloat.Height - 1 - y));
+                //                                            for (int x = 0; x < backingImageBufferFloat.Width; x++)
+                //                                            {
+                //#if true
+                //                                                pDestBuffer[x * 4 + 0] = (byte)(pSource[index * 4 + 0] * 255);
+                //                                                pDestBuffer[x * 4 + 1] = (byte)(pSource[index * 4 + 1] * 255);
+                //                                                pDestBuffer[x * 4 + 2] = (byte)(pSource[index * 4 + 2] * 255);
+                //                                                pDestBuffer[x * 4 + 3] = (byte)(pSource[index * 4 + 3] * 255);
+                //                                                index++;
+                //#else
+                //                                                pDestBuffer[x * 4 + 0] = (byte)255;
+                //                                                pDestBuffer[x * 4 + 1] = (byte)0;
+                //                                                pDestBuffer[x * 4 + 2] = (byte)128;
+                //                                                pDestBuffer[x * 4 + 3] = (byte)255;
+                //#endif
+                //                                            }
+                //                                        }
+                //                                    }
+                //                                }
+                //                            }
 
-                            windowsBitmap.UnlockBits(bitmapData1);
-                        }
-                        break;
+                //                            windowsBitmap.UnlockBits(bitmapData1);
+                //                        }
+                //                        break;
 
-                    default:
-                        throw new NotImplementedException();
-                }
+                //                    default:
+                //                        throw new NotImplementedException();
+                //                }
             }
 
             numInFunction--;
@@ -138,10 +139,10 @@ namespace Mini
                         break;
 
                     case 128:
-                        windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                        backingImageBufferByte = null;
-                        backingImageBufferFloat = new ImageBufferFloat(width, height, 128, new BlenderBGRAFloat());
-                        break;
+                        //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                        //backingImageBufferByte = null;
+                        //backingImageBufferFloat = new ImageBufferFloat(width, height, 128, new BlenderBGRAFloat());
+                        //break;
 
                     default:
                         throw new NotImplementedException("Don't support this bit depth yet.");

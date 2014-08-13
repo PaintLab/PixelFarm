@@ -23,7 +23,7 @@
 using System;
 
 namespace MatterHackers.Agg
-{
+{   
     //===================================================dda_line_interpolator
     public sealed class dda_line_interpolator
     {

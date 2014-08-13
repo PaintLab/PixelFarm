@@ -282,8 +282,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     g_rasterizer.add_path(ell);
                     agg::render_scanlines(g_rasterizer, g_scanline, rg);
                 }
-                 */
-
+                 */ 
                 //m_num_cb.Render(g_rasterizer, g_scanline, clippingProxy);
             }
             alphaMaskImageBuffer.DettachBuffer();
