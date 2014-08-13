@@ -134,7 +134,11 @@ namespace MatterHackers.Agg
             Rasterizer.add_path(transfromedRect);
             {
                 ImageClippingProxy destImageWithClipping = new ImageClippingProxy(destImageByte);
-                scanlineRenderer.GenerateAndRender(Rasterizer, drawImageScanlineCache, destImageWithClipping, destImageSpanAllocatorCache, spanImageFilter);
+                scanlineRenderer.GenerateAndRender(Rasterizer,
+                    drawImageScanlineCache, 
+                    destImageWithClipping, 
+                    destImageSpanAllocatorCache,
+                    spanImageFilter);
             }
         }
 

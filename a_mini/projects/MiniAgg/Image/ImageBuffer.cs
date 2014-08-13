@@ -114,7 +114,7 @@ namespace MatterHackers.Agg.Image
 
         public ImageBuffer(int width, int height, int bitsPerPixel, IRecieveBlenderByte recieveBlender)
         {
-            Allocate(width, height, width * (bitsPerPixel/8), bitsPerPixel);
+            Allocate(width, height, width * (bitsPerPixel / 8), bitsPerPixel);
             SetRecieveBlender(recieveBlender);
         }
 
@@ -146,7 +146,7 @@ namespace MatterHackers.Agg.Image
             SetBuffer(newBuffer, offset + bufferOffset);
             SetRecieveBlender(blender);
         }
-        
+
         /// <summary>
         /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
         /// It will modify the original main image when you draw to it.
@@ -218,7 +218,7 @@ namespace MatterHackers.Agg.Image
 
         public void SetAlpha(byte value)
         {
-            if(BitDepth != 32)
+            if (BitDepth != 32)
             {
                 throw new Exception("You don't have alpha channel to set.  Your image has a bit depth of " + BitDepth.ToString() + ".");
             }
@@ -479,10 +479,11 @@ namespace MatterHackers.Agg.Image
                 && m_DistanceInBytesBetweenPixelsInclusive == distanceInBytesBetweenPixelsInclusive
                 && m_ByteBuffer != null)
             {
-                for (int i = 0; i < m_ByteBuffer.Length; i++)
+                for (int i = m_ByteBuffer.Length - 1; i >= 0; --i)
                 {
                     m_ByteBuffer[i] = 0;
                 }
+
                 return;
             }
             else
@@ -506,7 +507,7 @@ namespace MatterHackers.Agg.Image
             {
                 throw new System.Exception("It looks like you are passing bits per pixel rather than distance in bytes.");
             }
-            if(distanceInBytesBetweenPixelsInclusive < (bitDepth / 8))
+            if (distanceInBytesBetweenPixelsInclusive < (bitDepth / 8))
             {
                 throw new Exception("You do not have enough room between pixels to support your bit depth.");
             }
@@ -838,70 +839,70 @@ namespace MatterHackers.Agg.Image
         {
             visibleBounds = new RectangleInt(0, 0, Width, Height);
 
-	        // trim the bottom
-	        bool aPixelsIsVisible = false;
-            for (int y = 0; y < height; y++) 
-	        {
+            // trim the bottom
+            bool aPixelsIsVisible = false;
+            for (int y = 0; y < height; y++)
+            {
                 for (int x = 0; x < width; x++)
-		        {
-			        if(IsPixelVisible(x, y))
-			        {
+                {
+                    if (IsPixelVisible(x, y))
+                    {
                         visibleBounds.Bottom = y;
                         y = height;
                         x = width;
-				        aPixelsIsVisible = true;
-			        }
-		        }
-	        }
+                        aPixelsIsVisible = true;
+                    }
+                }
+            }
 
-	        // if we don't run into any pixels set for the top trim than there are no pixels set at all
+            // if we don't run into any pixels set for the top trim than there are no pixels set at all
             if (!aPixelsIsVisible)
-	        {
+            {
                 visibleBounds.SetRect(0, 0, 0, 0);
-		        return;
-	        }
+                return;
+            }
 
-	        // trim the bottom
+            // trim the bottom
             for (int y = height - 1; y >= 0; y--)
-	        {
+            {
                 for (int x = 0; x < width; x++)
-		        {
+                {
                     if (IsPixelVisible(x, y))
                     {
                         visibleBounds.Top = y + 1;
-				        y = -1;
+                        y = -1;
                         x = width;
-			        }
-		        }
-	        }
+                    }
+                }
+            }
 
-	        // trim the left
+            // trim the left
             for (int x = 0; x < width; x++)
-	        {
+            {
                 for (int y = 0; y < height; y++)
-		        {
-			        if(IsPixelVisible(x, y))
-			        {
-				        visibleBounds.Left=x;
+                {
+                    if (IsPixelVisible(x, y))
+                    {
+                        visibleBounds.Left = x;
                         y = height;
                         x = width;
-			        }
-		        }
-	        }
+                    }
+                }
+            }
 
-	        // trim the right
+            // trim the right
             for (int x = width - 1; x >= 0; x--)
-	        {
+            {
                 for (int y = 0; y < height; y++)
-		        {
+                {
                     if (IsPixelVisible(x, y))
                     {
                         visibleBounds.Right = x + 1;
                         y = height;
-				        x = -1;
-			        }
-		        }
-	        }
+                        x = -1;
+                    }
+                }
+            }
         }
 
         public void CropToVisible()
@@ -991,7 +992,7 @@ namespace MatterHackers.Agg.Image
                         {
                             byte aByte = aBuffer[aBufferOffset + byteIndex];
                             byte bByte = bBuffer[bBufferOffset + byteIndex];
-                            if (aByte < (bByte - maxError) || aByte > (bByte + maxError) )
+                            if (aByte < (bByte - maxError) || aByte > (bByte + maxError))
                             {
                                 return false;
                             }
@@ -1153,7 +1154,7 @@ namespace MatterHackers.Agg.Image
                 throw new Exception("We do not create a temp buffer for this to work.  You must have a source distinct from the dest.");
             }
             Deallocate();
-            Allocate(boundsToCopyFrom.Width, boundsToCopyFrom.Height, boundsToCopyFrom.Width * sourceImage.BitDepth/8, sourceImage.BitDepth);
+            Allocate(boundsToCopyFrom.Width, boundsToCopyFrom.Height, boundsToCopyFrom.Width * sourceImage.BitDepth / 8, sourceImage.BitDepth);
             SetRecieveBlender(sourceImage.GetRecieveBlender());
 
             if (width != 0 && height != 0)
@@ -1164,8 +1165,8 @@ namespace MatterHackers.Agg.Image
                 MatterHackers.Agg.Graphics2D graphics2D = NewGraphics2D();
                 graphics2D.Clear(new RGBA_Bytes(0, 0, 0, 0));
 
-                int x = - boundsToCopyFrom.Left -(int)sourceImage.OriginOffset.x;
-                int y = - boundsToCopyFrom.Bottom -(int)sourceImage.OriginOffset.y;
+                int x = -boundsToCopyFrom.Left - (int)sourceImage.OriginOffset.x;
+                int y = -boundsToCopyFrom.Bottom - (int)sourceImage.OriginOffset.y;
 
                 graphics2D.Render(sourceImage, x, y, 0, 1, 1);
             }
@@ -1182,7 +1183,7 @@ namespace MatterHackers.Agg.Image
         }
     }
 
-    public static class DoCopyOrBlend
+    static class DoCopyOrBlend
     {
         const byte base_mask = 255;
 

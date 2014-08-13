@@ -49,34 +49,34 @@ namespace MatterHackers.Agg
     sealed public class rasterizer_compound_aa : IRasterizer
     {
         rasterizer_cells_aa m_Rasterizer;
-        VectorClipper              m_VectorClipper;
-        agg_basics.filling_rule_e         m_filling_rule;
-        layer_order_e          m_layer_order;
+        VectorClipper m_VectorClipper;
+        agg_basics.filling_rule_e m_filling_rule;
+        layer_order_e m_layer_order;
         VectorPOD<style_info> m_styles;  // Active Styles
-        VectorPOD<int>   m_ast;     // Active Style Table (unique values)
-        VectorPOD<byte>      m_asm;     // Active Style Mask 
-        VectorPOD<cell_aa>  m_cells;
+        VectorPOD<int> m_ast;     // Active Style Table (unique values)
+        VectorPOD<byte> m_asm;     // Active Style Mask 
+        VectorPOD<cell_aa> m_cells;
         VectorPOD<byte> m_cover_buf;
-        VectorPOD<int>  m_master_alpha;
+        VectorPOD<int> m_master_alpha;
 
-        int        m_min_style;
-        int        m_max_style;
+        int m_min_style;
+        int m_max_style;
         int m_start_x;
         int m_start_y;
-        int        m_scan_y;
-        int        m_sl_start;
-        int   m_sl_len;
+        int m_scan_y;
+        int m_sl_start;
+        int m_sl_len;
 
-        struct style_info 
-        { 
+        struct style_info
+        {
             internal int start_cell;
             internal int num_cells;
             internal int last_x;
         };
 
-        private const int aa_shift  = 8;
-        private const int aa_scale  = 1 << aa_shift;
-        private const int aa_mask   = aa_scale - 1;
+        private const int aa_shift = 8;
+        private const int aa_scale = 1 << aa_shift;
+        private const int aa_mask = aa_scale - 1;
         private const int aa_scale2 = aa_scale * 2;
         private const int aa_mask2 = aa_scale2 - 1;
 
@@ -95,12 +95,12 @@ namespace MatterHackers.Agg
             m_cover_buf = new VectorPOD<byte>();
             m_master_alpha = new VectorPOD<int>();
             m_min_style = (0x7FFFFFFF);
-            m_max_style=(-0x7FFFFFFF);
-            m_start_x=(0);
-            m_start_y=(0);
-            m_scan_y=(0x7FFFFFFF);
-            m_sl_start=(0);
-            m_sl_len=(0);
+            m_max_style = (-0x7FFFFFFF);
+            m_start_x = (0);
+            m_start_y = (0);
+            m_scan_y = (0x7FFFFFFF);
+            m_sl_start = (0);
+            m_sl_len = (0);
         }
 
         public void gamma(IGammaFunction gamma_function)
@@ -109,19 +109,19 @@ namespace MatterHackers.Agg
         }
 
 
-        public void reset() 
-        { 
-            m_Rasterizer.reset(); 
-            m_min_style =  0x7FFFFFFF;
+        public void reset()
+        {
+            m_Rasterizer.reset();
+            m_min_style = 0x7FFFFFFF;
             m_max_style = -0x7FFFFFFF;
-            m_scan_y    =  0x7FFFFFFF;
-            m_sl_start  =  0;
-            m_sl_len    = 0;
+            m_scan_y = 0x7FFFFFFF;
+            m_sl_start = 0;
+            m_sl_len = 0;
         }
 
-        void filling_rule(agg_basics.filling_rule_e filling_rule) 
-        { 
-            m_filling_rule = filling_rule; 
+        void filling_rule(agg_basics.filling_rule_e filling_rule)
+        {
+            m_filling_rule = filling_rule;
         }
 
         void layer_order(layer_order_e order)
@@ -129,7 +129,7 @@ namespace MatterHackers.Agg
             m_layer_order = order;
         }
 
-        void clip_box(double x1, double y1, 
+        void clip_box(double x1, double y1,
                                                     double x2, double y2)
         {
             reset();
@@ -151,75 +151,75 @@ namespace MatterHackers.Agg
             cell.right = (int)right;
             m_Rasterizer.style(cell);
 
-            if(left  >= 0 && left  < m_min_style) m_min_style = left;
-            if(left  >= 0 && left  > m_max_style) m_max_style = left;
-            if(right >= 0 && right < m_min_style) m_min_style = right;
-            if(right >= 0 && right > m_max_style) m_max_style = right;
+            if (left >= 0 && left < m_min_style) m_min_style = left;
+            if (left >= 0 && left > m_max_style) m_max_style = left;
+            if (right >= 0 && right < m_min_style) m_min_style = right;
+            if (right >= 0 && right > m_max_style) m_max_style = right;
         }
 
         public void move_to(int x, int y)
         {
-            if(m_Rasterizer.sorted()) reset();
+            if (m_Rasterizer.sorted()) reset();
             m_VectorClipper.move_to(m_start_x = m_VectorClipper.downscale(x),
                               m_start_y = m_VectorClipper.downscale(y));
         }
 
         public void line_to(int x, int y)
         {
-            m_VectorClipper.line_to(m_Rasterizer, 
+            m_VectorClipper.line_to(m_Rasterizer,
                               m_VectorClipper.downscale(x),
                               m_VectorClipper.downscale(y));
         }
 
-        public void move_to_d(double x, double y) 
-        { 
-            if(m_Rasterizer.sorted()) reset();
+        public void move_to_d(double x, double y)
+        {
+            if (m_Rasterizer.sorted()) reset();
             m_VectorClipper.move_to(m_start_x = m_VectorClipper.upscale(x),
-                              m_start_y = m_VectorClipper.upscale(y)); 
+                              m_start_y = m_VectorClipper.upscale(y));
         }
 
-        public void line_to_d(double x, double y) 
-        { 
-            m_VectorClipper.line_to(m_Rasterizer, 
+        public void line_to_d(double x, double y)
+        {
+            m_VectorClipper.line_to(m_Rasterizer,
                               m_VectorClipper.upscale(x),
-                              m_VectorClipper.upscale(y)); 
+                              m_VectorClipper.upscale(y));
         }
 
         void add_vertex(double x, double y, ShapePath.FlagsAndCommand cmd)
         {
-            if(ShapePath.is_move_to(cmd)) 
+            if (ShapePath.is_move_to(cmd))
             {
                 move_to_d(x, y);
             }
-            else 
-            if(ShapePath.is_vertex(cmd))
-            {
-                line_to_d(x, y);
-            }
             else
-            if(ShapePath.is_close(cmd))
-            {
-                m_VectorClipper.line_to(m_Rasterizer, m_start_x, m_start_y);
-            }
+                if (ShapePath.is_vertex(cmd))
+                {
+                    line_to_d(x, y);
+                }
+                else
+                    if (ShapePath.is_close(cmd))
+                    {
+                        m_VectorClipper.line_to(m_Rasterizer, m_start_x, m_start_y);
+                    }
         }
 
         void edge(int x1, int y1, int x2, int y2)
         {
-            if(m_Rasterizer.sorted()) reset();
+            if (m_Rasterizer.sorted()) reset();
             m_VectorClipper.move_to(m_VectorClipper.downscale(x1), m_VectorClipper.downscale(y1));
-            m_VectorClipper.line_to(m_Rasterizer, 
+            m_VectorClipper.line_to(m_Rasterizer,
                               m_VectorClipper.downscale(x2),
                               m_VectorClipper.downscale(y2));
         }
-        
-        void edge_d(double x1, double y1, 
+
+        void edge_d(double x1, double y1,
                                                   double x2, double y2)
         {
-            if(m_Rasterizer.sorted()) reset();
-            m_VectorClipper.move_to(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1)); 
-            m_VectorClipper.line_to(m_Rasterizer, 
+            if (m_Rasterizer.sorted()) reset();
+            m_VectorClipper.move_to(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1));
+            m_VectorClipper.line_to(m_Rasterizer,
                               m_VectorClipper.upscale(x2),
-                              m_VectorClipper.upscale(y2)); 
+                              m_VectorClipper.upscale(y2));
         }
 
         void sort()
@@ -230,11 +230,11 @@ namespace MatterHackers.Agg
         public bool rewind_scanlines()
         {
             m_Rasterizer.sort_cells();
-            if(m_Rasterizer.total_cells() == 0) 
+            if (m_Rasterizer.total_cells() == 0)
             {
                 return false;
             }
-            if(m_max_style < m_min_style)
+            if (m_max_style < m_min_style)
             {
                 return false;
             }
@@ -247,9 +247,9 @@ namespace MatterHackers.Agg
         // Returns the number of styles
         public int sweep_styles()
         {
-            for(;;)
+            for (; ; )
             {
-                if(m_scan_y > m_Rasterizer.max_y()) return 0;
+                if (m_scan_y > m_Rasterizer.max_y()) return 0;
                 int num_cells = (int)m_Rasterizer.scanline_num_cells(m_scan_y);
                 cell_aa[] cells;
                 int cellOffset = 0;
@@ -264,19 +264,19 @@ namespace MatterHackers.Agg
                 m_asm.Allocate((num_styles + 7) >> 3, 8);
                 m_asm.zero();
 
-                if(num_cells > 0)
+                if (num_cells > 0)
                 {
                     // Pre-add zero (for no-fill style, that is, -1).
                     // We need that to ensure that the "-1 style" would go first.
-                    m_asm.Array[0] |= 1; 
+                    m_asm.Array[0] |= 1;
                     m_ast.add(0);
                     m_styles.Array[styleOffset].start_cell = 0;
                     m_styles.Array[styleOffset].num_cells = 0;
                     m_styles.Array[styleOffset].last_x = -0x7FFFFFFF;
 
                     m_sl_start = cells[0].x;
-                    m_sl_len   = (int)(cells[num_cells-1].x - m_sl_start + 1);
-                    while(num_cells-- != 0)
+                    m_sl_len = (int)(cells[num_cells - 1].x - m_sl_start + 1);
+                    while (num_cells-- != 0)
                     {
                         curCellOffset = (int)cellOffset++;
                         add_style(cells[curCellOffset].left);
@@ -287,7 +287,7 @@ namespace MatterHackers.Agg
                     int i;
                     int start_cell = 0;
                     style_info[] stylesArray = m_styles.Array;
-                    for(i = 0; i < m_ast.size(); i++)
+                    for (i = 0; i < m_ast.size(); i++)
                     {
                         int IndexToModify = (int)m_ast[i];
                         int v = stylesArray[IndexToModify].start_cell;
@@ -298,7 +298,7 @@ namespace MatterHackers.Agg
                     num_cells = (int)m_Rasterizer.scanline_num_cells(m_scan_y);
                     m_Rasterizer.scanline_cells(m_scan_y, out cells, out cellOffset);
 
-                    while(num_cells-- > 0)
+                    while (num_cells-- > 0)
                     {
                         curCellOffset = (int)cellOffset++;
                         style_id = (int)((cells[curCellOffset].left < 0) ? 0 :
@@ -348,7 +348,7 @@ namespace MatterHackers.Agg
                         }
                     }
                 }
-                if(m_ast.size() > 1) break;
+                if (m_ast.size() > 1) break;
                 ++m_scan_y;
             }
             ++m_scan_y;
@@ -383,15 +383,15 @@ namespace MatterHackers.Agg
         bool navigate_scanline(int y)
         {
             m_Rasterizer.sort_cells();
-            if(m_Rasterizer.total_cells() == 0) 
+            if (m_Rasterizer.total_cells() == 0)
             {
                 return false;
             }
-            if(m_max_style < m_min_style)
+            if (m_max_style < m_min_style)
             {
                 return false;
             }
-            if(y < m_Rasterizer.min_y() || y > m_Rasterizer.max_y()) 
+            if (y < m_Rasterizer.min_y() || y > m_Rasterizer.max_y())
             {
                 return false;
             }
@@ -400,16 +400,16 @@ namespace MatterHackers.Agg
             allocate_master_alpha();
             return true;
         }
-        
+
         bool hit_test(int tx, int ty)
         {
-            if(!navigate_scanline(ty)) 
+            if (!navigate_scanline(ty))
             {
                 return false;
             }
 
-            int num_styles = sweep_styles(); 
-            if(num_styles <= 0)
+            int num_styles = sweep_styles();
+            if (num_styles <= 0)
             {
                 return false;
             }
@@ -427,9 +427,9 @@ namespace MatterHackers.Agg
 
         void master_alpha(int style, double alpha)
         {
-            if(style >= 0)
+            if (style >= 0)
             {
-                while((int)m_master_alpha.size() <= style)
+                while ((int)m_master_alpha.size() <= style)
                 {
                     m_master_alpha.add(aa_mask);
                 }
@@ -449,14 +449,14 @@ namespace MatterHackers.Agg
 
             ShapePath.FlagsAndCommand cmd;
             vs.rewind(path_id);
-            if(m_Rasterizer.sorted()) reset();
-            while(!ShapePath.is_stop(cmd = vs.vertex(out x, out y)))
+            if (m_Rasterizer.sorted()) reset();
+            while (!ShapePath.is_stop(cmd = vs.vertex(out x, out y)))
             {
                 add_vertex(x, y, cmd);
             }
         }
 
-        public int min_x()     { return m_Rasterizer.min_x(); }
+        public int min_x() { return m_Rasterizer.min_x(); }
         public int min_y() { return m_Rasterizer.min_y(); }
         public int max_x() { return m_Rasterizer.max_x(); }
         public int max_y() { return m_Rasterizer.max_y(); }
@@ -468,17 +468,17 @@ namespace MatterHackers.Agg
 
         public int calculate_alpha(int area, int master_alpha)
         {
-            int cover = area >> (poly_subpixel_shift*2 + 1 - aa_shift);
-            if(cover < 0) cover = -cover;
+            int cover = area >> (poly_subpixel_shift * 2 + 1 - aa_shift);
+            if (cover < 0) cover = -cover;
             if (m_filling_rule == agg_basics.filling_rule_e.fill_even_odd)
             {
                 cover &= aa_mask2;
-                if(cover > aa_scale)
+                if (cover > aa_scale)
                 {
                     cover = aa_scale2 - cover;
                 }
             }
-            if(cover > aa_mask) cover = aa_mask;
+            if (cover > aa_mask) cover = aa_mask;
             return (int)((cover * master_alpha + aa_mask) >> aa_shift);
         }
 
@@ -493,17 +493,17 @@ namespace MatterHackers.Agg
         public bool sweep_scanline(IScanlineCache sl, int style_idx)
         {
             int scan_y = m_scan_y - 1;
-            if(scan_y > m_Rasterizer.max_y()) return false;
+            if (scan_y > m_Rasterizer.max_y()) return false;
 
             sl.ResetSpans();
 
             int master_alpha = aa_mask;
 
-            if(style_idx < 0) 
+            if (style_idx < 0)
             {
                 style_idx = 0;
             }
-            else 
+            else
             {
                 style_idx++;
                 master_alpha = m_master_alpha[(int)(m_ast[(int)style_idx] + m_min_style - 1)];
@@ -516,7 +516,7 @@ namespace MatterHackers.Agg
             cell_aa cell = m_cells[CellOffset];
 
             int cover = 0;
-            while(num_cells-- != 0)
+            while (num_cells-- != 0)
             {
                 int alpha;
                 int x = cell.x;
@@ -526,7 +526,7 @@ namespace MatterHackers.Agg
 
                 cell = m_cells[++CellOffset];
 
-                if(area != 0)
+                if (area != 0)
                 {
                     alpha = calculate_alpha((cover << (poly_subpixel_shift + 1)) - area,
                                             master_alpha);
@@ -534,32 +534,32 @@ namespace MatterHackers.Agg
                     x++;
                 }
 
-                if(num_cells != 0 && cell.x > x)
+                if (num_cells != 0 && cell.x > x)
                 {
                     alpha = calculate_alpha(cover << (poly_subpixel_shift + 1),
                                             master_alpha);
-                    if(alpha != 0)
+                    if (alpha != 0)
                     {
                         sl.add_span(x, cell.x - x, alpha);
                     }
                 }
             }
 
-            if(sl.num_spans() == 0) return false;
+            if (sl.num_spans() == 0) return false;
             sl.finalize(scan_y);
             return true;
         }
 
         private void add_style(int style_id)
         {
-            if(style_id < 0) style_id  = 0;
-            else             style_id -= m_min_style - 1;
+            if (style_id < 0) style_id = 0;
+            else style_id -= m_min_style - 1;
 
             int nbyte = (int)((int)style_id >> 3);
             int mask = (int)(1 << (style_id & 7));
 
             style_info[] stylesArray = m_styles.Array;
-            if((m_asm[nbyte] & mask) == 0)
+            if ((m_asm[nbyte] & mask) == 0)
             {
                 m_ast.add((int)style_id);
                 m_asm.Array[nbyte] |= (byte)mask;
@@ -572,7 +572,7 @@ namespace MatterHackers.Agg
 
         private void allocate_master_alpha()
         {
-            while((int)m_master_alpha.size() <= m_max_style)
+            while ((int)m_master_alpha.size() <= m_max_style)
             {
                 m_master_alpha.add(aa_mask);
             }
