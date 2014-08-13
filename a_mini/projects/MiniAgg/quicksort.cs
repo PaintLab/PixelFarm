@@ -83,6 +83,7 @@ namespace MatterHackers.Agg
             {
                 n--;
             }
+
             while (m < n)
             {
                 //swap data between m and n
@@ -100,6 +101,7 @@ namespace MatterHackers.Agg
                     n--;
                 } 
             }
+
             if (pivot != n)
             {
                 cell_aa temp2 = dataToSort[n];

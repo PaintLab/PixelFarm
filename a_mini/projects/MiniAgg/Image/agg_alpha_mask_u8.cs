@@ -149,14 +149,14 @@ namespace MatterHackers.Agg
         uint m_Step;
         uint m_Offset;
 
-        public static readonly int cover_shift = 8;
-        public static readonly int cover_none = 0;
-        public static readonly int cover_full = 255;
+        //public static readonly int cover_shift = 8;
+        //public static readonly int cover_none = 0;
+        //public static readonly int cover_full = 255;
 
-        public AlphaMaskByteClipped(IImageByte rbuf, uint Step, uint Offset)
+        public AlphaMaskByteClipped(IImageByte rbuf, uint step, uint offset)
         {
-            m_Step = Step;
-            m_Offset = Offset;
+            m_Step = step;
+            m_Offset = offset;
             m_rbuf = rbuf;
         }
 

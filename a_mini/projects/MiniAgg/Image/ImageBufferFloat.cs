@@ -25,6 +25,8 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
+
+
     public class ImageBufferFloat : IImageFloat
     {
         public const int OrderB = 0;
@@ -32,15 +34,11 @@ namespace MatterHackers.Agg.Image
         public const int OrderR = 2;
         public const int OrderA = 3;
 
-        internal class InternalImageGraphics2D : ImageGraphics2D
+        class InternalImageGraphics2D : ImageGraphics2D
         {
-            ImageBufferFloat m_Owner;
-
             internal InternalImageGraphics2D(ImageBufferFloat owner)
                 : base()
             {
-                m_Owner = owner;
-
                 ScanlineRasterizer rasterizer = new ScanlineRasterizer();
                 ImageClippingProxyFloat imageClippingProxy = new ImageClippingProxyFloat(owner);
 
@@ -49,9 +47,9 @@ namespace MatterHackers.Agg.Image
             }
         };
 
-        protected int[] m_yTable;
-        protected int[] m_xTable;
-        private float[] m_FloatBuffer;
+        int[] m_yTable;
+        int[] m_xTable;
+        float[] m_FloatBuffer;
         int m_BufferOffset; // the beggining of the image in this buffer
         int m_BufferFirstPixel; // Pointer to first pixel depending on strideInFloats and image position
 
@@ -237,7 +235,7 @@ namespace MatterHackers.Agg.Image
                 int destOffset;
                 float[] destBuffer = GetPixelPointerXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset, out destOffset);
 
-                for (int i = 0; i<clippedSourceImageRect.Height; i++)
+                for (int i = 0; i < clippedSourceImageRect.Height; i++)
                 {
                     agg_basics.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInFloats);
                     sourceOffset += sourceImage.StrideInFloats();
@@ -610,7 +608,7 @@ namespace MatterHackers.Agg.Image
 
                     do
                     {
-                        float alpha = colorAlpha * (covers[coversIndex] * (1.0f/255.0f));
+                        float alpha = colorAlpha * (covers[coversIndex] * (1.0f / 255.0f));
                         if (alpha == 1)
                         {
                             m_Blender.CopyPixels(buffer, bufferOffset, sourceColor, 1);
@@ -923,7 +921,7 @@ namespace MatterHackers.Agg.Image
             {
                 //if (sourceColor.m_A != 0)
                 {
-                    sourceColor.alpha = sourceColor.alpha * ((float)cover * (1/255));
+                    sourceColor.alpha = sourceColor.alpha * ((float)cover * (1 / 255));
 #if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
                     if (sourceColor.m_A == base_mask)
                     {

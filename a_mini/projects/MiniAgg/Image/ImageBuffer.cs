@@ -33,7 +33,7 @@ namespace MatterHackers.Agg.Image
         public const int OrderR = 2;
         public const int OrderA = 3;
 
-        internal class InternalImageGraphics2D : ImageGraphics2D
+        class InternalImageGraphics2D : ImageGraphics2D
         {
             internal InternalImageGraphics2D(ImageBuffer owner)
                 : base()
@@ -46,9 +46,9 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        protected int[] yTableArray;
-        protected int[] xTableArray;
-        private byte[] m_ByteBuffer;
+        int[] yTableArray;
+        int[] xTableArray;
+        byte[] m_ByteBuffer;
 
         int bufferOffset; // the beggining of the image in this buffer
         int bufferFirstPixel; // Pointer to first pixel depending on strideInBytes and image position
@@ -429,16 +429,38 @@ namespace MatterHackers.Agg.Image
         private void SetUpLookupTables()
         {
             yTableArray = new int[height];
-            for (int i = 0; i < height; i++)
-            {
-                yTableArray[i] = i * strideInBytes;
-            }
-
             xTableArray = new int[width];
-            for (int i = 0; i < width; i++)
+            unsafe
             {
-                xTableArray[i] = i * m_DistanceInBytesBetweenPixelsInclusive;
+                fixed (int* first = &yTableArray[0])
+                {
+                    //go last
+                    int* cur = first + height;
+                    for (int i = height - 1; i >= 0; )
+                    {
+                        //--------------------
+                        *cur = i * strideInBytes;
+                        --i;
+                        cur--;
+                        //--------------------
+                    }
+                }
+                fixed (int* first = &xTableArray[0])
+                {
+                    //go last
+                    int* cur = first + width;
+                    //even
+                    for (int i = width - 1; i >= 0; )
+                    {
+                        //--------------------
+                        *cur = i * m_DistanceInBytesBetweenPixelsInclusive;
+                        --i;
+                        cur--;
+                        //--------------------
+                    } 
+                }
             }
+            
         }
 
         public void FlipY()
@@ -538,7 +560,6 @@ namespace MatterHackers.Agg.Image
         public byte[] GetPixelPointerY(int y, out int bufferOffset)
         {
             bufferOffset = bufferFirstPixel + yTableArray[y];
-            //bufferOffset = GetBufferOffsetXY(0, y);
             return m_ByteBuffer;
         }
 
@@ -557,7 +578,6 @@ namespace MatterHackers.Agg.Image
         {
             return bufferFirstPixel + yTableArray[y] + xTableArray[0];
         }
-
         public int GetBufferOffsetXY(int x, int y)
         {
             return bufferFirstPixel + yTableArray[y] + xTableArray[x];

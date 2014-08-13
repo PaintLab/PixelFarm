@@ -17,13 +17,13 @@ using System;
 namespace MatterHackers.Agg
 {
     //---------------------------------------------------------------line_coord
-    public struct line_coord
-    {
-        public static int conv(double x)
-        {
-            return (int)Math.Round(x * LineAABasics.line_subpixel_scale);
-        }
-    };
+    //public struct line_coord
+    //{
+    //    public static int conv(double x)
+    //    {
+    //        return (int)Math.Round(x * LineAABasics.line_subpixel_scale);
+    //    }
+    //};
 
     //-----------------------------------------------------------line_coord_sat
     public struct line_coord_sat

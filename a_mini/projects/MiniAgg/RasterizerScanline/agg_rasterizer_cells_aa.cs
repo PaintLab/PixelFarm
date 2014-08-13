@@ -107,6 +107,7 @@ namespace MatterHackers.Agg
 
         cell_aa m_curr_cell;
         cell_aa m_style_cell;
+
         int m_min_x;
         int m_min_y;
         int m_max_x;
@@ -326,7 +327,7 @@ namespace MatterHackers.Agg
             m_curr_cell.x = 0x7FFFFFFF;
             m_curr_cell.y = 0x7FFFFFFF;
             m_curr_cell.cover = 0;
-            m_curr_cell.area = 0; 
+            m_curr_cell.area = 0;
 
             if (m_num_used_cells == 0) return;
 

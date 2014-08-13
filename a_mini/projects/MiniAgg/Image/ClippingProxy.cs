@@ -111,7 +111,7 @@ namespace MatterHackers.Agg.Image
 
             int w = this.Width;
             if (w != 0)
-            {
+            {    
                 for (int y = this.Height - 1; y >= 0; --y)
                 {
                     base.copy_hline(0, y, w, c);

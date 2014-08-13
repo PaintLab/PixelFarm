@@ -91,25 +91,7 @@ namespace MatterHackers.Agg
         private int m_size;
     }
 
-
-    /// <summary>
-    /// designed for store int32 of dataType
-    /// </summary>
-    /// <typeparam name="dataType"></typeparam>
-    class Int32BufferPool<dataType>
-    {
-        //MIT 2014,WinterDev
-        int[] int32Buffer;
-        public Int32BufferPool()
-        {
-        }
-    }
-
-
-
-
-
-
+     
     //--------------------------------------------------------------pod_vector
     // A simple class template to store Plain Old Data, a vector
     // of a fixed size. The data is contiguous in memory
