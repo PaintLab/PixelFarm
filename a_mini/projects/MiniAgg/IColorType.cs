@@ -16,7 +16,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MatterHackers.Agg
-{
+{   
+
     public interface IColorType
     {
         RGBA_Floats GetAsRGBA_Floats();
@@ -24,14 +25,14 @@ namespace MatterHackers.Agg
 
         RGBA_Bytes gradient(RGBA_Bytes c, double k);
 
-        int Red0To255 { get; set;}
-        int Green0To255 { get; set;}
-        int Blue0To255 { get; set;}
-        int Alpha0To255 { get; set;}
+        int Red0To255 { get; }
+        int Green0To255 { get; }
+        int Blue0To255 { get; }
+        int Alpha0To255 { get; }
 
-        float Red0To1 { get; set; }
-        float Green0To1 { get; set; }
-        float Blue0To1 { get; set; }
-        float Alpha0To1 { get; set; }
+        float Red0To1 { get; }
+        float Green0To1 { get; }
+        float Blue0To1 { get; }
+        float Alpha0To1 { get; }
     };
 }

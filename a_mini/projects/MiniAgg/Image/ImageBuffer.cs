@@ -49,6 +49,7 @@ namespace MatterHackers.Agg.Image
         protected int[] yTableArray;
         protected int[] xTableArray;
         private byte[] m_ByteBuffer;
+
         int bufferOffset; // the beggining of the image in this buffer
         int bufferFirstPixel; // Pointer to first pixel depending on strideInBytes and image position
 
@@ -631,7 +632,7 @@ namespace MatterHackers.Agg.Image
                 {
                     do
                     {
-                        recieveBlender.BlendPixel(buffer, bufferOffset, new RGBA_Bytes(sourceColor.red, sourceColor.green, sourceColor.blue, alpha));
+                        recieveBlender.BlendPixel(buffer, bufferOffset, RGBA_Bytes.Make(sourceColor.red, sourceColor.green, sourceColor.blue, alpha));
                         bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
                     }
                     while (--len != 0);
@@ -708,7 +709,7 @@ namespace MatterHackers.Agg.Image
                         }
                         else
                         {
-                            recieveBlender.BlendPixel(buffer, bufferOffset, new RGBA_Bytes(sourceColor.red, sourceColor.green, sourceColor.blue, alpha));
+                            recieveBlender.BlendPixel(buffer, bufferOffset, RGBA_Bytes.Make(sourceColor.red, sourceColor.green, sourceColor.blue, alpha));
                         }
                         bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
                         coversIndex++;

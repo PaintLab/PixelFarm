@@ -245,10 +245,10 @@ namespace MatterHackers.Agg.Image
                         int g = buffer[bufferOffset + ImageBuffer.OrderG];
                         int b = buffer[bufferOffset + ImageBuffer.OrderB];
                         int a = buffer[bufferOffset + ImageBuffer.OrderA];
-                        buffer[bufferOffset + ImageBuffer.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift);
-                        buffer[bufferOffset + ImageBuffer.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift);
-                        buffer[bufferOffset + ImageBuffer.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift);
-                        buffer[bufferOffset + ImageBuffer.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)RGBA_Bytes.base_shift));
+                        buffer[bufferOffset + ImageBuffer.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
+                        buffer[bufferOffset + ImageBuffer.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
+                        buffer[bufferOffset + ImageBuffer.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
+                        buffer[bufferOffset + ImageBuffer.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)RGBA_Bytes.BASE_SHIFT));
                     }
                 }
             }
@@ -400,10 +400,10 @@ namespace MatterHackers.Agg.Image
                 int g = buffer[bufferOffset + ImageBuffer.OrderG];
                 int b = buffer[bufferOffset + ImageBuffer.OrderB];
                 int a = buffer[bufferOffset + ImageBuffer.OrderA];
-                buffer[bufferOffset + ImageBuffer.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift));
-                buffer[bufferOffset + ImageBuffer.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift));
-                buffer[bufferOffset + ImageBuffer.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift));
-                buffer[ImageBuffer.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)RGBA_Bytes.base_shift));
+                buffer[bufferOffset + ImageBuffer.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
+                buffer[bufferOffset + ImageBuffer.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
+                buffer[bufferOffset + ImageBuffer.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
+                buffer[ImageBuffer.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)RGBA_Bytes.BASE_SHIFT));
             }
         }
 

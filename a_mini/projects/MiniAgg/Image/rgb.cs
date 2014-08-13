@@ -153,7 +153,10 @@ namespace MatterHackers.Agg.Image
     {
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR], buffer[bufferOffset + ImageBuffer.OrderG], buffer[bufferOffset + ImageBuffer.OrderB], 255);
+            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR],
+                buffer[bufferOffset + ImageBuffer.OrderG],
+                buffer[bufferOffset + ImageBuffer.OrderB],
+                255);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, RGBA_Bytes sourceColor, int count)
@@ -175,9 +178,9 @@ namespace MatterHackers.Agg.Image
                 int r = buffer[bufferOffset + ImageBuffer.OrderR];
                 int g = buffer[bufferOffset + ImageBuffer.OrderG];
                 int b = buffer[bufferOffset + ImageBuffer.OrderB];
-                buffer[bufferOffset + ImageBuffer.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift);
-                buffer[bufferOffset + ImageBuffer.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift);
-                buffer[bufferOffset + ImageBuffer.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift);
+                buffer[bufferOffset + ImageBuffer.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
+                buffer[bufferOffset + ImageBuffer.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
+                buffer[bufferOffset + ImageBuffer.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
             }
         }
 
@@ -270,9 +273,9 @@ namespace MatterHackers.Agg.Image
                 int r = buffer[bufferOffset + ImageBuffer.OrderR];
                 int g = buffer[bufferOffset + ImageBuffer.OrderG];
                 int b = buffer[bufferOffset + ImageBuffer.OrderB];
-                buffer[bufferOffset + ImageBuffer.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift));
-                buffer[bufferOffset + ImageBuffer.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift));
-                buffer[bufferOffset + ImageBuffer.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.base_shift)) >> (int)RGBA_Bytes.base_shift));
+                buffer[bufferOffset + ImageBuffer.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
+                buffer[bufferOffset + ImageBuffer.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
+                buffer[bufferOffset + ImageBuffer.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
             }
         }
 
@@ -301,7 +304,10 @@ namespace MatterHackers.Agg.Image
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR], buffer[bufferOffset + ImageBuffer.OrderG], buffer[bufferOffset + ImageBuffer.OrderB], 255);
+            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR], 
+                buffer[bufferOffset + ImageBuffer.OrderG],
+                buffer[bufferOffset + ImageBuffer.OrderB], 
+                255);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, RGBA_Bytes sourceColor, int count)

@@ -65,8 +65,8 @@ namespace MatterHackers.Agg
                 //alphaSlider.View.BackgroundColor = clearColor;
 
                 RGBA_Bytes FillColor = this.UseBlackBlackground ?
-                    new RGBA_Bytes(255, 255, 255, (int)(this.AlphaValue)) :
-                    new RGBA_Bytes(0, 0, 0, (int)(this.AlphaValue));
+                    new RGBA_Bytes(255, 255, 255, (byte)(this.AlphaValue)) :
+                    new RGBA_Bytes(0, 0, 0, (byte)(this.AlphaValue));
 
                 VertexSource.Ellipse er = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 ras.add_path(er);

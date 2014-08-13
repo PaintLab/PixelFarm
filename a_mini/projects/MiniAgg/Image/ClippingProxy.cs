@@ -62,7 +62,7 @@ namespace MatterHackers.Agg.Image
 
         public void reset_clipping(bool visibility)
         {
-            if(visibility)
+            if (visibility)
             {
                 m_ClippingRect.Left = 0;
                 m_ClippingRect.Bottom = 0;
@@ -92,13 +92,13 @@ namespace MatterHackers.Agg.Image
                    x <= m_ClippingRect.Right && y <= m_ClippingRect.Top;
         }
 
-        public RectangleInt clip_box() { return m_ClippingRect;    }
+        public RectangleInt clip_box() { return m_ClippingRect; }
         int xmin() { return m_ClippingRect.Left; }
         int ymin() { return m_ClippingRect.Bottom; }
         int xmax() { return m_ClippingRect.Right; }
         int ymax() { return m_ClippingRect.Top; }
 
-        public RectangleInt bounding_clip_box() { return m_ClippingRect;    }
+        public RectangleInt bounding_clip_box() { return m_ClippingRect; }
         public int bounding_xmin() { return m_ClippingRect.Left; }
         public int bounding_ymin() { return m_ClippingRect.Bottom; }
         public int bounding_xmax() { return m_ClippingRect.Right; }
@@ -106,20 +106,22 @@ namespace MatterHackers.Agg.Image
 
         public void clear(IColorType in_c)
         {
-            int y;
-            RGBA_Bytes c = new RGBA_Bytes(in_c.Red0To255, in_c.Green0To255, in_c.Blue0To255, in_c.Alpha0To255);
-            if(Width != 0)
+            
+            RGBA_Bytes c = RGBA_Bytes.Make(in_c.Red0To255, in_c.Green0To255, in_c.Blue0To255, in_c.Alpha0To255);
+
+            int w = this.Width;
+            if (w != 0)
             {
-                for(y = 0; y < Height; y++)
+                for (int y = this.Height - 1; y >= 0; --y)
                 {
-                    base.copy_hline(0, (int)y, (int)Width, c);
-                }
+                    base.copy_hline(0, y, w, c);
+                } 
             }
         }
-          
+
         public override void copy_pixel(int x, int y, byte[] c, int ByteOffset)
         {
-            if(inbox(x, y))
+            if (inbox(x, y))
             {
                 base.copy_pixel(x, y, c, ByteOffset);
             }
@@ -132,52 +134,52 @@ namespace MatterHackers.Agg.Image
 
         public override void copy_hline(int x1, int y, int x2, RGBA_Bytes c)
         {
-            if(x1 > x2) { int t = (int)x2; x2 = (int)x1; x1 = t; }
-            if(y  > ymax()) return;
-            if(y  < ymin()) return;
-            if(x1 > xmax()) return;
-            if(x2 < xmin()) return;
+            if (x1 > x2) { int t = (int)x2; x2 = (int)x1; x1 = t; }
+            if (y > ymax()) return;
+            if (y < ymin()) return;
+            if (x1 > xmax()) return;
+            if (x2 < xmin()) return;
 
-            if(x1 < xmin()) x1 = xmin();
-            if(x2 > xmax()) x2 = (int)xmax();
+            if (x1 < xmin()) x1 = xmin();
+            if (x2 > xmax()) x2 = (int)xmax();
 
             base.copy_hline(x1, y, (int)(x2 - x1 + 1), c);
         }
 
         public override void copy_vline(int x, int y1, int y2, RGBA_Bytes c)
         {
-            if(y1 > y2) { int t = (int)y2; y2 = (int)y1; y1 = t; }
-            if(x  > xmax()) return;
-            if(x  < xmin()) return;
-            if(y1 > ymax()) return;
-            if(y2 < ymin()) return;
+            if (y1 > y2) { int t = (int)y2; y2 = (int)y1; y1 = t; }
+            if (x > xmax()) return;
+            if (x < xmin()) return;
+            if (y1 > ymax()) return;
+            if (y2 < ymin()) return;
 
-            if(y1 < ymin()) y1 = ymin();
-            if(y2 > ymax()) y2 = (int)ymax();
+            if (y1 < ymin()) y1 = ymin();
+            if (y2 > ymax()) y2 = (int)ymax();
 
             base.copy_vline(x, y1, (int)(y2 - y1 + 1), c);
         }
 
         public override void blend_hline(int x1, int y, int x2, RGBA_Bytes c, byte cover)
         {
-            if (x1 > x2) 
+            if (x1 > x2)
             {
                 int t = (int)x2;
                 x2 = x1;
-                x1 = t; 
+                x1 = t;
             }
-            if(y  > ymax()) 
+            if (y > ymax())
                 return;
-            if(y  < ymin()) 
+            if (y < ymin())
                 return;
-            if(x1 > xmax()) 
+            if (x1 > xmax())
                 return;
-            if(x2 < xmin()) 
+            if (x2 < xmin())
                 return;
 
-            if(x1 < xmin()) 
+            if (x1 < xmin())
                 x1 = xmin();
-            if(x2 > xmax()) 
+            if (x2 > xmax())
                 x2 = xmax();
 
             base.blend_hline(x1, y, x2, c, cover);
@@ -185,14 +187,14 @@ namespace MatterHackers.Agg.Image
 
         public override void blend_vline(int x, int y1, int y2, RGBA_Bytes c, byte cover)
         {
-            if(y1 > y2) { int t = y2; y2 = y1; y1 = t; }
-            if(x  > xmax()) return;
-            if(x  < xmin()) return;
-            if(y1 > ymax()) return;
-            if(y2 < ymin()) return;
+            if (y1 > y2) { int t = y2; y2 = y1; y1 = t; }
+            if (x > xmax()) return;
+            if (x < xmin()) return;
+            if (y1 > ymax()) return;
+            if (y2 < ymin()) return;
 
-            if(y1 < ymin()) y1 = ymin();
-            if(y2 > ymax()) y2 = ymax();
+            if (y1 < ymin()) y1 = ymin();
+            if (y2 > ymax()) y2 = ymax();
 
             base.blend_vline(x, y1, y2, c, cover);
         }
@@ -237,7 +239,7 @@ namespace MatterHackers.Agg.Image
 
             if (x > xmax()) return;
             if (x < xmin()) return;
-             
+
             if (y < ymin())
             {
                 len -= (ymin() - y);
@@ -328,7 +330,7 @@ namespace MatterHackers.Agg.Image
 
         public override void SetPixel(int x, int y, RGBA_Bytes color)
         {
-            if((uint)x < Width && (uint)y<Height)
+            if ((uint)x < Width && (uint)y < Height)
             {
                 base.SetPixel(x, y, color);
             }
@@ -343,7 +345,7 @@ namespace MatterHackers.Agg.Image
             destRect.Offset(destXOffset, destYOffset);
 
             RectangleInt clippedSourceRect = new RectangleInt();
-            if(clippedSourceRect.IntersectRectangles(destRect, m_ClippingRect))
+            if (clippedSourceRect.IntersectRectangles(destRect, m_ClippingRect))
             {
                 // move it back relative to the source
                 clippedSourceRect.Offset(-destXOffset, -destYOffset);
@@ -354,44 +356,44 @@ namespace MatterHackers.Agg.Image
 
         public RectangleInt clip_rect_area(ref RectangleInt destRect, ref RectangleInt sourceRect, int sourceWidth, int sourceHeight)
         {
-            RectangleInt rc = new RectangleInt(0,0,0,0);
+            RectangleInt rc = new RectangleInt(0, 0, 0, 0);
             RectangleInt cb = clip_box();
             ++cb.Right;
             ++cb.Top;
 
-            if(sourceRect.Left < 0)
+            if (sourceRect.Left < 0)
             {
                 destRect.Left -= sourceRect.Left;
                 sourceRect.Left = 0;
             }
-            if(sourceRect.Bottom < 0)
+            if (sourceRect.Bottom < 0)
             {
                 destRect.Bottom -= sourceRect.Bottom;
                 sourceRect.Bottom = 0;
             }
 
-            if(sourceRect.Right > sourceWidth) sourceRect.Right = sourceWidth;
-            if(sourceRect.Top > sourceHeight) sourceRect.Top = sourceHeight;
+            if (sourceRect.Right > sourceWidth) sourceRect.Right = sourceWidth;
+            if (sourceRect.Top > sourceHeight) sourceRect.Top = sourceHeight;
 
-            if(destRect.Left < cb.Left)
+            if (destRect.Left < cb.Left)
             {
                 sourceRect.Left += cb.Left - destRect.Left;
                 destRect.Left = cb.Left;
             }
-            if(destRect.Bottom < cb.Bottom)
+            if (destRect.Bottom < cb.Bottom)
             {
                 sourceRect.Bottom += cb.Bottom - destRect.Bottom;
                 destRect.Bottom = cb.Bottom;
             }
 
-            if(destRect.Right > cb.Right) destRect.Right = cb.Right;
-            if(destRect.Top > cb.Top) destRect.Top = cb.Top;
+            if (destRect.Right > cb.Right) destRect.Right = cb.Right;
+            if (destRect.Top > cb.Top) destRect.Top = cb.Top;
 
             rc.Right = destRect.Right - destRect.Left;
             rc.Top = destRect.Top - destRect.Bottom;
 
-            if(rc.Right > sourceRect.Right - sourceRect.Left) rc.Right = sourceRect.Right - sourceRect.Left;
-            if(rc.Top > sourceRect.Top - sourceRect.Bottom) rc.Top = sourceRect.Top - sourceRect.Bottom;
+            if (rc.Right > sourceRect.Right - sourceRect.Left) rc.Right = sourceRect.Right - sourceRect.Left;
+            if (rc.Top > sourceRect.Top - sourceRect.Bottom) rc.Top = sourceRect.Top - sourceRect.Bottom;
             return rc;
         }
 

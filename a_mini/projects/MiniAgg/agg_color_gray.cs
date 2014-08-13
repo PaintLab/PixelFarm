@@ -42,7 +42,8 @@ namespace MatterHackers.Agg
         byte a;
 
         //--------------------------------------------------------------------
-        public gray8(uint v_) : this(v_, (uint)base_mask)
+        public gray8(uint v_)
+            : this(v_, (uint)base_mask)
         {
 
         }
@@ -57,13 +58,13 @@ namespace MatterHackers.Agg
         gray8(gray8 c, uint a_)
         {
             v = (c.v);
-            a= (byte)(a_);
+            a = (byte)(a_);
         }
 
         //--------------------------------------------------------------------
         public gray8(RGBA_Floats c)
         {
-            v=((byte)agg_basics.uround((0.299*c.Red0To255 + 0.587*c.Green0To255 + 0.114*c.Blue0To255) * (double)(base_mask)));
+            v = ((byte)agg_basics.uround((0.299 * c.Red0To255 + 0.587 * c.Green0To255 + 0.114 * c.Blue0To255) * (double)(base_mask)));
             a = ((byte)agg_basics.uround(c.Alpha0To255 * (double)(base_mask)));
         }
 
@@ -71,22 +72,22 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public gray8(RGBA_Floats c, double a_)
         {
-            v=((byte)agg_basics.uround((0.299*c.Red0To255 + 0.587*c.Green0To255 + 0.114*c.Blue0To255) * (double)(base_mask)));
-            a=((byte)agg_basics.uround(a_ * (double)(base_mask)));
+            v = ((byte)agg_basics.uround((0.299 * c.Red0To255 + 0.587 * c.Green0To255 + 0.114 * c.Blue0To255) * (double)(base_mask)));
+            a = ((byte)agg_basics.uround(a_ * (double)(base_mask)));
         }
 
         //--------------------------------------------------------------------
         public gray8(RGBA_Bytes c)
         {
-            v=(byte)((c.Red0To255*77 + c.Green0To255*150 + c.Blue0To255*29) >> 8);
-            a=(byte)(c.Alpha0To255);
+            v = (byte)((c.Red0To255 * 77 + c.Green0To255 * 150 + c.Blue0To255 * 29) >> 8);
+            a = (byte)(c.Alpha0To255);
         }
 
         //--------------------------------------------------------------------
         public gray8(RGBA_Bytes c, int a_)
         {
-            v=(byte)((c.Red0To255*77 + c.Green0To255*150 + c.Blue0To255*29) >> 8);
-            a=(byte)(a_);
+            v = (byte)((c.Red0To255 * 77 + c.Green0To255 * 150 + c.Blue0To255 * 29) >> 8);
+            a = (byte)(a_);
         }
 
         //--------------------------------------------------------------------
@@ -105,8 +106,8 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public void opacity(double a_)
         {
-            if(a_ < 0.0) a_ = 0.0;
-            if(a_ > 1.0) a_ = 1.0;
+            if (a_ < 0.0) a_ = 0.0;
+            if (a_ > 1.0) a_ = 1.0;
             a = (byte)agg_basics.uround(a_ * (double)(base_mask));
         }
 
@@ -120,8 +121,8 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public gray8 premultiply()
         {
-            if(a == (byte)base_mask) return this;
-            if(a == 0)
+            if (a == (byte)base_mask) return this;
+            if (a == 0)
             {
                 v = 0;
                 return this;
@@ -133,8 +134,8 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public gray8 premultiply(int a_)
         {
-            if(a == (int)base_mask && a_ >= (int)base_mask) return this;
-            if(a == 0 || a_ == 0)
+            if (a == (int)base_mask && a_ >= (int)base_mask) return this;
+            if (a == 0 || a_ == 0)
             {
                 v = a = 0;
                 return this;
@@ -148,8 +149,8 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public gray8 demultiply()
         {
-            if(a == (int)base_mask) return this;
-            if(a == 0)
+            if (a == (int)base_mask) return this;
+            if (a == 0)
             {
                 v = 0;
                 return this;

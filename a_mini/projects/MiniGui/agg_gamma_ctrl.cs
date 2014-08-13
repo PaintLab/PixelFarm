@@ -28,7 +28,7 @@ namespace MatterHackers.Agg.UI
     // Class that can be used to create an interactive control to set up 
     // gamma arrays.
     //------------------------------------------------------------------------
-    public class gamma_ctrl  : SimpleVertexSourceWidget
+    public class gamma_ctrl : SimpleVertexSourceWidget
     {
         gamma_spline m_gamma_spline = new gamma_spline();
         double m_border_width;
@@ -121,13 +121,13 @@ namespace MatterHackers.Agg.UI
             m_pdy = (0.0);
             calc_spline_box();
 
-            m_background_color = new RGBA_Bytes(1.0, 1.0, 0.9);
-            m_border_color = new RGBA_Bytes(0.0, 0.0, 0.0);
-            m_curve_color = new RGBA_Bytes(0.0, 0.0, 0.0);
-            m_grid_color = new RGBA_Bytes(0.2, 0.2, 0.0);
-            m_inactive_pnt_color = new RGBA_Bytes(0.0, 0.0, 0.0);
-            m_active_pnt_color = new RGBA_Bytes(1.0, 0.0, 0.0);
-            m_text_color = new RGBA_Bytes(0.0, 0.0, 0.0);
+            m_background_color = RGBA_Bytes.Make(1.0, 1.0, 0.9);
+            m_border_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
+            m_curve_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
+            m_grid_color = RGBA_Bytes.Make(0.2, 0.2, 0.0);
+            m_inactive_pnt_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
+            m_active_pnt_color = RGBA_Bytes.Make(1.0, 0.0, 0.0);
+            m_text_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
 
             m_colors[0] = m_curve_color;
             m_colors[1] = m_grid_color;
@@ -287,7 +287,7 @@ namespace MatterHackers.Agg.UI
             border.LineTo(LocalBounds.Left + m_border_width, LocalBounds.Top - m_border_width);
             border.LineTo(LocalBounds.Right - m_border_width, LocalBounds.Top - m_border_width);
             border.LineTo(LocalBounds.Right - m_border_width, LocalBounds.Bottom + m_border_width);
-            
+
             graphics2D.Render(border, m_border_color);
 
             rewind(0);
