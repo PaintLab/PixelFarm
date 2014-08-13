@@ -138,7 +138,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public void line_to(rasterizer_cells_aa ras, int x2, int y2)
+        internal void line_to(rasterizer_cells_aa ras, int x2, int y2)
         {
             if(m_clipping)
             {

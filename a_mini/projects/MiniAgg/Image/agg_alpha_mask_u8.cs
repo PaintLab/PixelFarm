@@ -43,9 +43,9 @@ namespace MatterHackers.Agg
         uint m_Step;
         uint m_Offset;
 
-        public static readonly int cover_shift = 8;
-        public static readonly int cover_none = 0;
-        public static readonly int cover_full = 255;
+        //public static readonly int cover_shift = 8;
+        //public static readonly int cover_none = 0;
+        //public static readonly int cover_full = 255;
 
         public AlphaMaskByteUnclipped(IImageByte rbuf, uint Step, uint Offset)
         {

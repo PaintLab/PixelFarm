@@ -37,9 +37,9 @@ using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e
 namespace MatterHackers.Agg
 {
     //-----------------------------------------------------------------cell_aa
-    // A pixel cell. There're no constructors defined and it was done 
-    // intentionally in order to avoid extra overhead when allocating an 
-    // array of cells.
+    // A pixel cell. There're no constructors defined and it was done ***
+    // intentionally in order to avoid extra overhead when allocating an ****
+    // array of cells. ***
     public struct cell_aa
     {
         public int x;
@@ -47,7 +47,7 @@ namespace MatterHackers.Agg
         public int cover;
         public int area;
         public int left;
-        public int right; 
+        public int right;
 
         public void initial()
         {
@@ -82,16 +82,26 @@ namespace MatterHackers.Agg
                 return ((ex - x) | (ey - y) | (left - cell.left) | (right - cell.right)) != 0;
             }
         }
+#if DEBUG
+        public override string ToString()
+        {
+            return "x:" + x + ",y:" + y + ",cover:" + cover + ",area:" + area + ",left:" + left + ",right:" + right;
+        }
+#endif
+
+
     };
+
 
     //-----------------------------------------------------rasterizer_cells_aa
     // An internal class that implements the main rasterization algorithm.
     // Used in the rasterizer. Should not be used directly.
-    public sealed class rasterizer_cells_aa
+    sealed class rasterizer_cells_aa
     {
         private int m_num_used_cells;
         private VectorPOD<cell_aa> m_cells;
         private VectorPOD<cell_aa> m_sorted_cells;
+
         private VectorPOD<sorted_y> m_sorted_y;
         private QuickSort_cell_aa m_QSorter;
 
@@ -103,20 +113,20 @@ namespace MatterHackers.Agg
         int m_max_y;
         bool m_sorted;
 
-        private enum cell_block_scale_e
+        enum cell_block_scale_e
         {
             cell_block_shift = 12,
             cell_block_size = 1 << cell_block_shift,
             cell_block_mask = cell_block_size - 1,
             cell_block_pool = 256,
-            cell_block_limit = 1024 * cell_block_size
-        };
+            cell_block_limit = cell_block_size * 1024
+        }
 
-        private struct sorted_y
+        struct sorted_y
         {
             internal int start;
             internal int num;
-        };
+        }
 
         public rasterizer_cells_aa()
         {
@@ -153,11 +163,13 @@ namespace MatterHackers.Agg
 
         enum dx_limit_e { dx_limit = 16384 << agg_basics.poly_subpixel_scale_e.poly_subpixel_shift };
 
+        const int poly_subpixel_shift = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_shift;
+        const int poly_subpixel_mask = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_mask;
+        const int poly_subpixel_scale = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_scale;
+
         public void line(int x1, int y1, int x2, int y2)
         {
-            int poly_subpixel_shift = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_shift;
-            int poly_subpixel_mask = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_mask;
-            int poly_subpixel_scale = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_scale;
+
             int dx = x2 - x1;
 
             if (dx >= (int)dx_limit_e.dx_limit || dx <= -(int)dx_limit_e.dx_limit)
@@ -310,10 +322,11 @@ namespace MatterHackers.Agg
             if (m_sorted) return; //Perform sort only the first time.
 
             add_curr_cell();
+
             m_curr_cell.x = 0x7FFFFFFF;
             m_curr_cell.y = 0x7FFFFFFF;
             m_curr_cell.cover = 0;
-            m_curr_cell.area = 0;
+            m_curr_cell.area = 0; 
 
             if (m_num_used_cells == 0) return;
 
@@ -323,21 +336,22 @@ namespace MatterHackers.Agg
             // Allocate and zero the Y array
             m_sorted_y.Allocate((int)(m_max_y - m_min_y + 1));
             m_sorted_y.zero();
+
             cell_aa[] cells = m_cells.Array;
             sorted_y[] sortedYData = m_sorted_y.Array;
             cell_aa[] sortedCellsData = m_sorted_cells.Array;
 
             // Create the Y-histogram (count the numbers of cells for each Y)
-            for (int i = 0; i < m_num_used_cells; i++)
+            for (int i = 0; i < m_num_used_cells; ++i)
             {
-                int Index = cells[i].y - m_min_y;
-                sortedYData[Index].start++;
+                int index = cells[i].y - m_min_y;
+                sortedYData[index].start++;
             }
 
             // Convert the Y-histogram into the array of starting indexes
             int start = 0;
-            int SortedYSize = m_sorted_y.size();
-            for (int i = 0; i < SortedYSize; i++)
+            int sortedYSize = m_sorted_y.size();
+            for (int i = 0; i < sortedYSize; i++)
             {
                 int v = sortedYData[i].start;
                 sortedYData[i].start = start;
@@ -345,21 +359,24 @@ namespace MatterHackers.Agg
             }
 
             // Fill the cell pointer array sorted by Y
-            for (int i = 0; i < m_num_used_cells; i++)
+            for (int i = 0; i < m_num_used_cells; ++i)
             {
-                int SortedIndex = cells[i].y - m_min_y;
-                int curr_y_start = sortedYData[SortedIndex].start;
-                int curr_y_num = sortedYData[SortedIndex].num;
+                int sortedIndex = cells[i].y - m_min_y;
+                int curr_y_start = sortedYData[sortedIndex].start;
+                int curr_y_num = sortedYData[sortedIndex].num;
                 sortedCellsData[curr_y_start + curr_y_num] = cells[i];
-                ++sortedYData[SortedIndex].num;
+                ++sortedYData[sortedIndex].num;
             }
 
             // Finally arrange the X-arrays
-            for (int i = 0; i < SortedYSize; i++)
+            for (int i = 0; i < sortedYSize; i++)
             {
-                if (sortedYData[i].num != 0)
+                var yData = sortedYData[i];
+                if (yData.num != 0)
                 {
-                    m_QSorter.Sort(sortedCellsData, sortedYData[i].start, sortedYData[i].start + sortedYData[i].num - 1);
+                    m_QSorter.Sort(sortedCellsData,
+                        yData.start,
+                        yData.start + yData.num - 1);
                 }
             }
             m_sorted = true;
@@ -537,14 +554,14 @@ namespace MatterHackers.Agg
             m_curr_cell.area += (fx2 + (int)poly_subpixel_scale_e.poly_subpixel_scale - first) * delta;
         }
 
-        static void swap_cells(cell_aa a, cell_aa b)
-        {
-            cell_aa temp = a;
-            a = b;
-            b = temp;
-        }
+        //static void swap_cells(cell_aa a, cell_aa b)
+        //{
+        //    cell_aa temp = a;
+        //    a = b;
+        //    b = temp;
+        //}
 
-        enum qsort { qsort_threshold = 9 };
+        //enum qsort { qsort_threshold = 9 };
     }
 
     //------------------------------------------------------scanline_hit_test

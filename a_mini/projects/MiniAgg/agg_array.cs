@@ -16,6 +16,11 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
+
+//MIT 2014, WinterDev
+//----------------------------------------------------------------------------
+
+
 using System;
 using System.Collections.Generic;
 using System.Collections;
@@ -54,7 +59,7 @@ namespace MatterHackers.Agg
 
         public void Resize(int size)
         {
-            if(size != m_size)
+            if (size != m_size)
             {
                 m_array = new T[size];
             }
@@ -85,6 +90,24 @@ namespace MatterHackers.Agg
         private T[] m_array;
         private int m_size;
     }
+
+
+    /// <summary>
+    /// designed for store int32 of dataType
+    /// </summary>
+    /// <typeparam name="dataType"></typeparam>
+    class Int32BufferPool<dataType>
+    {
+        //MIT 2014,WinterDev
+        int[] int32Buffer;
+        public Int32BufferPool()
+        {
+        }
+    }
+
+
+
+
 
 
     //--------------------------------------------------------------pod_vector
@@ -148,11 +171,11 @@ namespace MatterHackers.Agg
                 throw new Exception("requested remove past end of array");
             }
 
-            for (int i = indexToRemove; i < Length-1; i++ )
+            for (int i = indexToRemove; i < Length - 1; i++)
             {
                 internalArray[i] = internalArray[i + 1];
             }
-            
+
             currentSize--;
         }
 
@@ -218,9 +241,9 @@ namespace MatterHackers.Agg
         // Resize keeping the content.
         public void Resize(int newSize)
         {
-            if(newSize > currentSize)
+            if (newSize > currentSize)
             {
-                if(newSize > AllocatedSize)
+                if (newSize > AllocatedSize)
                 {
                     var newArray = new dataType[newSize];
                     if (internalArray != null)
@@ -242,7 +265,7 @@ namespace MatterHackers.Agg
         public void zero()
         {
             int NumItems = internalArray.Length;
-            for(int i=0; i<NumItems; i++)
+            for (int i = 0; i < NumItems; i++)
             {
                 internalArray[i] = zeroed_object;
             }
@@ -253,7 +276,7 @@ namespace MatterHackers.Agg
             add(v);
         }
 
-        public virtual void add(dataType v) 
+        public virtual void add(dataType v)
         {
             if (internalArray == null || internalArray.Length < (currentSize + 1))
             {
@@ -270,7 +293,7 @@ namespace MatterHackers.Agg
         }
 
         public void push_back(dataType v) { internalArray[currentSize++] = v; }
-        
+
         public void Insert(int index, dataType value)
         {
             insert_at(index, value);
@@ -296,9 +319,9 @@ namespace MatterHackers.Agg
         public void inc_size(int size) { currentSize += size; }
         public int size() { return currentSize; }
 
-        public dataType this[int i] 
-        { 
-            get 
+        public dataType this[int i]
+        {
+            get
             {
                 return internalArray[i];
             }
@@ -321,7 +344,7 @@ namespace MatterHackers.Agg
         public void clear() { currentSize = 0; }
         public void cut_at(int num) { if (num < currentSize) currentSize = num; }
 
-        public int Length 
+        public int Length
         {
             get
             {
@@ -355,13 +378,13 @@ namespace MatterHackers.Agg
 
         public VectorPOD_RangeAdaptor(VectorPOD<int> array, int start, int size)
         {
-            m_array=(array);
-            m_start=(start);
-            m_size=(size);
+            m_array = (array);
+            m_start = (start);
+            m_size = (size);
         }
 
         public int size() { return m_size; }
-        public int this[int i] 
+        public int this[int i]
         {
             get
             {

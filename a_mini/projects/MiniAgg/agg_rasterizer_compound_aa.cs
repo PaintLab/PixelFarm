@@ -150,6 +150,7 @@ namespace MatterHackers.Agg
             cell.left = (int)left;
             cell.right = (int)right;
             m_Rasterizer.style(cell);
+
             if(left  >= 0 && left  < m_min_style) m_min_style = left;
             if(left  >= 0 && left  > m_max_style) m_max_style = left;
             if(right >= 0 && right < m_min_style) m_min_style = right;

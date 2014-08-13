@@ -33,7 +33,7 @@ using System.Text;
 
 namespace MatterHackers.Agg
 {
-    public class QuickSort_cell_aa
+    class QuickSort_cell_aa
     {
         public QuickSort_cell_aa()
         {
@@ -41,7 +41,7 @@ namespace MatterHackers.Agg
 
         public void Sort(cell_aa[] dataToSort)
         {
-            Sort(dataToSort, 0, (int)(dataToSort.Length- 1));
+            Sort(dataToSort, 0, dataToSort.Length - 1);
         }
 
         public void Sort(cell_aa[] dataToSort, int beg, int end)
@@ -68,41 +68,44 @@ namespace MatterHackers.Agg
         private int getPivotPoint(cell_aa[] dataToSort, int begPoint, int endPoint)
         {
             int pivot = begPoint;
-            int m = begPoint+1;
+            int m = begPoint + 1;
             int n = endPoint;
+
+            var x_at_PivotPoint = dataToSort[pivot].x;
+
             while ((m < endPoint)
-                && dataToSort[pivot].x >= dataToSort[m].x)
+                && x_at_PivotPoint >= dataToSort[m].x)
             {
                 m++;
             }
 
-            while ((n > begPoint) && (dataToSort[pivot].x <= dataToSort[n].x))
+            while ((n > begPoint) && (x_at_PivotPoint <= dataToSort[n].x))
             {
                 n--;
             }
             while (m < n)
             {
+                //swap data between m and n
                 cell_aa temp = dataToSort[m];
                 dataToSort[m] = dataToSort[n];
                 dataToSort[n] = temp;
 
-                while ((m < endPoint) && (dataToSort[pivot].x >= dataToSort[m].x))
+                while ((m < endPoint) && (x_at_PivotPoint >= dataToSort[m].x))
                 {
                     m++;
                 }
 
-                while ((n > begPoint) && (dataToSort[pivot].x <= dataToSort[n].x))
+                while ((n > begPoint) && (x_at_PivotPoint <= dataToSort[n].x))
                 {
                     n--;
-                }
-
+                } 
             }
             if (pivot != n)
             {
                 cell_aa temp2 = dataToSort[n];
                 dataToSort[n] = dataToSort[pivot];
                 dataToSort[pivot] = temp2;
-                
+
             }
             return n;
         }
@@ -145,6 +148,7 @@ namespace MatterHackers.Agg
             int pivot = begPoint;
             int m = begPoint + 1;
             int n = endPoint;
+
             while ((m < endPoint)
                 && dataToSort[pivot] >= dataToSort[m])
             {

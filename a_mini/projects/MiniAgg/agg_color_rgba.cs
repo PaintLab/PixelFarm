@@ -731,7 +731,7 @@ namespace MatterHackers.Agg
         }
         public RGBA_Bytes(byte r_, byte g_, byte b_, byte a_)
         {
-            //clamp value with bitwise 
+            
             red = r_;
             green = g_;
             blue = b_;
