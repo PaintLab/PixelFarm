@@ -34,10 +34,10 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        void init_span(int len)
-        {
-            init_span(len, cover_full);
-        }
+        //void init_span(int len)
+        //{
+        //    init_span(len, cover_full);
+        //}
 
         void init_span(int len, byte cover)
         {

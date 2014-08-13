@@ -33,7 +33,7 @@
 using System;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
-using filling_rule_e = MatterHackers.Agg.agg_basics.filling_rule_e;
+using filling_rule_e = MatterHackers.Agg.filling_rule_e;
 using status = MatterHackers.Agg.ScanlineRasterizer.status;
 using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e;
 
@@ -85,13 +85,13 @@ namespace MatterHackers.Agg
         void add_path(IVertexSource vs, int pathID);
         bool rewind_scanlines();
     }
-    
+
     public sealed class ScanlineRasterizer : IRasterizer
     {
         private rasterizer_cells_aa m_outline;
         private VectorClipper m_VectorClipper;
         private int[] m_gamma = new int[(int)aa_scale_e.aa_scale];
-        private agg_basics.filling_rule_e m_filling_rule;
+        private filling_rule_e m_filling_rule;
         private bool m_auto_close;
         private int m_start_x;
         private int m_start_y;
@@ -108,14 +108,15 @@ namespace MatterHackers.Agg
 
         public enum aa_scale_e
         {
-            aa_shift  = 8,
-            aa_scale  = 1 << aa_shift,
-            aa_mask   = aa_scale - 1,
+            aa_shift = 8,
+            aa_scale = 1 << aa_shift,
+            aa_mask = aa_scale - 1,
             aa_scale2 = aa_scale * 2,
-            aa_mask2  = aa_scale2 - 1
+            aa_mask2 = aa_scale2 - 1
         };
 
-        public ScanlineRasterizer() : this(new VectorClipper())
+        public ScanlineRasterizer()
+            : this(new VectorClipper())
         {
         }
 
@@ -153,8 +154,8 @@ namespace MatterHackers.Agg
 
         //--------------------------------------------------------------------
         public void reset()
-        { 
-            m_outline.reset(); 
+        {
+            m_outline.reset();
             m_status = status.status_initial;
         }
 
@@ -181,13 +182,13 @@ namespace MatterHackers.Agg
         public void SetVectorClipBox(double x1, double y1, double x2, double y2)
         {
             reset();
-            m_VectorClipper.clip_box(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1), 
+            m_VectorClipper.clip_box(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1),
                                m_VectorClipper.upscale(x2), m_VectorClipper.upscale(y2));
         }
 
-        public void filling_rule(agg_basics.filling_rule_e filling_rule)
-        { 
-            m_filling_rule = filling_rule; 
+        public void filling_rule(filling_rule_e filling_rule)
+        {
+            m_filling_rule = filling_rule;
         }
 
         public void auto_close(bool flag) { m_auto_close = flag; }
@@ -195,27 +196,27 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public void gamma(IGammaFunction gamma_function)
         {
-            
-             for (int i = 0; i < (int)aa_scale_e.aa_scale; i++)
-             {
-             	m_gamma[i] = (int)agg_basics.uround(
+
+            for (int i = 0; i < (int)aa_scale_e.aa_scale; i++)
+            {
+                m_gamma[i] = (int)agg_basics.uround(
                     gamma_function.GetGamma((double)(i) / (int)aa_scale_e.aa_mask) * (int)aa_scale_e.aa_mask);
-             }
+            }
         }
 
         /*
         //--------------------------------------------------------------------
         public int apply_gamma(int cover) 
         { 
-        	return (int)m_gamma[cover];
+            return (int)m_gamma[cover];
         }
          */
 
         //--------------------------------------------------------------------
         void move_to(int x, int y)
         {
-            if(m_outline.sorted()) reset();
-            if(m_auto_close) close_polygon();
+            if (m_outline.sorted()) reset();
+            if (m_auto_close) close_polygon();
             m_VectorClipper.move_to(m_start_x = m_VectorClipper.downscale(x),
                               m_start_y = m_VectorClipper.downscale(y));
             m_status = status.status_move_to;
@@ -231,21 +232,21 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        public void move_to_d(double x, double y) 
-        { 
-            if(m_outline.sorted()) reset();
-            if(m_auto_close) close_polygon();
+        public void move_to_d(double x, double y)
+        {
+            if (m_outline.sorted()) reset();
+            if (m_auto_close) close_polygon();
             m_VectorClipper.move_to(m_start_x = m_VectorClipper.upscale(x),
                               m_start_y = m_VectorClipper.upscale(y));
             m_status = status.status_move_to;
         }
 
         //------------------------------------------------------------------------
-        public void line_to_d(double x, double y) 
-        { 
+        public void line_to_d(double x, double y)
+        {
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.upscale(x),
-                              m_VectorClipper.upscale(y)); 
+                              m_VectorClipper.upscale(y));
             m_status = status.status_line_to;
         }
 
@@ -282,19 +283,19 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         void edge(int x1, int y1, int x2, int y2)
         {
-            if(m_outline.sorted()) reset();
+            if (m_outline.sorted()) reset();
             m_VectorClipper.move_to(m_VectorClipper.downscale(x1), m_VectorClipper.downscale(y1));
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.downscale(x2),
                               m_VectorClipper.downscale(y2));
             m_status = status.status_move_to;
         }
-        
+
         //------------------------------------------------------------------------
         void edge_d(double x1, double y1, double x2, double y2)
         {
-            if(m_outline.sorted()) reset();
-            m_VectorClipper.move_to(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1)); 
+            if (m_outline.sorted()) reset();
+            m_VectorClipper.move_to(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1));
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.upscale(x2),
                               m_VectorClipper.upscale(y2));
@@ -339,7 +340,7 @@ namespace MatterHackers.Agg
             }
 #endif
         }
-        
+
         //--------------------------------------------------------------------
         public int min_x() { return m_outline.min_x(); }
         public int min_y() { return m_outline.min_y(); }
@@ -349,16 +350,16 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         void sort()
         {
-            if(m_auto_close) close_polygon();
+            if (m_auto_close) close_polygon();
             m_outline.sort_cells();
         }
 
         //------------------------------------------------------------------------
         public bool rewind_scanlines()
         {
-            if(m_auto_close) close_polygon();
+            if (m_auto_close) close_polygon();
             m_outline.sort_cells();
-            if (m_outline.total_cells() == 0) 
+            if (m_outline.total_cells() == 0)
             {
                 return false;
             }
@@ -369,11 +370,11 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         bool navigate_scanline(int y)
         {
-            if(m_auto_close) close_polygon();
+            if (m_auto_close) close_polygon();
             m_outline.sort_cells();
-            if(m_outline.total_cells() == 0 || 
-               y < m_outline.min_y() || 
-               y > m_outline.max_y()) 
+            if (m_outline.total_cells() == 0 ||
+               y < m_outline.min_y() ||
+               y > m_outline.max_y())
             {
                 return false;
             }
@@ -411,7 +412,7 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public bool sweep_scanline(IScanlineCache scanlineCache)
         {
-            for(;;)
+            for (; ; )
             {
                 if (m_scan_y > m_outline.max_y())
                 {
@@ -425,17 +426,17 @@ namespace MatterHackers.Agg
                 m_outline.scanline_cells(m_scan_y, out cells, out Offset);
                 int cover = 0;
 
-                while(num_cells != 0)
+                while (num_cells != 0)
                 {
                     cell_aa cur_cell = cells[Offset];
-                    int x    = cur_cell.x;
+                    int x = cur_cell.x;
                     int area = cur_cell.area;
                     int alpha;
 
                     cover += cur_cell.cover;
 
                     //accumulate all cells with the same X
-                    while(--num_cells != 0)
+                    while (--num_cells != 0)
                     {
                         Offset++;
                         cur_cell = cells[Offset];
@@ -444,30 +445,30 @@ namespace MatterHackers.Agg
                             break;
                         }
 
-                        area  += cur_cell.area;
+                        area += cur_cell.area;
                         cover += cur_cell.cover;
                     }
 
-                    if(area != 0)
+                    if (area != 0)
                     {
                         alpha = calculate_alpha((cover << ((int)poly_subpixel_scale_e.poly_subpixel_shift + 1)) - area);
-                        if(alpha != 0)
+                        if (alpha != 0)
                         {
                             scanlineCache.add_cell(x, alpha);
                         }
                         x++;
                     }
 
-                    if((num_cells != 0) && (cur_cell.x > x))
+                    if ((num_cells != 0) && (cur_cell.x > x))
                     {
                         alpha = calculate_alpha(cover << ((int)poly_subpixel_scale_e.poly_subpixel_shift + 1));
-                        if(alpha != 0)
+                        if (alpha != 0)
                         {
                             scanlineCache.add_span(x, (cur_cell.x - x), alpha);
                         }
                     }
                 }
-        
+
                 if (scanlineCache.num_spans() != 0) break;
                 ++m_scan_y;
             }
@@ -480,7 +481,7 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         bool hit_test(int tx, int ty)
         {
-            if(!navigate_scanline(ty)) return false;
+            if (!navigate_scanline(ty)) return false;
             //scanline_hit_test sl(tx);
             //sweep_scanline(sl);
             //return sl.hit();

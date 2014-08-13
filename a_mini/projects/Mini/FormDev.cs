@@ -68,7 +68,7 @@ namespace Mini
         private void button1_Click(object sender, EventArgs e)
         {
             //--------------
-             
+
 
             //test01
             var lionShape = new MatterHackers.Agg.LionShape();
@@ -139,6 +139,14 @@ namespace Mini
 
         private void button2_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            MatterHackers.Agg.NativeBufferMan natBuffMan = new MatterHackers.Agg.NativeBufferMan(1024);
+
+            natBuffMan.MemSet(0, 0, 100);
 
         }
 

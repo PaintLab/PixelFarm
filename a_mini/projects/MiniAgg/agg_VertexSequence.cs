@@ -66,12 +66,12 @@ namespace MatterHackers.Agg
     {
         public override void add(VertexDistance val)
         {
-            if(base.size() > 1)
+            if (base.size() > 1)
             {
-                if (!Array[base.size() - 2].IsEqual(Array[base.size() - 1])) 
-                 {
-                     base.RemoveLast();
-                 }
+                if (!Array[base.size() - 2].IsEqual(Array[base.size() - 1]))
+                {
+                    base.RemoveLast();
+                }
             }
             base.add(val);
         }
@@ -84,7 +84,7 @@ namespace MatterHackers.Agg
 
         public void close(bool closed)
         {
-            while(base.size() > 1)
+            while (base.size() > 1)
             {
                 if (Array[base.size() - 2].IsEqual(Array[base.size() - 1])) break;
                 VertexDistance t = this[base.size() - 1];
@@ -92,9 +92,9 @@ namespace MatterHackers.Agg
                 modify_last(t);
             }
 
-            if(closed)
+            if (closed)
             {
-                while(base.size() > 1)
+                while (base.size() > 1)
                 {
                     if (Array[base.size() - 1].IsEqual(Array[0])) break;
                     base.RemoveLast();
@@ -125,7 +125,7 @@ namespace MatterHackers.Agg
     public struct VertexDistance
     {
         public double x;
-        public double   y;
+        public double y;
         public double dist;
 
         public VertexDistance(double x_, double y_)
@@ -138,7 +138,7 @@ namespace MatterHackers.Agg
         public bool IsEqual(VertexDistance val)
         {
             bool ret = (dist = agg_math.calc_distance(x, y, val.x, val.y)) > agg_math.vertex_dist_epsilon;
-            if(!ret) dist = 1.0 / agg_math.vertex_dist_epsilon;
+            if (!ret) dist = 1.0 / agg_math.vertex_dist_epsilon;
             return ret;
         }
     }

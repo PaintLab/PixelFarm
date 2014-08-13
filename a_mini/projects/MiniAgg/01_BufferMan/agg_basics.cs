@@ -24,16 +24,18 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
 {
+    public enum filling_rule_e
+    {
+        fill_non_zero,
+        fill_even_odd
+    }
+
+
     static public class agg_basics
     {
         //----------------------------------------------------------filling_rule_e
-        public enum filling_rule_e
-        {
-            fill_non_zero,
-            fill_even_odd
-        }
 
-        public static void memcpy(Byte[] dest, int destIndex, Byte[] source, int sourceIndex, int count)
+        public static void memcpy(byte[] dest, int destIndex, Byte[] source, int sourceIndex, int count)
         {
 #if USE_UNSAFE
 #else
@@ -45,26 +47,26 @@ namespace MatterHackers.Agg
 #endif
         }
 
-        public static int ComputeHash(byte[] data)
-        {
-            unchecked
-            {
-                const int p = 16777619;
-                int hash = (int)2166136261;
+        //public static int ComputeHash(byte[] data)
+        //{
+        //    unchecked
+        //    {
+        //        const int p = 16777619;
+        //        int hash = (int)2166136261;
 
-                for (int i = 0; i < data.Length; i++)
-                {
-                    hash = (hash ^ data[i]) * p;
-                }
+        //        for (int i = 0; i < data.Length; i++)
+        //        {
+        //            hash = (hash ^ data[i]) * p;
+        //        }
 
-                hash += hash << 13;
-                hash ^= hash >> 7;
-                hash += hash << 3;
-                hash ^= hash >> 17;
-                hash += hash << 5;
-                return hash;
-            }
-        }
+        //        hash += hash << 13;
+        //        hash ^= hash >> 7;
+        //        hash += hash << 3;
+        //        hash ^= hash >> 17;
+        //        hash += hash << 5;
+        //        return hash;
+        //    }
+        //}
 
         public static void memcpy(int[] dest, int destIndex, int[] source, int sourceIndex, int count)
         {
@@ -117,7 +119,7 @@ namespace MatterHackers.Agg
                     dest[destIndex + i] = source[sourceIndex + i];
                 }
                  */
-            } 
+            }
         }
 
         public static void memmove(float[] dest, int destIndex, float[] source, int sourceIndex, int Count)
@@ -204,8 +206,8 @@ namespace MatterHackers.Agg
                                         *cur = byteValue;
                                         cur--;
                                         count--;
-                                    } 
-                                } 
+                                    }
+                                }
                             } break;
                     }
                 }

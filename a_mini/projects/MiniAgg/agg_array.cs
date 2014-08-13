@@ -146,20 +146,20 @@ namespace MatterHackers.Agg
             Allocate(capacity, extraTail);
         }
 
-        public virtual void Remove(int indexToRemove)
-        {
-            if (indexToRemove >= Length)
-            {
-                throw new Exception("requested remove past end of array");
-            }
+        //public virtual void Remove(int indexToRemove)
+        //{
+        //    if (indexToRemove >= Length)
+        //    {
+        //        throw new Exception("requested remove past end of array");
+        //    }
 
-            for (int i = indexToRemove; i < Length - 1; i++)
-            {
-                internalArray[i] = internalArray[i + 1];
-            }
+        //    for (int i = indexToRemove; i < Length - 1; i++)
+        //    {
+        //        internalArray[i] = internalArray[i + 1];
+        //    }
 
-            currentSize--;
-        }
+        //    currentSize--;
+        //}
 
         public virtual void RemoveLast()
         {
@@ -339,16 +339,16 @@ namespace MatterHackers.Agg
             currentSize = 0;
         }
 
-        public void Remove(dataType itemToRemove)
-        {
-            for (int i = 0; i < Length; i++)
-            {
-                if ((object)internalArray[i] == (object)itemToRemove)
-                {
-                    Remove(i);
-                }
-            }
-        }
+        //public void Remove(dataType itemToRemove)
+        //{
+        //    for (int i = 0; i < Length; i++)
+        //    {
+        //        if ((object)internalArray[i] == (object)itemToRemove)
+        //        {
+        //            Remove(i);
+        //        }
+        //    }
+        //}
     }
 
     //----------------------------------------------------------range_adaptor

@@ -32,10 +32,10 @@ namespace MatterHackers.Agg
         {
             return agg_basics.iround(x * LineAABasics.line_subpixel_scale, LineAABasics.line_max_coord);
         }
-    };
+    } 
 
     //==========================================================line_parameters
-    public struct line_parameters
+    public class line_parameters
     {
         //---------------------------------------------------------------------
         public int x1, y1, x2, y2, dx, dy, sx, sy;
@@ -73,18 +73,18 @@ namespace MatterHackers.Agg
         //---------------------------------------------------------------------
         public line_parameters(int x1_, int y1_, int x2_, int y2_, int len_)
         {
-            x1=(x1_);
-            y1=(y1_);
-            x2=(x2_);
-            y2=(y2_);
-            dx=(Math.Abs(x2_ - x1_));
-            dy=(Math.Abs(y2_ - y1_));
-            sx=((x2_ > x1_) ? 1 : -1);
-            sy=((y2_ > y1_) ? 1 : -1);
-            vertical=(dy >= dx);
-            inc=(vertical ? sy : sx);
-            len=(len_);
-            octant=((sy & 4) | (sx & 2) | (vertical ? 1 : 0));
+            x1 = (x1_);
+            y1 = (y1_);
+            x2 = (x2_);
+            y2 = (y2_);
+            dx = (Math.Abs(x2_ - x1_));
+            dy = (Math.Abs(y2_ - y1_));
+            sx = ((x2_ > x1_) ? 1 : -1);
+            sy = ((y2_ > y1_) ? 1 : -1);
+            vertical = (dy >= dx);
+            inc = (vertical ? sy : sx);
+            len = (len_);
+            octant = ((sy & 4) | (sx & 2) | (vertical ? 1 : 0));
         }
 
         //---------------------------------------------------------------------
@@ -182,7 +182,7 @@ namespace MatterHackers.Agg
                 y = (l2.y1 + l2.y1 - (l2.x1 - l1.x1) - (l2.x2 - l2.x1)) >> 1;
                 return;
             }
-            
+
             x = agg_basics.iround(tx);
             y = agg_basics.iround(ty);
         }

@@ -42,12 +42,16 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
+    <Compile Include="BorderDouble.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
+    <Compile Include="Image\FloodFiller.cs" />
     <Compile Include="Image\Gray.cs" />
     <Compile Include="Image\ImageSequence.cs" />
     <Compile Include="Image\ImageTgaIO.cs" />
     <Compile Include="Image\RecursiveBlur.cs" />
     <Compile Include="StringHelper.cs" />
+    <Compile Include="UnitTests2.cs" />
+    <Compile Include="VertexSource\agg_bspline.cs" />
     <Compile Include="VertexSource\agg_curves.cs" />
     <Compile Include="VertexSource\agg_gsv_text.cs" />
     <Compile Include="VertexSource\agg_span_gouraud.cs" />

@@ -243,21 +243,7 @@ namespace MatterHackers.Agg
             get { return (Right - Left) / 2; }
         }
 
-        public void Inflate(BorderDouble borderDouble)
-        {
-            Left -= borderDouble.Left;
-            Right += borderDouble.Right;
-            Bottom -= borderDouble.Bottom;
-            Top += borderDouble.Top;
-        }
-
-        public void Deflate(BorderDouble borderDouble)
-        {
-            Left += borderDouble.Left;
-            Right -= borderDouble.Right;
-            Bottom += borderDouble.Bottom;
-            Top -= borderDouble.Top;
-        }
+        
 
         public override string ToString()
         {
