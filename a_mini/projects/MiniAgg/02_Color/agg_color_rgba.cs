@@ -646,6 +646,18 @@ namespace MatterHackers.Agg
 
     public struct RGBA_Bytes : IColorType
     {
+        //--------------
+        //BGRA *** 
+        public byte blue;
+        public byte green;
+        public byte red;
+        public byte alpha;
+
+
+
+
+
+
         public const int COVER_SHIFT = 8;
         public const int COVER_SIZE = 1 << COVER_SHIFT;  //----cover_size 
         public const int COVER_MASK = COVER_SIZE - 1;    //----cover_mask 
@@ -656,10 +668,8 @@ namespace MatterHackers.Agg
         public const int BASE_SCALE = (1 << BASE_SHIFT);
         public const int BASE_MASK = (BASE_SCALE - 1);
 
-        public byte blue;
-        public byte green;
-        public byte red;
-        public byte alpha;
+
+        
 
         public static readonly RGBA_Bytes White = new RGBA_Bytes(255, 255, 255, 255);
         public static readonly RGBA_Bytes LightGray = new RGBA_Bytes(225, 225, 225, 255);

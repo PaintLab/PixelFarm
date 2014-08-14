@@ -402,7 +402,7 @@ namespace MatterHackers.Agg.Image
         }
 
         public int StrideInBytes() { return strideInBytes; }
-        public int StrideInBytesAbs() { return System.Math.Abs(strideInBytes); }
+        
         public int GetBytesBetweenPixelsInclusive() { return m_DistanceInBytesBetweenPixelsInclusive; }
         public int BitDepth
         {
@@ -459,10 +459,10 @@ namespace MatterHackers.Agg.Image
                         --i;
                         cur--;
                         //--------------------
-                    } 
+                    }
                 }
             }
-            
+
         }
 
         public void FlipY()
@@ -808,7 +808,7 @@ namespace MatterHackers.Agg.Image
         {
             int bufferOffset = GetBufferOffsetXY(x, y);
 
-            int ScanWidth = StrideInBytesAbs();
+            int ScanWidth = System.Math.Abs(StrideInBytes());
             if (!firstCoverForAll)
             {
                 do

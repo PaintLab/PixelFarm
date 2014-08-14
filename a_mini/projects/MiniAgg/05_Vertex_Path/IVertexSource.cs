@@ -23,14 +23,15 @@ namespace MatterHackers.Agg.VertexSource
 {
     public struct VertexData
     {
+        public ShapePath.FlagsAndCommand command;
+        public Vector2 position;
+
         public VertexData(ShapePath.FlagsAndCommand command, Vector2 position)
         {
             this.command = command;
             this.position = position;
         }
 
-        public ShapePath.FlagsAndCommand command;
-        public Vector2 position;
 
         public bool IsMoveTo
         {

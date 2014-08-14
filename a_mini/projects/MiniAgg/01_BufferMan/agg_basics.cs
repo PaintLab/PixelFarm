@@ -39,7 +39,7 @@ namespace MatterHackers.Agg
             int destIndex, byte[] source,
             int sourceIndex, int count)
         {
-            NativeBufferMan.MemCopy(dest, destIndex, source, sourceIndex, count);
+            NativeBufferMethods.MemCopy(dest, destIndex, source, sourceIndex, count);
 
             //#if USE_UNSAFE
             //#else
@@ -155,7 +155,7 @@ namespace MatterHackers.Agg
 
         public static void memset(byte[] dest, int destIndex, byte byteValue, int count)
         {
-            NativeBufferMan.MemSet(dest, destIndex, byteValue, count);
+            NativeBufferMethods.MemSet(dest, destIndex, byteValue, count);
             //unsafe
             //{
             //    fixed (byte* head = &dest[0])
@@ -230,7 +230,7 @@ namespace MatterHackers.Agg
 
         public static void MemClear(Byte[] dest, int destIndex, int count)
         {
-            NativeBufferMan.MemSet(dest, destIndex, 0, count);
+            NativeBufferMethods.MemSet(dest, destIndex, 0, count);
 
             //unsafe
             //{
@@ -288,8 +288,7 @@ namespace MatterHackers.Agg
 
         public static bool is_equal_eps(double v1, double v2, double epsilon)
         {
-
-            return Math.Abs(v1 - v2) <= (double)(epsilon);
+            return Math.Abs(v1 - v2) <= (epsilon);
         }
 
         //------------------------------------------------------------------deg2rad

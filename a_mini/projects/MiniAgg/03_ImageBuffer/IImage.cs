@@ -28,25 +28,20 @@ namespace MatterHackers.Agg.Image
             get;
             set;
         }
-
-        int BitDepth { get; }
-
+        int BitDepth { get; } 
         int Width { get; }
         int Height { get; }
-        RectangleInt GetBounds();
-
+        RectangleInt GetBounds(); 
         int GetBufferOffsetY(int y);
-        int GetBufferOffsetXY(int x, int y);
-
-        Graphics2D NewGraphics2D();
-
+        int GetBufferOffsetXY(int x, int y); 
+        Graphics2D NewGraphics2D(); 
         void MarkImageChanged();
     }
 
     public interface IImageByte : IImage
     {
         int StrideInBytes();
-        int StrideInBytesAbs();
+         
 
         IRecieveBlenderByte GetRecieveBlender();
         void SetRecieveBlender(IRecieveBlenderByte value);

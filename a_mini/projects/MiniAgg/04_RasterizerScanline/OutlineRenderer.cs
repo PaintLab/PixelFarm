@@ -1213,7 +1213,7 @@ namespace MatterHackers.Agg
         const int aa_scale = 1 << aa_shift;
         const int aa_mask = aa_scale - 1;
 
-        ArrayPOD<byte> m_profile = new ArrayPOD<byte>();
+        ArrayPOD<byte, byte> m_profile = new ArrayPOD<byte, byte>(64);
         byte[] m_gamma = new byte[aa_scale];
         int m_subpixel_width;
         double m_min_width;

@@ -76,11 +76,7 @@ namespace MatterHackers.Agg.Image
         {
             return linkedImage.StrideInBytes();
         }
-
-        public virtual int StrideInBytesAbs()
-        {
-            return linkedImage.StrideInBytesAbs();
-        }
+ 
 
         public virtual RectangleInt GetBounds()
         {

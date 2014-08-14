@@ -84,20 +84,30 @@ namespace MatterHackers.Agg
 
         public void close(bool closed)
         {
-            while (base.size() > 1)
+            int snapSize = base.size();
+            while (snapSize > 1)
             {
-                if (Array[base.size() - 2].IsEqual(Array[base.size() - 1])) break;
-                VertexDistance t = this[base.size() - 1];
+                if (Array[snapSize - 2].IsEqual(Array[snapSize - 1]))
+                {
+                    break;
+                }
+                VertexDistance t = this[snapSize - 1];
                 base.RemoveLast();
+                snapSize--;
                 modify_last(t);
             }
 
             if (closed)
             {
-                while (base.size() > 1)
+                snapSize = base.size();
+                while (snapSize > 1)
                 {
-                    if (Array[base.size() - 1].IsEqual(Array[0])) break;
+                    if (Array[snapSize - 1].IsEqual(Array[0]))
+                    {
+                        break;
+                    }
                     base.RemoveLast();
+                    snapSize--;
                 }
             }
         }
@@ -132,13 +142,15 @@ namespace MatterHackers.Agg
         {
             x = x_;
             y = y_;
-            dist = 0.0;
+            dist = 0;
         }
-
         public bool IsEqual(VertexDistance val)
         {
             bool ret = (dist = agg_math.calc_distance(x, y, val.x, val.y)) > agg_math.vertex_dist_epsilon;
-            if (!ret) dist = 1.0 / agg_math.vertex_dist_epsilon;
+            if (!ret)
+            {
+                dist = 1.0 / agg_math.vertex_dist_epsilon;
+            }
             return ret;
         }
     }

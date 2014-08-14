@@ -29,13 +29,13 @@ namespace MatterHackers.Agg
     public interface IAlphaMask
     {
         byte pixel(int x, int y);
-        byte combine_pixel(int x, int y, byte val);
+       // byte combine_pixel(int x, int y, byte val);
         void fill_hspan(int x, int y, byte[] dst, int dstIndex, int num_pix);
         void fill_vspan(int x, int y, byte[] dst, int dstIndex, int num_pix);
         void combine_hspanFullCover(int x, int y, byte[] dst, int dstIndex, int num_pix);
         void combine_hspan(int x, int y, byte[] dst, int dstIndex, int num_pix);
         void combine_vspan(int x, int y, byte[] dst, int dstIndex, int num_pix);
-    };
+    }
 
     public sealed class AlphaMaskByteUnclipped : IAlphaMask
     {
@@ -65,15 +65,15 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public byte combine_pixel(int x, int y, byte val)
-        {
-            unchecked
-            {
-                int bufferIndex = m_rbuf.GetBufferOffsetXY(x, y);
-                byte[] buffer = m_rbuf.GetBuffer();
-                return (byte)((255 + val * buffer[bufferIndex]) >> 8);
-            }
-        }
+        //public byte combine_pixel(int x, int y, byte val)
+        //{
+        //    unchecked
+        //    {
+        //        int bufferIndex = m_rbuf.GetBufferOffsetXY(x, y);
+        //        byte[] buffer = m_rbuf.GetBuffer();
+        //        return (byte)((255 + val * buffer[bufferIndex]) >> 8);
+        //    }
+        //}
 
         public void fill_hspan(int x, int y, byte[] dst, int dstIndex, int num_pix)
         {
@@ -180,20 +180,20 @@ namespace MatterHackers.Agg
             return 0;
         }
 
-        public byte combine_pixel(int x, int y, byte val)
-        {
-            unchecked
-            {
-                if ((uint)x < (uint)m_rbuf.Width
-                    && (uint)y < (uint)m_rbuf.Height)
-                {
-                    int bufferIndex = m_rbuf.GetBufferOffsetXY(x, y);
-                    byte[] buffer = m_rbuf.GetBuffer();
-                    return (byte)((val * buffer[bufferIndex] + 255) >> 8);
-                }
-            }
-            return 0;
-        }
+        //public byte combine_pixel(int x, int y, byte val)
+        //{
+        //    unchecked
+        //    {
+        //        if ((uint)x < (uint)m_rbuf.Width
+        //            && (uint)y < (uint)m_rbuf.Height)
+        //        {
+        //            int bufferIndex = m_rbuf.GetBufferOffsetXY(x, y);
+        //            byte[] buffer = m_rbuf.GetBuffer();
+        //            return (byte)((val * buffer[bufferIndex] + 255) >> 8);
+        //        }
+        //    }
+        //    return 0;
+        //}
 
         public void fill_hspan(int x, int y, byte[] dst, int dstIndex, int num_pix)
         {
@@ -335,13 +335,34 @@ namespace MatterHackers.Agg
 
             int maskIndex = m_rbuf.GetBufferOffsetXY(x, y);
             byte[] mask = m_rbuf.GetBuffer();
-            do
+            unsafe
             {
-                covers[coversIndex] = (byte)(((covers[coversIndex]) * mask[maskIndex] + 255) >> 8);
-                coversIndex++;
-                maskIndex++;
+                fixed (byte* maskHead = &mask[maskIndex])
+                fixed (byte* coverHead = &covers[coversIndex])
+                {
+                    byte* c_mask_index = maskHead;
+                    byte* c_cover_index = coverHead;
+                    do
+                    {
+                        *c_cover_index = (byte)((*c_cover_index * (*c_mask_index) + 255) >> 8);
+
+                        c_cover_index++;
+                        c_mask_index++;
+                        //covers[coversIndex] = (byte)(((covers[coversIndex]) * mask[maskIndex] + 255) >> 8);
+                        //coversIndex++;
+                        //maskIndex++;
+                    }
+                    while (--count != 0);
+                }
+
+                //do
+                //{
+                //    covers[coversIndex] = (byte)(((covers[coversIndex]) * mask[maskIndex] + 255) >> 8);
+                //    coversIndex++;
+                //    maskIndex++;
+                //}
+                //while (--count != 0);
             }
-            while (--count != 0);
         }
 
         public void fill_vspan(int x, int y, byte[] buffer, int bufferIndex, int num_pix)
