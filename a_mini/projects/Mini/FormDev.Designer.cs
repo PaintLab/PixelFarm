@@ -53,13 +53,13 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(266, 339);
+            this.button2.Location = new System.Drawing.Point(417, 413);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(150, 32);
             this.button2.TabIndex = 2;
-            this.button2.Text = "Create-Save-Load";
+            this.button2.Text = "Test Filter";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // FormDev
             // 

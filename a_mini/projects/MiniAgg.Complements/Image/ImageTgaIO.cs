@@ -105,70 +105,70 @@ namespace MatterHackers.Agg.Image
 
         static unsafe void Do24To24Bit(byte[] Dest, byte[] Source, int SourceOffset, int Width, int Height)
         {
-	        if (Width > 0) 
-	        {
+            if (Width > 0)
+            {
                 int DestOffset = Height * Width * 3;
                 for (int i = 0; i < Width * 3; i++)
                 {
-                    Dest[DestOffset+i] = Source[SourceOffset+i];
+                    Dest[DestOffset + i] = Source[SourceOffset + i];
                 }
-	        }
+            }
         }
 
         static unsafe void Do32To24Bit(byte[] Dest, byte[] Source, int SourceOffset, int Width, int Height)
         {
-	        if (Width > 0) 
-	        {
-		        int i = 0;
-		        int DestOffest = Height * Width * 3;
-		        do 
-		        {
+            if (Width > 0)
+            {
+                int i = 0;
+                int DestOffest = Height * Width * 3;
+                do
+                {
                     Dest[DestOffest + i * 3 + RGB_BLUE] = Source[SourceOffset + RGB_BLUE];
                     Dest[DestOffest + i * 3 + RGB_GREEN] = Source[SourceOffset + RGB_GREEN];
                     Dest[DestOffest + i * 3 + RGB_RED] = Source[SourceOffset + RGB_RED];
                     SourceOffset += 4;
-		        } while (++i < Width);
-	        }
+                } while (++i < Width);
+            }
         }
 
         static unsafe void Do24To32Bit(byte[] Dest, byte[] Source, int SourceOffset, int Width, int Height)
         {
-	        if (Width > 0) 
-	        {
-		        int i = 0;
+            if (Width > 0)
+            {
+                int i = 0;
                 int DestOffest = Height * Width * 4;
-		        do 
-		        {
+                do
+                {
                     Dest[DestOffest + i * 4 + RGB_BLUE] = Source[SourceOffset + RGB_BLUE];
                     Dest[DestOffest + i * 4 + RGB_GREEN] = Source[SourceOffset + RGB_GREEN];
                     Dest[DestOffest + i * 4 + RGB_RED] = Source[SourceOffset + RGB_RED];
                     Dest[DestOffest + i * 4 + 3] = 255;
-			        SourceOffset += 3;
-		        } while (++i < Width);
-	        }
+                    SourceOffset += 3;
+                } while (++i < Width);
+            }
         }
 
         static unsafe void Do32To32Bit(byte[] Dest, byte[] Source, int SourceOffset, int Width, int Height)
         {
-	        if (Width > 0) 
-	        {
-		        int i = 0;
+            if (Width > 0)
+            {
+                int i = 0;
                 int DestOffest = Height * Width * 4;
-                do 
-		        {
+                do
+                {
                     Dest[DestOffest + RGB_BLUE] = Source[SourceOffset + RGB_BLUE];
                     Dest[DestOffest + RGB_GREEN] = Source[SourceOffset + RGB_GREEN];
                     Dest[DestOffest + RGB_RED] = Source[SourceOffset + RGB_RED];
                     Dest[DestOffest + RGBA_ALPHA] = Source[SourceOffset + RGBA_ALPHA];
-			        SourceOffset += 4;
+                    SourceOffset += 4;
                     DestOffest += 4;
-		        } while (++i < Width);
-	        }
+                } while (++i < Width);
+            }
         }
 
         static bool ReadTGAInfo(byte[] WorkPtr, out STargaHeader TargaHeader)
         {
-	        TargaHeader.PostHeaderSkip = WorkPtr[0];
+            TargaHeader.PostHeaderSkip = WorkPtr[0];
             TargaHeader.ColorMapType = WorkPtr[1];
             TargaHeader.ImageType = WorkPtr[2];
             TargaHeader.ColorMapStart = BitConverter.ToUInt16(WorkPtr, 3);
@@ -181,14 +181,14 @@ namespace MatterHackers.Agg.Image
             TargaHeader.BPP = WorkPtr[16];
             TargaHeader.Descriptor = WorkPtr[17];
 
-        	
 
-	        // check the header
+
+            // check the header
             if (TargaHeader.ColorMapType != 0 ||	// 0 = RGB, 1 = Palette
-		        // 1 = Palette, 2 = RGB, 3 = mono, 9 = RLE Palette, 10 = RLE RGB, 11 RLE mono
+                // 1 = Palette, 2 = RGB, 3 = mono, 9 = RLE Palette, 10 = RLE RGB, 11 RLE mono
                 (TargaHeader.ImageType != 2 && TargaHeader.ImageType != 10 && TargaHeader.ImageType != 9) ||
                 (TargaHeader.BPP != 24 && TargaHeader.BPP != 32))
-	        {
+            {
 #if ASSERTS_ENABLED
 		        if ( ((byte*)pTargaHeader)[0] == 'B' && ((byte*)pTargaHeader)[1] == 'M' )
 		        {
@@ -242,9 +242,9 @@ namespace MatterHackers.Agg.Image
 		        }
 #endif // ASSERTS_ENABLED
                 return false;
-	        }
+            }
 
-	        return true;
+            return true;
         }
 
         const int IS_PIXLE_RUN = 0x80;
@@ -468,7 +468,7 @@ namespace MatterHackers.Agg.Image
         const int MAX_RUN_LENGTH = 127;
         static int memcmp(byte[] pCheck, int CheckOffset, byte[] pSource, int SourceOffset, int Width)
         {
-            for(int i=0; i<Width; i++)
+            for (int i = 0; i < Width; i++)
             {
                 if (pCheck[CheckOffset + i] < pSource[SourceOffset + i])
                 {
@@ -487,28 +487,28 @@ namespace MatterHackers.Agg.Image
         {
             int Count = 0;
             while (memcmp(checkBufer, checkOffset, sourceBuffer, sourceOffsetToNextPixel, numBytesInPixel) == 0 && Count < maxSameLengthWidth)
-	        {
-		        Count++;
+            {
+                Count++;
                 sourceOffsetToNextPixel += numBytesInPixel;
-	        }
+            }
 
-	        return Count;
+            return Count;
         }
 
         static int GetDifLength(byte[] pCheck, byte[] pSource, int SourceOffset, int numBytesInPixel, int Max)
         {
             int Count = 0;
             while (memcmp(pCheck, 0, pSource, SourceOffset, numBytesInPixel) != 0 && Count < Max)
-	        {
-		        Count++;
+            {
+                Count++;
                 for (int i = 0; i < numBytesInPixel; i++)
-		        {
-                    pCheck[i] = pSource[SourceOffset+i];
-		        }
+                {
+                    pCheck[i] = pSource[SourceOffset + i];
+                }
                 SourceOffset += numBytesInPixel;
             }
 
-	        return Count;
+            return Count;
         }
 
         const int MIN_RUN_LENGTH = 2;
@@ -519,35 +519,35 @@ namespace MatterHackers.Agg.Image
             int pixelsProcessed = 0;
 
             while (pixelsProcessed < Width)
-	        {
-		        // always get as many as you can that are the same first
+            {
+                // always get as many as you can that are the same first
                 int Max = System.Math.Min(MAX_RUN_LENGTH, (Width - 1) - pixelsProcessed);
                 int SameLength = GetSameLength(sourceBuffer, sourceOffset, sourceBuffer, sourceOffset + 1, 1, Max);
-		        if(SameLength >= MIN_RUN_LENGTH)
-		        //if(SameLength)
-		        {
-			        // write in the count
+                if (SameLength >= MIN_RUN_LENGTH)
+                //if(SameLength)
+                {
+                    // write in the count
                     if (SameLength > MAX_RUN_LENGTH)
                     {
                         throw new System.Exception("Bad Length");
                     }
                     destBuffer[WritePos++] = (byte)((SameLength) | IS_PIXLE_RUN);
 
-			        // write in the same length pixel value
-			        destBuffer[WritePos++] = sourceBuffer[sourceOffset];
+                    // write in the same length pixel value
+                    destBuffer[WritePos++] = sourceBuffer[sourceOffset];
 
                     pixelsProcessed += SameLength + 1;
-		        }
-		        else
-		        {
+                }
+                else
+                {
                     byte CheckPixel = sourceBuffer[sourceOffset];
                     int DifLength = Max;
 
                     if (DifLength == 0)
-			        {
-				        DifLength = 1;
-			        }
-			        // write in the count (if there is only one the count is 0)
+                    {
+                        DifLength = 1;
+                    }
+                    // write in the count (if there is only one the count is 0)
                     if (DifLength > MAX_RUN_LENGTH)
                     {
                         throw new System.Exception("Bad Length");
@@ -555,16 +555,16 @@ namespace MatterHackers.Agg.Image
 
                     destBuffer[WritePos++] = (byte)(DifLength - 1);
 
-			        while(DifLength-- != 0)
-			        {
-				        // write in the same length pixel value
-				        destBuffer[WritePos++] = sourceBuffer[sourceOffset++];
+                    while (DifLength-- != 0)
+                    {
+                        // write in the same length pixel value
+                        destBuffer[WritePos++] = sourceBuffer[sourceOffset++];
                         pixelsProcessed++;
-			        }
-		        }
-	        }
+                    }
+                }
+            }
 
-	        return WritePos;
+            return WritePos;
         }
 
         static byte[] differenceHold = new byte[4];
@@ -575,49 +575,49 @@ namespace MatterHackers.Agg.Image
             int pixelsProcessed = 0;
 
             while (pixelsProcessed < Width)
-	        {
-		        // always get as many as you can that are the same first
+            {
+                // always get as many as you can that are the same first
                 int Max = System.Math.Min(MAX_RUN_LENGTH, (Width - 1) - pixelsProcessed);
                 int SameLength = GetSameLength(sourceBuffer, sourceOffset, sourceBuffer, sourceOffset + 3, 3, Max);
-		        if(SameLength > 0)
-		        {
-			        // write in the count
+                if (SameLength > 0)
+                {
+                    // write in the count
                     if (SameLength > MAX_RUN_LENGTH)
                     {
                         throw new Exception();
                     }
 
-			        destBuffer[WritePos++] = (byte)((SameLength) | IS_PIXLE_RUN);
+                    destBuffer[WritePos++] = (byte)((SameLength) | IS_PIXLE_RUN);
 
-			        // write in the same length pixel value
+                    // write in the same length pixel value
                     destBuffer[WritePos++] = sourceBuffer[sourceOffset + 0];
                     destBuffer[WritePos++] = sourceBuffer[sourceOffset + 1];
                     destBuffer[WritePos++] = sourceBuffer[sourceOffset + 2];
 
                     sourceOffset += (SameLength) * 3;
-			        pixelsProcessed += SameLength + 1;
-		        }
-		        else
-		        {
+                    pixelsProcessed += SameLength + 1;
+                }
+                else
+                {
                     differenceHold[0] = sourceBuffer[sourceOffset + 0];
                     differenceHold[1] = sourceBuffer[sourceOffset + 1];
                     differenceHold[2] = sourceBuffer[sourceOffset + 2];
                     int DifLength = GetDifLength(differenceHold, sourceBuffer, sourceOffset + 3, 3, Max);
-			        if(DifLength == 0)
-			        {
-				        DifLength = 1;
-			        }
+                    if (DifLength == 0)
+                    {
+                        DifLength = 1;
+                    }
 
-			        // write in the count (if there is only one the count is 0)
+                    // write in the count (if there is only one the count is 0)
                     if (SameLength > MAX_RUN_LENGTH)
                     {
                         throw new Exception();
                     }
                     destBuffer[WritePos++] = (byte)(DifLength - 1);
 
-			        while(DifLength-- > 0)
-			        {
-				        // write in the same length pixel value
+                    while (DifLength-- > 0)
+                    {
+                        // write in the same length pixel value
                         destBuffer[WritePos++] = sourceBuffer[sourceOffset + 0];
                         destBuffer[WritePos++] = sourceBuffer[sourceOffset + 1];
                         destBuffer[WritePos++] = sourceBuffer[sourceOffset + 2];
@@ -625,10 +625,10 @@ namespace MatterHackers.Agg.Image
                         sourceOffset += 3;
                         pixelsProcessed++;
                     }
-		        }
-	        }
+                }
+            }
 
-	        return WritePos;
+            return WritePos;
         }
 
         static int CompressLine32(byte[] destBuffer, byte[] sourceBuffer, int sourceOffset, int Width)
@@ -695,51 +695,51 @@ namespace MatterHackers.Agg.Image
 
             return WritePos;
             /*
-	        while(SourcePos < Width)
-	        {
-		        // always get as many as you can that are the same first
+            while(SourcePos < Width)
+            {
+                // always get as many as you can that are the same first
                 int Max = System.Math.Min(MAX_RUN_LENGTH, (Width - 1) - SourcePos);
                 int SameLength = GetSameLength((byte*)&pSource[SourcePos], (byte*)&pSource[SourcePos + 1], 4, Max);
-		        if(SameLength)
-		        {
-			        // write in the count
-			        assert(SameLength<= MAX_RUN_LENGTH);
-			        pDest[WritePos++] = (byte)((SameLength) | IS_PIXLE_RUN);
+                if(SameLength)
+                {
+                    // write in the count
+                    assert(SameLength<= MAX_RUN_LENGTH);
+                    pDest[WritePos++] = (byte)((SameLength) | IS_PIXLE_RUN);
 
-			        // write in the same length pixel value
-			        pDest[WritePos++] = pSource[SourcePos].Blue;
-			        pDest[WritePos++] = pSource[SourcePos].Green;
-			        pDest[WritePos++] = pSource[SourcePos].Red;
-			        pDest[WritePos++] = pSource[SourcePos].Alpha;
+                    // write in the same length pixel value
+                    pDest[WritePos++] = pSource[SourcePos].Blue;
+                    pDest[WritePos++] = pSource[SourcePos].Green;
+                    pDest[WritePos++] = pSource[SourcePos].Red;
+                    pDest[WritePos++] = pSource[SourcePos].Alpha;
 
-			        SourcePos += SameLength + 1;
-		        }
-		        else
-		        {
-			        Pixel32 CheckPixel = pSource[SourcePos];
-			        int DifLength = GetDifLength((byte*)&CheckPixel, (byte*)&pSource[SourcePos+1], 4, Max);
-			        if(!DifLength)
-			        {
-				        DifLength = 1;
-			        }
+                    SourcePos += SameLength + 1;
+                }
+                else
+                {
+                    Pixel32 CheckPixel = pSource[SourcePos];
+                    int DifLength = GetDifLength((byte*)&CheckPixel, (byte*)&pSource[SourcePos+1], 4, Max);
+                    if(!DifLength)
+                    {
+                        DifLength = 1;
+                    }
 
-			        // write in the count (if there is only one the count is 0)
-			        assert(DifLength <= MAX_RUN_LENGTH);
-			        pDest[WritePos++] = (byte)(DifLength-1);
+                    // write in the count (if there is only one the count is 0)
+                    assert(DifLength <= MAX_RUN_LENGTH);
+                    pDest[WritePos++] = (byte)(DifLength-1);
 
-			        while(DifLength--)
-			        {
-				        // write in the same length pixel value
-				        pDest[WritePos++] = pSource[SourcePos].Blue;
-				        pDest[WritePos++] = pSource[SourcePos].Green;
-				        pDest[WritePos++] = pSource[SourcePos].Red;
-				        pDest[WritePos++] = pSource[SourcePos].Alpha;
-				        SourcePos++;
-			        }
-		        }
-	        }
+                    while(DifLength--)
+                    {
+                        // write in the same length pixel value
+                        pDest[WritePos++] = pSource[SourcePos].Blue;
+                        pDest[WritePos++] = pSource[SourcePos].Green;
+                        pDest[WritePos++] = pSource[SourcePos].Red;
+                        pDest[WritePos++] = pSource[SourcePos].Alpha;
+                        SourcePos++;
+                    }
+                }
+            }
 
-	        return WritePos;
+            return WritePos;
              */
         }
 
@@ -756,119 +756,119 @@ namespace MatterHackers.Agg.Image
 
         static public bool Save(ImageBuffer image, Stream streamToSaveImageDataTo)
         {
-	        STargaHeader TargaHeader;
+            STargaHeader TargaHeader;
 
             BinaryWriter writerToSaveTo = new BinaryWriter(streamToSaveImageDataTo);
 
-	        int SourceDepth = image.BitDepth;
+            int SourceDepth = image.BitDepth;
 
-	        // make sure there is something to save before opening the file
-	        if(image.Width <= 0 || image.Height <= 0)
-	        {
+            // make sure there is something to save before opening the file
+            if (image.Width <= 0 || image.Height <= 0)
+            {
                 return false;
             }
 
-	        // set up the header
-	        TargaHeader.PostHeaderSkip = 0;	// no skip after the header
-	        if(SourceDepth == 8)
-	        {
-		        TargaHeader.ColorMapType = 1;		// Color type is Palette
-		        TargaHeader.ImageType = 9;		// 1 = Palette, 9 = RLE Palette
-		        TargaHeader.ColorMapStart = 0;
-		        TargaHeader.ColorMapLength = 256;
-		        TargaHeader.ColorMapBits = 24;
-	        }
-	        else
-	        {
-		        TargaHeader.ColorMapType = 0;		// Color type is RGB
+            // set up the header
+            TargaHeader.PostHeaderSkip = 0;	// no skip after the header
+            if (SourceDepth == 8)
+            {
+                TargaHeader.ColorMapType = 1;		// Color type is Palette
+                TargaHeader.ImageType = 9;		// 1 = Palette, 9 = RLE Palette
+                TargaHeader.ColorMapStart = 0;
+                TargaHeader.ColorMapLength = 256;
+                TargaHeader.ColorMapBits = 24;
+            }
+            else
+            {
+                TargaHeader.ColorMapType = 0;		// Color type is RGB
 #if WRITE_RLE_COMPRESSED
 		        TargaHeader.ImageType = 10;		// RLE RGB
 #else
-		        TargaHeader.ImageType = 2;		// RGB
+                TargaHeader.ImageType = 2;		// RGB
 #endif
-		        TargaHeader.ColorMapStart = 0;
-		        TargaHeader.ColorMapLength = 0;
-		        TargaHeader.ColorMapBits = 0;
-	        }
-	        TargaHeader.XStart = 0;
-	        TargaHeader.YStart = 0;
-	        TargaHeader.Width = (ushort)image.Width;
+                TargaHeader.ColorMapStart = 0;
+                TargaHeader.ColorMapLength = 0;
+                TargaHeader.ColorMapBits = 0;
+            }
+            TargaHeader.XStart = 0;
+            TargaHeader.YStart = 0;
+            TargaHeader.Width = (ushort)image.Width;
             TargaHeader.Height = (ushort)image.Height;
-	        TargaHeader.BPP = (byte)SourceDepth;
-	        TargaHeader.Descriptor = 0;	// all 8 bits are used for alpha
+            TargaHeader.BPP = (byte)SourceDepth;
+            TargaHeader.Descriptor = 0;	// all 8 bits are used for alpha
 
             TargaHeader.BinaryWrite(writerToSaveTo);
 
-	        byte[] pLineBuffer = new byte[image.StrideInBytesAbs() * 2];
+            byte[] pLineBuffer = new byte[Math.Abs(image.StrideInBytes()) * 2];
 
-	        //int BytesToSave;
-	        switch(SourceDepth)
-	        {
-	        case 8:
+            //int BytesToSave;
+            switch (SourceDepth)
+            {
+                case 8:
                     /*
                 if (image.HasPalette())
-		        {
-			        for(int i=0; i<256; i++)
-			        {
+                {
+                    for(int i=0; i<256; i++)
+                    {
                         TGAFile.Write(image.GetPaletteIfAllocated()->pPalette[i * RGB_SIZE + RGB_BLUE]);
                         TGAFile.Write(image.GetPaletteIfAllocated()->pPalette[i * RGB_SIZE + RGB_GREEN]);
                         TGAFile.Write(image.GetPaletteIfAllocated()->pPalette[i * RGB_SIZE + RGB_RED]);
-			        }
-		        } 
-		        else 
+                    }
+                } 
+                else 
                      */
-		        {	// there is no palette for this DIB but we should write something
-			        for(int i=0; i<256; i++)
-			        {
-				        writerToSaveTo.Write((byte)i);
-                        writerToSaveTo.Write((byte)i);
-                        writerToSaveTo.Write((byte)i);
-			        }
-		        }
-                for (int i = 0; i < image.Height; i++)
-		        {
-                    int bufferOffset;
-                    byte[] buffer = image.GetPixelPointerY(i, out bufferOffset);
+                    {	// there is no palette for this DIB but we should write something
+                        for (int i = 0; i < 256; i++)
+                        {
+                            writerToSaveTo.Write((byte)i);
+                            writerToSaveTo.Write((byte)i);
+                            writerToSaveTo.Write((byte)i);
+                        }
+                    }
+                    for (int i = 0; i < image.Height; i++)
+                    {
+                        int bufferOffset;
+                        byte[] buffer = image.GetPixelPointerY(i, out bufferOffset);
 #if WRITE_RLE_COMPRESSED
                     BytesToSave = CompressLine8(pLineBuffer, buffer, bufferOffset, image.Width());
 			        writerToSaveTo.Write(pLineBuffer, 0, BytesToSave);
 #else
-                    writerToSaveTo.Write(buffer, bufferOffset, image.Width);
+                        writerToSaveTo.Write(buffer, bufferOffset, image.Width);
 #endif
-                }
-		        break;
+                    }
+                    break;
 
-	        case 24:
-                for (int i = 0; i<image.Height; i++)
-		        {
-                    int bufferOffset;
-                    byte[] buffer = image.GetPixelPointerY(i, out bufferOffset);
+                case 24:
+                    for (int i = 0; i < image.Height; i++)
+                    {
+                        int bufferOffset;
+                        byte[] buffer = image.GetPixelPointerY(i, out bufferOffset);
 #if WRITE_RLE_COMPRESSED
                     BytesToSave = CompressLine24(pLineBuffer, buffer, bufferOffset, image.Width());
                     writerToSaveTo.Write(pLineBuffer, 0, BytesToSave);
 #else
-                    writerToSaveTo.Write(buffer, bufferOffset, image.Width * 3);
+                        writerToSaveTo.Write(buffer, bufferOffset, image.Width * 3);
 #endif
-                }
-		        break;
+                    }
+                    break;
 
-	        case 32:
-                for (int i = 0; i < image.Height; i++)
-		        {
-                    int bufferOffset;
-                    byte[] buffer = image.GetPixelPointerY(i, out bufferOffset);
+                case 32:
+                    for (int i = 0; i < image.Height; i++)
+                    {
+                        int bufferOffset;
+                        byte[] buffer = image.GetPixelPointerY(i, out bufferOffset);
 #if WRITE_RLE_COMPRESSED
                     BytesToSave = CompressLine32(pLineBuffer, buffer, bufferOffset, image.Width);
                     writerToSaveTo.Write(pLineBuffer, 0, BytesToSave);
 #else
-                    writerToSaveTo.Write(buffer, bufferOffset, image.Width * 4);
+                        writerToSaveTo.Write(buffer, bufferOffset, image.Width * 4);
 #endif
-                }
-		        break;
+                    }
+                    break;
 
-	        default:
-                throw new NotSupportedException();
-	        }
+                default:
+                    throw new NotSupportedException();
+            }
 
             writerToSaveTo.Close();
             return true;
@@ -877,25 +877,25 @@ namespace MatterHackers.Agg.Image
         /*
         bool SourceNeedsToBeResaved(String pFileName)
         {
-	        CFile TGAFile;
-	        if(TGAFile.Open(pFileName, CFile::modeRead))
-	        {
-		        STargaHeader TargaHeader;
-		        byte[] pWorkPtr = new byte[sizeof(STargaHeader)];
+            CFile TGAFile;
+            if(TGAFile.Open(pFileName, CFile::modeRead))
+            {
+                STargaHeader TargaHeader;
+                byte[] pWorkPtr = new byte[sizeof(STargaHeader)];
 
-		        TGAFile.Read(pWorkPtr, sizeof(STargaHeader));
-		        TGAFile.Close();
+                TGAFile.Read(pWorkPtr, sizeof(STargaHeader));
+                TGAFile.Close();
 
-		        if(ReadTGAInfo(pWorkPtr, &TargaHeader))
-		        {
-			        ArrayDeleteAndSetNull(pWorkPtr);
-			        return TargaHeader.ImageType != 10;
-		        }
+                if(ReadTGAInfo(pWorkPtr, &TargaHeader))
+                {
+                    ArrayDeleteAndSetNull(pWorkPtr);
+                    return TargaHeader.ImageType != 10;
+                }
 
-		        ArrayDeleteAndSetNull(pWorkPtr);
-	        }
+                ArrayDeleteAndSetNull(pWorkPtr);
+            }
 
-	        return true;
+            return true;
         }
          */
 
@@ -929,15 +929,15 @@ namespace MatterHackers.Agg.Image
 
         static public int GetBitDepth(Stream streamToReadFrom)
         {
-	        STargaHeader TargaHeader;
+            STargaHeader TargaHeader;
             byte[] ImageData = new byte[streamToReadFrom.Length];
             streamToReadFrom.Read(ImageData, 0, (int)streamToReadFrom.Length);
             if (ReadTGAInfo(ImageData, out TargaHeader))
-	        {
-		        return TargaHeader.BPP;
-	        }
+            {
+                return TargaHeader.BPP;
+            }
 
-	        return 0;
+            return 0;
         }
     }
 }
