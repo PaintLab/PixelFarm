@@ -631,14 +631,445 @@ namespace MatterHackers.Agg.Image
                 }
             }
 #endif
-        } 
-        private void stack_blur_bgra32(ImageBuffer img, int radius, int ry)
+        }
+
+
+        class BlurStack
         {
+            public int r;
+            public int g;
+            public int b;
+            public int a;
+            public BlurStack() { }
+            public BlurStack(byte r, byte g, byte b, byte a)
+            {
+                this.r = r;
+                this.g = g;
+                this.b = b;
+                this.a = a;
+            }
+        }
+
+        class CircularBlurStack
+        {
+            int currentHeadIndex;
+            int currentTailIndex;
+
+            int size;
+            BlurStack[] blurValues;
+            public CircularBlurStack(int size)
+            {
+                this.size = size;
+                this.blurValues = new BlurStack[size];
+                this.currentHeadIndex = 0;
+                this.currentTailIndex = size - 1;
+                for (int i = size - 1; i >= 0; --i)
+                {
+                    blurValues[i] = new BlurStack();
+
+                }
+            }
+            public void Prepare(int count, int r, int g, int b, int a)
+            {
+
+                this.currentHeadIndex = 0;
+                this.currentTailIndex = size - 1;
+                for (int i = 0; i < count; ++i)
+                {
+                    blurValues[i] = new BlurStack((byte)r, (byte)g, (byte)b, (byte)a);
+                    this.Next();
+                }
+
+            }
+            public void ResetHeadTailPosition()
+            {
+                this.currentHeadIndex = 0;
+                this.currentTailIndex = size - 1;
+            }
+            public void Next()
+            {
+
+                //--------------------------
+                if (currentHeadIndex + 1 < size)
+                {
+                    currentHeadIndex++;
+                }
+                else
+                {
+                    currentHeadIndex = 0;
+                }
+                //--------------------------
+
+                if (currentTailIndex + 1 < size)
+                {
+                    currentTailIndex++;
+                }
+                else
+                {
+                    currentTailIndex = 0;
+                }
+            }
+            public BlurStack CurrentHeadColor
+            {
+                get
+                {
+                    return this.blurValues[this.currentHeadIndex];
+                }
+            }
+            public BlurStack CurrentTailColor
+            {
+                get
+                {
+                    return this.blurValues[this.currentTailIndex];
+                }
+            }
 
 
         }
 
-             
+        private void stack_blur_bgra32(ImageBuffer img, int radius, int ry)
+        {
+            //
+            //
+            int width = img.Width;
+            int w4 = img.Width * 4;
+            int height = img.Height;
+            int[] srcBuffer = new int[width * height];
+            int i = 0;
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    RGBA_Bytes px = img.GetPixel(x, y);
+                    srcBuffer[i] = px.blue |
+                                   (px.green << 8) |
+                                   (px.red << 16);
+                    i++;
+                }
+            }
+
+
+            int[] destBuffer = new int[srcBuffer.Length];
+            StackBlurARGB.FastBlur32ARGB(srcBuffer, destBuffer, img.Width, img.Height, radius);
+
+
+            i = 0;
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    int dest = destBuffer[i];
+                    img.SetPixel(x, y,
+                       new RGBA_Bytes(
+                           (byte)((dest >> 16) & 0xff),
+                           (byte)((dest >> 8) & 0xff),
+                           (byte)((dest) & 0xff)));
+                    i++;
+                }
+            }
+
+            ////n = 0;
+            //for (i = 0; i < lim; ++i)
+            //{
+            //    int dest = destBuffer[n];
+            //    //buffer1[i] = (byte)((dest >> 24) & 0xff); //R
+            //    //buffer1[i + 1] = (byte)((dest >> 16) & 0xff); //G
+            //    //buffer1[i + 2] = (byte)((dest >> 8) & 0xff);//B
+            //    //buffer1[i + 3] = (byte)((dest) & 0xff); //A 
+
+            //    //from ARGB
+            //    byte b_ = (byte)((dest) & 0xff);
+            //    byte g_ = (byte)((dest >> 8) & 0xff);
+            //    byte r_ = (byte)((dest >> 16) & 0xff);
+            //    byte a_ = (byte)((dest >> 24) & 0xff);
+
+            //    buffer1[i] = b_;
+            //    buffer1[i + 1] = g_;
+            //    buffer1[i + 2] = r_;
+            //    buffer1[i + 3] = a_;
+
+            //    i += 4;
+            //    n++;
+            //}
+            // Buffer.BlockCopy(destBuffer, 0, buffer1, 0, buffer1.Length);
+        }
+
+
+        private void stack_blur_bgra32_2(ImageBuffer img, int radius, int ry)
+        {
+
+
+            //------------------------------------------------------------ 
+            //Original StackBlue  Author:Mario Klingemann 
+            //StackBlur - a fast almost Gaussian Blur For Canvas
+
+            //Version: 	0.5
+            //Author:		Mario Klingemann
+            //Contact: 	mario@quasimondo.com
+            //Website:	http://www.quasimondo.com/StackBlurForCanvas
+            //Twitter:	@quasimondo
+            //(port from js version)
+
+            //------------------------------------------------------------
+            if (radius < 1)
+            {
+                return;
+            }
+            if (radius > 254) radius = 254;
+
+
+            byte[] imgBuffer = img.GetBuffer();
+            //------------------------------------------------------------
+            int r_sum, g_sum, b_sum, a_sum;
+            int r_in_sum, g_in_sum, b_in_sum, a_in_sum;
+            int r_out_sum, g_out_sum, b_out_sum, a_out_sum;
+            //------------------------------------------------------------
+            int p = 0;
+            int width = img.Width; //original img width
+            int height = img.Height;//original img height
+            int div = (radius + radius) + 1;
+
+            int widthMinus1 = width - 1;
+            int heightMinus1 = height - 1;
+            int radiusPlus1 = radius + 1;
+            int sumFactor = radiusPlus1 * (radiusPlus1 + 1) / 2;
+
+            //prepare blur stack             
+            CircularBlurStack circularBlurStack = new CircularBlurStack(div);
+
+            int y = 0;
+            int yp = 0;
+
+            int mul_sum = stack_blur_tables.g_stack_blur8_mul[radius];
+            int shg_sum = stack_blur_tables.g_stack_blur8_shr[radius];
+
+            int yi = 0;
+            int yw = 0;
+
+
+            for (y = 0; y < height; ++y)
+            {
+                int pr, pg, pb, pa;//pixel rgba
+                int rbs;
+
+                //---------------------------------------------------
+                //reset
+                r_in_sum = g_in_sum = b_in_sum = a_in_sum =
+                     r_sum = g_sum = b_sum = a_sum = 0;
+
+
+                r_out_sum = radiusPlus1 * (pr = imgBuffer[yi + (int)order_e.R]);
+                g_out_sum = radiusPlus1 * (pg = imgBuffer[yi + (int)order_e.G]);
+                b_out_sum = radiusPlus1 * (pb = imgBuffer[yi + (int)order_e.B]);
+                a_out_sum = radiusPlus1 * (pa = imgBuffer[yi + (int)order_e.A]);
+
+                r_sum += sumFactor * pr;
+                g_sum += sumFactor * pg;
+                b_sum += sumFactor * pb;
+                a_sum += sumFactor * pa;
+
+                //---------------------------------------------------  
+                //reset to start point and prepare  color values
+                circularBlurStack.ResetHeadTailPosition();
+                circularBlurStack.Prepare(radiusPlus1, pr, pg, pb, pa);
+                //--------------------------------------------------- 
+
+                for (int i = 1; i < radiusPlus1; ++i)
+                {
+                    p = yi + ((widthMinus1 < i ? widthMinus1 : i) << 2);
+                    var stackColor = circularBlurStack.CurrentHeadColor;
+
+                    r_sum += (stackColor.r = (pr = imgBuffer[p + (int)order_e.R])) * (rbs = radiusPlus1 - i);
+                    g_sum += (stackColor.g = (pg = imgBuffer[p + (int)order_e.G])) * rbs;
+                    b_sum += (stackColor.b = (pb = imgBuffer[p + (int)order_e.B])) * rbs;
+                    a_sum += (stackColor.a = (pa = imgBuffer[p + (int)order_e.A])) * rbs;
+
+                    r_in_sum += pr;
+                    g_in_sum += pg;
+                    b_in_sum += pb;
+                    a_in_sum += pa;
+
+                    circularBlurStack.Next();
+                }
+
+                circularBlurStack.ResetHeadTailPosition();
+
+                for (int x = 0; x < width; ++x)
+                {
+                    pa = (a_sum * mul_sum) >> shg_sum;
+                    if (pa != 0)
+                    {
+                        //has alpha 
+                        int pa_under_255 = 255 / 255;
+                        imgBuffer[yi + (int)order_e.R] = (byte)(((r_sum * mul_sum) >> shg_sum) * pa_under_255);
+                        imgBuffer[yi + (int)order_e.G] = (byte)(((g_sum * mul_sum) >> shg_sum) * pa_under_255);
+                        imgBuffer[yi + (int)order_e.B] = (byte)(((b_sum * mul_sum) >> shg_sum) * pa_under_255);
+                        imgBuffer[yi + (int)order_e.A] = (byte)pa;
+
+                    }
+                    else
+                    {
+                        //not visible if alpha =0
+                        imgBuffer[yi + (int)order_e.R] =
+                            imgBuffer[yi + (int)order_e.G] =
+                            imgBuffer[yi + (int)order_e.B] =
+                            imgBuffer[yi + (int)order_e.A] = 0;
+                    }
+
+                    r_sum -= r_out_sum;
+                    g_sum -= g_out_sum;
+                    b_sum -= b_out_sum;
+                    a_sum -= a_out_sum;
+
+                    var stackInColor = circularBlurStack.CurrentHeadColor;
+
+                    r_out_sum -= stackInColor.r;
+                    g_out_sum -= stackInColor.g;
+                    b_out_sum -= stackInColor.b;
+                    a_out_sum -= stackInColor.a;
+
+                    p = (yw + ((p = x + radius + 1) < widthMinus1 ? p : widthMinus1)) << 2;
+
+                    r_in_sum += (stackInColor.r = imgBuffer[p + (int)order_e.R]);
+                    g_in_sum += (stackInColor.g = imgBuffer[p + (int)order_e.G]);
+                    b_in_sum += (stackInColor.b = imgBuffer[p + (int)order_e.B]);
+                    a_in_sum += (stackInColor.a = imgBuffer[p + (int)order_e.A]);
+
+                    r_sum += r_in_sum;
+                    g_sum += g_in_sum;
+                    b_sum += b_in_sum;
+                    a_sum += a_in_sum;
+
+
+                    var stackOutColor = circularBlurStack.CurrentTailColor;
+                    r_out_sum += (pr = stackOutColor.r);
+                    g_out_sum += (pg = stackOutColor.g);
+                    b_out_sum += (pb = stackOutColor.b);
+                    a_out_sum += (pa = stackOutColor.a);
+
+                    r_in_sum -= pr;
+                    g_in_sum -= pg;
+                    b_in_sum -= pb;
+                    a_in_sum -= pa;
+
+                    circularBlurStack.Next();
+                    yi += 4;
+                }
+                yw += width;
+            }
+
+            //end y loop
+            //------  
+            //begin x loop  
+            for (int x = 0; x < width; ++x)
+            {
+
+                r_in_sum = g_in_sum = b_in_sum = a_in_sum
+                    = r_sum = g_sum = b_sum = a_sum = 0;
+
+                yi = x << 2;
+
+                int pr, pg, pb, pa;//pixel rgba
+                int rbs;
+                r_out_sum = radiusPlus1 * (pr = imgBuffer[yi + (int)order_e.R]);
+                g_out_sum = radiusPlus1 * (pg = imgBuffer[yi + (int)order_e.G]);
+                b_out_sum = radiusPlus1 * (pb = imgBuffer[yi + (int)order_e.B]);
+                a_out_sum = radiusPlus1 * (pa = imgBuffer[yi + (int)order_e.A]);
+
+                r_sum += sumFactor * pr;
+                g_sum += sumFactor * pg;
+                b_sum += sumFactor * pb;
+                a_sum += sumFactor * pa;
+
+                circularBlurStack.ResetHeadTailPosition();
+                circularBlurStack.Prepare(radiusPlus1, pr, pg, pb, pa);
+
+                yp = width;
+                for (int i = 1; i <= radius; ++i)
+                {
+                    yi = (yp + x) << 2;
+
+                    var stackColor = circularBlurStack.CurrentHeadColor;
+
+                    r_sum += (stackColor.r = (pr = imgBuffer[yi + (int)order_e.R])) * (rbs = radiusPlus1 - i);
+                    g_sum += (stackColor.g = (pg = imgBuffer[yi + (int)order_e.G])) * rbs;
+                    b_sum += (stackColor.b = (pb = imgBuffer[yi + (int)order_e.B])) * rbs;
+                    a_sum += (stackColor.a = (pa = imgBuffer[yi + (int)order_e.A])) * rbs;
+
+                    r_in_sum += pr;
+                    g_in_sum += pg;
+                    b_in_sum += pb;
+                    a_in_sum += pa;
+
+                    circularBlurStack.Next();
+
+                    if (i < heightMinus1)
+                    {
+                        yp += width;
+                    }
+                }
+                yi = x;
+                circularBlurStack.ResetHeadTailPosition();
+                for (y = 0; y < height; ++y)
+                {
+                    pa = yi << 2;
+                    pa = (a_sum * mul_sum) >> shg_sum;
+
+                    if (pa != 0)
+                    {
+                        //has alpha 
+                        int pa_under_255 = 255 / 255;
+                        imgBuffer[p + (int)order_e.R] = (byte)(((r_sum * mul_sum) >> shg_sum) * pa_under_255);
+                        imgBuffer[p + (int)order_e.G] = (byte)(((g_sum * mul_sum) >> shg_sum) * pa_under_255);
+                        imgBuffer[p + (int)order_e.B] = (byte)(((b_sum * mul_sum) >> shg_sum) * pa_under_255);
+                        imgBuffer[p + (int)order_e.A] = (byte)pa;
+                    }
+                    else
+                    {
+                        //not visible if alpha =0
+                        imgBuffer[p + (int)order_e.R] = 0;
+                        imgBuffer[p + (int)order_e.G] = 0;
+                        imgBuffer[p + (int)order_e.B] = 0;
+                        imgBuffer[p + (int)order_e.A] = 0;
+                    }
+
+                    r_sum -= r_out_sum;
+                    g_sum -= g_out_sum;
+                    b_sum -= b_out_sum;
+                    a_sum -= a_out_sum;
+
+
+                    var stackInColor = circularBlurStack.CurrentHeadColor;
+                    r_out_sum -= stackInColor.r;
+                    g_out_sum -= stackInColor.g;
+                    b_out_sum -= stackInColor.b;
+                    a_out_sum -= stackInColor.a;
+
+                    p = (x + (((p = y + radiusPlus1) < heightMinus1 ? p : heightMinus1) * width)) << 2;
+
+                    r_sum += (r_in_sum += (stackInColor.r = imgBuffer[p + (int)order_e.R]));
+                    g_sum += (g_in_sum += (stackInColor.g = imgBuffer[p + (int)order_e.G]));
+                    b_sum += (b_in_sum += (stackInColor.b = imgBuffer[p + (int)order_e.B]));
+                    a_sum += (a_in_sum += (stackInColor.a = imgBuffer[p + (int)order_e.A]));
+
+                    var stackOutColor = circularBlurStack.CurrentTailColor;
+                    r_out_sum += (pr = stackOutColor.r);
+                    g_out_sum += (pg = stackOutColor.g);
+                    b_out_sum += (pb = stackOutColor.b);
+                    a_out_sum += (pa = stackOutColor.a);
+
+                    r_in_sum -= pr;
+                    g_in_sum -= pg;
+                    b_in_sum -= pb;
+                    a_in_sum -= pa;
+
+                    circularBlurStack.Next();
+
+                    yi += width;
+
+                }
+            }
+        }
 
     }
 

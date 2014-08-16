@@ -60,10 +60,9 @@ namespace MatterHackers.Agg
                 {
                     memcpy(head_dest, head_src, len);
                 }
-            }
-
+            } 
         }
-
+         
 
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
         static unsafe extern void memset(byte* dest, byte c, int byteCount);

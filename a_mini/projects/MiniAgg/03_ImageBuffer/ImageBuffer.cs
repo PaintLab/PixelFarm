@@ -60,9 +60,10 @@ namespace MatterHackers.Agg.Image
         int strideInBytes; // Number of bytes per row. Can be < 0
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
+
         Vector2 m_OriginOffset = new Vector2(0, 0);
 
-        private IRecieveBlenderByte recieveBlender;
+        IRecieveBlenderByte recieveBlender;
 
         const int base_mask = 255;
 
@@ -402,7 +403,7 @@ namespace MatterHackers.Agg.Image
         }
 
         public int StrideInBytes() { return strideInBytes; }
-        
+
         public int GetBytesBetweenPixelsInclusive() { return m_DistanceInBytesBetweenPixelsInclusive; }
         public int BitDepth
         {
