@@ -327,142 +327,144 @@ namespace MatterHackers.Agg.Image
 
         static unsafe int LowLevelReadTGABitsFromBuffer(ImageBuffer imageToReadTo, byte[] wholeFileBuffer, int DestBitDepth)
         {
-            STargaHeader TargaHeader = new STargaHeader();
-            int FileReadOffset;
+            throw new NotSupportedException();
 
-            if (!ReadTGAInfo(wholeFileBuffer, out TargaHeader))
-            {
-                return 0;
-            }
+            //STargaHeader TargaHeader = new STargaHeader();
+            //int FileReadOffset;
 
-            // if the frame we are loading is different then the one we have allocated
-            // or we don't have any bits allocated
+            //if (!ReadTGAInfo(wholeFileBuffer, out TargaHeader))
+            //{
+            //    return 0;
+            //}
 
-            if ((imageToReadTo.Width * imageToReadTo.Height) != (TargaHeader.Width * TargaHeader.Height))
-            {
-                imageToReadTo.Allocate(TargaHeader.Width, TargaHeader.Height, TargaHeader.Width * DestBitDepth / 8, DestBitDepth);
-            }
+            //// if the frame we are loading is different then the one we have allocated
+            //// or we don't have any bits allocated
 
-            // work out the line width
-            switch (imageToReadTo.BitDepth)
-            {
-                case 24:
-                    TGABytesPerLine = imageToReadTo.Width * 3;
-                    if (imageToReadTo.GetRecieveBlender() == null)
-                    {
-                        imageToReadTo.SetRecieveBlender(new BlenderBGR());
-                    }
-                    break;
+            //if ((imageToReadTo.Width * imageToReadTo.Height) != (TargaHeader.Width * TargaHeader.Height))
+            //{
+            //    imageToReadTo.Allocate(TargaHeader.Width, TargaHeader.Height, TargaHeader.Width * DestBitDepth / 8, DestBitDepth);
+            //}
 
-                case 32:
-                    TGABytesPerLine = imageToReadTo.Width * 4;
-                    if (imageToReadTo.GetRecieveBlender() == null)
-                    {
-                        imageToReadTo.SetRecieveBlender(new BlenderBGRA());
-                    }
-                    break;
+            //// work out the line width
+            //switch (imageToReadTo.BitDepth)
+            //{
+            //    case 24:
+            //        TGABytesPerLine = imageToReadTo.Width * 3;
+            //        if (imageToReadTo.GetRecieveBlender() == null)
+            //        {
+            //            imageToReadTo.SetRecieveBlender(new BlenderBGR());
+            //        }
+            //        break;
 
-                default:
-                    throw new System.Exception("Bad bit depth.");
-            }
+            //    case 32:
+            //        TGABytesPerLine = imageToReadTo.Width * 4;
+            //        if (imageToReadTo.GetRecieveBlender() == null)
+            //        {
+            //            imageToReadTo.SetRecieveBlender(new BlenderBGRA());
+            //        }
+            //        break;
 
-            if (TGABytesPerLine > 0)
-            {
-                byte[] BufferToDecompressTo = null;
-                FileReadOffset = TargaHeaderSize + TargaHeader.PostHeaderSkip;
+            //    default:
+            //        throw new System.Exception("Bad bit depth.");
+            //}
 
-                if (TargaHeader.ImageType == 10) // 10 is RLE compressed
-                {
-                    BufferToDecompressTo = new byte[TGABytesPerLine * 2];
-                }
+            //if (TGABytesPerLine > 0)
+            //{
+            //    byte[] BufferToDecompressTo = null;
+            //    FileReadOffset = TargaHeaderSize + TargaHeader.PostHeaderSkip;
 
-                // read all the lines *
-                for (int i = 0; i < imageToReadTo.Height; i++)
-                {
-                    byte[] BufferToCopyFrom;
-                    int CopyOffset = 0;
+            //    if (TargaHeader.ImageType == 10) // 10 is RLE compressed
+            //    {
+            //        BufferToDecompressTo = new byte[TGABytesPerLine * 2];
+            //    }
 
-                    int CurReadLine;
+            //    // read all the lines *
+            //    for (int i = 0; i < imageToReadTo.Height; i++)
+            //    {
+            //        byte[] BufferToCopyFrom;
+            //        int CopyOffset = 0;
 
-                    // bit 5 tells us if the image is stored top to bottom or bottom to top
-                    if ((TargaHeader.Descriptor & 0x20) != 0)
-                    {
-                        // bottom to top
-                        CurReadLine = imageToReadTo.Height - i - 1;
-                    }
-                    else
-                    {
-                        // top to bottom
-                        CurReadLine = i;
-                    }
+            //        int CurReadLine;
 
-                    if (TargaHeader.ImageType == 10) // 10 is RLE compressed
-                    {
-                        FileReadOffset = Decompress(BufferToDecompressTo, wholeFileBuffer, FileReadOffset, imageToReadTo.Width, TargaHeader.BPP, CurReadLine);
-                        BufferToCopyFrom = BufferToDecompressTo;
-                    }
-                    else
-                    {
-                        BufferToCopyFrom = wholeFileBuffer;
-                        CopyOffset = FileReadOffset;
-                    }
+            //        // bit 5 tells us if the image is stored top to bottom or bottom to top
+            //        if ((TargaHeader.Descriptor & 0x20) != 0)
+            //        {
+            //            // bottom to top
+            //            CurReadLine = imageToReadTo.Height - i - 1;
+            //        }
+            //        else
+            //        {
+            //            // top to bottom
+            //            CurReadLine = i;
+            //        }
 
-                    int bufferOffset;
-                    byte[] imageBuffer = imageToReadTo.GetBuffer(out bufferOffset);
+            //        if (TargaHeader.ImageType == 10) // 10 is RLE compressed
+            //        {
+            //            FileReadOffset = Decompress(BufferToDecompressTo, wholeFileBuffer, FileReadOffset, imageToReadTo.Width, TargaHeader.BPP, CurReadLine);
+            //            BufferToCopyFrom = BufferToDecompressTo;
+            //        }
+            //        else
+            //        {
+            //            BufferToCopyFrom = wholeFileBuffer;
+            //            CopyOffset = FileReadOffset;
+            //        }
 
-                    switch (imageToReadTo.BitDepth)
-                    {
-                        case 8:
-                            switch (TargaHeader.BPP)
-                            {
-                                case 24:
-                                    Do24To8Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
-                                    break;
+            //        int bufferOffset;
+            //        byte[] imageBuffer = imageToReadTo.GetBuffer(out bufferOffset);
 
-                                case 32:
-                                    Do32To8Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
-                                    break;
-                            }
-                            break;
+            //        switch (imageToReadTo.BitDepth)
+            //        {
+            //            case 8:
+            //                switch (TargaHeader.BPP)
+            //                {
+            //                    case 24:
+            //                        Do24To8Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
+            //                        break;
 
-                        case 24:
-                            switch (TargaHeader.BPP)
-                            {
-                                case 24:
-                                    Do24To24Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
-                                    break;
+            //                    case 32:
+            //                        Do32To8Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
+            //                        break;
+            //                }
+            //                break;
 
-                                case 32:
-                                    Do32To24Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
-                                    break;
-                            }
-                            break;
+            //            case 24:
+            //                switch (TargaHeader.BPP)
+            //                {
+            //                    case 24:
+            //                        Do24To24Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
+            //                        break;
 
-                        case 32:
-                            switch (TargaHeader.BPP)
-                            {
-                                case 24:
-                                    Do24To32Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
-                                    break;
+            //                    case 32:
+            //                        Do32To24Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
+            //                        break;
+            //                }
+            //                break;
 
-                                case 32:
-                                    Do32To32Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
-                                    break;
-                            }
-                            break;
+            //            case 32:
+            //                switch (TargaHeader.BPP)
+            //                {
+            //                    case 24:
+            //                        Do24To32Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
+            //                        break;
 
-                        default:
-                            throw new System.Exception("Bad bit depth");
-                    }
+            //                    case 32:
+            //                        Do32To32Bit(imageBuffer, BufferToCopyFrom, CopyOffset, imageToReadTo.Width, CurReadLine);
+            //                        break;
+            //                }
+            //                break;
 
-                    if (TargaHeader.ImageType != 10) // 10 is RLE compressed
-                    {
-                        FileReadOffset += TGABytesPerLine;
-                    }
-                }
-            }
+            //            default:
+            //                throw new System.Exception("Bad bit depth");
+            //        }
 
-            return TargaHeader.Width;
+            //        if (TargaHeader.ImageType != 10) // 10 is RLE compressed
+            //        {
+            //            FileReadOffset += TGABytesPerLine;
+            //        }
+            //    }
+            //}
+
+            //return TargaHeader.Width;
         }
 
         const int MAX_RUN_LENGTH = 127;
@@ -900,7 +902,7 @@ namespace MatterHackers.Agg.Image
          */
 
         static public int ReadBitsFromBuffer(ImageBuffer image, byte[] WorkPtr, int destBitDepth)
-        {
+        {  
             return LowLevelReadTGABitsFromBuffer(image, WorkPtr, destBitDepth);
         }
 

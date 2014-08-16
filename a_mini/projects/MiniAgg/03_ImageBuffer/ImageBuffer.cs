@@ -26,6 +26,21 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
+    class InternalImageGraphics2D : ImageGraphics2D
+    {
+        internal InternalImageGraphics2D(ImageBuffer owner)
+            : base()
+        {
+            ScanlineRasterizer rasterizer = new ScanlineRasterizer();
+            ImageClippingProxy imageClippingProxy = new ImageClippingProxy(owner);
+
+            Initialize(imageClippingProxy, rasterizer);
+            ScanlineCache = new ScanlineCachePacked8();
+        }
+    }
+
+
+
     public class ImageBuffer : IImageByte
     {
         public const int OrderB = 0;
@@ -33,23 +48,14 @@ namespace MatterHackers.Agg.Image
         public const int OrderR = 2;
         public const int OrderA = 3;
 
-        class InternalImageGraphics2D : ImageGraphics2D
-        {
-            internal InternalImageGraphics2D(ImageBuffer owner)
-                : base()
-            {
-                ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-                ImageClippingProxy imageClippingProxy = new ImageClippingProxy(owner);
-
-                Initialize(imageClippingProxy, rasterizer);
-                ScanlineCache = new ScanlineCachePacked8();
-            }
-        }
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugGetNewDebugId();
+#endif
 
         int[] yTableArray;
         int[] xTableArray;
         byte[] m_ByteBuffer;
-
 
 
         int bufferOffset; // the beggining of the image in this buffer
@@ -93,27 +99,27 @@ namespace MatterHackers.Agg.Image
             SetRecieveBlender(recieveBlender);
         }
 
-        public ImageBuffer(IImageByte sourceImage, IRecieveBlenderByte recieveBlender)
-        {
-            SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.StrideInBytes(), sourceImage.BitDepth, sourceImage.GetBytesBetweenPixelsInclusive(), true);
-            int offset = sourceImage.GetBufferOffsetXY(0, 0);
-            byte[] buffer = sourceImage.GetBuffer();
-            byte[] newBuffer = new byte[buffer.Length];
-            agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
-            SetBuffer(newBuffer, offset);
-            SetRecieveBlender(recieveBlender);
-        }
+        //public ImageBuffer(IImageByte sourceImage, IRecieveBlenderByte recieveBlender)
+        //{
+        //    SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.StrideInBytes(), sourceImage.BitDepth, sourceImage.GetBytesBetweenPixelsInclusive(), true);
+        //    int offset = sourceImage.GetBufferOffsetXY(0, 0);
+        //    byte[] buffer = sourceImage.GetBuffer();
+        //    byte[] newBuffer = new byte[buffer.Length];
+        //    agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
+        //    SetBuffer(newBuffer, offset);
+        //    SetRecieveBlender(recieveBlender);
+        //}
 
-        public ImageBuffer(ImageBuffer sourceImage)
-        {
-            SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.StrideInBytes(), sourceImage.BitDepth, sourceImage.GetBytesBetweenPixelsInclusive(), true);
-            int offset = sourceImage.GetBufferOffsetXY(0, 0);
-            byte[] buffer = sourceImage.GetBuffer();
-            byte[] newBuffer = new byte[buffer.Length];
-            agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
-            SetBuffer(newBuffer, offset);
-            SetRecieveBlender(sourceImage.GetRecieveBlender());
-        }
+        //public ImageBuffer(ImageBuffer sourceImage)
+        //{
+        //    SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.StrideInBytes(), sourceImage.BitDepth, sourceImage.GetBytesBetweenPixelsInclusive(), true);
+        //    int offset = sourceImage.GetBufferOffsetXY(0, 0);
+        //    byte[] buffer = sourceImage.GetBuffer();
+        //    byte[] newBuffer = new byte[buffer.Length];
+        //    agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
+        //    SetBuffer(newBuffer, offset);
+        //    SetRecieveBlender(sourceImage.GetRecieveBlender());
+        //}
 
         public ImageBuffer(int width, int height, int bitsPerPixel, IRecieveBlenderByte recieveBlender)
         {
@@ -121,12 +127,18 @@ namespace MatterHackers.Agg.Image
             SetRecieveBlender(recieveBlender);
         }
 
-        public void Allocate(int width, int height, int bitsPerPixel, IRecieveBlenderByte recieveBlender)
+        //public void Allocate(int width, int height, int bitsPerPixel, IRecieveBlenderByte recieveBlender)
+        //{
+        //    Allocate(width, height, width * (bitsPerPixel / 8), bitsPerPixel);
+        //    SetRecieveBlender(recieveBlender);
+        //}
+#if DEBUG
+        static int dbugGetNewDebugId()
         {
-            Allocate(width, height, width * (bitsPerPixel / 8), bitsPerPixel);
-            SetRecieveBlender(recieveBlender);
-        }
 
+            return dbugTotalId++;
+        }
+#endif
 #if false
         public ImageBuffer(IImage image, IBlender blender, GammaLookUpTable gammaTable)
         {
@@ -139,16 +151,16 @@ namespace MatterHackers.Agg.Image
         }
 #endif
 
-        public ImageBuffer(IImageByte sourceImageToCopy, IRecieveBlenderByte blender, int distanceBetweenPixelsInclusive, int bufferOffset, int bitsPerPixel)
-        {
-            SetDimmensionAndFormat(sourceImageToCopy.Width, sourceImageToCopy.Height, sourceImageToCopy.StrideInBytes(), bitsPerPixel, distanceBetweenPixelsInclusive, true);
-            int offset = sourceImageToCopy.GetBufferOffsetXY(0, 0);
-            byte[] buffer = sourceImageToCopy.GetBuffer();
-            byte[] newBuffer = new byte[buffer.Length];
-            agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
-            SetBuffer(newBuffer, offset + bufferOffset);
-            SetRecieveBlender(blender);
-        }
+        //public ImageBuffer(IImageByte sourceImageToCopy, IRecieveBlenderByte blender, int distanceBetweenPixelsInclusive, int bufferOffset, int bitsPerPixel)
+        //{
+        //    SetDimmensionAndFormat(sourceImageToCopy.Width, sourceImageToCopy.Height, sourceImageToCopy.StrideInBytes(), bitsPerPixel, distanceBetweenPixelsInclusive, true);
+        //    int offset = sourceImageToCopy.GetBufferOffsetXY(0, 0);
+        //    byte[] buffer = sourceImageToCopy.GetBuffer();
+        //    byte[] newBuffer = new byte[buffer.Length];
+        //    agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
+        //    SetBuffer(newBuffer, offset + bufferOffset);
+        //    SetRecieveBlender(blender);
+        //}
 
         /// <summary>
         /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
@@ -219,22 +231,9 @@ namespace MatterHackers.Agg.Image
             return false;
         }
 
-        public void SetAlpha(byte value)
-        {
-            if (BitDepth != 32)
-            {
-                throw new Exception("You don't have alpha channel to set.  Your image has a bit depth of " + BitDepth.ToString() + ".");
-            }
-            int numPixels = Width * Height;
-            int offset;
-            byte[] buffer = GetBuffer(out offset);
-            for (int i = 0; i < numPixels; i++)
-            {
-                buffer[offset + i * 4 + 3] = value;
-            }
-        }
 
-        private void Deallocate()
+
+        internal void Deallocate()
         {
             if (m_ByteBuffer != null)
             {
@@ -243,7 +242,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void Allocate(int inWidth, int inHeight, int inScanWidthInBytes, int bitsPerPixel)
+        void Allocate(int inWidth, int inHeight, int inScanWidthInBytes, int bitsPerPixel)
         {
             if (inWidth < 1 || inHeight < 1)
             {
@@ -466,18 +465,6 @@ namespace MatterHackers.Agg.Image
 
         }
 
-        public void FlipY()
-        {
-            strideInBytes *= -1;
-            bufferFirstPixel = bufferOffset;
-            if (strideInBytes < 0)
-            {
-                int addAmount = -((int)((int)height - 1) * strideInBytes);
-                bufferFirstPixel = addAmount + bufferOffset;
-            }
-
-            SetUpLookupTables();
-        }
 
         public void SetBuffer(byte[] byteBuffer, int bufferOffset)
         {
@@ -572,6 +559,39 @@ namespace MatterHackers.Agg.Image
             return m_ByteBuffer;
         }
 
+        public static void CopySubBufferTo(ImageBuffer buff, int mx, int my, int w, int h, int[] buffer)
+        {
+            int i = 0;
+            byte[] mBuffer = buff.m_ByteBuffer;
+
+            for (int y = my; y < h; ++y)
+            {
+                //int ybufferOffset = buff.GetBufferOffsetY(y);
+                int xbufferOffset = buff.GetBufferOffsetXY(0, y);
+                for (int x = mx; x < w; ++x)
+                {
+                    //rgba
+                    //RGBA_Bytes px = buff.GetPixel(x, y);
+                    byte r = mBuffer[xbufferOffset + 2];
+                    byte g = mBuffer[xbufferOffset + 1];
+                    byte b = mBuffer[xbufferOffset];
+
+                    //              public const int OrderB = 0;
+                    //public const int OrderG = 1;
+                    //public const int OrderR = 2;
+                    //public const int OrderA = 3;
+                    xbufferOffset += 4;
+
+                    //buffer[i] = px.blue |
+                    //               (px.green << 8) |
+                    //               (px.red << 16);
+                    buffer[i] = b |
+                                  (g << 8) |
+                                  (r << 16);
+                    i++;
+                }
+            }
+        }
         public RGBA_Bytes GetPixel(int x, int y)
         {
             return recieveBlender.PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
@@ -926,228 +946,7 @@ namespace MatterHackers.Agg.Image
                     }
                 }
             }
-        }
-
-        public void CropToVisible()
-        {
-            Vector2 OldOriginOffset = OriginOffset;
-
-            //Move the HotSpot to 0, 0 so PPoint will work the way we want
-            OriginOffset = new Vector2(0, 0);
-
-            RectangleInt visibleBounds;
-            GetVisibleBounds(out visibleBounds);
-
-            if (visibleBounds.Width == Width
-                && visibleBounds.Height == Height)
-            {
-                OriginOffset = OldOriginOffset;
-                return;
-            }
-
-            // check if the Not0Rect has any size
-            if (visibleBounds.Width > 0)
-            {
-                ImageBuffer TempImage = new ImageBuffer();
-
-                // set TempImage equal to the Not0Rect
-                TempImage.Initialize(this, visibleBounds);
-
-                // set the frame equal to the TempImage
-                Initialize(TempImage);
-
-                OriginOffset = new Vector2(-visibleBounds.Left + OldOriginOffset.x, -visibleBounds.Bottom + OldOriginOffset.y);
-            }
-            else
-            {
-                Deallocate();
-            }
-        }
-
-        public static bool operator ==(ImageBuffer a, ImageBuffer b)
-        {
-            if ((object)a == null || (object)b == null)
-            {
-                if ((object)a == null && (object)b == null)
-                {
-                    return true;
-                }
-                return false;
-            }
-            return a.Equals(b, 0);
-        }
-
-        public static bool operator !=(ImageBuffer a, ImageBuffer b)
-        {
-            bool areEqual = a == b;
-            return !areEqual;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() == typeof(ImageBuffer))
-            {
-                return this == (ImageBuffer)obj;
-            }
-            return false;
-        }
-
-        public bool Equals(ImageBuffer b, int maxError = 0)
-        {
-            if (Width == b.Width
-                && Height == b.Height
-                && BitDepth == b.BitDepth
-                && StrideInBytes() == b.StrideInBytes()
-                && m_OriginOffset == b.m_OriginOffset)
-            {
-                int bytesPerPixel = BitDepth / 8;
-                int aDistanceBetweenPixels = GetBytesBetweenPixelsInclusive();
-                int bDistanceBetweenPixels = b.GetBytesBetweenPixelsInclusive();
-                byte[] aBuffer = GetBuffer();
-                byte[] bBuffer = b.GetBuffer();
-                for (int y = 0; y < Height; y++)
-                {
-                    int aBufferOffset = GetBufferOffsetY(y);
-                    int bBufferOffset = b.GetBufferOffsetY(y);
-                    for (int x = 0; x < Width; x++)
-                    {
-                        for (int byteIndex = 0; byteIndex < bytesPerPixel; byteIndex++)
-                        {
-                            byte aByte = aBuffer[aBufferOffset + byteIndex];
-                            byte bByte = bBuffer[bBufferOffset + byteIndex];
-                            if (aByte < (bByte - maxError) || aByte > (bByte + maxError))
-                            {
-                                return false;
-                            }
-                        }
-                        aBufferOffset += aDistanceBetweenPixels;
-                        bBufferOffset += bDistanceBetweenPixels;
-                    }
-                }
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool Contains(ImageBuffer imageToFind, int maxError = 0)
-        {
-            int matchX;
-            int matchY;
-            return Contains(imageToFind, out matchX, out matchY, maxError);
-        }
-
-        public bool Contains(ImageBuffer imageToFind, out int matchX, out int matchY, int maxError = 0)
-        {
-            matchX = 0;
-            matchY = 0;
-            if (Width >= imageToFind.Width
-                && Height >= imageToFind.Height
-                && BitDepth == imageToFind.BitDepth)
-            {
-                int bytesPerPixel = BitDepth / 8;
-                int aDistanceBetweenPixels = GetBytesBetweenPixelsInclusive();
-                int bDistanceBetweenPixels = imageToFind.GetBytesBetweenPixelsInclusive();
-                byte[] thisBuffer = GetBuffer();
-                byte[] containedBuffer = imageToFind.GetBuffer();
-                for (matchY = 0; matchY <= Height - imageToFind.Height; matchY++)
-                {
-                    for (matchX = 0; matchX <= Width - imageToFind.Width; matchX++)
-                    {
-                        bool foundBadMatch = false;
-                        for (int imageToFindY = 0; imageToFindY < imageToFind.Height; imageToFindY++)
-                        {
-                            int thisBufferOffset = GetBufferOffsetXY(matchX, matchY + imageToFindY);
-                            int imageToFindBufferOffset = imageToFind.GetBufferOffsetY(imageToFindY);
-                            for (int imageToFindX = 0; imageToFindX < imageToFind.Width; imageToFindX++)
-                            {
-                                for (int byteIndex = 0; byteIndex < bytesPerPixel; byteIndex++)
-                                {
-                                    byte aByte = thisBuffer[thisBufferOffset + byteIndex];
-                                    byte bByte = containedBuffer[imageToFindBufferOffset + byteIndex];
-                                    if (aByte < (bByte - maxError) || aByte > (bByte + maxError))
-                                    {
-                                        foundBadMatch = true;
-                                        byteIndex = bytesPerPixel;
-                                        imageToFindX = imageToFind.Width;
-                                        imageToFindY = imageToFind.Height;
-                                    }
-                                }
-                                thisBufferOffset += aDistanceBetweenPixels;
-                                imageToFindBufferOffset += bDistanceBetweenPixels;
-                            }
-                        }
-                        if (!foundBadMatch)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public bool FindLeastSquaresMatch(ImageBuffer imageToFind, double maxError)
-        {
-            Vector2 bestPosition;
-            double bestLeastSquares;
-            return FindLeastSquaresMatch(imageToFind, out bestPosition, out bestLeastSquares, maxError);
-        }
-
-        public bool FindLeastSquaresMatch(ImageBuffer imageToFind, out Vector2 bestPosition, out double bestLeastSquares, double maxError = double.MaxValue)
-        {
-            bestPosition = Vector2.Zero;
-            bestLeastSquares = double.MaxValue;
-
-            if (Width >= imageToFind.Width
-                && Height >= imageToFind.Height
-                && BitDepth == imageToFind.BitDepth)
-            {
-                int bytesPerPixel = BitDepth / 8;
-                int aDistanceBetweenPixels = GetBytesBetweenPixelsInclusive();
-                int bDistanceBetweenPixels = imageToFind.GetBytesBetweenPixelsInclusive();
-                byte[] thisBuffer = GetBuffer();
-                byte[] containedBuffer = imageToFind.GetBuffer();
-                for (int matchY = 0; matchY <= Height - imageToFind.Height; matchY++)
-                {
-                    for (int matchX = 0; matchX <= Width - imageToFind.Width; matchX++)
-                    {
-                        double currentLeastSquares = 0;
-
-                        for (int imageToFindY = 0; imageToFindY < imageToFind.Height; imageToFindY++)
-                        {
-                            int thisBufferOffset = GetBufferOffsetXY(matchX, matchY + imageToFindY);
-                            int imageToFindBufferOffset = imageToFind.GetBufferOffsetY(imageToFindY);
-                            for (int imageToFindX = 0; imageToFindX < imageToFind.Width; imageToFindX++)
-                            {
-                                for (int byteIndex = 0; byteIndex < bytesPerPixel; byteIndex++)
-                                {
-                                    byte aByte = thisBuffer[thisBufferOffset + byteIndex];
-                                    byte bByte = containedBuffer[imageToFindBufferOffset + byteIndex];
-                                    int difference = (int)aByte - (int)bByte;
-                                    currentLeastSquares += difference * difference;
-                                }
-                                thisBufferOffset += aDistanceBetweenPixels;
-                                imageToFindBufferOffset += bDistanceBetweenPixels;
-                            }
-                            if (currentLeastSquares > maxError)
-                            {
-                                // stop checking we have too much error.
-                                imageToFindY = imageToFind.Height;
-                            }
-                        }
-                        if (currentLeastSquares < bestLeastSquares)
-                        {
-                            bestPosition = new Vector2(matchX, matchY);
-                            bestLeastSquares = currentLeastSquares;
-                        }
-                    }
-                }
-            }
-
-            return bestLeastSquares <= maxError;
-        }
+        } 
 
         public override int GetHashCode()
         {
@@ -1162,15 +961,14 @@ namespace MatterHackers.Agg.Image
             return boundingRect;
         }
 
-        private void Initialize(ImageBuffer sourceImage)
+        internal void Initialize(ImageBuffer sourceImage)
         {
             RectangleInt sourceBoundingRect = sourceImage.GetBoundingRect();
 
             Initialize(sourceImage, sourceBoundingRect);
             OriginOffset = sourceImage.OriginOffset;
-        }
-
-        private void Initialize(ImageBuffer sourceImage, RectangleInt boundsToCopyFrom)
+        } 
+        internal void Initialize(ImageBuffer sourceImage, RectangleInt boundsToCopyFrom)
         {
             if (sourceImage == this)
             {

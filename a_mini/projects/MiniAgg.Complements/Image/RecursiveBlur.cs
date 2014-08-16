@@ -735,30 +735,32 @@ namespace MatterHackers.Agg.Image
             int w4 = img.Width * 4;
             int height = img.Height;
             int[] srcBuffer = new int[width * height];
+            //img.CopySubBufferTo(0, 0, width, height, srcBuffer);
+            ImageBuffer.CopySubBufferTo(img, 0, 0, width, height, srcBuffer);
+            //int i = 0; 
+            //for (int y = 0; y < height; ++y)
+            //{
+            //    for (int x = 0; x < width; ++x)
+            //    {
+            //        RGBA_Bytes px = img.GetPixel(x, y);
+            //        srcBuffer[i] = px.blue |
+            //                       (px.green << 8) |
+            //                       (px.red << 16);
+            //        i++;
+            //    }
+            //}
+
+
+            //int[] destBuffer = new int[srcBuffer.Length];
+            StackBlurARGB.FastBlur32ARGB(srcBuffer, srcBuffer, img.Width, img.Height, radius);
+
+
             int i = 0;
             for (int y = 0; y < height; ++y)
             {
                 for (int x = 0; x < width; ++x)
                 {
-                    RGBA_Bytes px = img.GetPixel(x, y);
-                    srcBuffer[i] = px.blue |
-                                   (px.green << 8) |
-                                   (px.red << 16);
-                    i++;
-                }
-            }
-
-
-            int[] destBuffer = new int[srcBuffer.Length];
-            StackBlurARGB.FastBlur32ARGB(srcBuffer, destBuffer, img.Width, img.Height, radius);
-
-
-            i = 0;
-            for (int y = 0; y < height; ++y)
-            {
-                for (int x = 0; x < width; ++x)
-                {
-                    int dest = destBuffer[i];
+                    int dest = srcBuffer[i];
                     img.SetPixel(x, y,
                        new RGBA_Bytes(
                            (byte)((dest >> 16) & 0xff),

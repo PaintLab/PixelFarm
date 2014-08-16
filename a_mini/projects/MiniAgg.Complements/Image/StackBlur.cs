@@ -19,27 +19,26 @@ namespace MatterHackers
 
     public static class StackBlurARGB
     {
-        //const int A_SHIFT = 24;
-        //const int R_SHIFT = 16;
-        //const int G_SHIFT = 8;
-        //const int B_SHIFT = 0;
 
-     
-        
-        
+        //-----------------------------------------------
         const int A_SHIFT = 24;
         const int R_SHIFT = 16;
         const int G_SHIFT = 8;
         const int B_SHIFT = 0;
 
-        //const int A_SHIFT = 0;
-        //const int R_SHIFT = 8;
-        //const int G_SHIFT = 16;
-        //const int B_SHIFT = 24;
+        //lookp table cache
+        static byte[] _radius2 = null;
+        static byte[] _radius3 = null;
+        static byte[] _radius4 = null;
+        static byte[] _radius5 = null;
+        static byte[] _radius6 = null;
+        static byte[] _radius7 = null;
+        static byte[] _radius8 = null; 
 
         //------------------------------------------------
         static byte[] PrepareLookupTable(int radius)
         {
+            
             int div = radius + radius + 1;
             var dv = new byte[256 * div];
             for (int i = (256 * div) - 1; i >= 0; --i)

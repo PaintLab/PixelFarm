@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="01_BufferMan\agg_array.cs" />
     <Compile Include="01_BufferMan\agg_basics.cs" />
+    <Compile Include="03_ImageBuffer\ImageBufferHelper.cs" />
     <Compile Include="04_RasterizerScanline\agg_clip_liang_barsky.cs" />
     <Compile Include="02_Color\agg_color_gray.cs" />
     <Compile Include="02_Color\agg_color_rgba.cs" />
