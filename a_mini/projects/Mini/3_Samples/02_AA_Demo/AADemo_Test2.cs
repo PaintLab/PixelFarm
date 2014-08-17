@@ -56,12 +56,14 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             int num_spans = scanLineCache.num_spans();
             ScanlineSpan scanlineSpan = scanLineCache.begin();
             byte[] ManagedCoversArray = scanLineCache.GetCovers();
+            var gfx = Graphics2D.CreateFromImage(destImage);
+
             for (; ; )
             {
                 int x = scanlineSpan.x;
                 int num_pix = scanlineSpan.len;
                 int coverIndex = scanlineSpan.cover_index;
-                var gfx = Graphics2D.CreateFromImage(destImage);
+            
                 do
                 {
                     int a = (ManagedCoversArray[coverIndex++] * color.Alpha0To255) >> 8;
