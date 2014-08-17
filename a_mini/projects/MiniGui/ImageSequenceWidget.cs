@@ -55,7 +55,10 @@ namespace MatterHackers.Agg.UI
                     {
                         // we just turned it on so make sure the update is being called
                         lastTimeUpdated = 0;
-                        runningTime.Restart();
+                        runningTime.Stop();
+                        runningTime.Reset();
+                        runningTime.Start();
+                        //runningTime.Restart();
                         UiThread.RunOnIdle(UpdateGif);
                     }
                 }

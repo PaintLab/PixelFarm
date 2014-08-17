@@ -22,8 +22,14 @@ using System.Collections.Generic;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.Agg.Transform;
-//using MatterHackers.Agg.Font;
 using MatterHackers.VectorMath;
+
+namespace System.Runtime.CompilerServices
+{
+    public class ExtensionAttribute : Attribute
+    {
+    }
+}
 
 namespace MatterHackers.Agg
 {
@@ -109,7 +115,7 @@ namespace MatterHackers.Agg
                 return destImageByte;
             }
         }
-         
+
 
         public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
 
@@ -128,7 +134,7 @@ namespace MatterHackers.Agg
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
-         
+
         public void Render(IVertexSource vertexSource, RGBA_Bytes[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)

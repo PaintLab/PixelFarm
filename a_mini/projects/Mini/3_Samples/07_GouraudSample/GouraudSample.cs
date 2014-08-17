@@ -194,7 +194,10 @@ namespace MatterHackers.Agg.Sample_Gouraud
             {
                 scanline_unpacked_8 sl = new scanline_unpacked_8();
                 ScanlineRasterizer ras = new ScanlineRasterizer();
-                stopwatch.Restart();
+                //stopwatch.Restart();
+                stopwatch.Stop();
+                stopwatch.Reset();
+                stopwatch.Start();
                 for (i = 0; i < 100; i++)
                 {
                     //render_gouraud(sl, ras);

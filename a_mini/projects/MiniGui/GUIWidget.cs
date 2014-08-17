@@ -367,7 +367,7 @@ namespace MatterHackers.Agg.UI
         }
 
         protected Transform.Affine parentToChildTransform = Affine.NewIdentity();
-        ObservableCollection<GuiWidget> children = new ObservableCollection<GuiWidget>();
+        List<GuiWidget> children = new List<GuiWidget>();
 
         private bool containsFocus = false;
 
@@ -466,19 +466,19 @@ namespace MatterHackers.Agg.UI
 
         public GuiWidget(HAnchor hAnchor = HAnchor.None, VAnchor vAnchor = VAnchor.None)
         {
-            children.CollectionChanged += children_CollectionChanged;
+            //children.CollectionChanged += children_CollectionChanged;
             LayoutEngine = new LayoutEngineSimpleAlign();
             HAnchor = hAnchor;
             VAnchor = vAnchor;
         }
 
-        void children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (childrenLockedInMouseUpCount != 0)
-            {
-                ThrowExceptionInDebug("The mouse should not be locked when the child list changes.");
-            }
-        }
+        //void children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        //{
+        //    //if (childrenLockedInMouseUpCount != 0)
+        //    //{
+        //    //    ThrowExceptionInDebug("The mouse should not be locked when the child list changes.");
+        //    //}
+        //}
 
         public virtual bool InvokeRequired
         {
@@ -513,7 +513,7 @@ namespace MatterHackers.Agg.UI
             throw new InvalidOperationException("You can only check for this is your top level window in a form.");
         }
 
-        public virtual ObservableCollection<GuiWidget> Children
+        public virtual List<GuiWidget> Children
         {
             get
             {

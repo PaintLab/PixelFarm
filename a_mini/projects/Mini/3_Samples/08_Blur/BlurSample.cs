@@ -199,7 +199,9 @@ namespace MatterHackers.Agg.Sample_Blur
                 bbox.Top += m_radius;
             }
 
-            stopwatch.Restart();
+            stopwatch.Stop();
+            stopwatch.Reset();
+            stopwatch.Start();
 
             if (BlurMethod != Sample_Blur.BlurMethod.ChannelBlur)
             {
