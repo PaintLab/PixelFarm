@@ -20,34 +20,19 @@ using System;
 using System.Runtime;
 
 using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource; 
+using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
-    //class InternalImageGraphics2D : ImageGraphics2D
-    //{   
-    //    internal InternalImageGraphics2D(IImageByte owner)
-    //        : base(new ImageClippingProxy(owner),
-    //        new ScanlineRasterizer(),
-    //        new ScanlineCachePacked8())
-    //    {
-    //        //ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-    //        //ImageClippingProxy imageClippingProxy = new ImageClippingProxy(owner);
 
-    //        //Initialize(imageClippingProxy, rasterizer);
-    //        //ScanlineCache = new ScanlineCachePacked8();
-    //    }
-    //}
-
-
-
-    public class ImageBuffer : IImageByte
+    public sealed class ImageBuffer : IImageBuffer
     {
         public const int OrderB = 0;
         public const int OrderG = 1;
         public const int OrderR = 2;
         public const int OrderA = 3;
+        const int BASE_MASK = 255;
 
 #if DEBUG
         static int dbugTotalId;
@@ -69,27 +54,9 @@ namespace MatterHackers.Agg.Image
         int bitDepth;
 
         Vector2 m_OriginOffset = new Vector2(0, 0);
-
         IRecieveBlenderByte recieveBlender;
 
-        const int base_mask = 255;
-
-        public event EventHandler ImageChanged;
-
         int changedCount = 0;
-        public int ChangedCount { get { return changedCount; } }
-        public void MarkImageChanged()
-        {
-            // mark this unchecked as we don't want to throw an exception if this rolls over.
-            unchecked
-            {
-                changedCount++;
-                if (ImageChanged != null)
-                {
-                    ImageChanged(this, null);
-                }
-            }
-        }
 
         public ImageBuffer()
         {
@@ -100,27 +67,6 @@ namespace MatterHackers.Agg.Image
             SetRecieveBlender(recieveBlender);
         }
 
-        //public ImageBuffer(IImageByte sourceImage, IRecieveBlenderByte recieveBlender)
-        //{
-        //    SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.StrideInBytes(), sourceImage.BitDepth, sourceImage.GetBytesBetweenPixelsInclusive(), true);
-        //    int offset = sourceImage.GetBufferOffsetXY(0, 0);
-        //    byte[] buffer = sourceImage.GetBuffer();
-        //    byte[] newBuffer = new byte[buffer.Length];
-        //    agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
-        //    SetBuffer(newBuffer, offset);
-        //    SetRecieveBlender(recieveBlender);
-        //}
-
-        //public ImageBuffer(ImageBuffer sourceImage)
-        //{
-        //    SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.StrideInBytes(), sourceImage.BitDepth, sourceImage.GetBytesBetweenPixelsInclusive(), true);
-        //    int offset = sourceImage.GetBufferOffsetXY(0, 0);
-        //    byte[] buffer = sourceImage.GetBuffer();
-        //    byte[] newBuffer = new byte[buffer.Length];
-        //    agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
-        //    SetBuffer(newBuffer, offset);
-        //    SetRecieveBlender(sourceImage.GetRecieveBlender());
-        //}
 
         public ImageBuffer(int width, int height, int bitsPerPixel, IRecieveBlenderByte recieveBlender)
         {
@@ -128,11 +74,17 @@ namespace MatterHackers.Agg.Image
             SetRecieveBlender(recieveBlender);
         }
 
-        //public void Allocate(int width, int height, int bitsPerPixel, IRecieveBlenderByte recieveBlender)
-        //{
-        //    Allocate(width, height, width * (bitsPerPixel / 8), bitsPerPixel);
-        //    SetRecieveBlender(recieveBlender);
-        //}
+        public int ChangedCount { get { return changedCount; } }
+
+        public void MarkImageChanged()
+        {
+            // mark this unchecked as we don't want to throw an exception if this rolls over.
+            unchecked
+            {
+                changedCount++;
+            }
+        }
+
 #if DEBUG
         static int dbugGetNewDebugId()
         {
@@ -140,28 +92,8 @@ namespace MatterHackers.Agg.Image
             return dbugTotalId++;
         }
 #endif
-#if false
-        public ImageBuffer(IImage image, IBlender blender, GammaLookUpTable gammaTable)
-        {
-            unsafe
-            {
-                AttachBuffer(image.GetBuffer(), image.Width(), image.Height(), image.StrideInBytes(), image.BitDepth, image.GetDistanceBetweenPixelsInclusive());
-            }
 
-            SetBlender(blender);
-        }
-#endif
 
-        //public ImageBuffer(IImageByte sourceImageToCopy, IRecieveBlenderByte blender, int distanceBetweenPixelsInclusive, int bufferOffset, int bitsPerPixel)
-        //{
-        //    SetDimmensionAndFormat(sourceImageToCopy.Width, sourceImageToCopy.Height, sourceImageToCopy.StrideInBytes(), bitsPerPixel, distanceBetweenPixelsInclusive, true);
-        //    int offset = sourceImageToCopy.GetBufferOffsetXY(0, 0);
-        //    byte[] buffer = sourceImageToCopy.GetBuffer();
-        //    byte[] newBuffer = new byte[buffer.Length];
-        //    agg_basics.memcpy(newBuffer, offset, buffer, offset, buffer.Length - offset);
-        //    SetBuffer(newBuffer, offset + bufferOffset);
-        //    SetRecieveBlender(blender);
-        //}
 
         /// <summary>
         /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
@@ -170,7 +102,7 @@ namespace MatterHackers.Agg.Image
         /// <param name="imageContainingSubImage"></param>
         /// <param name="subImageBounds"></param>
         /// <returns></returns>
-        public static ImageBuffer NewSubImageReference(IImageByte imageContainingSubImage, RectangleDouble subImageBounds)
+        public static ImageBuffer NewSubImageReference(IImageBuffer imageContainingSubImage, RectangleDouble subImageBounds)
         {
             ImageBuffer subImage = new ImageBuffer();
             if (subImageBounds.Left < 0 || subImageBounds.Bottom < 0 || subImageBounds.Right > imageContainingSubImage.Width || subImageBounds.Top > imageContainingSubImage.Height
@@ -196,7 +128,7 @@ namespace MatterHackers.Agg.Image
             SetBuffer(buffer, bufferOffset);
         }
 
-        public void Attach(IImageByte sourceImage, IRecieveBlenderByte recieveBlender, int distanceBetweenPixelsInclusive, int bufferOffset, int bitsPerPixel)
+        public void Attach(IImageBuffer sourceImage, IRecieveBlenderByte recieveBlender, int distanceBetweenPixelsInclusive, int bufferOffset, int bitsPerPixel)
         {
             SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.StrideInBytes(), bitsPerPixel, distanceBetweenPixelsInclusive, false);
             int offset = sourceImage.GetBufferOffsetXY(0, 0);
@@ -205,12 +137,12 @@ namespace MatterHackers.Agg.Image
             SetRecieveBlender(recieveBlender);
         }
 
-        public void Attach(IImageByte sourceImage, IRecieveBlenderByte recieveBlender)
+        public void Attach(IImageBuffer sourceImage, IRecieveBlenderByte recieveBlender)
         {
             Attach(sourceImage, recieveBlender, sourceImage.GetBytesBetweenPixelsInclusive(), 0, sourceImage.BitDepth);
         }
 
-        public bool Attach(IImageByte sourceImage, int x1, int y1, int x2, int y2)
+        public bool Attach(IImageBuffer sourceImage, int x1, int y1, int x2, int y2)
         {
             m_ByteBuffer = null;
             DettachBuffer();
@@ -231,9 +163,6 @@ namespace MatterHackers.Agg.Image
 
             return false;
         }
-
-
-
         internal void Deallocate()
         {
             if (m_ByteBuffer != null)
@@ -273,21 +202,13 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        //public MatterHackers.Agg.Graphics2D NewGraphics2D()
-        //{
-        //    InternalImageGraphics2D imageRenderer = new InternalImageGraphics2D(this);
 
-        //    imageRenderer.Rasterizer.SetVectorClipBox(0, 0, Width, Height);
-
-        //    return imageRenderer;
-        //}
-
-        public void CopyFrom(IImageByte sourceImage)
+        public void CopyFrom(IImageBuffer sourceImage)
         {
             CopyFrom(sourceImage, sourceImage.GetBounds(), 0, 0);
         }
 
-        protected void CopyFromNoClipping(IImageByte sourceImage, RectangleInt clippedSourceImageRect, int destXOffset, int destYOffset)
+        protected void CopyFromNoClipping(IImageBuffer sourceImage, RectangleInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
             if (GetBytesBetweenPixelsInclusive() != BitDepth / 8
                 || sourceImage.GetBytesBetweenPixelsInclusive() != sourceImage.BitDepth / 8)
@@ -360,7 +281,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void CopyFrom(IImageByte sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
+        public void CopyFrom(IImageBuffer sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
         {
             RectangleInt sourceImageBounds = sourceImage.GetBounds();
             RectangleInt clippedSourceImageRect = new RectangleInt();
@@ -404,13 +325,16 @@ namespace MatterHackers.Agg.Image
 
         public int StrideInBytes() { return strideInBytes; }
 
-        public int GetBytesBetweenPixelsInclusive() { return m_DistanceInBytesBetweenPixelsInclusive; }
+        public int GetBytesBetweenPixelsInclusive()
+        {
+            return m_DistanceInBytesBetweenPixelsInclusive;
+        }
         public int BitDepth
         {
             get { return bitDepth; }
         }
 
-        public virtual RectangleInt GetBounds()
+        public RectangleInt GetBounds()
         {
             return new RectangleInt(-(int)m_OriginOffset.x, -(int)m_OriginOffset.y, Width - (int)m_OriginOffset.x, Height - (int)m_OriginOffset.y);
         }
@@ -429,7 +353,7 @@ namespace MatterHackers.Agg.Image
             recieveBlender = value;
         }
 
-        private void SetUpLookupTables()
+        void SetUpLookupTables()
         {
             yTableArray = new int[height];
             xTableArray = new int[width];
@@ -483,7 +407,7 @@ namespace MatterHackers.Agg.Image
             SetUpLookupTables();
         }
 
-        private void DeallocateOrClearBuffer(int width, int height, int strideInBytes, int bitDepth, int distanceInBytesBetweenPixelsInclusive)
+        void DeallocateOrClearBuffer(int width, int height, int strideInBytes, int bitDepth, int distanceInBytesBetweenPixelsInclusive)
         {
             if (this.width == width
                 && this.height == height
@@ -505,7 +429,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        private void SetDimmensionAndFormat(int width, int height, int strideInBytes, int bitDepth, int distanceInBytesBetweenPixelsInclusive, bool doDeallocateOrClearBuffer)
+        void SetDimmensionAndFormat(int width, int height, int strideInBytes, int bitDepth, int distanceInBytesBetweenPixelsInclusive, bool doDeallocateOrClearBuffer)
         {
             if (doDeallocateOrClearBuffer)
             {
@@ -586,47 +510,12 @@ namespace MatterHackers.Agg.Image
                     //buffer[i] = px.blue |
                     //               (px.green << 8) |
                     //               (px.red << 16);
-                    buffer[i] = b |
-                                  (g << 8) |
+                    buffer[i] = b | (g << 8) |
                                   (r << 16);
                     i++;
                 }
             }
         }
-        //public static void CopySubBufferToByteArray(ImageBuffer buff, int mx, int my, int w, int h, byte[] buffer)
-        //{
-        //    int i = 0;
-        //    byte[] mBuffer = buff.m_ByteBuffer;
-
-        //    for (int y = my; y < h; ++y)
-        //    {
-        //        //int ybufferOffset = buff.GetBufferOffsetY(y);
-        //        int xbufferOffset = buff.GetBufferOffsetXY(0, y);
-        //        for (int x = mx; x < w; ++x)
-        //        {
-        //            //rgba
-        //            //RGBA_Bytes px = buff.GetPixel(x, y);
-        //            byte r = mBuffer[xbufferOffset + 2];
-        //            byte g = mBuffer[xbufferOffset + 1];
-        //            byte b = mBuffer[xbufferOffset];
-
-        //            xbufferOffset += 4; 
-        //            //buffer[i] = px.blue |
-        //            //               (px.green << 8) |
-        //            //               (px.red << 16);
-        //            //buffer[i] = b |
-        //            //              (g << 8) |
-        //            //              (r << 16);
-
-        //            buffer[i] = mBuffer[xbufferOffset];//b
-        //            buffer[i + 1] = mBuffer[xbufferOffset + 1];
-        //            buffer[i + 2] = mBuffer[xbufferOffset + 2];
-        //            buffer[i + 3] = 255;//
-        //            i++;
-        //        }
-        //    }
-        //}
-
 
 
 
@@ -706,7 +595,7 @@ namespace MatterHackers.Agg.Image
                 byte[] buffer = GetPixelPointerXY(x1, y, out bufferOffset);
 
                 int alpha = (((int)(sourceColor.alpha) * (cover + 1)) >> 8);
-                if (alpha == base_mask)
+                if (alpha == BASE_MASK)
                 {
                     recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
                 }
@@ -785,7 +674,7 @@ namespace MatterHackers.Agg.Image
                     do
                     {
                         int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
-                        if (alpha == base_mask)
+                        if (alpha == BASE_MASK)
                         {
                             recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, 1);
                         }
@@ -805,7 +694,7 @@ namespace MatterHackers.Agg.Image
         {
             if (sourceColor.alpha != 0)
             {
-                int ScanWidthInBytes = StrideInBytes();
+                int scanWidthBytes = StrideInBytes();
                 unchecked
                 {
                     int bufferOffset = GetBufferOffsetXY(x, y);
@@ -813,7 +702,7 @@ namespace MatterHackers.Agg.Image
                     {
                         byte oldAlpha = sourceColor.alpha;
                         sourceColor.alpha = (byte)(((int)(sourceColor.alpha) * ((int)(covers[coversIndex++]) + 1)) >> 8);
-                        if (sourceColor.alpha == base_mask)
+                        if (sourceColor.alpha == BASE_MASK)
                         {
                             recieveBlender.CopyPixels(m_ByteBuffer, bufferOffset, sourceColor, 1);
                         }
@@ -821,7 +710,7 @@ namespace MatterHackers.Agg.Image
                         {
                             recieveBlender.BlendPixel(m_ByteBuffer, bufferOffset, sourceColor);
                         }
-                        bufferOffset += ScanWidthInBytes;
+                        bufferOffset += scanWidthBytes;
                         sourceColor.alpha = oldAlpha;
                     }
                     while (--len != 0);
@@ -867,13 +756,13 @@ namespace MatterHackers.Agg.Image
         {
             int bufferOffset = GetBufferOffsetXY(x, y);
 
-            int ScanWidth = System.Math.Abs(StrideInBytes());
+            int scanWidthBytes = System.Math.Abs(StrideInBytes());
             if (!firstCoverForAll)
             {
                 do
                 {
                     DoCopyOrBlend.BasedOnAlphaAndCover(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex], covers[coversIndex++]);
-                    bufferOffset += ScanWidth;
+                    bufferOffset += scanWidthBytes;
                     ++colorsIndex;
                 }
                 while (--len != 0);
@@ -885,7 +774,7 @@ namespace MatterHackers.Agg.Image
                     do
                     {
                         DoCopyOrBlend.BasedOnAlpha(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex]);
-                        bufferOffset += ScanWidth;
+                        bufferOffset += scanWidthBytes;
                         ++colorsIndex;
                     }
                     while (--len != 0);
@@ -896,7 +785,7 @@ namespace MatterHackers.Agg.Image
                     {
 
                         DoCopyOrBlend.BasedOnAlphaAndCover(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex], covers[coversIndex]);
-                        bufferOffset += ScanWidth;
+                        bufferOffset += scanWidthBytes;
                         ++colorsIndex;
                     }
                     while (--len != 0);
@@ -962,15 +851,6 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void SetPixel32(int p, int p_2, uint p_3)
-        {
-            throw new NotImplementedException();
-        }
-
-        public uint GetPixel32(double p, double p_2)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     static class DoCopyOrBlend

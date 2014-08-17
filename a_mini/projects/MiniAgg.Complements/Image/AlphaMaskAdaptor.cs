@@ -52,7 +52,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public AlphaMaskAdaptor(IImageByte image, IAlphaMask mask)
+        public AlphaMaskAdaptor(IImageBuffer image, IAlphaMask mask)
             : base(image)
         {
             linkedImage = image;
@@ -60,7 +60,7 @@ namespace MatterHackers.Agg.Image
             m_spans = new ArrayPOD<byte>(255);
         }
 
-        public void AttachImage(IImageByte image)
+        public void AttachImage(IImageBuffer image)
         {
             linkedImage = image;
         }

@@ -65,7 +65,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void render_gouraud(IImageByte backBuffer, IScanlineCache sl, IRasterizer ras)
+        public void render_gouraud(IImageBuffer backBuffer, IScanlineCache sl, IRasterizer ras)
         {
             double alpha = this.AlphaValue;
             double brc = 1;
@@ -156,7 +156,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
         {
             ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageByte backBuffer = widgetsSubImage;
+            IImageBuffer backBuffer = widgetsSubImage;
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else

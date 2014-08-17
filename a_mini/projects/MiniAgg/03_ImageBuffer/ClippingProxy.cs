@@ -32,13 +32,13 @@ namespace MatterHackers.Agg.Image
 
         public const byte cover_full = 255;
 
-        public ImageClippingProxy(IImageByte ren)
+        public ImageClippingProxy(IImageBuffer ren)
             : base(ren)
         {
             m_ClippingRect = new RectangleInt(0, 0, (int)ren.Width - 1, (int)ren.Height - 1);
         }
 
-        public override void LinkToImage(IImageByte ren)
+        public override void LinkToImage(IImageBuffer ren)
         {
             base.LinkToImage(ren);
             m_ClippingRect = new RectangleInt(0, 0, (int)ren.Width - 1, (int)ren.Height - 1);
@@ -323,7 +323,7 @@ namespace MatterHackers.Agg.Image
             base.blend_color_hspan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-        public void copy_from(IImageByte src)
+        public void copy_from(IImageBuffer src)
         {
             CopyFrom(src, new RectangleInt(0, 0, (int)src.Width, (int)src.Height), 0, 0);
         }
@@ -336,7 +336,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public override void CopyFrom(IImageByte sourceImage,
+        public override void CopyFrom(IImageBuffer sourceImage,
                        RectangleInt sourceImageRect,
                        int destXOffset,
                        int destYOffset)

@@ -23,11 +23,11 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
-    public abstract class ImageProxy : IImageByte
+    public abstract class ImageProxy : IImageBuffer
     {
-        protected IImageByte linkedImage;
+        protected IImageBuffer linkedImage;
 
-        public IImageByte LinkedImage
+        public IImageBuffer LinkedImage
         {
             get
             {
@@ -40,12 +40,12 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public ImageProxy(IImageByte linkedImage)
+        public ImageProxy(IImageBuffer linkedImage)
         {
             this.linkedImage = linkedImage;
         }
 
-        public virtual void LinkToImage(IImageByte linkedImage)
+        public virtual void LinkToImage(IImageBuffer linkedImage)
         {
             this.linkedImage = linkedImage;
         }
@@ -82,12 +82,7 @@ namespace MatterHackers.Agg.Image
         {
             return linkedImage.GetBounds();
         }
-
-        //public Graphics2D NewGraphics2D()
-        //{
-        //    return linkedImage.NewGraphics2D();
-        //}
-
+         
         public IRecieveBlenderByte GetRecieveBlender()
         {
             return linkedImage.GetRecieveBlender();
@@ -108,12 +103,12 @@ namespace MatterHackers.Agg.Image
             linkedImage.copy_pixel(x, y, c, ByteOffset);
         }
 
-        public virtual void CopyFrom(IImageByte sourceRaster)
+        public virtual void CopyFrom(IImageBuffer sourceRaster)
         {
             linkedImage.CopyFrom(sourceRaster);
         }
 
-        public virtual void CopyFrom(IImageByte sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
+        public virtual void CopyFrom(IImageBuffer sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
         {
             linkedImage.CopyFrom(sourceImage, sourceImageRect, destXOffset, destYOffset);
         }

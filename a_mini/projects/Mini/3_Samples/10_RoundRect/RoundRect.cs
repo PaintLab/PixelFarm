@@ -111,7 +111,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
         {
             ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageByte backBuffer = widgetsSubImage;
+            IImageBuffer backBuffer = widgetsSubImage;
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.Gamma);
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();

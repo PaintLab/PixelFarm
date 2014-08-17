@@ -37,7 +37,7 @@ namespace MatterHackers.Agg
     public abstract class Graphics2D
     {
         const int cover_full = 255;
-        protected IImageByte destImageByte;
+        protected IImageBuffer destImageByte;
         protected Stroke StrockedText;
         protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
@@ -47,13 +47,13 @@ namespace MatterHackers.Agg
             affineTransformStack.Push(Affine.NewIdentity());
         }
 
-        public Graphics2D(IImageByte destImage, ScanlineRasterizer rasterizer)
+        public Graphics2D(IImageBuffer destImage, ScanlineRasterizer rasterizer)
             : this()
         {
             Initialize(destImage, rasterizer);
         }
 
-        internal void Initialize(IImageByte destImage, ScanlineRasterizer rasterizer)
+        internal void Initialize(IImageBuffer destImage, ScanlineRasterizer rasterizer)
         {
             destImageByte = destImage;
             //destImageFloat = null;
@@ -108,7 +108,7 @@ namespace MatterHackers.Agg
             set;
         }
 
-        public IImageByte DestImage
+        public IImageBuffer DestImage
         {
             get
             {
@@ -119,18 +119,18 @@ namespace MatterHackers.Agg
 
         public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
 
-        public void Render(IImageByte imageSource, int x, int y)
+        public void Render(IImageBuffer imageSource, int x, int y)
         {
             //base.Render(imageSource, x, y);
             Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public void Render(IImageByte imageSource, double x, double y)
+        public void Render(IImageBuffer imageSource, double x, double y)
         {
             Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public abstract void Render(IImageByte imageSource,
+        public abstract void Render(IImageBuffer imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
@@ -183,7 +183,7 @@ namespace MatterHackers.Agg
         }
 
         //================
-        public static Graphics2D CreateFromImage(IImageByte img)
+        public static Graphics2D CreateFromImage(IImageBuffer img)
         {
              
             var imgProxy = new ImageClippingProxy(img);

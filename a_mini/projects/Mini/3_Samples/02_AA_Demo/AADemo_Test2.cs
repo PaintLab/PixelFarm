@@ -24,7 +24,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             m_size = size;
         }
 
-        public void draw(ScanlineRasterizer ras, IScanlineCache sl, IImageByte destImage, RGBA_Bytes color,
+        public void draw(ScanlineRasterizer ras, IScanlineCache sl, IImageBuffer destImage, RGBA_Bytes color,
                   double x, double y)
         {
             ras.reset();
@@ -50,7 +50,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             m_size = size;
             m_square = new square(size);
         }
-        protected override void RenderSolidSingleScanLine(IImageByte destImage, IScanlineCache scanLineCache, RGBA_Bytes color)
+        protected override void RenderSolidSingleScanLine(IImageBuffer destImage, IScanlineCache scanLineCache, RGBA_Bytes color)
         {
             int y = scanLineCache.y();
             int num_spans = scanLineCache.num_spans();

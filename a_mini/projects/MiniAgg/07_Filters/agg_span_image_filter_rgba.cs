@@ -656,7 +656,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        private void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, IImageByte SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
+        private void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, IImageBuffer SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
         {
             byte[] fg_ptr;
             unchecked

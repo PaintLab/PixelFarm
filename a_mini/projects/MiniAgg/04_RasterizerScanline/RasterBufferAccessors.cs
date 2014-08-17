@@ -27,7 +27,7 @@ namespace MatterHackers.Agg
         byte[] next_x(out int bufferByteOffset);
         byte[] next_y(out int bufferByteOffset);
 
-        IImageByte SourceImage
+        IImageBuffer SourceImage
         {
             get;
         }
@@ -35,18 +35,18 @@ namespace MatterHackers.Agg
 
     public class ImageBufferAccessorCommon : IImageBufferAccessor
     {
-        protected IImageByte m_SourceImage;
+        protected IImageBuffer m_SourceImage;
         protected int m_x, m_x0, m_y, m_DistanceBetweenPixelsInclusive;
         protected byte[] m_Buffer;
         protected int m_CurrentBufferOffset = -1;
         int m_Width;
 
-        public ImageBufferAccessorCommon(IImageByte pixf)
+        public ImageBufferAccessorCommon(IImageBuffer pixf)
         {
             attach(pixf);
         }
 
-        void attach(IImageByte pixf)
+        void attach(IImageBuffer pixf)
         {
             m_SourceImage = pixf;
             m_Buffer = m_SourceImage.GetBuffer();
@@ -54,7 +54,7 @@ namespace MatterHackers.Agg
             m_DistanceBetweenPixelsInclusive = m_SourceImage.GetBytesBetweenPixelsInclusive();
         }
 
-        public IImageByte SourceImage
+        public IImageBuffer SourceImage
         {
             get
             {
@@ -154,7 +154,7 @@ namespace MatterHackers.Agg
     {
         byte[] m_OutsideBufferColor;
 
-        public ImageBufferAccessorClip(IImageByte sourceImage, RGBA_Bytes bk)
+        public ImageBufferAccessorClip(IImageBuffer sourceImage, RGBA_Bytes bk)
             : base(sourceImage)
         {
             m_OutsideBufferColor = new byte[4];
@@ -229,7 +229,7 @@ namespace MatterHackers.Agg
 
     public sealed class ImageBufferAccessorClamp : ImageBufferAccessorCommon
     {
-        public ImageBufferAccessorClamp(IImageByte pixf)
+        public ImageBufferAccessorClamp(IImageBuffer pixf)
             : base(pixf)
         {
         }

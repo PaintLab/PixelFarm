@@ -39,7 +39,7 @@ namespace MatterHackers.Agg
 
     public sealed class AlphaMaskByteUnclipped : IAlphaMask
     {
-        IImageByte m_rbuf;
+        IImageBuffer m_rbuf;
         uint m_Step;
         uint m_Offset;
 
@@ -47,14 +47,14 @@ namespace MatterHackers.Agg
         //public static readonly int cover_none = 0;
         //public static readonly int cover_full = 255;
 
-        public AlphaMaskByteUnclipped(IImageByte rbuf, uint Step, uint Offset)
+        public AlphaMaskByteUnclipped(IImageBuffer rbuf, uint Step, uint Offset)
         {
             m_Step = Step;
             m_Offset = Offset;
             m_rbuf = rbuf;
         }
 
-        public void attach(IImageByte rbuf) { m_rbuf = rbuf; }
+        public void attach(IImageBuffer rbuf) { m_rbuf = rbuf; }
 
         //--------------------------------------------------------------------
         public byte pixel(int x, int y)
@@ -145,7 +145,7 @@ namespace MatterHackers.Agg
 
     public sealed class AlphaMaskByteClipped : IAlphaMask
     {
-        IImageByte m_rbuf;
+        IImageBuffer m_rbuf;
         uint m_Step;
         uint m_Offset;
 
@@ -153,14 +153,14 @@ namespace MatterHackers.Agg
         //public static readonly int cover_none = 0;
         //public static readonly int cover_full = 255;
 
-        public AlphaMaskByteClipped(IImageByte rbuf, uint step, uint offset)
+        public AlphaMaskByteClipped(IImageBuffer rbuf, uint step, uint offset)
         {
             m_Step = step;
             m_Offset = offset;
             m_rbuf = rbuf;
         }
 
-        public void attach(IImageByte rbuf) { m_rbuf = rbuf; }
+        public void attach(IImageBuffer rbuf) { m_rbuf = rbuf; }
 
 
         //--------------------------------------------------------------------

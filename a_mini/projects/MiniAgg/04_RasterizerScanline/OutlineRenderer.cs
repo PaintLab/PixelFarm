@@ -1458,7 +1458,7 @@ namespace MatterHackers.Agg
     //======================================================renderer_outline_aa
     public class OutlineRenderer : LineRenderer
     {
-        private IImageByte destImageSurface;
+        private IImageBuffer destImageSurface;
         LineProfileAnitAlias lineProfile;
         RectangleInt clippingRectangle;
         bool doClipping;
@@ -1475,7 +1475,7 @@ namespace MatterHackers.Agg
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(IImageByte destImage, LineProfileAnitAlias profile)
+        public OutlineRenderer(IImageBuffer destImage, LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;
@@ -1483,7 +1483,7 @@ namespace MatterHackers.Agg
             doClipping = false;
         }
 
-        public void attach(IImageByte ren) { destImageSurface = ren; }
+        public void attach(IImageBuffer ren) { destImageSurface = ren; }
 
         //---------------------------------------------------------------------
         public void profile(LineProfileAnitAlias prof) { lineProfile = prof; }

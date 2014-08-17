@@ -81,7 +81,7 @@ namespace MatterHackers.Agg.Sample_Perspective
         {
             ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageByte backBuffer = widgetsSubImage;
+            IImageBuffer backBuffer = widgetsSubImage;
 
             if (!didInit)
             {

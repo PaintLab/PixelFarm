@@ -33,15 +33,15 @@ namespace MatterHackers.Agg.Image
         int Height { get; }
         RectangleInt GetBounds(); 
         int GetBufferOffsetY(int y);
-        int GetBufferOffsetXY(int x, int y); 
-        //Graphics2D NewGraphics2D(); 
+        int GetBufferOffsetXY(int x, int y);  
         void MarkImageChanged();
+   
     }
 
-    public interface IImageByte : IImage
+    public interface IImageBuffer : IImage
     {
-        int StrideInBytes(); 
 
+        int StrideInBytes(); 
         IRecieveBlenderByte GetRecieveBlender();
         void SetRecieveBlender(IRecieveBlenderByte value);
         int GetBytesBetweenPixelsInclusive();
@@ -51,8 +51,8 @@ namespace MatterHackers.Agg.Image
         RGBA_Bytes GetPixel(int x, int y);
         void copy_pixel(int x, int y, byte[] c, int ByteOffset);
         
-        void CopyFrom(IImageByte sourceImage);
-        void CopyFrom(IImageByte sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
+        void CopyFrom(IImageBuffer sourceImage);
+        void CopyFrom(IImageBuffer sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
 
         void SetPixel(int x, int y, RGBA_Bytes color);
         void BlendPixel(int x, int y, RGBA_Bytes sourceColor, byte cover);
@@ -74,42 +74,5 @@ namespace MatterHackers.Agg.Image
         void blend_color_hspan(int x, int y, int len, RGBA_Bytes[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
         void blend_color_vspan(int x, int y, int len, RGBA_Bytes[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
     }
-
-    //public interface IImageFloat : IImage
-    //{
-    //    int StrideInFloats();
-    //    int StrideInFloatsAbs();
-
-    //    IRecieveBlenderFloat GetBlender();
-    //    void SetBlender(IRecieveBlenderFloat value);
-    //    int GetFloatsBetweenPixelsInclusive();
-
-    //    float[] GetBuffer();
-
-    //    RGBA_Floats GetPixel(int x, int y);
-    //    void copy_pixel(int x, int y, float[] c, int floatOffset);
-
-    //    void CopyFrom(IImageFloat sourceImage);
-    //    void CopyFrom(IImageFloat sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
-
-    //    void SetPixel(int x, int y, RGBA_Floats color);
-    //    void BlendPixel(int x, int y, RGBA_Floats sourceColor, byte cover);
-
-    //    // line stuff
-    //    void copy_hline(int x, int y, int len, RGBA_Floats sourceColor);
-    //    void copy_vline(int x, int y, int len, RGBA_Floats sourceColor);
-
-    //    void blend_hline(int x, int y, int x2, RGBA_Floats sourceColor, byte cover);
-    //    void blend_vline(int x, int y1, int y2, RGBA_Floats sourceColor, byte cover);
-
-    //    // color stuff
-    //    void copy_color_hspan(int x, int y, int len, RGBA_Floats[] colors, int colorIndex);
-    //    void copy_color_vspan(int x, int y, int len, RGBA_Floats[] colors, int colorIndex);
-
-    //    void blend_solid_hspan(int x, int y, int len, RGBA_Floats sourceColor, byte[] covers, int coversIndex);
-    //    void blend_solid_vspan(int x, int y, int len, RGBA_Floats sourceColor, byte[] covers, int coversIndex);
-
-    //    void blend_color_hspan(int x, int y, int len, RGBA_Floats[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
-    //    void blend_color_vspan(int x, int y, int len, RGBA_Floats[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
-    //}
+     
 }

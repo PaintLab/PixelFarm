@@ -23,7 +23,7 @@ namespace MatterHackers.Agg.Image
     //=======================================================pixfmt_transposer
     public sealed class FormatTransposer : ImageProxy
     {
-        public FormatTransposer(IImageByte pixelFormat)
+        public FormatTransposer(IImageBuffer pixelFormat)
             : base(pixelFormat)
         {
         }

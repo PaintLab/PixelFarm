@@ -39,7 +39,7 @@ namespace MatterHackers.Agg
 
         }
 
-        public ImageGraphics2D(IImageByte destImage, 
+        public ImageGraphics2D(IImageBuffer destImage, 
             ScanlineRasterizer rasterizer, 
             IScanlineCache scanlineCache)
             : base(destImage, rasterizer)
@@ -84,7 +84,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        void DrawImageGetDestBounds(IImageByte sourceImage,
+        void DrawImageGetDestBounds(IImageBuffer sourceImage,
             double DestX, double DestY,
             double HotspotOffsetX, double HotspotOffsetY,
             double ScaleX, double ScaleY,
@@ -124,7 +124,7 @@ namespace MatterHackers.Agg
             drawImageRectPath.ClosePolygon();
         }
 
-        void DrawImage(IImageByte sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
+        void DrawImage(IImageBuffer sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
         {
             if (destImageByte.OriginOffset.x != 0 || destImageByte.OriginOffset.y != 0)
             {
@@ -142,7 +142,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public override void Render(IImageByte source,
+        public override void Render(IImageBuffer source,
             double destX, double destY,
             double angleRadians,
             double inScaleX, double inScaleY)

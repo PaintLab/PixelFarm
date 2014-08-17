@@ -42,7 +42,7 @@ namespace MatterHackers.Agg
             {
                 ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-                IImageByte backBuffer = widgetsSubImage;
+                IImageBuffer backBuffer = widgetsSubImage;
 
                 int distBetween = backBuffer.GetBytesBetweenPixelsInclusive();
                 ImageBuffer redImageBuffer = new ImageBuffer();
