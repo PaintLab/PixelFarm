@@ -109,8 +109,8 @@ namespace MatterHackers.Agg.RasterizerScanline
         private int m_min_x;
         private int m_last_x;
         private int m_y;
-        private ArrayPOD<byte, byte> m_covers;
-        private ArrayPOD<ScanlineSpan, int> m_spans;
+        private ArrayPOD<byte> m_covers;
+        private ArrayPOD<ScanlineSpan> m_spans;
         private int m_span_index;
         private int m_interator_index;
 
@@ -125,8 +125,8 @@ namespace MatterHackers.Agg.RasterizerScanline
         {     
 
             m_last_x = (0x7FFFFFF0);
-            m_covers = new ArrayPOD<byte, byte>(1000);
-            m_spans = new ArrayPOD<ScanlineSpan, int>(1000);
+            m_covers = new ArrayPOD<byte>(1000);
+            m_spans = new ArrayPOD<ScanlineSpan>(1000);
         }
 
         //--------------------------------------------------------------------

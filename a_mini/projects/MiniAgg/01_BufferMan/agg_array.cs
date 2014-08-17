@@ -28,26 +28,15 @@ using System.Collections;
 namespace MatterHackers.Agg
 {
 
-    public class Int32Buffer
-    {
 
-    }
-    public class UInt8Buffer
-    {
 
-    }
-    public class Float64Buffer
-    {
-
-    }
-
-    public class ArrayPOD<T, P>
+    public class ArrayPOD<T>
     {
         public ArrayPOD(int size)
         {
             m_array = new T[size];
             m_size = size;
-        } 
+        }
         public void Resize(int size)
         {
             if (size != m_size)
@@ -63,7 +52,7 @@ namespace MatterHackers.Agg
             get
             {
                 return m_array[index];
-            } 
+            }
             set
             {
                 m_array[index] = value;

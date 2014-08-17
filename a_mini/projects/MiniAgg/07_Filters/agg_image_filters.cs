@@ -37,7 +37,7 @@ namespace MatterHackers.Agg
         double m_radius;
         int m_diameter;
         int m_start;
-        ArrayPOD<int,int> m_weight_array;
+        ArrayPOD<int> m_weight_array;
 
         public enum image_filter_scale_e
         {
@@ -81,7 +81,7 @@ namespace MatterHackers.Agg
 
         public ImageFilterLookUpTable() 
         {
-            m_weight_array = new ArrayPOD<int,int>(256);
+            m_weight_array = new ArrayPOD<int>(256);
             m_radius = (0);
             m_diameter=(0);
             m_start=(0);
@@ -94,7 +94,7 @@ namespace MatterHackers.Agg
         }
         public ImageFilterLookUpTable(IImageFilterFunction filter, bool normalization)
         {
-            m_weight_array = new ArrayPOD<int,int>(256);
+            m_weight_array = new ArrayPOD<int>(256);
             calculate(filter, normalization);
         }
 

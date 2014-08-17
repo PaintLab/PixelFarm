@@ -559,7 +559,7 @@ namespace MatterHackers.Agg.Image
             return m_ByteBuffer;
         }
 
-        public static void CopySubBufferTo(ImageBuffer buff, int mx, int my, int w, int h, int[] buffer)
+        public static void CopySubBufferToInt32Array(ImageBuffer buff, int mx, int my, int w, int h, int[] buffer)
         {
             int i = 0;
             byte[] mBuffer = buff.m_ByteBuffer;
@@ -592,6 +592,43 @@ namespace MatterHackers.Agg.Image
                 }
             }
         }
+        //public static void CopySubBufferToByteArray(ImageBuffer buff, int mx, int my, int w, int h, byte[] buffer)
+        //{
+        //    int i = 0;
+        //    byte[] mBuffer = buff.m_ByteBuffer;
+
+        //    for (int y = my; y < h; ++y)
+        //    {
+        //        //int ybufferOffset = buff.GetBufferOffsetY(y);
+        //        int xbufferOffset = buff.GetBufferOffsetXY(0, y);
+        //        for (int x = mx; x < w; ++x)
+        //        {
+        //            //rgba
+        //            //RGBA_Bytes px = buff.GetPixel(x, y);
+        //            byte r = mBuffer[xbufferOffset + 2];
+        //            byte g = mBuffer[xbufferOffset + 1];
+        //            byte b = mBuffer[xbufferOffset];
+
+        //            xbufferOffset += 4; 
+        //            //buffer[i] = px.blue |
+        //            //               (px.green << 8) |
+        //            //               (px.red << 16);
+        //            //buffer[i] = b |
+        //            //              (g << 8) |
+        //            //              (r << 16);
+
+        //            buffer[i] = mBuffer[xbufferOffset];//b
+        //            buffer[i + 1] = mBuffer[xbufferOffset + 1];
+        //            buffer[i + 2] = mBuffer[xbufferOffset + 2];
+        //            buffer[i + 3] = 255;//
+        //            i++;
+        //        }
+        //    }
+        //}
+
+
+
+
         public RGBA_Bytes GetPixel(int x, int y)
         {
             return recieveBlender.PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
@@ -872,82 +909,13 @@ namespace MatterHackers.Agg.Image
             //for_each_pixel(apply_gamma_inv_rgba<color_type, order_type, GammaLut>(g));
         }
 
-        private bool IsPixelVisible(int x, int y)
+        public bool IsPixelVisible(int x, int y)
         {
             RGBA_Bytes pixelValue = GetRecieveBlender().PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
             return (pixelValue.Alpha0To255 != 0 || pixelValue.Red0To255 != 0 || pixelValue.Green0To255 != 0 || pixelValue.Blue0To255 != 0);
         }
 
-        public void GetVisibleBounds(out RectangleInt visibleBounds)
-        {
-            visibleBounds = new RectangleInt(0, 0, Width, Height);
-
-            // trim the bottom
-            bool aPixelsIsVisible = false;
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    if (IsPixelVisible(x, y))
-                    {
-                        visibleBounds.Bottom = y;
-                        y = height;
-                        x = width;
-                        aPixelsIsVisible = true;
-                    }
-                }
-            }
-
-            // if we don't run into any pixels set for the top trim than there are no pixels set at all
-            if (!aPixelsIsVisible)
-            {
-                visibleBounds.SetRect(0, 0, 0, 0);
-                return;
-            }
-
-            // trim the bottom
-            for (int y = height - 1; y >= 0; y--)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    if (IsPixelVisible(x, y))
-                    {
-                        visibleBounds.Top = y + 1;
-                        y = -1;
-                        x = width;
-                    }
-                }
-            }
-
-            // trim the left
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    if (IsPixelVisible(x, y))
-                    {
-                        visibleBounds.Left = x;
-                        y = height;
-                        x = width;
-                    }
-                }
-            }
-
-            // trim the right
-            for (int x = width - 1; x >= 0; x--)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    if (IsPixelVisible(x, y))
-                    {
-                        visibleBounds.Right = x + 1;
-                        y = height;
-                        x = -1;
-                    }
-                }
-            }
-        } 
-
+       
         public override int GetHashCode()
         {
             // This might be hard to make fast and usefull.
@@ -967,7 +935,7 @@ namespace MatterHackers.Agg.Image
 
             Initialize(sourceImage, sourceBoundingRect);
             OriginOffset = sourceImage.OriginOffset;
-        } 
+        }
         internal void Initialize(ImageBuffer sourceImage, RectangleInt boundsToCopyFrom)
         {
             if (sourceImage == this)

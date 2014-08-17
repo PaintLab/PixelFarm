@@ -5,16 +5,7 @@ using System.Runtime.InteropServices;
 namespace MatterHackers
 {
 
-    struct LimitMinMax
-    {
-        public int Min;
-        public int Max;
-        public LimitMinMax(int min, int max)
-        {
-            this.Min = min;
-            this.Max = max;
-        }
-    }
+   
 
 
     public static class StackBlurARGB
@@ -224,7 +215,16 @@ namespace MatterHackers
         private static int min(int a, int b) { return Math.Min(a, b); }
         private static int max(int a, int b) { return Math.Max(a, b); }
 
-
+        struct LimitMinMax
+        {
+            public int Min;
+            public int Max;
+            public LimitMinMax(int min, int max)
+            {
+                this.Min = min;
+                this.Max = max;
+            }
+        }
     }
 
 }

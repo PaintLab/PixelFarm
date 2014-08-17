@@ -41,7 +41,7 @@ namespace MatterHackers.Agg
         private int m_num;
         private int m_xOffset;
         private int m_yOffset;
-        private ArrayPOD<double, double> m_am = new ArrayPOD<double, double>(16);
+        private ArrayPOD<double> m_am = new ArrayPOD<double>(16);
         private int m_last_idx;
 
         //------------------------------------------------------------------------
@@ -122,7 +122,7 @@ namespace MatterHackers.Agg
 
                 int n1 = 3 * m_num;
 
-                ArrayPOD<double, double> al = new ArrayPOD<double, double>(n1);
+                ArrayPOD<double> al = new ArrayPOD<double>(n1);
 
                 for (k = 0; k < n1; k++)
                 {

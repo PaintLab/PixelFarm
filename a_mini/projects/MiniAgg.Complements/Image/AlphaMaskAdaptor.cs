@@ -21,7 +21,7 @@ namespace MatterHackers.Agg.Image
     public sealed class AlphaMaskAdaptor : ImageProxy
     {
         IAlphaMask m_mask;
-        ArrayPOD<byte, byte> m_spans;
+        ArrayPOD<byte> m_spans;
 
         enum span_extra_tail_e { span_extra_tail = 256 };
 
@@ -57,7 +57,7 @@ namespace MatterHackers.Agg.Image
         {
             linkedImage = image;
             m_mask = mask;
-            m_spans = new ArrayPOD<byte, byte>(255);
+            m_spans = new ArrayPOD<byte>(255);
         }
 
         public void AttachImage(IImageByte image)

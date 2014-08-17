@@ -42,6 +42,78 @@ namespace MatterHackers.Agg.Image
                 buffer[offset + i * 4 + 3] = value;
             }
         }
+        public static void GetVisibleBounds(this ImageBuffer imgBuffer, out RectangleInt visibleBounds)
+        {
+            int width = imgBuffer.Width;
+            int height = imgBuffer.Height;
+            visibleBounds = new RectangleInt(0, 0, width, height);
+
+            // trim the bottom
+            bool aPixelsIsVisible = false;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    if (imgBuffer.IsPixelVisible(x, y))
+                    {   
+                        visibleBounds.Bottom = y;
+                        y = height;
+                        x = width;
+                        aPixelsIsVisible = true;
+                    }
+                }
+            }
+
+            // if we don't run into any pixels set for the top trim than there are no pixels set at all
+            if (!aPixelsIsVisible)
+            {
+                visibleBounds.SetRect(0, 0, 0, 0);
+                return;
+            }
+
+            // trim the bottom
+            for (int y = height - 1; y >= 0; y--)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    if (imgBuffer.IsPixelVisible(x, y))
+                    {
+                        visibleBounds.Top = y + 1;
+                        y = -1;
+                        x = width;
+                    }
+                }
+            }
+
+            // trim the left
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (imgBuffer.IsPixelVisible(x, y))
+                    {
+                        visibleBounds.Left = x;
+                        y = height;
+                        x = width;
+                    }
+                }
+            }
+
+            // trim the right
+            for (int x = width - 1; x >= 0; x--)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (imgBuffer.IsPixelVisible(x, y))
+                    {
+                        visibleBounds.Right = x + 1;
+                        y = height;
+                        x = -1;
+                    }
+                }
+            }
+        }
+
         public static void CropToVisible(this ImageBuffer imgBuffer)
         {
             Vector2 OldOriginOffset = imgBuffer.OriginOffset;

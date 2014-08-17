@@ -729,14 +729,13 @@ namespace MatterHackers.Agg.Image
 
         private void stack_blur_bgra32(ImageBuffer img, int radius, int ry)
         {
-            //
-            //
+
             int width = img.Width;
             int w4 = img.Width * 4;
             int height = img.Height;
             int[] srcBuffer = new int[width * height];
-            //img.CopySubBufferTo(0, 0, width, height, srcBuffer);
-            ImageBuffer.CopySubBufferTo(img, 0, 0, width, height, srcBuffer);
+
+            ImageBuffer.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
             //int i = 0; 
             //for (int y = 0; y < height; ++y)
             //{
