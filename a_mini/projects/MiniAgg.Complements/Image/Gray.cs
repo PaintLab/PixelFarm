@@ -55,7 +55,7 @@ namespace MatterHackers.Agg.Image
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            int value = buffer[bufferOffset];
+            byte value = buffer[bufferOffset];
             return new RGBA_Bytes(value, value, value, 255);
         }
 
@@ -77,7 +77,7 @@ namespace MatterHackers.Agg.Image
             unchecked
             {
                 int y = (sourceColor.red * 77) + (sourceColor.green * 151) + (sourceColor.blue * 28);
-                int gray = (y>>8);
+                int gray = (y >> 8);
                 gray = (byte)((((gray - (int)(pDestBuffer[bufferOffset])) * sourceColor.alpha) + ((int)(pDestBuffer[bufferOffset]) << base_shift)) >> base_shift);
                 pDestBuffer[bufferOffset] = (byte)gray;
             }
@@ -126,7 +126,7 @@ namespace MatterHackers.Agg.Image
                         color.alpha = (byte)((color.alpha * (cover) + 255) >> 8);
                         BlendPixel(destBuffer, bufferOffset, color);
                     }
-                        bufferOffset += bytesBetweenPixelsInclusive;
+                    bufferOffset += bytesBetweenPixelsInclusive;
                     ++sourceColorsOffset;
                 }
                 while (--count != 0);
@@ -160,7 +160,7 @@ namespace MatterHackers.Agg.Image
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            int value = buffer[bufferOffset];
+            byte  value = buffer[bufferOffset];
             return new RGBA_Bytes(value, value, value, 255);
         }
 
@@ -261,7 +261,7 @@ namespace MatterHackers.Agg.Image
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            int value = buffer[bufferOffset];
+            byte value = buffer[bufferOffset];
             return new RGBA_Bytes(value, value, value, 255);
         }
 

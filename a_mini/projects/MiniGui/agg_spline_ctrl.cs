@@ -76,11 +76,11 @@ namespace MatterHackers.Agg.UI
             m_curve_poly = new Stroke(m_curve_pnt);
             m_ellipse = new Ellipse();
 
-            m_background_color = new RGBA_Bytes(1.0, 1.0, 0.9);
-            m_border_color = new RGBA_Bytes(0.0, 0.0, 0.0);
-            m_curve_color = new RGBA_Bytes(0.0, 0.0, 0.0);
-            m_inactive_pnt_color = new RGBA_Bytes(0.0, 0.0, 0.0);
-            m_active_pnt_color = new RGBA_Bytes(1.0, 0.0, 0.0);
+            m_background_color = RGBA_Bytes.Make(1.0, 1.0, 0.9);
+            m_border_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
+            m_curve_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
+            m_inactive_pnt_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
+            m_active_pnt_color = RGBA_Bytes.Make(1.0, 0.0, 0.0);
 
             m_num_pnt = (num_pnt);
             m_border_width = (1.0);

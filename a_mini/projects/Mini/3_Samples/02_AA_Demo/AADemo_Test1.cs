@@ -63,7 +63,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                     int a = (ManagedCoversArray[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                             destImage.NewGraphics2D().Rasterizer, m_sl, destImage,
-                            new RGBA_Bytes(color.Red0To255, color.Green0To255, color.Blue0To255, a),
+                            RGBA_Bytes.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
                             x, y);
                     ++x;
                 }
@@ -131,7 +131,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ImageClippingProxy clippingProxyNormal = new ImageClippingProxy(widgetsSubImage);
             ImageClippingProxy clippingProxyGamma = new ImageClippingProxy(rasterGamma);
 
-            clippingProxyNormal.clear(new RGBA_Floats(1, 1, 1));
+            clippingProxyNormal.clear(RGBA_Bytes.White);
 
             ScanlineRasterizer rasterizer = new ScanlineRasterizer();
             scanline_unpacked_8 sl = new scanline_unpacked_8();
@@ -146,23 +146,23 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             rasterizer.line_to_d(m_x[2] / size_mul, m_y[2] / size_mul);
             ren_en.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, RGBA_Bytes.Black);
 
+            //----------------------------------------
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, RGBA_Bytes.Black);
-
             rasterizer.gamma(new gamma_none());
-
+            //----------------------------------------
             PathStorage ps = new PathStorage();
             Stroke pg = new Stroke(ps);
             pg.width(2);
-
             ps.remove_all();
             ps.MoveTo(m_x[0], m_y[0]);
             ps.LineTo(m_x[1], m_y[1]);
             ps.LineTo(m_x[2], m_y[2]);
             ps.LineTo(m_x[0], m_y[0]);
-            rasterizer.add_path(pg);
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, rasterizer, sl, new RGBA_Bytes(0, 150, 160, 200));
 
+            rasterizer.add_path(pg);
+
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, rasterizer, sl, new RGBA_Bytes(0, 150, 160, 200));
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)
