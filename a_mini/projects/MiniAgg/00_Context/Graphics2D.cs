@@ -109,14 +109,7 @@ namespace MatterHackers.Agg
                 return destImageByte;
             }
         }
-
-        //public IImageFloat DestImageFloat
-        //{
-        //    get
-        //    {
-        //        return destImageFloat;
-        //    }
-        //}
+         
 
         public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
 
@@ -135,12 +128,7 @@ namespace MatterHackers.Agg
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
-
-        //public abstract void Render(IImageFloat imageSource,
-        //    double x, double y,
-        //    double angleRadians,
-        //    double scaleX, double ScaleY);
-
+         
         public void Render(IVertexSource vertexSource, RGBA_Bytes[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)

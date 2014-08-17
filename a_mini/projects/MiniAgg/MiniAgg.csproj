@@ -62,8 +62,8 @@
     <Compile Include="07_Filters\agg_span_image_filter_gray.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_rgb.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_rgba.cs" />
-    <Compile Include="04_Span\agg_span_interpolator_linear.cs" />
-    <Compile Include="04_Span\agg_span_interpolator_persp.cs" />
+    <Compile Include="04_SpanInterpolator\agg_span_interpolator_linear.cs" />
+    <Compile Include="04_SpanInterpolator\agg_span_interpolator_persp.cs" />
     <Compile Include="05_Vertex_Path\agg_VertexSequence.cs" />
     <Compile Include="x_temp_comment\Array2D.cs" />
     <Compile Include="01_BufferMan\NativeBufferMan.cs" />

@@ -29,62 +29,49 @@ namespace MatterHackers.Agg
 {
     public class GammaLookUpTable
     {
-        private double m_gamma;
-        private byte[] m_dir_gamma;
-        private byte[] m_inv_gamma;
 
-        enum gamma_scale_e
-        {
-            gamma_shift = 8,
-            gamma_size  = 1 << gamma_shift,
-            gamma_mask  = gamma_size - 1
-        };
+        const int GAMMA_SHIFT = 8;
+        const int GAMMA_SIZE = 1 << GAMMA_SHIFT;
+        const int GAMMA_MASK = GAMMA_SIZE - 1;
 
-        public GammaLookUpTable()
-        {
-            m_gamma = (1.0);
-            m_dir_gamma = new byte[(int)gamma_scale_e.gamma_size];
-            m_inv_gamma = new byte[(int)gamma_scale_e.gamma_size];
-        }
+        double m_gamma;
+        byte[] m_dir_gamma;
+        byte[] m_inv_gamma; 
 
-        public GammaLookUpTable(double gamma)
+        public GammaLookUpTable(double gamma = 1)
         {
             m_gamma = gamma;
-            m_dir_gamma = new byte[(int)gamma_scale_e.gamma_size];
-            m_inv_gamma = new byte[(int)gamma_scale_e.gamma_size];
+            m_dir_gamma = new byte[GAMMA_SIZE];
+            m_inv_gamma = new byte[GAMMA_SIZE];
             SetGamma(m_gamma);
         }
 
-        public void SetGamma(double g)
+        void SetGamma(double g)
         {
             m_gamma = g;
-
-            for (uint i = 0; i < (uint)gamma_scale_e.gamma_size; i++)
-            {
-                m_dir_gamma[i] = (byte)agg_basics.uround(Math.Pow(i / (double)gamma_scale_e.gamma_mask, m_gamma) * (double)gamma_scale_e.gamma_mask);
-            }
-
             double inv_g = 1.0 / g;
-            for(uint i = 0; i < (uint)gamma_scale_e.gamma_size; i++)
+            for (int i = GAMMA_SIZE - 1; i >= 0; --i)
             {
-                m_inv_gamma[i] = (byte)agg_basics.uround(Math.Pow(i / (double)gamma_scale_e.gamma_mask, inv_g) * (double)gamma_scale_e.gamma_mask);
+                m_dir_gamma[i] = (byte)agg_basics.uround(Math.Pow(i / (double)GAMMA_MASK, m_gamma) * (double)GAMMA_MASK);
+                m_inv_gamma[i] = (byte)agg_basics.uround(Math.Pow(i / (double)GAMMA_MASK, inv_g) * (double)GAMMA_MASK);
             }
         }
 
-        public double GetGamma()
+        public double Gamma
         {
-            return m_gamma;
+
+            get { return m_gamma; }
         }
 
-        public byte dir(int v) 
-        { 
-            return m_dir_gamma[v]; 
+        public byte dir(int v)
+        {
+            return m_dir_gamma[v];
         }
 
-        public byte inv(int v) 
-        { 
+        public byte inv(int v)
+        {
             return m_inv_gamma[v];
         }
-    };
+    }
 }
 
