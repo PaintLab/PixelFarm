@@ -36,8 +36,8 @@ namespace LayoutFarm.Agg.Font
 
     public class TypeFacePrinter2 : IVertexSource
     {
-        StyledTypeFace typeFaceStyle; 
-        String text = ""; 
+        StyledTypeFace typeFaceStyle;
+        String text = "";
         Vector2 totalSizeCach;
 
         public Justification Justification { get; set; }
@@ -182,7 +182,7 @@ namespace LayoutFarm.Agg.Font
 
                         if (currentGlyphImage != null)
                         {
-                            graphics2D.Render(currentGlyphImage, currentOffset);
+                            graphics2D.Render(currentGlyphImage, currentOffset.x, currentOffset.y);
                         }
 
                         // get the advance for the next character

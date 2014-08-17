@@ -78,7 +78,7 @@ namespace MatterHackers.Agg.Font
             : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
         {
         }
-        
+
         public TypeFacePrinter(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
         {
             this.typeFaceStyle = typeFaceStyle;
@@ -182,7 +182,7 @@ namespace MatterHackers.Agg.Font
 
                         if (currentGlyphImage != null)
                         {
-                            graphics2D.Render(currentGlyphImage, currentOffset);
+                            graphics2D.Render(currentGlyphImage, currentOffset.x, currentOffset.y);
                         }
 
                         // get the advance for the next character
@@ -447,7 +447,7 @@ namespace MatterHackers.Agg.Font
                 text = this.text;
             }
 
-            if(text != this.text)
+            if (text != this.text)
             {
                 Vector2 calculatedSize;
                 GetSize(0, Math.Max(0, text.Length - 1), out calculatedSize, text);
@@ -480,7 +480,7 @@ namespace MatterHackers.Agg.Font
             {
                 if (text[i] == '\n')
                 {
-                    if (i + 1 < characterToMeasureEndIndexInclusive && (text[i + 1] == '\n') && text[i] != text[i+1])
+                    if (i + 1 < characterToMeasureEndIndexInclusive && (text[i + 1] == '\n') && text[i] != text[i + 1])
                     {
                         i++;
                     }
@@ -528,7 +528,7 @@ namespace MatterHackers.Agg.Font
         public int NumLines(int characterToMeasureStartIndexInclusive, int characterToMeasureEndIndexInclusive)
         {
             int numLines = 1;
-            
+
             characterToMeasureStartIndexInclusive = Math.Max(0, Math.Min(characterToMeasureStartIndexInclusive, text.Length - 1));
             characterToMeasureEndIndexInclusive = Math.Max(0, Math.Min(characterToMeasureEndIndexInclusive, text.Length - 1));
             for (int i = characterToMeasureStartIndexInclusive; i < characterToMeasureEndIndexInclusive; i++)
@@ -550,7 +550,7 @@ namespace MatterHackers.Agg.Font
         {
             offset = Vector2.Zero;
 
-            characterToMeasureEndIndexInclusive = Math.Min(text.Length-1, characterToMeasureEndIndexInclusive);
+            characterToMeasureEndIndexInclusive = Math.Min(text.Length - 1, characterToMeasureEndIndexInclusive);
 
             for (int index = characterToMeasureStartIndexInclusive; index <= characterToMeasureEndIndexInclusive; index++)
             {
@@ -600,7 +600,7 @@ namespace MatterHackers.Agg.Font
                 {
                     CheckForBetterClickPosition(ref position, ref clostestIndex, ref clostestXDistSquared, ref clostestYDistSquared, ref offset, i);
 
-                    if(text[i] == '\r')
+                    if (text[i] == '\r')
                     {
                         throw new Exception("All \\r's should have been converted to \\n's.");
                     }

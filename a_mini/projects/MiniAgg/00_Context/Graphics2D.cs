@@ -122,12 +122,8 @@ namespace MatterHackers.Agg
 
         public void Render(IImageByte imageSource, int x, int y)
         {
-            Render(imageSource, x, y);
-        }
-
-        public void Render(IImageByte imageSource, Vector2 position)
-        {
-            Render(imageSource, position.x, position.y);
+            //base.Render(imageSource, x, y);
+            Render(imageSource, x, y, 0, 1, 1);
         }
 
         public void Render(IImageByte imageSource, double x, double y)

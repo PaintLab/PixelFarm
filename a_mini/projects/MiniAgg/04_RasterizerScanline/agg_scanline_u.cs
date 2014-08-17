@@ -24,6 +24,7 @@
 // PostScript and PDF technology for software developers.
 // 
 //----------------------------------------------------------------------------
+
 namespace MatterHackers.Agg.RasterizerScanline
 {
     //=============================================================scanline_u8
@@ -111,6 +112,8 @@ namespace MatterHackers.Agg.RasterizerScanline
         private int m_y;
         private ArrayPOD<byte> m_covers;
         private ArrayPOD<ScanlineSpan> m_spans;
+       
+
         private int m_span_index;
         private int m_interator_index;
 
@@ -205,8 +208,7 @@ namespace MatterHackers.Agg.RasterizerScanline
         {
             m_interator_index = 1;
             return GetNextScanlineSpan();
-        }
-
+        } 
         public byte[] GetCovers()
         {
             return m_covers.Array;
