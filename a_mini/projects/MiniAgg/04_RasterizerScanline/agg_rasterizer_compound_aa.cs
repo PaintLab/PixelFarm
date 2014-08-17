@@ -103,7 +103,7 @@ namespace MatterHackers.Agg
             m_sl_len = (0);
         }
 
-        public void gamma(IGammaFunction gamma_function)
+        public void ResetGamma(IGammaFunction gamma_function)
         {
             throw new System.NotImplementedException();
         }

@@ -82,7 +82,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             //span_allocator span_alloc = new span_allocator();
             span_gouraud_rgba span_gen = new span_gouraud_rgba();
 
-            ras.gamma(new gamma_linear(0.0, this.LinearGamma));
+            ras.ResetGamma(new gamma_linear(0.0, this.LinearGamma));
 
             double d = this.DilationValue;
 
@@ -180,7 +180,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #endif
 
 
-            ras.gamma(new gamma_none());
+            ras.ResetGamma(new gamma_none());
             //m_dilation.Render(ras, sl, ren_base);
             //m_gamma.Render(ras, sl, ren_base);
             //m_alpha.Render(ras, sl, ren_base);
