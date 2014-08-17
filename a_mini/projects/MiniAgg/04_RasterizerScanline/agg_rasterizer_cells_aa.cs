@@ -103,8 +103,7 @@ namespace MatterHackers.Agg
         private VectorPOD<cell_aa> m_sorted_cells;
 
         private VectorPOD<sorted_y> m_sorted_y;
-        private QuickSort_cell_aa m_QSorter;
-
+        
         cell_aa m_curr_cell;
         cell_aa m_style_cell;
 
@@ -131,7 +130,7 @@ namespace MatterHackers.Agg
 
         public rasterizer_cells_aa()
         {
-            m_QSorter = new QuickSort_cell_aa();
+          
             m_sorted_cells = new VectorPOD<cell_aa>();
             m_sorted_y = new VectorPOD<sorted_y>();
             m_min_x = (0x7FFFFFFF);
@@ -375,7 +374,7 @@ namespace MatterHackers.Agg
                 var yData = sortedYData[i];
                 if (yData.num != 0)
                 {
-                    m_QSorter.Sort(sortedCellsData,
+                    QuickSort_cell_aa.Sort(sortedCellsData,
                         yData.start,
                         yData.start + yData.num - 1);
                 }

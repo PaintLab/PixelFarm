@@ -33,18 +33,15 @@ using System.Text;
 
 namespace MatterHackers.Agg
 {
-    class QuickSort_cell_aa
+    static class QuickSort_cell_aa
     {
-        public QuickSort_cell_aa()
-        {
-        }
 
-        public void Sort(cell_aa[] dataToSort)
+        public static void Sort(cell_aa[] dataToSort)
         {
             Sort(dataToSort, 0, dataToSort.Length - 1);
         }
 
-        public void Sort(cell_aa[] dataToSort, int beg, int end)
+        public static void Sort(cell_aa[] dataToSort, int beg, int end)
         {
             if (end == beg)
             {
@@ -65,7 +62,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        private int getPivotPoint(cell_aa[] dataToSort, int begPoint, int endPoint)
+        static int getPivotPoint(cell_aa[] dataToSort, int begPoint, int endPoint)
         {
             int pivot = begPoint;
             int m = begPoint + 1;
@@ -99,7 +96,7 @@ namespace MatterHackers.Agg
                 while ((n > begPoint) && (x_at_PivotPoint <= dataToSort[n].x))
                 {
                     n--;
-                } 
+                }
             }
 
             if (pivot != n)
@@ -113,18 +110,14 @@ namespace MatterHackers.Agg
         }
     }
 
-    public class QuickSort_range_adaptor_uint
+    static class QuickSort_range_adaptor_uint
     {
-        public QuickSort_range_adaptor_uint()
-        {
-        }
-
-        public void Sort(VectorPOD_RangeAdaptor dataToSort)
+        public static void Sort(VectorPOD_RangeAdaptor dataToSort)
         {
             Sort(dataToSort, 0, (int)(dataToSort.size() - 1));
         }
 
-        public void Sort(VectorPOD_RangeAdaptor dataToSort, int beg, int end)
+        public static void Sort(VectorPOD_RangeAdaptor dataToSort, int beg, int end)
         {
             if (end == beg)
             {
@@ -145,7 +138,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        private int getPivotPoint(VectorPOD_RangeAdaptor dataToSort, int begPoint, int endPoint)
+        static int getPivotPoint(VectorPOD_RangeAdaptor dataToSort, int begPoint, int endPoint)
         {
             int pivot = begPoint;
             int m = begPoint + 1;

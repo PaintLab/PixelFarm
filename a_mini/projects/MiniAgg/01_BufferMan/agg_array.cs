@@ -27,9 +27,7 @@ using System.Collections;
 
 namespace MatterHackers.Agg
 {
-
-
-
+     
     public class ArrayPOD<T>
     {
         public ArrayPOD(int size)

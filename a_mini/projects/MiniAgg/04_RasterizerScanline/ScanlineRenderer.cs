@@ -182,189 +182,192 @@ namespace MatterHackers.Agg
         //    }
         //}
 
-        public void RenderCompound(rasterizer_compound_aa ras, IScanlineCache sl_aa, IScanlineCache sl_bin, IImageByte imageFormat, span_allocator alloc, IStyleHandler sh)
-        {
-#if false
-            unsafe
-            {
-                if (ras.rewind_scanlines())
-                {
-                    int min_x = ras.min_x();
-                    int len = ras.max_x() - min_x + 2;
-                    sl_aa.reset(min_x, ras.max_x());
-                    sl_bin.reset(min_x, ras.max_x());
+//        public void RenderCompound(rasterizer_compound_aa ras, IScanlineCache sl_aa, IScanlineCache sl_bin, IImageByte imageFormat, span_allocator alloc, IStyleHandler sh)
+//        {
+//#if false
+//            unsafe
+//            {
+//                if (ras.rewind_scanlines())
+//                {
+//                    int min_x = ras.min_x();
+//                    int len = ras.max_x() - min_x + 2;
+//                    sl_aa.reset(min_x, ras.max_x());
+//                    sl_bin.reset(min_x, ras.max_x());
 
-                    //typedef typename BaseRenderer::color_type color_type;
-                    ArrayPOD<RGBA_Bytes> color_span = alloc.allocate((int)len * 2);
-                    byte[] ManagedCoversArray = sl_aa.GetCovers();
-                    fixed (byte* pCovers = ManagedCoversArray)
-                    {
-                        fixed (RGBA_Bytes* pColorSpan = color_span.Array)
-                        {
-                            int mix_bufferOffset = len;
-                            int num_spans;
+//                    //typedef typename BaseRenderer::color_type color_type;
+//                    ArrayPOD<RGBA_Bytes> color_span = alloc.allocate((int)len * 2);
+//                    byte[] ManagedCoversArray = sl_aa.GetCovers();
+//                    fixed (byte* pCovers = ManagedCoversArray)
+//                    {
+//                        fixed (RGBA_Bytes* pColorSpan = color_span.Array)
+//                        {
+//                            int mix_bufferOffset = len;
+//                            int num_spans;
 
-                            int num_styles;
-                            int style;
-                            bool solid;
-                            while ((num_styles = ras.sweep_styles()) > 0)
-                            {
-                                if (num_styles == 1)
-                                {
-                                    // Optimization for a single style. Happens often
-                                    //-------------------------
-                                    if (ras.sweep_scanline(sl_aa, 0))
-                                    {
-                                        style = ras.style(0);
-                                        if (sh.is_solid(style))
-                                        {
-                                            // Just solid fill
-                                            //-----------------------
-                                            RenderSolidSingleScanLine(imageFormat, sl_aa, sh.color(style));
-                                        }
-                                        else
-                                        {
-                                            // Arbitrary span generator
-                                            //-----------------------
-                                            ScanlineSpan span_aa = sl_aa.Begin();
-                                            num_spans = sl_aa.num_spans();
-                                            for (; ; )
-                                            {
-                                                len = span_aa.len;
-                                                sh.generate_span(pColorSpan,
-                                                                 span_aa.x,
-                                                                 sl_aa.y(),
-                                                                 (int)len,
-                                                                 style);
+//                            int num_styles;
+//                            int style;
+//                            bool solid;
+//                            while ((num_styles = ras.sweep_styles()) > 0)
+//                            {
+//                                if (num_styles == 1)
+//                                {
+//                                    // Optimization for a single style. Happens often
+//                                    //-------------------------
+//                                    if (ras.sweep_scanline(sl_aa, 0))
+//                                    {
+//                                        style = ras.style(0);
+//                                        if (sh.is_solid(style))
+//                                        {
+//                                            // Just solid fill
+//                                            //-----------------------
+//                                            RenderSolidSingleScanLine(imageFormat, sl_aa, sh.color(style));
+//                                        }
+//                                        else
+//                                        {
+//                                            // Arbitrary span generator
+//                                            //-----------------------
+//                                            ScanlineSpan span_aa = sl_aa.Begin();
+//                                            num_spans = sl_aa.num_spans();
+//                                            for (; ; )
+//                                            {
+//                                                len = span_aa.len;
+//                                                sh.generate_span(pColorSpan,
+//                                                                 span_aa.x,
+//                                                                 sl_aa.y(),
+//                                                                 (int)len,
+//                                                                 style);
 
-                                                imageFormat.blend_color_hspan(span_aa.x,
-                                                                      sl_aa.y(),
-                                                                      (int)span_aa.len,
-                                                                      pColorSpan,
-                                                                      &pCovers[span_aa.cover_index], 0);
-                                                if (--num_spans == 0) break;
-                                                span_aa = sl_aa.GetNextScanlineSpan();
-                                            }
-                                        }
-                                    }
-                                }
-                                else // there are multiple styles
-                                {
-                                    if (ras.sweep_scanline(sl_bin, -1))
-                                    {
-                                        // Clear the spans of the mix_buffer
-                                        //--------------------
-                                        ScanlineSpan span_bin = sl_bin.Begin();
-                                        num_spans = sl_bin.num_spans();
-                                        for (; ; )
-                                        {
-                                            agg_basics.MemClear((byte*)&pColorSpan[mix_bufferOffset + span_bin.x - min_x],
-                                                   span_bin.len * sizeof(RGBA_Bytes));
+//                                                imageFormat.blend_color_hspan(span_aa.x,
+//                                                                      sl_aa.y(),
+//                                                                      (int)span_aa.len,
+//                                                                      pColorSpan,
+//                                                                      &pCovers[span_aa.cover_index], 0);
+//                                                if (--num_spans == 0) break;
+//                                                span_aa = sl_aa.GetNextScanlineSpan();
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                                else // there are multiple styles
+//                                {
+//                                    if (ras.sweep_scanline(sl_bin, -1))
+//                                    {
+//                                        // Clear the spans of the mix_buffer
+//                                        //--------------------
+//                                        ScanlineSpan span_bin = sl_bin.Begin();
+//                                        num_spans = sl_bin.num_spans();
+//                                        for (; ; )
+//                                        {
+//                                            agg_basics.MemClear((byte*)&pColorSpan[mix_bufferOffset + span_bin.x - min_x],
+//                                                   span_bin.len * sizeof(RGBA_Bytes));
 
-                                            if (--num_spans == 0) break;
-                                            span_bin = sl_bin.GetNextScanlineSpan();
-                                        }
+//                                            if (--num_spans == 0) break;
+//                                            span_bin = sl_bin.GetNextScanlineSpan();
+//                                        }
 
-                                        for (int i = 0; i < num_styles; i++)
-                                        {
-                                            style = ras.style(i);
-                                            solid = sh.is_solid(style);
+//                                        for (int i = 0; i < num_styles; i++)
+//                                        {
+//                                            style = ras.style(i);
+//                                            solid = sh.is_solid(style);
 
-                                            if (ras.sweep_scanline(sl_aa, (int)i))
-                                            {
-                                                //IColorType* colors;
-                                                //IColorType* cspan;
-                                                //typename ScanlineAA::cover_type* covers;
-                                                ScanlineSpan span_aa = sl_aa.Begin();
-                                                num_spans = sl_aa.num_spans();
-                                                if (solid)
-                                                {
-                                                    // Just solid fill
-                                                    //-----------------------
-                                                    for (; ; )
-                                                    {
-                                                        RGBA_Bytes c = sh.color(style);
-                                                        len = span_aa.len;
-                                                        RGBA_Bytes* colors = &pColorSpan[mix_bufferOffset + span_aa.x - min_x];
-                                                        byte* covers = &pCovers[span_aa.cover_index];
-                                                        do
-                                                        {
-                                                            if (*covers == cover_full)
-                                                            {
-                                                                *colors = c;
-                                                            }
-                                                            else
-                                                            {
-                                                                colors->add(c, *covers);
-                                                            }
-                                                            ++colors;
-                                                            ++covers;
-                                                        }
-                                                        while (--len != 0);
-                                                        if (--num_spans == 0) break;
-                                                        span_aa = sl_aa.GetNextScanlineSpan();
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    // Arbitrary span generator
-                                                    //-----------------------
-                                                    for (; ; )
-                                                    {
-                                                        len = span_aa.len;
-                                                        RGBA_Bytes* colors = &pColorSpan[mix_bufferOffset + span_aa.x - min_x];
-                                                        RGBA_Bytes* cspan = pColorSpan;
-                                                        sh.generate_span(cspan,
-                                                                         span_aa.x,
-                                                                         sl_aa.y(),
-                                                                         (int)len,
-                                                                         style);
-                                                        byte* covers = &pCovers[span_aa.cover_index];
-                                                        do
-                                                        {
-                                                            if (*covers == cover_full)
-                                                            {
-                                                                *colors = *cspan;
-                                                            }
-                                                            else
-                                                            {
-                                                                colors->add(*cspan, *covers);
-                                                            }
-                                                            ++cspan;
-                                                            ++colors;
-                                                            ++covers;
-                                                        }
-                                                        while (--len != 0);
-                                                        if (--num_spans == 0) break;
-                                                        span_aa = sl_aa.GetNextScanlineSpan();
-                                                    }
-                                                }
-                                            }
-                                        }
+//                                            if (ras.sweep_scanline(sl_aa, (int)i))
+//                                            {
+//                                                //IColorType* colors;
+//                                                //IColorType* cspan;
+//                                                //typename ScanlineAA::cover_type* covers;
+//                                                ScanlineSpan span_aa = sl_aa.Begin();
+//                                                num_spans = sl_aa.num_spans();
+//                                                if (solid)
+//                                                {
+//                                                    // Just solid fill
+//                                                    //-----------------------
+//                                                    for (; ; )
+//                                                    {
+//                                                        RGBA_Bytes c = sh.color(style);
+//                                                        len = span_aa.len;
+//                                                        RGBA_Bytes* colors = &pColorSpan[mix_bufferOffset + span_aa.x - min_x];
+//                                                        byte* covers = &pCovers[span_aa.cover_index];
+//                                                        do
+//                                                        {
+//                                                            if (*covers == cover_full)
+//                                                            {
+//                                                                *colors = c;
+//                                                            }
+//                                                            else
+//                                                            {
+//                                                                colors->add(c, *covers);
+//                                                            }
+//                                                            ++colors;
+//                                                            ++covers;
+//                                                        }
+//                                                        while (--len != 0);
+//                                                        if (--num_spans == 0) break;
+//                                                        span_aa = sl_aa.GetNextScanlineSpan();
+//                                                    }
+//                                                }
+//                                                else
+//                                                {
+//                                                    // Arbitrary span generator
+//                                                    //-----------------------
+//                                                    for (; ; )
+//                                                    {
+//                                                        len = span_aa.len;
+//                                                        RGBA_Bytes* colors = &pColorSpan[mix_bufferOffset + span_aa.x - min_x];
+//                                                        RGBA_Bytes* cspan = pColorSpan;
+//                                                        sh.generate_span(cspan,
+//                                                                         span_aa.x,
+//                                                                         sl_aa.y(),
+//                                                                         (int)len,
+//                                                                         style);
+//                                                        byte* covers = &pCovers[span_aa.cover_index];
+//                                                        do
+//                                                        {
+//                                                            if (*covers == cover_full)
+//                                                            {
+//                                                                *colors = *cspan;
+//                                                            }
+//                                                            else
+//                                                            {
+//                                                                colors->add(*cspan, *covers);
+//                                                            }
+//                                                            ++cspan;
+//                                                            ++colors;
+//                                                            ++covers;
+//                                                        }
+//                                                        while (--len != 0);
+//                                                        if (--num_spans == 0) break;
+//                                                        span_aa = sl_aa.GetNextScanlineSpan();
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
 
-                                        // Emit the blended result as a color hspan
-                                        //-------------------------
-                                        span_bin = sl_bin.Begin();
-                                        num_spans = sl_bin.num_spans();
-                                        for (; ; )
-                                        {
-                                            imageFormat.blend_color_hspan(span_bin.x,
-                                                                  sl_bin.y(),
-                                                                  (int)span_bin.len,
-                                                                  &pColorSpan[mix_bufferOffset + span_bin.x - min_x],
-                                                                  null,
-                                                                  cover_full);
-                                            if (--num_spans == 0) break;
-                                            span_bin = sl_bin.GetNextScanlineSpan();
-                                        }
-                                    } // if(ras.sweep_scanline(sl_bin, -1))
-                                } // if(num_styles == 1) ... else
-                            } // while((num_styles = ras.sweep_styles()) > 0)
-                        }
-                    }
-                } // if(ras.rewind_scanlines())
-            }
-#endif
-        }
+//                                        // Emit the blended result as a color hspan
+//                                        //-------------------------
+//                                        span_bin = sl_bin.Begin();
+//                                        num_spans = sl_bin.num_spans();
+//                                        for (; ; )
+//                                        {
+//                                            imageFormat.blend_color_hspan(span_bin.x,
+//                                                                  sl_bin.y(),
+//                                                                  (int)span_bin.len,
+//                                                                  &pColorSpan[mix_bufferOffset + span_bin.x - min_x],
+//                                                                  null,
+//                                                                  cover_full);
+//                                            if (--num_spans == 0) break;
+//                                            span_bin = sl_bin.GetNextScanlineSpan();
+//                                        }
+//                                    } // if(ras.sweep_scanline(sl_bin, -1))
+//                                } // if(num_styles == 1) ... else
+//                            } // while((num_styles = ras.sweep_styles()) > 0)
+//                        }
+//                    }
+//                } // if(ras.rewind_scanlines())
+//            }
+//#endif
+//        }
+    
+    
+    
     }
 }

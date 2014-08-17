@@ -40,8 +40,7 @@ namespace MatterHackers.Agg.Image
 
     public interface IImageByte : IImage
     {
-        int StrideInBytes();
-         
+        int StrideInBytes(); 
 
         IRecieveBlenderByte GetRecieveBlender();
         void SetRecieveBlender(IRecieveBlenderByte value);

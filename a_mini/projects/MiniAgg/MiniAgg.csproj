@@ -46,7 +46,7 @@
     <Compile Include="02_Color\agg_color_gray.cs" />
     <Compile Include="02_Color\agg_color_rgba.cs" />
     <Compile Include="04_RasterizerScanline\agg_dda_line.cs" />
-    <Compile Include="03_ImageBuffer\agg_gamma_functions.cs" />
+    <Compile Include="04_RasterizerScanline\IGammaFunction.cs" />
     <Compile Include="07_Filters\agg_image_filters.cs" />
     <Compile Include="04_RasterizerScanline\agg_line_aa_basics.cs" />
     <Compile Include="07_Filters\agg_math.cs" />
@@ -69,10 +69,9 @@
     <Compile Include="x_temp_comment\Array2D.cs" />
     <Compile Include="01_BufferMan\NativeBufferMan.cs" />
     <Compile Include="02_Color\GammaLookUpTable.cs" />
-    <Compile Include="00_Top\Graphics2D.cs" />
+    <Compile Include="00_Context\Graphics2D.cs" />
     <Compile Include="02_Color\IColorType.cs" />
     <Compile Include="04_RasterizerScanline\ImageLineRenderer.cs" />
-    <Compile Include="03_ImageBuffer\agg_alpha_mask_u8.cs" />
     <Compile Include="03_ImageBuffer\ClippingProxy.cs" />
     <Compile Include="03_ImageBuffer\IImage.cs" />
     <Compile Include="03_ImageBuffer\ImageBuffer.cs" />

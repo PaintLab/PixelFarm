@@ -20,17 +20,11 @@ using System;
 
 namespace MatterHackers.Agg
 {
-    public interface IGammaFunction
-    {
-        double GetGamma(double x);
-    }
-
+     
     public struct gamma_none : IGammaFunction
     {
         public double GetGamma(double x) { return x; }
     }
-
-
     //==============================================================gamma_power
     public class gamma_power : IGammaFunction
     {

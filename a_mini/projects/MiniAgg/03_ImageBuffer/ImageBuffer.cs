@@ -903,11 +903,11 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void apply_gamma_inv(GammaLookUpTable g)
-        {
-            throw new System.NotImplementedException();
-            //for_each_pixel(apply_gamma_inv_rgba<color_type, order_type, GammaLut>(g));
-        }
+        //public void apply_gamma_inv(GammaLookUpTable g)
+        //{
+        //    throw new System.NotImplementedException();
+        //    //for_each_pixel(apply_gamma_inv_rgba<color_type, order_type, GammaLut>(g));
+        //}
 
         public bool IsPixelVisible(int x, int y)
         {

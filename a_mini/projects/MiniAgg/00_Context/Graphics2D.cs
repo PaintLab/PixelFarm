@@ -27,12 +27,6 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
 {
-    public interface IStyleHandler
-    {
-        bool is_solid(int style);
-        RGBA_Bytes color(int style);
-        void generate_span(RGBA_Bytes[] span, int spanIndex, int x, int y, int len, int style);
-    };
 
     public abstract class Graphics2D
     {
@@ -54,14 +48,14 @@ namespace MatterHackers.Agg
             Initialize(destImage, rasterizer);
         }
 
-        public void Initialize(IImageByte destImage, ScanlineRasterizer rasterizer)
+        internal void Initialize(IImageByte destImage, ScanlineRasterizer rasterizer)
         {
             destImageByte = destImage;
             destImageFloat = null;
             this.rasterizer = rasterizer;
         }
 
-        public void Initialize(IImageFloat destImage, ScanlineRasterizer rasterizer)
+        internal void Initialize(IImageFloat destImage, ScanlineRasterizer rasterizer)
         {
             destImageByte = null;
             destImageFloat = destImage;
@@ -183,9 +177,9 @@ namespace MatterHackers.Agg
 
         public abstract void Clear(IColorType color);
 
-        
-     
-     
+
+
+
 
         public void Line(Vector2 start, Vector2 end, RGBA_Bytes color)
         {
@@ -205,7 +199,7 @@ namespace MatterHackers.Agg
         public abstract void SetClippingRect(RectangleDouble rect_d);
         public abstract RectangleDouble GetClippingRect();
 
-        
+
 
         public static void AssertDebugNotDefined()
         {

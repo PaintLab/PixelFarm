@@ -29,10 +29,10 @@ namespace MatterHackers.Agg
 {
     public class ImageGraphics2D : Graphics2D
     {
-        const int cover_full = 255;
-        protected IScanlineCache m_ScanlineCache;
+
+        IScanlineCache m_ScanlineCache;
         PathStorage drawImageRectPath = new PathStorage();
-        MatterHackers.Agg.span_allocator destImageSpanAllocatorCache = new span_allocator();
+        span_allocator destImageSpanAllocatorCache = new span_allocator();
         ScanlineCachePacked8 drawImageScanlineCache = new ScanlineCachePacked8();
         ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
@@ -135,8 +135,8 @@ namespace MatterHackers.Agg
             {
                 ImageClippingProxy destImageWithClipping = new ImageClippingProxy(destImageByte);
                 scanlineRenderer.GenerateAndRender(Rasterizer,
-                    drawImageScanlineCache, 
-                    destImageWithClipping, 
+                    drawImageScanlineCache,
+                    destImageWithClipping,
                     destImageSpanAllocatorCache,
                     spanImageFilter);
             }

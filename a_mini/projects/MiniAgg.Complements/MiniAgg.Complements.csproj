@@ -44,6 +44,8 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
     <Compile Include="agg_bounding_rect.cs" />
     <Compile Include="BorderDouble.cs" />
+    <Compile Include="Colors\agg_gamma_functions.cs" />
+    <Compile Include="Image\agg_alpha_mask_u8.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
     <Compile Include="Image\Gray.cs" />

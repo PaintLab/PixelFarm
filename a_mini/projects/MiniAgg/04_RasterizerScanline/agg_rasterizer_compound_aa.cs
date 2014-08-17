@@ -358,8 +358,8 @@ namespace MatterHackers.Agg
                 VectorPOD_RangeAdaptor ra = new VectorPOD_RangeAdaptor(m_ast, 1, m_ast.size() - 1);
                 if (m_layer_order == layer_order_e.layer_direct)
                 {
-                    QuickSort_range_adaptor_uint m_QSorter = new QuickSort_range_adaptor_uint();
-                    m_QSorter.Sort(ra);
+
+                    QuickSort_range_adaptor_uint.Sort(ra);
                     //quick_sort(ra, uint_greater);
                 }
                 else
