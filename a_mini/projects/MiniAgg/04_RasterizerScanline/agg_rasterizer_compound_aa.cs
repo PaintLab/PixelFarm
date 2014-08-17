@@ -50,7 +50,7 @@ namespace MatterHackers.Agg
     {
         rasterizer_cells_aa m_Rasterizer;
         VectorClipper m_VectorClipper;
-        filling_rule_e m_filling_rule;
+        FillingRule m_filling_rule;
         layer_order_e m_layer_order;
         VectorPOD<style_info> m_styles;  // Active Styles
         VectorPOD<int> m_ast;     // Active Style Table (unique values)
@@ -86,7 +86,7 @@ namespace MatterHackers.Agg
         {
             m_Rasterizer = new rasterizer_cells_aa();
             m_VectorClipper = new VectorClipper();
-            m_filling_rule = filling_rule_e.fill_non_zero;
+            m_filling_rule = FillingRule.NonZero;
             m_layer_order = layer_order_e.layer_direct;
             m_styles = new VectorPOD<style_info>();  // Active Styles
             m_ast = new VectorPOD<int>();     // Active Style Table (unique values)
@@ -119,7 +119,7 @@ namespace MatterHackers.Agg
             m_sl_len = 0;
         }
 
-        void filling_rule(filling_rule_e filling_rule)
+        void filling_rule(FillingRule filling_rule)
         {
             m_filling_rule = filling_rule;
         }
@@ -470,7 +470,7 @@ namespace MatterHackers.Agg
         {
             int cover = area >> (poly_subpixel_shift * 2 + 1 - aa_shift);
             if (cover < 0) cover = -cover;
-            if (m_filling_rule == filling_rule_e.fill_even_odd)
+            if (m_filling_rule == FillingRule.EvenOdd)
             {
                 cover &= aa_mask2;
                 if (cover > aa_scale)

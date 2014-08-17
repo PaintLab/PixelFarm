@@ -1326,7 +1326,8 @@ namespace MatterHackers.Agg.UI
         {
             if (DoubleBuffer)
             {
-                return BackBuffer.NewGraphics2D();
+                return Graphics2D.CreateFromImage(this.BackBuffer);
+                //return BackBuffer.NewGraphics2D();
             }
 
             if (Parent != null)
@@ -1702,7 +1703,7 @@ namespace MatterHackers.Agg.UI
                                 int yOffset = (int)Math.Floor(child.LocalBounds.Bottom);
                                 if (child.isCurrentlyInvalid)
                                 {
-                                    Graphics2D childBackBufferGraphics2D = child.backBuffer.NewGraphics2D();
+                                    Graphics2D childBackBufferGraphics2D = Graphics2D.CreateFromImage(child.backBuffer);//.NewGraphics2D();
                                     childBackBufferGraphics2D.Clear(new RGBA_Bytes(0, 0, 0, 0));
                                     Affine transformToBuffer = Affine.NewTranslation(-xOffset + xFraction, -yOffset + yFraction);
                                     childBackBufferGraphics2D.SetTransform(transformToBuffer);

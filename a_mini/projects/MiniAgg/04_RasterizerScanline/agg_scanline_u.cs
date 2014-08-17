@@ -122,7 +122,7 @@ namespace MatterHackers.Agg.RasterizerScanline
 
         //--------------------------------------------------------------------
         public scanline_unpacked_8()
-        {     
+        {
 
             m_last_x = (0x7FFFFFF0);
             m_covers = new ArrayPOD<byte>(1000);
@@ -163,31 +163,6 @@ namespace MatterHackers.Agg.RasterizerScanline
             m_last_x = x;
         }
 
-        /*
-        //--------------------------------------------------------------------
-        unsafe public void add_cells(int x, int len, byte* covers)
-        {
-            x -= m_min_x;
-            for (int i = 0; i < len; i++)
-            {
-                m_covers.Array[x + i] = covers[i];
-            }
-            if (x == m_last_x + 1)
-            {
-                m_spans.Array[m_span_index].len += (int)len;
-            }
-            else
-            {
-                m_span_index++;
-                m_spans.Array[m_span_index].x = x + m_min_x;
-                m_spans.Array[m_span_index].len = (int)len;
-                m_spans.Array[m_span_index].cover_index = x;
-            }
-            m_last_x = x + (int)len - 1;
-        }
-         */
-
-        //--------------------------------------------------------------------
         public void add_span(int x, int len, int cover)
         {
             x -= m_min_x;
@@ -236,5 +211,5 @@ namespace MatterHackers.Agg.RasterizerScanline
         {
             return m_covers.Array;
         }
-    };
+    }
 }

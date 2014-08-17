@@ -28,7 +28,7 @@ namespace MatterHackers.Agg.Image
 {
     class InternalImageGraphics2D : ImageGraphics2D
     {
-        internal InternalImageGraphics2D(ImageBuffer owner)
+        internal InternalImageGraphics2D(IImageByte owner)
             : base()
         {
             ScanlineRasterizer rasterizer = new ScanlineRasterizer();
@@ -272,14 +272,14 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public MatterHackers.Agg.Graphics2D NewGraphics2D()
-        {
-            InternalImageGraphics2D imageRenderer = new InternalImageGraphics2D(this);
+        //public MatterHackers.Agg.Graphics2D NewGraphics2D()
+        //{
+        //    InternalImageGraphics2D imageRenderer = new InternalImageGraphics2D(this);
 
-            imageRenderer.Rasterizer.SetVectorClipBox(0, 0, Width, Height);
+        //    imageRenderer.Rasterizer.SetVectorClipBox(0, 0, Width, Height);
 
-            return imageRenderer;
-        }
+        //    return imageRenderer;
+        //}
 
         public void CopyFrom(IImageByte sourceImage)
         {
@@ -915,7 +915,7 @@ namespace MatterHackers.Agg.Image
             return (pixelValue.Alpha0To255 != 0 || pixelValue.Red0To255 != 0 || pixelValue.Green0To255 != 0 || pixelValue.Blue0To255 != 0);
         }
 
-       
+
         public override int GetHashCode()
         {
             // This might be hard to make fast and usefull.
@@ -951,7 +951,7 @@ namespace MatterHackers.Agg.Image
                 RectangleInt DestRect = new RectangleInt(0, 0, boundsToCopyFrom.Width, boundsToCopyFrom.Height);
                 RectangleInt AbsoluteSourceRect = boundsToCopyFrom;
                 // The first thing we need to do is make sure the frame is cleared. LBB [3/15/2004]
-                MatterHackers.Agg.Graphics2D graphics2D = NewGraphics2D();
+                var graphics2D = MatterHackers.Agg.Graphics2D.CreateFromImage(this);
                 graphics2D.Clear(new RGBA_Bytes(0, 0, 0, 0));
 
                 int x = -boundsToCopyFrom.Left - (int)sourceImage.OriginOffset.x;

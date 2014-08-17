@@ -33,7 +33,7 @@
 using System;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
-using filling_rule_e = MatterHackers.Agg.filling_rule_e;
+using filling_rule_e = MatterHackers.Agg.FillingRule;
 using status = MatterHackers.Agg.ScanlineRasterizer.status;
 using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e;
 
@@ -91,7 +91,7 @@ namespace MatterHackers.Agg
         private rasterizer_cells_aa m_outline;
         private VectorClipper m_VectorClipper;
         private int[] m_gamma = new int[(int)aa_scale_e.aa_scale];
-        private filling_rule_e m_filling_rule;
+        private FillingRule m_filling_rule;
         private bool m_auto_close;
         private int m_start_x;
         private int m_start_y;
@@ -125,7 +125,7 @@ namespace MatterHackers.Agg
         {
             m_outline = new rasterizer_cells_aa();
             m_VectorClipper = rasterizer_sl_clip;
-            m_filling_rule = filling_rule_e.fill_non_zero;
+            m_filling_rule = FillingRule.NonZero;
             m_auto_close = true;
             m_start_x = 0;
             m_start_y = 0;
@@ -186,7 +186,7 @@ namespace MatterHackers.Agg
                                m_VectorClipper.upscale(x2), m_VectorClipper.upscale(y2));
         }
 
-        public void filling_rule(filling_rule_e filling_rule)
+        public void filling_rule(FillingRule filling_rule)
         {
             m_filling_rule = filling_rule;
         }
@@ -392,7 +392,7 @@ namespace MatterHackers.Agg
                 cover = -cover;
             }
 
-            if (m_filling_rule == filling_rule_e.fill_even_odd)
+            if (m_filling_rule == FillingRule.EvenOdd)
             {
                 cover &= (int)aa_scale_e.aa_mask2;
                 if (cover > (int)aa_scale_e.aa_scale)

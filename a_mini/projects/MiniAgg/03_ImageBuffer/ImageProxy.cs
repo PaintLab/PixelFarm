@@ -83,10 +83,10 @@ namespace MatterHackers.Agg.Image
             return linkedImage.GetBounds();
         }
 
-        public Graphics2D NewGraphics2D()
-        {
-            return linkedImage.NewGraphics2D();
-        }
+        //public Graphics2D NewGraphics2D()
+        //{
+        //    return linkedImage.NewGraphics2D();
+        //}
 
         public IRecieveBlenderByte GetRecieveBlender()
         {

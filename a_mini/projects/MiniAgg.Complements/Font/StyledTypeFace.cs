@@ -68,7 +68,7 @@ namespace MatterHackers.Agg.Font
             x = 0;
             y = 0;
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
-            switch(state)
+            switch (state)
             {
                 case 0:
                     cmd = glyph.vertex(out x, out y);
@@ -274,7 +274,7 @@ namespace MatterHackers.Agg.Font
             }
 
             IVertexSource glyphForCharacter = GetGlyphForCharacter(character);
-            if(glyphForCharacter == null)
+            if (glyphForCharacter == null)
             {
                 return null;
             }
@@ -290,7 +290,8 @@ namespace MatterHackers.Agg.Font
             }
 
             ImageBuffer charImage = new ImageBuffer(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
-            charImage.NewGraphics2D().Render(glyphForCharacter, xFraction, yFraction, RGBA_Bytes.Black);
+            var gfx = Graphics2D.CreateFromImage(charImage);
+            gfx.Render(glyphForCharacter, xFraction, yFraction, RGBA_Bytes.Black);
             characterImageCache[character] = charImage;
 
             return charImage;

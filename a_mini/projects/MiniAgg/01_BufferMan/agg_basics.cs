@@ -24,12 +24,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
 {
-    public enum filling_rule_e
-    {
-        fill_non_zero,
-        fill_even_odd
-    }
-
+    
 
     static public class agg_basics
     {

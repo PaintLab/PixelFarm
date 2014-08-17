@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Image
         RectangleInt GetBounds(); 
         int GetBufferOffsetY(int y);
         int GetBufferOffsetXY(int x, int y); 
-        Graphics2D NewGraphics2D(); 
+        //Graphics2D NewGraphics2D(); 
         void MarkImageChanged();
     }
 

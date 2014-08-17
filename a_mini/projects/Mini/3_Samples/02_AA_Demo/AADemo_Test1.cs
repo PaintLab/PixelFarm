@@ -58,11 +58,12 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                 int num_pix = scanlineSpan.len;
                 int coverIndex = scanlineSpan.cover_index;
 
+                var gfx = Graphics2D.CreateFromImage(destImage);
                 do
                 {
                     int a = (ManagedCoversArray[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
-                            destImage.NewGraphics2D().Rasterizer, m_sl, destImage,
+                           gfx.Rasterizer, m_sl, destImage,
                             RGBA_Bytes.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
                             x, y);
                     ++x;

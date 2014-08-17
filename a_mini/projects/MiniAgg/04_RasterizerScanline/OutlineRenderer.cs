@@ -584,10 +584,7 @@ namespace MatterHackers.Agg
     //====================================================line_interpolator_aa0
     public class line_interpolator_aa0 : line_interpolator_aa_base
     {
-        distance_interpolator1 m_di;
-        //typedef Renderer renderer_type;
-        //typedef line_interpolator_aa_base<Renderer> base_type;
-
+        distance_interpolator1 m_di; 
         //---------------------------------------------------------------------
         public line_interpolator_aa0(OutlineRenderer ren, line_parameters lp)
             : base(ren, lp)

@@ -29,120 +29,120 @@ using MatterHackers.Agg;
 
 namespace MatterHackers.Agg.Image
 {
-/*
-    //=========================================================multiplier_rgba
-    template<class ColorT, class Order> struct multiplier_rgba
-    {
-        typedef typename ColorT::value_type value_type;
-        typedef typename ColorT::calc_type calc_type;
-
-        //--------------------------------------------------------------------
-        static void premultiply(value_type* p)
+    /*
+        //=========================================================multiplier_rgba
+        template<class ColorT, class Order> struct multiplier_rgba
         {
-            calc_type a = p[Order::A];
-            if(a < ColorT::base_mask)
+            typedef typename ColorT::value_type value_type;
+            typedef typename ColorT::calc_type calc_type;
+
+            //--------------------------------------------------------------------
+            static void premultiply(value_type* p)
             {
-                if(a == 0)
+                calc_type a = p[Order::A];
+                if(a < ColorT::base_mask)
                 {
-                    p[Order::R] = p[Order::G] = p[Order::B] = 0;
-                    return;
+                    if(a == 0)
+                    {
+                        p[Order::R] = p[Order::G] = p[Order::B] = 0;
+                        return;
+                    }
+                    p[Order::R] = value_type((p[Order::R] * a + ColorT::base_mask) >> ColorT::base_shift);
+                    p[Order::G] = value_type((p[Order::G] * a + ColorT::base_mask) >> ColorT::base_shift);
+                    p[Order::B] = value_type((p[Order::B] * a + ColorT::base_mask) >> ColorT::base_shift);
                 }
-                p[Order::R] = value_type((p[Order::R] * a + ColorT::base_mask) >> ColorT::base_shift);
-                p[Order::G] = value_type((p[Order::G] * a + ColorT::base_mask) >> ColorT::base_shift);
-                p[Order::B] = value_type((p[Order::B] * a + ColorT::base_mask) >> ColorT::base_shift);
             }
-        }
 
 
-        //--------------------------------------------------------------------
-        static void demultiply(value_type* p)
-        {
-            calc_type a = p[Order::A];
-            if(a < ColorT::base_mask)
+            //--------------------------------------------------------------------
+            static void demultiply(value_type* p)
             {
-                if(a == 0)
+                calc_type a = p[Order::A];
+                if(a < ColorT::base_mask)
                 {
-                    p[Order::R] = p[Order::G] = p[Order::B] = 0;
-                    return;
+                    if(a == 0)
+                    {
+                        p[Order::R] = p[Order::G] = p[Order::B] = 0;
+                        return;
+                    }
+                    calc_type r = (calc_type(p[Order::R]) * ColorT::base_mask) / a;
+                    calc_type g = (calc_type(p[Order::G]) * ColorT::base_mask) / a;
+                    calc_type b = (calc_type(p[Order::B]) * ColorT::base_mask) / a;
+                    p[Order::R] = value_type((r > ColorT::base_mask) ? ColorT::base_mask : r);
+                    p[Order::G] = value_type((g > ColorT::base_mask) ? ColorT::base_mask : g);
+                    p[Order::B] = value_type((b > ColorT::base_mask) ? ColorT::base_mask : b);
                 }
-                calc_type r = (calc_type(p[Order::R]) * ColorT::base_mask) / a;
-                calc_type g = (calc_type(p[Order::G]) * ColorT::base_mask) / a;
-                calc_type b = (calc_type(p[Order::B]) * ColorT::base_mask) / a;
-                p[Order::R] = value_type((r > ColorT::base_mask) ? ColorT::base_mask : r);
-                p[Order::G] = value_type((g > ColorT::base_mask) ? ColorT::base_mask : g);
-                p[Order::B] = value_type((b > ColorT::base_mask) ? ColorT::base_mask : b);
             }
-        }
-    };
-
-    //=====================================================apply_gamma_dir_rgba
-    template<class ColorT, class Order, class GammaLut> class apply_gamma_dir_rgba
-    {
-    public:
-        typedef typename ColorT::value_type value_type;
-
-        apply_gamma_dir_rgba(const GammaLut& gamma) : m_gamma(gamma) {}
-
-        void operator () (value_type* p)
-        {
-            p[Order::R] = m_gamma.dir(p[Order::R]);
-            p[Order::G] = m_gamma.dir(p[Order::G]);
-            p[Order::B] = m_gamma.dir(p[Order::B]);
-        }
-
-    private:
-        const GammaLut& m_gamma;
-    };
-
-    //=====================================================apply_gamma_inv_rgba
-    template<class ColorT, class Order, class GammaLut> class apply_gamma_inv_rgba
-    {
-    public:
-        typedef typename ColorT::value_type value_type;
-
-        apply_gamma_inv_rgba(const GammaLut& gamma) : m_gamma(gamma) {}
-
-        void operator () (value_type* p)
-        {
-            p[Order::R] = m_gamma.inv(p[Order::R]);
-            p[Order::G] = m_gamma.inv(p[Order::G]);
-            p[Order::B] = m_gamma.inv(p[Order::B]);
-        }
-
-    private:
-        const GammaLut& m_gamma;
-    };
-
-   //=============================================================blender_rgba
-    template<class ColorT, class Order> struct blender_rgba
-    {
-        typedef ColorT color_type;
-        typedef Order order_type;
-        typedef typename color_type::value_type value_type;
-        typedef typename color_type::calc_type calc_type;
-        enum base_scale_e 
-        { 
-            base_shift = color_type::base_shift,
-            base_mask  = color_type::base_mask
         };
 
-        //--------------------------------------------------------------------
-        static void blend_pix(value_type* p, 
-                                         int cr, int cg, int cb,
-                                         int alpha, 
-                                         int cover=0)
+        //=====================================================apply_gamma_dir_rgba
+        template<class ColorT, class Order, class GammaLut> class apply_gamma_dir_rgba
         {
-            calc_type r = p[Order::R];
-            calc_type g = p[Order::G];
-            calc_type b = p[Order::B];
-            calc_type a = p[Order::A];
-            p[Order::R] = (value_type)(((cr - r) * alpha + (r << base_shift)) >> base_shift);
-            p[Order::G] = (value_type)(((cg - g) * alpha + (g << base_shift)) >> base_shift);
-            p[Order::B] = (value_type)(((cb - b) * alpha + (b << base_shift)) >> base_shift);
-            p[Order::A] = (value_type)((alpha + a) - ((alpha * a + base_mask) >> base_shift));
-        }
-    };
- */
+        public:
+            typedef typename ColorT::value_type value_type;
+
+            apply_gamma_dir_rgba(const GammaLut& gamma) : m_gamma(gamma) {}
+
+            void operator () (value_type* p)
+            {
+                p[Order::R] = m_gamma.dir(p[Order::R]);
+                p[Order::G] = m_gamma.dir(p[Order::G]);
+                p[Order::B] = m_gamma.dir(p[Order::B]);
+            }
+
+        private:
+            const GammaLut& m_gamma;
+        };
+
+        //=====================================================apply_gamma_inv_rgba
+        template<class ColorT, class Order, class GammaLut> class apply_gamma_inv_rgba
+        {
+        public:
+            typedef typename ColorT::value_type value_type;
+
+            apply_gamma_inv_rgba(const GammaLut& gamma) : m_gamma(gamma) {}
+
+            void operator () (value_type* p)
+            {
+                p[Order::R] = m_gamma.inv(p[Order::R]);
+                p[Order::G] = m_gamma.inv(p[Order::G]);
+                p[Order::B] = m_gamma.inv(p[Order::B]);
+            }
+
+        private:
+            const GammaLut& m_gamma;
+        };
+
+       //=============================================================blender_rgba
+        template<class ColorT, class Order> struct blender_rgba
+        {
+            typedef ColorT color_type;
+            typedef Order order_type;
+            typedef typename color_type::value_type value_type;
+            typedef typename color_type::calc_type calc_type;
+            enum base_scale_e 
+            { 
+                base_shift = color_type::base_shift,
+                base_mask  = color_type::base_mask
+            };
+
+            //--------------------------------------------------------------------
+            static void blend_pix(value_type* p, 
+                                             int cr, int cg, int cb,
+                                             int alpha, 
+                                             int cover=0)
+            {
+                calc_type r = p[Order::R];
+                calc_type g = p[Order::G];
+                calc_type b = p[Order::B];
+                calc_type a = p[Order::A];
+                p[Order::R] = (value_type)(((cr - r) * alpha + (r << base_shift)) >> base_shift);
+                p[Order::G] = (value_type)(((cg - g) * alpha + (g << base_shift)) >> base_shift);
+                p[Order::B] = (value_type)(((cb - b) * alpha + (b << base_shift)) >> base_shift);
+                p[Order::A] = (value_type)((alpha + a) - ((alpha * a + base_mask) >> base_shift));
+            }
+        };
+     */
     public class BlenderBaseBGR
     {
         public int NumPixelBits { get { return 24; } }
@@ -251,7 +251,7 @@ namespace MatterHackers.Agg.Image
 
         public void gamma(GammaLookUpTable g)
         {
-            m_gamma = g; 
+            m_gamma = g;
         }
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
@@ -304,9 +304,9 @@ namespace MatterHackers.Agg.Image
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR], 
+            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR],
                 buffer[bufferOffset + ImageBuffer.OrderG],
-                buffer[bufferOffset + ImageBuffer.OrderB], 
+                buffer[bufferOffset + ImageBuffer.OrderB],
                 255);
         }
 

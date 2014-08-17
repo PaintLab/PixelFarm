@@ -38,7 +38,7 @@ using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filt
 namespace MatterHackers.Agg
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    public class span_image_filter_rgba_nn_stepXby1 : span_image_filter
+    class span_image_filter_rgba_nn_stepXby1 : span_image_filter
     {
         const int base_shift = 8;
         const int base_scale = (int)(1 << base_shift);
@@ -314,131 +314,131 @@ namespace MatterHackers.Agg
         }
     }
 
-//    public class span_image_filter_rgba_bilinear_float : span_image_filter_float
-//    {
-//        public span_image_filter_rgba_bilinear_float(IImageBufferAccessorFloat src, ISpanInterpolatorFloat inter)
-//            : base(src, inter, null)
-//        {
-//        }
+    //    public class span_image_filter_rgba_bilinear_float : span_image_filter_float
+    //    {
+    //        public span_image_filter_rgba_bilinear_float(IImageBufferAccessorFloat src, ISpanInterpolatorFloat inter)
+    //            : base(src, inter, null)
+    //        {
+    //        }
 
-//        public override void generate(RGBA_Floats[] span, int spanIndex, int x, int y, int len)
-//        {
-//            base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+    //        public override void generate(RGBA_Floats[] span, int spanIndex, int x, int y, int len)
+    //        {
+    //            base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
-//            ImageBufferFloat SourceRenderingBuffer = (ImageBufferFloat)base.source().SourceImage;
-//            ISpanInterpolatorFloat spanInterpolator = base.interpolator();
-//            int bufferIndex;
-//            float[] fg_ptr = SourceRenderingBuffer.GetBuffer(out bufferIndex);
+    //            ImageBufferFloat SourceRenderingBuffer = (ImageBufferFloat)base.source().SourceImage;
+    //            ISpanInterpolatorFloat spanInterpolator = base.interpolator();
+    //            int bufferIndex;
+    //            float[] fg_ptr = SourceRenderingBuffer.GetBuffer(out bufferIndex);
 
-//            unchecked
-//            {
-//                do
-//                {
-//                    float tempR;
-//                    float tempG;
-//                    float tempB;
-//                    float tempA;
+    //            unchecked
+    //            {
+    //                do
+    //                {
+    //                    float tempR;
+    //                    float tempG;
+    //                    float tempB;
+    //                    float tempA;
 
-//                    float x_hr;
-//                    float y_hr;
+    //                    float x_hr;
+    //                    float y_hr;
 
-//                    spanInterpolator.coordinates(out x_hr, out y_hr);
+    //                    spanInterpolator.coordinates(out x_hr, out y_hr);
 
-//                    x_hr -= base.filter_dx_dbl();
-//                    y_hr -= base.filter_dy_dbl();
+    //                    x_hr -= base.filter_dx_dbl();
+    //                    y_hr -= base.filter_dy_dbl();
 
-//                    int x_lr = (int)x_hr;
-//                    int y_lr = (int)y_hr;
-//                    float weight;
+    //                    int x_lr = (int)x_hr;
+    //                    int y_lr = (int)y_hr;
+    //                    float weight;
 
-//                    tempR = tempG = tempB = tempA = 0;
+    //                    tempR = tempG = tempB = tempA = 0;
 
-//                    x_hr -= x_lr;
-//                    y_hr -= y_lr;
+    //                    x_hr -= x_lr;
+    //                    y_hr -= y_lr;
 
-//                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+    //                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
 
-//#if false
-//                    unsafe
-//                    {
-//                        fixed (float* pSource = fg_ptr)
-//                        {
-//                            Vector4f tempFinal = new Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
-                            
-//                            Vector4f color0 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 0]);
-//                            weight = (1.0f - x_hr) * (1.0f - y_hr);
-//                            Vector4f weight4f = new Vector4f(weight, weight, weight, weight);
-//                            tempFinal = tempFinal + weight4f * color0;
+    //#if false
+    //                    unsafe
+    //                    {
+    //                        fixed (float* pSource = fg_ptr)
+    //                        {
+    //                            Vector4f tempFinal = new Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
 
-//                            Vector4f color1 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 4]);
-//                            weight = (x_hr) * (1.0f - y_hr);
-//                            weight4f = new Vector4f(weight, weight, weight, weight);
-//                            tempFinal = tempFinal + weight4f * color1;
+    //                            Vector4f color0 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 0]);
+    //                            weight = (1.0f - x_hr) * (1.0f - y_hr);
+    //                            Vector4f weight4f = new Vector4f(weight, weight, weight, weight);
+    //                            tempFinal = tempFinal + weight4f * color0;
 
-//                            y_lr++;
-//                            bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+    //                            Vector4f color1 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 4]);
+    //                            weight = (x_hr) * (1.0f - y_hr);
+    //                            weight4f = new Vector4f(weight, weight, weight, weight);
+    //                            tempFinal = tempFinal + weight4f * color1;
 
-//                            Vector4f color2 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 0]);
-//                            weight = (1.0f - x_hr) * (y_hr);
-//                            weight4f = new Vector4f(weight, weight, weight, weight);
-//                            tempFinal = tempFinal + weight4f * color2;
+    //                            y_lr++;
+    //                            bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
 
-//                            Vector4f color3 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 4]);
-//                            weight = (x_hr) * (y_hr);
-//                            weight4f = new Vector4f(weight, weight, weight, weight);
-//                            tempFinal = tempFinal + weight4f * color3;
+    //                            Vector4f color2 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 0]);
+    //                            weight = (1.0f - x_hr) * (y_hr);
+    //                            weight4f = new Vector4f(weight, weight, weight, weight);
+    //                            tempFinal = tempFinal + weight4f * color2;
 
-//                            RGBA_Floats color;
-//                            color.m_B = tempFinal.X;
-//                            color.m_G = tempFinal.Y;
-//                            color.m_R = tempFinal.Z;
-//                            color.m_A = tempFinal.W;
-//                            span[spanIndex] = color;
-//                        }
-//                    }
-//#else
-//                    weight = (1.0f - x_hr) * (1.0f - y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-//                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
-//                    bufferIndex += 4;
+    //                            Vector4f color3 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 4]);
+    //                            weight = (x_hr) * (y_hr);
+    //                            weight4f = new Vector4f(weight, weight, weight, weight);
+    //                            tempFinal = tempFinal + weight4f * color3;
 
-//                    weight = (x_hr) * (1.0f - y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-//                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                            RGBA_Floats color;
+    //                            color.m_B = tempFinal.X;
+    //                            color.m_G = tempFinal.Y;
+    //                            color.m_R = tempFinal.Z;
+    //                            color.m_A = tempFinal.W;
+    //                            span[spanIndex] = color;
+    //                        }
+    //                    }
+    //#else
+    //                    weight = (1.0f - x_hr) * (1.0f - y_hr);
+    //                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                    bufferIndex += 4;
 
-//                    y_lr++;
-//                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+    //                    weight = (x_hr) * (1.0f - y_hr);
+    //                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
 
-//                    weight = (1.0f - x_hr) * (y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-//                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
-//                    bufferIndex += 4;
+    //                    y_lr++;
+    //                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
 
-//                    weight = (x_hr) * (y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-//                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                    weight = (1.0f - x_hr) * (y_hr);
+    //                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                    bufferIndex += 4;
 
-//                    RGBA_Floats color;
-//                    color.red = tempR;
-//                    color.green = tempG;
-//                    color.blue = tempB;
-//                    color.alpha = tempA;
-//                    span[spanIndex] = color;
-//#endif
-//                    spanIndex++;
-//                    spanInterpolator.Next();
-//                } while (--len != 0);
-//            }
-//        }
-//    };
+    //                    weight = (x_hr) * (y_hr);
+    //                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+
+    //                    RGBA_Floats color;
+    //                    color.red = tempR;
+    //                    color.green = tempG;
+    //                    color.blue = tempB;
+    //                    color.alpha = tempA;
+    //                    span[spanIndex] = color;
+    //#endif
+    //                    spanIndex++;
+    //                    spanInterpolator.Next();
+    //                } while (--len != 0);
+    //            }
+    //        }
+    //    };
 
     //====================================span_image_filter_rgba_bilinear_clip
     public class span_image_filter_rgba_bilinear_clip : span_image_filter

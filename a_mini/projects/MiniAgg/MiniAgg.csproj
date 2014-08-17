@@ -46,6 +46,7 @@
     <Compile Include="02_Color\agg_color_gray.cs" />
     <Compile Include="02_Color\agg_color_rgba.cs" />
     <Compile Include="04_RasterizerScanline\agg_dda_line.cs" />
+    <Compile Include="04_RasterizerScanline\FillingRule.cs" />
     <Compile Include="04_RasterizerScanline\IGammaFunction.cs" />
     <Compile Include="05_Vertex_Path\LineCapAndJoin.cs" />
     <Compile Include="04_RasterizerScanline\agg_line_aa_basics.cs" />

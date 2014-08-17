@@ -32,7 +32,6 @@ namespace MatterHackers.Agg
     {
         const int cover_full = 255;
         protected IImageByte destImageByte;
-       // protected IImageFloat destImageFloat;
         protected Stroke StrockedText;
         protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
@@ -55,12 +54,6 @@ namespace MatterHackers.Agg
             this.rasterizer = rasterizer;
         }
 
-        //internal void Initialize(IImageFloat destImage, ScanlineRasterizer rasterizer)
-        //{
-        //    destImageByte = null;
-        //    destImageFloat = destImage;
-        //    this.rasterizer = rasterizer;
-        //}
 
         public int TransformStackCount
         {
@@ -177,15 +170,6 @@ namespace MatterHackers.Agg
 
         public abstract void Clear(IColorType color);
 
-
-
-
-
-        public void Line(Vector2 start, Vector2 end, RGBA_Bytes color)
-        {
-            Line(start.x, start.y, end.x, end.y, color);
-        }
-
         public void Line(double x1, double y1, double x2, double y2, RGBA_Bytes color)
         {
             PathStorage m_LinesToDraw = new PathStorage();
@@ -208,7 +192,13 @@ namespace MatterHackers.Agg
 #endif
         }
 
-
+        //================
+        public static Graphics2D CreateFromImage(IImageByte img)
+        {
+            InternalImageGraphics2D imageRenderer = new InternalImageGraphics2D(img);
+            imageRenderer.Rasterizer.SetVectorClipBox(0, 0, img.Width, img.Height);
+            return imageRenderer;
+        }
 
 
 

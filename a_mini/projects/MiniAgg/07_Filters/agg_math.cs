@@ -35,30 +35,37 @@ namespace MatterHackers.Agg
         public const double intersection_epsilon = 1.0e-30;
 
         //------------------------------------------------------------cross_product
-        public static double cross_product(double x1, double y1, 
-                                        double x2, double y2, 
-                                        double x,  double y)
+        public static double cross_product(double x1, double y1,
+                                        double x2, double y2,
+                                        double x, double y)
         {
             return (x - x2) * (y2 - y1) - (y - y2) * (x2 - x1);
         }
 
         //--------------------------------------------------------point_in_triangle
-        public static bool point_in_triangle(double x1, double y1, 
-                                          double x2, double y2, 
-                                          double x3, double y3, 
-                                          double x,  double y)
+        public static bool point_in_triangle(double x1, double y1,
+                                          double x2, double y2,
+                                          double x3, double y3,
+                                          double x, double y)
         {
-            bool cp1 = cross_product(x1, y1, x2, y2, x, y) < 0.0;
-            bool cp2 = cross_product(x2, y2, x3, y3, x, y) < 0.0;
-            bool cp3 = cross_product(x3, y3, x1, y1, x, y) < 0.0;
-            return cp1 == cp2 && cp2 == cp3 && cp3 == cp1;
+            bool tmp1 = false;
+            return ((tmp1 = cross_product(x1, y1, x2, y2, x, y) < 0.0) ==
+           (cross_product(x2, y2, x3, y3, x, y) < 0.0)) &&
+           (tmp1 ==
+           (cross_product(x3, y3, x1, y1, x, y) < 0.0));
+
+
+            //bool cp1 = cross_product(x1, y1, x2, y2, x, y) < 0.0;
+            //bool cp2 = cross_product(x2, y2, x3, y3, x, y) < 0.0;
+            //bool cp3 = cross_product(x3, y3, x1, y1, x, y) < 0.0;
+            //return cp1 == cp2 && cp2 == cp3 && cp3 == cp1;
         }
 
         //-----------------------------------------------------------calc_distance
         public static double calc_distance(double x1, double y1, double x2, double y2)
         {
-            double dx = x2-x1;
-            double dy = y2-y1;
+            double dx = x2 - x1;
+            double dy = y2 - y1;
 
 
             return Math.Sqrt(dx * dx + dy * dy);
@@ -67,20 +74,20 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------calc_sq_distance
         public static double calc_sq_distance(double x1, double y1, double x2, double y2)
         {
-            double dx = x2-x1;
-            double dy = y2-y1;
+            double dx = x2 - x1;
+            double dy = y2 - y1;
             return dx * dx + dy * dy;
         }
 
         //------------------------------------------------calc_line_point_distance
-        public static double calc_line_point_distance(double x1, double y1, 
-                                                   double x2, double y2, 
-                                                   double x,  double y)
+        public static double calc_line_point_distance(double x1, double y1,
+                                                   double x2, double y2,
+                                                   double x, double y)
         {
-            double dx = x2-x1;
-            double dy = y2-y1;
+            double dx = x2 - x1;
+            double dy = y2 - y1;
             double d = Math.Sqrt(dx * dx + dy * dy);
-            if(d < vertex_dist_epsilon)
+            if (d < vertex_dist_epsilon)
             {
                 return calc_distance(x1, y1, x, y);
             }
@@ -88,16 +95,16 @@ namespace MatterHackers.Agg
         }
 
         //-------------------------------------------------------calc_line_point_u
-        public static double calc_segment_point_u(double x1, double y1, 
-                                               double x2, double y2, 
-                                               double x,  double y)
+        public static double calc_segment_point_u(double x1, double y1,
+                                               double x2, double y2,
+                                               double x, double y)
         {
             double dx = x2 - x1;
             double dy = y2 - y1;
 
-            if(dx == 0 && dy == 0)
+            if (dx == 0 && dy == 0)
             {
-	            return 0;
+                return 0;
             }
 
             double pdx = x - x1;
@@ -107,29 +114,29 @@ namespace MatterHackers.Agg
         }
 
         //---------------------------------------------calc_line_point_sq_distance
-        public static double calc_segment_point_sq_distance(double x1, double y1, 
-                                                         double x2, double y2, 
-                                                         double x,  double y,
+        public static double calc_segment_point_sq_distance(double x1, double y1,
+                                                         double x2, double y2,
+                                                         double x, double y,
                                                          double u)
         {
-            if(u <= 0)
+            if (u <= 0)
             {
-	            return calc_sq_distance(x, y, x1, y1);
+                return calc_sq_distance(x, y, x1, y1);
             }
-            else 
-            if(u >= 1)
-            {
-	            return calc_sq_distance(x, y, x2, y2);
-            }
+            else
+                if (u >= 1)
+                {
+                    return calc_sq_distance(x, y, x2, y2);
+                }
             return calc_sq_distance(x, y, x1 + u * (x2 - x1), y1 + u * (y2 - y1));
         }
 
         //---------------------------------------------calc_line_point_sq_distance
-        public static double calc_segment_point_sq_distance(double x1, double y1, 
-                                                         double x2, double y2, 
-                                                         double x,  double y)
+        public static double calc_segment_point_sq_distance(double x1, double y1,
+                                                         double x2, double y2,
+                                                         double x, double y)
         {
-            return 
+            return
                 calc_segment_point_sq_distance(
                     x1, y1, x2, y2, x, y,
                     calc_segment_point_u(x1, y1, x2, y2, x, y));
@@ -140,8 +147,8 @@ namespace MatterHackers.Agg
                                           double bX1, double bY1, double bX2, double bY2,
                                           out double x, out double y)
         {
-            double num = (aY1-bY1) * (bX2-bX1) - (aX1-bX1) * (bY2-bY1);
-            double den = (aX2-aX1) * (bY2-bY1) - (aY2-aY1) * (bX2-bX1);
+            double num = (aY1 - bY1) * (bX2 - bX1) - (aX1 - bX1) * (bY2 - bY1);
+            double den = (aX2 - aX1) * (bY2 - bY1) - (aY2 - aY1) * (bX2 - bX1);
             if (Math.Abs(den) < intersection_epsilon)
             {
                 x = 0;
@@ -149,8 +156,8 @@ namespace MatterHackers.Agg
                 return false;
             }
             double r = num / den;
-            x = aX1 + r * (aX2-aX1);
-            y = aY1 + r * (aY2-aY1);
+            x = aX1 + r * (aX2 - aX1);
+            y = aY1 + r * (aY2 - aY1);
             return true;
         }
 
@@ -164,7 +171,7 @@ namespace MatterHackers.Agg
             double dy1 = y2 - y1;
             double dx2 = x4 - x3;
             double dy2 = y4 - y3;
-            return ((x3 - x2) * dy1 - (y3 - y2) * dx1 < 0.0) != 
+            return ((x3 - x2) * dy1 - (y3 - y2) * dx1 < 0.0) !=
                    ((x4 - x2) * dy1 - (y4 - y2) * dx1 < 0.0) &&
                    ((x1 - x4) * dy2 - (y1 - y4) * dx2 < 0.0) !=
                    ((x2 - x4) * dy2 - (y2 - y4) * dx2 < 0.0);
@@ -189,8 +196,8 @@ namespace MatterHackers.Agg
         {
             double dx = x2 - x1;
             double dy = y2 - y1;
-            double d = Math.Sqrt(dx*dx + dy*dy); 
-            x =  thickness * dy / d;
+            double d = Math.Sqrt(dx * dx + dy * dy);
+            x = thickness * dy / d;
             y = -thickness * dx / d;
         }
 
@@ -201,16 +208,16 @@ namespace MatterHackers.Agg
                                         double[] x, double[] y,
                                         double d)
         {
-            double dx1=0.0;
-            double dy1=0.0; 
-            double dx2=0.0;
-            double dy2=0.0; 
-            double dx3=0.0;
-            double dy3=0.0; 
+            double dx1 = 0.0;
+            double dy1 = 0.0;
+            double dx2 = 0.0;
+            double dy2 = 0.0;
+            double dx3 = 0.0;
+            double dy3 = 0.0;
             double loc = cross_product(x1, y1, x2, y2, x3, y3);
-            if(Math.Abs(loc) > intersection_epsilon)
+            if (Math.Abs(loc) > intersection_epsilon)
             {
-                if(cross_product(x1, y1, x2, y2, x3, y3) > 0.0) 
+                if (cross_product(x1, y1, x2, y2, x3, y3) > 0.0)
                 {
                     d = -d;
                 }
@@ -231,7 +238,7 @@ namespace MatterHackers.Agg
                                              double x2, double y2,
                                              double x3, double y3)
         {
-            return (x1*y2 - x2*y1 + x2*y3 - x3*y2 + x3*y1 - x1*y3) * 0.5;
+            return (x1 * y2 - x2 * y1 + x2 * y3 - x3 * y2 + x3 * y1 - x1 * y3) * 0.5;
         }
 
         //-------------------------------------------------------calc_polygon_area
@@ -239,12 +246,12 @@ namespace MatterHackers.Agg
         {
             int i;
             double sum = 0.0;
-            double x  = st[0].x;
-            double y  = st[0].y;
+            double x = st[0].x;
+            double y = st[0].y;
             double xs = x;
             double ys = y;
 
-            for(i = 1; i < st.size(); i++)
+            for (i = 1; i < st.size(); i++)
             {
                 VertexDistance v = st[i];
                 sum += x * v.y - y * v.x;
@@ -353,7 +360,7 @@ namespace MatterHackers.Agg
             //This code is actually pure C and portable to most 
             //architectures including 64bit ones. 
             int t = val;
-            int bit=0;
+            int bit = 0;
             int shift = 11;
 
             //The following piece of code is just an emulation of the
@@ -362,21 +369,21 @@ namespace MatterHackers.Agg
             //as fast as just one "bsr". On PIII and PIV the
             //bsr is optimized quite well.
             bit = (int)t >> 24;
-            if(bit != 0)
+            if (bit != 0)
             {
                 bit = g_elder_bit_table[bit] + 24;
             }
             else
             {
                 bit = ((int)t >> 16) & 0xFF;
-                if(bit != 0)
+                if (bit != 0)
                 {
                     bit = g_elder_bit_table[bit] + 16;
                 }
                 else
                 {
                     bit = ((int)t >> 8) & 0xFF;
-                    if(bit != 0)
+                    if (bit != 0)
                     {
                         bit = g_elder_bit_table[bit] + 8;
                     }
@@ -389,7 +396,7 @@ namespace MatterHackers.Agg
 
             //This code calculates the sqrt.
             bit -= 9;
-            if(bit > 0)
+            if (bit > 0)
             {
                 bit = (bit >> 1) + (bit & 1);
                 shift -= (int)bit;
@@ -422,48 +429,48 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         public static double besj(double x, int n)
         {
-            if(n < 0)
+            if (n < 0)
             {
                 return 0;
             }
             double d = 1E-6;
             double b = 0;
-            if (Math.Abs(x) <= d) 
+            if (Math.Abs(x) <= d)
             {
-                if(n != 0) return 0;
+                if (n != 0) return 0;
                 return 1;
             }
             double b1 = 0; // b1 is the value from the previous iteration
             // Set up a starting order for recurrence
             int m1 = (int)Math.Abs(x) + 6;
-            if (Math.Abs(x) > 5) 
+            if (Math.Abs(x) > 5)
             {
                 m1 = (int)(Math.Abs(1.4 * x + 60 / x));
             }
             int m2 = (int)(n + 2 + Math.Abs(x) / 4);
-            if (m1 > m2) 
+            if (m1 > m2)
             {
                 m2 = m1;
             }
-        
+
             // Apply recurrence down from current max order
-            for(;;) 
+            for (; ; )
             {
                 double c3 = 0;
                 double c2 = 1E-30;
                 double c4 = 0;
                 int m8 = 1;
-                if (m2 / 2 * 2 == m2) 
+                if (m2 / 2 * 2 == m2)
                 {
                     m8 = -1;
                 }
                 int imax = m2 - 2;
-                for (int i = 1; i <= imax; i++) 
+                for (int i = 1; i <= imax; i++)
                 {
                     double c6t = 2 * (m2 - i) * c2 / x - c3;
                     c3 = c2;
                     c2 = c6t;
-                    if(m2 - i - 1 == n)
+                    if (m2 - i - 1 == n)
                     {
                         b = c6t;
                     }
@@ -474,7 +481,7 @@ namespace MatterHackers.Agg
                     }
                 }
                 double c6 = 2 * c2 / x - c3;
-                if(n == 0)
+                if (n == 0)
                 {
                     b = c6;
                 }
