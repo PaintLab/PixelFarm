@@ -83,7 +83,6 @@
     <Compile Include="04_RasterizerScanline\IScanline.cs" />
     <Compile Include="06_MathTools\IVertexDest.cs" />
     <Compile Include="04_RasterizerScanline\OutlineRenderer.cs" />
-    <Compile Include="06_MathTools\Point2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="04_RasterizerScanline\RasterBufferAccessors.cs" />
     <Compile Include="04_RasterizerScanline\agg_scanline_p.cs" />

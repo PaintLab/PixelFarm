@@ -9,6 +9,7 @@ namespace MatterHackers.Agg
     {
         public int Left, Bottom, Right, Top;
 
+         
         public RectangleInt(int left, int bottom, int right, int top)
         {
             Left = left;
@@ -16,19 +17,7 @@ namespace MatterHackers.Agg
             Right = right;
             Top = top;
         }
-
-        public void SetRect(int left, int bottom, int right, int top)
-        {
-            init(left, bottom, right, top);
-        }
-
-        public void init(int x1_, int y1_, int x2_, int y2_)
-        {
-            Left = x1_;
-            Bottom = y1_;
-            Right = x2_;
-            Top = y2_;
-        }
+         
 
         // This function assumes the rect is normalized
         public int Width

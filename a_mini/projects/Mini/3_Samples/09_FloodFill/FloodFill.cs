@@ -60,7 +60,7 @@ namespace MatterHackers.Agg.Sample_FloodFill
 
         public override void Draw(Graphics2D graphics2D)
         {
-            graphics2D.Render(imageToFillOn, imageOffset);
+            graphics2D.Render(imageToFillOn, imageOffset.x, imageOffset.y);
 
         }
 

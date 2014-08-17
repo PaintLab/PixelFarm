@@ -120,9 +120,9 @@ namespace MatterHackers.Agg
 
         public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
 
-        public void Render(IImageByte imageSource, Point2D position)
+        public void Render(IImageByte imageSource, int x, int y)
         {
-            Render(imageSource, position.x, position.y);
+            Render(imageSource, x, y);
         }
 
         public void Render(IImageByte imageSource, Vector2 position)

@@ -45,8 +45,8 @@ namespace MatterHackers.Agg.RasterizerScanline
         private int m_y;
         private byte[] m_covers;
         private int m_cover_index;
-
         private ScanlineSpan[] m_spans;
+
         private int m_span_index;
 
         private int m_interator_index;

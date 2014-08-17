@@ -26,6 +26,7 @@ using System;
 namespace MatterHackers.Agg.Transform
 {
     //----------------------------------------------------------trans_viewport
+
     public sealed class Viewport
     {
         double m_world_x1;
@@ -36,7 +37,7 @@ namespace MatterHackers.Agg.Transform
         double m_device_y1;
         double m_device_x2;
         double m_device_y2;
-        aspect_ratio_e m_aspect;
+        AspectRatio m_aspect;
         bool m_is_valid;
         double m_align_x;
         double m_align_y;
@@ -49,13 +50,12 @@ namespace MatterHackers.Agg.Transform
         double m_kx;
         double m_ky;
 
-        public enum aspect_ratio_e
+        public enum AspectRatio
         {
-            //aspect_ratio_e
-
-            aspect_ratio_stretch,
-            aspect_ratio_meet,
-            aspect_ratio_slice
+            //aspect_ratio_e 
+            Stretch,
+            Meet,
+            Slice
         };
 
         //-------------------------------------------------------------------
@@ -69,7 +69,7 @@ namespace MatterHackers.Agg.Transform
             m_device_y1 = (0.0);
             m_device_x2 = (1.0);
             m_device_y2 = (1.0);
-            m_aspect = aspect_ratio_e.aspect_ratio_stretch;
+            m_aspect = AspectRatio.Stretch;
             m_is_valid = (true);
             m_align_x = (0.5);
             m_align_y = (0.5);
@@ -86,7 +86,7 @@ namespace MatterHackers.Agg.Transform
         //-------------------------------------------------------------------
         public void preserve_aspect_ratio(double alignx,
                                    double aligny,
-                                   aspect_ratio_e aspect)
+                                   AspectRatio aspect)
         {
             m_align_x = alignx;
             m_align_y = aligny;
@@ -146,7 +146,7 @@ namespace MatterHackers.Agg.Transform
         public bool is_valid() { return m_is_valid; }
         public double align_x() { return m_align_x; }
         public double align_y() { return m_align_y; }
-        public aspect_ratio_e aspect_ratio() { return m_aspect; }
+        public AspectRatio aspect_ratio() { return m_aspect; }
 
         //-------------------------------------------------------------------
         public void transform(ref double x, ref double y)
@@ -241,13 +241,13 @@ namespace MatterHackers.Agg.Transform
             double device_y1 = m_device_y1;
             double device_x2 = m_device_x2;
             double device_y2 = m_device_y2;
-            if (m_aspect != aspect_ratio_e.aspect_ratio_stretch)
+            if (m_aspect != AspectRatio.Stretch)
             {
                 double d;
                 m_kx = (device_x2 - device_x1) / (world_x2 - world_x1);
                 m_ky = (device_y2 - device_y1) / (world_y2 - world_y1);
 
-                if ((m_aspect == aspect_ratio_e.aspect_ratio_meet) == (m_kx < m_ky))
+                if ((m_aspect == AspectRatio.Meet) == (m_kx < m_ky))
                 {
                     d = (world_y2 - world_y1) * m_ky / m_kx;
                     world_y1 += (world_y2 - world_y1 - d) * m_align_y;
