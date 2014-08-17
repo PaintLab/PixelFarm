@@ -3,7 +3,7 @@
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -20,7 +20,7 @@ namespace MatterHackers.Agg.Sample_FloodFill
         {
             BackgroundColor = RGBA_Bytes.White;
             imageToFillOn = new ImageBuffer(400, 300, 32, new BlenderBGRA());
-            Graphics2D imageToFillGraphics = imageToFillOn.NewGraphics2D();
+            var imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
             imageToFillGraphics.Clear(RGBA_Bytes.White);
             imageToFillGraphics.DrawString("Click to fill", 20, 30);
             imageToFillGraphics.Circle(new Vector2(200, 150), 35, RGBA_Bytes.Black);
@@ -60,7 +60,7 @@ namespace MatterHackers.Agg.Sample_FloodFill
 
         public override void Draw(Graphics2D graphics2D)
         {
-            graphics2D.Render(imageToFillOn, imageOffset);
+            graphics2D.Render(imageToFillOn, imageOffset.x, imageOffset.y);
 
         }
 

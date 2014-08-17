@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MiniAgg</RootNamespace>
     <AssemblyName>MiniAgg</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,8 +47,9 @@
     <Compile Include="02_Color\agg_color_gray.cs" />
     <Compile Include="02_Color\agg_color_rgba.cs" />
     <Compile Include="04_RasterizerScanline\agg_dda_line.cs" />
+    <Compile Include="04_RasterizerScanline\FillingRule.cs" />
     <Compile Include="04_RasterizerScanline\IGammaFunction.cs" />
-    <Compile Include="07_Filters\agg_image_filters.cs" />
+    <Compile Include="05_Vertex_Path\LineCapAndJoin.cs" />
     <Compile Include="04_RasterizerScanline\agg_line_aa_basics.cs" />
     <Compile Include="07_Filters\agg_math.cs" />
     <Compile Include="07_Filters\agg_pattern_filters_rgba.cs" />
@@ -56,15 +58,13 @@
     <Compile Include="04_RasterizerScanline\agg_rasterizer_outline_aa.cs" />
     <Compile Include="x_temp_comment\agg_scanline_bin.cs" />
     <Compile Include="06_MathTools\agg_simul_eq.cs" />
-    <Compile Include="04_Span\agg_span_allocator.cs" />
-    <Compile Include="04_Span\agg_span_gradient.cs" />
+    <Compile Include="x_temp_comment\agg_span_allocator.cs" />
     <Compile Include="07_Filters\agg_span_image_filter.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_gray.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_rgb.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_rgba.cs" />
-    <Compile Include="04_Span\agg_span_interpolator_linear.cs" />
-    <Compile Include="04_Span\agg_span_interpolator_persp.cs" />
-    <Compile Include="04_Span\agg_span_subdiv_adaptor.cs" />
+    <Compile Include="04_SpanInterpolator\agg_span_interpolator_linear.cs" />
+    <Compile Include="04_SpanInterpolator\agg_span_interpolator_persp.cs" />
     <Compile Include="05_Vertex_Path\agg_VertexSequence.cs" />
     <Compile Include="x_temp_comment\Array2D.cs" />
     <Compile Include="01_BufferMan\NativeBufferMan.cs" />
@@ -80,14 +80,11 @@
     <Compile Include="03_ImageBuffer\ImageProxy.cs" />
     <Compile Include="02_Color\rgb.cs" />
     <Compile Include="02_Color\rgba.cs" />
-    <Compile Include="03_ImageBuffer\Transposer.cs" />
     <Compile Include="05_Vertex_Path\IMarkers.cs" />
     <Compile Include="04_RasterizerScanline\IScanline.cs" />
     <Compile Include="06_MathTools\IVertexDest.cs" />
     <Compile Include="04_RasterizerScanline\OutlineRenderer.cs" />
-    <Compile Include="06_MathTools\Point2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="04_RasterizerScanline\quicksort.cs" />
     <Compile Include="04_RasterizerScanline\RasterBufferAccessors.cs" />
     <Compile Include="04_RasterizerScanline\agg_scanline_p.cs" />
     <Compile Include="04_RasterizerScanline\agg_scanline_u.cs" />
@@ -117,7 +114,9 @@
       <Name>MiniVectorMath</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="07_Filters\ImageFilterLookupTable.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

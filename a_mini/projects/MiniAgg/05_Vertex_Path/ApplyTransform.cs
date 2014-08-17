@@ -23,8 +23,7 @@ namespace MatterHackers.Agg.VertexSource
     // in the original agg this was conv_transform
     public class VertexSourceApplyTransform : IVertexSourceProxy
     {
-        private Transform.ITransform transformToApply;
-
+        Transform.ITransform transformToApply;
         public IVertexSource VertexSource
         {
             get;
@@ -57,15 +56,15 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void rewind(int path_id) 
-        { 
-            VertexSource.rewind(path_id); 
+        public void rewind(int path_id)
+        {
+            VertexSource.rewind(path_id);
         }
 
         public ShapePath.FlagsAndCommand vertex(out double x, out double y)
         {
             ShapePath.FlagsAndCommand cmd = VertexSource.vertex(out x, out y);
-            if(ShapePath.is_vertex(cmd))
+            if (ShapePath.is_vertex(cmd))
             {
                 transformToApply.transform(ref x, ref y);
             }

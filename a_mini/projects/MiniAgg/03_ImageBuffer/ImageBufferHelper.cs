@@ -20,8 +20,7 @@ using System;
 using System.Runtime;
 
 using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+using MatterHackers.Agg.VertexSource; 
 using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
@@ -67,7 +66,7 @@ namespace MatterHackers.Agg.Image
             // if we don't run into any pixels set for the top trim than there are no pixels set at all
             if (!aPixelsIsVisible)
             {
-                visibleBounds.SetRect(0, 0, 0, 0);
+                visibleBounds = new RectangleInt(0, 0, 0, 0);
                 return;
             }
 

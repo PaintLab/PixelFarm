@@ -50,10 +50,8 @@ namespace MatterHackers.Agg.VertexSource
             {
                 //m_coord_x = null;
                 //m_coord_y = null;
-                m_coord_xy = null;
-
-                m_CommandAndFlags = null;
-
+                m_coord_xy = null;  
+                m_CommandAndFlags = null; 
                 m_num_vertices = 0;
             }
 
@@ -294,82 +292,10 @@ namespace MatterHackers.Agg.VertexSource
         public void remove_all() { vertices.remove_all(); iteratorIndex = 0; }
         public void free_all() { vertices.free_all(); iteratorIndex = 0; }
 
-        public bool Equals(IVertexSource other, double maxError = .0001, bool oldStyle = true)
-        {
-            if (oldStyle)
-            {
-                return OldEqualsOldStyle(this, other, maxError);
-            }
-            else
-            {
-                return OldEqualsNewStyle(this, other, maxError);
-            }
-        }
+       
 
-        static public bool OldEqualsOldStyle(IVertexSource control, IVertexSource test, double maxError = .0001)
-        {
-            control.rewind(0);
-            double controlX;
-            double controlY;
-            ShapePath.FlagsAndCommand controlFlagsAndCommand = control.vertex(out controlX, out controlY);
-
-            test.rewind(0);
-            double testX;
-            double testY;
-            ShapePath.FlagsAndCommand otherFlagsAndCommand = test.vertex(out testX, out testY);
-
-            int index = 1;
-            if (controlFlagsAndCommand == otherFlagsAndCommand && 
-                controlX == testX &&
-                agg_basics.is_equal_eps(controlY, testY, .000000001))
-            {
-                while (controlFlagsAndCommand != ShapePath.FlagsAndCommand.CommandStop)
-                {
-                    controlFlagsAndCommand = control.vertex(out controlX, out controlY);
-                    otherFlagsAndCommand = test.vertex(out testX, out testY);
-                    if (controlFlagsAndCommand != otherFlagsAndCommand
-                        || controlX < testX - maxError || controlX > testX + maxError
-                        || controlY < testY - maxError || controlY > testY + maxError)
-                    {
-                        return false;
-                    }
-                    index++;
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        static public bool OldEqualsNewStyle(IVertexSource control, IVertexSource test, double maxError = .0001)
-        {
-            control.rewind(0);
-            double controlX;
-            double controlY;
-            ShapePath.FlagsAndCommand controlFlagsAndCommand = control.vertex(out controlX, out controlY);
-
-            int index = 0;
-            foreach (VertexData vertexData in test.Vertices())
-            {
-                if (controlFlagsAndCommand != vertexData.command
-                    || controlX < vertexData.position.x - maxError || controlX > vertexData.position.x + maxError
-                    || controlY < vertexData.position.y - maxError || controlY > vertexData.position.y + maxError)
-                {
-                    return false;
-                }
-                controlFlagsAndCommand = control.vertex(out controlX, out controlY);
-                index++;
-            }
-
-            if (controlFlagsAndCommand == ShapePath.FlagsAndCommand.CommandStop)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
+         
+       
         // Make path functions
         //--------------------------------------------------------------------
         public int start_new_path()

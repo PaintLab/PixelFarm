@@ -21,8 +21,7 @@ using System.Collections.Generic;
 
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.RasterizerScanline;
+using MatterHackers.Agg.Transform; 
 using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
@@ -31,16 +30,18 @@ namespace MatterHackers.Agg
     {
 
         IScanlineCache m_ScanlineCache;
-        PathStorage drawImageRectPath = new PathStorage();
-        span_allocator destImageSpanAllocatorCache = new span_allocator();
-        ScanlineCachePacked8 drawImageScanlineCache = new ScanlineCachePacked8();
+        PathStorage drawImageRectPath = new PathStorage(); 
+        ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
         public ImageGraphics2D()
         {
+
         }
 
-        public ImageGraphics2D(IImageByte destImage, ScanlineRasterizer rasterizer, IScanlineCache scanlineCache)
+        public ImageGraphics2D(IImageBuffer destImage, 
+            ScanlineRasterizer rasterizer, 
+            IScanlineCache scanlineCache)
             : base(destImage, rasterizer)
         {
             m_ScanlineCache = scanlineCache;
@@ -78,12 +79,12 @@ namespace MatterHackers.Agg
             }
             else
             {
-                scanlineRenderer.RenderSolid(destImageFloat, rasterizer, m_ScanlineCache, colorBytes.GetAsRGBA_Floats());
-                destImageFloat.MarkImageChanged();
+                //scanlineRenderer.RenderSolid(destImageFloat, rasterizer, m_ScanlineCache, colorBytes.GetAsRGBA_Floats());
+                //destImageFloat.MarkImageChanged();
             }
         }
 
-        void DrawImageGetDestBounds(IImageByte sourceImage,
+        void DrawImageGetDestBounds(IImageBuffer sourceImage,
             double DestX, double DestY,
             double HotspotOffsetX, double HotspotOffsetY,
             double ScaleX, double ScaleY,
@@ -123,7 +124,7 @@ namespace MatterHackers.Agg
             drawImageRectPath.ClosePolygon();
         }
 
-        void DrawImage(IImageByte sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
+        void DrawImage(IImageBuffer sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
         {
             if (destImageByte.OriginOffset.x != 0 || destImageByte.OriginOffset.y != 0)
             {
@@ -136,13 +137,12 @@ namespace MatterHackers.Agg
                 ImageClippingProxy destImageWithClipping = new ImageClippingProxy(destImageByte);
                 scanlineRenderer.GenerateAndRender(Rasterizer,
                     drawImageScanlineCache,
-                    destImageWithClipping,
-                    destImageSpanAllocatorCache,
+                    destImageWithClipping, 
                     spanImageFilter);
             }
         }
 
-        public override void Render(IImageByte source,
+        public override void Render(IImageBuffer source,
             double destX, double destY,
             double angleRadians,
             double inScaleX, double inScaleY)
@@ -284,13 +284,13 @@ namespace MatterHackers.Agg
             }
         }
 
-        public override void Render(IImageFloat source,
-            double x, double y,
-            double angleDegrees,
-            double inScaleX, double inScaleY)
-        {
-            throw new NotImplementedException();
-        }
+        //public override void Render(IImageFloat source,
+        //    double x, double y,
+        //    double angleDegrees,
+        //    double inScaleX, double inScaleY)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public override void Clear(IColorType iColor)
         {
@@ -360,36 +360,36 @@ namespace MatterHackers.Agg
             }
             else // it is a float
             {
-                if (DestImageFloat == null)
-                {
-                    throw new Exception("You have to have either a byte or float DestImage.");
-                }
+                //if (DestImageFloat == null)
+                //{
+                //    throw new Exception("You have to have either a byte or float DestImage.");
+                //}
 
-                RGBA_Floats color = iColor.GetAsRGBA_Floats();
-                int width = DestImageFloat.Width;
-                int height = DestImageFloat.Height;
-                float[] buffer = DestImageFloat.GetBuffer();
-                switch (DestImageFloat.BitDepth)
-                {
-                    case 128:
-                        for (int y = 0; y < height; y++)
-                        {
-                            int bufferOffset = DestImageFloat.GetBufferOffsetXY(clippingRectInt.Left, y);
-                            int bytesBetweenPixels = DestImageFloat.GetFloatsBetweenPixelsInclusive();
-                            for (int x = 0; x < clippingRectInt.Width; x++)
-                            {
-                                buffer[bufferOffset + 0] = color.blue;
-                                buffer[bufferOffset + 1] = color.green;
-                                buffer[bufferOffset + 2] = color.red;
-                                buffer[bufferOffset + 3] = color.alpha;
-                                bufferOffset += bytesBetweenPixels;
-                            }
-                        }
-                        break;
+                //RGBA_Floats color = iColor.GetAsRGBA_Floats();
+                //int width = DestImageFloat.Width;
+                //int height = DestImageFloat.Height;
+                //float[] buffer = DestImageFloat.GetBuffer();
+                //switch (DestImageFloat.BitDepth)
+                //{
+                //    case 128:
+                //        for (int y = 0; y < height; y++)
+                //        {
+                //            int bufferOffset = DestImageFloat.GetBufferOffsetXY(clippingRectInt.Left, y);
+                //            int bytesBetweenPixels = DestImageFloat.GetFloatsBetweenPixelsInclusive();
+                //            for (int x = 0; x < clippingRectInt.Width; x++)
+                //            {
+                //                buffer[bufferOffset + 0] = color.blue;
+                //                buffer[bufferOffset + 1] = color.green;
+                //                buffer[bufferOffset + 2] = color.red;
+                //                buffer[bufferOffset + 3] = color.alpha;
+                //                bufferOffset += bytesBetweenPixels;
+                //            }
+                //        }
+                //        break;
 
-                    default:
-                        throw new NotImplementedException();
-                }
+                //    default:
+                //        throw new NotImplementedException();
+                //}
             }
         }
     }

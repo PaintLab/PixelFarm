@@ -55,11 +55,12 @@ namespace MatterHackers.Agg
      */
 
     //======================================================line_image_pattern
-    public class line_image_pattern : ImageBuffer
+    public class line_image_pattern
     {
         IPatternFilter m_filter;
         int m_dilation;
         int m_dilation_hr;
+        ImageBuffer myBuffer = new ImageBuffer();
         ImageBuffer m_buf = new ImageBuffer();
         byte[] m_data = null;
         int m_DataSizeInBytes = 0;
@@ -81,7 +82,13 @@ namespace MatterHackers.Agg
             m_half_height_hr = (0);
             m_offset_y_hr = (0);
         }
-
+        public ImageBuffer MyBuffer
+        {
+            get
+            {
+                return this.myBuffer;
+            }
+        }
         ~line_image_pattern()
         {
             if (m_DataSizeInBytes > 0)
@@ -103,12 +110,12 @@ namespace MatterHackers.Agg
             m_half_height_hr = 0;
             m_offset_y_hr = (0);
 
-            create(src);
+            create(src.MyBuffer);
         }
 
         // Create
         //--------------------------------------------------------------------
-        public void create(IImageByte src)
+        public void create(IImageBuffer src)
         {
             // we are going to create a dialated image for filtering
             // we add m_dilation pixels to every side of the image and then copy the image in the x
@@ -776,7 +783,7 @@ namespace MatterHackers.Agg
     //template<class BaseRenderer, class ImagePattern> 
     public class ImageLineRenderer : LineRenderer
     {
-        IImageByte m_ren;
+        IImageBuffer m_ren;
         line_image_pattern m_pattern;
         int m_start;
         double m_scale_x;
@@ -787,7 +794,7 @@ namespace MatterHackers.Agg
         //typedef renderer_outline_image<BaseRenderer, ImagePattern> self_type;
 
         //---------------------------------------------------------------------
-        public ImageLineRenderer(IImageByte ren, line_image_pattern patt)
+        public ImageLineRenderer(IImageBuffer ren, line_image_pattern patt)
         {
             m_ren = ren;
             m_pattern = patt;
@@ -797,7 +804,7 @@ namespace MatterHackers.Agg
             m_clipping = (false);
         }
 
-        public void attach(IImageByte ren) { m_ren = ren; }
+        public void attach(IImageBuffer ren) { m_ren = ren; }
 
         //---------------------------------------------------------------------
         public void pattern(line_image_pattern p) { m_pattern = p; }

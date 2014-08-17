@@ -8,7 +8,7 @@ using System;
 using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -24,7 +24,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
         LionShape lionShape;
         MatterHackers.Agg.ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-        ScanlineCachePacked8 scanlineCache = new ScanlineCachePacked8();
+        ScanlinePacked8 scanlineCache = new ScanlinePacked8();
         double angle = 0;
         double lionScale = 1.0;
         double skewX = 0;
@@ -79,7 +79,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                 ImageBuffer image = new ImageBuffer();
                 image.Attach(alphaMaskImageBuffer, new blender_gray(1), 1, 0, 8);
                 ImageClippingProxy clippingProxy = new ImageClippingProxy(image);
-                ScanlineCachePacked8 sl = new ScanlineCachePacked8();
+                ScanlinePacked8 sl = new ScanlinePacked8();
 
                 clippingProxy.clear(RGBA_Bytes.Black);
 

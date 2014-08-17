@@ -27,7 +27,8 @@ using System.Collections;
 
 namespace MatterHackers.Agg
 {
-     
+    //POD= Plain Old Data  
+
     public class ArrayPOD<T>
     {
         public ArrayPOD(int size)

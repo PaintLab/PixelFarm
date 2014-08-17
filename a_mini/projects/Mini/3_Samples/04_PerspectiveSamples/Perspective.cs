@@ -6,7 +6,7 @@ using System;
 using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -22,7 +22,7 @@ namespace MatterHackers.Agg.Sample_Perspective
     public class perspective_application : DemoBase
     {
         MatterHackers.Agg.ScanlineRasterizer g_rasterizer = new ScanlineRasterizer();
-        ScanlineCachePacked8 g_scanline = new ScanlineCachePacked8();
+        ScanlinePacked8 g_scanline = new ScanlinePacked8();
 
         UI.PolygonEditWidget quadPolygonControl;
         private LionShape lionShape;
@@ -81,7 +81,7 @@ namespace MatterHackers.Agg.Sample_Perspective
         {
             ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageByte backBuffer = widgetsSubImage;
+            IImageBuffer backBuffer = widgetsSubImage;
 
             if (!didInit)
             {

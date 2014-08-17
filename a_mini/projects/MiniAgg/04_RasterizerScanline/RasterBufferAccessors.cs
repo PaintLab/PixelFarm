@@ -27,7 +27,7 @@ namespace MatterHackers.Agg
         byte[] next_x(out int bufferByteOffset);
         byte[] next_y(out int bufferByteOffset);
 
-        IImageByte SourceImage
+        IImageBuffer SourceImage
         {
             get;
         }
@@ -35,18 +35,18 @@ namespace MatterHackers.Agg
 
     public class ImageBufferAccessorCommon : IImageBufferAccessor
     {
-        protected IImageByte m_SourceImage;
+        protected IImageBuffer m_SourceImage;
         protected int m_x, m_x0, m_y, m_DistanceBetweenPixelsInclusive;
         protected byte[] m_Buffer;
         protected int m_CurrentBufferOffset = -1;
         int m_Width;
 
-        public ImageBufferAccessorCommon(IImageByte pixf)
+        public ImageBufferAccessorCommon(IImageBuffer pixf)
         {
             attach(pixf);
         }
 
-        void attach(IImageByte pixf)
+        void attach(IImageBuffer pixf)
         {
             m_SourceImage = pixf;
             m_Buffer = m_SourceImage.GetBuffer();
@@ -54,7 +54,7 @@ namespace MatterHackers.Agg
             m_DistanceBetweenPixelsInclusive = m_SourceImage.GetBytesBetweenPixelsInclusive();
         }
 
-        public IImageByte SourceImage
+        public IImageBuffer SourceImage
         {
             get
             {
@@ -154,7 +154,7 @@ namespace MatterHackers.Agg
     {
         byte[] m_OutsideBufferColor;
 
-        public ImageBufferAccessorClip(IImageByte sourceImage, RGBA_Bytes bk)
+        public ImageBufferAccessorClip(IImageBuffer sourceImage, RGBA_Bytes bk)
             : base(sourceImage)
         {
             m_OutsideBufferColor = new byte[4];
@@ -229,7 +229,7 @@ namespace MatterHackers.Agg
 
     public sealed class ImageBufferAccessorClamp : ImageBufferAccessorCommon
     {
-        public ImageBufferAccessorClamp(IImageByte pixf)
+        public ImageBufferAccessorClamp(IImageBuffer pixf)
             : base(pixf)
         {
         }
@@ -519,167 +519,167 @@ namespace MatterHackers.Agg
         };
      */
 
-    public interface IImageBufferAccessorFloat
-    {
-        float[] span(int x, int y, int len, out int bufferIndex);
-        float[] next_x(out int bufferFloatOffset);
-        float[] next_y(out int bufferFloatOffset);
+    //public interface IImageBufferAccessorFloat
+    //{
+    //    float[] span(int x, int y, int len, out int bufferIndex);
+    //    float[] next_x(out int bufferFloatOffset);
+    //    float[] next_y(out int bufferFloatOffset);
 
-        IImageFloat SourceImage
-        {
-            get;
-        }
-    };
+    //    IImageFloat SourceImage
+    //    {
+    //        get;
+    //    }
+    //};
 
-    public class ImageBufferAccessorCommonFloat : IImageBufferAccessorFloat
-    {
-        protected IImageFloat m_SourceImage;
-        protected int m_x, m_x0, m_y, m_DistanceBetweenPixelsInclusive;
-        protected float[] m_Buffer;
-        protected int m_CurrentBufferOffset = -1;
-        int m_Width;
+    //public class ImageBufferAccessorCommonFloat : IImageBufferAccessorFloat
+    //{
+    //    protected IImageFloat m_SourceImage;
+    //    protected int m_x, m_x0, m_y, m_DistanceBetweenPixelsInclusive;
+    //    protected float[] m_Buffer;
+    //    protected int m_CurrentBufferOffset = -1;
+    //    int m_Width;
 
-        public ImageBufferAccessorCommonFloat(IImageFloat pixf)
-        {
-            attach(pixf);
-        }
+    //    public ImageBufferAccessorCommonFloat(IImageFloat pixf)
+    //    {
+    //        attach(pixf);
+    //    }
 
-        void attach(IImageFloat pixf)
-        {
-            m_SourceImage = pixf;
-            m_Buffer = m_SourceImage.GetBuffer();
-            m_Width = m_SourceImage.Width;
-            m_DistanceBetweenPixelsInclusive = m_SourceImage.GetFloatsBetweenPixelsInclusive();
-        }
+    //    void attach(IImageFloat pixf)
+    //    {
+    //        m_SourceImage = pixf;
+    //        m_Buffer = m_SourceImage.GetBuffer();
+    //        m_Width = m_SourceImage.Width;
+    //        m_DistanceBetweenPixelsInclusive = m_SourceImage.GetFloatsBetweenPixelsInclusive();
+    //    }
 
-        public IImageFloat SourceImage
-        {
-            get
-            {
-                return m_SourceImage;
-            }
-        }
+    //    public IImageFloat SourceImage
+    //    {
+    //        get
+    //        {
+    //            return m_SourceImage;
+    //        }
+    //    }
 
-        private float[] pixel(out int bufferFloatOffset)
-        {
-            int x = m_x;
-            int y = m_y;
-            unchecked
-            {
-                if ((uint)x >= (uint)m_SourceImage.Width)
-                {
-                    if (x < 0)
-                    {
-                        x = 0;
-                    }
-                    else
-                    {
-                        x = (int)m_SourceImage.Width - 1;
-                    }
-                }
+    //    private float[] pixel(out int bufferFloatOffset)
+    //    {
+    //        int x = m_x;
+    //        int y = m_y;
+    //        unchecked
+    //        {
+    //            if ((uint)x >= (uint)m_SourceImage.Width)
+    //            {
+    //                if (x < 0)
+    //                {
+    //                    x = 0;
+    //                }
+    //                else
+    //                {
+    //                    x = (int)m_SourceImage.Width - 1;
+    //                }
+    //            }
 
-                if ((uint)y >= (uint)m_SourceImage.Height)
-                {
-                    if (y < 0)
-                    {
-                        y = 0;
-                    }
-                    else
-                    {
-                        y = (int)m_SourceImage.Height - 1;
-                    }
-                }
-            }
+    //            if ((uint)y >= (uint)m_SourceImage.Height)
+    //            {
+    //                if (y < 0)
+    //                {
+    //                    y = 0;
+    //                }
+    //                else
+    //                {
+    //                    y = (int)m_SourceImage.Height - 1;
+    //                }
+    //            }
+    //        }
 
-            bufferFloatOffset = m_SourceImage.GetBufferOffsetXY(x, y);
-            return m_SourceImage.GetBuffer();
-        }
+    //        bufferFloatOffset = m_SourceImage.GetBufferOffsetXY(x, y);
+    //        return m_SourceImage.GetBuffer();
+    //    }
 
-        public float[] span(int x, int y, int len, out int bufferOffset)
-        {
-            m_x = m_x0 = x;
-            m_y = y;
-            unchecked
-            {
-                if ((uint)y < (uint)m_SourceImage.Height
-                    && x >= 0 && x + len <= (int)m_SourceImage.Width)
-                {
-                    bufferOffset = m_SourceImage.GetBufferOffsetXY(x, y);
-                    m_Buffer = m_SourceImage.GetBuffer();
-                    m_CurrentBufferOffset = bufferOffset;
-                    return m_Buffer;
-                }
-            }
+    //    public float[] span(int x, int y, int len, out int bufferOffset)
+    //    {
+    //        m_x = m_x0 = x;
+    //        m_y = y;
+    //        unchecked
+    //        {
+    //            if ((uint)y < (uint)m_SourceImage.Height
+    //                && x >= 0 && x + len <= (int)m_SourceImage.Width)
+    //            {
+    //                bufferOffset = m_SourceImage.GetBufferOffsetXY(x, y);
+    //                m_Buffer = m_SourceImage.GetBuffer();
+    //                m_CurrentBufferOffset = bufferOffset;
+    //                return m_Buffer;
+    //            }
+    //        }
 
-            m_CurrentBufferOffset = -1;
-            return pixel(out bufferOffset);
-        }
+    //        m_CurrentBufferOffset = -1;
+    //        return pixel(out bufferOffset);
+    //    }
 
-        public float[] next_x(out int bufferOffset)
-        {
-            // this is the code (managed) that the original agg used.  
-            // It looks like it doesn't check x but, It should be a bit faster and is valid 
-            // because "span" checked the whole length for good x.
-            if (m_CurrentBufferOffset != -1)
-            {
-                m_CurrentBufferOffset += m_DistanceBetweenPixelsInclusive;
-                bufferOffset = m_CurrentBufferOffset;
-                return m_Buffer;
-            }
-            ++m_x;
-            return pixel(out bufferOffset);
-        }
+    //    public float[] next_x(out int bufferOffset)
+    //    {
+    //        // this is the code (managed) that the original agg used.  
+    //        // It looks like it doesn't check x but, It should be a bit faster and is valid 
+    //        // because "span" checked the whole length for good x.
+    //        if (m_CurrentBufferOffset != -1)
+    //        {
+    //            m_CurrentBufferOffset += m_DistanceBetweenPixelsInclusive;
+    //            bufferOffset = m_CurrentBufferOffset;
+    //            return m_Buffer;
+    //        }
+    //        ++m_x;
+    //        return pixel(out bufferOffset);
+    //    }
 
-        public float[] next_y(out int bufferOffset)
-        {
-            ++m_y;
-            m_x = m_x0;
-            if (m_CurrentBufferOffset != -1
-                && (uint)m_y < (uint)m_SourceImage.Height)
-            {
-                m_CurrentBufferOffset = m_SourceImage.GetBufferOffsetXY(m_x, m_y);
-                bufferOffset = m_CurrentBufferOffset;
-                return m_Buffer;
-            }
+    //    public float[] next_y(out int bufferOffset)
+    //    {
+    //        ++m_y;
+    //        m_x = m_x0;
+    //        if (m_CurrentBufferOffset != -1
+    //            && (uint)m_y < (uint)m_SourceImage.Height)
+    //        {
+    //            m_CurrentBufferOffset = m_SourceImage.GetBufferOffsetXY(m_x, m_y);
+    //            bufferOffset = m_CurrentBufferOffset;
+    //            return m_Buffer;
+    //        }
 
-            m_CurrentBufferOffset = -1;
-            return pixel(out bufferOffset);
-        }
-    };
+    //        m_CurrentBufferOffset = -1;
+    //        return pixel(out bufferOffset);
+    //    }
+    //};
 
-    public sealed class ImageBufferAccessorClipFloat : ImageBufferAccessorCommonFloat
-    {
-        float[] m_OutsideBufferColor;
+    //public sealed class ImageBufferAccessorClipFloat : ImageBufferAccessorCommonFloat
+    //{
+    //    float[] m_OutsideBufferColor;
 
-        public ImageBufferAccessorClipFloat(IImageFloat sourceImage, RGBA_Floats bk)
-            : base(sourceImage)
-        {
-            m_OutsideBufferColor = new float[4];
-            m_OutsideBufferColor[0] = bk.red;
-            m_OutsideBufferColor[1] = bk.green;
-            m_OutsideBufferColor[2] = bk.blue;
-            m_OutsideBufferColor[3] = bk.alpha;
-        }
+    //    public ImageBufferAccessorClipFloat(IImageFloat sourceImage, RGBA_Floats bk)
+    //        : base(sourceImage)
+    //    {
+    //        m_OutsideBufferColor = new float[4];
+    //        m_OutsideBufferColor[0] = bk.red;
+    //        m_OutsideBufferColor[1] = bk.green;
+    //        m_OutsideBufferColor[2] = bk.blue;
+    //        m_OutsideBufferColor[3] = bk.alpha;
+    //    }
 
-        private float[] pixel(out int bufferFloatOffset)
-        {
-            unchecked
-            {
-                if (((uint)m_x < (uint)m_SourceImage.Width)
-                    && ((uint)m_y < (uint)m_SourceImage.Height))
-                {
-                    bufferFloatOffset = m_SourceImage.GetBufferOffsetXY(m_x, m_y);
-                    return m_SourceImage.GetBuffer();
-                }
-            }
+    //    private float[] pixel(out int bufferFloatOffset)
+    //    {
+    //        unchecked
+    //        {
+    //            if (((uint)m_x < (uint)m_SourceImage.Width)
+    //                && ((uint)m_y < (uint)m_SourceImage.Height))
+    //            {
+    //                bufferFloatOffset = m_SourceImage.GetBufferOffsetXY(m_x, m_y);
+    //                return m_SourceImage.GetBuffer();
+    //            }
+    //        }
 
-            bufferFloatOffset = 0;
-            return m_OutsideBufferColor;
-        }
+    //        bufferFloatOffset = 0;
+    //        return m_OutsideBufferColor;
+    //    }
 
-        //public void background_color(IColorType bk)
-        //{
-        //  m_pixf.make_pix(m_pBackBufferColor, bk);
-        //}
-    };
+    //    //public void background_color(IColorType bk)
+    //    //{
+    //    //  m_pixf.make_pix(m_pBackBufferColor, bk);
+    //    //}
+    //};
 }

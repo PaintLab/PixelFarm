@@ -30,7 +30,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg.RasterizerScanline
+namespace MatterHackers.Agg 
 {
     //=============================================================scanline_p8
     // 
@@ -39,14 +39,14 @@ namespace MatterHackers.Agg.RasterizerScanline
     // for details.
     // 
     //------------------------------------------------------------------------
-    public sealed class ScanlineCachePacked8 : IScanlineCache
+    public sealed class ScanlinePacked8 : IScanlineCache
     {
         private int m_last_x;
         private int m_y;
         private byte[] m_covers;
         private int m_cover_index;
-
         private ScanlineSpan[] m_spans;
+
         private int m_span_index;
 
         private int m_interator_index;
@@ -57,7 +57,7 @@ namespace MatterHackers.Agg.RasterizerScanline
             return m_spans[m_interator_index - 1];
         }
 
-        public ScanlineCachePacked8()
+        public ScanlinePacked8()
         {
             m_last_x = 0x7FFFFFF0;
             m_covers = new byte[1000];
@@ -99,32 +99,33 @@ namespace MatterHackers.Agg.RasterizerScanline
             m_cover_index++;
         }
 
-        //--------------------------------------------------------------------
-        public void add_cells(int x, int len, byte[] covers, int coversIndex)
-        {
-            //for (int i = 0; i < len; i++)
-            //{
-            //    m_covers[m_cover_index + i] = covers[i];
-            //}
-            for (int i = len - 1; i >= 0; --i)
-            {
-                m_covers[m_cover_index + i] = covers[i];
-            }
-            if (x == m_last_x + 1 && m_spans[m_span_index].len > 0)
-            {
-                m_spans[m_span_index].len += (short)len;
-            }
-            else
-            {
-                m_span_index++;
-                m_spans[m_span_index].cover_index = m_cover_index;
-                m_spans[m_span_index].x = (short)x;
-                m_spans[m_span_index].len = (short)len;
-            }
+        ////--------------------------------------------------------------------
+        //public void add_cells(int x, int len, byte[] covers, int coversIndex)
+        //{
 
-            m_cover_index += len;
-            m_last_x = x + (int)len - 1;
-        }
+        //    for (int i = len - 1; i >= 0; --i)
+        //    {
+        //        m_covers[m_cover_index + i] = covers[i];
+        //    }
+        //    if (x == m_last_x + 1 && m_spans[m_span_index].len > 0)
+        //    {
+        //        m_spans[m_span_index].len += (short)len;
+        //    }
+        //    else
+        //    {
+        //        m_span_index++;
+                
+        //        ScanlineSpan span = new ScanlineSpan();
+        //        span.cover_index = m_cover_index;
+        //        span.x = (short)x;
+        //        span.len = (short)len;
+
+        //        m_spans[m_span_index] = span;
+        //    }
+
+        //    m_cover_index += len;
+        //    m_last_x = x + (int)len - 1;
+        //}
 
         //--------------------------------------------------------------------
         public void add_span(int x, int len, int cover)

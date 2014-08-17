@@ -28,7 +28,7 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using System.Linq;
+//using System.Linq;
 
 using MatterHackers.VectorMath;
 

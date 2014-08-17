@@ -142,7 +142,7 @@ namespace MatterHackers.Agg
         {
             x = x_;
             y = y_;
-            dist = 0;
+            dist = 0; //lazy calculate 
         }
         public bool IsEqual(VertexDistance val)
         {

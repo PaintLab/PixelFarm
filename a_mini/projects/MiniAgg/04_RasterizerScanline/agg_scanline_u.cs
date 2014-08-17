@@ -24,7 +24,8 @@
 // PostScript and PDF technology for software developers.
 // 
 //----------------------------------------------------------------------------
-namespace MatterHackers.Agg.RasterizerScanline
+
+namespace MatterHackers.Agg 
 {
     //=============================================================scanline_u8
     //
@@ -104,13 +105,15 @@ namespace MatterHackers.Agg.RasterizerScanline
     // are better, because switching between two different areas of memory 
     // (that can be very large) occurs less frequently.
     //------------------------------------------------------------------------
-    public sealed class scanline_unpacked_8 : IScanlineCache
+    public sealed class ScanlineUnpacked8 : IScanlineCache
     {
         private int m_min_x;
         private int m_last_x;
         private int m_y;
         private ArrayPOD<byte> m_covers;
         private ArrayPOD<ScanlineSpan> m_spans;
+       
+
         private int m_span_index;
         private int m_interator_index;
 
@@ -121,8 +124,8 @@ namespace MatterHackers.Agg.RasterizerScanline
         }
 
         //--------------------------------------------------------------------
-        public scanline_unpacked_8()
-        {     
+        public ScanlineUnpacked8()
+        {
 
             m_last_x = (0x7FFFFFF0);
             m_covers = new ArrayPOD<byte>(1000);
@@ -163,31 +166,6 @@ namespace MatterHackers.Agg.RasterizerScanline
             m_last_x = x;
         }
 
-        /*
-        //--------------------------------------------------------------------
-        unsafe public void add_cells(int x, int len, byte* covers)
-        {
-            x -= m_min_x;
-            for (int i = 0; i < len; i++)
-            {
-                m_covers.Array[x + i] = covers[i];
-            }
-            if (x == m_last_x + 1)
-            {
-                m_spans.Array[m_span_index].len += (int)len;
-            }
-            else
-            {
-                m_span_index++;
-                m_spans.Array[m_span_index].x = x + m_min_x;
-                m_spans.Array[m_span_index].len = (int)len;
-                m_spans.Array[m_span_index].cover_index = x;
-            }
-            m_last_x = x + (int)len - 1;
-        }
-         */
-
-        //--------------------------------------------------------------------
         public void add_span(int x, int len, int cover)
         {
             x -= m_min_x;
@@ -230,11 +208,10 @@ namespace MatterHackers.Agg.RasterizerScanline
         {
             m_interator_index = 1;
             return GetNextScanlineSpan();
-        }
-
+        } 
         public byte[] GetCovers()
         {
             return m_covers.Array;
         }
-    };
+    }
 }

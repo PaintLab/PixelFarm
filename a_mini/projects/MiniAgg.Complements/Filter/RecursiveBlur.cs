@@ -99,7 +99,7 @@ namespace MatterHackers.Agg.Image
             A = 3
         };
 
-        public void blur_x(IImageByte img, int radius)
+        public void blur_x(IImageBuffer img, int radius)
         {
 
             throw new NotSupportedException();
@@ -191,7 +191,7 @@ namespace MatterHackers.Agg.Image
 #endif
         }
 
-        public void blur_y(IImageByte img, int radius)
+        public void blur_y(IImageBuffer img, int radius)
         {
             FormatTransposer img2 = new FormatTransposer(img);
             blur_x(img2, radius);
@@ -1240,7 +1240,7 @@ namespace MatterHackers.Agg.Image
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
         }
 
-        public void blur_x(IImageByte img, double radius)
+        public void blur_x(IImageBuffer img, double radius)
         {
             if (radius < 0.62) return;
             if (img.Width < 3) return;
@@ -1326,13 +1326,13 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void blur_y(IImageByte img, double radius)
+        public void blur_y(IImageBuffer img, double radius)
         {
             FormatTransposer img2 = new FormatTransposer(img);
             blur_x(img2, radius);
         }
 
-        public void blur(IImageByte img, double radius)
+        public void blur(IImageBuffer img, double radius)
         {
             blur_x(img, radius);
             blur_y(img, radius);

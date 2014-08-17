@@ -22,7 +22,7 @@ using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filt
 namespace MatterHackers.Agg
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    public class span_image_filter_gray_nn_stepXby1 : span_image_filter
+    class span_image_filter_gray_nn_stepXby1 : span_image_filter
     {
         const int base_shift = 8;
         const int base_scale = (int)(1 << base_shift);
@@ -81,7 +81,7 @@ namespace MatterHackers.Agg
 #endif
         }
     }
-    
+
     /*
         //==============================================span_image_filter_gray_nn
         //template<class Source, class Interpolator> 

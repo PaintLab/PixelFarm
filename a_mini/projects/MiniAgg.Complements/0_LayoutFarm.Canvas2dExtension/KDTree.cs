@@ -30,7 +30,7 @@ either expressed or implied, of the FreeBSD Project.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+
 using System.Text;
 using MatterHackers.VectorMath;
 using NUnit.Framework;
@@ -122,7 +122,7 @@ namespace MatterHackers.Agg
             }
 
             StoredType firstItemFromCollection = default(StoredType); // if StoredType is a class this will set it to null - if struct, a zeroed struct.
-            foreach(StoredType item in collectionToCreateFrom)
+            foreach (StoredType item in collectionToCreateFrom)
             {
                 firstItemFromCollection = item;
                 break;
@@ -214,8 +214,10 @@ namespace MatterHackers.Agg
             Vector2DLeafItem item1 = new Vector2DLeafItem(5, 5);
             Vector2DLeafItem item2 = new Vector2DLeafItem(5, 5);
             Vector2DLeafItem item3 = new Vector2DLeafItem(5, 5);
-            IEnumerable<Vector2DLeafItem> enumerable = new Vector2DLeafItem[] { item1, item2, item3 }.AsEnumerable<Vector2DLeafItem>();
-            KDTreeNode<Vector2DLeafItem> rootNode = KDTreeNode<Vector2DLeafItem>.CreateTree(enumerable);
+            var itemList = new Vector2DLeafItem[] { item1, item2, item3 };
+
+            // IEnumerable<Vector2DLeafItem> enumerable = new Vector2DLeafItem[] { item1, item2, item3 }.AsEnumerable<Vector2DLeafItem>();
+            KDTreeNode<Vector2DLeafItem> rootNode = KDTreeNode<Vector2DLeafItem>.CreateTree(itemList);
 
             KDTreeNode<Vector2DLeafItem> testNode = rootNode;
             Assert.IsTrue(testNode.DimensionSplitIsOn == 0);
@@ -263,8 +265,8 @@ namespace MatterHackers.Agg
             Vector3DLeafItem item1 = new Vector3DLeafItem(5, 5, 5);
             Vector3DLeafItem item2 = new Vector3DLeafItem(5, 5, 5);
             Vector3DLeafItem item3 = new Vector3DLeafItem(5, 5, 5);
-            IEnumerable<Vector3DLeafItem> enumerable = new Vector3DLeafItem[] { item1, item2, item3 }.AsEnumerable<Vector3DLeafItem>();
-            KDTreeNode<Vector3DLeafItem> rootNode = KDTreeNode<Vector3DLeafItem>.CreateTree(enumerable);
+            var itemList = new Vector3DLeafItem[] { item1, item2, item3 };
+            KDTreeNode<Vector3DLeafItem> rootNode = KDTreeNode<Vector3DLeafItem>.CreateTree(itemList);
 
             RunTestOnNode3D(item1, item2, item3, rootNode);
         }
@@ -275,8 +277,8 @@ namespace MatterHackers.Agg
             Vector3DLeafItem item1 = new Vector3DLeafItem(5, 5, 5);
             Vector3DLeafItem item2 = new Vector3DLeafItem(5, 5, 5);
             Vector3DLeafItem item3 = new Vector3DLeafItem(5, 5, 5);
-            IEnumerable<Vector3DLeafItem> enumerable = new Vector3DLeafItem[] { item1, item2, item3 }.AsEnumerable<Vector3DLeafItem>();
-            KDTreeNode<Vector3DLeafItem> rootNode = KDTreeNode<Vector3DLeafItem>.CreateTree(enumerable);
+            var itemlist = new Vector3DLeafItem[] { item1, item2, item3 };
+            KDTreeNode<Vector3DLeafItem> rootNode = KDTreeNode<Vector3DLeafItem>.CreateTree(itemlist);
             RunTestOnNode3D(item1, item2, item3, rootNode);
 
             KDTreeNode<Vector3DLeafItem> fromRootNode = KDTreeNode<Vector3DLeafItem>.CreateTree(rootNode.UnorderedEnumerator());
@@ -303,8 +305,8 @@ namespace MatterHackers.Agg
             Vector3DLeafItem item1 = new Vector3DLeafItem(1, 0, 0);
             Vector3DLeafItem item2 = new Vector3DLeafItem(2, 0, 0);
             Vector3DLeafItem item3 = new Vector3DLeafItem(3, 0, 0);
-            IEnumerable<Vector3DLeafItem> enumerable = new Vector3DLeafItem[] { item1, item2, item3 }.AsEnumerable<Vector3DLeafItem>();
-            KDTreeNode<Vector3DLeafItem> rootNode = KDTreeNode<Vector3DLeafItem>.CreateTree(enumerable);
+            var itemList = new Vector3DLeafItem[] { item1, item2, item3 };
+            KDTreeNode<Vector3DLeafItem> rootNode = KDTreeNode<Vector3DLeafItem>.CreateTree(itemList);
 
             int index = 0;
             foreach (Vector3DLeafItem item in rootNode.GetDistanceEnumerator(new double[] { 2.1, 0, 0 }))

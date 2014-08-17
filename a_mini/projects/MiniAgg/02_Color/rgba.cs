@@ -25,7 +25,7 @@
 // 
 //----------------------------------------------------------------------------
 #define USE_BLENDER
-using ColorT = MatterHackers.Agg.order_bgra;
+//using ColorT = MatterHackers.Agg.order_bgra;
 
 using System;
 

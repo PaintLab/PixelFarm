@@ -25,11 +25,7 @@ using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e
 
 namespace MatterHackers.Agg
 {
-    //--------------------------------------------------------poly_max_coord_e
-    enum poly_max_coord_e
-    {
-        poly_max_coord = (1 << 30) - 1 //----poly_max_coord
-    };
+     
     
     public class VectorClipper
     {

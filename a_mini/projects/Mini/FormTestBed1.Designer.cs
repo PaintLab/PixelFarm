@@ -32,7 +32,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.softAggControl2 = new Mini.SoftAggControl();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            //((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -96,7 +96,7 @@
             this.Text = "Form1";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            //((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

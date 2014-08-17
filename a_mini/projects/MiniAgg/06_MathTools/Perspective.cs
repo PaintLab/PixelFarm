@@ -72,13 +72,25 @@ namespace MatterHackers.Agg.Transform
         // Rectangle to quadrilateral
         public Perspective(double x1, double y1, double x2, double y2, double[] quad)
         {
-            rect_to_quad(x1, y1, x2, y2, quad);
+            unsafe
+            {
+                fixed (double* q_h = &quad[0])
+                {
+                    rect_to_quad(x1, y1, x2, y2, q_h);
+                }
+            }
         }
 
         // Quadrilateral to rectangle
         public Perspective(double[] quad, double x1, double y1, double x2, double y2)
         {
-            quad_to_rect(quad, x1, y1, x2, y2);
+            unsafe
+            {
+                fixed (double* q_h = &quad[0])
+                {
+                    quad_to_rect(q_h, x1, y1, x2, y2);
+                }
+            }
         }
 
         // Arbitrary quadrilateral transformations
@@ -105,35 +117,55 @@ namespace MatterHackers.Agg.Transform
         // x1,y1, x2,y2, x3,y3, x4,y4
         public bool quad_to_quad(double[] qs, double[] qd)
         {
+            unsafe
+            {
+                fixed (double* qs_h = &qs[0])
+                fixed (double* qd_h = &qd[0])
+                {
+                    return quad_to_quad2(qs_h, qd_h);
+                }
+            }
+        }
+        public unsafe bool quad_to_quad2(double* qs_h, double* qdHead)
+        {
             Perspective p = new Perspective();
-            if (!quad_to_square(qs)) return false;
-            if (!p.square_to_quad(qd)) return false;
+            if (!quad_to_square(qs_h)) return false;
+            if (!p.square_to_quad(qdHead))
+            {
+                return false;
+            }
             multiply(p);
             return true;
         }
-
-        public bool rect_to_quad(double x1, double y1, double x2, double y2, double[] q)
+        unsafe bool rect_to_quad(double x1, double y1, double x2, double y2, double* q)
         {
-            double[] r = new double[8];
+            double* r = stackalloc double[8];
             r[0] = r[6] = x1;
             r[2] = r[4] = x2;
             r[1] = r[3] = y1;
             r[5] = r[7] = y2;
-            return quad_to_quad(r, q);
+
+            return quad_to_quad2(r, q);
         }
 
-        public bool quad_to_rect(double[] q, double x1, double y1, double x2, double y2)
+        unsafe bool quad_to_rect(double* q, double x1, double y1, double x2, double y2)
         {
-            double[] r = new double[8];
+
+            //double[] r = new double[8];
+            //r[0] = r[6] = x1;
+            //r[2] = r[4] = x2;
+            //r[1] = r[3] = y1;
+            //r[5] = r[7] = y2;
+            double* r = stackalloc double[8];
             r[0] = r[6] = x1;
             r[2] = r[4] = x2;
             r[1] = r[3] = y1;
             r[5] = r[7] = y2;
-            return quad_to_quad(q, r);
+            return quad_to_quad2(q, r);
         }
 
         // Map square (0,0,1,1) to the quadrilateral and vice versa
-        public bool square_to_quad(double[] q)
+        unsafe bool square_to_quad(double* q)
         {
             double dx = q[0] - q[2] + q[4] - q[6];
             double dy = q[1] - q[3] + q[5] - q[7];
@@ -179,10 +211,56 @@ namespace MatterHackers.Agg.Transform
                 ty = q[1];
                 w2 = 1.0;
             }
+
+
+            //double dx = q[0] - q[2] + q[4] - q[6];
+            //double dy = q[1] - q[3] + q[5] - q[7];
+            //if (dx == 0.0 && dy == 0.0)
+            //{
+            //    // Affine case (parallelogram)
+            //    //---------------
+            //    sx = q[2] - q[0];
+            //    shy = q[3] - q[1];
+            //    w0 = 0.0;
+            //    shx = q[4] - q[2];
+            //    sy = q[5] - q[3];
+            //    w1 = 0.0;
+            //    tx = q[0];
+            //    ty = q[1];
+            //    w2 = 1.0;
+            //}
+            //else
+            //{
+            //    double dx1 = q[2] - q[4];
+            //    double dy1 = q[3] - q[5];
+            //    double dx2 = q[6] - q[4];
+            //    double dy2 = q[7] - q[5];
+            //    double den = dx1 * dy2 - dx2 * dy1;
+            //    if (den == 0.0)
+            //    {
+            //        // Singular case
+            //        //---------------
+            //        sx = shy = w0 = shx = sy = w1 = tx = ty = w2 = 0.0;
+            //        return false;
+            //    }
+            //    // General case
+            //    //---------------
+            //    double u = (dx * dy2 - dy * dx2) / den;
+            //    double v = (dy * dx1 - dx * dy1) / den;
+            //    sx = q[2] - q[0] + u * q[2];
+            //    shy = q[3] - q[1] + u * q[3];
+            //    w0 = u;
+            //    shx = q[6] - q[0] + v * q[6];
+            //    sy = q[7] - q[1] + v * q[7];
+            //    w1 = v;
+            //    tx = q[0];
+            //    ty = q[1];
+            //    w2 = 1.0;
+            //}
             return true;
         }
 
-        public bool quad_to_square(double[] q)
+        unsafe bool quad_to_square(double* q)
         {
             if (!square_to_quad(q)) return false;
             invert();

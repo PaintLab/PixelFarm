@@ -22,8 +22,14 @@ using System.Collections.Generic;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.Agg.Transform;
-//using MatterHackers.Agg.Font;
 using MatterHackers.VectorMath;
+
+namespace System.Runtime.CompilerServices
+{
+    public class ExtensionAttribute : Attribute
+    {
+    }
+}
 
 namespace MatterHackers.Agg
 {
@@ -31,8 +37,7 @@ namespace MatterHackers.Agg
     public abstract class Graphics2D
     {
         const int cover_full = 255;
-        protected IImageByte destImageByte;
-        protected IImageFloat destImageFloat;
+        protected IImageBuffer destImageByte;
         protected Stroke StrockedText;
         protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
@@ -42,25 +47,19 @@ namespace MatterHackers.Agg
             affineTransformStack.Push(Affine.NewIdentity());
         }
 
-        public Graphics2D(IImageByte destImage, ScanlineRasterizer rasterizer)
+        public Graphics2D(IImageBuffer destImage, ScanlineRasterizer rasterizer)
             : this()
         {
             Initialize(destImage, rasterizer);
         }
 
-        internal void Initialize(IImageByte destImage, ScanlineRasterizer rasterizer)
+        internal void Initialize(IImageBuffer destImage, ScanlineRasterizer rasterizer)
         {
             destImageByte = destImage;
-            destImageFloat = null;
+            //destImageFloat = null;
             this.rasterizer = rasterizer;
         }
 
-        internal void Initialize(IImageFloat destImage, ScanlineRasterizer rasterizer)
-        {
-            destImageByte = null;
-            destImageFloat = destImage;
-            this.rasterizer = rasterizer;
-        }
 
         public int TransformStackCount
         {
@@ -109,7 +108,7 @@ namespace MatterHackers.Agg
             set;
         }
 
-        public IImageByte DestImage
+        public IImageBuffer DestImage
         {
             get
             {
@@ -117,37 +116,21 @@ namespace MatterHackers.Agg
             }
         }
 
-        public IImageFloat DestImageFloat
-        {
-            get
-            {
-                return destImageFloat;
-            }
-        }
 
         public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
 
-        public void Render(IImageByte imageSource, Point2D position)
+        public void Render(IImageBuffer imageSource, int x, int y)
         {
-            Render(imageSource, position.x, position.y);
+            //base.Render(imageSource, x, y);
+            Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public void Render(IImageByte imageSource, Vector2 position)
-        {
-            Render(imageSource, position.x, position.y);
-        }
-
-        public void Render(IImageByte imageSource, double x, double y)
+        public void Render(IImageBuffer imageSource, double x, double y)
         {
             Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public abstract void Render(IImageByte imageSource,
-            double x, double y,
-            double angleRadians,
-            double scaleX, double ScaleY);
-
-        public abstract void Render(IImageFloat imageSource,
+        public abstract void Render(IImageBuffer imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
@@ -177,15 +160,6 @@ namespace MatterHackers.Agg
 
         public abstract void Clear(IColorType color);
 
-
-
-
-
-        public void Line(Vector2 start, Vector2 end, RGBA_Bytes color)
-        {
-            Line(start.x, start.y, end.x, end.y, color);
-        }
-
         public void Line(double x1, double y1, double x2, double y2, RGBA_Bytes color)
         {
             PathStorage m_LinesToDraw = new PathStorage();
@@ -208,7 +182,17 @@ namespace MatterHackers.Agg
 #endif
         }
 
-
+        //================
+        public static Graphics2D CreateFromImage(IImageBuffer img)
+        {
+             
+            var imgProxy = new ImageClippingProxy(img);
+            var scanlineRaster = new ScanlineRasterizer();
+            var scanlineCachedPacked8 = new ScanlinePacked8();
+            ImageGraphics2D imageRenderer = new ImageGraphics2D(imgProxy, scanlineRaster, scanlineCachedPacked8);
+            imageRenderer.Rasterizer.SetVectorClipBox(0, 0, img.Width, img.Height);
+            return imageRenderer;
+        }
 
 
 

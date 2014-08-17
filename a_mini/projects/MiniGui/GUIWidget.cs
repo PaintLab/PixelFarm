@@ -367,7 +367,7 @@ namespace MatterHackers.Agg.UI
         }
 
         protected Transform.Affine parentToChildTransform = Affine.NewIdentity();
-        ObservableCollection<GuiWidget> children = new ObservableCollection<GuiWidget>();
+        List<GuiWidget> children = new List<GuiWidget>();
 
         private bool containsFocus = false;
 
@@ -466,19 +466,19 @@ namespace MatterHackers.Agg.UI
 
         public GuiWidget(HAnchor hAnchor = HAnchor.None, VAnchor vAnchor = VAnchor.None)
         {
-            children.CollectionChanged += children_CollectionChanged;
+            //children.CollectionChanged += children_CollectionChanged;
             LayoutEngine = new LayoutEngineSimpleAlign();
             HAnchor = hAnchor;
             VAnchor = vAnchor;
         }
 
-        void children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (childrenLockedInMouseUpCount != 0)
-            {
-                ThrowExceptionInDebug("The mouse should not be locked when the child list changes.");
-            }
-        }
+        //void children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        //{
+        //    //if (childrenLockedInMouseUpCount != 0)
+        //    //{
+        //    //    ThrowExceptionInDebug("The mouse should not be locked when the child list changes.");
+        //    //}
+        //}
 
         public virtual bool InvokeRequired
         {
@@ -513,7 +513,7 @@ namespace MatterHackers.Agg.UI
             throw new InvalidOperationException("You can only check for this is your top level window in a form.");
         }
 
-        public virtual ObservableCollection<GuiWidget> Children
+        public virtual List<GuiWidget> Children
         {
             get
             {
@@ -1326,7 +1326,8 @@ namespace MatterHackers.Agg.UI
         {
             if (DoubleBuffer)
             {
-                return BackBuffer.NewGraphics2D();
+                return Graphics2D.CreateFromImage(this.BackBuffer);
+                //return BackBuffer.NewGraphics2D();
             }
 
             if (Parent != null)
@@ -1702,7 +1703,7 @@ namespace MatterHackers.Agg.UI
                                 int yOffset = (int)Math.Floor(child.LocalBounds.Bottom);
                                 if (child.isCurrentlyInvalid)
                                 {
-                                    Graphics2D childBackBufferGraphics2D = child.backBuffer.NewGraphics2D();
+                                    Graphics2D childBackBufferGraphics2D = Graphics2D.CreateFromImage(child.backBuffer);//.NewGraphics2D();
                                     childBackBufferGraphics2D.Clear(new RGBA_Bytes(0, 0, 0, 0));
                                     Affine transformToBuffer = Affine.NewTranslation(-xOffset + xFraction, -yOffset + yFraction);
                                     childBackBufferGraphics2D.SetTransform(transformToBuffer);

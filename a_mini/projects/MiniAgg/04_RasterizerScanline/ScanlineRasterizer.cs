@@ -33,8 +33,8 @@
 using System;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
-using filling_rule_e = MatterHackers.Agg.filling_rule_e;
-using status = MatterHackers.Agg.ScanlineRasterizer.status;
+using filling_rule_e = MatterHackers.Agg.FillingRule;
+using status = MatterHackers.Agg.ScanlineRasterizer.Status;
 using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e;
 
 namespace MatterHackers.Agg
@@ -77,7 +77,7 @@ namespace MatterHackers.Agg
         int max_x();
         int max_y();
 
-        void gamma(IGammaFunction gamma_function);
+        void ResetGamma(IGammaFunction gamma_function);
 
         bool sweep_scanline(IScanlineCache sl);
         void reset();
@@ -90,30 +90,32 @@ namespace MatterHackers.Agg
     {
         private rasterizer_cells_aa m_outline;
         private VectorClipper m_VectorClipper;
-        private int[] m_gamma = new int[(int)aa_scale_e.aa_scale];
-        private filling_rule_e m_filling_rule;
+        private int[] m_gamma = new int[AA_SCALE];
+        private FillingRule m_filling_rule;
         private bool m_auto_close;
         private int m_start_x;
         private int m_start_y;
-        private status m_status;
+        private Status m_status;
         private int m_scan_y;
 
-        public enum status
-        {
-            status_initial,
-            status_move_to,
-            status_line_to,
-            status_closed
-        };
 
-        public enum aa_scale_e
+        //---------------------------
+        const int AA_SHIFT = 8;
+        const int AA_SCALE = 1 << AA_SHIFT;
+        const int AA_MASK = AA_SCALE - 1;
+        const int AA_SCALE2 = AA_SCALE * 2;
+        const int AA_MASK2 = AA_SCALE2 - 1;
+
+        //---------------------------
+
+        public enum Status
         {
-            aa_shift = 8,
-            aa_scale = 1 << aa_shift,
-            aa_mask = aa_scale - 1,
-            aa_scale2 = aa_scale * 2,
-            aa_mask2 = aa_scale2 - 1
-        };
+            Initial,
+            MoveTo,
+            LineTo,
+            Closed
+        }
+
 
         public ScanlineRasterizer()
             : this(new VectorClipper())
@@ -125,38 +127,23 @@ namespace MatterHackers.Agg
         {
             m_outline = new rasterizer_cells_aa();
             m_VectorClipper = rasterizer_sl_clip;
-            m_filling_rule = filling_rule_e.fill_non_zero;
+            m_filling_rule = FillingRule.NonZero;
             m_auto_close = true;
             m_start_x = 0;
             m_start_y = 0;
-            m_status = status.status_initial;
+            m_status = Status.Initial;
 
-            for (int i = 0; i < (int)aa_scale_e.aa_scale; i++)
+            for (int i = AA_SCALE - 1; i >= 0; --i)
             {
                 m_gamma[i] = i;
-            }
+            } 
         }
-
-        /*
-        //--------------------------------------------------------------------
-        public rasterizer_scanline_aa(IClipper rasterizer_sl_clip, IGammaFunction gamma_function)
-        {
-            m_outline = new rasterizer_cells_aa();
-            m_clipper = rasterizer_sl_clip;
-            m_filling_rule = filling_rule_e.fill_non_zero;
-            m_auto_close = true;
-            m_start_x = 0;
-            m_start_y = 0;
-            m_status = status.status_initial;
-
-            gamma(gamma_function);
-        }*/
-
+         
         //--------------------------------------------------------------------
         public void reset()
         {
             m_outline.reset();
-            m_status = status.status_initial;
+            m_status = Status.Initial;
         }
 
         public void reset_clipping()
@@ -186,7 +173,7 @@ namespace MatterHackers.Agg
                                m_VectorClipper.upscale(x2), m_VectorClipper.upscale(y2));
         }
 
-        public void filling_rule(filling_rule_e filling_rule)
+        public void filling_rule(FillingRule filling_rule)
         {
             m_filling_rule = filling_rule;
         }
@@ -194,24 +181,14 @@ namespace MatterHackers.Agg
         public void auto_close(bool flag) { m_auto_close = flag; }
 
         //--------------------------------------------------------------------
-        public void gamma(IGammaFunction gamma_function)
+        public void ResetGamma(IGammaFunction gamma_function)
         {
-
-            for (int i = 0; i < (int)aa_scale_e.aa_scale; i++)
+            for (int i = AA_SCALE - 1; i >= 0; --i)
             {
                 m_gamma[i] = (int)agg_basics.uround(
-                    gamma_function.GetGamma((double)(i) / (int)aa_scale_e.aa_mask) * (int)aa_scale_e.aa_mask);
+                    gamma_function.GetGamma((double)(i) / AA_MASK) * AA_MASK);
             }
-        }
-
-        /*
-        //--------------------------------------------------------------------
-        public int apply_gamma(int cover) 
-        { 
-            return (int)m_gamma[cover];
-        }
-         */
-
+        } 
         //--------------------------------------------------------------------
         void move_to(int x, int y)
         {
@@ -219,7 +196,7 @@ namespace MatterHackers.Agg
             if (m_auto_close) close_polygon();
             m_VectorClipper.move_to(m_start_x = m_VectorClipper.downscale(x),
                               m_start_y = m_VectorClipper.downscale(y));
-            m_status = status.status_move_to;
+            m_status = Status.MoveTo;
         }
 
         //------------------------------------------------------------------------
@@ -228,7 +205,7 @@ namespace MatterHackers.Agg
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.downscale(x),
                               m_VectorClipper.downscale(y));
-            m_status = status.status_line_to;
+            m_status = Status.LineTo;
         }
 
         //------------------------------------------------------------------------
@@ -238,7 +215,7 @@ namespace MatterHackers.Agg
             if (m_auto_close) close_polygon();
             m_VectorClipper.move_to(m_start_x = m_VectorClipper.upscale(x),
                               m_start_y = m_VectorClipper.upscale(y));
-            m_status = status.status_move_to;
+            m_status = Status.MoveTo;
         }
 
         //------------------------------------------------------------------------
@@ -247,15 +224,15 @@ namespace MatterHackers.Agg
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.upscale(x),
                               m_VectorClipper.upscale(y));
-            m_status = status.status_line_to;
+            m_status = Status.LineTo;
         }
 
         public void close_polygon()
         {
-            if (m_status == status.status_line_to)
+            if (m_status == Status.LineTo)
             {
                 m_VectorClipper.line_to(m_outline, m_start_x, m_start_y);
-                m_status = status.status_closed;
+                m_status = Status.Closed;
             }
         }
 
@@ -288,7 +265,7 @@ namespace MatterHackers.Agg
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.downscale(x2),
                               m_VectorClipper.downscale(y2));
-            m_status = status.status_move_to;
+            m_status = Status.MoveTo;
         }
 
         //------------------------------------------------------------------------
@@ -299,7 +276,7 @@ namespace MatterHackers.Agg
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.upscale(x2),
                               m_VectorClipper.upscale(y2));
-            m_status = status.status_move_to;
+            m_status = Status.MoveTo;
         }
 
         //-------------------------------------------------------------------
@@ -385,25 +362,25 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public int calculate_alpha(int area)
         {
-            int cover = area >> ((int)poly_subpixel_scale_e.poly_subpixel_shift * 2 + 1 - (int)aa_scale_e.aa_shift);
+            int cover = area >> ((int)poly_subpixel_scale_e.poly_subpixel_shift * 2 + 1 - AA_SHIFT);
 
             if (cover < 0)
             {
                 cover = -cover;
             }
 
-            if (m_filling_rule == filling_rule_e.fill_even_odd)
+            if (m_filling_rule == FillingRule.EvenOdd)
             {
-                cover &= (int)aa_scale_e.aa_mask2;
-                if (cover > (int)aa_scale_e.aa_scale)
+                cover &= AA_SCALE2;
+                if (cover > AA_SCALE)
                 {
-                    cover = (int)aa_scale_e.aa_scale2 - cover;
+                    cover = AA_SCALE2 - cover;
                 }
             }
 
-            if (cover > (int)aa_scale_e.aa_mask)
+            if (cover > AA_MASK)
             {
-                cover = (int)aa_scale_e.aa_mask;
+                cover = AA_MASK;
             }
 
             return (int)m_gamma[cover];

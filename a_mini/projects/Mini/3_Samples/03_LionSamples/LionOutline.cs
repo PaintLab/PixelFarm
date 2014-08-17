@@ -32,7 +32,7 @@ using System;
 using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -95,7 +95,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
     {
         private LionShape lionShape;
         ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-        ScanlineCachePacked8 scanlineCache = new ScanlineCachePacked8();
+        ScanlinePacked8 scanlineCache = new ScanlinePacked8();
 
         //special option 
         public lion_outline()

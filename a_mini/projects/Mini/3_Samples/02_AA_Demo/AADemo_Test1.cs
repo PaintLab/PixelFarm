@@ -6,7 +6,7 @@ using System;
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -21,7 +21,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             m_size = size;
         }
 
-        public void draw(ScanlineRasterizer ras, IScanlineCache sl, IImageByte destImage, RGBA_Bytes color,
+        public void draw(ScanlineRasterizer ras, IScanlineCache sl, IImageBuffer destImage, RGBA_Bytes color,
                   double x, double y)
         {
             ras.reset();
@@ -38,7 +38,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
     {
         double m_size;
         square m_square;
-        scanline_unpacked_8 m_sl = new scanline_unpacked_8();
+        ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         public renderer_enlarged_test1(double size)
         {
             m_size = size;
@@ -46,23 +46,26 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
         }
 
 
-        protected override void RenderSolidSingleScanLine(IImageByte destImage, IScanlineCache scanLineCache, RGBA_Bytes color)
+        protected override void RenderSolidSingleScanLine(IImageBuffer destImage, IScanlineCache scanLineCache, RGBA_Bytes color)
         {
             int y = scanLineCache.y();
             int num_spans = scanLineCache.num_spans();
             ScanlineSpan scanlineSpan = scanLineCache.begin();
             byte[] ManagedCoversArray = scanLineCache.GetCovers();
+            var gfx = Graphics2D.CreateFromImage(destImage);
+
             for (; ; )
             {
                 int x = scanlineSpan.x;
                 int num_pix = scanlineSpan.len;
                 int coverIndex = scanlineSpan.cover_index;
 
+               
                 do
                 {
                     int a = (ManagedCoversArray[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
-                            destImage.NewGraphics2D().Rasterizer, m_sl, destImage,
+                           gfx.Rasterizer, m_sl, destImage,
                             RGBA_Bytes.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
                             x, y);
                     ++x;
@@ -134,7 +137,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             clippingProxyNormal.clear(RGBA_Bytes.White);
 
             ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-            scanline_unpacked_8 sl = new scanline_unpacked_8();
+            ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 
             int size_mul = (int)this.PixelSize;
 
@@ -149,7 +152,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             //----------------------------------------
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, RGBA_Bytes.Black);
-            rasterizer.gamma(new gamma_none());
+            rasterizer.ResetGamma(new gamma_none());
             //----------------------------------------
             PathStorage ps = new PathStorage();
             Stroke pg = new Stroke(ps);

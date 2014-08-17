@@ -31,12 +31,12 @@ namespace MatterHackers.Agg
 {
     // Supported byte orders for RGB and RGBA pixel formats
     //=======================================================================
-    struct order_rgb { enum rgb_e { R = 0, G = 1, B = 2, rgb_tag }; };       //----order_rgb
-    struct order_bgr { enum bgr_e { B = 0, G = 1, R = 2, rgb_tag }; };       //----order_bgr
-    struct order_rgba { enum rgba_e { R = 0, G = 1, B = 2, A = 3, rgba_tag }; }; //----order_rgba
-    struct order_argb { enum argb_e { A = 0, R = 1, G = 2, B = 3, rgba_tag }; }; //----order_argb
-    struct order_abgr { enum abgr_e { A = 0, B = 1, G = 2, R = 3, rgba_tag }; }; //----order_abgr
-    struct order_bgra { enum bgra_e { B = 0, G = 1, R = 2, A = 3, rgba_tag }; }; //----order_bgra
+    //struct order_rgb { enum rgb_e { R = 0, G = 1, B = 2, rgb_tag }; };       //----order_rgb
+    //struct order_bgr { enum bgr_e { B = 0, G = 1, R = 2, rgb_tag }; };       //----order_bgr
+    //struct order_rgba { enum rgba_e { R = 0, G = 1, B = 2, A = 3, rgba_tag }; }; //----order_rgba
+    //struct order_argb { enum argb_e { A = 0, R = 1, G = 2, B = 3, rgba_tag }; }; //----order_argb
+    //struct order_abgr { enum abgr_e { A = 0, B = 1, G = 2, R = 3, rgba_tag }; }; //----order_abgr
+    //struct order_bgra { enum bgra_e { B = 0, G = 1, R = 2, A = 3, rgba_tag }; }; //----order_bgra
 
     public struct RGBA_Floats : IColorType
     {
@@ -651,11 +651,7 @@ namespace MatterHackers.Agg
         public byte blue;
         public byte green;
         public byte red;
-        public byte alpha;
-
-
-
-
+        public byte alpha; 
 
 
         public const int COVER_SHIFT = 8;

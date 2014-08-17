@@ -5,7 +5,7 @@ using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.Agg.Font;
 using MatterHackers.VectorMath;
 
@@ -38,7 +38,7 @@ namespace MatterHackers.Agg.Sample_Blur
         FlattenCurves m_shape;
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
-        ScanlineCachePacked8 m_sl;
+        ScanlinePacked8 m_sl;
         ImageBuffer m_rbuf2;
 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
@@ -59,7 +59,7 @@ namespace MatterHackers.Agg.Sample_Blur
             this.BlurMethod = Sample_Blur.BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
 
-            m_sl = new ScanlineCachePacked8();
+            m_sl = new ScanlinePacked8();
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
             m_path = typeFaceForLargeA.GetGlyphForCharacter('a');
 
@@ -199,7 +199,9 @@ namespace MatterHackers.Agg.Sample_Blur
                 bbox.Top += m_radius;
             }
 
-            stopwatch.Restart();
+            stopwatch.Stop();
+            stopwatch.Reset();
+            stopwatch.Start();
 
             if (BlurMethod != Sample_Blur.BlurMethod.ChannelBlur)
             {
