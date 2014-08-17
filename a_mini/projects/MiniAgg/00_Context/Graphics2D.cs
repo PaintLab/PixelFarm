@@ -185,7 +185,11 @@ namespace MatterHackers.Agg
         //================
         public static Graphics2D CreateFromImage(IImageByte img)
         {
-            InternalImageGraphics2D imageRenderer = new InternalImageGraphics2D(img);
+             
+            var imgProxy = new ImageClippingProxy(img);
+            var scanlineRaster = new ScanlineRasterizer();
+            var scanlineCachedPacked8 = new ScanlinePacked8();
+            ImageGraphics2D imageRenderer = new ImageGraphics2D(imgProxy, scanlineRaster, scanlineCachedPacked8);
             imageRenderer.Rasterizer.SetVectorClipBox(0, 0, img.Width, img.Height);
             return imageRenderer;
         }

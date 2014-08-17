@@ -6,7 +6,7 @@ using System;
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -41,7 +41,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
     {
         double m_size;
         square m_square;
-        scanline_unpacked_8 m_sl = new scanline_unpacked_8();
+        ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
 
 
 
@@ -145,7 +145,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             clippingProxyNormal.clear(RGBA_Bytes.White);
 
             ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-            scanline_unpacked_8 sl = new scanline_unpacked_8();
+            ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 
             int size_mul = (int)this.PixelSize;
 

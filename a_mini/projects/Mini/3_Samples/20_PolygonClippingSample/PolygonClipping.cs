@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 using MatterHackers.Agg.Transform;
 

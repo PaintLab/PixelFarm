@@ -30,7 +30,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg.RasterizerScanline
+namespace MatterHackers.Agg 
 {
     //=============================================================scanline_p8
     // 
@@ -39,7 +39,7 @@ namespace MatterHackers.Agg.RasterizerScanline
     // for details.
     // 
     //------------------------------------------------------------------------
-    public sealed class ScanlineCachePacked8 : IScanlineCache
+    public sealed class ScanlinePacked8 : IScanlineCache
     {
         private int m_last_x;
         private int m_y;
@@ -57,7 +57,7 @@ namespace MatterHackers.Agg.RasterizerScanline
             return m_spans[m_interator_index - 1];
         }
 
-        public ScanlineCachePacked8()
+        public ScanlinePacked8()
         {
             m_last_x = 0x7FFFFFF0;
             m_covers = new byte[1000];

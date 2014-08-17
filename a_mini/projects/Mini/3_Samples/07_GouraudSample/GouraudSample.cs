@@ -7,7 +7,7 @@ using System.Diagnostics;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 
 using Mini;
 namespace MatterHackers.Agg.Sample_Gouraud
@@ -166,7 +166,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             ImageClippingProxy ren_base = new ImageClippingProxy(pf);
             ren_base.clear(new RGBA_Floats(1.0, 1.0, 1.0));
 
-            scanline_unpacked_8 sl = new scanline_unpacked_8();
+            ScanlineUnpacked8 sl = new ScanlineUnpacked8();
             ScanlineRasterizer ras = new ScanlineRasterizer();
 #if true
             render_gouraud(backBuffer, sl, ras);
@@ -192,7 +192,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             int i;
             if (isRightButton)
             {
-                scanline_unpacked_8 sl = new scanline_unpacked_8();
+                ScanlineUnpacked8 sl = new ScanlineUnpacked8();
                 ScanlineRasterizer ras = new ScanlineRasterizer();
                 //stopwatch.Restart();
                 stopwatch.Stop();

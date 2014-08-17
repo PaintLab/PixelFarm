@@ -3,7 +3,7 @@
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -126,7 +126,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             clippingProxyNormal.clear(this.WhiteOnBlack ? new RGBA_Floats(0, 0, 0) : new RGBA_Floats(1, 1, 1));
 
             ScanlineRasterizer ras = new ScanlineRasterizer();
-            ScanlineCachePacked8 sl = new ScanlineCachePacked8();
+            ScanlinePacked8 sl = new ScanlinePacked8();
 
             VertexSource.Ellipse e = new VertexSource.Ellipse();
 

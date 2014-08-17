@@ -20,24 +20,25 @@ using System;
 using System.Runtime;
 
 using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+using MatterHackers.Agg.VertexSource; 
 using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
-    class InternalImageGraphics2D : ImageGraphics2D
-    {
-        internal InternalImageGraphics2D(IImageByte owner)
-            : base()
-        {
-            ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-            ImageClippingProxy imageClippingProxy = new ImageClippingProxy(owner);
+    //class InternalImageGraphics2D : ImageGraphics2D
+    //{   
+    //    internal InternalImageGraphics2D(IImageByte owner)
+    //        : base(new ImageClippingProxy(owner),
+    //        new ScanlineRasterizer(),
+    //        new ScanlineCachePacked8())
+    //    {
+    //        //ScanlineRasterizer rasterizer = new ScanlineRasterizer();
+    //        //ImageClippingProxy imageClippingProxy = new ImageClippingProxy(owner);
 
-            Initialize(imageClippingProxy, rasterizer);
-            ScanlineCache = new ScanlineCachePacked8();
-        }
-    }
+    //        //Initialize(imageClippingProxy, rasterizer);
+    //        //ScanlineCache = new ScanlineCachePacked8();
+    //    }
+    //}
 
 
 

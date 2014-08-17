@@ -37,7 +37,7 @@ using System.IO;
 
 using MatterHackers.Agg;
 using MatterHackers.Agg.Image;
-using MatterHackers.Agg.RasterizerScanline;
+
 
 namespace Mini
 {

@@ -25,7 +25,7 @@
 // 
 //----------------------------------------------------------------------------
 
-namespace MatterHackers.Agg.RasterizerScanline
+namespace MatterHackers.Agg 
 {
     //=============================================================scanline_u8
     //
@@ -105,7 +105,7 @@ namespace MatterHackers.Agg.RasterizerScanline
     // are better, because switching between two different areas of memory 
     // (that can be very large) occurs less frequently.
     //------------------------------------------------------------------------
-    public sealed class scanline_unpacked_8 : IScanlineCache
+    public sealed class ScanlineUnpacked8 : IScanlineCache
     {
         private int m_min_x;
         private int m_last_x;
@@ -124,7 +124,7 @@ namespace MatterHackers.Agg.RasterizerScanline
         }
 
         //--------------------------------------------------------------------
-        public scanline_unpacked_8()
+        public ScanlineUnpacked8()
         {
 
             m_last_x = (0x7FFFFFF0);

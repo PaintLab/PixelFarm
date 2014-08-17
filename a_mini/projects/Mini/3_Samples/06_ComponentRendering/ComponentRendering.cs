@@ -3,7 +3,7 @@ using System.IO;
 
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.UI;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 
@@ -58,7 +58,7 @@ namespace MatterHackers.Agg
                 ImageClippingProxy clippingProxyBlue = new ImageClippingProxy(blueImageBuffer);
 
                 ScanlineRasterizer ras = new ScanlineRasterizer();
-                ScanlineCachePacked8 sl = new ScanlineCachePacked8();
+                ScanlinePacked8 sl = new ScanlinePacked8();
 
                 RGBA_Bytes clearColor = this.UseBlackBlackground ? new RGBA_Bytes(0, 0, 0) : new RGBA_Bytes(255, 255, 255);
                 clippingProxy.clear(clearColor);

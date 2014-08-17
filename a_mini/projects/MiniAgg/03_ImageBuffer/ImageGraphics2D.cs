@@ -21,8 +21,7 @@ using System.Collections.Generic;
 
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.RasterizerScanline;
+using MatterHackers.Agg.Transform; 
 using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
@@ -31,16 +30,18 @@ namespace MatterHackers.Agg
     {
 
         IScanlineCache m_ScanlineCache;
-        PathStorage drawImageRectPath = new PathStorage();
-        //span_allocator destImageSpanAllocatorCache = new span_allocator();
-        ScanlineCachePacked8 drawImageScanlineCache = new ScanlineCachePacked8();
+        PathStorage drawImageRectPath = new PathStorage(); 
+        ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
         public ImageGraphics2D()
         {
+
         }
 
-        public ImageGraphics2D(IImageByte destImage, ScanlineRasterizer rasterizer, IScanlineCache scanlineCache)
+        public ImageGraphics2D(IImageByte destImage, 
+            ScanlineRasterizer rasterizer, 
+            IScanlineCache scanlineCache)
             : base(destImage, rasterizer)
         {
             m_ScanlineCache = scanlineCache;

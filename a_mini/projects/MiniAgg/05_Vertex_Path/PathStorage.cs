@@ -50,10 +50,8 @@ namespace MatterHackers.Agg.VertexSource
             {
                 //m_coord_x = null;
                 //m_coord_y = null;
-                m_coord_xy = null;
-
-                m_CommandAndFlags = null;
-
+                m_coord_xy = null;  
+                m_CommandAndFlags = null; 
                 m_num_vertices = 0;
             }
 
