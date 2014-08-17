@@ -359,7 +359,7 @@ namespace MatterHackers.Agg
                 if (m_layer_order == layer_order_e.layer_direct)
                 {
 
-                    QuickSort_range_adaptor_uint.Sort(ra);
+                    QuickSort.Sort(ra);
                     //quick_sort(ra, uint_greater);
                 }
                 else
@@ -578,7 +578,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        static class QuickSort_range_adaptor_uint
+        static class QuickSort
         {
             public static void Sort(VectorPOD_RangeAdaptor dataToSort)
             {

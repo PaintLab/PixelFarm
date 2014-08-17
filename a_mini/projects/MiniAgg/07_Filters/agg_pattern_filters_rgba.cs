@@ -26,28 +26,7 @@ namespace MatterHackers.Agg
         void pixel_high_res(ImageBuffer sourceImage, RGBA_Bytes[] destBuffer, int destBufferOffset, int x, int y);
     }
 
-    //=======================================================pattern_filter_nn
-    //template<class ColorT> 
-    /*
-    struct pattern_filter_nn
-    {
-        typedef ColorT RGBA_Bytes;
-        static uint dilation() { return 0; }
-
-        static void pixel_low_res(RGBA_Bytes** buf, 
-                                             RGBA_Bytes* p, int x, int y)
-        {
-            *p = buf[y][x];
-        }
-
-        static void pixel_high_res(RGBA_Bytes** buf, 
-                                              RGBA_Bytes* p, int x, int y)
-        {
-            *p = buf[y >> line_subpixel_shift]
-                    [x >> line_subpixel_shift];
-        }
-    };
-     */
+     
 
     public struct pattern_filter_bilinear_RGBA_Bytes : IPatternFilter
     {

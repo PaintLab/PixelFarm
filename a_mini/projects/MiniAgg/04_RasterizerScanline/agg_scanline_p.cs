@@ -102,10 +102,7 @@ namespace MatterHackers.Agg.RasterizerScanline
         //--------------------------------------------------------------------
         public void add_cells(int x, int len, byte[] covers, int coversIndex)
         {
-            //for (int i = 0; i < len; i++)
-            //{
-            //    m_covers[m_cover_index + i] = covers[i];
-            //}
+
             for (int i = len - 1; i >= 0; --i)
             {
                 m_covers[m_cover_index + i] = covers[i];
@@ -117,9 +114,13 @@ namespace MatterHackers.Agg.RasterizerScanline
             else
             {
                 m_span_index++;
-                m_spans[m_span_index].cover_index = m_cover_index;
-                m_spans[m_span_index].x = (short)x;
-                m_spans[m_span_index].len = (short)len;
+                
+                ScanlineSpan span = new ScanlineSpan();
+                span.cover_index = m_cover_index;
+                span.x = (short)x;
+                span.len = (short)len;
+
+                m_spans[m_span_index] = span;
             }
 
             m_cover_index += len;

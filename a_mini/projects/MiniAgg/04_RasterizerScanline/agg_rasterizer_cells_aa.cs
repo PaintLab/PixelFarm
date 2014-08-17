@@ -374,7 +374,7 @@ namespace MatterHackers.Agg
                 var yData = sortedYData[i];
                 if (yData.num != 0)
                 {
-                    QuickSort_cell_aa.Sort(sortedCellsData,
+                    QuickSort.Sort(sortedCellsData,
                         yData.start,
                         yData.start + yData.num - 1);
                 }
@@ -554,7 +554,7 @@ namespace MatterHackers.Agg
             m_curr_cell.area += (fx2 + (int)poly_subpixel_scale_e.poly_subpixel_scale - first) * delta;
         }
         //------------
-        static class QuickSort_cell_aa
+        static class QuickSort
         {
 
             public static void Sort(cell_aa[] dataToSort)

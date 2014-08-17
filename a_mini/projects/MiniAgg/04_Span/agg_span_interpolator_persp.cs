@@ -228,7 +228,7 @@ namespace MatterHackers.Agg
     //template<int SubpixelShift = 8> 
     public class span_interpolator_persp_lerp : ISpanInterpolator
     {
-        Transform.Perspective             m_trans_dir;
+        Transform.Perspective m_trans_dir;
         Transform.Perspective m_trans_inv;
         dda2_line_interpolator m_coord_x;
         dda2_line_interpolator m_coord_y;
@@ -247,7 +247,7 @@ namespace MatterHackers.Agg
 
         //--------------------------------------------------------------------
         // Arbitrary quadrangle transformations
-        public span_interpolator_persp_lerp(double[] src, double[] dst) 
+        public span_interpolator_persp_lerp(double[] src, double[] dst)
             : this()
         {
             quad_to_quad(src, dst);
@@ -255,7 +255,7 @@ namespace MatterHackers.Agg
 
         //--------------------------------------------------------------------
         // Direct transformations 
-        public span_interpolator_persp_lerp(double x1, double y1, 
+        public span_interpolator_persp_lerp(double x1, double y1,
                                      double x2, double y2,
                                      double[] quad)
             : this()
@@ -265,7 +265,7 @@ namespace MatterHackers.Agg
 
         //--------------------------------------------------------------------
         // Reverse transformations 
-        public span_interpolator_persp_lerp(double[] quad, 
+        public span_interpolator_persp_lerp(double[] quad,
                                      double x1, double y1,
                                      double x2, double y2)
             : this()
@@ -296,7 +296,7 @@ namespace MatterHackers.Agg
 
         //--------------------------------------------------------------------
         // Set the reverse transformations, i.e., quadrangle -> rectangle
-        public void quad_to_rect(double[] quad, 
+        public void quad_to_rect(double[] quad,
                           double x1, double y1, double x2, double y2)
         {
             double[] dst = new double[8];
@@ -323,7 +323,7 @@ namespace MatterHackers.Agg
 
             double dx;
             double dy;
-            double delta = 1/(double)subpixel_scale;
+            double delta = 1 / (double)subpixel_scale;
 
             // Calculate scale by X at x1,y1
             dx = xt + delta;
@@ -366,7 +366,7 @@ namespace MatterHackers.Agg
             int sy2 = (int)agg_basics.uround(subpixel_scale / Math.Sqrt(dx * dx + dy * dy)) >> subpixel_shift;
 
             // Initialize the interpolators
-            m_coord_x = new dda2_line_interpolator(x1,  x2,  (int)len);
+            m_coord_x = new dda2_line_interpolator(x1, x2, (int)len);
             m_coord_y = new dda2_line_interpolator(y1, y2, (int)len);
             m_scale_x = new dda2_line_interpolator(sx1, sx2, (int)len);
             m_scale_y = new dda2_line_interpolator(sy1, sy2, (int)len);
@@ -377,8 +377,8 @@ namespace MatterHackers.Agg
         public void resynchronize(double xe, double ye, int len)
         {
             // Assume x1,y1 are equal to the ones at the previous end point 
-            int x1  = m_coord_x.y();
-            int y1  = m_coord_y.y();
+            int x1 = m_coord_x.y();
+            int y1 = m_coord_y.y();
             int sx1 = m_scale_x.y();
             int sy1 = m_scale_y.y();
 
@@ -399,7 +399,7 @@ namespace MatterHackers.Agg
             m_trans_inv.transform(ref dx, ref dy);
             dx -= xe;
             dy -= ye;
-            int sx2 = (int)agg_basics.uround(subpixel_scale/Math.Sqrt(dx*dx + dy*dy)) >> subpixel_shift;
+            int sx2 = (int)agg_basics.uround(subpixel_scale / Math.Sqrt(dx * dx + dy * dy)) >> subpixel_shift;
 
             // Calculate scale by Y at x2,y2
             dx = xt;
@@ -407,10 +407,10 @@ namespace MatterHackers.Agg
             m_trans_inv.transform(ref dx, ref dy);
             dx -= xe;
             dy -= ye;
-            int sy2 = (int)agg_basics.uround(subpixel_scale/Math.Sqrt(dx*dx + dy*dy)) >> subpixel_shift;
+            int sy2 = (int)agg_basics.uround(subpixel_scale / Math.Sqrt(dx * dx + dy * dy)) >> subpixel_shift;
 
             // Initialize the interpolators
-            m_coord_x = new dda2_line_interpolator(x1,  x2,  (int)len);
+            m_coord_x = new dda2_line_interpolator(x1, x2, (int)len);
             m_coord_y = new dda2_line_interpolator(y1, y2, (int)len);
             m_scale_x = new dda2_line_interpolator(sx1, sx2, (int)len);
             m_scale_y = new dda2_line_interpolator(sy1, sy2, (int)len);
@@ -421,7 +421,7 @@ namespace MatterHackers.Agg
             throw new System.NotImplementedException();
         }
 
-        public void transformer(Transform.ITransform trans) 
+        public void transformer(Transform.ITransform trans)
         {
             throw new System.NotImplementedException();
         }

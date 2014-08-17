@@ -48,7 +48,6 @@
     <Compile Include="04_RasterizerScanline\agg_dda_line.cs" />
     <Compile Include="04_RasterizerScanline\IGammaFunction.cs" />
     <Compile Include="05_Vertex_Path\LineCapAndJoin.cs" />
-    <Compile Include="07_Filters\agg_image_filters.cs" />
     <Compile Include="04_RasterizerScanline\agg_line_aa_basics.cs" />
     <Compile Include="07_Filters\agg_math.cs" />
     <Compile Include="07_Filters\agg_pattern_filters_rgba.cs" />
@@ -58,7 +57,6 @@
     <Compile Include="x_temp_comment\agg_scanline_bin.cs" />
     <Compile Include="06_MathTools\agg_simul_eq.cs" />
     <Compile Include="04_Span\agg_span_allocator.cs" />
-    <Compile Include="04_Span\agg_span_gradient.cs" />
     <Compile Include="07_Filters\agg_span_image_filter.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_gray.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_rgb.cs" />
@@ -116,7 +114,9 @@
       <Name>MiniVectorMath</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="07_Filters\ImageFilterLookupTable.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

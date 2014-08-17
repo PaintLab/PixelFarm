@@ -44,11 +44,11 @@ namespace MatterHackers.Agg
         {
             SubpixelShift = 8,
             subpixel_shift = SubpixelShift,
-            subpixel_scale  = 1 << subpixel_shift
+            subpixel_scale = 1 << subpixel_shift
         };
 
         //--------------------------------------------------------------------
-        public span_interpolator_linear() {}
+        public span_interpolator_linear() { }
         public span_interpolator_linear(Transform.ITransform trans)
         {
             m_trans = trans;
@@ -98,7 +98,7 @@ namespace MatterHackers.Agg
             m_li_x = new dda2_line_interpolator(m_li_x.y(), agg_basics.iround(xe * (double)subpixel_scale_e.subpixel_scale), (int)len);
             m_li_y = new dda2_line_interpolator(m_li_y.y(), agg_basics.iround(ye * (double)subpixel_scale_e.subpixel_scale), (int)len);
         }
-    
+
         //----------------------------------------------------------------
         //public void operator++()
         public void Next()
@@ -126,7 +126,7 @@ namespace MatterHackers.Agg
         void resynchronize(double xe, double ye, int len);
         void local_scale(out double x, out double y);
     };
-    
+
     //================================================span_interpolator_linear
     public sealed class span_interpolator_linear_float : ISpanInterpolatorFloat
     {
