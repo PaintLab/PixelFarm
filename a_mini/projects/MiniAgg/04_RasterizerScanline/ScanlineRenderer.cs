@@ -24,17 +24,17 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void RenderSolid(IImageFloat destImage, IRasterizer rasterizer, IScanlineCache scanLine, RGBA_Floats color)
-        {
-            if (rasterizer.rewind_scanlines())
-            {
-                scanLine.reset(rasterizer.min_x(), rasterizer.max_x());
-                while (rasterizer.sweep_scanline(scanLine))
-                {
-                    RenderSolidSingleScanLine(destImage, scanLine, color);
-                }
-            }
-        }
+        //public void RenderSolid(IImageFloat destImage, IRasterizer rasterizer, IScanlineCache scanLine, RGBA_Floats color)
+        //{
+        //    if (rasterizer.rewind_scanlines())
+        //    {
+        //        scanLine.reset(rasterizer.min_x(), rasterizer.max_x());
+        //        while (rasterizer.sweep_scanline(scanLine))
+        //        {
+        //            RenderSolidSingleScanLine(destImage, scanLine, color);
+        //        }
+        //    }
+        //}
 
         protected virtual void RenderSolidSingleScanLine(IImageByte destImage, IScanlineCache scanLine, RGBA_Bytes color)
         {
@@ -60,29 +60,29 @@ namespace MatterHackers.Agg
             }
         }
 
-        private void RenderSolidSingleScanLine(IImageFloat destImage, IScanlineCache scanLine, RGBA_Floats color)
-        {
-            int y = scanLine.y();
-            int num_spans = scanLine.num_spans();
-            ScanlineSpan scanlineSpan = scanLine.begin();
+        //private void RenderSolidSingleScanLine(IImageFloat destImage, IScanlineCache scanLine, RGBA_Floats color)
+        //{
+        //    int y = scanLine.y();
+        //    int num_spans = scanLine.num_spans();
+        //    ScanlineSpan scanlineSpan = scanLine.begin();
 
-            byte[] ManagedCoversArray = scanLine.GetCovers();
-            for (; ; )
-            {
-                int x = scanlineSpan.x;
-                if (scanlineSpan.len > 0)
-                {
-                    destImage.blend_solid_hspan(x, y, scanlineSpan.len, color, ManagedCoversArray, scanlineSpan.cover_index);
-                }
-                else
-                {
-                    int x2 = (x - (int)scanlineSpan.len - 1);
-                    destImage.blend_hline(x, y, x2, color, ManagedCoversArray[scanlineSpan.cover_index]);
-                }
-                if (--num_spans == 0) break;
-                scanlineSpan = scanLine.GetNextScanlineSpan();
-            }
-        }
+        //    byte[] ManagedCoversArray = scanLine.GetCovers();
+        //    for (; ; )
+        //    {
+        //        int x = scanlineSpan.x;
+        //        if (scanlineSpan.len > 0)
+        //        {
+        //            destImage.blend_solid_hspan(x, y, scanlineSpan.len, color, ManagedCoversArray, scanlineSpan.cover_index);
+        //        }
+        //        else
+        //        {
+        //            int x2 = (x - (int)scanlineSpan.len - 1);
+        //            destImage.blend_hline(x, y, x2, color, ManagedCoversArray[scanlineSpan.cover_index]);
+        //        }
+        //        if (--num_spans == 0) break;
+        //        scanlineSpan = scanLine.GetNextScanlineSpan();
+        //    }
+        //}
 
         public void RenderSolidAllPaths(IImageByte destImage,
             IRasterizer ras,

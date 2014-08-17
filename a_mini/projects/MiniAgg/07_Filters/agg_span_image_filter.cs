@@ -92,53 +92,53 @@ namespace MatterHackers.Agg
         void generate(RGBA_Floats[] span, int spanIndex, int x, int y, int len);
     };
 
-    public abstract class span_image_filter_float : ISpanGeneratorFloat
-    {
-        private IImageBufferAccessorFloat m_ImageBufferAccessor;
-        protected ISpanInterpolatorFloat m_interpolator;
-        protected IImageFilterFunction m_filterFunction;
-        private float m_dx_dbl;
-        private float m_dy_dbl;
+    //public abstract class span_image_filter_float : ISpanGeneratorFloat
+    //{
+    //    private IImageBufferAccessorFloat m_ImageBufferAccessor;
+    //    protected ISpanInterpolatorFloat m_interpolator;
+    //    protected IImageFilterFunction m_filterFunction;
+    //    private float m_dx_dbl;
+    //    private float m_dy_dbl;
 
-        public span_image_filter_float() { }
-        public span_image_filter_float(IImageBufferAccessorFloat src,
-            ISpanInterpolatorFloat interpolator)
-            : this(src, interpolator, null)
-        {
+    //    public span_image_filter_float() { }
+    //    public span_image_filter_float(IImageBufferAccessorFloat src,
+    //        ISpanInterpolatorFloat interpolator)
+    //        : this(src, interpolator, null)
+    //    {
 
-        }
+    //    }
 
-        public span_image_filter_float(IImageBufferAccessorFloat src,
-            ISpanInterpolatorFloat interpolator, IImageFilterFunction filterFunction)
-        {
-            m_ImageBufferAccessor = src;
-            m_interpolator = interpolator;
-            m_filterFunction = filterFunction;
-            m_dx_dbl = (0.5f);
-            m_dy_dbl = (0.5f);
-        }
-        public void attach(IImageBufferAccessorFloat v) { m_ImageBufferAccessor = v; }
+    //    public span_image_filter_float(IImageBufferAccessorFloat src,
+    //        ISpanInterpolatorFloat interpolator, IImageFilterFunction filterFunction)
+    //    {
+    //        m_ImageBufferAccessor = src;
+    //        m_interpolator = interpolator;
+    //        m_filterFunction = filterFunction;
+    //        m_dx_dbl = (0.5f);
+    //        m_dy_dbl = (0.5f);
+    //    }
+    //    public void attach(IImageBufferAccessorFloat v) { m_ImageBufferAccessor = v; }
 
-        public abstract void generate(RGBA_Floats[] span, int spanIndex, int x, int y, int len);
+    //    public abstract void generate(RGBA_Floats[] span, int spanIndex, int x, int y, int len);
 
-        public IImageBufferAccessorFloat source() { return m_ImageBufferAccessor; }
-        public IImageFilterFunction filterFunction() { return m_filterFunction; }
-        public float filter_dx_dbl() { return m_dx_dbl; }
-        public float filter_dy_dbl() { return m_dy_dbl; }
+    //    public IImageBufferAccessorFloat source() { return m_ImageBufferAccessor; }
+    //    public IImageFilterFunction filterFunction() { return m_filterFunction; }
+    //    public float filter_dx_dbl() { return m_dx_dbl; }
+    //    public float filter_dy_dbl() { return m_dy_dbl; }
 
-        public void interpolator(ISpanInterpolatorFloat v) { m_interpolator = v; }
-        public void filterFunction(IImageFilterFunction v) { m_filterFunction = v; }
-        public void filter_offset(float dx, float dy)
-        {
-            m_dx_dbl = dx;
-            m_dy_dbl = dy;
-        }
-        public void filter_offset(float d) { filter_offset(d, d); }
+    //    public void interpolator(ISpanInterpolatorFloat v) { m_interpolator = v; }
+    //    public void filterFunction(IImageFilterFunction v) { m_filterFunction = v; }
+    //    public void filter_offset(float dx, float dy)
+    //    {
+    //        m_dx_dbl = dx;
+    //        m_dy_dbl = dy;
+    //    }
+    //    public void filter_offset(float d) { filter_offset(d, d); }
 
-        public ISpanInterpolatorFloat interpolator() { return m_interpolator; }
+    //    public ISpanInterpolatorFloat interpolator() { return m_interpolator; }
 
-        public void prepare() { }
-    }
+    //    public void prepare() { }
+    //}
 
     /*
 

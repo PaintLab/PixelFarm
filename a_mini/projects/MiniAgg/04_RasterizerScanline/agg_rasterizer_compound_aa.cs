@@ -72,7 +72,7 @@ namespace MatterHackers.Agg
             internal int start_cell;
             internal int num_cells;
             internal int last_x;
-        };
+        } 
 
         private const int aa_shift = 8;
         private const int aa_scale = 1 << aa_shift;
@@ -575,6 +575,78 @@ namespace MatterHackers.Agg
             while ((int)m_master_alpha.size() <= m_max_style)
             {
                 m_master_alpha.add(aa_mask);
+            }
+        }
+
+        static class QuickSort_range_adaptor_uint
+        {
+            public static void Sort(VectorPOD_RangeAdaptor dataToSort)
+            {
+                Sort(dataToSort, 0, (int)(dataToSort.size() - 1));
+            }
+
+            public static void Sort(VectorPOD_RangeAdaptor dataToSort, int beg, int end)
+            {
+                if (end == beg)
+                {
+                    return;
+                }
+                else
+                {
+                    int pivot = getPivotPoint(dataToSort, beg, end);
+                    if (pivot > beg)
+                    {
+                        Sort(dataToSort, beg, pivot - 1);
+                    }
+
+                    if (pivot < end)
+                    {
+                        Sort(dataToSort, pivot + 1, end);
+                    }
+                }
+            }
+
+            static int getPivotPoint(VectorPOD_RangeAdaptor dataToSort, int begPoint, int endPoint)
+            {
+                int pivot = begPoint;
+                int m = begPoint + 1;
+                int n = endPoint;
+
+                while ((m < endPoint)
+                    && dataToSort[pivot] >= dataToSort[m])
+                {
+                    m++;
+                }
+
+                while ((n > begPoint) && (dataToSort[pivot] <= dataToSort[n]))
+                {
+                    n--;
+                }
+                while (m < n)
+                {
+                    int temp = dataToSort[m];
+                    dataToSort[m] = dataToSort[n];
+                    dataToSort[n] = temp;
+
+                    while ((m < endPoint) && (dataToSort[pivot] >= dataToSort[m]))
+                    {
+                        m++;
+                    }
+
+                    while ((n > begPoint) && (dataToSort[pivot] <= dataToSort[n]))
+                    {
+                        n--;
+                    }
+
+                }
+                if (pivot != n)
+                {
+                    int temp2 = dataToSort[n];
+                    dataToSort[n] = dataToSort[pivot];
+                    dataToSort[pivot] = temp2;
+
+                }
+                return n;
             }
         }
     };

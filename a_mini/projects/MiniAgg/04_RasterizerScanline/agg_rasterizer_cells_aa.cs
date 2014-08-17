@@ -103,7 +103,7 @@ namespace MatterHackers.Agg
         private VectorPOD<cell_aa> m_sorted_cells;
 
         private VectorPOD<sorted_y> m_sorted_y;
-        
+
         cell_aa m_curr_cell;
         cell_aa m_style_cell;
 
@@ -130,7 +130,7 @@ namespace MatterHackers.Agg
 
         public rasterizer_cells_aa()
         {
-          
+
             m_sorted_cells = new VectorPOD<cell_aa>();
             m_sorted_y = new VectorPOD<sorted_y>();
             m_min_x = (0x7FFFFFFF);
@@ -553,20 +553,90 @@ namespace MatterHackers.Agg
             m_curr_cell.cover += delta;
             m_curr_cell.area += (fx2 + (int)poly_subpixel_scale_e.poly_subpixel_scale - first) * delta;
         }
+        //------------
+        static class QuickSort_cell_aa
+        {
 
-        //static void swap_cells(cell_aa a, cell_aa b)
-        //{
-        //    cell_aa temp = a;
-        //    a = b;
-        //    b = temp;
-        //}
+            public static void Sort(cell_aa[] dataToSort)
+            {
+                Sort(dataToSort, 0, dataToSort.Length - 1);
+            }
 
-        //enum qsort { qsort_threshold = 9 };
+            public static void Sort(cell_aa[] dataToSort, int beg, int end)
+            {
+                if (end == beg)
+                {
+                    return;
+                }
+                else
+                {
+                    int pivot = getPivotPoint(dataToSort, beg, end);
+                    if (pivot > beg)
+                    {
+                        Sort(dataToSort, beg, pivot - 1);
+                    }
+
+                    if (pivot < end)
+                    {
+                        Sort(dataToSort, pivot + 1, end);
+                    }
+                }
+            }
+
+            static int getPivotPoint(cell_aa[] dataToSort, int begPoint, int endPoint)
+            {
+                int pivot = begPoint;
+                int m = begPoint + 1;
+                int n = endPoint;
+
+                var x_at_PivotPoint = dataToSort[pivot].x;
+
+                while ((m < endPoint)
+                    && x_at_PivotPoint >= dataToSort[m].x)
+                {
+                    m++;
+                }
+
+                while ((n > begPoint) && (x_at_PivotPoint <= dataToSort[n].x))
+                {
+                    n--;
+                }
+
+                while (m < n)
+                {
+                    //swap data between m and n
+                    cell_aa temp = dataToSort[m];
+                    dataToSort[m] = dataToSort[n];
+                    dataToSort[n] = temp;
+
+                    while ((m < endPoint) && (x_at_PivotPoint >= dataToSort[m].x))
+                    {
+                        m++;
+                    }
+
+                    while ((n > begPoint) && (x_at_PivotPoint <= dataToSort[n].x))
+                    {
+                        n--;
+                    }
+                }
+
+                if (pivot != n)
+                {
+                    cell_aa temp2 = dataToSort[n];
+                    dataToSort[n] = dataToSort[pivot];
+                    dataToSort[pivot] = temp2;
+
+                }
+                return n;
+            }
+        }
     }
 
     //------------------------------------------------------scanline_hit_test
     public class scanline_hit_test : IScanlineCache
     {
+        //see pattern fill example 
+
         private int m_x;
         private bool m_hit;
 
@@ -611,5 +681,7 @@ namespace MatterHackers.Agg
         {
             throw new System.NotImplementedException();
         }
+
+
     }
 }

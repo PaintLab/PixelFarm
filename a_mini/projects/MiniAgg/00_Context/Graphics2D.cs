@@ -32,7 +32,7 @@ namespace MatterHackers.Agg
     {
         const int cover_full = 255;
         protected IImageByte destImageByte;
-        protected IImageFloat destImageFloat;
+       // protected IImageFloat destImageFloat;
         protected Stroke StrockedText;
         protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
@@ -51,16 +51,16 @@ namespace MatterHackers.Agg
         internal void Initialize(IImageByte destImage, ScanlineRasterizer rasterizer)
         {
             destImageByte = destImage;
-            destImageFloat = null;
+            //destImageFloat = null;
             this.rasterizer = rasterizer;
         }
 
-        internal void Initialize(IImageFloat destImage, ScanlineRasterizer rasterizer)
-        {
-            destImageByte = null;
-            destImageFloat = destImage;
-            this.rasterizer = rasterizer;
-        }
+        //internal void Initialize(IImageFloat destImage, ScanlineRasterizer rasterizer)
+        //{
+        //    destImageByte = null;
+        //    destImageFloat = destImage;
+        //    this.rasterizer = rasterizer;
+        //}
 
         public int TransformStackCount
         {
@@ -117,13 +117,13 @@ namespace MatterHackers.Agg
             }
         }
 
-        public IImageFloat DestImageFloat
-        {
-            get
-            {
-                return destImageFloat;
-            }
-        }
+        //public IImageFloat DestImageFloat
+        //{
+        //    get
+        //    {
+        //        return destImageFloat;
+        //    }
+        //}
 
         public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
 
@@ -147,10 +147,10 @@ namespace MatterHackers.Agg
             double angleRadians,
             double scaleX, double ScaleY);
 
-        public abstract void Render(IImageFloat imageSource,
-            double x, double y,
-            double angleRadians,
-            double scaleX, double ScaleY);
+        //public abstract void Render(IImageFloat imageSource,
+        //    double x, double y,
+        //    double angleRadians,
+        //    double scaleX, double ScaleY);
 
         public void Render(IVertexSource vertexSource, RGBA_Bytes[] colorArray, int[] pathIdArray, int numPaths)
         {

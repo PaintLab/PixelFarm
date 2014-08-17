@@ -27,15 +27,15 @@ namespace MatterHackers.Agg
         static void swap_arrays_index1(double[,] a1, uint a1Index0, double[,] a2, uint a2Index0)
         {
             int Cols = a1.GetLength(1);
-            if(a2.GetLength(1) != Cols)
+            if (a2.GetLength(1) != Cols)
             {
                 throw new System.FormatException("a1 and a2 must have the same second dimension.");
             }
-            for(int i = 0; i < Cols; i++)
+            for (int i = 0; i < Cols; i++)
             {
-                double tmp = a1[a1Index0,i];
-                a1[a1Index0,i] = a2[a2Index0,i];
-                a2[a2Index0,i] = tmp;
+                double tmp = a1[a1Index0, i];
+                a1[a1Index0, i] = a2[a2Index0, i];
+                a2[a2Index0, i] = tmp;
             }
         }
 
@@ -47,7 +47,7 @@ namespace MatterHackers.Agg
             max_val = -1.0;
             int i;
             int Rows = m.GetLength(0);
-            for(i = (int)row; i < Rows; i++)
+            for (i = (int)row; i < Rows; i++)
             {
                 if ((tmp = Math.Abs(m[i, row])) > max_val && tmp != 0.0)
                 {
@@ -56,31 +56,31 @@ namespace MatterHackers.Agg
                 }
             }
 
-            if(m[k,row] == 0.0)
+            if (m[k, row] == 0.0)
             {
                 return -1;
             }
 
-            if(k != (int)(row))
+            if (k != (int)(row))
             {
                 swap_arrays_index1(m, (uint)k, m, row);
                 return k;
             }
             return 0;
         }
-    };
-    
+    } 
+
 
 
     //===============================================================simul_eq
     //template<uint Size, uint RightCols>
-    struct simul_eq
+    static class simul_eq
     {
-        public static bool solve(double[,] left, 
+        public static bool solve(double[,] left,
                           double[,] right,
                           double[,] result)
         {
-            if(left.GetLength(0) != 4
+            if (left.GetLength(0) != 4
                 || right.GetLength(0) != 4
                 || left.GetLength(1) != 4
                 || result.GetLength(0) != 4
@@ -90,62 +90,61 @@ namespace MatterHackers.Agg
                 throw new System.FormatException("left right and result must all be the same size.");
             }
             double a1;
-            int Size = right.GetLength(0);
-            int RightCols = right.GetLength(1);
+            int size = right.GetLength(0);
+            int rightCols = right.GetLength(1);
 
-            double[,] tmp = new double[Size,Size + RightCols];
+            double[,] tmp = new double[size, size + rightCols];
 
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < size; i++)
             {
-                for(int j = 0; j < Size; j++)
+                for (int j = 0; j < size; j++)
                 {
-                    tmp[i,j] = left[i,j];
-                } 
-                for(int j = 0; j < RightCols; j++)
+                    tmp[i, j] = left[i, j];
+                }
+                for (int j = 0; j < rightCols; j++)
                 {
-                    tmp[i,Size + j] = right[i,j];
+                    tmp[i, size + j] = right[i, j];
                 }
             }
 
-            for(int k = 0; k < Size; k++)
+            for (int k = 0; k < size; k++)
             {
-                if(matrix_pivot.pivot(tmp, (uint)k) < 0)
+                if (matrix_pivot.pivot(tmp, (uint)k) < 0)
                 {
                     return false; // Singularity....
                 }
 
-                a1 = tmp[k,k];
+                a1 = tmp[k, k];
 
-                for(int j = k; j < Size + RightCols; j++)
+                for (int j = k; j < size + rightCols; j++)
                 {
-                    tmp[k,j] /= a1;
+                    tmp[k, j] /= a1;
                 }
 
-                for(int i = k + 1; i < Size; i++)
+                for (int i = k + 1; i < size; i++)
                 {
-                    a1 = tmp[i,k];
-                    for (int j = k; j < Size + RightCols; j++)
+                    a1 = tmp[i, k];
+                    for (int j = k; j < size + rightCols; j++)
                     {
-                        tmp[i,j] -= a1 * tmp[k,j];
+                        tmp[i, j] -= a1 * tmp[k, j];
                     }
                 }
             }
 
 
-            for(int k = 0; k < RightCols; k++)
+            for (int k = 0; k < rightCols; k++)
             {
                 int m;
-                for(m = (int)(Size - 1); m >= 0; m--)
+                for (m = (int)(size - 1); m >= 0; m--)
                 {
-                    result[m,k] = tmp[m,Size + k];
-                    for(int j = m + 1; j < Size; j++)
+                    result[m, k] = tmp[m, size + k];
+                    for (int j = m + 1; j < size; j++)
                     {
-                        result[m,k] -= tmp[m,j] * result[j,k];
+                        result[m, k] -= tmp[m, j] * result[j, k];
                     }
                 }
             }
             return true;
-        }
-
-    };
+        } 
+    } 
 }

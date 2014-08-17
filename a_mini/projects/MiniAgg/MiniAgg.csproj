@@ -47,6 +47,7 @@
     <Compile Include="02_Color\agg_color_rgba.cs" />
     <Compile Include="04_RasterizerScanline\agg_dda_line.cs" />
     <Compile Include="04_RasterizerScanline\IGammaFunction.cs" />
+    <Compile Include="05_Vertex_Path\LineCapAndJoin.cs" />
     <Compile Include="07_Filters\agg_image_filters.cs" />
     <Compile Include="04_RasterizerScanline\agg_line_aa_basics.cs" />
     <Compile Include="07_Filters\agg_math.cs" />
@@ -80,14 +81,12 @@
     <Compile Include="03_ImageBuffer\ImageProxy.cs" />
     <Compile Include="02_Color\rgb.cs" />
     <Compile Include="02_Color\rgba.cs" />
-    <Compile Include="03_ImageBuffer\Transposer.cs" />
     <Compile Include="05_Vertex_Path\IMarkers.cs" />
     <Compile Include="04_RasterizerScanline\IScanline.cs" />
     <Compile Include="06_MathTools\IVertexDest.cs" />
     <Compile Include="04_RasterizerScanline\OutlineRenderer.cs" />
     <Compile Include="06_MathTools\Point2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="04_RasterizerScanline\quicksort.cs" />
     <Compile Include="04_RasterizerScanline\RasterBufferAccessors.cs" />
     <Compile Include="04_RasterizerScanline\agg_scanline_p.cs" />
     <Compile Include="04_RasterizerScanline\agg_scanline_u.cs" />

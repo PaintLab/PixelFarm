@@ -53,6 +53,7 @@
     <Compile Include="Image\ImageTgaIO.cs" />
     <Compile Include="Image\RecursiveBlur.cs" />
     <Compile Include="Image\StackBlur.cs" />
+    <Compile Include="Image\Transposer.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="UnitTests2.cs" />
     <Compile Include="VertexSource\agg_bspline.cs" />

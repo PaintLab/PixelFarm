@@ -929,95 +929,95 @@ namespace MatterHackers.Agg
         }
     };
 
-    public class span_image_filter_rgba_float : span_image_filter_float
-    {
-        public span_image_filter_rgba_float(IImageBufferAccessorFloat src, ISpanInterpolatorFloat inter, IImageFilterFunction filterFunction)
-            : base(src, inter, filterFunction)
-        {
-            if (src.SourceImage.GetFloatsBetweenPixelsInclusive() != 4)
-            {
-                throw new System.NotSupportedException("span_image_filter_rgba must have a 32 bit DestImage");
-            }
-        }
+    //public class span_image_filter_rgba_float : span_image_filter_float
+    //{
+    //    public span_image_filter_rgba_float(IImageBufferAccessorFloat src, ISpanInterpolatorFloat inter, IImageFilterFunction filterFunction)
+    //        : base(src, inter, filterFunction)
+    //    {
+    //        if (src.SourceImage.GetFloatsBetweenPixelsInclusive() != 4)
+    //        {
+    //            throw new System.NotSupportedException("span_image_filter_rgba must have a 32 bit DestImage");
+    //        }
+    //    }
 
-        public override void generate(RGBA_Floats[] span, int spanIndex, int xInt, int yInt, int len)
-        {
-            base.interpolator().begin(xInt + base.filter_dx_dbl(), yInt + base.filter_dy_dbl(), len);
+    //    public override void generate(RGBA_Floats[] span, int spanIndex, int xInt, int yInt, int len)
+    //    {
+    //        base.interpolator().begin(xInt + base.filter_dx_dbl(), yInt + base.filter_dy_dbl(), len);
 
-            float f_r, f_g, f_b, f_a;
+    //        float f_r, f_g, f_b, f_a;
 
-            float[] fg_ptr;
+    //        float[] fg_ptr;
 
-            int radius = (int)m_filterFunction.radius();
-            int diameter = radius * 2;
-            int start = -(int)(diameter / 2 - 1);
+    //        int radius = (int)m_filterFunction.radius();
+    //        int diameter = radius * 2;
+    //        int start = -(int)(diameter / 2 - 1);
 
-            int x_count;
+    //        int x_count;
 
-            ISpanInterpolatorFloat spanInterpolator = base.interpolator();
-            IImageBufferAccessorFloat sourceAccessor = source();
+    //        ISpanInterpolatorFloat spanInterpolator = base.interpolator();
+    //        IImageBufferAccessorFloat sourceAccessor = source();
 
-            do
-            {
-                float x = xInt;
-                float y = yInt;
-                spanInterpolator.coordinates(out x, out y);
-                //x -= (float)base.filter_dx_dbl();
-                //y -= (float)base.filter_dy_dbl();
-                int sourceXInt = (int)x;
-                int sourceYInt = (int)y;
-                Vector2 sourceOrigin = new Vector2(x, y);
-                Vector2 sourceSample = new Vector2(sourceXInt + start, sourceYInt + start);
+    //        do
+    //        {
+    //            float x = xInt;
+    //            float y = yInt;
+    //            spanInterpolator.coordinates(out x, out y);
+    //            //x -= (float)base.filter_dx_dbl();
+    //            //y -= (float)base.filter_dy_dbl();
+    //            int sourceXInt = (int)x;
+    //            int sourceYInt = (int)y;
+    //            Vector2 sourceOrigin = new Vector2(x, y);
+    //            Vector2 sourceSample = new Vector2(sourceXInt + start, sourceYInt + start);
 
-                f_b = f_g = f_r = f_a = 0;
+    //            f_b = f_g = f_r = f_a = 0;
 
-                int y_count = diameter;
+    //            int y_count = diameter;
 
-                int bufferIndex;
-                fg_ptr = sourceAccessor.span(sourceXInt + start, sourceYInt + start, diameter, out bufferIndex);
-                float totalWeight = 0.0f;
-                for (; ; )
-                {
-                    float yweight = (float)m_filterFunction.calc_weight(System.Math.Sqrt((sourceSample.y - sourceOrigin.y) * (sourceSample.y - sourceOrigin.y)));
-                    x_count = (int)diameter;
-                    for (; ; )
-                    {
-                        float xweight = (float)m_filterFunction.calc_weight(System.Math.Sqrt((sourceSample.x - sourceOrigin.x) * (sourceSample.x - sourceOrigin.x)));
-                        float weight = xweight * yweight;
+    //            int bufferIndex;
+    //            fg_ptr = sourceAccessor.span(sourceXInt + start, sourceYInt + start, diameter, out bufferIndex);
+    //            float totalWeight = 0.0f;
+    //            for (; ; )
+    //            {
+    //                float yweight = (float)m_filterFunction.calc_weight(System.Math.Sqrt((sourceSample.y - sourceOrigin.y) * (sourceSample.y - sourceOrigin.y)));
+    //                x_count = (int)diameter;
+    //                for (; ; )
+    //                {
+    //                    float xweight = (float)m_filterFunction.calc_weight(System.Math.Sqrt((sourceSample.x - sourceOrigin.x) * (sourceSample.x - sourceOrigin.x)));
+    //                    float weight = xweight * yweight;
 
-                        f_r += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                        f_g += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                        f_b += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                        f_a += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                    f_r += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    f_g += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    f_b += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    f_a += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
 
-                        totalWeight += weight;
-                        sourceSample.x += 1;
-                        if (--x_count == 0) break;
-                        sourceAccessor.next_x(out bufferIndex);
-                    }
+    //                    totalWeight += weight;
+    //                    sourceSample.x += 1;
+    //                    if (--x_count == 0) break;
+    //                    sourceAccessor.next_x(out bufferIndex);
+    //                }
 
-                    sourceSample.x -= diameter;
+    //                sourceSample.x -= diameter;
 
-                    if (--y_count == 0) break;
-                    sourceSample.y += 1;
-                    fg_ptr = sourceAccessor.next_y(out bufferIndex);
-                }
+    //                if (--y_count == 0) break;
+    //                sourceSample.y += 1;
+    //                fg_ptr = sourceAccessor.next_y(out bufferIndex);
+    //            }
 
-                if (f_b < 0) f_b = 0; if (f_b > 1) f_b = 1;
-                if (f_r < 0) f_r = 0; if (f_r > 1) f_r = 1;
-                if (f_g < 0) f_g = 0; if (f_g > 1) f_g = 1;
+    //            if (f_b < 0) f_b = 0; if (f_b > 1) f_b = 1;
+    //            if (f_r < 0) f_r = 0; if (f_r > 1) f_r = 1;
+    //            if (f_g < 0) f_g = 0; if (f_g > 1) f_g = 1;
 
-                span[spanIndex].red = f_r;
-                span[spanIndex].green = f_g;
-                span[spanIndex].blue = f_b;
-                span[spanIndex].alpha = 1;// f_a;
+    //            span[spanIndex].red = f_r;
+    //            span[spanIndex].green = f_g;
+    //            span[spanIndex].blue = f_b;
+    //            span[spanIndex].alpha = 1;// f_a;
 
-                spanIndex++;
-                spanInterpolator.Next();
+    //            spanIndex++;
+    //            spanInterpolator.Next();
 
-            } while (--len != 0);
-        }
-    };
+    //        } while (--len != 0);
+    //    }
+    //};
     /*
 
         //========================================span_image_resample_rgba_affine

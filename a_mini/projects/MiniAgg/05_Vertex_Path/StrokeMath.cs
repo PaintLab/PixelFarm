@@ -26,30 +26,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    public enum LineCap
-    {
-        Butt,
-        Square,
-        Round
-    }
-
-    public enum LineJoin
-    {
-        Miter,
-        MiterRevert,
-        Round,
-        Bevel,
-        MiterRound
-    }
-
-    public enum InnerJoin
-    {
-        Bevel,
-        Miter,
-        Jag,
-        Round
-    }
-
+    
     public class StrokeMath
     {
         public enum status_e
