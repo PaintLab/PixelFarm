@@ -17,7 +17,7 @@ namespace MatterHackers.Agg.UI
         {
             this.FlowDirection = FlowDirection;
         }
-        
+
         public override void InitLayout()
         {
             base.InitLayout();
@@ -36,7 +36,7 @@ namespace MatterHackers.Agg.UI
                     ApplyHAnchorToChild(parent, child);
                     ApplyVAnchorToChild(parent, child);
                 }
-                
+
                 DoLayoutChildren(layoutEventArgs);
 
                 FixOriginXIfRightToLeft(parent);
@@ -109,7 +109,7 @@ namespace MatterHackers.Agg.UI
 
             return false;
         }
-    
+
         public override bool GetOriginAndWidthForChild(GuiWidget parent, GuiWidget child, out Vector2 newOriginRelParent, out double newWidth)
         {
             newOriginRelParent = Vector2.Zero;
@@ -188,7 +188,8 @@ namespace MatterHackers.Agg.UI
                 }
 
                 RectangleDouble childBoundsWithMargin = child.LocalBounds;
-                childBoundsWithMargin.Inflate(child.Margin);
+                //childBoundsWithMargin.Inflate(child.Margin);
+                DoubleRectHelper.Inflate(ref childBoundsWithMargin, child.Margin);
                 totalWidthWithMargin += childBoundsWithMargin.Width;
                 totalHeightWithMargin += childBoundsWithMargin.Height;
                 boundsOfAllChildrenIncludingMargin.ExpandToInclude(childBoundsWithMargin);

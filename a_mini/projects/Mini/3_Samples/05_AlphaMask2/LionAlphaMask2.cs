@@ -81,7 +81,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                 ImageClippingProxy clippingProxy = new ImageClippingProxy(image);
                 ScanlineCachePacked8 sl = new ScanlineCachePacked8();
 
-                clippingProxy.clear(new RGBA_Floats(0));
+                clippingProxy.clear(RGBA_Bytes.Black);
 
                 VertexSource.Ellipse ellipseForMask = new MatterHackers.Agg.VertexSource.Ellipse();
 
@@ -113,7 +113,8 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                         // there is not very much reason to set the alpha as you will get the amount of 
                         // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
                         rasterizer.add_path(ellipseForMask);
-                        scanlineRenderer.render_scanlines_aa_solid(clippingProxy, rasterizer, sl, new RGBA_Bytes((int)((float)i / (float)num * 255), 0, 0, 255));
+                        scanlineRenderer.render_scanlines_aa_solid(clippingProxy, rasterizer, sl,
+                           RGBA_Bytes.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                     }
 
                 }
@@ -169,7 +170,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                 transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
                 transform *= Affine.NewTranslation(Width / 2, Height / 2);
 
-                clippingProxy.clear(new RGBA_Floats(1, 1, 1));
+                clippingProxy.clear(RGBA_Bytes.White);
 
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
                 // draw a background to show how the mask is working better
@@ -185,7 +186,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
                             // Drawing as an outline
                             rasterizer.add_path(rect);
-                            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, rasterizer, scanlineCache, new RGBA_Bytes(.9, .9, .9));
+                            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, rasterizer, scanlineCache, RGBA_Bytes.Make(.9, .9, .9));
                         }
                     }
                 }
@@ -281,8 +282,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     g_rasterizer.add_path(ell);
                     agg::render_scanlines(g_rasterizer, g_scanline, rg);
                 }
-                 */
-
+                 */ 
                 //m_num_cb.Render(g_rasterizer, g_scanline, clippingProxy);
             }
             alphaMaskImageBuffer.DettachBuffer();

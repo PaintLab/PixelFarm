@@ -42,6 +42,7 @@
     <Compile Include="AppWidgetFactory.cs" />
     <Compile Include="Clipboard\Clipboard.cs" />
     <Compile Include="DefaultViewFactory.cs" />
+    <Compile Include="DoubleRectHelper.cs" />
     <Compile Include="FileDropEventArgs.cs" />
     <Compile Include="FlowLayoutWidget.cs" />
     <Compile Include="GUIWidget.cs" />

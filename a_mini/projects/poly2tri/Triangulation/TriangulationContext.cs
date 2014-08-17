@@ -31,41 +31,62 @@
 
 using System.Collections.Generic;
 
-namespace Poly2Tri {
-	public abstract class TriangulationContext {
-		public TriangulationDebugContext DebugContext { get; protected set; }
+namespace Poly2Tri
+{
 
-		public readonly List<DelaunayTriangle> Triangles = new List<DelaunayTriangle>();
-		public readonly List<TriangulationPoint> Points = new List<TriangulationPoint>(200);
-		public TriangulationMode TriangulationMode { get; protected set; }
-		public Triangulatable Triangulatable { get; private set; }
+    public abstract class TriangulationContext
+    {
 
-		public int StepCount { get; private set; }
+        public readonly List<DelaunayTriangle> Triangles = new List<DelaunayTriangle>();
+        public readonly List<TriangulationPoint> Points = new List<TriangulationPoint>(200);
+        internal TriangulationContext()
+        {
+        }
+        public TriangulationMode TriangulationMode { get; protected set; }
+        public Triangulatable Triangulatable { get; private set; }
 
-		public void Done() {
-			StepCount++;
-		}
+        public abstract TriangulationAlgorithm Algorithm { get; }
 
-		public abstract TriangulationAlgorithm Algorithm { get; }
+        public virtual void PrepareTriangulation(Triangulatable t)
+        {
+            Triangulatable = t;
+            TriangulationMode = t.TriangulationMode;
+            t.Prepare(this);
+        }
 
-		public virtual void PrepareTriangulation(Triangulatable t) {
-			Triangulatable = t;
-			TriangulationMode = t.TriangulationMode;
-			t.Prepare(this);
-		}
+        //public abstract TriangulationConstraint NewConstraint(TriangulationPoint a, TriangulationPoint b);
+        public abstract void MakeNewConstraint(TriangulationPoint a, TriangulationPoint b);
 
-		public abstract TriangulationConstraint NewConstraint(TriangulationPoint a, TriangulationPoint b);
+        public void Update(string message) { }
 
-		public void Update(string message) {}
+        public virtual void Clear()
+        {
+            this.Points.Clear();
+            this.Triangles.Clear();
 
-		public virtual void Clear() {
-			Points.Clear();
-			if (DebugContext != null) DebugContext.Clear();
-			StepCount = 0;
-		}
+            if (DebugContext != null) { DebugContext.Clear(); }
+#if DEBUG
+            dbugStepCount = 0;
+#endif
+        }
 
-		public virtual bool IsDebugEnabled { get; protected set; }
+        public bool IsDebugEnabled { get; private set; }
 
-		public DTSweepDebugContext DTDebugContext { get { return DebugContext as DTSweepDebugContext; } }
-	}
+        protected void SetDebugMode(bool enable)
+        {
+            this.IsDebugEnabled = enable;
+        }
+
+        public DTSweepDebugContext DTDebugContext { get { return DebugContext as DTSweepDebugContext; } }
+
+
+#if DEBUG
+        int dbugStepCount;
+        public void dbugDone()
+        {
+            dbugStepCount++;
+        }
+#endif
+        public TriangulationDebugContext DebugContext { get; protected set; }
+    }
 }
