@@ -35,7 +35,7 @@ namespace MatterHackers.Agg
     // outside the given with init() X-range. Extrapolation is a simple linear 
     // function.
     //------------------------------------------------------------------------
-    public sealed class bspline 
+    public sealed class bspline
     {
         private int m_max;
         private int m_num;
@@ -77,11 +77,11 @@ namespace MatterHackers.Agg
             init(num, x, y);
         }
 
-        
+
         //------------------------------------------------------------------------
         public void init(int max)
         {
-            if(max > 2 && max > m_max)
+            if (max > 2 && max > m_max)
             {
                 m_am.Resize(max * 3);
                 m_max = max;
@@ -96,9 +96,9 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         public void add_point(double x, double y)
         {
-            if(m_num < m_max)
+            if (m_num < m_max)
             {
-                m_am[m_xOffset+m_num] = x;
+                m_am[m_xOffset + m_num] = x;
                 m_am[m_yOffset + m_num] = y;
                 ++m_num;
             }
@@ -108,14 +108,14 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         public void prepare()
         {
-            if(m_num > 2)
+            if (m_num > 2)
             {
                 int i, k;
-                int r; 
+                int r;
                 int s;
                 double h, p, d, f, e;
-        
-                for(k = 0; k < m_num; k++) 
+
+                for (k = 0; k < m_num; k++)
                 {
                     m_am[k] = 0.0;
                 }
@@ -124,7 +124,7 @@ namespace MatterHackers.Agg
 
                 ArrayPOD<double> al = new ArrayPOD<double>(n1);
 
-                for(k = 0; k < n1; k++) 
+                for (k = 0; k < n1; k++)
                 {
                     al[k] = 0.0;
                 }
@@ -133,32 +133,32 @@ namespace MatterHackers.Agg
                 s = m_num * 2;
 
                 n1 = m_num - 1;
-                d = m_am[m_xOffset+1] - m_am[m_xOffset+0];
-                e = (m_am[m_yOffset+1] - m_am[m_yOffset+0]) / d;
+                d = m_am[m_xOffset + 1] - m_am[m_xOffset + 0];
+                e = (m_am[m_yOffset + 1] - m_am[m_yOffset + 0]) / d;
 
-                for(k = 1; k < n1; k++) 
+                for (k = 1; k < n1; k++)
                 {
-                    h     = d;
-                    d     = m_am[m_xOffset+k + 1] - m_am[m_xOffset+k];
-                    f     = e;
-                    e     = (m_am[m_yOffset+k + 1] - m_am[m_yOffset+k]) / d;
+                    h = d;
+                    d = m_am[m_xOffset + k + 1] - m_am[m_xOffset + k];
+                    f = e;
+                    e = (m_am[m_yOffset + k + 1] - m_am[m_yOffset + k]) / d;
                     al[k] = d / (d + h);
-                    al[r+k]  = 1.0 - al[k];
-                    al[s+k]  = 6.0 * (e - f) / (h + d);
+                    al[r + k] = 1.0 - al[k];
+                    al[s + k] = 6.0 * (e - f) / (h + d);
                 }
 
-                for(k = 1; k < n1; k++) 
+                for (k = 1; k < n1; k++)
                 {
                     p = 1.0 / (al[r + k] * al[k - 1] + 2.0);
                     al[k] *= -p;
-                    al[s + k] = (al[s + k] - al[r + k] * al[s + k - 1]) * p; 
+                    al[s + k] = (al[s + k] - al[r + k] * al[s + k - 1]) * p;
                 }
 
-                m_am[n1]     = 0.0;
-                al[n1 - 1]   = al[s+n1 - 1];
+                m_am[n1] = 0.0;
+                al[n1 - 1] = al[s + n1 - 1];
                 m_am[n1 - 1] = al[n1 - 1];
 
-                for(k = n1 - 2, i = 0; i < m_num - 2; i++, k--) 
+                for (k = n1 - 2, i = 0; i < m_num - 2; i++, k--)
                 {
                     al[k] = al[k] * al[k + 1] + al[s + k];
                     m_am[k] = al[k];
@@ -172,11 +172,11 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         public void init(int num, double[] x, double[] y)
         {
-            if(num > 2)
+            if (num > 2)
             {
                 init(num);
                 int i;
-                for(i = 0; i < num; i++)
+                for (i = 0; i < num; i++)
                 {
                     add_point(x[i], y[i]);
                 }
@@ -187,16 +187,16 @@ namespace MatterHackers.Agg
 
 
         //------------------------------------------------------------------------
-        void bsearch(int n, int xOffset, double x0, out int i) 
+        void bsearch(int n, int xOffset, double x0, out int i)
         {
             int j = n - 1;
             int k;
-              
-            for(i = 0; (j - i) > 1; ) 
+
+            for (i = 0; (j - i) > 1; )
             {
                 k = (i + j) >> 1;
-                if (x0 < m_am[xOffset + k]) j = k; 
-                else                         i = k;
+                if (x0 < m_am[xOffset + k]) j = k;
+                else i = k;
             }
         }
 
@@ -236,7 +236,7 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         public double get(double x)
         {
-            if(m_num > 2)
+            if (m_num > 2)
             {
                 int i;
 
@@ -257,7 +257,7 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         public double get_stateful(double x)
         {
-            if(m_num > 2)
+            if (m_num > 2)
             {
                 // Extrapolation on the left
                 if (x < m_am[m_xOffset + 0]) return extrapolation_left(x);
@@ -265,31 +265,31 @@ namespace MatterHackers.Agg
                 // Extrapolation on the right
                 if (x >= m_am[m_xOffset + m_num - 1]) return extrapolation_right(x);
 
-                if(m_last_idx >= 0)
+                if (m_last_idx >= 0)
                 {
                     // Check if x is not in current range
                     if (x < m_am[m_xOffset + m_last_idx] || x > m_am[m_xOffset + m_last_idx + 1])
                     {
                         // Check if x between next points (most probably)
-                        if(m_last_idx < m_num - 2 &&
+                        if (m_last_idx < m_num - 2 &&
                            x >= m_am[m_xOffset + m_last_idx + 1] &&
                            x <= m_am[m_xOffset + m_last_idx + 2])
                         {
                             ++m_last_idx;
                         }
                         else
-                        if(m_last_idx > 0 &&
-                           x >= m_am[m_xOffset + m_last_idx - 1] &&
-                           x <= m_am[m_xOffset + m_last_idx])
-                        {
-                            // x is between pevious points
-                            --m_last_idx;
-                        }
-                        else
-                        {
-                            // Else perform full search
-                            bsearch(m_num, m_xOffset, x, out m_last_idx);
-                        }
+                            if (m_last_idx > 0 &&
+                               x >= m_am[m_xOffset + m_last_idx - 1] &&
+                               x <= m_am[m_xOffset + m_last_idx])
+                            {
+                                // x is between pevious points
+                                --m_last_idx;
+                            }
+                            else
+                            {
+                                // Else perform full search
+                                bsearch(m_num, m_xOffset, x, out m_last_idx);
+                            }
                     }
                     return interpolation(x, m_last_idx);
                 }

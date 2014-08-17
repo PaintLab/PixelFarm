@@ -42,18 +42,18 @@ namespace MatterHackers.Agg
             int num_spans = scanLine.num_spans();
             ScanlineSpan scanlineSpan = scanLine.begin();
 
-            byte[] ManagedCoversArray = scanLine.GetCovers();
+            byte[] coversArray = scanLine.GetCovers();
             for (; ; )
             {
                 int x = scanlineSpan.x;
                 if (scanlineSpan.len > 0)
                 {
-                    destImage.blend_solid_hspan(x, y, scanlineSpan.len, color, ManagedCoversArray, scanlineSpan.cover_index);
+                    destImage.blend_solid_hspan(x, y, scanlineSpan.len, color, coversArray, scanlineSpan.cover_index);
                 }
                 else
                 {
                     int x2 = (x - (int)scanlineSpan.len - 1);
-                    destImage.blend_hline(x, y, x2, color, ManagedCoversArray[scanlineSpan.cover_index]);
+                    destImage.blend_hline(x, y, x2, color, coversArray[scanlineSpan.cover_index]);
                 }
                 if (--num_spans == 0) break;
                 scanlineSpan = scanLine.GetNextScanlineSpan();

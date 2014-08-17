@@ -319,7 +319,9 @@ namespace MatterHackers.Agg.VertexSource
             ShapePath.FlagsAndCommand otherFlagsAndCommand = test.vertex(out testX, out testY);
 
             int index = 1;
-            if (controlFlagsAndCommand == otherFlagsAndCommand && controlX == testX && agg_basics.is_equal_eps(controlY, testY, .000000001))
+            if (controlFlagsAndCommand == otherFlagsAndCommand && 
+                controlX == testX &&
+                agg_basics.is_equal_eps(controlY, testY, .000000001))
             {
                 while (controlFlagsAndCommand != ShapePath.FlagsAndCommand.CommandStop)
                 {

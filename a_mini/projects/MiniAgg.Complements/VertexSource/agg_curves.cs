@@ -339,18 +339,27 @@ namespace MatterHackers.Agg.VertexSource
 
         public IEnumerable<VertexData> Vertices()
         {
-            for (int i = 0; i < m_points.size(); i++)
+            int j = m_points.size();
+
+            if (j > 0)
             {
-                if (i == 0)
-                {
-                    yield return new VertexData(ShapePath.FlagsAndCommand.CommandMoveTo, m_points[i]);
-                }
-                else
+                //first cmd 
+                //cmd0
+                yield return new VertexData(ShapePath.FlagsAndCommand.CommandMoveTo, m_points[0]);
+                //others
+                for (int i = 1; i < j; i++)
                 {
                     yield return new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, m_points[i]);
+                    //if (i == 0)
+                    //{
+                    //    yield return new VertexData(ShapePath.FlagsAndCommand.CommandMoveTo, m_points[i]);
+                    //}
+                    //else
+                    //{
+                        
+                    //}
                 }
             }
-
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
         }
 

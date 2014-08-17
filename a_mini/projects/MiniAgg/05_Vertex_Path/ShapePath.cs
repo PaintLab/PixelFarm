@@ -161,7 +161,10 @@ namespace MatterHackers.Agg
                     double y = prev.y + (last.y - prev.y) * d;
                     last.x = x;
                     last.y = y;
-                    if (!prev.IsEqual(last)) vs.RemoveLast();
+                    if (!prev.IsEqual(last))
+                    {
+                        vs.RemoveLast();
+                    }
                     vs.close(closed != 0);
                 }
             }

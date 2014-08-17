@@ -215,26 +215,30 @@ namespace MatterHackers.Agg.Sample_Blur
                 if (image2.Attach(widgetsSubImage, (int)bbox.Left, (int)bbox.Bottom, (int)bbox.Right, (int)bbox.Top))
                 {
                     // Blur it
-                    if (BlurMethod == Sample_Blur.BlurMethod.StackBlur)
+                    switch (BlurMethod)
                     {
-                        // More general method, but 30-40% slower.
-                        //------------------
-                        //m_stack_blur.blur(pixf2, agg::uround(m_radius.Value));
+                        case Sample_Blur.BlurMethod.StackBlur:
+                            {
+                                // More general method, but 30-40% slower.
+                                //------------------
+                                //m_stack_blur.blur(pixf2, agg::uround(m_radius.Value));
 
-                        // Faster, but bore specific. 
-                        // Works only for 8 bits per channel and only with radii <= 254.
-                        //------------------
-                        stack_blur test = new stack_blur();
-                        test.Blur(image2, agg_basics.uround(m_radius), agg_basics.uround(m_radius));
+                                // Faster, but bore specific. 
+                                // Works only for 8 bits per channel and only with radii <= 254.
+                                //------------------
+                                stack_blur test = new stack_blur();
+                                test.Blur(image2, agg_basics.uround(m_radius), agg_basics.uround(m_radius));
+
+                            } break; 
+                        default:
+                            {  // True Gaussian Blur, 3-5 times slower than Stack Blur,
+                                // but still constant time of radius. Very sensitive
+                                // to precision, doubles are must here.
+                                //------------------
+                                m_recursive_blur.blur(image2, m_radius);
+                            } break;
                     }
-                    else
-                    {
-                        // True Gaussian Blur, 3-5 times slower than Stack Blur,
-                        // but still constant time of radius. Very sensitive
-                        // to precision, doubles are must here.
-                        //------------------
-                        m_recursive_blur.blur(image2, m_radius);
-                    }
+
                 }
             }
             else

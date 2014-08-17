@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -140,15 +140,64 @@ namespace Mini
         private void button2_Click(object sender, EventArgs e)
         {
 
+            Bitmap bmp = new Bitmap("d:\\WImageTest\\test002.png");
+            //MatterHackers.StackBlur2.FastBlur32RGBA(bmp, 15);
+
+            var rct = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+            //assign dimension info and copy buffer 
+            var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+            int bmpStride = bitmapData.Stride;
+            int width = bmp.Width;
+            int height = bmp.Height;
+            int wh = width * height;
+
+            //var dest = new int[wh];
+            //var source = new int[wh];
+
+            var source = new int[width * height];
+            var dest = new int[width * height];
+            Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
+            MatterHackers.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
+            Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
+
+            bmp.UnlockBits(bitmapData);
+
+            bmp.Save("d:\\WImageTest\\test002_2.png");
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
-        {
+        private void button3_Click(object sender, EventArgs e)
+        {   
              
-              
-             
+            byte[] buffer1 = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+            int[] srcBuffer = new int[2];
 
+            Buffer.BlockCopy(buffer1, 0, srcBuffer, 0, buffer1.Length);
+
+            int s01 = srcBuffer[0];
+            int s3 = (s01 >> 24) & 0xff;
+            int s2 = (s01 >> 16) & 0xff;
+            int s1 = (s01 >> 8) & 0xff;
+            int s0 = (s01 >> 0) & 0xff;
+
+
+
+
+            //byte[] buffer1 = img.GetBuffer();
+            ////copy from stream of byte buffer to int array            
+            //int[] srcBuffer = new int[buffer1.Length / 4];
+            //Buffer.BlockCopy(buffer1, 0, srcBuffer, 0, buffer1.Length);
+            ////-----------------------  
+
+            //int[] destBuffer = new int[srcBuffer.Length];
+            //StackBlurARGB.FastBlur32ARGB(srcBuffer, destBuffer, img.Width, img.Height, radius);
+
+            ////Buffer.BlockCopy(srcBuffer, 0, destBuffer, 0, buffer1.Length);
+
+            //Buffer.BlockCopy(destBuffer, 0, buffer1, 0, buffer1.Length);
         }
+
+
 
 
     }

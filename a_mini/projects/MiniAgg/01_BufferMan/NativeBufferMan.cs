@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 namespace MatterHackers.Agg
 {
 
-    public class NativeBufferMan
+    public class NativeBuffer
     {
         byte[] mmm;
         int totalAllocSize;
         int currentIndex;
-        public NativeBufferMan(int initSize)
+        public NativeBuffer(int initSize)
         {
             this.mmm = new byte[initSize];
             this.totalAllocSize = initSize;
@@ -26,16 +26,20 @@ namespace MatterHackers.Agg
         {
             //clear with zero
 
-            MemSet(this.mmm, 0, 0, totalAllocSize);
+            NativeBufferMethods.MemSet(this.mmm, 0, 0, totalAllocSize);
         }
         public void Clear(byte b)
         {
             //clear with zero
-            MemSet(this.mmm, 0, b, totalAllocSize);
+            NativeBufferMethods.MemSet(this.mmm, 0, b, totalAllocSize);
         }
+    }
 
 
 
+
+    public static class NativeBufferMethods
+    {
         //-------------------------------------------------------------------------
         public static void MemSet(byte[] dest, int startAt, byte value, int count)
         {
@@ -47,19 +51,18 @@ namespace MatterHackers.Agg
                 }
             }
         }
-        public static void MemCopy(byte[] dest_buffer, int outputStartAt, byte[] src_buffer, int src_index, int len)
+        public static void MemCopy(byte[] dest_buffer, int dest_startAt, byte[] src_buffer, int src_StartAt, int len)
         {
             unsafe
             {
-                fixed (byte* head_dest = &dest_buffer[outputStartAt])
-                fixed (byte* head_src = &src_buffer[src_index])
+                fixed (byte* head_dest = &dest_buffer[dest_startAt])
+                fixed (byte* head_src = &src_buffer[src_StartAt])
                 {
                     memcpy(head_dest, head_src, len);
                 }
-            }
-
+            } 
         }
-
+         
 
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
         static unsafe extern void memset(byte* dest, byte c, int byteCount);
@@ -68,11 +71,7 @@ namespace MatterHackers.Agg
 
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
         static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
-
-
-
     }
-
 
 
 }

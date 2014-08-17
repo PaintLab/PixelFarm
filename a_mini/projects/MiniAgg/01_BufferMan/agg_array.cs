@@ -27,36 +27,16 @@ using System.Collections;
 
 namespace MatterHackers.Agg
 {
-    public interface IDataContainer<T>
-    {
-        T[] Array { get; }
-        void RemoveLast();
-    }
 
-    public class ArrayPOD<T> : IDataContainer<T>
-    {
-        public ArrayPOD()
-            : this(64)
-        {
-        }
 
+
+    public class ArrayPOD<T>
+    {
         public ArrayPOD(int size)
         {
             m_array = new T[size];
             m_size = size;
         }
-
-        public void RemoveLast()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ArrayPOD(ArrayPOD<T> v)
-        {
-            m_array = (T[])v.m_array.Clone();
-            m_size = v.m_size;
-        }
-
         public void Resize(int size)
         {
             if (size != m_size)
@@ -73,7 +53,6 @@ namespace MatterHackers.Agg
             {
                 return m_array[index];
             }
-
             set
             {
                 m_array[index] = value;
@@ -87,16 +66,17 @@ namespace MatterHackers.Agg
                 return m_array;
             }
         }
+
         private T[] m_array;
         private int m_size;
     }
 
-     
+
     //--------------------------------------------------------------pod_vector
     // A simple class template to store Plain Old Data, a vector
     // of a fixed size. The data is contiguous in memory
     //------------------------------------------------------------------------
-    public class VectorPOD<dataType> : IDataContainer<dataType>
+    public class VectorPOD<dataType>
     {
         protected int currentSize;
         private dataType[] internalArray = new dataType[0];
@@ -230,10 +210,11 @@ namespace MatterHackers.Agg
                     var newArray = new dataType[newSize];
                     if (internalArray != null)
                     {
-                        for (int i = 0; i < internalArray.Length; i++)
+                        for (int i = internalArray.Length - 1; i >= 0; --i)
                         {
                             newArray[i] = internalArray[i];
                         }
+
                     }
                     internalArray = newArray;
                 }
@@ -260,7 +241,7 @@ namespace MatterHackers.Agg
 
         public virtual void add(dataType v)
         {
-            if (internalArray == null || internalArray.Length < (currentSize + 1))
+            if (internalArray.Length < (currentSize + 1))
             {
                 if (currentSize < 100000)
                 {
@@ -274,29 +255,29 @@ namespace MatterHackers.Agg
             internalArray[currentSize++] = v;
         }
 
-        public void push_back(dataType v) { internalArray[currentSize++] = v; }
+        //public void push_back(dataType v) { internalArray[currentSize++] = v; }
 
-        public void Insert(int index, dataType value)
-        {
-            insert_at(index, value);
-        }
+        //public void Insert(int index, dataType value)
+        //{
+        //    insert_at(index, value);
+        //}
 
-        public void insert_at(int pos, dataType val)
-        {
-            if (pos >= currentSize)
-            {
-                internalArray[currentSize] = val;
-            }
-            else
-            {
-                for (int i = 0; i < currentSize - pos; i++)
-                {
-                    internalArray[i + pos + 1] = internalArray[i + pos];
-                }
-                internalArray[pos] = val;
-            }
-            ++currentSize;
-        }
+        //public void insert_at(int pos, dataType val)
+        //{
+        //    if (pos >= currentSize)
+        //    {
+        //        internalArray[currentSize] = val;
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < currentSize - pos; i++)
+        //        {
+        //            internalArray[i + pos + 1] = internalArray[i + pos];
+        //        }
+        //        internalArray[pos] = val;
+        //    }
+        //    ++currentSize;
+        //}
 
         public void inc_size(int size) { currentSize += size; }
         public int size() { return currentSize; }
