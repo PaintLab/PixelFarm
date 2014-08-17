@@ -32,7 +32,7 @@ namespace MatterHackers.Agg
 
         IScanlineCache m_ScanlineCache;
         PathStorage drawImageRectPath = new PathStorage();
-        span_allocator destImageSpanAllocatorCache = new span_allocator();
+        //span_allocator destImageSpanAllocatorCache = new span_allocator();
         ScanlineCachePacked8 drawImageScanlineCache = new ScanlineCachePacked8();
         ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
@@ -136,8 +136,7 @@ namespace MatterHackers.Agg
                 ImageClippingProxy destImageWithClipping = new ImageClippingProxy(destImageByte);
                 scanlineRenderer.GenerateAndRender(Rasterizer,
                     drawImageScanlineCache,
-                    destImageWithClipping,
-                    destImageSpanAllocatorCache,
+                    destImageWithClipping, 
                     spanImageFilter);
             }
         }

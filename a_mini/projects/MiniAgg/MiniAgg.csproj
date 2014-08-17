@@ -56,14 +56,13 @@
     <Compile Include="04_RasterizerScanline\agg_rasterizer_outline_aa.cs" />
     <Compile Include="x_temp_comment\agg_scanline_bin.cs" />
     <Compile Include="06_MathTools\agg_simul_eq.cs" />
-    <Compile Include="04_Span\agg_span_allocator.cs" />
+    <Compile Include="x_temp_comment\agg_span_allocator.cs" />
     <Compile Include="07_Filters\agg_span_image_filter.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_gray.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_rgb.cs" />
     <Compile Include="07_Filters\agg_span_image_filter_rgba.cs" />
     <Compile Include="04_Span\agg_span_interpolator_linear.cs" />
     <Compile Include="04_Span\agg_span_interpolator_persp.cs" />
-    <Compile Include="04_Span\agg_span_subdiv_adaptor.cs" />
     <Compile Include="05_Vertex_Path\agg_VertexSequence.cs" />
     <Compile Include="x_temp_comment\Array2D.cs" />
     <Compile Include="01_BufferMan\NativeBufferMan.cs" />

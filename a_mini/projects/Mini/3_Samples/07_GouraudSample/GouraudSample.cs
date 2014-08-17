@@ -79,7 +79,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #endif
             ImageClippingProxy ren_base = new ImageClippingProxy(image);
 
-            span_allocator span_alloc = new span_allocator();
+            //span_allocator span_alloc = new span_allocator();
             span_gouraud_rgba span_gen = new span_gouraud_rgba();
 
             ras.gamma(new gamma_linear(0.0, this.LinearGamma));
@@ -105,7 +105,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             span_gen.triangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
             ras.add_path(span_gen);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_alloc, span_gen);
+            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
             span_gen.colors(new RGBA_Floats(0, 1, 0, alpha),
@@ -113,7 +113,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
                             new RGBA_Floats(brc, brc, brc, alpha));
             span_gen.triangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
             ras.add_path(span_gen);
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_alloc, span_gen);
+            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
             span_gen.colors(new RGBA_Floats(0, 0, 1, alpha),
@@ -121,7 +121,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
                             new RGBA_Floats(brc, brc, brc, alpha));
             span_gen.triangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
             ras.add_path(span_gen);
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_alloc, span_gen);
+            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
             brc = 1 - brc;
@@ -130,7 +130,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
                             new RGBA_Floats(brc, brc, brc, alpha));
             span_gen.triangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
             ras.add_path(span_gen);
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_alloc, span_gen);
+            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
             span_gen.colors(new RGBA_Floats(0, 1, 0, alpha),
@@ -138,7 +138,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
                             new RGBA_Floats(brc, brc, brc, alpha));
             span_gen.triangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
             ras.add_path(span_gen);
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_alloc, span_gen);
+            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
             span_gen.colors(new RGBA_Floats(0, 0, 1, alpha),
@@ -146,7 +146,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
                             new RGBA_Floats(brc, brc, brc, alpha));
             span_gen.triangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
             ras.add_path(span_gen);
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_alloc, span_gen);
+            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
         }
         public override void Draw(Graphics2D g)
         {
