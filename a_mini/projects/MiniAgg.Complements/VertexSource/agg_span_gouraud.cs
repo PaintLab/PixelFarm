@@ -56,7 +56,7 @@ namespace MatterHackers.Agg.VertexSource
             triangle(x1, y1, x2, y2, x3, y3, d);
         }
 
-        public void colors(IColorType c1, IColorType c2, IColorType c3)
+        public void colors(IColor c1, IColor c2, IColor c3)
         {
             m_coord[0].color = c1.GetAsRGBA_Bytes();
             m_coord[1].color = c2.GetAsRGBA_Bytes();

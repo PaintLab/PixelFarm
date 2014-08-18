@@ -21,25 +21,21 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
-    public interface IImage
+    
+    public interface IImage 
     {
         Vector2 OriginOffset
         {
             get;
             set;
         }
-        int BitDepth { get; } 
+        int BitDepth { get; }
         int Width { get; }
         int Height { get; }
-        RectangleInt GetBounds(); 
+        RectangleInt GetBounds();
         int GetBufferOffsetY(int y);
-        int GetBufferOffsetXY(int x, int y);  
+        int GetBufferOffsetXY(int x, int y);
         void MarkImageChanged();
-   
-    }
-
-    public interface IImageBuffer : IImage
-    {
 
         int StrideInBytes(); 
         IRecieveBlenderByte GetRecieveBlender();
@@ -51,8 +47,8 @@ namespace MatterHackers.Agg.Image
         RGBA_Bytes GetPixel(int x, int y);
         void copy_pixel(int x, int y, byte[] c, int ByteOffset);
         
-        void CopyFrom(IImageBuffer sourceImage);
-        void CopyFrom(IImageBuffer sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
+        void CopyFrom(IImage sourceImage);
+        void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
 
         void SetPixel(int x, int y, RGBA_Bytes color);
         void BlendPixel(int x, int y, RGBA_Bytes sourceColor, byte cover);

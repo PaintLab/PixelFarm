@@ -75,7 +75,7 @@ namespace MatterHackers.Agg.UI
         public static bool DebugBoundsUnderMouse = false;
 
         bool doubleBuffer;
-        ImageBuffer backBuffer;
+        ActualImage backBuffer;
 
         bool debugShowBounds = false;
         bool widgetHasBeenClosed = false;
@@ -557,14 +557,14 @@ namespace MatterHackers.Agg.UI
             int intHeight = Math.Max((int)(Math.Ceiling(localBounds.Top) - Math.Floor(localBounds.Bottom)) + 1, 1);
             if (backBuffer == null || backBuffer.Width != intWidth || backBuffer.Height != intHeight)
             {
-                backBuffer = new ImageBuffer(intWidth, intHeight, 32, new BlenderPreMultBGRA());
+                backBuffer = new ActualImage(intWidth, intHeight, 32, new BlenderPreMultBGRA());
             }
         }
 
         /// <summary>
         /// This will return the backBuffer object for widgets that are double buffered.  It will return null if they are not.
         /// </summary>
-        public ImageBuffer BackBuffer
+        public ImageBase BackBuffer
         {
             get
             {

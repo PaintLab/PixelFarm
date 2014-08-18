@@ -18,7 +18,7 @@ using System.Text;
 namespace MatterHackers.Agg
 {   
 
-    public interface IColorType
+    public interface IColor
     {
         RGBA_Floats GetAsRGBA_Floats();
         RGBA_Bytes GetAsRGBA_Bytes();

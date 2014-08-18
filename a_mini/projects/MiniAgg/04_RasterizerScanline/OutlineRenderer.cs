@@ -1445,7 +1445,7 @@ namespace MatterHackers.Agg
         public delegate bool CompareFunction(int value);
         public RGBA_Bytes color() { return m_color; }
 
-        public void color(IColorType c) { m_color = c.GetAsRGBA_Bytes(); }
+        public void color(IColor c) { m_color = c.GetAsRGBA_Bytes(); }
         public abstract void semidot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2);
         public abstract void semidot_hline(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2, int x1, int y1, int x2);
         public abstract void pie(int xc, int yc, int x1, int y1, int x2, int y2);
@@ -1458,7 +1458,7 @@ namespace MatterHackers.Agg
     //======================================================renderer_outline_aa
     public class OutlineRenderer : LineRenderer
     {
-        private IImageBuffer destImageSurface;
+        private IImage destImageSurface;
         LineProfileAnitAlias lineProfile;
         RectangleInt clippingRectangle;
         bool doClipping;
@@ -1475,7 +1475,7 @@ namespace MatterHackers.Agg
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(IImageBuffer destImage, LineProfileAnitAlias profile)
+        public OutlineRenderer(IImage destImage, LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;
@@ -1483,7 +1483,7 @@ namespace MatterHackers.Agg
             doClipping = false;
         }
 
-        public void attach(IImageBuffer ren) { destImageSurface = ren; }
+        public void attach(IImage ren) { destImageSurface = ren; }
 
         //---------------------------------------------------------------------
         public void profile(LineProfileAnitAlias prof) { lineProfile = prof; }

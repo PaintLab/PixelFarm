@@ -38,7 +38,7 @@ namespace MatterHackers.Agg
     //struct order_abgr { enum abgr_e { A = 0, B = 1, G = 2, R = 3, rgba_tag }; }; //----order_abgr
     //struct order_bgra { enum bgra_e { B = 0, G = 1, R = 2, A = 3, rgba_tag }; }; //----order_bgra
 
-    public struct RGBA_Floats : IColorType
+    public struct RGBA_Floats : IColor
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
@@ -507,7 +507,7 @@ namespace MatterHackers.Agg
         }
 
 
-        public static IColorType no_color() { return (IColorType)new RGBA_Floats(0, 0, 0, 0); }
+        public static IColor no_color() { return (IColor)new RGBA_Floats(0, 0, 0, 0); }
 
         public static RGBA_Floats from_wavelength(float wl)
         {
@@ -644,7 +644,7 @@ namespace MatterHackers.Agg
         }
     }
 
-    public struct RGBA_Bytes : IColorType
+    public struct RGBA_Bytes : IColor
     {
         //--------------
         //BGRA *** 
@@ -944,7 +944,7 @@ namespace MatterHackers.Agg
             Blue0To255 = gamma.dir((byte)Blue0To255);
         }
 
-        public static IColorType no_color() { return new RGBA_Bytes(0, 0, 0, 0); }
+        public static IColor no_color() { return new RGBA_Bytes(0, 0, 0, 0); }
 
         //-------------------------------------------------------------rgb8_packed
         static public RGBA_Bytes rgb8_packed(int v)

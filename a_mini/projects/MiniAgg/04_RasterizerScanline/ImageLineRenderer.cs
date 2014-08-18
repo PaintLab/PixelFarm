@@ -59,9 +59,8 @@ namespace MatterHackers.Agg
     {
         IPatternFilter m_filter;
         int m_dilation;
-        int m_dilation_hr;
-        ImageBuffer myBuffer = new ImageBuffer();
-        ImageBuffer m_buf = new ImageBuffer();
+        int m_dilation_hr; 
+        ReferenceImage m_buf;
         byte[] m_data = null;
         int m_DataSizeInBytes = 0;
         int m_width;
@@ -82,11 +81,12 @@ namespace MatterHackers.Agg
             m_half_height_hr = (0);
             m_offset_y_hr = (0);
         }
-        public ImageBuffer MyBuffer
+        public ImageBase MyBuffer
         {
             get
             {
-                return this.myBuffer;
+                throw new NotSupportedException();
+                 
             }
         }
         ~line_image_pattern()
@@ -115,8 +115,9 @@ namespace MatterHackers.Agg
 
         // Create
         //--------------------------------------------------------------------
-        public void create(IImageBuffer src)
+        public void create(IImage src)
         {
+
             // we are going to create a dialated image for filtering
             // we add m_dilation pixels to every side of the image and then copy the image in the x
             // dirrection into each end so that we can sample into this image to get filtering on x repeating
@@ -142,14 +143,16 @@ namespace MatterHackers.Agg
             int bufferWidth = m_width + m_dilation * 2;
             int bufferHeight = m_height + m_dilation * 2;
             int bytesPerPixel = src.BitDepth / 8;
-            int NewSizeInBytes = bufferWidth * bufferHeight * bytesPerPixel;
-            if (m_DataSizeInBytes < NewSizeInBytes)
+            int newSizeInBytes = bufferWidth * bufferHeight * bytesPerPixel;
+            if (m_DataSizeInBytes < newSizeInBytes)
             {
-                m_DataSizeInBytes = NewSizeInBytes;
+                m_DataSizeInBytes = newSizeInBytes;
                 m_data = new byte[m_DataSizeInBytes];
             }
 
-            m_buf.AttachBuffer(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
+
+            m_buf = new ReferenceImage(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
+   
             byte[] destBuffer = m_buf.GetBuffer();
             byte[] sourceBuffer = src.GetBuffer();
 
@@ -783,7 +786,7 @@ namespace MatterHackers.Agg
     //template<class BaseRenderer, class ImagePattern> 
     public class ImageLineRenderer : LineRenderer
     {
-        IImageBuffer m_ren;
+        IImage m_ren;
         line_image_pattern m_pattern;
         int m_start;
         double m_scale_x;
@@ -794,7 +797,7 @@ namespace MatterHackers.Agg
         //typedef renderer_outline_image<BaseRenderer, ImagePattern> self_type;
 
         //---------------------------------------------------------------------
-        public ImageLineRenderer(IImageBuffer ren, line_image_pattern patt)
+        public ImageLineRenderer(IImage ren, line_image_pattern patt)
         {
             m_ren = ren;
             m_pattern = patt;
@@ -804,7 +807,7 @@ namespace MatterHackers.Agg
             m_clipping = (false);
         }
 
-        public void attach(IImageBuffer ren) { m_ren = ren; }
+        public void attach(IImage ren) { m_ren = ren; }
 
         //---------------------------------------------------------------------
         public void pattern(line_image_pattern p) { m_pattern = p; }

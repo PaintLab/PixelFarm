@@ -18,7 +18,7 @@ using MatterHackers.Agg;
 namespace MatterHackers.Agg.Image
 {
     //==================================================pixfmt_amask_adaptor
-    public sealed class AlphaMaskAdaptor : ImageProxy
+    public sealed class AlphaMaskAdaptor : ProxyImage
     {
         IAlphaMask m_mask;
         ArrayPOD<byte> m_spans;
@@ -52,7 +52,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public AlphaMaskAdaptor(IImageBuffer image, IAlphaMask mask)
+        public AlphaMaskAdaptor(IImage image, IAlphaMask mask)
             : base(image)
         {
             linkedImage = image;
@@ -60,7 +60,7 @@ namespace MatterHackers.Agg.Image
             m_spans = new ArrayPOD<byte>(255);
         }
 
-        public void AttachImage(IImageBuffer image)
+        public void AttachImage(IImage image)
         {
             linkedImage = image;
         }

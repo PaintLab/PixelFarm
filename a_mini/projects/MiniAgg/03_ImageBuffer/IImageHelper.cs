@@ -20,28 +20,42 @@ using System;
 using System.Runtime;
 
 using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource; 
+using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
-    public static class ImageBufferHelper
+    public static class IImageHelper
     {
-        public static void SetAlpha(this ImageBuffer imgBuffer, byte value)
+        public static void SetAlpha(this ImageBase img, byte value)
         {
-            if (imgBuffer.BitDepth != 32)
+            if (img.BitDepth != 32)
             {
-                throw new Exception("You don't have alpha channel to set.  Your image has a bit depth of " + imgBuffer.BitDepth.ToString() + ".");
+                throw new Exception("You don't have alpha channel to set.  Your image has a bit depth of " + img.BitDepth.ToString() + ".");
             }
-            int numPixels = imgBuffer.Width * imgBuffer.Height;
+            int numPixels = img.Width * img.Height;
+           
+            byte[] buffer = img.GetBuffer();
+            for (int i = 0; i < numPixels; i++)
+            {
+                buffer[ i * 4 + 3] = value;
+            }
+        }
+        public static void SetAlpha(this ReferenceImage img, byte value)
+        {
+            if (img.BitDepth != 32)
+            {
+                throw new Exception("You don't have alpha channel to set.  Your image has a bit depth of " + img.BitDepth.ToString() + ".");
+            }
+            int numPixels = img.Width * img.Height;
             int offset;
-            byte[] buffer = imgBuffer.GetBuffer(out offset);
+            byte[] buffer = img.GetBuffer(out offset);
             for (int i = 0; i < numPixels; i++)
             {
                 buffer[offset + i * 4 + 3] = value;
             }
         }
-        public static void GetVisibleBounds(this ImageBuffer imgBuffer, out RectangleInt visibleBounds)
+        public static void GetVisibleBounds(this ImageBase imgBuffer, out RectangleInt visibleBounds)
         {
             int width = imgBuffer.Width;
             int height = imgBuffer.Height;
@@ -54,7 +68,7 @@ namespace MatterHackers.Agg.Image
                 for (int x = 0; x < width; x++)
                 {
                     if (imgBuffer.IsPixelVisible(x, y))
-                    {   
+                    {
                         visibleBounds.Bottom = y;
                         y = height;
                         x = width;
@@ -113,38 +127,38 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public static void CropToVisible(this ImageBuffer imgBuffer)
+        public static void CropToVisible(this ImageBase imgBuffer)
         {
-            Vector2 OldOriginOffset = imgBuffer.OriginOffset;
+            //Vector2 OldOriginOffset = imgBuffer.OriginOffset;
 
-            //Move the HotSpot to 0, 0 so PPoint will work the way we want
-            imgBuffer.OriginOffset = new Vector2(0, 0);
+            ////Move the HotSpot to 0, 0 so PPoint will work the way we want
+            //imgBuffer.OriginOffset = new Vector2(0, 0);
 
-            RectangleInt visibleBounds;
-            imgBuffer.GetVisibleBounds(out visibleBounds);
+            //RectangleInt visibleBounds;
+            //imgBuffer.GetVisibleBounds(out visibleBounds);
 
-            if (visibleBounds.Width == imgBuffer.Width
-                && visibleBounds.Height == imgBuffer.Height)
-            {
-                imgBuffer.OriginOffset = OldOriginOffset;
-                return;
-            }
+            //if (visibleBounds.Width == imgBuffer.Width
+            //    && visibleBounds.Height == imgBuffer.Height)
+            //{
+            //    imgBuffer.OriginOffset = OldOriginOffset;
+            //    return;
+            //}
 
-            // check if the Not0Rect has any size
-            if (visibleBounds.Width > 0)
-            {
-                ImageBuffer tempImage = new ImageBuffer(); 
-                // set TempImage equal to the Not0Rect
-                tempImage.Initialize(imgBuffer, visibleBounds);
+            //// check if the Not0Rect has any size
+            //if (visibleBounds.Width > 0)
+            //{
+            //    BufferImage2 tempImage = new BufferImage2();
+            //    // set TempImage equal to the Not0Rect
+            //    tempImage.Initialize(imgBuffer, visibleBounds);
 
-                // set the frame equal to the TempImage
-                imgBuffer.Initialize(tempImage); 
-                imgBuffer.OriginOffset = new Vector2(-visibleBounds.Left + OldOriginOffset.x, -visibleBounds.Bottom + OldOriginOffset.y);
-            }
-            else
-            {
-                imgBuffer.Deallocate();
-            }
+            //    // set the frame equal to the TempImage
+            //    imgBuffer.Initialize(tempImage);
+            //    imgBuffer.OriginOffset = new Vector2(-visibleBounds.Left + OldOriginOffset.x, -visibleBounds.Bottom + OldOriginOffset.y);
+            //}
+            //else
+            //{
+            //    imgBuffer.Deallocate();
+            //}
         }
         //public void FlipY(ImageBuffer imgBuffer)
         //{

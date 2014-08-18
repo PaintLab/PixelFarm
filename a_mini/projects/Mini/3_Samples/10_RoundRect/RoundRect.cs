@@ -109,19 +109,17 @@ namespace MatterHackers.Agg.Sample_RoundRect
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageBase.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageBuffer backBuffer = widgetsSubImage;
+            IImage backBuffer = widgetsSubImage;
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.Gamma);
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();
             IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
-            ImageBuffer rasterNormal = new ImageBuffer();
-            rasterNormal.Attach(backBuffer, NormalBlender);
-            ImageBuffer rasterGamma = new ImageBuffer();
-            rasterGamma.Attach(backBuffer, GammaBlender);
-            ImageClippingProxy clippingProxyNormal = new ImageClippingProxy(rasterNormal);
-            ImageClippingProxy clippingProxyGamma = new ImageClippingProxy(rasterGamma);
+            var rasterNormal = new ReferenceImage(backBuffer, NormalBlender); 
+            var rasterGamma = new ReferenceImage(backBuffer, GammaBlender); 
+            ClipProxyImage clippingProxyNormal = new ClipProxyImage(rasterNormal);
+            ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
             clippingProxyNormal.clear(this.WhiteOnBlack ? new RGBA_Floats(0, 0, 0) : new RGBA_Floats(1, 1, 1));
 

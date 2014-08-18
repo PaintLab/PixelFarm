@@ -26,19 +26,16 @@ using MatterHackers.Agg;
 
 namespace MatterHackers.Agg.Image
 {
-    public class ImageClippingProxy : ImageProxy
+    public sealed class ClipProxyImage : ProxyImage
     {
-        private RectangleInt m_ClippingRect;
-
-        public const byte cover_full = 255;
-
-        public ImageClippingProxy(IImageBuffer ren)
-            : base(ren)
+        RectangleInt m_ClippingRect; 
+        public ClipProxyImage(IImage refImage)
+            : base(refImage)
         {
-            m_ClippingRect = new RectangleInt(0, 0, (int)ren.Width - 1, (int)ren.Height - 1);
+            m_ClippingRect = new RectangleInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
         }
 
-        public override void LinkToImage(IImageBuffer ren)
+        public override void LinkToImage(IImage ren)
         {
             base.LinkToImage(ren);
             m_ClippingRect = new RectangleInt(0, 0, (int)ren.Width - 1, (int)ren.Height - 1);
@@ -104,18 +101,18 @@ namespace MatterHackers.Agg.Image
         public int bounding_xmax() { return m_ClippingRect.Right; }
         public int bounding_ymax() { return m_ClippingRect.Top; }
 
-        public void clear(IColorType in_c)
+        public void clear(IColor in_c)
         {
-            
+
             RGBA_Bytes c = RGBA_Bytes.Make(in_c.Red0To255, in_c.Green0To255, in_c.Blue0To255, in_c.Alpha0To255);
 
             int w = this.Width;
             if (w != 0)
-            {    
+            {
                 for (int y = this.Height - 1; y >= 0; --y)
                 {
                     base.copy_hline(0, y, w, c);
-                } 
+                }
             }
         }
 
@@ -323,7 +320,7 @@ namespace MatterHackers.Agg.Image
             base.blend_color_hspan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-        public void copy_from(IImageBuffer src)
+        public void copy_from(IImage src)
         {
             CopyFrom(src, new RectangleInt(0, 0, (int)src.Width, (int)src.Height), 0, 0);
         }
@@ -336,7 +333,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public override void CopyFrom(IImageBuffer sourceImage,
+        public override void CopyFrom(IImage sourceImage,
                        RectangleInt sourceImageRect,
                        int destXOffset,
                        int destYOffset)

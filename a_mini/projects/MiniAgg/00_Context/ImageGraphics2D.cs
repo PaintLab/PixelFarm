@@ -21,16 +21,16 @@ using System.Collections.Generic;
 
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform; 
+using MatterHackers.Agg.Transform;
 using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
 {
-    public class ImageGraphics2D : Graphics2D
+    class ImageGraphics2D : Graphics2D
     {
 
         IScanlineCache m_ScanlineCache;
-        PathStorage drawImageRectPath = new PathStorage(); 
+        PathStorage drawImageRectPath = new PathStorage();
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
@@ -39,8 +39,8 @@ namespace MatterHackers.Agg
 
         }
 
-        public ImageGraphics2D(IImageBuffer destImage, 
-            ScanlineRasterizer rasterizer, 
+        public ImageGraphics2D(IImage destImage,
+            ScanlineRasterizer rasterizer,
             IScanlineCache scanlineCache)
             : base(destImage, rasterizer)
         {
@@ -84,7 +84,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        void DrawImageGetDestBounds(IImageBuffer sourceImage,
+        void DrawImageGetDestBounds(IImage sourceImage,
             double DestX, double DestY,
             double HotspotOffsetX, double HotspotOffsetY,
             double ScaleX, double ScaleY,
@@ -124,7 +124,7 @@ namespace MatterHackers.Agg
             drawImageRectPath.ClosePolygon();
         }
 
-        void DrawImage(IImageBuffer sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
+        void DrawImage(IImage sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
         {
             if (destImageByte.OriginOffset.x != 0 || destImageByte.OriginOffset.y != 0)
             {
@@ -134,15 +134,15 @@ namespace MatterHackers.Agg
             VertexSourceApplyTransform transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
             Rasterizer.add_path(transfromedRect);
             {
-                ImageClippingProxy destImageWithClipping = new ImageClippingProxy(destImageByte);
+                ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);
                 scanlineRenderer.GenerateAndRender(Rasterizer,
                     drawImageScanlineCache,
-                    destImageWithClipping, 
+                    destImageWithClipping,
                     spanImageFilter);
             }
         }
 
-        public override void Render(IImageBuffer source,
+        public override void Render(IImage source,
             double destX, double destY,
             double angleRadians,
             double inScaleX, double inScaleY)
@@ -292,7 +292,7 @@ namespace MatterHackers.Agg
         //    throw new NotImplementedException();
         //}
 
-        public override void Clear(IColorType iColor)
+        public override void Clear(IColor iColor)
         {
             RectangleDouble clippingRect = GetClippingRect();
             RectangleInt clippingRectInt = new RectangleInt((int)clippingRect.Left, (int)clippingRect.Bottom, (int)clippingRect.Right, (int)clippingRect.Top);

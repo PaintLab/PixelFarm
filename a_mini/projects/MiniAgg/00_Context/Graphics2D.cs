@@ -37,7 +37,7 @@ namespace MatterHackers.Agg
     public abstract class Graphics2D
     {
         const int cover_full = 255;
-        protected IImageBuffer destImageByte;
+        protected IImage destImageByte;
         protected Stroke StrockedText;
         protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
@@ -47,13 +47,13 @@ namespace MatterHackers.Agg
             affineTransformStack.Push(Affine.NewIdentity());
         }
 
-        public Graphics2D(IImageBuffer destImage, ScanlineRasterizer rasterizer)
+        public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
             : this()
         {
             Initialize(destImage, rasterizer);
         }
 
-        internal void Initialize(IImageBuffer destImage, ScanlineRasterizer rasterizer)
+        internal void Initialize(IImage destImage, ScanlineRasterizer rasterizer)
         {
             destImageByte = destImage;
             //destImageFloat = null;
@@ -108,7 +108,7 @@ namespace MatterHackers.Agg
             set;
         }
 
-        public IImageBuffer DestImage
+        public IImage DestImage
         {
             get
             {
@@ -119,18 +119,18 @@ namespace MatterHackers.Agg
 
         public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
 
-        public void Render(IImageBuffer imageSource, int x, int y)
+        public void Render(IImage imageSource, int x, int y)
         {
             //base.Render(imageSource, x, y);
             Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public void Render(IImageBuffer imageSource, double x, double y)
+        public void Render(IImage imageSource, double x, double y)
         {
             Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public abstract void Render(IImageBuffer imageSource,
+        public abstract void Render(IImage imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
@@ -158,7 +158,7 @@ namespace MatterHackers.Agg
             Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)), 0, color);
         }
 
-        public abstract void Clear(IColorType color);
+        public abstract void Clear(IColor color);
 
         public void Line(double x1, double y1, double x2, double y2, RGBA_Bytes color)
         {
@@ -183,10 +183,10 @@ namespace MatterHackers.Agg
         }
 
         //================
-        public static Graphics2D CreateFromImage(IImageBuffer img)
+        public static Graphics2D CreateFromImage(IImage img)
         {
              
-            var imgProxy = new ImageClippingProxy(img);
+            var imgProxy = new ClipProxyImage(img);
             var scanlineRaster = new ScanlineRasterizer();
             var scanlineCachedPacked8 = new ScanlinePacked8();
             ImageGraphics2D imageRenderer = new ImageGraphics2D(imgProxy, scanlineRaster, scanlineCachedPacked8);

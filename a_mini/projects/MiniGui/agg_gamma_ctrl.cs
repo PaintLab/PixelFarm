@@ -84,7 +84,7 @@ namespace MatterHackers.Agg.UI
         public void inactive_pnt_color(RGBA_Bytes c) { m_inactive_pnt_color = c; }
         public void active_pnt_color(RGBA_Bytes c) { m_active_pnt_color = c; }
         public void text_color(RGBA_Bytes c) { m_text_color = c; }
-        public override IColorType color(int i) { return m_colors[i]; }
+        public override IColor color(int i) { return m_colors[i]; }
 
         public gamma_ctrl(Vector2 position, Vector2 size)
             : base(position, false)

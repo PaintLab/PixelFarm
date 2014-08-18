@@ -496,7 +496,7 @@ namespace MatterHackers.Agg.UI
     //template<class ColorT> 
     public class PolygonEditWidget : polygon_ctrl_impl
     {
-        IColorType m_color;
+        IColor m_color;
 
         public PolygonEditWidget(int np) : this(np, 5) { }
 
@@ -506,7 +506,7 @@ namespace MatterHackers.Agg.UI
             m_color = new RGBA_Floats(0.0, 0.0, 0.0);
         }
 
-        public void line_color(IColorType c) { m_color = c; }
-        public override IColorType color(int i) { return m_color; }
+        public void line_color(IColor c) { m_color = c; }
+        public override IColor color(int i) { return m_color; }
     };
 }

@@ -12,7 +12,7 @@ namespace MatterHackers.Agg
         VectorPOD<RGBA_Bytes> tempSpanColors = new VectorPOD<RGBA_Bytes>();
         VectorPOD<RGBA_Floats> tempSpanColorsFloats = new VectorPOD<RGBA_Floats>();
 
-        public void render_scanlines_aa_solid(IImageBuffer destImage, IRasterizer rasterizer, IScanlineCache scanLine, RGBA_Bytes color)
+        public void render_scanlines_aa_solid(IImage destImage, IRasterizer rasterizer, IScanlineCache scanLine, RGBA_Bytes color)
         {
             if (rasterizer.rewind_scanlines())
             {
@@ -36,7 +36,7 @@ namespace MatterHackers.Agg
         //    }
         //}
 
-        protected virtual void RenderSolidSingleScanLine(IImageBuffer destImage, IScanlineCache scanLine, RGBA_Bytes color)
+        protected virtual void RenderSolidSingleScanLine(IImage destImage, IScanlineCache scanLine, RGBA_Bytes color)
         {
             int y = scanLine.y();
             int num_spans = scanLine.num_spans();
@@ -84,7 +84,7 @@ namespace MatterHackers.Agg
         //    }
         //}
 
-        public void RenderSolidAllPaths(IImageBuffer destImage,
+        public void RenderSolidAllPaths(IImage destImage,
             IRasterizer ras,
             IScanlineCache sl,
             IVertexSource vs,
@@ -102,7 +102,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        void GenerateAndRenderSingleScanline(IScanlineCache scanLineCache, IImageBuffer destImage, ISpanGenerator span_gen)
+        void GenerateAndRenderSingleScanline(IScanlineCache scanLineCache, IImage destImage, ISpanGenerator span_gen)
         {
             int y = scanLineCache.y();
             int num_spans = scanLineCache.num_spans();
@@ -156,7 +156,7 @@ namespace MatterHackers.Agg
         //    }
         //}
 
-        public void GenerateAndRender(IRasterizer rasterizer, IScanlineCache scanlineCache, IImageBuffer destImage,
+        public void GenerateAndRender(IRasterizer rasterizer, IScanlineCache scanlineCache, IImage destImage,
              ISpanGenerator spanGenerator)
         {
             if (rasterizer.rewind_scanlines())
