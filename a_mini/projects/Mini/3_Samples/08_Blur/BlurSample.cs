@@ -219,13 +219,11 @@ namespace MatterHackers.Agg.Sample_Blur
                 int y1 = (int)bbox.Top;
                 int x2 = (int)bbox.Right;
                 int y2 = (int)bbox.Bottom;
-                RectangleInt boundsRect = new RectangleInt(x1, y1, x2, y2);
+                RectangleInt boundsRect = new RectangleInt(x1, y2, x2, y1);
                 if (boundsRect.clip(new RectangleInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
                 {
                     //check if intersect 
-                    ReferenceImage image2 = new ReferenceImage(widgetsSubImage, new BlenderBGRA(), x1, y1, x2, y2);
-
-
+                    ReferenceImage image2 = new ReferenceImage(widgetsSubImage, new BlenderBGRA(), x1, y2, x2, y1); 
                     // Blur it
                     switch (BlurMethod)
                     {
