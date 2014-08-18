@@ -39,7 +39,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
         ScanlinePacked8 m_sl;
-        ReferenceImage m_rbuf2;
+        //ReferenceImage m_rbuf2;
 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
         RecursiveBlur m_recursive_blur = new RecursiveBlur(new recursive_blur_calc_rgb());
@@ -50,7 +50,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
         public blur()
         {
-            m_rbuf2 = new ReferenceImage();
+            //m_rbuf2 = new ReferenceImage();
             m_shape_bounds = new RectangleDouble();
             m_shadow_ctrl = new PolygonEditWidget(4);
 
@@ -147,7 +147,7 @@ namespace MatterHackers.Agg.Sample_Blur
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageBase.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = IImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             clippingProxy.clear(RGBA_Bytes.White);
             m_ras.SetVectorClipBox(0, 0, Width, Height);

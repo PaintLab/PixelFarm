@@ -43,12 +43,12 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             this.Height = 600;
 
             //AnchorAll();
-            alphaMaskImageBuffer = new ReferenceImage();
+            //alphaMaskImageBuffer = new ReferenceImage();
 
 #if USE_CLIPPING_ALPHA_MASK
-            alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
+            //alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
 #else
-            alphaMask = new AlphaMaskByteUnclipped(alphaMaskImageBuffer, 1, 0);
+            //alphaMask = new AlphaMaskByteUnclipped(alphaMaskImageBuffer, 1, 0);
 #endif
 
             //numMasksSlider = new UI.Slider(5, 5, 150, 12);
@@ -140,7 +140,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(Graphics2D g)
         {
-            var widgetsSubImage = ImageBase.NewSubImageReference(g.DestImage, g.GetClippingRect());
+            var widgetsSubImage = IImageHelper.NewSubImageReference(g.DestImage, g.GetClippingRect());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;

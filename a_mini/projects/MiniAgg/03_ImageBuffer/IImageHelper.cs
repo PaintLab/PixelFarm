@@ -27,6 +27,33 @@ namespace MatterHackers.Agg.Image
 {
     public static class IImageHelper
     {
+        /// <summary>
+        /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
+        /// It will modify the original main image when you draw to it.
+        /// </summary>
+        /// <param name="imageContainingSubImage"></param>
+        /// <param name="subImageBounds"></param>
+        /// <returns></returns>
+        public static IImage NewSubImageReference(this IImage imageContainingSubImage, RectangleDouble subImageBounds)
+        {
+
+
+            if (subImageBounds.Left < 0 || subImageBounds.Bottom < 0 || subImageBounds.Right > imageContainingSubImage.Width || subImageBounds.Top > imageContainingSubImage.Height
+                || subImageBounds.Left >= subImageBounds.Right || subImageBounds.Bottom >= subImageBounds.Top)
+            {
+                throw new ArgumentException("The subImageBounds must be on the image and valid.");
+            }
+            int left = Math.Max(0, (int)Math.Floor(subImageBounds.Left));
+            int bottom = Math.Max(0, (int)Math.Floor(subImageBounds.Bottom));
+            int width = Math.Min(imageContainingSubImage.Width - left, (int)subImageBounds.Width);
+            int height = Math.Min(imageContainingSubImage.Height - bottom, (int)subImageBounds.Height);
+            int bufferOffsetToFirstPixel = imageContainingSubImage.GetBufferOffsetXY(left, bottom);
+
+            ReferenceImage subImage = new ReferenceImage(imageContainingSubImage, bufferOffsetToFirstPixel, width, height);
+
+
+            return subImage;
+        }
         public static void SetAlpha(this ImageBase img, byte value)
         {
             if (img.BitDepth != 32)

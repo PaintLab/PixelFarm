@@ -26,36 +26,15 @@ namespace MatterHackers.Agg.Image
     public abstract class ProxyImage : IImage
     {
         protected IImage linkedImage;
-
-       
         public ProxyImage(IImage linkedImage)
         {
             this.linkedImage = linkedImage;
         }
-
-        public virtual void LinkToImage(IImage linkedImage)
-        {
-            this.linkedImage = linkedImage;
-        }
-        public IImage LinkedImage
-        {
-            get
-            {
-                return linkedImage;
-            }
-
-            set
-            {
-                linkedImage = value;
-            }
-        }
-
-        public virtual Vector2 OriginOffset
+        public Vector2 OriginOffset
         {
             get { return linkedImage.OriginOffset; }
             set { linkedImage.OriginOffset = value; }
         }
-
         public virtual int Width
         {
             get
@@ -76,13 +55,13 @@ namespace MatterHackers.Agg.Image
         {
             return linkedImage.StrideInBytes();
         }
- 
+
 
         public virtual RectangleInt GetBounds()
         {
             return linkedImage.GetBounds();
         }
-         
+
         public IRecieveBlenderByte GetRecieveBlender()
         {
             return linkedImage.GetRecieveBlender();
@@ -183,10 +162,7 @@ namespace MatterHackers.Agg.Image
             return linkedImage.GetBufferOffsetXY(x, y);
         }
 
-        public int GetBufferOffsetY(int y)
-        {
-            return linkedImage.GetBufferOffsetY(y);
-        }
+
 
         public virtual int GetBytesBetweenPixelsInclusive()
         {
@@ -206,5 +182,5 @@ namespace MatterHackers.Agg.Image
             linkedImage.MarkImageChanged();
         }
     }
-     
+
 }

@@ -33,14 +33,16 @@ namespace MatterHackers.Agg.Image
         int Width { get; }
         int Height { get; }
         RectangleInt GetBounds();
-        int GetBufferOffsetY(int y);
+        
         int GetBufferOffsetXY(int x, int y);
         void MarkImageChanged();
 
-        int StrideInBytes(); 
+        int StrideInBytes();
+        int GetBytesBetweenPixelsInclusive();
+
         IRecieveBlenderByte GetRecieveBlender();
         void SetRecieveBlender(IRecieveBlenderByte value);
-        int GetBytesBetweenPixelsInclusive();
+        
 
         byte[] GetBuffer();
 

@@ -33,13 +33,7 @@ namespace MatterHackers.Agg.Image
             : base(refImage)
         {
             m_ClippingRect = new RectangleInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
-        }
-
-        public override void LinkToImage(IImage ren)
-        {
-            base.LinkToImage(ren);
-            m_ClippingRect = new RectangleInt(0, 0, (int)ren.Width - 1, (int)ren.Height - 1);
-        }
+        } 
 
         public bool SetClippingBox(int x1, int y1, int x2, int y2)
         {

@@ -40,10 +40,11 @@ namespace MatterHackers.Agg.Image
         public readonly int dbugId = dbugGetNewDebugId();
 #endif
 
+        //--------------------------------------------
         int[] yTableArray;
         int[] xTableArray;
         protected byte[] m_ByteBuffer;
-
+        //--------------------------------------------
         // Pointer to first pixel depending on strideInBytes and image position
         protected int bufferFirstPixel;
 
@@ -119,33 +120,7 @@ namespace MatterHackers.Agg.Image
 
 
 
-        /// <summary>
-        /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
-        /// It will modify the original main image when you draw to it.
-        /// </summary>
-        /// <param name="imageContainingSubImage"></param>
-        /// <param name="subImageBounds"></param>
-        /// <returns></returns>
-        public static IImage NewSubImageReference(IImage imageContainingSubImage, RectangleDouble subImageBounds)
-        {
-
-
-            if (subImageBounds.Left < 0 || subImageBounds.Bottom < 0 || subImageBounds.Right > imageContainingSubImage.Width || subImageBounds.Top > imageContainingSubImage.Height
-                || subImageBounds.Left >= subImageBounds.Right || subImageBounds.Bottom >= subImageBounds.Top)
-            {
-                throw new ArgumentException("The subImageBounds must be on the image and valid.");
-            }
-            int left = Math.Max(0, (int)Math.Floor(subImageBounds.Left));
-            int bottom = Math.Max(0, (int)Math.Floor(subImageBounds.Bottom));
-            int width = Math.Min(imageContainingSubImage.Width - left, (int)subImageBounds.Width);
-            int height = Math.Min(imageContainingSubImage.Height - bottom, (int)subImageBounds.Height);
-            int bufferOffsetToFirstPixel = imageContainingSubImage.GetBufferOffsetXY(left, bottom);
-
-            ReferenceImage subImage = new ReferenceImage(imageContainingSubImage, bufferOffsetToFirstPixel, width, height);
-
-
-            return subImage;
-        }
+        
         public void CopyFrom(IImage sourceImage)
         {
             CopyFrom(sourceImage, sourceImage.GetBounds(), 0, 0);
@@ -420,7 +395,7 @@ namespace MatterHackers.Agg.Image
 
             for (int y = my; y < h; ++y)
             {
-                //int ybufferOffset = buff.GetBufferOffsetY(y);
+                 
                 int xbufferOffset = buff.GetBufferOffsetXY(0, y);
                 for (int x = mx; x < w; ++x)
                 {
@@ -453,10 +428,7 @@ namespace MatterHackers.Agg.Image
             return recieveBlender.PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
         }
 
-        public int GetBufferOffsetY(int y)
-        {
-            return bufferFirstPixel + yTableArray[y] + xTableArray[0];
-        }
+        
         public int GetBufferOffsetXY(int x, int y)
         {
             return bufferFirstPixel + yTableArray[y] + xTableArray[x];

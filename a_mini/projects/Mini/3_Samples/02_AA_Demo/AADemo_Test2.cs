@@ -131,7 +131,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
 
 
-            var widgetsSubImage = ImageBase.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = IImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
 
