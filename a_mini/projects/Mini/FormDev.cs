@@ -166,7 +166,17 @@ namespace Mini
             bmp.Save("d:\\WImageTest\\test002_2.png");
         }
 
-         
+        private void cmdTestRasterImage_Click(object sender, EventArgs e)
+        {
+            //test raster image
+
+            Bitmap lion = new Bitmap("d:\\WImageTest\\lion.png");
+
+
+
+        }
+
+
 
 
 

@@ -37,8 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\DemoBase.cs" />
@@ -64,6 +66,12 @@
     <Compile Include="FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormRasterImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRasterImage.Designer.cs">
+      <DependentUpon>FormRasterImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormTestBed1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +84,7 @@
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
+    <Compile Include="ImageTransform\ImageTransform.cs" />
     <Compile Include="MiniCinema\SimpleSprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="2_Platform\WindowsFormsBitmapBackBuffer.cs" />
@@ -87,6 +96,9 @@
     </Compile>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormRasterImage.resx">
+      <DependentUpon>FormRasterImage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormTestBed1.resx">
       <DependentUpon>FormTestBed1.cs</DependentUpon>

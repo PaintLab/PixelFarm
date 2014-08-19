@@ -65,12 +65,13 @@
             // 
             // cmdTestRasterImage
             // 
-            this.cmdTestRasterImage.Location = new System.Drawing.Point(417, 363);
+            this.cmdTestRasterImage.Location = new System.Drawing.Point(417, 375);
             this.cmdTestRasterImage.Name = "cmdTestRasterImage";
             this.cmdTestRasterImage.Size = new System.Drawing.Size(150, 32);
             this.cmdTestRasterImage.TabIndex = 4;
             this.cmdTestRasterImage.Text = "TestRasterImage";
             this.cmdTestRasterImage.UseVisualStyleBackColor = true;
+            this.cmdTestRasterImage.Click += new System.EventHandler(this.cmdTestRasterImage_Click);
             // 
             // panel1
             // 
