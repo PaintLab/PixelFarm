@@ -104,6 +104,7 @@
         public MyColor ReadOnePixel()
         {
             int byteIndex = ((cY * stride) + cX * 4);
+            
             byte b = buffer[byteIndex];
             byte g = buffer[byteIndex + 1];
             byte r = buffer[byteIndex + 2];

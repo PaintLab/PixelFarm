@@ -460,7 +460,7 @@ namespace Mini
                 return reader.ReadOnePixel();
             }
         }
-       
+
         static void SeparateByChannel(MyColor[] myColors, byte[] rBuffer, byte[] gBuffer, byte[] bBuffer, byte[] aBuffer)
         {
             for (int i = 0; i < 16; ++i)
@@ -660,6 +660,226 @@ namespace Mini
                bmpdata2.Scan0, outputBuffer.Length);
             outputbmp.UnlockBits(bmpdata2);
             outputbmp.Save("d:\\WImageTest\\n_lion_bicubic.png");
+        }
+
+        private void cmdRotate30Bilinear_Click(object sender, EventArgs e)
+        {
+            //reverse map *** 
+            Bitmap bmp = new Bitmap("d:\\WImageTest\\n_lion.png");
+            int bmpHeight = bmp.Height;
+            int bmpWidth = bmp.Width;
+            var bmpdata = bmp.LockBits(new Rectangle(0, 0, bmpWidth, bmpHeight), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+            int stride = bmpdata.Stride;
+            byte[] buffer = new byte[stride * bmpHeight];
+
+            System.Runtime.InteropServices.Marshal.Copy(
+                bmpdata.Scan0, buffer,
+                0, buffer.Length);
+            bmp.UnlockBits(bmpdata);
+            bmpdata = null;
+            bmp = null;
+            //-----------------------------------------------
+
+
+            int heightLim = bmpHeight - 3;
+            int widthLim = bmpWidth - 3;
+
+
+            BufferReader4 reader = new BufferReader4(buffer, stride, bmpWidth, bmpHeight);
+            MyColor[] pixelBuffer = new MyColor[16];
+
+
+            //crate small half image and interpolate
+            double x_factor = 1;
+            double y_factor = 1;
+
+            //double x_factor = 0.35;
+            //double y_factor = 0.35;
+            //double newWidth = (double)bmpWidth * x_factor;
+            //double newHeight = (double)bmpHeight * y_factor;
+            int nWidth = (int)(bmpWidth * x_factor);
+            int nHeight = (int)(bmpHeight * y_factor);
+
+            Bitmap outputbmp = new Bitmap(nWidth, nHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //-----------------------------------------------
+            var bmpdata2 = outputbmp.LockBits(new Rectangle(0, 0, nWidth, nHeight),
+                System.Drawing.Imaging.ImageLockMode.ReadWrite, outputbmp.PixelFormat);
+            //-----------------------------------------
+            int stride2 = bmpdata2.Stride;
+            byte[] outputBuffer = new byte[stride2 * outputbmp.Height];
+
+            int targetPixelIndex = 0;
+            int startLine = 0;
+
+
+            //------------------------------------------------------------------
+            double degreeAngle = -30;
+            double radianAngle = degreeAngle * Math.PI / 180;
+
+            //find approppriate pixel 
+            for (int ey = 0; ey < nHeight; ++ey)
+            {
+                for (int bx = 0; bx < nWidth; ++bx)
+                {
+                    //float u = x*cos(-Q) - y*sin(-Q);
+                    //float v = x*sin(-Q) + y*cos(-Q);
+                    double ideal_originalX = bx * Math.Cos(-radianAngle) - (ey * Math.Sin(-radianAngle)); //(float)(bx / x_factor);
+                    double ideal_originalY = bx * Math.Sin(-radianAngle) + (ey * Math.Cos(-radianAngle));//(float)(ey / y_factor);
+                    //---
+                    //round
+                    int originalPosX = RoundPixel(ideal_originalX); ;//(int)(bx / x_factor);
+                    int originalPosY = RoundPixel(ideal_originalY);//(int)(ey / y_factor);
+                    //---
+                    if (originalPosX >= bmpWidth)
+                    {
+                        originalPosX = bmpWidth - 1;
+                    }
+                    if (originalPosY >= bmpHeight)
+                    {
+                        originalPosY = bmpHeight - 1;
+                    }
+                    //---
+                    if (originalPosX < 0 || originalPosY < 0)
+                    {
+                        //skip
+                        targetPixelIndex += 4; 
+                    }
+                    else
+                    {
+                        reader.SetStartPixel(originalPosX, originalPosY);
+                        //find src pixel and approximate  
+                        MyColor color = GetApproximateColor_Bilinear(reader,
+                           (float)ideal_originalX,
+                           (float)ideal_originalY);
+
+                        outputBuffer[targetPixelIndex] = (byte)color.b;
+                        outputBuffer[targetPixelIndex + 1] = (byte)color.g;
+                        outputBuffer[targetPixelIndex + 2] = (byte)color.r;
+                        outputBuffer[targetPixelIndex + 3] = (byte)color.a;
+                        targetPixelIndex += 4;
+                    }
+                }
+                //newline
+                startLine += stride2;
+                targetPixelIndex = startLine;
+            }
+
+
+            System.Runtime.InteropServices.Marshal.Copy(
+               outputBuffer, 0,
+               bmpdata2.Scan0, outputBuffer.Length);
+            outputbmp.UnlockBits(bmpdata2);
+            outputbmp.Save("d:\\WImageTest\\n_lion_rotate30_bilinear.png");
+        }
+
+        private void cmdRotate30Bicubic_Click(object sender, EventArgs e)
+        {
+            //reverse map *** 
+            Bitmap bmp = new Bitmap("d:\\WImageTest\\n_lion.png");
+            int bmpHeight = bmp.Height;
+            int bmpWidth = bmp.Width;
+            var bmpdata = bmp.LockBits(new Rectangle(0, 0, bmpWidth, bmpHeight), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+            int stride = bmpdata.Stride;
+            byte[] buffer = new byte[stride * bmpHeight];
+
+            System.Runtime.InteropServices.Marshal.Copy(
+                bmpdata.Scan0, buffer,
+                0, buffer.Length);
+            bmp.UnlockBits(bmpdata);
+            bmpdata = null;
+            bmp = null;
+            //-----------------------------------------------
+
+
+            int heightLim = bmpHeight - 3;
+            int widthLim = bmpWidth - 3;
+
+
+            BufferReader4 reader = new BufferReader4(buffer, stride, bmpWidth, bmpHeight);
+            MyColor[] pixelBuffer = new MyColor[16];
+
+
+            //crate small half image and interpolate
+            double x_factor = 1;
+            double y_factor = 1;
+
+            //double x_factor = 0.35;
+            //double y_factor = 0.35;
+            //double newWidth = (double)bmpWidth * x_factor;
+            //double newHeight = (double)bmpHeight * y_factor;
+            int nWidth = (int)(bmpWidth * x_factor);
+            int nHeight = (int)(bmpHeight * y_factor);
+
+            Bitmap outputbmp = new Bitmap(nWidth, nHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //-----------------------------------------------
+            var bmpdata2 = outputbmp.LockBits(new Rectangle(0, 0, nWidth, nHeight),
+                System.Drawing.Imaging.ImageLockMode.ReadWrite, outputbmp.PixelFormat);
+            //-----------------------------------------
+            int stride2 = bmpdata2.Stride;
+            byte[] outputBuffer = new byte[stride2 * outputbmp.Height];
+
+            int targetPixelIndex = 0;
+            int startLine = 0;
+
+
+            //------------------------------------------------------------------
+            double degreeAngle = -30;
+            double radianAngle = degreeAngle * Math.PI / 180;
+
+            //find approppriate pixel 
+            for (int ey = 0; ey < nHeight; ++ey)
+            {
+                for (int bx = 0; bx < nWidth; ++bx)
+                {
+                    //float u = x*cos(-Q) - y*sin(-Q);
+                    //float v = x*sin(-Q) + y*cos(-Q);
+                    double ideal_originalX = bx * Math.Cos(-radianAngle) - (ey * Math.Sin(-radianAngle)); //(float)(bx / x_factor);
+                    double ideal_originalY = bx * Math.Sin(-radianAngle) + (ey * Math.Cos(-radianAngle));//(float)(ey / y_factor);
+                    //---
+                    //round
+                    int originalPosX = RoundPixel(ideal_originalX); ;//(int)(bx / x_factor);
+                    int originalPosY = RoundPixel(ideal_originalY);//(int)(ey / y_factor);
+                    //---
+                    if (originalPosX >= bmpWidth)
+                    {
+                        originalPosX = bmpWidth - 1;
+                    }
+                    if (originalPosY >= bmpHeight)
+                    {
+                        originalPosY = bmpHeight - 1;
+                    }
+                    //---
+                    if (originalPosX < 0 || originalPosY < 0)
+                    {
+                        //skip
+                        targetPixelIndex += 4;
+                    }
+                    else
+                    {
+                        reader.SetStartPixel(originalPosX, originalPosY);
+                        //find src pixel and approximate  
+                        MyColor color = GetApproximateColor_Bicubic(reader,
+                           (float)ideal_originalX,
+                           (float)ideal_originalY);
+
+                        outputBuffer[targetPixelIndex] = (byte)color.b;
+                        outputBuffer[targetPixelIndex + 1] = (byte)color.g;
+                        outputBuffer[targetPixelIndex + 2] = (byte)color.r;
+                        outputBuffer[targetPixelIndex + 3] = (byte)color.a;
+                        targetPixelIndex += 4;
+                    }
+                }
+                //newline
+                startLine += stride2;
+                targetPixelIndex = startLine;
+            }
+
+
+            System.Runtime.InteropServices.Marshal.Copy(
+               outputBuffer, 0,
+               bmpdata2.Scan0, outputBuffer.Length);
+            outputbmp.UnlockBits(bmpdata2);
+            outputbmp.Save("d:\\WImageTest\\n_lion_rotate30_bicubic.png");
         }
 
         //buffer = new byte[]{

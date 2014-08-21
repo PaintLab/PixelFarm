@@ -73,6 +73,7 @@
             this.cmdRotate30Bilinear.TabIndex = 3;
             this.cmdRotate30Bilinear.Text = "Rotate_30_Bilinear";
             this.cmdRotate30Bilinear.UseVisualStyleBackColor = true;
+            this.cmdRotate30Bilinear.Click += new System.EventHandler(this.cmdRotate30Bilinear_Click);
             // 
             // cmdRotate30Bicubic
             // 
@@ -82,6 +83,7 @@
             this.cmdRotate30Bicubic.TabIndex = 4;
             this.cmdRotate30Bicubic.Text = "Rotate_30_Bicubic";
             this.cmdRotate30Bicubic.UseVisualStyleBackColor = true;
+            this.cmdRotate30Bicubic.Click += new System.EventHandler(this.cmdRotate30Bicubic_Click);
             // 
             // FormRasterImage
             // 
