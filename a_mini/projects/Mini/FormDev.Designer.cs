@@ -33,6 +33,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.cmdTestRasterImage = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listBox1
@@ -65,7 +66,7 @@
             // 
             // cmdTestRasterImage
             // 
-            this.cmdTestRasterImage.Location = new System.Drawing.Point(417, 375);
+            this.cmdTestRasterImage.Location = new System.Drawing.Point(3, 3);
             this.cmdTestRasterImage.Name = "cmdTestRasterImage";
             this.cmdTestRasterImage.Size = new System.Drawing.Size(150, 32);
             this.cmdTestRasterImage.TabIndex = 4;
@@ -75,6 +76,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.cmdTestRasterImage);
             this.panel1.Location = new System.Drawing.Point(253, 13);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(428, 344);
@@ -86,12 +88,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(693, 463);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.cmdTestRasterImage);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox1);
             this.Name = "FormDev";
             this.Text = "DevForm";
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

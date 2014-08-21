@@ -170,8 +170,9 @@ namespace Mini
         {
             //test raster image
 
-            Bitmap lion = new Bitmap("d:\\WImageTest\\lion.png");
-
+            //Bitmap lion = new Bitmap("d:\\WImageTest\\lion.png");
+            FormRasterImage formRasterImage = new FormRasterImage();
+            formRasterImage.Show();
 
 
         }
