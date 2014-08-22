@@ -36,11 +36,11 @@ using MatterHackers.Agg.VertexSource;
 namespace MatterHackers.Agg
 {
     //===========================================================layer_order_e
-    public enum layer_order_e
+    public enum LayerOrder
     {
-        layer_unsorted, //------layer_unsorted
-        layer_direct,   //------layer_direct
-        layer_inverse   //------layer_inverse
+        Unsorted, //------layer_unsorted
+        Direct,   //------layer_direct
+        Inverse   //------layer_inverse
     };
 
 
@@ -51,7 +51,7 @@ namespace MatterHackers.Agg
         rasterizer_cells_aa m_Rasterizer;
         VectorClipper m_VectorClipper;
         FillingRule m_filling_rule;
-        layer_order_e m_layer_order;
+        LayerOrder m_layer_order;
         VectorPOD<style_info> m_styles;  // Active Styles
         VectorPOD<int> m_ast;     // Active Style Table (unique values)
         VectorPOD<byte> m_asm;     // Active Style Mask 
@@ -72,7 +72,7 @@ namespace MatterHackers.Agg
             internal int start_cell;
             internal int num_cells;
             internal int last_x;
-        } 
+        }
 
         private const int aa_shift = 8;
         private const int aa_scale = 1 << aa_shift;
@@ -87,7 +87,7 @@ namespace MatterHackers.Agg
             m_Rasterizer = new rasterizer_cells_aa();
             m_VectorClipper = new VectorClipper();
             m_filling_rule = FillingRule.NonZero;
-            m_layer_order = layer_order_e.layer_direct;
+            m_layer_order = LayerOrder.Direct;
             m_styles = new VectorPOD<style_info>();  // Active Styles
             m_ast = new VectorPOD<int>();     // Active Style Table (unique values)
             m_asm = new VectorPOD<byte>();     // Active Style Mask 
@@ -124,7 +124,7 @@ namespace MatterHackers.Agg
             m_filling_rule = filling_rule;
         }
 
-        void layer_order(layer_order_e order)
+        void layer_order(LayerOrder order)
         {
             m_layer_order = order;
         }
@@ -353,10 +353,10 @@ namespace MatterHackers.Agg
             }
             ++m_scan_y;
 
-            if (m_layer_order != layer_order_e.layer_unsorted)
+            if (m_layer_order != LayerOrder.Unsorted)
             {
                 VectorPOD_RangeAdaptor ra = new VectorPOD_RangeAdaptor(m_ast, 1, m_ast.size() - 1);
-                if (m_layer_order == layer_order_e.layer_direct)
+                if (m_layer_order == LayerOrder.Direct)
                 {
 
                     QuickSort.Sort(ra);
@@ -482,7 +482,7 @@ namespace MatterHackers.Agg
             return (int)((cover * master_alpha + aa_mask) >> aa_shift);
         }
 
-        public bool sweep_scanline(IScanlineCache sl)
+        public bool sweep_scanline(IScanline sl)
         {
             throw new System.NotImplementedException();
         }
@@ -490,7 +490,7 @@ namespace MatterHackers.Agg
         // Sweeps one scanline with one style index. The style ID can be 
         // determined by calling style(). 
         //template<class Scanline> 
-        public bool sweep_scanline(IScanlineCache sl, int style_idx)
+        public bool sweep_scanline(IScanline sl, int style_idx)
         {
             int scan_y = m_scan_y - 1;
             if (scan_y > m_Rasterizer.max_y()) return false;

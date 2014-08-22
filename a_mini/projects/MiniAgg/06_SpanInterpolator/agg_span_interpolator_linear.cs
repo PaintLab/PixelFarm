@@ -17,10 +17,8 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg 
 {
-
     public interface ISpanInterpolator
     {
         void begin(double x, double y, int len);
@@ -32,6 +30,13 @@ namespace MatterHackers.Agg
         void resynchronize(double xe, double ye, int len);
         void local_scale(out int x, out int y);
     };
+}
+
+
+namespace MatterHackers.Agg.Lines
+{
+
+   
 
     //================================================span_interpolator_linear
     public sealed class span_interpolator_linear : ISpanInterpolator

@@ -13,26 +13,93 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg 
 {
-    //---------------------------------------------------------------line_coord
-    //public struct line_coord
-    //{
-    //    public static int conv(double x)
-    //    {
-    //        return (int)Math.Round(x * LineAABasics.line_subpixel_scale);
-    //    }
-    //};
 
-    //-----------------------------------------------------------line_coord_sat
-    public struct line_coord_sat
+    public static class LineAABasics
     {
-        public static int conv(double x)
+        public const int line_subpixel_shift = 8;                          //----line_subpixel_shift
+        public const int line_subpixel_scale = 1 << line_subpixel_shift;  //----line_subpixel_scale
+        public const int line_subpixel_mask = line_subpixel_scale - 1;    //----line_subpixel_mask
+        public const int line_max_coord = (1 << 28) - 1;              //----line_max_coord
+        public const int line_max_length = 1 << (line_subpixel_shift + 10); //----line_max_length
+
+        public const int line_mr_subpixel_shift = 4;                           //----line_mr_subpixel_shift
+        public const int line_mr_subpixel_scale = 1 << line_mr_subpixel_shift; //----line_mr_subpixel_scale 
+        public const int line_mr_subpixel_mask = line_mr_subpixel_scale - 1;   //----line_mr_subpixel_mask 
+
+        public static int line_mr(int x)
         {
-            return agg_basics.iround(x * LineAABasics.line_subpixel_scale, LineAABasics.line_max_coord);
+            return x >> (line_subpixel_shift - line_mr_subpixel_shift);
         }
-    } 
+
+        public static int line_hr(int x)
+        {
+            return x << (line_subpixel_shift - line_mr_subpixel_shift);
+        }
+
+        public static int line_dbl_hr(int x)
+        {
+            return x << line_subpixel_shift;
+        }
+
+
+        public static void bisectrix(line_parameters l1,
+                   line_parameters l2,
+                   out int x, out int y)
+        {
+            double k = (double)(l2.len) / (double)(l1.len);
+            double tx = l2.x2 - (l2.x1 - l1.x1) * k;
+            double ty = l2.y2 - (l2.y1 - l1.y1) * k;
+
+            //All bisectrices must be on the right of the line
+            //If the next point is on the left (l1 => l2.2)
+            //then the bisectix should be rotated by 180 degrees.
+            if ((double)(l2.x2 - l2.x1) * (double)(l2.y1 - l1.y1) <
+               (double)(l2.y2 - l2.y1) * (double)(l2.x1 - l1.x1) + 100.0)
+            {
+                tx -= (tx - l2.x1) * 2.0;
+                ty -= (ty - l2.y1) * 2.0;
+            }
+
+            // Check if the bisectrix is too short
+            double dx = tx - l2.x1;
+            double dy = ty - l2.y1;
+            if ((int)Math.Sqrt(dx * dx + dy * dy) < line_subpixel_scale)
+            {
+                x = (l2.x1 + l2.x1 + (l2.y1 - l1.y1) + (l2.y2 - l2.y1)) >> 1;
+                y = (l2.y1 + l2.y1 - (l2.x1 - l1.x1) - (l2.x2 - l2.x1)) >> 1;
+                return;
+            }
+
+            x = agg_basics.iround(tx);
+            y = agg_basics.iround(ty);
+        }
+
+        public static void fix_degenerate_bisectrix_start(line_parameters lp,
+                                               ref int x, ref int y)
+        {
+            int d = agg_basics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
+                            (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
+            if (d < line_subpixel_scale / 2)
+            {
+                x = lp.x1 + (lp.y2 - lp.y1);
+                y = lp.y1 - (lp.x2 - lp.x1);
+            }
+        }
+
+        public static void fix_degenerate_bisectrix_end(line_parameters lp,
+                                             ref int x, ref int y)
+        {
+            int d = agg_basics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
+                            (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
+            if (d < line_subpixel_scale / 2)
+            {
+                x = lp.x2 + (lp.y2 - lp.y1);
+                y = lp.y2 - (lp.x2 - lp.x1);
+            }
+        }
+    };
 
     //==========================================================line_parameters
     public class line_parameters
@@ -127,88 +194,20 @@ namespace MatterHackers.Agg
         }
     };
 
-    public static class LineAABasics
+}
+
+namespace MatterHackers.Agg.Lines
+{
+   
+    //-----------------------------------------------------------line_coord_sat
+    public struct line_coord_sat
     {
-        public const int line_subpixel_shift = 8;                          //----line_subpixel_shift
-        public const int line_subpixel_scale = 1 << line_subpixel_shift;  //----line_subpixel_scale
-        public const int line_subpixel_mask = line_subpixel_scale - 1;    //----line_subpixel_mask
-        public const int line_max_coord = (1 << 28) - 1;              //----line_max_coord
-        public const int line_max_length = 1 << (line_subpixel_shift + 10); //----line_max_length
-
-        public const int line_mr_subpixel_shift = 4;                           //----line_mr_subpixel_shift
-        public const int line_mr_subpixel_scale = 1 << line_mr_subpixel_shift; //----line_mr_subpixel_scale 
-        public const int line_mr_subpixel_mask = line_mr_subpixel_scale - 1;   //----line_mr_subpixel_mask 
-
-        public static int line_mr(int x)
+        public static int conv(double x)
         {
-            return x >> (line_subpixel_shift - line_mr_subpixel_shift);
+            return agg_basics.iround(x * LineAABasics.line_subpixel_scale, LineAABasics.line_max_coord);
         }
+    } 
 
-        public static int line_hr(int x)
-        {
-            return x << (line_subpixel_shift - line_mr_subpixel_shift);
-        }
-
-        public static int line_dbl_hr(int x)
-        {
-            return x << line_subpixel_shift;
-        }
-
-
-        public static void bisectrix(line_parameters l1,
-                   line_parameters l2,
-                   out int x, out int y)
-        {
-            double k = (double)(l2.len) / (double)(l1.len);
-            double tx = l2.x2 - (l2.x1 - l1.x1) * k;
-            double ty = l2.y2 - (l2.y1 - l1.y1) * k;
-
-            //All bisectrices must be on the right of the line
-            //If the next point is on the left (l1 => l2.2)
-            //then the bisectix should be rotated by 180 degrees.
-            if ((double)(l2.x2 - l2.x1) * (double)(l2.y1 - l1.y1) <
-               (double)(l2.y2 - l2.y1) * (double)(l2.x1 - l1.x1) + 100.0)
-            {
-                tx -= (tx - l2.x1) * 2.0;
-                ty -= (ty - l2.y1) * 2.0;
-            }
-
-            // Check if the bisectrix is too short
-            double dx = tx - l2.x1;
-            double dy = ty - l2.y1;
-            if ((int)Math.Sqrt(dx * dx + dy * dy) < line_subpixel_scale)
-            {
-                x = (l2.x1 + l2.x1 + (l2.y1 - l1.y1) + (l2.y2 - l2.y1)) >> 1;
-                y = (l2.y1 + l2.y1 - (l2.x1 - l1.x1) - (l2.x2 - l2.x1)) >> 1;
-                return;
-            }
-
-            x = agg_basics.iround(tx);
-            y = agg_basics.iround(ty);
-        }
-
-        public static void fix_degenerate_bisectrix_start(line_parameters lp,
-                                               ref int x, ref int y)
-        {
-            int d = agg_basics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
-                            (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
-            if (d < line_subpixel_scale / 2)
-            {
-                x = lp.x1 + (lp.y2 - lp.y1);
-                y = lp.y1 - (lp.x2 - lp.x1);
-            }
-        }
-
-        public static void fix_degenerate_bisectrix_end(line_parameters lp,
-                                             ref int x, ref int y)
-        {
-            int d = agg_basics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
-                            (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
-            if (d < line_subpixel_scale / 2)
-            {
-                x = lp.x2 + (lp.y2 - lp.y1);
-                y = lp.y2 - (lp.x2 - lp.x1);
-            }
-        }
-    };
+   
+   
 }

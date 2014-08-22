@@ -32,7 +32,7 @@ namespace MatterHackers.Agg.Image
             int bufferOffsetToFirstPixel, 
             int width, 
             int height)
-        {
+        { 
             AttachBuffer(image.GetBuffer(),
                bufferOffsetToFirstPixel,
                 width,
@@ -134,8 +134,7 @@ namespace MatterHackers.Agg.Image
             {
                 throw new Exception("Your buffer does not have enough room it it for your height and strideInBytes.");
             }
-            this.m_ByteBuffer = byteBuffer;
-
+            this.m_ByteBuffer = byteBuffer; 
             this.bufferOffset = bufferFirstPixel = bufferOffset;
             if (strideInBytes < 0)
             {

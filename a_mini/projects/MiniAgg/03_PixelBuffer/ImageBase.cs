@@ -113,14 +113,14 @@ namespace MatterHackers.Agg.Image
 #if DEBUG
         static int dbugGetNewDebugId()
         {
-           
+
             return dbugTotalId++;
         }
 #endif
 
 
 
-        
+
         public void CopyFrom(IImage sourceImage)
         {
             CopyFrom(sourceImage, sourceImage.GetBounds(), 0, 0);
@@ -395,40 +395,29 @@ namespace MatterHackers.Agg.Image
 
             for (int y = my; y < h; ++y)
             {
-                 
+
                 int xbufferOffset = buff.GetBufferOffsetXY(0, y);
                 for (int x = mx; x < w; ++x)
                 {
                     //rgba
-                    //RGBA_Bytes px = buff.GetPixel(x, y);
+                  
                     byte r = mBuffer[xbufferOffset + 2];
                     byte g = mBuffer[xbufferOffset + 1];
                     byte b = mBuffer[xbufferOffset];
-
-                    //              public const int OrderB = 0;
-                    //public const int OrderG = 1;
-                    //public const int OrderR = 2;
-                    //public const int OrderA = 3;
-                    xbufferOffset += 4;
-
-                    //buffer[i] = px.blue |
-                    //               (px.green << 8) |
-                    //               (px.red << 16);
-                    buffer[i] = b | (g << 8) |
-                                  (r << 16);
+                     
+                    xbufferOffset += 4; 
+                    buffer[i] = b | (g << 8) | (r << 16);
                     i++;
                 }
             }
         }
-
-
 
         public RGBA_Bytes GetPixel(int x, int y)
         {
             return recieveBlender.PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
         }
 
-        
+
         public int GetBufferOffsetXY(int x, int y)
         {
             return bufferFirstPixel + yTableArray[y] + xTableArray[x];

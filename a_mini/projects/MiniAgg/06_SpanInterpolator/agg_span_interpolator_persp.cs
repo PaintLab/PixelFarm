@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Lines
 {
     /*
     //===========================================span_interpolator_persp_exact

@@ -30,6 +30,7 @@ using System;
 
 using MatterHackers.Agg.Image;
 using MatterHackers.VectorMath;
+using MatterHackers.Agg.Lines;
 
 using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
 using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filter_scale_e;
@@ -465,9 +466,9 @@ namespace MatterHackers.Agg
             int bufferIndex;
             byte[] fg_ptr;
 
-            if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.span_interpolator_linear)
-                && ((MatterHackers.Agg.span_interpolator_linear)base.m_interpolator).transformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
-            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.span_interpolator_linear)base.m_interpolator).transformer()).is_identity())
+            if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.Lines.span_interpolator_linear)
+                && ((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
+            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer()).is_identity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe

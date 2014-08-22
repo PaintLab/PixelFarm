@@ -105,7 +105,7 @@ namespace MatterHackers.Agg
     // are better, because switching between two different areas of memory 
     // (that can be very large) occurs less frequently.
     //------------------------------------------------------------------------
-    public sealed class ScanlineUnpacked8 : IScanlineCache
+    public sealed class ScanlineUnpacked8 : IScanline
     {
         private int m_min_x;
         private int m_last_x;

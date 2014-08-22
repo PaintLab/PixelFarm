@@ -79,7 +79,7 @@ namespace MatterHackers.Agg
 
         void ResetGamma(IGammaFunction gamma_function);
 
-        bool sweep_scanline(IScanlineCache sl);
+        bool sweep_scanline(IScanline sl);
         void reset();
         void add_path(IVertexSource vs);
         void add_path(IVertexSource vs, int pathID);
@@ -387,7 +387,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public bool sweep_scanline(IScanlineCache scanlineCache)
+        public bool sweep_scanline(IScanline scanlineCache)
         {
             for (; ; )
             {

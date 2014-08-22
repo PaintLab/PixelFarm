@@ -39,7 +39,7 @@ namespace MatterHackers.Agg
     // for details.
     // 
     //------------------------------------------------------------------------
-    public sealed class ScanlinePacked8 : IScanlineCache
+    public sealed class ScanlinePacked8 : IScanline
     {
         private int m_last_x;
         private int m_y;

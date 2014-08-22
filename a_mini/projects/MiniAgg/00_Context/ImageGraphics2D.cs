@@ -29,7 +29,7 @@ namespace MatterHackers.Agg
     class ImageGraphics2D : Graphics2D
     {
 
-        IScanlineCache m_ScanlineCache;
+        IScanline m_ScanlineCache;
         PathStorage drawImageRectPath = new PathStorage();
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
@@ -41,13 +41,13 @@ namespace MatterHackers.Agg
 
         public ImageGraphics2D(IImage destImage,
             ScanlineRasterizer rasterizer,
-            IScanlineCache scanlineCache)
+            IScanline scanlineCache)
             : base(destImage, rasterizer)
         {
             m_ScanlineCache = scanlineCache;
         }
 
-        public override IScanlineCache ScanlineCache
+        public override IScanline ScanlineCache
         {
             get { return m_ScanlineCache; }
             set { m_ScanlineCache = value; }
@@ -134,8 +134,10 @@ namespace MatterHackers.Agg
             VertexSourceApplyTransform transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
             Rasterizer.add_path(transfromedRect);
             {
-                ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);
-                scanlineRenderer.GenerateAndRender(Rasterizer,
+                //ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);
+                ChildImage destImageWithClipping = new ChildImage(destImageByte, destImageByte.GetRecieveBlender());
+                scanlineRenderer.GenerateAndRender(
+                    Rasterizer,
                     drawImageScanlineCache,
                     destImageWithClipping,
                     spanImageFilter);
@@ -234,7 +236,7 @@ namespace MatterHackers.Agg
                 sourceRectTransform.invert();
 
                 span_image_filter spanImageFilter;
-                span_interpolator_linear interpolator = new span_interpolator_linear(sourceRectTransform);
+                var interpolator = new  MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, RGBA_Floats.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
 
                 spanImageFilter = new span_image_filter_rgba_bilinear_clip(sourceAccessor, RGBA_Floats.rgba_pre(0, 0, 0, 0), interpolator);
@@ -256,7 +258,7 @@ namespace MatterHackers.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 sourceRectTransform.invert();
 
-                span_interpolator_linear interpolator = new span_interpolator_linear(sourceRectTransform);
+                var interpolator = new MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, RGBA_Floats.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
 
                 span_image_filter spanImageFilter = null;

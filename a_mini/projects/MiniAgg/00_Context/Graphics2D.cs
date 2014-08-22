@@ -102,7 +102,7 @@ namespace MatterHackers.Agg
             get { return rasterizer; }
         }
 
-        public abstract IScanlineCache ScanlineCache
+        public abstract IScanline ScanlineCache
         {
             get;
             set;
@@ -185,8 +185,8 @@ namespace MatterHackers.Agg
         //================
         public static Graphics2D CreateFromImage(IImage img)
         {
-             
-            var imgProxy = new ClipProxyImage(img);
+
+            var imgProxy = new ChildImage(img, img.GetRecieveBlender());
             var scanlineRaster = new ScanlineRasterizer();
             var scanlineCachedPacked8 = new ScanlinePacked8();
             ImageGraphics2D imageRenderer = new ImageGraphics2D(imgProxy, scanlineRaster, scanlineCachedPacked8);

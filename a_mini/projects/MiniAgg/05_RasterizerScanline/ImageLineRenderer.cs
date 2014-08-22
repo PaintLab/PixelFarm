@@ -20,7 +20,7 @@
 using System;
 using MatterHackers.Agg.Image;
 
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Lines
 {
     /*
     //========================================================line_image_scale

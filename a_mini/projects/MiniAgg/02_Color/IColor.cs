@@ -34,5 +34,5 @@ namespace MatterHackers.Agg
         float Green0To1 { get; }
         float Blue0To1 { get; }
         float Alpha0To1 { get; }
-    };
+    } 
 }

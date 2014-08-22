@@ -15,8 +15,10 @@
 using System;
 using MatterHackers.Agg.Image;
 
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Lines
 {
+
+
 #if true
     //===================================================distance_interpolator0
     public class distance_interpolator0

@@ -22,6 +22,7 @@
 //#include "agg_clip_liang_barsky.h"
 
 using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e;
+using MatterHackers.Agg.Lines;
 
 namespace MatterHackers.Agg
 {

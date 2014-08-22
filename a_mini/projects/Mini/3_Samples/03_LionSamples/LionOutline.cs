@@ -34,7 +34,7 @@ using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
 
 using MatterHackers.VectorMath;
-
+using MatterHackers.Agg.Lines;
 using Mini;
 
 namespace MatterHackers.Agg.Sample_LionOutline

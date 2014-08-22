@@ -16,7 +16,7 @@ using System;
 
 using MatterHackers.Agg.VertexSource;
 
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Lines
 {
     //-----------------------------------------------------------line_aa_vertex
     // Vertex (x, y) with the distance to the next one. The last vertex has 

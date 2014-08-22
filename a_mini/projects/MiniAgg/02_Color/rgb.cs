@@ -153,7 +153,8 @@ namespace MatterHackers.Agg.Image
     {
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new RGBA_Bytes(buffer[bufferOffset + ImageBase.OrderR],
+            return new RGBA_Bytes(
+                buffer[bufferOffset + ImageBase.OrderR],
                 buffer[bufferOffset + ImageBase.OrderG],
                 buffer[bufferOffset + ImageBase.OrderB],
                 255);

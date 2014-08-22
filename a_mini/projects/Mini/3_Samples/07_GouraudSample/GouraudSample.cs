@@ -65,7 +65,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void render_gouraud(IImage backBuffer, IScanlineCache sl, IRasterizer ras)
+        public void render_gouraud(IImage backBuffer, IScanline sl, IRasterizer ras)
         {
             double alpha = this.AlphaValue;
             double brc = 1;

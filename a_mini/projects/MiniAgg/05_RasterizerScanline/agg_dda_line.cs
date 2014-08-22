@@ -22,7 +22,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Lines
 {   
     //===================================================dda_line_interpolator
     public sealed class dda_line_interpolator
@@ -85,7 +85,7 @@ namespace MatterHackers.Agg
     //=================================================dda2_line_interpolator
     public sealed class dda2_line_interpolator
     {
-        enum save_size_e { save_size = 2 };
+        enum SaveSize { save_size = 2 };
 
         //--------------------------------------------------------------------
         public dda2_line_interpolator() {}

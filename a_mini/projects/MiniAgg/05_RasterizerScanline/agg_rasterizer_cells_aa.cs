@@ -633,7 +633,7 @@ namespace MatterHackers.Agg
     }
 
     //------------------------------------------------------scanline_hit_test
-    public class scanline_hit_test : IScanlineCache
+    public class scanline_hit_test : IScanline
     {
         //see pattern fill example 
 
