@@ -147,7 +147,7 @@ namespace MatterHackers.Agg.Sample_Blur
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = IImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             clippingProxy.clear(RGBA_Bytes.White);
             m_ras.SetVectorClipBox(0, 0, Width, Height);
@@ -223,7 +223,7 @@ namespace MatterHackers.Agg.Sample_Blur
                 if (boundsRect.clip(new RectangleInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
                 {
                     //check if intersect 
-                    ReferenceImage image2 = new ReferenceImage(widgetsSubImage, new BlenderBGRA(), x1, y2, x2, y1); 
+                    ChildImage image2 = new ChildImage(widgetsSubImage, new BlenderBGRA(), x1, y2, x2, y1); 
                     // Blur it
                     switch (BlurMethod)
                     {

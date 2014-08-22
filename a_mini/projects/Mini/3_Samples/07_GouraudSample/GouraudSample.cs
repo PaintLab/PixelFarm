@@ -74,7 +74,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            var image = new ReferenceImage(backBuffer, new BlenderBGRA()); 
+            var image = new ChildImage(backBuffer, new BlenderBGRA()); 
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(image);
 
@@ -153,13 +153,13 @@ namespace MatterHackers.Agg.Sample_Gouraud
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = IImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             IImage backBuffer = widgetsSubImage;
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            var pf = new ReferenceImage(backBuffer, new BlenderBGRA()); 
+            var pf = new ChildImage(backBuffer, new BlenderBGRA()); 
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(pf);
             ren_base.clear(new RGBA_Floats(1.0, 1.0, 1.0));

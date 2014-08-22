@@ -43,7 +43,7 @@
     <Compile Include="01_BufferMan\agg_array.cs" />
     <Compile Include="01_BufferMan\agg_basics.cs" />
     <Compile Include="03_ImageBuffer\ActualImage.cs" />
-    <Compile Include="03_ImageBuffer\ReferenceImage.cs" />
+    <Compile Include="03_ImageBuffer\ChildImage.cs" />
     <Compile Include="03_ImageBuffer\IImageHelper.cs" />
     <Compile Include="04_RasterizerScanline\agg_clip_liang_barsky.cs" />
     <Compile Include="02_Color\agg_color_gray.cs" />

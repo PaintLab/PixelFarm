@@ -25,7 +25,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
-    public static class IImageHelper
+    public static class ImageHelper
     {
         /// <summary>
         /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
@@ -49,7 +49,7 @@ namespace MatterHackers.Agg.Image
             int height = Math.Min(imageContainingSubImage.Height - bottom, (int)subImageBounds.Height);
             int bufferOffsetToFirstPixel = imageContainingSubImage.GetBufferOffsetXY(left, bottom);
 
-            ReferenceImage subImage = new ReferenceImage(imageContainingSubImage, bufferOffsetToFirstPixel, width, height);
+            ChildImage subImage = new ChildImage(imageContainingSubImage, bufferOffsetToFirstPixel, width, height);
 
 
             return subImage;
@@ -68,7 +68,7 @@ namespace MatterHackers.Agg.Image
                 buffer[ i * 4 + 3] = value;
             }
         }
-        public static void SetAlpha(this ReferenceImage img, byte value)
+        public static void SetAlpha(this ChildImage img, byte value)
         {
             if (img.BitDepth != 32)
             {

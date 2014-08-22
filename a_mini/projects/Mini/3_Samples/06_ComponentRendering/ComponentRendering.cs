@@ -40,15 +40,15 @@ namespace MatterHackers.Agg
         {
             if (graphics2D.DestImage != null)
             {
-                var widgetsSubImage = IImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+                var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
                 IImage backBuffer = widgetsSubImage;
 
                 int distBetween = backBuffer.GetBytesBetweenPixelsInclusive();
 
-                var redImageBuffer = new ReferenceImage(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);                 
-                var greenImageBuffer = new ReferenceImage(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);             
-                var blueImageBuffer = new ReferenceImage(backBuffer, new blender_gray(distBetween), distBetween, 0, 8);
+                var redImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);                 
+                var greenImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);             
+                var blueImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 0, 8);
     
 
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);

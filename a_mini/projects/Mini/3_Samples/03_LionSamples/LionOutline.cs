@@ -122,14 +122,14 @@ namespace MatterHackers.Agg.Sample_LionOutline
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = IImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
 
             int strokeWidth = 1;
 
-            var clippedSubImage = new ReferenceImage(widgetsSubImage, new BlenderBGRA()); 
+            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA()); 
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.clear(RGBA_Bytes.White);
 

@@ -31,7 +31,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         double skewY = 0;
         bool isMaskSliderValueChanged = true;
 
-        ReferenceImage alphaMaskImageBuffer;
+        ChildImage alphaMaskImageBuffer;
         IAlphaMask alphaMask;
 
         public alpha_mask2_application()
@@ -70,7 +70,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         {
             alphaBitmap = new ActualImage(width, height, 8, new blender_gray(1));
 
-            alphaMaskImageBuffer = new ReferenceImage(alphaBitmap, new blender_gray(1));
+            alphaMaskImageBuffer = new ChildImage(alphaBitmap, new blender_gray(1));
 
             alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
 
@@ -80,7 +80,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             alphaMaskImageBuffer.attach(alphaByteArray, (int)cx, (int)cy, cx, 1);
 #endif
 
-            var image = new ReferenceImage(alphaMaskImageBuffer, new blender_gray(1), 1, 0, 8);
+            var image = new ChildImage(alphaMaskImageBuffer, new blender_gray(1), 1, 0, 8);
 
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
             ScanlinePacked8 sclnPack = new ScanlinePacked8();
@@ -140,7 +140,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(Graphics2D g)
         {
-            var widgetsSubImage = IImageHelper.NewSubImageReference(g.DestImage, g.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(g.DestImage, g.GetClippingRect());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;

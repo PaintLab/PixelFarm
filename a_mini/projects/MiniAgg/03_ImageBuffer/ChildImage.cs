@@ -25,10 +25,10 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
-    public class ReferenceImage : ImageBase
+    public class ChildImage : ImageBase
     {
         int bufferOffset; // the beggining of the image in this buffer 
-        public ReferenceImage(IImage image, 
+        public ChildImage(IImage image, 
             int bufferOffsetToFirstPixel, 
             int width, 
             int height)
@@ -42,14 +42,14 @@ namespace MatterHackers.Agg.Image
                 image.GetBytesBetweenPixelsInclusive());
             SetRecieveBlender(image.GetRecieveBlender());
         }
-        public ReferenceImage(byte[] buffer,
+        public ChildImage(byte[] buffer,
             int bufferOffsetToFirstPixel,
             int width, 
             int height, 
             int strideInBytes,
             int bitDepth, 
             int distanceInBytesBetweenPixelsInclusive)
-        {
+        {   
             AttachBuffer(buffer,
                 bufferOffsetToFirstPixel,
                 width, 
@@ -57,7 +57,7 @@ namespace MatterHackers.Agg.Image
                 strideInBytes, bitDepth, 
                 distanceInBytesBetweenPixelsInclusive); 
         }
-        public ReferenceImage(IImage image,
+        public ChildImage(IImage image,
             IRecieveBlenderByte blender,
             int distanceBetweenPixelsInclusive,
             int bufferOffset, 
@@ -66,17 +66,17 @@ namespace MatterHackers.Agg.Image
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, bufferOffset, bitsPerPixel);
         } 
-        public ReferenceImage(IImage image, IRecieveBlenderByte blender)
+        public ChildImage(IImage image, IRecieveBlenderByte blender)
         {   
             Attach(image, blender, image.GetBytesBetweenPixelsInclusive(), 0, image.BitDepth);
         }
-        public ReferenceImage(IImage image, IRecieveBlenderByte blender, int x1, int y1, int x2, int y2)
+        public ChildImage(IImage image, IRecieveBlenderByte blender, int x1, int y1, int x2, int y2)
         {
             SetRecieveBlender(blender);
             Attach(image, x1, y1, x2, y2);
-        }
+        }  
         
-
+        
         void AttachBuffer(byte[] buffer,
           int bufferOffset,
           int width,

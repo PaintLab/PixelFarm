@@ -131,13 +131,13 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
 
 
-            var widgetsSubImage = IImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
 
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();
             IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
-            var rasterGamma = new ReferenceImage(widgetsSubImage, GammaBlender);
+            var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
             
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);

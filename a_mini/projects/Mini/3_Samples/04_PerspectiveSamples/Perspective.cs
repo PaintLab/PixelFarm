@@ -79,7 +79,7 @@ namespace MatterHackers.Agg.Sample_Perspective
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = IImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             IImage backBuffer = widgetsSubImage;
 
@@ -88,10 +88,10 @@ namespace MatterHackers.Agg.Sample_Perspective
                 didInit = true;
                 OnInitialize();
             }
-            ReferenceImage image;
+            ChildImage image;
             if (backBuffer.BitDepth == 32)
             {
-                image = new ReferenceImage(backBuffer, new BlenderBGRA()); 
+                image = new ChildImage(backBuffer, new BlenderBGRA()); 
             }
             else
             {
@@ -99,7 +99,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                 {
                     throw new System.NotSupportedException();
                 }
-                image = new ReferenceImage(backBuffer, new BlenderBGR()); 
+                image = new ChildImage(backBuffer, new BlenderBGR()); 
             }
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
             clippingProxy.clear(RGBA_Bytes.White);// new RGBA_Bytes(255, 255, 255));

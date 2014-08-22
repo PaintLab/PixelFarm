@@ -60,7 +60,7 @@ namespace MatterHackers.Agg
         IPatternFilter m_filter;
         int m_dilation;
         int m_dilation_hr; 
-        ReferenceImage m_buf;
+        ChildImage m_buf;
         byte[] m_data = null;
         int m_DataSizeInBytes = 0;
         int m_width;
@@ -151,7 +151,7 @@ namespace MatterHackers.Agg
             }
 
 
-            m_buf = new ReferenceImage(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
+            m_buf = new ChildImage(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
    
             byte[] destBuffer = m_buf.GetBuffer();
             byte[] sourceBuffer = src.GetBuffer();
