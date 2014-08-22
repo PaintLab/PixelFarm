@@ -48,8 +48,8 @@ namespace MatterHackers.Agg.Image
         // Pointer to first pixel depending on strideInBytes and image position
         protected int bufferFirstPixel;
 
-        int width;  // Width in pixels
-        int height; // Height in pixels
+        int width;  // in pixels
+        int height; // in pixels
         int strideInBytes; // Number of bytes per row. Can be < 0
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
@@ -400,12 +400,12 @@ namespace MatterHackers.Agg.Image
                 for (int x = mx; x < w; ++x)
                 {
                     //rgba
-                  
+
                     byte r = mBuffer[xbufferOffset + 2];
                     byte g = mBuffer[xbufferOffset + 1];
                     byte b = mBuffer[xbufferOffset];
-                     
-                    xbufferOffset += 4; 
+
+                    xbufferOffset += 4;
                     buffer[i] = b | (g << 8) | (r << 16);
                     i++;
                 }

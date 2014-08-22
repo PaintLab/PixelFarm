@@ -46,12 +46,12 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
         }
 
 
-        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanLineCache, RGBA_Bytes color)
+        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanline, RGBA_Bytes color)
         {
-            int y = scanLineCache.y();
-            int num_spans = scanLineCache.num_spans();
-            ScanlineSpan scanlineSpan = scanLineCache.begin();
-            byte[] ManagedCoversArray = scanLineCache.GetCovers();
+            int y = scanline.y();
+            int num_spans = scanline.num_spans();
+            ScanlineSpan scanlineSpan = scanline.begin();
+            byte[] coverArray = scanline.GetCovers();
             var gfx = Graphics2D.CreateFromImage(destImage);
 
             for (; ; )
@@ -63,7 +63,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                
                 do
                 {
-                    int a = (ManagedCoversArray[coverIndex++] * color.Alpha0To255) >> 8;
+                    int a = (coverArray[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                            gfx.Rasterizer, m_sl, destImage,
                             RGBA_Bytes.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
@@ -72,7 +72,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                 }
                 while (--num_pix > 0);
                 if (--num_spans == 0) break;
-                scanlineSpan = scanLineCache.GetNextScanlineSpan();
+                scanlineSpan = scanline.GetNextScanlineSpan();
             }
 
         }

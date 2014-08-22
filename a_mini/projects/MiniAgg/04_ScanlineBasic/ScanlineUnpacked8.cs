@@ -25,7 +25,7 @@
 // 
 //----------------------------------------------------------------------------
 
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
     //=============================================================scanline_u8
     //
@@ -107,29 +107,32 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public sealed class ScanlineUnpacked8 : IScanline
     {
-        private int m_min_x;
-        private int m_last_x;
-        private int m_y;
-        private ArrayPOD<byte> m_covers;
-        private ArrayPOD<ScanlineSpan> m_spans;
-       
+        int m_min_x;
+        int m_last_x;
+        int m_y;
+        ArrayPOD<byte> m_covers;
+        ArrayPOD<ScanlineSpan> m_spans;
 
-        private int m_span_index;
-        private int m_interator_index;
 
-        public ScanlineSpan GetNextScanlineSpan()
-        {
-            m_interator_index++;
-            return m_spans.Array[m_interator_index - 1];
-        }
+        int m_span_index;
+        int m_interator_index;
 
-        //--------------------------------------------------------------------
         public ScanlineUnpacked8()
         {
 
             m_last_x = (0x7FFFFFF0);
             m_covers = new ArrayPOD<byte>(1000);
             m_spans = new ArrayPOD<ScanlineSpan>(1000);
+        }
+        public ScanlineSpan GetNextScanlineSpan()
+        {
+            m_interator_index++;
+            return m_spans.Array[m_interator_index - 1];
+        }
+        public ScanlineSpan GetSpan(int index)
+        {
+
+            return m_spans.Array[index];
         }
 
         //--------------------------------------------------------------------
@@ -189,7 +192,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public void finalize(int y)
+        public void CloseLine(int y)
         {
             m_y = y;
         }
@@ -208,7 +211,7 @@ namespace MatterHackers.Agg
         {
             m_interator_index = 1;
             return GetNextScanlineSpan();
-        } 
+        }
         public byte[] GetCovers()
         {
             return m_covers.Array;

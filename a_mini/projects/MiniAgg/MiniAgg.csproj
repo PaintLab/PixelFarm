@@ -87,8 +87,8 @@
     <Compile Include="05_RasterizerScanline\OutlineRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="03_PixelBuffer\RasterBufferAccessors.cs" />
-    <Compile Include="04_ScanlineBasic\agg_scanline_p.cs" />
-    <Compile Include="04_ScanlineBasic\agg_scanline_u.cs" />
+    <Compile Include="04_ScanlineBasic\ScanlinePacked8.cs" />
+    <Compile Include="04_ScanlineBasic\ScanlineUnpacked8.cs" />
     <Compile Include="06_MathTools\RectangleDouble.cs" />
     <Compile Include="06_MathTools\RectangleInt.cs" />
     <Compile Include="05_RasterizerScanline\ScanlineRasterizer.cs" />

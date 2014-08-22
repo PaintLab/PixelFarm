@@ -30,7 +30,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
     //=============================================================scanline_p8
     // 
@@ -41,21 +41,14 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public sealed class ScanlinePacked8 : IScanline
     {
-        private int m_last_x;
-        private int m_y;
-        private byte[] m_covers;
-        private int m_cover_index;
-        private ScanlineSpan[] m_spans;
+        int m_last_x;
+        int m_y;
+        byte[] m_covers;
+        int m_cover_index;
+        ScanlineSpan[] m_spans;
 
-        private int m_span_index;
-
-        private int m_interator_index;
-
-        public ScanlineSpan GetNextScanlineSpan()
-        {
-            m_interator_index++;
-            return m_spans[m_interator_index - 1];
-        }
+        int m_span_index;
+        int m_interator_index;
 
         public ScanlinePacked8()
         {
@@ -63,7 +56,15 @@ namespace MatterHackers.Agg
             m_covers = new byte[1000];
             m_spans = new ScanlineSpan[1000];
         }
-
+        public ScanlineSpan GetNextScanlineSpan()
+        {
+            m_interator_index++;
+            return m_spans[m_interator_index - 1];
+        }
+        public ScanlineSpan GetSpan(int index)
+        {
+            return m_spans[index];
+        }
         //--------------------------------------------------------------------
         public void reset(int min_x, int max_x)
         {
@@ -98,35 +99,6 @@ namespace MatterHackers.Agg
             m_last_x = x;
             m_cover_index++;
         }
-
-        ////--------------------------------------------------------------------
-        //public void add_cells(int x, int len, byte[] covers, int coversIndex)
-        //{
-
-        //    for (int i = len - 1; i >= 0; --i)
-        //    {
-        //        m_covers[m_cover_index + i] = covers[i];
-        //    }
-        //    if (x == m_last_x + 1 && m_spans[m_span_index].len > 0)
-        //    {
-        //        m_spans[m_span_index].len += (short)len;
-        //    }
-        //    else
-        //    {
-        //        m_span_index++;
-                
-        //        ScanlineSpan span = new ScanlineSpan();
-        //        span.cover_index = m_cover_index;
-        //        span.x = (short)x;
-        //        span.len = (short)len;
-
-        //        m_spans[m_span_index] = span;
-        //    }
-
-        //    m_cover_index += len;
-        //    m_last_x = x + (int)len - 1;
-        //}
-
         //--------------------------------------------------------------------
         public void add_span(int x, int len, int cover)
         {
@@ -148,7 +120,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public void finalize(int y)
+        public void CloseLine(int y)
         {
             m_y = y;
         }

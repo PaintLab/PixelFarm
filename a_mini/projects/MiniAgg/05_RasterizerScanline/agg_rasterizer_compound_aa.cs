@@ -546,7 +546,7 @@ namespace MatterHackers.Agg
             }
 
             if (sl.num_spans() == 0) return false;
-            sl.finalize(scan_y);
+            sl.CloseLine(scan_y);
             return true;
         }
 

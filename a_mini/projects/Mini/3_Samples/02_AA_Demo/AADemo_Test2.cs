@@ -50,33 +50,39 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             m_size = size;
             m_square = new square(size);
         }
-        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanLineCache, RGBA_Bytes color)
+        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanline, RGBA_Bytes color)
         {
-            int y = scanLineCache.y();
-            int num_spans = scanLineCache.num_spans();
-            ScanlineSpan scanlineSpan = scanLineCache.begin();
-            byte[] ManagedCoversArray = scanLineCache.GetCovers();
+            int y = scanline.y();
+            int num_spans = scanline.num_spans();
+            
+            byte[] coverArray = scanline.GetCovers();
             var gfx = Graphics2D.CreateFromImage(destImage);
 
+            ScanlineSpan span = scanline.begin();
             for (; ; )
             {
-                int x = scanlineSpan.x;
-                int num_pix = scanlineSpan.len;
-                int coverIndex = scanlineSpan.cover_index;
+                int x = span.x;
+                int num_pix = span.len;
+                int coverIndex = span.cover_index;
             
                 do
                 {
-                    int a = (ManagedCoversArray[coverIndex++] * color.Alpha0To255) >> 8;
+                    int a = (coverArray[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                             gfx.Rasterizer, m_sl, destImage,
-                            RGBA_Bytes.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
+                            RGBA_Bytes.Make(
+                                color.Red0To255, 
+                                color.Green0To255, 
+                                color.Blue0To255, a),
                             x, y);
                     ++x;
                 }
                 while (--num_pix > 0);
                 if (--num_spans == 0) break;
-                scanlineSpan = scanLineCache.GetNextScanlineSpan();
+
+                span = scanline.GetNextScanlineSpan();
             }
+
 
         }
     }

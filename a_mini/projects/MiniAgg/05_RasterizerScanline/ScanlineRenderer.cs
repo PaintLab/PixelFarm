@@ -10,7 +10,7 @@ namespace MatterHackers.Agg
     /// <summary>
     /// to bitmap
     /// </summary>
-     
+
     public class ScanlineRenderer
     {
         VectorPOD<RGBA_Bytes> tempSpanColors = new VectorPOD<RGBA_Bytes>();
@@ -45,7 +45,10 @@ namespace MatterHackers.Agg
                     int x2 = (x - (int)scanlineSpan.len - 1);
                     destImage.blend_hline(x, y, x2, color, coversArray[scanlineSpan.cover_index]);
                 }
-                if (--num_spans == 0) break;
+                if (--num_spans == 0)
+                {   
+                    break;
+                }
                 scanlineSpan = scanLine.GetNextScanlineSpan();
             }
         }
@@ -97,7 +100,7 @@ namespace MatterHackers.Agg
         }
 
 
-        public void GenerateAndRender(IRasterizer rasterizer, 
+        public void GenerateAndRender(IRasterizer rasterizer,
              IScanline scanlineCache, IImage destImage,
              ISpanGenerator spanGenerator)
         {

@@ -387,7 +387,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public bool sweep_scanline(IScanline scanlineCache)
+        public bool sweep_scanline(IScanline scline)
         {
             for (; ; )
             {
@@ -396,16 +396,16 @@ namespace MatterHackers.Agg
                     return false;
                 }
 
-                scanlineCache.ResetSpans();
+                scline.ResetSpans();
                 int num_cells = (int)m_outline.scanline_num_cells(m_scan_y);
                 cell_aa[] cells;
-                int Offset;
-                m_outline.scanline_cells(m_scan_y, out cells, out Offset);
+                int offset;
+                m_outline.scanline_cells(m_scan_y, out cells, out offset);
                 int cover = 0;
 
                 while (num_cells != 0)
                 {
-                    cell_aa cur_cell = cells[Offset];
+                    cell_aa cur_cell = cells[offset];
                     int x = cur_cell.x;
                     int area = cur_cell.area;
                     int alpha;
@@ -415,8 +415,8 @@ namespace MatterHackers.Agg
                     //accumulate all cells with the same X
                     while (--num_cells != 0)
                     {
-                        Offset++;
-                        cur_cell = cells[Offset];
+                        offset++;
+                        cur_cell = cells[offset];
                         if (cur_cell.x != x)
                         {
                             break;
@@ -431,7 +431,7 @@ namespace MatterHackers.Agg
                         alpha = calculate_alpha((cover << ((int)poly_subpixel_scale_e.poly_subpixel_shift + 1)) - area);
                         if (alpha != 0)
                         {
-                            scanlineCache.add_cell(x, alpha);
+                            scline.add_cell(x, alpha);
                         }
                         x++;
                     }
@@ -441,16 +441,16 @@ namespace MatterHackers.Agg
                         alpha = calculate_alpha(cover << ((int)poly_subpixel_scale_e.poly_subpixel_shift + 1));
                         if (alpha != 0)
                         {
-                            scanlineCache.add_span(x, (cur_cell.x - x), alpha);
+                            scline.add_span(x, (cur_cell.x - x), alpha);
                         }
                     }
                 }
 
-                if (scanlineCache.num_spans() != 0) break;
+                if (scline.num_spans() != 0) break;
                 ++m_scan_y;
             }
 
-            scanlineCache.finalize(m_scan_y);
+            scline.CloseLine(m_scan_y);
             ++m_scan_y;
             return true;
         }
