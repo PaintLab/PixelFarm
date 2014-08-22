@@ -20,11 +20,7 @@ using MatterHackers.Agg.Image;
 
 namespace MatterHackers.Agg
 {
-    public interface IPatternFilter
-    {
-        int dilation();
-        void pixel_high_res(ImageBase sourceImage, RGBA_Bytes[] destBuffer, int destBufferOffset, int x, int y);
-    }
+   
 
      
 
@@ -32,12 +28,12 @@ namespace MatterHackers.Agg
     {
         public int dilation() { return 1; }
 
-        public void pixel_low_res(RGBA_Bytes[][] buf, RGBA_Bytes[] p, int offset, int x, int y)
+        public void pixel_low_res(ColorRGBA[][] buf, ColorRGBA[] p, int offset, int x, int y)
         {
             p[offset] = buf[y][x];
         }
 
-        public void pixel_high_res(ImageBase sourceImage, RGBA_Bytes[] destBuffer, int destBufferOffset, int x, int y)
+        public void pixel_high_res(ImageBase sourceImage, ColorRGBA[] destBuffer, int destBufferOffset, int x, int y)
         {
             int r, g, b, a;
             r = g = b = a = LineAABasics.line_subpixel_scale * LineAABasics.line_subpixel_scale / 2;

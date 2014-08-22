@@ -530,7 +530,7 @@ namespace MatterHackers.Agg
                 {
                     alpha = calculate_alpha((cover << (poly_subpixel_shift + 1)) - area,
                                             master_alpha);
-                    sl.add_cell(x, alpha);
+                    sl.AddCell(x, alpha);
                     x++;
                 }
 
@@ -540,13 +540,13 @@ namespace MatterHackers.Agg
                                             master_alpha);
                     if (alpha != 0)
                     {
-                        sl.add_span(x, cell.x - x, alpha);
+                        sl.AddSpan(x, cell.x - x, alpha);
                     }
                 }
             }
 
-            if (sl.num_spans() == 0) return false;
-            sl.finalize(scan_y);
+            if (sl.SpanCount == 0) return false;
+            sl.CloseLine(scan_y);
             return true;
         }
 

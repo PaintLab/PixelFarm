@@ -11,15 +11,15 @@ namespace MatterHackers.Agg
     {
         public abstract class FillingRule
         {
-            protected RGBA_Bytes startColor;
-            protected RGBA_Bytes fillColor;
+            protected ColorRGBA startColor;
+            protected ColorRGBA fillColor;
 
-            protected FillingRule(RGBA_Bytes fillColor)
+            protected FillingRule(ColorRGBA fillColor)
             {
                 this.fillColor = fillColor;
             }
 
-            public void SetStartColor(RGBA_Bytes startColor)
+            public void SetStartColor(ColorRGBA startColor)
             {
                 this.startColor = startColor;
             }
@@ -36,7 +36,7 @@ namespace MatterHackers.Agg
 
         public class ExactMatch : FillingRule
         {
-            public ExactMatch(RGBA_Bytes fillColor)
+            public ExactMatch(ColorRGBA fillColor)
                 : base(fillColor)
             {
             }
@@ -53,7 +53,7 @@ namespace MatterHackers.Agg
         {
             int tolerance0To255;
 
-            public ToleranceMatch(RGBA_Bytes fillColor, int tolerance0To255)
+            public ToleranceMatch(ColorRGBA fillColor, int tolerance0To255)
                 : base(fillColor)
             {
                 this.tolerance0To255 = tolerance0To255;
@@ -90,12 +90,12 @@ namespace MatterHackers.Agg
 
         FirstInFirstOutQueue<Range> ranges = new FirstInFirstOutQueue<Range>(9);
 
-        public FloodFill(RGBA_Bytes fillColor)
+        public FloodFill(ColorRGBA fillColor)
         {
             fillRule = new ExactMatch(fillColor);
         }
 
-        public FloodFill(RGBA_Bytes fillColor, int tolerance0To255)
+        public FloodFill(ColorRGBA fillColor, int tolerance0To255)
         {
             if (tolerance0To255 > 0)
             {
@@ -132,7 +132,7 @@ namespace MatterHackers.Agg
 
             int startColorBufferOffset = destImage.GetBufferOffsetXY(x, y);
 
-            fillRule.SetStartColor(new RGBA_Bytes(destImage.GetBuffer()[startColorBufferOffset+2], destImage.GetBuffer()[startColorBufferOffset + 1], destImage.GetBuffer()[startColorBufferOffset]));
+            fillRule.SetStartColor(new ColorRGBA(destImage.GetBuffer()[startColorBufferOffset+2], destImage.GetBuffer()[startColorBufferOffset + 1], destImage.GetBuffer()[startColorBufferOffset]));
 
             LinearFill(x, y);
 

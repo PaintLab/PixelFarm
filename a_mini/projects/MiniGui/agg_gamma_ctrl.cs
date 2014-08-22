@@ -67,23 +67,23 @@ namespace MatterHackers.Agg.UI
         double m_pdx;
         double m_pdy;
 
-        RGBA_Bytes m_background_color;
-        RGBA_Bytes m_border_color;
-        RGBA_Bytes m_curve_color;
-        RGBA_Bytes m_grid_color;
-        RGBA_Bytes m_inactive_pnt_color;
-        RGBA_Bytes m_active_pnt_color;
-        RGBA_Bytes m_text_color;
-        RGBA_Bytes[] m_colors = new RGBA_Bytes[7];
+        ColorRGBA m_background_color;
+        ColorRGBA m_border_color;
+        ColorRGBA m_curve_color;
+        ColorRGBA m_grid_color;
+        ColorRGBA m_inactive_pnt_color;
+        ColorRGBA m_active_pnt_color;
+        ColorRGBA m_text_color;
+        ColorRGBA[] m_colors = new ColorRGBA[7];
 
         // Set colors
-        public void background_color(RGBA_Bytes c) { m_background_color = c; }
-        public void border_color(RGBA_Bytes c) { m_border_color = c; }
-        public void curve_color(RGBA_Bytes c) { m_curve_color = c; }
-        public void grid_color(RGBA_Bytes c) { m_grid_color = c; }
-        public void inactive_pnt_color(RGBA_Bytes c) { m_inactive_pnt_color = c; }
-        public void active_pnt_color(RGBA_Bytes c) { m_active_pnt_color = c; }
-        public void text_color(RGBA_Bytes c) { m_text_color = c; }
+        public void background_color(ColorRGBA c) { m_background_color = c; }
+        public void border_color(ColorRGBA c) { m_border_color = c; }
+        public void curve_color(ColorRGBA c) { m_curve_color = c; }
+        public void grid_color(ColorRGBA c) { m_grid_color = c; }
+        public void inactive_pnt_color(ColorRGBA c) { m_inactive_pnt_color = c; }
+        public void active_pnt_color(ColorRGBA c) { m_active_pnt_color = c; }
+        public void text_color(ColorRGBA c) { m_text_color = c; }
         public override IColor color(int i) { return m_colors[i]; }
 
         public gamma_ctrl(Vector2 position, Vector2 size)
@@ -121,13 +121,13 @@ namespace MatterHackers.Agg.UI
             m_pdy = (0.0);
             calc_spline_box();
 
-            m_background_color = RGBA_Bytes.Make(1.0, 1.0, 0.9);
-            m_border_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
-            m_curve_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
-            m_grid_color = RGBA_Bytes.Make(0.2, 0.2, 0.0);
-            m_inactive_pnt_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
-            m_active_pnt_color = RGBA_Bytes.Make(1.0, 0.0, 0.0);
-            m_text_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
+            m_background_color = ColorRGBA.Make(1.0, 1.0, 0.9);
+            m_border_color = ColorRGBA.Make(0.0, 0.0, 0.0);
+            m_curve_color = ColorRGBA.Make(0.0, 0.0, 0.0);
+            m_grid_color = ColorRGBA.Make(0.2, 0.2, 0.0);
+            m_inactive_pnt_color = ColorRGBA.Make(0.0, 0.0, 0.0);
+            m_active_pnt_color = ColorRGBA.Make(1.0, 0.0, 0.0);
+            m_text_color = ColorRGBA.Make(0.0, 0.0, 0.0);
 
             m_colors[0] = m_curve_color;
             m_colors[1] = m_grid_color;

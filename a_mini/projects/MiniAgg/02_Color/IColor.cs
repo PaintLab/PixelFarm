@@ -20,10 +20,10 @@ namespace MatterHackers.Agg
 
     public interface IColor
     {
-        RGBA_Floats GetAsRGBA_Floats();
-        RGBA_Bytes GetAsRGBA_Bytes();
+        ColorRGBAf GetAsRGBA_Floats();
+        ColorRGBA GetAsRGBA_Bytes();
 
-        RGBA_Bytes gradient(RGBA_Bytes c, double k);
+        ColorRGBA gradient(ColorRGBA c, double k);
 
         int Red0To255 { get; }
         int Green0To255 { get; }

@@ -25,7 +25,7 @@
 // 
 //----------------------------------------------------------------------------
 
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
     //=============================================================scanline_u8
     //
@@ -107,33 +107,35 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public sealed class ScanlineUnpacked8 : IScanline
     {
-        private int m_min_x;
-        private int m_last_x;
-        private int m_y;
-        private ArrayPOD<byte> m_covers;
-        private ArrayPOD<ScanlineSpan> m_spans;
-       
+        int minX;         
 
-        private int m_span_index;
-        private int m_interator_index;
+        ArrayPOD<byte> m_covers;
+        ArrayPOD<ScanlineSpan> m_spans;
 
-        public ScanlineSpan GetNextScanlineSpan()
-        {
-            m_interator_index++;
-            return m_spans.Array[m_interator_index - 1];
-        }
 
-        //--------------------------------------------------------------------
+        int last_span_index;
+        int last_x;
+        int lineY;
+
+
         public ScanlineUnpacked8()
         {
 
-            m_last_x = (0x7FFFFFF0);
+            last_x = (0x7FFFFFF0);
             m_covers = new ArrayPOD<byte>(1000);
             m_spans = new ArrayPOD<ScanlineSpan>(1000);
         }
-
+       
+        public ScanlineSpan GetSpan(int index)
+        {
+            return m_spans.Array[index];
+        }
+        public int SpanCount
+        {
+            get { return last_span_index; }
+        }
         //--------------------------------------------------------------------
-        public void reset(int min_x, int max_x)
+        public void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 2;
             if (max_len > m_spans.Size())
@@ -141,74 +143,73 @@ namespace MatterHackers.Agg
                 m_spans.Resize(max_len);
                 m_covers.Resize(max_len);
             }
-            m_last_x = 0x7FFFFFF0;
-            m_min_x = min_x;
-            m_span_index = 0;
+            last_x = 0x7FFFFFF0;
+            minX = min_x;
+            last_span_index = 0;
         }
 
         //--------------------------------------------------------------------
-        public void add_cell(int x, int cover)
+        public void AddCell(int x, int cover)
         {
-            x -= m_min_x;
+            x -= minX;
             m_covers.Array[x] = (byte)cover;
 
-            if (x == m_last_x + 1)
+            if (x == last_x + 1)
             {
-                m_spans.Array[m_span_index].len++;
+                m_spans.Array[last_span_index].len++;
+
             }
             else
             {
-                m_span_index++;
-                m_spans.Array[m_span_index].x = x + m_min_x;
-                m_spans.Array[m_span_index].len = 1;
-                m_spans.Array[m_span_index].cover_index = (int)x;
+                last_span_index++;
+
+                m_spans.Array[last_span_index].x = x + minX;
+                m_spans.Array[last_span_index].len = 1;
+                m_spans.Array[last_span_index].cover_index = (int)x;
             }
-            m_last_x = x;
+            last_x = x;
         }
 
-        public void add_span(int x, int len, int cover)
+        public void AddSpan(int x, int len, int cover)
         {
-            x -= m_min_x;
+            x -= minX;
             for (int i = 0; i < len; i++)
             {
                 m_covers.Array[x + i] = (byte)cover;
             }
 
-            if (x == m_last_x + 1)
+            if (x == last_x + 1)
             {
-                m_spans.Array[m_span_index].len += (int)len;
+                m_spans.Array[last_span_index].len += (int)len;
             }
             else
             {
-                m_span_index++;
-                m_spans.Array[m_span_index].x = x + m_min_x;
-                m_spans.Array[m_span_index].len = (int)len;
-                m_spans.Array[m_span_index].cover_index = (int)x;
+
+                last_span_index++;
+                m_spans.Array[last_span_index].x = x + minX;
+                m_spans.Array[last_span_index].len = (int)len;
+                m_spans.Array[last_span_index].cover_index = (int)x;
             }
-            m_last_x = x + (int)len - 1;
+            last_x = x + (int)len - 1;
         }
 
         //--------------------------------------------------------------------
-        public void finalize(int y)
+        public void CloseLine(int y)
         {
-            m_y = y;
+            lineY = y;
         }
 
         //--------------------------------------------------------------------
         public void ResetSpans()
         {
-            m_last_x = 0x7FFFFFF0;
-            m_span_index = 0;
+            last_x = 0x7FFFFFF0;
+            last_span_index = 0;
         }
 
         //--------------------------------------------------------------------
-        public int y() { return m_y; }
-        public int num_spans() { return (int)m_span_index; }
-        public ScanlineSpan begin()
-        {
-            m_interator_index = 1;
-            return GetNextScanlineSpan();
-        } 
+        public int Y { get { return lineY; } }
+
+         
         public byte[] GetCovers()
         {
             return m_covers.Array;

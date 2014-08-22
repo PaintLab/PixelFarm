@@ -54,7 +54,7 @@ namespace Mini
         void OnInitialize(int width, int height)
         {
             bitmapBackBuffer.Initialize(width, height, 32);
-            NewGraphics2D().Clear(new RGBA_Floats(1, 1, 1, 1));
+            NewGraphics2D().Clear(new ColorRGBAf(1, 1, 1, 1));
         }
         protected override void OnMouseDown(MouseEventArgs e)
         {

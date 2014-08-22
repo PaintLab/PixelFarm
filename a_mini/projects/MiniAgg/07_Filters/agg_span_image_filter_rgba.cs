@@ -50,7 +50,7 @@ namespace MatterHackers.Agg
         {
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
@@ -75,7 +75,7 @@ namespace MatterHackers.Agg
                 {
                     do
                     {
-                        span[spanIndex++] = *(RGBA_Bytes*)&(pSource[bufferIndex]);
+                        span[spanIndex++] = *(ColorRGBA*)&(pSource[bufferIndex]);
                         bufferIndex += 4;
                     } while (--len != 0);
                 }
@@ -107,7 +107,7 @@ namespace MatterHackers.Agg
         {
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
@@ -126,7 +126,7 @@ namespace MatterHackers.Agg
                 int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
                 int bufferIndex;
                 bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
-                RGBA_Bytes color;
+                ColorRGBA color;
                 color.blue = fg_ptr[bufferIndex++];
                 color.green = fg_ptr[bufferIndex++];
                 color.red = fg_ptr[bufferIndex++];
@@ -226,7 +226,7 @@ namespace MatterHackers.Agg
             }
 #endif
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
@@ -301,7 +301,7 @@ namespace MatterHackers.Agg
                     tempB >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                     tempA >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
 
-                    RGBA_Bytes color;
+                    ColorRGBA color;
                     color.red = (byte)tempR;
                     color.green = (byte)tempG;
                     color.blue = (byte)tempB;
@@ -444,7 +444,7 @@ namespace MatterHackers.Agg
     //====================================span_image_filter_rgba_bilinear_clip
     public class span_image_filter_rgba_bilinear_clip : span_image_filter
     {
-        private RGBA_Bytes m_OutsideSourceColor;
+        private ColorRGBA m_OutsideSourceColor;
 
         const int base_shift = 8;
         const int base_scale = (int)(1 << base_shift);
@@ -460,7 +460,7 @@ namespace MatterHackers.Agg
         public IColor background_color() { return m_OutsideSourceColor; }
         public void background_color(IColor v) { m_OutsideSourceColor = v.GetAsRGBA_Bytes(); }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageBase SourceRenderingBuffer = (ImageBase)base.GetImageBufferAccessor().SourceImage;
             int bufferIndex;
@@ -820,7 +820,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
@@ -1157,7 +1157,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.interpolator();
             spanInterpolator.begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);

@@ -98,11 +98,11 @@ namespace MatterHackers.Agg
     // Used in the rasterizer. Should not be used directly.
     sealed class rasterizer_cells_aa
     {
-        private int m_num_used_cells;
-        private VectorPOD<cell_aa> m_cells;
-        private VectorPOD<cell_aa> m_sorted_cells;
+        int m_num_used_cells;
+        VectorPOD<cell_aa> m_cells;
+        VectorPOD<cell_aa> m_sorted_cells;
 
-        private VectorPOD<sorted_y> m_sorted_y;
+        VectorPOD<sorted_y> m_sorted_y;
 
         cell_aa m_curr_cell;
         cell_aa m_style_cell;
@@ -365,7 +365,7 @@ namespace MatterHackers.Agg
                 int curr_y_start = sortedYData[sortedIndex].start;
                 int curr_y_num = sortedYData[sortedIndex].num;
                 sortedCellsData[curr_y_start + curr_y_num] = cells[i];
-                ++sortedYData[sortedIndex].num;
+                sortedYData[sortedIndex].num++;
             }
 
             // Finally arrange the X-arrays
@@ -392,10 +392,10 @@ namespace MatterHackers.Agg
             return (int)m_sorted_y.data()[y - m_min_y].num;
         }
 
-        public void scanline_cells(int y, out cell_aa[] CellData, out int Offset)
+        public void scanline_cells(int y, out cell_aa[] cellData, out int offset)
         {
-            CellData = m_sorted_cells.data();
-            Offset = m_sorted_y[y - m_min_y].start;
+            cellData = m_sorted_cells.data();
+            offset = m_sorted_y[y - m_min_y].start;
         }
 
         public bool sorted() { return m_sorted; }
@@ -647,21 +647,28 @@ namespace MatterHackers.Agg
         }
 
         public void ResetSpans() { }
-        public void finalize(int nothing) { }
-        public void add_cell(int x, int nothing)
+        public void CloseLine(int nothing) { }
+        public void AddCell(int x, int nothing)
         {
             if (m_x == x) m_hit = true;
         }
-        public void add_span(int x, int len, int nothing)
+        public void AddSpan(int x, int len, int nothing)
         {
-            if (m_x >= x && m_x < x + len) m_hit = true;
+            if (m_x >= x && m_x < x + len)
+            {
+                m_hit = true;
+            }
         }
         public int num_spans() { return 1; }
         public bool hit() { return m_hit; }
 
-
-
-        public void reset(int min_x, int max_x)
+        public ScanlineSpan GetSpan(int index)
+        {
+            //empty scanline
+            return new ScanlineSpan();
+        }
+        public int SpanCount { get { return num_spans(); } }
+        public void ResetSpans(int min_x, int max_x)
         {
             throw new System.NotImplementedException();
         }
@@ -673,9 +680,12 @@ namespace MatterHackers.Agg
         {
             throw new System.NotImplementedException();
         }
-        public int y()
+        public int Y 
         {
-            throw new System.NotImplementedException();
+            get
+            {
+                throw new System.NotImplementedException();
+            }
         }
         public byte[] GetCovers()
         {

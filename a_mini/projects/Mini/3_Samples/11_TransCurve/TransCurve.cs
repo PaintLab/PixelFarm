@@ -125,7 +125,7 @@ namespace MatterHackers.Agg.Sample_TransCurve
         }
         public override void Draw(Graphics2D g)
         {
-            g.Clear(RGBA_Bytes.White);
+            g.Clear(ColorRGBA.White);
             this.m_poly.OnDraw(g);
 
         }

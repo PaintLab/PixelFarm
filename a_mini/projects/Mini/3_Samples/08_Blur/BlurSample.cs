@@ -78,7 +78,7 @@ namespace MatterHackers.Agg.Sample_Blur
             m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
             m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
-            m_shadow_ctrl.line_color(new RGBA_Floats(0, 0.3, 0.5, 0.3));
+            m_shadow_ctrl.line_color(new ColorRGBAf(0, 0.3, 0.5, 0.3));
         }
 
         [DemoConfig]
@@ -149,7 +149,7 @@ namespace MatterHackers.Agg.Sample_Blur
         {
             var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
-            clippingProxy.clear(RGBA_Bytes.White);
+            clippingProxy.clear(ColorRGBA.White);
             m_ras.SetVectorClipBox(0, 0, Width, Height);
 
             Affine move = Affine.NewTranslation(10, 10);
@@ -174,7 +174,7 @@ namespace MatterHackers.Agg.Sample_Blur
             // Render shadow
             m_ras.add_path(shadow_trans);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new RGBA_Floats(0.2, 0.3, 0).GetAsRGBA_Bytes());
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).GetAsRGBA_Bytes());
 
             // Calculate the bounding box and extend it by the blur radius
             RectangleDouble bbox = new RectangleDouble();
@@ -320,7 +320,7 @@ namespace MatterHackers.Agg.Sample_Blur
                 m_ras.add_path(m_path);
             }
 
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new RGBA_Floats(0.6, 0.9, 0.7, 0.8).GetAsRGBA_Bytes());
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.6, 0.9, 0.7, 0.8).GetAsRGBA_Bytes());
 
             graphics2D.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
 

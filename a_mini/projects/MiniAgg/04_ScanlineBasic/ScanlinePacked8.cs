@@ -30,7 +30,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
     //=============================================================scanline_p8
     // 
@@ -41,31 +41,35 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public sealed class ScanlinePacked8 : IScanline
     {
-        private int m_last_x;
-        private int m_y;
-        private byte[] m_covers;
-        private int m_cover_index;
-        private ScanlineSpan[] m_spans;
+        
+        
 
-        private int m_span_index;
+        byte[] m_covers;
+        int m_cover_index;
+        ScanlineSpan[] m_spans;
 
-        private int m_interator_index;
-
-        public ScanlineSpan GetNextScanlineSpan()
-        {
-            m_interator_index++;
-            return m_spans[m_interator_index - 1];
-        }
+        int last_span_index;
+        int last_x;
+        int lineY;
 
         public ScanlinePacked8()
         {
-            m_last_x = 0x7FFFFFF0;
+            last_x = 0x7FFFFFF0;
             m_covers = new byte[1000];
             m_spans = new ScanlineSpan[1000];
         }
 
+        public ScanlineSpan GetSpan(int index)
+        {
+            return m_spans[index];
+        }
+
+        public int SpanCount
+        {
+            get { return last_span_index; }
+        }
         //--------------------------------------------------------------------
-        public void reset(int min_x, int max_x)
+        public void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 3;
             if (max_len > m_spans.Length)
@@ -73,106 +77,71 @@ namespace MatterHackers.Agg
                 m_spans = new ScanlineSpan[max_len];
                 m_covers = new byte[max_len];
             }
-            m_last_x = 0x7FFFFFF0;
+            last_x = 0x7FFFFFF0;
             m_cover_index = 0;
-            m_span_index = 0;
-            m_spans[m_span_index].len = 0;
+            last_span_index = 0;
+            m_spans[last_span_index].len = 0;
         }
 
         //--------------------------------------------------------------------
-        public void add_cell(int x, int cover)
+        public void AddCell(int x, int cover)
         {
             m_covers[m_cover_index] = (byte)cover;
-            if (x == m_last_x + 1 && m_spans[m_span_index].len > 0)
+            if (x == last_x + 1 && m_spans[last_span_index].len > 0)
             {
-                m_spans[m_span_index].len++;
+                m_spans[last_span_index].len++;
             }
             else
             {
-                m_span_index++;
+                last_span_index++;
 
-                m_spans[m_span_index].cover_index = m_cover_index;
-                m_spans[m_span_index].x = (short)x;
-                m_spans[m_span_index].len = 1;
+                m_spans[last_span_index].cover_index = m_cover_index;
+                m_spans[last_span_index].x = (short)x;
+                m_spans[last_span_index].len = 1;
             }
-            m_last_x = x;
+            last_x = x;
             m_cover_index++;
         }
-
-        ////--------------------------------------------------------------------
-        //public void add_cells(int x, int len, byte[] covers, int coversIndex)
-        //{
-
-        //    for (int i = len - 1; i >= 0; --i)
-        //    {
-        //        m_covers[m_cover_index + i] = covers[i];
-        //    }
-        //    if (x == m_last_x + 1 && m_spans[m_span_index].len > 0)
-        //    {
-        //        m_spans[m_span_index].len += (short)len;
-        //    }
-        //    else
-        //    {
-        //        m_span_index++;
-                
-        //        ScanlineSpan span = new ScanlineSpan();
-        //        span.cover_index = m_cover_index;
-        //        span.x = (short)x;
-        //        span.len = (short)len;
-
-        //        m_spans[m_span_index] = span;
-        //    }
-
-        //    m_cover_index += len;
-        //    m_last_x = x + (int)len - 1;
-        //}
-
         //--------------------------------------------------------------------
-        public void add_span(int x, int len, int cover)
+        public void AddSpan(int x, int len, int cover)
         {
-            if (x == m_last_x + 1
-                && m_spans[m_span_index].len < 0
-                && cover == m_spans[m_span_index].cover_index)
-            {
-                m_spans[m_span_index].len -= (short)len;
+            if (x == last_x + 1
+                && m_spans[last_span_index].len < 0
+                && cover == m_spans[last_span_index].cover_index)
+            {   
+                m_spans[last_span_index].len -= (short)len;
             }
             else
             {
                 m_covers[m_cover_index] = (byte)cover;
-                m_span_index++;
-                m_spans[m_span_index].cover_index = m_cover_index++;
-                m_spans[m_span_index].x = (short)x;
-                m_spans[m_span_index].len = (short)(-(int)(len));
+                last_span_index++;
+
+                m_spans[last_span_index].cover_index = m_cover_index++;
+                m_spans[last_span_index].x = (short)x;
+                m_spans[last_span_index].len = (short)(-(int)(len));
             }
-            m_last_x = x + (int)len - 1;
+            last_x = x + len - 1;
         }
 
         //--------------------------------------------------------------------
-        public void finalize(int y)
+        public void CloseLine(int y)
         {
-            m_y = y;
+            lineY = y;
         }
 
         //--------------------------------------------------------------------
         public void ResetSpans()
         {
-            m_last_x = 0x7FFFFFF0;
+            last_x = 0x7FFFFFF0;
             m_cover_index = 0;
-            m_span_index = 0;
-            m_spans[m_span_index].len = 0;
+            last_span_index = 0;
+            m_spans[last_span_index].len = 0;
         }
 
-        public int y() { return m_y; }
-        public int num_spans() { return (int)m_span_index; }
-        public ScanlineSpan begin()
-        {
-            m_interator_index = 1;
-            return GetNextScanlineSpan();
-        }
-
+        public int Y { get { return lineY; } }
         public byte[] GetCovers()
         {
             return m_covers;
         }
-    };
+    }
 }

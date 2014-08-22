@@ -25,11 +25,11 @@ using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_su
 
 namespace MatterHackers.Agg
 {
-    public interface ISpanGenerator
-    {
-        void prepare();
-        void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len);
-    };
+    //public interface ISpanGenerator
+    //{
+    //    void prepare();
+    //    void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len);
+    //};
 
     public abstract class span_image_filter : ISpanGenerator
     {
@@ -61,7 +61,7 @@ namespace MatterHackers.Agg
         }
         public void attach(IImageBufferAccessor v) { imageBufferAccessor = v; }
 
-        public abstract void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len);
+        public abstract void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len);
 
         public IImageBufferAccessor GetImageBufferAccessor() { return imageBufferAccessor; }
         public ImageFilterLookUpTable filter() { return m_filter; }
@@ -89,7 +89,7 @@ namespace MatterHackers.Agg
     public interface ISpanGeneratorFloat
     {
         void prepare();
-        void generate(RGBA_Floats[] span, int spanIndex, int x, int y, int len);
+        void generate(ColorRGBAf[] span, int spanIndex, int x, int y, int len);
     };
 
     

@@ -761,7 +761,7 @@ namespace MatterHackers.Agg.Image
                 {
                     int dest = srcBuffer[i];
                     img.SetPixel(x, y,
-                       new RGBA_Bytes(
+                       new ColorRGBA(
                            (byte)((dest >> 16) & 0xff),
                            (byte)((dest >> 8) & 0xff),
                            (byte)((dest) & 0xff)));
@@ -1216,12 +1216,12 @@ namespace MatterHackers.Agg.Image
 
         public abstract RecursizeBlurCalculator CreateNew();
 
-        public abstract void from_pix(RGBA_Bytes c);
+        public abstract void from_pix(ColorRGBA c);
 
         public abstract void calc(double b1, double b2, double b3, double b4,
             RecursizeBlurCalculator c1, RecursizeBlurCalculator c2, RecursizeBlurCalculator c3, RecursizeBlurCalculator c4);
 
-        public abstract void to_pix(ref RGBA_Bytes c);
+        public abstract void to_pix(ref ColorRGBA c);
     };
 
     //===========================================================recursive_blur
@@ -1229,14 +1229,14 @@ namespace MatterHackers.Agg.Image
     {
         VectorPOD<RecursizeBlurCalculator> m_sum1;
         VectorPOD<RecursizeBlurCalculator> m_sum2;
-        VectorPOD<RGBA_Bytes> m_buf;
+        VectorPOD<ColorRGBA> m_buf;
         RecursizeBlurCalculator m_RecursizeBlurCalculatorFactory;
 
         public RecursiveBlur(RecursizeBlurCalculator recursizeBluerCalculatorFactory)
         {
             m_sum1 = new VectorPOD<RecursizeBlurCalculator>();
             m_sum2 = new VectorPOD<RecursizeBlurCalculator>();
-            m_buf = new VectorPOD<RGBA_Bytes>();
+            m_buf = new VectorPOD<ColorRGBA>();
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
         }
 
@@ -1285,7 +1285,7 @@ namespace MatterHackers.Agg.Image
 
             RecursizeBlurCalculator[] Sum1Array = m_sum1.Array;
             RecursizeBlurCalculator[] Sum2Array = m_sum2.Array;
-            RGBA_Bytes[] BufferArray = m_buf.Array;
+            ColorRGBA[] BufferArray = m_buf.Array;
 
             for (int i = StartCreatingAt; i < w; i++)
             {
@@ -1347,7 +1347,7 @@ namespace MatterHackers.Agg.Image
             return new recursive_blur_calc_rgb();
         }
 
-        public override void from_pix(RGBA_Bytes c)
+        public override void from_pix(ColorRGBA c)
         {
             r = c.red;
             g = c.green;
@@ -1362,7 +1362,7 @@ namespace MatterHackers.Agg.Image
             b = b1 * c1.b + b2 * c2.b + b3 * c3.b + b4 * c4.b;
         }
 
-        public override void to_pix(ref RGBA_Bytes c)
+        public override void to_pix(ref ColorRGBA c)
         {
             c.red = (byte)agg_basics.uround(r);
             c.green = (byte)agg_basics.uround(g);
@@ -1378,7 +1378,7 @@ namespace MatterHackers.Agg.Image
             return new recursive_blur_calc_rgba();
         }
 
-        public override void from_pix(RGBA_Bytes c)
+        public override void from_pix(ColorRGBA c)
         {
             r = c.red;
             g = c.green;
@@ -1395,7 +1395,7 @@ namespace MatterHackers.Agg.Image
             a = b1 * c1.a + b2 * c2.a + b3 * c3.a + b4 * c4.a;
         }
 
-        public override void to_pix(ref RGBA_Bytes c)
+        public override void to_pix(ref ColorRGBA c)
         {
             c.red = (byte)agg_basics.uround(r);
             c.green = (byte)agg_basics.uround(g);
@@ -1412,7 +1412,7 @@ namespace MatterHackers.Agg.Image
             return new recursive_blur_calc_gray();
         }
 
-        public override void from_pix(RGBA_Bytes c)
+        public override void from_pix(ColorRGBA c)
         {
             r = c.red;
         }
@@ -1423,7 +1423,7 @@ namespace MatterHackers.Agg.Image
             r = b1 * c1.r + b2 * c2.r + b3 * c3.r + b4 * c4.r;
         }
 
-        public override void to_pix(ref RGBA_Bytes c)
+        public override void to_pix(ref ColorRGBA c)
         {
             c.red = (byte)agg_basics.uround(r);
         }

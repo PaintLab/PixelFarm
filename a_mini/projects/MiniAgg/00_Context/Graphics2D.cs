@@ -117,7 +117,7 @@ namespace MatterHackers.Agg
         }
 
 
-        public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
+        public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes);
 
         public void Render(IImage imageSource, int x, int y)
         {
@@ -135,7 +135,7 @@ namespace MatterHackers.Agg
             double angleRadians,
             double scaleX, double ScaleY);
 
-        public void Render(IVertexSource vertexSource, RGBA_Bytes[] colorArray, int[] pathIdArray, int numPaths)
+        public void Render(IVertexSource vertexSource, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)
             {
@@ -143,24 +143,24 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void Render(IVertexSource vertexSource, RGBA_Bytes color)
+        public void Render(IVertexSource vertexSource, ColorRGBA color)
         {
             Render(vertexSource, 0, color);
         }
 
-        public void Render(IVertexSource vertexSource, double x, double y, RGBA_Bytes color)
+        public void Render(IVertexSource vertexSource, double x, double y, ColorRGBA color)
         {
             Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)), 0, color);
         }
 
-        public void Render(IVertexSource vertexSource, Vector2 position, RGBA_Bytes color)
+        public void Render(IVertexSource vertexSource, Vector2 position, ColorRGBA color)
         {
             Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)), 0, color);
         }
 
         public abstract void Clear(IColor color);
 
-        public void Line(double x1, double y1, double x2, double y2, RGBA_Bytes color)
+        public void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
             PathStorage m_LinesToDraw = new PathStorage();
             m_LinesToDraw.remove_all();

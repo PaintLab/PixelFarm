@@ -39,15 +39,15 @@ namespace MatterHackers.Agg
         public static void DrawString(this Graphics2D gx, string Text, double x, double y, double pointSize = 12,
             Justification justification = Justification.Left,
             Baseline baseline = Baseline.Text,
-            RGBA_Bytes color = new RGBA_Bytes(),
+            ColorRGBA color = new ColorRGBA(),
             bool drawFromHintedCache = false,
-            RGBA_Bytes backgroundColor = new RGBA_Bytes())
+            ColorRGBA backgroundColor = new ColorRGBA())
         {
 
             TypeFacePrinter stringPrinter = new TypeFacePrinter(Text, pointSize, new Vector2(x, y), justification, baseline);
             if (color.Alpha0To255 == 0)
             {
-                color = RGBA_Bytes.Black;
+                color = ColorRGBA.Black;
             }
 
             if (backgroundColor.Alpha0To255 != 0)
@@ -61,9 +61,9 @@ namespace MatterHackers.Agg
         public static void DrawString2(this Graphics2D gx, string text, double x, double y, double pointSize = 12,
            Justification justification = Justification.Left,
            Baseline baseline = Baseline.Text,
-           RGBA_Bytes color = new RGBA_Bytes(),
+           ColorRGBA color = new ColorRGBA(),
            bool drawFromHintedCache = false,
-           RGBA_Bytes backgroundColor = new RGBA_Bytes())
+           ColorRGBA backgroundColor = new ColorRGBA())
         {
 
             //1. parse text 
@@ -75,7 +75,7 @@ namespace MatterHackers.Agg
 
             if (color.Alpha0To255 == 0)
             {
-                color = RGBA_Bytes.Black;
+                color = ColorRGBA.Black;
             }
 
             if (backgroundColor.Alpha0To255 != 0)
@@ -92,9 +92,9 @@ namespace MatterHackers.Agg
            double pointSize = 12,
            Justification justification = Justification.Left,
            Baseline baseline = Baseline.Text,
-           RGBA_Bytes color = new RGBA_Bytes(),
+           ColorRGBA color = new ColorRGBA(),
            bool drawFromHintedCache = false,
-           RGBA_Bytes backgroundColor = new RGBA_Bytes())
+           ColorRGBA backgroundColor = new ColorRGBA())
         {
 
             var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
@@ -105,7 +105,7 @@ namespace MatterHackers.Agg
 
             if (color.Alpha0To255 == 0)
             {
-                color = RGBA_Bytes.Black;
+                color = ColorRGBA.Black;
             }
 
             if (backgroundColor.Alpha0To255 != 0)
@@ -116,7 +116,7 @@ namespace MatterHackers.Agg
             stringPrinter.DrawFromHintedCache = drawFromHintedCache;
             stringPrinter.Render(gx, color);
         }
-        public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, RGBA_Bytes color, double strokeWidth = 1)
+        public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
         {
             RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
             Stroke rectOutline = new Stroke(rect, strokeWidth);
@@ -124,12 +124,12 @@ namespace MatterHackers.Agg
             gx.Render(rectOutline, color);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectangleDouble rect, RGBA_Bytes color, double strokeWidth = 1)
+        public static void Rectangle(this Graphics2D gx, RectangleDouble rect, ColorRGBA color, double strokeWidth = 1)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color, strokeWidth);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectangleInt rect, RGBA_Bytes color)
+        public static void Rectangle(this Graphics2D gx, RectangleInt rect, ColorRGBA color)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color);
         }
@@ -158,12 +158,12 @@ namespace MatterHackers.Agg
             RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
             gx.Render(rect, fillColor.GetAsRGBA_Bytes());
         }
-        public static void Circle(this Agg.Graphics2D g, double x, double y, double radius, RGBA_Bytes color)
+        public static void Circle(this Agg.Graphics2D g, double x, double y, double radius, ColorRGBA color)
         {
             Ellipse elipse = new Ellipse(x, y, radius, radius);
             g.Render(elipse, color);
         }
-        public static void Circle(this Agg.Graphics2D g, Vector2 origin, double radius, RGBA_Bytes color)
+        public static void Circle(this Agg.Graphics2D g, Vector2 origin, double radius, ColorRGBA color)
         {
             Circle(g, origin.x, origin.y, radius, color);
         }

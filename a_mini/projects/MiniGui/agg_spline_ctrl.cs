@@ -35,11 +35,11 @@ namespace MatterHackers.Agg.UI
     //------------------------------------------------------------------------
     public class spline_ctrl : SimpleVertexSourceWidget
     {
-        RGBA_Bytes m_background_color;
-        RGBA_Bytes m_border_color;
-        RGBA_Bytes m_curve_color;
-        RGBA_Bytes m_inactive_pnt_color;
-        RGBA_Bytes m_active_pnt_color;
+        ColorRGBA m_background_color;
+        ColorRGBA m_border_color;
+        ColorRGBA m_curve_color;
+        ColorRGBA m_inactive_pnt_color;
+        ColorRGBA m_active_pnt_color;
 
         int m_num_pnt;
         double[] m_xp = new double[32];
@@ -76,11 +76,11 @@ namespace MatterHackers.Agg.UI
             m_curve_poly = new Stroke(m_curve_pnt);
             m_ellipse = new Ellipse();
 
-            m_background_color = RGBA_Bytes.Make(1.0, 1.0, 0.9);
-            m_border_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
-            m_curve_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
-            m_inactive_pnt_color = RGBA_Bytes.Make(0.0, 0.0, 0.0);
-            m_active_pnt_color = RGBA_Bytes.Make(1.0, 0.0, 0.0);
+            m_background_color = ColorRGBA.Make(1.0, 1.0, 0.9);
+            m_border_color = ColorRGBA.Make(0.0, 0.0, 0.0);
+            m_curve_color = ColorRGBA.Make(0.0, 0.0, 0.0);
+            m_inactive_pnt_color = ColorRGBA.Make(0.0, 0.0, 0.0);
+            m_active_pnt_color = ColorRGBA.Make(1.0, 0.0, 0.0);
 
             m_num_pnt = (num_pnt);
             m_border_width = (1.0);
@@ -465,11 +465,11 @@ namespace MatterHackers.Agg.UI
         }
 
         // Set colors
-        public void background_color(RGBA_Bytes c) { m_background_color = c; }
-        public void border_color(RGBA_Bytes c) { m_border_color = c; }
-        public void curve_color(RGBA_Bytes c) { m_curve_color = c; }
-        public void inactive_pnt_color(RGBA_Bytes c) { m_inactive_pnt_color = c; }
-        public void active_pnt_color(RGBA_Bytes c) { m_active_pnt_color = c; }
+        public void background_color(ColorRGBA c) { m_background_color = c; }
+        public void border_color(ColorRGBA c) { m_border_color = c; }
+        public void curve_color(ColorRGBA c) { m_curve_color = c; }
+        public void inactive_pnt_color(ColorRGBA c) { m_inactive_pnt_color = c; }
+        public void active_pnt_color(ColorRGBA c) { m_active_pnt_color = c; }
         public override IColor color(int i)
         {
             switch (i)

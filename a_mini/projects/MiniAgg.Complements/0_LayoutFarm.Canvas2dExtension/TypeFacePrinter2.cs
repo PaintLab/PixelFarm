@@ -133,7 +133,7 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, RGBA_Bytes color, IVertexSourceProxy vertexSourceToApply)
+        public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
         {
             vertexSourceToApply.VertexSource = this;
             rewind(0);
@@ -148,7 +148,7 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, RGBA_Bytes color)
+        public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
             rewind(0);
             if (DrawFromHintedCache)
@@ -161,7 +161,7 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        void RenderFromCache(Graphics2D graphics2D, RGBA_Bytes color)
+        void RenderFromCache(Graphics2D graphics2D, ColorRGBA color)
         {
             if (text != null && text.Length > 0)
             {

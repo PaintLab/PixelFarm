@@ -152,8 +152,8 @@ namespace MatterHackers.Agg.UI
         public bool TabStop { get; set; }
         public virtual int TabIndex { get; set; }
 
-        RGBA_Bytes backgroundColor = new RGBA_Bytes();
-        public RGBA_Bytes BackgroundColor
+        ColorRGBA backgroundColor = new ColorRGBA();
+        public ColorRGBA BackgroundColor
         {
             get { return backgroundColor; }
             set
@@ -1704,7 +1704,7 @@ namespace MatterHackers.Agg.UI
                                 if (child.isCurrentlyInvalid)
                                 {
                                     Graphics2D childBackBufferGraphics2D = Graphics2D.CreateFromImage(child.backBuffer);//.NewGraphics2D();
-                                    childBackBufferGraphics2D.Clear(new RGBA_Bytes(0, 0, 0, 0));
+                                    childBackBufferGraphics2D.Clear(new ColorRGBA(0, 0, 0, 0));
                                     Affine transformToBuffer = Affine.NewTranslation(-xOffset + xFraction, -yOffset + yFraction);
                                     childBackBufferGraphics2D.SetTransform(transformToBuffer);
                                     child.OnDrawBackground(childBackBufferGraphics2D);
@@ -1741,14 +1741,14 @@ namespace MatterHackers.Agg.UI
 
             if (DebugShowBounds)
             {
-                graphics2D.Line(LocalBounds.Left, LocalBounds.Bottom, LocalBounds.Right, LocalBounds.Top, RGBA_Bytes.Green);
-                graphics2D.Line(LocalBounds.Left, LocalBounds.Top, LocalBounds.Right, LocalBounds.Bottom, RGBA_Bytes.Green);
-                graphics2D.Rectangle(LocalBounds, RGBA_Bytes.Red);
+                graphics2D.Line(LocalBounds.Left, LocalBounds.Bottom, LocalBounds.Right, LocalBounds.Top, ColorRGBA.Green);
+                graphics2D.Line(LocalBounds.Left, LocalBounds.Top, LocalBounds.Right, LocalBounds.Bottom, ColorRGBA.Green);
+                graphics2D.Rectangle(LocalBounds, ColorRGBA.Red);
             }
             if (showSize)
             {
                 graphics2D.DrawString(string.Format("{4} {0}, {1} : {2}, {3}", (int)MinimumSize.x, (int)MinimumSize.y, (int)LocalBounds.Width, (int)LocalBounds.Height, Name),
-                    Width / 2, Math.Max(Height - 16, Height / 2 - 16 * graphics2D.TransformStackCount), color: RGBA_Bytes.Magenta, justification: Font.Justification.Center);
+                    Width / 2, Math.Max(Height - 16, Height / 2 - 16 * graphics2D.TransformStackCount), color: ColorRGBA.Magenta, justification: Font.Justification.Center);
             }
         }
 

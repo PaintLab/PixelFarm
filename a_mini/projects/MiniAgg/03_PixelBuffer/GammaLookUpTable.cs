@@ -16,13 +16,7 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-
-//#ifndef AGG_GAMMA_LUT_INCLUDED
-//#define AGG_GAMMA_LUT_INCLUDED
-
-//#include <math.h>
-//#include "agg_basics.h"
-
+ 
 using System;
 
 namespace MatterHackers.Agg

@@ -5,16 +5,18 @@ namespace MatterHackers.Agg
  
 
     public interface IScanline
-    {
-        void finalize(int y);
-        void reset(int min_x, int max_x);
-        void ResetSpans();
-        int num_spans();
-        ScanlineSpan begin();
-        ScanlineSpan GetNextScanlineSpan();
-        int y();
+    {   
+        int Y { get; }
+        
+        void AddCell(int x, int cover);
+        void AddSpan(int x, int len, int cover);
+        int SpanCount { get; }
+
         byte[] GetCovers();
-        void add_cell(int x, int cover);
-        void add_span(int x, int len, int cover);
+        ScanlineSpan GetSpan(int index);
+         
+        void CloseLine(int y);
+        void ResetSpans(int min_x, int max_x);
+        void ResetSpans(); 
     }
 }
