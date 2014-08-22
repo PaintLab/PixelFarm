@@ -46,8 +46,9 @@
     <Compile Include="agg_bounding_rect.cs" />
     <Compile Include="BorderDouble.cs" />
     <Compile Include="Colors\agg_gamma_functions.cs" />
+    <Compile Include="Colors\ClipProxyImage.cs" />
+    <Compile Include="Colors\ProxyImage.cs" />
     <Compile Include="Image\agg_alpha_mask_u8.cs" />
-    <Compile Include="Filter\agg_image_filters.cs" />
     <Compile Include="VertexSource\agg_span_gradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />

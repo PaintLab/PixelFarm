@@ -325,7 +325,7 @@ namespace MatterHackers.Agg.Image
         }
 
 
-        static unsafe int LowLevelReadTGABitsFromBuffer(ImageBuffer imageToReadTo, byte[] wholeFileBuffer, int DestBitDepth)
+        static unsafe int LowLevelReadTGABitsFromBuffer(ImageBase imageToReadTo, byte[] wholeFileBuffer, int DestBitDepth)
         {
             throw new NotSupportedException();
 
@@ -745,18 +745,18 @@ namespace MatterHackers.Agg.Image
              */
         }
 
-        static public bool SaveImageData(String fileNameToSaveTo, ImageBuffer image)
+        static public bool SaveImageData(String fileNameToSaveTo, ImageBase image)
         {
             return Save(image, fileNameToSaveTo);
         }
 
-        static public bool Save(ImageBuffer image, String fileNameToSaveTo)
+        static public bool Save(ImageBase image, String fileNameToSaveTo)
         {
             Stream file = File.Open(fileNameToSaveTo, FileMode.Create);
             return Save(image, file);
         }
 
-        static public bool Save(ImageBuffer image, Stream streamToSaveImageDataTo)
+        static public bool Save(ImageBase image, Stream streamToSaveImageDataTo)
         {
             STargaHeader TargaHeader;
 
@@ -901,17 +901,17 @@ namespace MatterHackers.Agg.Image
         }
          */
 
-        static public int ReadBitsFromBuffer(ImageBuffer image, byte[] WorkPtr, int destBitDepth)
+        static public int ReadBitsFromBuffer(ImageBase image, byte[] WorkPtr, int destBitDepth)
         {  
             return LowLevelReadTGABitsFromBuffer(image, WorkPtr, destBitDepth);
         }
 
-        public static bool LoadImageData(string fileName, ImageBuffer image)
+        public static bool LoadImageData(string fileName, ImageBase image)
         {
             return LoadImageData(image, fileName);
         }
 
-        static public bool LoadImageData(ImageBuffer image, string fileName)
+        static public bool LoadImageData(ImageBase image, string fileName)
         {
             if (System.IO.File.Exists(fileName))
             {
@@ -922,7 +922,7 @@ namespace MatterHackers.Agg.Image
             return false;
         }
 
-        static public bool LoadImageData(ImageBuffer image, Stream streamToLoadImageDataFrom, int destBitDepth)
+        static public bool LoadImageData(ImageBase image, Stream streamToLoadImageDataFrom, int destBitDepth)
         {
             byte[] ImageData = new byte[streamToLoadImageDataFrom.Length];
             streamToLoadImageDataFrom.Read(ImageData, 0, (int)streamToLoadImageDataFrom.Length);

@@ -30,6 +30,7 @@ using System;
 
 using MatterHackers.Agg.Image;
 using MatterHackers.VectorMath;
+using MatterHackers.Agg.Lines;
 
 using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
 using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filter_scale_e;
@@ -49,9 +50,9 @@ namespace MatterHackers.Agg
         {
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBuffer SourceRenderingBuffer = (ImageBuffer)GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -74,7 +75,7 @@ namespace MatterHackers.Agg
                 {
                     do
                     {
-                        span[spanIndex++] = *(RGBA_Bytes*)&(pSource[bufferIndex]);
+                        span[spanIndex++] = *(ColorRGBA*)&(pSource[bufferIndex]);
                         bufferIndex += 4;
                     } while (--len != 0);
                 }
@@ -106,9 +107,9 @@ namespace MatterHackers.Agg
         {
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBuffer SourceRenderingBuffer = (ImageBuffer)GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -125,7 +126,7 @@ namespace MatterHackers.Agg
                 int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
                 int bufferIndex;
                 bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
-                RGBA_Bytes color;
+                ColorRGBA color;
                 color.blue = fg_ptr[bufferIndex++];
                 color.green = fg_ptr[bufferIndex++];
                 color.red = fg_ptr[bufferIndex++];
@@ -225,14 +226,14 @@ namespace MatterHackers.Agg
             }
 #endif
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
-            ImageBuffer SourceRenderingBuffer = (ImageBuffer)base.GetImageBufferAccessor().SourceImage;
+            ImageBase srcImg = (ImageBase)base.GetImageBufferAccessor().SourceImage;
             ISpanInterpolator spanInterpolator = base.interpolator();
-            int bufferIndex;
-            byte[] fg_ptr = SourceRenderingBuffer.GetBuffer(out bufferIndex);
+            int bufferIndex = 0;
+            byte[] fg_ptr = srcImg.GetBuffer();
 
             unchecked
             {
@@ -263,44 +264,44 @@ namespace MatterHackers.Agg
                     x_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
                     y_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
 
-                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+                    bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
 
                     weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) *
                              ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
-                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                     bufferIndex += 4;
 
                     weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
-                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
 
                     y_lr++;
-                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+                    bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
 
                     weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
-                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                     bufferIndex += 4;
 
                     weight = (x_hr * y_hr);
-                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
 
                     tempR >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                     tempG >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                     tempB >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                     tempA >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
 
-                    RGBA_Bytes color;
+                    ColorRGBA color;
                     color.red = (byte)tempR;
                     color.green = (byte)tempG;
                     color.blue = (byte)tempB;
@@ -443,31 +444,31 @@ namespace MatterHackers.Agg
     //====================================span_image_filter_rgba_bilinear_clip
     public class span_image_filter_rgba_bilinear_clip : span_image_filter
     {
-        private RGBA_Bytes m_OutsideSourceColor;
+        private ColorRGBA m_OutsideSourceColor;
 
         const int base_shift = 8;
         const int base_scale = (int)(1 << base_shift);
         const int base_mask = base_scale - 1;
 
         public span_image_filter_rgba_bilinear_clip(IImageBufferAccessor src,
-            IColorType back_color, ISpanInterpolator inter)
+            IColor back_color, ISpanInterpolator inter)
             : base(src, inter, null)
         {
             m_OutsideSourceColor = back_color.GetAsRGBA_Bytes();
         }
 
-        public IColorType background_color() { return m_OutsideSourceColor; }
-        public void background_color(IColorType v) { m_OutsideSourceColor = v.GetAsRGBA_Bytes(); }
+        public IColor background_color() { return m_OutsideSourceColor; }
+        public void background_color(IColor v) { m_OutsideSourceColor = v.GetAsRGBA_Bytes(); }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBuffer SourceRenderingBuffer = (ImageBuffer)base.GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)base.GetImageBufferAccessor().SourceImage;
             int bufferIndex;
             byte[] fg_ptr;
 
-            if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.span_interpolator_linear)
-                && ((MatterHackers.Agg.span_interpolator_linear)base.m_interpolator).transformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
-            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.span_interpolator_linear)base.m_interpolator).transformer()).is_identity())
+            if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.Lines.span_interpolator_linear)
+                && ((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
+            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer()).is_identity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe
@@ -547,20 +548,20 @@ namespace MatterHackers.Agg
                                  ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
                         if (weight > base_mask)
                         {
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
 
                         weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
                         if (weight > base_mask)
                         {
                             bufferIndex += distanceBetweenPixelsInclusive;
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
 
                         weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
@@ -568,19 +569,19 @@ namespace MatterHackers.Agg
                         {
                             ++y_lr;
                             fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
                         weight = (x_hr * y_hr);
                         if (weight > base_mask)
                         {
                             bufferIndex += distanceBetweenPixelsInclusive;
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
                         accumulatedColor[0] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                         accumulatedColor[1] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
@@ -656,7 +657,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        private void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, IImageBuffer SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
+        private void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, IImage SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
         {
             byte[] fg_ptr;
             unchecked
@@ -666,10 +667,10 @@ namespace MatterHackers.Agg
                     int bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
                     fg_ptr = SourceRenderingBuffer.GetBuffer();
 
-                    accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                 }
                 else
                 {
@@ -819,7 +820,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
@@ -870,10 +871,10 @@ namespace MatterHackers.Agg
                                      (int)image_filter_scale_e.image_filter_scale / 2) >>
                                      (int)image_filter_scale_e.image_filter_shift;
 
-                        f_b += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                        f_g += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                        f_r += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                        f_a += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                        f_b += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                        f_g += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                        f_r += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                        f_a += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
 
                         if (--x_count == 0) break;
                         x_hr += (int)image_subpixel_scale_e.image_subpixel_scale;
@@ -1156,7 +1157,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.interpolator();
             spanInterpolator.begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
@@ -1214,10 +1215,10 @@ namespace MatterHackers.Agg
                         int weight = (weight_y * weight_array[x_hr] +
                                      (int)image_filter_scale_e.image_filter_scale / 2) >>
                                      downscale_shift;
-                        fg[0] += fg_ptr[sourceIndex + ImageBuffer.OrderR] * weight;
-                        fg[1] += fg_ptr[sourceIndex + ImageBuffer.OrderG] * weight;
-                        fg[2] += fg_ptr[sourceIndex + ImageBuffer.OrderB] * weight;
-                        fg[3] += fg_ptr[sourceIndex + ImageBuffer.OrderA] * weight;
+                        fg[0] += fg_ptr[sourceIndex + ImageBase.OrderR] * weight;
+                        fg[1] += fg_ptr[sourceIndex + ImageBase.OrderG] * weight;
+                        fg[2] += fg_ptr[sourceIndex + ImageBase.OrderB] * weight;
+                        fg[3] += fg_ptr[sourceIndex + ImageBase.OrderA] * weight;
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;

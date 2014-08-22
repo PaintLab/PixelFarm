@@ -110,7 +110,7 @@ namespace Mini
                 var lionShape2 = new MatterHackers.Agg.LionShape();
 
                 MatterHackers.Agg.VertexSource.PathStorage path;
-                MatterHackers.Agg.RGBA_Bytes[] colors;
+                MatterHackers.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
 
                 //1. path and command
@@ -166,36 +166,18 @@ namespace Mini
             bmp.Save("d:\\WImageTest\\test002_2.png");
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {   
-             
-            byte[] buffer1 = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
-            int[] srcBuffer = new int[2];
+        private void cmdTestRasterImage_Click(object sender, EventArgs e)
+        {
+            //test raster image
 
-            Buffer.BlockCopy(buffer1, 0, srcBuffer, 0, buffer1.Length);
-
-            int s01 = srcBuffer[0];
-            int s3 = (s01 >> 24) & 0xff;
-            int s2 = (s01 >> 16) & 0xff;
-            int s1 = (s01 >> 8) & 0xff;
-            int s0 = (s01 >> 0) & 0xff;
+            //Bitmap lion = new Bitmap("d:\\WImageTest\\lion.png");
+            FormRasterImage formRasterImage = new FormRasterImage();
+            formRasterImage.Show();
 
 
-
-
-            //byte[] buffer1 = img.GetBuffer();
-            ////copy from stream of byte buffer to int array            
-            //int[] srcBuffer = new int[buffer1.Length / 4];
-            //Buffer.BlockCopy(buffer1, 0, srcBuffer, 0, buffer1.Length);
-            ////-----------------------  
-
-            //int[] destBuffer = new int[srcBuffer.Length];
-            //StackBlurARGB.FastBlur32ARGB(srcBuffer, destBuffer, img.Width, img.Height, radius);
-
-            ////Buffer.BlockCopy(srcBuffer, 0, destBuffer, 0, buffer1.Length);
-
-            //Buffer.BlockCopy(destBuffer, 0, buffer1, 0, buffer1.Length);
         }
+
+
 
 
 

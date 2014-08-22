@@ -39,7 +39,7 @@ namespace MatterHackers.Agg
 
     public sealed class AlphaMaskByteUnclipped : IAlphaMask
     {
-        IImageBuffer m_rbuf;
+        IImage m_rbuf;
         uint m_Step;
         uint m_Offset;
 
@@ -47,14 +47,14 @@ namespace MatterHackers.Agg
         //public static readonly int cover_none = 0;
         //public static readonly int cover_full = 255;
 
-        public AlphaMaskByteUnclipped(IImageBuffer rbuf, uint Step, uint Offset)
+        public AlphaMaskByteUnclipped(IImage rbuf, uint Step, uint Offset)
         {
             m_Step = Step;
             m_Offset = Offset;
             m_rbuf = rbuf;
         }
 
-        public void attach(IImageBuffer rbuf) { m_rbuf = rbuf; }
+        public void attach(IImage rbuf) { m_rbuf = rbuf; }
 
         //--------------------------------------------------------------------
         public byte pixel(int x, int y)
@@ -145,7 +145,7 @@ namespace MatterHackers.Agg
 
     public sealed class AlphaMaskByteClipped : IAlphaMask
     {
-        IImageBuffer m_rbuf;
+        IImage m_rbuf;
         uint m_Step;
         uint m_Offset;
 
@@ -153,14 +153,14 @@ namespace MatterHackers.Agg
         //public static readonly int cover_none = 0;
         //public static readonly int cover_full = 255;
 
-        public AlphaMaskByteClipped(IImageBuffer rbuf, uint step, uint offset)
+        public AlphaMaskByteClipped(IImage rbuf, uint step, uint offset)
         {
             m_Step = step;
             m_Offset = offset;
             m_rbuf = rbuf;
         }
 
-        public void attach(IImageBuffer rbuf) { m_rbuf = rbuf; }
+        public void attach(IImage rbuf) { m_rbuf = rbuf; }
 
 
         //--------------------------------------------------------------------
@@ -347,21 +347,10 @@ namespace MatterHackers.Agg
                         *c_cover_index = (byte)((*c_cover_index * (*c_mask_index) + 255) >> 8);
 
                         c_cover_index++;
-                        c_mask_index++;
-                        //covers[coversIndex] = (byte)(((covers[coversIndex]) * mask[maskIndex] + 255) >> 8);
-                        //coversIndex++;
-                        //maskIndex++;
+                        c_mask_index++; 
                     }
                     while (--count != 0);
-                }
-
-                //do
-                //{
-                //    covers[coversIndex] = (byte)(((covers[coversIndex]) * mask[maskIndex] + 255) >> 8);
-                //    coversIndex++;
-                //    maskIndex++;
-                //}
-                //while (--count != 0);
+                } 
             }
         }
 

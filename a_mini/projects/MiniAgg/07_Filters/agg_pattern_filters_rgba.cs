@@ -20,11 +20,7 @@ using MatterHackers.Agg.Image;
 
 namespace MatterHackers.Agg
 {
-    public interface IPatternFilter
-    {
-        int dilation();
-        void pixel_high_res(ImageBuffer sourceImage, RGBA_Bytes[] destBuffer, int destBufferOffset, int x, int y);
-    }
+   
 
      
 
@@ -32,12 +28,12 @@ namespace MatterHackers.Agg
     {
         public int dilation() { return 1; }
 
-        public void pixel_low_res(RGBA_Bytes[][] buf, RGBA_Bytes[] p, int offset, int x, int y)
+        public void pixel_low_res(ColorRGBA[][] buf, ColorRGBA[] p, int offset, int x, int y)
         {
             p[offset] = buf[y][x];
         }
 
-        public void pixel_high_res(ImageBuffer sourceImage, RGBA_Bytes[] destBuffer, int destBufferOffset, int x, int y)
+        public void pixel_high_res(ImageBase sourceImage, ColorRGBA[] destBuffer, int destBufferOffset, int x, int y)
         {
             int r, g, b, a;
             r = g = b = a = LineAABasics.line_subpixel_scale * LineAABasics.line_subpixel_scale / 2;
@@ -53,34 +49,34 @@ namespace MatterHackers.Agg
 
             weight = (LineAABasics.line_subpixel_scale - x) *
                      (LineAABasics.line_subpixel_scale - y);
-            r += weight * ptr[sourceOffset + ImageBuffer.OrderR];
-            g += weight * ptr[sourceOffset + ImageBuffer.OrderG];
-            b += weight * ptr[sourceOffset + ImageBuffer.OrderB];
-            a += weight * ptr[sourceOffset + ImageBuffer.OrderA];
+            r += weight * ptr[sourceOffset + ImageBase.OrderR];
+            g += weight * ptr[sourceOffset + ImageBase.OrderG];
+            b += weight * ptr[sourceOffset + ImageBase.OrderB];
+            a += weight * ptr[sourceOffset + ImageBase.OrderA];
 
             sourceOffset += sourceImage.GetBytesBetweenPixelsInclusive();
 
             weight = x * (LineAABasics.line_subpixel_scale - y);
-            r += weight * ptr[sourceOffset + ImageBuffer.OrderR];
-            g += weight * ptr[sourceOffset + ImageBuffer.OrderG];
-            b += weight * ptr[sourceOffset + ImageBuffer.OrderB];
-            a += weight * ptr[sourceOffset + ImageBuffer.OrderA];
+            r += weight * ptr[sourceOffset + ImageBase.OrderR];
+            g += weight * ptr[sourceOffset + ImageBase.OrderG];
+            b += weight * ptr[sourceOffset + ImageBase.OrderB];
+            a += weight * ptr[sourceOffset + ImageBase.OrderA];
 
             ptr = sourceImage.GetPixelPointerXY(x_lr, y_lr + 1, out sourceOffset);
 
             weight = (LineAABasics.line_subpixel_scale - x) * y;
-            r += weight * ptr[sourceOffset + ImageBuffer.OrderR];
-            g += weight * ptr[sourceOffset + ImageBuffer.OrderG];
-            b += weight * ptr[sourceOffset + ImageBuffer.OrderB];
-            a += weight * ptr[sourceOffset + ImageBuffer.OrderA];
+            r += weight * ptr[sourceOffset + ImageBase.OrderR];
+            g += weight * ptr[sourceOffset + ImageBase.OrderG];
+            b += weight * ptr[sourceOffset + ImageBase.OrderB];
+            a += weight * ptr[sourceOffset + ImageBase.OrderA];
 
             sourceOffset += sourceImage.GetBytesBetweenPixelsInclusive();
 
             weight = x * y;
-            r += weight * ptr[sourceOffset + ImageBuffer.OrderR];
-            g += weight * ptr[sourceOffset + ImageBuffer.OrderG];
-            b += weight * ptr[sourceOffset + ImageBuffer.OrderB];
-            a += weight * ptr[sourceOffset + ImageBuffer.OrderA];
+            r += weight * ptr[sourceOffset + ImageBase.OrderR];
+            g += weight * ptr[sourceOffset + ImageBase.OrderG];
+            b += weight * ptr[sourceOffset + ImageBase.OrderB];
+            a += weight * ptr[sourceOffset + ImageBase.OrderA];
 
             destBuffer[destBufferOffset].red = (byte)(r >> LineAABasics.line_subpixel_shift * 2);
             destBuffer[destBufferOffset].green = (byte)(g >> LineAABasics.line_subpixel_shift * 2);

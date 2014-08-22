@@ -43,7 +43,7 @@ namespace Mini
 {
     internal class WindowsFormsBitmapBackBuffer
     {
-        internal ImageBuffer backingImageBufferByte;
+        internal ActualImage backingImageBufferByte;
         //internal ImageBufferFloat backingImageBufferFloat;
         internal Bitmap windowsBitmap;
 
@@ -127,7 +127,7 @@ namespace Mini
                 {
                     case 24:
                         windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                        backingImageBufferByte = new ImageBuffer(width, height, 24, new BlenderBGR());
+                        backingImageBufferByte = new ActualImage(width, height, 24, new BlenderBGR());
                         break;
 
                     case 32:
@@ -135,7 +135,7 @@ namespace Mini
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //32bppPArgb 
-                        backingImageBufferByte = new ImageBuffer(width, height, 32, new BlenderBGRA());
+                        backingImageBufferByte = new ActualImage(width, height, 32, new BlenderBGRA());
                         break;
 
                     case 128:

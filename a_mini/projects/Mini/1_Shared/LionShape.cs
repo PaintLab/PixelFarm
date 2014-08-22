@@ -156,7 +156,7 @@ namespace MatterHackers.Agg
         "M 157,342 L 156,349 L 150,356 L 157,353 L 163,346 L 162,342 L 157,342 L 157,342 L 157,342\n" +
         "M 99,265 L 96,284 L 92,299 L 73,339 L 73,333 L 87,300 L 99,265 L 99,265 L 99,265\n";
 
-        static public int parse_lion(PathStorage path, RGBA_Bytes[] colors, int[] path_idx)
+        static public int parse_lion(PathStorage path, ColorRGBA[] colors, int[] path_idx)
         {
             // Parse the lion and then detect its bounding
             // box and arrange polygons orientations (make all polygons
@@ -174,7 +174,7 @@ namespace MatterHackers.Agg
                     // New color. Every new color creates new path in the path object.
                     path.ClosePolygon();
 
-                    colors[npaths] = RGBA_Bytes.rgb8_packed((int)newColor);
+                    colors[npaths] = ColorRGBA.rgb8_packed((int)newColor);
                     path_idx[npaths] = path.start_new_path();
                     npaths++;
                 }
@@ -215,7 +215,7 @@ namespace MatterHackers.Agg
     public class LionShape
     {
         PathStorage path = new PathStorage();
-        RGBA_Bytes[] colors = new RGBA_Bytes[100];
+        ColorRGBA[] colors = new ColorRGBA[100];
         int[] pathIndex = new int[100];
         int numPaths = 0;
 
@@ -252,7 +252,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public RGBA_Bytes[] Colors
+        public ColorRGBA[] Colors
         {
             get
             {
@@ -289,7 +289,7 @@ namespace MatterHackers.Agg
         public static void UnsafeDirectSetData(LionShape lion,
             int numPaths,
             PathStorage pathStore,
-            RGBA_Bytes[] colors,
+            ColorRGBA[] colors,
             int[] pathIndice)
         {
             lion.path = pathStore;
