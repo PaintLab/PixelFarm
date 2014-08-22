@@ -424,8 +424,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         }
         void make_arrows(PathStorage ps)
         {
-            ps.remove_all();
-
+            ps.Clear();
             ps.MoveTo(1330.599999999999909, 1282.399999999999864);
             ps.LineTo(1377.400000000000091, 1282.399999999999864);
             ps.LineTo(1361.799999999999955, 1298.000000000000000);

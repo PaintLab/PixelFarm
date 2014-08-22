@@ -1278,16 +1278,16 @@ namespace MatterHackers.Agg.Image
             int wm = (int)w - 1;
             int x, y;
 
-            int StartCreatingAt = (int)m_sum1.size();
-            m_sum1.Resize(w);
-            m_sum2.Resize(w);
+            int startCreatingAt = (int)m_sum1.Count;
+            m_sum1.AdjustSize(w);
+            m_sum2.AdjustSize(w);
             m_buf.Allocate(w);
 
             RecursizeBlurCalculator[] Sum1Array = m_sum1.Array;
             RecursizeBlurCalculator[] Sum2Array = m_sum2.Array;
             ColorRGBA[] BufferArray = m_buf.Array;
 
-            for (int i = StartCreatingAt; i < w; i++)
+            for (int i = startCreatingAt; i < w; i++)
             {
                 Sum1Array[i] = m_RecursizeBlurCalculatorFactory.CreateNew();
                 Sum2Array[i] = m_RecursizeBlurCalculatorFactory.CreateNew();

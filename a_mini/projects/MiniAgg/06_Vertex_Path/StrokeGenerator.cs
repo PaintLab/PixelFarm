@@ -78,7 +78,7 @@ namespace MatterHackers.Agg.VertexSource
         // Vertex Generator Interface
         public void RemoveAll()
         {
-            m_src_vertices.remove_all();
+            m_src_vertices.Clear();
             m_closed = 0;
             m_status = StrokeMath.Status.Init;
         }
@@ -94,7 +94,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 if (ShapePath.is_vertex(cmd))
                 {
-                    m_src_vertices.add(new VertexDistance(x, y));
+                    m_src_vertices.AddItem(new VertexDistance(x, y));
                 }
                 else
                 {
@@ -110,7 +110,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 m_src_vertices.close(m_closed != 0);
                 ShapePath.shorten_path(m_src_vertices, m_shorten, m_closed);
-                if (m_src_vertices.size() < 3) m_closed = 0;
+                if (m_src_vertices.Count < 3) m_closed = 0;
             }
             m_status = StrokeMath.Status.Ready;
             m_src_vertex = 0;
@@ -129,7 +129,8 @@ namespace MatterHackers.Agg.VertexSource
                         goto case StrokeMath.Status.Ready;
 
                     case StrokeMath.Status.Ready:
-                        if (m_src_vertices.size() < 2 + (m_closed != 0 ? 1 : 0))
+
+                        if (m_src_vertices.Count < 2 + (m_closed != 0 ? 1 : 0))
                         {
                             cmd = ShapePath.FlagsAndCommand.CommandStop;
                             break;
@@ -151,9 +152,9 @@ namespace MatterHackers.Agg.VertexSource
 
                     case StrokeMath.Status.Cap2:
                         m_stroker.calc_cap(m_out_vertices,
-                            m_src_vertices[m_src_vertices.size() - 1],
-                            m_src_vertices[m_src_vertices.size() - 2],
-                            m_src_vertices[m_src_vertices.size() - 2].dist);
+                            m_src_vertices[m_src_vertices.Count - 1],
+                            m_src_vertices[m_src_vertices.Count - 2],
+                            m_src_vertices[m_src_vertices.Count - 2].dist);
                         m_prev_status = StrokeMath.Status.Outline2;
                         m_status = StrokeMath.Status.OutVertices;
                         m_out_vertex = 0;
@@ -162,7 +163,7 @@ namespace MatterHackers.Agg.VertexSource
                     case StrokeMath.Status.Outline1:
                         if (m_closed != 0)
                         {
-                            if (m_src_vertex >= m_src_vertices.size())
+                            if (m_src_vertex >= m_src_vertices.Count)
                             {
                                 m_prev_status = StrokeMath.Status.CloseFirst;
                                 m_status = StrokeMath.Status.EndPoly1;
@@ -171,7 +172,7 @@ namespace MatterHackers.Agg.VertexSource
                         }
                         else
                         {
-                            if (m_src_vertex >= m_src_vertices.size() - 1)
+                            if (m_src_vertex >= m_src_vertices.Count - 1)
                             {
                                 m_status = StrokeMath.Status.Cap2;
                                 break;
@@ -216,7 +217,7 @@ namespace MatterHackers.Agg.VertexSource
                         break;
 
                     case StrokeMath.Status.OutVertices:
-                        if (m_out_vertex >= m_out_vertices.size())
+                        if (m_out_vertex >= m_out_vertices.Count)
                         {
                             m_status = m_prev_status;
                         }

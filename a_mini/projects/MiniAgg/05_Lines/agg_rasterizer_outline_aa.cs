@@ -45,58 +45,58 @@ namespace MatterHackers.Agg.Lines
 
     public class line_aa_vertex_sequence : VectorArrayList<line_aa_vertex>
     {
-        public override void add(line_aa_vertex val)
+        public override void AddItem(line_aa_vertex val)
         {
-            if (base.size() > 1)
+            if (base.Count > 1)
             {
-                if (!Array[base.size() - 2].Compare(Array[base.size() - 1]))
+                if (!Array[base.Count - 2].Compare(Array[base.Count - 1]))
                 {
                     base.RemoveLast();
                 }
             }
-            base.add(val);
+            base.AddItem(val);
         }
 
         public void modify_last(line_aa_vertex val)
         {
             base.RemoveLast();
-            add(val);
+            AddItem(val);
         }
 
         public void close(bool closed)
         {
-            while (base.size() > 1)
+            while (base.Count > 1)
             {
-                if (Array[base.size() - 2].Compare(Array[base.size() - 1])) break;
-                line_aa_vertex t = this[base.size() - 1];
+                if (Array[base.Count - 2].Compare(Array[base.Count - 1])) break;
+                line_aa_vertex t = this[base.Count - 1];
                 base.RemoveLast();
                 modify_last(t);
             }
 
             if (closed)
             {
-                while (base.size() > 1)
+                while (base.Count > 1)
                 {
-                    if (Array[base.size() - 1].Compare(Array[0])) break;
+                    if (Array[base.Count - 1].Compare(Array[0])) break;
                     base.RemoveLast();
                 }
             }
         }
 
-        internal line_aa_vertex prev(int idx)
-        {
-            return this[(idx + currentSize - 1) % currentSize];
-        }
+        //internal line_aa_vertex prev(int idx)
+        //{
+        //    return this[(idx + Count - 1) % Count];
+        //}
 
-        internal line_aa_vertex curr(int idx)
-        {
-            return this[idx];
-        }
+        //internal line_aa_vertex curr(int idx)
+        //{
+        //    return this[idx];
+        //}
 
-        internal line_aa_vertex next(int idx)
-        {
-            return this[(idx + 1) % currentSize];
-        }
+        //internal line_aa_vertex next(int idx)
+        //{
+        //    return this[(idx + 1) % Count];
+        //}
     }
 
     //=======================================================rasterizer_outline_aa
@@ -167,7 +167,7 @@ namespace MatterHackers.Agg.Lines
                 dv.lnext = m_src_vertices[dv.idx].len;
 
                 ++dv.idx;
-                if (dv.idx >= m_src_vertices.size()) dv.idx = 0;
+                if (dv.idx >= m_src_vertices.Count) dv.idx = 0;
 
                 dv.x2 = m_src_vertices[dv.idx].x;
                 dv.y2 = m_src_vertices[dv.idx].y;
@@ -238,7 +238,7 @@ namespace MatterHackers.Agg.Lines
 
         public void line_to(int x, int y)
         {
-            m_src_vertices.add(new line_aa_vertex(x, y));
+            m_src_vertices.AddItem(new line_aa_vertex(x, y));
         }
 
         public void move_to_d(double x, double y)
@@ -264,11 +264,11 @@ namespace MatterHackers.Agg.Lines
 
             if (close_polygon)
             {
-                if (m_src_vertices.size() >= 3)
+                if (m_src_vertices.Count >= 3)
                 {
                     dv.idx = 2;
 
-                    v = m_src_vertices[m_src_vertices.size() - 1];
+                    v = m_src_vertices[m_src_vertices.Count - 1];
                     x1 = v.x;
                     y1 = v.y;
                     lprev = v.len;
@@ -322,12 +322,12 @@ namespace MatterHackers.Agg.Lines
                     {
                         LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
                     }
-                    draw(ref dv, 0, m_src_vertices.size());
+                    draw(ref dv, 0, m_src_vertices.Count);
                 }
             }
             else
             {
-                switch (m_src_vertices.size())
+                switch (m_src_vertices.Count)
                 {
                     case 0:
                     case 1:
@@ -491,7 +491,7 @@ namespace MatterHackers.Agg.Lines
                                 LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
                             }
 
-                            draw(ref dv, 1, m_src_vertices.size() - 2);
+                            draw(ref dv, 1, m_src_vertices.Count - 2);
 
                             if ((dv.flags & 1) == 0)
                             {
@@ -527,7 +527,8 @@ namespace MatterHackers.Agg.Lines
                         break;
                 }
             }
-            m_src_vertices.remove_all();
+
+            m_src_vertices.Clear();
         }
 
         public void add_vertex(double x, double y, ShapePath.FlagsAndCommand cmd)
@@ -566,7 +567,7 @@ namespace MatterHackers.Agg.Lines
 
             ShapePath.FlagsAndCommand cmd;
             vs.rewind(path_id);
-            
+
             //int index = 0;
             //int start = 851;
             //int num = 5;

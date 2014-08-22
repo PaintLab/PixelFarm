@@ -312,12 +312,12 @@ namespace MatterHackers.Agg.VertexSource
             init(x1, y1, cx, cy, x2, y2);
         }
 
-        public void reset() { m_points.remove_all(); m_count = 0; }
+        public void reset() { m_points.Clear(); m_count = 0; }
         public void init(double x1, double y1,
                   double cx, double cy,
                   double x2, double y2)
         {
-            m_points.remove_all();
+            m_points.Clear();
             m_distance_tolerance_square = 0.5 / m_approximation_scale;
             m_distance_tolerance_square *= m_distance_tolerance_square;
             bezier(x1, y1, cx, cy, x2, y2);
@@ -339,7 +339,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public IEnumerable<VertexData> Vertices()
         {
-            int j = m_points.size();
+            int j = m_points.Count;
 
             if (j > 0)
             {
@@ -370,7 +370,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public ShapePath.FlagsAndCommand vertex(out double x, out double y)
         {
-            if (m_count >= m_points.size())
+            if (m_count >= m_points.Count)
             {
                 x = 0;
                 y = 0;
@@ -387,9 +387,9 @@ namespace MatterHackers.Agg.VertexSource
                     double x2, double y2,
                     double x3, double y3)
         {
-            m_points.add(new Vector2(x1, y1));
+            m_points.AddItem(new Vector2(x1, y1));
             recursive_bezier(x1, y1, x2, y2, x3, y3, 0);
-            m_points.add(new Vector2(x3, y3));
+            m_points.AddItem(new Vector2(x3, y3));
         }
 
         private void recursive_bezier(double x1, double y1,
@@ -427,7 +427,7 @@ namespace MatterHackers.Agg.VertexSource
                     //----------------------
                     if (m_angle_tolerance < Curves.curve_angle_tolerance_epsilon)
                     {
-                        m_points.add(new Vector2(x123, y123));
+                        m_points.AddItem(new Vector2(x123, y123));
                         return;
                     }
 
@@ -440,7 +440,7 @@ namespace MatterHackers.Agg.VertexSource
                     {
                         // Finally we can stop the recursion
                         //----------------------
-                        m_points.add(new Vector2(x123, y123));
+                        m_points.AddItem(new Vector2(x123, y123));
                         return;
                     }
                 }
@@ -469,7 +469,7 @@ namespace MatterHackers.Agg.VertexSource
                 }
                 if (d < m_distance_tolerance_square)
                 {
-                    m_points.add(new Vector2(x2, y2));
+                    m_points.AddItem(new Vector2(x2, y2));
                     return;
                 }
             }
@@ -749,13 +749,13 @@ namespace MatterHackers.Agg.VertexSource
             init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
         }
 
-        public void reset() { m_points.remove_all(); m_count = 0; }
+        public void reset() { m_points.Clear(); m_count = 0; }
         public void init(double x1, double y1,
                   double x2, double y2,
                   double x3, double y3,
                   double x4, double y4)
         {
-            m_points.remove_all();
+            m_points.Clear();
             m_distance_tolerance_square = 0.5 / m_approximation_scale;
             m_distance_tolerance_square *= m_distance_tolerance_square;
             bezier(x1, y1, x2, y2, x3, y3, x4, y4);
@@ -799,7 +799,7 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
 
             vertexData.command = FlagsAndCommand.CommandLineTo;
-            for (int i = 1; i < m_points.size(); i++)
+            for (int i = 1; i < m_points.Count; i++)
             {
                 vertexData.position = m_points[i];
                 yield return vertexData;
@@ -817,7 +817,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public ShapePath.FlagsAndCommand vertex(out double x, out double y)
         {
-            if (m_count >= m_points.size())
+            if (m_count >= m_points.Count)
             {
                 x = 0;
                 y = 0;
@@ -834,9 +834,9 @@ namespace MatterHackers.Agg.VertexSource
                     double x3, double y3,
                     double x4, double y4)
         {
-            m_points.add(new Vector2(x1, y1));
+            m_points.AddItem(new Vector2(x1, y1));
             recursive_bezier(x1, y1, x2, y2, x3, y3, x4, y4, 0);
-            m_points.add(new Vector2(x4, y4));
+            m_points.AddItem(new Vector2(x4, y4));
         }
 
 
@@ -924,7 +924,7 @@ namespace MatterHackers.Agg.VertexSource
                     {
                         if (d2 < m_distance_tolerance_square)
                         {
-                            m_points.add(new Vector2(x2, y2));
+                            m_points.AddItem(new Vector2(x2, y2));
                             return;
                         }
                     }
@@ -932,7 +932,7 @@ namespace MatterHackers.Agg.VertexSource
                     {
                         if (d3 < m_distance_tolerance_square)
                         {
-                            m_points.add(new Vector2(x3, y3));
+                            m_points.AddItem(new Vector2(x3, y3));
                             return;
                         }
                     }
@@ -945,7 +945,7 @@ namespace MatterHackers.Agg.VertexSource
                     {
                         if (m_angle_tolerance < Curves.curve_angle_tolerance_epsilon)
                         {
-                            m_points.add(new Vector2(x23, y23));
+                            m_points.AddItem(new Vector2(x23, y23));
                             return;
                         }
 
@@ -956,8 +956,8 @@ namespace MatterHackers.Agg.VertexSource
 
                         if (da1 < m_angle_tolerance)
                         {
-                            m_points.add(new Vector2(x2, y2));
-                            m_points.add(new Vector2(x3, y3));
+                            m_points.AddItem(new Vector2(x2, y2));
+                            m_points.AddItem(new Vector2(x3, y3));
                             return;
                         }
 
@@ -965,7 +965,7 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             if (da1 > m_cusp_limit)
                             {
-                                m_points.add(new Vector2(x3, y3));
+                                m_points.AddItem(new Vector2(x3, y3));
                                 return;
                             }
                         }
@@ -979,7 +979,7 @@ namespace MatterHackers.Agg.VertexSource
                     {
                         if (m_angle_tolerance < Curves.curve_angle_tolerance_epsilon)
                         {
-                            m_points.add(new Vector2(x23, y23));
+                            m_points.AddItem(new Vector2(x23, y23));
                             return;
                         }
 
@@ -990,8 +990,8 @@ namespace MatterHackers.Agg.VertexSource
 
                         if (da1 < m_angle_tolerance)
                         {
-                            m_points.add(new Vector2(x2, y2));
-                            m_points.add(new Vector2(x3, y3));
+                            m_points.AddItem(new Vector2(x2, y2));
+                            m_points.AddItem(new Vector2(x3, y3));
                             return;
                         }
 
@@ -999,7 +999,7 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             if (da1 > m_cusp_limit)
                             {
-                                m_points.add(new Vector2(x2, y2));
+                                m_points.AddItem(new Vector2(x2, y2));
                                 return;
                             }
                         }
@@ -1016,7 +1016,7 @@ namespace MatterHackers.Agg.VertexSource
                         //----------------------
                         if (m_angle_tolerance < Curves.curve_angle_tolerance_epsilon)
                         {
-                            m_points.add(new Vector2(x23, y23));
+                            m_points.AddItem(new Vector2(x23, y23));
                             return;
                         }
 
@@ -1032,7 +1032,7 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             // Finally we can stop the recursion
                             //----------------------
-                            m_points.add(new Vector2(x23, y23));
+                            m_points.AddItem(new Vector2(x23, y23));
                             return;
                         }
 
@@ -1040,13 +1040,13 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             if (da1 > m_cusp_limit)
                             {
-                                m_points.add(new Vector2(x2, y2));
+                                m_points.AddItem(new Vector2(x2, y2));
                                 return;
                             }
 
                             if (da2 > m_cusp_limit)
                             {
-                                m_points.add(new Vector2(x3, y3));
+                                m_points.AddItem(new Vector2(x3, y3));
                                 return;
                             }
                         }

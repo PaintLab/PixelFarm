@@ -107,7 +107,7 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public sealed class ScanlineUnpacked8 : IScanline
     {
-        int minX;         
+        int minX;
 
         ArrayList<byte> m_covers;
         ArrayList<ScanlineSpan> m_spans;
@@ -125,7 +125,7 @@ namespace MatterHackers.Agg
             m_covers = new ArrayList<byte>(1000);
             m_spans = new ArrayList<ScanlineSpan>(1000);
         }
-       
+
         public ScanlineSpan GetSpan(int index)
         {
             return m_spans.Array[index];
@@ -138,7 +138,7 @@ namespace MatterHackers.Agg
         public void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 2;
-            if (max_len > m_spans.Size())
+            if (max_len > m_spans.Count)
             {
                 m_spans.Resize(max_len);
                 m_covers.Resize(max_len);
@@ -209,7 +209,7 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public int Y { get { return lineY; } }
 
-         
+
         public byte[] GetCovers()
         {
             return m_covers.Array;

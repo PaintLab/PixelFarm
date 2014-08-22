@@ -586,7 +586,7 @@ namespace MatterHackers.Agg.Lines
     //====================================================line_interpolator_aa0
     public class line_interpolator_aa0 : line_interpolator_aa_base
     {
-        distance_interpolator1 m_di; 
+        distance_interpolator1 m_di;
         //---------------------------------------------------------------------
         public line_interpolator_aa0(OutlineRenderer ren, line_parameters lp)
             : base(ren, lp)
@@ -1274,7 +1274,7 @@ namespace MatterHackers.Agg.Lines
             set(w, s);
         }
 
-        public int profile_size() { return m_profile.Size(); }
+        public int profile_size() { return m_profile.Count; }
         public int subpixel_width() { return m_subpixel_width; }
 
         //---------------------------------------------------------------------
@@ -1291,7 +1291,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_subpixel_width = (int)AggBasics.uround(w * subpixel_scale);
             int size = m_subpixel_width + subpixel_scale * 6;
-            if (size > m_profile.Size())
+            if (size > m_profile.Count)
             {
                 m_profile.Resize(size);
             }
@@ -1725,37 +1725,37 @@ namespace MatterHackers.Agg.Lines
             line_interpolator_aa1 li = new line_interpolator_aa1(this, lp, sx, sy);
             if (li.vertical())
             {
-                while (li.step_ver());
+                while (li.step_ver()) ;
             }
             else
             {
-                while (li.step_hor());
+                while (li.step_hor()) ;
             }
         }
 
         public override void line1(line_parameters lp, int sx, int sy)
         {
-            if(doClipping)
+            if (doClipping)
             {
                 int x1 = lp.x1;
                 int y1 = lp.y1;
                 int x2 = lp.x2;
                 int y2 = lp.y2;
                 int flags = ClipLiangBarsky.clip_line_segment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
-                if((flags & 4) == 0)
+                if ((flags & 4) == 0)
                 {
-                    if(flags != 0)
+                    if (flags != 0)
                     {
                         line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
                                            AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
-                        if(((int)flags & 1) != 0)
+                        if (((int)flags & 1) != 0)
                         {
-                            sx = x1 + (y2 - y1); 
+                            sx = x1 + (y2 - y1);
                             sy = y1 - (x2 - x1);
                         }
                         else
                         {
-                            while(Math.Abs(sx - lp.x1) + Math.Abs(sy - lp.y1) > lp2.len)
+                            while (Math.Abs(sx - lp.x1) + Math.Abs(sy - lp.y1) > lp2.len)
                             {
                                 sx = (lp.x1 + sx) >> 1;
                                 sy = (lp.y1 + sy) >> 1;
@@ -1790,11 +1790,11 @@ namespace MatterHackers.Agg.Lines
             line_interpolator_aa2 li = new line_interpolator_aa2(this, lp, ex, ey);
             if (li.vertical())
             {
-                while (li.step_ver());
+                while (li.step_ver()) ;
             }
             else
             {
-                while (li.step_hor());
+                while (li.step_hor()) ;
             }
         }
 
@@ -1870,40 +1870,40 @@ namespace MatterHackers.Agg.Lines
         public override void line3(line_parameters lp,
                    int sx, int sy, int ex, int ey)
         {
-            if(doClipping)
+            if (doClipping)
             {
                 int x1 = lp.x1;
                 int y1 = lp.y1;
                 int x2 = lp.x2;
                 int y2 = lp.y2;
                 int flags = ClipLiangBarsky.clip_line_segment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
-                if((flags & 4) == 0)
+                if ((flags & 4) == 0)
                 {
-                    if(flags != 0)
+                    if (flags != 0)
                     {
                         line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
                             AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
-                        if((flags & 1) != 0)
+                        if ((flags & 1) != 0)
                         {
-                            sx = x1 + (y2 - y1); 
+                            sx = x1 + (y2 - y1);
                             sy = y1 - (x2 - x1);
                         }
                         else
                         {
-                            while(Math.Abs(sx - lp.x1) + Math.Abs(sy - lp.y1) > lp2.len)
+                            while (Math.Abs(sx - lp.x1) + Math.Abs(sy - lp.y1) > lp2.len)
                             {
                                 sx = (lp.x1 + sx) >> 1;
                                 sy = (lp.y1 + sy) >> 1;
                             }
                         }
-                        if((flags & 2) != 0)
+                        if ((flags & 2) != 0)
                         {
-                            ex = x2 + (y2 - y1); 
+                            ex = x2 + (y2 - y1);
                             ey = y2 - (x2 - x1);
                         }
                         else
                         {
-                            while(Math.Abs(ex - lp.x2) + Math.Abs(ey - lp.y2) > lp2.len)
+                            while (Math.Abs(ex - lp.x2) + Math.Abs(ey - lp.y2) > lp2.len)
                             {
                                 ex = (lp.x2 + ex) >> 1;
                                 ey = (lp.y2 + ey) >> 1;

@@ -181,7 +181,7 @@ namespace MatterHackers.Agg
             m_diameter = AggBasics.uceil(radius) * 2;
             m_start = -(int)(m_diameter / 2 - 1);
             int size = (int)m_diameter << (int)image_subpixel_scale_e.image_subpixel_shift;
-            if (size > m_weight_array.Size())
+            if (size > m_weight_array.Count)
             {
                 m_weight_array.Resize(size);
             }

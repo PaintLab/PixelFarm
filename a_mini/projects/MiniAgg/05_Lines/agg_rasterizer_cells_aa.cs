@@ -330,7 +330,7 @@ namespace MatterHackers.Agg
 
             if (m_num_used_cells == 0) return;
 
-            // Allocate the array of cell pointers
+            // Allocate the array of cell pointers 
             m_sorted_cells.Allocate(m_num_used_cells);
 
             // Allocate and zero the Y array
@@ -350,7 +350,7 @@ namespace MatterHackers.Agg
 
             // Convert the Y-histogram into the array of starting indexes
             int start = 0;
-            int sortedYSize = m_sorted_y.size();
+            int sortedYSize = m_sorted_y.Count;
             for (int i = 0; i < sortedYSize; i++)
             {
                 int v = sortedYData[i].start;
@@ -389,12 +389,12 @@ namespace MatterHackers.Agg
 
         public int scanline_num_cells(int y)
         {
-            return (int)m_sorted_y.data()[y - m_min_y].num;
+            return (int)m_sorted_y.GetArray()[y - m_min_y].num;
         }
 
         public void scanline_cells(int y, out cell_aa[] cellData, out int offset)
         {
-            cellData = m_sorted_cells.data();
+            cellData = m_sorted_cells.GetArray();
             offset = m_sorted_y[y - m_min_y].start;
         }
 
@@ -423,7 +423,7 @@ namespace MatterHackers.Agg
                 }
 
                 allocate_cells_if_required();
-                m_cells.data()[m_num_used_cells].Set(m_curr_cell);
+                m_cells.GetArray()[m_num_used_cells].Set(m_curr_cell);
                 m_num_used_cells++;
 
 #if false
@@ -444,7 +444,7 @@ namespace MatterHackers.Agg
 
         private void allocate_cells_if_required()
         {
-            if (m_cells == null || (m_num_used_cells + 1) >= m_cells.Capacity())
+            if (m_cells == null || (m_num_used_cells + 1) >= m_cells.AllocatedSize)
             {
                 if (m_num_used_cells >= (int)cell_block_scale_e.cell_block_limit)
                 {

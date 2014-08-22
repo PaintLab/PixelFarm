@@ -44,7 +44,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public int Size() { return m_size; }
+        public int Count { get { return m_size; } }
 
         public T this[int index]
         {
@@ -66,78 +66,29 @@ namespace MatterHackers.Agg
             }
         }
 
-        private T[] m_array;
-        private int m_size;
-    } 
+        T[] m_array;
+        int m_size;
+    }
 
     //--------------------------------------------------------------pod_vector
     // A simple class template to store Plain Old Data, a vector
     // of a fixed size. The data is contiguous in memory
     //------------------------------------------------------------------------
     public class VectorArrayList<T>
-    {   
-        protected int currentSize;
-        private T[] internalArray = new T[0];
+    {
+        int currentSize;
+        T[] internalArray = new T[0];
 
-        public int Count
-        {
-            get { return currentSize; }
-        }
-
-        public IEnumerable<T> DataIterator()
-        {
-            for (int index = 0; index < currentSize; index++)
-            {
-                // Yield each day of the week. 
-                yield return internalArray[index];
-            }
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            for (int index = 0; index < currentSize; index++)
-            {
-                // Yield each day of the week. 
-                yield return internalArray[index];
-            }
-        }
-
-        public int AllocatedSize
-        {
-            get
-            {
-                return internalArray.Length;
-            }
-        }
 
         public VectorArrayList()
         {
         }
 
         public VectorArrayList(int cap)
-            : this(cap, 0)
         {
+            Allocate(cap, 0);
         }
 
-        public VectorArrayList(int capacity, int extraTail)
-        {
-            Allocate(capacity, extraTail);
-        }
-
-        //public virtual void Remove(int indexToRemove)
-        //{
-        //    if (indexToRemove >= Length)
-        //    {
-        //        throw new Exception("requested remove past end of array");
-        //    }
-
-        //    for (int i = indexToRemove; i < Length - 1; i++)
-        //    {
-        //        internalArray[i] = internalArray[i + 1];
-        //    }
-
-        //    currentSize--;
-        //}
 
         public virtual void RemoveLast()
         {
@@ -146,14 +97,6 @@ namespace MatterHackers.Agg
                 currentSize--;
             }
         }
-
-        // Copying
-        public VectorArrayList(VectorArrayList<T> vectorToCopy)
-        {
-            currentSize = vectorToCopy.currentSize;
-            internalArray = (T[])vectorToCopy.internalArray.Clone();
-        }
-
         public void CopyFrom(VectorArrayList<T> vetorToCopy)
         {
             Allocate(vetorToCopy.currentSize);
@@ -162,14 +105,29 @@ namespace MatterHackers.Agg
                 vetorToCopy.internalArray.CopyTo(internalArray, 0);
             }
         }
-
-        // Set new capacity. All data is lost, size is set to zero.
-        public void Capacity(int newCapacity)
+        public int Count
         {
-            Capacity(newCapacity, 0);
+            get { return currentSize; }
         }
 
-        public void Capacity(int newCapacity, int extraTail)
+        internal int AllocatedSize
+        {
+            get
+            {
+                return internalArray.Length;
+            }
+        }
+
+        public void Clear()
+        {
+            currentSize = 0;
+        }
+        // Set new capacity. All data is lost, size is set to zero.
+        public void Clear(int newCapacity)
+        {
+            Clear(newCapacity, 0);
+        }
+        public void Clear(int newCapacity, int extraTail)
         {
             currentSize = 0;
             if (newCapacity > AllocatedSize)
@@ -183,7 +141,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public int Capacity() { return AllocatedSize; }
+
 
         // Allocate n elements. All data is lost, 
         // but elements can be accessed in range 0...size-1. 
@@ -194,12 +152,16 @@ namespace MatterHackers.Agg
 
         public void Allocate(int size, int extraTail)
         {
-            Capacity(size, extraTail);
+            Clear(size, extraTail);
             currentSize = size;
         }
 
-        // Resize keeping the content.
-        public void Resize(int newSize)
+
+        /// <summary>
+        ///  Resize keeping the content
+        /// </summary>
+        /// <param name="newSize"></param>
+        public void AdjustSize(int newSize)
         {
             if (newSize > currentSize)
             {
@@ -219,41 +181,37 @@ namespace MatterHackers.Agg
             }
         }
 
-#pragma warning disable 649
-        static T zeroed_object;
-#pragma warning restore 649
+
+        static T zeroed_object = default(T);
+
 
         public void zero()
         {
-            int NumItems = internalArray.Length;
-            for (int i = 0; i < NumItems; i++)
+
+            for (int i = internalArray.Length - 1; i >= 0; --i)
             {
                 internalArray[i] = zeroed_object;
             }
         }
 
-        public void Add(T v)
-        {
-            add(v);
-        }
 
-        public virtual void add(T v)
+
+        public virtual void AddItem(T v)
         {
             if (internalArray.Length < (currentSize + 1))
             {
                 if (currentSize < 100000)
                 {
-                    Resize(currentSize + (currentSize / 2) + 16);
+                    AdjustSize(currentSize + (currentSize / 2) + 16);
                 }
                 else
                 {
-                    Resize(currentSize + currentSize / 4);
+                    AdjustSize(currentSize + currentSize / 4);
                 }
             }
             internalArray[currentSize++] = v;
-        } 
-        public void inc_size(int size) { currentSize += size; }
-        public int size() { return currentSize; }
+        }
+
 
         public T this[int i]
         {
@@ -271,14 +229,9 @@ namespace MatterHackers.Agg
             }
         }
 
-        public T at(int i) { return internalArray[i]; }
-        public T value_at(int i) { return internalArray[i]; }
 
-        public T[] data() { return internalArray; }
+        public T[] GetArray() { return internalArray; }
 
-        public void remove_all() { currentSize = 0; }
-        public void clear() { currentSize = 0; }
-        public void cut_at(int num) { if (num < currentSize) currentSize = num; }
 
         public int Length
         {
@@ -288,11 +241,8 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void Clear()
-        {
-            currentSize = 0;
-        }
-         
+
+
     }
 
     //----------------------------------------------------------range_adaptor
@@ -309,7 +259,7 @@ namespace MatterHackers.Agg
             m_size = (size);
         }
 
-        public int size() { return m_size; }
+
         public int this[int i]
         {
             get
@@ -322,12 +272,15 @@ namespace MatterHackers.Agg
                 m_array.Array[m_start + i] = value;
             }
         }
-        public int at(int i) { return m_array.Array[m_start + i]; }
-        public int value_at(int i) { return m_array.Array[m_start + i]; }
+
+        public int Count
+        {
+            get { return this.m_size; }
+        }
     }
 
     public class Queue<T>
-    {   
+    {
         T[] itemArray;
         int size;
         int head;

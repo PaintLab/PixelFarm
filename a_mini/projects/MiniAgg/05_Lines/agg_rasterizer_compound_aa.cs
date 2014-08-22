@@ -260,7 +260,7 @@ namespace MatterHackers.Agg
                 int styleOffset = 0;
 
                 m_cells.Allocate((int)num_cells * 2, 256); // Each cell can have two styles
-                m_ast.Capacity(num_styles, 64);
+                m_ast.Clear(num_styles, 64);
                 m_asm.Allocate((num_styles + 7) >> 3, 8);
                 m_asm.zero();
 
@@ -269,7 +269,7 @@ namespace MatterHackers.Agg
                     // Pre-add zero (for no-fill style, that is, -1).
                     // We need that to ensure that the "-1 style" would go first.
                     m_asm.Array[0] |= 1;
-                    m_ast.add(0);
+                    m_ast.AddItem(0);
                     m_styles.Array[styleOffset].start_cell = 0;
                     m_styles.Array[styleOffset].num_cells = 0;
                     m_styles.Array[styleOffset].last_x = -0x7FFFFFFF;
@@ -287,7 +287,7 @@ namespace MatterHackers.Agg
                     int i;
                     int start_cell = 0;
                     style_info[] stylesArray = m_styles.Array;
-                    for (i = 0; i < m_ast.size(); i++)
+                    for (i = 0; i < m_ast.Count; i++)
                     {
                         int IndexToModify = (int)m_ast[i];
                         int v = stylesArray[IndexToModify].start_cell;
@@ -348,14 +348,14 @@ namespace MatterHackers.Agg
                         }
                     }
                 }
-                if (m_ast.size() > 1) break;
+                if (m_ast.Count > 1) break;
                 ++m_scan_y;
             }
             ++m_scan_y;
 
             if (m_layer_order != LayerOrder.Unsorted)
             {
-                VectorArrayListRangeAdaptor ra = new VectorArrayListRangeAdaptor(m_ast, 1, m_ast.size() - 1);
+                VectorArrayListRangeAdaptor ra = new VectorArrayListRangeAdaptor(m_ast, 1, m_ast.Count - 1);
                 if (m_layer_order == LayerOrder.Direct)
                 {
 
@@ -371,7 +371,7 @@ namespace MatterHackers.Agg
                 }
             }
 
-            return m_ast.size() - 1;
+            return m_ast.Count - 1;
         }
 
         // Returns style ID depending of the existing style index
@@ -429,9 +429,9 @@ namespace MatterHackers.Agg
         {
             if (style >= 0)
             {
-                while ((int)m_master_alpha.size() <= style)
+                while ((int)m_master_alpha.Count <= style)
                 {
-                    m_master_alpha.add(aa_mask);
+                    m_master_alpha.AddItem(aa_mask);
                 }
                 m_master_alpha.Array[style] = AggBasics.uround(alpha * aa_mask);
             }
@@ -561,7 +561,7 @@ namespace MatterHackers.Agg
             style_info[] stylesArray = m_styles.Array;
             if ((m_asm[nbyte] & mask) == 0)
             {
-                m_ast.add((int)style_id);
+                m_ast.AddItem((int)style_id);
                 m_asm.Array[nbyte] |= (byte)mask;
                 stylesArray[style_id].start_cell = 0;
                 stylesArray[style_id].num_cells = 0;
@@ -572,9 +572,9 @@ namespace MatterHackers.Agg
 
         private void allocate_master_alpha()
         {
-            while ((int)m_master_alpha.size() <= m_max_style)
+            while ((int)m_master_alpha.Count <= m_max_style)
             {
-                m_master_alpha.add(aa_mask);
+                m_master_alpha.AddItem(aa_mask);
             }
         }
 
@@ -582,7 +582,7 @@ namespace MatterHackers.Agg
         {
             public static void Sort(VectorArrayListRangeAdaptor dataToSort)
             {
-                Sort(dataToSort, 0, (int)(dataToSort.size() - 1));
+                Sort(dataToSort, 0, (int)(dataToSort.Count - 1));
             }
 
             public static void Sort(VectorArrayListRangeAdaptor dataToSort, int beg, int end)

@@ -203,7 +203,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             Stroke pg = new Stroke(ps);
             pg.width(2);
 
-            ps.remove_all();
+            ps.Clear();
             ps.MoveTo(m_x[0], m_y[0]);
             ps.LineTo(m_x[1], m_y[1]);
             ps.LineTo(m_x[2], m_y[2]);

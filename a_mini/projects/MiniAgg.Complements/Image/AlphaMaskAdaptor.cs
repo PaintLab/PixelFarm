@@ -29,12 +29,12 @@ namespace MatterHackers.Agg.Image
 
         void realloc_span(int len)
         {
-            if (len > m_spans.Size())
+            if (len > m_spans.Count)
             {
                 m_spans.Resize(len + (int)span_extra_tail_e.span_extra_tail);
             }
         }
-         
+
 
         void init_span(int len, byte cover)
         {

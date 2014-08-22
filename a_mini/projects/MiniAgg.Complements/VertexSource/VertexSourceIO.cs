@@ -10,7 +10,7 @@ namespace MatterHackers.Agg.VertexSource
     {
         public static void Load(PathStorage vertexSource, string pathAndFileName)
         {
-            vertexSource.remove_all();
+            vertexSource.Clear();
             string[] allLines = File.ReadAllLines(pathAndFileName);
             foreach (string line in allLines)
             {
