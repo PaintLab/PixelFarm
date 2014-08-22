@@ -5,7 +5,7 @@ using System;
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 
 using Mini;
 namespace MatterHackers.Agg.Sample_TransCurve
@@ -125,7 +125,7 @@ namespace MatterHackers.Agg.Sample_TransCurve
         }
         public override void Draw(Graphics2D g)
         {
-            g.Clear(RGBA_Bytes.White);
+            g.Clear(ColorRGBA.White);
             this.m_poly.OnDraw(g);
 
         }

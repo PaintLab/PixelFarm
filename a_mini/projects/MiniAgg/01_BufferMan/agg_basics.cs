@@ -24,11 +24,6 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
 {
-    public enum filling_rule_e
-    {
-        fill_non_zero,
-        fill_even_odd
-    }
 
 
     static public class agg_basics
@@ -51,42 +46,6 @@ namespace MatterHackers.Agg
             //#endif
         }
 
-        //public static int ComputeHash(byte[] data)
-        //{
-        //    unchecked
-        //    {
-        //        const int p = 16777619;
-        //        int hash = (int)2166136261;
-
-        //        for (int i = 0; i < data.Length; i++)
-        //        {
-        //            hash = (hash ^ data[i]) * p;
-        //        }
-
-        //        hash += hash << 13;
-        //        hash ^= hash >> 7;
-        //        hash += hash << 3;
-        //        hash ^= hash >> 17;
-        //        hash += hash << 5;
-        //        return hash;
-        //    }
-        //}
-
-        //public static void memcpy(int[] dest, int destIndex, int[] source, int sourceIndex, int count)
-        //{
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        dest[destIndex + i] = source[sourceIndex + i];
-        //    }
-        //}
-
-        //public static void memcpy(float[] dest, int destIndex, float[] source, int sourceIndex, int count)
-        //{
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        dest[destIndex++] = source[sourceIndex++];
-        //    }
-        //}
 
         public static void memmove(byte[] dest, int destIndex, Byte[] source, int sourceIndex, int Count)
         {
@@ -108,182 +67,15 @@ namespace MatterHackers.Agg
 
         }
 
-        //public static void memmove(int[] dest, int destIndex, int[] source, int sourceIndex, int Count)
-        //{
-        //    if (source != dest || destIndex < sourceIndex)
-        //    {
-        //        memcpy(dest, destIndex, source, sourceIndex, Count);
-        //    }
-        //    else
-        //    {
-        //        throw new Exception("this code needs to be tested");
-        //        /*
-        //        for (int i = Count-1; i > 0; i--)
-        //        {
-        //            dest[destIndex + i] = source[sourceIndex + i];
-        //        }
-        //         */
-        //    }
-        //}
-
-        //public static void memmove(float[] dest, int destIndex, float[] source, int sourceIndex, int Count)
-        //{
-        //    if (source != dest || destIndex < sourceIndex)
-        //    {
-        //        memcpy(dest, destIndex, source, sourceIndex, Count);
-        //    }
-        //    else
-        //    {
-        //        throw new Exception("this code needs to be tested");
-        //        /*
-        //        for (int i = Count-1; i > 0; i--)
-        //        {
-        //            dest[destIndex + i] = source[sourceIndex + i];
-        //        }
-        //         */
-        //    }
-
-        //}
-
-        //public static void memset(int[] dest, int destIndex, int Val, int Count)
-        //{
-        //    for (int i = 0; i < Count; i++)
-        //    {
-        //        dest[destIndex + i] = Val;
-        //    }
-        //}
 
         public static void memset(byte[] dest, int destIndex, byte byteValue, int count)
         {
             NativeBufferMethods.MemSet(dest, destIndex, byteValue, count);
-            //unsafe
-            //{
-            //    fixed (byte* head = &dest[0])
-            //    {
-            //        byte* cur = head + destIndex;
-            //        switch (count)
-            //        {
-            //            case 0:
-            //                {
-            //                } break;
-            //            case 1:
-            //                {
-            //                    *cur = byteValue;
-            //                } break;
-            //            case 2:
-            //                {
-            //                    *cur = byteValue;
-            //                    *(cur + 1) = byteValue;
-            //                    //dest[destIndex] = byteValue;
-            //                    //dest[destIndex + 1] = byteValue;
-            //                } break;
-            //            default:
-            //                {
-            //                    //loop
-            //                    if ((count % 2) == 0)
-            //                    {
-            //                        //even number
-            //                        while (count > 0)
-            //                        {
-            //                            *cur = byteValue;
-            //                            cur--;
-            //                            count--;
-            //                            //---------------
-            //                            *cur = byteValue;
-            //                            cur--;
-            //                            count--;
-            //                        }
-
-            //                    }
-            //                    else
-            //                    {
-
-            //                        //odd number
-            //                        *cur = byteValue;
-            //                        cur--;
-            //                        count--;
-            //                        while (count > 0)
-            //                        {
-            //                            *cur = byteValue;
-            //                            cur--;
-            //                            count--;
-            //                            //-------------
-            //                            *cur = byteValue;
-            //                            cur--;
-            //                            count--;
-            //                        }
-            //                    }
-            //                } break;
-            //        }
-            //    }
-            //}
-
         }
-
-        //public static void MemClear(int[] dest, int destIndex, int Count)
-        //{
-        //    for (int i = 0; i < Count; i++)
-        //    {
-        //        dest[destIndex + i] = 0;
-        //    }
-        //}
-
         public static void MemClear(Byte[] dest, int destIndex, int count)
         {
             NativeBufferMethods.MemSet(dest, destIndex, 0, count);
 
-            //unsafe
-            //{
-            //    fixed (byte* dest_pos = &dest[destIndex])
-            //    {
-            //        byte* cur = dest_pos;
-            //        for (int i = count - 1; i >= 0; --i)
-            //        {
-            //            *(cur + 1) = 0;
-            //            //dest[destIndex + i] = 0;
-            //        }
-            //    }
-            //}
-            //for (int i = count - 1; i >= 0; --i)
-            //{
-            //    dest[destIndex + i] = 0;
-            //}
-
-            //for (int i = 0; i < count; i++)
-            //{
-            //    dest[destIndex + i] = 0;
-            //}
-            /*
-            // dword align to dest
-            while (((int)pDest & 3) != 0
-                && Count > 0)
-            {
-                *pDest++ = 0;
-                Count--;
-            }
-
-            int NumLongs = Count / 4;
-
-            while (NumLongs-- > 0)
-            {
-                *((int*)pDest) = 0;
-
-                pDest += 4;
-            }
-
-            switch (Count & 3)
-            {
-                case 3:
-                    pDest[2] = 0;
-                    goto case 2;
-                case 2:
-                    pDest[1] = 0;
-                    goto case 1;
-                case 1:
-                    pDest[0] = 0;
-                    break;
-            }
-             */
         }
 
         public static bool is_equal_eps(double v1, double v2, double epsilon)

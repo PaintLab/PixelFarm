@@ -11,7 +11,7 @@ namespace MatterHackers.Agg.Image
 {
     public class ImageSequence
     {
-        double secondsPerFrame = 1.0/30.0;
+        double secondsPerFrame = 1.0 / 30.0;
         public double FramePerSecond
         {
             get { return 1 / secondsPerFrame; }
@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Image
             get
             {
                 RectangleInt bounds = new RectangleInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
-                foreach (ImageBuffer frame in imageList)
+                foreach (ImageBase frame in imageList)
                 {
                     bounds.ExpandToInclude(frame.GetBoundingRect());
                 }
@@ -48,7 +48,7 @@ namespace MatterHackers.Agg.Image
             get
             {
                 RectangleInt bounds = new RectangleInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
-                foreach (ImageBuffer frame in imageList)
+                foreach (ImageBase frame in imageList)
                 {
                     bounds.ExpandToInclude(frame.GetBoundingRect());
                 }
@@ -59,7 +59,7 @@ namespace MatterHackers.Agg.Image
 
         bool looping = false;
 
-        List<ImageBuffer> imageList = new List<ImageBuffer>();
+        List<ImageBase> imageList = new List<ImageBase>();
 
         public ImageSequence()
         {
@@ -67,7 +67,7 @@ namespace MatterHackers.Agg.Image
 
         public void SetAlpha(byte value)
         {
-            foreach (ImageBuffer image in imageList)
+            foreach (ImageBase image in imageList)
             {
                 image.SetAlpha(value);
             }
@@ -75,7 +75,7 @@ namespace MatterHackers.Agg.Image
 
         public void CenterOriginOffset()
         {
-            foreach (ImageBuffer image in imageList)
+            foreach (ImageBase image in imageList)
             {
                 image.OriginOffset = new Vector2(image.Width / 2, image.Height / 2);
             }
@@ -83,37 +83,38 @@ namespace MatterHackers.Agg.Image
 
         public void CropToVisible()
         {
-            foreach (ImageBuffer image in imageList)
-            {
-                image.CropToVisible();
-            }
+            //foreach (BufferImage image in imageList)
+            //{
+            //    image.CropToVisible();
+            //}
         }
 
         public static ImageSequence LoadFromTgas(String pathName)
         {
+            throw new NotSupportedException();
             // First we load up the Data In the Serialization file.
-            String gameDataObjectXMLPath = Path.Combine(pathName, "ImageSequence");
-            ImageSequence sequenceLoaded = new ImageSequence();
+            //String gameDataObjectXMLPath = Path.Combine(pathName, "ImageSequence");
+            //ImageSequence sequenceLoaded = new ImageSequence();
 
-            // Now lets look for and load up any images that we find.
-            String[] tgaFilesArray = Directory.GetFiles(pathName, "*.tga");
-            List<String> sortedTgaFiles = new List<string>(tgaFilesArray);
-            // Make sure they are sorted.
-            sortedTgaFiles.Sort();
-            sequenceLoaded.imageList = new List<ImageBuffer>();
-            int imageIndex = 0;
-            foreach (String tgaFile in sortedTgaFiles)
-            {
-                sequenceLoaded.AddImage(new ImageBuffer(new BlenderPreMultBGRA()));
-                Stream imageStream = File.Open(tgaFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                ImageTgaIO.LoadImageData(sequenceLoaded.imageList[imageIndex], imageStream, 32);
-                imageIndex++;
-            }
+            //// Now lets look for and load up any images that we find.
+            //String[] tgaFilesArray = Directory.GetFiles(pathName, "*.tga");
+            //List<String> sortedTgaFiles = new List<string>(tgaFilesArray);
+            //// Make sure they are sorted.
+            //sortedTgaFiles.Sort();
+            //sequenceLoaded.imageList = new List<BufferImage>();
+            //int imageIndex = 0;
+            //foreach (String tgaFile in sortedTgaFiles)
+            //{
+            //    sequenceLoaded.AddImage(new BufferImage2(new BlenderPreMultBGRA()));
+            //    Stream imageStream = File.Open(tgaFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            //    ImageTgaIO.LoadImageData(sequenceLoaded.imageList[imageIndex], imageStream, 32);
+            //    imageIndex++;
+            //}
 
-            return sequenceLoaded;
+            //return sequenceLoaded;
         }
 
-        public void AddImage(ImageBuffer imageBuffer)
+        public void AddImage(ImageBase imageBuffer)
         {
             imageList.Add(imageBuffer);
         }
@@ -123,23 +124,23 @@ namespace MatterHackers.Agg.Image
             return (int)((fractionOfTotalLength * (NumFrames - 1)) + .5);
         }
 
-        public ImageBuffer GetImageByTime(double NumSeconds)
+        public ImageBase GetImageByTime(double NumSeconds)
         {
             double TotalSeconds = NumFrames / FramePerSecond;
             return GetImageByRatio(NumSeconds / TotalSeconds);
         }
 
-        public ImageBuffer GetImageByRatio(double fractionOfTotalLength)
+        public ImageBase GetImageByRatio(double fractionOfTotalLength)
         {
             return GetImageByIndex(fractionOfTotalLength * (NumFrames - 1));
         }
 
-        public ImageBuffer GetImageByIndex(double ImageIndex)
+        public ImageBase GetImageByIndex(double ImageIndex)
         {
             return GetImageByIndex((int)(ImageIndex + .5));
         }
 
-        public ImageBuffer GetImageByIndex(int ImageIndex)
+        public ImageBase GetImageByIndex(int ImageIndex)
         {
             if (looping)
             {

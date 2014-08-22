@@ -3,7 +3,7 @@
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -109,24 +109,22 @@ namespace MatterHackers.Agg.Sample_RoundRect
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageByte backBuffer = widgetsSubImage;
+            IImage backBuffer = widgetsSubImage;
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.Gamma);
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();
             IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
-            ImageBuffer rasterNormal = new ImageBuffer();
-            rasterNormal.Attach(backBuffer, NormalBlender);
-            ImageBuffer rasterGamma = new ImageBuffer();
-            rasterGamma.Attach(backBuffer, GammaBlender);
-            ImageClippingProxy clippingProxyNormal = new ImageClippingProxy(rasterNormal);
-            ImageClippingProxy clippingProxyGamma = new ImageClippingProxy(rasterGamma);
+            var rasterNormal = new ChildImage(backBuffer, NormalBlender); 
+            var rasterGamma = new ChildImage(backBuffer, GammaBlender); 
+            ClipProxyImage clippingProxyNormal = new ClipProxyImage(rasterNormal);
+            ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            clippingProxyNormal.clear(this.WhiteOnBlack ? new RGBA_Floats(0, 0, 0) : new RGBA_Floats(1, 1, 1));
+            clippingProxyNormal.clear(this.WhiteOnBlack ? new ColorRGBAf(0, 0, 0) : new ColorRGBAf(1, 1, 1));
 
             ScanlineRasterizer ras = new ScanlineRasterizer();
-            ScanlineCachePacked8 sl = new ScanlineCachePacked8();
+            ScanlinePacked8 sl = new ScanlinePacked8();
 
             VertexSource.Ellipse e = new VertexSource.Ellipse();
 
@@ -138,10 +136,10 @@ namespace MatterHackers.Agg.Sample_RoundRect
             e.init(m_x[0], m_y[0], 3, 3, 16);
             ras.add_path(e);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new RGBA_Bytes(127, 127, 127));
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
             e.init(m_x[1], m_y[1], 3, 3, 16);
             ras.add_path(e);
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new RGBA_Bytes(127, 127, 127));
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
             double d = this.SubPixelOffset;
            
@@ -159,7 +157,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             {
                 ras.add_path(r);
             }
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new RGBA_Bytes(255, 255, 255) : new RGBA_Bytes(0, 0, 0));
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
 
 
         }

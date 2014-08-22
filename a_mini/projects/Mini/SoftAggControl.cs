@@ -41,11 +41,11 @@ namespace Mini
             Graphics2D graphics2D;
             if (bitmapBackBuffer.backingImageBufferByte != null)
             {
-                graphics2D = bitmapBackBuffer.backingImageBufferByte.NewGraphics2D();
+                graphics2D = Graphics2D.CreateFromImage(bitmapBackBuffer.backingImageBufferByte);
             }
             else
             {
-                throw new NotSupportedException(); 
+                throw new NotSupportedException();
                 //graphics2D = bitmapBackBuffer.backingImageBufferFloat.NewGraphics2D();
             }
             graphics2D.PushTransform();
@@ -54,7 +54,7 @@ namespace Mini
         void OnInitialize(int width, int height)
         {
             bitmapBackBuffer.Initialize(width, height, 32);
-            NewGraphics2D().Clear(new RGBA_Floats(1, 1, 1, 1));
+            NewGraphics2D().Clear(new ColorRGBAf(1, 1, 1, 1));
         }
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -91,7 +91,7 @@ namespace Mini
             }
             int width = 800;
             int height = 600;
-            var graphics = bitmapBackBuffer.backingImageBufferByte.NewGraphics2D();
+            var graphics =Graphics2D.CreateFromImage( bitmapBackBuffer.backingImageBufferByte);
 
             //--------------------------------
             exampleBase.Draw(graphics);

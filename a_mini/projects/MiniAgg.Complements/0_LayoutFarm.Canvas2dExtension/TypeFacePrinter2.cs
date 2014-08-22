@@ -36,8 +36,8 @@ namespace LayoutFarm.Agg.Font
 
     public class TypeFacePrinter2 : IVertexSource
     {
-        StyledTypeFace typeFaceStyle; 
-        String text = ""; 
+        StyledTypeFace typeFaceStyle;
+        String text = "";
         Vector2 totalSizeCach;
 
         public Justification Justification { get; set; }
@@ -133,7 +133,7 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, RGBA_Bytes color, IVertexSourceProxy vertexSourceToApply)
+        public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
         {
             vertexSourceToApply.VertexSource = this;
             rewind(0);
@@ -148,7 +148,7 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, RGBA_Bytes color)
+        public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
             rewind(0);
             if (DrawFromHintedCache)
@@ -161,7 +161,7 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        void RenderFromCache(Graphics2D graphics2D, RGBA_Bytes color)
+        void RenderFromCache(Graphics2D graphics2D, ColorRGBA color)
         {
             if (text != null && text.Length > 0)
             {
@@ -178,11 +178,11 @@ namespace LayoutFarm.Agg.Font
 
                     for (int currentChar = 0; currentChar < line.Length; currentChar++)
                     {
-                        ImageBuffer currentGlyphImage = typeFaceStyle.GetImageForCharacter(line[currentChar], 0, 0);
+                        ImageBase currentGlyphImage = typeFaceStyle.GetImageForCharacter(line[currentChar], 0, 0);
 
                         if (currentGlyphImage != null)
                         {
-                            graphics2D.Render(currentGlyphImage, currentOffset);
+                            graphics2D.Render(currentGlyphImage, currentOffset.x, currentOffset.y);
                         }
 
                         // get the advance for the next character

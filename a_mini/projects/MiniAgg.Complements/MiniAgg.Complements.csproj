@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MiniAgg.Complements</RootNamespace>
     <AssemblyName>MiniAgg.Complements</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,14 +46,18 @@
     <Compile Include="agg_bounding_rect.cs" />
     <Compile Include="BorderDouble.cs" />
     <Compile Include="Colors\agg_gamma_functions.cs" />
+    <Compile Include="Colors\ClipProxyImage.cs" />
+    <Compile Include="Colors\ProxyImage.cs" />
     <Compile Include="Image\agg_alpha_mask_u8.cs" />
+    <Compile Include="VertexSource\agg_span_gradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
     <Compile Include="Image\Gray.cs" />
     <Compile Include="Image\ImageSequence.cs" />
     <Compile Include="Image\ImageTgaIO.cs" />
-    <Compile Include="Image\RecursiveBlur.cs" />
-    <Compile Include="Image\StackBlur.cs" />
+    <Compile Include="Filter\RecursiveBlur.cs" />
+    <Compile Include="Filter\StackBlur.cs" />
+    <Compile Include="Image\Transposer.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="UnitTests2.cs" />
     <Compile Include="VertexSource\agg_bspline.cs" />
@@ -60,11 +65,13 @@
     <Compile Include="VertexSource\agg_gsv_text.cs" />
     <Compile Include="VertexSource\agg_span_gouraud.cs" />
     <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
+    <Compile Include="VertexSource\agg_span_subdiv_adaptor.cs" />
     <Compile Include="VertexSource\Arc.cs" />
     <Compile Include="VertexSource\Contour.cs" />
     <Compile Include="VertexSource\ContourGenerator.cs" />
     <Compile Include="VertexSource\Ellipse.cs" />
     <Compile Include="VertexSource\FlattenCurve.cs" />
+    <Compile Include="VertexSource\Point2D.cs" />
     <Compile Include="VertexSource\RoundedRect.cs" />
     <Compile Include="Font\LiberationSansFont.cs" />
     <Compile Include="Font\StyledTypeFace.cs" />

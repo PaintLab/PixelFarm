@@ -82,9 +82,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
         public LionFill()
         {
             lionShape = new LionShape();
-            TestLoadLionFromBinaryFile();
-
-
+            TestLoadLionFromBinaryFile(); 
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
@@ -100,7 +98,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
                 var lionShape2 = new MatterHackers.Agg.LionShape();
 
                 MatterHackers.Agg.VertexSource.PathStorage path;
-                MatterHackers.Agg.RGBA_Bytes[] colors;
+                MatterHackers.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
                 //1. path and command
                 MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(

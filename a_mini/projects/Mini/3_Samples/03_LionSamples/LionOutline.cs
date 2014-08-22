@@ -32,9 +32,9 @@ using System;
 using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
-using MatterHackers.VectorMath;
 
+using MatterHackers.VectorMath;
+using MatterHackers.Agg.Lines;
 using Mini;
 
 namespace MatterHackers.Agg.Sample_LionOutline
@@ -95,7 +95,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
     {
         private LionShape lionShape;
         ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-        ScanlineCachePacked8 scanlineCache = new ScanlineCachePacked8();
+        ScanlinePacked8 scanlineCache = new ScanlinePacked8();
 
         //special option 
         public lion_outline()
@@ -122,17 +122,16 @@ namespace MatterHackers.Agg.Sample_LionOutline
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
 
             int strokeWidth = 1;
 
-            ImageBuffer clippedSubImage = new ImageBuffer();
-            clippedSubImage.Attach(widgetsSubImage, new BlenderBGRA());
-            ImageClippingProxy imageClippingProxy = new ImageClippingProxy(clippedSubImage);
-            imageClippingProxy.clear(RGBA_Bytes.White);
+            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA()); 
+            ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
+            imageClippingProxy.clear(ColorRGBA.White);
 
             Affine transform = Affine.NewIdentity();
             transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);

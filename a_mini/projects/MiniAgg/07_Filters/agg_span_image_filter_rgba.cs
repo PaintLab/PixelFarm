@@ -30,6 +30,7 @@ using System;
 
 using MatterHackers.Agg.Image;
 using MatterHackers.VectorMath;
+using MatterHackers.Agg.Lines;
 
 using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
 using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filter_scale_e;
@@ -38,7 +39,7 @@ using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filt
 namespace MatterHackers.Agg
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    public class span_image_filter_rgba_nn_stepXby1 : span_image_filter
+    class span_image_filter_rgba_nn_stepXby1 : span_image_filter
     {
         const int base_shift = 8;
         const int base_scale = (int)(1 << base_shift);
@@ -49,9 +50,9 @@ namespace MatterHackers.Agg
         {
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBuffer SourceRenderingBuffer = (ImageBuffer)GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -74,7 +75,7 @@ namespace MatterHackers.Agg
                 {
                     do
                     {
-                        span[spanIndex++] = *(RGBA_Bytes*)&(pSource[bufferIndex]);
+                        span[spanIndex++] = *(ColorRGBA*)&(pSource[bufferIndex]);
                         bufferIndex += 4;
                     } while (--len != 0);
                 }
@@ -106,9 +107,9 @@ namespace MatterHackers.Agg
         {
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBuffer SourceRenderingBuffer = (ImageBuffer)GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -125,7 +126,7 @@ namespace MatterHackers.Agg
                 int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
                 int bufferIndex;
                 bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
-                RGBA_Bytes color;
+                ColorRGBA color;
                 color.blue = fg_ptr[bufferIndex++];
                 color.green = fg_ptr[bufferIndex++];
                 color.red = fg_ptr[bufferIndex++];
@@ -225,14 +226,14 @@ namespace MatterHackers.Agg
             }
 #endif
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
-            ImageBuffer SourceRenderingBuffer = (ImageBuffer)base.GetImageBufferAccessor().SourceImage;
+            ImageBase srcImg = (ImageBase)base.GetImageBufferAccessor().SourceImage;
             ISpanInterpolator spanInterpolator = base.interpolator();
-            int bufferIndex;
-            byte[] fg_ptr = SourceRenderingBuffer.GetBuffer(out bufferIndex);
+            int bufferIndex = 0;
+            byte[] fg_ptr = srcImg.GetBuffer();
 
             unchecked
             {
@@ -263,44 +264,44 @@ namespace MatterHackers.Agg
                     x_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
                     y_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
 
-                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+                    bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
 
                     weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) *
                              ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
-                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                     bufferIndex += 4;
 
                     weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
-                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
 
                     y_lr++;
-                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+                    bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
 
                     weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
-                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                     bufferIndex += 4;
 
                     weight = (x_hr * y_hr);
-                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
 
                     tempR >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                     tempG >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                     tempB >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                     tempA >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
 
-                    RGBA_Bytes color;
+                    ColorRGBA color;
                     color.red = (byte)tempR;
                     color.green = (byte)tempG;
                     color.blue = (byte)tempB;
@@ -314,160 +315,160 @@ namespace MatterHackers.Agg
         }
     }
 
-//    public class span_image_filter_rgba_bilinear_float : span_image_filter_float
-//    {
-//        public span_image_filter_rgba_bilinear_float(IImageBufferAccessorFloat src, ISpanInterpolatorFloat inter)
-//            : base(src, inter, null)
-//        {
-//        }
+    //    public class span_image_filter_rgba_bilinear_float : span_image_filter_float
+    //    {
+    //        public span_image_filter_rgba_bilinear_float(IImageBufferAccessorFloat src, ISpanInterpolatorFloat inter)
+    //            : base(src, inter, null)
+    //        {
+    //        }
 
-//        public override void generate(RGBA_Floats[] span, int spanIndex, int x, int y, int len)
-//        {
-//            base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+    //        public override void generate(RGBA_Floats[] span, int spanIndex, int x, int y, int len)
+    //        {
+    //            base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
-//            ImageBufferFloat SourceRenderingBuffer = (ImageBufferFloat)base.source().SourceImage;
-//            ISpanInterpolatorFloat spanInterpolator = base.interpolator();
-//            int bufferIndex;
-//            float[] fg_ptr = SourceRenderingBuffer.GetBuffer(out bufferIndex);
+    //            ImageBufferFloat SourceRenderingBuffer = (ImageBufferFloat)base.source().SourceImage;
+    //            ISpanInterpolatorFloat spanInterpolator = base.interpolator();
+    //            int bufferIndex;
+    //            float[] fg_ptr = SourceRenderingBuffer.GetBuffer(out bufferIndex);
 
-//            unchecked
-//            {
-//                do
-//                {
-//                    float tempR;
-//                    float tempG;
-//                    float tempB;
-//                    float tempA;
+    //            unchecked
+    //            {
+    //                do
+    //                {
+    //                    float tempR;
+    //                    float tempG;
+    //                    float tempB;
+    //                    float tempA;
 
-//                    float x_hr;
-//                    float y_hr;
+    //                    float x_hr;
+    //                    float y_hr;
 
-//                    spanInterpolator.coordinates(out x_hr, out y_hr);
+    //                    spanInterpolator.coordinates(out x_hr, out y_hr);
 
-//                    x_hr -= base.filter_dx_dbl();
-//                    y_hr -= base.filter_dy_dbl();
+    //                    x_hr -= base.filter_dx_dbl();
+    //                    y_hr -= base.filter_dy_dbl();
 
-//                    int x_lr = (int)x_hr;
-//                    int y_lr = (int)y_hr;
-//                    float weight;
+    //                    int x_lr = (int)x_hr;
+    //                    int y_lr = (int)y_hr;
+    //                    float weight;
 
-//                    tempR = tempG = tempB = tempA = 0;
+    //                    tempR = tempG = tempB = tempA = 0;
 
-//                    x_hr -= x_lr;
-//                    y_hr -= y_lr;
+    //                    x_hr -= x_lr;
+    //                    y_hr -= y_lr;
 
-//                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+    //                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
 
-//#if false
-//                    unsafe
-//                    {
-//                        fixed (float* pSource = fg_ptr)
-//                        {
-//                            Vector4f tempFinal = new Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
-                            
-//                            Vector4f color0 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 0]);
-//                            weight = (1.0f - x_hr) * (1.0f - y_hr);
-//                            Vector4f weight4f = new Vector4f(weight, weight, weight, weight);
-//                            tempFinal = tempFinal + weight4f * color0;
+    //#if false
+    //                    unsafe
+    //                    {
+    //                        fixed (float* pSource = fg_ptr)
+    //                        {
+    //                            Vector4f tempFinal = new Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
 
-//                            Vector4f color1 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 4]);
-//                            weight = (x_hr) * (1.0f - y_hr);
-//                            weight4f = new Vector4f(weight, weight, weight, weight);
-//                            tempFinal = tempFinal + weight4f * color1;
+    //                            Vector4f color0 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 0]);
+    //                            weight = (1.0f - x_hr) * (1.0f - y_hr);
+    //                            Vector4f weight4f = new Vector4f(weight, weight, weight, weight);
+    //                            tempFinal = tempFinal + weight4f * color0;
 
-//                            y_lr++;
-//                            bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+    //                            Vector4f color1 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 4]);
+    //                            weight = (x_hr) * (1.0f - y_hr);
+    //                            weight4f = new Vector4f(weight, weight, weight, weight);
+    //                            tempFinal = tempFinal + weight4f * color1;
 
-//                            Vector4f color2 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 0]);
-//                            weight = (1.0f - x_hr) * (y_hr);
-//                            weight4f = new Vector4f(weight, weight, weight, weight);
-//                            tempFinal = tempFinal + weight4f * color2;
+    //                            y_lr++;
+    //                            bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
 
-//                            Vector4f color3 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 4]);
-//                            weight = (x_hr) * (y_hr);
-//                            weight4f = new Vector4f(weight, weight, weight, weight);
-//                            tempFinal = tempFinal + weight4f * color3;
+    //                            Vector4f color2 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 0]);
+    //                            weight = (1.0f - x_hr) * (y_hr);
+    //                            weight4f = new Vector4f(weight, weight, weight, weight);
+    //                            tempFinal = tempFinal + weight4f * color2;
 
-//                            RGBA_Floats color;
-//                            color.m_B = tempFinal.X;
-//                            color.m_G = tempFinal.Y;
-//                            color.m_R = tempFinal.Z;
-//                            color.m_A = tempFinal.W;
-//                            span[spanIndex] = color;
-//                        }
-//                    }
-//#else
-//                    weight = (1.0f - x_hr) * (1.0f - y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-//                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
-//                    bufferIndex += 4;
+    //                            Vector4f color3 = Vector4f.LoadAligned((Vector4f*)&pSource[bufferIndex + 4]);
+    //                            weight = (x_hr) * (y_hr);
+    //                            weight4f = new Vector4f(weight, weight, weight, weight);
+    //                            tempFinal = tempFinal + weight4f * color3;
 
-//                    weight = (x_hr) * (1.0f - y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-//                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                            RGBA_Floats color;
+    //                            color.m_B = tempFinal.X;
+    //                            color.m_G = tempFinal.Y;
+    //                            color.m_R = tempFinal.Z;
+    //                            color.m_A = tempFinal.W;
+    //                            span[spanIndex] = color;
+    //                        }
+    //                    }
+    //#else
+    //                    weight = (1.0f - x_hr) * (1.0f - y_hr);
+    //                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                    bufferIndex += 4;
 
-//                    y_lr++;
-//                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+    //                    weight = (x_hr) * (1.0f - y_hr);
+    //                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
 
-//                    weight = (1.0f - x_hr) * (y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-//                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
-//                    bufferIndex += 4;
+    //                    y_lr++;
+    //                    bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
 
-//                    weight = (x_hr) * (y_hr);
-//                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-//                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-//                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-//                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                    weight = (1.0f - x_hr) * (y_hr);
+    //                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                    bufferIndex += 4;
 
-//                    RGBA_Floats color;
-//                    color.red = tempR;
-//                    color.green = tempG;
-//                    color.blue = tempB;
-//                    color.alpha = tempA;
-//                    span[spanIndex] = color;
-//#endif
-//                    spanIndex++;
-//                    spanInterpolator.Next();
-//                } while (--len != 0);
-//            }
-//        }
-//    };
+    //                    weight = (x_hr) * (y_hr);
+    //                    tempR += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    tempG += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    tempB += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    tempA += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+
+    //                    RGBA_Floats color;
+    //                    color.red = tempR;
+    //                    color.green = tempG;
+    //                    color.blue = tempB;
+    //                    color.alpha = tempA;
+    //                    span[spanIndex] = color;
+    //#endif
+    //                    spanIndex++;
+    //                    spanInterpolator.Next();
+    //                } while (--len != 0);
+    //            }
+    //        }
+    //    };
 
     //====================================span_image_filter_rgba_bilinear_clip
     public class span_image_filter_rgba_bilinear_clip : span_image_filter
     {
-        private RGBA_Bytes m_OutsideSourceColor;
+        private ColorRGBA m_OutsideSourceColor;
 
         const int base_shift = 8;
         const int base_scale = (int)(1 << base_shift);
         const int base_mask = base_scale - 1;
 
         public span_image_filter_rgba_bilinear_clip(IImageBufferAccessor src,
-            IColorType back_color, ISpanInterpolator inter)
+            IColor back_color, ISpanInterpolator inter)
             : base(src, inter, null)
         {
             m_OutsideSourceColor = back_color.GetAsRGBA_Bytes();
         }
 
-        public IColorType background_color() { return m_OutsideSourceColor; }
-        public void background_color(IColorType v) { m_OutsideSourceColor = v.GetAsRGBA_Bytes(); }
+        public IColor background_color() { return m_OutsideSourceColor; }
+        public void background_color(IColor v) { m_OutsideSourceColor = v.GetAsRGBA_Bytes(); }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBuffer SourceRenderingBuffer = (ImageBuffer)base.GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)base.GetImageBufferAccessor().SourceImage;
             int bufferIndex;
             byte[] fg_ptr;
 
-            if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.span_interpolator_linear)
-                && ((MatterHackers.Agg.span_interpolator_linear)base.m_interpolator).transformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
-            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.span_interpolator_linear)base.m_interpolator).transformer()).is_identity())
+            if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.Lines.span_interpolator_linear)
+                && ((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
+            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer()).is_identity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe
@@ -547,20 +548,20 @@ namespace MatterHackers.Agg
                                  ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
                         if (weight > base_mask)
                         {
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
 
                         weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
                         if (weight > base_mask)
                         {
                             bufferIndex += distanceBetweenPixelsInclusive;
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
 
                         weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
@@ -568,19 +569,19 @@ namespace MatterHackers.Agg
                         {
                             ++y_lr;
                             fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
                         weight = (x_hr * y_hr);
                         if (weight > base_mask)
                         {
                             bufferIndex += distanceBetweenPixelsInclusive;
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
                         accumulatedColor[0] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                         accumulatedColor[1] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
@@ -656,7 +657,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        private void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, IImageByte SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
+        private void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, IImage SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
         {
             byte[] fg_ptr;
             unchecked
@@ -666,10 +667,10 @@ namespace MatterHackers.Agg
                     int bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
                     fg_ptr = SourceRenderingBuffer.GetBuffer();
 
-                    accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                    accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                    accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                    accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                    accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                    accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                    accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                    accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                 }
                 else
                 {
@@ -819,7 +820,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
@@ -870,10 +871,10 @@ namespace MatterHackers.Agg
                                      (int)image_filter_scale_e.image_filter_scale / 2) >>
                                      (int)image_filter_scale_e.image_filter_shift;
 
-                        f_b += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                        f_g += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                        f_r += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                        f_a += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+                        f_b += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
+                        f_g += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
+                        f_r += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
+                        f_a += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
 
                         if (--x_count == 0) break;
                         x_hr += (int)image_subpixel_scale_e.image_subpixel_scale;
@@ -929,95 +930,95 @@ namespace MatterHackers.Agg
         }
     };
 
-    public class span_image_filter_rgba_float : span_image_filter_float
-    {
-        public span_image_filter_rgba_float(IImageBufferAccessorFloat src, ISpanInterpolatorFloat inter, IImageFilterFunction filterFunction)
-            : base(src, inter, filterFunction)
-        {
-            if (src.SourceImage.GetFloatsBetweenPixelsInclusive() != 4)
-            {
-                throw new System.NotSupportedException("span_image_filter_rgba must have a 32 bit DestImage");
-            }
-        }
+    //public class span_image_filter_rgba_float : span_image_filter_float
+    //{
+    //    public span_image_filter_rgba_float(IImageBufferAccessorFloat src, ISpanInterpolatorFloat inter, IImageFilterFunction filterFunction)
+    //        : base(src, inter, filterFunction)
+    //    {
+    //        if (src.SourceImage.GetFloatsBetweenPixelsInclusive() != 4)
+    //        {
+    //            throw new System.NotSupportedException("span_image_filter_rgba must have a 32 bit DestImage");
+    //        }
+    //    }
 
-        public override void generate(RGBA_Floats[] span, int spanIndex, int xInt, int yInt, int len)
-        {
-            base.interpolator().begin(xInt + base.filter_dx_dbl(), yInt + base.filter_dy_dbl(), len);
+    //    public override void generate(RGBA_Floats[] span, int spanIndex, int xInt, int yInt, int len)
+    //    {
+    //        base.interpolator().begin(xInt + base.filter_dx_dbl(), yInt + base.filter_dy_dbl(), len);
 
-            float f_r, f_g, f_b, f_a;
+    //        float f_r, f_g, f_b, f_a;
 
-            float[] fg_ptr;
+    //        float[] fg_ptr;
 
-            int radius = (int)m_filterFunction.radius();
-            int diameter = radius * 2;
-            int start = -(int)(diameter / 2 - 1);
+    //        int radius = (int)m_filterFunction.radius();
+    //        int diameter = radius * 2;
+    //        int start = -(int)(diameter / 2 - 1);
 
-            int x_count;
+    //        int x_count;
 
-            ISpanInterpolatorFloat spanInterpolator = base.interpolator();
-            IImageBufferAccessorFloat sourceAccessor = source();
+    //        ISpanInterpolatorFloat spanInterpolator = base.interpolator();
+    //        IImageBufferAccessorFloat sourceAccessor = source();
 
-            do
-            {
-                float x = xInt;
-                float y = yInt;
-                spanInterpolator.coordinates(out x, out y);
-                //x -= (float)base.filter_dx_dbl();
-                //y -= (float)base.filter_dy_dbl();
-                int sourceXInt = (int)x;
-                int sourceYInt = (int)y;
-                Vector2 sourceOrigin = new Vector2(x, y);
-                Vector2 sourceSample = new Vector2(sourceXInt + start, sourceYInt + start);
+    //        do
+    //        {
+    //            float x = xInt;
+    //            float y = yInt;
+    //            spanInterpolator.coordinates(out x, out y);
+    //            //x -= (float)base.filter_dx_dbl();
+    //            //y -= (float)base.filter_dy_dbl();
+    //            int sourceXInt = (int)x;
+    //            int sourceYInt = (int)y;
+    //            Vector2 sourceOrigin = new Vector2(x, y);
+    //            Vector2 sourceSample = new Vector2(sourceXInt + start, sourceYInt + start);
 
-                f_b = f_g = f_r = f_a = 0;
+    //            f_b = f_g = f_r = f_a = 0;
 
-                int y_count = diameter;
+    //            int y_count = diameter;
 
-                int bufferIndex;
-                fg_ptr = sourceAccessor.span(sourceXInt + start, sourceYInt + start, diameter, out bufferIndex);
-                float totalWeight = 0.0f;
-                for (; ; )
-                {
-                    float yweight = (float)m_filterFunction.calc_weight(System.Math.Sqrt((sourceSample.y - sourceOrigin.y) * (sourceSample.y - sourceOrigin.y)));
-                    x_count = (int)diameter;
-                    for (; ; )
-                    {
-                        float xweight = (float)m_filterFunction.calc_weight(System.Math.Sqrt((sourceSample.x - sourceOrigin.x) * (sourceSample.x - sourceOrigin.x)));
-                        float weight = xweight * yweight;
+    //            int bufferIndex;
+    //            fg_ptr = sourceAccessor.span(sourceXInt + start, sourceYInt + start, diameter, out bufferIndex);
+    //            float totalWeight = 0.0f;
+    //            for (; ; )
+    //            {
+    //                float yweight = (float)m_filterFunction.calc_weight(System.Math.Sqrt((sourceSample.y - sourceOrigin.y) * (sourceSample.y - sourceOrigin.y)));
+    //                x_count = (int)diameter;
+    //                for (; ; )
+    //                {
+    //                    float xweight = (float)m_filterFunction.calc_weight(System.Math.Sqrt((sourceSample.x - sourceOrigin.x) * (sourceSample.x - sourceOrigin.x)));
+    //                    float weight = xweight * yweight;
 
-                        f_r += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
-                        f_g += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
-                        f_b += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
-                        f_a += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
+    //                    f_r += weight * fg_ptr[bufferIndex + ImageBuffer.OrderR];
+    //                    f_g += weight * fg_ptr[bufferIndex + ImageBuffer.OrderG];
+    //                    f_b += weight * fg_ptr[bufferIndex + ImageBuffer.OrderB];
+    //                    f_a += weight * fg_ptr[bufferIndex + ImageBuffer.OrderA];
 
-                        totalWeight += weight;
-                        sourceSample.x += 1;
-                        if (--x_count == 0) break;
-                        sourceAccessor.next_x(out bufferIndex);
-                    }
+    //                    totalWeight += weight;
+    //                    sourceSample.x += 1;
+    //                    if (--x_count == 0) break;
+    //                    sourceAccessor.next_x(out bufferIndex);
+    //                }
 
-                    sourceSample.x -= diameter;
+    //                sourceSample.x -= diameter;
 
-                    if (--y_count == 0) break;
-                    sourceSample.y += 1;
-                    fg_ptr = sourceAccessor.next_y(out bufferIndex);
-                }
+    //                if (--y_count == 0) break;
+    //                sourceSample.y += 1;
+    //                fg_ptr = sourceAccessor.next_y(out bufferIndex);
+    //            }
 
-                if (f_b < 0) f_b = 0; if (f_b > 1) f_b = 1;
-                if (f_r < 0) f_r = 0; if (f_r > 1) f_r = 1;
-                if (f_g < 0) f_g = 0; if (f_g > 1) f_g = 1;
+    //            if (f_b < 0) f_b = 0; if (f_b > 1) f_b = 1;
+    //            if (f_r < 0) f_r = 0; if (f_r > 1) f_r = 1;
+    //            if (f_g < 0) f_g = 0; if (f_g > 1) f_g = 1;
 
-                span[spanIndex].red = f_r;
-                span[spanIndex].green = f_g;
-                span[spanIndex].blue = f_b;
-                span[spanIndex].alpha = 1;// f_a;
+    //            span[spanIndex].red = f_r;
+    //            span[spanIndex].green = f_g;
+    //            span[spanIndex].blue = f_b;
+    //            span[spanIndex].alpha = 1;// f_a;
 
-                spanIndex++;
-                spanInterpolator.Next();
+    //            spanIndex++;
+    //            spanInterpolator.Next();
 
-            } while (--len != 0);
-        }
-    };
+    //        } while (--len != 0);
+    //    }
+    //};
     /*
 
         //========================================span_image_resample_rgba_affine
@@ -1156,7 +1157,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.interpolator();
             spanInterpolator.begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
@@ -1214,10 +1215,10 @@ namespace MatterHackers.Agg
                         int weight = (weight_y * weight_array[x_hr] +
                                      (int)image_filter_scale_e.image_filter_scale / 2) >>
                                      downscale_shift;
-                        fg[0] += fg_ptr[sourceIndex + ImageBuffer.OrderR] * weight;
-                        fg[1] += fg_ptr[sourceIndex + ImageBuffer.OrderG] * weight;
-                        fg[2] += fg_ptr[sourceIndex + ImageBuffer.OrderB] * weight;
-                        fg[3] += fg_ptr[sourceIndex + ImageBuffer.OrderA] * weight;
+                        fg[0] += fg_ptr[sourceIndex + ImageBase.OrderR] * weight;
+                        fg[1] += fg_ptr[sourceIndex + ImageBase.OrderG] * weight;
+                        fg[2] += fg_ptr[sourceIndex + ImageBase.OrderB] * weight;
+                        fg[3] += fg_ptr[sourceIndex + ImageBase.OrderA] * weight;
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;

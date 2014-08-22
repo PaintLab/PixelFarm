@@ -75,7 +75,7 @@ namespace MatterHackers.Agg.UI
         public static bool DebugBoundsUnderMouse = false;
 
         bool doubleBuffer;
-        ImageBuffer backBuffer;
+        ActualImage backBuffer;
 
         bool debugShowBounds = false;
         bool widgetHasBeenClosed = false;
@@ -152,8 +152,8 @@ namespace MatterHackers.Agg.UI
         public bool TabStop { get; set; }
         public virtual int TabIndex { get; set; }
 
-        RGBA_Bytes backgroundColor = new RGBA_Bytes();
-        public RGBA_Bytes BackgroundColor
+        ColorRGBA backgroundColor = new ColorRGBA();
+        public ColorRGBA BackgroundColor
         {
             get { return backgroundColor; }
             set
@@ -367,7 +367,7 @@ namespace MatterHackers.Agg.UI
         }
 
         protected Transform.Affine parentToChildTransform = Affine.NewIdentity();
-        ObservableCollection<GuiWidget> children = new ObservableCollection<GuiWidget>();
+        List<GuiWidget> children = new List<GuiWidget>();
 
         private bool containsFocus = false;
 
@@ -466,19 +466,19 @@ namespace MatterHackers.Agg.UI
 
         public GuiWidget(HAnchor hAnchor = HAnchor.None, VAnchor vAnchor = VAnchor.None)
         {
-            children.CollectionChanged += children_CollectionChanged;
+            //children.CollectionChanged += children_CollectionChanged;
             LayoutEngine = new LayoutEngineSimpleAlign();
             HAnchor = hAnchor;
             VAnchor = vAnchor;
         }
 
-        void children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (childrenLockedInMouseUpCount != 0)
-            {
-                ThrowExceptionInDebug("The mouse should not be locked when the child list changes.");
-            }
-        }
+        //void children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        //{
+        //    //if (childrenLockedInMouseUpCount != 0)
+        //    //{
+        //    //    ThrowExceptionInDebug("The mouse should not be locked when the child list changes.");
+        //    //}
+        //}
 
         public virtual bool InvokeRequired
         {
@@ -513,7 +513,7 @@ namespace MatterHackers.Agg.UI
             throw new InvalidOperationException("You can only check for this is your top level window in a form.");
         }
 
-        public virtual ObservableCollection<GuiWidget> Children
+        public virtual List<GuiWidget> Children
         {
             get
             {
@@ -557,14 +557,14 @@ namespace MatterHackers.Agg.UI
             int intHeight = Math.Max((int)(Math.Ceiling(localBounds.Top) - Math.Floor(localBounds.Bottom)) + 1, 1);
             if (backBuffer == null || backBuffer.Width != intWidth || backBuffer.Height != intHeight)
             {
-                backBuffer = new ImageBuffer(intWidth, intHeight, 32, new BlenderPreMultBGRA());
+                backBuffer = new ActualImage(intWidth, intHeight, 32, new BlenderPreMultBGRA());
             }
         }
 
         /// <summary>
         /// This will return the backBuffer object for widgets that are double buffered.  It will return null if they are not.
         /// </summary>
-        public ImageBuffer BackBuffer
+        public ImageBase BackBuffer
         {
             get
             {
@@ -1326,7 +1326,8 @@ namespace MatterHackers.Agg.UI
         {
             if (DoubleBuffer)
             {
-                return BackBuffer.NewGraphics2D();
+                return Graphics2D.CreateFromImage(this.BackBuffer);
+                //return BackBuffer.NewGraphics2D();
             }
 
             if (Parent != null)
@@ -1702,8 +1703,8 @@ namespace MatterHackers.Agg.UI
                                 int yOffset = (int)Math.Floor(child.LocalBounds.Bottom);
                                 if (child.isCurrentlyInvalid)
                                 {
-                                    Graphics2D childBackBufferGraphics2D = child.backBuffer.NewGraphics2D();
-                                    childBackBufferGraphics2D.Clear(new RGBA_Bytes(0, 0, 0, 0));
+                                    Graphics2D childBackBufferGraphics2D = Graphics2D.CreateFromImage(child.backBuffer);//.NewGraphics2D();
+                                    childBackBufferGraphics2D.Clear(new ColorRGBA(0, 0, 0, 0));
                                     Affine transformToBuffer = Affine.NewTranslation(-xOffset + xFraction, -yOffset + yFraction);
                                     childBackBufferGraphics2D.SetTransform(transformToBuffer);
                                     child.OnDrawBackground(childBackBufferGraphics2D);
@@ -1740,14 +1741,14 @@ namespace MatterHackers.Agg.UI
 
             if (DebugShowBounds)
             {
-                graphics2D.Line(LocalBounds.Left, LocalBounds.Bottom, LocalBounds.Right, LocalBounds.Top, RGBA_Bytes.Green);
-                graphics2D.Line(LocalBounds.Left, LocalBounds.Top, LocalBounds.Right, LocalBounds.Bottom, RGBA_Bytes.Green);
-                graphics2D.Rectangle(LocalBounds, RGBA_Bytes.Red);
+                graphics2D.Line(LocalBounds.Left, LocalBounds.Bottom, LocalBounds.Right, LocalBounds.Top, ColorRGBA.Green);
+                graphics2D.Line(LocalBounds.Left, LocalBounds.Top, LocalBounds.Right, LocalBounds.Bottom, ColorRGBA.Green);
+                graphics2D.Rectangle(LocalBounds, ColorRGBA.Red);
             }
             if (showSize)
             {
                 graphics2D.DrawString(string.Format("{4} {0}, {1} : {2}, {3}", (int)MinimumSize.x, (int)MinimumSize.y, (int)LocalBounds.Width, (int)LocalBounds.Height, Name),
-                    Width / 2, Math.Max(Height - 16, Height / 2 - 16 * graphics2D.TransformStackCount), color: RGBA_Bytes.Magenta, justification: Font.Justification.Center);
+                    Width / 2, Math.Max(Height - 16, Height / 2 - 16 * graphics2D.TransformStackCount), color: ColorRGBA.Magenta, justification: Font.Justification.Center);
             }
         }
 

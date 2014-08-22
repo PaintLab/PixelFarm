@@ -31,16 +31,16 @@ namespace MatterHackers.Agg.Sample_Draw
             //1.
             // clear the image to white
             {
-                g.Clear(RGBA_Bytes.White);
+                g.Clear(ColorRGBA.White);
                 // draw a circle
-                g.Circle(50, 50, 30, RGBA_Bytes.Blue);
+                g.Circle(50, 50, 30, ColorRGBA.Blue);
                 // draw a line
-                g.Line(10, 100, 520, 50, new RGBA_Bytes(20, 200, 200));
+                g.Line(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
                 // draw a filled box
-                g.FillRectangle(60, 260, 200, 280, RGBA_Bytes.Yellow);
+                g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
 
                 // and an outline around it
-                g.Rectangle(60, 260, 200, 280, RGBA_Bytes.Magenta);
+                g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
 
 
 
@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.Sample_Draw
             int height = 600;
 
             //clear the image to white
-            g.Clear(RGBA_Bytes.White);
+            g.Clear(ColorRGBA.White);
             // draw a circle
             Ellipse ellipseTest = new Ellipse(0, 0, 100, 50);
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
@@ -84,9 +84,9 @@ namespace MatterHackers.Agg.Sample_Draw
                 VertexSourceApplyTransform rotatedAndTranslatedTransform = new VertexSourceApplyTransform(
                     rotatedTransform, Affine.NewTranslation(width / 2, 150));
 
-                g.Render(rotatedAndTranslatedTransform, RGBA_Bytes.Yellow);
+                g.Render(rotatedAndTranslatedTransform, ColorRGBA.Yellow);
                 Stroke ellipseOutline = new Stroke(rotatedAndTranslatedTransform, 3);
-                g.Render(ellipseOutline, RGBA_Bytes.Blue);
+                g.Render(ellipseOutline, ColorRGBA.Blue);
             }
 
             // and a little polygon
@@ -96,7 +96,7 @@ namespace MatterHackers.Agg.Sample_Draw
             littlePoly.LineTo(200, 200);
             littlePoly.LineTo(50, 150);
             littlePoly.LineTo(50, 50);
-            g.Render(littlePoly, RGBA_Bytes.Cyan);
+            g.Render(littlePoly, ColorRGBA.Cyan);
 
             // draw some text
 
@@ -104,14 +104,14 @@ namespace MatterHackers.Agg.Sample_Draw
 
             IVertexSource translatedText = new VertexSourceApplyTransform(textPrinter, Affine.NewTranslation(
                 new Vector2(width / 2, height / 4 * 3)));
-            g.Render(translatedText, RGBA_Bytes.Red);
+            g.Render(translatedText, ColorRGBA.Red);
             Stroke strokedText = new Stroke(translatedText);
-            g.Render(strokedText, RGBA_Bytes.Black);
+            g.Render(strokedText, ColorRGBA.Black);
 
             IVertexSource rotatedText = new VertexSourceApplyTransform(textPrinter, Affine.NewRotation(MathHelper.DegreesToRadians(90)));
             IVertexSource rotatedTranslatedText = new VertexSourceApplyTransform(rotatedText, Affine.NewTranslation(
                 new Vector2(40, height / 2)));
-            g.Render(rotatedTranslatedText, RGBA_Bytes.Black);
+            g.Render(rotatedTranslatedText, ColorRGBA.Black);
         }
     }
 

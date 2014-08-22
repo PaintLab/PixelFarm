@@ -246,15 +246,15 @@ namespace MatterHackers.Agg.UI
     //template<class IColorType> 
     public class bezier_ctrl : bezier_ctrl_impl
     {
-        RGBA_Floats m_color;
+        ColorRGBAf m_color;
 
         public bezier_ctrl()
         {
-            m_color = new RGBA_Floats(0.0, 0.0, 0.0);
+            m_color = new ColorRGBAf(0.0, 0.0, 0.0);
         }
 
-        public void line_color(IColorType c) { m_color = c.GetAsRGBA_Floats(); }
-        public override IColorType color(int i) { return m_color; }
+        public void line_color(IColor c) { m_color = c.GetAsRGBA_Floats(); }
+        public override IColor color(int i) { return m_color; }
     };
 
 
@@ -448,14 +448,14 @@ namespace MatterHackers.Agg.UI
     //template<class IColorType> 
     public class curve3_ctrl : curve3_ctrl_impl
     {
-        IColorType m_color;
+        IColor m_color;
 
         public curve3_ctrl()
         {
-            m_color = new RGBA_Floats(0.0, 0.0, 0.0);
+            m_color = new ColorRGBAf(0.0, 0.0, 0.0);
         }
 
-        public void line_color(IColorType c) { m_color = c; }
-        public override IColorType color(int i) { return m_color; }
+        public void line_color(IColor c) { m_color = c; }
+        public override IColor color(int i) { return m_color; }
     };
 }

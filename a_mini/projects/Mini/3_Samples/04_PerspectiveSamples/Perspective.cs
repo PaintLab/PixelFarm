@@ -6,7 +6,7 @@ using System;
 using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.RasterizerScanline;
+
 using MatterHackers.VectorMath;
 
 using Mini;
@@ -22,7 +22,7 @@ namespace MatterHackers.Agg.Sample_Perspective
     public class perspective_application : DemoBase
     {
         MatterHackers.Agg.ScanlineRasterizer g_rasterizer = new ScanlineRasterizer();
-        ScanlineCachePacked8 g_scanline = new ScanlineCachePacked8();
+        ScanlinePacked8 g_scanline = new ScanlinePacked8();
 
         UI.PolygonEditWidget quadPolygonControl;
         private LionShape lionShape;
@@ -79,20 +79,19 @@ namespace MatterHackers.Agg.Sample_Perspective
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageByte backBuffer = widgetsSubImage;
+            IImage backBuffer = widgetsSubImage;
 
             if (!didInit)
             {
                 didInit = true;
                 OnInitialize();
             }
-            ImageBuffer image;
+            ChildImage image;
             if (backBuffer.BitDepth == 32)
             {
-                image = new ImageBuffer();
-                image.Attach(backBuffer, new BlenderBGRA());
+                image = new ChildImage(backBuffer, new BlenderBGRA()); 
             }
             else
             {
@@ -100,11 +99,10 @@ namespace MatterHackers.Agg.Sample_Perspective
                 {
                     throw new System.NotSupportedException();
                 }
-                image = new ImageBuffer();
-                image.Attach(backBuffer, new BlenderBGR());
+                image = new ChildImage(backBuffer, new BlenderBGR()); 
             }
-            ImageClippingProxy clippingProxy = new ImageClippingProxy(image);
-            clippingProxy.clear(RGBA_Bytes.White);// new RGBA_Bytes(255, 255, 255));
+            ClipProxyImage clippingProxy = new ClipProxyImage(image);
+            clippingProxy.clear(ColorRGBA.White);// new RGBA_Bytes(255, 255, 255));
 
             g_rasterizer.SetVectorClipBox(0, 0, Width, Height);
 
@@ -137,10 +135,10 @@ namespace MatterHackers.Agg.Sample_Perspective
                     VertexSourceApplyTransform trans_ell_stroke = new VertexSourceApplyTransform(ell_stroke, tr);
 
                     g_rasterizer.add_path(trans_ell);
-                    scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, RGBA_Bytes.Make(0.5, 0.3, 0.0, 0.3));
+                    scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
 
                     g_rasterizer.add_path(trans_ell_stroke);
-                    scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, RGBA_Bytes.Make(0.0, 0.3, 0.2, 1.0));
+                    scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
                 }
             }
             else
@@ -165,17 +163,17 @@ namespace MatterHackers.Agg.Sample_Perspective
                     VertexSourceApplyTransform TransformedEllipesOutline = new VertexSourceApplyTransform(EllipseOutline, tr);
 
                     g_rasterizer.add_path(TransformedFilledEllipse);
-                    scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, RGBA_Bytes.Make(0.5, 0.3, 0.0, 0.3));
+                    scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
 
                     g_rasterizer.add_path(TransformedEllipesOutline);
-                    scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, RGBA_Bytes.Make(0.0, 0.3, 0.2, 1.0));
+                    scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
                 }
             }
 
             //--------------------------
             // Render the "quad" tool and controls
             g_rasterizer.add_path(quadPolygonControl);
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, RGBA_Bytes.Make(0, 0.3, 0.5, 0.6));
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
             //m_trans_type.Render(g_rasterizer, g_scanline, clippingProxy);
             //base.OnDraw(graphics2D);
         }

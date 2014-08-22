@@ -31,5 +31,5 @@ namespace MatterHackers.Agg
         {
             get;
         }
-    };
+    } 
 }

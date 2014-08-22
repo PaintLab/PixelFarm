@@ -68,7 +68,7 @@ namespace MatterHackers.Agg.Font
             x = 0;
             y = 0;
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
-            switch(state)
+            switch (state)
             {
                 case 0:
                     cmd = glyph.vertex(out x, out y);
@@ -91,32 +91,32 @@ namespace MatterHackers.Agg.Font
     {
         static StyledTypeFaceImageCache instance;
 
-        Dictionary<TypeFace, Dictionary<double, Dictionary<char, ImageBuffer>>> typeFaceImageCache = new Dictionary<TypeFace, Dictionary<double, Dictionary<char, ImageBuffer>>>();
+        Dictionary<TypeFace, Dictionary<double, Dictionary<char, ImageBase>>> typeFaceImageCache = new Dictionary<TypeFace, Dictionary<double, Dictionary<char, ImageBase>>>();
 
         // private so you can't use it by accident (it is a singlton)
         StyledTypeFaceImageCache()
         {
         }
 
-        public static Dictionary<char, ImageBuffer> GetCorrectCache(TypeFace typeFace, double emSizeInPoints)
+        public static Dictionary<char, ImageBase> GetCorrectCache(TypeFace typeFace, double emSizeInPoints)
         {
             // check if the cache is getting too big and if so prune it (or just delete it and start over).
 
-            Dictionary<double, Dictionary<char, ImageBuffer>> foundTypeFaceSizes;
+            Dictionary<double, Dictionary<char, ImageBase>> foundTypeFaceSizes;
             Instance.typeFaceImageCache.TryGetValue(typeFace, out foundTypeFaceSizes);
             if (foundTypeFaceSizes == null)
             {
                 // add in the type face
-                foundTypeFaceSizes = new Dictionary<double, Dictionary<char, ImageBuffer>>();
+                foundTypeFaceSizes = new Dictionary<double, Dictionary<char, ImageBase>>();
                 Instance.typeFaceImageCache.Add(typeFace, foundTypeFaceSizes);
             }
 
-            Dictionary<char, ImageBuffer> foundTypeFaceSize;
+            Dictionary<char, ImageBase> foundTypeFaceSize;
             foundTypeFaceSizes.TryGetValue(emSizeInPoints, out foundTypeFaceSize);
             if (foundTypeFaceSize == null)
             {
                 // add in the point size
-                foundTypeFaceSize = new Dictionary<char, ImageBuffer>();
+                foundTypeFaceSize = new Dictionary<char, ImageBase>();
                 foundTypeFaceSizes.Add(emSizeInPoints, foundTypeFaceSize);
             }
 
@@ -257,7 +257,7 @@ namespace MatterHackers.Agg.Font
             }
         }
 
-        public ImageBuffer GetImageForCharacter(char character, double xFraction, double yFraction)
+        public ImageBase GetImageForCharacter(char character, double xFraction, double yFraction)
         {
 
             if (xFraction > 1 || xFraction < 0 || yFraction > 1 || yFraction < 0)
@@ -265,8 +265,8 @@ namespace MatterHackers.Agg.Font
                 throw new ArgumentException("The x and y fractions must both be between 0 and 1.");
             }
 
-            ImageBuffer imageForCharacter;
-            Dictionary<char, ImageBuffer> characterImageCache = StyledTypeFaceImageCache.GetCorrectCache(this.typeFace, this.emSizeInPixels);
+            ImageBase imageForCharacter;
+            Dictionary<char, ImageBase> characterImageCache = StyledTypeFaceImageCache.GetCorrectCache(this.typeFace, this.emSizeInPixels);
             characterImageCache.TryGetValue(character, out imageForCharacter);
             if (imageForCharacter != null)
             {
@@ -274,7 +274,7 @@ namespace MatterHackers.Agg.Font
             }
 
             IVertexSource glyphForCharacter = GetGlyphForCharacter(character);
-            if(glyphForCharacter == null)
+            if (glyphForCharacter == null)
             {
                 return null;
             }
@@ -289,8 +289,9 @@ namespace MatterHackers.Agg.Font
                 curCommand = glyphForCharacter.vertex(out x, out y);
             }
 
-            ImageBuffer charImage = new ImageBuffer(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
-            charImage.NewGraphics2D().Render(glyphForCharacter, xFraction, yFraction, RGBA_Bytes.Black);
+            ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
+            var gfx = Graphics2D.CreateFromImage(charImage);
+            gfx.Render(glyphForCharacter, xFraction, yFraction, ColorRGBA.Black);
             characterImageCache[character] = charImage;
 
             return charImage;

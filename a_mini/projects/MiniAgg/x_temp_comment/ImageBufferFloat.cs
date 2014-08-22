@@ -20,7 +20,7 @@
 
 //using MatterHackers.Agg;
 //using MatterHackers.Agg.VertexSource;
-//using MatterHackers.Agg.RasterizerScanline;
+//
 //using MatterHackers.VectorMath;
 
 //namespace MatterHackers.Agg.Image

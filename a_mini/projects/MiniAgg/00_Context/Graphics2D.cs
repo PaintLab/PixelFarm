@@ -22,8 +22,14 @@ using System.Collections.Generic;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.Agg.Transform;
-//using MatterHackers.Agg.Font;
 using MatterHackers.VectorMath;
+
+namespace System.Runtime.CompilerServices
+{
+    public class ExtensionAttribute : Attribute
+    {
+    }
+}
 
 namespace MatterHackers.Agg
 {
@@ -31,8 +37,7 @@ namespace MatterHackers.Agg
     public abstract class Graphics2D
     {
         const int cover_full = 255;
-        protected IImageByte destImageByte;
-        protected IImageFloat destImageFloat;
+        protected IImage destImageByte;
         protected Stroke StrockedText;
         protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
@@ -42,25 +47,19 @@ namespace MatterHackers.Agg
             affineTransformStack.Push(Affine.NewIdentity());
         }
 
-        public Graphics2D(IImageByte destImage, ScanlineRasterizer rasterizer)
+        public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
             : this()
         {
             Initialize(destImage, rasterizer);
         }
 
-        internal void Initialize(IImageByte destImage, ScanlineRasterizer rasterizer)
+        internal void Initialize(IImage destImage, ScanlineRasterizer rasterizer)
         {
             destImageByte = destImage;
-            destImageFloat = null;
+            //destImageFloat = null;
             this.rasterizer = rasterizer;
         }
 
-        internal void Initialize(IImageFloat destImage, ScanlineRasterizer rasterizer)
-        {
-            destImageByte = null;
-            destImageFloat = destImage;
-            this.rasterizer = rasterizer;
-        }
 
         public int TransformStackCount
         {
@@ -103,13 +102,13 @@ namespace MatterHackers.Agg
             get { return rasterizer; }
         }
 
-        public abstract IScanlineCache ScanlineCache
+        public abstract IScanline ScanlineCache
         {
             get;
             set;
         }
 
-        public IImageByte DestImage
+        public IImage DestImage
         {
             get
             {
@@ -117,42 +116,26 @@ namespace MatterHackers.Agg
             }
         }
 
-        public IImageFloat DestImageFloat
+
+        public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes);
+
+        public void Render(IImage imageSource, int x, int y)
         {
-            get
-            {
-                return destImageFloat;
-            }
+            //base.Render(imageSource, x, y);
+            Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes);
-
-        public void Render(IImageByte imageSource, Point2D position)
-        {
-            Render(imageSource, position.x, position.y);
-        }
-
-        public void Render(IImageByte imageSource, Vector2 position)
-        {
-            Render(imageSource, position.x, position.y);
-        }
-
-        public void Render(IImageByte imageSource, double x, double y)
+        public void Render(IImage imageSource, double x, double y)
         {
             Render(imageSource, x, y, 0, 1, 1);
         }
 
-        public abstract void Render(IImageByte imageSource,
+        public abstract void Render(IImage imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
 
-        public abstract void Render(IImageFloat imageSource,
-            double x, double y,
-            double angleRadians,
-            double scaleX, double ScaleY);
-
-        public void Render(IVertexSource vertexSource, RGBA_Bytes[] colorArray, int[] pathIdArray, int numPaths)
+        public void Render(IVertexSource vertexSource, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)
             {
@@ -160,33 +143,24 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void Render(IVertexSource vertexSource, RGBA_Bytes color)
+        public void Render(IVertexSource vertexSource, ColorRGBA color)
         {
             Render(vertexSource, 0, color);
         }
 
-        public void Render(IVertexSource vertexSource, double x, double y, RGBA_Bytes color)
+        public void Render(IVertexSource vertexSource, double x, double y, ColorRGBA color)
         {
             Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)), 0, color);
         }
 
-        public void Render(IVertexSource vertexSource, Vector2 position, RGBA_Bytes color)
+        public void Render(IVertexSource vertexSource, Vector2 position, ColorRGBA color)
         {
             Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)), 0, color);
         }
 
-        public abstract void Clear(IColorType color);
+        public abstract void Clear(IColor color);
 
-
-
-
-
-        public void Line(Vector2 start, Vector2 end, RGBA_Bytes color)
-        {
-            Line(start.x, start.y, end.x, end.y, color);
-        }
-
-        public void Line(double x1, double y1, double x2, double y2, RGBA_Bytes color)
+        public void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
             PathStorage m_LinesToDraw = new PathStorage();
             m_LinesToDraw.remove_all();
@@ -208,7 +182,17 @@ namespace MatterHackers.Agg
 #endif
         }
 
+        //================
+        public static Graphics2D CreateFromImage(IImage img)
+        {
 
+            var imgProxy = new ChildImage(img, img.GetRecieveBlender());
+            var scanlineRaster = new ScanlineRasterizer();
+            var scanlineCachedPacked8 = new ScanlinePacked8();
+            ImageGraphics2D imageRenderer = new ImageGraphics2D(imgProxy, scanlineRaster, scanlineCachedPacked8);
+            imageRenderer.Rasterizer.SetVectorClipBox(0, 0, img.Width, img.Height);
+            return imageRenderer;
+        }
 
 
 

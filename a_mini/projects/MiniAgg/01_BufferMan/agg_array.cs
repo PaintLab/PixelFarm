@@ -27,7 +27,8 @@ using System.Collections;
 
 namespace MatterHackers.Agg
 {
-     
+    //POD= Plain Old Data  
+
     public class ArrayPOD<T>
     {
         public ArrayPOD(int size)
@@ -74,17 +75,17 @@ namespace MatterHackers.Agg
     // A simple class template to store Plain Old Data, a vector
     // of a fixed size. The data is contiguous in memory
     //------------------------------------------------------------------------
-    public class VectorPOD<dataType>
+    public class VectorPOD<T>
     {
         protected int currentSize;
-        private dataType[] internalArray = new dataType[0];
+        private T[] internalArray = new T[0];
 
         public int Count
         {
             get { return currentSize; }
         }
 
-        public IEnumerable<dataType> DataIterator()
+        public IEnumerable<T> DataIterator()
         {
             for (int index = 0; index < currentSize; index++)
             {
@@ -148,13 +149,13 @@ namespace MatterHackers.Agg
         }
 
         // Copying
-        public VectorPOD(VectorPOD<dataType> vectorToCopy)
+        public VectorPOD(VectorPOD<T> vectorToCopy)
         {
             currentSize = vectorToCopy.currentSize;
-            internalArray = (dataType[])vectorToCopy.internalArray.Clone();
+            internalArray = (T[])vectorToCopy.internalArray.Clone();
         }
 
-        public void CopyFrom(VectorPOD<dataType> vetorToCopy)
+        public void CopyFrom(VectorPOD<T> vetorToCopy)
         {
             Allocate(vetorToCopy.currentSize);
             if (vetorToCopy.currentSize != 0)
@@ -178,7 +179,7 @@ namespace MatterHackers.Agg
                 int sizeToAllocate = newCapacity + extraTail;
                 if (sizeToAllocate != 0)
                 {
-                    internalArray = new dataType[sizeToAllocate];
+                    internalArray = new T[sizeToAllocate];
                 }
             }
         }
@@ -205,7 +206,7 @@ namespace MatterHackers.Agg
             {
                 if (newSize > AllocatedSize)
                 {
-                    var newArray = new dataType[newSize];
+                    var newArray = new T[newSize];
                     if (internalArray != null)
                     {
                         for (int i = internalArray.Length - 1; i >= 0; --i)
@@ -220,7 +221,7 @@ namespace MatterHackers.Agg
         }
 
 #pragma warning disable 649
-        static dataType zeroed_object;
+        static T zeroed_object;
 #pragma warning restore 649
 
         public void zero()
@@ -232,12 +233,12 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void Add(dataType v)
+        public void Add(T v)
         {
             add(v);
         }
 
-        public virtual void add(dataType v)
+        public virtual void add(T v)
         {
             if (internalArray.Length < (currentSize + 1))
             {
@@ -251,36 +252,11 @@ namespace MatterHackers.Agg
                 }
             }
             internalArray[currentSize++] = v;
-        }
-
-        //public void push_back(dataType v) { internalArray[currentSize++] = v; }
-
-        //public void Insert(int index, dataType value)
-        //{
-        //    insert_at(index, value);
-        //}
-
-        //public void insert_at(int pos, dataType val)
-        //{
-        //    if (pos >= currentSize)
-        //    {
-        //        internalArray[currentSize] = val;
-        //    }
-        //    else
-        //    {
-        //        for (int i = 0; i < currentSize - pos; i++)
-        //        {
-        //            internalArray[i + pos + 1] = internalArray[i + pos];
-        //        }
-        //        internalArray[pos] = val;
-        //    }
-        //    ++currentSize;
-        //}
-
+        } 
         public void inc_size(int size) { currentSize += size; }
         public int size() { return currentSize; }
 
-        public dataType this[int i]
+        public T this[int i]
         {
             get
             {
@@ -288,7 +264,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public dataType[] Array
+        public T[] Array
         {
             get
             {
@@ -296,10 +272,10 @@ namespace MatterHackers.Agg
             }
         }
 
-        public dataType at(int i) { return internalArray[i]; }
-        public dataType value_at(int i) { return internalArray[i]; }
+        public T at(int i) { return internalArray[i]; }
+        public T value_at(int i) { return internalArray[i]; }
 
-        public dataType[] data() { return internalArray; }
+        public T[] data() { return internalArray; }
 
         public void remove_all() { currentSize = 0; }
         public void clear() { currentSize = 0; }
@@ -317,17 +293,7 @@ namespace MatterHackers.Agg
         {
             currentSize = 0;
         }
-
-        //public void Remove(dataType itemToRemove)
-        //{
-        //    for (int i = 0; i < Length; i++)
-        //    {
-        //        if ((object)internalArray[i] == (object)itemToRemove)
-        //        {
-        //            Remove(i);
-        //        }
-        //    }
-        //}
+         
     }
 
     //----------------------------------------------------------range_adaptor
