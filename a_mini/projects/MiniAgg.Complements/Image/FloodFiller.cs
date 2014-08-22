@@ -81,7 +81,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        ImageBuffer destImage;
+        ImageBase destImage;
         protected int imageStride = 0;
         protected byte[] destBuffer = null;
 
@@ -112,7 +112,7 @@ namespace MatterHackers.Agg
             this.fillRule = fillRule;
         }
 
-        public void Fill(ImageBuffer bufferToFillOn, int x, int y)
+        public void Fill(ImageBase bufferToFillOn, int x, int y)
         {
             unchecked // this way we can overflow the uint on negative and get a big number
             {

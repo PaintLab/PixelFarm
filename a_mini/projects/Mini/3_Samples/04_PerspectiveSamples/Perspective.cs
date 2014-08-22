@@ -79,20 +79,19 @@ namespace MatterHackers.Agg.Sample_Perspective
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageBuffer backBuffer = widgetsSubImage;
+            IImage backBuffer = widgetsSubImage;
 
             if (!didInit)
             {
                 didInit = true;
                 OnInitialize();
             }
-            ImageBuffer image;
+            ChildImage image;
             if (backBuffer.BitDepth == 32)
             {
-                image = new ImageBuffer();
-                image.Attach(backBuffer, new BlenderBGRA());
+                image = new ChildImage(backBuffer, new BlenderBGRA()); 
             }
             else
             {
@@ -100,10 +99,9 @@ namespace MatterHackers.Agg.Sample_Perspective
                 {
                     throw new System.NotSupportedException();
                 }
-                image = new ImageBuffer();
-                image.Attach(backBuffer, new BlenderBGR());
+                image = new ChildImage(backBuffer, new BlenderBGR()); 
             }
-            ImageClippingProxy clippingProxy = new ImageClippingProxy(image);
+            ClipProxyImage clippingProxy = new ClipProxyImage(image);
             clippingProxy.clear(RGBA_Bytes.White);// new RGBA_Bytes(255, 255, 255));
 
             g_rasterizer.SetVectorClipBox(0, 0, Width, Height);

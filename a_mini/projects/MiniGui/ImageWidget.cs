@@ -35,7 +35,7 @@ namespace MatterHackers.Agg.UI
 {
     public class ImageWidget : GuiWidget
     {
-        ImageBuffer image;
+        ImageBase image;
 
         public bool ForcePixelAlignment { get; set; }
 
@@ -45,13 +45,13 @@ namespace MatterHackers.Agg.UI
             LocalBounds = new RectangleDouble(0, 0, width, height);
         }
 
-        public ImageWidget(ImageBuffer initialImage)
+        public ImageWidget(ImageBase initialImage)
             : this(initialImage.Width, initialImage.Height)
         {
             Image = initialImage;
         }
 
-        public ImageBuffer Image
+        public ImageBase Image
         {
             get
             {

@@ -13,13 +13,13 @@ namespace MatterHackers.Agg.Sample_FloodFill
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
     public class FloodFillDemo : DemoBase
     {
-        ImageBuffer imageToFillOn;
+        ActualImage imageToFillOn;
         Point2D imageOffset = new Point2D(20, 60);
 
         public FloodFillDemo()
         {
             BackgroundColor = RGBA_Bytes.White;
-            imageToFillOn = new ImageBuffer(400, 300, 32, new BlenderBGRA());
+            imageToFillOn = new ActualImage(400, 300, 32, new BlenderBGRA());
             var imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
             imageToFillGraphics.Clear(RGBA_Bytes.White);
             imageToFillGraphics.DrawString("Click to fill", 20, 30);

@@ -21,7 +21,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             m_size = size;
         }
 
-        public void draw(ScanlineRasterizer ras, IScanlineCache sl, IImageBuffer destImage, RGBA_Bytes color,
+        public void draw(ScanlineRasterizer ras, IScanline sl, IImage destImage, RGBA_Bytes color,
                   double x, double y)
         {
             ras.reset();
@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
         }
 
 
-        protected override void RenderSolidSingleScanLine(IImageBuffer destImage, IScanlineCache scanLineCache, RGBA_Bytes color)
+        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanLineCache, RGBA_Bytes color)
         {
             int y = scanLineCache.y();
             int num_spans = scanLineCache.num_spans();
@@ -124,18 +124,18 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
         public void OnDraw(Graphics2D graphics2D)
         {
-            ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();
             IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
-            ImageBuffer rasterGamma = new ImageBuffer();
-            rasterGamma.Attach(widgetsSubImage, GammaBlender);
-            ImageClippingProxy clippingProxyNormal = new ImageClippingProxy(widgetsSubImage);
-            ImageClippingProxy clippingProxyGamma = new ImageClippingProxy(rasterGamma);
+            var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
+       
+
+            ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
+            ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
             clippingProxyNormal.clear(RGBA_Bytes.White);
-
             ScanlineRasterizer rasterizer = new ScanlineRasterizer();
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 

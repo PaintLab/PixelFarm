@@ -39,7 +39,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
         ScanlinePacked8 m_sl;
-        ImageBuffer m_rbuf2;
+        //ReferenceImage m_rbuf2;
 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
         RecursiveBlur m_recursive_blur = new RecursiveBlur(new recursive_blur_calc_rgb());
@@ -50,7 +50,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
         public blur()
         {
-            m_rbuf2 = new ImageBuffer();
+            //m_rbuf2 = new ReferenceImage();
             m_shape_bounds = new RectangleDouble();
             m_shadow_ctrl = new PolygonEditWidget(4);
 
@@ -147,8 +147,8 @@ namespace MatterHackers.Agg.Sample_Blur
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
-            ImageClippingProxy clippingProxy = new ImageClippingProxy(widgetsSubImage);
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             clippingProxy.clear(RGBA_Bytes.White);
             m_ras.SetVectorClipBox(0, 0, Width, Height);
 
@@ -212,10 +212,18 @@ namespace MatterHackers.Agg.Sample_Blur
 #if SourceDepth24
                 ImageBuffer image2 = new ImageBuffer(new BlenderBGR());
 #else
-                ImageBuffer image2 = new ImageBuffer(new BlenderBGRA());
+
 #endif
-                if (image2.Attach(widgetsSubImage, (int)bbox.Left, (int)bbox.Bottom, (int)bbox.Right, (int)bbox.Top))
+
+                int x1 = (int)bbox.Left;
+                int y1 = (int)bbox.Top;
+                int x2 = (int)bbox.Right;
+                int y2 = (int)bbox.Bottom;
+                RectangleInt boundsRect = new RectangleInt(x1, y2, x2, y1);
+                if (boundsRect.clip(new RectangleInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
                 {
+                    //check if intersect 
+                    ChildImage image2 = new ChildImage(widgetsSubImage, new BlenderBGRA(), x1, y2, x2, y1); 
                     // Blur it
                     switch (BlurMethod)
                     {
@@ -231,7 +239,7 @@ namespace MatterHackers.Agg.Sample_Blur
                                 stack_blur test = new stack_blur();
                                 test.Blur(image2, agg_basics.uround(m_radius), agg_basics.uround(m_radius));
 
-                            } break; 
+                            } break;
                         default:
                             {  // True Gaussian Blur, 3-5 times slower than Stack Blur,
                                 // but still constant time of radius. Very sensitive
@@ -241,7 +249,11 @@ namespace MatterHackers.Agg.Sample_Blur
                             } break;
                     }
 
+
+
                 }
+
+
             }
             else
             {

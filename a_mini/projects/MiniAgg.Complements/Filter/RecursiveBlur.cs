@@ -99,7 +99,7 @@ namespace MatterHackers.Agg.Image
             A = 3
         };
 
-        public void blur_x(IImageBuffer img, int radius)
+        public void blur_x(IImage img, int radius)
         {
 
             throw new NotSupportedException();
@@ -191,13 +191,13 @@ namespace MatterHackers.Agg.Image
 #endif
         }
 
-        public void blur_y(IImageBuffer img, int radius)
+        public void blur_y(IImage img, int radius)
         {
             FormatTransposer img2 = new FormatTransposer(img);
             blur_x(img2, radius);
         }
 
-        public void blur(ImageBuffer img, int radius)
+        public void blur(ImageBase img, int radius)
         {
             blur_x(img, radius);
             FormatTransposer img2 = new FormatTransposer(img);
@@ -205,7 +205,7 @@ namespace MatterHackers.Agg.Image
         }
 
 
-        void stack_blur_gray8(ImageBuffer img, int rx, int ry)
+        void stack_blur_gray8(ImageBase img, int rx, int ry)
         {
             throw new NotImplementedException();
 #if false
@@ -369,7 +369,7 @@ namespace MatterHackers.Agg.Image
 #endif
         }
 
-        public void Blur(ImageBuffer img, int rx, int ry)
+        public void Blur(ImageBase img, int rx, int ry)
         {
             switch (img.BitDepth)
             {
@@ -386,7 +386,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        private void stack_blur_bgr24(ImageBuffer img, int rx, int ry)
+        private void stack_blur_bgr24(ImageBase img, int rx, int ry)
         {
             throw new NotImplementedException();
 #if false
@@ -727,7 +727,7 @@ namespace MatterHackers.Agg.Image
 
         }
 
-        private void stack_blur_bgra32(ImageBuffer img, int radius, int ry)
+        private void stack_blur_bgra32(ImageBase img, int radius, int ry)
         {
 
             int width = img.Width;
@@ -735,7 +735,7 @@ namespace MatterHackers.Agg.Image
             int height = img.Height;
             int[] srcBuffer = new int[width * height];
 
-            ImageBuffer.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
+            ImageBase.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
             //int i = 0; 
             //for (int y = 0; y < height; ++y)
             //{
@@ -796,7 +796,7 @@ namespace MatterHackers.Agg.Image
         }
 
 
-        private void stack_blur_bgra32_2(ImageBuffer img, int radius, int ry)
+        private void stack_blur_bgra32_2(ImageBase img, int radius, int ry)
         {
 
 
@@ -1240,7 +1240,7 @@ namespace MatterHackers.Agg.Image
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
         }
 
-        public void blur_x(IImageBuffer img, double radius)
+        public void blur_x(IImage img, double radius)
         {
             if (radius < 0.62) return;
             if (img.Width < 3) return;
@@ -1326,13 +1326,13 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void blur_y(IImageBuffer img, double radius)
+        public void blur_y(IImage img, double radius)
         {
             FormatTransposer img2 = new FormatTransposer(img);
             blur_x(img2, radius);
         }
 
-        public void blur(IImageBuffer img, double radius)
+        public void blur(IImage img, double radius)
         {
             blur_x(img, radius);
             blur_y(img, radius);

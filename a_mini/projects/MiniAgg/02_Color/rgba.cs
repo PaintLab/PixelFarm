@@ -211,20 +211,20 @@ namespace MatterHackers.Agg.Image
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {   
             return new RGBA_Bytes(
-                buffer[bufferOffset + ImageBuffer.OrderR],
-                buffer[bufferOffset + ImageBuffer.OrderG], 
-                buffer[bufferOffset + ImageBuffer.OrderB], 
-                buffer[bufferOffset + ImageBuffer.OrderA]);
+                buffer[bufferOffset + ImageBase.OrderR],
+                buffer[bufferOffset + ImageBase.OrderG], 
+                buffer[bufferOffset + ImageBase.OrderB], 
+                buffer[bufferOffset + ImageBase.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, RGBA_Bytes sourceColor, int count)
         {
             do
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBuffer.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBuffer.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBuffer.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
             while (--count != 0);
@@ -238,21 +238,21 @@ namespace MatterHackers.Agg.Image
                 {
                     if (sourceColor.alpha == 255)
                     {
-                        buffer[bufferOffset + ImageBuffer.OrderR] = (byte)(sourceColor.red);
-                        buffer[bufferOffset + ImageBuffer.OrderG] = (byte)(sourceColor.green);
-                        buffer[bufferOffset + ImageBuffer.OrderB] = (byte)(sourceColor.blue);
-                        buffer[bufferOffset + ImageBuffer.OrderA] = (byte)(sourceColor.alpha);
+                        buffer[bufferOffset + ImageBase.OrderR] = (byte)(sourceColor.red);
+                        buffer[bufferOffset + ImageBase.OrderG] = (byte)(sourceColor.green);
+                        buffer[bufferOffset + ImageBase.OrderB] = (byte)(sourceColor.blue);
+                        buffer[bufferOffset + ImageBase.OrderA] = (byte)(sourceColor.alpha);
                     }
                     else
                     {
-                        int r = buffer[bufferOffset + ImageBuffer.OrderR];
-                        int g = buffer[bufferOffset + ImageBuffer.OrderG];
-                        int b = buffer[bufferOffset + ImageBuffer.OrderB];
-                        int a = buffer[bufferOffset + ImageBuffer.OrderA];
-                        buffer[bufferOffset + ImageBuffer.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
-                        buffer[bufferOffset + ImageBuffer.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
-                        buffer[bufferOffset + ImageBuffer.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
-                        buffer[bufferOffset + ImageBuffer.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)RGBA_Bytes.BASE_SHIFT));
+                        int r = buffer[bufferOffset + ImageBase.OrderR];
+                        int g = buffer[bufferOffset + ImageBase.OrderG];
+                        int b = buffer[bufferOffset + ImageBase.OrderB];
+                        int a = buffer[bufferOffset + ImageBase.OrderA];
+                        buffer[bufferOffset + ImageBase.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
+                        buffer[bufferOffset + ImageBase.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
+                        buffer[bufferOffset + ImageBase.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT);
+                        buffer[bufferOffset + ImageBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)RGBA_Bytes.BASE_SHIFT));
                     }
                 }
             }
@@ -313,17 +313,17 @@ namespace MatterHackers.Agg.Image
     {
         public RGBA_Floats PixelToColorRGBA_Floats(float[] buffer, int bufferOffset)
         {
-            return new RGBA_Floats(buffer[bufferOffset + ImageBuffer.OrderR], buffer[bufferOffset + ImageBuffer.OrderG], buffer[bufferOffset + ImageBuffer.OrderB], buffer[bufferOffset + ImageBuffer.OrderA]);
+            return new RGBA_Floats(buffer[bufferOffset + ImageBase.OrderR], buffer[bufferOffset + ImageBase.OrderG], buffer[bufferOffset + ImageBase.OrderB], buffer[bufferOffset + ImageBase.OrderA]);
         }
 
         public void CopyPixels(float[] buffer, int bufferOffset, RGBA_Floats sourceColor, int count)
         {
             do
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBuffer.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBuffer.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBuffer.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
             while (--count != 0);
@@ -333,21 +333,21 @@ namespace MatterHackers.Agg.Image
         {
             if (sourceColor.alpha == 1)
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = (byte)(sourceColor.red);
-                buffer[bufferOffset + ImageBuffer.OrderG] = (byte)(sourceColor.green);
-                buffer[bufferOffset + ImageBuffer.OrderB] = (byte)(sourceColor.blue);
-                buffer[bufferOffset + ImageBuffer.OrderA] = (byte)(sourceColor.alpha);
+                buffer[bufferOffset + ImageBase.OrderR] = (byte)(sourceColor.red);
+                buffer[bufferOffset + ImageBase.OrderG] = (byte)(sourceColor.green);
+                buffer[bufferOffset + ImageBase.OrderB] = (byte)(sourceColor.blue);
+                buffer[bufferOffset + ImageBase.OrderA] = (byte)(sourceColor.alpha);
             }
             else
             {
-                float r = buffer[bufferOffset + ImageBuffer.OrderR];
-                float g = buffer[bufferOffset + ImageBuffer.OrderG];
-                float b = buffer[bufferOffset + ImageBuffer.OrderB];
-                float a = buffer[bufferOffset + ImageBuffer.OrderA];
-                buffer[bufferOffset + ImageBuffer.OrderR] = (sourceColor.red - r) * sourceColor.alpha + r;
-                buffer[bufferOffset + ImageBuffer.OrderG] = (sourceColor.green - g) * sourceColor.alpha + g;
-                buffer[bufferOffset + ImageBuffer.OrderB] = (sourceColor.blue - b) * sourceColor.alpha + b;
-                buffer[bufferOffset + ImageBuffer.OrderA] = (sourceColor.alpha + a) - sourceColor.alpha * a;
+                float r = buffer[bufferOffset + ImageBase.OrderR];
+                float g = buffer[bufferOffset + ImageBase.OrderG];
+                float b = buffer[bufferOffset + ImageBase.OrderB];
+                float a = buffer[bufferOffset + ImageBase.OrderA];
+                buffer[bufferOffset + ImageBase.OrderR] = (sourceColor.red - r) * sourceColor.alpha + r;
+                buffer[bufferOffset + ImageBase.OrderG] = (sourceColor.green - g) * sourceColor.alpha + g;
+                buffer[bufferOffset + ImageBase.OrderB] = (sourceColor.blue - b) * sourceColor.alpha + b;
+                buffer[bufferOffset + ImageBase.OrderA] = (sourceColor.alpha + a) - sourceColor.alpha * a;
             }
         }
 
@@ -380,17 +380,17 @@ namespace MatterHackers.Agg.Image
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR], buffer[bufferOffset + ImageBuffer.OrderG], buffer[bufferOffset + ImageBuffer.OrderB], buffer[bufferOffset + ImageBuffer.OrderA]);
+            return new RGBA_Bytes(buffer[bufferOffset + ImageBase.OrderR], buffer[bufferOffset + ImageBase.OrderG], buffer[bufferOffset + ImageBase.OrderB], buffer[bufferOffset + ImageBase.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, RGBA_Bytes sourceColor, int count)
         {
             do
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = m_gamma.inv(sourceColor.red);
-                buffer[bufferOffset + ImageBuffer.OrderG] = m_gamma.inv(sourceColor.green);
-                buffer[bufferOffset + ImageBuffer.OrderB] = m_gamma.inv(sourceColor.blue);
-                buffer[bufferOffset + ImageBuffer.OrderA] = m_gamma.inv(sourceColor.alpha);
+                buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv(sourceColor.red);
+                buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv(sourceColor.green);
+                buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv(sourceColor.blue);
+                buffer[bufferOffset + ImageBase.OrderA] = m_gamma.inv(sourceColor.alpha);
                 bufferOffset += 4;
             }
             while (--count != 0);
@@ -400,14 +400,14 @@ namespace MatterHackers.Agg.Image
         {
             unchecked
             {
-                int r = buffer[bufferOffset + ImageBuffer.OrderR];
-                int g = buffer[bufferOffset + ImageBuffer.OrderG];
-                int b = buffer[bufferOffset + ImageBuffer.OrderB];
-                int a = buffer[bufferOffset + ImageBuffer.OrderA];
-                buffer[bufferOffset + ImageBuffer.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
-                buffer[bufferOffset + ImageBuffer.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
-                buffer[bufferOffset + ImageBuffer.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
-                buffer[ImageBuffer.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)RGBA_Bytes.BASE_SHIFT));
+                int r = buffer[bufferOffset + ImageBase.OrderR];
+                int g = buffer[bufferOffset + ImageBase.OrderG];
+                int b = buffer[bufferOffset + ImageBase.OrderB];
+                int a = buffer[bufferOffset + ImageBase.OrderA];
+                buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
+                buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
+                buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)RGBA_Bytes.BASE_SHIFT)) >> (int)RGBA_Bytes.BASE_SHIFT));
+                buffer[ImageBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)RGBA_Bytes.BASE_SHIFT));
             }
         }
 
@@ -436,17 +436,17 @@ namespace MatterHackers.Agg.Image
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR], buffer[bufferOffset + ImageBuffer.OrderG], buffer[bufferOffset + ImageBuffer.OrderB], buffer[bufferOffset + ImageBuffer.OrderA]);
+            return new RGBA_Bytes(buffer[bufferOffset + ImageBase.OrderR], buffer[bufferOffset + ImageBase.OrderG], buffer[bufferOffset + ImageBase.OrderB], buffer[bufferOffset + ImageBase.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, RGBA_Bytes sourceColor, int count)
         {
             for (int i = 0; i < count; i++)
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBuffer.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBuffer.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBuffer.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
         }
@@ -478,14 +478,14 @@ namespace MatterHackers.Agg.Image
 					pDestBuffer[bufferOffset + ImageBuffer.OrderA] = 255;
 					            
 #else
-					int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderR] * oneOverAlpha + 255) >> 8) + sourceColor.red];
-                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderG] * oneOverAlpha + 255) >> 8) + sourceColor.green];
-                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderB] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
-                    int a = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
-                    pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)r;
-                    pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)g;
-                    pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)b;
-                    pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(oneOverAlpha * (base_mask - a) + 255) >> 8]);
+					int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * oneOverAlpha + 255) >> 8) + sourceColor.red];
+                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * oneOverAlpha + 255) >> 8) + sourceColor.green];
+                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
+                    int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
+                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
+                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
+                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
+                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(oneOverAlpha * (base_mask - a) + 255) >> 8]);
 #endif
                 }
             }
@@ -509,24 +509,24 @@ namespace MatterHackers.Agg.Image
                                 RGBA_Bytes sourceColor = sourceColors[sourceColorsOffset];
                                 if (sourceColor.alpha == 255)
                                 {
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)sourceColor.red;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)sourceColor.green;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)sourceColor.blue;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderA] = 255;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = 255;
                                 }
                                 else
                                 {
                                     int OneOverAlpha = base_mask - sourceColor.alpha;
                                     unchecked
                                     {
-                                        int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                        int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                        int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                        int a = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
-                                        pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)r;
-                                        pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)g;
-                                        pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)b;
-                                        pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                                        int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                        int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                        int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                        int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
+                                        pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
+                                        pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
+                                        pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
+                                        pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
                                     }
                                 }
 #endif
@@ -546,24 +546,24 @@ namespace MatterHackers.Agg.Image
                                 }
                                 else if (alpha == 255)
                                 {
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)sourceColor.red;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)sourceColor.green;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)sourceColor.blue;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)alpha;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
                                 }
                                 else
                                 {
                                     int OneOverAlpha = base_mask - alpha;
                                     unchecked
                                     {
-                                        int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                        int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                        int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                        int a = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
-                                        pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)r;
-                                        pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)g;
-                                        pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)b;
-                                        pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                                        int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                        int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                        int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                        int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
+                                        pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
+                                        pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
+                                        pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
+                                        pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
                                     }
                                 }
                                 sourceColorsOffset++;
@@ -580,24 +580,24 @@ namespace MatterHackers.Agg.Image
                         int alpha = (sourceColor.alpha * sourceCovers[sourceCoversOffset] + 255) / 256;
                         if (alpha == 255)
                         {
-                            pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)sourceColor.red;
-                            pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)sourceColor.green;
-                            pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)sourceColor.blue;
-                            pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)alpha;
+                            pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
+                            pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
+                            pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
+                            pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
                         }
                         else if(alpha > 0)
                         {
                             int OneOverAlpha = base_mask - alpha;
                             unchecked
                             {
-                                int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                int a = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)r;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)g;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)b;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                                int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
+                                pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
+                                pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
+                                pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
+                                pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
                             }
                         }
                         sourceColorsOffset++;
@@ -628,17 +628,17 @@ namespace MatterHackers.Agg.Image
 
         public RGBA_Bytes PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new RGBA_Bytes(buffer[bufferOffset + ImageBuffer.OrderR], buffer[bufferOffset + ImageBuffer.OrderG], buffer[bufferOffset + ImageBuffer.OrderB], buffer[bufferOffset + ImageBuffer.OrderA]);
+            return new RGBA_Bytes(buffer[bufferOffset + ImageBase.OrderR], buffer[bufferOffset + ImageBase.OrderG], buffer[bufferOffset + ImageBase.OrderB], buffer[bufferOffset + ImageBase.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, RGBA_Bytes sourceColor, int count)
         {
             for (int i = 0; i < count; i++)
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBuffer.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBuffer.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBuffer.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
         }
@@ -655,15 +655,15 @@ namespace MatterHackers.Agg.Image
                     int sourceG = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.green + 255) >> 8]);
                     int sourceB = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.blue + 255) >> 8]);
 
-                    int destR = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderR] * oneOverAlpha + 255) >> 8) + sourceR];
-                    int destG = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderG] * oneOverAlpha + 255) >> 8) + sourceG];
-                    int destB = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBuffer.OrderB] * oneOverAlpha + 255) >> 8) + sourceB];
+                    int destR = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * oneOverAlpha + 255) >> 8) + sourceR];
+                    int destG = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * oneOverAlpha + 255) >> 8) + sourceG];
+                    int destB = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * oneOverAlpha + 255) >> 8) + sourceB];
                     // TODO: calculated the correct dest alpha
                     //int destA = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
 
-                    pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)destR;
-                    pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)destG;
-                    pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)destB;
+                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)destR;
+                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)destG;
+                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)destB;
                     //pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(oneOverAlpha * (base_mask - a) + 255) >> 8]);
                 }
             }
@@ -778,10 +778,10 @@ namespace MatterHackers.Agg.Image
         {
             do
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBuffer.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBuffer.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBuffer.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
             while (--count != 0);
@@ -796,10 +796,10 @@ namespace MatterHackers.Agg.Image
         {
             do
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBuffer.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBuffer.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBuffer.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
             while (--count != 0);
@@ -809,21 +809,21 @@ namespace MatterHackers.Agg.Image
         {
             if (sourceColor.alpha == 1)
             {
-                buffer[bufferOffset + ImageBuffer.OrderR] = (byte)(sourceColor.red);
-                buffer[bufferOffset + ImageBuffer.OrderG] = (byte)(sourceColor.green);
-                buffer[bufferOffset + ImageBuffer.OrderB] = (byte)(sourceColor.blue);
-                buffer[bufferOffset + ImageBuffer.OrderA] = (byte)(sourceColor.alpha);
+                buffer[bufferOffset + ImageBase.OrderR] = (byte)(sourceColor.red);
+                buffer[bufferOffset + ImageBase.OrderG] = (byte)(sourceColor.green);
+                buffer[bufferOffset + ImageBase.OrderB] = (byte)(sourceColor.blue);
+                buffer[bufferOffset + ImageBase.OrderA] = (byte)(sourceColor.alpha);
             }
             else
             {
-                float r = buffer[bufferOffset + ImageBuffer.OrderR];
-                float g = buffer[bufferOffset + ImageBuffer.OrderG];
-                float b = buffer[bufferOffset + ImageBuffer.OrderB];
-                float a = buffer[bufferOffset + ImageBuffer.OrderA];
-                buffer[bufferOffset + ImageBuffer.OrderR] = (sourceColor.red - r) * sourceColor.alpha + r;
-                buffer[bufferOffset + ImageBuffer.OrderG] = (sourceColor.green - g) * sourceColor.alpha + g;
-                buffer[bufferOffset + ImageBuffer.OrderB] = (sourceColor.blue - b) * sourceColor.alpha + b;
-                buffer[bufferOffset + ImageBuffer.OrderA] = (sourceColor.alpha + a) - sourceColor.alpha * a;
+                float r = buffer[bufferOffset + ImageBase.OrderR];
+                float g = buffer[bufferOffset + ImageBase.OrderG];
+                float b = buffer[bufferOffset + ImageBase.OrderB];
+                float a = buffer[bufferOffset + ImageBase.OrderA];
+                buffer[bufferOffset + ImageBase.OrderR] = (sourceColor.red - r) * sourceColor.alpha + r;
+                buffer[bufferOffset + ImageBase.OrderG] = (sourceColor.green - g) * sourceColor.alpha + g;
+                buffer[bufferOffset + ImageBase.OrderB] = (sourceColor.blue - b) * sourceColor.alpha + b;
+                buffer[bufferOffset + ImageBase.OrderA] = (sourceColor.alpha + a) - sourceColor.alpha * a;
             }
         }
 
@@ -873,24 +873,24 @@ namespace MatterHackers.Agg.Image
                             }
                             else if (alpha == 255)
                             {
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderR] = (byte)sourceColor.red;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderG] = (byte)sourceColor.green;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderB] = (byte)sourceColor.blue;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)alpha;
+                                pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
+                                pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
+                                pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
+                                pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
                             }
                             else
                             {
                                 float OneOverAlpha = base_mask - alpha;
                                 unchecked
                                 {
-                                    float r = pDestBuffer[bufferOffset + ImageBuffer.OrderR] * OneOverAlpha + sourceColor.red;
-                                    float g = pDestBuffer[bufferOffset + ImageBuffer.OrderG] * OneOverAlpha + sourceColor.green;
-                                    float b = pDestBuffer[bufferOffset + ImageBuffer.OrderB] * OneOverAlpha + sourceColor.blue;
-                                    float a = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderR] = r;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderG] = g;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderB] = b;
-                                    pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (1.0f - ((OneOverAlpha * (1.0f - a))));
+                                    float r = pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + sourceColor.red;
+                                    float g = pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + sourceColor.green;
+                                    float b = pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + sourceColor.blue;
+                                    float a = pDestBuffer[bufferOffset + ImageBase.OrderA];
+                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = r;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = g;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = b;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (1.0f - ((OneOverAlpha * (1.0f - a))));
                                 }
                             }
                             sourceColorsOffset++;
@@ -906,10 +906,10 @@ namespace MatterHackers.Agg.Image
                     RGBA_Floats sourceColor = sourceColors[sourceColorsOffset];
                     if (sourceColor.alpha == 1 && sourceCovers[sourceCoversOffset] == 255)
                     {
-                        pDestBuffer[bufferOffset + ImageBuffer.OrderR] = sourceColor.red;
-                        pDestBuffer[bufferOffset + ImageBuffer.OrderG] = sourceColor.green;
-                        pDestBuffer[bufferOffset + ImageBuffer.OrderB] = sourceColor.blue;
-                        pDestBuffer[bufferOffset + ImageBuffer.OrderA] = 1;
+                        pDestBuffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+                        pDestBuffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+                        pDestBuffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+                        pDestBuffer[bufferOffset + ImageBase.OrderA] = 1;
                     }
                     else
                     {
@@ -922,16 +922,16 @@ namespace MatterHackers.Agg.Image
                             unchecked
                             {
                                 // the color is already pre multiplied by the alpha but not by the cover value so we only need to multiply th ecolor by the cover
-                                float r = (pDestBuffer[bufferOffset + ImageBuffer.OrderR] * OneOverAlpha) + sourceColor.red * coverFloat;
-                                float g = (pDestBuffer[bufferOffset + ImageBuffer.OrderG] * OneOverAlpha) + sourceColor.green * coverFloat;
-                                float b = (pDestBuffer[bufferOffset + ImageBuffer.OrderB] * OneOverAlpha) + sourceColor.blue * coverFloat;
+                                float r = (pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha) + sourceColor.red * coverFloat;
+                                float g = (pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha) + sourceColor.green * coverFloat;
+                                float b = (pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha) + sourceColor.blue * coverFloat;
                                 
-                                float destAlpha = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
+                                float destAlpha = pDestBuffer[bufferOffset + ImageBase.OrderA];
                                 float a = (destAlpha + (1.0f - destAlpha) * sourceColor.alpha * coverFloat);
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderR] = r;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderG] = g;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderB] = b;
-                                pDestBuffer[bufferOffset + ImageBuffer.OrderA] = a;
+                                pDestBuffer[bufferOffset + ImageBase.OrderR] = r;
+                                pDestBuffer[bufferOffset + ImageBase.OrderG] = g;
+                                pDestBuffer[bufferOffset + ImageBase.OrderB] = b;
+                                pDestBuffer[bufferOffset + ImageBase.OrderA] = a;
                             }
                         }
                     }

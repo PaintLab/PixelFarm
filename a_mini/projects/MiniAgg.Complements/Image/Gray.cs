@@ -33,7 +33,7 @@ namespace MatterHackers.Agg.Image
     {
         public int NumPixelBits { get { return 8; } }
 
-        public const byte base_mask = 255;
+        public const byte BASE_SHIFT = 255;
         const int base_shift = 8;
 
         static int[] m_Saturate9BitToByte = new int[1 << 9];
@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.Image
 
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, RGBA_Bytes sourceColor)
         {
-            int OneOverAlpha = base_mask - sourceColor.alpha;
+            int OneOverAlpha = BASE_SHIFT - sourceColor.alpha;
             unchecked
             {
                 int y = (sourceColor.red * 77) + (sourceColor.green * 151) + (sourceColor.blue * 28);

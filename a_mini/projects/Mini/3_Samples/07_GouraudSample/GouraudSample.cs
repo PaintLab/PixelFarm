@@ -65,7 +65,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void render_gouraud(IImageBuffer backBuffer, IScanlineCache sl, IRasterizer ras)
+        public void render_gouraud(IImage backBuffer, IScanline sl, IRasterizer ras)
         {
             double alpha = this.AlphaValue;
             double brc = 1;
@@ -74,10 +74,9 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            ImageBuffer image = new ImageBuffer();
-            image.Attach(backBuffer, new BlenderBGRA());
+            var image = new ChildImage(backBuffer, new BlenderBGRA()); 
 #endif
-            ImageClippingProxy ren_base = new ImageClippingProxy(image);
+            ClipProxyImage ren_base = new ClipProxyImage(image);
 
             //span_allocator span_alloc = new span_allocator();
             span_gouraud_rgba span_gen = new span_gouraud_rgba();
@@ -154,16 +153,15 @@ namespace MatterHackers.Agg.Sample_Gouraud
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            ImageBuffer widgetsSubImage = ImageBuffer.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImageBuffer backBuffer = widgetsSubImage;
+            IImage backBuffer = widgetsSubImage;
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            ImageBuffer pf = new ImageBuffer();
-            pf.Attach(backBuffer, new BlenderBGRA());
+            var pf = new ChildImage(backBuffer, new BlenderBGRA()); 
 #endif
-            ImageClippingProxy ren_base = new ImageClippingProxy(pf);
+            ClipProxyImage ren_base = new ClipProxyImage(pf);
             ren_base.clear(new RGBA_Floats(1.0, 1.0, 1.0));
 
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();

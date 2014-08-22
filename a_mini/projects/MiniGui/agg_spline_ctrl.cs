@@ -470,7 +470,7 @@ namespace MatterHackers.Agg.UI
         public void curve_color(RGBA_Bytes c) { m_curve_color = c; }
         public void inactive_pnt_color(RGBA_Bytes c) { m_inactive_pnt_color = c; }
         public void active_pnt_color(RGBA_Bytes c) { m_active_pnt_color = c; }
-        public override IColorType color(int i)
+        public override IColor color(int i)
         {
             switch (i)
             {

@@ -134,22 +134,22 @@ namespace MatterHackers.Agg
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectangleDouble rect, IColorType fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectangleDouble rect, IColor fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectangleInt rect, IColorType fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectangleInt rect, IColor fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, Vector2 leftBottom, Vector2 rightTop, IColorType fillColor)
+        public static void FillRectangle(this Graphics2D gx, Vector2 leftBottom, Vector2 rightTop, IColor fillColor)
         {
             gx.FillRectangle(leftBottom.x, leftBottom.y, rightTop.x, rightTop.y, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, double left, double bottom, double right, double top, IColorType fillColor)
+        public static void FillRectangle(this Graphics2D gx, double left, double bottom, double right, double top, IColor fillColor)
         {
             if (right < left || top < bottom)
             {

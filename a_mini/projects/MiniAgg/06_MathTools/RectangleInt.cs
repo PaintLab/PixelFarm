@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
- 
+
 using System.Text;
 
 namespace MatterHackers.Agg
@@ -9,7 +9,7 @@ namespace MatterHackers.Agg
     {
         public int Left, Bottom, Right, Top;
 
-         
+
         public RectangleInt(int left, int bottom, int right, int top)
         {
             Left = left;
@@ -17,7 +17,7 @@ namespace MatterHackers.Agg
             Right = right;
             Top = top;
         }
-         
+
 
         // This function assumes the rect is normalized
         public int Width
@@ -282,5 +282,13 @@ namespace MatterHackers.Agg
 
             return true;
         }
+
+
+#if DEBUG
+        public override string ToString()
+        {
+            return "L:" + this.Left + ",T:" + this.Top + ",R:" + this.Right + ",B:" + this.Bottom;
+        }
+#endif
     }
 }

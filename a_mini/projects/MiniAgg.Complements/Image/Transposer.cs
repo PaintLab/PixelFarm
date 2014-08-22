@@ -21,9 +21,9 @@ using MatterHackers.Agg;
 namespace MatterHackers.Agg.Image
 {
     //=======================================================pixfmt_transposer
-    public sealed class FormatTransposer : ImageProxy
+    public sealed class FormatTransposer : ProxyImage
     {
-        public FormatTransposer(IImageBuffer pixelFormat)
+        public FormatTransposer(IImage pixelFormat)
             : base(pixelFormat)
         {
         }

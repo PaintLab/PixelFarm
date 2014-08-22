@@ -9,7 +9,7 @@ namespace Mini
 {
     public static class BitmapHelper
     {
-        public static void CopyToWindowsBitmap(ImageBuffer backingImageBufferByte,
+        public static void CopyToWindowsBitmap(ImageBase backingImageBufferByte,
             Bitmap windowsBitmap,
             RectangleInt rect)
         {
@@ -22,8 +22,8 @@ namespace Mini
             //int backBufferHeight = backingImageBufferByte.Height;
             //int backBufferHeightMinusOne = backBufferHeight - 1;
 
-            int offset;
-            byte[] buffer = backingImageBufferByte.GetBuffer(out offset);
+            int offset = 0;
+            byte[] buffer = backingImageBufferByte.GetBuffer();
 
             BitmapHelper.CopyToWindowsBitmap(buffer,offset,
                 backingImageBufferByte.StrideInBytes(), backingImageBufferByte.Height,
