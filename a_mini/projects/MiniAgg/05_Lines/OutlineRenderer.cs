@@ -98,7 +98,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_dx = (x2 - x1);
             m_dy = (y2 - y1);
-            m_dist = (agg_basics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
                           (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
 
             m_dx <<= LineAABasics.line_subpixel_shift;
@@ -174,7 +174,7 @@ namespace MatterHackers.Agg.Lines
             m_dx_start = (LineAABasics.line_mr(sx) - LineAABasics.line_mr(x1));
             m_dy_start = (LineAABasics.line_mr(sy) - LineAABasics.line_mr(y1));
 
-            m_dist = (agg_basics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
                           (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
 
             m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
@@ -194,7 +194,7 @@ namespace MatterHackers.Agg.Lines
             m_dx_start = (LineAABasics.line_mr(ex) - LineAABasics.line_mr(x2));
             m_dy_start = (LineAABasics.line_mr(ey) - LineAABasics.line_mr(y2));
 
-            m_dist = (agg_basics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
                           (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
 
             m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ex)) * m_dy_start -
@@ -328,7 +328,7 @@ namespace MatterHackers.Agg.Lines
                 m_dx_end = (LineAABasics.line_mr(ex) - LineAABasics.line_mr(x2));
                 m_dy_end = (LineAABasics.line_mr(ey) - LineAABasics.line_mr(y2));
 
-                m_dist = (agg_basics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
+                m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
                               (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
 
                 m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
@@ -1212,7 +1212,7 @@ namespace MatterHackers.Agg.Lines
         const int aa_scale = 1 << aa_shift;
         const int aa_mask = aa_scale - 1;
 
-        ArrayPOD<byte> m_profile = new ArrayPOD<byte>(64);
+        ArrayList<byte> m_profile = new ArrayList<byte>(64);
         byte[] m_gamma = new byte[aa_scale];
         int m_subpixel_width;
         double m_min_width;
@@ -1251,7 +1251,7 @@ namespace MatterHackers.Agg.Lines
             int i;
             for (i = 0; i < aa_scale; i++)
             {
-                m_gamma[i] = (byte)(agg_basics.uround(gamma_function.GetGamma((double)(i) / aa_mask) * aa_mask));
+                m_gamma[i] = (byte)(AggBasics.uround(gamma_function.GetGamma((double)(i) / aa_mask) * aa_mask));
             }
         }
 
@@ -1289,7 +1289,7 @@ namespace MatterHackers.Agg.Lines
 
         private byte[] profile(double w)
         {
-            m_subpixel_width = (int)agg_basics.uround(w * subpixel_scale);
+            m_subpixel_width = (int)AggBasics.uround(w * subpixel_scale);
             int size = m_subpixel_width + subpixel_scale * 6;
             if (size > m_profile.Size())
             {
@@ -1542,7 +1542,7 @@ namespace MatterHackers.Agg.Lines
             int dy = y - yc1;
             do
             {
-                int d = (int)(agg_math.fast_sqrt(dx * dx + dy * dy));
+                int d = (int)(AggMath.fast_sqrt(dx * dx + dy * dy));
                 covers[Offset1] = 0;
                 if (cmp(di.dist()) && d <= w)
                 {
@@ -1612,7 +1612,7 @@ namespace MatterHackers.Agg.Lines
             int dy = y - yc;
             do
             {
-                int d = (int)(agg_math.fast_sqrt(dx * dx + dy * dy));
+                int d = (int)(AggMath.fast_sqrt(dx * dx + dy * dy));
                 covers[index1] = 0;
                 if (di.dist1() <= 0 && di.dist2() > 0 && d <= w)
                 {
@@ -1695,7 +1695,7 @@ namespace MatterHackers.Agg.Lines
                     if (flags != 0)
                     {
                         line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
-                                           agg_basics.uround(agg_math.calc_distance(x1, y1, x2, y2)));
+                                           AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         line0_no_clip(lp2);
                     }
                     else
@@ -1747,7 +1747,7 @@ namespace MatterHackers.Agg.Lines
                     if(flags != 0)
                     {
                         line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
-                                           agg_basics.uround(agg_math.calc_distance(x1, y1, x2, y2)));
+                                           AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if(((int)flags & 1) != 0)
                         {
                             sx = x1 + (y2 - y1); 
@@ -1812,7 +1812,7 @@ namespace MatterHackers.Agg.Lines
                     if (flags != 0)
                     {
                         line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
-                                           agg_basics.uround(agg_math.calc_distance(x1, y1, x2, y2)));
+                                           AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if ((flags & 2) != 0)
                         {
                             ex = x2 + (y2 - y1);
@@ -1882,7 +1882,7 @@ namespace MatterHackers.Agg.Lines
                     if(flags != 0)
                     {
                         line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
-                            agg_basics.uround(agg_math.calc_distance(x1, y1, x2, y2)));
+                            AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if((flags & 1) != 0)
                         {
                             sx = x1 + (y2 - y1); 

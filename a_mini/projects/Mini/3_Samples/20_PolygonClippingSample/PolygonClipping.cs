@@ -490,7 +490,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_step = step;
             m_start_angle = start_angle;
             m_angle = start_angle;
-            m_da = agg_basics.deg2rad(4.0);
+            m_da = AggBasics.deg2rad(4.0);
             m_dr = m_step / 90.0;
         }
 

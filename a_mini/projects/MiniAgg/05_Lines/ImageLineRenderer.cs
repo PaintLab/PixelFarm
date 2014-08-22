@@ -133,10 +133,10 @@ namespace MatterHackers.Agg.Lines
             // 0000000000
             // 0000000000
 
-            m_height = (int)agg_basics.uceil(src.Height);
-            m_width = (int)agg_basics.uceil(src.Width);
-            m_width_hr = (int)agg_basics.uround(src.Width * LineAABasics.line_subpixel_scale);
-            m_half_height_hr = (int)agg_basics.uround(src.Height * LineAABasics.line_subpixel_scale / 2);
+            m_height = (int)AggBasics.uceil(src.Height);
+            m_width = (int)AggBasics.uceil(src.Width);
+            m_width_hr = (int)AggBasics.uround(src.Width * LineAABasics.line_subpixel_scale);
+            m_half_height_hr = (int)AggBasics.uround(src.Height * LineAABasics.line_subpixel_scale / 2);
             m_offset_y_hr = m_dilation_hr + m_half_height_hr - LineAABasics.line_subpixel_scale / 2;
             m_half_height_hr += LineAABasics.line_subpixel_scale / 2;
 
@@ -284,7 +284,7 @@ namespace MatterHackers.Agg.Lines
             m_dx_end = (LineAABasics.line_mr(ex) - LineAABasics.line_mr(x2));
             m_dy_end = (LineAABasics.line_mr(ey) - LineAABasics.line_mr(y2));
 
-            m_dist = (agg_basics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
                           (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
 
             m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
@@ -292,11 +292,11 @@ namespace MatterHackers.Agg.Lines
 
             m_dist_end = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ex)) * m_dy_end -
                        (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ey)) * m_dx_end);
-            m_len = (int)(agg_basics.uround(len / scale));
+            m_len = (int)(AggBasics.uround(len / scale));
 
             double d = len * scale;
-            int dx = agg_basics.iround(((x2 - x1) << LineAABasics.line_subpixel_shift) / d);
-            int dy = agg_basics.iround(((y2 - y1) << LineAABasics.line_subpixel_shift) / d);
+            int dx = AggBasics.iround(((x2 - x1) << LineAABasics.line_subpixel_shift) / d);
+            int dy = AggBasics.iround(((y2 - y1) << LineAABasics.line_subpixel_shift) / d);
             m_dx_pict = -dy;
             m_dy_pict = dx;
             m_dist_pict = ((x + LineAABasics.line_subpixel_scale / 2 - (x1 - dy)) * m_dy_pict -
@@ -830,7 +830,7 @@ namespace MatterHackers.Agg.Lines
         public double scale_x() { return m_scale_x; }
 
         //---------------------------------------------------------------------
-        public void start_x(double s) { m_start = agg_basics.iround(s * LineAABasics.line_subpixel_scale); }
+        public void start_x(double s) { m_start = AggBasics.iround(s * LineAABasics.line_subpixel_scale); }
         public double start_x() { return (double)(m_start) / LineAABasics.line_subpixel_scale; }
 
         //---------------------------------------------------------------------

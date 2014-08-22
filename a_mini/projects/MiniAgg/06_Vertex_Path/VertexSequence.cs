@@ -62,7 +62,7 @@ namespace MatterHackers.Agg
     // Function close() calls this operator and removes the last vertex if 
     // necessary.
     //------------------------------------------------------------------------
-    public class VertexSequence : VectorPOD<VertexDistance>
+    public class VertexSequence : VectorArrayList<VertexDistance>
     {
         public override void add(VertexDistance val)
         {
@@ -146,10 +146,10 @@ namespace MatterHackers.Agg
         }
         public bool IsEqual(VertexDistance val)
         {
-            bool ret = (dist = agg_math.calc_distance(x, y, val.x, val.y)) > agg_math.vertex_dist_epsilon;
+            bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.vertex_dist_epsilon;
             if (!ret)
             {
-                dist = 1.0 / agg_math.vertex_dist_epsilon;
+                dist = 1.0 / AggMath.vertex_dist_epsilon;
             }
             return ret;
         }

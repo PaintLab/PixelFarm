@@ -38,12 +38,12 @@ namespace MatterHackers.Agg.Lines
         {
             double dx = val.x - x;
             double dy = val.y - y;
-            return (len = agg_basics.uround(Math.Sqrt(dx * dx + dy * dy))) >
+            return (len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy))) >
                    (LineAABasics.line_subpixel_scale + LineAABasics.line_subpixel_scale / 2);
         }
     };
 
-    public class line_aa_vertex_sequence : VectorPOD<line_aa_vertex>
+    public class line_aa_vertex_sequence : VectorArrayList<line_aa_vertex>
     {
         public override void add(line_aa_vertex val)
         {

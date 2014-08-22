@@ -35,7 +35,7 @@ using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 using filling_rule_e = MatterHackers.Agg.FillingRule;
 using status = MatterHackers.Agg.ScanlineRasterizer.Status;
-using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e;
+using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.poly_subpixel_scale_e;
 
 namespace MatterHackers.Agg
 {
@@ -185,7 +185,7 @@ namespace MatterHackers.Agg
         {
             for (int i = AA_SCALE - 1; i >= 0; --i)
             {
-                m_gamma[i] = (int)agg_basics.uround(
+                m_gamma[i] = (int)AggBasics.uround(
                     gamma_function.GetGamma((double)(i) / AA_MASK) * AA_MASK);
             }
         }

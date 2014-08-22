@@ -1227,16 +1227,16 @@ namespace MatterHackers.Agg.Image
     //===========================================================recursive_blur
     public sealed class RecursiveBlur
     {
-        VectorPOD<RecursizeBlurCalculator> m_sum1;
-        VectorPOD<RecursizeBlurCalculator> m_sum2;
-        VectorPOD<ColorRGBA> m_buf;
+        VectorArrayList<RecursizeBlurCalculator> m_sum1;
+        VectorArrayList<RecursizeBlurCalculator> m_sum2;
+        VectorArrayList<ColorRGBA> m_buf;
         RecursizeBlurCalculator m_RecursizeBlurCalculatorFactory;
 
         public RecursiveBlur(RecursizeBlurCalculator recursizeBluerCalculatorFactory)
         {
-            m_sum1 = new VectorPOD<RecursizeBlurCalculator>();
-            m_sum2 = new VectorPOD<RecursizeBlurCalculator>();
-            m_buf = new VectorPOD<ColorRGBA>();
+            m_sum1 = new VectorArrayList<RecursizeBlurCalculator>();
+            m_sum2 = new VectorArrayList<RecursizeBlurCalculator>();
+            m_buf = new VectorArrayList<ColorRGBA>();
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
         }
 
@@ -1364,9 +1364,9 @@ namespace MatterHackers.Agg.Image
 
         public override void to_pix(ref ColorRGBA c)
         {
-            c.red = (byte)agg_basics.uround(r);
-            c.green = (byte)agg_basics.uround(g);
-            c.blue = (byte)agg_basics.uround(b);
+            c.red = (byte)AggBasics.uround(r);
+            c.green = (byte)AggBasics.uround(g);
+            c.blue = (byte)AggBasics.uround(b);
         }
     };
 
@@ -1397,10 +1397,10 @@ namespace MatterHackers.Agg.Image
 
         public override void to_pix(ref ColorRGBA c)
         {
-            c.red = (byte)agg_basics.uround(r);
-            c.green = (byte)agg_basics.uround(g);
-            c.blue = (byte)agg_basics.uround(b);
-            c.alpha = (byte)agg_basics.uround(a);
+            c.red = (byte)AggBasics.uround(r);
+            c.green = (byte)AggBasics.uround(g);
+            c.blue = (byte)AggBasics.uround(b);
+            c.alpha = (byte)AggBasics.uround(a);
         }
     };
 
@@ -1425,7 +1425,7 @@ namespace MatterHackers.Agg.Image
 
         public override void to_pix(ref ColorRGBA c)
         {
-            c.red = (byte)agg_basics.uround(r);
+            c.red = (byte)AggBasics.uround(r);
         }
     };
 }

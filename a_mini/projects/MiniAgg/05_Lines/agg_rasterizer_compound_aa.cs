@@ -52,12 +52,12 @@ namespace MatterHackers.Agg
         VectorClipper m_VectorClipper;
         FillingRule m_filling_rule;
         LayerOrder m_layer_order;
-        VectorPOD<style_info> m_styles;  // Active Styles
-        VectorPOD<int> m_ast;     // Active Style Table (unique values)
-        VectorPOD<byte> m_asm;     // Active Style Mask 
-        VectorPOD<cell_aa> m_cells;
-        VectorPOD<byte> m_cover_buf;
-        VectorPOD<int> m_master_alpha;
+        VectorArrayList<style_info> m_styles;  // Active Styles
+        VectorArrayList<int> m_ast;     // Active Style Table (unique values)
+        VectorArrayList<byte> m_asm;     // Active Style Mask 
+        VectorArrayList<cell_aa> m_cells;
+        VectorArrayList<byte> m_cover_buf;
+        VectorArrayList<int> m_master_alpha;
 
         int m_min_style;
         int m_max_style;
@@ -80,7 +80,7 @@ namespace MatterHackers.Agg
         private const int aa_scale2 = aa_scale * 2;
         private const int aa_mask2 = aa_scale2 - 1;
 
-        private const int poly_subpixel_shift = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_shift;
+        private const int poly_subpixel_shift = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_shift;
 
         public rasterizer_compound_aa()
         {
@@ -88,12 +88,12 @@ namespace MatterHackers.Agg
             m_VectorClipper = new VectorClipper();
             m_filling_rule = FillingRule.NonZero;
             m_layer_order = LayerOrder.Direct;
-            m_styles = new VectorPOD<style_info>();  // Active Styles
-            m_ast = new VectorPOD<int>();     // Active Style Table (unique values)
-            m_asm = new VectorPOD<byte>();     // Active Style Mask 
-            m_cells = new VectorPOD<cell_aa>();
-            m_cover_buf = new VectorPOD<byte>();
-            m_master_alpha = new VectorPOD<int>();
+            m_styles = new VectorArrayList<style_info>();  // Active Styles
+            m_ast = new VectorArrayList<int>();     // Active Style Table (unique values)
+            m_asm = new VectorArrayList<byte>();     // Active Style Mask 
+            m_cells = new VectorArrayList<cell_aa>();
+            m_cover_buf = new VectorArrayList<byte>();
+            m_master_alpha = new VectorArrayList<int>();
             m_min_style = (0x7FFFFFFF);
             m_max_style = (-0x7FFFFFFF);
             m_start_x = (0);
@@ -355,7 +355,7 @@ namespace MatterHackers.Agg
 
             if (m_layer_order != LayerOrder.Unsorted)
             {
-                VectorPOD_RangeAdaptor ra = new VectorPOD_RangeAdaptor(m_ast, 1, m_ast.size() - 1);
+                VectorArrayListRangeAdaptor ra = new VectorArrayListRangeAdaptor(m_ast, 1, m_ast.size() - 1);
                 if (m_layer_order == LayerOrder.Direct)
                 {
 
@@ -433,7 +433,7 @@ namespace MatterHackers.Agg
                 {
                     m_master_alpha.add(aa_mask);
                 }
-                m_master_alpha.Array[style] = agg_basics.uround(alpha * aa_mask);
+                m_master_alpha.Array[style] = AggBasics.uround(alpha * aa_mask);
             }
         }
 
@@ -580,12 +580,12 @@ namespace MatterHackers.Agg
 
         static class QuickSort
         {
-            public static void Sort(VectorPOD_RangeAdaptor dataToSort)
+            public static void Sort(VectorArrayListRangeAdaptor dataToSort)
             {
                 Sort(dataToSort, 0, (int)(dataToSort.size() - 1));
             }
 
-            public static void Sort(VectorPOD_RangeAdaptor dataToSort, int beg, int end)
+            public static void Sort(VectorArrayListRangeAdaptor dataToSort, int beg, int end)
             {
                 if (end == beg)
                 {
@@ -606,7 +606,7 @@ namespace MatterHackers.Agg
                 }
             }
 
-            static int getPivotPoint(VectorPOD_RangeAdaptor dataToSort, int begPoint, int endPoint)
+            static int getPivotPoint(VectorArrayListRangeAdaptor dataToSort, int begPoint, int endPoint)
             {
                 int pivot = begPoint;
                 int m = begPoint + 1;

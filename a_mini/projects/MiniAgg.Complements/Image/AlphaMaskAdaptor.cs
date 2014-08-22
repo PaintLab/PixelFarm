@@ -21,7 +21,7 @@ namespace MatterHackers.Agg.Image
     public sealed class AlphaMaskAdaptor : ProxyImage
     {
         IAlphaMask m_mask;
-        ArrayPOD<byte> m_spans;
+        ArrayList<byte> m_spans;
 
         enum span_extra_tail_e { span_extra_tail = 256 };
 
@@ -39,7 +39,7 @@ namespace MatterHackers.Agg.Image
         void init_span(int len, byte cover)
         {
             realloc_span(len);
-            agg_basics.memset(m_spans.Array, 0, cover, len);
+            AggBasics.memset(m_spans.Array, 0, cover, len);
         }
 
         void init_span(int len, byte[] covers, int coversIndex)
@@ -57,7 +57,7 @@ namespace MatterHackers.Agg.Image
         {
             linkedImage = image;
             m_mask = mask;
-            m_spans = new ArrayPOD<byte>(255);
+            m_spans = new ArrayList<byte>(255);
         }
 
         public void AttachImage(IImage image)

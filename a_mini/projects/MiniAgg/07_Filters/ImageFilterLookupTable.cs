@@ -49,7 +49,7 @@ namespace MatterHackers.Agg
         double m_radius;
         int m_diameter;
         int m_start;
-        ArrayPOD<int> m_weight_array;
+        ArrayList<int> m_weight_array;
 
         public enum image_filter_scale_e
         {
@@ -81,7 +81,7 @@ namespace MatterHackers.Agg
                 double x = (double)i / (double)image_subpixel_scale_e.image_subpixel_scale;
                 double y = filter.calc_weight(x);
                 m_weight_array.Array[pivot + i] =
-                m_weight_array.Array[pivot - i] = agg_basics.iround(y * (int)image_filter_scale_e.image_filter_scale);
+                m_weight_array.Array[pivot - i] = AggBasics.iround(y * (int)image_filter_scale_e.image_filter_scale);
             }
             int end = (diameter() << (int)image_subpixel_scale_e.image_subpixel_shift) - 1;
             m_weight_array.Array[0] = m_weight_array.Array[end];
@@ -93,7 +93,7 @@ namespace MatterHackers.Agg
 
         public ImageFilterLookUpTable()
         {
-            m_weight_array = new ArrayPOD<int>(256);
+            m_weight_array = new ArrayList<int>(256);
             m_radius = (0);
             m_diameter = (0);
             m_start = (0);
@@ -106,7 +106,7 @@ namespace MatterHackers.Agg
         }
         public ImageFilterLookUpTable(IImageFilterFunction filter, bool normalization)
         {
-            m_weight_array = new ArrayPOD<int>(256);
+            m_weight_array = new ArrayList<int>(256);
             calculate(filter, normalization);
         }
 
@@ -145,7 +145,7 @@ namespace MatterHackers.Agg
                     for (j = 0; j < m_diameter; j++)
                     {
                         sum += m_weight_array.Array[j * (int)image_subpixel_scale_e.image_subpixel_scale + i] =
-                            (int)agg_basics.iround(m_weight_array.Array[j * (int)image_subpixel_scale_e.image_subpixel_scale + i] * k);
+                            (int)AggBasics.iround(m_weight_array.Array[j * (int)image_subpixel_scale_e.image_subpixel_scale + i] * k);
                     }
 
                     sum -= (int)image_filter_scale_e.image_filter_scale;
@@ -178,7 +178,7 @@ namespace MatterHackers.Agg
         private void realloc_lut(double radius)
         {
             m_radius = radius;
-            m_diameter = agg_basics.uceil(radius) * 2;
+            m_diameter = AggBasics.uceil(radius) * 2;
             m_start = -(int)(m_diameter / 2 - 1);
             int size = (int)m_diameter << (int)image_subpixel_scale_e.image_subpixel_shift;
             if (size > m_weight_array.Size())

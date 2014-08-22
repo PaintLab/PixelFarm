@@ -143,7 +143,7 @@ namespace MatterHackers.Agg.UI
             {
                 double xp = calc_xp(i);
                 double yp = calc_yp(i);
-                if (agg_math.calc_distance(x, y, xp, yp) <= m_point_size + 1)
+                if (AggMath.calc_distance(x, y, xp, yp) <= m_point_size + 1)
                 {
                     m_pdx = xp - x;
                     m_pdy = yp - y;

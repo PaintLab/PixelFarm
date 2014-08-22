@@ -65,11 +65,11 @@ namespace MatterHackers.Agg.VertexSource
                 double k = (y - m_y1) * m_1dy;
                 if(k < 0.0) k = 0.0;
                 if(k > 1.0) k = 1.0;
-                m_r = m_r1 + agg_basics.iround(m_dr * k);
-                m_g = m_g1 + agg_basics.iround(m_dg * k);
-                m_b = m_b1 + agg_basics.iround(m_db * k);
-                m_a = m_a1 + agg_basics.iround(m_da * k);
-                m_x = agg_basics.iround((m_x1 + m_dx * k) * (double)subpixel_scale_e.subpixel_scale);
+                m_r = m_r1 + AggBasics.iround(m_dr * k);
+                m_g = m_g1 + AggBasics.iround(m_dg * k);
+                m_b = m_b1 + AggBasics.iround(m_db * k);
+                m_a = m_a1 + AggBasics.iround(m_da * k);
+                m_x = AggBasics.iround((m_x1 + m_dx * k) * (double)subpixel_scale_e.subpixel_scale);
             }
 
             public double m_x1;
@@ -118,7 +118,7 @@ namespace MatterHackers.Agg.VertexSource
 
             m_y2 = (int)(coord[1].y);
 
-            m_swap = agg_math.cross_product(coord[0].x, coord[0].y,
+            m_swap = AggMath.cross_product(coord[0].x, coord[0].y,
                                    coord[2].x, coord[2].y,
                                    coord[1].x, coord[1].y) < 0.0;
 

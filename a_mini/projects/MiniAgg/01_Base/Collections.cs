@@ -29,9 +29,9 @@ namespace MatterHackers.Agg
 {
     //POD= Plain Old Data  
 
-    public class ArrayPOD<T>
+    public class ArrayList<T>
     {
-        public ArrayPOD(int size)
+        public ArrayList(int size)
         {
             m_array = new T[size];
             m_size = size;
@@ -68,15 +68,14 @@ namespace MatterHackers.Agg
 
         private T[] m_array;
         private int m_size;
-    }
-
+    } 
 
     //--------------------------------------------------------------pod_vector
     // A simple class template to store Plain Old Data, a vector
     // of a fixed size. The data is contiguous in memory
     //------------------------------------------------------------------------
-    public class VectorPOD<T>
-    {
+    public class VectorArrayList<T>
+    {   
         protected int currentSize;
         private T[] internalArray = new T[0];
 
@@ -111,16 +110,16 @@ namespace MatterHackers.Agg
             }
         }
 
-        public VectorPOD()
+        public VectorArrayList()
         {
         }
 
-        public VectorPOD(int cap)
+        public VectorArrayList(int cap)
             : this(cap, 0)
         {
         }
 
-        public VectorPOD(int capacity, int extraTail)
+        public VectorArrayList(int capacity, int extraTail)
         {
             Allocate(capacity, extraTail);
         }
@@ -149,13 +148,13 @@ namespace MatterHackers.Agg
         }
 
         // Copying
-        public VectorPOD(VectorPOD<T> vectorToCopy)
+        public VectorArrayList(VectorArrayList<T> vectorToCopy)
         {
             currentSize = vectorToCopy.currentSize;
             internalArray = (T[])vectorToCopy.internalArray.Clone();
         }
 
-        public void CopyFrom(VectorPOD<T> vetorToCopy)
+        public void CopyFrom(VectorArrayList<T> vetorToCopy)
         {
             Allocate(vetorToCopy.currentSize);
             if (vetorToCopy.currentSize != 0)
@@ -297,13 +296,13 @@ namespace MatterHackers.Agg
     }
 
     //----------------------------------------------------------range_adaptor
-    public class VectorPOD_RangeAdaptor
+    public class VectorArrayListRangeAdaptor
     {
-        VectorPOD<int> m_array;
+        VectorArrayList<int> m_array;
         int m_start;
         int m_size;
 
-        public VectorPOD_RangeAdaptor(VectorPOD<int> array, int start, int size)
+        public VectorArrayListRangeAdaptor(VectorArrayList<int> array, int start, int size)
         {
             m_array = (array);
             m_start = (start);
@@ -327,8 +326,8 @@ namespace MatterHackers.Agg
         public int value_at(int i) { return m_array.Array[m_start + i]; }
     }
 
-    public class FirstInFirstOutQueue<T>
-    {
+    public class Queue<T>
+    {   
         T[] itemArray;
         int size;
         int head;
@@ -340,7 +339,7 @@ namespace MatterHackers.Agg
             get { return size; }
         }
 
-        public FirstInFirstOutQueue(int shiftFactor)
+        public Queue(int shiftFactor)
         {
             this.shiftFactor = shiftFactor;
             mask = (1 << shiftFactor) - 1;

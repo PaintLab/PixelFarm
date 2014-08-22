@@ -230,7 +230,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             }
             if (i == 3)
             {
-                if (agg_math.point_in_triangle(m_x[0], m_y[0],
+                if (AggMath.point_in_triangle(m_x[0], m_y[0],
                                       m_x[1], m_y[1],
                                       m_x[2], m_y[2],
                                       x, y))

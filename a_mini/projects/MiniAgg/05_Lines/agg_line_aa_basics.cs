@@ -72,14 +72,14 @@ namespace MatterHackers.Agg
                 return;
             }
 
-            x = agg_basics.iround(tx);
-            y = agg_basics.iround(ty);
+            x = AggBasics.iround(tx);
+            y = AggBasics.iround(ty);
         }
 
         public static void fix_degenerate_bisectrix_start(line_parameters lp,
                                                ref int x, ref int y)
         {
-            int d = agg_basics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
+            int d = AggBasics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
                             (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
             if (d < line_subpixel_scale / 2)
             {
@@ -91,7 +91,7 @@ namespace MatterHackers.Agg
         public static void fix_degenerate_bisectrix_end(line_parameters lp,
                                              ref int x, ref int y)
         {
-            int d = agg_basics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
+            int d = AggBasics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
                             (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
             if (d < line_subpixel_scale / 2)
             {
@@ -204,7 +204,7 @@ namespace MatterHackers.Agg.Lines
     {
         public static int conv(double x)
         {
-            return agg_basics.iround(x * LineAABasics.line_subpixel_scale, LineAABasics.line_max_coord);
+            return AggBasics.iround(x * LineAABasics.line_subpixel_scale, LineAABasics.line_max_coord);
         }
     } 
 

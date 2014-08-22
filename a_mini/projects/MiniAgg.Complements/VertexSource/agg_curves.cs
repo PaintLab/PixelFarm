@@ -187,7 +187,7 @@ namespace MatterHackers.Agg.VertexSource
 
             double len = Math.Sqrt(dx1 * dx1 + dy1 * dy1) + Math.Sqrt(dx2 * dx2 + dy2 * dy2);
 
-            m_num_steps = (int)agg_basics.uround(len * 0.25 * m_scale);
+            m_num_steps = (int)AggBasics.uround(len * 0.25 * m_scale);
 
             if (m_num_steps < 4)
             {
@@ -292,11 +292,11 @@ namespace MatterHackers.Agg.VertexSource
         double m_distance_tolerance_square;
         double m_angle_tolerance;
         int m_count;
-        VectorPOD<Vector2> m_points;
+        VectorArrayList<Vector2> m_points;
 
         public curve3_div()
         {
-            m_points = new VectorPOD<Vector2>();
+            m_points = new VectorArrayList<Vector2>();
             m_approximation_scale = (1.0);
             m_angle_tolerance = (0.0);
             m_count = (0);
@@ -452,7 +452,7 @@ namespace MatterHackers.Agg.VertexSource
                 da = dx * dx + dy * dy;
                 if (da == 0)
                 {
-                    d = agg_math.calc_sq_distance(x1, y1, x2, y2);
+                    d = AggMath.calc_sq_distance(x1, y1, x2, y2);
                 }
                 else
                 {
@@ -463,9 +463,9 @@ namespace MatterHackers.Agg.VertexSource
                         // We can leave just two endpoints
                         return;
                     }
-                    if (d <= 0) d = agg_math.calc_sq_distance(x2, y2, x1, y1);
-                    else if (d >= 1) d = agg_math.calc_sq_distance(x2, y2, x3, y3);
-                    else d = agg_math.calc_sq_distance(x2, y2, x1 + d * dx, y1 + d * dy);
+                    if (d <= 0) d = AggMath.calc_sq_distance(x2, y2, x1, y1);
+                    else if (d >= 1) d = AggMath.calc_sq_distance(x2, y2, x3, y3);
+                    else d = AggMath.calc_sq_distance(x2, y2, x1 + d * dx, y1 + d * dy);
                 }
                 if (d < m_distance_tolerance_square)
                 {
@@ -588,7 +588,7 @@ namespace MatterHackers.Agg.VertexSource
                           Math.Sqrt(dx2 * dx2 + dy2 * dy2) +
                           Math.Sqrt(dx3 * dx3 + dy3 * dy3)) * 0.25 * m_scale;
 
-            m_num_steps = (int)agg_basics.uround(len);
+            m_num_steps = (int)AggBasics.uround(len);
 
             if (m_num_steps < 4)
             {
@@ -718,11 +718,11 @@ namespace MatterHackers.Agg.VertexSource
         double m_angle_tolerance;
         double m_cusp_limit;
         int m_count;
-        VectorPOD<Vector2> m_points;
+        VectorArrayList<Vector2> m_points;
 
         public curve4_div()
         {
-            m_points = new VectorPOD<Vector2>();
+            m_points = new VectorArrayList<Vector2>();
             m_approximation_scale = (1.0);
             m_angle_tolerance = (0.0);
             m_cusp_limit = (0.0);
@@ -894,8 +894,8 @@ namespace MatterHackers.Agg.VertexSource
                     k = dx * dx + dy * dy;
                     if (k == 0)
                     {
-                        d2 = agg_math.calc_sq_distance(x1, y1, x2, y2);
-                        d3 = agg_math.calc_sq_distance(x4, y4, x3, y3);
+                        d2 = AggMath.calc_sq_distance(x1, y1, x2, y2);
+                        d3 = AggMath.calc_sq_distance(x4, y4, x3, y3);
                     }
                     else
                     {
@@ -912,13 +912,13 @@ namespace MatterHackers.Agg.VertexSource
                             // We can leave just two endpoints
                             return;
                         }
-                        if (d2 <= 0) d2 = agg_math.calc_sq_distance(x2, y2, x1, y1);
-                        else if (d2 >= 1) d2 = agg_math.calc_sq_distance(x2, y2, x4, y4);
-                        else d2 = agg_math.calc_sq_distance(x2, y2, x1 + d2 * dx, y1 + d2 * dy);
+                        if (d2 <= 0) d2 = AggMath.calc_sq_distance(x2, y2, x1, y1);
+                        else if (d2 >= 1) d2 = AggMath.calc_sq_distance(x2, y2, x4, y4);
+                        else d2 = AggMath.calc_sq_distance(x2, y2, x1 + d2 * dx, y1 + d2 * dy);
 
-                        if (d3 <= 0) d3 = agg_math.calc_sq_distance(x3, y3, x1, y1);
-                        else if (d3 >= 1) d3 = agg_math.calc_sq_distance(x3, y3, x4, y4);
-                        else d3 = agg_math.calc_sq_distance(x3, y3, x1 + d3 * dx, y1 + d3 * dy);
+                        if (d3 <= 0) d3 = AggMath.calc_sq_distance(x3, y3, x1, y1);
+                        else if (d3 >= 1) d3 = AggMath.calc_sq_distance(x3, y3, x4, y4);
+                        else d3 = AggMath.calc_sq_distance(x3, y3, x1 + d3 * dx, y1 + d3 * dy);
                     }
                     if (d2 > d3)
                     {

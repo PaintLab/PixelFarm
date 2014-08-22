@@ -32,7 +32,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e;
+using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.poly_subpixel_scale_e;
 
 namespace MatterHackers.Agg
 {
@@ -99,10 +99,10 @@ namespace MatterHackers.Agg
     sealed class rasterizer_cells_aa
     {
         int m_num_used_cells;
-        VectorPOD<cell_aa> m_cells;
-        VectorPOD<cell_aa> m_sorted_cells;
+        VectorArrayList<cell_aa> m_cells;
+        VectorArrayList<cell_aa> m_sorted_cells;
 
-        VectorPOD<sorted_y> m_sorted_y;
+        VectorArrayList<sorted_y> m_sorted_y;
 
         cell_aa m_curr_cell;
         cell_aa m_style_cell;
@@ -131,8 +131,8 @@ namespace MatterHackers.Agg
         public rasterizer_cells_aa()
         {
 
-            m_sorted_cells = new VectorPOD<cell_aa>();
-            m_sorted_y = new VectorPOD<sorted_y>();
+            m_sorted_cells = new VectorArrayList<cell_aa>();
+            m_sorted_y = new VectorArrayList<sorted_y>();
             m_min_x = (0x7FFFFFFF);
             m_min_y = (0x7FFFFFFF);
             m_max_x = (-0x7FFFFFFF);
@@ -161,11 +161,11 @@ namespace MatterHackers.Agg
             m_style_cell.style(style_cell);
         }
 
-        enum dx_limit_e { dx_limit = 16384 << agg_basics.poly_subpixel_scale_e.poly_subpixel_shift };
+        enum dx_limit_e { dx_limit = 16384 << AggBasics.poly_subpixel_scale_e.poly_subpixel_shift };
 
-        const int poly_subpixel_shift = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_shift;
-        const int poly_subpixel_mask = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_mask;
-        const int poly_subpixel_scale = (int)agg_basics.poly_subpixel_scale_e.poly_subpixel_scale;
+        const int poly_subpixel_shift = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_shift;
+        const int poly_subpixel_mask = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_mask;
+        const int poly_subpixel_scale = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_scale;
 
         public void line(int x1, int y1, int x2, int y2)
         {
@@ -452,7 +452,7 @@ namespace MatterHackers.Agg
                 }
 
                 int new_num_allocated_cells = m_num_used_cells + (int)cell_block_scale_e.cell_block_size;
-                VectorPOD<cell_aa> new_cells = new VectorPOD<cell_aa>(new_num_allocated_cells);
+                VectorArrayList<cell_aa> new_cells = new VectorArrayList<cell_aa>(new_num_allocated_cells);
                 if (m_cells != null)
                 {
                     new_cells.CopyFrom(m_cells);

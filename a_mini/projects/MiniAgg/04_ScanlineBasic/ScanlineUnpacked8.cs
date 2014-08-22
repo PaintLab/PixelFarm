@@ -109,8 +109,8 @@ namespace MatterHackers.Agg
     {
         int minX;         
 
-        ArrayPOD<byte> m_covers;
-        ArrayPOD<ScanlineSpan> m_spans;
+        ArrayList<byte> m_covers;
+        ArrayList<ScanlineSpan> m_spans;
 
 
         int last_span_index;
@@ -122,8 +122,8 @@ namespace MatterHackers.Agg
         {
 
             last_x = (0x7FFFFFF0);
-            m_covers = new ArrayPOD<byte>(1000);
-            m_spans = new ArrayPOD<ScanlineSpan>(1000);
+            m_covers = new ArrayList<byte>(1000);
+            m_spans = new ArrayList<ScanlineSpan>(1000);
         }
        
         public ScanlineSpan GetSpan(int index)

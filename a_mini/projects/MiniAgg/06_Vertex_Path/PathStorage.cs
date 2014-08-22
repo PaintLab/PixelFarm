@@ -770,7 +770,7 @@ namespace MatterHackers.Agg.VertexSource
                     ShapePath.FlagsAndCommand PathAndFlags0 = last_vertex(out x0, out y0);
                     if (ShapePath.is_vertex(PathAndFlags0))
                     {
-                        if (agg_math.calc_distance(x, y, x0, y0) > agg_math.vertex_dist_epsilon)
+                        if (AggMath.calc_distance(x, y, x0, y0) > AggMath.vertex_dist_epsilon)
                         {
                             if (ShapePath.is_move_to(PathAndFlags)) PathAndFlags = ShapePath.FlagsAndCommand.CommandLineTo;
                             vertices.AddVertex(x, y, PathAndFlags);

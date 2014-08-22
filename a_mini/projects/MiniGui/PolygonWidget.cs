@@ -93,7 +93,7 @@ namespace MatterHackers.Agg.UI
 
     public class polygon_ctrl_impl : UI.SimpleVertexSourceWidget
     {
-        ArrayPOD<double> m_polygon;
+        ArrayList<double> m_polygon;
         int m_num_points;
         int m_node;
         int m_edge;
@@ -116,7 +116,7 @@ namespace MatterHackers.Agg.UI
             : base(new Vector2())
         {
             m_ellipse = new MatterHackers.Agg.VertexSource.Ellipse();
-            m_polygon = new ArrayPOD<double>(np * 2);
+            m_polygon = new ArrayList<double>(np * 2);
             m_num_points = (np);
             m_node = (-1);
             m_edge = (-1);

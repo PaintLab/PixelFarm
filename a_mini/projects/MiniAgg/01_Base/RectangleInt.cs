@@ -7,9 +7,7 @@ namespace MatterHackers.Agg
 {
     public struct RectangleInt
     {
-        public int Left, Bottom, Right, Top;
-
-
+        public int Left, Bottom, Right, Top; 
         public RectangleInt(int left, int bottom, int right, int top)
         {
             Left = left;

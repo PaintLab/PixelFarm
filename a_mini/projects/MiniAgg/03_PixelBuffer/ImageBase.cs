@@ -146,7 +146,7 @@ namespace MatterHackers.Agg
 
                 for (int i = 0; i < clippedSourceImageRect.Height; i++)
                 {
-                    agg_basics.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
+                    AggBasics.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
                     sourceOffset += sourceImage.StrideInBytes();
                     destOffset += StrideInBytes();
                 }

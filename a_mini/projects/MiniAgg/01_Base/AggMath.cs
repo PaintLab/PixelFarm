@@ -24,7 +24,7 @@ using MatterHackers.Agg.VertexSource;
 
 namespace MatterHackers.Agg
 {
-    public static class agg_math
+    public static class AggMath
     {
         //------------------------------------------------------vertex_dist_epsilon
         // Coinciding points maximal distance (Epsilon)
