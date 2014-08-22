@@ -33,7 +33,7 @@ namespace MatterHackers.Agg
         {
         }
 
-        public override void generate(RGBA_Bytes[] span, int spanIndex, int x, int y, int len)
+        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             int bytesBetweenPixelsInclusive = SourceRenderingBuffer.GetBytesBetweenPixelsInclusive();

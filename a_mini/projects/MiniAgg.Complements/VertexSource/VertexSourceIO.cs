@@ -95,14 +95,14 @@ namespace MatterHackers.Agg.VertexSource
             writer.Flush();
             //------------------------------------
         }
-        public static void WriteColorsToStream(BinaryWriter writer, MatterHackers.Agg.RGBA_Bytes[] colors)
+        public static void WriteColorsToStream(BinaryWriter writer, MatterHackers.Agg.ColorRGBA[] colors)
         {
             int len = colors.Length;
             //1.
             writer.Write(len);
             for (int i = 0; i < len; ++i)
             {
-                MatterHackers.Agg.RGBA_Bytes color = colors[i];
+                MatterHackers.Agg.ColorRGBA color = colors[i];
                 writer.Write(color.red);
                 writer.Write(color.green);
                 writer.Write(color.blue);
@@ -162,17 +162,17 @@ namespace MatterHackers.Agg.VertexSource
 
         }
 
-        public static void ReadColorDataFromStream(BinaryReader reader, out MatterHackers.Agg.RGBA_Bytes[] colors)
+        public static void ReadColorDataFromStream(BinaryReader reader, out MatterHackers.Agg.ColorRGBA[] colors)
         {
             int len = reader.ReadInt32();
-            colors = new RGBA_Bytes[len];
+            colors = new ColorRGBA[len];
             for (int i = 0; i < len; ++i)
             {
                 byte r = reader.ReadByte();
                 byte g = reader.ReadByte();
                 byte b = reader.ReadByte();
                 byte a = reader.ReadByte();
-                colors[i] = new RGBA_Bytes(r, g, b, a);
+                colors[i] = new ColorRGBA(r, g, b, a);
             }
             int end = reader.ReadInt32();
         }

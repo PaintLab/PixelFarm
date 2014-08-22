@@ -13,8 +13,8 @@ namespace MatterHackers.Agg
 
     public class ScanlineRenderer
     {
-        VectorPOD<RGBA_Bytes> tempSpanColors = new VectorPOD<RGBA_Bytes>();
-        public void render_scanlines_aa_solid(IImage destImage, IRasterizer rasterizer, IScanline scline, RGBA_Bytes color)
+        VectorPOD<ColorRGBA> tempSpanColors = new VectorPOD<ColorRGBA>();
+        public void render_scanlines_aa_solid(IImage destImage, IRasterizer rasterizer, IScanline scline, ColorRGBA color)
         {
             if (rasterizer.rewind_scanlines())
             {
@@ -26,7 +26,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        protected virtual void RenderSolidSingleScanLine(IImage destImage, IScanline scline, RGBA_Bytes color)
+        protected virtual void RenderSolidSingleScanLine(IImage destImage, IScanline scline, ColorRGBA color)
         {
             int y = scline.Y;
             int num_spans = scline.SpanCount;
@@ -55,7 +55,7 @@ namespace MatterHackers.Agg
             IRasterizer ras,
             IScanline sl,
             IVertexSource vs,
-            RGBA_Bytes[] color_storage,
+            ColorRGBA[] color_storage,
             int[] path_id,
             int num_paths)
         {

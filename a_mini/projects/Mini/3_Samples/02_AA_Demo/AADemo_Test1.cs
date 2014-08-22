@@ -21,7 +21,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             m_size = size;
         }
 
-        public void draw(ScanlineRasterizer ras, IScanline sl, IImage destImage, RGBA_Bytes color,
+        public void draw(ScanlineRasterizer ras, IScanline sl, IImage destImage, ColorRGBA color,
                   double x, double y)
         {
             ras.reset();
@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
         }
 
 
-        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanline, RGBA_Bytes color)
+        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -66,7 +66,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                            gfx.Rasterizer, m_sl, destImage,
-                            RGBA_Bytes.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
+                            ColorRGBA.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
                             x, y);
                     ++x;
                 }
@@ -133,7 +133,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            clippingProxyNormal.clear(RGBA_Bytes.White);
+            clippingProxyNormal.clear(ColorRGBA.White);
             ScanlineRasterizer rasterizer = new ScanlineRasterizer();
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 
@@ -145,11 +145,11 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             rasterizer.move_to_d(m_x[0] / size_mul, m_y[0] / size_mul);
             rasterizer.line_to_d(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.line_to_d(m_x[2] / size_mul, m_y[2] / size_mul);
-            ren_en.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, RGBA_Bytes.Black);
+            ren_en.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, RGBA_Bytes.Black);
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new gamma_none());
             //----------------------------------------
             PathStorage ps = new PathStorage();
@@ -163,7 +163,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
             rasterizer.add_path(pg);
 
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, rasterizer, sl, new RGBA_Bytes(0, 150, 160, 200));
+            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

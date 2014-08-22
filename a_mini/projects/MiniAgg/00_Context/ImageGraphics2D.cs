@@ -63,7 +63,7 @@ namespace MatterHackers.Agg
             return Rasterizer.GetVectorClipBox();
         }
 
-        public override void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes)
+        public override void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes)
         {
             rasterizer.reset();
             Affine transform = GetTransform();
@@ -237,9 +237,9 @@ namespace MatterHackers.Agg
 
                 span_image_filter spanImageFilter;
                 var interpolator = new  MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, RGBA_Floats.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
+                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
 
-                spanImageFilter = new span_image_filter_rgba_bilinear_clip(sourceAccessor, RGBA_Floats.rgba_pre(0, 0, 0, 0), interpolator);
+                spanImageFilter = new span_image_filter_rgba_bilinear_clip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0), interpolator);
 
                 DrawImage(source, spanImageFilter, destRectTransform);
 #if false // this is some debug you can enable to visualize the dest bounding box
@@ -259,7 +259,7 @@ namespace MatterHackers.Agg
                 sourceRectTransform.invert();
 
                 var interpolator = new MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, RGBA_Floats.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
+                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
 
                 span_image_filter spanImageFilter = null;
                 switch (source.BitDepth)
@@ -301,7 +301,7 @@ namespace MatterHackers.Agg
 
             if (DestImage != null)
             {
-                RGBA_Bytes color = iColor.GetAsRGBA_Bytes();
+                ColorRGBA color = iColor.GetAsRGBA_Bytes();
                 int width = DestImage.Width;
                 int height = DestImage.Height;
                 byte[] buffer = DestImage.GetBuffer();

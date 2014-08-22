@@ -92,7 +92,7 @@ namespace MatterHackers.Agg.UI
         public abstract void rewind(int path_id);
         public abstract ShapePath.FlagsAndCommand vertex(out double x, out double y);
 
-        public virtual IColor color(int i) { return (IColor)new RGBA_Floats(); }
+        public virtual IColor color(int i) { return (IColor)new ColorRGBAf(); }
 
         public override void OnDraw(Graphics2D graphics2D)
         {

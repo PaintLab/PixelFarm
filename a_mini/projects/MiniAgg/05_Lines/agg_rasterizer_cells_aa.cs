@@ -648,11 +648,11 @@ namespace MatterHackers.Agg
 
         public void ResetSpans() { }
         public void CloseLine(int nothing) { }
-        public void add_cell(int x, int nothing)
+        public void AddCell(int x, int nothing)
         {
             if (m_x == x) m_hit = true;
         }
-        public void add_span(int x, int len, int nothing)
+        public void AddSpan(int x, int len, int nothing)
         {
             if (m_x >= x && m_x < x + len)
             {

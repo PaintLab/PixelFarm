@@ -291,7 +291,7 @@ namespace MatterHackers.Agg.Font
 
             ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
             var gfx = Graphics2D.CreateFromImage(charImage);
-            gfx.Render(glyphForCharacter, xFraction, yFraction, RGBA_Bytes.Black);
+            gfx.Render(glyphForCharacter, xFraction, yFraction, ColorRGBA.Black);
             characterImageCache[character] = charImage;
 
             return charImage;

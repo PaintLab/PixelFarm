@@ -582,7 +582,7 @@ namespace MatterHackers.Agg.Lines
         }
 
         public void RenderAllPaths(IVertexSource vs,
-                              RGBA_Bytes[] colors,
+                              ColorRGBA[] colors,
                               int[] path_id,
                               int num_paths)
         {

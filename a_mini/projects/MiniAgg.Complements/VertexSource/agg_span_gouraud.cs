@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             public double x;
             public double y;
-            public RGBA_Bytes color;
+            public ColorRGBA color;
         };
 
         public span_gouraud()
@@ -43,9 +43,9 @@ namespace MatterHackers.Agg.VertexSource
             m_cmd[0] = ShapePath.FlagsAndCommand.CommandStop;
         }
 
-        public span_gouraud(RGBA_Bytes c1,
-                     RGBA_Bytes c2,
-                     RGBA_Bytes c3,
+        public span_gouraud(ColorRGBA c1,
+                     ColorRGBA c2,
+                     ColorRGBA c3,
                      double x1, double y1,
                      double x2, double y2,
                      double x3, double y3,

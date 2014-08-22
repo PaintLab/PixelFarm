@@ -131,7 +131,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
             var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA()); 
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
-            imageClippingProxy.clear(RGBA_Bytes.White);
+            imageClippingProxy.clear(ColorRGBA.White);
 
             Affine transform = Affine.NewIdentity();
             transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);

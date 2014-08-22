@@ -32,8 +32,11 @@ namespace MatterHackers.Agg
 {
 
     //===================================================================gray8
-    public struct gray8
-    {
+    /// <summary>
+    /// 8 bits gray color
+    /// </summary>
+    public struct ColorGray
+    {   
         const int base_shift = 8;
         const uint base_scale = (uint)(1 << base_shift);
         const uint base_mask = base_scale - 1;
@@ -42,27 +45,27 @@ namespace MatterHackers.Agg
         byte a;
 
         //--------------------------------------------------------------------
-        public gray8(uint v_)
+        public ColorGray(uint v_)
             : this(v_, (uint)base_mask)
         {
 
         }
 
-        public gray8(uint v_, uint a_)
+        public ColorGray(uint v_, uint a_)
         {
             v = (byte)(v_);
             a = (byte)(a_);
         }
 
         //--------------------------------------------------------------------
-        gray8(gray8 c, uint a_)
+        ColorGray(ColorGray c, uint a_)
         {
             v = (c.v);
             a = (byte)(a_);
         }
 
         //--------------------------------------------------------------------
-        public gray8(RGBA_Floats c)
+        public ColorGray(ColorRGBAf c)
         {
             v = ((byte)agg_basics.uround((0.299 * c.Red0To255 + 0.587 * c.Green0To255 + 0.114 * c.Blue0To255) * (double)(base_mask)));
             a = ((byte)agg_basics.uround(c.Alpha0To255 * (double)(base_mask)));
@@ -70,21 +73,21 @@ namespace MatterHackers.Agg
 
 
         //--------------------------------------------------------------------
-        public gray8(RGBA_Floats c, double a_)
+        public ColorGray(ColorRGBAf c, double a_)
         {
             v = ((byte)agg_basics.uround((0.299 * c.Red0To255 + 0.587 * c.Green0To255 + 0.114 * c.Blue0To255) * (double)(base_mask)));
             a = ((byte)agg_basics.uround(a_ * (double)(base_mask)));
         }
 
         //--------------------------------------------------------------------
-        public gray8(RGBA_Bytes c)
+        public ColorGray(ColorRGBA c)
         {
             v = (byte)((c.Red0To255 * 77 + c.Green0To255 * 150 + c.Blue0To255 * 29) >> 8);
             a = (byte)(c.Alpha0To255);
         }
 
         //--------------------------------------------------------------------
-        public gray8(RGBA_Bytes c, int a_)
+        public ColorGray(ColorRGBA c, int a_)
         {
             v = (byte)((c.Red0To255 * 77 + c.Green0To255 * 150 + c.Blue0To255 * 29) >> 8);
             a = (byte)(a_);
@@ -97,7 +100,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public gray8 transparent()
+        public ColorGray transparent()
         {
             a = 0;
             return this;
@@ -119,7 +122,7 @@ namespace MatterHackers.Agg
 
 
         //--------------------------------------------------------------------
-        public gray8 premultiply()
+        public ColorGray premultiply()
         {
             if (a == (byte)base_mask) return this;
             if (a == 0)
@@ -132,7 +135,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public gray8 premultiply(int a_)
+        public ColorGray premultiply(int a_)
         {
             if (a == (int)base_mask && a_ >= (int)base_mask) return this;
             if (a == 0 || a_ == 0)
@@ -147,7 +150,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public gray8 demultiply()
+        public ColorGray demultiply()
         {
             if (a == (int)base_mask) return this;
             if (a == 0)
@@ -161,9 +164,9 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public gray8 gradient(gray8 c, double k)
+        public ColorGray gradient(ColorGray c, double k)
         {
-            gray8 ret;
+            ColorGray ret;
             int ik = agg_basics.uround(k * (int)base_scale);
             ret.v = (byte)((int)(v) + ((((int)(c.v) - v) * ik) >> base_shift));
             ret.a = (byte)((int)(a) + ((((int)(c.a) - a) * ik) >> base_shift));

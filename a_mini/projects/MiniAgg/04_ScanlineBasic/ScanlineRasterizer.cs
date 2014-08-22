@@ -431,7 +431,7 @@ namespace MatterHackers.Agg
                         alpha = calculate_alpha((cover << ((int)poly_subpixel_scale_e.poly_subpixel_shift + 1)) - area);
                         if (alpha != 0)
                         {
-                            scline.add_cell(x, alpha);
+                            scline.AddCell(x, alpha);
                         }
                         x++;
                     }
@@ -441,7 +441,7 @@ namespace MatterHackers.Agg
                         alpha = calculate_alpha(cover << ((int)poly_subpixel_scale_e.poly_subpixel_shift + 1));
                         if (alpha != 0)
                         {
-                            scline.add_span(x, (cur_cell.x - x), alpha);
+                            scline.AddSpan(x, (cur_cell.x - x), alpha);
                         }
                     }
                 }
