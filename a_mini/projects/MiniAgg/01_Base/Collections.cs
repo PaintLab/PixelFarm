@@ -27,64 +27,20 @@ using System.Collections;
 
 namespace MatterHackers.Agg
 {
-    //POD= Plain Old Data  
-
-    public class ArrayList<T>
-    {
-        public ArrayList(int size)
-        {
-            m_array = new T[size];
-            m_size = size;
-        }
-        public void Resize(int size)
-        {
-            if (size != m_size)
-            {
-                m_array = new T[size];
-            }
-        }
-
-        public int Count { get { return m_size; } }
-
-        public T this[int index]
-        {
-            get
-            {
-                return m_array[index];
-            }
-            set
-            {
-                m_array[index] = value;
-            }
-        }
-
-        public T[] Array
-        {
-            get
-            {
-                return m_array;
-            }
-        }
-
-        T[] m_array;
-        int m_size;
-    }
-
+  
     //--------------------------------------------------------------pod_vector
-    // A simple class template to store Plain Old Data, a vector
+    // A simple class template to store Plain Old Data (POD), a vector
     // of a fixed size. The data is contiguous in memory
     //------------------------------------------------------------------------
-    public class VectorArrayList<T>
+    public class ArrayList<T>
     {
         int currentSize;
-        T[] internalArray = new T[0];
-
-
-        public VectorArrayList()
+        T[] internalArray = new T[0]; 
+        public ArrayList()
         {
         }
 
-        public VectorArrayList(int cap)
+        public ArrayList(int cap)
         {
             Allocate(cap, 0);
         }
@@ -97,7 +53,7 @@ namespace MatterHackers.Agg
                 currentSize--;
             }
         }
-        public void CopyFrom(VectorArrayList<T> vetorToCopy)
+        public void CopyFrom(ArrayList<T> vetorToCopy)
         {
             Allocate(vetorToCopy.currentSize);
             if (vetorToCopy.currentSize != 0)
@@ -154,8 +110,7 @@ namespace MatterHackers.Agg
         {
             Clear(size, extraTail);
             currentSize = size;
-        }
-
+        } 
 
         /// <summary>
         ///  Resize keeping the content
@@ -246,13 +201,13 @@ namespace MatterHackers.Agg
     }
 
     //----------------------------------------------------------range_adaptor
-    public class VectorArrayListRangeAdaptor
+    public class ArrayListRangeAdaptor
     {
-        VectorArrayList<int> m_array;
+        ArrayList<int> m_array;
         int m_start;
         int m_size;
 
-        public VectorArrayListRangeAdaptor(VectorArrayList<int> array, int start, int size)
+        public ArrayListRangeAdaptor(ArrayList<int> array, int start, int size)
         {
             m_array = (array);
             m_start = (start);

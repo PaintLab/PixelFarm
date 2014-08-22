@@ -99,10 +99,10 @@ namespace MatterHackers.Agg
     sealed class rasterizer_cells_aa
     {
         int m_num_used_cells;
-        VectorArrayList<cell_aa> m_cells;
-        VectorArrayList<cell_aa> m_sorted_cells;
+        ArrayList<cell_aa> m_cells;
+        ArrayList<cell_aa> m_sorted_cells;
 
-        VectorArrayList<sorted_y> m_sorted_y;
+        ArrayList<sorted_y> m_sorted_y;
 
         cell_aa m_curr_cell;
         cell_aa m_style_cell;
@@ -131,8 +131,8 @@ namespace MatterHackers.Agg
         public rasterizer_cells_aa()
         {
 
-            m_sorted_cells = new VectorArrayList<cell_aa>();
-            m_sorted_y = new VectorArrayList<sorted_y>();
+            m_sorted_cells = new ArrayList<cell_aa>();
+            m_sorted_y = new ArrayList<sorted_y>();
             m_min_x = (0x7FFFFFFF);
             m_min_y = (0x7FFFFFFF);
             m_max_x = (-0x7FFFFFFF);
@@ -452,7 +452,7 @@ namespace MatterHackers.Agg
                 }
 
                 int new_num_allocated_cells = m_num_used_cells + (int)cell_block_scale_e.cell_block_size;
-                VectorArrayList<cell_aa> new_cells = new VectorArrayList<cell_aa>(new_num_allocated_cells);
+                ArrayList<cell_aa> new_cells = new ArrayList<cell_aa>(new_num_allocated_cells);
                 if (m_cells != null)
                 {
                     new_cells.CopyFrom(m_cells);

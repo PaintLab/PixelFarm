@@ -292,11 +292,11 @@ namespace MatterHackers.Agg.VertexSource
         double m_distance_tolerance_square;
         double m_angle_tolerance;
         int m_count;
-        VectorArrayList<Vector2> m_points;
+        ArrayList<Vector2> m_points;
 
         public curve3_div()
         {
-            m_points = new VectorArrayList<Vector2>();
+            m_points = new ArrayList<Vector2>();
             m_approximation_scale = (1.0);
             m_angle_tolerance = (0.0);
             m_count = (0);
@@ -718,11 +718,11 @@ namespace MatterHackers.Agg.VertexSource
         double m_angle_tolerance;
         double m_cusp_limit;
         int m_count;
-        VectorArrayList<Vector2> m_points;
+        ArrayList<Vector2> m_points;
 
         public curve4_div()
         {
-            m_points = new VectorArrayList<Vector2>();
+            m_points = new ArrayList<Vector2>();
             m_approximation_scale = (1.0);
             m_angle_tolerance = (0.0);
             m_cusp_limit = (0.0);

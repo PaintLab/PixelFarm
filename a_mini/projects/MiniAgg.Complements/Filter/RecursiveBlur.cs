@@ -1227,16 +1227,16 @@ namespace MatterHackers.Agg.Image
     //===========================================================recursive_blur
     public sealed class RecursiveBlur
     {
-        VectorArrayList<RecursizeBlurCalculator> m_sum1;
-        VectorArrayList<RecursizeBlurCalculator> m_sum2;
-        VectorArrayList<ColorRGBA> m_buf;
+        ArrayList<RecursizeBlurCalculator> m_sum1;
+        ArrayList<RecursizeBlurCalculator> m_sum2;
+        ArrayList<ColorRGBA> m_buf;
         RecursizeBlurCalculator m_RecursizeBlurCalculatorFactory;
 
         public RecursiveBlur(RecursizeBlurCalculator recursizeBluerCalculatorFactory)
         {
-            m_sum1 = new VectorArrayList<RecursizeBlurCalculator>();
-            m_sum2 = new VectorArrayList<RecursizeBlurCalculator>();
-            m_buf = new VectorArrayList<ColorRGBA>();
+            m_sum1 = new ArrayList<RecursizeBlurCalculator>();
+            m_sum2 = new ArrayList<RecursizeBlurCalculator>();
+            m_buf = new ArrayList<ColorRGBA>();
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
         }
 

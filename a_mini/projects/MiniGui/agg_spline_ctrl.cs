@@ -105,7 +105,8 @@ namespace MatterHackers.Agg.UI
             calc_spline_box();
             update_spline();
             {
-                m_spline.init((int)m_num_pnt, m_xp, m_yp);
+                 
+                m_spline = new bspline((int)m_num_pnt, m_xp, m_yp);
                 for (int i = 0; i < 256; i++)
                 {
                     m_spline_values[i] = m_spline.get((double)(i) / 255.0);

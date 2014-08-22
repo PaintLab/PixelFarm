@@ -43,7 +43,7 @@ namespace MatterHackers.Agg.Lines
         }
     };
 
-    public class line_aa_vertex_sequence : VectorArrayList<line_aa_vertex>
+    public class line_aa_vertex_sequence : ArrayList<line_aa_vertex>
     {
         public override void AddItem(line_aa_vertex val)
         {

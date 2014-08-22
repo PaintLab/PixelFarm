@@ -13,7 +13,7 @@ namespace MatterHackers.Agg
 
     public class ScanlineRenderer
     {
-        VectorArrayList<ColorRGBA> tempSpanColors = new VectorArrayList<ColorRGBA>();
+        ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
         public void render_scanlines_aa_solid(IImage destImage, IRasterizer rasterizer, IScanline scline, ColorRGBA color)
         {
             if (rasterizer.rewind_scanlines())

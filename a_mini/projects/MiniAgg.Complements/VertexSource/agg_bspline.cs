@@ -41,7 +41,7 @@ namespace MatterHackers.Agg
         private int m_num;
         private int m_xOffset;
         private int m_yOffset;
-        private ArrayList<double> m_am = new ArrayList<double>(16);
+        private double[] m_am = new double[16];
         private int m_last_idx;
 
         //------------------------------------------------------------------------
@@ -79,20 +79,18 @@ namespace MatterHackers.Agg
 
 
         //------------------------------------------------------------------------
-        public void init(int max)
+        void init(int max)
         {
             if (max > 2 && max > m_max)
-            {
-                m_am.Resize(max * 3);
+            {   
+                m_am = new double[max * 3];
                 m_max = max;
                 m_xOffset = m_max;
                 m_yOffset = m_max * 2;
             }
             m_num = 0;
             m_last_idx = -1;
-        }
-
-
+        } 
         //------------------------------------------------------------------------
         public void add_point(double x, double y)
         {
@@ -122,7 +120,7 @@ namespace MatterHackers.Agg
 
                 int n1 = 3 * m_num;
 
-                ArrayList<double> al = new ArrayList<double>(n1);
+                double[] al = new double[n1];
 
                 for (k = 0; k < n1; k++)
                 {
@@ -184,8 +182,6 @@ namespace MatterHackers.Agg
             }
             m_last_idx = -1;
         }
-
-
         //------------------------------------------------------------------------
         void bsearch(int n, int xOffset, double x0, out int i)
         {

@@ -62,7 +62,7 @@ namespace MatterHackers.Agg
     // Function close() calls this operator and removes the last vertex if 
     // necessary.
     //------------------------------------------------------------------------
-    public class VertexSequence : VectorArrayList<VertexDistance>
+    public class VertexSequence : ArrayList<VertexDistance>
     {
         public override void AddItem(VertexDistance val)
         {

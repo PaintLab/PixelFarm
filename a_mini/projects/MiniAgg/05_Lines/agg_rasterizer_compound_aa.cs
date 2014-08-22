@@ -52,12 +52,12 @@ namespace MatterHackers.Agg
         VectorClipper m_VectorClipper;
         FillingRule m_filling_rule;
         LayerOrder m_layer_order;
-        VectorArrayList<style_info> m_styles;  // Active Styles
-        VectorArrayList<int> m_ast;     // Active Style Table (unique values)
-        VectorArrayList<byte> m_asm;     // Active Style Mask 
-        VectorArrayList<cell_aa> m_cells;
-        VectorArrayList<byte> m_cover_buf;
-        VectorArrayList<int> m_master_alpha;
+        ArrayList<style_info> m_styles;  // Active Styles
+        ArrayList<int> m_ast;     // Active Style Table (unique values)
+        ArrayList<byte> m_asm;     // Active Style Mask 
+        ArrayList<cell_aa> m_cells;
+        ArrayList<byte> m_cover_buf;
+        ArrayList<int> m_master_alpha;
 
         int m_min_style;
         int m_max_style;
@@ -88,12 +88,12 @@ namespace MatterHackers.Agg
             m_VectorClipper = new VectorClipper();
             m_filling_rule = FillingRule.NonZero;
             m_layer_order = LayerOrder.Direct;
-            m_styles = new VectorArrayList<style_info>();  // Active Styles
-            m_ast = new VectorArrayList<int>();     // Active Style Table (unique values)
-            m_asm = new VectorArrayList<byte>();     // Active Style Mask 
-            m_cells = new VectorArrayList<cell_aa>();
-            m_cover_buf = new VectorArrayList<byte>();
-            m_master_alpha = new VectorArrayList<int>();
+            m_styles = new ArrayList<style_info>();  // Active Styles
+            m_ast = new ArrayList<int>();     // Active Style Table (unique values)
+            m_asm = new ArrayList<byte>();     // Active Style Mask 
+            m_cells = new ArrayList<cell_aa>();
+            m_cover_buf = new ArrayList<byte>();
+            m_master_alpha = new ArrayList<int>();
             m_min_style = (0x7FFFFFFF);
             m_max_style = (-0x7FFFFFFF);
             m_start_x = (0);
@@ -355,7 +355,7 @@ namespace MatterHackers.Agg
 
             if (m_layer_order != LayerOrder.Unsorted)
             {
-                VectorArrayListRangeAdaptor ra = new VectorArrayListRangeAdaptor(m_ast, 1, m_ast.Count - 1);
+                ArrayListRangeAdaptor ra = new ArrayListRangeAdaptor(m_ast, 1, m_ast.Count - 1);
                 if (m_layer_order == LayerOrder.Direct)
                 {
 
@@ -580,12 +580,12 @@ namespace MatterHackers.Agg
 
         static class QuickSort
         {
-            public static void Sort(VectorArrayListRangeAdaptor dataToSort)
+            public static void Sort(ArrayListRangeAdaptor dataToSort)
             {
                 Sort(dataToSort, 0, (int)(dataToSort.Count - 1));
             }
 
-            public static void Sort(VectorArrayListRangeAdaptor dataToSort, int beg, int end)
+            public static void Sort(ArrayListRangeAdaptor dataToSort, int beg, int end)
             {
                 if (end == beg)
                 {
@@ -606,7 +606,7 @@ namespace MatterHackers.Agg
                 }
             }
 
-            static int getPivotPoint(VectorArrayListRangeAdaptor dataToSort, int begPoint, int endPoint)
+            static int getPivotPoint(ArrayListRangeAdaptor dataToSort, int begPoint, int endPoint)
             {
                 int pivot = begPoint;
                 int m = begPoint + 1;

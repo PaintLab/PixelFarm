@@ -1212,7 +1212,7 @@ namespace MatterHackers.Agg.Lines
         const int aa_scale = 1 << aa_shift;
         const int aa_mask = aa_scale - 1;
 
-        ArrayList<byte> m_profile = new ArrayList<byte>(64);
+        byte[] m_profile = new byte[64];
         byte[] m_gamma = new byte[aa_scale];
         int m_subpixel_width;
         double m_min_width;
@@ -1274,7 +1274,7 @@ namespace MatterHackers.Agg.Lines
             set(w, s);
         }
 
-        public int profile_size() { return m_profile.Count; }
+        public int profile_size() { return m_profile.Length; }
         public int subpixel_width() { return m_subpixel_width; }
 
         //---------------------------------------------------------------------
@@ -1284,18 +1284,20 @@ namespace MatterHackers.Agg.Lines
         //---------------------------------------------------------------------
         public byte value(int dist)
         {
-            return m_profile.Array[dist + subpixel_scale * 2];
+            return m_profile[dist + subpixel_scale * 2];
         }
 
         private byte[] profile(double w)
         {
             m_subpixel_width = (int)AggBasics.uround(w * subpixel_scale);
             int size = m_subpixel_width + subpixel_scale * 6;
-            if (size > m_profile.Count)
+            if (size > m_profile.Length)
             {
-                m_profile.Resize(size);
+                //clear ?
+                m_profile = new byte[size];
+                //m_profile.Resize(size);
             }
-            return m_profile.Array;
+            return m_profile;
         }
 
         private void set(double center_width, double smoother_width)
@@ -1358,7 +1360,7 @@ namespace MatterHackers.Agg.Lines
 
             for (i = 0; i < ch.Length; i++)
             {
-                m_profile.Array[i] = ch[i];
+                m_profile[i] = ch[i];
             }
         }
     };
