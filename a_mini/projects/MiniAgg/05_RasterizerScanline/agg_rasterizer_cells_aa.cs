@@ -668,7 +668,7 @@ namespace MatterHackers.Agg
             return new ScanlineSpan();
         }
         public int SpanCount { get { return num_spans(); } }
-        public void reset(int min_x, int max_x)
+        public void ResetSpans(int min_x, int max_x)
         {
             throw new System.NotImplementedException();
         }
@@ -680,9 +680,12 @@ namespace MatterHackers.Agg
         {
             throw new System.NotImplementedException();
         }
-        public int y()
+        public int Y 
         {
-            throw new System.NotImplementedException();
+            get
+            {
+                throw new System.NotImplementedException();
+            }
         }
         public byte[] GetCovers()
         {

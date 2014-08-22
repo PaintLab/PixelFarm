@@ -133,7 +133,7 @@ namespace MatterHackers.Agg
             get { return m_span_index; }
         }
         //--------------------------------------------------------------------
-        public void reset(int min_x, int max_x)
+        public void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 2;
             if (max_len > m_spans.Size())
@@ -205,7 +205,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public int y() { return m_y; }
+        public int Y { get { return m_y; } }
 
          
         public byte[] GetCovers()

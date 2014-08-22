@@ -7,10 +7,10 @@ namespace MatterHackers.Agg
     public interface IScanline
     {
         void CloseLine(int y);
-        void reset(int min_x, int max_x);
+        void ResetSpans(int min_x, int max_x);
         void ResetSpans();
-        
-        int y();
+
+        int Y { get; }
         byte[] GetCovers();
         void add_cell(int x, int cover);
         void add_span(int x, int len, int cover);

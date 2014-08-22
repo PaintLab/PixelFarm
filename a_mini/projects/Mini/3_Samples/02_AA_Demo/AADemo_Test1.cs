@@ -48,10 +48,10 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
         protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanline, RGBA_Bytes color)
         {
-            int y = scanline.y();
+            int y = scanline.Y;
             int num_spans = scanline.SpanCount;
 
-            byte[] coverArray = scanline.GetCovers();
+            byte[] covers = scanline.GetCovers();
             var gfx = Graphics2D.CreateFromImage(destImage);
 
             for (int i = 1; i <= num_spans; ++i)
@@ -63,7 +63,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                 int coverIndex = span.cover_index;
                 do
                 {
-                    int a = (coverArray[coverIndex++] * color.Alpha0To255) >> 8;
+                    int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                            gfx.Rasterizer, m_sl, destImage,
                             RGBA_Bytes.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),

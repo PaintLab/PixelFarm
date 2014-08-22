@@ -82,9 +82,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
         public LionFill()
         {
             lionShape = new LionShape();
-            TestLoadLionFromBinaryFile();
-
-
+            TestLoadLionFromBinaryFile(); 
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
