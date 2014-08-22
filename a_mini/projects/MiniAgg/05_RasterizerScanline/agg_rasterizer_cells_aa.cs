@@ -654,7 +654,10 @@ namespace MatterHackers.Agg
         }
         public void add_span(int x, int len, int nothing)
         {
-            if (m_x >= x && m_x < x + len) m_hit = true;
+            if (m_x >= x && m_x < x + len)
+            {
+                m_hit = true;
+            }
         }
         public int num_spans() { return 1; }
         public bool hit() { return m_hit; }
@@ -664,7 +667,7 @@ namespace MatterHackers.Agg
             //empty scanline
             return new ScanlineSpan();
         }
-
+        public int SpanCount { get { return num_spans(); } }
         public void reset(int min_x, int max_x)
         {
             throw new System.NotImplementedException();

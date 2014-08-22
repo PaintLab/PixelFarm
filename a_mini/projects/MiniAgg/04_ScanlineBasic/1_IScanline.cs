@@ -9,14 +9,15 @@ namespace MatterHackers.Agg
         void CloseLine(int y);
         void reset(int min_x, int max_x);
         void ResetSpans();
-        int num_spans();
-        ScanlineSpan begin();
-        ScanlineSpan GetNextScanlineSpan();
+        
         int y();
         byte[] GetCovers();
         void add_cell(int x, int cover);
         void add_span(int x, int len, int cover);
-        ScanlineSpan GetSpan(int index);
 
+
+        ScanlineSpan GetSpan(int index);
+        int SpanCount { get; }
+        
     }
 }

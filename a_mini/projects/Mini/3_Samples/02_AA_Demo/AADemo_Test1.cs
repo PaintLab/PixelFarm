@@ -49,18 +49,18 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
         protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanline, RGBA_Bytes color)
         {
             int y = scanline.y();
-            int num_spans = scanline.num_spans();
-            ScanlineSpan scanlineSpan = scanline.begin();
+            int num_spans = scanline.SpanCount;
+
             byte[] coverArray = scanline.GetCovers();
             var gfx = Graphics2D.CreateFromImage(destImage);
 
-            for (; ; )
+            for (int i = 1; i <= num_spans; ++i)
             {
-                int x = scanlineSpan.x;
-                int num_pix = scanlineSpan.len;
-                int coverIndex = scanlineSpan.cover_index;
+                ScanlineSpan span = scanline.GetSpan(i);
 
-               
+                int x = span.x;
+                int num_pix = span.len;
+                int coverIndex = span.cover_index;
                 do
                 {
                     int a = (coverArray[coverIndex++] * color.Alpha0To255) >> 8;
@@ -71,8 +71,6 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                     ++x;
                 }
                 while (--num_pix > 0);
-                if (--num_spans == 0) break;
-                scanlineSpan = scanline.GetNextScanlineSpan();
             }
 
         }
@@ -130,7 +128,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();
             IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
-       
+
 
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);

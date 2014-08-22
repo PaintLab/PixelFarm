@@ -136,9 +136,9 @@ namespace MatterHackers.Agg
             for (int i = AA_SCALE - 1; i >= 0; --i)
             {
                 m_gamma[i] = i;
-            } 
+            }
         }
-         
+
         //--------------------------------------------------------------------
         public void reset()
         {
@@ -188,7 +188,7 @@ namespace MatterHackers.Agg
                 m_gamma[i] = (int)agg_basics.uround(
                     gamma_function.GetGamma((double)(i) / AA_MASK) * AA_MASK);
             }
-        } 
+        }
         //--------------------------------------------------------------------
         void move_to(int x, int y)
         {
@@ -446,7 +446,7 @@ namespace MatterHackers.Agg
                     }
                 }
 
-                if (scline.num_spans() != 0) break;
+                if (scline.SpanCount != 0) break;
                 ++m_scan_y;
             }
 

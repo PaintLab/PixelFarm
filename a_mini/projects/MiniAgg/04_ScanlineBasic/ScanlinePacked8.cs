@@ -43,12 +43,13 @@ namespace MatterHackers.Agg
     {
         int m_last_x;
         int m_y;
+
         byte[] m_covers;
         int m_cover_index;
         ScanlineSpan[] m_spans;
 
-        int m_span_index;
-        int m_interator_index;
+        int m_span_index; 
+
 
         public ScanlinePacked8()
         {
@@ -56,14 +57,15 @@ namespace MatterHackers.Agg
             m_covers = new byte[1000];
             m_spans = new ScanlineSpan[1000];
         }
-        public ScanlineSpan GetNextScanlineSpan()
-        {
-            m_interator_index++;
-            return m_spans[m_interator_index - 1];
-        }
+
         public ScanlineSpan GetSpan(int index)
         {
             return m_spans[index];
+        }
+
+        public int SpanCount
+        {
+            get { return  m_span_index; }
         }
         //--------------------------------------------------------------------
         public void reset(int min_x, int max_x)
@@ -112,6 +114,7 @@ namespace MatterHackers.Agg
             {
                 m_covers[m_cover_index] = (byte)cover;
                 m_span_index++;
+
                 m_spans[m_span_index].cover_index = m_cover_index++;
                 m_spans[m_span_index].x = (short)x;
                 m_spans[m_span_index].len = (short)(-(int)(len));
@@ -134,14 +137,7 @@ namespace MatterHackers.Agg
             m_spans[m_span_index].len = 0;
         }
 
-        public int y() { return m_y; }
-        public int num_spans() { return (int)m_span_index; }
-        public ScanlineSpan begin()
-        {
-            m_interator_index = 1;
-            return GetNextScanlineSpan();
-        }
-
+        public int y() { return m_y; } 
         public byte[] GetCovers()
         {
             return m_covers;

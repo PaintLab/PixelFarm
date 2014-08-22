@@ -110,13 +110,12 @@ namespace MatterHackers.Agg
         int m_min_x;
         int m_last_x;
         int m_y;
+
         ArrayPOD<byte> m_covers;
         ArrayPOD<ScanlineSpan> m_spans;
 
 
-        int m_span_index;
-        int m_interator_index;
-
+        int m_span_index; 
         public ScanlineUnpacked8()
         {
 
@@ -124,17 +123,15 @@ namespace MatterHackers.Agg
             m_covers = new ArrayPOD<byte>(1000);
             m_spans = new ArrayPOD<ScanlineSpan>(1000);
         }
-        public ScanlineSpan GetNextScanlineSpan()
-        {
-            m_interator_index++;
-            return m_spans.Array[m_interator_index - 1];
-        }
+       
         public ScanlineSpan GetSpan(int index)
         {
-
             return m_spans.Array[index];
         }
-
+        public int SpanCount
+        {
+            get { return m_span_index; }
+        }
         //--------------------------------------------------------------------
         public void reset(int min_x, int max_x)
         {
@@ -158,10 +155,12 @@ namespace MatterHackers.Agg
             if (x == m_last_x + 1)
             {
                 m_spans.Array[m_span_index].len++;
+
             }
             else
             {
                 m_span_index++;
+
                 m_spans.Array[m_span_index].x = x + m_min_x;
                 m_spans.Array[m_span_index].len = 1;
                 m_spans.Array[m_span_index].cover_index = (int)x;
@@ -183,6 +182,7 @@ namespace MatterHackers.Agg
             }
             else
             {
+
                 m_span_index++;
                 m_spans.Array[m_span_index].x = x + m_min_x;
                 m_spans.Array[m_span_index].len = (int)len;
@@ -206,12 +206,8 @@ namespace MatterHackers.Agg
 
         //--------------------------------------------------------------------
         public int y() { return m_y; }
-        public int num_spans() { return (int)m_span_index; }
-        public ScanlineSpan begin()
-        {
-            m_interator_index = 1;
-            return GetNextScanlineSpan();
-        }
+
+         
         public byte[] GetCovers()
         {
             return m_covers.Array;

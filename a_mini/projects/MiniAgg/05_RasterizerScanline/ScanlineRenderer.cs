@@ -26,30 +26,27 @@ namespace MatterHackers.Agg
             }
         }
 
-        protected virtual void RenderSolidSingleScanLine(IImage destImage, IScanline scanLine, RGBA_Bytes color)
+        protected virtual void RenderSolidSingleScanLine(IImage destImage, IScanline scline, RGBA_Bytes color)
         {
-            int y = scanLine.y();
-            int num_spans = scanLine.num_spans();
-            ScanlineSpan scanlineSpan = scanLine.begin();
+            int y = scline.y();
+            int num_spans = scline.SpanCount;
 
-            byte[] coversArray = scanLine.GetCovers();
-            for (; ; )
+
+            byte[] coversArray = scline.GetCovers();
+            for (int i = 1; i <= num_spans; ++i)
             {
-                int x = scanlineSpan.x;
-                if (scanlineSpan.len > 0)
+                ScanlineSpan span = scline.GetSpan(i);
+                int x = span.x;
+                if (span.len > 0)
                 {
-                    destImage.blend_solid_hspan(x, y, scanlineSpan.len, color, coversArray, scanlineSpan.cover_index);
+                    destImage.blend_solid_hspan(x, y, span.len, color, coversArray, span.cover_index);
                 }
                 else
                 {
-                    int x2 = (x - (int)scanlineSpan.len - 1);
-                    destImage.blend_hline(x, y, x2, color, coversArray[scanlineSpan.cover_index]);
+                    int x2 = (x - (int)span.len - 1);
+                    destImage.blend_hline(x, y, x2, color, coversArray[span.cover_index]);
                 }
-                if (--num_spans == 0)
-                {   
-                    break;
-                }
-                scanlineSpan = scanLine.GetNextScanlineSpan();
+                 
             }
         }
 
@@ -72,17 +69,18 @@ namespace MatterHackers.Agg
             }
         }
 
-        void GenerateAndRenderSingleScanline(IScanline scanLineCache, IImage destImage, ISpanGenerator span_gen)
+        void GenerateAndRenderSingleScanline(IScanline scline, IImage destImage, ISpanGenerator span_gen)
         {
-            int y = scanLineCache.y();
-            int num_spans = scanLineCache.num_spans();
-            ScanlineSpan scanlineSpan = scanLineCache.begin();
+            int y = scline.y();
+            int num_spans = scline.SpanCount;
 
-            byte[] ManagedCoversArray = scanLineCache.GetCovers();
-            for (; ; )
+
+            byte[] ManagedCoversArray = scline.GetCovers();
+            for (int i = 1; i <= num_spans; ++i)
             {
-                int x = scanlineSpan.x;
-                int len = scanlineSpan.len;
+                ScanlineSpan span = scline.GetSpan(i);
+                int x = span.x;
+                int len = span.len;
                 if (len < 0) len = -len;
 
                 if (tempSpanColors.Capacity() < len)
@@ -91,11 +89,11 @@ namespace MatterHackers.Agg
                 }
 
                 span_gen.generate(tempSpanColors.Array, 0, x, y, len);
-                bool useFirstCoverForAll = scanlineSpan.len < 0;
-                destImage.blend_color_hspan(x, y, len, tempSpanColors.Array, 0, ManagedCoversArray, scanlineSpan.cover_index, useFirstCoverForAll);
+                bool useFirstCoverForAll = span.len < 0;
+                destImage.blend_color_hspan(x, y, len, tempSpanColors.Array, 0, ManagedCoversArray, span.cover_index, useFirstCoverForAll);
 
-                if (--num_spans == 0) break;
-                scanlineSpan = scanLineCache.GetNextScanlineSpan();
+              
+                 
             }
         }
 

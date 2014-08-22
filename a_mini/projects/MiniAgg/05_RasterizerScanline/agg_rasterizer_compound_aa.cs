@@ -545,7 +545,7 @@ namespace MatterHackers.Agg
                 }
             }
 
-            if (sl.num_spans() == 0) return false;
+            if (sl.SpanCount == 0) return false;
             sl.CloseLine(scan_y);
             return true;
         }
