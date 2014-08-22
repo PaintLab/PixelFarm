@@ -27,7 +27,7 @@ using System.Collections;
 
 namespace MatterHackers.Agg
 {
-  
+
     //--------------------------------------------------------------pod_vector
     // A simple class template to store Plain Old Data (POD), a vector
     // of a fixed size. The data is contiguous in memory
@@ -35,7 +35,7 @@ namespace MatterHackers.Agg
     public class ArrayList<T>
     {
         int currentSize;
-        T[] internalArray = new T[0]; 
+        T[] internalArray = new T[0];
         public ArrayList()
         {
         }
@@ -110,7 +110,7 @@ namespace MatterHackers.Agg
         {
             Clear(size, extraTail);
             currentSize = size;
-        } 
+        }
 
         /// <summary>
         ///  Resize keeping the content
@@ -194,101 +194,9 @@ namespace MatterHackers.Agg
             {
                 return currentSize;
             }
-        }
-
-
-
+        } 
     }
 
-    //----------------------------------------------------------range_adaptor
-    public class ArrayListRangeAdaptor
-    {
-        ArrayList<int> m_array;
-        int m_start;
-        int m_size;
-
-        public ArrayListRangeAdaptor(ArrayList<int> array, int start, int size)
-        {
-            m_array = (array);
-            m_start = (start);
-            m_size = (size);
-        }
-
-
-        public int this[int i]
-        {
-            get
-            {
-                return m_array.Array[m_start + i];
-            }
-
-            set
-            {
-                m_array.Array[m_start + i] = value;
-            }
-        }
-
-        public int Count
-        {
-            get { return this.m_size; }
-        }
-    }
-
-    public class Queue<T>
-    {
-        T[] itemArray;
-        int size;
-        int head;
-        int shiftFactor;
-        int mask;
-
-        public int Count
-        {
-            get { return size; }
-        }
-
-        public Queue(int shiftFactor)
-        {
-            this.shiftFactor = shiftFactor;
-            mask = (1 << shiftFactor) - 1;
-            itemArray = new T[1 << shiftFactor];
-            head = 0;
-            size = 0;
-        }
-
-        public T First
-        {
-            get { return itemArray[head & mask]; }
-        }
-
-        public void Enqueue(T itemToQueue)
-        {
-            if (size == itemArray.Length)
-            {
-                int headIndex = head & mask;
-                shiftFactor += 1;
-                mask = (1 << shiftFactor) - 1;
-                T[] newArray = new T[1 << shiftFactor];
-                // copy the from head to the end
-                Array.Copy(itemArray, headIndex, newArray, 0, size - headIndex);
-                // copy form 0 to the size
-                Array.Copy(itemArray, 0, newArray, size - headIndex, headIndex);
-                itemArray = newArray;
-                head = 0;
-            }
-            itemArray[(head + (size++)) & mask] = itemToQueue;
-        }
-
-        public T Dequeue()
-        {
-            int headIndex = head & mask;
-            T firstItem = itemArray[headIndex];
-            if (size > 0)
-            {
-                head++;
-                size--;
-            }
-            return firstItem;
-        }
-    }
+    
+  
 }

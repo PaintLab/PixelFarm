@@ -88,7 +88,7 @@ namespace MatterHackers.Agg
 
     public sealed class ScanlineRasterizer : IRasterizer
     {
-        private rasterizer_cells_aa m_outline;
+        private RasterizerCellsAA m_outline;
         private VectorClipper m_VectorClipper;
         private int[] m_gamma = new int[AA_SCALE];
         private FillingRule m_filling_rule;
@@ -125,7 +125,7 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public ScanlineRasterizer(VectorClipper rasterizer_sl_clip)
         {
-            m_outline = new rasterizer_cells_aa();
+            m_outline = new RasterizerCellsAA();
             m_VectorClipper = rasterizer_sl_clip;
             m_filling_rule = FillingRule.NonZero;
             m_auto_close = true;
@@ -398,14 +398,14 @@ namespace MatterHackers.Agg
 
                 scline.ResetSpans();
                 int num_cells = (int)m_outline.scanline_num_cells(m_scan_y);
-                cell_aa[] cells;
+                CellAA[] cells;
                 int offset;
                 m_outline.scanline_cells(m_scan_y, out cells, out offset);
                 int cover = 0;
 
                 while (num_cells != 0)
                 {
-                    cell_aa cur_cell = cells[offset];
+                    CellAA cur_cell = cells[offset];
                     int x = cur_cell.x;
                     int area = cur_cell.area;
                     int alpha;

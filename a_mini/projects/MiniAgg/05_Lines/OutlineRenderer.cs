@@ -17,7 +17,14 @@ using MatterHackers.Agg.Image;
 
 namespace MatterHackers.Agg.Lines
 {
-
+    //-----------------------------------------------------------line_coord_sat
+    public struct line_coord_sat
+    {
+        public static int conv(double x)
+        {
+            return AggBasics.iround(x * LineAABasics.SUBPIXEL_SCALE, LineAABasics.SUBPIXEL_COORD);
+        }
+    }  
 
 #if true
     //===================================================distance_interpolator0
@@ -35,11 +42,11 @@ namespace MatterHackers.Agg.Lines
             {
                 m_dx = (LineAABasics.line_mr(x2) - LineAABasics.line_mr(x1));
                 m_dy = (LineAABasics.line_mr(y2) - LineAABasics.line_mr(y1));
-                m_dist = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(x2)) * m_dy -
-                       (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(y2)) * m_dx);
+                m_dist = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(x2)) * m_dy -
+                       (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(y2)) * m_dx);
 
-                m_dx <<= LineAABasics.line_mr_subpixel_shift;
-                m_dy <<= LineAABasics.line_mr_subpixel_shift;
+                m_dx <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+                m_dy <<= LineAABasics.MR_SUBPIXEL_SHIFT;
             }
         }
 
@@ -68,15 +75,15 @@ namespace MatterHackers.Agg.Lines
             m_dy1 = (LineAABasics.line_mr(y1) - LineAABasics.line_mr(yc));
             m_dx2 = (LineAABasics.line_mr(x2) - LineAABasics.line_mr(xc));
             m_dy2 = (LineAABasics.line_mr(y2) - LineAABasics.line_mr(yc));
-            m_dist1 = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(x1)) * m_dy1 -
-                    (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(y1)) * m_dx1);
-            m_dist2 = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(x2)) * m_dy2 -
-                    (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(y2)) * m_dx2);
+            m_dist1 = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(x1)) * m_dy1 -
+                    (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(y1)) * m_dx1);
+            m_dist2 = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(x2)) * m_dy2 -
+                    (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(y2)) * m_dx2);
 
-            m_dx1 <<= LineAABasics.line_mr_subpixel_shift;
-            m_dy1 <<= LineAABasics.line_mr_subpixel_shift;
-            m_dx2 <<= LineAABasics.line_mr_subpixel_shift;
-            m_dy2 <<= LineAABasics.line_mr_subpixel_shift;
+            m_dx1 <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dy1 <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dx2 <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dy2 <<= LineAABasics.MR_SUBPIXEL_SHIFT;
         }
 
         //---------------------------------------------------------------------
@@ -98,11 +105,11 @@ namespace MatterHackers.Agg.Lines
         {
             m_dx = (x2 - x1);
             m_dy = (y2 - y1);
-            m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
-                          (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+                          (double)(y + LineAABasics.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
 
-            m_dx <<= LineAABasics.line_subpixel_shift;
-            m_dy <<= LineAABasics.line_subpixel_shift;
+            m_dx <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dy <<= LineAABasics.SUBPIXEL_SHIFT;
         }
 
         //---------------------------------------------------------------------
@@ -174,16 +181,16 @@ namespace MatterHackers.Agg.Lines
             m_dx_start = (LineAABasics.line_mr(sx) - LineAABasics.line_mr(x1));
             m_dy_start = (LineAABasics.line_mr(sy) - LineAABasics.line_mr(y1));
 
-            m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
-                          (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+                          (double)(y + LineAABasics.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
 
-            m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
-                         (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sy)) * m_dx_start);
+            m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
+                         (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sy)) * m_dx_start);
 
-            m_dx <<= LineAABasics.line_subpixel_shift;
-            m_dy <<= LineAABasics.line_subpixel_shift;
-            m_dx_start <<= LineAABasics.line_mr_subpixel_shift;
-            m_dy_start <<= LineAABasics.line_mr_subpixel_shift;
+            m_dx <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dy <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dx_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dy_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
         }
 
         public distance_interpolator2(int x1, int y1, int x2, int y2,
@@ -194,16 +201,16 @@ namespace MatterHackers.Agg.Lines
             m_dx_start = (LineAABasics.line_mr(ex) - LineAABasics.line_mr(x2));
             m_dy_start = (LineAABasics.line_mr(ey) - LineAABasics.line_mr(y2));
 
-            m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
-                          (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+                          (double)(y + LineAABasics.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
 
-            m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ex)) * m_dy_start -
-                         (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ey)) * m_dx_start);
+            m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ex)) * m_dy_start -
+                         (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ey)) * m_dx_start);
 
-            m_dx <<= LineAABasics.line_subpixel_shift;
-            m_dy <<= LineAABasics.line_subpixel_shift;
-            m_dx_start <<= LineAABasics.line_mr_subpixel_shift;
-            m_dy_start <<= LineAABasics.line_mr_subpixel_shift;
+            m_dx <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dy <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dx_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dy_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
         }
 
 
@@ -328,21 +335,21 @@ namespace MatterHackers.Agg.Lines
                 m_dx_end = (LineAABasics.line_mr(ex) - LineAABasics.line_mr(x2));
                 m_dy_end = (LineAABasics.line_mr(ey) - LineAABasics.line_mr(y2));
 
-                m_dist = (AggBasics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
-                              (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
+                m_dist = (AggBasics.iround((double)(x + LineAABasics.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+                              (double)(y + LineAABasics.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
 
-                m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
-                             (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sy)) * m_dx_start);
+                m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
+                             (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sy)) * m_dx_start);
 
-                m_dist_end = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ex)) * m_dy_end -
-                           (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ey)) * m_dx_end);
+                m_dist_end = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ex)) * m_dy_end -
+                           (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ey)) * m_dx_end);
 
-                m_dx <<= LineAABasics.line_subpixel_shift;
-                m_dy <<= LineAABasics.line_subpixel_shift;
-                m_dx_start <<= LineAABasics.line_mr_subpixel_shift;
-                m_dy_start <<= LineAABasics.line_mr_subpixel_shift;
-                m_dx_end <<= LineAABasics.line_mr_subpixel_shift;
-                m_dy_end <<= LineAABasics.line_mr_subpixel_shift;
+                m_dx <<= LineAABasics.SUBPIXEL_SHIFT;
+                m_dy <<= LineAABasics.SUBPIXEL_SHIFT;
+                m_dx_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+                m_dy_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+                m_dx_end <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+                m_dy_end <<= LineAABasics.MR_SUBPIXEL_SHIFT;
             }
         }
 
@@ -442,7 +449,7 @@ namespace MatterHackers.Agg.Lines
     //================================================line_interpolator_aa_base
     public class line_interpolator_aa_base
     {
-        protected line_parameters m_lp;
+        protected LineParameters m_lp;
         protected dda2_line_interpolator m_li;
         protected OutlineRenderer m_ren;
         int m_len;
@@ -460,30 +467,30 @@ namespace MatterHackers.Agg.Lines
 
         protected const int max_half_width = 64;
 
-        public line_interpolator_aa_base(OutlineRenderer ren, line_parameters lp)
+        public line_interpolator_aa_base(OutlineRenderer ren, LineParameters lp)
         {
             m_lp = lp;
             m_li = new dda2_line_interpolator(lp.vertical ? LineAABasics.line_dbl_hr(lp.x2 - lp.x1) : LineAABasics.line_dbl_hr(lp.y2 - lp.y1),
                 lp.vertical ? Math.Abs(lp.y2 - lp.y1) : Math.Abs(lp.x2 - lp.x1) + 1);
             m_ren = ren;
             m_len = ((lp.vertical == (lp.inc > 0)) ? -lp.len : lp.len);
-            m_x = (lp.x1 >> LineAABasics.line_subpixel_shift);
-            m_y = (lp.y1 >> LineAABasics.line_subpixel_shift);
+            m_x = (lp.x1 >> LineAABasics.SUBPIXEL_SHIFT);
+            m_y = (lp.y1 >> LineAABasics.SUBPIXEL_SHIFT);
             m_old_x = (m_x);
             m_old_y = (m_y);
-            m_count = ((lp.vertical ? Math.Abs((lp.y2 >> LineAABasics.line_subpixel_shift) - m_y) :
-                                   Math.Abs((lp.x2 >> LineAABasics.line_subpixel_shift) - m_x)));
+            m_count = ((lp.vertical ? Math.Abs((lp.y2 >> LineAABasics.SUBPIXEL_SHIFT) - m_y) :
+                                   Math.Abs((lp.x2 >> LineAABasics.SUBPIXEL_SHIFT) - m_x)));
             m_width = (ren.subpixel_width());
             //m_max_extent(m_width >> (line_subpixel_shift - 2));
-            m_max_extent = ((m_width + LineAABasics.line_subpixel_mask) >> LineAABasics.line_subpixel_shift);
+            m_max_extent = ((m_width + LineAABasics.SUBPIXEL_MARK) >> LineAABasics.SUBPIXEL_SHIFT);
             m_step = 0;
 
             dda2_line_interpolator li = new dda2_line_interpolator(0,
-                lp.vertical ? (lp.dy << LineAABasics.line_subpixel_shift) : (lp.dx << LineAABasics.line_subpixel_shift),
+                lp.vertical ? (lp.dy << LineAABasics.SUBPIXEL_SHIFT) : (lp.dx << LineAABasics.SUBPIXEL_SHIFT),
                 lp.len);
 
             int i;
-            int stop = m_width + LineAABasics.line_subpixel_scale * 2;
+            int stop = m_width + LineAABasics.SUBPIXEL_SCALE * 2;
             for (i = 0; i < max_half_width; ++i)
             {
                 m_dist[i] = li.y();
@@ -497,7 +504,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_li.Next();
             m_x += m_lp.inc;
-            m_y = (m_lp.y1 + m_li.y()) >> LineAABasics.line_subpixel_shift;
+            m_y = (m_lp.y1 + m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.inc_x(m_y - m_old_y);
             else di.dec_x(m_y - m_old_y);
@@ -511,7 +518,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_li.Next();
             m_x += m_lp.inc;
-            m_y = (m_lp.y1 + m_li.y()) >> LineAABasics.line_subpixel_shift;
+            m_y = (m_lp.y1 + m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.inc_x(m_y - m_old_y);
             else di.dec_x(m_y - m_old_y);
@@ -525,7 +532,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_li.Next();
             m_x += m_lp.inc;
-            m_y = (m_lp.y1 + m_li.y()) >> LineAABasics.line_subpixel_shift;
+            m_y = (m_lp.y1 + m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.inc_x(m_y - m_old_y);
             else di.dec_x(m_y - m_old_y);
@@ -539,7 +546,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_li.Next();
             m_y += m_lp.inc;
-            m_x = (m_lp.x1 + m_li.y()) >> LineAABasics.line_subpixel_shift;
+            m_x = (m_lp.x1 + m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.inc_y(m_x - m_old_x);
             else di.dec_y(m_x - m_old_x);
@@ -553,7 +560,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_li.Next();
             m_y += m_lp.inc;
-            m_x = (m_lp.x1 + m_li.y()) >> LineAABasics.line_subpixel_shift;
+            m_x = (m_lp.x1 + m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.inc_y(m_x - m_old_x);
             else di.dec_y(m_x - m_old_x);
@@ -567,7 +574,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_li.Next();
             m_y += m_lp.inc;
-            m_x = (m_lp.x1 + m_li.y()) >> LineAABasics.line_subpixel_shift;
+            m_x = (m_lp.x1 + m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.inc_y(m_x - m_old_x);
             else di.dec_y(m_x - m_old_x);
@@ -588,11 +595,11 @@ namespace MatterHackers.Agg.Lines
     {
         distance_interpolator1 m_di;
         //---------------------------------------------------------------------
-        public line_interpolator_aa0(OutlineRenderer ren, line_parameters lp)
+        public line_interpolator_aa0(OutlineRenderer ren, LineParameters lp)
             : base(ren, lp)
         {
             m_di = new distance_interpolator1(lp.x1, lp.y1, lp.x2, lp.y2,
-                 lp.x1 & ~LineAABasics.line_subpixel_mask, lp.y1 & ~LineAABasics.line_subpixel_mask);
+                 lp.x1 & ~LineAABasics.SUBPIXEL_MARK, lp.y1 & ~LineAABasics.SUBPIXEL_MARK);
 
             m_li.adjust_forward();
         }
@@ -668,13 +675,13 @@ namespace MatterHackers.Agg.Lines
         //typedef line_interpolator_aa_base<Renderer> base_type;
 
         //---------------------------------------------------------------------
-        public line_interpolator_aa1(OutlineRenderer ren, line_parameters lp,
+        public line_interpolator_aa1(OutlineRenderer ren, LineParameters lp,
                               int sx, int sy)
             :
             base(ren, lp)
         {
             m_di = new distance_interpolator2(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy,
-                 lp.x1 & ~LineAABasics.line_subpixel_mask, lp.y1 & ~LineAABasics.line_subpixel_mask);
+                 lp.x1 & ~LineAABasics.SUBPIXEL_MARK, lp.y1 & ~LineAABasics.SUBPIXEL_MARK);
 
             int dist1_start;
             int dist2_start;
@@ -687,7 +694,7 @@ namespace MatterHackers.Agg.Lines
                 {
                     base.m_li.Prev();
                     base.m_y -= lp.inc;
-                    base.m_x = (base.m_lp.x1 + base.m_li.y()) >> LineAABasics.line_subpixel_shift;
+                    base.m_x = (base.m_lp.x1 + base.m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
                     if (lp.inc > 0) m_di.dec_y(base.m_x - base.m_old_x);
                     else m_di.inc_y(base.m_x - base.m_old_x);
@@ -719,7 +726,7 @@ namespace MatterHackers.Agg.Lines
                 {
                     base.m_li.Prev();
                     base.m_x -= lp.inc;
-                    base.m_y = (base.m_lp.y1 + base.m_li.y()) >> LineAABasics.line_subpixel_shift;
+                    base.m_y = (base.m_lp.y1 + base.m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
                     if (lp.inc > 0) m_di.dec_x(base.m_y - base.m_old_y);
                     else m_di.inc_x(base.m_y - base.m_old_y);
@@ -862,13 +869,13 @@ namespace MatterHackers.Agg.Lines
         //typedef line_interpolator_aa_base<Renderer> base_type;
 
         //---------------------------------------------------------------------
-        public line_interpolator_aa2(OutlineRenderer ren, line_parameters lp,
+        public line_interpolator_aa2(OutlineRenderer ren, LineParameters lp,
                               int ex, int ey)
             :
             base(ren, lp)
         {
             m_di = new distance_interpolator2(lp.x1, lp.y1, lp.x2, lp.y2, ex, ey,
-                 lp.x1 & ~LineAABasics.line_subpixel_mask, lp.y1 & ~LineAABasics.line_subpixel_mask,
+                 lp.x1 & ~LineAABasics.SUBPIXEL_MARK, lp.y1 & ~LineAABasics.SUBPIXEL_MARK,
                  0);
             base.m_li.adjust_forward();
             base.m_step -= base.m_max_extent;
@@ -993,13 +1000,13 @@ namespace MatterHackers.Agg.Lines
         //typedef line_interpolator_aa_base<Renderer> base_type;
 
         //---------------------------------------------------------------------
-        public line_interpolator_aa3(OutlineRenderer ren, line_parameters lp,
+        public line_interpolator_aa3(OutlineRenderer ren, LineParameters lp,
                               int sx, int sy, int ex, int ey)
             :
             base(ren, lp)
         {
             m_di = new distance_interpolator3(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy, ex, ey,
-                 lp.x1 & ~LineAABasics.line_subpixel_mask, lp.y1 & ~LineAABasics.line_subpixel_mask);
+                 lp.x1 & ~LineAABasics.SUBPIXEL_MARK, lp.y1 & ~LineAABasics.SUBPIXEL_MARK);
             int dist1_start;
             int dist2_start;
             int npix = 1;
@@ -1009,7 +1016,7 @@ namespace MatterHackers.Agg.Lines
                 {
                     base.m_li.Prev();
                     base.m_y -= lp.inc;
-                    base.m_x = (base.m_lp.x1 + base.m_li.y()) >> LineAABasics.line_subpixel_shift;
+                    base.m_x = (base.m_lp.x1 + base.m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
                     if (lp.inc > 0) m_di.dec_y(base.m_x - base.m_old_x);
                     else m_di.inc_y(base.m_x - base.m_old_x);
@@ -1040,7 +1047,7 @@ namespace MatterHackers.Agg.Lines
                 {
                     base.m_li.Prev();
                     base.m_x -= lp.inc;
-                    base.m_y = (base.m_lp.y1 + base.m_li.y()) >> LineAABasics.line_subpixel_shift;
+                    base.m_y = (base.m_lp.y1 + base.m_li.y()) >> LineAABasics.SUBPIXEL_SHIFT;
 
                     if (lp.inc > 0) m_di.dec_x(base.m_y - base.m_old_y);
                     else m_di.inc_x(base.m_y - base.m_old_y);
@@ -1453,10 +1460,10 @@ namespace MatterHackers.Agg.Lines
         public abstract void semidot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2);
         public abstract void semidot_hline(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2, int x1, int y1, int x2);
         public abstract void pie(int xc, int yc, int x1, int y1, int x2, int y2);
-        public abstract void line0(line_parameters lp);
-        public abstract void line1(line_parameters lp, int sx, int sy);
-        public abstract void line2(line_parameters lp, int ex, int ey);
-        public abstract void line3(line_parameters lp, int sx, int sy, int ex, int ey);
+        public abstract void line0(LineParameters lp);
+        public abstract void line1(LineParameters lp, int sx, int sy);
+        public abstract void line2(LineParameters lp, int ex, int ey);
+        public abstract void line3(LineParameters lp, int sx, int sy, int ex, int ey);
     }
 
     //======================================================renderer_outline_aa
@@ -1532,12 +1539,12 @@ namespace MatterHackers.Agg.Lines
             byte[] covers = new byte[max_half_width * 2 + 4];
             int Offset0 = 0;
             int Offset1 = 0;
-            int x = x1 << LineAABasics.line_subpixel_shift;
-            int y = y1 << LineAABasics.line_subpixel_shift;
+            int x = x1 << LineAABasics.SUBPIXEL_SHIFT;
+            int y = y1 << LineAABasics.SUBPIXEL_SHIFT;
             int w = subpixel_width();
             distance_interpolator0 di = new distance_interpolator0(xc1, yc1, xc2, yc2, x, y);
-            x += LineAABasics.line_subpixel_scale / 2;
-            y += LineAABasics.line_subpixel_scale / 2;
+            x += LineAABasics.SUBPIXEL_SCALE / 2;
+            y += LineAABasics.SUBPIXEL_SCALE / 2;
 
             int x0 = x1;
             int dx = x - xc1;
@@ -1551,7 +1558,7 @@ namespace MatterHackers.Agg.Lines
                     covers[Offset1] = (byte)cover(d);
                 }
                 ++Offset1;
-                dx += LineAABasics.line_subpixel_scale;
+                dx += LineAABasics.SUBPIXEL_SCALE;
                 di.inc_x();
             }
             while (++x1 <= x2);
@@ -1565,15 +1572,15 @@ namespace MatterHackers.Agg.Lines
         {
             if (doClipping && ClipLiangBarsky.clipping_flags(xc1, yc1, clippingRectangle) != 0) return;
 
-            int r = ((subpixel_width() + LineAABasics.line_subpixel_mask) >> LineAABasics.line_subpixel_shift);
+            int r = ((subpixel_width() + LineAABasics.SUBPIXEL_MARK) >> LineAABasics.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
             ellipse_bresenham_interpolator ei = new ellipse_bresenham_interpolator(r, r);
             int dx = 0;
             int dy = -r;
             int dy0 = dy;
             int dx0 = dx;
-            int x = xc1 >> LineAABasics.line_subpixel_shift;
-            int y = yc1 >> LineAABasics.line_subpixel_shift;
+            int x = xc1 >> LineAABasics.SUBPIXEL_SHIFT;
+            int y = yc1 >> LineAABasics.SUBPIXEL_SHIFT;
 
             do
             {
@@ -1601,13 +1608,13 @@ namespace MatterHackers.Agg.Lines
             byte[] covers = new byte[max_half_width * 2 + 4];
             int index0 = 0;
             int index1 = 0;
-            int x = xh1 << LineAABasics.line_subpixel_shift;
-            int y = yh1 << LineAABasics.line_subpixel_shift;
+            int x = xh1 << LineAABasics.SUBPIXEL_SHIFT;
+            int y = yh1 << LineAABasics.SUBPIXEL_SHIFT;
             int w = subpixel_width();
 
             distance_interpolator00 di = new distance_interpolator00(xc, yc, xp1, yp1, xp2, yp2, x, y);
-            x += LineAABasics.line_subpixel_scale / 2;
-            y += LineAABasics.line_subpixel_scale / 2;
+            x += LineAABasics.SUBPIXEL_SCALE / 2;
+            y += LineAABasics.SUBPIXEL_SCALE / 2;
 
             int xh0 = xh1;
             int dx = x - xc;
@@ -1621,7 +1628,7 @@ namespace MatterHackers.Agg.Lines
                     covers[index1] = (byte)cover(d);
                 }
                 ++index1;
-                dx += LineAABasics.line_subpixel_scale;
+                dx += LineAABasics.SUBPIXEL_SCALE;
                 di.inc_x();
             }
             while (++xh1 <= xh2);
@@ -1630,15 +1637,15 @@ namespace MatterHackers.Agg.Lines
 
         public override void pie(int xc, int yc, int x1, int y1, int x2, int y2)
         {
-            int r = ((subpixel_width() + LineAABasics.line_subpixel_mask) >> LineAABasics.line_subpixel_shift);
+            int r = ((subpixel_width() + LineAABasics.SUBPIXEL_MARK) >> LineAABasics.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
             ellipse_bresenham_interpolator ei = new ellipse_bresenham_interpolator(r, r);
             int dx = 0;
             int dy = -r;
             int dy0 = dy;
             int dx0 = dx;
-            int x = xc >> LineAABasics.line_subpixel_shift;
-            int y = yc >> LineAABasics.line_subpixel_shift;
+            int x = xc >> LineAABasics.SUBPIXEL_SHIFT;
+            int y = yc >> LineAABasics.SUBPIXEL_SHIFT;
 
             do
             {
@@ -1658,11 +1665,11 @@ namespace MatterHackers.Agg.Lines
             pie_hline(xc, yc, x1, y1, x2, y2, x - dx0, y + dy0, x + dx0);
         }
 
-        public void line0_no_clip(line_parameters lp)
+        public void line0_no_clip(LineParameters lp)
         {
-            if (lp.len > LineAABasics.line_max_length)
+            if (lp.len > LineAABasics.MAX_LENGTH)
             {
-                line_parameters lp1, lp2;
+                LineParameters lp1, lp2;
                 lp.divide(out lp1, out lp2);
                 line0_no_clip(lp1);
                 line0_no_clip(lp2);
@@ -1683,7 +1690,7 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public override void line0(line_parameters lp)
+        public override void line0(LineParameters lp)
         {
             if (doClipping)
             {
@@ -1696,7 +1703,7 @@ namespace MatterHackers.Agg.Lines
                 {
                     if (flags != 0)
                     {
-                        line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
+                        LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
                                            AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         line0_no_clip(lp2);
                     }
@@ -1712,11 +1719,11 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public void line1_no_clip(line_parameters lp, int sx, int sy)
+        public void line1_no_clip(LineParameters lp, int sx, int sy)
         {
-            if (lp.len > LineAABasics.line_max_length)
+            if (lp.len > LineAABasics.MAX_LENGTH)
             {
-                line_parameters lp1, lp2;
+                LineParameters lp1, lp2;
                 lp.divide(out lp1, out lp2);
                 line1_no_clip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
                 line1_no_clip(lp2, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
@@ -1735,7 +1742,7 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public override void line1(line_parameters lp, int sx, int sy)
+        public override void line1(LineParameters lp, int sx, int sy)
         {
             if (doClipping)
             {
@@ -1748,7 +1755,7 @@ namespace MatterHackers.Agg.Lines
                 {
                     if (flags != 0)
                     {
-                        line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
+                        LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
                                            AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if (((int)flags & 1) != 0)
                         {
@@ -1777,11 +1784,11 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public void line2_no_clip(line_parameters lp, int ex, int ey)
+        public void line2_no_clip(LineParameters lp, int ex, int ey)
         {
-            if (lp.len > LineAABasics.line_max_length)
+            if (lp.len > LineAABasics.MAX_LENGTH)
             {
-                line_parameters lp1, lp2;
+                LineParameters lp1, lp2;
                 lp.divide(out lp1, out lp2);
                 line2_no_clip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
                 line2_no_clip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
@@ -1800,7 +1807,7 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public override void line2(line_parameters lp, int ex, int ey)
+        public override void line2(LineParameters lp, int ex, int ey)
         {
             if (doClipping)
             {
@@ -1813,7 +1820,7 @@ namespace MatterHackers.Agg.Lines
                 {
                     if (flags != 0)
                     {
-                        line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
+                        LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
                                            AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if ((flags & 2) != 0)
                         {
@@ -1842,12 +1849,12 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public void line3_no_clip(line_parameters lp,
+        public void line3_no_clip(LineParameters lp,
                            int sx, int sy, int ex, int ey)
         {
-            if (lp.len > LineAABasics.line_max_length)
+            if (lp.len > LineAABasics.MAX_LENGTH)
             {
-                line_parameters lp1, lp2;
+                LineParameters lp1, lp2;
                 lp.divide(out lp1, out lp2);
                 int mx = lp1.x2 + (lp1.y2 - lp1.y1);
                 int my = lp1.y2 - (lp1.x2 - lp1.x1);
@@ -1869,7 +1876,7 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public override void line3(line_parameters lp,
+        public override void line3(LineParameters lp,
                    int sx, int sy, int ex, int ey)
         {
             if (doClipping)
@@ -1883,7 +1890,7 @@ namespace MatterHackers.Agg.Lines
                 {
                     if (flags != 0)
                     {
-                        line_parameters lp2 = new line_parameters(x1, y1, x2, y2,
+                        LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
                             AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if ((flags & 1) != 0)
                         {

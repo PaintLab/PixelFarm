@@ -39,7 +39,7 @@ namespace MatterHackers.Agg.Lines
             double dx = val.x - x;
             double dy = val.y - y;
             return (len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy))) >
-                   (LineAABasics.line_subpixel_scale + LineAABasics.line_subpixel_scale / 2);
+                   (LineAABasics.SUBPIXEL_SCALE + LineAABasics.SUBPIXEL_SCALE / 2);
         }
     };
 
@@ -124,7 +124,7 @@ namespace MatterHackers.Agg.Lines
         {
             public int idx;
             public int x1, y1, x2, y2;
-            public line_parameters curr, next;
+            public LineParameters curr, next;
             public int lcurr, lnext;
             public int xb1, yb1, xb2, yb2;
             public int flags;
@@ -173,7 +173,7 @@ namespace MatterHackers.Agg.Lines
                 dv.y2 = m_src_vertices[dv.idx].y;
 
                 dv.curr = dv.next;
-                dv.next = new line_parameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
+                dv.next = new LineParameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
                 dv.xb1 = dv.xb2;
                 dv.yb1 = dv.yb2;
 
@@ -277,18 +277,18 @@ namespace MatterHackers.Agg.Lines
                     x2 = v.x;
                     y2 = v.y;
                     dv.lcurr = v.len;
-                    line_parameters prev = new line_parameters(x1, y1, x2, y2, lprev);
+                    LineParameters prev = new LineParameters(x1, y1, x2, y2, lprev);
 
                     v = m_src_vertices[1];
                     dv.x1 = v.x;
                     dv.y1 = v.y;
                     dv.lnext = v.len;
-                    dv.curr = new line_parameters(x2, y2, dv.x1, dv.y1, dv.lcurr);
+                    dv.curr = new LineParameters(x2, y2, dv.x1, dv.y1, dv.lcurr);
 
                     v = m_src_vertices[dv.idx];
                     dv.x2 = v.x;
                     dv.y2 = v.y;
-                    dv.next = new line_parameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
+                    dv.next = new LineParameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
 
                     dv.xb1 = 0;
                     dv.yb1 = 0;
@@ -342,7 +342,7 @@ namespace MatterHackers.Agg.Lines
                             v = m_src_vertices[1];
                             x2 = v.x;
                             y2 = v.y;
-                            line_parameters lp = new line_parameters(x1, y1, x2, y2, lprev);
+                            LineParameters lp = new LineParameters(x1, y1, x2, y2, lprev);
                             if (m_round_cap)
                             {
                                 m_ren.semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
@@ -374,8 +374,8 @@ namespace MatterHackers.Agg.Lines
                             v = m_src_vertices[2];
                             x3 = v.x;
                             y3 = v.y;
-                            line_parameters lp1 = new line_parameters(x1, y1, x2, y2, lprev);
-                            line_parameters lp2 = new line_parameters(x2, y2, x3, y3, lnext);
+                            LineParameters lp1 = new LineParameters(x1, y1, x2, y2, lprev);
+                            LineParameters lp2 = new LineParameters(x2, y2, x3, y3, lnext);
 
                             if (m_round_cap)
                             {
@@ -422,18 +422,18 @@ namespace MatterHackers.Agg.Lines
                             x2 = v.x;
                             y2 = v.y;
                             dv.lcurr = v.len;
-                            line_parameters prev = new line_parameters(x1, y1, x2, y2, lprev);
+                            LineParameters prev = new LineParameters(x1, y1, x2, y2, lprev);
 
                             v = m_src_vertices[2];
                             dv.x1 = v.x;
                             dv.y1 = v.y;
                             dv.lnext = v.len;
-                            dv.curr = new line_parameters(x2, y2, dv.x1, dv.y1, dv.lcurr);
+                            dv.curr = new LineParameters(x2, y2, dv.x1, dv.y1, dv.lcurr);
 
                             v = m_src_vertices[dv.idx];
                             dv.x2 = v.x;
                             dv.y2 = v.y;
-                            dv.next = new line_parameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
+                            dv.next = new LineParameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
 
                             dv.xb1 = 0;
                             dv.yb1 = 0;

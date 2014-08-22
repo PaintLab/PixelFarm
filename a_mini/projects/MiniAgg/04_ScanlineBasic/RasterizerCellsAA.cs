@@ -40,7 +40,7 @@ namespace MatterHackers.Agg
     // A pixel cell. There're no constructors defined and it was done ***
     // intentionally in order to avoid extra overhead when allocating an ****
     // array of cells. ***
-    public struct cell_aa
+    public struct CellAA
     {
         public int x;
         public int y;
@@ -59,7 +59,7 @@ namespace MatterHackers.Agg
             right = -1;
         }
 
-        public void Set(cell_aa cellB)
+        public void Set(CellAA cellB)
         {
             x = cellB.x;
             y = cellB.y;
@@ -69,13 +69,13 @@ namespace MatterHackers.Agg
             right = cellB.right;
         }
 
-        public void style(cell_aa cellB)
+        public void style(CellAA cellB)
         {
             left = cellB.left;
             right = cellB.right;
         }
 
-        public bool not_equal(int ex, int ey, cell_aa cell)
+        public bool not_equal(int ex, int ey, CellAA cell)
         {
             unchecked
             {
@@ -87,25 +87,24 @@ namespace MatterHackers.Agg
         {
             return "x:" + x + ",y:" + y + ",cover:" + cover + ",area:" + area + ",left:" + left + ",right:" + right;
         }
-#endif
+#endif 
 
-
-    };
+    } 
 
 
     //-----------------------------------------------------rasterizer_cells_aa
     // An internal class that implements the main rasterization algorithm.
     // Used in the rasterizer. Should not be used directly.
-    sealed class rasterizer_cells_aa
+    sealed class RasterizerCellsAA
     {
         int m_num_used_cells;
-        ArrayList<cell_aa> m_cells;
-        ArrayList<cell_aa> m_sorted_cells;
+        ArrayList<CellAA> m_cells;
+        ArrayList<CellAA> m_sorted_cells;
 
         ArrayList<sorted_y> m_sorted_y;
 
-        cell_aa m_curr_cell;
-        cell_aa m_style_cell;
+        CellAA m_curr_cell;
+        CellAA m_style_cell;
 
         int m_min_x;
         int m_min_y;
@@ -128,10 +127,10 @@ namespace MatterHackers.Agg
             internal int num;
         }
 
-        public rasterizer_cells_aa()
+        public RasterizerCellsAA()
         {
 
-            m_sorted_cells = new ArrayList<cell_aa>();
+            m_sorted_cells = new ArrayList<CellAA>();
             m_sorted_y = new ArrayList<sorted_y>();
             m_min_x = (0x7FFFFFFF);
             m_min_y = (0x7FFFFFFF);
@@ -156,7 +155,7 @@ namespace MatterHackers.Agg
             m_max_y = -0x7FFFFFFF;
         }
 
-        public void style(cell_aa style_cell)
+        public void style(CellAA style_cell)
         {
             m_style_cell.style(style_cell);
         }
@@ -337,9 +336,9 @@ namespace MatterHackers.Agg
             m_sorted_y.Allocate((int)(m_max_y - m_min_y + 1));
             m_sorted_y.zero();
 
-            cell_aa[] cells = m_cells.Array;
+            CellAA[] cells = m_cells.Array;
             sorted_y[] sortedYData = m_sorted_y.Array;
-            cell_aa[] sortedCellsData = m_sorted_cells.Array;
+            CellAA[] sortedCellsData = m_sorted_cells.Array;
 
             // Create the Y-histogram (count the numbers of cells for each Y)
             for (int i = 0; i < m_num_used_cells; ++i)
@@ -392,7 +391,7 @@ namespace MatterHackers.Agg
             return (int)m_sorted_y.GetArray()[y - m_min_y].num;
         }
 
-        public void scanline_cells(int y, out cell_aa[] cellData, out int offset)
+        public void scanline_cells(int y, out CellAA[] cellData, out int offset)
         {
             cellData = m_sorted_cells.GetArray();
             offset = m_sorted_y[y - m_min_y].start;
@@ -452,7 +451,7 @@ namespace MatterHackers.Agg
                 }
 
                 int new_num_allocated_cells = m_num_used_cells + (int)cell_block_scale_e.cell_block_size;
-                ArrayList<cell_aa> new_cells = new ArrayList<cell_aa>(new_num_allocated_cells);
+                ArrayList<CellAA> new_cells = new ArrayList<CellAA>(new_num_allocated_cells);
                 if (m_cells != null)
                 {
                     new_cells.CopyFrom(m_cells);
@@ -557,12 +556,12 @@ namespace MatterHackers.Agg
         static class QuickSort
         {
 
-            public static void Sort(cell_aa[] dataToSort)
+            public static void Sort(CellAA[] dataToSort)
             {
                 Sort(dataToSort, 0, dataToSort.Length - 1);
             }
 
-            public static void Sort(cell_aa[] dataToSort, int beg, int end)
+            public static void Sort(CellAA[] dataToSort, int beg, int end)
             {
                 if (end == beg)
                 {
@@ -583,7 +582,7 @@ namespace MatterHackers.Agg
                 }
             }
 
-            static int getPivotPoint(cell_aa[] dataToSort, int begPoint, int endPoint)
+            static int getPivotPoint(CellAA[] dataToSort, int begPoint, int endPoint)
             {
                 int pivot = begPoint;
                 int m = begPoint + 1;
@@ -605,7 +604,7 @@ namespace MatterHackers.Agg
                 while (m < n)
                 {
                     //swap data between m and n
-                    cell_aa temp = dataToSort[m];
+                    CellAA temp = dataToSort[m];
                     dataToSort[m] = dataToSort[n];
                     dataToSort[n] = temp;
 
@@ -622,7 +621,7 @@ namespace MatterHackers.Agg
 
                 if (pivot != n)
                 {
-                    cell_aa temp2 = dataToSort[n];
+                    CellAA temp2 = dataToSort[n];
                     dataToSort[n] = dataToSort[pivot];
                     dataToSort[pivot] = temp2;
 
@@ -632,66 +631,5 @@ namespace MatterHackers.Agg
         }
     }
 
-    //------------------------------------------------------scanline_hit_test
-    public class scanline_hit_test : IScanline
-    {
-        //see pattern fill example 
-
-        private int m_x;
-        private bool m_hit;
-
-        public scanline_hit_test(int x)
-        {
-            m_x = x;
-            m_hit = false;
-        }
-
-        public void ResetSpans() { }
-        public void CloseLine(int nothing) { }
-        public void AddCell(int x, int nothing)
-        {
-            if (m_x == x) m_hit = true;
-        }
-        public void AddSpan(int x, int len, int nothing)
-        {
-            if (m_x >= x && m_x < x + len)
-            {
-                m_hit = true;
-            }
-        }
-        public int num_spans() { return 1; }
-        public bool hit() { return m_hit; }
-
-        public ScanlineSpan GetSpan(int index)
-        {
-            //empty scanline
-            return new ScanlineSpan();
-        }
-        public int SpanCount { get { return num_spans(); } }
-        public void ResetSpans(int min_x, int max_x)
-        {
-            throw new System.NotImplementedException();
-        }
-        public ScanlineSpan begin()
-        {
-            throw new System.NotImplementedException();
-        }
-        public ScanlineSpan GetNextScanlineSpan()
-        {
-            throw new System.NotImplementedException();
-        }
-        public int Y 
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-        public byte[] GetCovers()
-        {
-            throw new System.NotImplementedException();
-        }
-
-
-    }
+    
 }
