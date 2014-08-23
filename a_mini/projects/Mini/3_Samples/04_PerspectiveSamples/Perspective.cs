@@ -109,11 +109,12 @@ namespace MatterHackers.Agg.Sample_Perspective
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {
-                
-                var txBilinear = new Bilinear(lionShape.Bounds.Left,
-                    lionShape.Bounds.Bottom,
-                    lionShape.Bounds.Right,
-                    lionShape.Bounds.Top,
+
+                var bound = lionShape.Bounds;
+                var txBilinear = new Bilinear(bound.Left,
+                    bound.Bottom,
+                    bound.Right,
+                    bound.Top,  
                     quadPolygonControl.polygon());
 
 

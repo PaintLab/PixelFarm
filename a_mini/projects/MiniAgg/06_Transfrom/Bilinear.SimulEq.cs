@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
@@ -21,122 +21,21 @@ using System;
 namespace MatterHackers.Agg.Transform
 {
 
-    //==========================================================trans_bilinear
-    public sealed partial class Bilinear : ITransform
+
+    partial class Bilinear : ITransform
     {
-
-        double[,] m_mtx = new double[4, 2];
-        bool m_valid;
-
-        //--------------------------------------------------------------------
-        public Bilinear()
-        {
-            m_valid = false;
-        }
-
-        //--------------------------------------------------------------------
-        // Arbitrary quadrangle transformations
-        public Bilinear(double[] src, double[] dst)
-        {
-            quad_to_quad(src, dst);
-        }
-        //--------------------------------------------------------------------
-        // Direct transformations 
-        public Bilinear(double x1, double y1, double x2, double y2, double[] quad)
-        {
-            rect_to_quad(x1, y1, x2, y2, quad);
-        }
-        //--------------------------------------------------------------------
-        // Reverse transformations 
-        public Bilinear(double[] quad,
-                       double x1, double y1,
-                       double x2, double y2)
-        {
-            quad_to_rect(quad, x1, y1, x2, y2);
-        }
-        //--------------------------------------------------------------------
-        // Set the transformations using two arbitrary quadrangles.
-        public void quad_to_quad(double[] src, double[] dst)
-        {
-            double[,] left = new double[4, 4];
-            double[,] right = new double[4, 2];
-            uint i;
-            for (i = 0; i < 4; i++)
-            {
-                uint ix = i * 2;
-                uint iy = ix + 1;
-                left[i, 0] = 1.0;
-                left[i, 1] = src[ix] * src[iy];
-                left[i, 2] = src[ix];
-                left[i, 3] = src[iy];
-
-                right[i, 0] = dst[ix];
-                right[i, 1] = dst[iy];
-            }
-            m_valid = SimulEq.Solve(left, right, m_mtx);
-        }
-
-
-        //--------------------------------------------------------------------
-        // Set the direct transformations, i.e., rectangle -> quadrangle
-        public void rect_to_quad(double x1, double y1, double x2, double y2,
-                          double[] quad)
-        {
-            double[] src = new double[8];
-            src[0] = src[6] = x1;
-            src[2] = src[4] = x2;
-            src[1] = src[3] = y1;
-            src[5] = src[7] = y2;
-            quad_to_quad(src, quad);
-        }
-
-
-        //--------------------------------------------------------------------
-        // Set the reverse transformations, i.e., quadrangle -> rectangle
-        public void quad_to_rect(double[] quad,
-                          double x1, double y1, double x2, double y2)
-        {
-            double[] dst = new double[8];
-            dst[0] = dst[6] = x1;
-            dst[2] = dst[4] = x2;
-            dst[1] = dst[3] = y1;
-            dst[5] = dst[7] = y2;
-            quad_to_quad(quad, dst);
-        }
-
-        //--------------------------------------------------------------------
-        // Check if the equations were solved successfully
-        public bool IsValid() { return m_valid; }
-
-        //--------------------------------------------------------------------
-        // Transform a point (x, y)
-        public void Transform(ref double x, ref double y)
-        {
-            double tx = x;
-            double ty = y;
-            double xy = tx * ty;
-            x = m_mtx[0, 0] + m_mtx[1, 0] * xy + m_mtx[2, 0] * tx + m_mtx[3, 0] * ty;
-            y = m_mtx[0, 1] + m_mtx[1, 1] * xy + m_mtx[2, 1] * tx + m_mtx[3, 1] * ty;
-        }
-    }
-
-
-    //============================================================matrix_pivot
-    //template<uint Rows, uint Cols>
-    partial class Bilinear
-    {
-
+        //============================================================matrix_pivot
+        //template<uint Rows, uint Cols> 
         //===============================================================simul_eq
         //template<uint Size, uint RightCols>
-        static class SimulEq
+        static class SimulEqGeneral
         {
 
             public static bool Solve(double[,] left,
-                              double[,] right,
-                              double[,] result)
+                             double[,] right,
+                             double[,] result)
             {
-                //please check before use !
-
+                //please check before use ! 
                 //if (left.GetLength(0) != 4
                 //    || right.GetLength(0) != 4
                 //    || left.GetLength(1) != 4
@@ -153,12 +52,15 @@ namespace MatterHackers.Agg.Transform
 
                 double[,] tmp = new double[size, size + rightCols];
 
+
                 for (int i = 0; i < size; i++)
                 {
+                    
                     for (int j = 0; j < size; j++)
                     {
                         tmp[i, j] = left[i, j];
                     }
+
                     for (int j = 0; j < rightCols; j++)
                     {
                         tmp[i, size + j] = right[i, j];
@@ -167,7 +69,7 @@ namespace MatterHackers.Agg.Transform
 
                 for (int k = 0; k < size; k++)
                 {
-                    if (DoMatrixPivot(tmp, (uint)k) < 0)
+                    if (DoMatrixPivot(tmp, k) < 0)
                     {
                         return false; // Singularity....
                     }
@@ -191,10 +93,12 @@ namespace MatterHackers.Agg.Transform
 
 
                 for (int k = 0; k < rightCols; k++)
-                {
-                    int m;
-                    for (m = (int)(size - 1); m >= 0; m--)
+                {   
+
+                    for (int m = size - 1; m >= 0; m--)
                     {
+                        ///2
+
                         result[m, k] = tmp[m, size + k];
                         for (int j = m + 1; j < size; j++)
                         {
@@ -202,11 +106,13 @@ namespace MatterHackers.Agg.Transform
                         }
                     }
                 }
+
+
                 return true;
             }
 
 
-            static void SwapArraysIndex1(double[,] a1, uint a1Index0, double[,] a2, uint a2Index0)
+            static void SwapArraysIndex1(double[,] a1, uint a1Index0, double[,] a2, int a2Index0)
             {
                 int cols = a1.GetLength(1);
                 if (a2.GetLength(1) != cols)
@@ -222,7 +128,7 @@ namespace MatterHackers.Agg.Transform
                 }
             }
 
-            static int DoMatrixPivot(double[,] m, uint row)
+            static int DoMatrixPivot(double[,] m, int row)
             {
                 int k = (int)(row);
                 double max_val, tmp;
@@ -252,5 +158,8 @@ namespace MatterHackers.Agg.Transform
                 return 0;
             }
         }
+
+
+
     }
 }
