@@ -44,47 +44,47 @@ namespace MatterHackers.Agg.Transform
                 //    || result.GetLength(1) != 2)
                 //{
                 //    throw new System.FormatException("left right and result must all be the same size.");
-                //}
-
-                double a1;
-                int size = right.GetLength(0);
-                int rightCols = right.GetLength(1);
-
-                double[,] tmp = new double[size, size + rightCols];
+                //} 
+                int rowCountRt = right.GetLength(0);
+                int colCountRt = right.GetLength(1);
 
 
-                for (int i = 0; i < size; i++)
+                double[,] tmp = new double[rowCountRt, rowCountRt + colCountRt];
+                //--------------------------------------
+                //merge left and right matrix to tmp
+                for (int i = 0; i < rowCountRt; i++)
                 {
-                    
-                    for (int j = 0; j < size; j++)
+
+                    for (int j = 0; j < rowCountRt; j++)
                     {
                         tmp[i, j] = left[i, j];
                     }
 
-                    for (int j = 0; j < rightCols; j++)
+                    for (int j = 0; j < colCountRt; j++)
                     {
-                        tmp[i, size + j] = right[i, j];
+                        tmp[i, rowCountRt + j] = right[i, j];
                     }
                 }
+                //--------------------------------------
 
-                for (int k = 0; k < size; k++)
+                for (int k = 0; k < rowCountRt; k++)
                 {
-                    if (DoMatrixPivot(tmp, k) < 0)
+                    if (DoMatrixPivot(tmp, rowCountRt, k) < 0)
                     {
                         return false; // Singularity....
                     }
 
-                    a1 = tmp[k, k];
+                    double a1 = tmp[k, k];
 
-                    for (int j = k; j < size + rightCols; j++)
+                    for (int j = k; j < rowCountRt + colCountRt; j++)
                     {
                         tmp[k, j] /= a1;
                     }
 
-                    for (int i = k + 1; i < size; i++)
+                    for (int i = k + 1; i < rowCountRt; i++)
                     {
                         a1 = tmp[i, k];
-                        for (int j = k; j < size + rightCols; j++)
+                        for (int j = k; j < rowCountRt + colCountRt; j++)
                         {
                             tmp[i, j] -= a1 * tmp[k, j];
                         }
@@ -92,15 +92,15 @@ namespace MatterHackers.Agg.Transform
                 }
 
 
-                for (int k = 0; k < rightCols; k++)
-                {   
+                for (int k = 0; k < colCountRt; k++)
+                {
 
-                    for (int m = size - 1; m >= 0; m--)
+                    for (int m = rowCountRt - 1; m >= 0; m--)
                     {
                         ///2
 
-                        result[m, k] = tmp[m, size + k];
-                        for (int j = m + 1; j < size; j++)
+                        result[m, k] = tmp[m, rowCountRt + k];
+                        for (int j = m + 1; j < rowCountRt; j++)
                         {
                             result[m, k] -= tmp[m, j] * result[j, k];
                         }
@@ -128,15 +128,15 @@ namespace MatterHackers.Agg.Transform
                 }
             }
 
-            static int DoMatrixPivot(double[,] m, int row)
+            static int DoMatrixPivot(double[,] m, int rowCount, int row)
             {
                 int k = (int)(row);
                 double max_val, tmp;
 
                 max_val = -1.0;
-                int i;
-                int rows = m.GetLength(0);
-                for (i = (int)row; i < rows; i++)
+
+
+                for (int i = (int)row; i < rowCount; i++)
                 {
                     if ((tmp = Math.Abs(m[i, row])) > max_val && tmp != 0.0)
                     {

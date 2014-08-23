@@ -152,7 +152,7 @@ namespace MatterHackers.Agg.Transform
 
         public static readonly Affine IdentityMatrix = Affine.NewIdentity();
         //------------------------------------------ Construction
-        public Affine(Affine copyFrom)
+        private Affine(Affine copyFrom)
         {
             sx = copyFrom.sx;
             shy = copyFrom.shy;
@@ -163,7 +163,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Custom matrix. Usually used in derived classes
-        public Affine(double v0_sx, double v1_shy, double v2_shx,
+        private Affine(double v0_sx, double v1_shy, double v2_shx,
                      double v3_sy, double v4_tx, double v5_ty)
         {
             sx = v0_sx;
@@ -175,7 +175,7 @@ namespace MatterHackers.Agg.Transform
             ty = v5_ty;
         }
         // Custom matrix from m[6]
-        public Affine(double[] m)
+        private Affine(double[] m)
         {
             sx = m[0];
             shy = m[1];

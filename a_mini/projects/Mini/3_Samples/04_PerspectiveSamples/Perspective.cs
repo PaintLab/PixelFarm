@@ -111,13 +111,11 @@ namespace MatterHackers.Agg.Sample_Perspective
             {
 
                 var bound = lionShape.Bounds;
-                var txBilinear = new Bilinear(bound.Left,
+                var txBilinear = Bilinear.RectToQuad(bound.Left,
                     bound.Bottom,
                     bound.Right,
                     bound.Top,  
-                    quadPolygonControl.polygon());
-
-
+                    quadPolygonControl.polygon()); 
 
                 if (txBilinear.IsValid())
                 {

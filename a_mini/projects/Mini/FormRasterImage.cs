@@ -40,7 +40,7 @@ namespace Mini
             //step 2: eliminate y from L3 -> found z
             //resubstitue back
 
-            
+
             //test1:
             double x, y, z;
             LinearEqSolver.Resolve(
@@ -903,7 +903,13 @@ namespace Mini
             outputbmp.Save("d:\\WImageTest\\n_lion_rotate30_bicubic.png");
         }
 
-       
+        private void button2_Click(object sender, EventArgs e)
+        {
+           
+
+        }
+
+
 
         //buffer = new byte[]{
         //    1,2,3,4      , 5,6,7,8,      9,10,11,12,    13,14,15,16, /*|*/ 101,102,103,104,  105,106,107,108,  109,110,111,112,  113,114,115,116,
