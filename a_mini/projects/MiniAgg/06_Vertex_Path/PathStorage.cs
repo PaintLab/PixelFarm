@@ -55,9 +55,9 @@ namespace MatterHackers.Agg.VertexSource
                 m_num_vertices = 0;
             }
 
-            public int size()
+            public int Count
             {
-                return m_num_vertices;
+                get { return m_num_vertices; }
             }
 
             public VertexStorage()
@@ -265,7 +265,7 @@ namespace MatterHackers.Agg.VertexSource
             vertices = new VertexStorage();
         }
 
-        public void add(Vector2 vertex)
+        public void AddItem(Vector2 vertex)
         {
             throw new System.NotImplementedException();
         }
@@ -275,9 +275,9 @@ namespace MatterHackers.Agg.VertexSource
             vertices.AddVertex(x, y, flagsAndCommand);
         }
 
-        public int size()
+        public int Count
         {
-            return vertices.size();
+            get { return vertices.Count; }
         }
 
         public Vector2 this[int i]
@@ -289,7 +289,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void remove_all() { vertices.remove_all(); iteratorIndex = 0; }
+        public void Clear() { vertices.remove_all(); iteratorIndex = 0; }
         public void free_all() { vertices.free_all(); iteratorIndex = 0; }
 
        
@@ -770,7 +770,7 @@ namespace MatterHackers.Agg.VertexSource
                     ShapePath.FlagsAndCommand PathAndFlags0 = last_vertex(out x0, out y0);
                     if (ShapePath.is_vertex(PathAndFlags0))
                     {
-                        if (agg_math.calc_distance(x, y, x0, y0) > agg_math.vertex_dist_epsilon)
+                        if (AggMath.calc_distance(x, y, x0, y0) > AggMath.vertex_dist_epsilon)
                         {
                             if (ShapePath.is_move_to(PathAndFlags)) PathAndFlags = ShapePath.FlagsAndCommand.CommandLineTo;
                             vertices.AddVertex(x, y, PathAndFlags);

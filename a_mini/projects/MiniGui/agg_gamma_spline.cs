@@ -84,33 +84,33 @@ namespace MatterHackers.Agg.UI
 
 
         public void values(double kx1, double ky1, double kx2, double ky2)
-    {
-        if(kx1 < 0.001) kx1 = 0.001;
-        if(kx1 > 1.999) kx1 = 1.999;
-        if(ky1 < 0.001) ky1 = 0.001;
-        if(ky1 > 1.999) ky1 = 1.999;
-        if(kx2 < 0.001) kx2 = 0.001;
-        if(kx2 > 1.999) kx2 = 1.999;
-        if(ky2 < 0.001) ky2 = 0.001;
-        if(ky2 > 1.999) ky2 = 1.999;
-
-        m_x[0] = 0.0;
-        m_y[0] = 0.0;
-        m_x[1] = kx1 * 0.25;
-        m_y[1] = ky1 * 0.25;
-        m_x[2] = 1.0 - kx2 * 0.25;
-        m_y[2] = 1.0 - ky2 * 0.25;
-        m_x[3] = 1.0;
-        m_y[3] = 1.0;
-
-        m_spline.init(4, m_x, m_y);
-
-        int i;
-        for(i = 0; i < 256; i++)
         {
-            m_gamma[i] = (byte)(y((double)(i) / 255.0) * 255.0);
+            if (kx1 < 0.001) kx1 = 0.001;
+            if (kx1 > 1.999) kx1 = 1.999;
+            if (ky1 < 0.001) ky1 = 0.001;
+            if (ky1 > 1.999) ky1 = 1.999;
+            if (kx2 < 0.001) kx2 = 0.001;
+            if (kx2 > 1.999) kx2 = 1.999;
+            if (ky2 < 0.001) ky2 = 0.001;
+            if (ky2 > 1.999) ky2 = 1.999;
+
+            m_x[0] = 0.0;
+            m_y[0] = 0.0;
+            m_x[1] = kx1 * 0.25;
+            m_y[1] = ky1 * 0.25;
+            m_x[2] = 1.0 - kx2 * 0.25;
+            m_y[2] = 1.0 - ky2 * 0.25;
+            m_x[3] = 1.0;
+            m_y[3] = 1.0;
+
+            m_spline.init(4, m_x, m_y);
+
+            int i;
+            for (i = 0; i < 256; i++)
+            {
+                m_gamma[i] = (byte)(y((double)(i) / 255.0) * 255.0);
+            }
         }
-    }
 
         public byte[] gamma() { return m_gamma; }
         public double y(double x)

@@ -26,7 +26,7 @@ namespace MatterHackers.Agg
 {
 
 
-    static public class agg_basics
+    static public class AggBasics
     {
         //----------------------------------------------------------filling_rule_e
 

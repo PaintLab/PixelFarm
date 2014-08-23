@@ -93,7 +93,7 @@ namespace MatterHackers.Agg.UI
 
     public class polygon_ctrl_impl : UI.SimpleVertexSourceWidget
     {
-        ArrayPOD<double> m_polygon;
+        double[] m_polygon;
         int m_num_points;
         int m_node;
         int m_edge;
@@ -116,11 +116,11 @@ namespace MatterHackers.Agg.UI
             : base(new Vector2())
         {
             m_ellipse = new MatterHackers.Agg.VertexSource.Ellipse();
-            m_polygon = new ArrayPOD<double>(np * 2);
+            m_polygon = new double[np * 2];
             m_num_points = (np);
             m_node = (-1);
             m_edge = (-1);
-            m_vs = new simple_polygon_vertex_source(m_polygon.Array, m_num_points, false);
+            m_vs = new simple_polygon_vertex_source(m_polygon, m_num_points, false);
             m_stroke = new Stroke(m_vs);
             m_point_radius = (point_radius);
             m_status = (0);
@@ -140,15 +140,15 @@ namespace MatterHackers.Agg.UI
         }
 
         public int num_points() { return m_num_points; }
-        public double GetXN(int n) { return m_polygon.Array[n * 2]; }
-        public void SetXN(int n, double newXN) { needToRecalculateBounds = true; m_polygon.Array[n * 2] = newXN; }
-        public void AddXN(int n, double newXN) { needToRecalculateBounds = true; m_polygon.Array[n * 2] += newXN; }
+        public double GetXN(int n) { return m_polygon[n * 2]; }
+        public void SetXN(int n, double newXN) { needToRecalculateBounds = true; m_polygon[n * 2] = newXN; }
+        public void AddXN(int n, double newXN) { needToRecalculateBounds = true; m_polygon[n * 2] += newXN; }
 
-        public double GetYN(int n) { return m_polygon.Array[n * 2 + 1]; }
-        public void SetYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon.Array[n * 2 + 1] = newYN; }
-        public void AddYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon.Array[n * 2 + 1] += newYN; }
+        public double GetYN(int n) { return m_polygon[n * 2 + 1]; }
+        public void SetYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] = newYN; }
+        public void AddYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] += newYN; }
 
-        public double[] polygon() { return m_polygon.Array; }
+        public double[] polygon() { return m_polygon; }
 
         public void line_width(double w) { m_stroke.width(w); }
         public double line_width() { return m_stroke.width(); }

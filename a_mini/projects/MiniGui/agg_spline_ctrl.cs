@@ -105,7 +105,8 @@ namespace MatterHackers.Agg.UI
             calc_spline_box();
             update_spline();
             {
-                m_spline.init((int)m_num_pnt, m_xp, m_yp);
+                 
+                m_spline = new bspline((int)m_num_pnt, m_xp, m_yp);
                 for (int i = 0; i < 256; i++)
                 {
                     m_spline_values[i] = m_spline.get((double)(i) / 255.0);
@@ -143,7 +144,7 @@ namespace MatterHackers.Agg.UI
             {
                 double xp = calc_xp(i);
                 double yp = calc_yp(i);
-                if (agg_math.calc_distance(x, y, xp, yp) <= m_point_size + 1)
+                if (AggMath.calc_distance(x, y, xp, yp) <= m_point_size + 1)
                 {
                     m_pdx = xp - x;
                     m_pdy = yp - y;
@@ -332,7 +333,7 @@ namespace MatterHackers.Agg.UI
 
 
                 case 3:                 // Inactive points
-                    m_curve_pnt.remove_all();
+                    m_curve_pnt.Clear();
                     for (int i = 0; i < m_num_pnt; i++)
                     {
                         if (i != m_active_pnt)
@@ -347,7 +348,7 @@ namespace MatterHackers.Agg.UI
 
 
                 case 4:                 // Active point
-                    m_curve_pnt.remove_all();
+                    m_curve_pnt.Clear();
                     if (m_active_pnt >= 0)
                     {
                         m_ellipse.init(calc_xp(m_active_pnt), calc_yp(m_active_pnt),
@@ -417,7 +418,7 @@ namespace MatterHackers.Agg.UI
         private void calc_curve()
         {
             int i;
-            m_curve_pnt.remove_all();
+            m_curve_pnt.Clear();
             m_curve_pnt.MoveTo(m_xs1, m_ys1 + (m_ys2 - m_ys1) * m_spline_values[0]);
             for (i = 1; i < 256; i++)
             {

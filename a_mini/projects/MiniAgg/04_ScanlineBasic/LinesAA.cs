@@ -13,39 +13,39 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
 
     public static class LineAABasics
     {
-        public const int line_subpixel_shift = 8;                          //----line_subpixel_shift
-        public const int line_subpixel_scale = 1 << line_subpixel_shift;  //----line_subpixel_scale
-        public const int line_subpixel_mask = line_subpixel_scale - 1;    //----line_subpixel_mask
-        public const int line_max_coord = (1 << 28) - 1;              //----line_max_coord
-        public const int line_max_length = 1 << (line_subpixel_shift + 10); //----line_max_length
+        public const int SUBPIXEL_SHIFT = 8;                          //----line_subpixel_shift
+        public const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;  //----line_subpixel_scale
+        public const int SUBPIXEL_MARK = SUBPIXEL_SCALE - 1;    //----line_subpixel_mask
+        public const int SUBPIXEL_COORD = (1 << 28) - 1;              //----line_max_coord
+        public const int MAX_LENGTH = 1 << (SUBPIXEL_SHIFT + 10); //----line_max_length
 
-        public const int line_mr_subpixel_shift = 4;                           //----line_mr_subpixel_shift
-        public const int line_mr_subpixel_scale = 1 << line_mr_subpixel_shift; //----line_mr_subpixel_scale 
-        public const int line_mr_subpixel_mask = line_mr_subpixel_scale - 1;   //----line_mr_subpixel_mask 
+        public const int MR_SUBPIXEL_SHIFT = 4;                           //----line_mr_subpixel_shift
+        public const int MR_SUBPIXEL_SCALE = 1 << MR_SUBPIXEL_SHIFT; //----line_mr_subpixel_scale 
+        public const int MR_SUBPIXEL_MASK = MR_SUBPIXEL_SCALE - 1;   //----line_mr_subpixel_mask 
 
         public static int line_mr(int x)
         {
-            return x >> (line_subpixel_shift - line_mr_subpixel_shift);
+            return x >> (SUBPIXEL_SHIFT - MR_SUBPIXEL_SHIFT);
         }
 
         public static int line_hr(int x)
         {
-            return x << (line_subpixel_shift - line_mr_subpixel_shift);
+            return x << (SUBPIXEL_SHIFT - MR_SUBPIXEL_SHIFT);
         }
 
         public static int line_dbl_hr(int x)
         {
-            return x << line_subpixel_shift;
+            return x << SUBPIXEL_SHIFT;
         }
 
 
-        public static void bisectrix(line_parameters l1,
-                   line_parameters l2,
+        public static void bisectrix(LineParameters l1,
+                   LineParameters l2,
                    out int x, out int y)
         {
             double k = (double)(l2.len) / (double)(l1.len);
@@ -65,35 +65,35 @@ namespace MatterHackers.Agg
             // Check if the bisectrix is too short
             double dx = tx - l2.x1;
             double dy = ty - l2.y1;
-            if ((int)Math.Sqrt(dx * dx + dy * dy) < line_subpixel_scale)
+            if ((int)Math.Sqrt(dx * dx + dy * dy) < SUBPIXEL_SCALE)
             {
                 x = (l2.x1 + l2.x1 + (l2.y1 - l1.y1) + (l2.y2 - l2.y1)) >> 1;
                 y = (l2.y1 + l2.y1 - (l2.x1 - l1.x1) - (l2.x2 - l2.x1)) >> 1;
                 return;
             }
 
-            x = agg_basics.iround(tx);
-            y = agg_basics.iround(ty);
+            x = AggBasics.iround(tx);
+            y = AggBasics.iround(ty);
         }
 
-        public static void fix_degenerate_bisectrix_start(line_parameters lp,
+        public static void fix_degenerate_bisectrix_start(LineParameters lp,
                                                ref int x, ref int y)
         {
-            int d = agg_basics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
+            int d = AggBasics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
                             (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
-            if (d < line_subpixel_scale / 2)
+            if (d < SUBPIXEL_SCALE / 2)
             {
                 x = lp.x1 + (lp.y2 - lp.y1);
                 y = lp.y1 - (lp.x2 - lp.x1);
             }
         }
 
-        public static void fix_degenerate_bisectrix_end(line_parameters lp,
+        public static void fix_degenerate_bisectrix_end(LineParameters lp,
                                              ref int x, ref int y)
         {
-            int d = agg_basics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
+            int d = AggBasics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
                             (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
-            if (d < line_subpixel_scale / 2)
+            if (d < SUBPIXEL_SCALE / 2)
             {
                 x = lp.x2 + (lp.y2 - lp.y1);
                 y = lp.y2 - (lp.x2 - lp.x1);
@@ -102,7 +102,7 @@ namespace MatterHackers.Agg
     };
 
     //==========================================================line_parameters
-    public class line_parameters
+    public class LineParameters
     {
         //---------------------------------------------------------------------
         public int x1, y1, x2, y2, dx, dy, sx, sy;
@@ -138,7 +138,7 @@ namespace MatterHackers.Agg
         public static readonly byte[] s_diagonal_quadrant = { 0, 1, 2, 1, 0, 3, 2, 3 };
 
         //---------------------------------------------------------------------
-        public line_parameters(int x1_, int y1_, int x2_, int y2_, int len_)
+        public LineParameters(int x1_, int y1_, int x2_, int y2_, int len_)
         {
             x1 = (x1_);
             y1 = (y1_);
@@ -159,26 +159,29 @@ namespace MatterHackers.Agg
         public uint diagonal_quadrant() { return s_diagonal_quadrant[octant]; }
 
         //---------------------------------------------------------------------
-        public bool same_orthogonal_quadrant(line_parameters lp)
+        public bool same_orthogonal_quadrant(LineParameters lp)
         {
             return s_orthogonal_quadrant[octant] == s_orthogonal_quadrant[lp.octant];
         }
 
         //---------------------------------------------------------------------
-        public bool same_diagonal_quadrant(line_parameters lp)
+        public bool same_diagonal_quadrant(LineParameters lp)
         {
             return s_diagonal_quadrant[octant] == s_diagonal_quadrant[lp.octant];
         }
 
         //---------------------------------------------------------------------
-        public void divide(out line_parameters lp1, out line_parameters lp2)
+        public void divide(out LineParameters lp1, out LineParameters lp2)
         {
             int xmid = (x1 + x2) >> 1;
             int ymid = (y1 + y2) >> 1;
             int len2 = len >> 1;
 
-            lp1 = this; // it is a struct so this is a copy
-            lp2 = this; // it is a struct so this is a copy
+            //lp1 = this; // it is a struct so this is a copy
+            //lp2 = this; // it is a struct so this is a copy
+
+            lp1 = new LineParameters(this.x1, this.y1, this.x2, this.y2, this.len);
+            lp2 = new LineParameters(this.x1, this.y1, this.x2, this.y2, this.len);
 
             lp1.x2 = xmid;
             lp1.y2 = ymid;
@@ -194,20 +197,4 @@ namespace MatterHackers.Agg
         }
     };
 
-}
-
-namespace MatterHackers.Agg.Lines
-{
-   
-    //-----------------------------------------------------------line_coord_sat
-    public struct line_coord_sat
-    {
-        public static int conv(double x)
-        {
-            return agg_basics.iround(x * LineAABasics.line_subpixel_scale, LineAABasics.line_max_coord);
-        }
-    } 
-
-   
-   
 }

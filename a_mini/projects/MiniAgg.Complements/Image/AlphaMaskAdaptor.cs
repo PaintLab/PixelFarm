@@ -21,7 +21,7 @@ namespace MatterHackers.Agg.Image
     public sealed class AlphaMaskAdaptor : ProxyImage
     {
         IAlphaMask m_mask;
-        ArrayPOD<byte> m_spans;
+        byte[] m_spans;
 
         enum span_extra_tail_e { span_extra_tail = 256 };
 
@@ -29,23 +29,24 @@ namespace MatterHackers.Agg.Image
 
         void realloc_span(int len)
         {
-            if (len > m_spans.Size())
+            if (len > m_spans.Length)
             {
-                m_spans.Resize(len + (int)span_extra_tail_e.span_extra_tail);
+                m_spans = new byte[len + (int)span_extra_tail_e.span_extra_tail];
+                //m_spans.Resize(len + (int)span_extra_tail_e.span_extra_tail);
             }
         }
-         
+
 
         void init_span(int len, byte cover)
         {
             realloc_span(len);
-            agg_basics.memset(m_spans.Array, 0, cover, len);
+            AggBasics.memset(m_spans, 0, cover, len);
         }
 
         void init_span(int len, byte[] covers, int coversIndex)
         {
             realloc_span(len);
-            byte[] array = m_spans.Array;
+            byte[] array = m_spans;
             for (int i = 0; i < (int)len; i++)
             {
                 array[i] = covers[coversIndex + i];
@@ -57,7 +58,7 @@ namespace MatterHackers.Agg.Image
         {
             linkedImage = image;
             m_mask = mask;
-            m_spans = new ArrayPOD<byte>(255);
+            m_spans = new byte[256];
         }
 
         public void AttachImage(IImage image)
@@ -96,14 +97,14 @@ namespace MatterHackers.Agg.Image
             if (cover == cover_full)
             {
                 realloc_span(len);
-                m_mask.combine_hspanFullCover(x1, y, m_spans.Array, 0, (int)len);
-                linkedImage.blend_solid_hspan(x1, y, (int)len, c, m_spans.Array, 0);
+                m_mask.combine_hspanFullCover(x1, y, m_spans, 0, (int)len);
+                linkedImage.blend_solid_hspan(x1, y, (int)len, c, m_spans, 0);
             }
             else
             {
                 init_span(len, cover);
-                m_mask.combine_hspan(x1, y, m_spans.Array, 0, (int)len);
-                linkedImage.blend_solid_hspan(x1, y, (int)len, c, m_spans.Array, 0);
+                m_mask.combine_hspan(x1, y, m_spans, 0, (int)len);
+                linkedImage.blend_solid_hspan(x1, y, (int)len, c, m_spans, 0);
             }
         }
 
@@ -141,7 +142,7 @@ namespace MatterHackers.Agg.Image
 
         public override void blend_solid_hspan(int x, int y, int len, ColorRGBA color, byte[] covers, int coversIndex)
         {
-            byte[] buffer = m_spans.Array;
+            byte[] buffer = m_spans;
             m_mask.combine_hspan(x, y, covers, coversIndex, len);
             linkedImage.blend_solid_hspan(x, y, len, color, covers, coversIndex);
         }

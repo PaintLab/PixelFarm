@@ -22,11 +22,12 @@ namespace MatterHackers.Agg
 {
     public interface IVertexDest
     {
-        void remove_all();
 
-        int size();
-        void add(Vector2 vertex);
 
+        int Count { get; }
+        void AddItem(Vector2 vertex);
+
+        void Clear();
         Vector2 this[int i]
         {
             get;

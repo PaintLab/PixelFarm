@@ -74,7 +74,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_filter = filter;
             m_dilation = (filter.dilation() + 1);
-            m_dilation_hr = (m_dilation << LineAABasics.line_subpixel_shift);
+            m_dilation_hr = (m_dilation << LineAABasics.SUBPIXEL_SHIFT);
             m_width = (0);
             m_height = (0);
             m_width_hr = (0);
@@ -103,7 +103,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_filter = (filter);
             m_dilation = (filter.dilation() + 1);
-            m_dilation_hr = (m_dilation << LineAABasics.line_subpixel_shift);
+            m_dilation_hr = (m_dilation << LineAABasics.SUBPIXEL_SHIFT);
             m_width = 0;
             m_height = 0;
             m_width_hr = 0;
@@ -133,12 +133,12 @@ namespace MatterHackers.Agg.Lines
             // 0000000000
             // 0000000000
 
-            m_height = (int)agg_basics.uceil(src.Height);
-            m_width = (int)agg_basics.uceil(src.Width);
-            m_width_hr = (int)agg_basics.uround(src.Width * LineAABasics.line_subpixel_scale);
-            m_half_height_hr = (int)agg_basics.uround(src.Height * LineAABasics.line_subpixel_scale / 2);
-            m_offset_y_hr = m_dilation_hr + m_half_height_hr - LineAABasics.line_subpixel_scale / 2;
-            m_half_height_hr += LineAABasics.line_subpixel_scale / 2;
+            m_height = (int)AggBasics.uceil(src.Height);
+            m_width = (int)AggBasics.uceil(src.Width);
+            m_width_hr = (int)AggBasics.uround(src.Width * LineAABasics.SUBPIXEL_SCALE);
+            m_half_height_hr = (int)AggBasics.uround(src.Height * LineAABasics.SUBPIXEL_SCALE / 2);
+            m_offset_y_hr = m_dilation_hr + m_half_height_hr - LineAABasics.SUBPIXEL_SCALE / 2;
+            m_half_height_hr += LineAABasics.SUBPIXEL_SCALE / 2;
 
             int bufferWidth = m_width + m_dilation * 2;
             int bufferHeight = m_height + m_dilation * 2;
@@ -284,31 +284,31 @@ namespace MatterHackers.Agg.Lines
             m_dx_end = (LineAABasics.line_mr(ex) - LineAABasics.line_mr(x2));
             m_dy_end = (LineAABasics.line_mr(ey) - LineAABasics.line_mr(y2));
 
-            m_dist = (agg_basics.iround((double)(x + LineAABasics.line_subpixel_scale / 2 - x2) * (double)(m_dy) -
-                          (double)(y + LineAABasics.line_subpixel_scale / 2 - y2) * (double)(m_dx)));
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+                          (double)(y + LineAABasics.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
 
-            m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
-                         (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(sy)) * m_dx_start);
+            m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
+                         (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sy)) * m_dx_start);
 
-            m_dist_end = ((LineAABasics.line_mr(x + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ex)) * m_dy_end -
-                       (LineAABasics.line_mr(y + LineAABasics.line_subpixel_scale / 2) - LineAABasics.line_mr(ey)) * m_dx_end);
-            m_len = (int)(agg_basics.uround(len / scale));
+            m_dist_end = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ex)) * m_dy_end -
+                       (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ey)) * m_dx_end);
+            m_len = (int)(AggBasics.uround(len / scale));
 
             double d = len * scale;
-            int dx = agg_basics.iround(((x2 - x1) << LineAABasics.line_subpixel_shift) / d);
-            int dy = agg_basics.iround(((y2 - y1) << LineAABasics.line_subpixel_shift) / d);
+            int dx = AggBasics.iround(((x2 - x1) << LineAABasics.SUBPIXEL_SHIFT) / d);
+            int dy = AggBasics.iround(((y2 - y1) << LineAABasics.SUBPIXEL_SHIFT) / d);
             m_dx_pict = -dy;
             m_dy_pict = dx;
-            m_dist_pict = ((x + LineAABasics.line_subpixel_scale / 2 - (x1 - dy)) * m_dy_pict -
-                            (y + LineAABasics.line_subpixel_scale / 2 - (y1 + dx)) * m_dx_pict) >>
-                           LineAABasics.line_subpixel_shift;
+            m_dist_pict = ((x + LineAABasics.SUBPIXEL_SCALE / 2 - (x1 - dy)) * m_dy_pict -
+                            (y + LineAABasics.SUBPIXEL_SCALE / 2 - (y1 + dx)) * m_dx_pict) >>
+                           LineAABasics.SUBPIXEL_SHIFT;
 
-            m_dx <<= LineAABasics.line_subpixel_shift;
-            m_dy <<= LineAABasics.line_subpixel_shift;
-            m_dx_start <<= LineAABasics.line_mr_subpixel_shift;
-            m_dy_start <<= LineAABasics.line_mr_subpixel_shift;
-            m_dx_end <<= LineAABasics.line_mr_subpixel_shift;
-            m_dy_end <<= LineAABasics.line_mr_subpixel_shift;
+            m_dx <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dy <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dx_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dy_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dx_end <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dy_end <<= LineAABasics.MR_SUBPIXEL_SHIFT;
         }
 
         //---------------------------------------------------------------------
@@ -830,13 +830,13 @@ namespace MatterHackers.Agg.Lines
         public double scale_x() { return m_scale_x; }
 
         //---------------------------------------------------------------------
-        public void start_x(double s) { m_start = agg_basics.iround(s * LineAABasics.line_subpixel_scale); }
-        public double start_x() { return (double)(m_start) / LineAABasics.line_subpixel_scale; }
+        public void start_x(double s) { m_start = AggBasics.iround(s * LineAABasics.SUBPIXEL_SCALE); }
+        public double start_x() { return (double)(m_start) / LineAABasics.SUBPIXEL_SCALE; }
 
         //---------------------------------------------------------------------
         public int subpixel_width() { return m_pattern.line_width(); }
         public int pattern_width() { return m_pattern.pattern_width(); }
-        public double width() { return (double)(subpixel_width()) / LineAABasics.line_subpixel_scale; }
+        public double width() { return (double)(subpixel_width()) / LineAABasics.SUBPIXEL_SCALE; }
 
         public void pixel(ColorRGBA[] p, int offset, int x, int y)
         {
@@ -873,19 +873,19 @@ namespace MatterHackers.Agg.Lines
         {
         }
 
-        public override void line0(line_parameters lp)
+        public override void line0(LineParameters lp)
         {
         }
 
-        public override void line1(line_parameters lp, int sx, int sy)
+        public override void line1(LineParameters lp, int sx, int sy)
         {
         }
 
-        public override void line2(line_parameters lp, int ex, int ey)
+        public override void line2(LineParameters lp, int ex, int ey)
         {
         }
 
-        public void line3_no_clip(line_parameters lp,
+        public void line3_no_clip(LineParameters lp,
                            int sx, int sy, int ex, int ey)
         {
             throw new NotImplementedException();
@@ -919,7 +919,7 @@ namespace MatterHackers.Agg.Lines
              */
         }
 
-        public override void line3(line_parameters lp,
+        public override void line3(LineParameters lp,
                    int sx, int sy, int ex, int ey)
         {
             throw new NotImplementedException();

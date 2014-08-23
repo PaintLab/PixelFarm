@@ -25,7 +25,7 @@ namespace MatterHackers.Agg.Lines
     public static class ClipLiangBarsky
     {
         //------------------------------------------------------------------------
-        enum clipping_flags_e
+        enum ClippingFlags
         {
             clipping_flags_x1_clipped = 4,
             clipping_flags_x2_clipped = 1,
@@ -33,7 +33,7 @@ namespace MatterHackers.Agg.Lines
             clipping_flags_y2_clipped = 2,
             clipping_flags_x_clipped = clipping_flags_x1_clipped | clipping_flags_x2_clipped,
             clipping_flags_y_clipped = clipping_flags_y1_clipped | clipping_flags_y2_clipped
-        };
+        }
 
         //----------------------------------------------------------clipping_flags
         // Determine the clipping code of the vertex according to the 
@@ -228,25 +228,25 @@ namespace MatterHackers.Agg.Lines
         {
             int bound;
 
-            if ((flags & (int)clipping_flags_e.clipping_flags_x_clipped) != 0)
+            if ((flags & (int)ClippingFlags.clipping_flags_x_clipped) != 0)
             {
                 if (x1 == x2)
                 {
                     return false;
                 }
-                bound = ((flags & (int)clipping_flags_e.clipping_flags_x1_clipped) != 0) ? clip_box.Left : clip_box.Right;
+                bound = ((flags & (int)ClippingFlags.clipping_flags_x1_clipped) != 0) ? clip_box.Left : clip_box.Right;
                 y = (int)((double)(bound - x1) * (y2 - y1) / (x2 - x1) + y1);
                 x = bound;
             }
 
             flags = clipping_flags_y(y, clip_box);
-            if ((flags & (int)clipping_flags_e.clipping_flags_y_clipped) != 0)
+            if ((flags & (int)ClippingFlags.clipping_flags_y_clipped) != 0)
             {
                 if (y1 == y2)
                 {
                     return false;
                 }
-                bound = ((flags & (int)clipping_flags_e.clipping_flags_x1_clipped) != 0) ? clip_box.Bottom : clip_box.Top;
+                bound = ((flags & (int)ClippingFlags.clipping_flags_x1_clipped) != 0) ? clip_box.Bottom : clip_box.Top;
                 x = (int)((double)(bound - y1) * (x2 - x1) / (y2 - y1) + x1);
                 y = bound;
             }
@@ -272,15 +272,15 @@ namespace MatterHackers.Agg.Lines
                 return 0;
             }
 
-            if ((f1 & (int)clipping_flags_e.clipping_flags_x_clipped) != 0 &&
-               (f1 & (int)clipping_flags_e.clipping_flags_x_clipped) == (f2 & (int)clipping_flags_e.clipping_flags_x_clipped))
+            if ((f1 & (int)ClippingFlags.clipping_flags_x_clipped) != 0 &&
+               (f1 & (int)ClippingFlags.clipping_flags_x_clipped) == (f2 & (int)ClippingFlags.clipping_flags_x_clipped))
             {
                 // Fully clipped
                 return 4;
             }
 
-            if ((f1 & (int)clipping_flags_e.clipping_flags_y_clipped) != 0 &&
-               (f1 & (int)clipping_flags_e.clipping_flags_y_clipped) == (f2 & (int)clipping_flags_e.clipping_flags_y_clipped))
+            if ((f1 & (int)ClippingFlags.clipping_flags_y_clipped) != 0 &&
+               (f1 & (int)ClippingFlags.clipping_flags_y_clipped) == (f2 & (int)ClippingFlags.clipping_flags_y_clipped))
             {
                 // Fully clipped
                 return 4;
