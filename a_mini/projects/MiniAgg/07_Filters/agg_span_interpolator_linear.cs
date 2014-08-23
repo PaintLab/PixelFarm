@@ -80,13 +80,13 @@ namespace MatterHackers.Agg.Lines
 
             tx = x;
             ty = y;
-            m_trans.transform(ref tx, ref ty);
+            m_trans.Transform(ref tx, ref ty);
             int x1 = AggBasics.iround(tx * (double)SUB_PIXEL_SCALE);
             int y1 = AggBasics.iround(ty * (double)SUB_PIXEL_SCALE);
 
             tx = x + len;
             ty = y;
-            m_trans.transform(ref tx, ref ty);
+            m_trans.Transform(ref tx, ref ty);
             int x2 = AggBasics.iround(tx * (double)SUB_PIXEL_SCALE);
             int y2 = AggBasics.iround(ty * (double)SUB_PIXEL_SCALE);
 
@@ -97,7 +97,7 @@ namespace MatterHackers.Agg.Lines
         //----------------------------------------------------------------
         public void resynchronize(double xe, double ye, int len)
         {
-            m_trans.transform(ref xe, ref ye);
+            m_trans.Transform(ref xe, ref ye);
             m_li_x = new dda2_line_interpolator(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
             m_li_y = new dda2_line_interpolator(m_li_y.y(), AggBasics.iround(ye * (double)SUB_PIXEL_SCALE), (int)len);
         }
@@ -168,13 +168,13 @@ namespace MatterHackers.Agg.Lines
 
             tx = x;
             ty = y;
-            m_trans.transform(ref tx, ref ty);
+            m_trans.Transform(ref tx, ref ty);
             currentX = (float)tx;
             currentY = (float)ty;
 
             tx = x + len;
             ty = y;
-            m_trans.transform(ref tx, ref ty);
+            m_trans.Transform(ref tx, ref ty);
             stepX = (float)((tx - currentX) / len);
             stepY = (float)((ty - currentY) / len);
         }

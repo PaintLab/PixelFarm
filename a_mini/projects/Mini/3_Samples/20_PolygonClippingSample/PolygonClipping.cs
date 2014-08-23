@@ -539,7 +539,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
             foreach (VertexData vertexData in src.Vertices())
             {
-                if (ShapePath.is_vertex(vertexData.command))
+                if (ShapePath.IsVertextCommand(vertexData.command))
                 {
                     ++m_points;
                 }

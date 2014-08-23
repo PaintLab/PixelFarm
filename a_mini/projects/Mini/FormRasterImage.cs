@@ -41,6 +41,7 @@ namespace Mini
             //resubstitue back
 
             
+            //test1:
             double x, y, z;
             LinearEqSolver.Resolve(
                 new LinearEq3(2, 1, -1, 8),
@@ -49,6 +50,11 @@ namespace Mini
                 out x,   //x=2
                 out y,  //y=3
                 out z); //z=-1
+
+
+            //test2
+
+
 
 
         }

@@ -167,15 +167,16 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
 
 
-            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var childImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
+            
+                    
+            IRecieveBlenderByte rasterBlender = new BlenderBGRA();
+            IRecieveBlenderByte gammaBlender = new BlenderGammaBGRA(this.GammaValue);
 
-            IRecieveBlenderByte NormalBlender = new BlenderBGRA();
-            IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
-            var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
+            var rasterGamma = new ChildImage(childImage, gammaBlender);
 
-            ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
+            ClipProxyImage clippingProxyNormal = new ClipProxyImage(childImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
             clippingProxyNormal.clear(ColorRGBA.White);

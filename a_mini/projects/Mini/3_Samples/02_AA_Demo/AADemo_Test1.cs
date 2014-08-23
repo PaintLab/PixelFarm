@@ -122,7 +122,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();

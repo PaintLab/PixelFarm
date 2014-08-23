@@ -210,7 +210,7 @@ namespace MatterHackers.Agg.UI
                 cmd = m_stroke.vertex(out x, out y);
                 if (!ShapePath.is_stop(cmd))
                 {
-                    ParentToChildTransform.transform(ref x, ref y);
+                    ParentToChildTransform.Transform(ref x, ref y);
                     return cmd;
                 }
                 if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
@@ -220,7 +220,7 @@ namespace MatterHackers.Agg.UI
             cmd = m_ellipse.vertex(out x, out y);
             if (!ShapePath.is_stop(cmd))
             {
-                ParentToChildTransform.transform(ref x, ref y);
+                ParentToChildTransform.Transform(ref x, ref y);
                 return cmd;
             }
             if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
@@ -230,7 +230,7 @@ namespace MatterHackers.Agg.UI
             cmd = m_ellipse.vertex(out x, out y);
             if (!ShapePath.is_stop(cmd))
             {
-                ParentToChildTransform.transform(ref x, ref y);
+                ParentToChildTransform.Transform(ref x, ref y);
             }
             return cmd;
         }

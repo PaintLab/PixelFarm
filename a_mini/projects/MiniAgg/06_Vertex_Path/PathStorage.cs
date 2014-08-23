@@ -314,7 +314,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x2;
                 double y2;
-                if (ShapePath.is_vertex(vertices.last_vertex(out x2, out y2)))
+                if (ShapePath.IsVertextCommand(vertices.last_vertex(out x2, out y2)))
                 {
                     x += x2;
                     y += y2;
@@ -440,7 +440,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x0;
             double y0;
-            if (ShapePath.is_vertex(vertices.last_vertex(out x0, out y0)))
+            if (ShapePath.IsVertextCommand(vertices.last_vertex(out x0, out y0)))
             {
                 double x_ctrl;
                 double y_ctrl;
@@ -498,7 +498,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x0;
             double y0;
-            if (ShapePath.is_vertex(last_vertex(out x0, out y0)))
+            if (ShapePath.IsVertextCommand(last_vertex(out x0, out y0)))
             {
                 double x_ctrl1;
                 double y_ctrl1;
@@ -617,7 +617,7 @@ namespace MatterHackers.Agg.VertexSource
 
             // Skip all non-vertices at the beginning
             while (start < vertices.total_vertices() &&
-                  !ShapePath.is_vertex(vertices.command(start))) ++start;
+                  !ShapePath.IsVertextCommand(vertices.command(start))) ++start;
 
             // Skip all insignificant move_to
             while (start + 1 < vertices.total_vertices() &&
@@ -685,7 +685,7 @@ namespace MatterHackers.Agg.VertexSource
             for (i = 0; i < vertices.total_vertices(); i++)
             {
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(i, out x, out y);
-                if (ShapePath.is_vertex(PathAndFlags))
+                if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
                     vertices.modify_vertex(i, x2 - x + x1, y);
                 }
@@ -699,7 +699,7 @@ namespace MatterHackers.Agg.VertexSource
             for (i = 0; i < vertices.total_vertices(); i++)
             {
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(i, out x, out y);
-                if (ShapePath.is_vertex(PathAndFlags))
+                if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
                     vertices.modify_vertex(i, x, y2 - y + y1);
                 }
@@ -713,7 +713,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void end_poly(ShapePath.FlagsAndCommand flags)
         {
-            if (ShapePath.is_vertex(vertices.last_command()))
+            if (ShapePath.IsVertextCommand(vertices.last_command()))
             {
                 vertices.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandEndPoly | flags);
             }
@@ -764,11 +764,11 @@ namespace MatterHackers.Agg.VertexSource
             ShapePath.FlagsAndCommand PathAndFlags = vs.vertex(out x, out y);
             if (!ShapePath.is_stop(PathAndFlags))
             {
-                if (ShapePath.is_vertex(PathAndFlags))
+                if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
                     double x0, y0;
                     ShapePath.FlagsAndCommand PathAndFlags0 = last_vertex(out x0, out y0);
-                    if (ShapePath.is_vertex(PathAndFlags0))
+                    if (ShapePath.IsVertextCommand(PathAndFlags0))
                     {
                         if (AggMath.calc_distance(x, y, x0, y0) > AggMath.vertex_dist_epsilon)
                         {
@@ -830,7 +830,7 @@ namespace MatterHackers.Agg.VertexSource
                 double x, y;
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(path_id, out x, out y);
                 if (ShapePath.is_stop(PathAndFlags)) break;
-                if (ShapePath.is_vertex(PathAndFlags))
+                if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
                     x += dx;
                     y += dy;
@@ -846,7 +846,7 @@ namespace MatterHackers.Agg.VertexSource
             for (index = 0; index < num_ver; index++)
             {
                 double x, y;
-                if (ShapePath.is_vertex(vertices.vertex(index, out x, out y)))
+                if (ShapePath.IsVertextCommand(vertices.vertex(index, out x, out y)))
                 {
                     x += dx;
                     y += dy;
@@ -869,9 +869,9 @@ namespace MatterHackers.Agg.VertexSource
                 double x, y;
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(path_id, out x, out y);
                 if (ShapePath.is_stop(PathAndFlags)) break;
-                if (ShapePath.is_vertex(PathAndFlags))
+                if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
-                    trans.transform(ref x, ref y);
+                    trans.Transform(ref x, ref y);
                     vertices.modify_vertex(path_id, x, y);
                 }
             }
@@ -885,9 +885,9 @@ namespace MatterHackers.Agg.VertexSource
             for (index = 0; index < num_ver; index++)
             {
                 double x, y;
-                if (ShapePath.is_vertex(vertices.vertex(index, out x, out y)))
+                if (ShapePath.IsVertextCommand(vertices.vertex(index, out x, out y)))
                 {
-                    trans.transform(ref x, ref y);
+                    trans.Transform(ref x, ref y);
                     vertices.modify_vertex(index, x, y);
                 }
             }
@@ -897,7 +897,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             // Skip all non-vertices at the beginning
             while (start < vertices.total_vertices() &&
-                  !ShapePath.is_vertex(vertices.command(start))) ++start;
+                  !ShapePath.IsVertextCommand(vertices.command(start))) ++start;
 
             // Skip all insignificant move_to
             while (start + 1 < vertices.total_vertices() &&

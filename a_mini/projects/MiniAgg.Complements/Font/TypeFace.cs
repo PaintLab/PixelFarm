@@ -488,10 +488,9 @@ namespace MatterHackers.Agg.Font
             textTransform = Affine.NewIdentity();
             textTransform *= Affine.NewTranslation(10, origX);
 
-            VertexSourceApplyTransform transformedText = new VertexSourceApplyTransform(textTransform);
-            fontNamePrinter.Render(graphics2D, ColorRGBA.Black, transformedText);
-
-            graphics2D.Render(transformedText, ColorRGBA.Black);
+            //VertexSourceApplyTransform transformedText = new VertexSourceApplyTransform(textTransform);
+            //fontNamePrinter.Render(graphics2D, ColorRGBA.Black, transformedText);
+            //graphics2D.Render(transformedText, ColorRGBA.Black);
 
             // render the legend
 			StyledTypeFace legendFont = new StyledTypeFace(this, 12);

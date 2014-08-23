@@ -122,6 +122,7 @@ namespace MatterHackers.Agg
             {
                 if (newSize > AllocatedSize)
                 {
+                    //create new array and copy data to that 
                     var newArray = new T[newSize];
                     if (internalArray != null)
                     {
@@ -129,7 +130,6 @@ namespace MatterHackers.Agg
                         {
                             newArray[i] = internalArray[i];
                         }
-
                     }
                     internalArray = newArray;
                 }
@@ -194,9 +194,9 @@ namespace MatterHackers.Agg
             {
                 return currentSize;
             }
-        } 
+        }
     }
 
-    
-  
+
+
 }

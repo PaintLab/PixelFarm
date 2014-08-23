@@ -234,7 +234,7 @@ namespace MatterHackers.Agg.UI
 
             if (!ShapePath.is_stop(cmd))
             {
-                ParentToChildTransform.transform(ref x, ref y);
+                ParentToChildTransform.Transform(ref x, ref y);
             }
             return cmd;
         }
@@ -437,7 +437,7 @@ namespace MatterHackers.Agg.UI
 
             if (!ShapePath.is_stop(cmd))
             {
-                ParentToChildTransform.transform(ref x, ref y);
+                ParentToChildTransform.Transform(ref x, ref y);
             }
             return cmd;
         }

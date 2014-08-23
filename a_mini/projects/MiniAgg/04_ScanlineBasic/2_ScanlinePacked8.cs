@@ -41,8 +41,6 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public sealed class ScanlinePacked8 : IScanline
     {
-        
-        
 
         byte[] m_covers;
         int m_cover_index;
@@ -108,7 +106,7 @@ namespace MatterHackers.Agg
             if (x == last_x + 1
                 && m_spans[last_span_index].len < 0
                 && cover == m_spans[last_span_index].cover_index)
-            {   
+            {
                 m_spans[last_span_index].len -= (short)len;
             }
             else

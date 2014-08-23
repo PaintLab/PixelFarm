@@ -735,7 +735,7 @@ namespace MatterHackers.Agg.UI
                 if (Parent.GetMousePosition(out parentMousePosition))
                 {
                     position = parentMousePosition;
-                    ParentToChildTransform.transform(ref position.x, ref position.y);
+                    ParentToChildTransform.Transform(ref position.x, ref position.y);
                     return true;
                 }
             }

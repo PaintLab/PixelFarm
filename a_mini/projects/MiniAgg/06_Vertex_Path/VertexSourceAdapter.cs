@@ -125,7 +125,7 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             command = VertexSource.vertex(out x, out y);
                             //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
-                            if (ShapePath.is_vertex(command))
+                            if (ShapePath.IsVertextCommand(command))
                             {
                                 m_last_cmd = command;
                                 if (ShapePath.is_move_to(command))

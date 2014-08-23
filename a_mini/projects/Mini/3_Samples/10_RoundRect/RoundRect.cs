@@ -109,7 +109,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             IImage backBuffer = widgetsSubImage;
 

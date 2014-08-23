@@ -149,7 +149,7 @@ namespace MatterHackers.Agg
             double angleRadians,
             double inScaleX, double inScaleY)
         {
-            { // exit early if the dest and source bounds don't touch.
+            {   // exit early if the dest and source bounds don't touch.
                 // TODO: <BUG> make this do rotation and scalling
                 RectangleInt sourceBounds = source.GetBounds();
                 RectangleInt destBounds = this.destImageByte.GetBounds();
@@ -175,7 +175,7 @@ namespace MatterHackers.Agg
                 {
                     throw new NotImplementedException();
                 }
-                graphicsTransform.transform(ref destX, ref destY);
+                graphicsTransform.Transform(ref destX, ref destY);
             }
 
 #if false // this is an optomization that eliminates the drawing of images that have their alpha set to all 0 (happens with generated images like explosions).
@@ -236,7 +236,7 @@ namespace MatterHackers.Agg
                 sourceRectTransform.invert();
 
                 span_image_filter spanImageFilter;
-                var interpolator = new  MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
+                var interpolator = new MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
 
                 spanImageFilter = new span_image_filter_rgba_bilinear_clip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0), interpolator);

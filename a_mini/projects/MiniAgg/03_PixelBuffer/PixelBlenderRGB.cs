@@ -238,11 +238,11 @@ namespace MatterHackers.Agg.Image
 
     public sealed class BlenderGammaBGR : BlenderBaseBGR, IRecieveBlenderByte
     {
-        private GammaLookUpTable m_gamma;
+        GammaLookUpTable m_gamma;
 
-        public BlenderGammaBGR()
+        public BlenderGammaBGR(double gamma = 1)
         {
-            m_gamma = new GammaLookUpTable();
+            m_gamma = new GammaLookUpTable(gamma);
         }
 
         public BlenderGammaBGR(GammaLookUpTable g)
@@ -351,7 +351,7 @@ namespace MatterHackers.Agg.Image
             byte[] covers, int coversIndex, bool firstCoverForAll, int count)
         {
             if (firstCoverForAll)
-            {  
+            {
                 int cover = covers[coversIndex];
                 if (cover == 255)
                 {

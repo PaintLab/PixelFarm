@@ -34,131 +34,131 @@ using MatterHackers.Agg;
 
 namespace MatterHackers.Agg.Image
 {
-/*
-    //=========================================================multiplier_rgba
-    template<class ColorT, class Order> struct multiplier_rgba
-    {
-        typedef typename ColorT::value_type value_type;
-        typedef typename ColorT::calc_type calc_type;
-
-        //--------------------------------------------------------------------
-        static void premultiply(value_type* p)
+    /*
+        //=========================================================multiplier_rgba
+        template<class ColorT, class Order> struct multiplier_rgba
         {
-            calc_type a = p[Order::A];
-            if(a < ColorT::base_mask)
+            typedef typename ColorT::value_type value_type;
+            typedef typename ColorT::calc_type calc_type;
+
+            //--------------------------------------------------------------------
+            static void premultiply(value_type* p)
             {
-                if(a == 0)
+                calc_type a = p[Order::A];
+                if(a < ColorT::base_mask)
                 {
-                    p[Order::R] = p[Order::G] = p[Order::B] = 0;
-                    return;
+                    if(a == 0)
+                    {
+                        p[Order::R] = p[Order::G] = p[Order::B] = 0;
+                        return;
+                    }
+                    p[Order::R] = value_type((p[Order::R] * a + ColorT::base_mask) >> ColorT::base_shift);
+                    p[Order::G] = value_type((p[Order::G] * a + ColorT::base_mask) >> ColorT::base_shift);
+                    p[Order::B] = value_type((p[Order::B] * a + ColorT::base_mask) >> ColorT::base_shift);
                 }
-                p[Order::R] = value_type((p[Order::R] * a + ColorT::base_mask) >> ColorT::base_shift);
-                p[Order::G] = value_type((p[Order::G] * a + ColorT::base_mask) >> ColorT::base_shift);
-                p[Order::B] = value_type((p[Order::B] * a + ColorT::base_mask) >> ColorT::base_shift);
             }
-        }
 
 
-        //--------------------------------------------------------------------
-        static void demultiply(value_type* p)
-        {
-            calc_type a = p[Order::A];
-            if(a < ColorT::base_mask)
+            //--------------------------------------------------------------------
+            static void demultiply(value_type* p)
             {
-                if(a == 0)
+                calc_type a = p[Order::A];
+                if(a < ColorT::base_mask)
                 {
-                    p[Order::R] = p[Order::G] = p[Order::B] = 0;
-                    return;
+                    if(a == 0)
+                    {
+                        p[Order::R] = p[Order::G] = p[Order::B] = 0;
+                        return;
+                    }
+                    calc_type r = (calc_type(p[Order::R]) * ColorT::base_mask) / a;
+                    calc_type g = (calc_type(p[Order::G]) * ColorT::base_mask) / a;
+                    calc_type b = (calc_type(p[Order::B]) * ColorT::base_mask) / a;
+                    p[Order::R] = value_type((r > ColorT::base_mask) ? ColorT::base_mask : r);
+                    p[Order::G] = value_type((g > ColorT::base_mask) ? ColorT::base_mask : g);
+                    p[Order::B] = value_type((b > ColorT::base_mask) ? ColorT::base_mask : b);
                 }
-                calc_type r = (calc_type(p[Order::R]) * ColorT::base_mask) / a;
-                calc_type g = (calc_type(p[Order::G]) * ColorT::base_mask) / a;
-                calc_type b = (calc_type(p[Order::B]) * ColorT::base_mask) / a;
-                p[Order::R] = value_type((r > ColorT::base_mask) ? ColorT::base_mask : r);
-                p[Order::G] = value_type((g > ColorT::base_mask) ? ColorT::base_mask : g);
-                p[Order::B] = value_type((b > ColorT::base_mask) ? ColorT::base_mask : b);
             }
-        }
-    };
-
-    //=====================================================apply_gamma_dir_rgba
-    template<class ColorT, class Order, class GammaLut> class apply_gamma_dir_rgba
-    {
-    public:
-        typedef typename ColorT::value_type value_type;
-
-        apply_gamma_dir_rgba(const GammaLut& gamma) : m_gamma(gamma) {}
-
-        void operator () (value_type* p)
-        {
-            p[Order::R] = m_gamma.dir(p[Order::R]);
-            p[Order::G] = m_gamma.dir(p[Order::G]);
-            p[Order::B] = m_gamma.dir(p[Order::B]);
-        }
-
-    private:
-        const GammaLut& m_gamma;
-    };
-
-    //=====================================================apply_gamma_inv_rgba
-    template<class ColorT, class Order, class GammaLut> class apply_gamma_inv_rgba
-    {
-    public:
-        typedef typename ColorT::value_type value_type;
-
-        apply_gamma_inv_rgba(const GammaLut& gamma) : m_gamma(gamma) {}
-
-        void operator () (value_type* p)
-        {
-            p[Order::R] = m_gamma.inv(p[Order::R]);
-            p[Order::G] = m_gamma.inv(p[Order::G]);
-            p[Order::B] = m_gamma.inv(p[Order::B]);
-        }
-
-    private:
-        const GammaLut& m_gamma;
-    };
-    
-
-    //=============================================================blender_rgba
-    template<class ColorT, class Order> struct blender_rgba
-    {
-        typedef ColorT color_type;
-        typedef Order order_type;
-        typedef typename color_type::value_type value_type;
-        typedef typename color_type::calc_type calc_type;
-        enum base_scale_e 
-        { 
-            base_shift = color_type::base_shift,
-            base_mask  = color_type::base_mask
         };
 
-        //--------------------------------------------------------------------
-        static void blend_pix(value_type* p, 
-                                         int cr, int cg, int cb,
-                                         int alpha, 
-                                         int cover=0)
+        //=====================================================apply_gamma_dir_rgba
+        template<class ColorT, class Order, class GammaLut> class apply_gamma_dir_rgba
         {
-            calc_type r = p[Order::R];
-            calc_type g = p[Order::G];
-            calc_type b = p[Order::B];
-            calc_type a = p[Order::A];
-            p[Order::R] = (value_type)(((cr - r) * alpha + (r << base_shift)) >> base_shift);
-            p[Order::G] = (value_type)(((cg - g) * alpha + (g << base_shift)) >> base_shift);
-            p[Order::B] = (value_type)(((cb - b) * alpha + (b << base_shift)) >> base_shift);
-            p[Order::A] = (value_type)((alpha + a) - ((alpha * a + base_mask) >> base_shift));
-        }
-    };
- */
+        public:
+            typedef typename ColorT::value_type value_type;
 
+            apply_gamma_dir_rgba(const GammaLut& gamma) : m_gamma(gamma) {}
+
+            void operator () (value_type* p)
+            {
+                p[Order::R] = m_gamma.dir(p[Order::R]);
+                p[Order::G] = m_gamma.dir(p[Order::G]);
+                p[Order::B] = m_gamma.dir(p[Order::B]);
+            }
+
+        private:
+            const GammaLut& m_gamma;
+        };
+
+        //=====================================================apply_gamma_inv_rgba
+        template<class ColorT, class Order, class GammaLut> class apply_gamma_inv_rgba
+        {
+        public:
+            typedef typename ColorT::value_type value_type;
+
+            apply_gamma_inv_rgba(const GammaLut& gamma) : m_gamma(gamma) {}
+
+            void operator () (value_type* p)
+            {
+                p[Order::R] = m_gamma.inv(p[Order::R]);
+                p[Order::G] = m_gamma.inv(p[Order::G]);
+                p[Order::B] = m_gamma.inv(p[Order::B]);
+            }
+
+        private:
+            const GammaLut& m_gamma;
+        };
     
 
-	public interface IRecieveBlenderByte
+        //=============================================================blender_rgba
+        template<class ColorT, class Order> struct blender_rgba
+        {
+            typedef ColorT color_type;
+            typedef Order order_type;
+            typedef typename color_type::value_type value_type;
+            typedef typename color_type::calc_type calc_type;
+            enum base_scale_e 
+            { 
+                base_shift = color_type::base_shift,
+                base_mask  = color_type::base_mask
+            };
+
+            //--------------------------------------------------------------------
+            static void blend_pix(value_type* p, 
+                                             int cr, int cg, int cb,
+                                             int alpha, 
+                                             int cover=0)
+            {
+                calc_type r = p[Order::R];
+                calc_type g = p[Order::G];
+                calc_type b = p[Order::B];
+                calc_type a = p[Order::A];
+                p[Order::R] = (value_type)(((cr - r) * alpha + (r << base_shift)) >> base_shift);
+                p[Order::G] = (value_type)(((cg - g) * alpha + (g << base_shift)) >> base_shift);
+                p[Order::B] = (value_type)(((cb - b) * alpha + (b << base_shift)) >> base_shift);
+                p[Order::A] = (value_type)((alpha + a) - ((alpha * a + base_mask) >> base_shift));
+            }
+        };
+     */
+
+
+
+    public interface IRecieveBlenderByte
     {
         int NumPixelBits { get; }
 
         ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset);
-        
-		void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count);
+
+        void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count);
 
         void BlendPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor);
         void BlendPixels(byte[] buffer, int bufferOffset, ColorRGBA[] sourceColors, int sourceColorsOffset, byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count);
@@ -194,11 +194,11 @@ namespace MatterHackers.Agg.Image
     public sealed class BlenderBGRA : BlenderBaseBGRA, IRecieveBlenderByte
     {
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
-        {   
+        {
             return new ColorRGBA(
                 buffer[bufferOffset + ImageBase.OrderR],
-                buffer[bufferOffset + ImageBase.OrderG], 
-                buffer[bufferOffset + ImageBase.OrderB], 
+                buffer[bufferOffset + ImageBase.OrderG],
+                buffer[bufferOffset + ImageBase.OrderB],
                 buffer[bufferOffset + ImageBase.OrderA]);
         }
 
@@ -348,9 +348,9 @@ namespace MatterHackers.Agg.Image
     {
         private GammaLookUpTable m_gamma;
 
-        public BlenderGammaBGRA()
+        public BlenderGammaBGRA(double gammaValue)
         {
-            m_gamma = new GammaLookUpTable();
+            m_gamma = new GammaLookUpTable(gammaValue);
         }
 
         public BlenderGammaBGRA(GammaLookUpTable g)
@@ -360,7 +360,7 @@ namespace MatterHackers.Agg.Image
 
         public void gamma(GammaLookUpTable g)
         {
-            m_gamma = g; 
+            m_gamma = g;
         }
 
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
@@ -463,7 +463,7 @@ namespace MatterHackers.Agg.Image
 					pDestBuffer[bufferOffset + ImageBuffer.OrderA] = 255;
 					            
 #else
-					int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * oneOverAlpha + 255) >> 8) + sourceColor.red];
+                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * oneOverAlpha + 255) >> 8) + sourceColor.red];
                     int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * oneOverAlpha + 255) >> 8) + sourceColor.green];
                     int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
                     int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
@@ -479,117 +479,117 @@ namespace MatterHackers.Agg.Image
         public void BlendPixels(byte[] pDestBuffer, int bufferOffset,
             ColorRGBA[] sourceColors, int sourceColorsOffset,
             byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count)
+        {
+            if (firstCoverForAll)
             {
-                if (firstCoverForAll)
+                //unsafe
                 {
-                    //unsafe
+                    if (sourceCovers[sourceCoversOffset] == 255)
                     {
-                        if (sourceCovers[sourceCoversOffset] == 255)
+                        for (int i = 0; i < count; i++)
                         {
-                            for (int i = 0; i < count; i++)
-                            {
 #if false
                                 BlendPixel(pDestBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
 #else
-                                ColorRGBA sourceColor = sourceColors[sourceColorsOffset];
-                                if (sourceColor.alpha == 255)
+                            ColorRGBA sourceColor = sourceColors[sourceColorsOffset];
+                            if (sourceColor.alpha == 255)
+                            {
+                                pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
+                                pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
+                                pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
+                                pDestBuffer[bufferOffset + ImageBase.OrderA] = 255;
+                            }
+                            else
+                            {
+                                int OneOverAlpha = base_mask - sourceColor.alpha;
+                                unchecked
                                 {
-                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = 255;
+                                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                    int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
+                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
                                 }
-                                else
-                                {
-                                    int OneOverAlpha = base_mask - sourceColor.alpha;
-                                    unchecked
-                                    {
-                                        int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                        int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                        int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                        int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
-                                        pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
-                                        pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
-                                        pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                                        pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
-                                    }
-                                }
+                            }
 #endif
-                                sourceColorsOffset++;
-                                bufferOffset += 4;
-                            }
-                        }
-                        else
-                        {
-                            for (int i = 0; i < count; i++)
-                            {
-                                ColorRGBA sourceColor = sourceColors[sourceColorsOffset];
-                                int alpha = (sourceColor.alpha * sourceCovers[sourceCoversOffset] + 255) / 256;
-                                if (alpha == 0)
-                                {
-                                    continue;
-                                }
-                                else if (alpha == 255)
-                                {
-                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
-                                }
-                                else
-                                {
-                                    int OneOverAlpha = base_mask - alpha;
-                                    unchecked
-                                    {
-                                        int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                        int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                        int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                        int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
-                                        pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
-                                        pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
-                                        pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                                        pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
-                                    }
-                                }
-                                sourceColorsOffset++;
-                                bufferOffset += 4;
-                            }
+                            sourceColorsOffset++;
+                            bufferOffset += 4;
                         }
                     }
-                }
-                else
-                {
-                    for (int i = 0; i < count; i++)
+                    else
                     {
-                        ColorRGBA sourceColor = sourceColors[sourceColorsOffset];
-                        int alpha = (sourceColor.alpha * sourceCovers[sourceCoversOffset] + 255) / 256;
-                        if (alpha == 255)
+                        for (int i = 0; i < count; i++)
                         {
-                            pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
-                            pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
-                            pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
-                            pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
-                        }
-                        else if(alpha > 0)
-                        {
-                            int OneOverAlpha = base_mask - alpha;
-                            unchecked
+                            ColorRGBA sourceColor = sourceColors[sourceColorsOffset];
+                            int alpha = (sourceColor.alpha * sourceCovers[sourceCoversOffset] + 255) / 256;
+                            if (alpha == 0)
                             {
-                                int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
-                                pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
-                                pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
-                                pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                                pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                                continue;
                             }
+                            else if (alpha == 255)
+                            {
+                                pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
+                                pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
+                                pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
+                                pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
+                            }
+                            else
+                            {
+                                int OneOverAlpha = base_mask - alpha;
+                                unchecked
+                                {
+                                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                    int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
+                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
+                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                                }
+                            }
+                            sourceColorsOffset++;
+                            bufferOffset += 4;
                         }
-                        sourceColorsOffset++;
-                        sourceCoversOffset++;
-                        bufferOffset += 4;
                     }
                 }
+            }
+            else
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    ColorRGBA sourceColor = sourceColors[sourceColorsOffset];
+                    int alpha = (sourceColor.alpha * sourceCovers[sourceCoversOffset] + 255) / 256;
+                    if (alpha == 255)
+                    {
+                        pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
+                        pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
+                        pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
+                        pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
+                    }
+                    else if (alpha > 0)
+                    {
+                        int OneOverAlpha = base_mask - alpha;
+                        unchecked
+                        {
+                            int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                            int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                            int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                            int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
+                            pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
+                            pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
+                            pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
+                            pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                        }
+                    }
+                    sourceColorsOffset++;
+                    sourceCoversOffset++;
+                    bufferOffset += 4;
+                }
+            }
         }
     }
 
@@ -910,7 +910,7 @@ namespace MatterHackers.Agg.Image
                                 float r = (pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha) + sourceColor.red * coverFloat;
                                 float g = (pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha) + sourceColor.green * coverFloat;
                                 float b = (pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha) + sourceColor.blue * coverFloat;
-                                
+
                                 float destAlpha = pDestBuffer[bufferOffset + ImageBase.OrderA];
                                 float a = (destAlpha + (1.0f - destAlpha) * sourceColor.alpha * coverFloat);
                                 pDestBuffer[bufferOffset + ImageBase.OrderR] = r;

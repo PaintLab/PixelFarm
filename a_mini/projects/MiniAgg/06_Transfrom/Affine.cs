@@ -89,12 +89,16 @@ namespace MatterHackers.Agg.Transform
     // m *= agg::trans_affine_rotation(30.0 * 3.1415926 / 180.0);  // rotate
     // m *= agg::trans_affine_translation(100.0, 100.0);           // move back to (100,100)
     //----------------------------------------------------------------------
-    public struct Affine : ITransform
+    public class Affine : ITransform
     {
         const double AFFINE_EPSILON = 1e-14;
 
         public double sx, shy, shx, sy, tx, ty;
 
+        public Affine()
+        {
+            //new affine transform
+        }
         //------------------------------------------ Construction
         public Affine(Affine copyFrom)
         {
@@ -514,7 +518,7 @@ namespace MatterHackers.Agg.Transform
          */
         //-------------------------------------------- Transformations
         // Direct transformation of x and y
-        public void transform(ref double x, ref double y)
+        public void Transform(ref double x, ref double y)
         {
             double tmp = x;
             x = tmp * sx + y * shx + tx;
@@ -523,13 +527,13 @@ namespace MatterHackers.Agg.Transform
 
         public void transform(ref Vector2 pointToTransform)
         {
-            transform(ref pointToTransform.x, ref pointToTransform.y);
+            Transform(ref pointToTransform.x, ref pointToTransform.y);
         }
 
         public void transform(ref RectangleDouble rectToTransform)
         {
-            transform(ref rectToTransform.Left, ref rectToTransform.Bottom);
-            transform(ref rectToTransform.Right, ref rectToTransform.Top);
+            Transform(ref rectToTransform.Left, ref rectToTransform.Bottom);
+            Transform(ref rectToTransform.Right, ref rectToTransform.Top);
         }
         /*
 
@@ -598,9 +602,9 @@ namespace MatterHackers.Agg.Transform
                      is_equal_eps(shx, 0.0) &&
                      is_equal_eps(sy, 1.0) &&
                      is_equal_eps(tx, 0.0) &&
-                     is_equal_eps(ty, 0.0); 
+                     is_equal_eps(ty, 0.0);
         }
-         
+
         static bool is_equal_eps(double v1, double v2)
         {
             return Math.Abs(v1 - v2) <= (AFFINE_EPSILON);
@@ -625,8 +629,8 @@ namespace MatterHackers.Agg.Transform
             double y1 = 0.0;
             double x2 = 1.0;
             double y2 = 0.0;
-            transform(ref x1, ref y1);
-            transform(ref x2, ref y2);
+            Transform(ref x1, ref y1);
+            Transform(ref x2, ref y2);
             return Math.Atan2(y2 - y1, x2 - x1);
         }
 
@@ -644,8 +648,8 @@ namespace MatterHackers.Agg.Transform
             double y2 = 1.0;
             Affine t = new Affine(this);
             t *= NewRotation(-rotation());
-            t.transform(ref x1, ref y1);
-            t.transform(ref x2, ref y2);
+            t.Transform(ref x1, ref y1);
+            t.Transform(ref x2, ref y2);
             x = x2 - x1;
             y = y2 - y1;
         }

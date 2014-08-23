@@ -244,7 +244,7 @@ namespace MatterHackers.Agg
             }
             else
             {
-                if (ShapePath.is_vertex(vertexData.command))
+                if (ShapePath.IsVertextCommand(vertexData.command))
                 {
                     line_to_d(vertexData.position.x, vertexData.position.y);
                 }
