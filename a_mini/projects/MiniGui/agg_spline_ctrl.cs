@@ -66,7 +66,7 @@ namespace MatterHackers.Agg.UI
         int m_move_pnt;
         double m_pdx;
         double m_pdy;
-        Transform.Affine m_mtx = Affine.NewIdentity();
+        Transform.Affine m_mtx = Affine.IdentityMatrix;
 
         public spline_ctrl(Vector2 location, Vector2 size, int num_pnt)
             : base(location, false)

@@ -63,8 +63,9 @@ namespace MatterHackers.Agg.Sample_Blur
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
             m_path = typeFaceForLargeA.GetGlyphForCharacter('a');
 
-            Affine shape_mtx = Affine.NewIdentity();
-            shape_mtx *= Affine.NewTranslation(150, 100);
+            Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
+            //shape_mtx *= Affine.NewTranslation(150, 100);
+
             m_path = new VertexSourceApplyTransform(m_path, shape_mtx);
             m_shape = new FlattenCurves(m_path);
 

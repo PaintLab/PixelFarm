@@ -366,7 +366,7 @@ namespace MatterHackers.Agg.UI
             HAnchor = HAnchor.ParentCenter;
         }
 
-        protected Transform.Affine parentToChildTransform = Affine.NewIdentity();
+        protected Transform.Affine parentToChildTransform = Affine.IdentityMatrix;
         List<GuiWidget> children = new List<GuiWidget>();
 
         private bool containsFocus = false;
@@ -704,8 +704,10 @@ namespace MatterHackers.Agg.UI
 
                 if (tempLocalToParentTransform.tx != value.x || tempLocalToParentTransform.ty != value.y)
                 {
-                    tempLocalToParentTransform.tx = value.x;
-                    tempLocalToParentTransform.ty = value.y;
+                    //tempLocalToParentTransform.tx = value.x;
+                    //tempLocalToParentTransform.ty = value.y;
+
+                    tempLocalToParentTransform = tempLocalToParentTransform.CreateTranslation(value.x, value.y);
                     ParentToChildTransform = tempLocalToParentTransform;
                     Invalidate();
                     if (this.Parent != null)
@@ -1567,7 +1569,7 @@ namespace MatterHackers.Agg.UI
                     {
                         double childX = fileDropEventArgs.X;
                         double childY = fileDropEventArgs.Y;
-                        child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
 
                         FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
                         child.OnDragEnter(childDropEvent);
@@ -1591,7 +1593,7 @@ namespace MatterHackers.Agg.UI
                     {
                         double childX = fileDropEventArgs.X;
                         double childY = fileDropEventArgs.Y;
-                        child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
 
                         FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
                         child.OnDragOver(childDropEvent);
@@ -1616,7 +1618,7 @@ namespace MatterHackers.Agg.UI
                     {
                         double childX = fileDropEventArgs.X;
                         double childY = fileDropEventArgs.Y;
-                        child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
 
                         FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
                         child.OnDragDrop(childDropEvent);
@@ -1906,7 +1908,7 @@ namespace MatterHackers.Agg.UI
             {
                 double childX = mouseEvent.X;
                 double childY = mouseEvent.Y;
-                child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
                 MouseEventArgs childMouseEvent = new MouseEventArgs(mouseEvent, childX, childY);
                 child.DoMouseMovedOffWidgetRecursive(childMouseEvent);
             }
@@ -1947,7 +1949,7 @@ namespace MatterHackers.Agg.UI
                     GuiWidget child = Children[i];
                     double childX = mouseEvent.X;
                     double childY = mouseEvent.Y;
-                    child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                    child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
 
                     MouseEventArgs childMouseEvent = new MouseEventArgs(mouseEvent, childX, childY);
                     if (childHasAcceptedThisEvent)
@@ -2059,7 +2061,7 @@ namespace MatterHackers.Agg.UI
                 {
                     double childX = mouseEvent.X;
                     double childY = mouseEvent.Y;
-                    child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                    child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
                     MouseEventArgs childMouseEvent = new MouseEventArgs(mouseEvent, childX, childY);
                     if (child.mouseCapturedState != MouseCapturedState.NotCaptured)
                     {
@@ -2132,7 +2134,7 @@ namespace MatterHackers.Agg.UI
                 GuiWidget child = Children[i];
                 double childX = mouseEvent.X;
                 double childY = mouseEvent.Y;
-                child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
                 MouseEventArgs childMouseEvent = new MouseEventArgs(mouseEvent, childX, childY);
                 if (child.Visible && child.Enabled && child.CanSelect)
                 {
@@ -2223,7 +2225,7 @@ namespace MatterHackers.Agg.UI
                         GuiWidget child = Children[i];
                         double childX = mouseEvent.X;
                         double childY = mouseEvent.Y;
-                        child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
                         MouseEventArgs childMouseEvent = new MouseEventArgs(mouseEvent, childX, childY);
                         if (child.Visible && child.Enabled && child.CanSelect)
                         {
@@ -2276,7 +2278,7 @@ namespace MatterHackers.Agg.UI
 
                         double childX = mouseEvent.X;
                         double childY = mouseEvent.Y;
-                        child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
                         MouseEventArgs childMouseEvent = new MouseEventArgs(mouseEvent, childX, childY);
                         if (child.mouseCapturedState != MouseCapturedState.NotCaptured)
                         {
@@ -2408,7 +2410,7 @@ namespace MatterHackers.Agg.UI
                     {
                         double childX = mouseEvent.X;
                         double childY = mouseEvent.Y;
-                        child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
+                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
                         MouseEventArgs childMouseEvent = new MouseEventArgs(mouseEvent, childX, childY);
 
                         if (child.PositionWithinLocalBounds(childMouseEvent.X, childMouseEvent.Y))
@@ -2568,6 +2570,6 @@ namespace MatterHackers.Agg.UI
             }
         }
 
-        public double scale() { return ParentToChildTransform.GetScale(); }
+        public double GetScaleValue() { return ParentToChildTransform.GetScale(); }
     }
 }

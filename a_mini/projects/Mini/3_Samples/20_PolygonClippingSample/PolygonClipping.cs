@@ -254,13 +254,20 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         make_arrows(arrows);
 
-                        Affine mtx1 = Affine.NewIdentity();
-                        Affine mtx2 = Affine.NewIdentity();
-                        mtx1 *= Affine.NewTranslation(-1150, -1150);
-                        mtx1 *= Affine.NewScaling(2.0);
+                        //Affine mtx1 = Affine.NewIdentity();                        
+                        //mtx1 *= Affine.NewTranslation(-1150, -1150);
+                        //mtx1 *= Affine.NewScaling(2.0);
+                        Affine mtx1 = Affine.NewMatix( 
+                                AffinePlan.Translate(-1150,-1150),
+                                AffinePlan.Scale(2)
+                             );
 
-                        mtx2 = mtx1;
-                        mtx2 *= Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
+
+
+                        //Affine.NewIdentity();
+                        //mtx2 = mtx1;
+                        //mtx2 *= Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
+                        Affine mtx2 = mtx1 * Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
 
                         VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
                         VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
@@ -289,9 +296,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         PathStorage gb_poly = new PathStorage();
                         MatterHackers.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
-                        Affine mtx = Affine.NewIdentity(); ;
-                        mtx *= Affine.NewTranslation(-1150, -1150);
-                        mtx *= Affine.NewScaling(2.0);
+                        Affine mtx = Affine.NewMatix( 
+                                AffinePlan.Translate(-1150, -1150),
+                                AffinePlan.Scale(2) );
 
                         VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx);
 
@@ -362,9 +369,16 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         glyph.curve3(22.41, 4.74, 28.47, 9.62);
                         glyph.ClosePolygon();
 
-                        Affine mtx = Affine.NewIdentity();
-                        mtx *= Affine.NewScaling(4.0);
-                        mtx *= Affine.NewTranslation(220, 200);
+                        //Affine mtx = Affine.NewIdentity();
+                        //mtx *= Affine.NewScaling(4.0);
+                        //mtx *= Affine.NewTranslation(220, 200);
+                        Affine mtx = Affine.NewMatix( 
+                            AffinePlan.Scale(4),
+                            AffinePlan.Translate(220, 200) );
+
+                        //mtx *= Affine.NewScaling(4.0);
+                        //mtx *= Affine.NewTranslation(220, 200);
+
                         VertexSourceApplyTransform trans = new VertexSourceApplyTransform(glyph, mtx);
                         FlattenCurves curve = new FlattenCurves(trans);
 
@@ -412,7 +426,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_x = x;
             m_y = y;
         }
-        public override void MouseDown(int x, int y,bool isRightoy)
+        public override void MouseDown(int x, int y, bool isRightoy)
         {
             m_x = x;
             m_y = y;

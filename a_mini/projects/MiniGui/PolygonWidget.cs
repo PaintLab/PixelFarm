@@ -242,7 +242,7 @@ namespace MatterHackers.Agg.UI
             m_edge = -1;
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.inverse_transform(ref x, ref y);
+            ParentToChildTransform.InverseTransform(ref x, ref y);
             for (int i = 0; i < m_num_points; i++)
             {
                 if (Math.Sqrt((x - GetXN(i)) * (x - GetXN(i)) + (y - GetYN(i)) * (y - GetYN(i))) < m_point_radius)
@@ -302,7 +302,7 @@ namespace MatterHackers.Agg.UI
             double dy;
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.inverse_transform(ref x, ref y);
+            ParentToChildTransform.InverseTransform(ref x, ref y);
             if (m_node == (int)(m_num_points))
             {
                 dx = x - m_dx;

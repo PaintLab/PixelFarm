@@ -410,8 +410,8 @@ namespace MatterHackers.Agg.Transform
         public Perspective trans_perspectivemultiply_inv(Affine m)
         {
             Affine t = m;
-            t.invert();
-            return multiply(t);
+            var invert = t.CreateInvert();
+            return multiply(invert);
         }
 
         //------------------------------------------------------------------------

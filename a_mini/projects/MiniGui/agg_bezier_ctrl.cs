@@ -112,7 +112,7 @@ namespace MatterHackers.Agg.UI
         {
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.inverse_transform(ref x, ref y);
+            ParentToChildTransform.InverseTransform(ref x, ref y);
             m_poly.OnMouseDown(new MouseEventArgs(mouseEvent, x, y));
             Invalidate();
             base.OnMouseDown(mouseEvent);
@@ -131,7 +131,7 @@ namespace MatterHackers.Agg.UI
         {
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.inverse_transform(ref x, ref y);
+            ParentToChildTransform.InverseTransform(ref x, ref y);
             m_poly.OnMouseMove(new MouseEventArgs(mouseEvent, x, y));
             Invalidate();
             BoundsRelativeToParent = m_poly.BoundsRelativeToParent;
@@ -157,7 +157,7 @@ namespace MatterHackers.Agg.UI
             m_poly.rewind(0);
             m_idx = idx;
 
-            m_curve.approximation_scale(base.scale());
+            m_curve.approximation_scale(base.GetScaleValue());
             switch (idx)
             {
                 default:
@@ -335,7 +335,7 @@ namespace MatterHackers.Agg.UI
         {
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.inverse_transform(ref x, ref y);
+            ParentToChildTransform.InverseTransform(ref x, ref y);
             m_poly.OnMouseDown(new MouseEventArgs(mouseEvent, x, y));
         }
 
@@ -350,7 +350,7 @@ namespace MatterHackers.Agg.UI
         {
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.inverse_transform(ref x, ref y);
+            ParentToChildTransform.InverseTransform(ref x, ref y);
             m_poly.OnMouseMove(new MouseEventArgs(mouseEvent, x, y));
         }
 
