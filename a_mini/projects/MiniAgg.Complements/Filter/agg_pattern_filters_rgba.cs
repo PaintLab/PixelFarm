@@ -20,9 +20,7 @@ using MatterHackers.Agg.Image;
 
 namespace MatterHackers.Agg
 {
-   
-
-     
+    
 
     public struct pattern_filter_bilinear_RGBA_Bytes : IPatternFilter
     {

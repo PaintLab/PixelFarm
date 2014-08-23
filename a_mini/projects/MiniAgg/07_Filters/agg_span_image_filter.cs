@@ -25,11 +25,7 @@ using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_su
 
 namespace MatterHackers.Agg
 {
-    //public interface ISpanGenerator
-    //{
-    //    void prepare();
-    //    void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len);
-    //};
+     
 
     public abstract class span_image_filter : ISpanGenerator
     {

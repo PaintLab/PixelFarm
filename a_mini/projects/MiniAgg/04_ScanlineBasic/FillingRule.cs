@@ -16,11 +16,7 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-//#define USE_UNSAFE // no real code for this yet
 
-using System;
-using System.IO;
-using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
 {
