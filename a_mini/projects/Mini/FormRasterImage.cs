@@ -40,9 +40,9 @@ namespace Mini
             //step 2: eliminate y from L3 -> found z
             //resubstitue back
 
-            LinearEqSolver linEqSolver = new LinearEqSolver();
+            
             double x, y, z;
-            linEqSolver.Resolve(
+            LinearEqSolver.Resolve(
                 new LinearEq3(2, 1, -1, 8),
                 new LinearEq3(-3, -1, 2, -11),
                 new LinearEq3(-2, 1, 2, -3),

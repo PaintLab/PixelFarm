@@ -4,7 +4,7 @@
 namespace ImageTransformation
 {
 
-    class LinearEqSolver
+    static class LinearEqSolver
     {
         //from wikipedia: Linear_algebra
         //Gaussian elimination 
@@ -20,7 +20,7 @@ namespace ImageTransformation
         //step 2: eliminate y from L3 -> found z
         //resubstitue back
 
-        public void Resolve(LinearEq3 line1,
+        public static void Resolve(LinearEq3 line1,
             LinearEq3 line2,
             LinearEq3 line3,
             out double resolve_x,
