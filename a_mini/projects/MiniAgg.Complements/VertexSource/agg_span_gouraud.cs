@@ -88,20 +88,20 @@ namespace MatterHackers.Agg.VertexSource
 
             if(d != 0.0)
             {   
-                agg_math.dilate_triangle(m_coord[0].x, m_coord[0].y,
+                AggMath.dilate_triangle(m_coord[0].x, m_coord[0].y,
                                 m_coord[1].x, m_coord[1].y,
                                 m_coord[2].x, m_coord[2].y,
                                 m_x, m_y, d);
 
-                agg_math.calc_intersection(m_x[4], m_y[4], m_x[5], m_y[5],
+                AggMath.calc_intersection(m_x[4], m_y[4], m_x[5], m_y[5],
                                   m_x[0], m_y[0], m_x[1], m_y[1],
                                   out m_coord[0].x, out m_coord[0].y);
 
-                agg_math.calc_intersection(m_x[0], m_y[0], m_x[1], m_y[1],
+                AggMath.calc_intersection(m_x[0], m_y[0], m_x[1], m_y[1],
                                   m_x[2], m_y[2], m_x[3], m_y[3],
                                   out m_coord[1].x, out m_coord[1].y);
 
-                agg_math.calc_intersection(m_x[2], m_y[2], m_x[3], m_y[3],
+                AggMath.calc_intersection(m_x[2], m_y[2], m_x[3], m_y[3],
                                   m_x[4], m_y[4], m_x[5], m_y[5],
                                   out m_coord[2].x, out m_coord[2].y);
                 m_cmd[3] = ShapePath.FlagsAndCommand.CommandLineTo;

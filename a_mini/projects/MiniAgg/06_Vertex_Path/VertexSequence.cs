@@ -62,29 +62,29 @@ namespace MatterHackers.Agg
     // Function close() calls this operator and removes the last vertex if 
     // necessary.
     //------------------------------------------------------------------------
-    public class VertexSequence : VectorPOD<VertexDistance>
+    public class VertexSequence : ArrayList<VertexDistance>
     {
-        public override void add(VertexDistance val)
+        public override void AddItem(VertexDistance val)
         {
-            if (base.size() > 1)
+            if (base.Count > 1)
             {
-                if (!Array[base.size() - 2].IsEqual(Array[base.size() - 1]))
+                if (!Array[base.Count - 2].IsEqual(Array[base.Count - 1]))
                 {
                     base.RemoveLast();
                 }
             }
-            base.add(val);
+            base.AddItem(val);
         }
 
         public void modify_last(VertexDistance val)
         {
             base.RemoveLast();
-            add(val);
+            AddItem(val);
         }
 
         public void close(bool closed)
         {
-            int snapSize = base.size();
+            int snapSize = base.Count;
             while (snapSize > 1)
             {
                 if (Array[snapSize - 2].IsEqual(Array[snapSize - 1]))
@@ -99,7 +99,7 @@ namespace MatterHackers.Agg
 
             if (closed)
             {
-                snapSize = base.size();
+                snapSize = base.Count;
                 while (snapSize > 1)
                 {
                     if (Array[snapSize - 1].IsEqual(Array[0]))
@@ -114,7 +114,7 @@ namespace MatterHackers.Agg
 
         public VertexDistance prev(int idx)
         {
-            return this[(idx + currentSize - 1) % currentSize];
+            return this[(idx + this.Count - 1) % Count];
         }
 
         public VertexDistance curr(int idx)
@@ -124,7 +124,7 @@ namespace MatterHackers.Agg
 
         public VertexDistance next(int idx)
         {
-            return this[(idx + 1) % currentSize];
+            return this[(idx + 1) % Count];
         }
     }
 
@@ -146,10 +146,10 @@ namespace MatterHackers.Agg
         }
         public bool IsEqual(VertexDistance val)
         {
-            bool ret = (dist = agg_math.calc_distance(x, y, val.x, val.y)) > agg_math.vertex_dist_epsilon;
+            bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.vertex_dist_epsilon;
             if (!ret)
             {
-                dist = 1.0 / agg_math.vertex_dist_epsilon;
+                dist = 1.0 / AggMath.vertex_dist_epsilon;
             }
             return ret;
         }

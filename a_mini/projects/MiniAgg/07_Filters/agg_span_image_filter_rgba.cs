@@ -446,9 +446,9 @@ namespace MatterHackers.Agg
     {
         private ColorRGBA m_OutsideSourceColor;
 
-        const int base_shift = 8;
-        const int base_scale = (int)(1 << base_shift);
-        const int base_mask = base_scale - 1;
+        const int BASE_SHIFT = 8;
+        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
+        const int BASE_MASK = BASE_SCALE - 1;
 
         public span_image_filter_rgba_bilinear_clip(IImageBufferAccessor src,
             IColor back_color, ISpanInterpolator inter)
@@ -546,7 +546,7 @@ namespace MatterHackers.Agg
 
                         weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) *
                                  ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
-                        if (weight > base_mask)
+                        if (weight > BASE_MASK)
                         {
                             accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
                             accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
@@ -555,7 +555,7 @@ namespace MatterHackers.Agg
                         }
 
                         weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
-                        if (weight > base_mask)
+                        if (weight > BASE_MASK)
                         {
                             bufferIndex += distanceBetweenPixelsInclusive;
                             accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
@@ -565,7 +565,7 @@ namespace MatterHackers.Agg
                         }
 
                         weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
-                        if (weight > base_mask)
+                        if (weight > BASE_MASK)
                         {
                             ++y_lr;
                             fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
@@ -575,7 +575,7 @@ namespace MatterHackers.Agg
                             accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
                         weight = (x_hr * y_hr);
-                        if (weight > base_mask)
+                        if (weight > BASE_MASK)
                         {
                             bufferIndex += distanceBetweenPixelsInclusive;
                             accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
@@ -610,7 +610,7 @@ namespace MatterHackers.Agg
 
                             weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) *
                                      ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
-                            if (weight > base_mask)
+                            if (weight > BASE_MASK)
                             {
                                 BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
                             }
@@ -618,7 +618,7 @@ namespace MatterHackers.Agg
                             x_lr++;
 
                             weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
-                            if (weight > base_mask)
+                            if (weight > BASE_MASK)
                             {
                                 BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
                             }
@@ -627,7 +627,7 @@ namespace MatterHackers.Agg
                             y_lr++;
 
                             weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
-                            if (weight > base_mask)
+                            if (weight > BASE_MASK)
                             {
                                 BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
                             }
@@ -635,7 +635,7 @@ namespace MatterHackers.Agg
                             x_lr++;
 
                             weight = (x_hr * y_hr);
-                            if (weight > base_mask)
+                            if (weight > BASE_MASK)
                             {
                                 BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
                             }

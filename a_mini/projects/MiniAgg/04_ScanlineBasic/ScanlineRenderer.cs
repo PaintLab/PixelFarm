@@ -13,7 +13,7 @@ namespace MatterHackers.Agg
 
     public class ScanlineRenderer
     {
-        VectorPOD<ColorRGBA> tempSpanColors = new VectorPOD<ColorRGBA>();
+        ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
         public void render_scanlines_aa_solid(IImage destImage, IRasterizer rasterizer, IScanline scline, ColorRGBA color)
         {
             if (rasterizer.rewind_scanlines())
@@ -46,7 +46,7 @@ namespace MatterHackers.Agg
                     int x2 = (x - (int)span.len - 1);
                     destImage.blend_hline(x, y, x2, color, covers[span.cover_index]);
                 }
-                 
+
             }
         }
 
@@ -72,7 +72,7 @@ namespace MatterHackers.Agg
         void GenerateAndRenderSingleScanline(IScanline scline, IImage destImage, ISpanGenerator span_gen)
         {
             int y = scline.Y;
-            int num_spans = scline.SpanCount; 
+            int num_spans = scline.SpanCount;
             byte[] covers = scline.GetCovers();
             for (int i = 1; i <= num_spans; ++i)
             {
@@ -81,17 +81,17 @@ namespace MatterHackers.Agg
                 int len = span.len;
                 if (len < 0) len = -len;
 
-                if (tempSpanColors.Capacity() < len)
+                if (tempSpanColors.AllocatedSize < len)
                 {
-                    tempSpanColors.Capacity(len);
+                    tempSpanColors.Clear(len);
                 }
 
                 span_gen.generate(tempSpanColors.Array, 0, x, y, len);
                 bool useFirstCoverForAll = span.len < 0;
                 destImage.blend_color_hspan(x, y, len, tempSpanColors.Array, 0, covers, span.cover_index, useFirstCoverForAll);
 
-              
-                 
+
+
             }
         }
 

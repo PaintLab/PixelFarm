@@ -17,7 +17,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
     public interface ISpanInterpolator
     {
@@ -36,21 +36,19 @@ namespace MatterHackers.Agg
 namespace MatterHackers.Agg.Lines
 {
 
-   
+
 
     //================================================span_interpolator_linear
     public sealed class span_interpolator_linear : ISpanInterpolator
     {
-        private Transform.ITransform m_trans;
-        private dda2_line_interpolator m_li_x;
-        private dda2_line_interpolator m_li_y;
+        Transform.ITransform m_trans;
+        dda2_line_interpolator m_li_x;
+        dda2_line_interpolator m_li_y;
 
-        public enum subpixel_scale_e
-        {
-            SubpixelShift = 8,
-            subpixel_shift = SubpixelShift,
-            subpixel_scale = 1 << subpixel_shift
-        };
+
+        const int SUB_PIXEL_SHIFT = 8;
+        const int SUB_PIXEL_SCALE = 1 << SUB_PIXEL_SHIFT;
+
 
         //--------------------------------------------------------------------
         public span_interpolator_linear() { }
@@ -83,14 +81,14 @@ namespace MatterHackers.Agg.Lines
             tx = x;
             ty = y;
             m_trans.transform(ref tx, ref ty);
-            int x1 = agg_basics.iround(tx * (double)subpixel_scale_e.subpixel_scale);
-            int y1 = agg_basics.iround(ty * (double)subpixel_scale_e.subpixel_scale);
+            int x1 = AggBasics.iround(tx * (double)SUB_PIXEL_SCALE);
+            int y1 = AggBasics.iround(ty * (double)SUB_PIXEL_SCALE);
 
             tx = x + len;
             ty = y;
             m_trans.transform(ref tx, ref ty);
-            int x2 = agg_basics.iround(tx * (double)subpixel_scale_e.subpixel_scale);
-            int y2 = agg_basics.iround(ty * (double)subpixel_scale_e.subpixel_scale);
+            int x2 = AggBasics.iround(tx * (double)SUB_PIXEL_SCALE);
+            int y2 = AggBasics.iround(ty * (double)SUB_PIXEL_SCALE);
 
             m_li_x = new dda2_line_interpolator(x1, x2, (int)len);
             m_li_y = new dda2_line_interpolator(y1, y2, (int)len);
@@ -100,8 +98,8 @@ namespace MatterHackers.Agg.Lines
         public void resynchronize(double xe, double ye, int len)
         {
             m_trans.transform(ref xe, ref ye);
-            m_li_x = new dda2_line_interpolator(m_li_x.y(), agg_basics.iround(xe * (double)subpixel_scale_e.subpixel_scale), (int)len);
-            m_li_y = new dda2_line_interpolator(m_li_y.y(), agg_basics.iround(ye * (double)subpixel_scale_e.subpixel_scale), (int)len);
+            m_li_x = new dda2_line_interpolator(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
+            m_li_y = new dda2_line_interpolator(m_li_y.y(), AggBasics.iround(ye * (double)SUB_PIXEL_SCALE), (int)len);
         }
 
         //----------------------------------------------------------------

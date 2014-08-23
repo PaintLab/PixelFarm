@@ -29,20 +29,20 @@ namespace MatterHackers.Agg.VertexSource
     
     public class StrokeMath
     {
-        public enum status_e
+        public enum Status
         {
-            initial,
-            ready,
-            cap1,
-            cap2,
-            outline1,
-            close_first,
-            outline2,
-            out_vertices,
-            end_poly1,
-            end_poly2,
-            stop
-        };
+            Init,
+            Ready,
+            Cap1,
+            Cap2,
+            Outline1,
+            CloseFirst,
+            Outline2,
+            OutVertices,
+            EndPoly1,
+            EndPoly2,
+            Stop
+        } 
 
         double m_width;
         double m_width_abs;
@@ -109,7 +109,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void calc_cap(IVertexDest vc, VertexDistance v0, VertexDistance v1, double len)
         {
-            vc.remove_all();
+            vc.Clear();
 
             double dx1 = (v1.y - v0.y) / len;
             double dy1 = (v1.x - v0.x) / len;
@@ -175,9 +175,9 @@ namespace MatterHackers.Agg.VertexSource
             double dx2 = m_width * (v2.y - v1.y) / len2;
             double dy2 = m_width * (v2.x - v1.x) / len2;
 
-            vc.remove_all();
+            vc.Clear();
 
-            double cp = agg_math.cross_product(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
+            double cp = AggMath.cross_product(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
             if(cp != 0 && (cp > 0) == (m_width > 0))
             {
                 // Inner join
@@ -265,7 +265,7 @@ namespace MatterHackers.Agg.VertexSource
                     //-------------------
                     if(m_approx_scale * (m_width_abs - dbevel) < m_width_eps)
                     {
-                        if (agg_math.calc_intersection(v0.x + dx1, v0.y - dy1,
+                        if (AggMath.calc_intersection(v0.x + dx1, v0.y - dy1,
                                              v1.x + dx1, v1.y - dy1,
                                              v1.x + dx2, v1.y - dy2,
                                              v2.x + dx2, v2.y - dy2,
@@ -307,7 +307,7 @@ namespace MatterHackers.Agg.VertexSource
 
         private void add_vertex(IVertexDest vc, double x, double y)
         {
-            vc.add(new Vector2(x, y));
+            vc.AddItem(new Vector2(x, y));
         }
 
         void calc_arc(IVertexDest vc,
@@ -367,7 +367,7 @@ namespace MatterHackers.Agg.VertexSource
             bool miter_limit_exceeded = true; // Assume the worst
             bool intersection_failed  = true; // Assume the worst
 
-            if (agg_math.calc_intersection(v0.x + dx1, v0.y - dy1,
+            if (AggMath.calc_intersection(v0.x + dx1, v0.y - dy1,
                                  v1.x + dx1, v1.y - dy1,
                                  v1.x + dx2, v1.y - dy2,
                                  v2.x + dx2, v2.y - dy2,
@@ -375,7 +375,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 // Calculation of the intersection succeeded
                 //---------------------
-                di = agg_math.calc_distance(v1.x, v1.y, xi, yi);
+                di = AggMath.calc_distance(v1.x, v1.y, xi, yi);
                 if(di <= lim)
                 {
                     // Inside the miter limit
@@ -397,8 +397,8 @@ namespace MatterHackers.Agg.VertexSource
                 //----------------
                 double x2 = v1.x + dx1;
                 double y2 = v1.y - dy1;
-                if ((agg_math.cross_product(v0.x, v0.y, v1.x, v1.y, x2, y2) < 0.0) ==
-                   (agg_math.cross_product(v1.x, v1.y, v2.x, v2.y, x2, y2) < 0.0))
+                if ((AggMath.cross_product(v0.x, v0.y, v1.x, v1.y, x2, y2) < 0.0) ==
+                   (AggMath.cross_product(v1.x, v1.y, v2.x, v2.y, x2, y2) < 0.0))
                 {
                     // This case means that the next segment continues 
                     // the previous one (straight line)

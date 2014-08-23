@@ -25,23 +25,7 @@ using System;
 
 namespace MatterHackers.Agg
 {
-    
 
-   
-
-    /*
-
-    //--------------------------------------------------------image_filter
-    public class image_filter : ImageFilterLookUpTable
-    {
-        public image_filter()
-        {
-            calculate(m_filter_function);
-        }
-    
-        private IImageFilter m_filter_function;
-    };
-     */
 
 
     //-----------------------------------------------image_filter_bilinear
@@ -103,8 +87,8 @@ namespace MatterHackers.Agg
         public double calc_weight(double x)
         {
             double t;
-            if(x <  0.5) return 0.75 - x * x;
-            if(x <  1.5) {t = x - 1.5; return 0.5 * t * t;}
+            if (x < 0.5) return 0.75 - x * x;
+            if (x < 1.5) { t = x - 1.5; return 0.5 * t * t; }
             return 0.0;
         }
     };
@@ -121,7 +105,7 @@ namespace MatterHackers.Agg
         public double calc_weight(double x)
         {
             return
-                (1.0/6.0) * 
+                (1.0 / 6.0) *
                 (pow3(x + 2) - 4 * pow3(x + 1) + 6 * pow3(x) - 4 * pow3(x - 1));
         }
     };
@@ -159,8 +143,8 @@ namespace MatterHackers.Agg
             sum = 1.0;
             y = x * x / 4.0;
             t = y;
-        
-            for(i = 2; t > epsilon; i++)
+
+            for (i = 2; t > epsilon; i++)
             {
                 sum += t;
                 t *= (double)y / (i * i);
@@ -175,8 +159,8 @@ namespace MatterHackers.Agg
         public double radius() { return 2.0; }
         public double calc_weight(double x)
         {
-            if(x <  1.0) return 0.5 * (2.0 + x * x * (-5.0 + x * 3.0));
-            if(x <  2.0) return 0.5 * (4.0 + x * (-8.0 + x * (5.0 - x)));
+            if (x < 1.0) return 0.5 * (2.0 + x * x * (-5.0 + x * 3.0));
+            if (x < 2.0) return 0.5 * (4.0 + x * (-8.0 + x * (5.0 - x)));
             return 0.0;
         }
     };
@@ -187,27 +171,28 @@ namespace MatterHackers.Agg
         private double p0, p2, p3;
         private double q0, q1, q2, q3;
 
-        public image_filter_mitchell() : this(1.0/3.0, 1.0/3.0)
+        public image_filter_mitchell()
+            : this(1.0 / 3.0, 1.0 / 3.0)
         {
 
         }
 
         public image_filter_mitchell(double b, double c)
         {
-            p0=((6.0 - 2.0 * b) / 6.0);
-            p2=((-18.0 + 12.0 * b + 6.0 * c) / 6.0);
-            p3=((12.0 - 9.0 * b - 6.0 * c) / 6.0);
-            q0=((8.0 * b + 24.0 * c) / 6.0);
-            q1=((-12.0 * b - 48.0 * c) / 6.0);
-            q2=((6.0 * b + 30.0 * c) / 6.0);
-            q3=((-b - 6.0 * c) / 6.0);
+            p0 = ((6.0 - 2.0 * b) / 6.0);
+            p2 = ((-18.0 + 12.0 * b + 6.0 * c) / 6.0);
+            p3 = ((12.0 - 9.0 * b - 6.0 * c) / 6.0);
+            q0 = ((8.0 * b + 24.0 * c) / 6.0);
+            q1 = ((-12.0 * b - 48.0 * c) / 6.0);
+            q2 = ((6.0 * b + 30.0 * c) / 6.0);
+            q3 = ((-b - 6.0 * c) / 6.0);
         }
 
         public double radius() { return 2.0; }
         public double calc_weight(double x)
         {
-            if(x < 1.0) return p0 + x * x * (p2 + x * p3);
-            if(x < 2.0) return q0 + x * (q1 + x * (q2 + x * q3));
+            if (x < 1.0) return p0 + x * x * (p2 + x * p3);
+            if (x < 2.0) return q0 + x * (q1 + x * (q2 + x * q3));
             return 0.0;
         }
     };
@@ -219,11 +204,11 @@ namespace MatterHackers.Agg
         public double radius() { return 2.0; }
         public double calc_weight(double x)
         {
-            if(x < 1.0)
+            if (x < 1.0)
             {
-                return ((x - 9.0/5.0 ) * x - 1.0/5.0 ) * x + 1.0;
+                return ((x - 9.0 / 5.0) * x - 1.0 / 5.0) * x + 1.0;
             }
-            return ((-1.0/3.0 * (x-1) + 4.0/5.0) * (x-1) - 7.0/15.0 ) * (x-1);
+            return ((-1.0 / 3.0 * (x - 1) + 4.0 / 5.0) * (x - 1) - 7.0 / 15.0) * (x - 1);
         }
     };
 
@@ -234,15 +219,15 @@ namespace MatterHackers.Agg
         public double radius() { return 3.0; }
         public double calc_weight(double x)
         {
-           if(x < 1.0)
-           {
-              return ((13.0/11.0 * x - 453.0/209.0) * x - 3.0/209.0) * x + 1.0;
-           }
-           if(x < 2.0)
-           {
-              return ((-6.0/11.0 * (x-1) + 270.0/209.0) * (x-1) - 156.0/ 209.0) * (x-1);
-           }
-           return ((1.0/11.0 * (x-2) - 45.0/209.0) * (x-2) +  26.0/209.0) * (x-2);
+            if (x < 1.0)
+            {
+                return ((13.0 / 11.0 * x - 453.0 / 209.0) * x - 3.0 / 209.0) * x + 1.0;
+            }
+            if (x < 2.0)
+            {
+                return ((-6.0 / 11.0 * (x - 1) + 270.0 / 209.0) * (x - 1) - 156.0 / 209.0) * (x - 1);
+            }
+            return ((1.0 / 11.0 * (x - 2) - 45.0 / 209.0) * (x - 2) + 26.0 / 209.0) * (x - 2);
         }
     };
 
@@ -251,7 +236,7 @@ namespace MatterHackers.Agg
     public struct image_filter_gaussian : IImageFilterFunction
     {
         public double radius() { return 2.0; }
-        public double calc_weight(double x) 
+        public double calc_weight(double x)
         {
             return Math.Exp(-2.0 * x * x) * Math.Sqrt(2.0 / Math.PI);
         }
@@ -264,7 +249,7 @@ namespace MatterHackers.Agg
         public double radius() { return 3.2383; }
         public double calc_weight(double x)
         {
-            return (x == 0.0) ? Math.PI / 4.0 : agg_math.besj(Math.PI * x, 1) / (2.0 * x);
+            return (x == 0.0) ? Math.PI / 4.0 : AggMath.besj(Math.PI * x, 1) / (2.0 * x);
         }
     };
 
@@ -272,18 +257,18 @@ namespace MatterHackers.Agg
     //-------------------------------------------------image_filter_sinc
     public class image_filter_sinc : IImageFilterFunction
     {
-        public image_filter_sinc(double r) 
+        public image_filter_sinc(double r)
         {
             m_radius = (r < 2.0 ? 2.0 : r);
         }
         public double radius() { return m_radius; }
         public double calc_weight(double x)
         {
-            if(x == 0.0) return 1.0;
+            if (x == 0.0) return 1.0;
             x *= Math.PI;
             return Math.Sin(x) / x;
         }
-    
+
         private double m_radius;
     };
 
@@ -291,20 +276,20 @@ namespace MatterHackers.Agg
     //-----------------------------------------------image_filter_lanczos
     public class image_filter_lanczos : IImageFilterFunction
     {
-        public image_filter_lanczos(double r) 
+        public image_filter_lanczos(double r)
         {
-            m_radius=(r < 2.0 ? 2.0 : r);
+            m_radius = (r < 2.0 ? 2.0 : r);
         }
         public double radius() { return m_radius; }
         public double calc_weight(double x)
         {
-           if(x == 0.0) return 1.0;
-           if(x > m_radius) return 0.0;
-           x *= Math.PI;
-           double xr = x / m_radius;
-           return (Math.Sin(x) / x) * (Math.Sin(xr) / xr);
+            if (x == 0.0) return 1.0;
+            if (x > m_radius) return 0.0;
+            x *= Math.PI;
+            double xr = x / m_radius;
+            return (Math.Sin(x) / x) * (Math.Sin(xr) / xr);
         }
-    private double m_radius;
+        private double m_radius;
     };
 
     //----------------------------------------------image_filter_blackman
@@ -312,11 +297,11 @@ namespace MatterHackers.Agg
     {
         public image_filter_blackman(double r)
         {
-            m_radius=(r < 2.0 ? 2.0 : r);
+            m_radius = (r < 2.0 ? 2.0 : r);
         }
-        
+
         public double radius() { return m_radius; }
-        
+
         public double calc_weight(double x)
         {
             if (x == 0.0)
@@ -324,16 +309,16 @@ namespace MatterHackers.Agg
                 return 1.0;
             }
 
-           if (x > m_radius)
-           {
-               return 0.0;
-           }
+            if (x > m_radius)
+            {
+                return 0.0;
+            }
 
-           x *= Math.PI;
-           double xr = x / m_radius;
-           return (Math.Sin(x) / x) * (0.42 + 0.5*Math.Cos(xr) + 0.08*Math.Cos(2*xr));
+            x *= Math.PI;
+            double xr = x / m_radius;
+            return (Math.Sin(x) / x) * (0.42 + 0.5 * Math.Cos(xr) + 0.08 * Math.Cos(2 * xr));
         }
-        
+
         private double m_radius;
     };
 }

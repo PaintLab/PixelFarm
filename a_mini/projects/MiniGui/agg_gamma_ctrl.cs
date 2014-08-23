@@ -169,7 +169,7 @@ namespace MatterHackers.Agg.UI
             double y = mouseEvent.Y;
             calc_points();
 
-            if (agg_math.calc_distance(x, y, m_xp1, m_yp1) <= m_point_size + 1)
+            if (AggMath.calc_distance(x, y, m_xp1, m_yp1) <= m_point_size + 1)
             {
                 m_mouse_point = 1;
                 m_pdx = m_xp1 - x;
@@ -177,7 +177,7 @@ namespace MatterHackers.Agg.UI
                 m_p1_active = true;
             }
 
-            if (agg_math.calc_distance(x, y, m_xp2, m_yp2) <= m_point_size + 1)
+            if (AggMath.calc_distance(x, y, m_xp2, m_yp2) <= m_point_size + 1)
             {
                 m_mouse_point = 2;
                 m_pdx = m_xp2 - x;

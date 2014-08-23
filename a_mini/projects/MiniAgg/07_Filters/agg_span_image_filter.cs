@@ -25,11 +25,7 @@ using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_su
 
 namespace MatterHackers.Agg
 {
-    //public interface ISpanGenerator
-    //{
-    //    void prepare();
-    //    void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len);
-    //};
+     
 
     public abstract class span_image_filter : ISpanGenerator
     {
@@ -76,8 +72,8 @@ namespace MatterHackers.Agg
         {
             m_dx_dbl = dx;
             m_dy_dbl = dy;
-            m_dx_int = (int)agg_basics.iround(dx * (int)image_subpixel_scale_e.image_subpixel_scale);
-            m_dy_int = (int)agg_basics.iround(dy * (int)image_subpixel_scale_e.image_subpixel_scale);
+            m_dx_int = (int)AggBasics.iround(dx * (int)image_subpixel_scale_e.image_subpixel_scale);
+            m_dy_int = (int)AggBasics.iround(dy * (int)image_subpixel_scale_e.image_subpixel_scale);
         }
         public void filter_offset(double d) { filter_offset(d, d); }
 
@@ -117,11 +113,11 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         double blur_x() { return (double)(m_blur_x) / (double)((int)image_subpixel_scale_e.image_subpixel_scale); }
         double blur_y() { return (double)(m_blur_y) / (double)((int)image_subpixel_scale_e.image_subpixel_scale); }
-        void blur_x(double v) { m_blur_x = (int)agg_basics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale)); }
-        void blur_y(double v) { m_blur_y = (int)agg_basics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale)); }
+        void blur_x(double v) { m_blur_x = (int)AggBasics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale)); }
+        void blur_y(double v) { m_blur_y = (int)AggBasics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale)); }
         public void blur(double v)   
         {
-            m_blur_x = m_blur_y = (int)agg_basics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale));
+            m_blur_x = m_blur_y = (int)AggBasics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale));
         }
 
         protected void adjust_scale(ref int rx, ref int ry)

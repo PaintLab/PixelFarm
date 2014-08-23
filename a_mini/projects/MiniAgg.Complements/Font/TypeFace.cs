@@ -252,7 +252,7 @@ namespace MatterHackers.Agg.Font
                         parseIndex++;
                         // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
                         // so we store the position of the start of this polygon so we can flip it when we colse it.
-                        polyStartVertexSourceIndex = newGlyph.glyphData.size();
+                        polyStartVertexSourceIndex = newGlyph.glyphData.Count;
                         curXY.x = GetNextNumber(dString, ref parseIndex);
                         curXY.y = GetNextNumber(dString, ref parseIndex);
 

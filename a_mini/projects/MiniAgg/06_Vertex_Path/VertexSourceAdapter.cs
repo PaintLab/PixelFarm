@@ -23,20 +23,20 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    //------------------------------------------------------------null_markers
-    public struct null_markers : IMarkers
-    {
-        public void remove_all() { }
-        public void add_vertex(double x, double y, ShapePath.FlagsAndCommand unknown) { }
-        public void prepare_src() { }
-
-        public void rewind(int unknown) { }
-        public ShapePath.FlagsAndCommand vertex(ref double x, ref double y) { return ShapePath.FlagsAndCommand.CommandStop; }
-    };
-
+   
     //------------------------------------------------------conv_adaptor_vcgen
     public class VertexSourceAdapter : IVertexSourceProxy
     {
+        struct NullMarkers : IMarkers
+        {
+            public void remove_all() { }
+            public void add_vertex(double x, double y, ShapePath.FlagsAndCommand unknown) { }
+            public void prepare_src() { }
+
+            public void rewind(int unknown) { }
+            public ShapePath.FlagsAndCommand vertex(ref double x, ref double y) { return ShapePath.FlagsAndCommand.CommandStop; }
+        } 
+
         private IGenerator generator;
         private IMarkers markers;
         private status m_status;
@@ -59,7 +59,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public VertexSourceAdapter(IVertexSource vertexSource, IGenerator generator)
         {
-            markers = new null_markers();
+            markers = new NullMarkers();
             this.VertexSource = vertexSource;
             this.generator = generator;
             m_status = status.initial;

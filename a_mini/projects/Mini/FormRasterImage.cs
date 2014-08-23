@@ -11,7 +11,6 @@ namespace Mini
 {
     public partial class FormRasterImage : Form
     {
-        List<PointControl> controls = new List<PointControl>();
 
         public FormRasterImage()
         {
@@ -25,18 +24,34 @@ namespace Mini
 
         }
 
-
-
-
-
-        class PointControl : Panel
+        private void cmdLinearEq_Click(object sender, EventArgs e)
         {
+            //from wikipedia: Linear_algebra
+            //Gaussian elimination 
+            //3 points
+            //eg. 2x+y-z  =   8 // L1
+            //   -3x-y+2z = -11 // L2
+            //   -2x+y+2z =  -3 // L3
 
-            public PointControl()
-            {
-            }
+            //todo : find x,y,z
+
+            //solve steps:
+            //step 1: eliminate x from L2,L3
+            //step 2: eliminate y from L3 -> found z
+            //resubstitue back
+
+            
+            double x, y, z;
+            LinearEqSolver.Resolve(
+                new LinearEq3(2, 1, -1, 8),
+                new LinearEq3(-3, -1, 2, -11),
+                new LinearEq3(-2, 1, 2, -3),
+                out x,   //x=2
+                out y,  //y=3
+                out z); //z=-1
+
+
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -742,7 +757,7 @@ namespace Mini
                     if (originalPosX < 0 || originalPosY < 0)
                     {
                         //skip
-                        targetPixelIndex += 4; 
+                        targetPixelIndex += 4;
                     }
                     else
                     {
