@@ -142,10 +142,10 @@ namespace MatterHackers.Agg.Transform
         }
     }
 
-    public class Affine : ITransform
+    public sealed class Affine : ITransform
     {
 
-        const double AFFINE_EPSILON = 1e-14;
+        const double EPSILON = 1e-14;
 
         public readonly double sx, shy, shx, sy, tx, ty;
         bool isIdenHint;
@@ -890,7 +890,7 @@ namespace MatterHackers.Agg.Transform
 
         static bool is_equal_eps(double v1, double v2)
         {
-            return Math.Abs(v1 - v2) <= (AFFINE_EPSILON);
+            return Math.Abs(v1 - v2) <= (EPSILON);
         }
 
         // Check to see if two matrices are equal
