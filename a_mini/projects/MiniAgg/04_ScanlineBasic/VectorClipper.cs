@@ -21,7 +21,7 @@
 
 //#include "agg_clip_liang_barsky.h"
 
-using poly_subpixel_scale_e = MatterHackers.Agg.agg_basics.poly_subpixel_scale_e;
+using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.poly_subpixel_scale_e;
 using MatterHackers.Agg.Lines;
 
 namespace MatterHackers.Agg
@@ -38,11 +38,11 @@ namespace MatterHackers.Agg
 
         int mul_div(double a, double b, double c)
         {
-            return agg_basics.iround(a * b / c);
+            return AggBasics.iround(a * b / c);
         }
         int xi(int v) { return v; }
         int yi(int v) { return v; }
-        public int upscale(double v) { return agg_basics.iround(v * (int)poly_subpixel_scale_e.poly_subpixel_scale); }
+        public int upscale(double v) { return AggBasics.iround(v * (int)poly_subpixel_scale_e.poly_subpixel_scale); }
         public int downscale(int v) { return v / (int)poly_subpixel_scale_e.poly_subpixel_scale; }
 
         //--------------------------------------------------------------------
@@ -81,7 +81,7 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        private void line_clip_y(rasterizer_cells_aa ras,
+        private void line_clip_y(RasterizerCellsAA ras,
                                     int x1, int y1, 
                                     int x2, int y2,
                                     int f1, int f2)
@@ -135,7 +135,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        internal void line_to(rasterizer_cells_aa ras, int x2, int y2)
+        internal void line_to(RasterizerCellsAA ras, int x2, int y2)
         {
             if(m_clipping)
             {

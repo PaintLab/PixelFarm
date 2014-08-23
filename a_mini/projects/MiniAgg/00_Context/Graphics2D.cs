@@ -163,7 +163,7 @@ namespace MatterHackers.Agg
         public void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
             PathStorage m_LinesToDraw = new PathStorage();
-            m_LinesToDraw.remove_all();
+            m_LinesToDraw.Clear();
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);
             Stroke StrockedLineToDraw = new Stroke(m_LinesToDraw);

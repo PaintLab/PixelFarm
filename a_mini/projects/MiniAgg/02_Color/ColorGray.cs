@@ -67,16 +67,16 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public ColorGray(ColorRGBAf c)
         {
-            v = ((byte)agg_basics.uround((0.299 * c.Red0To255 + 0.587 * c.Green0To255 + 0.114 * c.Blue0To255) * (double)(base_mask)));
-            a = ((byte)agg_basics.uround(c.Alpha0To255 * (double)(base_mask)));
+            v = ((byte)AggBasics.uround((0.299 * c.Red0To255 + 0.587 * c.Green0To255 + 0.114 * c.Blue0To255) * (double)(base_mask)));
+            a = ((byte)AggBasics.uround(c.Alpha0To255 * (double)(base_mask)));
         }
 
 
         //--------------------------------------------------------------------
         public ColorGray(ColorRGBAf c, double a_)
         {
-            v = ((byte)agg_basics.uround((0.299 * c.Red0To255 + 0.587 * c.Green0To255 + 0.114 * c.Blue0To255) * (double)(base_mask)));
-            a = ((byte)agg_basics.uround(a_ * (double)(base_mask)));
+            v = ((byte)AggBasics.uround((0.299 * c.Red0To255 + 0.587 * c.Green0To255 + 0.114 * c.Blue0To255) * (double)(base_mask)));
+            a = ((byte)AggBasics.uround(a_ * (double)(base_mask)));
         }
 
         //--------------------------------------------------------------------
@@ -111,7 +111,7 @@ namespace MatterHackers.Agg
         {
             if (a_ < 0.0) a_ = 0.0;
             if (a_ > 1.0) a_ = 1.0;
-            a = (byte)agg_basics.uround(a_ * (double)(base_mask));
+            a = (byte)AggBasics.uround(a_ * (double)(base_mask));
         }
 
         //--------------------------------------------------------------------
@@ -167,7 +167,7 @@ namespace MatterHackers.Agg
         public ColorGray gradient(ColorGray c, double k)
         {
             ColorGray ret;
-            int ik = agg_basics.uround(k * (int)base_scale);
+            int ik = AggBasics.uround(k * (int)base_scale);
             ret.v = (byte)((int)(v) + ((((int)(c.v) - v) * ik) >> base_shift));
             ret.a = (byte)((int)(a) + ((((int)(c.a) - a) * ik) >> base_shift));
             return ret;

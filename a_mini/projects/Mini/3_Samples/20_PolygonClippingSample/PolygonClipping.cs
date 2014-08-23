@@ -424,8 +424,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         }
         void make_arrows(PathStorage ps)
         {
-            ps.remove_all();
-
+            ps.Clear();
             ps.MoveTo(1330.599999999999909, 1282.399999999999864);
             ps.LineTo(1377.400000000000091, 1282.399999999999864);
             ps.LineTo(1361.799999999999955, 1298.000000000000000);
@@ -490,7 +489,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_step = step;
             m_start_angle = start_angle;
             m_angle = start_angle;
-            m_da = agg_basics.deg2rad(4.0);
+            m_da = AggBasics.deg2rad(4.0);
             m_dr = m_step / 90.0;
         }
 

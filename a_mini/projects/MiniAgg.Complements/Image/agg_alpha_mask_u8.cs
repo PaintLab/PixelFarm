@@ -255,7 +255,7 @@ namespace MatterHackers.Agg
 
             if (y < 0 || y > ymax)
             {
-                agg_basics.MemClear(covers, coversIndex, num_pix);
+                AggBasics.MemClear(covers, coversIndex, num_pix);
                 return;
             }
 
@@ -264,10 +264,10 @@ namespace MatterHackers.Agg
                 count += x;
                 if (count <= 0)
                 {
-                    agg_basics.MemClear(covers, coversIndex, num_pix);
+                    AggBasics.MemClear(covers, coversIndex, num_pix);
                     return;
                 }
-                agg_basics.MemClear(covers, coversIndex, -x);
+                AggBasics.MemClear(covers, coversIndex, -x);
                 coversIndex -= x;
                 x = 0;
             }
@@ -278,10 +278,10 @@ namespace MatterHackers.Agg
                 count -= rest;
                 if (count <= 0)
                 {
-                    agg_basics.MemClear(covers, coversIndex, num_pix);
+                    AggBasics.MemClear(covers, coversIndex, num_pix);
                     return;
                 }
-                agg_basics.MemClear(covers, coversIndex + count, rest);
+                AggBasics.MemClear(covers, coversIndex + count, rest);
             }
 
             int maskIndex = m_rbuf.GetBufferOffsetXY(x, y);
@@ -304,7 +304,7 @@ namespace MatterHackers.Agg
 
             if (y < 0 || y > ymax)
             {
-                agg_basics.MemClear(buffer, bufferIndex, num_pix);
+                AggBasics.MemClear(buffer, bufferIndex, num_pix);
                 return;
             }
 
@@ -313,10 +313,10 @@ namespace MatterHackers.Agg
                 count += x;
                 if (count <= 0)
                 {
-                    agg_basics.MemClear(buffer, bufferIndex, num_pix);
+                    AggBasics.MemClear(buffer, bufferIndex, num_pix);
                     return;
                 }
-                agg_basics.MemClear(covers, coversIndex, -x);
+                AggBasics.MemClear(covers, coversIndex, -x);
                 coversIndex -= x;
                 x = 0;
             }
@@ -327,10 +327,10 @@ namespace MatterHackers.Agg
                 count -= rest;
                 if (count <= 0)
                 {
-                    agg_basics.MemClear(buffer, bufferIndex, num_pix);
+                    AggBasics.MemClear(buffer, bufferIndex, num_pix);
                     return;
                 }
-                agg_basics.MemClear(covers, coversIndex + count, rest);
+                AggBasics.MemClear(covers, coversIndex + count, rest);
             }
 
             int maskIndex = m_rbuf.GetBufferOffsetXY(x, y);

@@ -115,7 +115,7 @@ namespace MatterHackers.Agg
             int SourceBufferWidth = (int)sourceImage.Width;
             int SourceBufferHeight = (int)sourceImage.Height;
 
-            drawImageRectPath.remove_all();
+            drawImageRectPath.Clear();
 
             drawImageRectPath.MoveTo(0, 0);
             drawImageRectPath.LineTo(SourceBufferWidth, 0);

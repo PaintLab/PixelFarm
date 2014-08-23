@@ -1,4 +1,7 @@
-﻿namespace ImageTransformation
+﻿//MIT  2014, WinterDev 
+//CubicInterpolator from http://www.paulinternet.nl/?page=bic
+
+namespace ImageTransformation
 {
     public class CubicInterpolator
     {

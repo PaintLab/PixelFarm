@@ -44,10 +44,13 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
     <Compile Include="agg_bounding_rect.cs" />
+    <Compile Include="Base\Queue.cs" />
+    <Compile Include="Base\ScanlineHitTest.cs" />
     <Compile Include="BorderDouble.cs" />
-    <Compile Include="Colors\agg_gamma_functions.cs" />
-    <Compile Include="Colors\ClipProxyImage.cs" />
-    <Compile Include="Colors\ProxyImage.cs" />
+    <Compile Include="Base\agg_gamma_functions.cs" />
+    <Compile Include="Base\ClipProxyImage.cs" />
+    <Compile Include="Base\ProxyImage.cs" />
+    <Compile Include="Filter\agg_pattern_filters_rgba.cs" />
     <Compile Include="Image\agg_alpha_mask_u8.cs" />
     <Compile Include="VertexSource\agg_span_gradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />

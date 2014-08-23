@@ -51,22 +51,22 @@ namespace MatterHackers.Agg
 
         public int Red0To255
         {
-            get { return (int)agg_basics.uround(red * (float)BASE_MASK); }
+            get { return (int)AggBasics.uround(red * (float)BASE_MASK); }
 
         }
         public int Green0To255
         {
-            get { return (int)agg_basics.uround(green * (float)BASE_MASK); }
+            get { return (int)AggBasics.uround(green * (float)BASE_MASK); }
 
         }
         public int Blue0To255
         {
-            get { return (int)agg_basics.uround(blue * (float)BASE_MASK); }
+            get { return (int)AggBasics.uround(blue * (float)BASE_MASK); }
 
         }
         public int Alpha0To255
         {
-            get { return (int)agg_basics.uround(alpha * (float)BASE_MASK); }
+            get { return (int)AggBasics.uround(alpha * (float)BASE_MASK); }
         }
 
         public float Red0To1 { get { return red; } set { red = value; } }
@@ -746,19 +746,19 @@ namespace MatterHackers.Agg
         public static ColorRGBA Make(double r_, double g_, double b_, double a_)
         {
             return new ColorRGBA(
-               ((byte)agg_basics.uround(r_ * (double)BASE_MASK)),
-               ((byte)agg_basics.uround(g_ * (double)BASE_MASK)),
-               ((byte)agg_basics.uround(b_ * (double)BASE_MASK)),
-               ((byte)agg_basics.uround(a_ * (double)BASE_MASK)));
+               ((byte)AggBasics.uround(r_ * (double)BASE_MASK)),
+               ((byte)AggBasics.uround(g_ * (double)BASE_MASK)),
+               ((byte)AggBasics.uround(b_ * (double)BASE_MASK)),
+               ((byte)AggBasics.uround(a_ * (double)BASE_MASK)));
 
         }
         public static ColorRGBA Make(double r_, double g_, double b_)
         {
             return new ColorRGBA(
-               ((byte)agg_basics.uround(r_ * (double)BASE_MASK)),
-               ((byte)agg_basics.uround(g_ * (double)BASE_MASK)),
-               ((byte)agg_basics.uround(b_ * (double)BASE_MASK)),
-               ((byte)agg_basics.uround(BASE_MASK)));
+               ((byte)AggBasics.uround(r_ * (double)BASE_MASK)),
+               ((byte)AggBasics.uround(g_ * (double)BASE_MASK)),
+               ((byte)AggBasics.uround(b_ * (double)BASE_MASK)),
+               ((byte)AggBasics.uround(BASE_MASK)));
         }
         public static ColorRGBA Make(int r_, int g_, int b_, int a_)
         {
@@ -792,10 +792,10 @@ namespace MatterHackers.Agg
 
         public ColorRGBA(ColorRGBAf c)
         {
-            red = ((byte)agg_basics.uround(c.red * (double)BASE_MASK));
-            green = ((byte)agg_basics.uround(c.green * (double)BASE_MASK));
-            blue = ((byte)agg_basics.uround(c.blue * (double)BASE_MASK));
-            alpha = ((byte)agg_basics.uround(c.alpha * (double)BASE_MASK));
+            red = ((byte)AggBasics.uround(c.red * (double)BASE_MASK));
+            green = ((byte)AggBasics.uround(c.green * (double)BASE_MASK));
+            blue = ((byte)AggBasics.uround(c.blue * (double)BASE_MASK));
+            alpha = ((byte)AggBasics.uround(c.alpha * (double)BASE_MASK));
         }
 
         public static bool operator ==(ColorRGBA a, ColorRGBA b)
@@ -866,7 +866,7 @@ namespace MatterHackers.Agg
         public ColorRGBA gradient(ColorRGBA c, double k)
         {
             ColorRGBA ret = new ColorRGBA();
-            int ik = agg_basics.uround(k * BASE_SCALE);
+            int ik = AggBasics.uround(k * BASE_SCALE);
             ret.Red0To255 = (byte)((int)(Red0To255) + ((((int)(c.Red0To255) - Red0To255) * ik) >> BASE_SHIFT));
             ret.Green0To255 = (byte)((int)(Green0To255) + ((((int)(c.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
             ret.Blue0To255 = (byte)((int)(Blue0To255) + ((((int)(c.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));

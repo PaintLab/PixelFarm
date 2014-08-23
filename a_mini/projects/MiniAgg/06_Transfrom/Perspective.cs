@@ -566,15 +566,15 @@ namespace MatterHackers.Agg.Transform
         public bool is_identity() { return is_identity(AFFINE_EPSILON); }
         public bool is_identity(double epsilon)
         {
-            return agg_basics.is_equal_eps(sx, 1.0, epsilon) &&
-                   agg_basics.is_equal_eps(shy, 0.0, epsilon) &&
-                   agg_basics.is_equal_eps(w0, 0.0, epsilon) &&
-                   agg_basics.is_equal_eps(shx, 0.0, epsilon) &&
-                   agg_basics.is_equal_eps(sy, 1.0, epsilon) &&
-                   agg_basics.is_equal_eps(w1, 0.0, epsilon) &&
-                   agg_basics.is_equal_eps(tx, 0.0, epsilon) &&
-                   agg_basics.is_equal_eps(ty, 0.0, epsilon) &&
-                   agg_basics.is_equal_eps(w2, 1.0, epsilon);
+            return AggBasics.is_equal_eps(sx, 1.0, epsilon) &&
+                   AggBasics.is_equal_eps(shy, 0.0, epsilon) &&
+                   AggBasics.is_equal_eps(w0, 0.0, epsilon) &&
+                   AggBasics.is_equal_eps(shx, 0.0, epsilon) &&
+                   AggBasics.is_equal_eps(sy, 1.0, epsilon) &&
+                   AggBasics.is_equal_eps(w1, 0.0, epsilon) &&
+                   AggBasics.is_equal_eps(tx, 0.0, epsilon) &&
+                   AggBasics.is_equal_eps(ty, 0.0, epsilon) &&
+                   AggBasics.is_equal_eps(w2, 1.0, epsilon);
         }
 
         public bool is_equal(Perspective m)
@@ -584,15 +584,15 @@ namespace MatterHackers.Agg.Transform
 
         public bool is_equal(Perspective m, double epsilon)
         {
-            return agg_basics.is_equal_eps(sx, m.sx, epsilon) &&
-                   agg_basics.is_equal_eps(shy, m.shy, epsilon) &&
-                   agg_basics.is_equal_eps(w0, m.w0, epsilon) &&
-                   agg_basics.is_equal_eps(shx, m.shx, epsilon) &&
-                   agg_basics.is_equal_eps(sy, m.sy, epsilon) &&
-                   agg_basics.is_equal_eps(w1, m.w1, epsilon) &&
-                   agg_basics.is_equal_eps(tx, m.tx, epsilon) &&
-                   agg_basics.is_equal_eps(ty, m.ty, epsilon) &&
-                   agg_basics.is_equal_eps(w2, m.w2, epsilon);
+            return AggBasics.is_equal_eps(sx, m.sx, epsilon) &&
+                   AggBasics.is_equal_eps(shy, m.shy, epsilon) &&
+                   AggBasics.is_equal_eps(w0, m.w0, epsilon) &&
+                   AggBasics.is_equal_eps(shx, m.shx, epsilon) &&
+                   AggBasics.is_equal_eps(sy, m.sy, epsilon) &&
+                   AggBasics.is_equal_eps(w1, m.w1, epsilon) &&
+                   AggBasics.is_equal_eps(tx, m.tx, epsilon) &&
+                   AggBasics.is_equal_eps(ty, m.ty, epsilon) &&
+                   AggBasics.is_equal_eps(w2, m.w2, epsilon);
         }
 
         // Determine the major affine parameters. Use with caution 
@@ -637,49 +637,49 @@ namespace MatterHackers.Agg.Transform
             y = Math.Sqrt(shy * shy + sy * sy);
         }
 
-        //--------------------------------------------------------------------
-        public sealed class iterator_x
-        {
-            double den;
-            double den_step;
-            double nom_x;
-            double nom_x_step;
-            double nom_y;
-            double nom_y_step;
+        ////--------------------------------------------------------------------
+        //public sealed class iterator_x
+        //{
+        //    double den;
+        //    double den_step;
+        //    double nom_x;
+        //    double nom_x_step;
+        //    double nom_y;
+        //    double nom_y_step;
 
-            public double x;
-            public double y;
+        //    public double x;
+        //    public double y;
 
-            public iterator_x() { }
-            public iterator_x(double px, double py, double step, Perspective m)
-            {
-                den = (px * m.w0 + py * m.w1 + m.w2);
-                den_step = (m.w0 * step);
-                nom_x = (px * m.sx + py * m.shx + m.tx);
-                nom_x_step = (step * m.sx);
-                nom_y = (px * m.shy + py * m.sy + m.ty);
-                nom_y_step = (step * m.shy);
-                x = (nom_x / den);
-                y = (nom_y / den);
-            }
+        //    public iterator_x() { }
+        //    public iterator_x(double px, double py, double step, Perspective m)
+        //    {
+        //        den = (px * m.w0 + py * m.w1 + m.w2);
+        //        den_step = (m.w0 * step);
+        //        nom_x = (px * m.sx + py * m.shx + m.tx);
+        //        nom_x_step = (step * m.sx);
+        //        nom_y = (px * m.shy + py * m.sy + m.ty);
+        //        nom_y_step = (step * m.shy);
+        //        x = (nom_x / den);
+        //        y = (nom_y / den);
+        //    }
 
-            public static iterator_x operator ++(iterator_x a)
-            {
-                a.den += a.den_step;
-                a.nom_x += a.nom_x_step;
-                a.nom_y += a.nom_y_step;
-                double d = 1.0 / a.den;
-                a.x = a.nom_x * d;
-                a.y = a.nom_y * d;
+        //    public static iterator_x operator ++(iterator_x a)
+        //    {
+        //        a.den += a.den_step;
+        //        a.nom_x += a.nom_x_step;
+        //        a.nom_y += a.nom_y_step;
+        //        double d = 1.0 / a.den;
+        //        a.x = a.nom_x * d;
+        //        a.y = a.nom_y * d;
 
-                return a;
-            }
-        };
+        //        return a;
+        //    }
+        //};
 
-        //--------------------------------------------------------------------
-        public iterator_x begin(double x, double y, double step)
-        {
-            return new iterator_x(x, y, step, this);
-        }
+        ////--------------------------------------------------------------------
+        //public iterator_x begin(double x, double y, double step)
+        //{
+        //    return new iterator_x(x, y, step, this);
+        //}
     };
 }

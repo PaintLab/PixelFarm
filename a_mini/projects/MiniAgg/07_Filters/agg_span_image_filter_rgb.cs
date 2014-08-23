@@ -35,9 +35,9 @@ namespace MatterHackers.Agg
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
     class span_image_filter_rgb_nn_stepXby1 : span_image_filter
     {
-        const int base_shift = 8;
-        const int base_scale = (int)(1 << base_shift);
-        const int base_mask = base_scale - 1;
+        const int BASE_SHIFT = 8;
+        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
+        const int BASE_MASK = BASE_SCALE - 1;
 
         public span_image_filter_rgb_nn_stepXby1(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
             : base(sourceAccessor, spanInterpolator, null)
@@ -135,9 +135,9 @@ namespace MatterHackers.Agg
     //==========================================span_image_filter_rgb_bilinear
     public class span_image_filter_rgb_bilinear : span_image_filter
     {
-        const int base_shift = 8;
-        const int base_scale = (int)(1 << base_shift);
-        const int base_mask = base_scale - 1;
+        const int BASE_SHIFT = 8;
+        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
+        const int BASE_MASK = BASE_SCALE - 1;
 
         //--------------------------------------------------------------------
         public span_image_filter_rgb_bilinear(IImageBufferAccessor src,
@@ -157,7 +157,7 @@ namespace MatterHackers.Agg
             ImageBase srcImg = (ImageBase)base.GetImageBufferAccessor().SourceImage;
             ISpanInterpolator spanInterpolator = base.interpolator();
             int bufferIndex = 0;
-            byte[] fg_ptr = srcImg.GetBuffer(); 
+            byte[] fg_ptr = srcImg.GetBuffer();
             unchecked
             {
                 do
@@ -256,16 +256,16 @@ namespace MatterHackers.Agg
             }
                                                       */
         }
-    };
+    }
 
     //=====================================span_image_filter_rgb_bilinear_clip
     public class span_image_filter_rgb_bilinear_clip : span_image_filter
     {
-        private ColorRGBA m_OutsideSourceColor;
+        ColorRGBA m_OutsideSourceColor;
 
-        const int base_shift = 8;
-        const int base_scale = (int)(1 << base_shift);
-        const int base_mask = base_scale - 1;
+        const int BASE_SHIFT = 8;
+        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
+        const int BASE_MASK = BASE_SCALE - 1;
 
         //--------------------------------------------------------------------
         public span_image_filter_rgb_bilinear_clip(IImageBufferAccessor src,
@@ -356,7 +356,7 @@ namespace MatterHackers.Agg
                         accumulatedColor[1] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
                         accumulatedColor[2] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
 
-                        sourceAlpha = base_mask;
+                        sourceAlpha = BASE_MASK;
                     }
                     else
                     {
@@ -428,7 +428,7 @@ namespace MatterHackers.Agg
                     accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
                     accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
                     accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
-                    sourceAlpha += weight * base_mask;
+                    sourceAlpha += weight * BASE_MASK;
                 }
                 else
                 {
@@ -444,7 +444,7 @@ namespace MatterHackers.Agg
     //===================================================span_image_filter_rgb
     public class span_image_filter_rgb : span_image_filter
     {
-        const int base_mask = 255;
+        const int BASE_MASK = 255;
 
         //--------------------------------------------------------------------
         public span_image_filter_rgb(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
@@ -526,26 +526,26 @@ namespace MatterHackers.Agg
 
                 unchecked
                 {
-                    if ((uint)f_b > base_mask)
+                    if ((uint)f_b > BASE_MASK)
                     {
                         if (f_b < 0) f_b = 0;
-                        if (f_b > base_mask) f_b = (int)base_mask;
+                        if (f_b > BASE_MASK) f_b = (int)BASE_MASK;
                     }
 
-                    if ((uint)f_g > base_mask)
+                    if ((uint)f_g > BASE_MASK)
                     {
                         if (f_g < 0) f_g = 0;
-                        if (f_g > base_mask) f_g = (int)base_mask;
+                        if (f_g > BASE_MASK) f_g = (int)BASE_MASK;
                     }
 
-                    if ((uint)f_r > base_mask)
+                    if ((uint)f_r > BASE_MASK)
                     {
                         if (f_r < 0) f_r = 0;
-                        if (f_r > base_mask) f_r = (int)base_mask;
+                        if (f_r > BASE_MASK) f_r = (int)BASE_MASK;
                     }
                 }
 
-                span[spanIndex].alpha = (byte)base_mask;
+                span[spanIndex].alpha = (byte)BASE_MASK;
                 span[spanIndex].red = (byte)f_b;
                 span[spanIndex].green = (byte)f_g;
                 span[spanIndex].blue = (byte)f_r;
@@ -560,7 +560,7 @@ namespace MatterHackers.Agg
     //===============================================span_image_filter_rgb_2x2
     public class span_image_filter_rgb_2x2 : span_image_filter
     {
-        private const int base_mask = 255;
+        const int BASE_MASK = 255;
 
         //--------------------------------------------------------------------
         public span_image_filter_rgb_2x2(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)

@@ -33,6 +33,7 @@
             this.cmdBilinearInterpolation = new System.Windows.Forms.Button();
             this.cmdRotate30Bilinear = new System.Windows.Forms.Button();
             this.cmdRotate30Bicubic = new System.Windows.Forms.Button();
+            this.cmdLinearEq = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -85,11 +86,22 @@
             this.cmdRotate30Bicubic.UseVisualStyleBackColor = true;
             this.cmdRotate30Bicubic.Click += new System.EventHandler(this.cmdRotate30Bicubic_Click);
             // 
+            // cmdLinearEq
+            // 
+            this.cmdLinearEq.Location = new System.Drawing.Point(24, 385);
+            this.cmdLinearEq.Name = "cmdLinearEq";
+            this.cmdLinearEq.Size = new System.Drawing.Size(176, 35);
+            this.cmdLinearEq.TabIndex = 5;
+            this.cmdLinearEq.Text = "LinearEq";
+            this.cmdLinearEq.UseVisualStyleBackColor = true;
+            this.cmdLinearEq.Click += new System.EventHandler(this.cmdLinearEq_Click);
+            // 
             // FormRasterImage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 468);
+            this.Controls.Add(this.cmdLinearEq);
             this.Controls.Add(this.cmdRotate30Bicubic);
             this.Controls.Add(this.cmdRotate30Bilinear);
             this.Controls.Add(this.cmdBilinearInterpolation);
@@ -108,6 +120,7 @@
         private System.Windows.Forms.Button cmdBilinearInterpolation;
         private System.Windows.Forms.Button cmdRotate30Bilinear;
         private System.Windows.Forms.Button cmdRotate30Bicubic;
+        private System.Windows.Forms.Button cmdLinearEq;
 
     }
 }

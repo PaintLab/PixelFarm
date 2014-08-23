@@ -88,7 +88,7 @@ namespace MatterHackers.Agg
         protected bool[] pixelsChecked;
         FillingRule fillRule;
 
-        FirstInFirstOutQueue<Range> ranges = new FirstInFirstOutQueue<Range>(9);
+        Queue<Range> ranges = new Queue<Range>(9);
 
         public FloodFill(ColorRGBA fillColor)
         {
