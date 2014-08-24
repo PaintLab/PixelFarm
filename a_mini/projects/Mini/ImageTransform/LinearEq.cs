@@ -162,6 +162,10 @@ namespace ImageTransformation
             //step 1
             //primary line=line0
             //eliminate c0 from line1,line2, line3
+            if (line0.c0 == 0)
+            {
+
+            }
             var c10ratio = line1.c0 / line0.c0;
             var line1_remove_c0 = line1.Sub(line0.Multiply(c10ratio));
             //---------------------------------------------
@@ -173,6 +177,10 @@ namespace ImageTransformation
             //---------------------------------------------
             //step2:
             //primary line = line1
+            if (line1_remove_c0.c1 == 0)
+            {
+            }
+                
             //eliminate c1 from line2 , line3
             var c21ratio = line2_remove_c0.c1 / line1_remove_c0.c1;
             var line2_remove_c1 = line2_remove_c0.Sub(line1_remove_c0.Multiply(c21ratio));
@@ -180,9 +188,14 @@ namespace ImageTransformation
             var c31ratio = line3_remove_c0.c1 / line1_remove_c0.c1;
             var line3_remove_c1 = line3_remove_c0.Sub(line1_remove_c0.Multiply(c31ratio));
             //---------------------------------------------
+
             //step3:
             //primary line = line2
             //eliminate c2 from line3
+            if (line2_remove_c1.c2 == 0)
+            {
+
+            }
             var c32ratio = line3_remove_c1.c2 / line2_remove_c1.c2;
             var line3_remove_c2 = line3_remove_c1.Sub(line2_remove_c1.Multiply(c32ratio));
             //---------------------------------------------

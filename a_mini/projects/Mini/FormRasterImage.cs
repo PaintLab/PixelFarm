@@ -915,11 +915,11 @@ namespace Mini
         {
 
             var txBilinear1 = MatterHackers.Agg.Transform.Bilinear.RectToQuad(
-                 0, 0, 5, 5,
-                        new double[]{ 5,5, 
-                              10,10,
-                              5,15,
-                              0,10});
+                 1, 1, 5, 5,
+                        new double[]{ 5,5, //x1,y1, 
+                              10,10, //x2,y1
+                              5,15, //x2,y2,
+                              1,10});//x1,y2
 
             double x = 0;
             double y = 5;
@@ -930,11 +930,44 @@ namespace Mini
                      new double[]{ 5,5, 
                               10,10,
                               5,15,
-                              0,10}, 0, 0, 5, 5);
+                              1,10}, 1, 1, 5, 5);
+            double x1 = 5;
+            double y1 = 5;
+            txBilinear1.Transform(ref x1, ref y1);
 
-            x = 5;
-            y = 5;
-            txBilinear1.Transform(ref x, ref y);
+
+            //solve plan eq
+            //(v,w) in plan to x,y in rect
+            //x = c1v+ c2w+ c3vw + c4
+            //y = c5v+ c6w+ c7vw + c8
+            //------------------------------
+            //we knowns
+            //example 
+            //quad A  --reference
+            //(x1,y1),(x2,y1),(x2,y2),(x1,y2);
+            //(1,1), (5,1), (5,5), (1,5)
+            //quad B -- input
+            //(v1,w1),(v2,w1),(v2,w2),(v1,w2);
+            //(5,5),(10,10),(5,15),(0,10)
+
+
+
+            double c1, c2, c3, c4;
+            LinearEq4.Resolve(
+                new LinearEq4(5, 5, (5 * 5), 1, 1),
+                new LinearEq4(10, 10, (10 * 10), 1, 5),
+                new LinearEq4(5, 15, (5 * 15), 1, 5),
+                new LinearEq4(1, 10, (10 * 1), 1, 5),
+                out c1,   //x=2
+                out c2,  //y=3
+                out c3, //-1
+                out c4); //0 
+
+
+
+
+
+
         }
 
 
