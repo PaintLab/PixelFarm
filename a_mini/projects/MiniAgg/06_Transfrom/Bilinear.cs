@@ -21,6 +21,9 @@ using System;
 namespace MatterHackers.Agg.Transform
 {
 
+
+   
+
     //==========================================================trans_bilinear
     public sealed partial class Bilinear : ITransform
     {
@@ -32,7 +35,7 @@ namespace MatterHackers.Agg.Transform
                rc20, rc21,
                rc30, rc31;
         bool m_valid;
-         
+
         private Bilinear()
         {
         }
@@ -55,10 +58,14 @@ namespace MatterHackers.Agg.Transform
         public static Bilinear RectToQuad(double srcX1, double srcY1, double srcX2, double srcY2, double[] quad)
         {
             double[] src = new double[8];
-            src[0] = src[6] = srcX1;
-            src[2] = src[4] = srcX2;
-            src[1] = src[3] = srcY1;
-            src[5] = src[7] = srcY2;
+
+            //cartesian coord
+            src[0] = srcX1; src[1] = srcY1;//(x1,y1)
+            src[2] = srcX2; src[3] = srcY1;//(x2,y1)
+            src[4] = srcX2; src[5] = srcY2;//(x2,y2)
+            src[6] = srcX1; src[7] = srcY2;//(x2,y2)
+
+
 
 
             double[,] result = new double[4, 2];
@@ -71,21 +78,22 @@ namespace MatterHackers.Agg.Transform
             {
                 return new Bilinear();
             }
-
         }
+
         public static Bilinear QuadToRect(double[] srcQuad,
-                        double x1, double y1,
-                        double x2, double y2)
+                        double destX1, double destY1,
+                        double destX2, double destY2)
         {
             //--------------------------------------------------------------------
             // Set the reverse transformations, i.e., quadrangle -> rectangle 
             double[] dst = new double[8];
-            dst[0] = dst[6] = x1;
-            dst[2] = dst[4] = x2;
-            dst[1] = dst[3] = y1;
-            dst[5] = dst[7] = y2;
+            //cartesian coord
+            dst[0] = destX1; dst[1] = destY1;//(x1,y1)
+            dst[2] = destX2; dst[3] = destY1;//(x2,y1)
+            dst[4] = destX2; dst[5] = destY2;//(x2,y2)
+            dst[6] = destX1; dst[7] = destY2;//(x2,y2)
 
-            double[,] result = new double[4, 2]; 
+            double[,] result = new double[4, 2];
 
             if (GenerateMatrixQuadToQuad(srcQuad, dst, result))
             {

@@ -38,7 +38,7 @@ namespace MatterHackers.Agg.VertexSource
     {
 
         #region InternalVertexStorage
-        private class VertexStorage
+        class VertexStorage
         {
             int m_num_vertices;
             int m_allocated_vertices;

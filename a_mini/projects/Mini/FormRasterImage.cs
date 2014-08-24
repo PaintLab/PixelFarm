@@ -43,7 +43,7 @@ namespace Mini
 
             //test1:
             double x, y, z;
-            LinearEqSolver.Resolve(
+            LinearEq3.Resolve(
                 new LinearEq3(2, 1, -1, 8),
                 new LinearEq3(-3, -1, 2, -11),
                 new LinearEq3(-2, 1, 2, -3),
@@ -53,8 +53,16 @@ namespace Mini
 
 
             //test2
-
-
+            double c1, c2, c3, c4;
+            LinearEq4.Resolve(
+                new LinearEq4(2, 1, -1, 0, 8),
+                new LinearEq4(-3, -1, 2, 0, -11),
+                new LinearEq4(-2, 1, 2, 0, -3),
+                new LinearEq4(-2, 1, 2, 0, -3),
+                out c1,   //x=2
+                out c2,  //y=3
+                out c3, //-1
+                out c4); //0 
 
 
         }
@@ -905,8 +913,28 @@ namespace Mini
 
         private void button2_Click(object sender, EventArgs e)
         {
-           
 
+            var txBilinear1 = MatterHackers.Agg.Transform.Bilinear.RectToQuad(
+                 0, 0, 5, 5,
+                        new double[]{ 5,5, 
+                              10,10,
+                              5,15,
+                              0,10});
+
+            double x = 0;
+            double y = 5;
+            txBilinear1.Transform(ref x, ref y);
+
+
+            var txBilinear2 = MatterHackers.Agg.Transform.Bilinear.QuadToRect(
+                     new double[]{ 5,5, 
+                              10,10,
+                              5,15,
+                              0,10}, 0, 0, 5, 5);
+
+            x = 5;
+            y = 5;
+            txBilinear1.Transform(ref x, ref y);
         }
 
 
