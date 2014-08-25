@@ -53,7 +53,7 @@
     <Compile Include="05_Lines\agg_dda_line.cs" />
     <Compile Include="04_ScanlineBasic\FillingRule.cs" />
     <Compile Include="04_ScanlineBasic\IGammaFunction.cs" />
-    <Compile Include="06_Transfrom\Bilinear.SimulEq.cs" />
+    <Compile Include="06_Transfrom\SimulEqGeneral.cs" />
     <Compile Include="06_Vertex_Path\LineCapAndJoin.cs" />
     <Compile Include="04_ScanlineBasic\LinesAA.cs" />
     <Compile Include="07_Filters\agg_image_filters.cs" />

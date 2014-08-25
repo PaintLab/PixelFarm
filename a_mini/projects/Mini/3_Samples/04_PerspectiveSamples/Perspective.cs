@@ -117,7 +117,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     bound.Top,  
                     quadPolygonControl.polygon()); 
 
-                if (txBilinear.IsValid())
+                if (txBilinear.IsValid)
                 {
                     //--------------------------
                     // Render transformed lion

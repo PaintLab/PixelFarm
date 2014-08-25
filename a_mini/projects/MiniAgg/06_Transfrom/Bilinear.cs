@@ -91,7 +91,7 @@ namespace MatterHackers.Agg.Transform
             dst[0] = destX1; dst[1] = destY1;//(x1,y1)
             dst[2] = destX2; dst[3] = destY1;//(x2,y1)
             dst[4] = destX2; dst[5] = destY2;//(x2,y2)
-            dst[6] = destX1; dst[7] = destY2;//(x2,y2)
+            dst[6] = destX1; dst[7] = destY2;//(x1,y2)
 
             double[,] result = new double[4, 2];
 
@@ -150,7 +150,7 @@ namespace MatterHackers.Agg.Transform
 
         //--------------------------------------------------------------------
         // Check if the equations were solved successfully
-        public bool IsValid() { return m_valid; }
+        public bool IsValid { get { return m_valid; } }
 
         //--------------------------------------------------------------------
         // Transform a point (x, y)
