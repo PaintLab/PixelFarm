@@ -137,7 +137,7 @@ namespace MatterHackers.Agg.UI
         }
 
 
-        public override IEnumerable<VertexData> Vertices()
+        public override IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -147,7 +147,7 @@ namespace MatterHackers.Agg.UI
             m_cur_x = 0.0;
         }
 
-        public override ShapePath.FlagsAndCommand vertex(out double ox, out double oy)
+        public override ShapePath.FlagsAndCommand GetVertex(out double ox, out double oy)
         {
             RectangleDouble localBounds = new RectangleDouble(10, 10, 100, 100);
 

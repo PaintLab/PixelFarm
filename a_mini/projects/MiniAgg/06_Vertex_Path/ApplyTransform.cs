@@ -34,10 +34,10 @@ namespace MatterHackers.Agg.VertexSource
             get;
             set;
         }
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             //transform 'on-the-fly' 
-            foreach (VertexData vertexData in VertexSource.Vertices())
+            foreach (VertexData vertexData in VertexSource.GetVertexIter())
             {
                 
                 VertexData transformedVertex = vertexData;
@@ -56,9 +56,9 @@ namespace MatterHackers.Agg.VertexSource
             VertexSource.rewind(path_id);
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
-            ShapePath.FlagsAndCommand cmd = VertexSource.vertex(out x, out y);
+            ShapePath.FlagsAndCommand cmd = VertexSource.GetVertex(out x, out y);
             if (ShapePath.IsVertextCommand(cmd))
             {
                 transformToApply.Transform(ref x, ref y);

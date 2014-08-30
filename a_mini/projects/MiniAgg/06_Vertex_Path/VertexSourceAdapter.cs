@@ -76,7 +76,7 @@ namespace MatterHackers.Agg.VertexSource
 
         IMarkers GetMarkers() { return markers; }
 
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             rewind(0);
             ShapePath.FlagsAndCommand command = ShapePath.FlagsAndCommand.CommandStop;
@@ -84,7 +84,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x;
                 double y;
-                command = vertex(out x, out y);
+                command = GetVertex(out x, out y);
                 yield return new VertexData(command, new Vector2(x, y));
             } while (command != ShapePath.FlagsAndCommand.CommandStop);
         }
@@ -95,7 +95,7 @@ namespace MatterHackers.Agg.VertexSource
             m_status = status.initial;
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -107,7 +107,7 @@ namespace MatterHackers.Agg.VertexSource
                 {
                     case status.initial:
                         markers.remove_all();
-                        m_last_cmd = VertexSource.vertex(out m_start_x, out m_start_y);
+                        m_last_cmd = VertexSource.GetVertex(out m_start_x, out m_start_y);
                         m_status = status.accumulate;
                         goto case status.accumulate;
 
@@ -123,7 +123,7 @@ namespace MatterHackers.Agg.VertexSource
 
                         for (; ; )
                         {
-                            command = VertexSource.vertex(out x, out y);
+                            command = VertexSource.GetVertex(out x, out y);
                             //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
                             if (ShapePath.IsVertextCommand(command))
                             {

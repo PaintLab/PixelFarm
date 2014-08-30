@@ -304,7 +304,7 @@ namespace MatterHackers.Agg.UI
             base.OnDraw(graphics2D);
         }
 
-        public override IEnumerable<VertexData> Vertices()
+        public override IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -397,7 +397,7 @@ namespace MatterHackers.Agg.UI
             }
         }
 
-        public override ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public override ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -405,7 +405,7 @@ namespace MatterHackers.Agg.UI
             switch (m_idx)
             {
                 case 0:
-                    cmd = m_curve_poly.vertex(out x, out y);
+                    cmd = m_curve_poly.GetVertex(out x, out y);
                     break;
 
                 case 1:
@@ -422,11 +422,11 @@ namespace MatterHackers.Agg.UI
 
                 case 2:                 // Point1
                 case 3:                 // Point2
-                    cmd = m_ellipse.vertex(out x, out y);
+                    cmd = m_ellipse.GetVertex(out x, out y);
                     break;
 
                 case 4:
-                    cmd = m_text_poly.vertex(out x, out y);
+                    cmd = m_text_poly.GetVertex(out x, out y);
                     break;
 
                 default:

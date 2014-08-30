@@ -147,7 +147,7 @@ namespace MatterHackers.Agg.UI
 
         // Vertex source interface
         public override int num_paths() { return 7; }
-        public override IEnumerable<VertexData> Vertices()
+        public override IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -210,7 +210,7 @@ namespace MatterHackers.Agg.UI
                     break;
             }
         }
-        public override ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public override ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -220,7 +220,7 @@ namespace MatterHackers.Agg.UI
                 case 0:
                 case 1:
                 case 2:
-                    cmd = m_stroke.vertex(out x, out y);
+                    cmd = m_stroke.GetVertex(out x, out y);
                     break;
 
                 case 3:
@@ -228,7 +228,7 @@ namespace MatterHackers.Agg.UI
                 case 5:
                 case 6:
                 case 7:
-                    cmd = m_ellipse.vertex(out x, out y);
+                    cmd = m_ellipse.GetVertex(out x, out y);
                     break;
             }
 
@@ -362,7 +362,7 @@ namespace MatterHackers.Agg.UI
         // Vertex source interface
         public override int num_paths() { return 6; }
 
-        public override IEnumerable<VertexData> Vertices()
+        public override IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -414,7 +414,7 @@ namespace MatterHackers.Agg.UI
             }
         }
 
-        public override ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public override ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -424,14 +424,14 @@ namespace MatterHackers.Agg.UI
                 case 0:
                 case 1:
                 case 2:
-                    cmd = m_stroke.vertex(out x, out y);
+                    cmd = m_stroke.GetVertex(out x, out y);
                     break;
 
                 case 3:
                 case 4:
                 case 5:
                 case 6:
-                    cmd = m_ellipse.vertex(out x, out y);
+                    cmd = m_ellipse.GetVertex(out x, out y);
                     break;
             }
 

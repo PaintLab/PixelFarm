@@ -204,7 +204,7 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             if (text != null && text.Length > 0)
             {
@@ -223,7 +223,7 @@ namespace LayoutFarm.Agg.Font
 
                         if (currentGlyph != null)
                         {
-                            foreach (VertexData vertexData in currentGlyph.Vertices())
+                            foreach (VertexData vertexData in currentGlyph.GetVertexIter())
                             {
                                 if (vertexData.command != ShapePath.FlagsAndCommand.CommandStop)
                                 {
@@ -304,11 +304,11 @@ namespace LayoutFarm.Agg.Font
         IEnumerator<VertexData> currentEnumerator;
         public void rewind(int layerIndex)
         {
-            currentEnumerator = Vertices().GetEnumerator();
+            currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.position.x;
             y = currentEnumerator.Current.position.y;

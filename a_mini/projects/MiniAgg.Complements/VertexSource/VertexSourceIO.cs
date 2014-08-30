@@ -23,7 +23,7 @@ namespace MatterHackers.Agg.VertexSource
                     flagsAndCommand |= (ShapePath.FlagsAndCommand)System.Enum.Parse(typeof(ShapePath.FlagsAndCommand), elements[i].Trim());
                 }
 
-                vertexSource.Add(x, y, flagsAndCommand);
+                vertexSource.AddVertex(x, y, flagsAndCommand);
             }
         }
 
@@ -36,11 +36,11 @@ namespace MatterHackers.Agg.VertexSource
                     vertexSource.rewind(0);
                     double x;
                     double y;
-                    ShapePath.FlagsAndCommand flagsAndCommand = vertexSource.vertex(out x, out y);
+                    ShapePath.FlagsAndCommand flagsAndCommand = vertexSource.GetVertex(out x, out y);
                     do
                     {
                         outFile.WriteLine("{0}, {1}, {2}", x, y, flagsAndCommand.ToString());
-                        flagsAndCommand = vertexSource.vertex(out x, out y);
+                        flagsAndCommand = vertexSource.GetVertex(out x, out y);
                     }
                     while (flagsAndCommand != ShapePath.FlagsAndCommand.CommandStop);
                 }
@@ -49,7 +49,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 using (StreamWriter outFile = new StreamWriter(pathAndFileName))
                 {
-                    foreach (VertexData vertexData in vertexSource.Vertices())
+                    foreach (VertexData vertexData in vertexSource.GetVertexIter())
                     {
                         outFile.WriteLine("{0}, {1}, {2}", vertexData.position.x, vertexData.position.y, vertexData.command.ToString());
                     }

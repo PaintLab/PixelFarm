@@ -46,10 +46,10 @@ namespace MatterHackers.Agg.VertexSource
 
     public interface IVertexSource
     {
-        IEnumerable<VertexData> Vertices();
+        IEnumerable<VertexData> GetVertexIter();
 
         void rewind(int pathId = 0); // for a PathStorage this is the vertex index.
-        ShapePath.FlagsAndCommand vertex(out double x, out double y);
+        ShapePath.FlagsAndCommand GetVertex(out double x, out double y);
     }
 
     public interface IVertexSourceProxy : IVertexSource

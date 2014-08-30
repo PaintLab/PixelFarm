@@ -44,7 +44,7 @@ namespace MatterHackers.Agg
             {
                 vs.rewind(gi[start + i]);
                 ShapePath.FlagsAndCommand PathAndFlags;
-                while (!ShapePath.is_stop(PathAndFlags = vs.vertex(out x, out y)))
+                while (!ShapePath.is_stop(PathAndFlags = vs.GetVertex(out x, out y)))
                 {
                     if (ShapePath.IsVertextCommand(PathAndFlags))
                     {
@@ -103,7 +103,7 @@ namespace MatterHackers.Agg
 
             vs.rewind(path_id);
             ShapePath.FlagsAndCommand PathAndFlags;
-            while (!ShapePath.is_stop(PathAndFlags = vs.vertex(out x, out y)))
+            while (!ShapePath.is_stop(PathAndFlags = vs.GetVertex(out x, out y)))
             {
                 if (ShapePath.IsVertextCommand(PathAndFlags))
                 {

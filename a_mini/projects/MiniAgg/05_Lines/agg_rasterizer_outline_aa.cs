@@ -45,7 +45,7 @@ namespace MatterHackers.Agg.Lines
 
     public class line_aa_vertex_sequence : ArrayList<line_aa_vertex>
     {
-        public override void AddItem(line_aa_vertex val)
+        public override void AddVertex(line_aa_vertex val)
         {
             if (base.Count > 1)
             {
@@ -54,13 +54,13 @@ namespace MatterHackers.Agg.Lines
                     base.RemoveLast();
                 }
             }
-            base.AddItem(val);
+            base.AddVertex(val);
         }
 
         public void modify_last(line_aa_vertex val)
         {
             base.RemoveLast();
-            AddItem(val);
+            AddVertex(val);
         }
 
         public void close(bool closed)
@@ -238,7 +238,7 @@ namespace MatterHackers.Agg.Lines
 
         public void line_to(int x, int y)
         {
-            m_src_vertices.AddItem(new line_aa_vertex(x, y));
+            m_src_vertices.AddVertex(new line_aa_vertex(x, y));
         }
 
         public void move_to_d(double x, double y)
@@ -572,7 +572,7 @@ namespace MatterHackers.Agg.Lines
             //int start = 851;
             //int num = 5;
 
-            while (!ShapePath.is_stop(cmd = vs.vertex(out x, out y)))
+            while (!ShapePath.is_stop(cmd = vs.GetVertex(out x, out y)))
             {
                 //index++;
                 //if (index == 0

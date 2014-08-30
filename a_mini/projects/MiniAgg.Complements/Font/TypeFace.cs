@@ -314,7 +314,7 @@ namespace MatterHackers.Agg.Font
                                 curXY += lastXY;
                             }
 
-                            newGlyph.glyphData.curve3(controlPoint.x, controlPoint.y, curXY.x, curXY.y);
+                            newGlyph.glyphData.Curve3(controlPoint.x, controlPoint.y, curXY.x, curXY.y);
                         }
                         break;
 
@@ -328,7 +328,7 @@ namespace MatterHackers.Agg.Font
                             curXY += lastXY;
                         }
 
-                        newGlyph.glyphData.curve3(curXY.x, curXY.y);
+                        newGlyph.glyphData.Curve3(curXY.x, curXY.y);
                         break;
 
                     case 'z':
@@ -339,7 +339,7 @@ namespace MatterHackers.Agg.Font
                         newGlyph.glyphData.ClosePolygon();
                         // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
                         // We stored the position of the start of this polygon, no we flip it as we colse it.
-                        newGlyph.glyphData.invert_polygon(polyStartVertexSourceIndex);
+                        newGlyph.glyphData.InvertPolygon(polyStartVertexSourceIndex);
                         break;
 
                     case ' ':

@@ -94,7 +94,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 if (ShapePath.IsVertextCommand(cmd))
                 {
-                    m_src_vertices.AddItem(new VertexDistance(x, y));
+                    m_src_vertices.AddVertex(new VertexDistance(x, y));
                 }
                 else
                 {
