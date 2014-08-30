@@ -23,7 +23,7 @@
 namespace MatterHackers.Agg.VertexSource
 {
     public sealed class Stroke : VertexSourceAdapter
-    {
+    {   
         public Stroke(IVertexSource vertexSource, double inWidth = 1)
             : base(vertexSource, new StrokeGenerator())
         {

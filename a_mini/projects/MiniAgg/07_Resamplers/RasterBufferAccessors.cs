@@ -41,9 +41,9 @@ namespace MatterHackers.Agg
         protected int m_CurrentBufferOffset = -1;
         int m_Width;
 
-        public ImageBufferAccessor(IImage pixf)
+        public ImageBufferAccessor(IImage img)
         {
-            attach(pixf);
+            attach(img);
         }
 
         void attach(IImage pixf)

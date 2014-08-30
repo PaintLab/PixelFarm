@@ -162,7 +162,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             var pf = new ChildImage(backBuffer, new BlenderBGRA()); 
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(pf);
-            ren_base.clear(new ColorRGBAf(1.0, 1.0, 1.0));
+            ren_base.Clear(new ColorRGBAf(1.0, 1.0, 1.0));
 
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
             ScanlineRasterizer ras = new ScanlineRasterizer();

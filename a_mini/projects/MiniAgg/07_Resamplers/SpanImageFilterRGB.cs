@@ -52,10 +52,10 @@ namespace MatterHackers.Agg
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
             ISpanInterpolator spanInterpolator = interpolator();
-            spanInterpolator.begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
+            spanInterpolator.Begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
             int x_hr;
             int y_hr;
-            spanInterpolator.coordinates(out x_hr, out y_hr);
+            spanInterpolator.GetCoord(out x_hr, out y_hr);
             int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
             int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
             int bufferIndex;
@@ -108,14 +108,14 @@ namespace MatterHackers.Agg
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
             ISpanInterpolator spanInterpolator = interpolator();
-            spanInterpolator.begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
+            spanInterpolator.Begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
 
             byte[] fg_ptr = SourceRenderingBuffer.GetBuffer();
             do
             {
                 int x_hr;
                 int y_hr;
-                spanInterpolator.coordinates(out x_hr, out y_hr);
+                spanInterpolator.GetCoord(out x_hr, out y_hr);
                 int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
                 int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
                 int bufferIndex;
@@ -152,7 +152,7 @@ namespace MatterHackers.Agg
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+            base.interpolator().Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
             ImageBase srcImg = (ImageBase)base.GetImageBufferAccessor().SourceImage;
             ISpanInterpolator spanInterpolator = base.interpolator();
@@ -169,7 +169,7 @@ namespace MatterHackers.Agg
                     int x_hr;
                     int y_hr;
 
-                    spanInterpolator.coordinates(out x_hr, out y_hr);
+                    spanInterpolator.GetCoord(out x_hr, out y_hr);
 
                     x_hr -= base.filter_dx_int();
                     y_hr -= base.filter_dy_int();
@@ -280,7 +280,7 @@ namespace MatterHackers.Agg
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+            base.interpolator().Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
             int[] accumulatedColor = new int[3];
             int sourceAlpha;
@@ -305,7 +305,7 @@ namespace MatterHackers.Agg
                     int x_hr;
                     int y_hr;
 
-                    spanInterpolator.coordinates(out x_hr, out y_hr);
+                    spanInterpolator.GetCoord(out x_hr, out y_hr);
 
                     x_hr -= base.filter_dx_int();
                     y_hr -= base.filter_dy_int();
@@ -457,7 +457,7 @@ namespace MatterHackers.Agg
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+            base.interpolator().Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
             int f_r, f_g, f_b;
 
@@ -474,7 +474,7 @@ namespace MatterHackers.Agg
 
             do
             {
-                spanInterpolator.coordinates(out x, out y);
+                spanInterpolator.GetCoord(out x, out y);
 
                 x -= base.filter_dx_int();
                 y -= base.filter_dy_int();
@@ -677,7 +677,7 @@ namespace MatterHackers.Agg
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.interpolator();
-            spanInterpolator.begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+            spanInterpolator.Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
             int[] fg = new int[3];
 
@@ -694,8 +694,8 @@ namespace MatterHackers.Agg
                 int ry;
                 int rx_inv = (int)image_subpixel_scale_e.image_subpixel_scale;
                 int ry_inv = (int)image_subpixel_scale_e.image_subpixel_scale;
-                spanInterpolator.coordinates(out x, out y);
-                spanInterpolator.local_scale(out rx, out ry);
+                spanInterpolator.GetCoord(out x, out y);
+                spanInterpolator.GetLocalScale(out rx, out ry);
                 base.adjust_scale(ref rx, ref ry);
 
                 rx_inv = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / rx;

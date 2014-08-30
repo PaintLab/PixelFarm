@@ -179,7 +179,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(childImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            clippingProxyNormal.clear(ColorRGBA.White);
+            clippingProxyNormal.Clear(ColorRGBA.White);
 
             ScanlineRasterizer rasterizer = new ScanlineRasterizer();
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();

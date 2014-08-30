@@ -109,7 +109,7 @@ namespace MatterHackers.Agg.Lines
         public bool is_valid() { return m_trans_dir.is_valid(); }
 
         //----------------------------------------------------------------
-        public void begin(double x, double y, int len)
+        public void Begin(double x, double y, int len)
         {
             // Calculate transformed coordinates at x1,y1 
             double xt = x;
@@ -171,7 +171,7 @@ namespace MatterHackers.Agg.Lines
 
 
         //----------------------------------------------------------------
-        public void resynchronize(double xe, double ye, int len)
+        public void Resync(double xe, double ye, int len)
         {
             // Assume x1,y1 are equal to the ones at the previous end point 
             int x1 = m_coord_x.y();
@@ -213,12 +213,12 @@ namespace MatterHackers.Agg.Lines
             m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
         }
 
-        public Transform.ITransform transformer()
+        public Transform.ITransform GetTransformer()
         {
             throw new System.NotImplementedException();
         }
 
-        public void transformer(Transform.ITransform trans)
+        public void SetTransformer(Transform.ITransform trans)
         {
             throw new System.NotImplementedException();
         }
@@ -233,14 +233,14 @@ namespace MatterHackers.Agg.Lines
         }
 
         //----------------------------------------------------------------
-        public void coordinates(out int x, out int y)
+        public void GetCoord(out int x, out int y)
         {
             x = m_coord_x.y();
             y = m_coord_y.y();
         }
 
         //----------------------------------------------------------------
-        public void local_scale(out int x, out int y)
+        public void GetLocalScale(out int x, out int y)
         {
             x = m_scale_x.y();
             y = m_scale_y.y();

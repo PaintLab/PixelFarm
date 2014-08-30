@@ -150,7 +150,7 @@ namespace MatterHackers.Agg.Sample_Blur
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
-            clippingProxy.clear(ColorRGBA.White);
+            clippingProxy.Clear(ColorRGBA.White);
             m_ras.SetVectorClipBox(0, 0, Width, Height);
 
             Affine move = Affine.NewTranslation(10, 10);

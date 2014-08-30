@@ -42,10 +42,10 @@ namespace MatterHackers.Agg
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
             ISpanInterpolator spanInterpolator = interpolator();
-            spanInterpolator.begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
+            spanInterpolator.Begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
             int x_hr;
             int y_hr;
-            spanInterpolator.coordinates(out x_hr, out y_hr);
+            spanInterpolator.GetCoord(out x_hr, out y_hr);
             int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
             int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
             int bufferIndex;

@@ -21,14 +21,16 @@ namespace MatterHackers.Agg
 {
     public interface ISpanInterpolator
     {
-        void begin(double x, double y, int len);
-        void coordinates(out int x, out int y);
+        //------------------------------------------------
+        void Begin(double x, double y, int len);
+        void GetCoord(out int x, out int y);
         void Next();
-
-        Transform.ITransform transformer();
-        void transformer(Transform.ITransform trans);
-        void resynchronize(double xe, double ye, int len);
-        void local_scale(out int x, out int y);
+        //------------------------------------------------
+        Transform.ITransform GetTransformer();
+        void SetTransformer(Transform.ITransform trans);
+        //------------------------------------------------
+        void Resync(double xe, double ye, int len);
+        void GetLocalScale(out int x, out int y);
     }
 }
 
@@ -60,20 +62,20 @@ namespace MatterHackers.Agg.Lines
         public InterpolatorLinear(Transform.ITransform trans, double x, double y, int len)
         {
             m_trans = trans;
-            begin(x, y, len);
+            Begin(x, y, len);
         }
 
         //----------------------------------------------------------------
-        public Transform.ITransform transformer() { return m_trans; }
-        public void transformer(Transform.ITransform trans) { m_trans = trans; }
+        public Transform.ITransform GetTransformer() { return m_trans; }
+        public void SetTransformer(Transform.ITransform trans) { m_trans = trans; }
 
-        public void local_scale(out int x, out int y)
+        public void GetLocalScale(out int x, out int y)
         {
             throw new System.NotImplementedException();
         }
 
         //----------------------------------------------------------------
-        public void begin(double x, double y, int len)
+        public void Begin(double x, double y, int len)
         {
             double tx;
             double ty;
@@ -95,7 +97,7 @@ namespace MatterHackers.Agg.Lines
         }
 
         //----------------------------------------------------------------
-        public void resynchronize(double xe, double ye, int len)
+        public void Resync(double xe, double ye, int len)
         {
             m_trans.Transform(ref xe, ref ye);
             m_li_x = new LineInterpolatorDDA2(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
@@ -110,7 +112,7 @@ namespace MatterHackers.Agg.Lines
         }
 
         //----------------------------------------------------------------
-        public void coordinates(out int x, out int y)
+        public void GetCoord(out int x, out int y)
         {
             x = m_li_x.y();
             y = m_li_y.y();
