@@ -96,7 +96,7 @@ namespace MatterHackers.Agg.Transform
             double[,] result = new double[4, 2];
 
             if (GenerateMatrixQuadToQuad(srcQuad, dst, result))
-            {
+            {   
                 return new Bilinear(result);
             }
             else
@@ -141,12 +141,7 @@ namespace MatterHackers.Agg.Transform
             }
             //create result  
             return SimulEqGeneral.Solve(left, right, result);
-        }
-
-
-
-
-
+        } 
 
         //--------------------------------------------------------------------
         // Check if the equations were solved successfully

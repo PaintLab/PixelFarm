@@ -61,9 +61,8 @@ namespace MatterHackers.Agg.Transform
             for (int k = 0; k < rowCountRt; k++)
             {
                 if (DoMatrixPivot(mat, rowCountRt, k) < 0)
-                {
-                    continue;//?
-                    //return false; // Singularity....
+                {   
+                    return false; // Singularity....
                 }
 
                 double a1 = mat[k, k];
@@ -96,9 +95,9 @@ namespace MatterHackers.Agg.Transform
                         result[m, k] -= mat[m, j] * result[j, k];
                     }
                 }
-            } 
+            }
             return true;
-        } 
+        }
         static void SwapRow(double[,] arr, int a1Index0, int a2Index0)
         {
             int cols = arr.GetLength(1);

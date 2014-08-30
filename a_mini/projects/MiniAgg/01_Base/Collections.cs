@@ -38,14 +38,11 @@ namespace MatterHackers.Agg
         T[] internalArray = new T[0];
         public ArrayList()
         {
-        }
-
+        } 
         public ArrayList(int cap)
         {
             Allocate(cap, 0);
-        }
-
-
+        } 
         public virtual void RemoveLast()
         {
             if (currentSize != 0)
