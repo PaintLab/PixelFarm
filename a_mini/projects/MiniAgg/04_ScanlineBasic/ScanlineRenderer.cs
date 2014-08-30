@@ -87,11 +87,12 @@ namespace MatterHackers.Agg
                 }
 
                 span_gen.generate(tempSpanColors.Array, 0, x, y, len);
+
                 bool useFirstCoverForAll = span.len < 0;
-                destImage.blend_color_hspan(x, y, len, tempSpanColors.Array, 0, covers, span.cover_index, useFirstCoverForAll);
 
-
-
+                destImage.blend_color_hspan(x, y, len, 
+                    tempSpanColors.Array, 0,
+                    covers, span.cover_index, useFirstCoverForAll);
             }
         }
 
@@ -99,7 +100,7 @@ namespace MatterHackers.Agg
         public void GenerateAndRender(IRasterizer rasterizer,
              IScanline scline, IImage destImage,
              ISpanGenerator spanGenerator)
-        {
+        {   
             if (rasterizer.rewind_scanlines())
             {
                 scline.ResetSpans(rasterizer.min_x(), rasterizer.max_x());

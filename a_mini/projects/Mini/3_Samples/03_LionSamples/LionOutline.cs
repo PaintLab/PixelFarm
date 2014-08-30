@@ -122,7 +122,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
@@ -133,12 +133,18 @@ namespace MatterHackers.Agg.Sample_LionOutline
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.clear(ColorRGBA.White);
 
-            Affine transform = Affine.NewIdentity();
-            transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-            transform *= Affine.NewScaling(spriteScale, spriteScale);
-            transform *= Affine.NewRotation(angle + Math.PI);
-            transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-            transform *= Affine.NewTranslation(width / 2, height / 2);
+            Affine transform = Affine.NewMatix( 
+                    AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                    AffinePlan.Scale(spriteScale, spriteScale),
+                    AffinePlan.Rotate(angle + Math.PI),
+                    AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                    AffinePlan.Translate(width / 2, height / 2));
+
+            //transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
+            //transform *= Affine.NewScaling(spriteScale, spriteScale);
+            //transform *= Affine.NewRotation(angle + Math.PI);
+            //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
+            //transform *= Affine.NewTranslation(width / 2, height / 2);
 
             if (RenderAsScanline)
             {

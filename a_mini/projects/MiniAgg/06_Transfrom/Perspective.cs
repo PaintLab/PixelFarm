@@ -23,50 +23,43 @@ namespace MatterHackers.Agg.Transform
     //=======================================================trans_perspective
     public sealed class Perspective : ITransform
     {
-        public const double AFFINE_EPSILON = 1e-14;
-        public double sx, shy, w0, shx, sy, w1, tx, ty, w2;
+        const double EPSILON = 1e-14;
+        double sx, shy, w0, shx, sy, w1, tx, ty, w2;
 
-        //-------------------------------------------------------ruction
+        //------------------------------------------------------- 
         // Identity matrix
         public Perspective()
         {
-            sx = (1); shy = (0); w0 = (0);
-            shx = (0); sy = (1); w1 = (0);
-            tx = (0); ty = (0); w2 = (1);
+            sx = 1; shy = 0; w0 = 0;
+            shx = 0; sy = 1; w1 = 0;
+            tx = 0; ty = 0; w2 = 1;
         }
 
         // Custom matrix
-        public Perspective(double v0, double v1, double v2,
-                          double v3, double v4, double v5,
-                          double v6, double v7, double v8)
+        public Perspective(double v0_sx, double v1_shy, double v2_w0,
+                          double v3_shx, double v4_sy, double v5_w1,
+                          double v6_tx, double v7_ty, double v8_w2)
         {
-            sx = (v0); shy = (v1); w0 = (v2);
-            shx = (v3); sy = (v4); w1 = (v5);
-            tx = (v6); ty = (v7); w2 = (v8);
+            sx = v0_sx; shy = v1_shy; w0 = v2_w0;
+            shx = v3_shx; sy = v4_sy; w1 = v5_w1;
+            tx = v6_tx; ty = v7_ty; w2 = v8_w2;
         }
 
-        // Custom matrix from m[9]
-        public Perspective(double[] m)
-        {
-            sx = (m[0]); shy = (m[1]); w0 = (m[2]);
-            shx = (m[3]); sy = (m[4]); w1 = (m[5]);
-            tx = (m[6]); ty = (m[7]); w2 = (m[8]);
-        }
 
         // From affine
         public Perspective(Affine a)
         {
-            sx = (a.sx); shy = (a.shy); w0 = (0);
-            shx = (a.shx); sy = (a.sy); w1 = (0);
-            tx = (a.tx); ty = (a.ty); w2 = (1);
+            sx = a.sx; shy = a.shy; w0 = 0;
+            shx = a.shx; sy = a.sy; w1 = 0;
+            tx = a.tx; ty = a.ty; w2 = 1;
         }
 
         // From trans_perspective
         public Perspective(Perspective a)
         {
-            sx = (a.sx); shy = (a.shy); w0 = a.w0;
-            shx = (a.shx); sy = (a.sy); w1 = a.w1;
-            tx = (a.tx); ty = (a.ty); w2 = a.w2;
+            sx = a.sx; shy = a.shy; w0 = a.w0;
+            shx = a.shx; sy = a.sy; w1 = a.w1;
+            tx = a.tx; ty = a.ty; w2 = a.w2;
         }
 
         // Rectangle to quadrilateral
@@ -76,7 +69,12 @@ namespace MatterHackers.Agg.Transform
             {
                 fixed (double* q_h = &quad[0])
                 {
-                    rect_to_quad(x1, y1, x2, y2, q_h);
+                    double* r = stackalloc double[8];
+                    r[0] = r[6] = x1;
+                    r[2] = r[4] = x2;
+                    r[1] = r[3] = y1;
+                    r[5] = r[7] = y2;
+                    InternalGenerateQuadToQuad(r, q_h);
                 }
             }
         }
@@ -88,7 +86,13 @@ namespace MatterHackers.Agg.Transform
             {
                 fixed (double* q_h = &quad[0])
                 {
-                    quad_to_rect(q_h, x1, y1, x2, y2);
+                    double* r = stackalloc double[8];
+                    r[0] = r[6] = x1;
+                    r[2] = r[4] = x2;
+                    r[1] = r[3] = y1;
+                    r[5] = r[7] = y2;
+
+                    InternalGenerateQuadToQuad(q_h, r);
                 }
             }
         }
@@ -99,7 +103,7 @@ namespace MatterHackers.Agg.Transform
             quad_to_quad(src, dst);
         }
 
-        public void Set(Perspective Other)
+        void Set(Perspective Other)
         {
             sx = Other.sx;
             shy = Other.shy;
@@ -122,14 +126,21 @@ namespace MatterHackers.Agg.Transform
                 fixed (double* qs_h = &qs[0])
                 fixed (double* qd_h = &qd[0])
                 {
-                    return quad_to_quad2(qs_h, qd_h);
+                    return InternalGenerateQuadToQuad(qs_h, qd_h);
                 }
             }
         }
-        public unsafe bool quad_to_quad2(double* qs_h, double* qdHead)
+        unsafe bool InternalGenerateQuadToQuad(double* qs_h, double* qdHead)
         {
             Perspective p = new Perspective();
-            if (!quad_to_square(qs_h)) return false;
+
+            if (!square_to_quad(qs_h))
+            {
+                return false;
+            }
+
+            invert();
+            //---------------------------------
             if (!p.square_to_quad(qdHead))
             {
                 return false;
@@ -137,32 +148,8 @@ namespace MatterHackers.Agg.Transform
             multiply(p);
             return true;
         }
-        unsafe bool rect_to_quad(double x1, double y1, double x2, double y2, double* q)
-        {
-            double* r = stackalloc double[8];
-            r[0] = r[6] = x1;
-            r[2] = r[4] = x2;
-            r[1] = r[3] = y1;
-            r[5] = r[7] = y2;
 
-            return quad_to_quad2(r, q);
-        }
 
-        unsafe bool quad_to_rect(double* q, double x1, double y1, double x2, double y2)
-        {
-
-            //double[] r = new double[8];
-            //r[0] = r[6] = x1;
-            //r[2] = r[4] = x2;
-            //r[1] = r[3] = y1;
-            //r[5] = r[7] = y2;
-            double* r = stackalloc double[8];
-            r[0] = r[6] = x1;
-            r[2] = r[4] = x2;
-            r[1] = r[3] = y1;
-            r[5] = r[7] = y2;
-            return quad_to_quad2(q, r);
-        }
 
         // Map square (0,0,1,1) to the quadrilateral and vice versa
         unsafe bool square_to_quad(double* q)
@@ -259,15 +246,6 @@ namespace MatterHackers.Agg.Transform
             //}
             return true;
         }
-
-        unsafe bool quad_to_square(double* q)
-        {
-            if (!square_to_quad(q)) return false;
-            invert();
-            return true;
-        }
-
-
         //--------------------------------------------------------- Operations
         public Perspective from_affine(Affine a)
         {
@@ -278,7 +256,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Reset - load an identity matrix
-        public Perspective reset()
+        Perspective reset()
         {
             sx = 1; shy = 0; w0 = 0;
             shx = 0; sy = 1; w1 = 0;
@@ -287,7 +265,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Invert matrix. Returns false in degenerate case
-        public bool invert()
+        bool invert()
         {
             double d0 = sy * w2 - w1 * ty;
             double d1 = w0 * ty - shy * w2;
@@ -313,32 +291,32 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Direct transformations operations
-        public Perspective translate(double x, double y)
+        Perspective translate(double x, double y)
         {
             tx += x;
             ty += y;
             return this;
         }
 
-        public Perspective rotate(double a)
+        Perspective rotate(double a)
         {
             multiply(Affine.NewRotation(a));
             return this;
         }
 
-        public Perspective scale(double s)
+        Perspective scale(double s)
         {
             multiply(Affine.NewScaling(s));
             return this;
         }
 
-        public Perspective scale(double x, double y)
+        Perspective scale(double x, double y)
         {
             multiply(Affine.NewScaling(x, y));
             return this;
         }
 
-        public Perspective multiply(Perspective a)
+        Perspective multiply(Perspective a)
         {
             Perspective b = new Perspective(this);
             sx = a.sx * b.sx + a.shx * b.shy + a.tx * b.w0;
@@ -354,7 +332,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         //------------------------------------------------------------------------
-        public Perspective multiply(Affine a)
+        Perspective multiply(Affine a)
         {
             Perspective b = new Perspective(this);
             sx = a.sx * b.sx + a.shx * b.shy + a.tx * b.w0;
@@ -367,7 +345,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         //------------------------------------------------------------------------
-        public Perspective premultiply(Perspective b)
+        Perspective premultiply(Perspective b)
         {
             Perspective a = new Perspective(this);
             sx = a.sx * b.sx + a.shx * b.shy + a.tx * b.w0;
@@ -383,9 +361,10 @@ namespace MatterHackers.Agg.Transform
         }
 
         //------------------------------------------------------------------------
-        public Perspective premultiply(Affine b)
+        Perspective premultiply(Affine b)
         {
             Perspective a = new Perspective(this);
+
             sx = a.sx * b.sx + a.shx * b.shy;
             shx = a.sx * b.shx + a.shx * b.sy;
             tx = a.sx * b.tx + a.shx * b.ty + a.tx;
@@ -395,11 +374,12 @@ namespace MatterHackers.Agg.Transform
             w0 = a.w0 * b.sx + a.w1 * b.shy;
             w1 = a.w0 * b.shx + a.w1 * b.sy;
             w2 = a.w0 * b.tx + a.w1 * b.ty + a.w2;
+
             return this;
         }
 
         //------------------------------------------------------------------------
-        public Perspective multiply_inv(Perspective m)
+        Perspective multiply_inv(Perspective m)
         {
             Perspective t = m;
             t.invert();
@@ -407,15 +387,15 @@ namespace MatterHackers.Agg.Transform
         }
 
         //------------------------------------------------------------------------
-        public Perspective trans_perspectivemultiply_inv(Affine m)
+        Perspective trans_perspectivemultiply_inv(Affine m)
         {
             Affine t = m;
-            t.invert();
-            return multiply(t);
+            var invert = t.CreateInvert();
+            return multiply(invert);
         }
 
         //------------------------------------------------------------------------
-        public Perspective premultiply_inv(Perspective m)
+        Perspective premultiply_inv(Perspective m)
         {
             Perspective t = m;
             t.invert();
@@ -424,7 +404,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Multiply inverse of "m" by "this" and assign the result to "this"
-        public Perspective premultiply_inv(Affine m)
+        Perspective premultiply_inv(Affine m)
         {
             Perspective t = new Perspective(m);
             t.invert();
@@ -433,7 +413,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         //--------------------------------------------------------- Load/Store
-        public void store_to(double[] m)
+        void store_to(double[] m)
         {
             m[0] = sx; m[1] = shy; m[2] = w0;
             m[3] = shx; m[4] = sy; m[5] = w1;
@@ -441,7 +421,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         //------------------------------------------------------------------------
-        public Perspective load_from(double[] m)
+        Perspective load_from(double[] m)
         {
             sx = m[0]; shy = m[1]; w0 = m[2];
             shx = m[3]; sy = m[4]; w1 = m[5];
@@ -455,7 +435,6 @@ namespace MatterHackers.Agg.Transform
         {
             Perspective temp = a;
             temp.multiply(b);
-
             return temp;
         }
 
@@ -468,48 +447,48 @@ namespace MatterHackers.Agg.Transform
             return temp;
         }
 
-        // Multiply the matrix by inverse of another one and return the result in a separate matrix.
-        public static Perspective operator /(Perspective a, Perspective b)
-        {
-            Perspective temp = a;
-            temp.multiply_inv(b);
+        //// Multiply the matrix by inverse of another one and return the result in a separate matrix.
+        //public static Perspective operator /(Perspective a, Perspective b)
+        //{
+        //    Perspective temp = a;
+        //    temp.multiply_inv(b);
 
-            return temp;
-        }
+        //    return temp;
+        //}
 
-        // Calculate and return the inverse matrix
-        public static Perspective operator ~(Perspective b)
-        {
-            Perspective ret = b;
-            ret.invert();
-            return ret;
-        }
+        //// Calculate and return the inverse matrix
+        //public static Perspective operator ~(Perspective b)
+        //{
+        //    Perspective ret = b;
+        //    ret.invert();
+        //    return ret;
+        //}
 
-        // Equal operator with default epsilon
-        public static bool operator ==(Perspective a, Perspective b)
-        {
-            return a.is_equal(b, AFFINE_EPSILON);
-        }
+        //// Equal operator with default epsilon
+        //public static bool operator ==(Perspective a, Perspective b)
+        //{
+        //    return a.is_equal(b, EPSILON);
+        //}
 
-        // Not Equal operator with default epsilon
-        public static bool operator !=(Perspective a, Perspective b)
-        {
-            return !a.is_equal(b, AFFINE_EPSILON);
-        }
+        //// Not Equal operator with default epsilon
+        //public static bool operator !=(Perspective a, Perspective b)
+        //{
+        //    return !a.is_equal(b, EPSILON);
+        //}
 
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    return base.Equals(obj);
+        //}
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        //public override int GetHashCode()
+        //{
+        //    return base.GetHashCode();
+        //}
 
         //---------------------------------------------------- Transformations
         // Direct transformation of x and y
-        public void transform(ref double px, ref double py)
+        public void Transform(ref double px, ref double py)
         {
             double x = px;
             double y = py;
@@ -519,7 +498,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Direct transformation of x and y, affine part only
-        public void transform_affine(ref double x, ref double y)
+        void transform_affine(ref double x, ref double y)
         {
             double tmp = x;
             x = tmp * sx + y * shx + tx;
@@ -527,7 +506,7 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Direct transformation of x and y, 2x2 matrix only, no translation
-        public void transform_2x2(ref double x, ref double y)
+        void transform_2x2(ref double x, ref double y)
         {
             double tmp = x;
             x = tmp * sx + y * shx;
@@ -538,87 +517,89 @@ namespace MatterHackers.Agg.Transform
         // it explicitly inverts the matrix on every call. For massive 
         // operations it's better to invert() the matrix and then use 
         // direct transformations. 
-        public void inverse_transform(ref double x, ref double y)
+        void inverse_transform(ref double x, ref double y)
         {
             Perspective t = new Perspective(this);
-            if (t.invert()) t.transform(ref x, ref y);
+            if (t.invert()) t.Transform(ref x, ref y);
         }
 
 
         //---------------------------------------------------------- Auxiliary
-        public double determinant()
+        double determinant()
         {
             return sx * (sy * w2 - ty * w1) +
                    shx * (ty * w0 - shy * w2) +
                    tx * (shy * w1 - sy * w0);
         }
-        public double determinant_reciprocal()
+        double determinant_reciprocal()
         {
             return 1.0 / determinant();
         }
 
-        public bool is_valid() { return is_valid(AFFINE_EPSILON); }
+        public bool is_valid() { return is_valid(EPSILON); }
         public bool is_valid(double epsilon)
         {
-            return Math.Abs(sx) > epsilon && Math.Abs(sy) > epsilon && Math.Abs(w2) > epsilon;
+            return Math.Abs(sx) > epsilon &&
+                Math.Abs(sy) > epsilon && 
+                Math.Abs(w2) > epsilon;
         }
 
-        public bool is_identity() { return is_identity(AFFINE_EPSILON); }
-        public bool is_identity(double epsilon)
+        bool is_identity()
         {
-            return AggBasics.is_equal_eps(sx, 1.0, epsilon) &&
-                   AggBasics.is_equal_eps(shy, 0.0, epsilon) &&
-                   AggBasics.is_equal_eps(w0, 0.0, epsilon) &&
-                   AggBasics.is_equal_eps(shx, 0.0, epsilon) &&
-                   AggBasics.is_equal_eps(sy, 1.0, epsilon) &&
-                   AggBasics.is_equal_eps(w1, 0.0, epsilon) &&
-                   AggBasics.is_equal_eps(tx, 0.0, epsilon) &&
-                   AggBasics.is_equal_eps(ty, 0.0, epsilon) &&
-                   AggBasics.is_equal_eps(w2, 1.0, epsilon);
+
+            return AggBasics.is_equal_eps(sx, 1.0, EPSILON) &&
+                   AggBasics.is_equal_eps(shy, 0.0, EPSILON) &&
+                   AggBasics.is_equal_eps(w0, 0.0, EPSILON) &&
+                   AggBasics.is_equal_eps(shx, 0.0, EPSILON) &&
+                   AggBasics.is_equal_eps(sy, 1.0, EPSILON) &&
+                   AggBasics.is_equal_eps(w1, 0.0, EPSILON) &&
+                   AggBasics.is_equal_eps(tx, 0.0, EPSILON) &&
+                   AggBasics.is_equal_eps(ty, 0.0, EPSILON) &&
+                   AggBasics.is_equal_eps(w2, 1.0, EPSILON);
         }
 
-        public bool is_equal(Perspective m)
-        {
-            return is_equal(m, AFFINE_EPSILON);
-        }
+        //public bool is_equal(Perspective m)
+        //{
+        //    return is_equal(m, EPSILON);
+        //}
 
-        public bool is_equal(Perspective m, double epsilon)
-        {
-            return AggBasics.is_equal_eps(sx, m.sx, epsilon) &&
-                   AggBasics.is_equal_eps(shy, m.shy, epsilon) &&
-                   AggBasics.is_equal_eps(w0, m.w0, epsilon) &&
-                   AggBasics.is_equal_eps(shx, m.shx, epsilon) &&
-                   AggBasics.is_equal_eps(sy, m.sy, epsilon) &&
-                   AggBasics.is_equal_eps(w1, m.w1, epsilon) &&
-                   AggBasics.is_equal_eps(tx, m.tx, epsilon) &&
-                   AggBasics.is_equal_eps(ty, m.ty, epsilon) &&
-                   AggBasics.is_equal_eps(w2, m.w2, epsilon);
-        }
+        //public bool is_equal(Perspective m, double epsilon)
+        //{
+        //    return AggBasics.is_equal_eps(sx, m.sx, epsilon) &&
+        //           AggBasics.is_equal_eps(shy, m.shy, epsilon) &&
+        //           AggBasics.is_equal_eps(w0, m.w0, epsilon) &&
+        //           AggBasics.is_equal_eps(shx, m.shx, epsilon) &&
+        //           AggBasics.is_equal_eps(sy, m.sy, epsilon) &&
+        //           AggBasics.is_equal_eps(w1, m.w1, epsilon) &&
+        //           AggBasics.is_equal_eps(tx, m.tx, epsilon) &&
+        //           AggBasics.is_equal_eps(ty, m.ty, epsilon) &&
+        //           AggBasics.is_equal_eps(w2, m.w2, epsilon);
+        //}
 
         // Determine the major affine parameters. Use with caution 
         // considering possible degenerate cases.
-        public double scale()
+        double scale()
         {
             double x = 0.707106781 * sx + 0.707106781 * shx;
             double y = 0.707106781 * shy + 0.707106781 * sy;
             return Math.Sqrt(x * x + y * y);
         }
-        public double rotation()
+        double rotation()
         {
             double x1 = 0.0;
             double y1 = 0.0;
             double x2 = 1.0;
             double y2 = 0.0;
-            transform(ref x1, ref y1);
-            transform(ref x2, ref y2);
+            Transform(ref x1, ref y1);
+            Transform(ref x2, ref y2);
             return Math.Atan2(y2 - y1, x2 - x1);
         }
-        public void translation(out double dx, out double dy)
+        void translation(out double dx, out double dy)
         {
             dx = tx;
             dy = ty;
         }
-        public void scaling(out double x, out double y)
+        void scaling(out double x, out double y)
         {
             double x1 = 0.0;
             double y1 = 0.0;
@@ -626,60 +607,15 @@ namespace MatterHackers.Agg.Transform
             double y2 = 1.0;
             Perspective t = new Perspective(this);
             t *= Affine.NewRotation(-rotation());
-            t.transform(ref x1, ref y1);
-            t.transform(ref x2, ref y2);
+            t.Transform(ref x1, ref y1);
+            t.Transform(ref x2, ref y2);
             x = x2 - x1;
             y = y2 - y1;
         }
-        public void scaling_abs(out double x, out double y)
+        void scaling_abs(out double x, out double y)
         {
             x = Math.Sqrt(sx * sx + shx * shx);
             y = Math.Sqrt(shy * shy + sy * sy);
         }
-
-        ////--------------------------------------------------------------------
-        //public sealed class iterator_x
-        //{
-        //    double den;
-        //    double den_step;
-        //    double nom_x;
-        //    double nom_x_step;
-        //    double nom_y;
-        //    double nom_y_step;
-
-        //    public double x;
-        //    public double y;
-
-        //    public iterator_x() { }
-        //    public iterator_x(double px, double py, double step, Perspective m)
-        //    {
-        //        den = (px * m.w0 + py * m.w1 + m.w2);
-        //        den_step = (m.w0 * step);
-        //        nom_x = (px * m.sx + py * m.shx + m.tx);
-        //        nom_x_step = (step * m.sx);
-        //        nom_y = (px * m.shy + py * m.sy + m.ty);
-        //        nom_y_step = (step * m.shy);
-        //        x = (nom_x / den);
-        //        y = (nom_y / den);
-        //    }
-
-        //    public static iterator_x operator ++(iterator_x a)
-        //    {
-        //        a.den += a.den_step;
-        //        a.nom_x += a.nom_x_step;
-        //        a.nom_y += a.nom_y_step;
-        //        double d = 1.0 / a.den;
-        //        a.x = a.nom_x * d;
-        //        a.y = a.nom_y * d;
-
-        //        return a;
-        //    }
-        //};
-
-        ////--------------------------------------------------------------------
-        //public iterator_x begin(double x, double y, double step)
-        //{
-        //    return new iterator_x(x, y, step, this);
-        //}
-    };
+    }
 }

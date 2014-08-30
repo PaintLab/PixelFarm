@@ -722,9 +722,7 @@ namespace MatterHackers.Agg.Image
                 {
                     return this.blurValues[this.currentTailIndex];
                 }
-            }
-
-
+            } 
         }
 
         private void stack_blur_bgra32(ImageBase img, int radius, int ry)
@@ -736,24 +734,7 @@ namespace MatterHackers.Agg.Image
             int[] srcBuffer = new int[width * height];
 
             ImageBase.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
-            //int i = 0; 
-            //for (int y = 0; y < height; ++y)
-            //{
-            //    for (int x = 0; x < width; ++x)
-            //    {
-            //        RGBA_Bytes px = img.GetPixel(x, y);
-            //        srcBuffer[i] = px.blue |
-            //                       (px.green << 8) |
-            //                       (px.red << 16);
-            //        i++;
-            //    }
-            //}
-
-
-            //int[] destBuffer = new int[srcBuffer.Length];
             StackBlurARGB.FastBlur32ARGB(srcBuffer, srcBuffer, img.Width, img.Height, radius);
-
-
             int i = 0;
             for (int y = 0; y < height; ++y)
             {
@@ -767,32 +748,7 @@ namespace MatterHackers.Agg.Image
                            (byte)((dest) & 0xff)));
                     i++;
                 }
-            }
-
-            ////n = 0;
-            //for (i = 0; i < lim; ++i)
-            //{
-            //    int dest = destBuffer[n];
-            //    //buffer1[i] = (byte)((dest >> 24) & 0xff); //R
-            //    //buffer1[i + 1] = (byte)((dest >> 16) & 0xff); //G
-            //    //buffer1[i + 2] = (byte)((dest >> 8) & 0xff);//B
-            //    //buffer1[i + 3] = (byte)((dest) & 0xff); //A 
-
-            //    //from ARGB
-            //    byte b_ = (byte)((dest) & 0xff);
-            //    byte g_ = (byte)((dest >> 8) & 0xff);
-            //    byte r_ = (byte)((dest >> 16) & 0xff);
-            //    byte a_ = (byte)((dest >> 24) & 0xff);
-
-            //    buffer1[i] = b_;
-            //    buffer1[i + 1] = g_;
-            //    buffer1[i + 2] = r_;
-            //    buffer1[i + 3] = a_;
-
-            //    i += 4;
-            //    n++;
-            //}
-            // Buffer.BlockCopy(destBuffer, 0, buffer1, 0, buffer1.Length);
+            } 
         }
 
 

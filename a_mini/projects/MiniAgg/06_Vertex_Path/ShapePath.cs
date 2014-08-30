@@ -27,7 +27,7 @@ namespace MatterHackers.Agg
             FlagsMask = 0xF0
         };
 
-        public static bool is_vertex(FlagsAndCommand c)
+        public static bool IsVertextCommand(FlagsAndCommand c)
         {
             return c >= FlagsAndCommand.CommandMoveTo
                 && c < FlagsAndCommand.CommandEndPoly;

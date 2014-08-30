@@ -43,17 +43,17 @@ namespace MatterHackers.VectorMath
         /// <summary>
         /// Defines a unit-length Vector2d that points towards the X-axis.
         /// </summary>
-        public static Vector2 UnitX = new Vector2(1, 0);
+        public static readonly Vector2 UnitX = new Vector2(1, 0);
 
         /// <summary>
         /// Defines a unit-length Vector2d that points towards the Y-axis.
         /// </summary>
-        public static Vector2 UnitY = new Vector2(0, 1);
+        public static readonly Vector2 UnitY = new Vector2(0, 1);
 
         /// <summary>
         /// Defines a zero-length Vector2d.
         /// </summary>
-        public static Vector2 Zero = new Vector2(0, 0);
+        public static readonly Vector2 Zero = new Vector2(0, 0);
 
         /// <summary>
         /// Defines an instance with all components set to 1.
@@ -167,7 +167,7 @@ namespace MatterHackers.VectorMath
         {
             this = Vector2.Rotate(this, radians);
         }
-        
+
         public double GetAngle()
         {
             return System.Math.Atan2(y, x);
@@ -816,8 +816,8 @@ namespace MatterHackers.VectorMath
         /// <returns>The result of the operation.</returns>
         public static Vector2 operator /(double f, Vector2 vec)
         {
-            vec.x = f/vec.x;
-            vec.y = f/vec.y;
+            vec.x = f / vec.x;
+            vec.y = f / vec.y;
             return vec;
         }
 

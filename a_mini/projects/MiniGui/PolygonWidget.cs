@@ -210,7 +210,7 @@ namespace MatterHackers.Agg.UI
                 cmd = m_stroke.vertex(out x, out y);
                 if (!ShapePath.is_stop(cmd))
                 {
-                    ParentToChildTransform.transform(ref x, ref y);
+                    ParentToChildTransform.Transform(ref x, ref y);
                     return cmd;
                 }
                 if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
@@ -220,7 +220,7 @@ namespace MatterHackers.Agg.UI
             cmd = m_ellipse.vertex(out x, out y);
             if (!ShapePath.is_stop(cmd))
             {
-                ParentToChildTransform.transform(ref x, ref y);
+                ParentToChildTransform.Transform(ref x, ref y);
                 return cmd;
             }
             if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
@@ -230,7 +230,7 @@ namespace MatterHackers.Agg.UI
             cmd = m_ellipse.vertex(out x, out y);
             if (!ShapePath.is_stop(cmd))
             {
-                ParentToChildTransform.transform(ref x, ref y);
+                ParentToChildTransform.Transform(ref x, ref y);
             }
             return cmd;
         }
@@ -242,7 +242,7 @@ namespace MatterHackers.Agg.UI
             m_edge = -1;
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.inverse_transform(ref x, ref y);
+            ParentToChildTransform.InverseTransform(ref x, ref y);
             for (int i = 0; i < m_num_points; i++)
             {
                 if (Math.Sqrt((x - GetXN(i)) * (x - GetXN(i)) + (y - GetYN(i)) * (y - GetYN(i))) < m_point_radius)
@@ -302,7 +302,7 @@ namespace MatterHackers.Agg.UI
             double dy;
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
-            ParentToChildTransform.inverse_transform(ref x, ref y);
+            ParentToChildTransform.InverseTransform(ref x, ref y);
             if (m_node == (int)(m_num_points))
             {
                 dx = x - m_dx;

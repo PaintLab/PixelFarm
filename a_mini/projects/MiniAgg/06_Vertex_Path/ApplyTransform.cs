@@ -24,34 +24,29 @@ namespace MatterHackers.Agg.VertexSource
     public class VertexSourceApplyTransform : IVertexSourceProxy
     {
         Transform.ITransform transformToApply;
-        public IVertexSource VertexSource
-        {
-            get;
-            set;
-        }
-
-        public VertexSourceApplyTransform(Transform.ITransform newTransformeToApply)
-            : this(null, newTransformeToApply)
-        {
-        }
-
         public VertexSourceApplyTransform(IVertexSource vertexSource, Transform.ITransform newTransformeToApply)
         {
             VertexSource = vertexSource;
             transformToApply = newTransformeToApply;
         }
-
-        public void attach(IVertexSource vertexSource) { VertexSource = vertexSource; }
-
+        public IVertexSource VertexSource
+        {
+            get;
+            set;
+        }
         public IEnumerable<VertexData> Vertices()
         {
+            //transform 'on-the-fly' 
             foreach (VertexData vertexData in VertexSource.Vertices())
             {
+                
                 VertexData transformedVertex = vertexData;
-                if (ShapePath.is_vertex(transformedVertex.command))
+                if (ShapePath.IsVertextCommand(transformedVertex.command))
                 {
-                    transformToApply.transform(ref transformedVertex.position.x, ref transformedVertex.position.y);
+                    //transform 2d
+                    transformToApply.Transform(ref transformedVertex.position.x, ref transformedVertex.position.y);
                 }
+                
                 yield return transformedVertex;
             }
         }
@@ -64,9 +59,9 @@ namespace MatterHackers.Agg.VertexSource
         public ShapePath.FlagsAndCommand vertex(out double x, out double y)
         {
             ShapePath.FlagsAndCommand cmd = VertexSource.vertex(out x, out y);
-            if (ShapePath.is_vertex(cmd))
+            if (ShapePath.IsVertextCommand(cmd))
             {
-                transformToApply.transform(ref x, ref y);
+                transformToApply.Transform(ref x, ref y);
             }
             return cmd;
         }

@@ -46,7 +46,7 @@ namespace MatterHackers.Agg
                 ShapePath.FlagsAndCommand PathAndFlags;
                 while (!ShapePath.is_stop(PathAndFlags = vs.vertex(out x, out y)))
                 {
-                    if (ShapePath.is_vertex(PathAndFlags))
+                    if (ShapePath.IsVertextCommand(PathAndFlags))
                     {
                         if(first)
                         {
@@ -105,7 +105,7 @@ namespace MatterHackers.Agg
             ShapePath.FlagsAndCommand PathAndFlags;
             while (!ShapePath.is_stop(PathAndFlags = vs.vertex(out x, out y)))
             {
-                if (ShapePath.is_vertex(PathAndFlags))
+                if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
                     if(first)
                     {

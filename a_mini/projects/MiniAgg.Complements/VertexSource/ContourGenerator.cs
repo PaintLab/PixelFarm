@@ -76,7 +76,7 @@ namespace MatterHackers.Agg.VertexSource
             }
             else
             {
-                if (ShapePath.is_vertex(cmd))
+                if (ShapePath.IsVertextCommand(cmd))
                 {
                     m_src_vertices.AddItem(new VertexDistance(x, y));
                 }

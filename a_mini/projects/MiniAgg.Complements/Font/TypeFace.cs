@@ -97,33 +97,33 @@ namespace MatterHackers.Agg.Font
         int unitsPerEm;
         Panos_1 panose_1;
         int ascent;
-		public int Ascent { get { return ascent; } }
+        public int Ascent { get { return ascent; } }
         int descent;
-		public int Descent { get { return descent; } }
+        public int Descent { get { return descent; } }
         int x_height;
-		public int X_height { get { return x_height; } }
+        public int X_height { get { return x_height; } }
         int cap_height;
-		public int Cap_height { get { return cap_height; } }
+        public int Cap_height { get { return cap_height; } }
         RectangleInt boundingBox;
-		public RectangleInt BoundingBox { get { return boundingBox; } }
+        public RectangleInt BoundingBox { get { return boundingBox; } }
         int underline_thickness;
-		public int Underline_thickness { get { return underline_thickness; } }
+        public int Underline_thickness { get { return underline_thickness; } }
         int underline_position;
-		public int Underline_position { get { return underline_position; } }
+        public int Underline_position { get { return underline_position; } }
         String unicode_range;
 
         Glyph missingGlyph;
 
         Dictionary<int, Glyph> glyphs = new Dictionary<int, Glyph>(); // a glyph is indexed by the string it represents, usually one character, but sometimes multiple
         Dictionary<Char, Dictionary<Char, int>> HKerns = new Dictionary<char, Dictionary<char, int>>();
-		
-		public int UnitsPerEm
-		{
-			get
-			{
-				return unitsPerEm;
-			}
-		}
+
+        public int UnitsPerEm
+        {
+            get
+            {
+                return unitsPerEm;
+            }
+        }
 
         static String GetSubString(String source, String start, String end)
         {
@@ -423,7 +423,7 @@ namespace MatterHackers.Agg.Font
         {
             // TODO: check for kerning and adjust
             Glyph glyph;
-            if(glyphs.TryGetValue(character, out glyph))
+            if (glyphs.TryGetValue(character, out glyph))
             {
                 return glyph.horiz_adv_x;
             }
@@ -442,11 +442,11 @@ namespace MatterHackers.Agg.Font
             return 0;
         }
 
-        public void ShowDebugInfo (Graphics2D graphics2D)
+        public void ShowDebugInfo(Graphics2D graphics2D)
         {
-        	StyledTypeFace typeFaceNameStyle = new StyledTypeFace(this, 30);
+            StyledTypeFace typeFaceNameStyle = new StyledTypeFace(this, 30);
             TypeFacePrinter fontNamePrinter = new TypeFacePrinter(this.fontFamily + " - 30 point", typeFaceNameStyle);
-			
+
             RectangleDouble bounds = typeFaceNameStyle.BoundingBoxInPixels;
             double origX = 10 - bounds.Left;
             double x = origX;
@@ -484,17 +484,16 @@ namespace MatterHackers.Agg.Font
             temp = typeFaceNameStyle.UnderlinePositionInPixels;
             graphics2D.Line(x, y + temp, x + width, y + temp, underlineColor);
 
-            Affine textTransform;
-            textTransform = Affine.NewIdentity();
-            textTransform *= Affine.NewTranslation(10, origX);
+            Affine textTransform = Affine.NewMatix(AffinePlan.Translate(10, origX));
+            //textTransform = Affine.NewIdentity();
+            //textTransform *= Affine.NewTranslation(10, origX);
 
-            VertexSourceApplyTransform transformedText = new VertexSourceApplyTransform(textTransform);
-            fontNamePrinter.Render(graphics2D, ColorRGBA.Black, transformedText);
-
-            graphics2D.Render(transformedText, ColorRGBA.Black);
+            //VertexSourceApplyTransform transformedText = new VertexSourceApplyTransform(textTransform);
+            //fontNamePrinter.Render(graphics2D, ColorRGBA.Black, transformedText);
+            //graphics2D.Render(transformedText, ColorRGBA.Black);
 
             // render the legend
-			StyledTypeFace legendFont = new StyledTypeFace(this, 12);
+            StyledTypeFace legendFont = new StyledTypeFace(this, 12);
             Vector2 textPos = new Vector2(x + width / 2, y + typeFaceNameStyle.EmSizeInPixels * 1.5);
             graphics2D.Render(new TypeFacePrinter("Descent"), textPos, descentColor); textPos.y += legendFont.EmSizeInPixels;
             graphics2D.Render(new TypeFacePrinter("Underline"), textPos, underlineColor); textPos.y += legendFont.EmSizeInPixels;

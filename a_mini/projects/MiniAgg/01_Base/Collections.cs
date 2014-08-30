@@ -38,14 +38,11 @@ namespace MatterHackers.Agg
         T[] internalArray = new T[0];
         public ArrayList()
         {
-        }
-
+        } 
         public ArrayList(int cap)
         {
             Allocate(cap, 0);
-        }
-
-
+        } 
         public virtual void RemoveLast()
         {
             if (currentSize != 0)
@@ -122,6 +119,7 @@ namespace MatterHackers.Agg
             {
                 if (newSize > AllocatedSize)
                 {
+                    //create new array and copy data to that 
                     var newArray = new T[newSize];
                     if (internalArray != null)
                     {
@@ -129,7 +127,6 @@ namespace MatterHackers.Agg
                         {
                             newArray[i] = internalArray[i];
                         }
-
                     }
                     internalArray = newArray;
                 }
@@ -194,9 +191,9 @@ namespace MatterHackers.Agg
             {
                 return currentSize;
             }
-        } 
+        }
     }
 
-    
-  
+
+
 }

@@ -63,8 +63,9 @@ namespace MatterHackers.Agg.Sample_Blur
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
             m_path = typeFaceForLargeA.GetGlyphForCharacter('a');
 
-            Affine shape_mtx = Affine.NewIdentity();
-            shape_mtx *= Affine.NewTranslation(150, 100);
+            Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
+            //shape_mtx *= Affine.NewTranslation(150, 100);
+
             m_path = new VertexSourceApplyTransform(m_path, shape_mtx);
             m_shape = new FlattenCurves(m_path);
 
@@ -147,7 +148,7 @@ namespace MatterHackers.Agg.Sample_Blur
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             clippingProxy.clear(ColorRGBA.White);
             m_ras.SetVectorClipBox(0, 0, Width, Height);
