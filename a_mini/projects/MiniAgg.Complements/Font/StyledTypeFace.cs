@@ -307,8 +307,8 @@ namespace MatterHackers.Agg.Font
                 {
                     sourceGlyph = new GlyphWithUnderline(sourceGlyph, typeFace.GetAdvanceForCharacter(character), typeFace.Underline_position, typeFace.Underline_thickness);
                 }
-                Affine glyphTransform = Affine.NewIdentity();
-                glyphTransform *= Affine.NewScaling(currentEmScalling);
+
+                Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));                 
                 IVertexSource characterGlyph = new VertexSourceApplyTransform(sourceGlyph, glyphTransform);
 
                 if (FlatenCurves)

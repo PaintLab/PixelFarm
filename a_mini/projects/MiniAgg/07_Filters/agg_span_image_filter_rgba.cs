@@ -468,7 +468,7 @@ namespace MatterHackers.Agg
 
             if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.Lines.span_interpolator_linear)
                 && ((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
-            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer()).is_identity())
+            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.Lines.span_interpolator_linear)base.m_interpolator).transformer()).IsIdentity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe

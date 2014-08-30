@@ -32,7 +32,7 @@ namespace MatterHackers.Agg
         byte[] m_dir_gamma;
         byte[] m_inv_gamma; 
 
-        public GammaLookUpTable(double gamma = 1)
+        public GammaLookUpTable(double gamma)
         {
             m_gamma = gamma;
             m_dir_gamma = new byte[GAMMA_SIZE];

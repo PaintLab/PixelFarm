@@ -31,28 +31,24 @@ namespace MatterHackers.Agg.Image
         /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
         /// It will modify the original main image when you draw to it.
         /// </summary>
-        /// <param name="imageContainingSubImage"></param>
-        /// <param name="subImageBounds"></param>
+        /// <param name="parentImage"></param>
+        /// <param name="childImageBounds"></param>
         /// <returns></returns>
-        public static IImage NewSubImageReference(this IImage imageContainingSubImage, RectangleDouble subImageBounds)
+        public static IImage CreateChildImage(this IImage parentImage, RectangleDouble childImageBounds)
         {
 
-
-            if (subImageBounds.Left < 0 || subImageBounds.Bottom < 0 || subImageBounds.Right > imageContainingSubImage.Width || subImageBounds.Top > imageContainingSubImage.Height
-                || subImageBounds.Left >= subImageBounds.Right || subImageBounds.Bottom >= subImageBounds.Top)
+            if (childImageBounds.Left < 0 || childImageBounds.Bottom < 0 || childImageBounds.Right > parentImage.Width || childImageBounds.Top > parentImage.Height
+                || childImageBounds.Left >= childImageBounds.Right || childImageBounds.Bottom >= childImageBounds.Top)
             {
                 throw new ArgumentException("The subImageBounds must be on the image and valid.");
             }
-            int left = Math.Max(0, (int)Math.Floor(subImageBounds.Left));
-            int bottom = Math.Max(0, (int)Math.Floor(subImageBounds.Bottom));
-            int width = Math.Min(imageContainingSubImage.Width - left, (int)subImageBounds.Width);
-            int height = Math.Min(imageContainingSubImage.Height - bottom, (int)subImageBounds.Height);
-            int bufferOffsetToFirstPixel = imageContainingSubImage.GetBufferOffsetXY(left, bottom);
+            int left = Math.Max(0, (int)Math.Floor(childImageBounds.Left));
+            int bottom = Math.Max(0, (int)Math.Floor(childImageBounds.Bottom));
+            int width = Math.Min(parentImage.Width - left, (int)childImageBounds.Width);
+            int height = Math.Min(parentImage.Height - bottom, (int)childImageBounds.Height);
+            int bufferOffsetToFirstPixel = parentImage.GetBufferOffsetXY(left, bottom);
+            return new ChildImage(parentImage, bufferOffsetToFirstPixel, width, height);
 
-            ChildImage subImage = new ChildImage(imageContainingSubImage, bufferOffsetToFirstPixel, width, height);
-
-
-            return subImage;
         }
         public static void SetAlpha(this ImageBase img, byte value)
         {
@@ -61,11 +57,11 @@ namespace MatterHackers.Agg.Image
                 throw new Exception("You don't have alpha channel to set.  Your image has a bit depth of " + img.BitDepth.ToString() + ".");
             }
             int numPixels = img.Width * img.Height;
-           
+
             byte[] buffer = img.GetBuffer();
             for (int i = 0; i < numPixels; i++)
             {
-                buffer[ i * 4 + 3] = value;
+                buffer[i * 4 + 3] = value;
             }
         }
         public static void SetAlpha(this ChildImage img, byte value)

@@ -44,7 +44,7 @@ namespace MatterHackers.Agg
 
         public Graphics2D()
         {
-            affineTransformStack.Push(Affine.NewIdentity());
+            affineTransformStack.Push(Affine.IdentityMatrix);
         }
 
         public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)

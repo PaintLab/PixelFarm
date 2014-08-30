@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.Sample_LionFill
     {
 
         LionShape lionShape;
-        Affine transform = Affine.NewIdentity();
+        Affine transform = Affine.IdentityMatrix;
 
         VertexSourceApplyTransform transformedPathStorage;
         byte alpha;
@@ -82,8 +82,8 @@ namespace MatterHackers.Agg.Sample_LionFill
             lionShape = new LionShape();
             lionShape.ParseLion();
             this.Width = 500;
-            this.Height = 500; 
-            AlphaValue = 255; 
+            this.Height = 500;
+            AlphaValue = 255;
         }
         public byte AlphaValue
         {
@@ -114,12 +114,20 @@ namespace MatterHackers.Agg.Sample_LionFill
 
             if (transformedPathStorage == null)
             {
-                transform = Affine.NewIdentity();
-                transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-                transform *= Affine.NewScaling(spriteScale, spriteScale);
-                transform *= Affine.NewRotation(angle + Math.PI);
-                transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-                transform *= Affine.NewTranslation(Width / 2, Height / 2);
+                transform = Affine.NewMatix( 
+                        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                        AffinePlan.Scale(spriteScale, spriteScale),
+                        AffinePlan.Rotate(angle + Math.PI),
+                        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                        AffinePlan.Translate(Width / 2, Height / 2)
+                 );
+
+                //transform = Affine.NewIdentity();
+                //transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
+                //transform *= Affine.NewScaling(spriteScale, spriteScale);
+                //transform *= Affine.NewRotation(angle + Math.PI);
+                //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
+                //transform *= Affine.NewTranslation(Width / 2, Height / 2);
                 transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
             }
 

@@ -140,7 +140,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(Graphics2D g)
         {
-            var widgetsSubImage = ImageHelper.NewSubImageReference(g.DestImage, g.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(g.DestImage, g.GetClippingRect());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
@@ -163,13 +163,18 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
 
-            Affine transform = Affine.NewIdentity();
-            transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-            transform *= Affine.NewScaling(lionScale, lionScale);
-            transform *= Affine.NewRotation(angle + Math.PI);
-            transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-            transform *= Affine.NewTranslation(Width / 2, Height / 2);
-
+            //Affine transform = Affine.NewIdentity();
+            //transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
+            //transform *= Affine.NewScaling(lionScale, lionScale);
+            //transform *= Affine.NewRotation(angle + Math.PI);
+            //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
+            //transform *= Affine.NewTranslation(Width / 2, Height / 2);
+            Affine transform = Affine.NewMatix( 
+                    AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                    AffinePlan.Scale(lionScale, lionScale),
+                    AffinePlan.Rotate(angle + Math.PI),
+                    AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                    AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.clear(ColorRGBA.White);
 
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();

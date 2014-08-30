@@ -67,7 +67,7 @@ namespace MatterHackers.Agg
         {
             rasterizer.reset();
             Affine transform = GetTransform();
-            if (!transform.is_identity())
+            if (!transform.IsIdentity())
             {
                 vertexSource = new VertexSourceApplyTransform(vertexSource, transform);
             }
@@ -90,27 +90,40 @@ namespace MatterHackers.Agg
             double ScaleX, double ScaleY,
             double AngleRad, out Affine destRectTransform)
         {
-            destRectTransform = Affine.NewIdentity();
 
+            AffinePlan[] plan = new AffinePlan[4];
+            int i = 0;
             if (HotspotOffsetX != 0.0f || HotspotOffsetY != 0.0f)
             {
-                destRectTransform *= Affine.NewTranslation(-HotspotOffsetX, -HotspotOffsetY);
+                //destRectTransform *= Affine.NewTranslation(-HotspotOffsetX, -HotspotOffsetY);
+                plan[i] = AffinePlan.Translate(-HotspotOffsetX, -HotspotOffsetY);
+                i++;
             }
 
             if (ScaleX != 1 || ScaleY != 1)
             {
-                destRectTransform *= Affine.NewScaling(ScaleX, ScaleY);
+                //destRectTransform *= Affine.NewScaling(ScaleX, ScaleY);
+                plan[i] = AffinePlan.Scale(ScaleX, ScaleY);
+                i++;
             }
 
             if (AngleRad != 0)
             {
-                destRectTransform *= Affine.NewRotation(AngleRad);
+                //destRectTransform *= Affine.NewRotation(AngleRad);
+                plan[i] = AffinePlan.Rotate(AngleRad);
+                i++;
             }
 
             if (DestX != 0 || DestY != 0)
             {
-                destRectTransform *= Affine.NewTranslation(DestX, DestY);
+                
+
+                plan[i] = AffinePlan.Translate(DestX, DestY);
+                i++;
+
             }
+
+            destRectTransform = Affine.NewMatix(plan);
 
             int SourceBufferWidth = (int)sourceImage.Width;
             int SourceBufferHeight = (int)sourceImage.Height;
@@ -149,7 +162,7 @@ namespace MatterHackers.Agg
             double angleRadians,
             double inScaleX, double inScaleY)
         {
-            { // exit early if the dest and source bounds don't touch.
+            {   // exit early if the dest and source bounds don't touch.
                 // TODO: <BUG> make this do rotation and scalling
                 RectangleInt sourceBounds = source.GetBounds();
                 RectangleInt destBounds = this.destImageByte.GetBounds();
@@ -169,13 +182,13 @@ namespace MatterHackers.Agg
             double scaleY = inScaleY;
 
             Affine graphicsTransform = GetTransform();
-            if (!graphicsTransform.is_identity())
+            if (!graphicsTransform.IsIdentity())
             {
                 if (scaleX != 1 || scaleY != 1 || angleRadians != 0)
                 {
                     throw new NotImplementedException();
                 }
-                graphicsTransform.transform(ref destX, ref destY);
+                graphicsTransform.Transform(ref destX, ref destY);
             }
 
 #if false // this is an optomization that eliminates the drawing of images that have their alpha set to all 0 (happens with generated images like explosions).
@@ -231,12 +244,12 @@ namespace MatterHackers.Agg
                 Affine destRectTransform;
                 DrawImageGetDestBounds(source, destX, destY, sourceOriginOffsetX, sourceOriginOffsetY, scaleX, scaleY, angleRadians, out destRectTransform);
 
-                Affine sourceRectTransform = new Affine(destRectTransform);
+                Affine sourceRectTransform = destRectTransform.CreateInvert();
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                sourceRectTransform.invert();
+
 
                 span_image_filter spanImageFilter;
-                var interpolator = new  MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
+                var interpolator = new MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
 
                 spanImageFilter = new span_image_filter_rgba_bilinear_clip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0), interpolator);
@@ -254,9 +267,9 @@ namespace MatterHackers.Agg
                 Affine destRectTransform;
                 DrawImageGetDestBounds(source, destX, destY, sourceOriginOffsetX, sourceOriginOffsetY, scaleX, scaleY, angleRadians, out destRectTransform);
 
-                Affine sourceRectTransform = new Affine(destRectTransform);
+                Affine sourceRectTransform = destRectTransform.CreateInvert();
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                sourceRectTransform.invert();
+
 
                 var interpolator = new MatterHackers.Agg.Lines.span_interpolator_linear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());

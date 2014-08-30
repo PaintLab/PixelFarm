@@ -40,7 +40,7 @@ namespace MatterHackers.Agg
         {
             if (graphics2D.DestImage != null)
             {
-                var widgetsSubImage = ImageHelper.NewSubImageReference(graphics2D.DestImage, graphics2D.GetClippingRect());
+                var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
                 IImage backBuffer = widgetsSubImage;
 

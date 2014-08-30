@@ -89,14 +89,70 @@ namespace MatterHackers.Agg.Transform
     // m *= agg::trans_affine_rotation(30.0 * 3.1415926 / 180.0);  // rotate
     // m *= agg::trans_affine_translation(100.0, 100.0);           // move back to (100,100)
     //----------------------------------------------------------------------
-    public struct Affine : ITransform
+
+    public enum AffineMatrixCommand : byte
     {
-        const double AFFINE_EPSILON = 1e-14;
+        None,
+        Scale,
+        Skew,
+        Rotate,
+        Translate,
+        Invert
+    }
 
-        public double sx, shy, shx, sy, tx, ty;
+    public struct AffinePlan
+    {
+        public readonly AffineMatrixCommand cmd;
+        public readonly double x;
+        public readonly double y;
+        public AffinePlan(AffineMatrixCommand cmd, double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+            this.cmd = cmd;
+        }
+        public AffinePlan(AffineMatrixCommand cmd, double x)
+        {
+            this.x = x;
+            this.y = 0;
+            this.cmd = cmd;
+        }
 
+
+        //----------------------------------------------------------------------------
+        public static AffinePlan Translate(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Translate, x, y);
+        }
+        public static AffinePlan Rotate(double radAngle)
+        {
+            return new AffinePlan(AffineMatrixCommand.Rotate, radAngle);
+        }
+        public static AffinePlan Skew(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Skew, x, y);
+        }
+        public static AffinePlan Scale(double x, double y)
+        {
+            return new AffinePlan(AffineMatrixCommand.Scale, x, y);
+        }
+        public static AffinePlan Scale(double both)
+        {
+            return new AffinePlan(AffineMatrixCommand.Scale, both, both);
+        }
+    }
+
+    public sealed class Affine : ITransform
+    {
+
+        const double EPSILON = 1e-14;
+
+        public readonly double sx, shy, shx, sy, tx, ty;
+        bool isIdenHint;
+
+        public static readonly Affine IdentityMatrix = Affine.NewIdentity();
         //------------------------------------------ Construction
-        public Affine(Affine copyFrom)
+        private Affine(Affine copyFrom)
         {
             sx = copyFrom.sx;
             shy = copyFrom.shy;
@@ -107,19 +163,19 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Custom matrix. Usually used in derived classes
-        public Affine(double v0, double v1, double v2,
-                     double v3, double v4, double v5)
+        private Affine(double v0_sx, double v1_shy, double v2_shx,
+                     double v3_sy, double v4_tx, double v5_ty)
         {
-            sx = v0;
-            shy = v1;
-            shx = v2;
-            sy = v3;
-            tx = v4;
-            ty = v5;
-        }
+            sx = v0_sx;
+            shy = v1_shy;
+            shx = v2_shx;
 
+            sy = v3_sy;
+            tx = v4_tx;
+            ty = v5_ty;
+        }
         // Custom matrix from m[6]
-        public Affine(double[] m)
+        private Affine(double[] m)
         {
             sx = m[0];
             shy = m[1];
@@ -128,36 +184,247 @@ namespace MatterHackers.Agg.Transform
             tx = m[4];
             ty = m[5];
         }
-
-        // Identity matrix
-        public static Affine NewIdentity()
+        private Affine(Affine a, Affine b)
         {
-            Affine newAffine = new Affine();
-            newAffine.sx = 1.0;
-            newAffine.shy = 0.0;
-            newAffine.shx = 0.0;
-            newAffine.sy = 1.0;
-            newAffine.tx = 0.0;
-            newAffine.ty = 0.0;
+            //copy from a
+            //multiply with b
+            sx = a.sx;
+            shy = a.shy;
+            shx = a.shx;
+            sy = a.sy;
+            tx = a.tx;
+            ty = a.ty;
+            MultiplyMatrix(ref sx, ref sy, ref shx, ref shy, ref tx, ref ty, b);
 
-            return newAffine;
+        }
+        private Affine(Affine copyFrom, AffinePlan creationPlan)
+        {
+            //-----------------------
+            sx = copyFrom.sx;
+            shy = copyFrom.shy;
+            shx = copyFrom.shx;
+            sy = copyFrom.sy;
+            tx = copyFrom.tx;
+            ty = copyFrom.ty;
+            //-----------------------
+            switch (creationPlan.cmd)
+            {
+                default:
+                    {
+                        throw new NotSupportedException();
+                    }
+                case AffineMatrixCommand.None:
+                    break;
+                case AffineMatrixCommand.Rotate:
+                    {
+                        double angleRad = creationPlan.x;
+                        double ca = Math.Cos(angleRad);
+                        double sa = Math.Sin(angleRad);
+                        double t0 = sx * ca - shy * sa;
+                        double t2 = shx * ca - sy * sa;
+                        double t4 = tx * ca - ty * sa;
+
+                        shy = sx * sa + shy * ca;
+                        sy = shx * sa + sy * ca;
+                        ty = tx * sa + ty * ca;
+                        sx = t0;
+                        shx = t2;
+                        tx = t4;
+
+                    } break;
+                case AffineMatrixCommand.Scale:
+                    {
+                        double mm0 = creationPlan.x;
+                        double mm3 = creationPlan.y;
+                        sx *= mm0;
+                        shx *= mm0;
+                        tx *= mm0;
+                        shy *= mm3;
+                        sy *= mm3;
+                        ty *= mm3;
+                    } break;
+                case AffineMatrixCommand.Skew:
+                    {
+                        double m_sx = 1;
+                        double m_sy = 1;
+                        double m_shx = Math.Tan(creationPlan.x);
+                        double m_shy = Math.Tan(creationPlan.y);
+
+                        double t0 = sx * m_sx + shy * m_shx;
+                        double t2 = shx * m_sx + sy * m_shx;
+                        double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
+                        shy = sx * m_shy + shy * m_sy;
+                        sy = shx * m_shy + sy * m_sy;
+                        ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
+                        sx = t0;
+                        shx = t2;
+                        tx = t4;
+
+                        //return new Affine(1.0, Math.Tan(y), Math.Tan(x), 1.0, 0.0, 0.0);
+
+                    } break;
+                case AffineMatrixCommand.Translate:
+                    {
+                        tx += creationPlan.x;
+                        ty += creationPlan.y;
+                    } break;
+                case AffineMatrixCommand.Invert:
+                    {
+                        double d = CalculateDeterminantReciprocal();
+
+                        double t0 = sy * d;
+                        sy = sx * d;
+                        shy = -shy * d;
+                        shx = -shx * d;
+
+                        double t4 = -tx * t0 - ty * shx;
+                        ty = -tx * shy - ty * sy;
+
+                        sx = t0;
+                        tx = t4;
+
+                    } break;
+            }
+        }
+        private Affine(Affine copyFrom, AffinePlan[] creationPlans)
+        {
+            //-----------------------
+            sx = copyFrom.sx;
+            shy = copyFrom.shy;
+            shx = copyFrom.shx;
+            sy = copyFrom.sy;
+            tx = copyFrom.tx;
+            ty = copyFrom.ty;
+            //-----------------------
+            int j = creationPlans.Length;
+            for (int i = 0; i < j; ++i)
+            {
+                AffinePlan plan = creationPlans[i];
+                switch (plan.cmd)
+                {
+                    case AffineMatrixCommand.None:
+                        break;
+                    case AffineMatrixCommand.Rotate:
+                        {
+                            double angleRad = plan.x;
+                            double ca = Math.Cos(angleRad);
+                            double sa = Math.Sin(angleRad);
+                            double t0 = sx * ca - shy * sa;
+                            double t2 = shx * ca - sy * sa;
+                            double t4 = tx * ca - ty * sa;
+
+                            shy = sx * sa + shy * ca;
+                            sy = shx * sa + sy * ca;
+                            ty = tx * sa + ty * ca;
+                            sx = t0;
+                            shx = t2;
+                            tx = t4;
+                        } break;
+                    case AffineMatrixCommand.Scale:
+                        {
+                            double mm0 = plan.x;
+                            double mm3 = plan.y;
+                            sx *= mm0;
+                            shx *= mm0;
+                            tx *= mm0;
+                            shy *= mm3;
+                            sy *= mm3;
+                            ty *= mm3;
+                        } break;
+                    case AffineMatrixCommand.Translate:
+                        {
+                            tx += plan.x;
+                            ty += plan.y;
+                        } break;
+                    case AffineMatrixCommand.Skew:
+                        {
+                            double m_sx = 1;
+                            double m_sy = 1;
+                            double m_shx = Math.Tan(plan.x);
+                            double m_shy = Math.Tan(plan.y);
+
+                            double t0 = sx * m_sx + shy * m_shx;
+                            double t2 = shx * m_sx + sy * m_shx;
+                            double t4 = tx * m_sx + ty * m_shx + 0;//0=m.tx
+                            shy = sx * m_shy + shy * m_sy;
+                            sy = shx * m_shy + sy * m_sy;
+                            ty = tx * m_shy + ty * m_sy + 0;//0= m.ty;
+                            sx = t0;
+                            shx = t2;
+                            tx = t4;
+
+
+                        } break;
+                    case AffineMatrixCommand.Invert:
+                        {
+                            double d = CalculateDeterminantReciprocal();
+
+                            double t0 = sy * d;
+                            sy = sx * d;
+                            shy = -shy * d;
+                            shx = -shx * d;
+
+                            double t4 = -tx * t0 - ty * shx;
+                            ty = -tx * shy - ty * sy;
+
+                            sx = t0;
+                            tx = t4;
+                        } break;
+                    default:
+                        {
+                            throw new NotSupportedException();
+                        } break;
+                }
+            }
+
         }
 
+
+
+        private Affine(AffinePlan[] creationPlans)
+            : this(IdentityMatrix, creationPlans)
+        {
+        }
+
+
+        //----------------------------------------------------------
+        public static Affine operator *(Affine a, Affine b)
+        {
+            //new input
+            return new Affine(a, b);
+        }
+        //----------------------------------------------------------
+
+        // Identity matrix
+        static Affine NewIdentity()
+        {
+            var newIden = new Affine(1, 0, 0, 1, 0, 0);
+            newIden.isIdenHint = true;
+            return newIden;
+        }
+        public static Affine NewMatix(params AffinePlan[] creationPlans)
+        {
+            return new Affine(creationPlans);
+        }
+        public static Affine NewMatix(AffinePlan creationPlan)
+        {
+            return new Affine(IdentityMatrix, creationPlan);
+        }
         //====================================================trans_affine_rotation
         // Rotation matrix. sin() and cos() are calculated twice for the same angle.
         // There's no harm because the performance of sin()/cos() is very good on all
         // modern processors. Besides, this operation is not going to be invoked too 
         // often.
-        public static Affine NewRotation(double AngleRadians)
+        public static Affine NewRotation(double angRad)
         {
-            return new Affine(Math.Cos(AngleRadians), Math.Sin(AngleRadians), -Math.Sin(AngleRadians), Math.Cos(AngleRadians), 0.0, 0.0);
+            return new Affine(Math.Cos(angRad), Math.Sin(angRad), -Math.Sin(angRad), Math.Cos(angRad), 0.0, 0.0);
         }
 
         //====================================================trans_affine_scaling
         // Scaling matrix. x, y - scale coefficients by X and Y respectively
-        public static Affine NewScaling(double Scale)
+        public static Affine NewScaling(double scale)
         {
-            return new Affine(Scale, 0.0, 0.0, Scale, 0.0, 0.0);
+            return new Affine(scale, 0.0, 0.0, scale, 0.0, 0.0);
         }
 
         public static Affine NewScaling(double x, double y)
@@ -323,58 +590,62 @@ namespace MatterHackers.Agg.Transform
 
         //------------------------------------------ Operations
         // Reset - load an identity matrix
-        public void identity()
-        {
-            sx = sy = 1.0;
-            shy = shx = tx = ty = 0.0;
-        }
+        //public void identity()
+        //{
+        //    sx = sy = 1.0;
+        //    shy = shx = tx = ty = 0.0;
+        //}
 
-        // Direct transformations operations
-        public void translate(double x, double y)
-        {
-            tx += x;
-            ty += y;
-        }
+        //Direct transformations operations
+        //public void translate(double x, double y)
+        //{
+        //    tx += x;
+        //    ty += y;
+        //}
 
-        public void rotate(double AngleRadians)
-        {
-            double ca = Math.Cos(AngleRadians);
-            double sa = Math.Sin(AngleRadians);
-            double t0 = sx * ca - shy * sa;
-            double t2 = shx * ca - sy * sa;
-            double t4 = tx * ca - ty * sa;
-            shy = sx * sa + shy * ca;
-            sy = shx * sa + sy * ca;
-            ty = tx * sa + ty * ca;
-            sx = t0;
-            shx = t2;
-            tx = t4;
-        }
+        //public void rotate(double AngleRadians)
+        //{
+        //    double ca = Math.Cos(AngleRadians);
+        //    double sa = Math.Sin(AngleRadians);
+        //    double t0 = sx * ca - shy * sa;
+        //    double t2 = shx * ca - sy * sa;
+        //    double t4 = tx * ca - ty * sa;
+        //    shy = sx * sa + shy * ca;
+        //    sy = shx * sa + sy * ca;
+        //    ty = tx * sa + ty * ca;
+        //    sx = t0;
+        //    shx = t2;
+        //    tx = t4;
+        //}
 
-        public void scale(double x, double y)
-        {
-            double mm0 = x; // Possible hint for the optimizer
-            double mm3 = y;
-            sx *= mm0;
-            shx *= mm0;
-            tx *= mm0;
-            shy *= mm3;
-            sy *= mm3;
-            ty *= mm3;
-        }
+        //public void scale(double x, double y)
+        //{
+        //    double mm0 = x; // Possible hint for the optimizer
+        //    double mm3 = y;
+        //    sx *= mm0;
+        //    shx *= mm0;
+        //    tx *= mm0;
+        //    shy *= mm3;
+        //    sy *= mm3;
+        //    ty *= mm3;
+        //}
 
-        public void scale(double scaleAmount)
-        {
-            sx *= scaleAmount;
-            shx *= scaleAmount;
-            tx *= scaleAmount;
-            shy *= scaleAmount;
-            sy *= scaleAmount;
-            ty *= scaleAmount;
-        }
+        //public void scale(double scaleAmount)
+        //{
+        //    sx *= scaleAmount;
+        //    shx *= scaleAmount;
+        //    tx *= scaleAmount;
+        //    shy *= scaleAmount;
+        //    sy *= scaleAmount;
+        //    ty *= scaleAmount;
+        //}
 
         // Multiply matrix to another one
-        void multiply(Affine m)
+        static void MultiplyMatrix(
+            ref double sx, ref double sy,
+            ref double shx, ref double shy,
+            ref double tx, ref double ty,
+            Affine m)
         {
             double t0 = sx * m.sx + shy * m.shx;
             double t2 = shx * m.sx + sy * m.shx;
@@ -415,20 +686,32 @@ namespace MatterHackers.Agg.Transform
         // Invert matrix. Do not try to invert degenerate matrices, 
         // there's no check for validity. If you set scale to 0 and 
         // then try to invert matrix, expect unpredictable result.
-        public void invert()
+        //public void invert()
+        //{
+        //    double d = determinant_reciprocal();
+
+        //    double t0 = sy * d;
+        //    sy = sx * d;
+        //    shy = -shy * d;
+        //    shx = -shx * d;
+
+        //    double t4 = -tx * t0 - ty * shx;
+        //    ty = -tx * shy - ty * sy;
+
+        //    sx = t0;
+        //    tx = t4;
+        //}
+
+        // Invert matrix. Do not try to invert degenerate matrices, 
+        // there's no check for validity. If you set scale to 0 and 
+        // then try to invert matrix, expect unpredictable result.
+        public Affine CreateInvert()
         {
-            double d = determinant_reciprocal();
-
-            double t0 = sy * d;
-            sy = sx * d;
-            shy = -shy * d;
-            shx = -shx * d;
-
-            double t4 = -tx * t0 - ty * shx;
-            ty = -tx * shy - ty * sy;
-
-            sx = t0;
-            tx = t4;
+            return new Affine(this, new AffinePlan(AffineMatrixCommand.Invert, 0));
+        }
+        public Affine CreateTranslation(double x, double y)
+        {
+            return new Affine(this, AffinePlan.Translate(x, y));
         }
 
         /*
@@ -470,20 +753,17 @@ namespace MatterHackers.Agg.Transform
          */
         // Multiply the matrix by another one and return
         // the result in a separete matrix.
-        public static Affine operator *(Affine a, Affine b)
-        {
-            Affine temp = new Affine(a);
-            temp.multiply(b);
-            return temp;
-        }
 
-        public static Affine operator +(Affine a, Vector2 b)
-        {
-            Affine temp = new Affine(a);
-            temp.tx += b.x;
-            temp.ty += b.y;
-            return temp;
-        }
+
+        //public static Affine operator +(Affine a, Vector2 b)
+        //{
+        //    //new input
+        //    Affine temp = new Affine(a);
+        //    temp.tx += b.x;
+        //    temp.ty += b.y;
+        //    return temp;
+        //    return new Affine(a, MatrixCommand.Translate, b);
+        //}
         /*
 
         // Multiply the matrix by inverse of another one 
@@ -514,23 +794,23 @@ namespace MatterHackers.Agg.Transform
          */
         //-------------------------------------------- Transformations
         // Direct transformation of x and y
-        public void transform(ref double x, ref double y)
+        public void Transform(ref double x, ref double y)
         {
             double tmp = x;
             x = tmp * sx + y * shx + tx;
             y = tmp * shy + y * sy + ty;
         }
 
-        public void transform(ref Vector2 pointToTransform)
-        {
-            transform(ref pointToTransform.x, ref pointToTransform.y);
-        }
+        //public void transform(ref Vector2 pointToTransform)
+        //{
+        //    Transform(ref pointToTransform.x, ref pointToTransform.y);
+        //}
 
-        public void transform(ref RectangleDouble rectToTransform)
-        {
-            transform(ref rectToTransform.Left, ref rectToTransform.Bottom);
-            transform(ref rectToTransform.Right, ref rectToTransform.Top);
-        }
+        //public void transform(ref RectangleDouble rectToTransform)
+        //{
+        //    Transform(ref rectToTransform.Left, ref rectToTransform.Bottom);
+        //    Transform(ref rectToTransform.Right, ref rectToTransform.Top);
+        //}
         /*
 
         // Direct transformation of x and y, 2x2 matrix only, no translation
@@ -545,19 +825,19 @@ namespace MatterHackers.Agg.Transform
         // Inverse transformation of x and y. It works slower than the 
         // direct transformation. For massive operations it's better to 
         // invert() the matrix and then use direct transformations. 
-        public void inverse_transform(ref double x, ref double y)
+        public void InverseTransform(ref double x, ref double y)
         {
-            double d = determinant_reciprocal();
+            double d = CalculateDeterminantReciprocal();
             double a = (x - tx) * d;
             double b = (y - ty) * d;
             x = a * sy - b * shx;
             y = b * sx - a * shy;
         }
 
-        public void inverse_transform(ref Vector2 pointToTransform)
-        {
-            inverse_transform(ref pointToTransform.x, ref pointToTransform.y);
-        }
+        //public void inverse_transform(ref Vector2 pointToTransform)
+        //{
+        //    inverse_transform(ref pointToTransform.x, ref pointToTransform.y);
+        //}
         /*
 
         //-------------------------------------------- Auxiliary
@@ -569,7 +849,7 @@ namespace MatterHackers.Agg.Transform
 
          */
         // Calculate the reciprocal of the determinant
-        double determinant_reciprocal()
+        double CalculateDeterminantReciprocal()
         {
             return 1.0 / (sx * sy - shy * shx);
         }
@@ -585,25 +865,32 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Check to see if the matrix is not degenerate
-        public bool is_valid(double epsilon)
+        public bool IsNotDegenerated(double epsilon)
         {
             return Math.Abs(sx) > epsilon && Math.Abs(sy) > epsilon;
         }
 
         // Check to see if it's an identity matrix
-        public bool is_identity()
+        public bool IsIdentity()
         {
-            return is_equal_eps(sx, 1.0) &&
-                     is_equal_eps(shy, 0.0) &&
-                     is_equal_eps(shx, 0.0) &&
-                     is_equal_eps(sy, 1.0) &&
-                     is_equal_eps(tx, 0.0) &&
-                     is_equal_eps(ty, 0.0); 
+            if (!isIdenHint)
+            {
+                return is_equal_eps(sx, 1.0) &&
+                   is_equal_eps(shy, 0.0) &&
+                   is_equal_eps(shx, 0.0) &&
+                   is_equal_eps(sy, 1.0) &&
+                   is_equal_eps(tx, 0.0) &&
+                   is_equal_eps(ty, 0.0);
+            }
+            else
+            {
+                return true;
+            }
         }
-         
+
         static bool is_equal_eps(double v1, double v2)
         {
-            return Math.Abs(v1 - v2) <= (AFFINE_EPSILON);
+            return Math.Abs(v1 - v2) <= (EPSILON);
         }
 
         // Check to see if two matrices are equal
@@ -619,44 +906,44 @@ namespace MatterHackers.Agg.Transform
 
         // Determine the major parameters. Use with caution considering 
         // possible degenerate cases.
-        public double rotation()
-        {
-            double x1 = 0.0;
-            double y1 = 0.0;
-            double x2 = 1.0;
-            double y2 = 0.0;
-            transform(ref x1, ref y1);
-            transform(ref x2, ref y2);
-            return Math.Atan2(y2 - y1, x2 - x1);
-        }
+        //public double rotation()
+        //{
+        //    double x1 = 0.0;
+        //    double y1 = 0.0;
+        //    double x2 = 1.0;
+        //    double y2 = 0.0;
+        //    Transform(ref x1, ref y1);
+        //    Transform(ref x2, ref y2);
+        //    return Math.Atan2(y2 - y1, x2 - x1);
+        //}
 
-        public void translation(out double dx, out double dy)
-        {
-            dx = tx;
-            dy = ty;
-        }
+        //public void translation(out double dx, out double dy)
+        //{
+        //    dx = tx;
+        //    dy = ty;
+        //}
 
-        public void scaling(out double x, out double y)
-        {
-            double x1 = 0.0;
-            double y1 = 0.0;
-            double x2 = 1.0;
-            double y2 = 1.0;
-            Affine t = new Affine(this);
-            t *= NewRotation(-rotation());
-            t.transform(ref x1, ref y1);
-            t.transform(ref x2, ref y2);
-            x = x2 - x1;
-            y = y2 - y1;
-        }
+        //void scaling(out double x, out double y)
+        //{
+        //    double x1 = 0.0;
+        //    double y1 = 0.0;
+        //    double x2 = 1.0;
+        //    double y2 = 1.0;
 
-        public void scaling_abs(out double x, out double y)
-        {
-            // Used to calculate scaling coefficients in image resampling. 
-            // When there is considerable shear this method gives us much
-            // better estimation than just sx, sy.
-            x = Math.Sqrt(sx * sx + shx * shx);
-            y = Math.Sqrt(shy * shy + sy * sy);
-        }
-    };
+        //    Affine t = new Affine(this);
+        //    t *= NewRotation(-rotation());
+        //    t.Transform(ref x1, ref y1);
+        //    t.Transform(ref x2, ref y2);
+        //    x = x2 - x1;
+        //    y = y2 - y1;
+        //}
+        //void scaling_abs(out double x, out double y)
+        //{
+        //    // Used to calculate scaling coefficients in image resampling. 
+        //    // When there is considerable shear this method gives us much
+        //    // better estimation than just sx, sy.
+        //    x = Math.Sqrt(sx * sx + shx * shx);
+        //    y = Math.Sqrt(shy * shy + sy * sy);
+        //}
+    }
 }
