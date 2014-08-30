@@ -33,18 +33,18 @@ using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filt
 namespace MatterHackers.Agg
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    class span_image_filter_rgb_nn_stepXby1 : span_image_filter
+    class SpanImageFilterRBG_NNStepXby1 : SpanImageFilter
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public span_image_filter_rgb_nn_stepXby1(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
+        public SpanImageFilterRBG_NNStepXby1(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
             : base(sourceAccessor, spanInterpolator, null)
         {
         }
 
-        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             if (SourceRenderingBuffer.BitDepth != 24)
@@ -88,19 +88,19 @@ namespace MatterHackers.Agg
     }
 
     //===============================================span_image_filter_rgb_nn
-    public class span_image_filter_rgb_nn : span_image_filter
+    class SpanImageFilterRGB_NN : SpanImageFilter
     {
-        const int base_shift = 8;
-        const int base_scale = (int)(1 << base_shift);
-        const int base_mask = base_scale - 1;
+        const int BASE_SHIFT = 8;
+        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
+        const int BASE_MASK = BASE_SCALE - 1;
 
         //--------------------------------------------------------------------
-        public span_image_filter_rgb_nn(IImageBufferAccessor src, ISpanInterpolator inter)
+        public SpanImageFilterRGB_NN(IImageBufferAccessor src, ISpanInterpolator inter)
             : base(src, inter, null)
         {
         }
 
-        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
             if (SourceRenderingBuffer.BitDepth != 24)
@@ -133,14 +133,14 @@ namespace MatterHackers.Agg
     };
 
     //==========================================span_image_filter_rgb_bilinear
-    public class span_image_filter_rgb_bilinear : span_image_filter
+    class SpanImageFilterRGB_Bilinear : SpanImageFilter
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
         //--------------------------------------------------------------------
-        public span_image_filter_rgb_bilinear(IImageBufferAccessor src,
+        public SpanImageFilterRGB_Bilinear(IImageBufferAccessor src,
                                             ISpanInterpolator inter)
             : base(src, inter, null)
         {
@@ -150,7 +150,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
@@ -259,7 +259,7 @@ namespace MatterHackers.Agg
     }
 
     //=====================================span_image_filter_rgb_bilinear_clip
-    public class span_image_filter_rgb_bilinear_clip : span_image_filter
+    class SpanImageFilterRGB_BilinearClip : SpanImageFilter
     {
         ColorRGBA m_OutsideSourceColor;
 
@@ -268,7 +268,7 @@ namespace MatterHackers.Agg
         const int BASE_MASK = BASE_SCALE - 1;
 
         //--------------------------------------------------------------------
-        public span_image_filter_rgb_bilinear_clip(IImageBufferAccessor src,
+        public SpanImageFilterRGB_BilinearClip(IImageBufferAccessor src,
                                             IColor back_color,
                                             ISpanInterpolator inter)
             : base(src, inter, null)
@@ -278,7 +278,7 @@ namespace MatterHackers.Agg
         public IColor background_color() { return m_OutsideSourceColor; }
         public void background_color(IColor v) { m_OutsideSourceColor = v.GetAsRGBA_Bytes(); }
 
-        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
@@ -442,12 +442,11 @@ namespace MatterHackers.Agg
     };
 
     //===================================================span_image_filter_rgb
-    public class span_image_filter_rgb : span_image_filter
+    class SpanImageFilterRGB : SpanImageFilter
     {
         const int BASE_MASK = 255;
-
         //--------------------------------------------------------------------
-        public span_image_filter_rgb(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
+        public SpanImageFilterRGB(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
             : base(src, inter, filter)
         {
             if (src.SourceImage.GetBytesBetweenPixelsInclusive() != 3)
@@ -456,7 +455,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
 
@@ -558,17 +557,17 @@ namespace MatterHackers.Agg
     };
 
     //===============================================span_image_filter_rgb_2x2
-    public class span_image_filter_rgb_2x2 : span_image_filter
+    class SpanImageFilterRGB_2x2 : SpanImageFilter
     {
         const int BASE_MASK = 255;
 
         //--------------------------------------------------------------------
-        public span_image_filter_rgb_2x2(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
+        public SpanImageFilterRGB_2x2(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
             : base(src, inter, filter)
         {
         }
 
-        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             throw new NotImplementedException(); /*
             ISpanInterpolator spanInterpolator = base.interpolator();
@@ -652,135 +651,19 @@ namespace MatterHackers.Agg
             } while (--len != 0);
                                                       */
         }
-    };
+    }
 
-    /*
-    //==========================================span_image_resample_rgb_affine
-    template<class Source> 
-    class span_image_resample_rgb_affine : 
-    public span_image_resample_affine<Source>
-    {
-    public:
-        typedef Source source_type;
-        typedef typename source_type::color_type color_type;
-        typedef typename source_type::order_type order_type;
-        typedef span_image_resample_affine<source_type> base_type;
-        typedef typename base_type::interpolator_type interpolator_type;
-        typedef typename color_type::value_type value_type;
-        typedef typename color_type::long_type long_type;
-        enum base_scale_e
-        {
-            base_shift      = 8,//color_type::base_shift,
-            base_mask       = 255,//color_type::base_mask,
-            downscale_shift = image_filter_shift
-        };
-
-        //--------------------------------------------------------------------
-        span_image_resample_rgb_affine() {}
-        span_image_resample_rgb_affine(source_type& src, 
-                                       interpolator_type& inter,
-                                       const ImageFilterLookUpTable& filter) :
-            base(src, inter, filter) 
-        {}
-
-
-        //--------------------------------------------------------------------
-        void generate(color_type* span, int x, int y, unsigned len)
-        {
-            base_type::interpolator().begin(x + base_type::filter_dx_dbl(), 
-                                            y + base_type::filter_dy_dbl(), len);
-
-            long_type fg[3];
-
-            int diameter     = base_type::filter().diameter();
-            int filter_scale = diameter << image_subpixel_shift;
-            int radius_x     = (diameter * base_type::m_rx) >> 1;
-            int radius_y     = (diameter * base_type::m_ry) >> 1;
-            int len_x_lr     = 
-                (diameter * base_type::m_rx + image_subpixel_mask) >> 
-                    image_subpixel_shift;
-
-            const int16* weight_array = base_type::filter().weight_array();
-
-            do
-            {
-                base_type::interpolator().coordinates(&x, &y);
-
-                x += base_type::filter_dx_int() - radius_x;
-                y += base_type::filter_dy_int() - radius_y;
-
-                fg[0] = fg[1] = fg[2] = image_filter_scale / 2;
-
-                int y_lr = y >> image_subpixel_shift;
-                int y_hr = ((image_subpixel_mask - (y & image_subpixel_mask)) * 
-                                base_type::m_ry_inv) >> 
-                                    image_subpixel_shift;
-                int total_weight = 0;
-                int x_lr = x >> image_subpixel_shift;
-                int x_hr = ((image_subpixel_mask - (x & image_subpixel_mask)) * 
-                                base_type::m_rx_inv) >> 
-                                    image_subpixel_shift;
-
-                int x_hr2 = x_hr;
-                const value_type* fg_ptr = 
-                    source().pix_ptr(x_lr, y_lr, len_x_lr);
-                for(;;)
-                {
-                    int weight_y = weight_array[y_hr];
-                    x_hr = x_hr2;
-                    for(;;)
-                    {
-                        int weight = (weight_y * weight_array[x_hr] + 
-                                     image_filter_scale / 2) >> 
-                                     downscale_shift;
-
-                        fg[0] += *fg_ptr++ * weight;
-                        fg[1] += *fg_ptr++ * weight;
-                        fg[2] += *fg_ptr   * weight;
-                        total_weight += weight;
-                        x_hr  += base_type::m_rx_inv;
-                        if(x_hr >= filter_scale) break;
-                        fg_ptr = SourceRenderingBuffer.next_x();
-                    }
-                    y_hr += base_type::m_ry_inv;
-                    if(y_hr >= filter_scale) break;
-                    fg_ptr = SourceRenderingBuffer.next_y();
-                }
-
-                fg[0] /= total_weight;
-                fg[1] /= total_weight;
-                fg[2] /= total_weight;
-
-                if(fg[0] < 0) fg[0] = 0;
-                if(fg[1] < 0) fg[1] = 0;
-                if(fg[2] < 0) fg[2] = 0;
-
-                if(fg[order_type::R] > base_mask) fg[order_type::R] = base_mask;
-                if(fg[order_type::G] > base_mask) fg[order_type::G] = base_mask;
-                if(fg[order_type::B] > base_mask) fg[order_type::B] = base_mask;
-
-                span->r = (value_type)fg[order_type::R];
-                span->g = (value_type)fg[order_type::G];
-                span->b = (value_type)fg[order_type::B];
-                span->a = base_mask;
-
-                span++;
-                ++base_type::interpolator();
-            } while(--len);
-        }
-    };
-     */
 
 
     //=================================================span_image_resample_rgb
-    public class span_image_resample_rgb
-        : span_image_resample
+    class SpanImageResampleRGB
+      : SpanImageResample
     {
         private const int base_mask = 255;
         private const int downscale_shift = (int)ImageFilterLookUpTable.image_filter_scale_e.image_filter_shift;
 
         //--------------------------------------------------------------------
-        public span_image_resample_rgb(IImageBufferAccessor src,
+        public SpanImageResampleRGB(IImageBufferAccessor src,
                             ISpanInterpolator inter,
                             ImageFilterLookUpTable filter) :
             base(src, inter, filter)
@@ -791,7 +674,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public override void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.interpolator();
             spanInterpolator.begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);

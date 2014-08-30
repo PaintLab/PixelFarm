@@ -31,9 +31,9 @@ namespace MatterHackers.Agg
         {
             get;
         }
-    };
+    }
 
-    public class ImageBufferAccessorCommon : IImageBufferAccessor
+    public abstract class ImageBufferAccessor : IImageBufferAccessor
     {
         protected IImage m_SourceImage;
         protected int m_x, m_x0, m_y, m_DistanceBetweenPixelsInclusive;
@@ -41,7 +41,7 @@ namespace MatterHackers.Agg
         protected int m_CurrentBufferOffset = -1;
         int m_Width;
 
-        public ImageBufferAccessorCommon(IImage pixf)
+        public ImageBufferAccessor(IImage pixf)
         {
             attach(pixf);
         }
@@ -150,7 +150,7 @@ namespace MatterHackers.Agg
         }
     };
 
-    public sealed class ImageBufferAccessorClip : ImageBufferAccessorCommon
+    public sealed class ImageBufferAccessorClip : ImageBufferAccessor
     {
         byte[] m_OutsideBufferColor;
 
@@ -164,20 +164,20 @@ namespace MatterHackers.Agg
             m_OutsideBufferColor[3] = bk.alpha;
         }
 
-        private byte[] pixel(out int bufferByteOffset)
-        {
-            unchecked
-            {
-                if (((uint)m_x < (uint)m_SourceImage.Width)
-                    && ((uint)m_y < (uint)m_SourceImage.Height))
-                {
-                    bufferByteOffset = m_SourceImage.GetBufferOffsetXY(m_x, m_y);
-                    return m_SourceImage.GetBuffer();
-                }
-            }
+        //private byte[] pixel(out int bufferByteOffset)
+        //{
+        //    unchecked
+        //    {
+        //        if (((uint)m_x < (uint)m_SourceImage.Width)
+        //            && ((uint)m_y < (uint)m_SourceImage.Height))
+        //        {
+        //            bufferByteOffset = m_SourceImage.GetBufferOffsetXY(m_x, m_y);
+        //            return m_SourceImage.GetBuffer();
+        //        }
+        //    }
 
-            bufferByteOffset = 0;
-            return m_OutsideBufferColor;
-        }
+        //    bufferByteOffset = 0;
+        //    return m_OutsideBufferColor;
+        //}
     }  
 }

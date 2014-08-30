@@ -59,7 +59,7 @@ namespace MatterHackers.Agg.Lines
     {
         IPatternFilter m_filter;
         int m_dilation;
-        int m_dilation_hr; 
+        int m_dilation_hr;
         ChildImage m_buf;
         byte[] m_data = null;
         int m_DataSizeInBytes = 0;
@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.Lines
         public line_image_pattern(IPatternFilter filter)
         {
             m_filter = filter;
-            m_dilation = (filter.dilation() + 1);
+            m_dilation = (filter.Dilation + 1);
             m_dilation_hr = (m_dilation << LineAABasics.SUBPIXEL_SHIFT);
             m_width = (0);
             m_height = (0);
@@ -86,7 +86,7 @@ namespace MatterHackers.Agg.Lines
             get
             {
                 throw new NotSupportedException();
-                 
+
             }
         }
         ~line_image_pattern()
@@ -102,7 +102,7 @@ namespace MatterHackers.Agg.Lines
         public line_image_pattern(IPatternFilter filter, line_image_pattern src)
         {
             m_filter = (filter);
-            m_dilation = (filter.dilation() + 1);
+            m_dilation = (filter.Dilation + 1);
             m_dilation_hr = (m_dilation << LineAABasics.SUBPIXEL_SHIFT);
             m_width = 0;
             m_height = 0;
@@ -152,7 +152,7 @@ namespace MatterHackers.Agg.Lines
 
 
             m_buf = new ChildImage(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
-   
+
             byte[] destBuffer = m_buf.GetBuffer();
             byte[] sourceBuffer = src.GetBuffer();
 
@@ -198,7 +198,7 @@ namespace MatterHackers.Agg.Lines
         //--------------------------------------------------------------------
         public void pixel(ColorRGBA[] destBuffer, int destBufferOffset, int x, int y)
         {
-            m_filter.pixel_high_res(m_buf, destBuffer, destBufferOffset,
+            m_filter.SetPixelHighRes(m_buf, destBuffer, destBufferOffset,
                                      x % m_width_hr + m_dilation_hr,
                                      y + m_offset_y_hr);
         }

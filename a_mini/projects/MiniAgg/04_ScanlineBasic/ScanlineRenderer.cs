@@ -86,7 +86,7 @@ namespace MatterHackers.Agg
                     tempSpanColors.Clear(len);
                 }
 
-                span_gen.generate(tempSpanColors.Array, 0, x, y, len);
+                span_gen.Generate(tempSpanColors.Array, 0, x, y, len);
 
                 bool useFirstCoverForAll = span.len < 0;
 
@@ -104,7 +104,7 @@ namespace MatterHackers.Agg
             if (rasterizer.rewind_scanlines())
             {
                 scline.ResetSpans(rasterizer.min_x(), rasterizer.max_x());
-                spanGenerator.prepare();
+                spanGenerator.Prepare();
                 while (rasterizer.sweep_scanline(scline))
                 {
                     GenerateAndRenderSingleScanline(scline, destImage, spanGenerator);

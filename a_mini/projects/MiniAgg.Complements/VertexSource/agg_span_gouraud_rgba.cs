@@ -111,7 +111,7 @@ namespace MatterHackers.Agg.VertexSource
         {}
 
         //--------------------------------------------------------------------
-        public void prepare()
+        public void Prepare()
         {
             coord_type[] coord = new coord_type[3];
             base.arrange_vertices(coord);
@@ -127,7 +127,7 @@ namespace MatterHackers.Agg.VertexSource
             m_rgba3.init(coord[1], coord[2]);
         }
 
-        public void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             m_rgba1.calc(y);//(m_rgba1.m_1dy > 2) ? m_rgba1.m_y1 : y);
             rgba_calc pc1 = m_rgba1;
