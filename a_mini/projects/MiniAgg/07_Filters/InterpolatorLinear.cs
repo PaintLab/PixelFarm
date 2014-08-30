@@ -42,8 +42,8 @@ namespace MatterHackers.Agg.Lines
     public sealed class InterpolatorLinear : ISpanInterpolator
     {
         Transform.ITransform m_trans;
-        dda2_line_interpolator m_li_x;
-        dda2_line_interpolator m_li_y;
+        LineInterpolatorDDA2 m_li_x;
+        LineInterpolatorDDA2 m_li_y;
 
 
         const int SUB_PIXEL_SHIFT = 8;
@@ -90,16 +90,16 @@ namespace MatterHackers.Agg.Lines
             int x2 = AggBasics.iround(tx * (double)SUB_PIXEL_SCALE);
             int y2 = AggBasics.iround(ty * (double)SUB_PIXEL_SCALE);
 
-            m_li_x = new dda2_line_interpolator(x1, x2, (int)len);
-            m_li_y = new dda2_line_interpolator(y1, y2, (int)len);
+            m_li_x = new LineInterpolatorDDA2(x1, x2, (int)len);
+            m_li_y = new LineInterpolatorDDA2(y1, y2, (int)len);
         }
 
         //----------------------------------------------------------------
         public void resynchronize(double xe, double ye, int len)
         {
             m_trans.Transform(ref xe, ref ye);
-            m_li_x = new dda2_line_interpolator(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
-            m_li_y = new dda2_line_interpolator(m_li_y.y(), AggBasics.iround(ye * (double)SUB_PIXEL_SCALE), (int)len);
+            m_li_x = new LineInterpolatorDDA2(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
+            m_li_y = new LineInterpolatorDDA2(m_li_y.y(), AggBasics.iround(ye * (double)SUB_PIXEL_SCALE), (int)len);
         }
 
         

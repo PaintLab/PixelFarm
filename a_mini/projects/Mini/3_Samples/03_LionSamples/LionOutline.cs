@@ -163,11 +163,11 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
                 LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new gamma_none());
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
-                rasterizer_outline_aa rasterizer = new rasterizer_outline_aa(outlineRenderer);
+                OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
 
                 rasterizer.line_join(RenderAccurateJoins ?
-                    rasterizer_outline_aa.outline_aa_join_e.outline_miter_accurate_join
-                    : rasterizer_outline_aa.outline_aa_join_e.outline_round_join);
+                    OutlineAARasterizer.outline_aa_join_e.outline_miter_accurate_join
+                    : OutlineAARasterizer.outline_aa_join_e.outline_round_join);
                 rasterizer.round_cap(true);
 
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);

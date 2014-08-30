@@ -21,31 +21,31 @@ namespace MatterHackers.Agg.Lines
     //-----------------------------------------------------------line_aa_vertex
     // Vertex (x, y) with the distance to the next one. The last vertex has 
     // the distance between the last and the first points
-    public struct line_aa_vertex
+    public struct LineAAVertex
     {
         public int x;
         public int y;
         public int len;
 
-        public line_aa_vertex(int x_, int y_)
+        public LineAAVertex(int x, int y)
         {
-            x = (x_);
-            y = (y_);
-            len = (0);
+            this.x = x;
+            this.y = y;
+            len = 0;
         }
 
-        public bool Compare(line_aa_vertex val)
+        public bool Compare(LineAAVertex val)
         {
             double dx = val.x - x;
             double dy = val.y - y;
             return (len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy))) >
                    (LineAABasics.SUBPIXEL_SCALE + LineAABasics.SUBPIXEL_SCALE / 2);
         }
-    };
+    }
 
-    public class line_aa_vertex_sequence : ArrayList<line_aa_vertex>
+    public class LineAAVertexSequence : ArrayList<LineAAVertex>
     {
-        public override void AddVertex(line_aa_vertex val)
+        public override void AddVertex(LineAAVertex val)
         {
             if (base.Count > 1)
             {
@@ -57,7 +57,7 @@ namespace MatterHackers.Agg.Lines
             base.AddVertex(val);
         }
 
-        public void modify_last(line_aa_vertex val)
+        public void modify_last(LineAAVertex val)
         {
             base.RemoveLast();
             AddVertex(val);
@@ -68,7 +68,7 @@ namespace MatterHackers.Agg.Lines
             while (base.Count > 1)
             {
                 if (Array[base.Count - 2].Compare(Array[base.Count - 1])) break;
-                line_aa_vertex t = this[base.Count - 1];
+                LineAAVertex t = this[base.Count - 1];
                 base.RemoveLast();
                 modify_last(t);
             }
@@ -100,10 +100,10 @@ namespace MatterHackers.Agg.Lines
     }
 
     //=======================================================rasterizer_outline_aa
-    public class rasterizer_outline_aa
+    public class OutlineAARasterizer
     {
         LineRenderer m_ren;
-        line_aa_vertex_sequence m_src_vertices = new line_aa_vertex_sequence();
+        LineAAVertexSequence m_src_vertices = new LineAAVertexSequence();
         outline_aa_join_e m_line_join;
         bool m_round_cap;
         int m_start_x;
@@ -207,7 +207,7 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public rasterizer_outline_aa(LineRenderer ren)
+        public OutlineAARasterizer(LineRenderer ren)
         {
             m_ren = ren;
             m_line_join = (OutlineRenderer.accurate_join_only() ?
@@ -233,12 +233,12 @@ namespace MatterHackers.Agg.Lines
 
         public void move_to(int x, int y)
         {
-            m_src_vertices.modify_last(new line_aa_vertex(m_start_x = x, m_start_y = y));
+            m_src_vertices.modify_last(new LineAAVertex(m_start_x = x, m_start_y = y));
         }
 
         public void line_to(int x, int y)
         {
-            m_src_vertices.AddVertex(new line_aa_vertex(x, y));
+            m_src_vertices.AddVertex(new LineAAVertex(x, y));
         }
 
         public void move_to_d(double x, double y)
@@ -255,7 +255,7 @@ namespace MatterHackers.Agg.Lines
         {
             m_src_vertices.close(close_polygon);
             draw_vars dv = new draw_vars();
-            line_aa_vertex v;
+            LineAAVertex v;
             int x1;
             int y1;
             int x2;

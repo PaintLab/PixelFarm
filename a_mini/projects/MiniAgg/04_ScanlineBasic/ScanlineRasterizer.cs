@@ -88,15 +88,15 @@ namespace MatterHackers.Agg
 
     public sealed class ScanlineRasterizer : IRasterizer
     {
-        private RasterizerCellsAA m_outline;
-        private VectorClipper m_VectorClipper;
-        private int[] m_gamma = new int[AA_SCALE];
-        private FillingRule m_filling_rule;
-        private bool m_auto_close;
-        private int m_start_x;
-        private int m_start_y;
-        private Status m_status;
-        private int m_scan_y;
+        RasterizerCellsAA m_outline;
+        VectorClipper m_VectorClipper;
+        int[] m_gamma = new int[AA_SCALE];
+        FillingRule m_filling_rule;
+        bool m_auto_close;
+        int m_start_x;
+        int m_start_y;
+        Status m_status;
+        int m_scan_y;
 
 
         //---------------------------

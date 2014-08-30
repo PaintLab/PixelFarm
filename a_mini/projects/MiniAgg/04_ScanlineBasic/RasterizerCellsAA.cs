@@ -40,7 +40,7 @@ namespace MatterHackers.Agg
     // A pixel cell. There're no constructors defined and it was done ***
     // intentionally in order to avoid extra overhead when allocating an ****
     // array of cells. ***
-    public struct CellAA
+    struct CellAA
     {
         public int x;
         public int y;
@@ -87,9 +87,9 @@ namespace MatterHackers.Agg
         {
             return "x:" + x + ",y:" + y + ",cover:" + cover + ",area:" + area + ",left:" + left + ",right:" + right;
         }
-#endif 
+#endif
 
-    } 
+    }
 
 
     //-----------------------------------------------------rasterizer_cells_aa
@@ -631,5 +631,5 @@ namespace MatterHackers.Agg
         }
     }
 
-    
+
 }

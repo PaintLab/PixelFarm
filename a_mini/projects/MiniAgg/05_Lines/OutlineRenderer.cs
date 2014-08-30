@@ -450,7 +450,7 @@ namespace MatterHackers.Agg.Lines
     public class line_interpolator_aa_base
     {
         protected LineParameters m_lp;
-        protected dda2_line_interpolator m_li;
+        protected LineInterpolatorDDA2 m_li;
         protected OutlineRenderer m_ren;
         int m_len;
         protected int m_x;
@@ -470,7 +470,7 @@ namespace MatterHackers.Agg.Lines
         public line_interpolator_aa_base(OutlineRenderer ren, LineParameters lp)
         {
             m_lp = lp;
-            m_li = new dda2_line_interpolator(lp.vertical ? LineAABasics.line_dbl_hr(lp.x2 - lp.x1) : LineAABasics.line_dbl_hr(lp.y2 - lp.y1),
+            m_li = new LineInterpolatorDDA2(lp.vertical ? LineAABasics.line_dbl_hr(lp.x2 - lp.x1) : LineAABasics.line_dbl_hr(lp.y2 - lp.y1),
                 lp.vertical ? Math.Abs(lp.y2 - lp.y1) : Math.Abs(lp.x2 - lp.x1) + 1);
             m_ren = ren;
             m_len = ((lp.vertical == (lp.inc > 0)) ? -lp.len : lp.len);
@@ -485,7 +485,7 @@ namespace MatterHackers.Agg.Lines
             m_max_extent = ((m_width + LineAABasics.SUBPIXEL_MARK) >> LineAABasics.SUBPIXEL_SHIFT);
             m_step = 0;
 
-            dda2_line_interpolator li = new dda2_line_interpolator(0,
+            LineInterpolatorDDA2 li = new LineInterpolatorDDA2(0,
                 lp.vertical ? (lp.dy << LineAABasics.SUBPIXEL_SHIFT) : (lp.dx << LineAABasics.SUBPIXEL_SHIFT),
                 lp.len);
 
