@@ -305,7 +305,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        private void add_vertex(IVertexDest vc, double x, double y)
+        void add_vertex(IVertexDest vc, double x, double y)
         {
             vc.AddVertex(new Vector2(x, y));
         }

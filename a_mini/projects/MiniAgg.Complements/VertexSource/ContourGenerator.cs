@@ -72,7 +72,7 @@ namespace MatterHackers.Agg.VertexSource
             m_status = StrokeMath.Status.Init;
             if (ShapePath.is_move_to(cmd))
             {
-                m_src_vertices.modify_last(new VertexDistance(x, y));
+                m_src_vertices.ReplaceLast(new VertexDistance(x, y));
             }
             else
             {
@@ -99,7 +99,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             if (m_status == StrokeMath.Status.Init)
             {
-                m_src_vertices.close(true);
+                m_src_vertices.Close(true);
                 if (m_auto_detect)
                 {
                     if (!ShapePath.is_oriented(m_orientation))

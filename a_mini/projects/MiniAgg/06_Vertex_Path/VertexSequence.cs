@@ -76,13 +76,13 @@ namespace MatterHackers.Agg
             base.AddVertex(val);
         }
 
-        public void modify_last(VertexDistance val)
+        public void ReplaceLast(VertexDistance val)
         {
             base.RemoveLast();
             AddVertex(val);
         }
 
-        public void close(bool closed)
+        public void Close(bool closed)
         {
             int snapSize = base.Count;
             while (snapSize > 1)
@@ -94,7 +94,7 @@ namespace MatterHackers.Agg
                 VertexDistance t = this[snapSize - 1];
                 base.RemoveLast();
                 snapSize--;
-                modify_last(t);
+                ReplaceLast(t);
             }
 
             if (closed)
