@@ -32,7 +32,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.poly_subpixel_scale_e;
+using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 
 namespace MatterHackers.Agg
 {
@@ -159,11 +159,11 @@ namespace MatterHackers.Agg
             m_style_cell.style(style_cell);
         }
 
-        enum dx_limit_e { dx_limit = 16384 << AggBasics.poly_subpixel_scale_e.poly_subpixel_shift };
+        enum dx_limit_e { dx_limit = 16384 << AggBasics.PolySubPixelScale.poly_subpixel_shift };
 
-        const int poly_subpixel_shift = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_shift;
-        const int poly_subpixel_mask = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_mask;
-        const int poly_subpixel_scale = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_scale;
+        const int poly_subpixel_shift = (int)AggBasics.PolySubPixelScale.poly_subpixel_shift;
+        const int poly_subpixel_mask = (int)AggBasics.PolySubPixelScale.poly_subpixel_mask;
+        const int poly_subpixel_scale = (int)AggBasics.PolySubPixelScale.poly_subpixel_scale;
 
         public void line(int x1, int y1, int x2, int y2)
         {

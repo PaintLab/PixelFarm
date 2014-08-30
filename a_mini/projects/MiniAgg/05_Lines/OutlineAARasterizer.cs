@@ -243,12 +243,12 @@ namespace MatterHackers.Agg.Lines
 
         public void move_to_d(double x, double y)
         {
-            move_to(line_coord_sat.conv(x), line_coord_sat.conv(y));
+            move_to(LineCoordSat.Convert(x), LineCoordSat.Convert(y));
         }
 
         public void line_to_d(double x, double y)
         {
-            line_to(line_coord_sat.conv(x), line_coord_sat.conv(y));
+            line_to(LineCoordSat.Convert(x), LineCoordSat.Convert(y));
         }
 
         public void render(bool close_polygon)

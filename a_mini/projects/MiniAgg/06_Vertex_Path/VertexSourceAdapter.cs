@@ -23,10 +23,11 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-   
+
     //------------------------------------------------------conv_adaptor_vcgen
     public abstract class VertexSourceAdapter : IVertexSourceProxy
     {
+        //null pattern
         struct NullMarkers : IMarkers
         {
             public void remove_all() { }
@@ -35,11 +36,11 @@ namespace MatterHackers.Agg.VertexSource
 
             public void rewind(int unknown) { }
             public ShapePath.FlagsAndCommand vertex(ref double x, ref double y) { return ShapePath.FlagsAndCommand.CommandStop; }
-        } 
+        }
 
         private IGenerator generator;
         private IMarkers markers;
-        private status m_status;
+        private Status m_status;
         private ShapePath.FlagsAndCommand m_last_cmd;
         private double m_start_x;
         private double m_start_y;
@@ -50,19 +51,19 @@ namespace MatterHackers.Agg.VertexSource
             set;
         }
 
-        private enum status
+        enum Status
         {
-            initial,
-            accumulate,
-            generate
-        };
+            Initial,
+            Accumulate,
+            Generate
+        }
 
         public VertexSourceAdapter(IVertexSource vertexSource, IGenerator generator)
         {
             markers = new NullMarkers();
             this.VertexSource = vertexSource;
             this.generator = generator;
-            m_status = status.initial;
+            m_status = Status.Initial;
         }
 
         public VertexSourceAdapter(IVertexSource vertexSource, IGenerator generator, IMarkers markers)
@@ -85,14 +86,16 @@ namespace MatterHackers.Agg.VertexSource
                 double x;
                 double y;
                 command = GetVertex(out x, out y);
+
                 yield return new VertexData(command, new Vector2(x, y));
+
             } while (command != ShapePath.FlagsAndCommand.CommandStop);
         }
 
         public void rewind(int path_id)
         {
             VertexSource.rewind(path_id);
-            m_status = status.initial;
+            m_status = Status.Initial;
         }
 
         public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
@@ -105,13 +108,13 @@ namespace MatterHackers.Agg.VertexSource
             {
                 switch (m_status)
                 {
-                    case status.initial:
+                    case Status.Initial:
                         markers.remove_all();
                         m_last_cmd = VertexSource.GetVertex(out m_start_x, out m_start_y);
-                        m_status = status.accumulate;
-                        goto case status.accumulate;
+                        m_status = Status.Accumulate;
+                        goto case Status.Accumulate;
 
-                    case status.accumulate:
+                    case Status.Accumulate:
                         if (ShapePath.is_stop(m_last_cmd))
                         {
                             return ShapePath.FlagsAndCommand.CommandStop;
@@ -152,15 +155,15 @@ namespace MatterHackers.Agg.VertexSource
                             }
                         }
                         generator.Rewind(0);
-                        m_status = status.generate;
-                        goto case status.generate;
+                        m_status = Status.Generate;
+                        goto case Status.Generate;
 
-                    case status.generate:
+                    case Status.Generate:
                         command = generator.Vertex(ref x, ref y);
                         //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
                         if (ShapePath.is_stop(command))
                         {
-                            m_status = status.accumulate;
+                            m_status = Status.Accumulate;
                             break;
                         }
                         done = true;

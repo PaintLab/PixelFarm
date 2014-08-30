@@ -89,8 +89,9 @@ namespace MatterHackers.Agg
 
         //-----------------------------------------------------bounding_rect_single
         //template<class VertexSource, class CoordT> 
-        public static bool bounding_rect_single(IVertexSource vs, int path_id,
-                                  out double x1, out double y1, out double x2, out double y2)
+        public static bool bounding_rect_single(
+            IVertexSource vs, int path_id,
+            out double x1, out double y1, out double x2, out double y2)
         {
             double x = 0;
             double y = 0;

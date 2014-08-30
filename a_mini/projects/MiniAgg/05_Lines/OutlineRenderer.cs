@@ -18,25 +18,27 @@ using MatterHackers.Agg.Image;
 namespace MatterHackers.Agg.Lines
 {
     //-----------------------------------------------------------line_coord_sat
-    public struct line_coord_sat
+    public static class LineCoordSat
     {
-        public static int conv(double x)
+        public static int Convert(double x)
         {
-            return AggBasics.iround(x * LineAABasics.SUBPIXEL_SCALE, LineAABasics.SUBPIXEL_COORD);
+            return AggBasics.iround(
+                x * LineAABasics.SUBPIXEL_SCALE,
+                LineAABasics.SUBPIXEL_COORD);
         }
-    }  
+    }
 
 #if true
     //===================================================distance_interpolator0
-    public class distance_interpolator0
+    class DistanceInterpolator0
     {
         int m_dx;
         int m_dy;
         int m_dist;
 
         //---------------------------------------------------------------------
-        public distance_interpolator0() { }
-        public distance_interpolator0(int x1, int y1, int x2, int y2, int x, int y)
+        public DistanceInterpolator0() { }
+        public DistanceInterpolator0(int x1, int y1, int x2, int y2, int x, int y)
         {
             unchecked
             {
@@ -53,10 +55,10 @@ namespace MatterHackers.Agg.Lines
         //---------------------------------------------------------------------
         public void inc_x() { m_dist += m_dy; }
         public int dist() { return m_dist; }
-    };
+    }
 
     //==================================================distance_interpolator00
-    public class distance_interpolator00
+    class DistanceInterpolator00
     {
         int m_dx1;
         int m_dy1;
@@ -66,8 +68,8 @@ namespace MatterHackers.Agg.Lines
         int m_dist2;
 
         //---------------------------------------------------------------------
-        public distance_interpolator00() { }
-        public distance_interpolator00(int xc, int yc,
+        public DistanceInterpolator00() { }
+        public DistanceInterpolator00(int xc, int yc,
                                 int x1, int y1, int x2, int y2,
                                 int x, int y)
         {
@@ -93,15 +95,15 @@ namespace MatterHackers.Agg.Lines
     };
 
     //===================================================distance_interpolator1
-    public class distance_interpolator1
+    public class DistanceInterpolator1
     {
         int m_dx;
         int m_dy;
         int m_dist;
 
         //---------------------------------------------------------------------
-        public distance_interpolator1() { }
-        public distance_interpolator1(int x1, int y1, int x2, int y2, int x, int y)
+        public DistanceInterpolator1() { }
+        public DistanceInterpolator1(int x1, int y1, int x2, int y2, int x, int y)
         {
             m_dx = (x2 - x1);
             m_dy = (y2 - y1);
@@ -161,7 +163,7 @@ namespace MatterHackers.Agg.Lines
 
 
     //===================================================distance_interpolator2
-    public class distance_interpolator2
+    public class DistanceInterpolator2
     {
         int m_dx;
         int m_dy;
@@ -172,8 +174,8 @@ namespace MatterHackers.Agg.Lines
         int m_dist_start;
 
         //---------------------------------------------------------------------
-        public distance_interpolator2() { }
-        public distance_interpolator2(int x1, int y1, int x2, int y2,
+        public DistanceInterpolator2() { }
+        public DistanceInterpolator2(int x1, int y1, int x2, int y2,
                                int sx, int sy, int x, int y)
         {
             m_dx = (x2 - x1);
@@ -193,7 +195,7 @@ namespace MatterHackers.Agg.Lines
             m_dy_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
         }
 
-        public distance_interpolator2(int x1, int y1, int x2, int y2,
+        public DistanceInterpolator2(int x1, int y1, int x2, int y2,
                                int ex, int ey, int x, int y, int none)
         {
             m_dx = (x2 - x1);
@@ -307,7 +309,7 @@ namespace MatterHackers.Agg.Lines
 
 
     //===================================================distance_interpolator3
-    public class distance_interpolator3
+    public class DistanceInterpolator3
     {
         int m_dx;
         int m_dy;
@@ -321,8 +323,8 @@ namespace MatterHackers.Agg.Lines
         int m_dist_end;
 
         //---------------------------------------------------------------------
-        public distance_interpolator3() { }
-        public distance_interpolator3(int x1, int y1, int x2, int y2,
+        public DistanceInterpolator3() { }
+        public DistanceInterpolator3(int x1, int y1, int x2, int y2,
                                int sx, int sy, int ex, int ey,
                                int x, int y)
         {
@@ -444,10 +446,214 @@ namespace MatterHackers.Agg.Lines
         public int dy_start() { return m_dy_start; }
         public int dx_end() { return m_dx_end; }
         public int dy_end() { return m_dy_end; }
-    };
+    }
+
+
+    public class DistanceInterpolator4
+    {
+        int m_dx;
+        int m_dy;
+        int m_dx_start;
+        int m_dy_start;
+        int m_dx_pict;
+        int m_dy_pict;
+        int m_dx_end;
+        int m_dy_end;
+
+        int m_dist;
+        int m_dist_start;
+        int m_dist_pict;
+        int m_dist_end;
+        int m_len;
+
+        //---------------------------------------------------------------------
+        public DistanceInterpolator4() { }
+        public DistanceInterpolator4(int x1, int y1, int x2, int y2,
+                               int sx, int sy, int ex, int ey,
+                               int len, double scale, int x, int y)
+        {
+            m_dx = (x2 - x1);
+            m_dy = (y2 - y1);
+            m_dx_start = (LineAABasics.line_mr(sx) - LineAABasics.line_mr(x1));
+            m_dy_start = (LineAABasics.line_mr(sy) - LineAABasics.line_mr(y1));
+            m_dx_end = (LineAABasics.line_mr(ex) - LineAABasics.line_mr(x2));
+            m_dy_end = (LineAABasics.line_mr(ey) - LineAABasics.line_mr(y2));
+
+            m_dist = (AggBasics.iround((double)(x + LineAABasics.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+                          (double)(y + LineAABasics.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
+
+            m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
+                         (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sy)) * m_dx_start);
+
+            m_dist_end = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ex)) * m_dy_end -
+                       (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ey)) * m_dx_end);
+            m_len = (int)(AggBasics.uround(len / scale));
+
+            double d = len * scale;
+            int dx = AggBasics.iround(((x2 - x1) << LineAABasics.SUBPIXEL_SHIFT) / d);
+            int dy = AggBasics.iround(((y2 - y1) << LineAABasics.SUBPIXEL_SHIFT) / d);
+            m_dx_pict = -dy;
+            m_dy_pict = dx;
+            m_dist_pict = ((x + LineAABasics.SUBPIXEL_SCALE / 2 - (x1 - dy)) * m_dy_pict -
+                            (y + LineAABasics.SUBPIXEL_SCALE / 2 - (y1 + dx)) * m_dx_pict) >>
+                           LineAABasics.SUBPIXEL_SHIFT;
+
+            m_dx <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dy <<= LineAABasics.SUBPIXEL_SHIFT;
+            m_dx_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dy_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dx_end <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+            m_dy_end <<= LineAABasics.MR_SUBPIXEL_SHIFT;
+        }
+
+        //---------------------------------------------------------------------
+        public void inc_x()
+        {
+            m_dist += m_dy;
+            m_dist_start += m_dy_start;
+            m_dist_pict += m_dy_pict;
+            m_dist_end += m_dy_end;
+        }
+
+        //---------------------------------------------------------------------
+        public void dec_x()
+        {
+            m_dist -= m_dy;
+            m_dist_start -= m_dy_start;
+            m_dist_pict -= m_dy_pict;
+            m_dist_end -= m_dy_end;
+        }
+
+        //---------------------------------------------------------------------
+        public void inc_y()
+        {
+            m_dist -= m_dx;
+            m_dist_start -= m_dx_start;
+            m_dist_pict -= m_dx_pict;
+            m_dist_end -= m_dx_end;
+        }
+
+        //---------------------------------------------------------------------
+        public void dec_y()
+        {
+            m_dist += m_dx;
+            m_dist_start += m_dx_start;
+            m_dist_pict += m_dx_pict;
+            m_dist_end += m_dx_end;
+        }
+
+        //---------------------------------------------------------------------
+        public void inc_x(int dy)
+        {
+            m_dist += m_dy;
+            m_dist_start += m_dy_start;
+            m_dist_pict += m_dy_pict;
+            m_dist_end += m_dy_end;
+            if (dy > 0)
+            {
+                m_dist -= m_dx;
+                m_dist_start -= m_dx_start;
+                m_dist_pict -= m_dx_pict;
+                m_dist_end -= m_dx_end;
+            }
+            if (dy < 0)
+            {
+                m_dist += m_dx;
+                m_dist_start += m_dx_start;
+                m_dist_pict += m_dx_pict;
+                m_dist_end += m_dx_end;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public void dec_x(int dy)
+        {
+            m_dist -= m_dy;
+            m_dist_start -= m_dy_start;
+            m_dist_pict -= m_dy_pict;
+            m_dist_end -= m_dy_end;
+            if (dy > 0)
+            {
+                m_dist -= m_dx;
+                m_dist_start -= m_dx_start;
+                m_dist_pict -= m_dx_pict;
+                m_dist_end -= m_dx_end;
+            }
+            if (dy < 0)
+            {
+                m_dist += m_dx;
+                m_dist_start += m_dx_start;
+                m_dist_pict += m_dx_pict;
+                m_dist_end += m_dx_end;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public void inc_y(int dx)
+        {
+            m_dist -= m_dx;
+            m_dist_start -= m_dx_start;
+            m_dist_pict -= m_dx_pict;
+            m_dist_end -= m_dx_end;
+            if (dx > 0)
+            {
+                m_dist += m_dy;
+                m_dist_start += m_dy_start;
+                m_dist_pict += m_dy_pict;
+                m_dist_end += m_dy_end;
+            }
+            if (dx < 0)
+            {
+                m_dist -= m_dy;
+                m_dist_start -= m_dy_start;
+                m_dist_pict -= m_dy_pict;
+                m_dist_end -= m_dy_end;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public void dec_y(int dx)
+        {
+            m_dist += m_dx;
+            m_dist_start += m_dx_start;
+            m_dist_pict += m_dx_pict;
+            m_dist_end += m_dx_end;
+            if (dx > 0)
+            {
+                m_dist += m_dy;
+                m_dist_start += m_dy_start;
+                m_dist_pict += m_dy_pict;
+                m_dist_end += m_dy_end;
+            }
+            if (dx < 0)
+            {
+                m_dist -= m_dy;
+                m_dist_start -= m_dy_start;
+                m_dist_pict -= m_dy_pict;
+                m_dist_end -= m_dy_end;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public int dist() { return m_dist; }
+        public int dist_start() { return m_dist_start; }
+        public int dist_pict() { return m_dist_pict; }
+        public int dist_end() { return m_dist_end; }
+
+        //---------------------------------------------------------------------
+        public int dx() { return m_dx; }
+        public int dy() { return m_dy; }
+        public int dx_start() { return m_dx_start; }
+        public int dy_start() { return m_dy_start; }
+        public int dx_pict() { return m_dx_pict; }
+        public int dy_pict() { return m_dy_pict; }
+        public int dx_end() { return m_dx_end; }
+        public int dy_end() { return m_dy_end; }
+        public int len() { return m_len; }
+    } 
 
     //================================================line_interpolator_aa_base
-    public class line_interpolator_aa_base
+    public class LineInterpolatorAABase
     {
         protected LineParameters m_lp;
         protected LineInterpolatorDDA2 m_li;
@@ -467,7 +673,7 @@ namespace MatterHackers.Agg.Lines
 
         protected const int max_half_width = 64;
 
-        public line_interpolator_aa_base(OutlineRenderer ren, LineParameters lp)
+        public LineInterpolatorAABase(OutlineRenderer ren, LineParameters lp)
         {
             m_lp = lp;
             m_li = new LineInterpolatorDDA2(lp.vertical ? LineAABasics.line_dbl_hr(lp.x2 - lp.x1) : LineAABasics.line_dbl_hr(lp.y2 - lp.y1),
@@ -500,7 +706,7 @@ namespace MatterHackers.Agg.Lines
             m_dist[i++] = 0x7FFF0000;
         }
 
-        public int step_hor_base(distance_interpolator1 di)
+        public int step_hor_base(DistanceInterpolator1 di)
         {
             m_li.Next();
             m_x += m_lp.inc;
@@ -514,7 +720,7 @@ namespace MatterHackers.Agg.Lines
             return di.dist() / m_len;
         }
 
-        public int step_hor_base(distance_interpolator2 di)
+        public int step_hor_base(DistanceInterpolator2 di)
         {
             m_li.Next();
             m_x += m_lp.inc;
@@ -528,7 +734,7 @@ namespace MatterHackers.Agg.Lines
             return di.dist() / m_len;
         }
 
-        public int step_hor_base(distance_interpolator3 di)
+        public int step_hor_base(DistanceInterpolator3 di)
         {
             m_li.Next();
             m_x += m_lp.inc;
@@ -542,7 +748,7 @@ namespace MatterHackers.Agg.Lines
             return di.dist() / m_len;
         }
 
-        public int step_ver_base(distance_interpolator1 di)
+        public int step_ver_base(DistanceInterpolator1 di)
         {
             m_li.Next();
             m_y += m_lp.inc;
@@ -556,7 +762,7 @@ namespace MatterHackers.Agg.Lines
             return di.dist() / m_len;
         }
 
-        public int step_ver_base(distance_interpolator2 di)
+        public int step_ver_base(DistanceInterpolator2 di)
         {
             m_li.Next();
             m_y += m_lp.inc;
@@ -570,7 +776,7 @@ namespace MatterHackers.Agg.Lines
             return di.dist() / m_len;
         }
 
-        public int step_ver_base(distance_interpolator3 di)
+        public int step_ver_base(DistanceInterpolator3 di)
         {
             m_li.Next();
             m_y += m_lp.inc;
@@ -591,14 +797,14 @@ namespace MatterHackers.Agg.Lines
     };
 
     //====================================================line_interpolator_aa0
-    public class line_interpolator_aa0 : line_interpolator_aa_base
+    public class LineInterpolatorAA0 : LineInterpolatorAABase
     {
-        distance_interpolator1 m_di;
+        DistanceInterpolator1 m_di;
         //---------------------------------------------------------------------
-        public line_interpolator_aa0(OutlineRenderer ren, LineParameters lp)
+        public LineInterpolatorAA0(OutlineRenderer ren, LineParameters lp)
             : base(ren, lp)
         {
-            m_di = new distance_interpolator1(lp.x1, lp.y1, lp.x2, lp.y2,
+            m_di = new DistanceInterpolator1(lp.x1, lp.y1, lp.x2, lp.y2,
                  lp.x1 & ~LineAABasics.SUBPIXEL_MARK, lp.y1 & ~LineAABasics.SUBPIXEL_MARK);
 
             m_li.adjust_forward();
@@ -668,19 +874,17 @@ namespace MatterHackers.Agg.Lines
     };
 
     //====================================================line_interpolator_aa1
-    public class line_interpolator_aa1 : line_interpolator_aa_base
+    public class LineInterpolatorAA1 : LineInterpolatorAABase
     {
-        distance_interpolator2 m_di;
-        //typedef Renderer renderer_type;
-        //typedef line_interpolator_aa_base<Renderer> base_type;
+        DistanceInterpolator2 m_di; 
 
         //---------------------------------------------------------------------
-        public line_interpolator_aa1(OutlineRenderer ren, LineParameters lp,
+        public LineInterpolatorAA1(OutlineRenderer ren, LineParameters lp,
                               int sx, int sy)
             :
             base(ren, lp)
         {
-            m_di = new distance_interpolator2(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy,
+            m_di = new DistanceInterpolator2(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy,
                  lp.x1 & ~LineAABasics.SUBPIXEL_MARK, lp.y1 & ~LineAABasics.SUBPIXEL_MARK);
 
             int dist1_start;
@@ -862,19 +1066,17 @@ namespace MatterHackers.Agg.Lines
     };
 
     //====================================================line_interpolator_aa2
-    public class line_interpolator_aa2 : line_interpolator_aa_base
+    public class LineInterpolatorAA2 : LineInterpolatorAABase
     {
-        distance_interpolator2 m_di;
-        //typedef Renderer renderer_type;
-        //typedef line_interpolator_aa_base<Renderer> base_type;
-
+        DistanceInterpolator2 m_di;
+         
         //---------------------------------------------------------------------
-        public line_interpolator_aa2(OutlineRenderer ren, LineParameters lp,
+        public LineInterpolatorAA2(OutlineRenderer ren, LineParameters lp,
                               int ex, int ey)
             :
             base(ren, lp)
         {
-            m_di = new distance_interpolator2(lp.x1, lp.y1, lp.x2, lp.y2, ex, ey,
+            m_di = new DistanceInterpolator2(lp.x1, lp.y1, lp.x2, lp.y2, ex, ey,
                  lp.x1 & ~LineAABasics.SUBPIXEL_MARK, lp.y1 & ~LineAABasics.SUBPIXEL_MARK,
                  0);
             base.m_li.adjust_forward();
@@ -993,19 +1195,17 @@ namespace MatterHackers.Agg.Lines
     };
 
     //====================================================line_interpolator_aa3
-    public class line_interpolator_aa3 : line_interpolator_aa_base
+    public class LineInterpolatorAA3 : LineInterpolatorAABase
     {
-        distance_interpolator3 m_di;
-        //typedef Renderer renderer_type;
-        //typedef line_interpolator_aa_base<Renderer> base_type;
-
+        DistanceInterpolator3 m_di;
+       
         //---------------------------------------------------------------------
-        public line_interpolator_aa3(OutlineRenderer ren, LineParameters lp,
+        public LineInterpolatorAA3(OutlineRenderer ren, LineParameters lp,
                               int sx, int sy, int ex, int ey)
             :
             base(ren, lp)
         {
-            m_di = new distance_interpolator3(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy, ex, ey,
+            m_di = new DistanceInterpolator3(lp.x1, lp.y1, lp.x2, lp.y2, sx, sy, ex, ey,
                  lp.x1 & ~LineAABasics.SUBPIXEL_MARK, lp.y1 & ~LineAABasics.SUBPIXEL_MARK);
             int dist1_start;
             int dist2_start;
@@ -1372,7 +1572,7 @@ namespace MatterHackers.Agg.Lines
         }
     };
 
-    public class ellipse_bresenham_interpolator
+    public class EllipseBresenhamInterpolator
     {
         int m_rx2;
         int m_ry2;
@@ -1384,7 +1584,7 @@ namespace MatterHackers.Agg.Lines
         int m_inc_y;
         int m_cur_f;
 
-        public ellipse_bresenham_interpolator(int rx, int ry)
+        public EllipseBresenhamInterpolator(int rx, int ry)
         {
             m_rx2 = (rx * rx);
             m_ry2 = (ry * ry);
@@ -1507,10 +1707,10 @@ namespace MatterHackers.Agg.Lines
         public void reset_clipping() { doClipping = false; }
         public void clip_box(double x1, double y1, double x2, double y2)
         {
-            clippingRectangle.Left = line_coord_sat.conv(x1);
-            clippingRectangle.Bottom = line_coord_sat.conv(y1);
-            clippingRectangle.Right = line_coord_sat.conv(x2);
-            clippingRectangle.Top = line_coord_sat.conv(y2);
+            clippingRectangle.Left = LineCoordSat.Convert(x1);
+            clippingRectangle.Bottom = LineCoordSat.Convert(y1);
+            clippingRectangle.Right = LineCoordSat.Convert(x2);
+            clippingRectangle.Top = LineCoordSat.Convert(y2);
             doClipping = true;
         }
 
@@ -1542,7 +1742,7 @@ namespace MatterHackers.Agg.Lines
             int x = x1 << LineAABasics.SUBPIXEL_SHIFT;
             int y = y1 << LineAABasics.SUBPIXEL_SHIFT;
             int w = subpixel_width();
-            distance_interpolator0 di = new distance_interpolator0(xc1, yc1, xc2, yc2, x, y);
+            DistanceInterpolator0 di = new DistanceInterpolator0(xc1, yc1, xc2, yc2, x, y);
             x += LineAABasics.SUBPIXEL_SCALE / 2;
             y += LineAABasics.SUBPIXEL_SCALE / 2;
 
@@ -1574,7 +1774,7 @@ namespace MatterHackers.Agg.Lines
 
             int r = ((subpixel_width() + LineAABasics.SUBPIXEL_MARK) >> LineAABasics.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
-            ellipse_bresenham_interpolator ei = new ellipse_bresenham_interpolator(r, r);
+            EllipseBresenhamInterpolator ei = new EllipseBresenhamInterpolator(r, r);
             int dx = 0;
             int dy = -r;
             int dy0 = dy;
@@ -1612,7 +1812,7 @@ namespace MatterHackers.Agg.Lines
             int y = yh1 << LineAABasics.SUBPIXEL_SHIFT;
             int w = subpixel_width();
 
-            distance_interpolator00 di = new distance_interpolator00(xc, yc, xp1, yp1, xp2, yp2, x, y);
+            DistanceInterpolator00 di = new DistanceInterpolator00(xc, yc, xp1, yp1, xp2, yp2, x, y);
             x += LineAABasics.SUBPIXEL_SCALE / 2;
             y += LineAABasics.SUBPIXEL_SCALE / 2;
 
@@ -1639,7 +1839,7 @@ namespace MatterHackers.Agg.Lines
         {
             int r = ((subpixel_width() + LineAABasics.SUBPIXEL_MARK) >> LineAABasics.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
-            ellipse_bresenham_interpolator ei = new ellipse_bresenham_interpolator(r, r);
+            EllipseBresenhamInterpolator ei = new EllipseBresenhamInterpolator(r, r);
             int dx = 0;
             int dy = -r;
             int dy0 = dy;
@@ -1676,7 +1876,7 @@ namespace MatterHackers.Agg.Lines
                 return;
             }
 
-            line_interpolator_aa0 li = new line_interpolator_aa0(this, lp);
+            LineInterpolatorAA0 li = new LineInterpolatorAA0(this, lp);
             if (li.count() != 0)
             {
                 if (li.vertical())
@@ -1731,7 +1931,7 @@ namespace MatterHackers.Agg.Lines
             }
 
             LineAABasics.fix_degenerate_bisectrix_start(lp, ref sx, ref sy);
-            line_interpolator_aa1 li = new line_interpolator_aa1(this, lp, sx, sy);
+            LineInterpolatorAA1 li = new LineInterpolatorAA1(this, lp, sx, sy);
             if (li.vertical())
             {
                 while (li.step_ver()) ;
@@ -1796,7 +1996,7 @@ namespace MatterHackers.Agg.Lines
             }
 
             LineAABasics.fix_degenerate_bisectrix_end(lp, ref ex, ref ey);
-            line_interpolator_aa2 li = new line_interpolator_aa2(this, lp, ex, ey);
+            LineInterpolatorAA2 li = new LineInterpolatorAA2(this, lp, ex, ey);
             if (li.vertical())
             {
                 while (li.step_ver()) ;
@@ -1865,7 +2065,7 @@ namespace MatterHackers.Agg.Lines
 
             LineAABasics.fix_degenerate_bisectrix_start(lp, ref sx, ref sy);
             LineAABasics.fix_degenerate_bisectrix_end(lp, ref ex, ref ey);
-            line_interpolator_aa3 li = new line_interpolator_aa3(this, lp, sx, sy, ex, ey);
+            LineInterpolatorAA3 li = new LineInterpolatorAA3(this, lp, sx, sy, ex, ey);
             if (li.vertical())
             {
                 while (li.step_ver()) ;

@@ -35,7 +35,7 @@ using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 using filling_rule_e = MatterHackers.Agg.FillingRule;
 using status = MatterHackers.Agg.ScanlineRasterizer.Status;
-using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.poly_subpixel_scale_e;
+using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 
 namespace MatterHackers.Agg
 {

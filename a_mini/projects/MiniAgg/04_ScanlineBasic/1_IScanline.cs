@@ -1,9 +1,7 @@
 using System;
 
 namespace MatterHackers.Agg
-{
- 
-
+{   
     public interface IScanline
     {   
         int Y { get; }
