@@ -381,7 +381,7 @@ namespace MatterHackers.Agg.UI
         public event KeyEventHandler KeyDown;
         public event KeyEventHandler KeyUp;
 
-        public event WidgetClosingEventHandler Closing;
+       // public event WidgetClosingEventHandler Closing;
 
         public event EventHandler Closed;
 
@@ -450,27 +450,27 @@ namespace MatterHackers.Agg.UI
 
         static readonly RectangleDouble largestValidBounds = new RectangleDouble(-1000000, -1000000, 1000000, 1000000);
 
-        public GuiWidget(double width, double height, SizeLimitsToSet sizeLimits = SizeLimitsToSet.Minimum)
-            : this(HAnchor.None, VAnchor.None)
-        {
-            if ((sizeLimits & SizeLimitsToSet.Minimum) == SizeLimitsToSet.Minimum)
-            {
-                MinimumSize = new Vector2(width, height);
-            }
-            if ((sizeLimits & SizeLimitsToSet.Maximum) == SizeLimitsToSet.Maximum)
-            {
-                MaximumSize = new Vector2(width, height);
-            }
-            LocalBounds = new RectangleDouble(0, 0, width, height);
-        }
+        //public GuiWidget(double width, double height, SizeLimitsToSet sizeLimits = SizeLimitsToSet.Minimum)
+        //    : this(HAnchor.None, VAnchor.None)
+        //{
+        //    if ((sizeLimits & SizeLimitsToSet.Minimum) == SizeLimitsToSet.Minimum)
+        //    {
+        //        MinimumSize = new Vector2(width, height);
+        //    }
+        //    if ((sizeLimits & SizeLimitsToSet.Maximum) == SizeLimitsToSet.Maximum)
+        //    {
+        //        MaximumSize = new Vector2(width, height);
+        //    }
+        //    LocalBounds = new RectangleDouble(0, 0, width, height);
+        //}
 
-        public GuiWidget(HAnchor hAnchor = HAnchor.None, VAnchor vAnchor = VAnchor.None)
-        {
-            //children.CollectionChanged += children_CollectionChanged;
-            LayoutEngine = new LayoutEngineSimpleAlign();
-            HAnchor = hAnchor;
-            VAnchor = vAnchor;
-        }
+        //public GuiWidget(HAnchor hAnchor = HAnchor.None, VAnchor vAnchor = VAnchor.None)
+        //{
+        //    //children.CollectionChanged += children_CollectionChanged;
+        //    LayoutEngine = new LayoutEngineSimpleAlign();
+        //    HAnchor = hAnchor;
+        //    VAnchor = vAnchor;
+        //}
 
         //void children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         //{
@@ -1558,74 +1558,74 @@ namespace MatterHackers.Agg.UI
         {
         }
 
-        public virtual void OnDragEnter(FileDropEventArgs fileDropEventArgs)
-        {
-            if (PositionWithinLocalBounds(fileDropEventArgs.X, fileDropEventArgs.Y))
-            {
-                for (int i = Children.Count - 1; i >= 0; i--)
-                {
-                    GuiWidget child = Children[i];
-                    if (child.Visible)
-                    {
-                        double childX = fileDropEventArgs.X;
-                        double childY = fileDropEventArgs.Y;
-                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
+        //public virtual void OnDragEnter(FileDropEventArgs fileDropEventArgs)
+        //{
+        //    if (PositionWithinLocalBounds(fileDropEventArgs.X, fileDropEventArgs.Y))
+        //    {
+        //        for (int i = Children.Count - 1; i >= 0; i--)
+        //        {
+        //            GuiWidget child = Children[i];
+        //            if (child.Visible)
+        //            {
+        //                double childX = fileDropEventArgs.X;
+        //                double childY = fileDropEventArgs.Y;
+        //                child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
 
-                        FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
-                        child.OnDragEnter(childDropEvent);
-                        if (childDropEvent.AcceptDrop)
-                        {
-                            fileDropEventArgs.AcceptDrop = true;
-                        }
-                    }
-                }
-            }
-        }
+        //                FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
+        //                child.OnDragEnter(childDropEvent);
+        //                if (childDropEvent.AcceptDrop)
+        //                {
+        //                    fileDropEventArgs.AcceptDrop = true;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
-        public virtual void OnDragOver(FileDropEventArgs fileDropEventArgs)
-        {
-            if (PositionWithinLocalBounds(fileDropEventArgs.X, fileDropEventArgs.Y))
-            {
-                for (int i = Children.Count - 1; i >= 0; i--)
-                {
-                    GuiWidget child = Children[i];
-                    if (child.Visible)
-                    {
-                        double childX = fileDropEventArgs.X;
-                        double childY = fileDropEventArgs.Y;
-                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
+        //public virtual void OnDragOver(FileDropEventArgs fileDropEventArgs)
+        //{
+        //    if (PositionWithinLocalBounds(fileDropEventArgs.X, fileDropEventArgs.Y))
+        //    {
+        //        for (int i = Children.Count - 1; i >= 0; i--)
+        //        {
+        //            GuiWidget child = Children[i];
+        //            if (child.Visible)
+        //            {
+        //                double childX = fileDropEventArgs.X;
+        //                double childY = fileDropEventArgs.Y;
+        //                child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
 
-                        FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
-                        child.OnDragOver(childDropEvent);
-                        if (childDropEvent.AcceptDrop)
-                        {
-                            fileDropEventArgs.AcceptDrop = true;
-                        }
-                    }
-                }
-            }
-        }
+        //                FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
+        //                child.OnDragOver(childDropEvent);
+        //                if (childDropEvent.AcceptDrop)
+        //                {
+        //                    fileDropEventArgs.AcceptDrop = true;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
-        public virtual void OnDragDrop(FileDropEventArgs fileDropEventArgs)
-        {
-            // to do this we would need to implement OnDragOver (and debug it, it was a mess when I started it and don't care right now). // LBB 2013 04 30
-            if (PositionWithinLocalBounds(fileDropEventArgs.X, fileDropEventArgs.Y))
-            {
-                for (int i = Children.Count - 1; i >= 0; i--)
-                {
-                    GuiWidget child = Children[i];
-                    if (child.Visible)
-                    {
-                        double childX = fileDropEventArgs.X;
-                        double childY = fileDropEventArgs.Y;
-                        child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
+        //public virtual void OnDragDrop(FileDropEventArgs fileDropEventArgs)
+        //{
+        //    // to do this we would need to implement OnDragOver (and debug it, it was a mess when I started it and don't care right now). // LBB 2013 04 30
+        //    if (PositionWithinLocalBounds(fileDropEventArgs.X, fileDropEventArgs.Y))
+        //    {
+        //        for (int i = Children.Count - 1; i >= 0; i--)
+        //        {
+        //            GuiWidget child = Children[i];
+        //            if (child.Visible)
+        //            {
+        //                double childX = fileDropEventArgs.X;
+        //                double childY = fileDropEventArgs.Y;
+        //                child.ParentToChildTransform.InverseTransform(ref childX, ref childY);
 
-                        FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
-                        child.OnDragDrop(childDropEvent);
-                    }
-                }
-            }
-        }
+        //                FileDropEventArgs childDropEvent = new FileDropEventArgs(fileDropEventArgs.DroppedFiles, childX, childY);
+        //                child.OnDragDrop(childDropEvent);
+        //            }
+        //        }
+        //    }
+        //}
 
         public virtual void OnLayout(LayoutEventArgs layoutEventArgs)
         {
@@ -1783,29 +1783,29 @@ namespace MatterHackers.Agg.UI
 
         public virtual void OnClosing(out bool cancelClose)
         {
-            cancelClose = false;
+             cancelClose = false;
 
-            if (Closing != null)
-            {
-                WidgetClosingEnventArgs closingEventArgs = new WidgetClosingEnventArgs();
-                Closing(this, closingEventArgs);
-                if (closingEventArgs.Cancel == true)
-                {
-                    // someone canceled it so stop checking.
-                    cancelClose = true;
-                    return;
-                }
-            }
+            //if (Closing != null)
+            //{
+            //    WidgetClosingEnventArgs closingEventArgs = new WidgetClosingEnventArgs();
+            //    Closing(this, closingEventArgs);
+            //    if (closingEventArgs.Cancel == true)
+            //    {
+            //        // someone canceled it so stop checking.
+            //        cancelClose = true;
+            //        return;
+            //    }
+            //}
 
-            foreach (GuiWidget child in Children)
-            {
-                child.OnClosing(out cancelClose);
-                if (cancelClose)
-                {
-                    // someone canceled it so stop checking.
-                    return;
-                }
-            }
+            //foreach (GuiWidget child in Children)
+            //{
+            //    child.OnClosing(out cancelClose);
+            //    if (cancelClose)
+            //    {
+            //        // someone canceled it so stop checking.
+            //        return;
+            //    }
+            //}
         }
 
         public void CloseOnIdle()

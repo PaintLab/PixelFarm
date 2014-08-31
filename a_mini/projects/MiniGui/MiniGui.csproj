@@ -36,42 +36,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="agg_bezier_ctrl.cs" />
-    <Compile Include="agg_gamma_ctrl.cs" />
-    <Compile Include="agg_gamma_spline.cs" />
     <Compile Include="agg_spline_ctrl.cs" />
-    <Compile Include="AppWidgetFactory.cs" />
-    <Compile Include="Clipboard\Clipboard.cs" />
-    <Compile Include="DefaultViewFactory.cs" />
     <Compile Include="DoubleRectHelper.cs" />
-    <Compile Include="FileDropEventArgs.cs" />
-    <Compile Include="FlowLayoutWidget.cs" />
     <Compile Include="GUIWidget.cs" />
-    <Compile Include="ImageSequenceWidget.cs" />
-    <Compile Include="ImageWidget.cs" />
     <Compile Include="InvalidateEventArgs.cs" />
-    <Compile Include="Keyboard.cs" />
     <Compile Include="KeyEventArgs.cs" />
     <Compile Include="KeyPressEventArgs.cs" />
     <Compile Include="Keys.cs" />
-    <Compile Include="LayoutEngines\LayoutEngine.cs" />
-    <Compile Include="LayoutEngines\LayoutEngineFlow.cs" />
-    <Compile Include="LayoutEngines\LayoutEngineSimpleAlign.cs" />
+    <Compile Include="LayoutEngine.cs" />
     <Compile Include="LayoutEventArgs.cs" />
-    <Compile Include="LayoutPannel.cs" />
     <Compile Include="MouseButtons.cs" />
     <Compile Include="MouseEventArgs.cs" />
-    <Compile Include="PluginFinder.cs" />
     <Compile Include="PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RootedObjectEventHandler.cs" />
     <Compile Include="SimpleVertexSourceWidget.cs" />
-    <Compile Include="StringEventArgs.cs" />
-    <Compile Include="SystemWindow\AbstractOsMappingWidget.cs" />
-    <Compile Include="SystemWindow\OsMappingWidgetFactory.cs" />
-    <Compile Include="SystemWindow\SystemWindow.cs" />
     <Compile Include="TimedLock.cs" />
     <Compile Include="UiThread.cs" />
-    <Compile Include="WidgetClosingEnventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">
