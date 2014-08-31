@@ -90,6 +90,7 @@ namespace MatterHackers.Agg.UI
         public abstract int num_paths();
         public abstract IEnumerable<VertexData> GetVertexIter();
         public abstract void Rewind(int path_id);
+        public abstract void RewindZero();
         public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
 
         public virtual IColor color(int i) { return (IColor)new ColorRGBAf(); }

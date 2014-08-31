@@ -1171,7 +1171,17 @@ namespace MatterHackers.Agg.VertexSource
                 m_curve_div.rewind(path_id);
             }
         }
-
+        public void RewindZero()
+        {
+            if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
+            {
+                m_curve_inc.rewind(0);
+            }
+            else
+            {
+                m_curve_div.rewind(0);
+            }
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
@@ -1307,7 +1317,17 @@ namespace MatterHackers.Agg.VertexSource
                 m_curve_div.rewind(path_id);
             }
         }
-
+        public void RewindZero()
+        {
+            if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
+            {
+                m_curve_inc.rewind(0);
+            }
+            else
+            {
+                m_curve_div.rewind(0);
+            }
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)

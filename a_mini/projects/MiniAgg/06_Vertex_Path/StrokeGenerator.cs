@@ -21,7 +21,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    public class Vector2Container : ArrayList<Vector2> , IVertexDest
+    public class Vector2Container : ArrayList<Vector2>, IVertexDest
     {
 
     }

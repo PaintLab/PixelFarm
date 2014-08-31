@@ -28,7 +28,7 @@ namespace MatterHackers.Agg.Font
 {
     public class GlyphWithUnderline : IVertexSource
     {
-        int state = 0;
+
         IVertexSource underline;
         IVertexSource glyph;
 
@@ -60,12 +60,19 @@ namespace MatterHackers.Agg.Font
         {
             get { return this.glyph.IsDynamicVertexGen; }
         }
+
         public void Rewind(int path_id)
         {
             underline.Rewind(0);
             glyph.Rewind(path_id);
         }
+        public void RewindZero()
+        {
+            underline.Rewind(0);
+            glyph.Rewind(0);
+        }
 
+        int state = 0;
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
@@ -303,6 +310,7 @@ namespace MatterHackers.Agg.Font
         public IVertexSource GetGlyphForCharacter(char character)
         {
             // scale it to the correct size.
+
             IVertexSource sourceGlyph = typeFace.GetGlyphForCharacter(character);
             if (sourceGlyph != null)
             {

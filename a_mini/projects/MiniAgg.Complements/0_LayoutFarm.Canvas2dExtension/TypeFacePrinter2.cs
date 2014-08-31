@@ -133,20 +133,20 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
-        {
-            vertexSourceToApply.VertexSource = this;
-            Rewind(0);
-            if (DrawFromHintedCache)
-            {
-                // TODO: make this work
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-            else
-            {
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-        }
+        //public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
+        //{
+        //    vertexSourceToApply.VertexSource = this;
+        //    Rewind(0);
+        //    if (DrawFromHintedCache)
+        //    {
+        //        // TODO: make this work
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //    else
+        //    {
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //}
 
         public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
@@ -303,6 +303,11 @@ namespace LayoutFarm.Agg.Font
 #if true
         IEnumerator<VertexData> currentEnumerator;
         public void Rewind(int layerIndex)
+        {
+            currentEnumerator = GetVertexIter().GetEnumerator();
+            currentEnumerator.MoveNext();
+        }
+        public void RewindZero()
         {
             currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();

@@ -50,5 +50,5 @@ namespace MatterHackers.Agg.VertexSource
 
         void shorten(double s);
         double shorten();
-    };
+    } 
 }

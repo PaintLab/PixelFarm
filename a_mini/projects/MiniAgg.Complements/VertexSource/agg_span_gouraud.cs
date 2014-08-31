@@ -135,6 +135,10 @@ namespace MatterHackers.Agg.VertexSource
         {
             m_vertex = 0;
         }
+        public void RewindZero()
+        {
+            m_vertex = 0;
+        }
 
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {

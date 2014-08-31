@@ -22,10 +22,9 @@ using MatterHackers.VectorMath;
 namespace MatterHackers.Agg.VertexSource
 {
     public struct VertexData
-    {
+    {   
         public ShapePath.FlagsAndCommand command;
-        public Vector2 position;
-
+        public Vector2 position; 
         public VertexData(ShapePath.FlagsAndCommand command, Vector2 position)
         {
             this.command = command;
@@ -47,14 +46,15 @@ namespace MatterHackers.Agg.VertexSource
     public interface IVertexSource
     {
         IEnumerable<VertexData> GetVertexIter();
-        // for a PathStorage this is the vertex index.
+        // for a PathStorage this is the vertex index. 
         void Rewind(int pathId = 0);
-        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y); 
+        void RewindZero();
+        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);  
         bool IsDynamicVertexGen { get; }
     }
 
     public interface IVertexSourceProxy : IVertexSource
     {
-        IVertexSource VertexSource { get; set; }
+        IVertexSource VertexSource { get; }
     }
 }

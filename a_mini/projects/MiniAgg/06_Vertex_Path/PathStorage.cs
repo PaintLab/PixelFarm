@@ -357,14 +357,17 @@ namespace MatterHackers.Agg.VertexSource
                 double y = 0;
                 ShapePath.FlagsAndCommand command = vertices.GetVertex(i, out x, out y);
                 yield return new VertexData(command, new Vector2(x, y));
-            } 
+            }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2(0, 0));
-        } 
+        }
         public virtual void Rewind(int pathId)
         {
             iteratorIndex = pathId;
         }
-
+        public virtual void RewindZero()
+        {
+            iteratorIndex = 0;
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (iteratorIndex >= vertices.Count)
@@ -373,7 +376,6 @@ namespace MatterHackers.Agg.VertexSource
                 y = 0;
                 return ShapePath.FlagsAndCommand.CommandStop;
             }
-
             return vertices.GetVertex(iteratorIndex++, out x, out y);
         }
         //----------------------------------------------------------------
@@ -503,7 +505,7 @@ namespace MatterHackers.Agg.VertexSource
         }
 
         //// Concatenate path. The path is added as is.
-        
+
 
         public void ConcatPath(IVertexSource vs, int path_id = 0)
         {

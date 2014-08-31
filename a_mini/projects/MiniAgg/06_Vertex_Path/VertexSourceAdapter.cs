@@ -44,20 +44,20 @@ namespace MatterHackers.Agg.VertexSource
         private ShapePath.FlagsAndCommand m_last_cmd;
         private double m_start_x;
         private double m_start_y;
-
-        public IVertexSource VertexSource
-        {
-            get;
-            set;
-        }
-        public bool IsDynamicVertexGen { get { return this.VertexSource.IsDynamicVertexGen; } }
-
         enum Status
         {
             Initial,
             Accumulate,
             Generate
         }
+        public IVertexSource VertexSource
+        {
+            get;
+            private set;
+        }
+        public bool IsDynamicVertexGen { get { return this.VertexSource.IsDynamicVertexGen; } }
+
+
 
         public VertexSourceAdapter(IVertexSource vertexSource, IGenerator generator)
         {
@@ -67,11 +67,7 @@ namespace MatterHackers.Agg.VertexSource
             m_status = Status.Initial;
         }
 
-        public VertexSourceAdapter(IVertexSource vertexSource, IGenerator generator, IMarkers markers)
-            : this(vertexSource, generator)
-        {
-            this.markers = markers;
-        }
+
         void Attach(IVertexSource vertexSource) { this.VertexSource = vertexSource; }
 
         protected IGenerator GetGenerator() { return generator; }
@@ -98,7 +94,11 @@ namespace MatterHackers.Agg.VertexSource
             VertexSource.Rewind(path_id);
             m_status = Status.Initial;
         }
-
+        public void RewindZero()
+        {
+            VertexSource.Rewind(0);
+            m_status = Status.Initial;
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;

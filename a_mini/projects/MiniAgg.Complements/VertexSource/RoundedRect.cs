@@ -52,16 +52,16 @@ namespace MatterHackers.Agg.VertexSource
             leftTopRadius.x = radius;
             leftTopRadius.y = radius;
 
-            if (left > right) 
-            { 
-                bounds.Left = right; 
-                bounds.Right = left; 
+            if (left > right)
+            {
+                bounds.Left = right;
+                bounds.Right = left;
             }
 
             if (bottom > top)
-            { 
-                bounds.Bottom = top; 
-                bounds.Top = bottom; 
+            {
+                bounds.Bottom = top;
+                bounds.Top = bottom;
             }
         }
 
@@ -84,13 +84,13 @@ namespace MatterHackers.Agg.VertexSource
 
         public void radius(double r)
         {
-            leftBottomRadius.x = leftBottomRadius.y = rightBottomRadius.x = rightBottomRadius.y = rightTopRadius.x = rightTopRadius.y = leftTopRadius.x = leftTopRadius.y = r; 
+            leftBottomRadius.x = leftBottomRadius.y = rightBottomRadius.x = rightBottomRadius.y = rightTopRadius.x = rightTopRadius.y = leftTopRadius.x = leftTopRadius.y = r;
         }
 
         public void radius(double rx, double ry)
         {
             leftBottomRadius.x = rightBottomRadius.x = rightTopRadius.x = leftTopRadius.x = rx;
-            leftBottomRadius.y = rightBottomRadius.y = rightTopRadius.y = leftTopRadius.y = ry; 
+            leftBottomRadius.y = rightBottomRadius.y = rightTopRadius.y = leftTopRadius.y = ry;
         }
 
         public void radius(double leftBottomRadius, double rightBottomRadius, double rightTopRadius, double leftTopRadius)
@@ -101,7 +101,7 @@ namespace MatterHackers.Agg.VertexSource
             this.leftTopRadius = new Vector2(leftTopRadius, leftTopRadius);
         }
 
-        public void radius(double rx1, double ry1, double rx2, double ry2, 
+        public void radius(double rx1, double ry1, double rx2, double ry2,
                               double rx3, double ry3, double rx4, double ry4)
         {
             leftBottomRadius.x = rx1; leftBottomRadius.y = ry1; rightBottomRadius.x = rx2; rightBottomRadius.y = ry2;
@@ -118,9 +118,9 @@ namespace MatterHackers.Agg.VertexSource
             t = dx / (leftBottomRadius.x + rightBottomRadius.x); if (t < k) k = t;
             t = dx / (rightTopRadius.x + leftTopRadius.x); if (t < k) k = t;
             t = dy / (leftBottomRadius.y + rightBottomRadius.y); if (t < k) k = t;
-            t = dy / (rightTopRadius.y + leftTopRadius.y); if (t < k) k = t; 
+            t = dy / (rightTopRadius.y + leftTopRadius.y); if (t < k) k = t;
 
-            if(k < 1.0)
+            if (k < 1.0)
             {
                 leftBottomRadius.x *= k; leftBottomRadius.y *= k; rightBottomRadius.x *= k; rightBottomRadius.y *= k;
                 rightTopRadius.x *= k; rightTopRadius.y *= k; leftTopRadius.x *= k; leftTopRadius.y *= k;
@@ -194,7 +194,10 @@ namespace MatterHackers.Agg.VertexSource
         {
             state = 0;
         }
-
+        public void RewindZero()
+        {
+            state = 0;
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
@@ -204,7 +207,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 case 0:
                     currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y,
-                               Math.PI, Math.PI + Math.PI  * 0.5);
+                               Math.PI, Math.PI + Math.PI * 0.5);
                     currentProcessingArc.rewind(0);
                     state++;
                     goto case 1;

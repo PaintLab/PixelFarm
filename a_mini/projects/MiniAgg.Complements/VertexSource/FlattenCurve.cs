@@ -207,7 +207,14 @@ namespace MatterHackers.Agg.VertexSource
             m_curve3.reset();
             m_curve4.reset();
         }
-
+        public void RewindZero()
+        {
+            VertexSource.Rewind(0);
+            lastX = 0.0;
+            lastY = 0.0;
+            m_curve3.reset();
+            m_curve4.reset();
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (!ShapePath.is_stop(m_curve3.GetNextVertex(out x, out y)))

@@ -63,7 +63,10 @@ namespace MatterHackers.Agg.VertexSource
         {
             VertexSource.Rewind(path_id);
         }
-
+        public void RewindZero()
+        {
+            VertexSource.RewindZero();
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             ShapePath.FlagsAndCommand cmd = VertexSource.GetNextVertex(out x, out y);

@@ -207,7 +207,16 @@ namespace MatterHackers.Agg.VertexSource
             m_StartOfGlyphsIndex = m_StartOfIndicesIndex + 257 * 2; // one for x one for y
             m_CurrentCharacterIndex = 0;
         }
+        public void RewindZero()
+        {
+            m_status = status.initial;
+            if (m_font == null) return;
 
+            m_StartOfIndicesIndex = translateIndex(0);
+
+            m_StartOfGlyphsIndex = m_StartOfIndicesIndex + 257 * 2; // one for x one for y
+            m_CurrentCharacterIndex = 0;
+        }
         private void GetSize(char characterToMeasure, out double width, out double height)
         {
             width = 0;

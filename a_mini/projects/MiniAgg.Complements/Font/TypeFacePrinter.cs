@@ -133,20 +133,22 @@ namespace MatterHackers.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
-        {
-            vertexSourceToApply.VertexSource = this;
-            Rewind(0);
-            if (DrawFromHintedCache)
-            {
-                // TODO: make this work
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-            else
-            {
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-        }
+        //public void Render(Graphics2D graphics2D,
+        //    ColorRGBA color, 
+        //    IVertexSourceProxy vertexSourceToApply)
+        //{
+        //    vertexSourceToApply.VertexSource = this;
+        //    Rewind(0);
+        //    if (DrawFromHintedCache)
+        //    {
+        //        // TODO: make this work
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //    else
+        //    {
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //}
 
         public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
@@ -307,7 +309,11 @@ namespace MatterHackers.Agg.Font
             currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();
         }
-
+        public void RewindZero()
+        {
+            currentEnumerator = GetVertexIter().GetEnumerator();
+            currentEnumerator.MoveNext();
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.position.x;
