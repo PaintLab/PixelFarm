@@ -85,7 +85,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
             ScanlinePacked8 sclnPack = new ScanlinePacked8();
 
-            clippingProxy.clear(ColorRGBA.Black);
+            clippingProxy.Clear(ColorRGBA.Black);
 
             VertexSource.Ellipse ellipseForMask = new MatterHackers.Agg.VertexSource.Ellipse();
 
@@ -175,7 +175,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     AffinePlan.Rotate(angle + Math.PI),
                     AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                     AffinePlan.Translate(width / 2, height / 2));
-            clippingProxy.clear(ColorRGBA.White);
+            clippingProxy.Clear(ColorRGBA.White);
 
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             // draw a background to show how the mask is working better

@@ -111,7 +111,7 @@ namespace MatterHackers.Agg.VertexSource
         {}
 
         //--------------------------------------------------------------------
-        public void prepare()
+        public void Prepare()
         {
             coord_type[] coord = new coord_type[3];
             base.arrange_vertices(coord);
@@ -127,7 +127,7 @@ namespace MatterHackers.Agg.VertexSource
             m_rgba3.init(coord[1], coord[2]);
         }
 
-        public void generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             m_rgba1.calc(y);//(m_rgba1.m_1dy > 2) ? m_rgba1.m_y1 : y);
             rgba_calc pc1 = m_rgba1;
@@ -163,10 +163,10 @@ namespace MatterHackers.Agg.VertexSource
             int nlen = Math.Abs(pc2.m_x - pc1.m_x);
             if (nlen <= 0) nlen = 1;
  
-            var r = new MatterHackers.Agg.Lines.dda_line_interpolator(pc1.m_r, pc2.m_r, nlen, 14);
-            var g = new MatterHackers.Agg.Lines.dda_line_interpolator(pc1.m_g, pc2.m_g, nlen, 14);
-            var b = new MatterHackers.Agg.Lines.dda_line_interpolator(pc1.m_b, pc2.m_b, nlen, 14);
-            var a = new MatterHackers.Agg.Lines.dda_line_interpolator(pc1.m_a, pc2.m_a, nlen, 14);
+            var r = new MatterHackers.Agg.Lines.LineInterPolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
+            var g = new MatterHackers.Agg.Lines.LineInterPolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
+            var b = new MatterHackers.Agg.Lines.LineInterPolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
+            var a = new MatterHackers.Agg.Lines.LineInterPolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
 
             // Calculate the starting point of the gradient with subpixel 
             // accuracy and correct (roll back) the interpolators.

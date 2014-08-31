@@ -55,7 +55,7 @@ namespace MatterHackers.Agg.UI
         public void close(bool f) { m_close = f; }
         public bool close() { return m_close; }
 
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -65,7 +65,7 @@ namespace MatterHackers.Agg.UI
             m_vertex = 0;
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -163,7 +163,7 @@ namespace MatterHackers.Agg.UI
         public bool close() { return m_vs.close(); }
 
         // Vertex source interface
-        public override IEnumerable<VertexData> Vertices()
+        public override IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -201,13 +201,13 @@ namespace MatterHackers.Agg.UI
 #endif
         }
 
-        public override ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public override ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
             double r = m_point_radius;
             if (m_status == 0)
             {
-                cmd = m_stroke.vertex(out x, out y);
+                cmd = m_stroke.GetVertex(out x, out y);
                 if (!ShapePath.is_stop(cmd))
                 {
                     ParentToChildTransform.Transform(ref x, ref y);
@@ -217,7 +217,7 @@ namespace MatterHackers.Agg.UI
                 m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
                 ++m_status;
             }
-            cmd = m_ellipse.vertex(out x, out y);
+            cmd = m_ellipse.GetVertex(out x, out y);
             if (!ShapePath.is_stop(cmd))
             {
                 ParentToChildTransform.Transform(ref x, ref y);
@@ -227,7 +227,7 @@ namespace MatterHackers.Agg.UI
             if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
             m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
             ++m_status;
-            cmd = m_ellipse.vertex(out x, out y);
+            cmd = m_ellipse.GetVertex(out x, out y);
             if (!ShapePath.is_stop(cmd))
             {
                 ParentToChildTransform.Transform(ref x, ref y);

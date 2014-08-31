@@ -280,7 +280,7 @@ namespace MatterHackers.Agg.UI
         // Vertex soutce interface
         public override int num_paths() { return 5; }
 
-        public override IEnumerable<VertexData> Vertices()
+        public override IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -340,7 +340,7 @@ namespace MatterHackers.Agg.UI
                         {
                             m_ellipse.init(calc_xp(i), calc_yp(i),
                                            m_point_size, m_point_size, 32);
-                            m_curve_pnt.concat_path(m_ellipse);
+                            m_curve_pnt.ConcatPath(m_ellipse);
                         }
                     }
                     m_curve_poly.rewind(0);
@@ -354,14 +354,14 @@ namespace MatterHackers.Agg.UI
                         m_ellipse.init(calc_xp(m_active_pnt), calc_yp(m_active_pnt),
                                        m_point_size, m_point_size, 32);
 
-                        m_curve_pnt.concat_path(m_ellipse);
+                        m_curve_pnt.ConcatPath(m_ellipse);
                     }
                     m_curve_poly.rewind(0);
                     break;
             }
         }
 
-        public override ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public override ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -385,12 +385,12 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case 2:
-                    cmd = m_curve_poly.vertex(out x, out y);
+                    cmd = m_curve_poly.GetVertex(out x, out y);
                     break;
 
                 case 3:
                 case 4:
-                    cmd = m_curve_pnt.vertex(out x, out y);
+                    cmd = m_curve_pnt.GetVertex(out x, out y);
                     break;
 
                 default:

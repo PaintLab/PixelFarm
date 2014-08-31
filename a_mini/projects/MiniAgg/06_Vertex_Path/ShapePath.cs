@@ -25,7 +25,7 @@ namespace MatterHackers.Agg
             FlagCW = 1 << (6 - 1),
             FlagClose = 1 << (7 - 1),
             FlagsMask = 0xF0
-        };
+        }
 
         public static bool IsVertextCommand(FlagsAndCommand c)
         {
@@ -165,7 +165,7 @@ namespace MatterHackers.Agg
                     {
                         vs.RemoveLast();
                     }
-                    vs.close(closed != 0);
+                    vs.Close(closed != 0);
                 }
             }
         }

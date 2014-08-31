@@ -148,7 +148,7 @@ namespace MatterHackers.Agg
 
 
 
-        public virtual void AddItem(T v)
+        public virtual void AddVertex(T v)
         {
             if (internalArray.Length < (currentSize + 1))
             {

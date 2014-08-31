@@ -21,7 +21,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    public class Vector2Container : ArrayList<Vector2>, IVertexDest
+    public class Vector2Container : ArrayList<Vector2> , IVertexDest
     {
 
     }
@@ -88,13 +88,13 @@ namespace MatterHackers.Agg.VertexSource
             m_status = StrokeMath.Status.Init;
             if (ShapePath.is_move_to(cmd))
             {
-                m_src_vertices.modify_last(new VertexDistance(x, y));
+                m_src_vertices.ReplaceLast(new VertexDistance(x, y));
             }
             else
             {
                 if (ShapePath.IsVertextCommand(cmd))
                 {
-                    m_src_vertices.AddItem(new VertexDistance(x, y));
+                    m_src_vertices.AddVertex(new VertexDistance(x, y));
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             if (m_status == StrokeMath.Status.Init)
             {
-                m_src_vertices.close(m_closed != 0);
+                m_src_vertices.Close(m_closed != 0);
                 ShapePath.shorten_path(m_src_vertices, m_shorten, m_closed);
                 if (m_src_vertices.Count < 3) m_closed = 0;
             }

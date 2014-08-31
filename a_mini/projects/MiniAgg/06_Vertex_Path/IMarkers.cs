@@ -23,5 +23,5 @@ namespace MatterHackers.Agg
     {
         void remove_all();
         void add_vertex(double x, double y, ShapePath.FlagsAndCommand unknown);
-    };
+    } 
 }

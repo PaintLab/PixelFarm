@@ -64,7 +64,7 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public class VertexSequence : ArrayList<VertexDistance>
     {
-        public override void AddItem(VertexDistance val)
+        public override void AddVertex(VertexDistance val)
         {
             if (base.Count > 1)
             {
@@ -73,16 +73,16 @@ namespace MatterHackers.Agg
                     base.RemoveLast();
                 }
             }
-            base.AddItem(val);
+            base.AddVertex(val);
         }
 
-        public void modify_last(VertexDistance val)
+        public void ReplaceLast(VertexDistance val)
         {
             base.RemoveLast();
-            AddItem(val);
+            AddVertex(val);
         }
 
-        public void close(bool closed)
+        public void Close(bool closed)
         {
             int snapSize = base.Count;
             while (snapSize > 1)
@@ -94,7 +94,7 @@ namespace MatterHackers.Agg
                 VertexDistance t = this[snapSize - 1];
                 base.RemoveLast();
                 snapSize--;
-                modify_last(t);
+                ReplaceLast(t);
             }
 
             if (closed)

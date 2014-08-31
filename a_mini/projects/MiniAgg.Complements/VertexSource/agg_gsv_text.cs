@@ -192,7 +192,7 @@ namespace MatterHackers.Agg.VertexSource
             return v;
         }
 
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -336,7 +336,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;

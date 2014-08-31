@@ -23,16 +23,14 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.ImageFilter
 {
 
-
-
     //-----------------------------------------------image_filter_bilinear
-    public struct image_filter_bilinear : IImageFilterFunction
+    public struct image_filter_bilinear : IImageFilter
     {
-        public double radius() { return 1.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 1.0; }
+        public double CalculateWeight(double x)
         {
             if (Math.Abs(x) < 1)
             {
@@ -48,70 +46,66 @@ namespace MatterHackers.Agg
 
             return 0;
         }
-    };
+    }
 
     //-----------------------------------------------image_filter_hanning
-    public struct image_filter_hanning : IImageFilterFunction
+    public struct image_filter_hanning : IImageFilter
     {
-        public double radius() { return 1.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 1.0; }
+        public double CalculateWeight(double x)
         {
             return 0.5 + 0.5 * Math.Cos(Math.PI * x);
         }
-    };
+    }
 
     //-----------------------------------------------image_filter_hamming
-    public struct image_filter_hamming : IImageFilterFunction
+    public struct image_filter_hamming : IImageFilter
     {
-        public double radius() { return 1.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 1.0; }
+        public double CalculateWeight(double x)
         {
             return 0.54 + 0.46 * Math.Cos(Math.PI * x);
         }
-    };
-
+    }
     //-----------------------------------------------image_filter_hermite
-    public struct image_filter_hermite : IImageFilterFunction
+    public struct image_filter_hermite : IImageFilter
     {
-        public double radius() { return 1.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 1.0; }
+        public double CalculateWeight(double x)
         {
             return (2.0 * x - 3.0) * x * x + 1.0;
         }
-    };
-
+    }
     //------------------------------------------------image_filter_quadric
-    public struct image_filter_quadric : IImageFilterFunction
+    public struct image_filter_quadric : IImageFilter
     {
-        public double radius() { return 1.5; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 1.5; }
+        public double CalculateWeight(double x)
         {
             double t;
             if (x < 0.5) return 0.75 - x * x;
             if (x < 1.5) { t = x - 1.5; return 0.5 * t * t; }
             return 0.0;
         }
-    };
-
+    }
     //------------------------------------------------image_filter_bicubic
-    public class image_filter_bicubic : IImageFilterFunction
+    public class image_filter_bicubic : IImageFilter
     {
         private static double pow3(double x)
         {
             return (x <= 0.0) ? 0.0 : x * x * x;
         }
 
-        public double radius() { return 2.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 2.0; }
+        public double CalculateWeight(double x)
         {
             return
                 (1.0 / 6.0) *
                 (pow3(x + 2) - 4 * pow3(x + 1) + 6 * pow3(x) - 4 * pow3(x - 1));
         }
-    };
-
+    }
     //-------------------------------------------------image_filter_kaiser
-    public class image_filter_kaiser : IImageFilterFunction
+    public class image_filter_kaiser : IImageFilter
     {
         private double a;
         private double i0a;
@@ -129,8 +123,8 @@ namespace MatterHackers.Agg
             i0a = 1.0 / bessel_i0(b);
         }
 
-        public double radius() { return 1.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 1.0; }
+        public double CalculateWeight(double x)
         {
             return bessel_i0(a * Math.Sqrt(1.0 - x * x)) * i0a;
         }
@@ -151,22 +145,20 @@ namespace MatterHackers.Agg
             }
             return sum;
         }
-    };
-
+    }
     //----------------------------------------------image_filter_catrom
-    public struct image_filter_catrom : IImageFilterFunction
+    public struct image_filter_catrom : IImageFilter
     {
-        public double radius() { return 2.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 2.0; }
+        public double CalculateWeight(double x)
         {
             if (x < 1.0) return 0.5 * (2.0 + x * x * (-5.0 + x * 3.0));
             if (x < 2.0) return 0.5 * (4.0 + x * (-8.0 + x * (5.0 - x)));
             return 0.0;
         }
-    };
-
+    }
     //---------------------------------------------image_filter_mitchell
-    public class image_filter_mitchell : IImageFilterFunction
+    public class image_filter_mitchell : IImageFilter
     {
         private double p0, p2, p3;
         private double q0, q1, q2, q3;
@@ -188,21 +180,19 @@ namespace MatterHackers.Agg
             q3 = ((-b - 6.0 * c) / 6.0);
         }
 
-        public double radius() { return 2.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 2.0; }
+        public double CalculateWeight(double x)
         {
             if (x < 1.0) return p0 + x * x * (p2 + x * p3);
             if (x < 2.0) return q0 + x * (q1 + x * (q2 + x * q3));
             return 0.0;
         }
-    };
-
-
+    }
     //----------------------------------------------image_filter_spline16
-    public struct image_filter_spline16 : IImageFilterFunction
+    public struct image_filter_spline16 : IImageFilter
     {
-        public double radius() { return 2.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 2.0; }
+        public double CalculateWeight(double x)
         {
             if (x < 1.0)
             {
@@ -210,14 +200,12 @@ namespace MatterHackers.Agg
             }
             return ((-1.0 / 3.0 * (x - 1) + 4.0 / 5.0) * (x - 1) - 7.0 / 15.0) * (x - 1);
         }
-    };
-
-
+    }
     //---------------------------------------------image_filter_spline36
-    public struct image_filter_spline36 : IImageFilterFunction
+    public struct image_filter_spline36 : IImageFilter
     {
-        public double radius() { return 3.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 3.0; }
+        public double CalculateWeight(double x)
         {
             if (x < 1.0)
             {
@@ -229,59 +217,50 @@ namespace MatterHackers.Agg
             }
             return ((1.0 / 11.0 * (x - 2) - 45.0 / 209.0) * (x - 2) + 26.0 / 209.0) * (x - 2);
         }
-    };
-
-
+    }
     //----------------------------------------------image_filter_gaussian
-    public struct image_filter_gaussian : IImageFilterFunction
+    public struct image_filter_gaussian : IImageFilter
     {
-        public double radius() { return 2.0; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 2.0; }
+        public double CalculateWeight(double x)
         {
             return Math.Exp(-2.0 * x * x) * Math.Sqrt(2.0 / Math.PI);
         }
-    };
-
-
+    }
     //------------------------------------------------image_filter_bessel
-    public struct image_filter_bessel : IImageFilterFunction
+    public struct image_filter_bessel : IImageFilter
     {
-        public double radius() { return 3.2383; }
-        public double calc_weight(double x)
+        public double GetRadius() { return 3.2383; }
+        public double CalculateWeight(double x)
         {
             return (x == 0.0) ? Math.PI / 4.0 : AggMath.besj(Math.PI * x, 1) / (2.0 * x);
         }
-    };
-
-
+    }
     //-------------------------------------------------image_filter_sinc
-    public class image_filter_sinc : IImageFilterFunction
+    public class image_filter_sinc : IImageFilter
     {
         public image_filter_sinc(double r)
         {
             m_radius = (r < 2.0 ? 2.0 : r);
         }
-        public double radius() { return m_radius; }
-        public double calc_weight(double x)
+        public double GetRadius() { return m_radius; }
+        public double CalculateWeight(double x)
         {
             if (x == 0.0) return 1.0;
             x *= Math.PI;
             return Math.Sin(x) / x;
-        }
-
+        } 
         private double m_radius;
-    };
-
-
+    }
     //-----------------------------------------------image_filter_lanczos
-    public class image_filter_lanczos : IImageFilterFunction
+    public class image_filter_lanczos : IImageFilter
     {
         public image_filter_lanczos(double r)
         {
             m_radius = (r < 2.0 ? 2.0 : r);
         }
-        public double radius() { return m_radius; }
-        public double calc_weight(double x)
+        public double GetRadius() { return m_radius; }
+        public double CalculateWeight(double x)
         {
             if (x == 0.0) return 1.0;
             if (x > m_radius) return 0.0;
@@ -290,19 +269,18 @@ namespace MatterHackers.Agg
             return (Math.Sin(x) / x) * (Math.Sin(xr) / xr);
         }
         private double m_radius;
-    };
-
+    }
     //----------------------------------------------image_filter_blackman
-    public class image_filter_blackman : IImageFilterFunction
+    public class image_filter_blackman : IImageFilter
     {
         public image_filter_blackman(double r)
         {
             m_radius = (r < 2.0 ? 2.0 : r);
         }
 
-        public double radius() { return m_radius; }
+        public double GetRadius() { return m_radius; }
 
-        public double calc_weight(double x)
+        public double CalculateWeight(double x)
         {
             if (x == 0.0)
             {
@@ -320,5 +298,7 @@ namespace MatterHackers.Agg
         }
 
         private double m_radius;
-    };
+    }
 }
+
+ 

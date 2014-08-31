@@ -109,7 +109,7 @@ namespace MatterHackers.Agg.VertexSource
             calc_num_steps();
         }
 
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
             vertexData.command = FlagsAndCommand.CommandMoveTo;
@@ -150,7 +150,7 @@ namespace MatterHackers.Agg.VertexSource
             m_step = 0;
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;

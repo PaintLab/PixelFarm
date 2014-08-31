@@ -55,11 +55,11 @@ namespace MatterHackers.Agg.Lines
      */
 
     //======================================================line_image_pattern
-    public class line_image_pattern
+    public class LineImagePattern
     {
         IPatternFilter m_filter;
         int m_dilation;
-        int m_dilation_hr; 
+        int m_dilation_hr;
         ChildImage m_buf;
         byte[] m_data = null;
         int m_DataSizeInBytes = 0;
@@ -70,10 +70,10 @@ namespace MatterHackers.Agg.Lines
         int m_offset_y_hr;
 
         //--------------------------------------------------------------------
-        public line_image_pattern(IPatternFilter filter)
+        public LineImagePattern(IPatternFilter filter)
         {
             m_filter = filter;
-            m_dilation = (filter.dilation() + 1);
+            m_dilation = (filter.Dilation + 1);
             m_dilation_hr = (m_dilation << LineAABasics.SUBPIXEL_SHIFT);
             m_width = (0);
             m_height = (0);
@@ -86,10 +86,10 @@ namespace MatterHackers.Agg.Lines
             get
             {
                 throw new NotSupportedException();
-                 
+
             }
         }
-        ~line_image_pattern()
+        ~LineImagePattern()
         {
             if (m_DataSizeInBytes > 0)
             {
@@ -99,10 +99,10 @@ namespace MatterHackers.Agg.Lines
 
         // Create
         //--------------------------------------------------------------------
-        public line_image_pattern(IPatternFilter filter, line_image_pattern src)
+        public LineImagePattern(IPatternFilter filter, LineImagePattern src)
         {
             m_filter = (filter);
-            m_dilation = (filter.dilation() + 1);
+            m_dilation = (filter.Dilation + 1);
             m_dilation_hr = (m_dilation << LineAABasics.SUBPIXEL_SHIFT);
             m_width = 0;
             m_height = 0;
@@ -152,7 +152,7 @@ namespace MatterHackers.Agg.Lines
 
 
             m_buf = new ChildImage(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
-   
+
             byte[] destBuffer = m_buf.GetBuffer();
             byte[] sourceBuffer = src.GetBuffer();
 
@@ -198,7 +198,7 @@ namespace MatterHackers.Agg.Lines
         //--------------------------------------------------------------------
         public void pixel(ColorRGBA[] destBuffer, int destBufferOffset, int x, int y)
         {
-            m_filter.pixel_high_res(m_buf, destBuffer, destBufferOffset,
+            m_filter.SetPixelHighRes(m_buf, destBuffer, destBufferOffset,
                                      x % m_width_hr + m_dilation_hr,
                                      y + m_offset_y_hr);
         }
@@ -254,208 +254,7 @@ namespace MatterHackers.Agg.Lines
      */
 
     //===================================================distance_interpolator4
-    public class distance_interpolator4
-    {
-        int m_dx;
-        int m_dy;
-        int m_dx_start;
-        int m_dy_start;
-        int m_dx_pict;
-        int m_dy_pict;
-        int m_dx_end;
-        int m_dy_end;
-
-        int m_dist;
-        int m_dist_start;
-        int m_dist_pict;
-        int m_dist_end;
-        int m_len;
-
-        //---------------------------------------------------------------------
-        public distance_interpolator4() { }
-        public distance_interpolator4(int x1, int y1, int x2, int y2,
-                               int sx, int sy, int ex, int ey,
-                               int len, double scale, int x, int y)
-        {
-            m_dx = (x2 - x1);
-            m_dy = (y2 - y1);
-            m_dx_start = (LineAABasics.line_mr(sx) - LineAABasics.line_mr(x1));
-            m_dy_start = (LineAABasics.line_mr(sy) - LineAABasics.line_mr(y1));
-            m_dx_end = (LineAABasics.line_mr(ex) - LineAABasics.line_mr(x2));
-            m_dy_end = (LineAABasics.line_mr(ey) - LineAABasics.line_mr(y2));
-
-            m_dist = (AggBasics.iround((double)(x + LineAABasics.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
-                          (double)(y + LineAABasics.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
-
-            m_dist_start = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sx)) * m_dy_start -
-                         (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(sy)) * m_dx_start);
-
-            m_dist_end = ((LineAABasics.line_mr(x + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ex)) * m_dy_end -
-                       (LineAABasics.line_mr(y + LineAABasics.SUBPIXEL_SCALE / 2) - LineAABasics.line_mr(ey)) * m_dx_end);
-            m_len = (int)(AggBasics.uround(len / scale));
-
-            double d = len * scale;
-            int dx = AggBasics.iround(((x2 - x1) << LineAABasics.SUBPIXEL_SHIFT) / d);
-            int dy = AggBasics.iround(((y2 - y1) << LineAABasics.SUBPIXEL_SHIFT) / d);
-            m_dx_pict = -dy;
-            m_dy_pict = dx;
-            m_dist_pict = ((x + LineAABasics.SUBPIXEL_SCALE / 2 - (x1 - dy)) * m_dy_pict -
-                            (y + LineAABasics.SUBPIXEL_SCALE / 2 - (y1 + dx)) * m_dx_pict) >>
-                           LineAABasics.SUBPIXEL_SHIFT;
-
-            m_dx <<= LineAABasics.SUBPIXEL_SHIFT;
-            m_dy <<= LineAABasics.SUBPIXEL_SHIFT;
-            m_dx_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
-            m_dy_start <<= LineAABasics.MR_SUBPIXEL_SHIFT;
-            m_dx_end <<= LineAABasics.MR_SUBPIXEL_SHIFT;
-            m_dy_end <<= LineAABasics.MR_SUBPIXEL_SHIFT;
-        }
-
-        //---------------------------------------------------------------------
-        public void inc_x()
-        {
-            m_dist += m_dy;
-            m_dist_start += m_dy_start;
-            m_dist_pict += m_dy_pict;
-            m_dist_end += m_dy_end;
-        }
-
-        //---------------------------------------------------------------------
-        public void dec_x()
-        {
-            m_dist -= m_dy;
-            m_dist_start -= m_dy_start;
-            m_dist_pict -= m_dy_pict;
-            m_dist_end -= m_dy_end;
-        }
-
-        //---------------------------------------------------------------------
-        public void inc_y()
-        {
-            m_dist -= m_dx;
-            m_dist_start -= m_dx_start;
-            m_dist_pict -= m_dx_pict;
-            m_dist_end -= m_dx_end;
-        }
-
-        //---------------------------------------------------------------------
-        public void dec_y()
-        {
-            m_dist += m_dx;
-            m_dist_start += m_dx_start;
-            m_dist_pict += m_dx_pict;
-            m_dist_end += m_dx_end;
-        }
-
-        //---------------------------------------------------------------------
-        public void inc_x(int dy)
-        {
-            m_dist += m_dy;
-            m_dist_start += m_dy_start;
-            m_dist_pict += m_dy_pict;
-            m_dist_end += m_dy_end;
-            if (dy > 0)
-            {
-                m_dist -= m_dx;
-                m_dist_start -= m_dx_start;
-                m_dist_pict -= m_dx_pict;
-                m_dist_end -= m_dx_end;
-            }
-            if (dy < 0)
-            {
-                m_dist += m_dx;
-                m_dist_start += m_dx_start;
-                m_dist_pict += m_dx_pict;
-                m_dist_end += m_dx_end;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public void dec_x(int dy)
-        {
-            m_dist -= m_dy;
-            m_dist_start -= m_dy_start;
-            m_dist_pict -= m_dy_pict;
-            m_dist_end -= m_dy_end;
-            if (dy > 0)
-            {
-                m_dist -= m_dx;
-                m_dist_start -= m_dx_start;
-                m_dist_pict -= m_dx_pict;
-                m_dist_end -= m_dx_end;
-            }
-            if (dy < 0)
-            {
-                m_dist += m_dx;
-                m_dist_start += m_dx_start;
-                m_dist_pict += m_dx_pict;
-                m_dist_end += m_dx_end;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public void inc_y(int dx)
-        {
-            m_dist -= m_dx;
-            m_dist_start -= m_dx_start;
-            m_dist_pict -= m_dx_pict;
-            m_dist_end -= m_dx_end;
-            if (dx > 0)
-            {
-                m_dist += m_dy;
-                m_dist_start += m_dy_start;
-                m_dist_pict += m_dy_pict;
-                m_dist_end += m_dy_end;
-            }
-            if (dx < 0)
-            {
-                m_dist -= m_dy;
-                m_dist_start -= m_dy_start;
-                m_dist_pict -= m_dy_pict;
-                m_dist_end -= m_dy_end;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public void dec_y(int dx)
-        {
-            m_dist += m_dx;
-            m_dist_start += m_dx_start;
-            m_dist_pict += m_dx_pict;
-            m_dist_end += m_dx_end;
-            if (dx > 0)
-            {
-                m_dist += m_dy;
-                m_dist_start += m_dy_start;
-                m_dist_pict += m_dy_pict;
-                m_dist_end += m_dy_end;
-            }
-            if (dx < 0)
-            {
-                m_dist -= m_dy;
-                m_dist_start -= m_dy_start;
-                m_dist_pict -= m_dy_pict;
-                m_dist_end -= m_dy_end;
-            }
-        }
-
-        //---------------------------------------------------------------------
-        public int dist() { return m_dist; }
-        public int dist_start() { return m_dist_start; }
-        public int dist_pict() { return m_dist_pict; }
-        public int dist_end() { return m_dist_end; }
-
-        //---------------------------------------------------------------------
-        public int dx() { return m_dx; }
-        public int dy() { return m_dy; }
-        public int dx_start() { return m_dx_start; }
-        public int dy_start() { return m_dy_start; }
-        public int dx_pict() { return m_dx_pict; }
-        public int dy_pict() { return m_dy_pict; }
-        public int dx_end() { return m_dx_end; }
-        public int dy_end() { return m_dy_end; }
-        public int len() { return m_len; }
-    };
+  
 
 #if true
 #if false
@@ -787,7 +586,7 @@ namespace MatterHackers.Agg.Lines
     public class ImageLineRenderer : LineRenderer
     {
         IImage m_ren;
-        line_image_pattern m_pattern;
+        LineImagePattern m_pattern;
         int m_start;
         double m_scale_x;
         RectangleInt m_clip_box;
@@ -797,7 +596,7 @@ namespace MatterHackers.Agg.Lines
         //typedef renderer_outline_image<BaseRenderer, ImagePattern> self_type;
 
         //---------------------------------------------------------------------
-        public ImageLineRenderer(IImage ren, line_image_pattern patt)
+        public ImageLineRenderer(IImage ren, LineImagePattern patt)
         {
             m_ren = ren;
             m_pattern = patt;
@@ -810,18 +609,18 @@ namespace MatterHackers.Agg.Lines
         public void attach(IImage ren) { m_ren = ren; }
 
         //---------------------------------------------------------------------
-        public void pattern(line_image_pattern p) { m_pattern = p; }
-        public line_image_pattern pattern() { return m_pattern; }
+        public void pattern(LineImagePattern p) { m_pattern = p; }
+        public LineImagePattern pattern() { return m_pattern; }
 
         //---------------------------------------------------------------------
         public void reset_clipping() { m_clipping = false; }
 
         public void clip_box(double x1, double y1, double x2, double y2)
         {
-            m_clip_box.Left = line_coord_sat.conv(x1);
-            m_clip_box.Bottom = line_coord_sat.conv(y1);
-            m_clip_box.Right = line_coord_sat.conv(x2);
-            m_clip_box.Top = line_coord_sat.conv(y2);
+            m_clip_box.Left = LineCoordSat.Convert(x1);
+            m_clip_box.Bottom = LineCoordSat.Convert(y1);
+            m_clip_box.Right = LineCoordSat.Convert(x2);
+            m_clip_box.Top = LineCoordSat.Convert(y2);
             m_clipping = true;
         }
 

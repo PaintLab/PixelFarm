@@ -102,7 +102,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                 image = new ChildImage(backBuffer, new BlenderBGR());
             }
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
-            clippingProxy.clear(ColorRGBA.White);
+            clippingProxy.Clear(ColorRGBA.White);
 
             g_rasterizer.SetVectorClipBox(0, 0, Width, Height);
 

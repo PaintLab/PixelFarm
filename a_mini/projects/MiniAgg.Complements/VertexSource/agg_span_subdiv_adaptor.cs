@@ -56,10 +56,10 @@ namespace MatterHackers.Agg
                              int subdiv_shift)
             : this(interpolator, subdiv_shift)
         {
-            begin(x, y, len);
+            Begin(x, y, len);
         }
 
-        public void resynchronize(double xe, double ye, int len)
+        public void Resync(double xe, double ye, int len)
         {
             throw new System.NotImplementedException();
         }
@@ -69,13 +69,13 @@ namespace MatterHackers.Agg
         public void interpolator(ISpanInterpolator intr) { m_interpolator = intr; }
 
         //----------------------------------------------------------------
-        public Transform.ITransform transformer()
+        public Transform.ITransform GetTransformer()
         {
-            return m_interpolator.transformer();
+            return m_interpolator.GetTransformer();
         }
-        public void transformer(Transform.ITransform trans)
+        public void SetTransformer(Transform.ITransform trans)
         {
-            m_interpolator.transformer(trans);
+            m_interpolator.SetTransformer(trans);
         }
 
         //----------------------------------------------------------------
@@ -88,14 +88,14 @@ namespace MatterHackers.Agg
         }
 
         //----------------------------------------------------------------
-        public void begin(double x, double y, int len)
+        public void Begin(double x, double y, int len)
         {
             m_pos = 1;
             m_src_x = AggBasics.iround(x * subpixel_scale) + subpixel_scale;
             m_src_y = y;
             m_len = len;
             if (len > m_subdiv_size) len = (int)m_subdiv_size;
-            m_interpolator.begin(x, y, len);
+            m_interpolator.Begin(x, y, len);
         }
 
         //----------------------------------------------------------------
@@ -106,7 +106,7 @@ namespace MatterHackers.Agg
             {
                 int len = m_len;
                 if (len > m_subdiv_size) len = (int)m_subdiv_size;
-                m_interpolator.resynchronize((double)m_src_x / (double)subpixel_scale + len,
+                m_interpolator.Resync((double)m_src_x / (double)subpixel_scale + len,
                                               m_src_y,
                                               len);
                 m_pos = 0;
@@ -117,15 +117,15 @@ namespace MatterHackers.Agg
         }
 
         //----------------------------------------------------------------
-        public void coordinates(out int x, out int y)
+        public void GetCoord(out int x, out int y)
         {
-            m_interpolator.coordinates(out x, out y);
+            m_interpolator.GetCoord(out x, out y);
         }
 
         //----------------------------------------------------------------
-        public void local_scale(out int x, out int y)
+        public void GetLocalScale(out int x, out int y)
         {
-            m_interpolator.local_scale(out x, out y);
+            m_interpolator.GetLocalScale(out x, out y);
         }
-    };
+    } 
 }

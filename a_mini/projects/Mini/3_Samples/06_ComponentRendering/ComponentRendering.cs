@@ -60,7 +60,7 @@ namespace MatterHackers.Agg
                 ScanlinePacked8 sl = new ScanlinePacked8();
 
                 ColorRGBA clearColor = this.UseBlackBlackground ? new ColorRGBA(0, 0, 0) : new ColorRGBA(255, 255, 255);
-                clippingProxy.clear(clearColor);
+                clippingProxy.Clear(clearColor);
                 //alphaSlider.View.BackgroundColor = clearColor;
 
                 ColorRGBA FillColor = this.UseBlackBlackground ?

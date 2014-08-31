@@ -175,7 +175,7 @@ namespace MatterHackers.Agg
                     path.ClosePolygon();
 
                     colors[npaths] = ColorRGBA.rgb8_packed((int)newColor);
-                    path_idx[npaths] = path.start_new_path();
+                    path_idx[npaths] = path.StartNewPath();
                     npaths++;
                 }
                 else
@@ -207,7 +207,7 @@ namespace MatterHackers.Agg
                 }
             }
 
-            path.arrange_orientations_all_paths(ShapePath.FlagsAndCommand.FlagCW);
+            path.ArrangeOrientationsAll(ShapePath.FlagsAndCommand.FlagCW);
             return npaths;
         }
     }

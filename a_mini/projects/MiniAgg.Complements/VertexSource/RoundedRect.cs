@@ -130,7 +130,7 @@ namespace MatterHackers.Agg.VertexSource
         public void approximation_scale(double s) { currentProcessingArc.approximation_scale(s); }
         public double approximation_scale() { return currentProcessingArc.approximation_scale(); }
 
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
             foreach (VertexData vertexData in currentProcessingArc.Vertices())
@@ -195,7 +195,7 @@ namespace MatterHackers.Agg.VertexSource
             state = 0;
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;
             y = 0;

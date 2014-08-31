@@ -32,7 +32,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.poly_subpixel_scale_e;
+using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 
 namespace MatterHackers.Agg
 {
@@ -40,7 +40,7 @@ namespace MatterHackers.Agg
     // A pixel cell. There're no constructors defined and it was done ***
     // intentionally in order to avoid extra overhead when allocating an ****
     // array of cells. ***
-    public struct CellAA
+    struct CellAA
     {
         public int x;
         public int y;
@@ -87,9 +87,9 @@ namespace MatterHackers.Agg
         {
             return "x:" + x + ",y:" + y + ",cover:" + cover + ",area:" + area + ",left:" + left + ",right:" + right;
         }
-#endif 
+#endif
 
-    } 
+    }
 
 
     //-----------------------------------------------------rasterizer_cells_aa
@@ -101,7 +101,7 @@ namespace MatterHackers.Agg
         ArrayList<CellAA> m_cells;
         ArrayList<CellAA> m_sorted_cells;
 
-        ArrayList<sorted_y> m_sorted_y;
+        ArrayList<SortedY> m_sorted_y;
 
         CellAA m_curr_cell;
         CellAA m_style_cell;
@@ -112,16 +112,15 @@ namespace MatterHackers.Agg
         int m_max_y;
         bool m_sorted;
 
-        enum cell_block_scale_e
-        {
-            cell_block_shift = 12,
-            cell_block_size = 1 << cell_block_shift,
-            cell_block_mask = cell_block_size - 1,
-            cell_block_pool = 256,
-            cell_block_limit = cell_block_size * 1024
-        }
 
-        struct sorted_y
+        const int BLOCK_SHIFT = 12;
+        const int BLOCK_SIZE = 1 << BLOCK_SHIFT;
+        const int BLOCK_MASK = BLOCK_SIZE - 1;
+        const int BLOCK_POOL = 256;
+        const int BLOCK_LIMIT = BLOCK_SIZE * 1024;
+
+
+        struct SortedY
         {
             internal int start;
             internal int num;
@@ -131,7 +130,7 @@ namespace MatterHackers.Agg
         {
 
             m_sorted_cells = new ArrayList<CellAA>();
-            m_sorted_y = new ArrayList<sorted_y>();
+            m_sorted_y = new ArrayList<SortedY>();
             m_min_x = (0x7FFFFFFF);
             m_min_y = (0x7FFFFFFF);
             m_max_x = (-0x7FFFFFFF);
@@ -160,11 +159,11 @@ namespace MatterHackers.Agg
             m_style_cell.style(style_cell);
         }
 
-        enum dx_limit_e { dx_limit = 16384 << AggBasics.poly_subpixel_scale_e.poly_subpixel_shift };
+        enum dx_limit_e { dx_limit = 16384 << AggBasics.PolySubPixelScale.poly_subpixel_shift };
 
-        const int poly_subpixel_shift = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_shift;
-        const int poly_subpixel_mask = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_mask;
-        const int poly_subpixel_scale = (int)AggBasics.poly_subpixel_scale_e.poly_subpixel_scale;
+        const int poly_subpixel_shift = (int)AggBasics.PolySubPixelScale.poly_subpixel_shift;
+        const int poly_subpixel_mask = (int)AggBasics.PolySubPixelScale.poly_subpixel_mask;
+        const int poly_subpixel_scale = (int)AggBasics.PolySubPixelScale.poly_subpixel_scale;
 
         public void line(int x1, int y1, int x2, int y2)
         {
@@ -337,7 +336,7 @@ namespace MatterHackers.Agg
             m_sorted_y.zero();
 
             CellAA[] cells = m_cells.Array;
-            sorted_y[] sortedYData = m_sorted_y.Array;
+            SortedY[] sortedYData = m_sorted_y.Array;
             CellAA[] sortedCellsData = m_sorted_cells.Array;
 
             // Create the Y-histogram (count the numbers of cells for each Y)
@@ -416,7 +415,7 @@ namespace MatterHackers.Agg
         {
             if ((m_curr_cell.area | m_curr_cell.cover) != 0)
             {
-                if (m_num_used_cells >= (int)cell_block_scale_e.cell_block_limit)
+                if (m_num_used_cells >= BLOCK_LIMIT)
                 {
                     return;
                 }
@@ -445,12 +444,12 @@ namespace MatterHackers.Agg
         {
             if (m_cells == null || (m_num_used_cells + 1) >= m_cells.AllocatedSize)
             {
-                if (m_num_used_cells >= (int)cell_block_scale_e.cell_block_limit)
+                if (m_num_used_cells >= BLOCK_LIMIT)
                 {
                     return;
                 }
 
-                int new_num_allocated_cells = m_num_used_cells + (int)cell_block_scale_e.cell_block_size;
+                int new_num_allocated_cells = m_num_used_cells + BLOCK_SIZE;
                 ArrayList<CellAA> new_cells = new ArrayList<CellAA>(new_num_allocated_cells);
                 if (m_cells != null)
                 {
@@ -631,5 +630,5 @@ namespace MatterHackers.Agg
         }
     }
 
-    
+
 }

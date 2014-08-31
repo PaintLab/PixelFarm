@@ -113,18 +113,18 @@ namespace MatterHackers.Agg.Sample_RoundRect
 
             IImage backBuffer = widgetsSubImage;
 
-            GammaLookUpTable gamma = new GammaLookUpTable(this.Gamma);
-            IRecieveBlenderByte NormalBlender = new BlenderBGRA();
-            IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
-            var rasterNormal = new ChildImage(backBuffer, NormalBlender); 
-            var rasterGamma = new ChildImage(backBuffer, GammaBlender); 
-            ClipProxyImage clippingProxyNormal = new ClipProxyImage(rasterNormal);
-            ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            clippingProxyNormal.clear(this.WhiteOnBlack ? new ColorRGBAf(0, 0, 0) : new ColorRGBAf(1, 1, 1));
+            var normalBlender = new BlenderBGRA();
+            var gammaBlender = new BlenderGammaBGRA(this.Gamma);
+            var rasterNormal = new ChildImage(backBuffer, normalBlender);
+            var rasterGamma = new ChildImage(backBuffer, gammaBlender);
+            var clippingProxyNormal = new ClipProxyImage(rasterNormal);
+            var clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            ScanlineRasterizer ras = new ScanlineRasterizer();
-            ScanlinePacked8 sl = new ScanlinePacked8();
+            clippingProxyNormal.Clear(this.WhiteOnBlack ? new ColorRGBAf(0, 0, 0) : new ColorRGBAf(1, 1, 1));
+
+            var ras = new ScanlineRasterizer();
+            var sl = new ScanlinePacked8();
 
             VertexSource.Ellipse e = new VertexSource.Ellipse();
 
@@ -142,7 +142,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
             double d = this.SubPixelOffset;
-           
+
             // Creating a rounded rectangle
             VertexSource.RoundedRect r = new VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d,
                 this.Radius);
@@ -186,8 +186,8 @@ namespace MatterHackers.Agg.Sample_RoundRect
         {
             m_idx = -1;
 
-        } 
-         
+        }
+
     }
- 
+
 }

@@ -44,7 +44,7 @@ namespace MatterHackers.Agg
             {
                 vs.rewind(gi[start + i]);
                 ShapePath.FlagsAndCommand PathAndFlags;
-                while (!ShapePath.is_stop(PathAndFlags = vs.vertex(out x, out y)))
+                while (!ShapePath.is_stop(PathAndFlags = vs.GetVertex(out x, out y)))
                 {
                     if (ShapePath.IsVertextCommand(PathAndFlags))
                     {
@@ -89,8 +89,9 @@ namespace MatterHackers.Agg
 
         //-----------------------------------------------------bounding_rect_single
         //template<class VertexSource, class CoordT> 
-        public static bool bounding_rect_single(IVertexSource vs, int path_id,
-                                  out double x1, out double y1, out double x2, out double y2)
+        public static bool bounding_rect_single(
+            IVertexSource vs, int path_id,
+            out double x1, out double y1, out double x2, out double y2)
         {
             double x = 0;
             double y = 0;
@@ -103,7 +104,7 @@ namespace MatterHackers.Agg
 
             vs.rewind(path_id);
             ShapePath.FlagsAndCommand PathAndFlags;
-            while (!ShapePath.is_stop(PathAndFlags = vs.vertex(out x, out y)))
+            while (!ShapePath.is_stop(PathAndFlags = vs.GetVertex(out x, out y)))
             {
                 if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
