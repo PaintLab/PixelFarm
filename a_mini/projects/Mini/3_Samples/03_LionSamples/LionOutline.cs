@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
             "and when so called miter limit is exceded, they are not as accurate as generated " +
             "by the stroke converter (conv_stroke). To see the difference, maximize the window" +
             " and try to rotate and scale the �lion� with and without using the scanline " +
-            "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")] 
+            "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")]
     public class LionFillOutlineExample : DemoBase
     {
         lion_outline lionFill;
@@ -129,11 +129,11 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
             int strokeWidth = 1;
 
-            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA()); 
+            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(ColorRGBA.White);
 
-            Affine transform = Affine.NewMatix( 
+            Affine transform = Affine.NewMatix(
                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                     AffinePlan.Scale(spriteScale, spriteScale),
                     AffinePlan.Rotate(angle + Math.PI),
@@ -165,10 +165,10 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
 
-                rasterizer.line_join(RenderAccurateJoins ?
+                rasterizer.LineJoin = (RenderAccurateJoins ?
                     OutlineAARasterizer.OutlineJoin.AccurateJoin
                     : OutlineAARasterizer.OutlineJoin.Round);
-                rasterizer.round_cap(true);
+                rasterizer.RoundCap = true;
 
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
 
