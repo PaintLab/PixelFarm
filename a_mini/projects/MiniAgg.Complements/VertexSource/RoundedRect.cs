@@ -190,7 +190,7 @@ namespace MatterHackers.Agg.VertexSource
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
         }
 
-        public void rewind(int unused)
+        public void Rewind(int unused)
         {
             state = 0;
         }

@@ -60,7 +60,7 @@ namespace MatterHackers.Agg.UI
             throw new NotImplementedException();
         }
 
-        public void rewind(int idx)
+        public void Rewind(int idx)
         {
             m_vertex = 0;
         }
@@ -169,14 +169,14 @@ namespace MatterHackers.Agg.UI
         }
 
         public override int num_paths() { return 1; }
-        public override void rewind(int path_id)
+        public override void Rewind(int path_id)
         {
             if (needToRecalculateBounds)
             {
                 RecalculateBounds();
             }
             m_status = 0;
-            m_stroke.rewind(0);
+            m_stroke.Rewind(0);
         }
 
         void RecalculateBounds()

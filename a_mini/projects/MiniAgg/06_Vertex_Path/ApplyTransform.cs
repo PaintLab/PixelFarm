@@ -51,9 +51,9 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void rewind(int path_id)
+        public void Rewind(int path_id)
         {
-            VertexSource.rewind(path_id);
+            VertexSource.Rewind(path_id);
         }
 
         public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)

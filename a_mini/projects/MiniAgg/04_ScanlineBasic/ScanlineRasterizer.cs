@@ -305,7 +305,7 @@ namespace MatterHackers.Agg
             double y = 0;
 
             ShapePath.FlagsAndCommand PathAndFlags;
-            vs.rewind(pathID);
+            vs.Rewind(pathID);
             if (m_outline.sorted())
             {
                 reset();

@@ -290,15 +290,15 @@ namespace MatterHackers.Agg.UI
 
             graphics2D.Render(border, m_border_color);
 
-            rewind(0);
+            Rewind(0);
             graphics2D.Render(this, m_curve_color);
-            rewind(1);
+            Rewind(1);
             graphics2D.Render(this, m_grid_color);
-            rewind(2);
+            Rewind(2);
             graphics2D.Render(this, m_inactive_pnt_color);
-            rewind(3);
+            Rewind(3);
             graphics2D.Render(this, m_active_pnt_color);
-            rewind(4);
+            Rewind(4);
             graphics2D.Render(this, m_text_color);
 
             base.OnDraw(graphics2D);
@@ -309,7 +309,7 @@ namespace MatterHackers.Agg.UI
             throw new NotImplementedException();
         }
 
-        public override void rewind(int idx)
+        public override void Rewind(int idx)
         {
             double kx1, ky1, kx2, ky2;
             string tbuf;
@@ -323,7 +323,7 @@ namespace MatterHackers.Agg.UI
                 case 0:                 // Curve
                     m_gamma_spline.box(m_xs1, m_ys1, m_xs2, m_ys2);
                     m_curve_poly.width(m_curve_width);
-                    m_curve_poly.rewind(0);
+                    m_curve_poly.Rewind(0);
                     break;
 
                 case 1:                 // Grid
@@ -392,7 +392,7 @@ namespace MatterHackers.Agg.UI
                     m_text_poly.width(m_text_thickness);
                     m_text_poly.line_join(LineJoin.Round);
                     m_text_poly.line_cap(LineCap.Round);
-                    m_text_poly.rewind(0);
+                    m_text_poly.Rewind(0);
                     break;
             }
         }

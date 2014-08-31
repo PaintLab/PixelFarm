@@ -566,7 +566,7 @@ namespace MatterHackers.Agg.Lines
             double y;
 
             ShapePath.FlagsAndCommand cmd;
-            vs.rewind(path_id);
+            vs.Rewind(path_id);
 
             //int index = 0;
             //int start = 851;

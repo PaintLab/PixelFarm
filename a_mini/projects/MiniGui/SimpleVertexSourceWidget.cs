@@ -49,7 +49,7 @@ namespace MatterHackers.Agg.UI
                 {
                     RectangleDouble localBounds = new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
 
-                    rewind(0);
+                    Rewind(0);
                     double x;
                     double y;
                     ShapePath.FlagsAndCommand cmd;
@@ -89,7 +89,7 @@ namespace MatterHackers.Agg.UI
 
         public abstract int num_paths();
         public abstract IEnumerable<VertexData> GetVertexIter();
-        public abstract void rewind(int path_id);
+        public abstract void Rewind(int path_id);
         public abstract ShapePath.FlagsAndCommand GetVertex(out double x, out double y);
 
         public virtual IColor color(int i) { return (IColor)new ColorRGBAf(); }

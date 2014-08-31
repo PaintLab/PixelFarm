@@ -145,7 +145,7 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
         }
 
-        public void rewind(int path_id)
+        public void Rewind(int path_id)
         {
             m_step = 0;
         }

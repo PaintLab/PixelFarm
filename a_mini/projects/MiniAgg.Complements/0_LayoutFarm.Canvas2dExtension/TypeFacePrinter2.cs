@@ -136,7 +136,7 @@ namespace LayoutFarm.Agg.Font
         public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
         {
             vertexSourceToApply.VertexSource = this;
-            rewind(0);
+            Rewind(0);
             if (DrawFromHintedCache)
             {
                 // TODO: make this work
@@ -150,7 +150,7 @@ namespace LayoutFarm.Agg.Font
 
         public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
-            rewind(0);
+            Rewind(0);
             if (DrawFromHintedCache)
             {
                 RenderFromCache(graphics2D, color);
@@ -302,7 +302,7 @@ namespace LayoutFarm.Agg.Font
 
 #if true
         IEnumerator<VertexData> currentEnumerator;
-        public void rewind(int layerIndex)
+        public void Rewind(int layerIndex)
         {
             currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();

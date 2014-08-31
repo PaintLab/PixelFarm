@@ -79,7 +79,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public IEnumerable<VertexData> GetVertexIter()
         {
-            rewind(0);
+            Rewind(0);
             ShapePath.FlagsAndCommand command = ShapePath.FlagsAndCommand.CommandStop;
             do
             {
@@ -92,9 +92,9 @@ namespace MatterHackers.Agg.VertexSource
             } while (command != ShapePath.FlagsAndCommand.CommandStop);
         }
 
-        public void rewind(int path_id)
+        public void Rewind(int path_id)
         {
-            VertexSource.rewind(path_id);
+            VertexSource.Rewind(path_id);
             m_status = Status.Initial;
         }
 

@@ -299,7 +299,7 @@ namespace MatterHackers.Agg.VertexSource
             m_points = new ArrayList<Vector2>();
             m_approximation_scale = (1.0);
             m_angle_tolerance = (0.0);
-            m_count = (0);
+            m_count = 0;
         }
 
         public curve3_div(double x1, double y1,
@@ -308,7 +308,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             m_approximation_scale = (1.0);
             m_angle_tolerance = (0.0);
-            m_count = (0);
+            m_count = 0;
             init(x1, y1, cx, cy, x2, y2);
         }
 
@@ -356,18 +356,16 @@ namespace MatterHackers.Agg.VertexSource
                     //}
                     //else
                     //{
-                        
+
                     //}
                 }
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
         }
-
         public void rewind(int idx)
         {
             m_count = 0;
         }
-
         public ShapePath.FlagsAndCommand vertex(out double x, out double y)
         {
             if (m_count >= m_points.Count)
@@ -1161,7 +1159,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void rewind(int path_id)
+        public void Rewind(int path_id)
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
             {
@@ -1286,7 +1284,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void rewind(int path_id)
+        public void Rewind(int path_id)
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
             {

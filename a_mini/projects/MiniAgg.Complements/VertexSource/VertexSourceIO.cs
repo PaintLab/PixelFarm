@@ -33,7 +33,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 using (StreamWriter outFile = new StreamWriter(pathAndFileName))
                 {
-                    vertexSource.rewind(0);
+                    vertexSource.Rewind(0);
                     double x;
                     double y;
                     ShapePath.FlagsAndCommand flagsAndCommand = vertexSource.GetVertex(out x, out y);
