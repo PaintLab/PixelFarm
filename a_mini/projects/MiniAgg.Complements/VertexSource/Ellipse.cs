@@ -34,6 +34,7 @@ namespace MatterHackers.Agg.VertexSource
         public double originY;
         public double radiusX;
         public double radiusY;
+
         private double m_scale;
         private int numSteps;
         private int m_step;
@@ -156,7 +157,7 @@ namespace MatterHackers.Agg.VertexSource
             m_step = 0;
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;

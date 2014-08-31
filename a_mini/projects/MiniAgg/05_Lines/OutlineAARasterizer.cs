@@ -572,7 +572,7 @@ namespace MatterHackers.Agg.Lines
             //int start = 851;
             //int num = 5;
 
-            while (!ShapePath.is_stop(cmd = vs.GetVertex(out x, out y)))
+            while (!ShapePath.is_stop(cmd = vs.GetNextVertex(out x, out y)))
             {
                 //index++;
                 //if (index == 0

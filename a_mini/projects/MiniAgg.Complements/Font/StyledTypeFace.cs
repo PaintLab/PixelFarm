@@ -66,7 +66,7 @@ namespace MatterHackers.Agg.Font
             glyph.Rewind(path_id);
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -74,7 +74,7 @@ namespace MatterHackers.Agg.Font
             switch (state)
             {
                 case 0:
-                    cmd = glyph.GetVertex(out x, out y);
+                    cmd = glyph.GetNextVertex(out x, out y);
                     if (ShapePath.is_stop(cmd))
                     {
                         state++;
@@ -83,7 +83,7 @@ namespace MatterHackers.Agg.Font
                     return cmd;
 
                 case 1:
-                    cmd = underline.GetVertex(out x, out y);
+                    cmd = underline.GetNextVertex(out x, out y);
                     break;
             }
             return cmd;
@@ -284,12 +284,12 @@ namespace MatterHackers.Agg.Font
 
             glyphForCharacter.Rewind(0);
             double x, y;
-            ShapePath.FlagsAndCommand curCommand = glyphForCharacter.GetVertex(out x, out y);
+            ShapePath.FlagsAndCommand curCommand = glyphForCharacter.GetNextVertex(out x, out y);
             RectangleDouble bounds = new RectangleDouble(x, y, x, y);
             while (curCommand != ShapePath.FlagsAndCommand.CommandStop)
             {
                 bounds.ExpandToInclude(x, y);
-                curCommand = glyphForCharacter.GetVertex(out x, out y);
+                curCommand = glyphForCharacter.GetNextVertex(out x, out y);
             }
 
             ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());

@@ -365,7 +365,7 @@ namespace MatterHackers.Agg.VertexSource
             iteratorIndex = pathId;
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (iteratorIndex >= vertices.Count)
             {
@@ -510,7 +510,7 @@ namespace MatterHackers.Agg.VertexSource
             double x, y;
             ShapePath.FlagsAndCommand PathAndFlags;
             vs.Rewind(path_id);
-            while (!ShapePath.is_stop(PathAndFlags = vs.GetVertex(out x, out y)))
+            while (!ShapePath.is_stop(PathAndFlags = vs.GetNextVertex(out x, out y)))
             {
                 vertices.AddVertex(x, y, PathAndFlags);
             }
@@ -526,7 +526,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x, y;
             vs.Rewind(path_id);
-            ShapePath.FlagsAndCommand PathAndFlags = vs.GetVertex(out x, out y);
+            ShapePath.FlagsAndCommand PathAndFlags = vs.GetNextVertex(out x, out y);
             if (!ShapePath.is_stop(PathAndFlags))
             {
                 if (ShapePath.IsVertextCommand(PathAndFlags))
@@ -554,7 +554,7 @@ namespace MatterHackers.Agg.VertexSource
                         vertices.AddVertex(x, y, PathAndFlags);
                     }
                 }
-                while (!ShapePath.is_stop(PathAndFlags = vs.GetVertex(out x, out y)))
+                while (!ShapePath.is_stop(PathAndFlags = vs.GetNextVertex(out x, out y)))
                 {
                     vertices.AddVertex(x, y, ShapePath.is_move_to(PathAndFlags) ?
                                                     ShapePath.FlagsAndCommand.CommandLineTo :

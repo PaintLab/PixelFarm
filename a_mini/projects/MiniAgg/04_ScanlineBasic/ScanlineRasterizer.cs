@@ -311,7 +311,7 @@ namespace MatterHackers.Agg
                 reset();
             }
 
-            while (!ShapePath.is_stop(PathAndFlags = vs.GetVertex(out x, out y)))
+            while (!ShapePath.is_stop(PathAndFlags = vs.GetNextVertex(out x, out y)))
             {
                 AddVertex(new VertexData(PathAndFlags, new Vector2(x, y)));
             }

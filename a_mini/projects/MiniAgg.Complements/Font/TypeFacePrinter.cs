@@ -308,7 +308,7 @@ namespace MatterHackers.Agg.Font
             currentEnumerator.MoveNext();
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.position.x;
             y = currentEnumerator.Current.position.y;

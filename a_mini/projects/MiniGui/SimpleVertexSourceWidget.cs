@@ -54,7 +54,7 @@ namespace MatterHackers.Agg.UI
                     double y;
                     ShapePath.FlagsAndCommand cmd;
                     int numPoint = 0;
-                    while (!ShapePath.is_stop(cmd = GetVertex(out x, out y)))
+                    while (!ShapePath.is_stop(cmd = GetNextVertex(out x, out y)))
                     {
                         numPoint++;
                         localBounds.ExpandToInclude(x, y);
@@ -90,7 +90,7 @@ namespace MatterHackers.Agg.UI
         public abstract int num_paths();
         public abstract IEnumerable<VertexData> GetVertexIter();
         public abstract void Rewind(int path_id);
-        public abstract ShapePath.FlagsAndCommand GetVertex(out double x, out double y);
+        public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
 
         public virtual IColor color(int i) { return (IColor)new ColorRGBAf(); }
 

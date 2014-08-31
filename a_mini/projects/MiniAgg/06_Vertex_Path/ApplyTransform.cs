@@ -64,9 +64,9 @@ namespace MatterHackers.Agg.VertexSource
             VertexSource.Rewind(path_id);
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            ShapePath.FlagsAndCommand cmd = VertexSource.GetVertex(out x, out y);
+            ShapePath.FlagsAndCommand cmd = VertexSource.GetNextVertex(out x, out y);
             if (ShapePath.IsVertextCommand(cmd))
             {
                 transformToApply.Transform(ref x, ref y);

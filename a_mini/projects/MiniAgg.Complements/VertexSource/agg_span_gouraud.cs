@@ -136,7 +136,7 @@ namespace MatterHackers.Agg.VertexSource
             m_vertex = 0;
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = m_x[m_vertex];
             y = m_y[m_vertex];

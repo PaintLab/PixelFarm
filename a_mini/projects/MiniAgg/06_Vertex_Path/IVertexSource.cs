@@ -49,8 +49,7 @@ namespace MatterHackers.Agg.VertexSource
         IEnumerable<VertexData> GetVertexIter();
         // for a PathStorage this is the vertex index.
         void Rewind(int pathId = 0);
-        ShapePath.FlagsAndCommand GetVertex(out double x, out double y);
-
+        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y); 
         bool IsDynamicVertexGen { get; }
     }
 

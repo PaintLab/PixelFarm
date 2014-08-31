@@ -36,11 +36,11 @@ namespace MatterHackers.Agg.VertexSource
                     vertexSource.Rewind(0);
                     double x;
                     double y;
-                    ShapePath.FlagsAndCommand flagsAndCommand = vertexSource.GetVertex(out x, out y);
+                    ShapePath.FlagsAndCommand flagsAndCommand = vertexSource.GetNextVertex(out x, out y);
                     do
                     {
                         outFile.WriteLine("{0}, {1}, {2}", x, y, flagsAndCommand.ToString());
-                        flagsAndCommand = vertexSource.GetVertex(out x, out y);
+                        flagsAndCommand = vertexSource.GetNextVertex(out x, out y);
                     }
                     while (flagsAndCommand != ShapePath.FlagsAndCommand.CommandStop);
                 }

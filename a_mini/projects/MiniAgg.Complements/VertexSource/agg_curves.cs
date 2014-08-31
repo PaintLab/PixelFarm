@@ -1172,7 +1172,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
             {
@@ -1308,7 +1308,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
             {
