@@ -35,7 +35,7 @@ namespace MatterHackers.Agg.VertexSource
             next_char,
             start_glyph,
             glyph
-        };
+        } 
 
         double m_StartX;
         double m_CurrentX;
@@ -336,6 +336,13 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return true;
+            }
+        }
         public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;

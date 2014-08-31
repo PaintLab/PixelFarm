@@ -227,5 +227,7 @@ namespace MatterHackers.Agg.VertexSource
 
             //----------------------------------------------------------
         }
+
+        
     }
 }

@@ -257,8 +257,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //Affine mtx1 = Affine.NewIdentity();                        
                         //mtx1 *= Affine.NewTranslation(-1150, -1150);
                         //mtx1 *= Affine.NewScaling(2.0);
-                        Affine mtx1 = Affine.NewMatix( 
-                                AffinePlan.Translate(-1150,-1150),
+                        Affine mtx1 = Affine.NewMatix(
+                                AffinePlan.Translate(-1150, -1150),
                                 AffinePlan.Scale(2)
                              );
 
@@ -296,9 +296,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         PathStorage gb_poly = new PathStorage();
                         MatterHackers.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
-                        Affine mtx = Affine.NewMatix( 
+                        Affine mtx = Affine.NewMatix(
                                 AffinePlan.Translate(-1150, -1150),
-                                AffinePlan.Scale(2) );
+                                AffinePlan.Scale(2));
 
                         VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx);
 
@@ -372,9 +372,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //Affine mtx = Affine.NewIdentity();
                         //mtx *= Affine.NewScaling(4.0);
                         //mtx *= Affine.NewTranslation(220, 200);
-                        Affine mtx = Affine.NewMatix( 
+                        Affine mtx = Affine.NewMatix(
                             AffinePlan.Scale(4),
-                            AffinePlan.Translate(220, 200) );
+                            AffinePlan.Translate(220, 200));
 
                         //mtx *= Affine.NewScaling(4.0);
                         //mtx *= Affine.NewTranslation(220, 200);
@@ -519,6 +519,13 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_start = true;
         }
 
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return false;
+            }
+        }
         public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = 0;

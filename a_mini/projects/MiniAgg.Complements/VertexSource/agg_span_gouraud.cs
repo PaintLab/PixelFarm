@@ -35,7 +35,7 @@ namespace MatterHackers.Agg.VertexSource
             public double x;
             public double y;
             public ColorRGBA color;
-        };
+        }
 
         public span_gouraud()
         {
@@ -51,7 +51,7 @@ namespace MatterHackers.Agg.VertexSource
                      double x3, double y3,
                      double d)
         {
-            m_vertex=(0);
+            m_vertex = (0);
             colors(c1, c2, c3);
             triangle(x1, y1, x2, y2, x3, y3, d);
         }
@@ -70,24 +70,24 @@ namespace MatterHackers.Agg.VertexSource
         // It's necessary to achieve numerical stability. 
         // However, the coordinates to interpolate colors are calculated
         // as miter joins (calc_intersection).
-        public void triangle(double x1, double y1, 
+        public void triangle(double x1, double y1,
                       double x2, double y2,
                       double x3, double y3,
                       double d)
         {
-            m_coord[0].x = m_x[0] = x1; 
+            m_coord[0].x = m_x[0] = x1;
             m_coord[0].y = m_y[0] = y1;
-            m_coord[1].x = m_x[1] = x2; 
+            m_coord[1].x = m_x[1] = x2;
             m_coord[1].y = m_y[1] = y2;
-            m_coord[2].x = m_x[2] = x3; 
+            m_coord[2].x = m_x[2] = x3;
             m_coord[2].y = m_y[2] = y3;
             m_cmd[0] = ShapePath.FlagsAndCommand.CommandMoveTo;
             m_cmd[1] = ShapePath.FlagsAndCommand.CommandLineTo;
             m_cmd[2] = ShapePath.FlagsAndCommand.CommandLineTo;
             m_cmd[3] = ShapePath.FlagsAndCommand.CommandStop;
 
-            if(d != 0.0)
-            {   
+            if (d != 0.0)
+            {
                 AggMath.dilate_triangle(m_coord[0].x, m_coord[0].y,
                                 m_coord[1].x, m_coord[1].y,
                                 m_coord[2].x, m_coord[2].y,
@@ -113,7 +113,21 @@ namespace MatterHackers.Agg.VertexSource
 
         public IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotImplementedException();
+            m_vertex = 0;
+            for (int i = 0; i < 8; ++i)
+            {
+                yield return new VertexData(
+                    m_cmd[m_vertex],
+                    new VectorMath.Vector2(m_x[i], m_y[i]));
+            }
+        }
+
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return false;
+            }
         }
 
         // Vertex Source Interface to feed the coordinates to the rasterizer
@@ -155,6 +169,6 @@ namespace MatterHackers.Agg.VertexSource
                 coord[2] = coord[1];
                 coord[1] = tmp;
             }
-       }
+        }
     }
 }

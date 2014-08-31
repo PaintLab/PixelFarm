@@ -50,6 +50,7 @@ namespace MatterHackers.Agg.VertexSource
             get;
             set;
         }
+        public bool IsDynamicVertexGen { get { return this.VertexSource.IsDynamicVertexGen; } }
 
         enum Status
         {

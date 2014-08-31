@@ -1080,6 +1080,7 @@ namespace MatterHackers.Agg.VertexSource
             init(x1, y1, cx, cy, x2, y2);
         }
 
+
         public void reset()
         {
             m_curve_inc.reset();
@@ -1177,7 +1178,17 @@ namespace MatterHackers.Agg.VertexSource
             {
                 return m_curve_inc.vertex(out x, out y);
             }
-            return m_curve_div.vertex(out x, out y);
+            else
+            {
+                return m_curve_div.vertex(out x, out y);
+            }
+        }
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return false;
+            }
         }
     }
 
@@ -1209,6 +1220,7 @@ namespace MatterHackers.Agg.VertexSource
             init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
         }
 
+        public bool IsDynamicVertexGen { get { return false; } }
         public void reset()
         {
             m_curve_inc.reset();

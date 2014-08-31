@@ -129,6 +129,14 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public IEnumerable<VertexData> GetVertexIter()
         {
             VertexData lastPosition = new VertexData();

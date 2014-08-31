@@ -56,7 +56,10 @@ namespace MatterHackers.Agg.Font
                 yield return vertexData;
             }
         }
-
+        public bool IsDynamicVertexGen
+        {
+            get { return this.glyph.IsDynamicVertexGen; }
+        }
         public void Rewind(int path_id)
         {
             underline.Rewind(0);
@@ -308,7 +311,7 @@ namespace MatterHackers.Agg.Font
                     sourceGlyph = new GlyphWithUnderline(sourceGlyph, typeFace.GetAdvanceForCharacter(character), typeFace.Underline_position, typeFace.Underline_thickness);
                 }
 
-                Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));                 
+                Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
                 IVertexSource characterGlyph = new VertexSourceApplyTransform(sourceGlyph, glyphTransform);
 
                 if (FlatenCurves)

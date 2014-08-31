@@ -324,7 +324,10 @@ namespace MatterHackers.Agg.VertexSource
         {
             return vertices.GetVertex(index, out x, out y);
         }
-
+        public bool IsDynamicVertexGen
+        {
+            get { return false; }
+        }
         public ShapePath.FlagsAndCommand GetCommand(int index)
         {
             return vertices.GetCommand(index);

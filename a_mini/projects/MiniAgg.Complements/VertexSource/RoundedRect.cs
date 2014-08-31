@@ -287,6 +287,15 @@ namespace MatterHackers.Agg.VertexSource
             }
             return cmd;
         }
+
+
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return true;
+            }
+        }
     };
 }
 

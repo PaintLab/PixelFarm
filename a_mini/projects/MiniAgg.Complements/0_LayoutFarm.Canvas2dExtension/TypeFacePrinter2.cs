@@ -307,17 +307,22 @@ namespace LayoutFarm.Agg.Font
             currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();
         }
+        public bool IsDynamicVertexGen
+        {
+            get { return true; }
+        }
+
 
         public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.position.x;
             y = currentEnumerator.Current.position.y;
             ShapePath.FlagsAndCommand command = currentEnumerator.Current.command;
-
             currentEnumerator.MoveNext();
-
             return command;
         }
+
+
 #else
         public void rewind(int pathId)
         {

@@ -203,7 +203,7 @@ namespace MatterHackers.Agg.Font
                 }
             }
         }
-
+        public bool IsDynamicVertexGen { get { return true; } }
         public IEnumerable<VertexData> GetVertexIter()
         {
             if (text != null && text.Length > 0)

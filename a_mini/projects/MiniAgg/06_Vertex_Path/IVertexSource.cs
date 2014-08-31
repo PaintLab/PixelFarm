@@ -50,6 +50,8 @@ namespace MatterHackers.Agg.VertexSource
         // for a PathStorage this is the vertex index.
         void Rewind(int pathId = 0);
         ShapePath.FlagsAndCommand GetVertex(out double x, out double y);
+
+        bool IsDynamicVertexGen { get; }
     }
 
     public interface IVertexSourceProxy : IVertexSource

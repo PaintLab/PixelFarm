@@ -60,7 +60,7 @@ namespace MatterHackers.Agg.VertexSource
             : this(origin.x, origin.y, RadiusX, RadiusY, num_steps, cw)
         {
         }
-        
+
         public Ellipse(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps = 0, bool cw = false)
         {
             this.originX = OriginX;
@@ -104,11 +104,17 @@ namespace MatterHackers.Agg.VertexSource
         }
 
         public void approximation_scale(double scale)
-        {   
+        {
             m_scale = scale;
             calc_num_steps();
         }
-
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return true;
+            }
+        }
         public IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
@@ -120,7 +126,7 @@ namespace MatterHackers.Agg.VertexSource
             double anglePerStep = MathHelper.Tau / (double)numSteps;
             double angle = 0;
             vertexData.command = FlagsAndCommand.CommandLineTo;
-            for(int i=1; i<numSteps; i++)
+            for (int i = 1; i < numSteps; i++)
             {
                 angle += anglePerStep;
 
@@ -154,7 +160,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             x = 0;
             y = 0;
-            if (m_step == numSteps) 
+            if (m_step == numSteps)
             {
                 ++m_step;
                 return FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
