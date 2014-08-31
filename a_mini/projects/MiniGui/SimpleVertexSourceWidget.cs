@@ -49,7 +49,7 @@ namespace MatterHackers.Agg.UI
                 {
                     RectangleDouble localBounds = new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
 
-                    Rewind(0);
+                    this.RewindZero();
                     double x;
                     double y;
                     ShapePath.FlagsAndCommand cmd;

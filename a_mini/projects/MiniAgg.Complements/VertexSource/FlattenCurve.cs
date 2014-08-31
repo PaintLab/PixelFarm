@@ -209,7 +209,7 @@ namespace MatterHackers.Agg.VertexSource
         }
         public void RewindZero()
         {
-            VertexSource.Rewind(0);
+            VertexSource.RewindZero();
             lastX = 0.0;
             lastY = 0.0;
             m_curve3.reset();

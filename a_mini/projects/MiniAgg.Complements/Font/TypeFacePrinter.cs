@@ -152,7 +152,7 @@ namespace MatterHackers.Agg.Font
 
         public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
-            Rewind(0);
+            this.RewindZero();
             if (DrawFromHintedCache)
             {
                 RenderFromCache(graphics2D, color);

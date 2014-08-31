@@ -63,13 +63,13 @@ namespace MatterHackers.Agg.Font
 
         public void Rewind(int path_id)
         {
-            underline.Rewind(0);
+            underline.RewindZero();
             glyph.Rewind(path_id);
         }
         public void RewindZero()
         {
-            underline.Rewind(0);
-            glyph.Rewind(0);
+            underline.RewindZero();
+            glyph.RewindZero();
         }
 
         int state = 0;
@@ -289,7 +289,7 @@ namespace MatterHackers.Agg.Font
                 return null;
             }
 
-            glyphForCharacter.Rewind(0);
+            glyphForCharacter.RewindZero();
             double x, y;
             ShapePath.FlagsAndCommand curCommand = glyphForCharacter.GetNextVertex(out x, out y);
             RectangleDouble bounds = new RectangleDouble(x, y, x, y);

@@ -187,7 +187,7 @@ namespace MatterHackers.Agg.UI
                 RecalculateBounds();
             }
             m_status = 0;
-            m_stroke.Rewind(0);
+            m_stroke.RewindZero();
         }
         public override void RewindZero()
         {
@@ -196,7 +196,7 @@ namespace MatterHackers.Agg.UI
                 RecalculateBounds();
             }
             m_status = 0;
-            m_stroke.Rewind(0);
+            m_stroke.RewindZero();
         }
         public override bool IsDynamicVertexGen
         {

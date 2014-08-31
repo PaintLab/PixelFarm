@@ -76,7 +76,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public IEnumerable<VertexData> GetVertexIter()
         {
-            Rewind(0);
+            this.RewindZero();
             ShapePath.FlagsAndCommand command = ShapePath.FlagsAndCommand.CommandStop;
             do
             {
@@ -96,7 +96,7 @@ namespace MatterHackers.Agg.VertexSource
         }
         public void RewindZero()
         {
-            VertexSource.Rewind(0);
+            VertexSource.RewindZero();
             m_status = Status.Initial;
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
