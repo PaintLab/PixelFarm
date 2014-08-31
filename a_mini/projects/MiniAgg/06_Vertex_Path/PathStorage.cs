@@ -39,13 +39,11 @@ namespace MatterHackers.Agg.VertexSource
     public sealed class PathStorage : IVertexSource, IVertexDest
     { 
         VertexStorage vertices;
-        int iteratorIndex; 
-
+        int iteratorIndex;  
         public PathStorage()
-        {
+        {   
             vertices = new VertexStorage();
-        }
-
+        } 
         public void AddVertex(Vector2 vertex)
         {
             throw new System.NotImplementedException();
@@ -320,37 +318,11 @@ namespace MatterHackers.Agg.VertexSource
         {
             return vertices.GetLastY();
         }
-
-        //public ShapePath.FlagsAndCommand GetVertex(int index, out double x, out double y)
-        //{
-        //    return vertices.GetVertex(index, out x, out y);
-        //}
-        //public ShapePath.FlagsAndCommand GetCommand(int index)
-        //{
-        //    return vertices.GetCommand(index);
-        //}
-
+         
         public bool IsDynamicVertexGen
         {
             get { return false; }
-        }
-
-
-        //public void ReplaceVertex(int index, double x, double y)
-        //{
-        //    vertices.ReplaceVertex(index, x, y);
-        //}
-
-        //public void ReplaceVertex(int index, double x, double y, ShapePath.FlagsAndCommand PathAndFlags)
-        //{
-        //    vertices.ReplaceVertex(index, x, y, PathAndFlags);
-        //}
-
-        //public void ReplaceCommand(int index, ShapePath.FlagsAndCommand PathAndFlags)
-        //{
-        //    vertices.ReplaceComand(index, PathAndFlags);
-        //}
-        //----------------------------------------------------------------
+        } 
         public IEnumerable<VertexData> GetVertexIter()
         {
             int count = vertices.Count;

@@ -181,13 +181,9 @@ namespace MatterHackers.Agg.UI
 
         public override int num_paths() { return 1; }
         public override void Rewind(int path_id)
-        {
-            if (needToRecalculateBounds)
-            {
-                RecalculateBounds();
-            }
-            m_status = 0;
-            m_stroke.RewindZero();
+        {   
+            //not use path_id?
+            this.RewindZero(); 
         }
         public override void RewindZero()
         {

@@ -285,7 +285,7 @@ namespace MatterHackers.Agg
             add_path(vs, 0);
         }
 
-        public void add_path(IVertexSource vs, int pathID)
+        public void add_path(IVertexSource vs, int pathId)
         {
 #if false
             if (m_outline.sorted())
@@ -305,7 +305,7 @@ namespace MatterHackers.Agg
             double y = 0;
 
             ShapePath.FlagsAndCommand PathAndFlags;
-            vs.Rewind(pathID);
+            vs.Rewind(pathId);
             if (m_outline.sorted())
             {
                 reset();

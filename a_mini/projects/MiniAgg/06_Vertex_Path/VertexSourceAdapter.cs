@@ -30,49 +30,42 @@ namespace MatterHackers.Agg.VertexSource
         //null pattern
         struct NullMarkers : IMarkers
         {
-            public void remove_all() { }
-            public void add_vertex(double x, double y, ShapePath.FlagsAndCommand unknown) { }
-            public void prepare_src() { }
-
-            public void rewind(int unknown) { }
-            public ShapePath.FlagsAndCommand vertex(ref double x, ref double y) { return ShapePath.FlagsAndCommand.CommandStop; }
+            public void RemoveAll() { }
+            public void AddVertex(double x, double y, ShapePath.FlagsAndCommand unknown) { }
         }
 
-        private IGenerator generator;
-        private IMarkers markers;
-        private Status m_status;
-        private ShapePath.FlagsAndCommand m_last_cmd;
-        private double m_start_x;
-        private double m_start_y;
+        readonly IVertexSource vtxsrc;
+
+        IGenerator generator;
+        IMarkers markers;
+        Status m_status;
+        ShapePath.FlagsAndCommand m_last_cmd;
+        double m_start_x;
+        double m_start_y;
         enum Status
         {
             Initial,
             Accumulate,
             Generate
         }
-        public IVertexSource VertexSource
-        {
-            get;
-            private set;
-        }
-        public bool IsDynamicVertexGen { get { return this.VertexSource.IsDynamicVertexGen; } }
+
+        public bool IsDynamicVertexGen { get { return this.vtxsrc.IsDynamicVertexGen; } }
 
 
 
         public VertexSourceAdapter(IVertexSource vertexSource, IGenerator generator)
         {
             markers = new NullMarkers();
-            this.VertexSource = vertexSource;
+
+            this.vtxsrc = vertexSource;
             this.generator = generator;
             m_status = Status.Initial;
         }
-
-
-        void Attach(IVertexSource vertexSource) { this.VertexSource = vertexSource; }
+         
 
         protected IGenerator GetGenerator() { return generator; }
 
-        IMarkers GetMarkers() { return markers; }
+        
 
         public IEnumerable<VertexData> GetVertexIter()
         {
@@ -91,12 +84,12 @@ namespace MatterHackers.Agg.VertexSource
 
         public void Rewind(int path_id)
         {
-            VertexSource.Rewind(path_id);
+            vtxsrc.Rewind(path_id);
             m_status = Status.Initial;
         }
         public void RewindZero()
         {
-            VertexSource.RewindZero();
+            vtxsrc.RewindZero();
             m_status = Status.Initial;
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
@@ -110,8 +103,8 @@ namespace MatterHackers.Agg.VertexSource
                 switch (m_status)
                 {
                     case Status.Initial:
-                        markers.remove_all();
-                        m_last_cmd = VertexSource.GetNextVertex(out m_start_x, out m_start_y);
+                        markers.RemoveAll();
+                        m_last_cmd = vtxsrc.GetNextVertex(out m_start_x, out m_start_y);
                         m_status = Status.Accumulate;
                         goto case Status.Accumulate;
 
@@ -123,11 +116,11 @@ namespace MatterHackers.Agg.VertexSource
 
                         generator.RemoveAll();
                         generator.AddVertex(m_start_x, m_start_y, ShapePath.FlagsAndCommand.CommandMoveTo);
-                        markers.add_vertex(m_start_x, m_start_y, ShapePath.FlagsAndCommand.CommandMoveTo);
+                        markers.AddVertex(m_start_x, m_start_y, ShapePath.FlagsAndCommand.CommandMoveTo);
 
                         for (; ; )
                         {
-                            command = VertexSource.GetNextVertex(out x, out y);
+                            command = vtxsrc.GetNextVertex(out x, out y);
                             //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
                             if (ShapePath.IsVertextCommand(command))
                             {
@@ -139,7 +132,7 @@ namespace MatterHackers.Agg.VertexSource
                                     break;
                                 }
                                 generator.AddVertex(x, y, command);
-                                markers.add_vertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+                                markers.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
                             }
                             else
                             {

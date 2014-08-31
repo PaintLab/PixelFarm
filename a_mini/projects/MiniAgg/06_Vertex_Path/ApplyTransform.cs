@@ -23,53 +23,50 @@ namespace MatterHackers.Agg.VertexSource
     // in the original agg this was conv_transform
     public class VertexSourceApplyTransform : IVertexSource
     {
+        readonly IVertexSource vtxsrc;
         Transform.ITransform transformToApply;
         public VertexSourceApplyTransform(IVertexSource vertexSource, Transform.ITransform newTransformeToApply)
         {
-            VertexSource = vertexSource;
+            vtxsrc = vertexSource; 
             transformToApply = newTransformeToApply;
         }
-        public IVertexSource VertexSource
-        {
-            get;
-            set;
-        }
+         
         public bool IsDynamicVertexGen
         {
             get
             {
-                return this.VertexSource.IsDynamicVertexGen;
+                return vtxsrc.IsDynamicVertexGen;
             }
 
         }
         public IEnumerable<VertexData> GetVertexIter()
         {
             //transform 'on-the-fly' 
-            foreach (VertexData vertexData in VertexSource.GetVertexIter())
+            foreach (VertexData vertexData in vtxsrc.GetVertexIter())
             {
-                
+
                 VertexData transformedVertex = vertexData;
                 if (ShapePath.IsVertextCommand(transformedVertex.command))
                 {
                     //transform 2d
                     transformToApply.Transform(ref transformedVertex.position.x, ref transformedVertex.position.y);
                 }
-                
+
                 yield return transformedVertex;
             }
         }
 
         public void Rewind(int path_id)
         {
-            VertexSource.Rewind(path_id);
+            vtxsrc.Rewind(path_id);
         }
         public void RewindZero()
         {
-            VertexSource.RewindZero();
+            vtxsrc.RewindZero();
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            ShapePath.FlagsAndCommand cmd = VertexSource.GetNextVertex(out x, out y);
+            ShapePath.FlagsAndCommand cmd = vtxsrc.GetNextVertex(out x, out y);
             if (ShapePath.IsVertextCommand(cmd))
             {
                 transformToApply.Transform(ref x, ref y);

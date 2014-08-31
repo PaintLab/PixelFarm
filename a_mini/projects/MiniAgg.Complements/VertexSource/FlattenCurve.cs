@@ -53,22 +53,13 @@ namespace MatterHackers.Agg.VertexSource
     {
         double lastX;
         double lastY;
-        Curve3 m_curve3;
-        Curve4 m_curve4;
+        readonly Curve3 m_curve3 = new Curve3();
+        readonly Curve4 m_curve4 = new Curve4();
+        readonly IVertexSource vertextSource;
 
-        public IVertexSource VertexSource
+        public FlattenCurves(IVertexSource vertextSource)
         {
-            get;
-            set;
-        }
-
-        public FlattenCurves(IVertexSource vertexSource)
-        {
-            m_curve3 = new Curve3();
-            m_curve4 = new Curve4();
-            VertexSource = vertexSource;
-            lastX = (0.0);
-            lastY = (0.0);
+            this.vertextSource = vertextSource;
         }
 
         public double ApproximationScale
@@ -85,7 +76,6 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void SetVertexSource(IVertexSource vertexSource) { VertexSource = vertexSource; }
 
         public Curves.CurveApproximationMethod ApproximationMethod
         {
@@ -141,7 +131,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             VertexData lastPosition = new VertexData();
 
-            IEnumerator<VertexData> vertexDataEnumerator = VertexSource.GetVertexIter().GetEnumerator();
+            IEnumerator<VertexData> vertexDataEnumerator = vertextSource.GetVertexIter().GetEnumerator();
             while (vertexDataEnumerator.MoveNext())
             {
                 VertexData vertexData = vertexDataEnumerator.Current;
@@ -201,7 +191,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void Rewind(int path_id)
         {
-            VertexSource.Rewind(path_id);
+            vertextSource.Rewind(path_id);
             lastX = 0.0;
             lastY = 0.0;
             m_curve3.reset();
@@ -209,7 +199,7 @@ namespace MatterHackers.Agg.VertexSource
         }
         public void RewindZero()
         {
-            VertexSource.RewindZero();
+            vertextSource.RewindZero();
             lastX = 0.0;
             lastY = 0.0;
             m_curve3.reset();
@@ -236,11 +226,11 @@ namespace MatterHackers.Agg.VertexSource
             double end_x;
             double end_y;
 
-            ShapePath.FlagsAndCommand cmd = VertexSource.GetNextVertex(out x, out y);
+            ShapePath.FlagsAndCommand cmd = vertextSource.GetNextVertex(out x, out y);
             switch (cmd)
             {
                 case ShapePath.FlagsAndCommand.CommandCurve3:
-                    VertexSource.GetNextVertex(out end_x, out end_y);
+                    vertextSource.GetNextVertex(out end_x, out end_y);
 
                     m_curve3.init(lastX, lastY, x, y, end_x, end_y);
 
@@ -250,8 +240,8 @@ namespace MatterHackers.Agg.VertexSource
                     break;
 
                 case ShapePath.FlagsAndCommand.CommandCurve4:
-                    VertexSource.GetNextVertex(out ct2_x, out ct2_y);
-                    VertexSource.GetNextVertex(out end_x, out end_y);
+                    vertextSource.GetNextVertex(out ct2_x, out ct2_y);
+                    vertextSource.GetNextVertex(out end_x, out end_y);
 
                     m_curve4.init(lastX, lastY, x, y, ct2_x, ct2_y, end_x, end_y);
 
