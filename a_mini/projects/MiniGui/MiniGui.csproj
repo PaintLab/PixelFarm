@@ -35,8 +35,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="agg_bezier_ctrl.cs" />
-    <Compile Include="agg_spline_ctrl.cs" />
     <Compile Include="DoubleRectHelper.cs" />
     <Compile Include="GUIWidget.cs" />
     <Compile Include="InvalidateEventArgs.cs" />
