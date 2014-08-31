@@ -18,7 +18,8 @@ namespace MatterHackers.Agg.VertexSource
                 double x = double.Parse(elements[0]);
                 double y = double.Parse(elements[1]);
                 ShapePath.FlagsAndCommand flagsAndCommand = (ShapePath.FlagsAndCommand)System.Enum.Parse(typeof(ShapePath.FlagsAndCommand), elements[2].Trim());
-                for (int i = 3; i < elements.Length; i++)
+                int len = elements.Length;
+                for (int i = 3; i < len; i++)
                 {
                     flagsAndCommand |= (ShapePath.FlagsAndCommand)System.Enum.Parse(typeof(ShapePath.FlagsAndCommand), elements[i].Trim());
                 }

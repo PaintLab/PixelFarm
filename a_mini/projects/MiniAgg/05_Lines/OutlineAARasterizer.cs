@@ -104,23 +104,23 @@ namespace MatterHackers.Agg.Lines
     {
         LineRenderer m_ren;
         LineAAVertexSequence m_src_vertices = new LineAAVertexSequence();
-        outline_aa_join_e m_line_join;
+        OutlineJoin m_line_join;
         bool m_round_cap;
         int m_start_x;
         int m_start_y;
 
-        public enum outline_aa_join_e
+        public enum OutlineJoin
         {
-            outline_no_join,             //-----outline_no_join
-            outline_miter_join,          //-----outline_miter_join
-            outline_round_join,          //-----outline_round_join
-            outline_miter_accurate_join  //-----outline_accurate_join
-        };
+            NoJoin,             //-----outline_no_join
+            Mitter,          //-----outline_miter_join
+            Round,          //-----outline_round_join
+            AccurateJoin  //-----outline_accurate_join
+        }
 
         public bool cmp_dist_start(int d) { return d > 0; }
         public bool cmp_dist_end(int d) { return d <= 0; }
 
-        private struct draw_vars
+        struct draw_vars
         {
             public int idx;
             public int x1, y1, x2, y2;
@@ -128,7 +128,7 @@ namespace MatterHackers.Agg.Lines
             public int lcurr, lnext;
             public int xb1, yb1, xb2, yb2;
             public int flags;
-        };
+        }
 
         private void draw(ref draw_vars dv, int start, int end)
         {
@@ -136,7 +136,7 @@ namespace MatterHackers.Agg.Lines
 
             for (i = start; i < end; i++)
             {
-                if (m_line_join == outline_aa_join_e.outline_round_join)
+                if (m_line_join == OutlineJoin.Round)
                 {
                     dv.xb1 = dv.curr.x1 + (dv.curr.y2 - dv.curr.y1);
                     dv.yb1 = dv.curr.y1 - (dv.curr.x2 - dv.curr.x1);
@@ -152,7 +152,7 @@ namespace MatterHackers.Agg.Lines
                     case 3: m_ren.line0(dv.curr); break;
                 }
 
-                if (m_line_join == outline_aa_join_e.outline_round_join && (dv.flags & 2) == 0)
+                if (m_line_join == OutlineJoin.Round && (dv.flags & 2) == 0)
                 {
                     m_ren.pie(dv.curr.x2, dv.curr.y2,
                                dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
@@ -179,11 +179,11 @@ namespace MatterHackers.Agg.Lines
 
                 switch (m_line_join)
                 {
-                    case outline_aa_join_e.outline_no_join:
+                    case OutlineJoin.NoJoin:
                         dv.flags = 3;
                         break;
 
-                    case outline_aa_join_e.outline_miter_join:
+                    case OutlineJoin.Mitter:
                         dv.flags >>= 1;
                         dv.flags |= (dv.curr.diagonal_quadrant() ==
                             dv.next.diagonal_quadrant() ? 1 : 0);
@@ -193,13 +193,13 @@ namespace MatterHackers.Agg.Lines
                         }
                         break;
 
-                    case outline_aa_join_e.outline_round_join:
+                    case OutlineJoin.Round:
                         dv.flags >>= 1;
                         dv.flags |= (((dv.curr.diagonal_quadrant() ==
                             dv.next.diagonal_quadrant()) ? 1 : 0) << 1);
                         break;
 
-                    case outline_aa_join_e.outline_miter_accurate_join:
+                    case OutlineJoin.AccurateJoin:
                         dv.flags = 0;
                         LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
                         break;
@@ -211,8 +211,8 @@ namespace MatterHackers.Agg.Lines
         {
             m_ren = ren;
             m_line_join = (OutlineRenderer.accurate_join_only() ?
-                            outline_aa_join_e.outline_miter_accurate_join :
-                            outline_aa_join_e.outline_round_join);
+                            OutlineJoin.AccurateJoin :
+                            OutlineJoin.Round);
             m_round_cap = (false);
             m_start_x = (0);
             m_start_y = (0);
@@ -220,13 +220,13 @@ namespace MatterHackers.Agg.Lines
 
         public void attach(LineRenderer ren) { m_ren = ren; }
 
-        public void line_join(outline_aa_join_e join)
+        public void line_join(OutlineJoin join)
         {
             m_line_join = OutlineRenderer.accurate_join_only() ?
-                outline_aa_join_e.outline_miter_accurate_join :
+                OutlineJoin.AccurateJoin :
                 join;
         }
-        public outline_aa_join_e line_join() { return m_line_join; }
+        public OutlineJoin line_join() { return m_line_join; }
 
         public void round_cap(bool v) { m_round_cap = v; }
         public bool round_cap() { return m_round_cap; }
@@ -297,28 +297,28 @@ namespace MatterHackers.Agg.Lines
 
                     switch (m_line_join)
                     {
-                        case outline_aa_join_e.outline_no_join:
+                        case OutlineJoin.NoJoin:
                             dv.flags = 3;
                             break;
 
-                        case outline_aa_join_e.outline_miter_join:
-                        case outline_aa_join_e.outline_round_join:
+                        case OutlineJoin.Mitter:
+                        case OutlineJoin.Round:
                             dv.flags =
                                 (prev.diagonal_quadrant() == dv.curr.diagonal_quadrant() ? 1 : 0) |
                                     ((dv.curr.diagonal_quadrant() == dv.next.diagonal_quadrant() ? 1 : 0) << 1);
                             break;
 
-                        case outline_aa_join_e.outline_miter_accurate_join:
+                        case OutlineJoin.AccurateJoin:
                             dv.flags = 0;
                             break;
                     }
 
-                    if ((dv.flags & 1) == 0 && m_line_join != outline_aa_join_e.outline_round_join)
+                    if ((dv.flags & 1) == 0 && m_line_join != OutlineJoin.Round)
                     {
                         LineAABasics.bisectrix(prev, dv.curr, out dv.xb1, out dv.yb1);
                     }
 
-                    if ((dv.flags & 2) == 0 && m_line_join != outline_aa_join_e.outline_round_join)
+                    if ((dv.flags & 2) == 0 && m_line_join != OutlineJoin.Round)
                     {
                         LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
                     }
@@ -382,7 +382,7 @@ namespace MatterHackers.Agg.Lines
                                 m_ren.semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                             }
 
-                            if (m_line_join == outline_aa_join_e.outline_round_join)
+                            if (m_line_join == OutlineJoin.Round)
                             {
                                 m_ren.line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1),
                                                   x2 + (y2 - y1), y2 - (x2 - x1));
@@ -442,18 +442,18 @@ namespace MatterHackers.Agg.Lines
 
                             switch (m_line_join)
                             {
-                                case outline_aa_join_e.outline_no_join:
+                                case OutlineJoin.NoJoin:
                                     dv.flags = 3;
                                     break;
 
-                                case outline_aa_join_e.outline_miter_join:
-                                case outline_aa_join_e.outline_round_join:
+                                case OutlineJoin.Mitter:
+                                case OutlineJoin.Round:
                                     dv.flags =
                                         (prev.diagonal_quadrant() == dv.curr.diagonal_quadrant() ? 1 : 0) |
                                             ((dv.curr.diagonal_quadrant() == dv.next.diagonal_quadrant() ? 1 : 0) << 1);
                                     break;
 
-                                case outline_aa_join_e.outline_miter_accurate_join:
+                                case OutlineJoin.AccurateJoin:
                                     dv.flags = 0;
                                     break;
                             }
@@ -464,7 +464,7 @@ namespace MatterHackers.Agg.Lines
                             }
                             if ((dv.flags & 1) == 0)
                             {
-                                if (m_line_join == outline_aa_join_e.outline_round_join)
+                                if (m_line_join == OutlineJoin.Round)
                                 {
                                     m_ren.line3(prev, x1 + (y2 - y1), y1 - (x2 - x1),
                                                        x2 + (y2 - y1), y2 - (x2 - x1));
@@ -486,7 +486,7 @@ namespace MatterHackers.Agg.Lines
                                              x1 + (y2 - y1),
                                              y1 - (x2 - x1));
                             }
-                            if ((dv.flags & 2) == 0 && m_line_join != outline_aa_join_e.outline_round_join)
+                            if ((dv.flags & 2) == 0 && m_line_join != OutlineJoin.Round)
                             {
                                 LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
                             }
@@ -495,7 +495,7 @@ namespace MatterHackers.Agg.Lines
 
                             if ((dv.flags & 1) == 0)
                             {
-                                if (m_line_join == outline_aa_join_e.outline_round_join)
+                                if (m_line_join == OutlineJoin.Round)
                                 {
                                     m_ren.line3(dv.curr,
                                                  dv.curr.x1 + (dv.curr.y2 - dv.curr.y1),

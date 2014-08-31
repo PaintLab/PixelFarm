@@ -25,7 +25,7 @@ namespace MatterHackers.Agg.VertexSource
 {
 
     //------------------------------------------------------conv_adaptor_vcgen
-    public abstract class VertexSourceAdapter : IVertexSourceProxy
+    public abstract class VertexSourceAdapter : IVertexSource
     {
         //null pattern
         struct NullMarkers : IMarkers

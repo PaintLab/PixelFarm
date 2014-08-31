@@ -63,11 +63,13 @@ namespace MatterHackers.Agg.Font
 
         public void Rewind(int path_id)
         {
+            state = 0;
             underline.RewindZero();
             glyph.Rewind(path_id);
         }
         public void RewindZero()
         {
+            state = 0;
             underline.RewindZero();
             glyph.RewindZero();
         }

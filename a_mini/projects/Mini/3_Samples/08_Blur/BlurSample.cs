@@ -153,7 +153,7 @@ namespace MatterHackers.Agg.Sample_Blur
             clippingProxy.Clear(ColorRGBA.White);
             m_ras.SetVectorClipBox(0, 0, Width, Height);
 
-            Affine move = Affine.NewTranslation(10, 10);
+             
 
             Perspective shadow_persp = new Perspective(m_shape_bounds.Left, m_shape_bounds.Bottom,
                                                 m_shape_bounds.Right, m_shape_bounds.Top,

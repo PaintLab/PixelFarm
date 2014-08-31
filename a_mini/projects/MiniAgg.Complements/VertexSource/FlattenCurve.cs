@@ -49,7 +49,7 @@ namespace MatterHackers.Agg.VertexSource
     // Class conv_curve recognizes commands path_cmd_curve3 and path_cmd_curve4 
     // and converts these vertices into a move_to/line_to sequence. 
     //-----------------------------------------------------------------------
-    public class FlattenCurves : IVertexSourceProxy
+    public class FlattenCurves : IVertexSource
     {
         double lastX;
         double lastY;

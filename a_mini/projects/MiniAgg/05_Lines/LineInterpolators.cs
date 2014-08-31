@@ -25,26 +25,26 @@ using System;
 namespace MatterHackers.Agg.Lines
 {
     //===================================================dda_line_interpolator
-    public sealed class LineInterPolatorDDA
+    public sealed class LineInterpolatorDDA
     {
         int m_y;
         int m_inc;
         int m_dy;
-        //int m_YShift;
-        int m_FractionShift;
+
+        int m_fractionShift;
 
         //--------------------------------------------------------------------
-        public LineInterPolatorDDA(int FractionShift)
+        public LineInterpolatorDDA(int fractionShift)
         {
-            m_FractionShift = FractionShift;
+            m_fractionShift = fractionShift;
         }
 
         //--------------------------------------------------------------------
-        public LineInterPolatorDDA(int y1, int y2, int count, int FractionShift)
+        public LineInterpolatorDDA(int y1, int y2, int count, int fractionShift)
         {
-            m_FractionShift = FractionShift;
+            m_fractionShift = fractionShift;
             m_y = (y1);
-            m_inc = (((y2 - y1) << m_FractionShift) / (int)(count));
+            m_inc = (((y2 - y1) << m_fractionShift) / (int)(count));
             m_dy = (0);
         }
 
@@ -78,7 +78,7 @@ namespace MatterHackers.Agg.Lines
 
 
         //--------------------------------------------------------------------
-        public int y() { return m_y + (m_dy >> (m_FractionShift)); } // - m_YShift)); }
+        public int y() { return m_y + (m_dy >> (m_fractionShift)); } // - m_YShift)); }
         public int dy() { return m_dy; }
     }
 

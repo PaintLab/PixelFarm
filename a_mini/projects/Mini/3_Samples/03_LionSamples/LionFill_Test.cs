@@ -82,7 +82,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
         public LionFill()
         {
             lionShape = new LionShape();
-            TestLoadLionFromBinaryFile(); 
+            TestLoadLionFromBinaryFile();
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
@@ -163,7 +163,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
                      AffinePlan.Rotate(angle + Math.PI),
                      AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                      AffinePlan.Translate(Width / 2, Height / 2)
-              );
+                );
                 transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
             }
 

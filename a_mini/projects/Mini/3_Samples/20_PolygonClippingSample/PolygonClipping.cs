@@ -64,18 +64,41 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             foreach (List<IntPoint> polygon in intersectedPolys)
             {
                 bool first = true;
-                foreach (IntPoint point in polygon)
+                int j = polygon.Count;
+
+                if (j > 0)
                 {
-                    if (first)
+                    //first one
+                    IntPoint point = polygon[0];
+
+                    output.AddVertex(point.X / 1000.0, 
+                        point.Y / 1000.0, 
+                        ShapePath.FlagsAndCommand.CommandMoveTo);
+
+                    //next ...
+                    if (j > 1)
                     {
-                        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
-                        first = false;
-                    }
-                    else
-                    {
-                        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
-                    }
+                        for (int i = 1; i < j; ++i)
+                        {
+                            point = polygon[i];
+                            output.AddVertex(point.X / 1000.0, 
+                                point.Y / 1000.0,
+                                ShapePath.FlagsAndCommand.CommandLineTo);
+                        }
+                    } 
                 }
+                //foreach (IntPoint point in polygon)
+                //{
+                //    if (first)
+                //    {
+                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
+                //        first = false;
+                //    }
+                //    else
+                //    {
+                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
+                //    }
+                //}
 
                 output.ClosePolygon();
             }

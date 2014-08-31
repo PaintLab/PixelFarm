@@ -21,7 +21,7 @@ using System.Collections.Generic;
 namespace MatterHackers.Agg.VertexSource
 {
     // in the original agg this was conv_transform
-    public class VertexSourceApplyTransform : IVertexSourceProxy
+    public class VertexSourceApplyTransform : IVertexSource
     {
         Transform.ITransform transformToApply;
         public VertexSourceApplyTransform(IVertexSource vertexSource, Transform.ITransform newTransformeToApply)

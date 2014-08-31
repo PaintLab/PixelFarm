@@ -51,10 +51,5 @@ namespace MatterHackers.Agg.VertexSource
         void RewindZero();
         ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);  
         bool IsDynamicVertexGen { get; }
-    }
-
-    public interface IVertexSourceProxy : IVertexSource
-    {
-        IVertexSource VertexSource { get; }
-    }
-}
+    } 
+ }

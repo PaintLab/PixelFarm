@@ -166,8 +166,8 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
 
                 rasterizer.line_join(RenderAccurateJoins ?
-                    OutlineAARasterizer.outline_aa_join_e.outline_miter_accurate_join
-                    : OutlineAARasterizer.outline_aa_join_e.outline_round_join);
+                    OutlineAARasterizer.OutlineJoin.AccurateJoin
+                    : OutlineAARasterizer.OutlineJoin.Round);
                 rasterizer.round_cap(true);
 
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
