@@ -207,7 +207,9 @@ namespace MatterHackers.Agg
                 }
             }
 
-            path.ArrangeOrientationsAll(ShapePath.FlagsAndCommand.FlagCW);
+            //path.ArrangeOrientationsAll(ShapePath.FlagsAndCommand.FlagCW);
+            path.ArrangeOrientationsAll(true);
+
             return npaths;
         }
     }

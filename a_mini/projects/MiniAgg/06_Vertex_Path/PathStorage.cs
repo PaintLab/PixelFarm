@@ -360,27 +360,39 @@ namespace MatterHackers.Agg.VertexSource
         // arrange_orientations_all_paths(), all the polygons will have 
         // the same orientation, i.e. path_flags_cw or path_flags_ccw
         //--------------------------------------------------------------------
-        int ArrangePolygonOrientation(int start, ShapePath.FlagsAndCommand orientation)
+        int ArrangePolygonOrientation(int start, bool closewise)
         {
-            if (orientation == ShapePath.FlagsAndCommand.FlagNone) return start;
+            //if (orientation == ShapePath.FlagsAndCommand.FlagNone) return start;
 
             // Skip all non-vertices at the beginning
+            ShapePath.FlagsAndCommand orientFlags = closewise ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
+
             while (start < vertices.Count &&
-                  !ShapePath.IsVertextCommand(vertices.GetCommand(start))) ++start;
+                  !ShapePath.IsVertextCommand(vertices.GetCommand(start)))
+            {
+                ++start;
+            }
 
             // Skip all insignificant move_to
             while (start + 1 < vertices.Count &&
                   ShapePath.IsMoveTo(vertices.GetCommand(start)) &&
-                  ShapePath.IsMoveTo(vertices.GetCommand(start + 1))) ++start;
+                  ShapePath.IsMoveTo(vertices.GetCommand(start + 1)))
+            {
+                ++start;
+            }
 
             // Find the last vertex
             int end = start + 1;
             while (end < vertices.Count &&
-                  !ShapePath.IsNextPoly(vertices.GetCommand(end))) ++end;
+                  !ShapePath.IsNextPoly(vertices.GetCommand(end)))
+            {
+                ++end;
+            }
+
 
             if (end - start > 2)
             {
-                if (PerceivePolygonOrientation(start, end) != orientation)
+                if (PerceivePolygonOrientation(start, end) != orientFlags)
                 {
                     // Invert polygon, set orientation flag, and skip all end_poly
                     InvertPolygon(start, end);
@@ -388,41 +400,46 @@ namespace MatterHackers.Agg.VertexSource
                     while (end < vertices.Count &&
                           ShapePath.IsEndPoly(flags = vertices.GetCommand(end)))
                     {
-                        vertices.ReplaceComand(end++, flags | orientation);// Path.set_orientation(cmd, orientation));
+                        vertices.ReplaceComand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
                     }
                 }
             }
             return end;
         }
 
-        int ArrangeOrientations(int start, ShapePath.FlagsAndCommand orientation)
+        int ArrangeOrientations(int start, bool closewise)
         {
-            if (orientation != ShapePath.FlagsAndCommand.FlagNone)
+
+            while (start < vertices.Count)
             {
-                while (start < vertices.Count)
+                start = ArrangePolygonOrientation(start, closewise);
+                if (ShapePath.IsStop(vertices.GetCommand(start)))
                 {
-                    start = ArrangePolygonOrientation(start, orientation);
-                    if (ShapePath.IsStop(vertices.GetCommand(start)))
-                    {
-                        ++start;
-                        break;
-                    }
+                    ++start;
+                    break;
                 }
             }
+
             return start;
         }
 
-        public void ArrangeOrientationsAll(ShapePath.FlagsAndCommand orientation)
+        public void ArrangeOrientationsAll(bool closewise)
         {
-            if (orientation != ShapePath.FlagsAndCommand.FlagNone)
+            int start = 0;
+            while (start < vertices.Count)
             {
-                int start = 0;
-                while (start < vertices.Count)
-                {
-                    start = ArrangeOrientations(start, orientation);
-                }
+                start = ArrangeOrientations(start, closewise);
             }
         }
+
+
+        //public void ArrangeOrientationsAll(ShapePath.FlagsAndCommand orientation)
+        //{
+        //    if (orientation != ShapePath.FlagsAndCommand.FlagNone)
+        //    {
+
+        //    }
+        //}
 
         // Flip all vertices horizontally or vertically, 
         // between x1 and x2, or between y1 and y2 respectively
