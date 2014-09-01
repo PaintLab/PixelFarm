@@ -90,7 +90,6 @@ namespace MatterHackers.Agg.VertexSource
             m_closed = false;
             m_status = StrokeMath.Status.Init;
         }
-
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
         {
             m_status = StrokeMath.Status.Init;
@@ -122,14 +121,15 @@ namespace MatterHackers.Agg.VertexSource
                 m_src_vertices.Close(true);
                 if (m_auto_detect)
                 {
-                    if (!ShapePath.IsOriented(m_orientation))
+                    if (!ShapePath.HasOrientationInfo(m_orientation))
                     {
                         m_orientation = (AggMath.calc_polygon_area(m_src_vertices) > 0.0) ?
                                         ShapePath.FlagsAndCommand.FlagCCW :
                                         ShapePath.FlagsAndCommand.FlagCW;
                     }
                 }
-                if (ShapePath.IsOriented(m_orientation))
+
+                if (ShapePath.HasOrientationInfo(m_orientation))
                 {
                     m_stroker.Width = ShapePath.IsCcw(m_orientation) ? m_width : -m_width;
                 }

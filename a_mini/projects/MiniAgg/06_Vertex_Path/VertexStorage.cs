@@ -69,7 +69,7 @@ namespace MatterHackers.Agg.VertexSource
             m_coord_xy[(index << 1) + 1] = y;
             m_CommandAndFlags[index] = CommandAndFlags;
         }
-        public void ReplaceComand(int index, ShapePath.FlagsAndCommand CommandAndFlags)
+        public void ReplaceCommand(int index, ShapePath.FlagsAndCommand CommandAndFlags)
         {
             m_CommandAndFlags[index] = CommandAndFlags;
         }
@@ -152,7 +152,12 @@ namespace MatterHackers.Agg.VertexSource
             y = m_coord_xy[i + 1];
             return m_CommandAndFlags[index];
         }
-
+        public void GetVertexXY(int index, out double x, out double y)
+        {
+            var i = index << 1;
+            x = m_coord_xy[i];
+            y = m_coord_xy[i + 1];
+        }
         public ShapePath.FlagsAndCommand GetCommand(int index)
         {
             return m_CommandAndFlags[index];

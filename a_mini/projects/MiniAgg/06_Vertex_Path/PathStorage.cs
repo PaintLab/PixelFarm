@@ -44,7 +44,11 @@ namespace MatterHackers.Agg.VertexSource
         {
             vertices = new VertexStorage();
         }
-
+        public PathStorage(PathStorage pathStorageToShareFrom)
+        {
+            //for share
+            vertices = pathStorageToShareFrom.vertices;
+        }
         public void AddVertex(double x, double y)
         {
             throw new System.NotImplementedException();
@@ -367,14 +371,15 @@ namespace MatterHackers.Agg.VertexSource
             // Skip all non-vertices at the beginning
             ShapePath.FlagsAndCommand orientFlags = closewise ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
 
-            while (start < vertices.Count &&
+            int vcount = vertices.Count;
+            while (start < vcount &&
                   !ShapePath.IsVertextCommand(vertices.GetCommand(start)))
             {
                 ++start;
             }
 
             // Skip all insignificant move_to
-            while (start + 1 < vertices.Count &&
+            while (start + 1 < vcount &&
                   ShapePath.IsMoveTo(vertices.GetCommand(start)) &&
                   ShapePath.IsMoveTo(vertices.GetCommand(start + 1)))
             {
@@ -383,7 +388,7 @@ namespace MatterHackers.Agg.VertexSource
 
             // Find the last vertex
             int end = start + 1;
-            while (end < vertices.Count &&
+            while (end < vcount &&
                   !ShapePath.IsNextPoly(vertices.GetCommand(end)))
             {
                 ++end;
@@ -400,7 +405,7 @@ namespace MatterHackers.Agg.VertexSource
                     while (end < vertices.Count &&
                           ShapePath.IsEndPoly(flags = vertices.GetCommand(end)))
                     {
-                        vertices.ReplaceComand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
+                        vertices.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
                     }
                 }
             }
@@ -472,25 +477,17 @@ namespace MatterHackers.Agg.VertexSource
                     vertices.ReplaceVertex(i, x, y2 - y + y1);
                 }
             }
-        }
-
-        public void EndPoly()
-        {
-            ClosePolygon(ShapePath.FlagsAndCommand.FlagClose);
-        }
-
-
-
-
+        } 
         public void ClosePolygon()
         {
             ClosePolygon(ShapePath.FlagsAndCommand.FlagNone);
         }
-
-        public void ClosePolygon(ShapePath.FlagsAndCommand flags)
+        public void ClosePolygonCCW()
         {
-
-
+            ClosePolygon(ShapePath.FlagsAndCommand.FlagCCW);
+        }
+        void ClosePolygon(ShapePath.FlagsAndCommand flags)
+        {
             var flags2 = flags | ShapePath.FlagsAndCommand.FlagClose;
 
             if (ShapePath.IsVertextCommand(vertices.GetLastCommand()))
@@ -511,8 +508,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 vertices.AddVertex(x, y, cmd_flags);
             }
-        }
-
+        } 
         //--------------------------------------------------------------------
         // Join path. The path is joined with the existing one, that is, 
         // it behaves as if the pen of a plotter was always down (drawing)
@@ -589,22 +585,22 @@ namespace MatterHackers.Agg.VertexSource
         //--------------------------------------------------------------------
 
 
-        public void Translate(double dx, double dy, int path_id)
-        {
-            int num_ver = vertices.Count;
-            for (; path_id < num_ver; path_id++)
-            {
-                double x, y;
-                ShapePath.FlagsAndCommand flags = this.vertices.GetVertex(path_id, out x, out y);
-                if (ShapePath.IsStop(flags)) break;
-                if (ShapePath.IsVertextCommand(flags))
-                {
-                    x += dx;
-                    y += dy;
-                    vertices.ReplaceVertex(path_id, x, y);
-                }
-            }
-        }
+        //public void Translate(double dx, double dy, int path_id)
+        //{
+        //    int num_ver = vertices.Count;
+        //    for (; path_id < num_ver; path_id++)
+        //    {
+        //        double x, y;
+        //        ShapePath.FlagsAndCommand flags = this.vertices.GetVertex(path_id, out x, out y);
+        //        if (ShapePath.IsStop(flags)) break;
+        //        if (ShapePath.IsVertextCommand(flags))
+        //        {
+        //            x += dx;
+        //            y += dy;
+        //            vertices.ReplaceVertex(path_id, x, y);
+        //        }
+        //    }
+        //}
 
         public void TranslateAll(double dx, double dy)
         {
@@ -625,21 +621,24 @@ namespace MatterHackers.Agg.VertexSource
         //--------------------------------------------------------------------
 
 
-        public void Transform(Transform.Affine trans, int path_id)
-        {
-            int num_ver = vertices.Count;
-            for (; path_id < num_ver; path_id++)
-            {
-                double x, y;
-                ShapePath.FlagsAndCommand PathAndFlags = vertices.GetVertex(path_id, out x, out y);
-                if (ShapePath.IsStop(PathAndFlags)) break;
-                if (ShapePath.IsVertextCommand(PathAndFlags))
-                {
-                    trans.Transform(ref x, ref y);
-                    vertices.ReplaceVertex(path_id, x, y);
-                }
-            }
-        }
+        //public void Transform(Transform.Affine trans, int path_id)
+        //{
+        //    int num_ver = vertices.Count;
+        //    for (; path_id < num_ver; path_id++)
+        //    {
+        //        double x, y;
+        //        ShapePath.FlagsAndCommand cmd = vertices.GetVertex(path_id, out x, out y);
+        //        if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+        //        {
+        //            break;
+        //        }
+        //        if (ShapePath.IsVertextCommand(cmd))
+        //        {
+        //            trans.Transform(ref x, ref y);
+        //            vertices.ReplaceVertex(path_id, x, y);
+        //        }
+        //    }
+        //}
 
         //--------------------------------------------------------------------
         public void TransformAll(Transform.Affine trans)
@@ -686,8 +685,8 @@ namespace MatterHackers.Agg.VertexSource
             for (i = 0; i < np; i++)
             {
                 double x1, y1, x2, y2;
-                vertices.GetVertex(start + i, out x1, out y1);
-                vertices.GetVertex(start + (i + 1) % np, out x2, out y2);
+                vertices.GetVertexXY(start + i, out x1, out y1);
+                vertices.GetVertexXY(start + (i + 1) % np, out x2, out y2);
                 area += x1 * y2 - y1 * x2;
             }
             return (area < 0.0) ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
@@ -703,22 +702,17 @@ namespace MatterHackers.Agg.VertexSource
             // Shift all commands to one position
             for (i = start; i < end; i++)
             {
-                vertices.ReplaceComand(i, vertices.GetCommand(i + 1));
+                vertices.ReplaceCommand(i, vertices.GetCommand(i + 1));
             }
 
             // Assign starting command to the ending command
-            vertices.ReplaceComand(end, tmp_PathAndFlags);
+            vertices.ReplaceCommand(end, tmp_PathAndFlags);
 
             // Reverse the polygon
             while (end > start)
             {
                 vertices.SwapVertices(start++, end--);
             }
-        }
-
-        public void ShareVertexData(PathStorage pathStorageToShareFrom)
-        {
-            vertices = pathStorageToShareFrom.vertices;
         }
 
 

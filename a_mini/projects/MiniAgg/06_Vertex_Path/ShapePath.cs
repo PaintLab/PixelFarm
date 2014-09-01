@@ -5,6 +5,7 @@ using System.Text;
 
 namespace MatterHackers.Agg
 {
+
     public static class ShapePath
     {
         [Flags]
@@ -12,6 +13,7 @@ namespace MatterHackers.Agg
         {
             //first lower 4 bits compact flags
             CommandStop = 0x00,
+
             CommandMoveTo = 0x01,
             CommandLineTo = 0x02,
             CommandCurve3 = 0x03,
@@ -33,11 +35,7 @@ namespace MatterHackers.Agg
             return c >= FlagsAndCommand.CommandMoveTo
                 && c < FlagsAndCommand.CommandEndPoly;
         }
-
-        public static bool IsDrawing(FlagsAndCommand c)
-        {
-            return c >= FlagsAndCommand.CommandLineTo && c < FlagsAndCommand.CommandEndPoly;
-        }
+ 
 
         public static bool IsStop(FlagsAndCommand c)
         {
@@ -48,12 +46,7 @@ namespace MatterHackers.Agg
         {
             return c == FlagsAndCommand.CommandMoveTo;
         }
-
-        public static bool IsLineTo(FlagsAndCommand c)
-        {
-            return c == FlagsAndCommand.CommandLineTo;
-        }
-
+        
         public static bool IsCurve(FlagsAndCommand c)
         {
             return c == FlagsAndCommand.CommandCurve3
@@ -96,7 +89,7 @@ namespace MatterHackers.Agg
             return (c & FlagsAndCommand.FlagCCW) != 0;
         }
 
-        public static bool IsOriented(FlagsAndCommand c)
+        public static bool HasOrientationInfo(FlagsAndCommand c)
         {
             return (c & (FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW)) != 0;
         }

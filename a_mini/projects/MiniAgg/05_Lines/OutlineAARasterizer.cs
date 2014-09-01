@@ -590,13 +590,11 @@ namespace MatterHackers.Agg.Lines
             double y;
 
             ShapePath.FlagsAndCommand cmd;
-            vs.Rewind(path_id);
-
+            vs.Rewind(path_id); 
             //int index = 0;
             //int start = 851;
-            //int num = 5;
-
-            while (!ShapePath.IsStop(cmd = vs.GetNextVertex(out x, out y)))
+            //int num = 5; 
+            while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 //index++;
                 //if (index == 0

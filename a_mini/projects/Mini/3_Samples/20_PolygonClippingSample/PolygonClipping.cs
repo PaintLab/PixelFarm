@@ -239,6 +239,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         stroke.Width = 10;
                         double x = m_x - Width / 2 + 100;
                         double y = m_y - Height / 2 + 100;
+
+                        //-----------------------------------------
                         ps1.MoveTo(x + 140, y + 145);
                         ps1.LineTo(x + 225, y + 44);
                         ps1.LineTo(x + 296, y + 219);
@@ -250,7 +252,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps1.MoveTo(x + 220 - 50, y + 222);
                         ps1.LineTo(x + 265 - 50, y + 331);
                         ps1.LineTo(x + 363 - 50, y + 249);
-                        ps1.ClosePolygon(ShapePath.FlagsAndCommand.FlagCCW);
+                        ps1.ClosePolygonCCW();
+                        //-----------------------------------------
+
 
                         ps2.MoveTo(100 + 32, 100 + 77);
                         ps2.LineTo(100 + 473, 100 + 263);

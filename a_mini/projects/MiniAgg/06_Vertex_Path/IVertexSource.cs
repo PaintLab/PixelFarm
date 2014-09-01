@@ -32,12 +32,12 @@ namespace MatterHackers.Agg.VertexSource
         }
         public bool IsMoveTo
         {
-            get { return ShapePath.IsMoveTo(command); }
+            get { return command == ShapePath.FlagsAndCommand.CommandMoveTo; }
         }
 
         public bool IsLineTo
         {
-            get { return ShapePath.IsLineTo(command); }
+            get { return command == ShapePath.FlagsAndCommand.CommandLineTo; }
         }
     }
 
@@ -48,7 +48,7 @@ namespace MatterHackers.Agg.VertexSource
         void Rewind(int pathId);
         void RewindZero();
         ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
-        
+
         bool IsDynamicVertexGen { get; }
     }
 

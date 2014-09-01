@@ -167,9 +167,11 @@ namespace MatterHackers.Agg.VertexSource
                             m_curve4.init(lastPosition.position.x, lastPosition.position.y, vertexData.position.x, vertexData.position.y, vertexDataControl.position.x, vertexDataControl.position.y, vertexDataEnd.position.x, vertexDataEnd.position.y);
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
+
                             while (!ShapePath.IsStop(vertexData.command))
                             {
                                 curveIterator.MoveNext();
+
                                 if (ShapePath.IsStop(curveIterator.Current.command))
                                 {
                                     break;
