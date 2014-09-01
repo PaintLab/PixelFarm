@@ -484,7 +484,7 @@ namespace MatterHackers.Agg.VertexSource
         //// Concatenate path. The path is added as is.
 
 
-        public void ConcatPath(IVertexSource vs, int path_id = 0)
+        public void ConcatPath(IVertexSource vs, int path_id)
         {
             double x, y;
             ShapePath.FlagsAndCommand flags;
@@ -512,7 +512,7 @@ namespace MatterHackers.Agg.VertexSource
                     ShapePath.FlagsAndCommand PathAndFlags0 = GetLastVertex(out x0, out y0);
                     if (ShapePath.IsVertextCommand(PathAndFlags0))
                     {
-                        if (AggMath.calc_distance(x, y, x0, y0) > AggMath.vertex_dist_epsilon)
+                        if (AggMath.calc_distance(x, y, x0, y0) > AggMath.VERTEX_DISTANCE_EPSILON)
                         {
                             if (ShapePath.is_move_to(flags)) flags = ShapePath.FlagsAndCommand.CommandLineTo;
                             vertices.AddVertex(x, y, flags);

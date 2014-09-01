@@ -28,11 +28,11 @@ namespace MatterHackers.Agg
     {
         //------------------------------------------------------vertex_dist_epsilon
         // Coinciding points maximal distance (Epsilon)
-        public const double vertex_dist_epsilon = 1e-14;
+        public const double VERTEX_DISTANCE_EPSILON = 1e-14;
 
         //-----------------------------------------------------intersection_epsilon
         // See calc_intersection
-        public const double intersection_epsilon = 1.0e-30;
+        public const double INTERSECTION_EPSILON = 1.0e-30;
 
         //------------------------------------------------------------cross_product
         public static double cross_product(double x1, double y1,
@@ -87,7 +87,7 @@ namespace MatterHackers.Agg
             double dx = x2 - x1;
             double dy = y2 - y1;
             double d = Math.Sqrt(dx * dx + dy * dy);
-            if (d < vertex_dist_epsilon)
+            if (d < VERTEX_DISTANCE_EPSILON)
             {
                 return calc_distance(x1, y1, x, y);
             }
@@ -149,7 +149,7 @@ namespace MatterHackers.Agg
         {
             double num = (aY1 - bY1) * (bX2 - bX1) - (aX1 - bX1) * (bY2 - bY1);
             double den = (aX2 - aX1) * (bY2 - bY1) - (aY2 - aY1) * (bX2 - bX1);
-            if (Math.Abs(den) < intersection_epsilon)
+            if (Math.Abs(den) < INTERSECTION_EPSILON)
             {
                 x = 0;
                 y = 0;
@@ -215,7 +215,7 @@ namespace MatterHackers.Agg
             double dx3 = 0.0;
             double dy3 = 0.0;
             double loc = cross_product(x1, y1, x2, y2, x3, y3);
-            if (Math.Abs(loc) > intersection_epsilon)
+            if (Math.Abs(loc) > INTERSECTION_EPSILON)
             {
                 if (cross_product(x1, y1, x2, y2, x3, y3) > 0.0)
                 {

@@ -306,8 +306,9 @@ namespace MatterHackers.Agg.Font
         IEnumerator<VertexData> currentEnumerator;
         public void Rewind(int layerIndex)
         {
-            currentEnumerator = GetVertexIter().GetEnumerator();
-            currentEnumerator.MoveNext();
+            RewindZero();
+            //currentEnumerator = GetVertexIter().GetEnumerator();
+            //currentEnumerator.MoveNext();
         }
         public void RewindZero()
         {

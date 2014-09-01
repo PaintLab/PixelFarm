@@ -146,10 +146,10 @@ namespace MatterHackers.Agg
         }
         public bool IsEqual(VertexDistance val)
         {
-            bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.vertex_dist_epsilon;
+            bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.VERTEX_DISTANCE_EPSILON;
             if (!ret)
             {
-                dist = 1.0 / AggMath.vertex_dist_epsilon;
+                dist = 1.0 / AggMath.VERTEX_DISTANCE_EPSILON;
             }
             return ret;
         }

@@ -62,7 +62,7 @@ namespace MatterHackers.Agg.UI
 
         public void Rewind(int idx)
         {
-            m_vertex = 0;
+            this.RewindZero();
         }
         public void RewindZero()
         {

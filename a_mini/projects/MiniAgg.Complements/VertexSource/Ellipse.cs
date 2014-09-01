@@ -154,7 +154,8 @@ namespace MatterHackers.Agg.VertexSource
 
         public void Rewind(int path_id)
         {
-            m_step = 0;
+            this.RewindZero();
+            //m_step = 0;
         }
         public void RewindZero()
         {

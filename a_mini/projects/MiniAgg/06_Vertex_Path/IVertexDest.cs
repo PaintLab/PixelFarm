@@ -23,7 +23,7 @@ namespace MatterHackers.Agg
     public interface IVertexDest
     {   
 
-        int Count { get; }
+       
         void AddVertex(Vector2 vertex); 
         void Clear();
        

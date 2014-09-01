@@ -132,7 +132,7 @@ namespace MatterHackers.Agg.VertexSource
     }
 
     //--------------------------------------------------------------curve3_inc
-    public sealed class curve3_inc
+    public sealed class Curve3Inc
     {
         int m_num_steps;
         int m_step;
@@ -152,14 +152,14 @@ namespace MatterHackers.Agg.VertexSource
         double m_saved_dfx;
         double m_saved_dfy;
 
-        public curve3_inc()
+        public Curve3Inc()
         {
             m_num_steps = (0);
             m_step = (0);
             m_scale = (1.0);
         }
 
-        public curve3_inc(double x1, double y1,
+        public Curve3Inc(double x1, double y1,
                    double x2, double y2,
                    double x3, double y3)
         {
@@ -1062,7 +1062,7 @@ namespace MatterHackers.Agg.VertexSource
     //-----------------------------------------------------------------curve3
     public sealed class Curve3 : IVertexSource
     {
-        curve3_inc m_curve_inc = new curve3_inc();
+        Curve3Inc m_curve_inc = new Curve3Inc();
         curve3_div m_curve_div = new curve3_div();
         Curves.CurveApproximationMethod m_approximation_method;
 

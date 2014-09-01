@@ -38,7 +38,7 @@ namespace MatterHackers.Agg.VertexSource
         Vector2 rightTopRadius;
         Vector2 leftTopRadius;
         int state;
-        arc currentProcessingArc = new arc();
+        Arc currentProcessingArc = new Arc();
 
         public RoundedRect(double left, double bottom, double right, double top, double radius)
         {
@@ -192,7 +192,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void Rewind(int unused)
         {
-            state = 0;
+            this.RewindZero();
         }
         public void RewindZero()
         {
