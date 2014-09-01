@@ -62,7 +62,7 @@ namespace MatterHackers.Agg.VertexSource
         }
 
 
-        public void SetMiterLimitTheta(double t) { m_stroker.miter_limit_theta(t); }
+        public void SetMiterLimitTheta(double t) { m_stroker.SetMiterLimitTheta(t); }
 
 
 
@@ -143,7 +143,7 @@ namespace MatterHackers.Agg.VertexSource
             m_src_vertex = 0;
         }
 
-        public ShapePath.FlagsAndCommand Vertex(ref double x, ref double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandLineTo;
             while (!ShapePath.is_stop(cmd))
@@ -172,7 +172,7 @@ namespace MatterHackers.Agg.VertexSource
                             m_status = StrokeMath.Status.EndPoly1;
                             break;
                         }
-                        m_stroker.calc_join(m_out_vertices,
+                        m_stroker.CreateJoin(m_out_vertices,
                                             m_src_vertices.prev(m_src_vertex),
                                             m_src_vertices.curr(m_src_vertex),
                                             m_src_vertices.next(m_src_vertex),

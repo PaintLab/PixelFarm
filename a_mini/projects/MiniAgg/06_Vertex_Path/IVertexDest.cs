@@ -21,9 +21,8 @@ using MatterHackers.VectorMath;
 namespace MatterHackers.Agg
 {
     public interface IVertexDest
-    {   
-        void AddVertex(Vector2 vertex); 
-        void Clear();
-       
+    {
+        void AddVertex(double x, double y);
+        void Clear();       
     } 
 }

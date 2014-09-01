@@ -44,11 +44,11 @@ namespace MatterHackers.Agg.VertexSource
         {   
             vertices = new VertexStorage();
         } 
-        public void AddVertex(Vector2 vertex)
+         
+        public void AddVertex(double x, double y)
         {
             throw new System.NotImplementedException();
         }
-
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand flagsAndCommand)
         {
             vertices.AddVertex(x, y, flagsAndCommand);

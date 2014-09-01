@@ -27,7 +27,6 @@ namespace MatterHackers.Agg.VertexSource
         public Stroke(IVertexSource vertexSource, double inWidth = 1)
             : base(vertexSource, new StrokeGenerator())
         {
-
             this.Width = inWidth;
         }
         public LineCap LineCap
@@ -59,11 +58,12 @@ namespace MatterHackers.Agg.VertexSource
         {
             get { return base.GetGenerator().Width; }
             set { this.GetGenerator().Width = value; }
+        }         
+
+        public void SetMiterLimitTheta(double t)
+        {
+            base.GetGenerator().SetMiterLimitTheta(t);
         }
-
-
-        public void miter_limit_theta(double t) { base.GetGenerator().SetMiterLimitTheta(t); }
- 
         public double ApproximateScale
         {
             get { return this.GetGenerator().ApproximateScale; }

@@ -153,7 +153,8 @@ namespace MatterHackers.Agg.VertexSource
                         goto case Status.Generate;
 
                     case Status.Generate:
-                        command = generator.Vertex(ref x, ref y);
+
+                        command = generator.GetNextVertex(ref x, ref y);
                         //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
                         if (ShapePath.is_stop(command))
                         {

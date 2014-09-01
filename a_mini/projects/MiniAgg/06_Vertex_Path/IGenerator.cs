@@ -23,8 +23,9 @@ namespace MatterHackers.Agg.VertexSource
     {
         void RemoveAll();
         void AddVertex(double x, double y, ShapePath.FlagsAndCommand unknown);
+                 
         void Rewind(int path_id);
-        ShapePath.FlagsAndCommand Vertex(ref double x, ref double y);
+        ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y);
 
 
         LineCap LineCap { get; set; }
@@ -37,7 +38,6 @@ namespace MatterHackers.Agg.VertexSource
 
 
         void SetMiterLimitTheta(double t); 
-
         double ApproximateScale { get; set; }
         bool AutoDetectOrientation { get; set; }
     }

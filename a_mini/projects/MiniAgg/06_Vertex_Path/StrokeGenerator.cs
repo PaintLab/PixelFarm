@@ -23,9 +23,11 @@ namespace MatterHackers.Agg.VertexSource
 {
     public class Vector2Container : ArrayList<Vector2>, IVertexDest
     {
-
+        public void AddVertex(double x, double y)
+        {
+            base.AddVertex(new Vector2(x, y));
+        }
     }
-
     //============================================================vcgen_stroke
     class StrokeGenerator : IGenerator
     {
@@ -75,7 +77,7 @@ namespace MatterHackers.Agg.VertexSource
             get { return m_stroker.Width; }
             set { this.m_stroker.Width = value; }
         }
-        public void SetMiterLimitTheta(double t) { m_stroker.miter_limit_theta(t); }
+        public void SetMiterLimitTheta(double t) { m_stroker.SetMiterLimitTheta(t); }
 
 
         public double InnerMiterLimit
@@ -98,7 +100,7 @@ namespace MatterHackers.Agg.VertexSource
             get { throw new NotSupportedException(); }
             set { throw new NotSupportedException(); }
         }
-         
+
 
 
         public double Shorten
@@ -148,7 +150,7 @@ namespace MatterHackers.Agg.VertexSource
             m_out_vertex = 0;
         }
 
-        public ShapePath.FlagsAndCommand Vertex(ref double x, ref double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandLineTo;
             while (!ShapePath.is_stop(cmd))
@@ -173,8 +175,12 @@ namespace MatterHackers.Agg.VertexSource
                         break;
 
                     case StrokeMath.Status.Cap1:
-                        m_stroker.calc_cap(m_out_vertices, m_src_vertices[0], m_src_vertices[1],
+                        m_stroker.CreateCap(
+                            m_out_vertices,
+                            m_src_vertices[0],
+                            m_src_vertices[1],
                             m_src_vertices[0].dist);
+
                         m_src_vertex = 1;
                         m_prev_status = StrokeMath.Status.Outline1;
                         m_status = StrokeMath.Status.OutVertices;
@@ -182,7 +188,7 @@ namespace MatterHackers.Agg.VertexSource
                         break;
 
                     case StrokeMath.Status.Cap2:
-                        m_stroker.calc_cap(m_out_vertices,
+                        m_stroker.CreateCap(m_out_vertices,
                             m_src_vertices[m_src_vertices.Count - 1],
                             m_src_vertices[m_src_vertices.Count - 2],
                             m_src_vertices[m_src_vertices.Count - 2].dist);
@@ -209,7 +215,8 @@ namespace MatterHackers.Agg.VertexSource
                                 break;
                             }
                         }
-                        m_stroker.calc_join(m_out_vertices,
+
+                        m_stroker.CreateJoin(m_out_vertices,
                             m_src_vertices.prev(m_src_vertex),
                             m_src_vertices.curr(m_src_vertex),
                             m_src_vertices.next(m_src_vertex),
@@ -235,7 +242,7 @@ namespace MatterHackers.Agg.VertexSource
                         }
 
                         --m_src_vertex;
-                        m_stroker.calc_join(m_out_vertices,
+                        m_stroker.CreateJoin(m_out_vertices,
                             m_src_vertices.next(m_src_vertex),
                             m_src_vertices.curr(m_src_vertex),
                             m_src_vertices.prev(m_src_vertex),
