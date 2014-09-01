@@ -22,7 +22,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    class VertexStorage
+    public class VertexStorage
     {
         int m_num_vertices;
         int m_allocated_vertices;

@@ -69,7 +69,7 @@ namespace MatterHackers.Agg.Sample_Blur
             m_path = new VertexSourceApplyTransform(m_path, shape_mtx);
             m_shape = new FlattenCurves(m_path);
 
-            BoundingRect.GetBoundingRectSingle(m_shape, 0, ref m_shape_bounds);
+            BoundingRect.GetBoundingRectSingle(m_shape,   ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
@@ -179,7 +179,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
             // Calculate the bounding box and extend it by the blur radius
             RectangleDouble bbox = new RectangleDouble();
-            BoundingRect.GetBoundingRectSingle(shadow_trans, 0, ref bbox);
+            BoundingRect.GetBoundingRectSingle(shadow_trans,  ref bbox);
 
             double m_radius = this.BlurRadius;
 

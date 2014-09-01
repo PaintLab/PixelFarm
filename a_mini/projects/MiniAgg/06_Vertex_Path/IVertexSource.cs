@@ -44,12 +44,15 @@ namespace MatterHackers.Agg.VertexSource
     public interface IVertexSource
     {
         IEnumerable<VertexData> GetVertexIter();
-        // for a PathStorage this is the vertex index. 
+        // for a PathStorage this is the vertex index.  
         void Rewind(int pathId);
         void RewindZero();
         ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
 
+
         bool IsDynamicVertexGen { get; }
     }
 
+
+   
 }

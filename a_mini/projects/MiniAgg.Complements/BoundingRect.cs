@@ -76,23 +76,33 @@ namespace MatterHackers.Agg
         {
             return GetBoundingRect(vs, gi, start, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
         }
-
-        public static bool GetBoundingRectSingle(IVertexSource vs, int path_id, ref RectangleDouble rect)
+        public static bool GetBoundingRectSingle(IVertexSource vs, ref RectangleDouble rect)
         {
             double x1, y1, x2, y2;
-            bool rValue = GetBoundingRectSingle(vs, path_id, out x1, out y1, out x2, out y2);
+            bool rValue = GetBoundingRectSingle(vs, out x1, out y1, out x2, out y2);
             rect.Left = x1;
             rect.Bottom = y1;
             rect.Right = x2;
             rect.Top = y2;
             return rValue;
         }
+        //public static bool GetBoundingRectSingle(IVertexSource vs, int path_id, ref RectangleDouble rect)
+        //{
+        //temp remove
+        //    double x1, y1, x2, y2;
+        //    bool rValue = GetBoundingRectSingle(vs, path_id, out x1, out y1, out x2, out y2);
+        //    rect.Left = x1;
+        //    rect.Bottom = y1;
+        //    rect.Right = x2;
+        //    rect.Top = y2;
+        //    return rValue;
+        //}
 
         //-----------------------------------------------------bounding_rect_single
         //template<class VertexSource, class CoordT> 
-        public static bool GetBoundingRectSingle(
-            IVertexSource vs, int path_id,
-            out double x1, out double y1, out double x2, out double y2)
+        static bool GetBoundingRectSingle(
+          IVertexSource vs,
+          out double x1, out double y1, out double x2, out double y2)
         {
             double x = 0;
             double y = 0;
@@ -103,7 +113,7 @@ namespace MatterHackers.Agg
             x2 = 0;
             y2 = 0;
 
-            vs.Rewind(path_id);
+            vs.RewindZero();
             ShapePath.FlagsAndCommand PathAndFlags;
             while (!ShapePath.IsStop(PathAndFlags = vs.GetNextVertex(out x, out y)))
             {
