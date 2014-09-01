@@ -16,6 +16,7 @@ namespace MatterHackers.Agg
             CommandLineTo = 0x02,
             CommandCurve3 = 0x03,
             CommandCurve4 = 0x04,
+            
             CommandEndPoly = 0x0F,
             CommandsMask = 0x0F,
             //-----------------------
@@ -59,15 +60,15 @@ namespace MatterHackers.Agg
                 || c == FlagsAndCommand.CommandCurve4;
         }
 
-        public static bool IsCurve3(FlagsAndCommand c)
-        {
-            return c == FlagsAndCommand.CommandCurve3;
-        }
+        //public static bool IsCurve3(FlagsAndCommand c)
+        //{
+        //    return c == FlagsAndCommand.CommandCurve3;
+        //}
 
-        public static bool IsCurve4(FlagsAndCommand c)
-        {
-            return c == FlagsAndCommand.CommandCurve4;
-        }
+        //public static bool IsCurve4(FlagsAndCommand c)
+        //{
+        //    return c == FlagsAndCommand.CommandCurve4;
+        //}
 
         public static bool IsEndPoly(FlagsAndCommand c)
         {
@@ -85,27 +86,27 @@ namespace MatterHackers.Agg
             return IsStop(c) || IsMoveTo(c) || IsEndPoly(c);
         }
 
-        public static bool is_cw(FlagsAndCommand c)
+        public static bool IsCw(FlagsAndCommand c)
         {
             return (c & FlagsAndCommand.FlagCW) != 0;
         }
 
-        public static bool is_ccw(FlagsAndCommand c)
+        public static bool IsCcw(FlagsAndCommand c)
         {
             return (c & FlagsAndCommand.FlagCCW) != 0;
         }
 
-        public static bool is_oriented(FlagsAndCommand c)
+        public static bool IsOriented(FlagsAndCommand c)
         {
             return (c & (FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW)) != 0;
         }
 
-        public static bool IsClosed(FlagsAndCommand c)
-        {
-            return (c & FlagsAndCommand.FlagClose) != 0;
-        }
+        //public static bool IsClosed(FlagsAndCommand c)
+        //{
+        //    return (c & FlagsAndCommand.FlagClose) != 0;
+        //}
 
-        public static FlagsAndCommand get_close_flag(FlagsAndCommand c)
+        public static FlagsAndCommand GetCloseFlags(FlagsAndCommand c)
         {
             return (FlagsAndCommand)(c & FlagsAndCommand.FlagClose);
         }

@@ -109,8 +109,8 @@ namespace MatterHackers.Agg.VertexSource
                 return GetVertex((int)(m_num_vertices - 1), out x, out y);
             }
 
-            x = new double();
-            y = new double();
+            x = 0;
+            y = 0;
             return ShapePath.FlagsAndCommand.CommandStop;
         }
 
@@ -224,5 +224,5 @@ namespace MatterHackers.Agg.VertexSource
 
         //----------------------------------------------------------
     }
-    
+
 }

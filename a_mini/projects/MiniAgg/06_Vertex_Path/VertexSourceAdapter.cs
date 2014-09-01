@@ -61,11 +61,11 @@ namespace MatterHackers.Agg.VertexSource
             this.generator = generator;
             m_status = Status.Initial;
         }
-         
+
 
         protected IGenerator GetGenerator() { return generator; }
 
-        
+
 
         public IEnumerable<VertexData> GetVertexIter()
         {
@@ -118,35 +118,64 @@ namespace MatterHackers.Agg.VertexSource
                         generator.AddVertex(m_start_x, m_start_y, ShapePath.FlagsAndCommand.CommandMoveTo);
                         markers.AddVertex(m_start_x, m_start_y, ShapePath.FlagsAndCommand.CommandMoveTo);
 
-                        for (; ; )
+                        bool runloop = true;
+                        while (runloop)
                         {
-                            command = vtxsrc.GetNextVertex(out x, out y);
-                            //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
-                            if (ShapePath.IsVertextCommand(command))
+                            command = vtxsrc.GetNextVertex(out x, out y);                             
+                            switch (ShapePath.FlagsAndCommand.CommandsMask & command)
                             {
-                                m_last_cmd = command;
-                                if (ShapePath.IsMoveTo(command))
-                                {
-                                    m_start_x = x;
-                                    m_start_y = y;
-                                    break;
-                                }
-                                generator.AddVertex(x, y, command);
-                                markers.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+                                case ShapePath.FlagsAndCommand.CommandStop:
+                                    {
+                                        m_last_cmd = ShapePath.FlagsAndCommand.CommandStop;
+                                        runloop = false;
+                                    } break;
+                                case ShapePath.FlagsAndCommand.CommandEndPoly:
+                                    {
+                                        generator.AddVertex(x, y, command);
+                                        runloop = false;
+                                    } break;
+                                case ShapePath.FlagsAndCommand.CommandLineTo:
+                                case ShapePath.FlagsAndCommand.CommandCurve3:
+                                case ShapePath.FlagsAndCommand.CommandCurve4:
+                                    {
+                                        m_last_cmd = command;
+                                        generator.AddVertex(x, y, command);
+                                        markers.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+
+                                    } break;
+                                case ShapePath.FlagsAndCommand.CommandMoveTo:
+                                    {
+                                        m_last_cmd = command;
+                                        m_start_x = x;
+                                        m_start_y = y;
+                                        runloop = false;
+                                    } break;
                             }
-                            else
-                            {
-                                if (ShapePath.IsStop(command))
-                                {
-                                    m_last_cmd = ShapePath.FlagsAndCommand.CommandStop;
-                                    break;
-                                }
-                                if (ShapePath.IsEndPoly(command))
-                                {
-                                    generator.AddVertex(x, y, command);
-                                    break;
-                                }
-                            }
+                            //if (ShapePath.IsVertextCommand(command))
+                            //{
+                            //    m_last_cmd = command;
+                            //    if (ShapePath.IsMoveTo(command))
+                            //    {
+                            //        m_start_x = x;
+                            //        m_start_y = y;
+                            //        break;
+                            //    }
+                            //    generator.AddVertex(x, y, command);
+                            //    markers.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+                            //}
+                            //else
+                            //{
+                            //    if (ShapePath.IsStop(command))
+                            //    {
+                            //        m_last_cmd = ShapePath.FlagsAndCommand.CommandStop;
+                            //        break;
+                            //    }
+                            //    if (ShapePath.IsEndPoly(command))
+                            //    {
+                            //        generator.AddVertex(x, y, command);
+                            //        break;
+                            //    }
+                            //}
                         }
                         generator.RewindZero();
                         m_status = Status.Generate;

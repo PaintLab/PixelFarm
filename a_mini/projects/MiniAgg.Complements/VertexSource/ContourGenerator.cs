@@ -33,7 +33,7 @@ namespace MatterHackers.Agg.VertexSource
             m_orientation = 0;
             m_auto_detect = false;
         }
-       
+
 
         public LineCap LineCap
         {
@@ -94,28 +94,24 @@ namespace MatterHackers.Agg.VertexSource
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
         {
             m_status = StrokeMath.Status.Init;
-            if (ShapePath.IsMoveTo(cmd))
+            switch ((ShapePath.FlagsAndCommand.CommandsMask) & cmd)
             {
-                m_src_vertices.ReplaceLast(new VertexDistance(x, y));
-            }
-            else
-            {
-                if (ShapePath.IsVertextCommand(cmd))
-                {
-                    m_src_vertices.AddVertex(new VertexDistance(x, y));
-                }
-                else
-                {
-                    if (ShapePath.IsEndPoly(cmd))
+                case ShapePath.FlagsAndCommand.CommandMoveTo:
+                    m_src_vertices.ReplaceLast(new VertexDistance(x, y));
+                    break;
+                case ShapePath.FlagsAndCommand.CommandEndPoly:
+                    m_closed = (ShapePath.GetCloseFlags(cmd) == ShapePath.FlagsAndCommand.FlagClose);
+                    if (m_orientation == ShapePath.FlagsAndCommand.FlagNone)
                     {
-                        m_closed = (ShapePath.get_close_flag(cmd) == ShapePath.FlagsAndCommand.FlagClose);
-                        if (m_orientation == ShapePath.FlagsAndCommand.FlagNone)
-                        {
-                            m_orientation = ShapePath.GetOrientation(cmd);
-                        }
+                        m_orientation = ShapePath.GetOrientation(cmd);
                     }
-                }
+                    break;
+                default:
+
+                    m_src_vertices.AddVertex(new VertexDistance(x, y));
+                    break;
             }
+            
         }
 
         // Vertex Source Interface
@@ -126,16 +122,16 @@ namespace MatterHackers.Agg.VertexSource
                 m_src_vertices.Close(true);
                 if (m_auto_detect)
                 {
-                    if (!ShapePath.is_oriented(m_orientation))
+                    if (!ShapePath.IsOriented(m_orientation))
                     {
                         m_orientation = (AggMath.calc_polygon_area(m_src_vertices) > 0.0) ?
                                         ShapePath.FlagsAndCommand.FlagCCW :
                                         ShapePath.FlagsAndCommand.FlagCW;
                     }
                 }
-                if (ShapePath.is_oriented(m_orientation))
-                {  
-                    m_stroker.Width = ShapePath.is_ccw(m_orientation) ? m_width : -m_width;
+                if (ShapePath.IsOriented(m_orientation))
+                {
+                    m_stroker.Width = ShapePath.IsCcw(m_orientation) ? m_width : -m_width;
                 }
             }
             m_status = StrokeMath.Status.Ready;
@@ -154,6 +150,7 @@ namespace MatterHackers.Agg.VertexSource
                         goto case StrokeMath.Status.Ready;
 
                     case StrokeMath.Status.Ready:
+
                         if (m_src_vertices.Count < 2 + (m_closed ? 1 : 0))
                         {
                             cmd = ShapePath.FlagsAndCommand.CommandStop;

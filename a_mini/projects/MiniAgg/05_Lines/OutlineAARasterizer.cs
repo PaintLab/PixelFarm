@@ -558,25 +558,24 @@ namespace MatterHackers.Agg.Lines
 
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
         {
-            if (ShapePath.IsMoveTo(cmd))
+            switch (ShapePath.FlagsAndCommand.CommandsMask & cmd)
             {
-                Render(false);
-                MoveTo(x, y);
-            }
-            else
-            {
-                if (ShapePath.IsEndPoly(cmd))
-                {
-                    Render(ShapePath.IsClosed(cmd));
-                    if (ShapePath.IsClosed(cmd))
+                case ShapePath.FlagsAndCommand.CommandMoveTo:
+                    Render(false);
+                    MoveTo(x, y);
+                    break;
+                case ShapePath.FlagsAndCommand.CommandEndPoly:
+
+                    bool is_closed = ((cmd & ShapePath.FlagsAndCommand.FlagClose) != 0);
+                    Render(is_closed);
+                    if (is_closed)
                     {
                         MoveTo(m_start_x, m_start_y);
                     }
-                }
-                else
-                {
+                    break;
+                default:
                     LineTo(x, y);
-                }
+                    break;
             }
         }
 

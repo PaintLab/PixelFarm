@@ -131,7 +131,7 @@ namespace MatterHackers.Agg.VertexSource
                 }
                 else
                 {
-                    m_closed = (int)ShapePath.get_close_flag(cmd);
+                    m_closed = (int)ShapePath.GetCloseFlags(cmd);
                 }
             }
         }

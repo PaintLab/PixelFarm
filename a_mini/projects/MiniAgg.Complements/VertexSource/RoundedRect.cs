@@ -133,7 +133,7 @@ namespace MatterHackers.Agg.VertexSource
         public IEnumerable<VertexData> GetVertexIter()
         {
             currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
-            foreach (VertexData vertexData in currentProcessingArc.Vertices())
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
                 if (ShapePath.IsStop(vertexData.command))
                 {
@@ -142,7 +142,7 @@ namespace MatterHackers.Agg.VertexSource
                 yield return vertexData;
             }
             currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
-            foreach (VertexData vertexData in currentProcessingArc.Vertices())
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
                 if (ShapePath.IsMoveTo(vertexData.command))
                 {
@@ -157,7 +157,7 @@ namespace MatterHackers.Agg.VertexSource
             }
 
             currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y, 0.0, Math.PI * 0.5);
-            foreach (VertexData vertexData in currentProcessingArc.Vertices())
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
                 if (ShapePath.IsMoveTo(vertexData.command))
                 {
@@ -172,18 +172,28 @@ namespace MatterHackers.Agg.VertexSource
             }
 
             currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y, Math.PI * 0.5, Math.PI);
-            foreach (VertexData vertexData in currentProcessingArc.Vertices())
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.IsMoveTo(vertexData.command))
+                switch (vertexData.command)
                 {
-                    // skip the initial moveto
-                    continue;
+                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        continue;
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        break;
+                    default:
+                        yield return vertexData;
+                        break;
                 }
-                if (ShapePath.IsStop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
+                //if (ShapePath.IsMoveTo(vertexData.command))
+                //{
+                //    // skip the initial moveto
+                //    continue;
+                //}
+                //if (ShapePath.IsStop(vertexData.command))
+                //{
+                //    break;
+                //}
+                //yield return vertexData;
             }
 
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW, new Vector2());

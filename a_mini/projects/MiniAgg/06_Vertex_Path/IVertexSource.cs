@@ -30,8 +30,6 @@ namespace MatterHackers.Agg.VertexSource
             this.command = command;
             this.position = position;
         }
-
-
         public bool IsMoveTo
         {
             get { return ShapePath.IsMoveTo(command); }
