@@ -16,10 +16,10 @@ namespace MatterHackers.Agg
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
         public void render_scanlines_aa_solid(IImage destImage, IRasterizer rasterizer, IScanline scline, ColorRGBA color)
         {
-            if (rasterizer.rewind_scanlines())
+            if (rasterizer.RewindScanlines())
             {
-                scline.ResetSpans(rasterizer.min_x(), rasterizer.max_x());
-                while (rasterizer.sweep_scanline(scline))
+                scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
+                while (rasterizer.SweepScanline(scline))
                 {
                     RenderSolidSingleScanLine(destImage, scline, color);
                 }
@@ -61,9 +61,9 @@ namespace MatterHackers.Agg
         {
             for (int i = 0; i < num_paths; i++)
             {
-                ras.reset();
+                ras.Reset();
 
-                ras.add_path(vs, path_id[i]);
+                ras.AddPath(vs, path_id[i]);
 
                 render_scanlines_aa_solid(destImage, ras, sl, color_storage[i]);
             }
@@ -90,7 +90,7 @@ namespace MatterHackers.Agg
 
                 bool useFirstCoverForAll = span.len < 0;
 
-                destImage.blend_color_hspan(x, y, len, 
+                destImage.blend_color_hspan(x, y, len,
                     tempSpanColors.Array, 0,
                     covers, span.cover_index, useFirstCoverForAll);
             }
@@ -100,12 +100,12 @@ namespace MatterHackers.Agg
         public void GenerateAndRender(IRasterizer rasterizer,
              IScanline scline, IImage destImage,
              ISpanGenerator spanGenerator)
-        {   
-            if (rasterizer.rewind_scanlines())
+        {
+            if (rasterizer.RewindScanlines())
             {
-                scline.ResetSpans(rasterizer.min_x(), rasterizer.max_x());
+                scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
                 spanGenerator.Prepare();
-                while (rasterizer.sweep_scanline(scline))
+                while (rasterizer.SweepScanline(scline))
                 {
                     GenerateAndRenderSingleScanline(scline, destImage, spanGenerator);
                 }

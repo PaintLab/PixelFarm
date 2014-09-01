@@ -137,10 +137,10 @@ namespace MatterHackers.Agg.Sample_Perspective
 
                     VertexSourceApplyTransform trans_ell_stroke = new VertexSourceApplyTransform(ell_stroke, txBilinear);
 
-                    g_rasterizer.add_path(trans_ell);
+                    g_rasterizer.AddPath(trans_ell);
                     scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
 
-                    g_rasterizer.add_path(trans_ell_stroke);
+                    g_rasterizer.AddPath(trans_ell_stroke);
                     scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
                 }
             }
@@ -164,7 +164,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //2. create transform version of fill ellipse
                     var txFillEllipse = new VertexSourceApplyTransform(filledEllipse, txPerspective);
                     //3. add
-                    g_rasterizer.add_path(txFillEllipse);
+                    g_rasterizer.AddPath(txFillEllipse);
                     //4. render it
                     scanlineRenderer.render_scanlines_aa_solid(clippingProxy,
                         g_rasterizer,
@@ -180,7 +180,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //2. create transform version of outlin  
                     var txOutline = new VertexSourceApplyTransform(strokeEllipse, txPerspective);
                     //3. add
-                    g_rasterizer.add_path(txOutline);                    
+                    g_rasterizer.AddPath(txOutline);                    
                     //4. render                      
                     scanlineRenderer.render_scanlines_aa_solid(clippingProxy,
                         g_rasterizer,
@@ -191,7 +191,7 @@ namespace MatterHackers.Agg.Sample_Perspective
 
             //--------------------------
             // Render the "quad" tool and controls
-            g_rasterizer.add_path(quadPolygonControl);
+            g_rasterizer.AddPath(quadPolygonControl);
             scanlineRenderer.render_scanlines_aa_solid(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
 
             //base.OnDraw(graphics2D);

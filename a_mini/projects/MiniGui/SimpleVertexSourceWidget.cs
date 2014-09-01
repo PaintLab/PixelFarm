@@ -98,7 +98,7 @@ namespace MatterHackers.Agg.UI
         public override void OnDraw(Graphics2D graphics2D)
         {
             for (int i = 0; i < num_paths(); i++)
-            {
+            {   
                 graphics2D.Render(this, i, color(i).GetAsRGBA_Bytes());
             }
             base.OnDraw(graphics2D);

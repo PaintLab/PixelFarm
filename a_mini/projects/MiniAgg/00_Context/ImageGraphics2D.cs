@@ -65,13 +65,35 @@ namespace MatterHackers.Agg
 
         public override void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes)
         {
-            rasterizer.reset();
+            rasterizer.Reset();
+
             Affine transform = GetTransform();
             if (!transform.IsIdentity())
             {
                 vertexSource = new VertexSourceApplyTransform(vertexSource, transform);
             }
-            rasterizer.add_path(vertexSource, pathIndexToRender);
+            rasterizer.AddPath(vertexSource, pathIndexToRender);
+
+            if (destImageByte != null)
+            {
+                scanlineRenderer.render_scanlines_aa_solid(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
+                DestImage.MarkImageChanged();
+            }
+            else
+            {
+                //scanlineRenderer.RenderSolid(destImageFloat, rasterizer, m_ScanlineCache, colorBytes.GetAsRGBA_Floats());
+                //destImageFloat.MarkImageChanged();
+            }
+        }
+        public override void Render(IVertexSource vertexSource, ColorRGBA colorBytes)
+        {
+            rasterizer.Reset();
+            Affine transform = GetTransform();
+            if (!transform.IsIdentity())
+            {
+                vertexSource = new VertexSourceApplyTransform(vertexSource, transform);
+            }
+            rasterizer.AddPath(vertexSource);
             if (destImageByte != null)
             {
                 scanlineRenderer.render_scanlines_aa_solid(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
@@ -145,7 +167,7 @@ namespace MatterHackers.Agg
             }
 
             VertexSourceApplyTransform transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
-            Rasterizer.add_path(transfromedRect);
+            Rasterizer.AddPath(transfromedRect);
             {
                 //ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);
                 ChildImage destImageWithClipping = new ChildImage(destImageByte, destImageByte.GetRecieveBlender());

@@ -72,23 +72,24 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public interface IRasterizer
     {
-        int min_x();
-        int min_y();
-        int max_x();
-        int max_y();
+
+        int MinX { get; }
+        int MinY { get; }
+        int MaxX { get; }
+        int MaxY { get; }
 
         void ResetGamma(IGammaFunction gamma_function);
 
-        bool sweep_scanline(IScanline sl);
-        void reset();
-        void add_path(IVertexSource vs);
-        void add_path(IVertexSource vs, int pathID);
-        bool rewind_scanlines();
+        bool SweepScanline(IScanline sl);
+        void Reset();
+        void AddPath(IVertexSource vs);
+        void AddPath(IVertexSource vs, int pathId);
+        bool RewindScanlines();
     }
 
     public sealed class ScanlineRasterizer : IRasterizer
     {
-        RasterizerCellsAA m_outline;
+        CellAARasterizer m_outline;
         VectorClipper m_VectorClipper;
         int[] m_gamma = new int[AA_SCALE];
         FillingRule m_filling_rule;
@@ -125,7 +126,7 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public ScanlineRasterizer(VectorClipper rasterizer_sl_clip)
         {
-            m_outline = new RasterizerCellsAA();
+            m_outline = new CellAARasterizer();
             m_VectorClipper = rasterizer_sl_clip;
             m_filling_rule = FillingRule.NonZero;
             m_auto_close = true;
@@ -140,15 +141,15 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public void reset()
+        public void Reset()
         {
-            m_outline.reset();
+            m_outline.Reset();
             m_status = Status.Initial;
         }
 
         public void reset_clipping()
         {
-            reset();
+            Reset();
             m_VectorClipper.reset_clipping();
         }
 
@@ -168,7 +169,7 @@ namespace MatterHackers.Agg
 
         public void SetVectorClipBox(double x1, double y1, double x2, double y2)
         {
-            reset();
+            Reset();
             m_VectorClipper.clip_box(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1),
                                m_VectorClipper.upscale(x2), m_VectorClipper.upscale(y2));
         }
@@ -192,7 +193,7 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         void move_to(int x, int y)
         {
-            if (m_outline.sorted()) reset();
+            if (m_outline.Sorted) Reset();
             if (m_auto_close) close_polygon();
             m_VectorClipper.move_to(m_start_x = m_VectorClipper.downscale(x),
                               m_start_y = m_VectorClipper.downscale(y));
@@ -211,7 +212,7 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         public void move_to_d(double x, double y)
         {
-            if (m_outline.sorted()) reset();
+            if (m_outline.Sorted) Reset();
             if (m_auto_close) close_polygon();
             m_VectorClipper.move_to(m_start_x = m_VectorClipper.upscale(x),
                               m_start_y = m_VectorClipper.upscale(y));
@@ -260,7 +261,7 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         void edge(int x1, int y1, int x2, int y2)
         {
-            if (m_outline.sorted()) reset();
+            if (m_outline.Sorted) Reset();
             m_VectorClipper.move_to(m_VectorClipper.downscale(x1), m_VectorClipper.downscale(y1));
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.downscale(x2),
@@ -271,7 +272,7 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         void edge_d(double x1, double y1, double x2, double y2)
         {
-            if (m_outline.sorted()) reset();
+            if (m_outline.Sorted) Reset();
             m_VectorClipper.move_to(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1));
             m_VectorClipper.line_to(m_outline,
                               m_VectorClipper.upscale(x2),
@@ -280,12 +281,25 @@ namespace MatterHackers.Agg
         }
 
         //-------------------------------------------------------------------
-        public void add_path(IVertexSource vs)
+        public void AddPath(IVertexSource vs)
         {
-            add_path(vs, 0);
+            double x = 0;
+            double y = 0;
+
+            ShapePath.FlagsAndCommand cmd;
+            vs.RewindZero();
+            if (m_outline.Sorted)
+            {
+                Reset();
+            }
+
+            while (!ShapePath.IsStop(cmd = vs.GetNextVertex(out x, out y)))
+            {
+                AddVertex(new VertexData(cmd, new Vector2(x, y)));
+            }
         }
 
-        public void add_path(IVertexSource vs, int pathId)
+        public void AddPath(IVertexSource vs, int pathId)
         {
 #if false
             if (m_outline.sorted())
@@ -304,43 +318,44 @@ namespace MatterHackers.Agg
             double x = 0;
             double y = 0;
 
-            ShapePath.FlagsAndCommand PathAndFlags;
+            ShapePath.FlagsAndCommand cmd;
             vs.Rewind(pathId);
-            if (m_outline.sorted())
+            if (m_outline.Sorted)
             {
-                reset();
+                Reset();
             }
 
-            while (!ShapePath.IsStop(PathAndFlags = vs.GetNextVertex(out x, out y)))
+            while (!ShapePath.IsStop(cmd = vs.GetNextVertex(out x, out y)))
             {
-                AddVertex(new VertexData(PathAndFlags, new Vector2(x, y)));
+                AddVertex(new VertexData(cmd, new Vector2(x, y)));
             }
 #endif
         }
 
-        //--------------------------------------------------------------------
-        public int min_x() { return m_outline.min_x(); }
-        public int min_y() { return m_outline.min_y(); }
-        public int max_x() { return m_outline.max_x(); }
-        public int max_y() { return m_outline.max_y(); }
+
+        public int MinX { get { return m_outline.MinX; } }
+        public int MinY { get { return m_outline.MinY; } }
+        public int MaxX { get { return m_outline.MaxX; } }
+        public int MaxY { get { return m_outline.MaxY; } }
+
 
         //--------------------------------------------------------------------
         void sort()
         {
             if (m_auto_close) close_polygon();
-            m_outline.sort_cells();
+            m_outline.SortCells();
         }
 
         //------------------------------------------------------------------------
-        public bool rewind_scanlines()
+        public bool RewindScanlines()
         {
             if (m_auto_close) close_polygon();
-            m_outline.sort_cells();
-            if (m_outline.total_cells() == 0)
+            m_outline.SortCells();
+            if (m_outline.TotalCells == 0)
             {
                 return false;
             }
-            m_scan_y = m_outline.min_y();
+            m_scan_y = m_outline.MinY;
             return true;
         }
 
@@ -348,10 +363,10 @@ namespace MatterHackers.Agg
         bool navigate_scanline(int y)
         {
             if (m_auto_close) close_polygon();
-            m_outline.sort_cells();
-            if (m_outline.total_cells() == 0 ||
-               y < m_outline.min_y() ||
-               y > m_outline.max_y())
+            m_outline.SortCells();
+            if (m_outline.TotalCells == 0 ||
+               y < m_outline.MinY ||
+               y > m_outline.MinY)
             {
                 return false;
             }
@@ -387,20 +402,23 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public bool sweep_scanline(IScanline scline)
+        public bool SweepScanline(IScanline scline)
         {
             for (; ; )
             {
-                if (m_scan_y > m_outline.max_y())
+                if (m_scan_y > m_outline.MaxY)
                 {
                     return false;
                 }
 
                 scline.ResetSpans();
-                int num_cells = (int)m_outline.scanline_num_cells(m_scan_y);
-                CellAA[] cells;
+
+                CellAA[] cells;                               
                 int offset;
-                m_outline.scanline_cells(m_scan_y, out cells, out offset);
+                int num_cells; 
+
+                m_outline.GetCells(m_scan_y, out cells, out offset, out num_cells);
+
                 int cover = 0;
 
                 while (num_cells != 0)

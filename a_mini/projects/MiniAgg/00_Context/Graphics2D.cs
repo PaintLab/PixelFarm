@@ -118,6 +118,7 @@ namespace MatterHackers.Agg
 
 
         public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes);
+        public abstract void Render(IVertexSource vertexSource, ColorRGBA colorBytes);
 
         public void Render(IImage imageSource, int x, int y)
         {
@@ -142,20 +143,15 @@ namespace MatterHackers.Agg
                 Render(vertexSource, pathIdArray[i], colorArray[i]);
             }
         }
-
-        public void Render(IVertexSource vertexSource, ColorRGBA color)
-        {
-            Render(vertexSource, 0, color);
-        }
-
+         
         public void Render(IVertexSource vertexSource, double x, double y, ColorRGBA color)
         {
-            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)), 0, color);
+            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)),   color);
         }
 
         public void Render(IVertexSource vertexSource, Vector2 position, ColorRGBA color)
         {
-            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)), 0, color);
+            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)),  color);
         }
 
         public abstract void Clear(IColor color);

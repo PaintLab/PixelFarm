@@ -59,7 +59,7 @@
     <Compile Include="06_Vertex_Path\VertexSourceReader.cs" />
     <Compile Include="06_Vertex_Path\VertexStorage.cs" />
     <Compile Include="01_Base\AggMath.cs" />
-    <Compile Include="04_ScanlineBasic\RasterizerCellsAA.cs" />
+    <Compile Include="04_ScanlineBasic\CellAARasterizer.cs" />
     <Compile Include="07_Resamplers\IImageFilter.cs" />
     <Compile Include="05_Lines\OutlineAARasterizer.cs" />
     <Compile Include="07_Resamplers\SpanImageResample.cs" />

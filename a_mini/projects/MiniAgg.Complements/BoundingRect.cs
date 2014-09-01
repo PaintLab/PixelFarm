@@ -102,7 +102,8 @@ namespace MatterHackers.Agg
         //template<class VertexSource, class CoordT> 
         static bool GetBoundingRectSingle(
           IVertexSource vs,
-          out double x1, out double y1, out double x2, out double y2)
+          out double x1, out double y1, 
+          out double x2, out double y2)
         {
             double x = 0;
             double y = 0;

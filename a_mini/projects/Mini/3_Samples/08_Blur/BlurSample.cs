@@ -173,7 +173,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
 
             // Render shadow
-            m_ras.add_path(shadow_trans);
+            m_ras.AddPath(shadow_trans);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).GetAsRGBA_Bytes());
 
@@ -314,11 +314,11 @@ namespace MatterHackers.Agg.Sample_Blur
             //------------------
             if (FlattenCurveCheck)
             {
-                m_ras.add_path(m_shape);
+                m_ras.AddPath(m_shape);
             }
             else
             {
-                m_ras.add_path(m_path);
+                m_ras.AddPath(m_path);
             }
 
             scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.6, 0.9, 0.7, 0.8).GetAsRGBA_Bytes());

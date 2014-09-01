@@ -59,7 +59,7 @@ namespace MatterHackers.Agg
             right = -1;
         }
 
-        public void Set(CellAA cellB)
+        public void CopyAllFrom(CellAA cellB)
         {
             x = cellB.x;
             y = cellB.y;
@@ -69,7 +69,7 @@ namespace MatterHackers.Agg
             right = cellB.right;
         }
 
-        public void style(CellAA cellB)
+        public void CopyLeftRightFrom(CellAA cellB)
         {
             left = cellB.left;
             right = cellB.right;
@@ -95,12 +95,11 @@ namespace MatterHackers.Agg
     //-----------------------------------------------------rasterizer_cells_aa
     // An internal class that implements the main rasterization algorithm.
     // Used in the rasterizer. Should not be used directly.
-    sealed class RasterizerCellsAA
+    sealed class CellAARasterizer
     {
         int m_num_used_cells;
         ArrayList<CellAA> m_cells;
         ArrayList<CellAA> m_sorted_cells;
-
         ArrayList<SortedY> m_sorted_y;
 
         CellAA m_curr_cell;
@@ -126,7 +125,7 @@ namespace MatterHackers.Agg
             internal int num;
         }
 
-        public RasterizerCellsAA()
+        public CellAARasterizer()
         {
 
             m_sorted_cells = new ArrayList<CellAA>();
@@ -141,7 +140,7 @@ namespace MatterHackers.Agg
             m_curr_cell.initial();
         }
 
-        public void reset()
+        public void Reset()
         {
             m_num_used_cells = 0;
 
@@ -154,37 +153,37 @@ namespace MatterHackers.Agg
             m_max_y = -0x7FFFFFFF;
         }
 
-        public void style(CellAA style_cell)
+        public void SetStyleCell(CellAA style_cell)
         {
-            m_style_cell.style(style_cell);
+            m_style_cell.CopyLeftRightFrom(style_cell);
         }
 
-        enum dx_limit_e { dx_limit = 16384 << AggBasics.PolySubPixelScale.poly_subpixel_shift };
 
-        const int poly_subpixel_shift = (int)AggBasics.PolySubPixelScale.poly_subpixel_shift;
-        const int poly_subpixel_mask = (int)AggBasics.PolySubPixelScale.poly_subpixel_mask;
-        const int poly_subpixel_scale = (int)AggBasics.PolySubPixelScale.poly_subpixel_scale;
+        const int DX_LIMIT = (16384 << (int)AggBasics.PolySubPixelScale.poly_subpixel_shift);
+        const int POLY_SUBPIXEL_SHIFT = (int)AggBasics.PolySubPixelScale.poly_subpixel_shift;
+        const int POLY_SUBPIXEL_MASK = (int)AggBasics.PolySubPixelScale.poly_subpixel_mask;
+        const int POLY_SUBPIXEL_SCALE = (int)AggBasics.PolySubPixelScale.poly_subpixel_scale;
 
-        public void line(int x1, int y1, int x2, int y2)
+        public void DrawLine(int x1, int y1, int x2, int y2)
         {
 
             int dx = x2 - x1;
 
-            if (dx >= (int)dx_limit_e.dx_limit || dx <= -(int)dx_limit_e.dx_limit)
+            if (dx >= DX_LIMIT || dx <= -DX_LIMIT)
             {
                 int cx = (x1 + x2) >> 1;
                 int cy = (y1 + y2) >> 1;
-                line(x1, y1, cx, cy);
-                line(cx, cy, x2, y2);
+                DrawLine(x1, y1, cx, cy);
+                DrawLine(cx, cy, x2, y2);
             }
 
             int dy = y2 - y1;
-            int ex1 = x1 >> poly_subpixel_shift;
-            int ex2 = x2 >> poly_subpixel_shift;
-            int ey1 = y1 >> poly_subpixel_shift;
-            int ey2 = y2 >> poly_subpixel_shift;
-            int fy1 = y1 & poly_subpixel_mask;
-            int fy2 = y2 & poly_subpixel_mask;
+            int ex1 = x1 >> POLY_SUBPIXEL_SHIFT;
+            int ex2 = x2 >> POLY_SUBPIXEL_SHIFT;
+            int ey1 = y1 >> POLY_SUBPIXEL_SHIFT;
+            int ey2 = y2 >> POLY_SUBPIXEL_SHIFT;
+            int fy1 = y1 & POLY_SUBPIXEL_MASK;
+            int fy2 = y2 & POLY_SUBPIXEL_MASK;
 
             int x_from, x_to;
             int p, rem, mod, lift, delta, first, incr;
@@ -198,12 +197,12 @@ namespace MatterHackers.Agg
             if (ey2 < m_min_y) m_min_y = ey2;
             if (ey2 > m_max_y) m_max_y = ey2;
 
-            set_curr_cell(ex1, ey1);
+            SetCurrCell(ex1, ey1);
 
             //everything is on a single horizontal line
             if (ey1 == ey2)
             {
-                render_hline(ey1, x1, fy1, x2, fy2);
+                RenderHLine(ey1, x1, fy1, x2, fy2);
                 return;
             }
 
@@ -214,11 +213,11 @@ namespace MatterHackers.Agg
             incr = 1;
             if (dx == 0)
             {
-                int ex = x1 >> poly_subpixel_shift;
-                int two_fx = (x1 - (ex << poly_subpixel_shift)) << 1;
+                int ex = x1 >> POLY_SUBPIXEL_SHIFT;
+                int two_fx = (x1 - (ex << POLY_SUBPIXEL_SHIFT)) << 1;
                 int area;
 
-                first = poly_subpixel_scale;
+                first = POLY_SUBPIXEL_SCALE;
                 if (dy < 0)
                 {
                     first = 0;
@@ -232,26 +231,26 @@ namespace MatterHackers.Agg
                 m_curr_cell.area += two_fx * delta;
 
                 ey1 += incr;
-                set_curr_cell(ex, ey1);
+                SetCurrCell(ex, ey1);
 
-                delta = first + first - poly_subpixel_scale;
+                delta = first + first - POLY_SUBPIXEL_SCALE;
                 area = two_fx * delta;
                 while (ey1 != ey2)
                 {
                     m_curr_cell.cover = delta;
                     m_curr_cell.area = area;
                     ey1 += incr;
-                    set_curr_cell(ex, ey1);
+                    SetCurrCell(ex, ey1);
                 }
-                delta = fy2 - poly_subpixel_scale + first;
+                delta = fy2 - POLY_SUBPIXEL_SCALE + first;
                 m_curr_cell.cover += delta;
                 m_curr_cell.area += two_fx * delta;
                 return;
             }
 
             //ok, we have to render several hlines
-            p = (poly_subpixel_scale - fy1) * dx;
-            first = poly_subpixel_scale;
+            p = (POLY_SUBPIXEL_SCALE - fy1) * dx;
+            first = POLY_SUBPIXEL_SCALE;
 
             if (dy < 0)
             {
@@ -271,14 +270,14 @@ namespace MatterHackers.Agg
             }
 
             x_from = x1 + delta;
-            render_hline(ey1, x1, fy1, x_from, first);
+            RenderHLine(ey1, x1, fy1, x_from, first);
 
             ey1 += incr;
-            set_curr_cell(x_from >> poly_subpixel_shift, ey1);
+            SetCurrCell(x_from >> POLY_SUBPIXEL_SHIFT, ey1);
 
             if (ey1 != ey2)
             {
-                p = poly_subpixel_scale * dx;
+                p = POLY_SUBPIXEL_SCALE * dx;
                 lift = p / dy;
                 rem = p % dy;
 
@@ -300,26 +299,28 @@ namespace MatterHackers.Agg
                     }
 
                     x_to = x_from + delta;
-                    render_hline(ey1, x_from, poly_subpixel_scale - first, x_to, first);
+                    RenderHLine(ey1, x_from, POLY_SUBPIXEL_SCALE - first, x_to, first);
                     x_from = x_to;
 
                     ey1 += incr;
-                    set_curr_cell(x_from >> poly_subpixel_shift, ey1);
+                    SetCurrCell(x_from >> POLY_SUBPIXEL_SHIFT, ey1);
                 }
             }
-            render_hline(ey1, x_from, poly_subpixel_scale - first, x2, fy2);
+            RenderHLine(ey1, x_from, POLY_SUBPIXEL_SCALE - first, x2, fy2);
         }
 
-        public int min_x() { return m_min_x; }
-        public int min_y() { return m_min_y; }
-        public int max_x() { return m_max_x; }
-        public int max_y() { return m_max_y; }
 
-        public void sort_cells()
+
+        public int MinX { get { return m_min_x; } }
+        public int MinY { get { return m_min_y; } }
+        public int MaxX { get { return m_max_x; } }
+        public int MaxY { get { return m_max_y; } }
+
+        public void SortCells()
         {
             if (m_sorted) return; //Perform sort only the first time.
 
-            add_curr_cell();
+            AddCurrCell();
 
             m_curr_cell.x = 0x7FFFFFFF;
             m_curr_cell.y = 0x7FFFFFFF;
@@ -380,30 +381,35 @@ namespace MatterHackers.Agg
             m_sorted = true;
         }
 
-        public int total_cells()
+        public int TotalCells
         {
-            return m_num_used_cells;
+            get { return this.m_num_used_cells; }
         }
 
-        public int scanline_num_cells(int y)
-        {
-            return (int)m_sorted_y.GetArray()[y - m_min_y].num;
-        }
-
-        public void scanline_cells(int y, out CellAA[] cellData, out int offset)
+         
+        public void GetCells(int y, out CellAA[] cellData, out int offset, out int num)
         {
             cellData = m_sorted_cells.GetArray();
-            offset = m_sorted_y[y - m_min_y].start;
+            var d = m_sorted_y[y - m_min_y]; 
+            offset = d.start;
+            num = d.num;
         }
 
-        public bool sorted() { return m_sorted; }
 
-        private void set_curr_cell(int x, int y)
+        public bool Sorted
+        {
+            get
+            {
+                return this.m_sorted;
+            }
+        }
+
+        void SetCurrCell(int x, int y)
         {
             if (m_curr_cell.not_equal(x, y, m_style_cell))
             {
-                add_curr_cell();
-                m_curr_cell.style(m_style_cell);
+                AddCurrCell();
+                m_curr_cell.CopyLeftRightFrom(m_style_cell);
                 m_curr_cell.x = x;
                 m_curr_cell.y = y;
                 m_curr_cell.cover = 0;
@@ -411,7 +417,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        private void add_curr_cell()
+        void AddCurrCell()
         {
             if ((m_curr_cell.area | m_curr_cell.cover) != 0)
             {
@@ -420,8 +426,8 @@ namespace MatterHackers.Agg
                     return;
                 }
 
-                allocate_cells_if_required();
-                m_cells.GetArray()[m_num_used_cells].Set(m_curr_cell);
+                AllocCellsIfRequired();
+                m_cells.GetArray()[m_num_used_cells].CopyAllFrom(m_curr_cell);
                 m_num_used_cells++;
 
 #if false
@@ -440,7 +446,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        private void allocate_cells_if_required()
+        void AllocCellsIfRequired()
         {
             if (m_cells == null || (m_num_used_cells + 1) >= m_cells.AllocatedSize)
             {
@@ -459,7 +465,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        private void render_hline(int ey, int x1, int y1, int x2, int y2)
+        void RenderHLine(int ey, int x1, int y1, int x2, int y2)
         {
             int ex1 = x1 >> (int)poly_subpixel_scale_e.poly_subpixel_shift;
             int ex2 = x2 >> (int)poly_subpixel_scale_e.poly_subpixel_shift;
@@ -472,7 +478,7 @@ namespace MatterHackers.Agg
             //trivial case. Happens often
             if (y1 == y2)
             {
-                set_curr_cell(ex2, ey);
+                SetCurrCell(ex2, ey);
                 return;
             }
 
@@ -513,7 +519,7 @@ namespace MatterHackers.Agg
             m_curr_cell.area += (fx1 + first) * delta;
 
             ex1 += incr;
-            set_curr_cell(ex1, ey);
+            SetCurrCell(ex1, ey);
             y1 += delta;
 
             if (ex1 != ex2)
@@ -544,13 +550,18 @@ namespace MatterHackers.Agg
                     m_curr_cell.area += (int)poly_subpixel_scale_e.poly_subpixel_scale * delta;
                     y1 += delta;
                     ex1 += incr;
-                    set_curr_cell(ex1, ey);
+                    SetCurrCell(ex1, ey);
                 }
             }
             delta = y2 - y1;
             m_curr_cell.cover += delta;
             m_curr_cell.area += (fx2 + (int)poly_subpixel_scale_e.poly_subpixel_scale - first) * delta;
         }
+
+
+
+
+
         //------------
         static class QuickSort
         {
@@ -568,7 +579,7 @@ namespace MatterHackers.Agg
                 }
                 else
                 {
-                    int pivot = getPivotPoint(dataToSort, beg, end);
+                    int pivot = GetPivotPoint(dataToSort, beg, end);
                     if (pivot > beg)
                     {
                         Sort(dataToSort, beg, pivot - 1);
@@ -581,7 +592,7 @@ namespace MatterHackers.Agg
                 }
             }
 
-            static int getPivotPoint(CellAA[] dataToSort, int begPoint, int endPoint)
+            static int GetPivotPoint(CellAA[] dataToSort, int begPoint, int endPoint)
             {
                 int pivot = begPoint;
                 int m = begPoint + 1;

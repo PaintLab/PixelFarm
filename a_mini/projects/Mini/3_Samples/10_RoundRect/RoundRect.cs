@@ -134,11 +134,11 @@ namespace MatterHackers.Agg.Sample_RoundRect
 
             // Render two "control" circles
             e.init(m_x[0], m_y[0], 3, 3, 16);
-            ras.add_path(e);
+            ras.AddPath(e);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
             e.init(m_x[1], m_y[1], 3, 3, 16);
-            ras.add_path(e);
+            ras.AddPath(e);
             scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
             double d = this.SubPixelOffset;
@@ -152,11 +152,11 @@ namespace MatterHackers.Agg.Sample_RoundRect
                 Stroke p = new Stroke(r);
                  
                 p.Width = 1;
-                ras.add_path(p);
+                ras.AddPath(p);
             }
             else
             {
-                ras.add_path(r);
+                ras.AddPath(r);
             }
             scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
 

@@ -24,7 +24,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
         public void draw(ScanlineRasterizer ras, IScanline sl, IImage destImage, ColorRGBA color,
                   double x, double y)
         {
-            ras.reset();
+            ras.Reset();
             ras.move_to_d(x * m_size, y * m_size);
             ras.line_to_d(x * m_size + m_size, y * m_size);
             ras.line_to_d(x * m_size + m_size, y * m_size + m_size);
@@ -141,7 +141,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
             renderer_enlarged_test1 ren_en = new renderer_enlarged_test1(size_mul);
 
-            rasterizer.reset();
+            rasterizer.Reset();
             rasterizer.move_to_d(m_x[0] / size_mul, m_y[0] / size_mul);
             rasterizer.line_to_d(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.line_to_d(m_x[2] / size_mul, m_y[2] / size_mul);
@@ -162,7 +162,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ps.LineTo(m_x[2], m_y[2]);
             ps.LineTo(m_x[0], m_y[0]);
 
-            rasterizer.add_path(pg);
+            rasterizer.AddPath(pg);
 
             scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
