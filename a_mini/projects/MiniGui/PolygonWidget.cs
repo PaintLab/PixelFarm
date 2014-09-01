@@ -235,7 +235,7 @@ namespace MatterHackers.Agg.UI
             if (m_status == 0)
             {
                 cmd = m_stroke.GetNextVertex(out x, out y);
-                if (!ShapePath.is_stop(cmd))
+                if (!ShapePath.IsStop(cmd))
                 {
                     ParentToChildTransform.Transform(ref x, ref y);
                     return cmd;
@@ -245,7 +245,7 @@ namespace MatterHackers.Agg.UI
                 ++m_status;
             }
             cmd = m_ellipse.GetNextVertex(out x, out y);
-            if (!ShapePath.is_stop(cmd))
+            if (!ShapePath.IsStop(cmd))
             {
                 ParentToChildTransform.Transform(ref x, ref y);
                 return cmd;
@@ -255,7 +255,7 @@ namespace MatterHackers.Agg.UI
             m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
             ++m_status;
             cmd = m_ellipse.GetNextVertex(out x, out y);
-            if (!ShapePath.is_stop(cmd))
+            if (!ShapePath.IsStop(cmd))
             {
                 ParentToChildTransform.Transform(ref x, ref y);
             }

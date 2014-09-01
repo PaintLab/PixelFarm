@@ -94,7 +94,7 @@ namespace MatterHackers.Agg.VertexSource
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
         {
             m_status = StrokeMath.Status.Init;
-            if (ShapePath.is_move_to(cmd))
+            if (ShapePath.IsMoveTo(cmd))
             {
                 m_src_vertices.ReplaceLast(new VertexDistance(x, y));
             }
@@ -106,12 +106,12 @@ namespace MatterHackers.Agg.VertexSource
                 }
                 else
                 {
-                    if (ShapePath.is_end_poly(cmd))
+                    if (ShapePath.IsEndPoly(cmd))
                     {
                         m_closed = (ShapePath.get_close_flag(cmd) == ShapePath.FlagsAndCommand.FlagClose);
                         if (m_orientation == ShapePath.FlagsAndCommand.FlagNone)
                         {
-                            m_orientation = ShapePath.get_orientation(cmd);
+                            m_orientation = ShapePath.GetOrientation(cmd);
                         }
                     }
                 }
@@ -119,7 +119,7 @@ namespace MatterHackers.Agg.VertexSource
         }
 
         // Vertex Source Interface
-        public void Rewind(int idx)
+        public void RewindZero()
         {
             if (m_status == StrokeMath.Status.Init)
             {
@@ -134,8 +134,7 @@ namespace MatterHackers.Agg.VertexSource
                     }
                 }
                 if (ShapePath.is_oriented(m_orientation))
-                {
-
+                {  
                     m_stroker.Width = ShapePath.is_ccw(m_orientation) ? m_width : -m_width;
                 }
             }
@@ -146,12 +145,12 @@ namespace MatterHackers.Agg.VertexSource
         public ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandLineTo;
-            while (!ShapePath.is_stop(cmd))
+            while (!ShapePath.IsStop(cmd))
             {
                 switch (m_status)
                 {
                     case StrokeMath.Status.Init:
-                        Rewind(0);
+                        this.RewindZero();
                         goto case StrokeMath.Status.Ready;
 
                     case StrokeMath.Status.Ready:

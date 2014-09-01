@@ -24,7 +24,7 @@ namespace MatterHackers.Agg.VertexSource
         void RemoveAll();
         void AddVertex(double x, double y, ShapePath.FlagsAndCommand unknown);
                  
-        void Rewind(int path_id);
+        void RewindZero();
         ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y);
 
 

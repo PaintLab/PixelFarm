@@ -43,7 +43,7 @@ namespace MatterHackers.Agg.Font
             // return all the data for the glyph
             foreach (VertexData vertexData in glyph.GetVertexIter())
             {
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
@@ -84,7 +84,7 @@ namespace MatterHackers.Agg.Font
             {
                 case 0:
                     cmd = glyph.GetNextVertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                         goto case 1;
@@ -290,6 +290,7 @@ namespace MatterHackers.Agg.Font
             {
                 return null;
             }
+
 
             glyphForCharacter.RewindZero();
             double x, y;

@@ -238,7 +238,7 @@ namespace MatterHackers.Agg
 
         void AddVertex(VertexData vertexData)
         {
-            if (ShapePath.is_move_to(vertexData.command))
+            if (ShapePath.IsMoveTo(vertexData.command))
             {
                 move_to_d(vertexData.position.x, vertexData.position.y);
             }
@@ -250,7 +250,7 @@ namespace MatterHackers.Agg
                 }
                 else
                 {
-                    if (ShapePath.is_close(vertexData.command))
+                    if (ShapePath.IsClose(vertexData.command))
                     {
                         close_polygon();
                     }
@@ -311,7 +311,7 @@ namespace MatterHackers.Agg
                 reset();
             }
 
-            while (!ShapePath.is_stop(PathAndFlags = vs.GetNextVertex(out x, out y)))
+            while (!ShapePath.IsStop(PathAndFlags = vs.GetNextVertex(out x, out y)))
             {
                 AddVertex(new VertexData(PathAndFlags, new Vector2(x, y)));
             }

@@ -85,9 +85,11 @@ namespace MatterHackers.Agg
         public void Close(bool closed)
         {
             int snapSize = base.Count;
+            var vtxArray = this.Array;
+
             while (snapSize > 1)
             {
-                if (Array[snapSize - 2].IsEqual(Array[snapSize - 1]))
+                if (vtxArray[snapSize - 2].IsEqual(vtxArray[snapSize - 1]))
                 {
                     break;
                 }

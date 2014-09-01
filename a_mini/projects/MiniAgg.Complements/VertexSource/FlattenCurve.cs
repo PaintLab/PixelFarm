@@ -147,14 +147,14 @@ namespace MatterHackers.Agg.VertexSource
                             do
                             {
                                 curveIterator.MoveNext();
-                                if (ShapePath.is_stop(curveIterator.Current.command))
+                                if (ShapePath.IsStop(curveIterator.Current.command))
                                 {
                                     break;
                                 }
                                 vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
                                 yield return vertexData;
                                 lastPosition = vertexData;
-                            } while (!ShapePath.is_stop(curveIterator.Current.command));
+                            } while (!ShapePath.IsStop(curveIterator.Current.command));
                         }
                         break;
 
@@ -167,10 +167,10 @@ namespace MatterHackers.Agg.VertexSource
                             m_curve4.init(lastPosition.position.x, lastPosition.position.y, vertexData.position.x, vertexData.position.y, vertexDataControl.position.x, vertexDataControl.position.y, vertexDataEnd.position.x, vertexDataEnd.position.y);
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
-                            while (!ShapePath.is_stop(vertexData.command))
+                            while (!ShapePath.IsStop(vertexData.command))
                             {
                                 curveIterator.MoveNext();
-                                if (ShapePath.is_stop(curveIterator.Current.command))
+                                if (ShapePath.IsStop(curveIterator.Current.command))
                                 {
                                     break;
                                 }
@@ -207,14 +207,14 @@ namespace MatterHackers.Agg.VertexSource
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            if (!ShapePath.is_stop(m_curve3.GetNextVertex(out x, out y)))
+            if (!ShapePath.IsStop(m_curve3.GetNextVertex(out x, out y)))
             {
                 lastX = x;
                 lastY = y;
                 return ShapePath.FlagsAndCommand.CommandLineTo;
             }
 
-            if (!ShapePath.is_stop(m_curve4.GetNextVertex(out x, out y)))
+            if (!ShapePath.IsStop(m_curve4.GetNextVertex(out x, out y)))
             {
                 lastX = x;
                 lastY = y;

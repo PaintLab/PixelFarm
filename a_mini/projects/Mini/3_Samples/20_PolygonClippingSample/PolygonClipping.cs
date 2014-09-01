@@ -594,7 +594,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                     ++m_points;
                 }
 
-                if (ShapePath.is_move_to(vertexData.command))
+                if (ShapePath.IsMoveTo(vertexData.command))
                 {
                     ++m_contours;
                 }

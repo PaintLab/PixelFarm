@@ -119,7 +119,7 @@ namespace MatterHackers.Agg.VertexSource
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
         {
             m_status = StrokeMath.Status.Init;
-            if (ShapePath.is_move_to(cmd))
+            if (ShapePath.IsMoveTo(cmd))
             {
                 m_src_vertices.ReplaceLast(new VertexDistance(x, y));
             }
@@ -137,12 +137,12 @@ namespace MatterHackers.Agg.VertexSource
         }
 
         // Vertex Source Interface
-        public void Rewind(int idx)
+        public void RewindZero()
         {
             if (m_status == StrokeMath.Status.Init)
             {
                 m_src_vertices.Close(m_closed != 0);
-                ShapePath.shorten_path(m_src_vertices, m_shorten, m_closed);
+                ShapePath.ShortenPath(m_src_vertices, m_shorten, m_closed);
                 if (m_src_vertices.Count < 3) m_closed = 0;
             }
             m_status = StrokeMath.Status.Ready;
@@ -153,12 +153,12 @@ namespace MatterHackers.Agg.VertexSource
         public ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandLineTo;
-            while (!ShapePath.is_stop(cmd))
+            while (!ShapePath.IsStop(cmd))
             {
                 switch (m_status)
                 {
                     case StrokeMath.Status.Init:
-                        Rewind(0);
+                        this.RewindZero();
                         goto case StrokeMath.Status.Ready;
 
                     case StrokeMath.Status.Ready:

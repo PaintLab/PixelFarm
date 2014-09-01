@@ -154,7 +154,7 @@ namespace MatterHackers.Agg.VertexSource
             x = 0;
             y = 0;
 
-            if (ShapePath.is_stop(m_NextPathCommand))
+            if (ShapePath.IsStop(m_NextPathCommand))
             {
                 return ShapePath.FlagsAndCommand.CommandStop;
             }

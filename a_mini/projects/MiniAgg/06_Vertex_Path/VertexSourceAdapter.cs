@@ -109,7 +109,7 @@ namespace MatterHackers.Agg.VertexSource
                         goto case Status.Accumulate;
 
                     case Status.Accumulate:
-                        if (ShapePath.is_stop(m_last_cmd))
+                        if (ShapePath.IsStop(m_last_cmd))
                         {
                             return ShapePath.FlagsAndCommand.CommandStop;
                         }
@@ -125,7 +125,7 @@ namespace MatterHackers.Agg.VertexSource
                             if (ShapePath.IsVertextCommand(command))
                             {
                                 m_last_cmd = command;
-                                if (ShapePath.is_move_to(command))
+                                if (ShapePath.IsMoveTo(command))
                                 {
                                     m_start_x = x;
                                     m_start_y = y;
@@ -136,19 +136,19 @@ namespace MatterHackers.Agg.VertexSource
                             }
                             else
                             {
-                                if (ShapePath.is_stop(command))
+                                if (ShapePath.IsStop(command))
                                 {
                                     m_last_cmd = ShapePath.FlagsAndCommand.CommandStop;
                                     break;
                                 }
-                                if (ShapePath.is_end_poly(command))
+                                if (ShapePath.IsEndPoly(command))
                                 {
                                     generator.AddVertex(x, y, command);
                                     break;
                                 }
                             }
                         }
-                        generator.Rewind(0);
+                        generator.RewindZero();
                         m_status = Status.Generate;
                         goto case Status.Generate;
 
@@ -156,7 +156,7 @@ namespace MatterHackers.Agg.VertexSource
 
                         command = generator.GetNextVertex(ref x, ref y);
                         //DebugFile.Print("x=" + x.ToString() + " y=" + y.ToString() + "\n");
-                        if (ShapePath.is_stop(command))
+                        if (ShapePath.IsStop(command))
                         {
                             m_status = Status.Accumulate;
                             break;

@@ -75,7 +75,7 @@ namespace MatterHackers.Agg.VertexSource
         //--------------------------------------------------------------------
         public int StartNewPath()
         {
-            if (!ShapePath.is_stop(vertices.GetLastCommand()))
+            if (!ShapePath.IsStop(vertices.GetLastCommand()))
             {
                 vertices.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandStop);
             }
@@ -219,7 +219,7 @@ namespace MatterHackers.Agg.VertexSource
                 double x_ctrl;
                 double y_ctrl;
                 ShapePath.FlagsAndCommand cmd = vertices.GetPrevVertex(out x_ctrl, out y_ctrl);
-                if (ShapePath.is_curve(cmd))
+                if (ShapePath.IsCurve(cmd))
                 {
                     x_ctrl = x0 + x0 - x_ctrl;
                     y_ctrl = y0 + y0 - y_ctrl;
@@ -277,7 +277,7 @@ namespace MatterHackers.Agg.VertexSource
                 double x_ctrl1;
                 double y_ctrl1;
                 ShapePath.FlagsAndCommand cmd = GetPrevVertex(out x_ctrl1, out y_ctrl1);
-                if (ShapePath.is_curve(cmd))
+                if (ShapePath.IsCurve(cmd))
                 {
                     x_ctrl1 = x0 + x0 - x_ctrl1;
                     y_ctrl1 = y0 + y0 - y_ctrl1;
@@ -370,13 +370,13 @@ namespace MatterHackers.Agg.VertexSource
 
             // Skip all insignificant move_to
             while (start + 1 < vertices.Count &&
-                  ShapePath.is_move_to(vertices.GetCommand(start)) &&
-                  ShapePath.is_move_to(vertices.GetCommand(start + 1))) ++start;
+                  ShapePath.IsMoveTo(vertices.GetCommand(start)) &&
+                  ShapePath.IsMoveTo(vertices.GetCommand(start + 1))) ++start;
 
             // Find the last vertex
             int end = start + 1;
             while (end < vertices.Count &&
-                  !ShapePath.is_next_poly(vertices.GetCommand(end))) ++end;
+                  !ShapePath.IsNextPoly(vertices.GetCommand(end))) ++end;
 
             if (end - start > 2)
             {
@@ -386,7 +386,7 @@ namespace MatterHackers.Agg.VertexSource
                     InvertPolygon(start, end);
                     ShapePath.FlagsAndCommand PathAndFlags;
                     while (end < vertices.Count &&
-                          ShapePath.is_end_poly(PathAndFlags = vertices.GetCommand(end)))
+                          ShapePath.IsEndPoly(PathAndFlags = vertices.GetCommand(end)))
                     {
                         vertices.ReplaceComand(end++, PathAndFlags | orientation);// Path.set_orientation(cmd, orientation));
                     }
@@ -402,7 +402,7 @@ namespace MatterHackers.Agg.VertexSource
                 while (start < vertices.Count)
                 {
                     start = ArrangePolygonOrientation(start, orientation);
-                    if (ShapePath.is_stop(vertices.GetCommand(start)))
+                    if (ShapePath.IsStop(vertices.GetCommand(start)))
                     {
                         ++start;
                         break;
@@ -489,7 +489,7 @@ namespace MatterHackers.Agg.VertexSource
             double x, y;
             ShapePath.FlagsAndCommand flags;
             vs.Rewind(path_id);
-            while (!ShapePath.is_stop(flags = vs.GetNextVertex(out x, out y)))
+            while (!ShapePath.IsStop(flags = vs.GetNextVertex(out x, out y)))
             {
                 vertices.AddVertex(x, y, flags);
             }
@@ -504,7 +504,7 @@ namespace MatterHackers.Agg.VertexSource
             double x, y;
             vs.Rewind(path_id);
             ShapePath.FlagsAndCommand flags = vs.GetNextVertex(out x, out y);
-            if (!ShapePath.is_stop(flags))
+            if (!ShapePath.IsStop(flags))
             {
                 if (ShapePath.IsVertextCommand(flags))
                 {
@@ -514,26 +514,26 @@ namespace MatterHackers.Agg.VertexSource
                     {
                         if (AggMath.calc_distance(x, y, x0, y0) > AggMath.VERTEX_DISTANCE_EPSILON)
                         {
-                            if (ShapePath.is_move_to(flags)) flags = ShapePath.FlagsAndCommand.CommandLineTo;
+                            if (ShapePath.IsMoveTo(flags)) flags = ShapePath.FlagsAndCommand.CommandLineTo;
                             vertices.AddVertex(x, y, flags);
                         }
                     }
                     else
                     {
-                        if (ShapePath.is_stop(PathAndFlags0))
+                        if (ShapePath.IsStop(PathAndFlags0))
                         {
                             flags = ShapePath.FlagsAndCommand.CommandMoveTo;
                         }
                         else
                         {
-                            if (ShapePath.is_move_to(flags)) flags = ShapePath.FlagsAndCommand.CommandLineTo;
+                            if (ShapePath.IsMoveTo(flags)) flags = ShapePath.FlagsAndCommand.CommandLineTo;
                         }
                         vertices.AddVertex(x, y, flags);
                     }
                 }
-                while (!ShapePath.is_stop(flags = vs.GetNextVertex(out x, out y)))
+                while (!ShapePath.IsStop(flags = vs.GetNextVertex(out x, out y)))
                 {
-                    vertices.AddVertex(x, y, ShapePath.is_move_to(flags) ?
+                    vertices.AddVertex(x, y, ShapePath.IsMoveTo(flags) ?
                                                     ShapePath.FlagsAndCommand.CommandLineTo :
                                                     flags);
                 }
@@ -567,7 +567,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x, y;
                 ShapePath.FlagsAndCommand flags = this.vertices.GetVertex(path_id, out x, out y);
-                if (ShapePath.is_stop(flags)) break;
+                if (ShapePath.IsStop(flags)) break;
                 if (ShapePath.IsVertextCommand(flags))
                 {
                     x += dx;
@@ -603,7 +603,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x, y;
                 ShapePath.FlagsAndCommand PathAndFlags = vertices.GetVertex(path_id, out x, out y);
-                if (ShapePath.is_stop(PathAndFlags)) break;
+                if (ShapePath.IsStop(PathAndFlags)) break;
                 if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
                     trans.Transform(ref x, ref y);
@@ -636,13 +636,13 @@ namespace MatterHackers.Agg.VertexSource
 
             // Skip all insignificant move_to
             while (start + 1 < vertices.Count &&
-                  ShapePath.is_move_to(vertices.GetCommand(start)) &&
-                  ShapePath.is_move_to(vertices.GetCommand(start + 1))) ++start;
+                  ShapePath.IsMoveTo(vertices.GetCommand(start)) &&
+                  ShapePath.IsMoveTo(vertices.GetCommand(start + 1))) ++start;
 
             // Find the last vertex
             int end = start + 1;
             while (end < vertices.Count &&
-                  !ShapePath.is_next_poly(vertices.GetCommand(end))) ++end;
+                  !ShapePath.IsNextPoly(vertices.GetCommand(end))) ++end;
 
             InvertPolygon(start, end);
         }

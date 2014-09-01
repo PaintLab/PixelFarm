@@ -216,7 +216,8 @@ namespace MatterHackers.Agg
     {
         PathStorage path = new PathStorage();
         ColorRGBA[] colors = new ColorRGBA[100];
-        int[] pathIndex = new int[100];
+        int[] pathIndexList = new int[100];
+
         int numPaths = 0;
 
         RectangleDouble boundingRect;
@@ -265,7 +266,7 @@ namespace MatterHackers.Agg
         {
             get
             {
-                return pathIndex;
+                return pathIndexList;
             }
 
         }
@@ -281,8 +282,8 @@ namespace MatterHackers.Agg
         public void ParseLion()
         {
 
-            numPaths = MatterHackers.Agg.LionParser.parse_lion(path, colors, pathIndex);
-            MatterHackers.Agg.bounding_rect.get_bounding_rect(path, pathIndex, 0, numPaths, out boundingRect);
+            numPaths = MatterHackers.Agg.LionParser.parse_lion(path, colors, pathIndexList);
+            MatterHackers.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, 0, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
@@ -294,13 +295,13 @@ namespace MatterHackers.Agg
         {
             lion.path = pathStore;
             lion.colors = colors;
-            lion.pathIndex = pathIndice;
+            lion.pathIndexList = pathIndice;
             lion.numPaths = numPaths;
             lion.UpdateBoundingRect(); 
         }
         void UpdateBoundingRect()
         {
-            MatterHackers.Agg.bounding_rect.get_bounding_rect(path, pathIndex, 0, numPaths, out boundingRect);
+            MatterHackers.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, 0, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0; 
         }

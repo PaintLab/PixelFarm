@@ -54,7 +54,7 @@ namespace MatterHackers.Agg.UI
                     double y;
                     ShapePath.FlagsAndCommand cmd;
                     int numPoint = 0;
-                    while (!ShapePath.is_stop(cmd = GetNextVertex(out x, out y)))
+                    while (!ShapePath.IsStop(cmd = GetNextVertex(out x, out y)))
                     {
                         numPoint++;
                         localBounds.ExpandToInclude(x, y);

@@ -135,7 +135,7 @@ namespace MatterHackers.Agg.VertexSource
             currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
             foreach (VertexData vertexData in currentProcessingArc.Vertices())
             {
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
@@ -144,12 +144,12 @@ namespace MatterHackers.Agg.VertexSource
             currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
             foreach (VertexData vertexData in currentProcessingArc.Vertices())
             {
-                if (ShapePath.is_move_to(vertexData.command))
+                if (ShapePath.IsMoveTo(vertexData.command))
                 {
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
@@ -159,12 +159,12 @@ namespace MatterHackers.Agg.VertexSource
             currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y, 0.0, Math.PI * 0.5);
             foreach (VertexData vertexData in currentProcessingArc.Vertices())
             {
-                if (ShapePath.is_move_to(vertexData.command))
+                if (ShapePath.IsMoveTo(vertexData.command))
                 {
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
@@ -174,12 +174,12 @@ namespace MatterHackers.Agg.VertexSource
             currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y, Math.PI * 0.5, Math.PI);
             foreach (VertexData vertexData in currentProcessingArc.Vertices())
             {
-                if (ShapePath.is_move_to(vertexData.command))
+                if (ShapePath.IsMoveTo(vertexData.command))
                 {
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
@@ -214,7 +214,7 @@ namespace MatterHackers.Agg.VertexSource
 
                 case 1:
                     cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                     }
@@ -233,7 +233,7 @@ namespace MatterHackers.Agg.VertexSource
 
                 case 3:
                     cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                     }
@@ -252,7 +252,7 @@ namespace MatterHackers.Agg.VertexSource
 
                 case 5:
                     cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                     }
@@ -271,7 +271,7 @@ namespace MatterHackers.Agg.VertexSource
 
                 case 7:
                     cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                     }
