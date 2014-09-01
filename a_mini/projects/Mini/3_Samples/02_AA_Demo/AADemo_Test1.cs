@@ -30,7 +30,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ras.line_to_d(x * m_size + m_size, y * m_size + m_size);
             ras.line_to_d(x * m_size, y * m_size + m_size);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(destImage, ras, sl, color);
+            scanlineRenderer.RenderScanlineSolidAA(destImage, ras, sl, color);
         }
     }
 
@@ -145,11 +145,11 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             rasterizer.move_to_d(m_x[0] / size_mul, m_y[0] / size_mul);
             rasterizer.line_to_d(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.line_to_d(m_x[2] / size_mul, m_y[2] / size_mul);
-            ren_en.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new gamma_none());
             //----------------------------------------
             PathStorage ps = new PathStorage();
@@ -164,7 +164,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
             rasterizer.AddPath(pg);
 
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

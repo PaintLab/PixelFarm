@@ -136,10 +136,10 @@ namespace MatterHackers.Agg.Sample_RoundRect
             e.init(m_x[0], m_y[0], 3, 3, 16);
             ras.AddPath(e);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
             e.init(m_x[1], m_y[1], 3, 3, 16);
             ras.AddPath(e);
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
             double d = this.SubPixelOffset;
 
@@ -158,7 +158,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             {
                 ras.AddPath(r);
             }
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
 
 
         }

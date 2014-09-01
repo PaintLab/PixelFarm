@@ -137,7 +137,7 @@ namespace MatterHackers.Agg
         static T zeroed_object = default(T);
 
 
-        public void zero()
+        public void Zero()
         {
 
             for (int i = internalArray.Length - 1; i >= 0; --i)

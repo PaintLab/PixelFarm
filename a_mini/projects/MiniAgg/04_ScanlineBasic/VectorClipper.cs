@@ -42,8 +42,8 @@ namespace MatterHackers.Agg
         }
         int xi(int v) { return v; }
         int yi(int v) { return v; }
-        public int upscale(double v) { return AggBasics.iround(v * (int)poly_subpixel_scale_e.poly_subpixel_scale); }
-        public int downscale(int v) { return v / (int)poly_subpixel_scale_e.poly_subpixel_scale; }
+        public int upscale(double v) { return AggBasics.iround(v * (int)poly_subpixel_scale_e.SCALE); }
+        public int downscale(int v) { return v / (int)poly_subpixel_scale_e.SCALE; }
 
         //--------------------------------------------------------------------
         public VectorClipper()

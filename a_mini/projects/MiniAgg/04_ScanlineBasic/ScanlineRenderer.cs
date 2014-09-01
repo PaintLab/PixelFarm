@@ -14,8 +14,9 @@ namespace MatterHackers.Agg
     public class ScanlineRenderer
     {
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
-        public void render_scanlines_aa_solid(IImage destImage, IRasterizer rasterizer, IScanline scline, ColorRGBA color)
-        {
+
+        public void RenderScanlineSolidAA(IImage destImage, IRasterizer rasterizer, IScanline scline, ColorRGBA color)
+        {      
             if (rasterizer.RewindScanlines())
             {
                 scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
@@ -62,10 +63,8 @@ namespace MatterHackers.Agg
             for (int i = 0; i < num_paths; i++)
             {
                 ras.Reset();
-
                 ras.AddPath(vs, path_id[i]);
-
-                render_scanlines_aa_solid(destImage, ras, sl, color_storage[i]);
+                RenderScanlineSolidAA(destImage, ras, sl, color_storage[i]);
             }
         }
 

@@ -377,7 +377,7 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         public int calculate_alpha(int area)
         {
-            int cover = area >> ((int)poly_subpixel_scale_e.poly_subpixel_shift * 2 + 1 - AA_SHIFT);
+            int cover = area >> (poly_subpixel_scale_e.SHIFT * 2 + 1 - AA_SHIFT);
 
             if (cover < 0)
             {
@@ -413,9 +413,9 @@ namespace MatterHackers.Agg
 
                 scline.ResetSpans();
 
-                CellAA[] cells;                               
+                CellAA[] cells;
                 int offset;
-                int num_cells; 
+                int num_cells;
 
                 m_outline.GetCells(m_scan_y, out cells, out offset, out num_cells);
 
@@ -446,7 +446,7 @@ namespace MatterHackers.Agg
 
                     if (area != 0)
                     {
-                        alpha = calculate_alpha((cover << ((int)poly_subpixel_scale_e.poly_subpixel_shift + 1)) - area);
+                        alpha = calculate_alpha((cover << (poly_subpixel_scale_e.SHIFT + 1)) - area);
                         if (alpha != 0)
                         {
                             scline.AddCell(x, alpha);
@@ -456,7 +456,7 @@ namespace MatterHackers.Agg
 
                     if ((num_cells != 0) && (cur_cell.x > x))
                     {
-                        alpha = calculate_alpha(cover << ((int)poly_subpixel_scale_e.poly_subpixel_shift + 1));
+                        alpha = calculate_alpha(cover << (poly_subpixel_scale_e.SHIFT + 1));
                         if (alpha != 0)
                         {
                             scline.AddSpan(x, (cur_cell.x - x), alpha);

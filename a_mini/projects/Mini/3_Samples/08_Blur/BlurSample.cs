@@ -175,7 +175,7 @@ namespace MatterHackers.Agg.Sample_Blur
             // Render shadow
             m_ras.AddPath(shadow_trans);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).GetAsRGBA_Bytes());
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).GetAsRGBA_Bytes());
 
             // Calculate the bounding box and extend it by the blur radius
             RectangleDouble bbox = new RectangleDouble();
@@ -321,7 +321,7 @@ namespace MatterHackers.Agg.Sample_Blur
                 m_ras.AddPath(m_path);
             }
 
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.6, 0.9, 0.7, 0.8).GetAsRGBA_Bytes());
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.6, 0.9, 0.7, 0.8).GetAsRGBA_Bytes());
 
             graphics2D.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
 

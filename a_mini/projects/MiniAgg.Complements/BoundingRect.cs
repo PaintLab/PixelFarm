@@ -26,9 +26,12 @@ namespace MatterHackers.Agg
 {
     static public class BoundingRect
     {
-        public static bool GetBoundingRect(PathStorage vs, int[] gi,
-                           int start, int num,
-                           out double x1, out double y1, out double x2, out double y2)
+        static bool GetBoundingRect(PathStorage vs, int[] gi,
+                         int num,
+                         out double x1,
+                         out double y1, 
+                         out double x2, 
+                         out double y2)
         {
             int i;
             double x = 0;
@@ -40,30 +43,43 @@ namespace MatterHackers.Agg
             x2 = 0;
             y2 = 0;
 
+            //--------------------------
+            vs.RewindZero();
+            //--------------------------
+
             for (i = 0; i < num; i++)
             {
-                vs.Rewind(gi[start + i]);
                 ShapePath.FlagsAndCommand flags;
 
                 while ((flags = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
                 {
-                    if (ShapePath.IsVertextCommand(flags))
+                    switch (flags)
                     {
-                        if (first)
-                        {
-                            x1 = x;
-                            y1 = y;
-                            x2 = x;
-                            y2 = y;
-                            first = false;
-                        }
-                        else
-                        {
-                            if (x < x1) x1 = x;
-                            if (y < y1) y1 = y;
-                            if (x > x2) x2 = x;
-                            if (y > y2) y2 = y;
-                        }
+                        
+                            
+                        //if is vertext cmd
+                        case ShapePath.FlagsAndCommand.CommandLineTo:
+                        case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        case ShapePath.FlagsAndCommand.CommandCurve3:
+                        case ShapePath.FlagsAndCommand.CommandCurve4:
+                            {
+                                if (first)
+                                {
+                                    x1 = x;
+                                    y1 = y;
+                                    x2 = x;
+                                    y2 = y;
+                                    first = false;
+                                }
+                                else
+                                {
+                                    if (x < x1) x1 = x;
+                                    if (y < y1) y1 = y;
+                                    if (x > x2) x2 = x;
+                                    if (y > y2) y2 = y;
+                                }
+
+                            } break;
                     }
                 }
             }
@@ -71,10 +87,10 @@ namespace MatterHackers.Agg
         }
 
         public static bool GetBoundingRect(PathStorage vs, int[] gi,
-                           int start, int num,
+                           int num,
                            out RectangleDouble boundingRect)
         {
-            return GetBoundingRect(vs, gi, start, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
+            return GetBoundingRect(vs, gi, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
         }
         public static bool GetBoundingRectSingle(IVertexSource vs, ref RectangleDouble rect)
         {
@@ -102,7 +118,7 @@ namespace MatterHackers.Agg
         //template<class VertexSource, class CoordT> 
         static bool GetBoundingRectSingle(
           IVertexSource vs,
-          out double x1, out double y1, 
+          out double x1, out double y1,
           out double x2, out double y2)
         {
             double x = 0;

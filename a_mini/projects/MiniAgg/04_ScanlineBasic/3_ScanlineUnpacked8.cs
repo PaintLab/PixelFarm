@@ -107,13 +107,12 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public sealed class ScanlineUnpacked8 : IScanline
     {
-        int minX;
-
         byte[] m_covers;
-        ScanlineSpan[] m_spans;
-
+        ScanlineSpan[] m_spans;     
+         
 
         int last_span_index;
+        int minX;
         int last_x;
         int lineY;
 

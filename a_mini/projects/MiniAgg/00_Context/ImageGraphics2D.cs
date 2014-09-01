@@ -76,7 +76,7 @@ namespace MatterHackers.Agg
 
             if (destImageByte != null)
             {
-                scanlineRenderer.render_scanlines_aa_solid(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
+                scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
                 DestImage.MarkImageChanged();
             }
             else
@@ -96,7 +96,7 @@ namespace MatterHackers.Agg
             rasterizer.AddPath(vertexSource);
             if (destImageByte != null)
             {
-                scanlineRenderer.render_scanlines_aa_solid(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
+                scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
                 DestImage.MarkImageChanged();
             }
             else

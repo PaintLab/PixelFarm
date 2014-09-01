@@ -14,11 +14,11 @@ namespace MatterHackers.Agg
             //first lower 4 bits compact flags
             CommandStop = 0x00,
 
-            CommandMoveTo = 0x01,
-            CommandLineTo = 0x02,
-            CommandCurve3 = 0x03,
-            CommandCurve4 = 0x04,
-            
+            CommandMoveTo = 0x01, //vertext cmd
+            CommandLineTo = 0x02, //vertext cmd
+            CommandCurve3 = 0x03, //vertext cmd
+            CommandCurve4 = 0x04, //vertext cmd
+
             CommandEndPoly = 0x0F,
             CommandsMask = 0x0F,
             //-----------------------
@@ -35,7 +35,7 @@ namespace MatterHackers.Agg
             return c >= FlagsAndCommand.CommandMoveTo
                 && c < FlagsAndCommand.CommandEndPoly;
         }
- 
+
 
         public static bool IsStop(FlagsAndCommand c)
         {
@@ -46,7 +46,7 @@ namespace MatterHackers.Agg
         {
             return c == FlagsAndCommand.CommandMoveTo;
         }
-        
+
         public static bool IsCurve(FlagsAndCommand c)
         {
             return c == FlagsAndCommand.CommandCurve3
