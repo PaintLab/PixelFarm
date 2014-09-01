@@ -35,7 +35,7 @@ namespace MatterHackers.Agg.VertexSource
             next_char,
             start_glyph,
             glyph
-        } 
+        }
 
         double m_StartX;
         double m_CurrentX;
@@ -199,13 +199,8 @@ namespace MatterHackers.Agg.VertexSource
 
         public void Rewind(int nothing)
         {
-            m_status = status.initial;
-            if (m_font == null) return;
+            this.RewindZero();
 
-            m_StartOfIndicesIndex = translateIndex(0);
-
-            m_StartOfGlyphsIndex = m_StartOfIndicesIndex + 257 * 2; // one for x one for y
-            m_CurrentCharacterIndex = 0;
         }
         public void RewindZero()
         {
@@ -303,7 +298,7 @@ namespace MatterHackers.Agg.VertexSource
                 {
                     clostestDist = lastDistToChar;
                     // we need to start after the lats character, or before the character after the last.
-                    clostestIndex = characterToMeasureEndIndexInclusive+1;
+                    clostestIndex = characterToMeasureEndIndexInclusive + 1;
                 }
             }
 
@@ -312,7 +307,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void GetSize(out Vector2 pixelSize)
         {
-            GetSize(0, m_Text.Length-1, out pixelSize);
+            GetSize(0, m_Text.Length - 1, out pixelSize);
         }
 
         public void GetSize(int characterToMeasureStartIndexInclusive, int characterToMeasureEndIndexInclusive, out Vector2 pixelSize)

@@ -150,7 +150,8 @@ namespace MatterHackers.Agg.Sample_RoundRect
             if (this.FillRoundRect)
             {
                 Stroke p = new Stroke(r);
-                p.width(1.0);
+                 
+                p.Width = 1;
                 ras.add_path(p);
             }
             else

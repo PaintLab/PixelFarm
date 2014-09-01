@@ -202,7 +202,8 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
             PathStorage ps = new PathStorage();
             Stroke pg = new Stroke(ps);
-            pg.width(2);
+             
+            pg.Width = 2;
 
             ps.Clear();
             ps.MoveTo(m_x[0], m_y[0]);

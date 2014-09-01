@@ -22,8 +22,6 @@ namespace MatterHackers.Agg
 {
     public interface IVertexDest
     {   
-
-       
         void AddVertex(Vector2 vertex); 
         void Clear();
        

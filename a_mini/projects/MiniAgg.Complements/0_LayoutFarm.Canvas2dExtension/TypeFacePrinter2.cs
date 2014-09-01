@@ -304,9 +304,7 @@ namespace LayoutFarm.Agg.Font
         IEnumerator<VertexData> currentEnumerator;
         public void Rewind(int layerIndex)
         {
-            RewindZero();
-            //currentEnumerator = GetVertexIter().GetEnumerator();
-            //currentEnumerator.MoveNext();
+            RewindZero(); 
         }
         public void RewindZero()
         {

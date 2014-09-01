@@ -151,8 +151,9 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
                 Stroke stroke = new Stroke(lionShape.Path);
-                stroke.width(strokeWidth);
-                stroke.line_join(LineJoin.Round);
+                 
+                stroke.Width = strokeWidth;
+                stroke.LineJoin = LineJoin.Round;
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke, transform);
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
                 scanlineRenderer.RenderSolidAllPaths(imageClippingProxy, rasterizer, scanlineCache, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);

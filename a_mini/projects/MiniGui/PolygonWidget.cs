@@ -138,7 +138,8 @@ namespace MatterHackers.Agg.UI
             m_dx = (0.0);
             m_dy = (0.0);
             m_in_polygon_check = (true);
-            m_stroke.width(1.0);
+
+            m_stroke.Width = 1;
         }
 
         public override void OnParentChanged(EventArgs e)
@@ -160,9 +161,13 @@ namespace MatterHackers.Agg.UI
         public void AddYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] += newYN; }
 
         public double[] polygon() { return m_polygon; }
+         
 
-        public void line_width(double w) { m_stroke.width(w); }
-        public double line_width() { return m_stroke.width(); }
+        public double LineWidth
+        {
+            get { return this.m_stroke.Width; }
+            set { this.m_stroke.Width = value; }
+        }
 
         public void point_radius(double r) { m_point_radius = r; }
         public double point_radius() { return m_point_radius; }
@@ -181,9 +186,9 @@ namespace MatterHackers.Agg.UI
 
         public override int num_paths() { return 1; }
         public override void Rewind(int path_id)
-        {   
+        {
             //not use path_id?
-            this.RewindZero(); 
+            this.RewindZero();
         }
         public override void RewindZero()
         {

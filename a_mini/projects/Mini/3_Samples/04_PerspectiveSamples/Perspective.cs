@@ -132,7 +132,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                                      (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
                                      200);
                     Stroke ell_stroke = new Stroke(ell);
-                    ell_stroke.width(3.0);
+                    ell_stroke.Width = 3;
                     VertexSourceApplyTransform trans_ell = new VertexSourceApplyTransform(ell, txBilinear);
 
                     VertexSourceApplyTransform trans_ell_stroke = new VertexSourceApplyTransform(ell_stroke, txBilinear);
@@ -175,7 +175,8 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //outline Ellipse
                     //1. create original version of stroke ellipse 
                     var strokeEllipse = new Stroke(filledEllipse);
-                    strokeEllipse.width(3.0);
+                     
+                    strokeEllipse.Width = 3;
                     //2. create transform version of outlin  
                     var txOutline = new VertexSourceApplyTransform(strokeEllipse, txPerspective);
                     //3. add

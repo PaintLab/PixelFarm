@@ -71,8 +71,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                     //first one
                     IntPoint point = polygon[0];
 
-                    output.AddVertex(point.X / 1000.0, 
-                        point.Y / 1000.0, 
+                    output.AddVertex(point.X / 1000.0,
+                        point.Y / 1000.0,
                         ShapePath.FlagsAndCommand.CommandMoveTo);
 
                     //next ...
@@ -81,11 +81,11 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         for (int i = 1; i < j; ++i)
                         {
                             point = polygon[i];
-                            output.AddVertex(point.X / 1000.0, 
+                            output.AddVertex(point.X / 1000.0,
                                 point.Y / 1000.0,
                                 ShapePath.FlagsAndCommand.CommandLineTo);
                         }
-                    } 
+                    }
                 }
                 //foreach (IntPoint point in polygon)
                 //{
@@ -235,8 +235,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         PathStorage ps1 = new PathStorage();
                         PathStorage ps2 = new PathStorage();
                         Stroke stroke = new Stroke(ps2);
-                        stroke.width(10.0);
-
+                         
+                        stroke.Width = 10;
                         double x = m_x - Width / 2 + 100;
                         double y = m_y - Height / 2 + 100;
                         ps1.MoveTo(x + 140, y + 145);
@@ -314,7 +314,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
                         Stroke stroke = new Stroke(sp);
-                        stroke.width(15.0);
+                         
+                        stroke.Width = 15;
 
                         PathStorage gb_poly = new PathStorage();
                         MatterHackers.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
@@ -328,7 +329,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         graphics2D.Render(trans_gb_poly, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
 
                         Stroke stroke_gb_poly = new Stroke(trans_gb_poly);
-                        stroke_gb_poly.width(0.1);
+                         
+                        stroke_gb_poly.Width = 0.1;
                         graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
 
                         graphics2D.Render(stroke, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
@@ -344,7 +346,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
                         Stroke stroke = new Stroke(sp);
-                        stroke.width(15.0);
+                         
+                        stroke.Width = 15;
 
                         PathStorage glyph = new PathStorage();
                         glyph.MoveTo(28.47, 6.45);
@@ -537,9 +540,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
         public void Rewind(int index)
         {
-            m_angle = m_start_angle;
-            m_curr_r = m_r1;
-            m_start = true;
+            this.RewindZero(); 
         }
         public void RewindZero()
         {

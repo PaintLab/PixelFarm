@@ -26,29 +26,19 @@ namespace MatterHackers.Agg.VertexSource
         void Rewind(int path_id);
         ShapePath.FlagsAndCommand Vertex(ref double x, ref double y);
 
-        LineCap line_cap();
-        LineJoin line_join();
-        InnerJoin inner_join();
 
-        void line_cap(LineCap lc);
-        void line_join(LineJoin lj);
-        void inner_join(InnerJoin ij);
+        LineCap LineCap { get; set; }
+        LineJoin LineJoin { get; set; }
+        InnerJoin InnerJoin { get; set; }
+        double InnerMiterLimit { get; set; }
+        double MiterLimit { get; set; }
+        double Width { get; set; }
+        double Shorten { get; set; }
 
-        void width(double w);
-        void miter_limit(double ml);
-        void miter_limit_theta(double t);
-        void inner_miter_limit(double ml);
-        void approximation_scale(double approxScale);
 
-        double width();
-        double miter_limit();
-        double inner_miter_limit();
-        double approximation_scale();
+        void SetMiterLimitTheta(double t); 
 
-        void auto_detect_orientation(bool v);
-        bool auto_detect_orientation();
-
-        void shorten(double s);
-        double shorten();
-    } 
+        double ApproximateScale { get; set; }
+        bool AutoDetectOrientation { get; set; }
+    }
 }
