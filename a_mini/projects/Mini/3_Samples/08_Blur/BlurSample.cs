@@ -155,9 +155,10 @@ namespace MatterHackers.Agg.Sample_Blur
 
 
 
-            Perspective shadow_persp = new Perspective(m_shape_bounds.Left, m_shape_bounds.Bottom,
-                                                m_shape_bounds.Right, m_shape_bounds.Top,
-                                                m_shadow_ctrl.polygon());
+            Perspective shadow_persp = new Perspective(
+                            m_shape_bounds.Left, m_shape_bounds.Bottom,
+                            m_shape_bounds.Right, m_shape_bounds.Top,
+                            m_shadow_ctrl.polygon());
 
             VertexSourceApplyTransform shadow_trans;
             if (FlattenCurveCheck)

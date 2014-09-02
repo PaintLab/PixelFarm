@@ -123,14 +123,9 @@ namespace MatterHackers.Agg.Sample_LionFill
                 );
 
                 //convert
-                //System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
-                transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
-                //transformedPathStorage.DoTransform(list);
-                //vxStorage = new VertexStorage(list);
-                vxStorage = transformedPathStorage.DoTransformToNewVxStorage();
+                 
+                vxStorage = transform.TransformToVxs(lionShape.Path);
             }
-
-            //graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
             graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
             base.OnDraw(graphics2D);

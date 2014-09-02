@@ -281,6 +281,10 @@ namespace MatterHackers.Agg
         }
 
         //-------------------------------------------------------------------
+        public void AddPath(IVertexProducer vs)
+        {
+            this.AddPath(vs.MakeSinglePath());
+        }
         public void AddPath(IVertexSource vs)
         {
             double x = 0;

@@ -75,7 +75,8 @@ namespace MatterHackers.Agg.Sample_Draw
             //clear the image to white
             g.Clear(ColorRGBA.White);
             // draw a circle
-            Ellipse ellipseTest = new Ellipse(0, 0, 100, 50);
+
+            Ellipse ellipsePro = new Ellipse(0, 0, 100, 50);
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
 
@@ -84,8 +85,10 @@ namespace MatterHackers.Agg.Sample_Draw
                     AffinePlan.Translate(width / 2, 150));
 
 
-                var tx = new VertexSourceApplyTransform(ellipseTest, mat);
-                var sp1 = tx.DoTransformToNewSinglePath();
+                var tx = new VertexSourceApplyTransform(ellipsePro.MakeSinglePath(), mat);
+
+                var sp1 = mat.TransformToSinglePath(ellipsePro.MakeVxs());// tx.DoTransformToNewSinglePath();
+
                 g.Render(sp1, ColorRGBA.Yellow);
 
                 Stroke ellipseOutline = new Stroke(sp1, 3);

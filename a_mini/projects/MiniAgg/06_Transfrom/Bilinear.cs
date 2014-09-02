@@ -22,7 +22,7 @@ namespace MatterHackers.Agg.Transform
 {
 
 
-   
+
 
     //==========================================================trans_bilinear
     public sealed partial class Bilinear : ITransform
@@ -96,7 +96,7 @@ namespace MatterHackers.Agg.Transform
             double[,] result = new double[4, 2];
 
             if (GenerateMatrixQuadToQuad(srcQuad, dst, result))
-            {   
+            {
                 return new Bilinear(result);
             }
             else
@@ -141,7 +141,7 @@ namespace MatterHackers.Agg.Transform
             }
             //create result  
             return SimulEqGeneral.Solve(left, right, result);
-        } 
+        }
 
         //--------------------------------------------------------------------
         // Check if the equations were solved successfully
@@ -156,6 +156,38 @@ namespace MatterHackers.Agg.Transform
             double xy = tx * ty;
             x = rc00 + rc10 * xy + rc20 * tx + rc30 * ty;
             y = rc01 + rc11 * xy + rc21 * tx + rc31 * ty;
+
+        }
+
+
+
+        //-------------------------------------------------------------------------
+        public Agg.VertexSource.SinglePath TransformToSinglePath(Agg.VertexSource.PathStorage src)
+        {
+            return new VertexSource.SinglePath(TransformToVxs(src));
+        }
+        public Agg.VertexSource.SinglePath TransformToSinglePath(Agg.VertexSource.VertexStorage src)
+        {
+            return new VertexSource.SinglePath(TransformToVxs(src));
+        }
+        public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
+        {
+            return TransformToVxs(src.Vsx);
+        }
+        public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.VertexStorage src)
+        {
+            var data = new System.Collections.Generic.List<Agg.VertexSource.VertexData>();
+
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            int count = src.Count;
+            for (int i = 0; i < count; ++i)
+            {
+                cmd = src.GetVertex(i, out x, out y);
+                this.Transform(ref x, ref y);
+                data.Add(new VertexSource.VertexData(cmd, new VectorMath.Vector2(x, y)));
+            }
+            return new Agg.VertexSource.VertexStorage(data);
         }
     }
 

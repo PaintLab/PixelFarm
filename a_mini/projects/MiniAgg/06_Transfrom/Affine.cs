@@ -899,16 +899,25 @@ namespace MatterHackers.Agg.Transform
         }
         public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {
+            return TransformToVxs(src.Vsx);
+        }
+        public Agg.VertexSource.SinglePath TransformToSinglePath(Agg.VertexSource.VertexStorage src)
+        {
+            return new VertexSource.SinglePath(this.TransformToVxs(src));
+        }
+        public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.VertexStorage src)
+        {
             var data = new System.Collections.Generic.List<Agg.VertexSource.VertexData>();
-            src.RewindZero();
+
             ShapePath.FlagsAndCommand cmd;
             double x, y;
-            while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            int count = src.Count;
+            for (int i = 0; i < count; ++i)
             {
+                cmd = src.GetVertex(i, out x, out y);
                 this.Transform(ref x, ref y);
                 data.Add(new VertexSource.VertexData(cmd, new VectorMath.Vector2(x, y)));
             }
-
             return new Agg.VertexSource.VertexStorage(data);
         }
         public Agg.VertexSource.VertexStorage Tranform(Agg.VertexSource.SinglePath src)

@@ -183,21 +183,14 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
                 var vxs = trans.DoTransformToNewVxStorage();
-                //rasterizer.RenderSolidAllPaths(
-                //    imageClippingProxy,
-                //    rasterizer,
-                //    scanlineCache,
-                //    vxs,
-                //    lionShape.Colors,
-                //    lionShape.PathIndexList,
-                //    lionShape.NumPaths);
+                 
                 int j = lionShape.NumPaths;
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderSinglePath(
                         new SinglePath(vxs, lionShape.PathIndexList[i]), lionShape.Colors[i]);
                 }
-                //rasterizer.RenderAllPaths(trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+                
             }
 
             base.OnDraw(graphics2D);

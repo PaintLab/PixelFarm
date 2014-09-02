@@ -140,11 +140,18 @@ namespace MatterHackers.Agg.Sample_Perspective
                     VertexSource.Ellipse ell = new MatterHackers.Agg.VertexSource.Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
                                      (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
                                      200);
-                    Stroke ell_stroke = new Stroke(ell);
-                    ell_stroke.Width = 3;
-                    VertexSourceApplyTransform trans_ell = new VertexSourceApplyTransform(ell, txBilinear);
 
-                    VertexSourceApplyTransform trans_ell_stroke = new VertexSourceApplyTransform(ell_stroke, txBilinear);
+                    SinglePath s1 = ell.MakeSinglePath();
+
+                    Stroke ell_stroke = new Stroke(s1);
+                    ell_stroke.Width = 3;
+
+                    var trans_ell = txBilinear.TransformToSinglePath(ell.MakeVxs());
+
+                    //VertexSourceApplyTransform trans_ell = new VertexSourceApplyTransform(ell, txBilinear); 
+                    //VertexSourceApplyTransform trans_ell_stroke = new VertexSourceApplyTransform(ell_stroke, txBilinear);
+
+                    var trans_ell_stroke = txBilinear.TransformToSinglePath(ell_stroke.MakeVxs());
 
                     g_rasterizer.AddPath(trans_ell);
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
@@ -183,10 +190,12 @@ namespace MatterHackers.Agg.Sample_Perspective
                     var filledEllipse = new MatterHackers.Agg.VertexSource.Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
                                       (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
                                       200);
+                    var ellipseVertext = txPerspective.TransformToVxs(filledEllipse.MakeVxs());
                     //2. create transform version of fill ellipse
-                    var txFillEllipse = new VertexSourceApplyTransform(filledEllipse, txPerspective);
+                    //var txFillEllipse = new VertexSourceApplyTransform(filledEllipse, txPerspective);
                     //3. add
-                    g_rasterizer.AddPath(txFillEllipse);
+                    //g_rasterizer.AddPath(txFillEllipse);
+                    g_rasterizer.AddPath(new SinglePath(ellipseVertext));
                     //4. render it
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy,
                         g_rasterizer,
@@ -196,11 +205,11 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //--------------------------------------------------------
                     //outline Ellipse
                     //1. create original version of stroke ellipse 
-                    var strokeEllipse = new Stroke(filledEllipse);
+                    var strokeEllipse = new Stroke(new SinglePath(filledEllipse.MakeVxs()));
 
                     strokeEllipse.Width = 3;
                     //2. create transform version of outlin  
-                    var txOutline =  new VertexSourceApplyTransform(strokeEllipse, txPerspective);
+                    var txOutline = new VertexSourceApplyTransform(strokeEllipse, txPerspective);
                     //3. add
                     g_rasterizer.AddPath(txOutline);
                     //4. render                      
@@ -216,7 +225,7 @@ namespace MatterHackers.Agg.Sample_Perspective
             g_rasterizer.AddPath(quadPolygonControl);
             scanlineRenderer.RenderScanlineSolidAA(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
 
-            //base.OnDraw(graphics2D);
+
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {

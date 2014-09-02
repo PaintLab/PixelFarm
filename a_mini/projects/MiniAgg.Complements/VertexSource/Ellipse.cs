@@ -28,17 +28,21 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    public class Ellipse : IVertexSource
+
+
+
+
+    public class Ellipse : IVertexProducer
     {
         public double originX;
         public double originY;
         public double radiusX;
         public double radiusY;
 
-        private double m_scale;
-        private int numSteps;
-        private int m_step;
-        private bool m_cw;
+        double m_scale;
+        int numSteps;
+        int m_step;
+        bool m_cw;
 
         public Ellipse()
         {
@@ -78,7 +82,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void init(double OriginX, double OriginY, double RadiusX, double RadiusY)
+        void init(double OriginX, double OriginY, double RadiusX, double RadiusY)
         {
             init(OriginX, OriginY, RadiusX, RadiusY, 0, false);
         }
@@ -88,8 +92,8 @@ namespace MatterHackers.Agg.VertexSource
             init(OriginX, OriginY, RadiusX, RadiusY, num_steps, false);
         }
 
-        public void init(double OriginX, double OriginY, double RadiusX, double RadiusY,
-                  int num_steps, bool cw)
+        void init(double OriginX, double OriginY, double RadiusX, double RadiusY,
+                int num_steps, bool cw)
         {
             originX = OriginX;
             originY = OriginY;
@@ -109,12 +113,19 @@ namespace MatterHackers.Agg.VertexSource
             m_scale = scale;
             calc_num_steps();
         }
-        public bool IsDynamicVertexGen
+         
+        public SinglePath MakeSinglePath()
         {
-            get
+            return new SinglePath(MakeVxs());
+        }
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> list = new List<VertexData>();
+            foreach (VertexData vx in this.GetVertexIter())
             {
-                return true;
+                list.Add(vx);
             }
+            return new VertexStorage(list);
         }
         public IEnumerable<VertexData> GetVertexIter()
         {
@@ -151,11 +162,8 @@ namespace MatterHackers.Agg.VertexSource
             vertexData.command = FlagsAndCommand.CommandStop;
             yield return vertexData;
         }
-         
-        public void RewindZero()
-        {
-            m_step = 0;
-        }
+
+        
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
@@ -189,5 +197,5 @@ namespace MatterHackers.Agg.VertexSource
             double da = Math.Acos(ra / (ra + 0.125 / m_scale)) * 2;
             numSteps = (int)Math.Round(2 * Math.PI / da);
         }
-    };
+    }
 }

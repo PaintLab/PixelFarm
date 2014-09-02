@@ -34,7 +34,7 @@ using MatterHackers.Agg.Font;
 namespace MatterHackers.Agg
 {
     public static class Canvas2dExtension
-    {   
+    {
 
         public static void DrawString(this Graphics2D gx, string Text, double x, double y, double pointSize = 12,
             Justification justification = Justification.Left,
@@ -161,7 +161,8 @@ namespace MatterHackers.Agg
         public static void Circle(this Agg.Graphics2D g, double x, double y, double radius, ColorRGBA color)
         {
             Ellipse elipse = new Ellipse(x, y, radius, radius);
-            g.Render(elipse, color);
+            g.Render(elipse.MakeVxs(), color);
+
         }
         public static void Circle(this Agg.Graphics2D g, Vector2 origin, double radius, ColorRGBA color)
         {

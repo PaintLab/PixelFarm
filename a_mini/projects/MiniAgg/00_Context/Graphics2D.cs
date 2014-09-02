@@ -144,15 +144,10 @@ namespace MatterHackers.Agg
                 Render(new SinglePath(vxStorage, pathIdArray[i]), colorArray[i]);
             }
         }
-        public void Render(IVertexSource vertexSource, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
+        public void Render(VertexStorage vxStorage, ColorRGBA c)
         {
-            throw new NotSupportedException();
-            //for (int i = 0; i < numPaths; i++)
-            //{
-            //    Render(vertexSource, pathIdArray[i], colorArray[i]);
-            //}
+            Render(new SinglePath(vxStorage, 0), c);
         }
-
         public void Render(IVertexSource vertexSource, double x, double y, ColorRGBA color)
         {
             Render(

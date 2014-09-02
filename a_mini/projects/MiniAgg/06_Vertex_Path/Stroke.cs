@@ -20,6 +20,7 @@
 // conv_stroke
 //
 //----------------------------------------------------------------------------
+using System.Collections.Generic;
 namespace MatterHackers.Agg.VertexSource
 {
     public sealed class Stroke : VertexSourceAdapter
@@ -74,5 +75,17 @@ namespace MatterHackers.Agg.VertexSource
             get { return this.GetGenerator().Shorten; }
             set { this.GetGenerator().Shorten = value; }
         }
+
+        //-------------------------------------------------
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> list = new List<VertexData>();
+            foreach (VertexData vx in this.GetVertexIter())
+            {
+                list.Add(vx);
+            }
+            return new VertexStorage(list);
+        }
+        //-------------------------------------------------
     }
 }
