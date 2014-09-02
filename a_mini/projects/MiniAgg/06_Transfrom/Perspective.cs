@@ -618,12 +618,12 @@ namespace MatterHackers.Agg.Transform
             y = Math.Sqrt(shy * shy + sy * sy);
         }
 
-        //===========================================
-        //public void Tranform(Agg.VertexSource.IVertexSource src)
-        //{
-
-        //}
-        public Agg.VertexSource.VertexStorage Tranform(Agg.VertexSource.PathStorage src)
+        //-------------------------------------------------------------------------
+        public Agg.VertexSource.SinglePath TransformToSinglePath(Agg.VertexSource.PathStorage src)
+        {
+            return new VertexSource.SinglePath(TransformToVxs(src));
+        }
+        public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             var data = new System.Collections.Generic.List<Agg.VertexSource.VertexData>();
             src.RewindZero();

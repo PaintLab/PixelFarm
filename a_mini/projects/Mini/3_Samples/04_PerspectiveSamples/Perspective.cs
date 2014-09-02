@@ -164,7 +164,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //2.render it
                     //var vxlist = new System.Collections.Generic.List<VertexData>();
                     //txLion.DoTransform(vxlist);
-                    var vxs = txPerspective.Tranform(lionShape.Path);
+                    var vxs = txPerspective.TransformToVxs(lionShape.Path);
 
                     //var vxs = txLion.DoTransformToNewVxStorage();
 
@@ -200,7 +200,7 @@ namespace MatterHackers.Agg.Sample_Perspective
 
                     strokeEllipse.Width = 3;
                     //2. create transform version of outlin  
-                    var txOutline = new VertexSourceApplyTransform(strokeEllipse, txPerspective);
+                    var txOutline =  new VertexSourceApplyTransform(strokeEllipse, txPerspective);
                     //3. add
                     g_rasterizer.AddPath(txOutline);
                     //4. render                      
