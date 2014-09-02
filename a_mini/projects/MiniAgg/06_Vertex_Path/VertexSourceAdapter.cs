@@ -27,17 +27,17 @@ namespace MatterHackers.Agg.VertexSource
     //------------------------------------------------------conv_adaptor_vcgen
     public abstract class VertexSourceAdapter : IVertexSource
     {
-        //null pattern
-        struct NullMarkers : IMarkers
-        {
-            public void RemoveAll() { }
-            public void AddVertex(double x, double y, ShapePath.FlagsAndCommand unknown) { }
-        }
+        ////null pattern
+        //struct NullMarkers : IMarkers
+        //{
+        //    public void RemoveAll() { }
+        //    public void AddVertex(double x, double y, ShapePath.FlagsAndCommand unknown) { }
+        //}
 
         readonly IVertexSource vtxsrc;
 
         IGenerator generator;
-        IMarkers markers;
+        //IMarkers markers;
         Status m_status;
         ShapePath.FlagsAndCommand m_last_cmd;
         double m_start_x;
@@ -48,20 +48,20 @@ namespace MatterHackers.Agg.VertexSource
             Accumulate,
             Generate
         }
-
-        public bool IsDynamicVertexGen { get { return this.vtxsrc.IsDynamicVertexGen; } }
-
-
-
         public VertexSourceAdapter(IVertexSource vertexSource, IGenerator generator)
         {
-            markers = new NullMarkers();
+            //markers = new NullMarkers();
 
             this.vtxsrc = vertexSource;
             this.generator = generator;
             m_status = Status.Initial;
         }
 
+        public bool IsDynamicVertexGen { get { return this.vtxsrc.IsDynamicVertexGen; } }
+
+
+
+       
 
         protected IGenerator GetGenerator() { return generator; }
 
@@ -97,7 +97,7 @@ namespace MatterHackers.Agg.VertexSource
                 switch (m_status)
                 {
                     case Status.Initial:
-                        markers.RemoveAll();
+                        //markers.RemoveAll();
                         m_last_cmd = vtxsrc.GetNextVertex(out m_start_x, out m_start_y);
                         m_status = Status.Accumulate;
                         goto case Status.Accumulate;
@@ -110,7 +110,7 @@ namespace MatterHackers.Agg.VertexSource
 
                         generator.RemoveAll();
                         generator.AddVertex(m_start_x, m_start_y, ShapePath.FlagsAndCommand.CommandMoveTo);
-                        markers.AddVertex(m_start_x, m_start_y, ShapePath.FlagsAndCommand.CommandMoveTo);
+                        //markers.AddVertex(m_start_x, m_start_y, ShapePath.FlagsAndCommand.CommandMoveTo);
 
                         bool runloop = true;
                         while (runloop)
@@ -134,7 +134,7 @@ namespace MatterHackers.Agg.VertexSource
                                     {
                                         m_last_cmd = command;
                                         generator.AddVertex(x, y, command);
-                                        markers.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+                                        //markers.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
 
                                     } break;
                                 case ShapePath.FlagsAndCommand.CommandMoveTo:

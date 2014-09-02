@@ -78,21 +78,21 @@ namespace MatterHackers.Agg.VertexSource
             m_cw = cw;
             if (numSteps == 0)
             {
-                calc_num_steps();
+                CalculateNumSteps();
             }
         }
 
-        void init(double OriginX, double OriginY, double RadiusX, double RadiusY)
+        void Init(double OriginX, double OriginY, double RadiusX, double RadiusY)
         {
-            init(OriginX, OriginY, RadiusX, RadiusY, 0, false);
+            Init(OriginX, OriginY, RadiusX, RadiusY, 0, false);
         }
 
         public void Reset(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps)
         {
-            init(OriginX, OriginY, RadiusX, RadiusY, num_steps, false);
+            Init(OriginX, OriginY, RadiusX, RadiusY, num_steps, false);
         }
 
-        void init(double OriginX, double OriginY, double RadiusX, double RadiusY,
+        void Init(double OriginX, double OriginY, double RadiusX, double RadiusY,
                 int num_steps, bool cw)
         {
             originX = OriginX;
@@ -104,29 +104,17 @@ namespace MatterHackers.Agg.VertexSource
             m_cw = cw;
             if (numSteps == 0)
             {
-                calc_num_steps();
+                CalculateNumSteps();
             }
         }
 
         public void approximation_scale(double scale)
         {
             m_scale = scale;
-            calc_num_steps();
+            CalculateNumSteps();
         }
-         
-        public SinglePath MakeSinglePath()
-        {
-            return new SinglePath(MakeVxs());
-        }
-        public VertexStorage MakeVxs()
-        {
-            List<VertexData> list = new List<VertexData>();
-            foreach (VertexData vx in this.GetVertexIter())
-            {
-                list.Add(vx);
-            }
-            return new VertexStorage(list);
-        }
+
+      
         public IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
@@ -163,7 +151,7 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
         }
 
-        
+
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
@@ -191,11 +179,32 @@ namespace MatterHackers.Agg.VertexSource
             return ((m_step == 1) ? FlagsAndCommand.CommandMoveTo : FlagsAndCommand.CommandLineTo);
         }
 
-        private void calc_num_steps()
+        void CalculateNumSteps()
         {
             double ra = (Math.Abs(radiusX) + Math.Abs(radiusY)) / 2;
             double da = Math.Acos(ra / (ra + 0.125 / m_scale)) * 2;
             numSteps = (int)Math.Round(2 * Math.PI / da);
         }
+
+        //-------------------------------------------------------
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(MakeVxs());
+        }
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> list = new List<VertexData>();
+            foreach (VertexData vx in this.GetVertexIter())
+            {
+                list.Add(vx);
+            }
+            return new VertexStorage(list);
+        }
+        //-------------------------------------------------------
     }
+
+
+
+
+
 }
