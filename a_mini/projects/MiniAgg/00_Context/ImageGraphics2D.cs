@@ -208,8 +208,8 @@ namespace MatterHackers.Agg
                 destRectTransform *= Affine.NewTranslation(-destImageByte.OriginOffset.x, -destImageByte.OriginOffset.y);
             }
 
-            var transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
-            var sp1 = transfromedRect.DoTransformToNewSinglePath();
+            //var transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
+            var sp1 = destRectTransform.TransformToSinglePath(drawImageRectPath);// transfromedRect.DoTransformToNewSinglePath();
             Rasterizer.AddPath(sp1);
             {
                 //ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);

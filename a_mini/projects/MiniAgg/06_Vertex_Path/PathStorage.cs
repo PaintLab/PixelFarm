@@ -526,7 +526,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
-            s.RewindZero(); 
+            s.RewindZero();
             while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, cmd_flags);
@@ -536,11 +536,11 @@ namespace MatterHackers.Agg.VertexSource
         // Join path. The path is joined with the existing one, that is, 
         // it behaves as if the pen of a plotter was always down (drawing)
         //template<class VertexSource>  
-        public void JoinPath(PathStorage vs, int path_id)
+        public void JoinPath(SinglePath s)
         {
             double x, y;
-            vs.Rewind(path_id);
-            ShapePath.FlagsAndCommand cmd = vs.GetNextVertex(out x, out y);
+            s.RewindZero();
+            ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
             if (cmd == ShapePath.FlagsAndCommand.CommandStop)
             {
                 return;
@@ -579,7 +579,7 @@ namespace MatterHackers.Agg.VertexSource
                 }
             }
 
-            while (!ShapePath.IsStop(cmd = vs.GetNextVertex(out x, out y)))
+            while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, ShapePath.IsMoveTo(cmd) ?
                                       ShapePath.FlagsAndCommand.CommandLineTo :

@@ -323,7 +323,7 @@ namespace MatterHackers.Agg.Font
                 }
 
                 Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
-                IVertexSource characterGlyph = new VertexSourceApplyTransform(sourceGlyph, glyphTransform).DoTransformToNewSinglePath();
+                IVertexSource characterGlyph = new VertexSourceApplyTransform(sourceGlyph, glyphTransform);
 
                 if (FlatenCurves)
                 {

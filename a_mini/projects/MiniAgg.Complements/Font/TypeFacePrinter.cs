@@ -36,12 +36,27 @@ namespace MatterHackers.Agg.Font
 
     public class TypeFacePrinter : IVertexSource
     {
-        StyledTypeFace typeFaceStyle;
-
-        String text = "";
-
+        StyledTypeFace typeFaceStyle; 
+        String text = ""; 
         Vector2 totalSizeCach;
+        public TypeFacePrinter(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
+            : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
+        {
+        }
 
+        public TypeFacePrinter(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
+        {
+            this.typeFaceStyle = typeFaceStyle;
+            this.text = text;
+            this.Justification = justification;
+            this.Origin = origin;
+            this.Baseline = baseline;
+        }
+
+        public TypeFacePrinter(String text, TypeFacePrinter copyPropertiesFrom)
+            : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
+        {
+        }
         public Justification Justification { get; set; }
         public Baseline Baseline { get; set; }
 
@@ -74,24 +89,7 @@ namespace MatterHackers.Agg.Font
         public Vector2 Origin { get; set; }
 
 
-        public TypeFacePrinter(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
-            : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
-        {
-        }
-
-        public TypeFacePrinter(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
-        {
-            this.typeFaceStyle = typeFaceStyle;
-            this.text = text;
-            this.Justification = justification;
-            this.Origin = origin;
-            this.Baseline = baseline;
-        }
-
-        public TypeFacePrinter(String text, TypeFacePrinter copyPropertiesFrom)
-            : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
-        {
-        }
+        
 
         public RectangleDouble LocalBounds
         {

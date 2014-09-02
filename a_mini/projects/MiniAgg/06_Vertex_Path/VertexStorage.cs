@@ -154,11 +154,8 @@ namespace MatterHackers.Agg.VertexSource
                 int index = (int)(m_num_vertices - 1);
                 return m_coord_xy[(index << 1) + 1];
             }
-            return new double();
+            return 0;
         }
-
-
-
         public ShapePath.FlagsAndCommand GetVertex(int index, out double x, out double y)
         {
             var i = index << 1;
