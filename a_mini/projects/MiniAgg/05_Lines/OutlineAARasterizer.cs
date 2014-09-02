@@ -104,104 +104,117 @@ namespace MatterHackers.Agg.Lines
     {
         LineRenderer m_ren;
         LineAAVertexSequence m_src_vertices = new LineAAVertexSequence();
-        outline_aa_join_e m_line_join;
+        OutlineJoin m_line_join;
         bool m_round_cap;
         int m_start_x;
         int m_start_y;
 
-        public enum outline_aa_join_e
+        public enum OutlineJoin
         {
-            outline_no_join,             //-----outline_no_join
-            outline_miter_join,          //-----outline_miter_join
-            outline_round_join,          //-----outline_round_join
-            outline_miter_accurate_join  //-----outline_accurate_join
-        };
+            NoJoin,             //-----outline_no_join
+            Mitter,          //-----outline_miter_join
+            Round,          //-----outline_round_join
+            AccurateJoin  //-----outline_accurate_join
+        }
 
-        public bool cmp_dist_start(int d) { return d > 0; }
-        public bool cmp_dist_end(int d) { return d <= 0; }
+        public bool CompareDistStart(int d) { return d > 0; }
+        public bool CompareDistEnd(int d) { return d <= 0; }
 
-        private struct draw_vars
+        struct DrawVarsPart0
         {
             public int idx;
-            public int x1, y1, x2, y2;
-            public LineParameters curr, next;
             public int lcurr, lnext;
-            public int xb1, yb1, xb2, yb2;
             public int flags;
-        };
+        }
 
-        private void draw(ref draw_vars dv, int start, int end)
+        struct DrawVarsPart1
         {
+            public int x1, y1, x2, y2;
+        }
+        struct DrawVarsPart2
+        {
+            public int xb1, yb1, xb2, yb2;
+        }
+
+        void Draw(ref DrawVarsPart0 dv,
+            ref DrawVarsPart1 dv1,
+            ref DrawVarsPart2 dv2,
+            ref LineParameters curr,
+            ref LineParameters next,
+            int start,
+            int end)
+        {
+
             int i;
 
             for (i = start; i < end; i++)
             {
-                if (m_line_join == outline_aa_join_e.outline_round_join)
+                if (m_line_join == OutlineJoin.Round)
                 {
-                    dv.xb1 = dv.curr.x1 + (dv.curr.y2 - dv.curr.y1);
-                    dv.yb1 = dv.curr.y1 - (dv.curr.x2 - dv.curr.x1);
-                    dv.xb2 = dv.curr.x2 + (dv.curr.y2 - dv.curr.y1);
-                    dv.yb2 = dv.curr.y2 - (dv.curr.x2 - dv.curr.x1);
+                    dv2.xb1 = curr.x1 + (curr.y2 - curr.y1);
+                    dv2.yb1 = curr.y1 - (curr.x2 - curr.x1);
+                    dv2.xb2 = curr.x2 + (curr.y2 - curr.y1);
+                    dv2.yb2 = curr.y2 - (curr.x2 - curr.x1);
                 }
 
                 switch (dv.flags)
                 {
-                    case 0: m_ren.line3(dv.curr, dv.xb1, dv.yb1, dv.xb2, dv.yb2); break;
-                    case 1: m_ren.line2(dv.curr, dv.xb2, dv.yb2); break;
-                    case 2: m_ren.line1(dv.curr, dv.xb1, dv.yb1); break;
-                    case 3: m_ren.line0(dv.curr); break;
+                    case 0: m_ren.line3(curr, dv2.xb1, dv2.yb1, dv2.xb2, dv2.yb2); break;
+                    case 1: m_ren.line2(curr, dv2.xb2, dv2.yb2); break;
+                    case 2: m_ren.line1(curr, dv2.xb1, dv2.yb1); break;
+                    case 3: m_ren.line0(curr); break;
                 }
 
-                if (m_line_join == outline_aa_join_e.outline_round_join && (dv.flags & 2) == 0)
+                if (m_line_join == OutlineJoin.Round && (dv.flags & 2) == 0)
                 {
-                    m_ren.pie(dv.curr.x2, dv.curr.y2,
-                               dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
-                               dv.curr.y2 - (dv.curr.x2 - dv.curr.x1),
-                               dv.curr.x2 + (dv.next.y2 - dv.next.y1),
-                               dv.curr.y2 - (dv.next.x2 - dv.next.x1));
+                    m_ren.pie(curr.x2, curr.y2,
+                               curr.x2 + (curr.y2 - curr.y1),
+                               curr.y2 - (curr.x2 - curr.x1),
+                               curr.x2 + (next.y2 - next.y1),
+                               curr.y2 - (next.x2 - next.x1));
                 }
 
-                dv.x1 = dv.x2;
-                dv.y1 = dv.y2;
+                dv1.x1 = dv1.x2;
+                dv1.y1 = dv1.y2;
                 dv.lcurr = dv.lnext;
                 dv.lnext = m_src_vertices[dv.idx].len;
 
                 ++dv.idx;
                 if (dv.idx >= m_src_vertices.Count) dv.idx = 0;
 
-                dv.x2 = m_src_vertices[dv.idx].x;
-                dv.y2 = m_src_vertices[dv.idx].y;
+                dv1.x2 = m_src_vertices[dv.idx].x;
+                dv1.y2 = m_src_vertices[dv.idx].y;
 
-                dv.curr = dv.next;
-                dv.next = new LineParameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
-                dv.xb1 = dv.xb2;
-                dv.yb1 = dv.yb2;
+                curr = next;
+                next = new LineParameters(dv1.x1, dv1.y1, dv1.x2, dv1.y2, dv.lnext);
+                dv2.xb1 = dv2.xb2;
+                dv2.yb1 = dv2.yb2;
 
                 switch (m_line_join)
                 {
-                    case outline_aa_join_e.outline_no_join:
+                    case OutlineJoin.NoJoin:
                         dv.flags = 3;
                         break;
 
-                    case outline_aa_join_e.outline_miter_join:
+                    case OutlineJoin.Mitter:
                         dv.flags >>= 1;
-                        dv.flags |= (dv.curr.diagonal_quadrant() ==
-                            dv.next.diagonal_quadrant() ? 1 : 0);
+                        dv.flags |= (curr.diagonal_quadrant() ==
+                            next.diagonal_quadrant() ? 1 : 0);
                         if ((dv.flags & 2) == 0)
                         {
-                            LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
+                            LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                         }
                         break;
 
-                    case outline_aa_join_e.outline_round_join:
+                    case OutlineJoin.Round:
                         dv.flags >>= 1;
-                        dv.flags |= (((dv.curr.diagonal_quadrant() ==
-                            dv.next.diagonal_quadrant()) ? 1 : 0) << 1);
+                        dv.flags |= (((curr.diagonal_quadrant() ==
+                            next.diagonal_quadrant()) ? 1 : 0) << 1);
                         break;
 
-                    case outline_aa_join_e.outline_miter_accurate_join:
+                    case OutlineJoin.AccurateJoin:
                         dv.flags = 0;
-                        LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
+                        LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                         break;
                 }
             }
@@ -211,56 +224,68 @@ namespace MatterHackers.Agg.Lines
         {
             m_ren = ren;
             m_line_join = (OutlineRenderer.accurate_join_only() ?
-                            outline_aa_join_e.outline_miter_accurate_join :
-                            outline_aa_join_e.outline_round_join);
+                            OutlineJoin.AccurateJoin :
+                            OutlineJoin.Round);
             m_round_cap = (false);
             m_start_x = (0);
             m_start_y = (0);
         }
 
-        public void attach(LineRenderer ren) { m_ren = ren; }
+        public void Attach(LineRenderer ren) { m_ren = ren; }
 
-        public void line_join(outline_aa_join_e join)
+
+        public OutlineJoin LineJoin
         {
-            m_line_join = OutlineRenderer.accurate_join_only() ?
-                outline_aa_join_e.outline_miter_accurate_join :
-                join;
+            get { return this.m_line_join; }
+            set
+            {
+                m_line_join = OutlineRenderer.accurate_join_only() ?
+                OutlineJoin.AccurateJoin : value;
+            }
         }
-        public outline_aa_join_e line_join() { return m_line_join; }
 
-        public void round_cap(bool v) { m_round_cap = v; }
-        public bool round_cap() { return m_round_cap; }
+        public bool RoundCap
+        {
+            get { return this.m_round_cap; }
+            set { this.m_round_cap = value; }
 
-        public void move_to(int x, int y)
+        }
+        public void MoveTo(int x, int y)
         {
             m_src_vertices.modify_last(new LineAAVertex(m_start_x = x, m_start_y = y));
         }
 
-        public void line_to(int x, int y)
+        public void LineTo(int x, int y)
         {
             m_src_vertices.AddVertex(new LineAAVertex(x, y));
         }
 
-        public void move_to_d(double x, double y)
+        public void MoveTo(double x, double y)
         {
-            move_to(LineCoordSat.Convert(x), LineCoordSat.Convert(y));
+            MoveTo(LineCoordSat.Convert(x), LineCoordSat.Convert(y));
         }
 
-        public void line_to_d(double x, double y)
+        public void LineTo(double x, double y)
         {
-            line_to(LineCoordSat.Convert(x), LineCoordSat.Convert(y));
+            LineTo(LineCoordSat.Convert(x), LineCoordSat.Convert(y));
         }
 
-        public void render(bool close_polygon)
+        public void Render(bool close_polygon)
         {
             m_src_vertices.close(close_polygon);
-            draw_vars dv = new draw_vars();
+            DrawVarsPart0 dv = new DrawVarsPart0();
+            DrawVarsPart1 dv1 = new DrawVarsPart1();
+            DrawVarsPart2 dv2 = new DrawVarsPart2();
+
             LineAAVertex v;
+
             int x1;
             int y1;
             int x2;
             int y2;
             int lprev;
+            LineParameters curr = null;
+            LineParameters next = null;
 
             if (close_polygon)
             {
@@ -280,49 +305,49 @@ namespace MatterHackers.Agg.Lines
                     LineParameters prev = new LineParameters(x1, y1, x2, y2, lprev);
 
                     v = m_src_vertices[1];
-                    dv.x1 = v.x;
-                    dv.y1 = v.y;
+                    dv1.x1 = v.x;
+                    dv1.y1 = v.y;
                     dv.lnext = v.len;
-                    dv.curr = new LineParameters(x2, y2, dv.x1, dv.y1, dv.lcurr);
+                    curr = new LineParameters(x2, y2, dv1.x1, dv1.y1, dv.lcurr);
 
                     v = m_src_vertices[dv.idx];
-                    dv.x2 = v.x;
-                    dv.y2 = v.y;
-                    dv.next = new LineParameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
+                    dv1.x2 = v.x;
+                    dv1.y2 = v.y;
+                    next = new LineParameters(dv1.x1, dv1.y1, dv1.x2, dv1.y2, dv.lnext);
 
-                    dv.xb1 = 0;
-                    dv.yb1 = 0;
-                    dv.xb2 = 0;
-                    dv.yb2 = 0;
+                    dv2.xb1 = 0;
+                    dv2.yb1 = 0;
+                    dv2.xb2 = 0;
+                    dv2.yb2 = 0;
 
                     switch (m_line_join)
                     {
-                        case outline_aa_join_e.outline_no_join:
+                        case OutlineJoin.NoJoin:
                             dv.flags = 3;
                             break;
 
-                        case outline_aa_join_e.outline_miter_join:
-                        case outline_aa_join_e.outline_round_join:
+                        case OutlineJoin.Mitter:
+                        case OutlineJoin.Round:
                             dv.flags =
-                                (prev.diagonal_quadrant() == dv.curr.diagonal_quadrant() ? 1 : 0) |
-                                    ((dv.curr.diagonal_quadrant() == dv.next.diagonal_quadrant() ? 1 : 0) << 1);
+                                (prev.diagonal_quadrant() == curr.diagonal_quadrant() ? 1 : 0) |
+                                    ((curr.diagonal_quadrant() == next.diagonal_quadrant() ? 1 : 0) << 1);
                             break;
 
-                        case outline_aa_join_e.outline_miter_accurate_join:
+                        case OutlineJoin.AccurateJoin:
                             dv.flags = 0;
                             break;
                     }
 
-                    if ((dv.flags & 1) == 0 && m_line_join != outline_aa_join_e.outline_round_join)
+                    if ((dv.flags & 1) == 0 && m_line_join != OutlineJoin.Round)
                     {
-                        LineAABasics.bisectrix(prev, dv.curr, out dv.xb1, out dv.yb1);
+                        LineAABasics.bisectrix(prev, curr, out dv2.xb1, out dv2.yb1);
                     }
 
-                    if ((dv.flags & 2) == 0 && m_line_join != outline_aa_join_e.outline_round_join)
+                    if ((dv.flags & 2) == 0 && m_line_join != OutlineJoin.Round)
                     {
-                        LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
+                        LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                     }
-                    draw(ref dv, 0, m_src_vertices.Count);
+                    Draw(ref dv, ref dv1, ref dv2, ref curr, ref next, 0, m_src_vertices.Count);
                 }
             }
             else
@@ -345,7 +370,7 @@ namespace MatterHackers.Agg.Lines
                             LineParameters lp = new LineParameters(x1, y1, x2, y2, lprev);
                             if (m_round_cap)
                             {
-                                m_ren.semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
+                                m_ren.semidot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                             }
                             m_ren.line3(lp,
                                          x1 + (y2 - y1),
@@ -354,7 +379,7 @@ namespace MatterHackers.Agg.Lines
                                          y2 - (x2 - x1));
                             if (m_round_cap)
                             {
-                                m_ren.semidot(cmp_dist_end, x2, y2, x2 + (y2 - y1), y2 - (x2 - x1));
+                                m_ren.semidot(CompareDistEnd, x2, y2, x2 + (y2 - y1), y2 - (x2 - x1));
                             }
                         }
                         break;
@@ -379,10 +404,10 @@ namespace MatterHackers.Agg.Lines
 
                             if (m_round_cap)
                             {
-                                m_ren.semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
+                                m_ren.semidot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                             }
 
-                            if (m_line_join == outline_aa_join_e.outline_round_join)
+                            if (m_line_join == OutlineJoin.Round)
                             {
                                 m_ren.line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1),
                                                   x2 + (y2 - y1), y2 - (x2 - x1));
@@ -395,16 +420,16 @@ namespace MatterHackers.Agg.Lines
                             }
                             else
                             {
-                                LineAABasics.bisectrix(lp1, lp2, out dv.xb1, out dv.yb1);
+                                LineAABasics.bisectrix(lp1, lp2, out dv2.xb1, out dv2.yb1);
                                 m_ren.line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1),
-                                                  dv.xb1, dv.yb1);
+                                                  dv2.xb1, dv2.yb1);
 
-                                m_ren.line3(lp2, dv.xb1, dv.yb1,
+                                m_ren.line3(lp2, dv2.xb1, dv2.yb1,
                                                   x3 + (y3 - y2), y3 - (x3 - x2));
                             }
                             if (m_round_cap)
                             {
-                                m_ren.semidot(cmp_dist_end, x3, y3, x3 + (y3 - y2), y3 - (x3 - x2));
+                                m_ren.semidot(CompareDistEnd, x3, y3, x3 + (y3 - y2), y3 - (x3 - x2));
                             }
                         }
                         break;
@@ -425,59 +450,59 @@ namespace MatterHackers.Agg.Lines
                             LineParameters prev = new LineParameters(x1, y1, x2, y2, lprev);
 
                             v = m_src_vertices[2];
-                            dv.x1 = v.x;
-                            dv.y1 = v.y;
+                            dv1.x1 = v.x;
+                            dv1.y1 = v.y;
                             dv.lnext = v.len;
-                            dv.curr = new LineParameters(x2, y2, dv.x1, dv.y1, dv.lcurr);
+                            curr = new LineParameters(x2, y2, dv1.x1, dv1.y1, dv.lcurr);
 
                             v = m_src_vertices[dv.idx];
-                            dv.x2 = v.x;
-                            dv.y2 = v.y;
-                            dv.next = new LineParameters(dv.x1, dv.y1, dv.x2, dv.y2, dv.lnext);
+                            dv1.x2 = v.x;
+                            dv1.y2 = v.y;
+                            next = new LineParameters(dv1.x1, dv1.y1, dv1.x2, dv1.y2, dv.lnext);
 
-                            dv.xb1 = 0;
-                            dv.yb1 = 0;
-                            dv.xb2 = 0;
-                            dv.yb2 = 0;
+                            dv2.xb1 = 0;
+                            dv2.yb1 = 0;
+                            dv2.xb2 = 0;
+                            dv2.yb2 = 0;
 
                             switch (m_line_join)
                             {
-                                case outline_aa_join_e.outline_no_join:
+                                case OutlineJoin.NoJoin:
                                     dv.flags = 3;
                                     break;
 
-                                case outline_aa_join_e.outline_miter_join:
-                                case outline_aa_join_e.outline_round_join:
+                                case OutlineJoin.Mitter:
+                                case OutlineJoin.Round:
                                     dv.flags =
-                                        (prev.diagonal_quadrant() == dv.curr.diagonal_quadrant() ? 1 : 0) |
-                                            ((dv.curr.diagonal_quadrant() == dv.next.diagonal_quadrant() ? 1 : 0) << 1);
+                                        (prev.diagonal_quadrant() == curr.diagonal_quadrant() ? 1 : 0) |
+                                            ((curr.diagonal_quadrant() == next.diagonal_quadrant() ? 1 : 0) << 1);
                                     break;
 
-                                case outline_aa_join_e.outline_miter_accurate_join:
+                                case OutlineJoin.AccurateJoin:
                                     dv.flags = 0;
                                     break;
                             }
 
                             if (m_round_cap)
                             {
-                                m_ren.semidot(cmp_dist_start, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
+                                m_ren.semidot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                             }
                             if ((dv.flags & 1) == 0)
                             {
-                                if (m_line_join == outline_aa_join_e.outline_round_join)
+                                if (m_line_join == OutlineJoin.Round)
                                 {
                                     m_ren.line3(prev, x1 + (y2 - y1), y1 - (x2 - x1),
                                                        x2 + (y2 - y1), y2 - (x2 - x1));
                                     m_ren.pie(prev.x2, prev.y2,
                                                x2 + (y2 - y1), y2 - (x2 - x1),
-                                               dv.curr.x1 + (dv.curr.y2 - dv.curr.y1),
-                                               dv.curr.y1 - (dv.curr.x2 - dv.curr.x1));
+                                                curr.x1 + (curr.y2 - curr.y1),
+                                               curr.y1 - (curr.x2 - curr.x1));
                                 }
                                 else
                                 {
-                                    LineAABasics.bisectrix(prev, dv.curr, out dv.xb1, out dv.yb1);
+                                    LineAABasics.bisectrix(prev, curr, out dv2.xb1, out dv2.yb1);
                                     m_ren.line3(prev, x1 + (y2 - y1), y1 - (x2 - x1),
-                                                       dv.xb1, dv.yb1);
+                                                       dv2.xb1, dv2.yb1);
                                 }
                             }
                             else
@@ -486,41 +511,41 @@ namespace MatterHackers.Agg.Lines
                                              x1 + (y2 - y1),
                                              y1 - (x2 - x1));
                             }
-                            if ((dv.flags & 2) == 0 && m_line_join != outline_aa_join_e.outline_round_join)
+                            if ((dv.flags & 2) == 0 && m_line_join != OutlineJoin.Round)
                             {
-                                LineAABasics.bisectrix(dv.curr, dv.next, out dv.xb2, out dv.yb2);
+                                LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                             }
 
-                            draw(ref dv, 1, m_src_vertices.Count - 2);
+                            Draw(ref dv, ref dv1, ref dv2, ref curr, ref next, 1, m_src_vertices.Count - 2);
 
                             if ((dv.flags & 1) == 0)
                             {
-                                if (m_line_join == outline_aa_join_e.outline_round_join)
+                                if (m_line_join == OutlineJoin.Round)
                                 {
-                                    m_ren.line3(dv.curr,
-                                                 dv.curr.x1 + (dv.curr.y2 - dv.curr.y1),
-                                                 dv.curr.y1 - (dv.curr.x2 - dv.curr.x1),
-                                                 dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
-                                                 dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
+                                    m_ren.line3(curr,
+                                                 curr.x1 + (curr.y2 - curr.y1),
+                                                 curr.y1 - (curr.x2 - curr.x1),
+                                                 curr.x2 + (curr.y2 - curr.y1),
+                                                 curr.y2 - (curr.x2 - curr.x1));
                                 }
                                 else
                                 {
-                                    m_ren.line3(dv.curr, dv.xb1, dv.yb1,
-                                                 dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
-                                                 dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
+                                    m_ren.line3(curr, dv2.xb1, dv2.yb1,
+                                                 curr.x2 + (curr.y2 - curr.y1),
+                                                 curr.y2 - (curr.x2 - curr.x1));
                                 }
                             }
                             else
                             {
-                                m_ren.line2(dv.curr,
-                                             dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
-                                             dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
+                                m_ren.line2(curr,
+                                             curr.x2 + (curr.y2 - curr.y1),
+                                             curr.y2 - (curr.x2 - curr.x1));
                             }
                             if (m_round_cap)
                             {
-                                m_ren.semidot(cmp_dist_end, dv.curr.x2, dv.curr.y2,
-                                               dv.curr.x2 + (dv.curr.y2 - dv.curr.y1),
-                                               dv.curr.y2 - (dv.curr.x2 - dv.curr.x1));
+                                m_ren.semidot(CompareDistEnd, curr.x2, curr.y2,
+                                               curr.x2 + (curr.y2 - curr.y1),
+                                               curr.y2 - (curr.x2 - curr.x1));
                             }
 
                         }
@@ -531,68 +556,82 @@ namespace MatterHackers.Agg.Lines
             m_src_vertices.Clear();
         }
 
-        public void add_vertex(double x, double y, ShapePath.FlagsAndCommand cmd)
+        public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
         {
-            if (ShapePath.is_move_to(cmd))
+            switch (ShapePath.FlagsAndCommand.CommandsMask & cmd)
             {
-                render(false);
-                move_to_d(x, y);
-            }
-            else
-            {
-                if (ShapePath.is_end_poly(cmd))
-                {
-                    render(ShapePath.is_closed(cmd));
-                    if (ShapePath.is_closed(cmd))
+                case ShapePath.FlagsAndCommand.CommandMoveTo:
+                    Render(false);
+                    MoveTo(x, y);
+                    break;
+                case ShapePath.FlagsAndCommand.CommandEndPoly:
+
+                    bool is_closed = ((cmd & ShapePath.FlagsAndCommand.FlagClose) != 0);
+                    Render(is_closed);
+                    if (is_closed)
                     {
-                        move_to(m_start_x, m_start_y);
+                        MoveTo(m_start_x, m_start_y);
                     }
-                }
-                else
-                {
-                    line_to_d(x, y);
-                }
+                    break;
+                default:
+                    LineTo(x, y);
+                    break;
             }
         }
 
-        public void add_path(IVertexSource vs)
-        {
-            add_path(vs, 0);
-        }
+        //public void AddPath(IVertexSource vs)
+        //{
+        //    AddPath(vs, 0);
+        //}
 
-        public void add_path(IVertexSource vs, int path_id)
+        //public void AddPath(IVertexSource vs, int path_id)
+        //{
+        //    double x;
+        //    double y;
+
+        //    ShapePath.FlagsAndCommand cmd;
+        //    vs.Rewind(path_id);
+        //    while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+        //    {
+        //        //index++;
+        //        //if (index == 0
+        //        //  || (index > start && index < start + num))
+        //        AddVertex(x, y, cmd);
+        //    }
+        //    Render(false);
+        //}
+        void AddPath(SinglePath s)
         {
             double x;
             double y;
 
             ShapePath.FlagsAndCommand cmd;
-            vs.rewind(path_id);
-
-            //int index = 0;
-            //int start = 851;
-            //int num = 5;
-
-            while (!ShapePath.is_stop(cmd = vs.GetVertex(out x, out y)))
+            s.RewindZero();
+            while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 //index++;
                 //if (index == 0
                 //  || (index > start && index < start + num))
-                add_vertex(x, y, cmd);
+                AddVertex(x, y, cmd);
             }
-            render(false);
+            Render(false);
         }
-
-        public void RenderAllPaths(IVertexSource vs,
-                              ColorRGBA[] colors,
-                              int[] path_id,
-                              int num_paths)
+        public void RenderSinglePath(SinglePath s, ColorRGBA c)
         {
-            for (int i = 0; i < num_paths; i++)
-            {
-                m_ren.color(colors[i]);
-                add_path(vs, path_id[i]);
-            }
+            m_ren.color(c);
+            AddPath(s);
         }
+        //public void RenderAllPaths(IVertexSource vs,
+        //                      ColorRGBA[] colors,
+        //                      int[] path_id,
+        //                      int num_paths)
+        //{
+        //    for (int i = 0; i < num_paths; i++)
+        //    {
+        //        m_ren.color(colors[i]);
+        //        AddPath(vs, path_id[i]);
+        //    }
+        //}
 
         /* // for debugging only
         public void render_path_index(IVertexSource vs,

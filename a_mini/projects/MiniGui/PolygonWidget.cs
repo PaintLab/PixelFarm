@@ -59,13 +59,20 @@ namespace MatterHackers.Agg.UI
         {
             throw new NotImplementedException();
         }
-
-        public void rewind(int idx)
+         
+        public void RewindZero()
         {
             m_vertex = 0;
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return false;
+            }
+        }
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -127,7 +134,8 @@ namespace MatterHackers.Agg.UI
             m_dx = (0.0);
             m_dy = (0.0);
             m_in_polygon_check = (true);
-            m_stroke.width(1.0);
+
+            m_stroke.Width = 1;
         }
 
         public override void OnParentChanged(EventArgs e)
@@ -149,9 +157,13 @@ namespace MatterHackers.Agg.UI
         public void AddYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] += newYN; }
 
         public double[] polygon() { return m_polygon; }
+         
 
-        public void line_width(double w) { m_stroke.width(w); }
-        public double line_width() { return m_stroke.width(); }
+        public double LineWidth
+        {
+            get { return this.m_stroke.Width; }
+            set { this.m_stroke.Width = value; }
+        }
 
         public void point_radius(double r) { m_point_radius = r; }
         public double point_radius() { return m_point_radius; }
@@ -169,16 +181,23 @@ namespace MatterHackers.Agg.UI
         }
 
         public override int num_paths() { return 1; }
-        public override void rewind(int path_id)
+        
+        public override void RewindZero()
         {
             if (needToRecalculateBounds)
             {
                 RecalculateBounds();
             }
             m_status = 0;
-            m_stroke.rewind(0);
+            m_stroke.RewindZero();
         }
-
+        public override bool IsDynamicVertexGen
+        {
+            get
+            {
+                return true;
+            }
+        }
         void RecalculateBounds()
         {
             needToRecalculateBounds = false;
@@ -201,34 +220,34 @@ namespace MatterHackers.Agg.UI
 #endif
         }
 
-        public override ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public override ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
             double r = m_point_radius;
             if (m_status == 0)
             {
-                cmd = m_stroke.GetVertex(out x, out y);
-                if (!ShapePath.is_stop(cmd))
+                cmd = m_stroke.GetNextVertex(out x, out y);
+                if (!ShapePath.IsStop(cmd))
                 {
                     ParentToChildTransform.Transform(ref x, ref y);
                     return cmd;
                 }
                 if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-                m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
+                m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
                 ++m_status;
             }
-            cmd = m_ellipse.GetVertex(out x, out y);
-            if (!ShapePath.is_stop(cmd))
+            cmd = m_ellipse.GetNextVertex(out x, out y);
+            if (!ShapePath.IsStop(cmd))
             {
                 ParentToChildTransform.Transform(ref x, ref y);
                 return cmd;
             }
             if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
             if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-            m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
+            m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
             ++m_status;
-            cmd = m_ellipse.GetVertex(out x, out y);
-            if (!ShapePath.is_stop(cmd))
+            cmd = m_ellipse.GetNextVertex(out x, out y);
+            if (!ShapePath.IsStop(cmd))
             {
                 ParentToChildTransform.Transform(ref x, ref y);
             }
@@ -503,10 +522,12 @@ namespace MatterHackers.Agg.UI
         public PolygonEditWidget(int np, double point_radius)
             : base(np, point_radius)
         {
-            m_color = new ColorRGBAf(0.0, 0.0, 0.0);
+            //m_color = new ColorRGBAf(0.0, 0.0, 0.0);
+            m_color = ColorRGBA.Black;
         }
 
         public void line_color(IColor c) { m_color = c; }
         public override IColor color(int i) { return m_color; }
-    };
+       
+    }
 }

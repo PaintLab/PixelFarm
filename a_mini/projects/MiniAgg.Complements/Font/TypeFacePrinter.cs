@@ -36,12 +36,27 @@ namespace MatterHackers.Agg.Font
 
     public class TypeFacePrinter : IVertexSource
     {
-        StyledTypeFace typeFaceStyle;
-
-        String text = "";
-
+        StyledTypeFace typeFaceStyle; 
+        String text = ""; 
         Vector2 totalSizeCach;
+        public TypeFacePrinter(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
+            : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
+        {
+        }
 
+        public TypeFacePrinter(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
+        {
+            this.typeFaceStyle = typeFaceStyle;
+            this.text = text;
+            this.Justification = justification;
+            this.Origin = origin;
+            this.Baseline = baseline;
+        }
+
+        public TypeFacePrinter(String text, TypeFacePrinter copyPropertiesFrom)
+            : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
+        {
+        }
         public Justification Justification { get; set; }
         public Baseline Baseline { get; set; }
 
@@ -74,24 +89,7 @@ namespace MatterHackers.Agg.Font
         public Vector2 Origin { get; set; }
 
 
-        public TypeFacePrinter(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
-            : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
-        {
-        }
-
-        public TypeFacePrinter(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
-        {
-            this.typeFaceStyle = typeFaceStyle;
-            this.text = text;
-            this.Justification = justification;
-            this.Origin = origin;
-            this.Baseline = baseline;
-        }
-
-        public TypeFacePrinter(String text, TypeFacePrinter copyPropertiesFrom)
-            : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
-        {
-        }
+        
 
         public RectangleDouble LocalBounds
         {
@@ -133,24 +131,26 @@ namespace MatterHackers.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
-        {
-            vertexSourceToApply.VertexSource = this;
-            rewind(0);
-            if (DrawFromHintedCache)
-            {
-                // TODO: make this work
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-            else
-            {
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-        }
+        //public void Render(Graphics2D graphics2D,
+        //    ColorRGBA color, 
+        //    IVertexSourceProxy vertexSourceToApply)
+        //{
+        //    vertexSourceToApply.VertexSource = this;
+        //    Rewind(0);
+        //    if (DrawFromHintedCache)
+        //    {
+        //        // TODO: make this work
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //    else
+        //    {
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //}
 
         public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
-            rewind(0);
+            this.RewindZero();
             if (DrawFromHintedCache)
             {
                 RenderFromCache(graphics2D, color);
@@ -203,7 +203,7 @@ namespace MatterHackers.Agg.Font
                 }
             }
         }
-
+        public bool IsDynamicVertexGen { get { return true; } }
         public IEnumerable<VertexData> GetVertexIter()
         {
             if (text != null && text.Length > 0)
@@ -302,13 +302,13 @@ namespace MatterHackers.Agg.Font
 
 #if true
         IEnumerator<VertexData> currentEnumerator;
-        public void rewind(int layerIndex)
+       
+        public void RewindZero()
         {
             currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();
         }
-
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.position.x;
             y = currentEnumerator.Current.position.y;

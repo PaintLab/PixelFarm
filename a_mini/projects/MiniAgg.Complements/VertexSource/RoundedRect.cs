@@ -38,7 +38,7 @@ namespace MatterHackers.Agg.VertexSource
         Vector2 rightTopRadius;
         Vector2 leftTopRadius;
         int state;
-        arc currentProcessingArc = new arc();
+        Arc currentProcessingArc = new Arc();
 
         public RoundedRect(double left, double bottom, double right, double top, double radius)
         {
@@ -52,16 +52,16 @@ namespace MatterHackers.Agg.VertexSource
             leftTopRadius.x = radius;
             leftTopRadius.y = radius;
 
-            if (left > right) 
-            { 
-                bounds.Left = right; 
-                bounds.Right = left; 
+            if (left > right)
+            {
+                bounds.Left = right;
+                bounds.Right = left;
             }
 
             if (bottom > top)
-            { 
-                bounds.Bottom = top; 
-                bounds.Top = bottom; 
+            {
+                bounds.Bottom = top;
+                bounds.Top = bottom;
             }
         }
 
@@ -84,13 +84,13 @@ namespace MatterHackers.Agg.VertexSource
 
         public void radius(double r)
         {
-            leftBottomRadius.x = leftBottomRadius.y = rightBottomRadius.x = rightBottomRadius.y = rightTopRadius.x = rightTopRadius.y = leftTopRadius.x = leftTopRadius.y = r; 
+            leftBottomRadius.x = leftBottomRadius.y = rightBottomRadius.x = rightBottomRadius.y = rightTopRadius.x = rightTopRadius.y = leftTopRadius.x = leftTopRadius.y = r;
         }
 
         public void radius(double rx, double ry)
         {
             leftBottomRadius.x = rightBottomRadius.x = rightTopRadius.x = leftTopRadius.x = rx;
-            leftBottomRadius.y = rightBottomRadius.y = rightTopRadius.y = leftTopRadius.y = ry; 
+            leftBottomRadius.y = rightBottomRadius.y = rightTopRadius.y = leftTopRadius.y = ry;
         }
 
         public void radius(double leftBottomRadius, double rightBottomRadius, double rightTopRadius, double leftTopRadius)
@@ -101,7 +101,7 @@ namespace MatterHackers.Agg.VertexSource
             this.leftTopRadius = new Vector2(leftTopRadius, leftTopRadius);
         }
 
-        public void radius(double rx1, double ry1, double rx2, double ry2, 
+        public void radius(double rx1, double ry1, double rx2, double ry2,
                               double rx3, double ry3, double rx4, double ry4)
         {
             leftBottomRadius.x = rx1; leftBottomRadius.y = ry1; rightBottomRadius.x = rx2; rightBottomRadius.y = ry2;
@@ -118,9 +118,9 @@ namespace MatterHackers.Agg.VertexSource
             t = dx / (leftBottomRadius.x + rightBottomRadius.x); if (t < k) k = t;
             t = dx / (rightTopRadius.x + leftTopRadius.x); if (t < k) k = t;
             t = dy / (leftBottomRadius.y + rightBottomRadius.y); if (t < k) k = t;
-            t = dy / (rightTopRadius.y + leftTopRadius.y); if (t < k) k = t; 
+            t = dy / (rightTopRadius.y + leftTopRadius.y); if (t < k) k = t;
 
-            if(k < 1.0)
+            if (k < 1.0)
             {
                 leftBottomRadius.x *= k; leftBottomRadius.y *= k; rightBottomRadius.x *= k; rightBottomRadius.y *= k;
                 rightTopRadius.x *= k; rightTopRadius.y *= k; leftTopRadius.x *= k; leftTopRadius.y *= k;
@@ -133,23 +133,23 @@ namespace MatterHackers.Agg.VertexSource
         public IEnumerable<VertexData> GetVertexIter()
         {
             currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
-            foreach (VertexData vertexData in currentProcessingArc.Vertices())
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
                 yield return vertexData;
             }
             currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
-            foreach (VertexData vertexData in currentProcessingArc.Vertices())
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.is_move_to(vertexData.command))
+                if (ShapePath.IsMoveTo(vertexData.command))
                 {
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
@@ -157,14 +157,14 @@ namespace MatterHackers.Agg.VertexSource
             }
 
             currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y, 0.0, Math.PI * 0.5);
-            foreach (VertexData vertexData in currentProcessingArc.Vertices())
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.is_move_to(vertexData.command))
+                if (ShapePath.IsMoveTo(vertexData.command))
                 {
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
@@ -172,30 +172,38 @@ namespace MatterHackers.Agg.VertexSource
             }
 
             currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y, Math.PI * 0.5, Math.PI);
-            foreach (VertexData vertexData in currentProcessingArc.Vertices())
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.is_move_to(vertexData.command))
+                switch (vertexData.command)
                 {
-                    // skip the initial moveto
-                    continue;
+                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        continue;
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        break;
+                    default:
+                        yield return vertexData;
+                        break;
                 }
-                if (ShapePath.is_stop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
+                //if (ShapePath.IsMoveTo(vertexData.command))
+                //{
+                //    // skip the initial moveto
+                //    continue;
+                //}
+                //if (ShapePath.IsStop(vertexData.command))
+                //{
+                //    break;
+                //}
+                //yield return vertexData;
             }
 
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW, new Vector2());
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
-        }
-
-        public void rewind(int unused)
+        } 
+        public void RewindZero()
         {
             state = 0;
         }
-
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -204,14 +212,14 @@ namespace MatterHackers.Agg.VertexSource
             {
                 case 0:
                     currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y,
-                               Math.PI, Math.PI + Math.PI  * 0.5);
-                    currentProcessingArc.rewind(0);
+                               Math.PI, Math.PI + Math.PI * 0.5);
+                    currentProcessingArc.RewindZero();
                     state++;
                     goto case 1;
 
                 case 1:
                     cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                     }
@@ -224,13 +232,13 @@ namespace MatterHackers.Agg.VertexSource
                 case 2:
                     currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y,
                                Math.PI + Math.PI * 0.5, 0.0);
-                    currentProcessingArc.rewind(0);
+                    currentProcessingArc.RewindZero();
                     state++;
                     goto case 3;
 
                 case 3:
                     cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                     }
@@ -243,13 +251,13 @@ namespace MatterHackers.Agg.VertexSource
                 case 4:
                     currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y,
                                0.0, Math.PI * 0.5);
-                    currentProcessingArc.rewind(0);
+                    currentProcessingArc.RewindZero();
                     state++;
                     goto case 5;
 
                 case 5:
                     cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                     }
@@ -262,13 +270,13 @@ namespace MatterHackers.Agg.VertexSource
                 case 6:
                     currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y,
                                Math.PI * 0.5, Math.PI);
-                    currentProcessingArc.rewind(0);
+                    currentProcessingArc.RewindZero();
                     state++;
                     goto case 7;
 
                 case 7:
                     cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                     }
@@ -286,6 +294,15 @@ namespace MatterHackers.Agg.VertexSource
                     break;
             }
             return cmd;
+        }
+
+
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return true;
+            }
         }
     };
 }

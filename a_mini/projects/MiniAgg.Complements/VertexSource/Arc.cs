@@ -33,17 +33,17 @@ namespace MatterHackers.Agg.VertexSource
     //
     // See Implementation agg_arc.cpp 
     //
-    public class arc
+    public class Arc
     {
-        double   originX;
-        double   originY;
-        
-        double   radiusX;
-        double   radiusY;
+        double originX;
+        double originY;
 
-        double   startAngle;
-        double   endAngle;
-        double   m_Scale;
+        double radiusX;
+        double radiusY;
+
+        double startAngle;
+        double endAngle;
+        double m_Scale;
         EDirection m_Direction;
 
         double m_CurrentFlatenAngle;
@@ -58,13 +58,13 @@ namespace MatterHackers.Agg.VertexSource
             CounterClockWise,
         }
 
-        public arc() 
+        public Arc()
         {
             m_Scale = 1.0;
             m_IsInitialized = false;
         }
 
-        public arc(double OriginX,  double OriginY, 
+        public Arc(double OriginX, double OriginY,
              double RadiusX, double RadiusY,
              double Angle1, double Angle2)
             : this(OriginX, OriginY, RadiusX, RadiusY, Angle1, Angle2, EDirection.CounterClockWise)
@@ -72,50 +72,50 @@ namespace MatterHackers.Agg.VertexSource
 
         }
 
-        public arc(double OriginX,  double OriginY, 
-             double RadiusX, double RadiusY, 
+        public Arc(double OriginX, double OriginY,
+             double RadiusX, double RadiusY,
              double Angle1, double Angle2,
              EDirection Direction)
         {
-            originX=OriginX;
-            originY=OriginY;
-            radiusX=RadiusX;
-            radiusY=RadiusY;
-            m_Scale=1.0;
+            originX = OriginX;
+            originY = OriginY;
+            radiusX = RadiusX;
+            radiusY = RadiusY;
+            m_Scale = 1.0;
             normalize(Angle1, Angle2, Direction);
         }
 
-        public void init(double OriginX,  double OriginY, 
-                  double RadiusX, double RadiusY, 
+        public void init(double OriginX, double OriginY,
+                  double RadiusX, double RadiusY,
                   double Angle1, double Angle2)
         {
             init(OriginX, OriginY, RadiusX, RadiusY, Angle1, Angle2, EDirection.CounterClockWise);
         }
 
-        public void init(double OriginX,  double OriginY, 
-                   double RadiusX, double RadiusY, 
-                   double Angle1, double Angle2, 
+        public void init(double OriginX, double OriginY,
+                   double RadiusX, double RadiusY,
+                   double Angle1, double Angle2,
                    EDirection Direction)
         {
-            originX   = OriginX;  
-            originY  = OriginY;
-            radiusX  = RadiusX; 
-            radiusY = RadiusY; 
+            originX = OriginX;
+            originY = OriginY;
+            radiusX = RadiusX;
+            radiusY = RadiusY;
             normalize(Angle1, Angle2, Direction);
         }
 
         public void approximation_scale(double s)
         {
             m_Scale = s;
-            if(m_IsInitialized)
+            if (m_IsInitialized)
             {
                 normalize(startAngle, endAngle, m_Direction);
             }
         }
-        
-        public double approximation_scale() { return m_Scale;  }
 
-        public IEnumerable<VertexData> Vertices()
+        public double approximation_scale() { return m_Scale; }
+
+        public IEnumerable<VertexData> GetVertexIter()
         {
             // go to the start
             VertexData vertexData = new VertexData();
@@ -143,9 +143,9 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
         }
 
-        public void rewind(int unused)
+        public void RewindZero()
         {
-            m_NextPathCommand = ShapePath.FlagsAndCommand.CommandMoveTo; 
+            m_NextPathCommand = ShapePath.FlagsAndCommand.CommandMoveTo;
             m_CurrentFlatenAngle = startAngle;
         }
 
@@ -154,7 +154,7 @@ namespace MatterHackers.Agg.VertexSource
             x = 0;
             y = 0;
 
-            if (ShapePath.is_stop(m_NextPathCommand))
+            if (ShapePath.IsStop(m_NextPathCommand))
             {
                 return ShapePath.FlagsAndCommand.CommandStop;
             }
@@ -197,9 +197,9 @@ namespace MatterHackers.Agg.VertexSource
                 }
                 flatenDeltaAngle = -flatenDeltaAngle;
             }
-            m_Direction   = Direction;
+            m_Direction = Direction;
             startAngle = Angle1;
-            endAngle   = Angle2;
+            endAngle = Angle2;
             m_IsInitialized = true;
         }
     }

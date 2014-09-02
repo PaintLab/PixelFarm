@@ -35,7 +35,7 @@ namespace MatterHackers.Agg.VertexSource
             next_char,
             start_glyph,
             glyph
-        };
+        }
 
         double m_StartX;
         double m_CurrentX;
@@ -196,8 +196,8 @@ namespace MatterHackers.Agg.VertexSource
         {
             throw new NotImplementedException();
         }
-
-        public void rewind(int nothing)
+         
+        public void RewindZero()
         {
             m_status = status.initial;
             if (m_font == null) return;
@@ -207,7 +207,6 @@ namespace MatterHackers.Agg.VertexSource
             m_StartOfGlyphsIndex = m_StartOfIndicesIndex + 257 * 2; // one for x one for y
             m_CurrentCharacterIndex = 0;
         }
-
         private void GetSize(char characterToMeasure, out double width, out double height)
         {
             width = 0;
@@ -294,7 +293,7 @@ namespace MatterHackers.Agg.VertexSource
                 {
                     clostestDist = lastDistToChar;
                     // we need to start after the lats character, or before the character after the last.
-                    clostestIndex = characterToMeasureEndIndexInclusive+1;
+                    clostestIndex = characterToMeasureEndIndexInclusive + 1;
                 }
             }
 
@@ -303,7 +302,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void GetSize(out Vector2 pixelSize)
         {
-            GetSize(0, m_Text.Length-1, out pixelSize);
+            GetSize(0, m_Text.Length - 1, out pixelSize);
         }
 
         public void GetSize(int characterToMeasureStartIndexInclusive, int characterToMeasureEndIndexInclusive, out Vector2 pixelSize)
@@ -336,7 +335,14 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;

@@ -42,8 +42,8 @@ namespace MatterHackers.Agg
         }
         int xi(int v) { return v; }
         int yi(int v) { return v; }
-        public int upscale(double v) { return AggBasics.iround(v * (int)poly_subpixel_scale_e.poly_subpixel_scale); }
-        public int downscale(int v) { return v / (int)poly_subpixel_scale_e.poly_subpixel_scale; }
+        public int upscale(double v) { return AggBasics.iround(v * (int)poly_subpixel_scale_e.SCALE); }
+        public int downscale(int v) { return v / (int)poly_subpixel_scale_e.SCALE; }
 
         //--------------------------------------------------------------------
         public VectorClipper()
@@ -81,7 +81,7 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        private void line_clip_y(RasterizerCellsAA ras,
+        private void line_clip_y(CellAARasterizer ras,
                                     int x1, int y1, 
                                     int x2, int y2,
                                     int f1, int f2)
@@ -91,7 +91,7 @@ namespace MatterHackers.Agg
             if((f1 | f2) == 0)
             {
                 // Fully visible
-                ras.line(x1, y1, x2, y2); 
+                ras.DrawLine(x1, y1, x2, y2); 
             }
             else
             {
@@ -130,12 +130,12 @@ namespace MatterHackers.Agg
                     ty2 = clipBox.Top;
                 }
 
-                ras.line(tx1, ty1, tx2, ty2); 
+                ras.DrawLine(tx1, ty1, tx2, ty2); 
             }
         }
 
         //--------------------------------------------------------------------
-        internal void line_to(RasterizerCellsAA ras, int x2, int y2)
+        internal void line_to(CellAARasterizer ras, int x2, int y2)
         {
             if(m_clipping)
             {
@@ -222,7 +222,7 @@ namespace MatterHackers.Agg
             }
             else
             {
-                ras.line(m_x1, m_y1, 
+                ras.DrawLine(m_x1, m_y1, 
                          x2,   y2); 
             }
             m_x1 = x2;

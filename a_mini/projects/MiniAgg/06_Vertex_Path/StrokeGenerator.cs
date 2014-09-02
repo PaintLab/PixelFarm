@@ -21,11 +21,13 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    public class Vector2Container : ArrayList<Vector2> , IVertexDest
+    public class Vector2Container : ArrayList<Vector2>, IVertexDest
     {
-
+        public void AddVertex(double x, double y)
+        {
+            base.AddVertex(new Vector2(x, y));
+        }
     }
-
     //============================================================vcgen_stroke
     class StrokeGenerator : IGenerator
     {
@@ -50,31 +52,62 @@ namespace MatterHackers.Agg.VertexSource
             m_status = StrokeMath.Status.Init;
         }
 
-        public void line_cap(LineCap lc) { m_stroker.line_cap(lc); }
-        public void line_join(LineJoin lj) { m_stroker.line_join(lj); }
-        public void inner_join(InnerJoin ij) { m_stroker.inner_join(ij); }
 
-        public LineCap line_cap() { return m_stroker.line_cap(); }
-        public LineJoin line_join() { return m_stroker.line_join(); }
-        public InnerJoin inner_join() { return m_stroker.inner_join(); }
+        public LineCap LineCap
+        {
+            get { return this.m_stroker.LineCap; }
+            set { this.m_stroker.LineCap = value; }
+        }
+        public LineJoin LineJoin
+        {
+            get { return this.m_stroker.LineJoin; }
+            set { this.m_stroker.LineJoin = value; }
 
-        public void width(double w) { m_stroker.width(w); }
-        public void miter_limit(double ml) { m_stroker.miter_limit(ml); }
-        public void miter_limit_theta(double t) { m_stroker.miter_limit_theta(t); }
-        public void inner_miter_limit(double ml) { m_stroker.inner_miter_limit(ml); }
-        public void approximation_scale(double approx_scale) { m_stroker.approximation_scale(approx_scale); }
+        }
+        public InnerJoin InnerJoin
+        {
+            get { return this.m_stroker.InnerJoin; }
+            set { this.m_stroker.InnerJoin = value; }
+        }
 
-        public double width() { return m_stroker.width(); }
-        public double miter_limit() { return m_stroker.miter_limit(); }
-        public double inner_miter_limit() { return m_stroker.inner_miter_limit(); }
-        public double approximation_scale() { return m_stroker.approximation_scale(); }
 
-        public void auto_detect_orientation(bool v) { throw new Exception(); }
-        public bool auto_detect_orientation() { throw new Exception(); }
 
-        public void shorten(double s) { m_shorten = s; }
-        public double shorten() { return m_shorten; }
+        public double Width
+        {
+            get { return m_stroker.Width; }
+            set { this.m_stroker.Width = value; }
+        }
+        public void SetMiterLimitTheta(double t) { m_stroker.SetMiterLimitTheta(t); }
 
+
+        public double InnerMiterLimit
+        {
+            get { return this.m_stroker.InnerMiterLimit; }
+            set { this.m_stroker.InnerMiterLimit = value; }
+        }
+        public double MiterLimit
+        {
+            get { return this.m_stroker.InnerMiterLimit; }
+            set { this.m_stroker.InnerMiterLimit = value; }
+        }
+        public double ApproximateScale
+        {
+            get { return this.m_stroker.ApproximateScale; }
+            set { this.m_stroker.ApproximateScale = value; }
+        }
+        public bool AutoDetectOrientation
+        {
+            get { throw new NotSupportedException(); }
+            set { throw new NotSupportedException(); }
+        }
+
+
+
+        public double Shorten
+        {
+            get { return this.m_shorten; }
+            set { this.m_shorten = value; }
+        }
         // Vertex Generator Interface
         public void RemoveAll()
         {
@@ -86,7 +119,7 @@ namespace MatterHackers.Agg.VertexSource
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
         {
             m_status = StrokeMath.Status.Init;
-            if (ShapePath.is_move_to(cmd))
+            if (ShapePath.IsMoveTo(cmd))
             {
                 m_src_vertices.ReplaceLast(new VertexDistance(x, y));
             }
@@ -98,18 +131,18 @@ namespace MatterHackers.Agg.VertexSource
                 }
                 else
                 {
-                    m_closed = (int)ShapePath.get_close_flag(cmd);
+                    m_closed = (int)ShapePath.GetCloseFlags(cmd);
                 }
             }
         }
 
         // Vertex Source Interface
-        public void Rewind(int idx)
+        public void RewindZero()
         {
             if (m_status == StrokeMath.Status.Init)
             {
                 m_src_vertices.Close(m_closed != 0);
-                ShapePath.shorten_path(m_src_vertices, m_shorten, m_closed);
+                ShapePath.ShortenPath(m_src_vertices, m_shorten, m_closed);
                 if (m_src_vertices.Count < 3) m_closed = 0;
             }
             m_status = StrokeMath.Status.Ready;
@@ -117,15 +150,15 @@ namespace MatterHackers.Agg.VertexSource
             m_out_vertex = 0;
         }
 
-        public ShapePath.FlagsAndCommand Vertex(ref double x, ref double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandLineTo;
-            while (!ShapePath.is_stop(cmd))
+            while (!ShapePath.IsStop(cmd))
             {
                 switch (m_status)
                 {
                     case StrokeMath.Status.Init:
-                        Rewind(0);
+                        this.RewindZero();
                         goto case StrokeMath.Status.Ready;
 
                     case StrokeMath.Status.Ready:
@@ -142,8 +175,12 @@ namespace MatterHackers.Agg.VertexSource
                         break;
 
                     case StrokeMath.Status.Cap1:
-                        m_stroker.calc_cap(m_out_vertices, m_src_vertices[0], m_src_vertices[1],
+                        m_stroker.CreateCap(
+                            m_out_vertices,
+                            m_src_vertices[0],
+                            m_src_vertices[1],
                             m_src_vertices[0].dist);
+
                         m_src_vertex = 1;
                         m_prev_status = StrokeMath.Status.Outline1;
                         m_status = StrokeMath.Status.OutVertices;
@@ -151,7 +188,7 @@ namespace MatterHackers.Agg.VertexSource
                         break;
 
                     case StrokeMath.Status.Cap2:
-                        m_stroker.calc_cap(m_out_vertices,
+                        m_stroker.CreateCap(m_out_vertices,
                             m_src_vertices[m_src_vertices.Count - 1],
                             m_src_vertices[m_src_vertices.Count - 2],
                             m_src_vertices[m_src_vertices.Count - 2].dist);
@@ -178,7 +215,8 @@ namespace MatterHackers.Agg.VertexSource
                                 break;
                             }
                         }
-                        m_stroker.calc_join(m_out_vertices,
+
+                        m_stroker.CreateJoin(m_out_vertices,
                             m_src_vertices.prev(m_src_vertex),
                             m_src_vertices.curr(m_src_vertex),
                             m_src_vertices.next(m_src_vertex),
@@ -204,7 +242,7 @@ namespace MatterHackers.Agg.VertexSource
                         }
 
                         --m_src_vertex;
-                        m_stroker.calc_join(m_out_vertices,
+                        m_stroker.CreateJoin(m_out_vertices,
                             m_src_vertices.next(m_src_vertex),
                             m_src_vertices.curr(m_src_vertex),
                             m_src_vertices.prev(m_src_vertex),

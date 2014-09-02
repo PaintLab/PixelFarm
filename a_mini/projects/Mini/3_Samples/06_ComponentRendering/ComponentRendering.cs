@@ -68,17 +68,17 @@ namespace MatterHackers.Agg
                     new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
 
                 VertexSource.Ellipse er = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.add_path(er);
+                ras.AddPath(er);
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-                scanlineRenderer.render_scanlines_aa_solid(clippingProxyRed, ras, sl, FillColor);
+                scanlineRenderer.RenderScanlineSolidAA(clippingProxyRed, ras, sl, FillColor);
 
                 VertexSource.Ellipse eg = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.add_path(eg);
-                scanlineRenderer.render_scanlines_aa_solid(clippingProxyGreen, ras, sl, FillColor);
+                ras.AddPath(eg);
+                scanlineRenderer.RenderScanlineSolidAA(clippingProxyGreen, ras, sl, FillColor);
 
                 VertexSource.Ellipse eb = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
-                ras.add_path(eb);
-                scanlineRenderer.render_scanlines_aa_solid(clippingProxyBlue, ras, sl, FillColor);
+                ras.AddPath(eb);
+                scanlineRenderer.RenderScanlineSolidAA(clippingProxyBlue, ras, sl, FillColor);
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

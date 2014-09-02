@@ -26,7 +26,7 @@ namespace MatterHackers.Agg.VertexSource
 {
 
     //=======================================================span_gouraud_rgba
-    public sealed class span_gouraud_rgba : span_gouraud, ISpanGenerator
+    public sealed class SpanGouraudRGBA : SpanGourand, ISpanGenerator
     {
         bool      m_swap;
         int       m_y2;
@@ -38,12 +38,12 @@ namespace MatterHackers.Agg.VertexSource
         { 
             subpixel_shift = 4, 
             subpixel_scale = 1 << subpixel_shift
-        };
+        } 
 
         //--------------------------------------------------------------------
         public struct rgba_calc
         {
-            public void init(span_gouraud.coord_type c1, span_gouraud.coord_type c2)
+            public void init(SpanGourand.CoordAndColor c1, SpanGourand.CoordAndColor c2)
             {
                 m_x1  = c1.x - 0.5; 
                 m_y1  = c1.y - 0.5;
@@ -92,8 +92,8 @@ namespace MatterHackers.Agg.VertexSource
         };
 
         //--------------------------------------------------------------------
-        public span_gouraud_rgba() {}
-        public span_gouraud_rgba(ColorRGBA c1, 
+        public SpanGouraudRGBA() {}
+        public SpanGouraudRGBA(ColorRGBA c1, 
                           ColorRGBA c2, 
                           ColorRGBA c3,
                           double x1, double y1, 
@@ -101,7 +101,7 @@ namespace MatterHackers.Agg.VertexSource
                           double x3, double y3) : this(c1, c2, c3, x1, y1, x2, y2, x3, y3, 0)
         {}
 
-        public span_gouraud_rgba(ColorRGBA c1, 
+        public SpanGouraudRGBA(ColorRGBA c1, 
                           ColorRGBA c2, 
                           ColorRGBA c3,
                           double x1, double y1, 
@@ -113,7 +113,7 @@ namespace MatterHackers.Agg.VertexSource
         //--------------------------------------------------------------------
         public void Prepare()
         {
-            coord_type[] coord = new coord_type[3];
+            CoordAndColor[] coord = new CoordAndColor[3];
             base.arrange_vertices(coord);
 
             m_y2 = (int)(coord[1].y);
@@ -163,10 +163,10 @@ namespace MatterHackers.Agg.VertexSource
             int nlen = Math.Abs(pc2.m_x - pc1.m_x);
             if (nlen <= 0) nlen = 1;
  
-            var r = new MatterHackers.Agg.Lines.LineInterPolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
-            var g = new MatterHackers.Agg.Lines.LineInterPolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
-            var b = new MatterHackers.Agg.Lines.LineInterPolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
-            var a = new MatterHackers.Agg.Lines.LineInterPolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
+            var r = new MatterHackers.Agg.Lines.LineInterpolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
+            var g = new MatterHackers.Agg.Lines.LineInterpolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
+            var b = new MatterHackers.Agg.Lines.LineInterpolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
+            var a = new MatterHackers.Agg.Lines.LineInterpolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
 
             // Calculate the starting point of the gradient with subpixel 
             // accuracy and correct (roll back) the interpolators.

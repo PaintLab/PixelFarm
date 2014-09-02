@@ -59,14 +59,14 @@ namespace MatterHackers.Agg
     }
 
     //============================================================gamma_linear
-    public class gamma_linear : IGammaFunction
+    public class GammaLinear : IGammaFunction
     {
-        public gamma_linear()
+        public GammaLinear()
         {
             m_start = (0.0);
             m_end = (1.0);
         }
-        public gamma_linear(double s, double e)
+        public GammaLinear(double s, double e)
         {
             m_start = (s);
             m_end = (e);

@@ -411,9 +411,10 @@ namespace MatterHackers.Agg.Font
             Glyph glyph;
             if (glyphs.TryGetValue(character, out glyph))
             {
-                PathStorage writeableGlyph = new PathStorage();
-                writeableGlyph.ShareVertexData(glyph.glyphData);
-                return writeableGlyph;
+                //PathStorage writeableGlyph = new PathStorage(glyph.glyphData);
+                //writeableGlyph.ShareVertexData(glyph.glyphData);
+                //return writeableGlyph;
+                return new PathStorage(glyph.glyphData);
             }
 
             return null;

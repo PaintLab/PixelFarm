@@ -28,7 +28,7 @@ namespace MatterHackers.Agg.Font
 {
     public class GlyphWithUnderline : IVertexSource
     {
-        int state = 0;
+
         IVertexSource underline;
         IVertexSource glyph;
 
@@ -43,7 +43,7 @@ namespace MatterHackers.Agg.Font
             // return all the data for the glyph
             foreach (VertexData vertexData in glyph.GetVertexIter())
             {
-                if (ShapePath.is_stop(vertexData.command))
+                if (ShapePath.IsStop(vertexData.command))
                 {
                     break;
                 }
@@ -56,14 +56,21 @@ namespace MatterHackers.Agg.Font
                 yield return vertexData;
             }
         }
-
-        public void rewind(int path_id)
+        public bool IsDynamicVertexGen
         {
-            underline.rewind(0);
-            glyph.rewind(path_id);
+            get { return this.glyph.IsDynamicVertexGen; }
         }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+      
+        public void RewindZero()
+        {
+            state = 0;
+            underline.RewindZero();
+            glyph.RewindZero();
+        }
+
+        int state = 0;
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -71,8 +78,8 @@ namespace MatterHackers.Agg.Font
             switch (state)
             {
                 case 0:
-                    cmd = glyph.GetVertex(out x, out y);
-                    if (ShapePath.is_stop(cmd))
+                    cmd = glyph.GetNextVertex(out x, out y);
+                    if (ShapePath.IsStop(cmd))
                     {
                         state++;
                         goto case 1;
@@ -80,7 +87,7 @@ namespace MatterHackers.Agg.Font
                     return cmd;
 
                 case 1:
-                    cmd = underline.GetVertex(out x, out y);
+                    cmd = underline.GetNextVertex(out x, out y);
                     break;
             }
             return cmd;
@@ -279,14 +286,15 @@ namespace MatterHackers.Agg.Font
                 return null;
             }
 
-            glyphForCharacter.rewind(0);
+
+            glyphForCharacter.RewindZero();
             double x, y;
-            ShapePath.FlagsAndCommand curCommand = glyphForCharacter.GetVertex(out x, out y);
+            ShapePath.FlagsAndCommand curCommand = glyphForCharacter.GetNextVertex(out x, out y);
             RectangleDouble bounds = new RectangleDouble(x, y, x, y);
             while (curCommand != ShapePath.FlagsAndCommand.CommandStop)
             {
                 bounds.ExpandToInclude(x, y);
-                curCommand = glyphForCharacter.GetVertex(out x, out y);
+                curCommand = glyphForCharacter.GetNextVertex(out x, out y);
             }
 
             ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
@@ -300,6 +308,7 @@ namespace MatterHackers.Agg.Font
         public IVertexSource GetGlyphForCharacter(char character)
         {
             // scale it to the correct size.
+
             IVertexSource sourceGlyph = typeFace.GetGlyphForCharacter(character);
             if (sourceGlyph != null)
             {
@@ -308,7 +317,7 @@ namespace MatterHackers.Agg.Font
                     sourceGlyph = new GlyphWithUnderline(sourceGlyph, typeFace.GetAdvanceForCharacter(character), typeFace.Underline_position, typeFace.Underline_thickness);
                 }
 
-                Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));                 
+                Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
                 IVertexSource characterGlyph = new VertexSourceApplyTransform(sourceGlyph, glyphTransform);
 
                 if (FlatenCurves)

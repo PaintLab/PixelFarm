@@ -29,7 +29,7 @@ namespace MatterHackers.Agg.UI
     {
 
         bool localBoundsComeFromPoints = true;
-        
+
         public SimpleVertexSourceWidget()
         {
             throw new Exception("this is depricated");
@@ -49,12 +49,12 @@ namespace MatterHackers.Agg.UI
                 {
                     RectangleDouble localBounds = new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
 
-                    rewind(0);
+                    this.RewindZero();
                     double x;
                     double y;
                     ShapePath.FlagsAndCommand cmd;
                     int numPoint = 0;
-                    while (!ShapePath.is_stop(cmd = GetVertex(out x, out y)))
+                    while (!ShapePath.IsStop(cmd = GetNextVertex(out x, out y)))
                     {
                         numPoint++;
                         localBounds.ExpandToInclude(x, y);
@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.UI
                 }
             }
 
-            set 
+            set
             {
                 if (localBoundsComeFromPoints)
                 {
@@ -89,18 +89,41 @@ namespace MatterHackers.Agg.UI
 
         public abstract int num_paths();
         public abstract IEnumerable<VertexData> GetVertexIter();
-        public abstract void rewind(int path_id);
-        public abstract ShapePath.FlagsAndCommand GetVertex(out double x, out double y);
+       
+        public abstract void RewindZero();
+        public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
 
-        public virtual IColor color(int i) { return (IColor)new ColorRGBAf(); }
+        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); }
 
         public override void OnDraw(Graphics2D graphics2D)
         {
-            for (int i = 0; i < num_paths(); i++)
+            var list = new System.Collections.Generic.List<VertexData>();
+            this.RewindZero();
+
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            while ((cmd = this.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
-                graphics2D.Render(this, i, color(i).GetAsRGBA_Bytes());
+                list.Add(new VertexData(cmd, new Vector2(x, y)));
             }
+            //foreach (var v in this.GetVertexIter())
+            //{
+
+            //}
+            graphics2D.Render(new SinglePath(new VertexStorage(list), 0),
+                color(0).GetAsRGBA_Bytes());
+
+
+            //for (int i = 0; i < num_paths(); i++)
+            //{
+            //    graphics2D.Render(this, i, color(i).GetAsRGBA_Bytes());
+            //}
             base.OnDraw(graphics2D);
+        }
+
+        public abstract bool IsDynamicVertexGen
+        {
+            get;
         }
     }
 }

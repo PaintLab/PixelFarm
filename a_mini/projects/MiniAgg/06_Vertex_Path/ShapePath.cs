@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
- 
+
 using System.Text;
 
 namespace MatterHackers.Agg
 {
+
     public static class ShapePath
     {
         [Flags]
@@ -12,10 +13,12 @@ namespace MatterHackers.Agg
         {
             //first lower 4 bits compact flags
             CommandStop = 0x00,
-            CommandMoveTo = 0x01,
-            CommandLineTo = 0x02,
-            CommandCurve3 = 0x03,
-            CommandCurve4 = 0x04,
+
+            CommandMoveTo = 0x01, //vertext cmd
+            CommandLineTo = 0x02, //vertext cmd
+            CommandCurve3 = 0x03, //vertext cmd
+            CommandCurve4 = 0x04, //vertext cmd
+
             CommandEndPoly = 0x0F,
             CommandsMask = 0x0F,
             //-----------------------
@@ -33,89 +36,80 @@ namespace MatterHackers.Agg
                 && c < FlagsAndCommand.CommandEndPoly;
         }
 
-        public static bool is_drawing(FlagsAndCommand c)
-        {
-            return c >= FlagsAndCommand.CommandLineTo && c < FlagsAndCommand.CommandEndPoly;
-        }
 
-        public static bool is_stop(FlagsAndCommand c)
+        public static bool IsStop(FlagsAndCommand c)
         {
             return c == FlagsAndCommand.CommandStop;
         }
 
-        public static bool is_move_to(FlagsAndCommand c)
+        public static bool IsMoveTo(FlagsAndCommand c)
         {
             return c == FlagsAndCommand.CommandMoveTo;
         }
 
-        public static bool is_line_to(FlagsAndCommand c)
-        {
-            return c == FlagsAndCommand.CommandLineTo;
-        }
-
-        public static bool is_curve(FlagsAndCommand c)
+        public static bool IsCurve(FlagsAndCommand c)
         {
             return c == FlagsAndCommand.CommandCurve3
                 || c == FlagsAndCommand.CommandCurve4;
         }
 
-        public static bool is_curve3(FlagsAndCommand c)
-        {
-            return c == FlagsAndCommand.CommandCurve3;
-        }
+        //public static bool IsCurve3(FlagsAndCommand c)
+        //{
+        //    return c == FlagsAndCommand.CommandCurve3;
+        //}
 
-        public static bool is_curve4(FlagsAndCommand c)
-        {
-            return c == FlagsAndCommand.CommandCurve4;
-        }
+        //public static bool IsCurve4(FlagsAndCommand c)
+        //{
+        //    return c == FlagsAndCommand.CommandCurve4;
+        //}
 
-        public static bool is_end_poly(FlagsAndCommand c)
+        public static bool IsEndPoly(FlagsAndCommand c)
         {
             return (c & FlagsAndCommand.CommandsMask) == FlagsAndCommand.CommandEndPoly;
         }
 
-        public static bool is_close(FlagsAndCommand c)
+        public static bool IsClose(FlagsAndCommand c)
         {
             return (c & ~(FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW)) ==
                    (FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose);
         }
 
-        public static bool is_next_poly(FlagsAndCommand c)
+        public static bool IsNextPoly(FlagsAndCommand c)
         {
-            return is_stop(c) || is_move_to(c) || is_end_poly(c);
+            return IsStop(c) || IsMoveTo(c) || IsEndPoly(c);
         }
 
-        public static bool is_cw(FlagsAndCommand c)
+        public static bool IsCw(FlagsAndCommand c)
         {
             return (c & FlagsAndCommand.FlagCW) != 0;
         }
 
-        public static bool is_ccw(FlagsAndCommand c)
+        public static bool IsCcw(FlagsAndCommand c)
         {
             return (c & FlagsAndCommand.FlagCCW) != 0;
         }
 
-        public static bool is_oriented(FlagsAndCommand c)
+        public static bool HasOrientationInfo(FlagsAndCommand c)
         {
             return (c & (FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW)) != 0;
         }
 
-        public static bool is_closed(FlagsAndCommand c)
-        {
-            return (c & FlagsAndCommand.FlagClose) != 0;
-        }
+        //public static bool IsClosed(FlagsAndCommand c)
+        //{
+        //    return (c & FlagsAndCommand.FlagClose) != 0;
+        //}
 
-        public static FlagsAndCommand get_close_flag(FlagsAndCommand c)
+        public static FlagsAndCommand GetCloseFlags(FlagsAndCommand c)
         {
             return (FlagsAndCommand)(c & FlagsAndCommand.FlagClose);
         }
 
-        public static FlagsAndCommand clear_orientation(FlagsAndCommand c)
+        public static FlagsAndCommand ClearOritentation(FlagsAndCommand c)
         {
             return c & ~(FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW);
         }
 
-        public static FlagsAndCommand get_orientation(FlagsAndCommand c)
+        public static FlagsAndCommand GetOrientation(FlagsAndCommand c)
         {
             return c & (FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW);
         }
@@ -128,12 +122,12 @@ namespace MatterHackers.Agg
         }
          */
 
-        static public void shorten_path(MatterHackers.Agg.VertexSequence vs, double s)
-        {
-            shorten_path(vs, s, 0);
-        }
+        //static public void shorten_path(MatterHackers.Agg.VertexSequence vs, double s)
+        //{
+        //    shorten_path(vs, s, 0);
+        //}
 
-        static public void shorten_path(VertexSequence vs, double s, int closed)
+        static public void ShortenPath(VertexSequence vs, double s, int closed)
         {
             if (s > 0.0 && vs.Count > 1)
             {

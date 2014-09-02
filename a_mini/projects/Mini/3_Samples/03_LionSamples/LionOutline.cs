@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
             "and when so called miter limit is exceded, they are not as accurate as generated " +
             "by the stroke converter (conv_stroke). To see the difference, maximize the window" +
             " and try to rotate and scale the �lion� with and without using the scanline " +
-            "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")] 
+            "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")]
     public class LionFillOutlineExample : DemoBase
     {
         lion_outline lionFill;
@@ -129,11 +129,11 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
             int strokeWidth = 1;
 
-            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA()); 
+            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(ColorRGBA.White);
 
-            Affine transform = Affine.NewMatix( 
+            Affine transform = Affine.NewMatix(
                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                     AffinePlan.Scale(spriteScale, spriteScale),
                     AffinePlan.Rotate(angle + Math.PI),
@@ -151,11 +151,22 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
                 Stroke stroke = new Stroke(lionShape.Path);
-                stroke.width(strokeWidth);
-                stroke.line_join(LineJoin.Round);
+
+                stroke.Width = strokeWidth;
+                stroke.LineJoin = LineJoin.Round;
+
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke, transform);
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-                scanlineRenderer.RenderSolidAllPaths(imageClippingProxy, rasterizer, scanlineCache, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+
+                var vxs = trans.DoTransformToNewVxStorage();
+                scanlineRenderer.RenderSolidAllPaths(
+                    imageClippingProxy,
+                    rasterizer,
+                    scanlineCache,
+                    vxs,
+                    lionShape.Colors,
+                    lionShape.PathIndexList,
+                    lionShape.NumPaths);
             }
             else
             {
@@ -165,14 +176,28 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
 
-                rasterizer.line_join(RenderAccurateJoins ?
-                    OutlineAARasterizer.outline_aa_join_e.outline_miter_accurate_join
-                    : OutlineAARasterizer.outline_aa_join_e.outline_round_join);
-                rasterizer.round_cap(true);
+                rasterizer.LineJoin = (RenderAccurateJoins ?
+                    OutlineAARasterizer.OutlineJoin.AccurateJoin
+                    : OutlineAARasterizer.OutlineJoin.Round);
+                rasterizer.RoundCap = true;
 
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-
-                rasterizer.RenderAllPaths(trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+                var vxs = trans.DoTransformToNewVxStorage();
+                //rasterizer.RenderSolidAllPaths(
+                //    imageClippingProxy,
+                //    rasterizer,
+                //    scanlineCache,
+                //    vxs,
+                //    lionShape.Colors,
+                //    lionShape.PathIndexList,
+                //    lionShape.NumPaths);
+                int j = lionShape.NumPaths;
+                for (int i = 0; i < j; ++i)
+                {
+                    rasterizer.RenderSinglePath(
+                        new SinglePath(vxs, lionShape.PathIndexList[i]), lionShape.Colors[i]);
+                }
+                //rasterizer.RenderAllPaths(trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
             }
 
             base.OnDraw(graphics2D);

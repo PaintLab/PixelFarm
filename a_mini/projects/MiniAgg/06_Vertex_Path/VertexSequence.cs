@@ -85,9 +85,11 @@ namespace MatterHackers.Agg
         public void Close(bool closed)
         {
             int snapSize = base.Count;
+            var vtxArray = this.Array;
+
             while (snapSize > 1)
             {
-                if (Array[snapSize - 2].IsEqual(Array[snapSize - 1]))
+                if (vtxArray[snapSize - 2].IsEqual(vtxArray[snapSize - 1]))
                 {
                     break;
                 }
@@ -146,10 +148,10 @@ namespace MatterHackers.Agg
         }
         public bool IsEqual(VertexDistance val)
         {
-            bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.vertex_dist_epsilon;
+            bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.VERTEX_DISTANCE_EPSILON;
             if (!ret)
             {
-                dist = 1.0 / AggMath.vertex_dist_epsilon;
+                dist = 1.0 / AggMath.VERTEX_DISTANCE_EPSILON;
             }
             return ret;
         }

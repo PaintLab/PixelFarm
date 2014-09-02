@@ -133,24 +133,24 @@ namespace LayoutFarm.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
-        {
-            vertexSourceToApply.VertexSource = this;
-            rewind(0);
-            if (DrawFromHintedCache)
-            {
-                // TODO: make this work
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-            else
-            {
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-        }
+        //public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
+        //{
+        //    vertexSourceToApply.VertexSource = this;
+        //    Rewind(0);
+        //    if (DrawFromHintedCache)
+        //    {
+        //        // TODO: make this work
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //    else
+        //    {
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //}
 
         public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
-            rewind(0);
+            this.RewindZero();
             if (DrawFromHintedCache)
             {
                 RenderFromCache(graphics2D, color);
@@ -302,22 +302,28 @@ namespace LayoutFarm.Agg.Font
 
 #if true
         IEnumerator<VertexData> currentEnumerator;
-        public void rewind(int layerIndex)
+        
+        public void RewindZero()
         {
             currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();
         }
+        public bool IsDynamicVertexGen
+        {
+            get { return true; }
+        }
 
-        public ShapePath.FlagsAndCommand GetVertex(out double x, out double y)
+
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.position.x;
             y = currentEnumerator.Current.position.y;
             ShapePath.FlagsAndCommand command = currentEnumerator.Current.command;
-
             currentEnumerator.MoveNext();
-
             return command;
         }
+
+
 #else
         public void rewind(int pathId)
         {

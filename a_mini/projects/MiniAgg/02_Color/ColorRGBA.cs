@@ -38,7 +38,7 @@ namespace MatterHackers.Agg
     //struct order_abgr { enum abgr_e { A = 0, B = 1, G = 2, R = 3, rgba_tag }; }; //----order_abgr
     //struct order_bgra { enum bgra_e { B = 0, G = 1, R = 2, A = 3, rgba_tag }; }; //----order_bgra
 
-    public struct ColorRGBAf : IColor
+    public struct ColorRGBAf //: IColor
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
@@ -507,7 +507,7 @@ namespace MatterHackers.Agg
         }
 
 
-        public static IColor no_color() { return (IColor)new ColorRGBAf(0, 0, 0, 0); }
+        public static IColor no_color() { return new ColorRGBAf(0, 0, 0, 0).GetAsRGBA_Bytes(); }
 
         public static ColorRGBAf from_wavelength(float wl)
         {

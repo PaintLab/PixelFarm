@@ -42,10 +42,10 @@ namespace MatterHackers.Agg
     public sealed class ScanlinePacked8 : IScanline
     {
 
-        byte[] m_covers;
-        int m_cover_index;
+        byte[] m_covers;      
         ScanlineSpan[] m_spans;
 
+        int m_cover_index;
         int last_span_index;
         int last_x;
         int lineY;
