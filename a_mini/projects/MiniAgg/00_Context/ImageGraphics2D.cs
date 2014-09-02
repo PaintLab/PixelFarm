@@ -74,7 +74,7 @@ namespace MatterHackers.Agg
                 vertexSource.RewindZero();
                 vertexTx.DoTransform(vxData);
                 //VertexStorage newvx = new VertexStorage(vxData);
-                rasterizer.AddPath(new SinglePath(new VertexStorage(vxData),0));
+                rasterizer.AddPath(new SinglePath(new VertexStorage(vxData), 0));
             }
             else
             {
@@ -129,7 +129,7 @@ namespace MatterHackers.Agg
             Affine transform = GetTransform();
             if (!transform.IsIdentity())
             {
-                vertexSource = new VertexSourceApplyTransform(vertexSource, transform);
+                vertexSource = new VertexSourceApplyTransform(vertexSource, transform).DoTransformToNewSinglePath();
             }
             rasterizer.AddPath(vertexSource);
             if (destImageByte != null)
@@ -204,8 +204,9 @@ namespace MatterHackers.Agg
                 destRectTransform *= Affine.NewTranslation(-destImageByte.OriginOffset.x, -destImageByte.OriginOffset.y);
             }
 
-            VertexSourceApplyTransform transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
-            Rasterizer.AddPath(transfromedRect);
+            var transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
+            var sp1 = transfromedRect.DoTransformToNewSinglePath();
+            Rasterizer.AddPath(sp1);
             {
                 //ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);
                 ChildImage destImageWithClipping = new ChildImage(destImageByte, destImageByte.GetRecieveBlender());

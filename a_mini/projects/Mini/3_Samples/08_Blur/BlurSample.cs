@@ -66,7 +66,7 @@ namespace MatterHackers.Agg.Sample_Blur
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             //shape_mtx *= Affine.NewTranslation(150, 100);
 
-            m_path = new VertexSourceApplyTransform(m_path, shape_mtx);
+            m_path = new VertexSourceApplyTransform(m_path, shape_mtx).DoTransformToNewSinglePath();
             m_shape = new FlattenCurves(m_path);
 
             BoundingRect.GetBoundingRectSingle(m_shape, ref m_shape_bounds);

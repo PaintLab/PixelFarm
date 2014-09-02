@@ -49,6 +49,13 @@ namespace MatterHackers.Agg.VertexSource
             //for share
             vertices = pathStorageToShareFrom.vertices;
         }
+        internal VertexStorage Vsx
+        {
+            get
+            {
+                return this.vertices;
+            }
+        }
         public void AddVertex(double x, double y)
         {
             throw new System.NotImplementedException();
@@ -515,12 +522,12 @@ namespace MatterHackers.Agg.VertexSource
         //// Concatenate path. The path is added as is.
 
 
-        public void ConcatPath(IVertexSource vs, int path_id)
+        public void ConcatPath(SinglePath s)
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
-            vs.Rewind(path_id);
-            while ((cmd_flags = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            s.RewindZero(); 
+            while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, cmd_flags);
             }

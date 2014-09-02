@@ -373,13 +373,11 @@ namespace MatterHackers.Agg.Transform
                     default:
                         {
                             throw new NotSupportedException();
-                        } break;
+                        } 
                 }
             }
 
-        }
-
-
+        } 
 
         private Affine(AffinePlan[] creationPlans)
             : this(IdentityMatrix, creationPlans)

@@ -12,12 +12,12 @@ using MatterHackers.Agg.VertexSource;
 using MatterHackers.Agg.Font;
 using MatterHackers.VectorMath;
 using MatterHackers.Agg.Transform;
- 
+
 
 using Mini;
 namespace MatterHackers.Agg.Sample_Draw
 {
-   
+
     [Info(OrderCode = "01")]
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample01 : DemoBase
@@ -79,14 +79,16 @@ namespace MatterHackers.Agg.Sample_Draw
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
 
-                VertexSourceApplyTransform rotatedTransform = new VertexSourceApplyTransform(
-                    ellipseTest, 
-                    Affine.NewRotation(MathHelper.DegreesToRadians(angleDegrees)));
-                VertexSourceApplyTransform rotatedAndTranslatedTransform = new VertexSourceApplyTransform(
-                    rotatedTransform, Affine.NewTranslation(width / 2, 150));
+                var mat = Affine.NewMatix(
+                    AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
+                    AffinePlan.Translate(width / 2, 150));
 
-                g.Render(rotatedAndTranslatedTransform, ColorRGBA.Yellow);
-                Stroke ellipseOutline = new Stroke(rotatedAndTranslatedTransform, 3);
+
+                var tx = new VertexSourceApplyTransform(ellipseTest, mat);
+                var sp1 = tx.DoTransformToNewSinglePath();
+                g.Render(sp1, ColorRGBA.Yellow);
+
+                Stroke ellipseOutline = new Stroke(sp1, 3);
                 g.Render(ellipseOutline, ColorRGBA.Blue);
             }
 

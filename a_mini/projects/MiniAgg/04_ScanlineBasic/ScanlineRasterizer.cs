@@ -82,7 +82,7 @@ namespace MatterHackers.Agg
 
         bool SweepScanline(IScanline sl);
         void Reset();
-        void AddPath(IVertexSource vs); 
+        void AddPath(IVertexSource vs);
         void AddPath(SinglePath spath);
         bool RewindScanlines();
     }
@@ -259,7 +259,7 @@ namespace MatterHackers.Agg
             }
         }
         //------------------------------------------------------------------------
-        void edge(int x1, int y1, int x2, int y2)
+        void EdgeInt32(int x1, int y1, int x2, int y2)
         {
             if (m_outline.Sorted) Reset();
             m_VectorClipper.move_to(m_VectorClipper.downscale(x1), m_VectorClipper.downscale(y1));
@@ -270,7 +270,7 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        void edge_d(double x1, double y1, double x2, double y2)
+        void Edge(double x1, double y1, double x2, double y2)
         {
             if (m_outline.Sorted) Reset();
             m_VectorClipper.move_to(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1));
@@ -293,7 +293,7 @@ namespace MatterHackers.Agg
                 Reset();
             }
 
-            while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)            
+            while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 AddVertex(new VertexData(cmd, new Vector2(x, y)));
             }
@@ -316,7 +316,7 @@ namespace MatterHackers.Agg
             }
 
         }
-        
+
 
         public int MinX { get { return m_outline.MinX; } }
         public int MinY { get { return m_outline.MinY; } }

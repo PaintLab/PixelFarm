@@ -160,15 +160,19 @@ namespace MatterHackers.Agg.Sample_Perspective
                 {
                     //lion:
                     //1. create transform version of lion
-                    var txLion = new VertexSourceApplyTransform(lionShape.Path, txPerspective);
+                    //var txLion = new VertexSourceApplyTransform(lionShape.Path, txPerspective);
                     //2.render it
-                    var vxlist = new System.Collections.Generic.List<VertexData>();
-                    txLion.DoTransform(vxlist);
+                    //var vxlist = new System.Collections.Generic.List<VertexData>();
+                    //txLion.DoTransform(vxlist);
+                    var vxs = txPerspective.Tranform(lionShape.Path);
+
+                    //var vxs = txLion.DoTransformToNewVxStorage();
+
 
                     scanlineRenderer.RenderSolidAllPaths(clippingProxy,
                         g_rasterizer,
                         g_scanline,
-                        new VertexStorage(vxlist),
+                        vxs,
                         lionShape.Colors,
                         lionShape.PathIndexList,
                         lionShape.NumPaths);

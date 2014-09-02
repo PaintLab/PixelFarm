@@ -26,7 +26,7 @@ namespace MatterHackers.Agg.VertexSource
     {
         public Stroke(IVertexSource vertexSource, double inWidth = 1)
             : base(vertexSource, new StrokeGenerator())
-        {
+        {   
             this.Width = inWidth;
         }
         public LineCap LineCap
