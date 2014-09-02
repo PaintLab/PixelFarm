@@ -190,15 +190,7 @@ namespace MatterHackers.Agg.VertexSource
                 }
             }
         }
-
-        public void Rewind(int path_id)
-        {
-            vertextSource.Rewind(path_id);
-            lastX = 0.0;
-            lastY = 0.0;
-            m_curve3.reset();
-            m_curve4.reset();
-        }
+         
         public void RewindZero()
         {
             vertextSource.RewindZero();

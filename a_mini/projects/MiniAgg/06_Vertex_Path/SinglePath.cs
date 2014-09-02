@@ -10,20 +10,22 @@ namespace MatterHackers.Agg.VertexSource
         int startAt;
         VertexStorage currentVertex;
         int currentIterIndex;
+        public SinglePath(VertexStorage currentVertex)
+        {
+            this.currentVertex = currentVertex;
+            this.startAt = 0;
+            this.currentIterIndex = startAt;
+        }
         public SinglePath(VertexStorage currentVertex, int startAt)
         {
             this.currentVertex = currentVertex;
             this.startAt = startAt;
             this.currentIterIndex = startAt;
         }
-
         public void RewindZero()
         {
             this.currentIterIndex = startAt;
-        }
-        public void Rewind(int pathId)
-        {
-        }
+        } 
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             var cmd = currentVertex.GetVertex(currentIterIndex, out x, out y);

@@ -22,10 +22,11 @@ namespace MatterHackers.Agg.VertexSource
 {
     // in the original agg this was conv_transform
     public interface IVertextTransform
-    {
+    { 
+
     }
 
-    public class VertexSourceApplyTransform : IVertextTransform,IVertexSource
+    public class VertexSourceApplyTransform : IVertextTransform, IVertexSource
     {
         readonly IVertexSource vtxsrc;
         readonly Transform.ITransform transformToApply;
@@ -56,7 +57,7 @@ namespace MatterHackers.Agg.VertexSource
                     transformToApply.Transform(ref transformedVertex.position.x, ref transformedVertex.position.y);
                 }
                 yield return transformedVertex;
-            } 
+            }
         }
 
         public void DoTransform(List<VertexData> output)
@@ -91,10 +92,7 @@ namespace MatterHackers.Agg.VertexSource
             DoTransform(data);
             return new SinglePath(new VertexStorage(data), 0);
         }
-        public void Rewind(int path_id)
-        {
-            vtxsrc.Rewind(path_id);
-        }
+      
         public void RewindZero()
         {
             vtxsrc.RewindZero();

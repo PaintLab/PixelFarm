@@ -196,12 +196,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             throw new NotImplementedException();
         }
-
-        public void Rewind(int nothing)
-        {
-            this.RewindZero();
-
-        }
+         
         public void RewindZero()
         {
             m_status = status.initial;

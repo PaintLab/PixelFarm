@@ -151,12 +151,7 @@ namespace MatterHackers.Agg.VertexSource
             vertexData.command = FlagsAndCommand.CommandStop;
             yield return vertexData;
         }
-
-        public void Rewind(int path_id)
-        {
-            this.RewindZero();
-            
-        }
+         
         public void RewindZero()
         {
             m_step = 0;

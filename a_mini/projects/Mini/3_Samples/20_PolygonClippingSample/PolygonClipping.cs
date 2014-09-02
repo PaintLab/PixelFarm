@@ -235,7 +235,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         PathStorage ps1 = new PathStorage();
                         PathStorage ps2 = new PathStorage();
                         Stroke stroke = new Stroke(ps2);
-                         
+
                         stroke.Width = 10;
                         double x = m_x - Width / 2 + 100;
                         double y = m_y - Height / 2 + 100;
@@ -303,7 +303,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         Stroke stroke_gb_poly = new Stroke(trans_gb_poly);
                         stroke_gb_poly.Width = 0.1;
-                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes()); 
+                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
                         graphics2D.Render(trans_arrows, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
                         CreateAndRenderCombined(graphics2D, trans_gb_poly, trans_arrows);
@@ -317,7 +317,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
                         Stroke stroke = new Stroke(sp);
-                         
+
                         stroke.Width = 15;
 
                         PathStorage gb_poly = new PathStorage();
@@ -327,18 +327,18 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                                 AffinePlan.Translate(-1150, -1150),
                                 AffinePlan.Scale(2));
 
-                        VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx);
-
-                        graphics2D.Render(trans_gb_poly, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
-
-                        Stroke stroke_gb_poly = new Stroke(trans_gb_poly);
                          
+                        var s1 = mtx.TransformToSinglePath(gb_poly);
+                        graphics2D.Render(s1, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
+
+                        Stroke stroke_gb_poly = new Stroke(s1);
+
                         stroke_gb_poly.Width = 0.1;
                         graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
 
                         graphics2D.Render(stroke, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, trans_gb_poly, stroke);
+                        CreateAndRenderCombined(graphics2D, s1, stroke);
                     }
                     break;
 
@@ -349,7 +349,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
                         Stroke stroke = new Stroke(sp);
-                         
+
                         stroke.Width = 15;
 
                         PathStorage glyph = new PathStorage();
@@ -541,10 +541,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             throw new NotImplementedException();
         }
 
-        public void Rewind(int index)
-        {
-            this.RewindZero(); 
-        }
+         
         public void RewindZero()
         {
             m_angle = m_start_angle;

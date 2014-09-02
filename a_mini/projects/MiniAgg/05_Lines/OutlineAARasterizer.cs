@@ -579,22 +579,35 @@ namespace MatterHackers.Agg.Lines
             }
         }
 
-        public void AddPath(IVertexSource vs)
-        {
-            AddPath(vs, 0);
-        }
+        //public void AddPath(IVertexSource vs)
+        //{
+        //    AddPath(vs, 0);
+        //}
 
-        public void AddPath(IVertexSource vs, int path_id)
+        //public void AddPath(IVertexSource vs, int path_id)
+        //{
+        //    double x;
+        //    double y;
+
+        //    ShapePath.FlagsAndCommand cmd;
+        //    vs.Rewind(path_id);
+        //    while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+        //    {
+        //        //index++;
+        //        //if (index == 0
+        //        //  || (index > start && index < start + num))
+        //        AddVertex(x, y, cmd);
+        //    }
+        //    Render(false);
+        //}
+        void AddPath(SinglePath s)
         {
             double x;
             double y;
 
             ShapePath.FlagsAndCommand cmd;
-            vs.Rewind(path_id); 
-            //int index = 0;
-            //int start = 851;
-            //int num = 5; 
-            while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            s.RewindZero();
+            while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 //index++;
                 //if (index == 0
@@ -603,18 +616,22 @@ namespace MatterHackers.Agg.Lines
             }
             Render(false);
         }
-
-        public void RenderAllPaths(IVertexSource vs,
-                              ColorRGBA[] colors,
-                              int[] path_id,
-                              int num_paths)
+        public void RenderSinglePath(SinglePath s, ColorRGBA c)
         {
-            for (int i = 0; i < num_paths; i++)
-            {
-                m_ren.color(colors[i]);
-                AddPath(vs, path_id[i]);
-            }
+            m_ren.color(c);
+            AddPath(s);
         }
+        //public void RenderAllPaths(IVertexSource vs,
+        //                      ColorRGBA[] colors,
+        //                      int[] path_id,
+        //                      int num_paths)
+        //{
+        //    for (int i = 0; i < num_paths; i++)
+        //    {
+        //        m_ren.color(colors[i]);
+        //        AddPath(vs, path_id[i]);
+        //    }
+        //}
 
         /* // for debugging only
         public void render_path_index(IVertexSource vs,

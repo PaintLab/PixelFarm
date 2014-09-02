@@ -373,11 +373,11 @@ namespace MatterHackers.Agg.Transform
                     default:
                         {
                             throw new NotSupportedException();
-                        } 
+                        }
                 }
             }
 
-        } 
+        }
 
         private Affine(AffinePlan[] creationPlans)
             : this(IdentityMatrix, creationPlans)
@@ -891,6 +891,40 @@ namespace MatterHackers.Agg.Transform
             return Math.Abs(v1 - v2) <= (EPSILON);
         }
 
+
+        //----------------------------------------------------------------------------------------------
+        public Agg.VertexSource.SinglePath TransformToSinglePath(Agg.VertexSource.PathStorage src)
+        {
+            return new VertexSource.SinglePath(TransformToVxs(src));
+        }
+        public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
+        {
+            var data = new System.Collections.Generic.List<Agg.VertexSource.VertexData>();
+            src.RewindZero();
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            {
+                this.Transform(ref x, ref y);
+                data.Add(new VertexSource.VertexData(cmd, new VectorMath.Vector2(x, y)));
+            }
+
+            return new Agg.VertexSource.VertexStorage(data);
+        }
+        public Agg.VertexSource.VertexStorage Tranform(Agg.VertexSource.SinglePath src)
+        {
+            var data = new System.Collections.Generic.List<Agg.VertexSource.VertexData>();
+            src.RewindZero();
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            {
+                this.Transform(ref x, ref y);
+                data.Add(new VertexSource.VertexData(cmd, new VectorMath.Vector2(x, y)));
+            }
+
+            return new Agg.VertexSource.VertexStorage(data);
+        }
         // Check to see if two matrices are equal
         //public bool is_equal(Affine m, double epsilon)
         //{

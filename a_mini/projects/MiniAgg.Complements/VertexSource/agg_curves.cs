@@ -237,7 +237,7 @@ namespace MatterHackers.Agg.VertexSource
             throw new NotImplementedException();
         }
 
-        public void rewind(int path_id)
+        public void RewindZero()
         {
             if (m_num_steps == 0)
             {
@@ -362,7 +362,7 @@ namespace MatterHackers.Agg.VertexSource
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
         }
-        public void rewind(int idx)
+        public void RewindZero()
         {
             m_count = 0;
         }
@@ -652,7 +652,7 @@ namespace MatterHackers.Agg.VertexSource
             throw new NotImplementedException();
         }
 
-        public void rewind(int path_id)
+        public void RewindZero()
         {
             if (m_num_steps == 0)
             {
@@ -808,7 +808,7 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
         }
 
-        public void rewind(int idx)
+        public void RewindZero()
         {
             m_count = 0;
         }
@@ -1159,27 +1159,16 @@ namespace MatterHackers.Agg.VertexSource
                 }
             }
         }
-
-        public void Rewind(int path_id)
-        {
-            if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
-            {
-                m_curve_inc.rewind(path_id);
-            }
-            else
-            {
-                m_curve_div.rewind(path_id);
-            }
-        }
+         
         public void RewindZero()
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
             {
-                m_curve_inc.rewind(0);
+                m_curve_inc.RewindZero();
             }
             else
             {
-                m_curve_div.rewind(0);
+                m_curve_div.RewindZero();
             }
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
@@ -1305,27 +1294,16 @@ namespace MatterHackers.Agg.VertexSource
                 return m_curve_div.Vertices();
             }
         }
-
-        public void Rewind(int path_id)
-        {
-            if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
-            {
-                m_curve_inc.rewind(path_id);
-            }
-            else
-            {
-                m_curve_div.rewind(path_id);
-            }
-        }
+         
         public void RewindZero()
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.curve_inc)
             {
-                m_curve_inc.rewind(0);
+                m_curve_inc.RewindZero();
             }
             else
             {
-                m_curve_div.rewind(0);
+                m_curve_div.RewindZero();
             }
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)

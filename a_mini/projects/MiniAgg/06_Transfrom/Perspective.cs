@@ -618,22 +618,32 @@ namespace MatterHackers.Agg.Transform
             y = Math.Sqrt(shy * shy + sy * sy);
         }
 
-        //===========================================
-        //public void Tranform(Agg.VertexSource.IVertexSource src)
-        //{
-
-        //}
-        public Agg.VertexSource.VertexStorage Tranform(Agg.VertexSource.PathStorage src)
+        //-------------------------------------------------------------------------
+        public Agg.VertexSource.SinglePath TransformToSinglePath(Agg.VertexSource.PathStorage src)
+        {
+            return new VertexSource.SinglePath(TransformToVxs(src));
+        }
+        public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             var data = new System.Collections.Generic.List<Agg.VertexSource.VertexData>();
             src.RewindZero();
             ShapePath.FlagsAndCommand cmd;
             double x, y;
-            while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            var vxs = src.Vsx;
+            int count = vxs.Count;
+            for (int i = 0; i < count; ++i)
             {
+                cmd = vxs.GetVertex(i, out x, out y);
                 this.Transform(ref x, ref y);
                 data.Add(new VertexSource.VertexData(cmd, new VectorMath.Vector2(x, y)));
             }
+
+
+            //while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            //{
+            //    this.Transform(ref x, ref y);
+            //    data.Add(new VertexSource.VertexData(cmd, new VectorMath.Vector2(x, y)));
+            //}
 
             return new Agg.VertexSource.VertexStorage(data);
         }

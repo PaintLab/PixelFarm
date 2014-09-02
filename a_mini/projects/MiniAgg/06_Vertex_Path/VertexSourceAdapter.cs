@@ -80,13 +80,7 @@ namespace MatterHackers.Agg.VertexSource
                 yield return new VertexData(command, new Vector2(x, y));
 
             } while (command != ShapePath.FlagsAndCommand.CommandStop);
-        }
-
-        public void Rewind(int path_id)
-        {
-            vtxsrc.Rewind(path_id);
-            m_status = Status.Initial;
-        }
+        } 
         public void RewindZero()
         {
             vtxsrc.RewindZero();

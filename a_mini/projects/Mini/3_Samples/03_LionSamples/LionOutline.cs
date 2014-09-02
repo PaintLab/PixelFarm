@@ -154,17 +154,16 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
                 stroke.Width = strokeWidth;
                 stroke.LineJoin = LineJoin.Round;
+
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke, transform);
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
-                var vxlist = new System.Collections.Generic.List<VertexData>();
-                trans.DoTransform(vxlist);
-
+                var vxs = trans.DoTransformToNewVxStorage();
                 scanlineRenderer.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
                     scanlineCache,
-                    new VertexStorage(vxlist),
+                    vxs,
                     lionShape.Colors,
                     lionShape.PathIndexList,
                     lionShape.NumPaths);
@@ -183,8 +182,22 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 rasterizer.RoundCap = true;
 
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-
-                rasterizer.RenderAllPaths(trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+                var vxs = trans.DoTransformToNewVxStorage();
+                //rasterizer.RenderSolidAllPaths(
+                //    imageClippingProxy,
+                //    rasterizer,
+                //    scanlineCache,
+                //    vxs,
+                //    lionShape.Colors,
+                //    lionShape.PathIndexList,
+                //    lionShape.NumPaths);
+                int j = lionShape.NumPaths;
+                for (int i = 0; i < j; ++i)
+                {
+                    rasterizer.RenderSinglePath(
+                        new SinglePath(vxs, lionShape.PathIndexList[i]), lionShape.Colors[i]);
+                }
+                //rasterizer.RenderAllPaths(trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
             }
 
             base.OnDraw(graphics2D);

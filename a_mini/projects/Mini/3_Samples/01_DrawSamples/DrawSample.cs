@@ -102,7 +102,6 @@ namespace MatterHackers.Agg.Sample_Draw
             g.Render(littlePoly, ColorRGBA.Cyan);
 
             // draw some text
-
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
 
             IVertexSource translatedText = new VertexSourceApplyTransform(textPrinter, Affine.NewTranslation(

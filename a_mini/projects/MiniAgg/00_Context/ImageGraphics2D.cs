@@ -70,11 +70,15 @@ namespace MatterHackers.Agg
             {
                 List<VertexData> vxData = new List<VertexData>();
                 //then transform
-                VertexSourceApplyTransform vertexTx = new VertexSourceApplyTransform(vertexSource, transform);
-                vertexSource.RewindZero();
-                vertexTx.DoTransform(vxData);
-                //VertexStorage newvx = new VertexStorage(vxData);
-                rasterizer.AddPath(new SinglePath(new VertexStorage(vxData), 0));
+                var s1 = new SinglePath(transform.Tranform(vertexSource));
+
+                //VertexSourceApplyTransform vertexTx = new VertexSourceApplyTransform(vertexSource, transform);
+                //vertexSource.RewindZero();
+                //vertexTx.DoTransform(vxData);
+                ////VertexStorage newvx = new VertexStorage(vxData);
+                //rasterizer.AddPath(new SinglePath(new VertexStorage(vxData), 0));
+
+                rasterizer.AddPath(s1);
             }
             else
             {
@@ -204,8 +208,8 @@ namespace MatterHackers.Agg
                 destRectTransform *= Affine.NewTranslation(-destImageByte.OriginOffset.x, -destImageByte.OriginOffset.y);
             }
 
-            var transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
-            var sp1 = transfromedRect.DoTransformToNewSinglePath();
+            //var transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
+            var sp1 = destRectTransform.TransformToSinglePath(drawImageRectPath);// transfromedRect.DoTransformToNewSinglePath();
             Rasterizer.AddPath(sp1);
             {
                 //ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);
