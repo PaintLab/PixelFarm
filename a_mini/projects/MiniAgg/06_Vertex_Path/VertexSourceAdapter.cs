@@ -27,17 +27,9 @@ namespace MatterHackers.Agg.VertexSource
     //------------------------------------------------------conv_adaptor_vcgen
     public abstract class VertexSourceAdapter : IVertexSource
     {
-        ////null pattern
-        //struct NullMarkers : IMarkers
-        //{
-        //    public void RemoveAll() { }
-        //    public void AddVertex(double x, double y, ShapePath.FlagsAndCommand unknown) { }
-        //}
-
+        ////null pattern 
         readonly IVertexSource vtxsrc;
-
-        IGenerator generator;
-        //IMarkers markers;
+        IVertextGenerator generator;
         Status m_status;
         ShapePath.FlagsAndCommand m_last_cmd;
         double m_start_x;
@@ -48,10 +40,8 @@ namespace MatterHackers.Agg.VertexSource
             Accumulate,
             Generate
         }
-        public VertexSourceAdapter(IVertexSource vertexSource, IGenerator generator)
+        public VertexSourceAdapter(IVertexSource vertexSource, IVertextGenerator generator)
         {
-            //markers = new NullMarkers();
-
             this.vtxsrc = vertexSource;
             this.generator = generator;
             m_status = Status.Initial;
@@ -59,11 +49,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public bool IsDynamicVertexGen { get { return this.vtxsrc.IsDynamicVertexGen; } }
 
-
-
-       
-
-        protected IGenerator GetGenerator() { return generator; }
+        protected IVertextGenerator GetGenerator() { return generator; }
 
 
 
@@ -80,7 +66,7 @@ namespace MatterHackers.Agg.VertexSource
                 yield return new VertexData(command, new Vector2(x, y));
 
             } while (command != ShapePath.FlagsAndCommand.CommandStop);
-        } 
+        }
         public void RewindZero()
         {
             vtxsrc.RewindZero();
@@ -115,7 +101,7 @@ namespace MatterHackers.Agg.VertexSource
                         bool runloop = true;
                         while (runloop)
                         {
-                            command = vtxsrc.GetNextVertex(out x, out y);                             
+                            command = vtxsrc.GetNextVertex(out x, out y);
                             switch (ShapePath.FlagsAndCommand.CommandsMask & command)
                             {
                                 case ShapePath.FlagsAndCommand.CommandStop:

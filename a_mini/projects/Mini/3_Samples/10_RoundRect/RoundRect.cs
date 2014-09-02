@@ -151,8 +151,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             r.normalize_radius();
             if (this.FillRoundRect)
             {
-                Stroke p = new Stroke(r);
-
+                Stroke p = new Stroke(r); 
                 p.Width = 1;
                 ras.AddPath(p);
             }

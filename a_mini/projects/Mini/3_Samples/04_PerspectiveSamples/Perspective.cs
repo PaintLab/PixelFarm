@@ -147,10 +147,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     ell_stroke.Width = 3;
 
                     var trans_ell = txBilinear.TransformToSinglePath(ell.MakeVxs());
-
-                    //VertexSourceApplyTransform trans_ell = new VertexSourceApplyTransform(ell, txBilinear); 
-                    //VertexSourceApplyTransform trans_ell_stroke = new VertexSourceApplyTransform(ell_stroke, txBilinear);
-
+ 
                     var trans_ell_stroke = txBilinear.TransformToSinglePath(ell_stroke.MakeVxs());
 
                     g_rasterizer.AddPath(trans_ell);

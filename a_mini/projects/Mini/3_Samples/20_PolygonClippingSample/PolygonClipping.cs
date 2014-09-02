@@ -327,7 +327,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                                 AffinePlan.Translate(-1150, -1150),
                                 AffinePlan.Scale(2));
 
-                         
+
                         var s1 = mtx.TransformToSinglePath(gb_poly);
                         graphics2D.Render(s1, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
 
@@ -421,7 +421,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             }
         }
 
-        private void CreateAndRenderCombined(Graphics2D graphics2D, IVertexSource ps1, IVertexSource ps2)
+        void CreateAndRenderCombined(Graphics2D graphics2D, IVertexSource ps1, IVertexSource ps2)
         {
             PathStorage combined = null;
 
@@ -541,7 +541,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             throw new NotImplementedException();
         }
 
-         
+
         public void RewindZero()
         {
             m_angle = m_start_angle;

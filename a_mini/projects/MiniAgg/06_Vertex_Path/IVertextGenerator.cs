@@ -19,7 +19,7 @@
 
 namespace MatterHackers.Agg.VertexSource
 {
-    public interface IGenerator
+    public interface IVertextGenerator
     {
         void RemoveAll();
         void AddVertex(double x, double y, ShapePath.FlagsAndCommand unknown);
