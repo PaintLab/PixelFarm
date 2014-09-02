@@ -345,27 +345,7 @@ namespace MatterHackers.Agg.VertexSource
                 yield return new VertexData(command, new Vector2(x, y));
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2(0, 0));
-        }
-        public void Rewind(int pathId)
-        {
-            if (pathId == 0)
-            {
-                iteratorIndex = 0;
-            }
-            else
-            {
-            }
-            //if (iteratorIndex > 0)
-            //{
-            //}
-            //if (pathId == 0)
-            //{
-            //    iteratorIndex = 0;
-            //}
-            //else
-            //{
-            //}
-        }
+        } 
         public void RewindZero()
         {
             iteratorIndex = 0;

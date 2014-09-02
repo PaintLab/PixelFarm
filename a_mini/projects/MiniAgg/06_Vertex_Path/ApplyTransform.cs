@@ -92,10 +92,7 @@ namespace MatterHackers.Agg.VertexSource
             DoTransform(data);
             return new SinglePath(new VertexStorage(data), 0);
         }
-        public void Rewind(int path_id)
-        {
-            vtxsrc.Rewind(path_id);
-        }
+      
         public void RewindZero()
         {
             vtxsrc.RewindZero();

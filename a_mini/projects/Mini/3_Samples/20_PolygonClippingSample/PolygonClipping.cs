@@ -541,10 +541,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             throw new NotImplementedException();
         }
 
-        public void Rewind(int index)
-        {
-            this.RewindZero();
-        }
+         
         public void RewindZero()
         {
             m_angle = m_start_angle;

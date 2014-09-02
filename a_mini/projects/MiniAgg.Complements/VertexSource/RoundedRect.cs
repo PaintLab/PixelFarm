@@ -198,12 +198,7 @@ namespace MatterHackers.Agg.VertexSource
 
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW, new Vector2());
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
-        }
-
-        public void Rewind(int unused)
-        {
-            this.RewindZero();
-        }
+        } 
         public void RewindZero()
         {
             state = 0;
@@ -218,7 +213,7 @@ namespace MatterHackers.Agg.VertexSource
                 case 0:
                     currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y,
                                Math.PI, Math.PI + Math.PI * 0.5);
-                    currentProcessingArc.rewind(0);
+                    currentProcessingArc.RewindZero();
                     state++;
                     goto case 1;
 
@@ -237,7 +232,7 @@ namespace MatterHackers.Agg.VertexSource
                 case 2:
                     currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y,
                                Math.PI + Math.PI * 0.5, 0.0);
-                    currentProcessingArc.rewind(0);
+                    currentProcessingArc.RewindZero();
                     state++;
                     goto case 3;
 
@@ -256,7 +251,7 @@ namespace MatterHackers.Agg.VertexSource
                 case 4:
                     currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y,
                                0.0, Math.PI * 0.5);
-                    currentProcessingArc.rewind(0);
+                    currentProcessingArc.RewindZero();
                     state++;
                     goto case 5;
 
@@ -275,7 +270,7 @@ namespace MatterHackers.Agg.VertexSource
                 case 6:
                     currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y,
                                Math.PI * 0.5, Math.PI);
-                    currentProcessingArc.rewind(0);
+                    currentProcessingArc.RewindZero();
                     state++;
                     goto case 7;
 

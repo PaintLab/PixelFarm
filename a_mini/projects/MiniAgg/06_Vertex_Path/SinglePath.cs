@@ -25,10 +25,7 @@ namespace MatterHackers.Agg.VertexSource
         public void RewindZero()
         {
             this.currentIterIndex = startAt;
-        }
-        public void Rewind(int pathId)
-        {
-        }
+        } 
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             var cmd = currentVertex.GetVertex(currentIterIndex, out x, out y);

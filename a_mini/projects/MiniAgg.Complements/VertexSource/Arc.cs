@@ -143,7 +143,7 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
         }
 
-        public void rewind(int unused)
+        public void RewindZero()
         {
             m_NextPathCommand = ShapePath.FlagsAndCommand.CommandMoveTo;
             m_CurrentFlatenAngle = startAngle;

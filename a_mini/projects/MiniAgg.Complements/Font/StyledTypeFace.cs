@@ -61,12 +61,7 @@ namespace MatterHackers.Agg.Font
             get { return this.glyph.IsDynamicVertexGen; }
         }
 
-        public void Rewind(int path_id)
-        {
-            state = 0;
-            underline.RewindZero();
-            glyph.Rewind(path_id);
-        }
+      
         public void RewindZero()
         {
             state = 0;
