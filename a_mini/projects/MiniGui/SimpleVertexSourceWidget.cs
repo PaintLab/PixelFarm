@@ -29,7 +29,7 @@ namespace MatterHackers.Agg.UI
     {
 
         bool localBoundsComeFromPoints = true;
-        
+
         public SimpleVertexSourceWidget()
         {
             throw new Exception("this is depricated");
@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.UI
                 }
             }
 
-            set 
+            set
             {
                 if (localBoundsComeFromPoints)
                 {
@@ -93,14 +93,31 @@ namespace MatterHackers.Agg.UI
         public abstract void RewindZero();
         public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
 
-        public virtual IColor color(int i) { return (IColor)new ColorRGBAf(); }
+        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); }
 
         public override void OnDraw(Graphics2D graphics2D)
         {
-            for (int i = 0; i < num_paths(); i++)
-            {   
-                graphics2D.Render(this, i, color(i).GetAsRGBA_Bytes());
+            var list = new System.Collections.Generic.List<VertexData>();
+            this.RewindZero();
+
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            while ((cmd = this.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            {
+                list.Add(new VertexData(cmd, new Vector2(x, y)));
             }
+            //foreach (var v in this.GetVertexIter())
+            //{
+
+            //}
+            graphics2D.Render(new SinglePath(new VertexStorage(list), 0),
+                color(0).GetAsRGBA_Bytes());
+
+
+            //for (int i = 0; i < num_paths(); i++)
+            //{
+            //    graphics2D.Render(this, i, color(i).GetAsRGBA_Bytes());
+            //}
             base.OnDraw(graphics2D);
         }
 

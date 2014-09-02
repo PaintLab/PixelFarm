@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.Sample_LionFill
     {
 
         LionShape lionShape;
-        Affine transform = Affine.IdentityMatrix;
+        VertexStorage vxStorage;
 
         VertexSourceApplyTransform transformedPathStorage;
         byte alpha;
@@ -106,32 +106,32 @@ namespace MatterHackers.Agg.Sample_LionFill
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-            transformedPathStorage = null;
+            vxStorage = null;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
 
-            if (transformedPathStorage == null)
+            if (vxStorage == null)
             {
-                transform = Affine.NewMatix( 
+                var transform = Affine.NewMatix(
                         AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                         AffinePlan.Scale(spriteScale, spriteScale),
                         AffinePlan.Rotate(angle + Math.PI),
                         AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                         AffinePlan.Translate(Width / 2, Height / 2)
-                 );
+                );
 
-                //transform = Affine.NewIdentity();
-                //transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-                //transform *= Affine.NewScaling(spriteScale, spriteScale);
-                //transform *= Affine.NewRotation(angle + Math.PI);
-                //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-                //transform *= Affine.NewTranslation(Width / 2, Height / 2);
+                //convert
+                System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
                 transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
+                transformedPathStorage.DoTransform(list);
+
+                vxStorage = new VertexStorage(list);
             }
 
-            graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+            //graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+            graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
             base.OnDraw(graphics2D);
         }

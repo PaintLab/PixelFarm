@@ -151,12 +151,23 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
                 Stroke stroke = new Stroke(lionShape.Path);
-                 
+
                 stroke.Width = strokeWidth;
                 stroke.LineJoin = LineJoin.Round;
                 VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke, transform);
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-                scanlineRenderer.RenderSolidAllPaths(imageClippingProxy, rasterizer, scanlineCache, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+
+                var vxlist = new System.Collections.Generic.List<VertexData>();
+                trans.DoTransform(vxlist);
+
+                scanlineRenderer.RenderSolidAllPaths(
+                    imageClippingProxy,
+                    rasterizer,
+                    scanlineCache,
+                    new VertexStorage(vxlist),
+                    lionShape.Colors,
+                    lionShape.PathIndexList,
+                    lionShape.NumPaths);
             }
             else
             {

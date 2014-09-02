@@ -80,7 +80,8 @@ namespace MatterHackers.Agg.Sample_Draw
             {
 
                 VertexSourceApplyTransform rotatedTransform = new VertexSourceApplyTransform(
-                    ellipseTest, Affine.NewRotation(MathHelper.DegreesToRadians(angleDegrees)));
+                    ellipseTest, 
+                    Affine.NewRotation(MathHelper.DegreesToRadians(angleDegrees)));
                 VertexSourceApplyTransform rotatedAndTranslatedTransform = new VertexSourceApplyTransform(
                     rotatedTransform, Affine.NewTranslation(width / 2, 150));
 

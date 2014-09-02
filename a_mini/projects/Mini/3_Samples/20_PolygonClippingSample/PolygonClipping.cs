@@ -303,8 +303,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         Stroke stroke_gb_poly = new Stroke(trans_gb_poly);
                         stroke_gb_poly.Width = 0.1;
-                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
-
+                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes()); 
                         graphics2D.Render(trans_arrows, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
                         CreateAndRenderCombined(graphics2D, trans_gb_poly, trans_arrows);

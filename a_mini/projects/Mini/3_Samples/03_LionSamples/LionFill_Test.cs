@@ -74,9 +74,8 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
     //--------------------------------------------------
     public class LionFill : SimpleSprite
     {
-
-        LionShape lionShape;
-        Affine transform = Affine.IdentityMatrix;
+        VertexStorage vxStorage; 
+        LionShape lionShape; 
         VertexSourceApplyTransform transformedPathStorage;
         byte alpha;
         public LionFill()
@@ -155,20 +154,28 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
 
             //freeze to bitmap ?
 
-            if (transformedPathStorage == null)
+            if (vxStorage == null)
             {
-                transform = Affine.NewMatix(
-                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-                     AffinePlan.Scale(spriteScale, spriteScale),
-                     AffinePlan.Rotate(angle + Math.PI),
-                     AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-                     AffinePlan.Translate(Width / 2, Height / 2)
+                var transform = Affine.NewMatix(
+                        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                        AffinePlan.Scale(spriteScale, spriteScale),
+                        AffinePlan.Rotate(angle + Math.PI),
+                        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                        AffinePlan.Translate(Width / 2, Height / 2)
                 );
+
+                //convert
+                System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
                 transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
+                transformedPathStorage.DoTransform(list);
+
+                vxStorage = new VertexStorage(list);
             }
 
-            graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+            //graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+            graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
+            base.OnDraw(graphics2D);
             if (!IsFreezed)
             {
                 //var destImage = graphics2D.DestImage;

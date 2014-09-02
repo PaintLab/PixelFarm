@@ -114,8 +114,8 @@ namespace MatterHackers.Agg.Sample_Perspective
                 var txBilinear = Bilinear.RectToQuad(bound.Left,
                     bound.Bottom,
                     bound.Right,
-                    bound.Top,  
-                    quadPolygonControl.polygon()); 
+                    bound.Top,
+                    quadPolygonControl.polygon());
 
                 if (txBilinear.IsValid)
                 {
@@ -123,7 +123,16 @@ namespace MatterHackers.Agg.Sample_Perspective
                     // Render transformed lion
                     //
                     VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, txBilinear);
-                    scanlineRenderer.RenderSolidAllPaths(clippingProxy, g_rasterizer, g_scanline, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+                    var vxlist = new System.Collections.Generic.List<VertexData>();
+                    trans.DoTransform(vxlist);
+
+                    scanlineRenderer.RenderSolidAllPaths(clippingProxy,
+                        g_rasterizer,
+                        g_scanline,
+                        new VertexStorage(vxlist),
+                        lionShape.Colors,
+                        lionShape.PathIndexList,
+                        lionShape.NumPaths);
 
                     //--------------------------
                     // Render transformed ellipse
@@ -153,7 +162,16 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //1. create transform version of lion
                     var txLion = new VertexSourceApplyTransform(lionShape.Path, txPerspective);
                     //2.render it
-                    scanlineRenderer.RenderSolidAllPaths(clippingProxy, g_rasterizer, g_scanline, txLion, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+                    var vxlist = new System.Collections.Generic.List<VertexData>();
+                    txLion.DoTransform(vxlist);
+
+                    scanlineRenderer.RenderSolidAllPaths(clippingProxy,
+                        g_rasterizer,
+                        g_scanline,
+                        new VertexStorage(vxlist),
+                        lionShape.Colors,
+                        lionShape.PathIndexList,
+                        lionShape.NumPaths);
 
                     //--------------------------------------------------------------------------------------
                     //filled Ellipse
@@ -175,12 +193,12 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //outline Ellipse
                     //1. create original version of stroke ellipse 
                     var strokeEllipse = new Stroke(filledEllipse);
-                     
+
                     strokeEllipse.Width = 3;
                     //2. create transform version of outlin  
                     var txOutline = new VertexSourceApplyTransform(strokeEllipse, txPerspective);
                     //3. add
-                    g_rasterizer.AddPath(txOutline);                    
+                    g_rasterizer.AddPath(txOutline);
                     //4. render                      
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy,
                         g_rasterizer,

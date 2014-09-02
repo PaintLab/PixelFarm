@@ -55,19 +55,19 @@ namespace MatterHackers.Agg
         public void RenderSolidAllPaths(IImage destImage,
             IRasterizer ras,
             IScanline sl,
-            IVertexSource vs,
+            VertexStorage vx,
             ColorRGBA[] color_storage,
             int[] path_id,
             int num_paths)
-        {
+        {   
             for (int i = 0; i < num_paths; i++)
             {
                 ras.Reset();
-                ras.AddPath(vs, path_id[i]);
+                ras.AddPath(new SinglePath(vx, path_id[i])); 
                 RenderScanlineSolidAA(destImage, ras, sl, color_storage[i]);
             }
         }
-
+        
         void GenerateAndRenderSingleScanline(IScanline scline, IImage destImage, ISpanGenerator span_gen)
         {
             int y = scline.Y;

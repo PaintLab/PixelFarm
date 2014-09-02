@@ -82,8 +82,8 @@ namespace MatterHackers.Agg
 
         bool SweepScanline(IScanline sl);
         void Reset();
-        void AddPath(IVertexSource vs);
-        void AddPath(IVertexSource vs, int pathId);
+        void AddPath(IVertexSource vs); 
+        void AddPath(SinglePath spath);
         bool RewindScanlines();
     }
 
@@ -293,45 +293,30 @@ namespace MatterHackers.Agg
                 Reset();
             }
 
-            while (!ShapePath.IsStop(cmd = vs.GetNextVertex(out x, out y)))
+            while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)            
             {
                 AddVertex(new VertexData(cmd, new Vector2(x, y)));
             }
         }
 
-        public void AddPath(IVertexSource vs, int pathId)
+        public void AddPath(SinglePath spath)
         {
-#if false
-            if (m_outline.sorted())
-            {
-                reset();
-            }
-
-            foreach (VertexData vertexData in vs.Vertices())
-            {
-                if(!ShapePath.is_stop(vertexData.command))
-                {
-                    AddVertex(new VertexData(vertexData.command, new Vector2(vertexData.position.x, vertexData.position.y)));
-                }
-            }
-#else
             double x = 0;
             double y = 0;
 
             ShapePath.FlagsAndCommand cmd;
-            vs.Rewind(pathId);
+            spath.RewindZero();
             if (m_outline.Sorted)
             {
                 Reset();
             }
-
-            while (!ShapePath.IsStop(cmd = vs.GetNextVertex(out x, out y)))
+            while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 AddVertex(new VertexData(cmd, new Vector2(x, y)));
             }
-#endif
-        }
 
+        }
+        
 
         public int MinX { get { return m_outline.MinX; } }
         public int MinY { get { return m_outline.MinY; } }
@@ -484,3 +469,4 @@ namespace MatterHackers.Agg
         }
     };
 }
+

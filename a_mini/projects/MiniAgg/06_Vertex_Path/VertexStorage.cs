@@ -26,12 +26,26 @@ namespace MatterHackers.Agg.VertexSource
     {
         int m_num_vertices;
         int m_allocated_vertices;
-        //easy to transfer back to unmanaged part!
         double[] m_coord_xy;
         ShapePath.FlagsAndCommand[] m_CommandAndFlags;
 
         public VertexStorage()
         {
+        }
+
+        public VertexStorage(List<VertexData> vxlist)
+        {
+            int j = this.m_num_vertices = vxlist.Count;
+            m_coord_xy = new double[(j << 1) + 2];
+            m_CommandAndFlags = new ShapePath.FlagsAndCommand[j + 2];
+            for (int i = 0; i < j; ++i)
+            {
+                VertexData vxdata = vxlist[i];
+                m_coord_xy[i << 1] = vxdata.position.x;
+                m_coord_xy[(i << 1) + 1] = vxdata.position.y;
+                m_CommandAndFlags[i] = vxdata.command;
+            }
+
         }
         public void FreeAll()
         {

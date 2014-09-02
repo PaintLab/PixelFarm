@@ -241,7 +241,7 @@ namespace MatterHackers.Agg.UI
                     return cmd;
                 }
                 if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-                m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
+                m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
                 ++m_status;
             }
             cmd = m_ellipse.GetNextVertex(out x, out y);
@@ -252,7 +252,7 @@ namespace MatterHackers.Agg.UI
             }
             if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
             if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-            m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
+            m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
             ++m_status;
             cmd = m_ellipse.GetNextVertex(out x, out y);
             if (!ShapePath.IsStop(cmd))
@@ -530,10 +530,12 @@ namespace MatterHackers.Agg.UI
         public PolygonEditWidget(int np, double point_radius)
             : base(np, point_radius)
         {
-            m_color = new ColorRGBAf(0.0, 0.0, 0.0);
+            //m_color = new ColorRGBAf(0.0, 0.0, 0.0);
+            m_color = ColorRGBA.Black;
         }
 
         public void line_color(IColor c) { m_color = c; }
         public override IColor color(int i) { return m_color; }
-    };
+       
+    }
 }

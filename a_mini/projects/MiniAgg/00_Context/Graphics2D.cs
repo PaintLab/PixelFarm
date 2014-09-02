@@ -117,9 +117,9 @@ namespace MatterHackers.Agg
         }
 
 
-        public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes);
+        //public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes);
         public abstract void Render(IVertexSource vertexSource, ColorRGBA colorBytes);
-
+        public abstract void Render(SinglePath vertexSource, ColorRGBA colorBytes);
         public void Render(IImage imageSource, int x, int y)
         {
             //base.Render(imageSource, x, y);
@@ -136,22 +136,31 @@ namespace MatterHackers.Agg
             double angleRadians,
             double scaleX, double ScaleY);
 
-        public void Render(IVertexSource vertexSource, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
+        public void Render(VertexStorage vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)
             {
-                Render(vertexSource, pathIdArray[i], colorArray[i]);
+                //Render(vertexSource, pathIdArray[i], colorArray[i]);
+                Render(new SinglePath(vxStorage, pathIdArray[i]), colorArray[i]);
             }
         }
-         
+        public void Render(IVertexSource vertexSource, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
+        {
+            throw new NotSupportedException();
+            //for (int i = 0; i < numPaths; i++)
+            //{
+            //    Render(vertexSource, pathIdArray[i], colorArray[i]);
+            //}
+        }
+
         public void Render(IVertexSource vertexSource, double x, double y, ColorRGBA color)
         {
-            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)),   color);
+            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)), color);
         }
 
         public void Render(IVertexSource vertexSource, Vector2 position, ColorRGBA color)
         {
-            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)),  color);
+            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)), color);
         }
 
         public abstract void Clear(IColor color);

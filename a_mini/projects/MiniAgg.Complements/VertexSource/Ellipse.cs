@@ -83,7 +83,7 @@ namespace MatterHackers.Agg.VertexSource
             init(OriginX, OriginY, RadiusX, RadiusY, 0, false);
         }
 
-        public void init(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps)
+        public void Reset(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps)
         {
             init(OriginX, OriginY, RadiusX, RadiusY, num_steps, false);
         }

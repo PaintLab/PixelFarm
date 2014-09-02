@@ -22,28 +22,28 @@ using System.Collections.Generic;
 namespace MatterHackers.Agg.VertexSource
 {
     //============================================================span_gouraud
-    public class span_gouraud : IVertexSource
+    public class SpanGourand : IVertexSource
     {
-        coord_type[] m_coord = new coord_type[3];
+        CoordAndColor[] m_coord = new CoordAndColor[3];
         double[] m_x = new double[8];
         double[] m_y = new double[8];
         ShapePath.FlagsAndCommand[] m_cmd = new ShapePath.FlagsAndCommand[8];
         int m_vertex;
 
-        public struct coord_type
+        public struct CoordAndColor
         {
             public double x;
             public double y;
             public ColorRGBA color;
         }
 
-        public span_gouraud()
+        public SpanGourand()
         {
             m_vertex = (0);
             m_cmd[0] = ShapePath.FlagsAndCommand.CommandStop;
         }
 
-        public span_gouraud(ColorRGBA c1,
+        public SpanGourand(ColorRGBA c1,
                      ColorRGBA c2,
                      ColorRGBA c3,
                      double x1, double y1,
@@ -147,7 +147,7 @@ namespace MatterHackers.Agg.VertexSource
             return m_cmd[m_vertex++];
         }
 
-        protected void arrange_vertices(coord_type[] coord)
+        protected void arrange_vertices(CoordAndColor[] coord)
         {
             coord[0] = m_coord[0];
             coord[1] = m_coord[1];
@@ -159,7 +159,7 @@ namespace MatterHackers.Agg.VertexSource
                 coord[2] = m_coord[0];
             }
 
-            coord_type tmp;
+            CoordAndColor tmp;
             if (coord[0].y > coord[1].y)
             {
                 tmp = coord[1];

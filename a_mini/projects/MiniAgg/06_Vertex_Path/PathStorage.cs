@@ -341,7 +341,23 @@ namespace MatterHackers.Agg.VertexSource
         }
         public void Rewind(int pathId)
         {
-            iteratorIndex = pathId;
+            if (pathId == 0)
+            {
+                iteratorIndex = 0;
+            }
+            else
+            {
+            }
+            //if (iteratorIndex > 0)
+            //{
+            //}
+            //if (pathId == 0)
+            //{
+            //    iteratorIndex = 0;
+            //}
+            //else
+            //{
+            //}
         }
         public void RewindZero()
         {
@@ -477,7 +493,7 @@ namespace MatterHackers.Agg.VertexSource
                     vertices.ReplaceVertex(i, x, y2 - y + y1);
                 }
             }
-        } 
+        }
         public void ClosePolygon()
         {
             ClosePolygon(ShapePath.FlagsAndCommand.FlagNone);
@@ -508,7 +524,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 vertices.AddVertex(x, y, cmd_flags);
             }
-        } 
+        }
         //--------------------------------------------------------------------
         // Join path. The path is joined with the existing one, that is, 
         // it behaves as if the pen of a plotter was always down (drawing)

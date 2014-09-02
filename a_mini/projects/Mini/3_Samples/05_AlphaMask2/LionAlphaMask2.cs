@@ -98,17 +98,17 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             {
                 if (i == num - 1)
                 {
-                    ellipseForMask.init(Width / 2, Height / 2, 110, 110, 100);
+                    ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
                     rasterizer.AddPath(ellipseForMask);
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
 
-                    ellipseForMask.init(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
+                    ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
                     rasterizer.AddPath(ellipseForMask);
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
                 }
                 else
                 {
-                    ellipseForMask.init(randGenerator.Next() % width,
+                    ellipseForMask.Reset(randGenerator.Next() % width,
                              randGenerator.Next() % height,
                              randGenerator.Next() % 100 + 20,
                              randGenerator.Next() % 100 + 20,
@@ -121,7 +121,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                        ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
-           
+
         }
 
 
@@ -169,7 +169,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             //transform *= Affine.NewRotation(angle + Math.PI);
             //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
             //transform *= Affine.NewTranslation(Width / 2, Height / 2);
-            Affine transform = Affine.NewMatix( 
+            Affine transform = Affine.NewMatix(
                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                     AffinePlan.Scale(lionScale, lionScale),
                     AffinePlan.Rotate(angle + Math.PI),
@@ -196,13 +196,17 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                 }
             }
 
-            //int x, y;
-
+            //int x, y; 
             // Render the lion
             VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-            scanlineRenderer.RenderSolidAllPaths(alphaMaskClippingProxy, 
-                   rasterizer, scanlineCache, trans, 
-                   lionShape.Colors, 
+            var vxlist = new System.Collections.Generic.List<VertexData>();
+            trans.DoTransform(vxlist);
+
+            scanlineRenderer.RenderSolidAllPaths(alphaMaskClippingProxy,
+                   rasterizer,
+                   scanlineCache,
+                   new VertexStorage(vxlist),
+                   lionShape.Colors,
                    lionShape.PathIndexList,
                    lionShape.NumPaths);
 
@@ -294,7 +298,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
              */
             //m_num_cb.Render(g_rasterizer, g_scanline, clippingProxy);
 
-             
+
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {

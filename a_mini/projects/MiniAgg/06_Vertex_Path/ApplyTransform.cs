@@ -24,13 +24,14 @@ namespace MatterHackers.Agg.VertexSource
     public class VertexSourceApplyTransform : IVertexSource
     {
         readonly IVertexSource vtxsrc;
-        Transform.ITransform transformToApply;
+        readonly Transform.ITransform transformToApply;
+
         public VertexSourceApplyTransform(IVertexSource vertexSource, Transform.ITransform newTransformeToApply)
         {
-            vtxsrc = vertexSource; 
+            vtxsrc = vertexSource;
             transformToApply = newTransformeToApply;
         }
-         
+
         public bool IsDynamicVertexGen
         {
             get
@@ -44,18 +45,48 @@ namespace MatterHackers.Agg.VertexSource
             //transform 'on-the-fly' 
             foreach (VertexData vertexData in vtxsrc.GetVertexIter())
             {
-
                 VertexData transformedVertex = vertexData;
                 if (ShapePath.IsVertextCommand(transformedVertex.command))
                 {
                     //transform 2d
                     transformToApply.Transform(ref transformedVertex.position.x, ref transformedVertex.position.y);
                 }
-
                 yield return transformedVertex;
             }
-        }
 
+        }
+        public void DoTransform(List<VertexData> output)
+        {
+
+            foreach (VertexData vx in vtxsrc.GetVertexIter())
+            {
+                VertexData transformedVertex = vx;
+                switch (transformedVertex.command)
+                {
+                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                    case ShapePath.FlagsAndCommand.CommandLineTo:
+                    case ShapePath.FlagsAndCommand.CommandCurve3:
+                    case ShapePath.FlagsAndCommand.CommandCurve4:
+                        {
+                            //transform 2d
+                            transformToApply.Transform(ref transformedVertex.position.x, ref transformedVertex.position.y);
+                        } break;
+                }
+                output.Add(transformedVertex);
+            }
+        }
+        public VertexStorage DoTransformToNewVxStorage()
+        {
+            List<VertexData> data = new List<VertexData>();
+            DoTransform(data);
+            return new VertexStorage(data);
+        }
+        public SinglePath DoTransformToNewSinglePath()
+        {
+            List<VertexData> data = new List<VertexData>();
+            DoTransform(data);
+            return new SinglePath(new VertexStorage(data), 0);
+        }
         public void Rewind(int path_id)
         {
             vtxsrc.Rewind(path_id);
@@ -74,9 +105,9 @@ namespace MatterHackers.Agg.VertexSource
             return cmd;
         }
 
-        public void SetTransformToApply(Transform.ITransform newTransformeToApply)
-        {
-            transformToApply = newTransformeToApply;
-        }
+        //public void SetTransformToApply(Transform.ITransform newTransformToApply)
+        //{
+        //    transformToApply = newTransformToApply;
+        //}
     }
 }
