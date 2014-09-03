@@ -25,10 +25,10 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                   double x, double y)
         {
             ras.Reset();
-            ras.move_to_d(x * m_size, y * m_size);
-            ras.line_to_d(x * m_size + m_size, y * m_size);
-            ras.line_to_d(x * m_size + m_size, y * m_size + m_size);
-            ras.line_to_d(x * m_size, y * m_size + m_size);
+            ras.MoveTo(x * m_size, y * m_size);
+            ras.LineTo(x * m_size + m_size, y * m_size);
+            ras.LineTo(x * m_size + m_size, y * m_size + m_size);
+            ras.LineTo(x * m_size, y * m_size + m_size);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.RenderScanlineSolidAA(destImage, ras, sl, color);
         }
@@ -142,9 +142,9 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             renderer_enlarged_test1 ren_en = new renderer_enlarged_test1(size_mul);
 
             rasterizer.Reset();
-            rasterizer.move_to_d(m_x[0] / size_mul, m_y[0] / size_mul);
-            rasterizer.line_to_d(m_x[1] / size_mul, m_y[1] / size_mul);
-            rasterizer.line_to_d(m_x[2] / size_mul, m_y[2] / size_mul);
+            rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
+            rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
+            rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
             ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------

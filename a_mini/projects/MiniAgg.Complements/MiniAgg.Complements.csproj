@@ -45,7 +45,6 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
     <Compile Include="BoundingRect.cs" />
     <Compile Include="Base\Queue.cs" />
-    <Compile Include="Base\ScanlineHitTest.cs" />
     <Compile Include="BorderDouble.cs" />
     <Compile Include="Base\agg_gamma_functions.cs" />
     <Compile Include="Base\ClipProxyImage.cs" />

@@ -187,6 +187,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     var filledEllipse = new MatterHackers.Agg.VertexSource.Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
                                       (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
                                       200);
+                    
                     var ellipseVertext = txPerspective.TransformToVxs(filledEllipse.MakeVxs());
                     //2. create transform version of fill ellipse
                     //var txFillEllipse = new VertexSourceApplyTransform(filledEllipse, txPerspective);
@@ -194,6 +195,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //g_rasterizer.AddPath(txFillEllipse);
                     g_rasterizer.AddPath(new SinglePath(ellipseVertext));
                     //4. render it
+
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy,
                         g_rasterizer,
                         g_scanline,
