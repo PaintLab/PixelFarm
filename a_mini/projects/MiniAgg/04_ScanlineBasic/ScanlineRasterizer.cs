@@ -124,9 +124,8 @@ namespace MatterHackers.Agg
             : this(new VectorClipper())
         {
         }
-
         //--------------------------------------------------------------------
-        public ScanlineRasterizer(VectorClipper rasterizer_sl_clip)
+        ScanlineRasterizer(VectorClipper rasterizer_sl_clip)
         {
             m_outline = new CellAARasterizer();
             m_VectorClipper = rasterizer_sl_clip;
@@ -152,16 +151,12 @@ namespace MatterHackers.Agg
         public void ResetClipping()
         {
             Reset();
-            m_VectorClipper.reset_clipping();
+            m_VectorClipper.ResetClipping();
         }
 
         public RectangleDouble GetVectorClipBox()
         {
-            return new RectangleDouble(
-                m_VectorClipper.downscale(m_VectorClipper.clipBox.Left),
-                m_VectorClipper.downscale(m_VectorClipper.clipBox.Bottom),
-                m_VectorClipper.downscale(m_VectorClipper.clipBox.Right),
-                m_VectorClipper.downscale(m_VectorClipper.clipBox.Top));
+            return m_VectorClipper.GetVectorClipBox(); 
         }
 
         public void SetVectorClipBox(RectangleDouble clippingRect)
@@ -172,10 +167,24 @@ namespace MatterHackers.Agg
         public void SetVectorClipBox(double x1, double y1, double x2, double y2)
         {
             Reset();
-            m_VectorClipper.clip_box(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1),
-                               m_VectorClipper.upscale(x2), m_VectorClipper.upscale(y2));
+            m_VectorClipper.ClipBox(
+                                upscale(x1), upscale(y1),
+                                upscale(x2), upscale(y2));
         }
-
+        //---------------------------------
+        //from vector clipper
+        static int upscale(double v)
+        {
+            //m_VectorClipper.upscale
+            return AggBasics.iround(v * (int)poly_subpixel_scale_e.SCALE);
+        }
+        //from vector clipper
+        static int downscale(int v)
+        {
+            //  m_VectorClipper.downscale
+            return v / (int)poly_subpixel_scale_e.SCALE;
+        }
+        //---------------------------------
         FillingRule FillingRule
         {
             get { return this.m_filling_rule; }
@@ -200,17 +209,17 @@ namespace MatterHackers.Agg
         {
             if (m_outline.Sorted) Reset();
             if (m_auto_close) ClosePolygon();
-            m_VectorClipper.move_to(m_start_x = m_VectorClipper.downscale(x),
-                              m_start_y = m_VectorClipper.downscale(y));
+            m_VectorClipper.MoveTo(m_start_x = downscale(x),
+                              m_start_y = downscale(y));
             m_status = Status.MoveTo;
         }
 
         //------------------------------------------------------------------------
         void LineTo(int x, int y)
         {
-            m_VectorClipper.line_to(m_outline,
-                              m_VectorClipper.downscale(x),
-                              m_VectorClipper.downscale(y));
+            m_VectorClipper.LineTo(m_outline,
+                             downscale(x),
+                             downscale(y));
             m_status = Status.LineTo;
         }
 
@@ -219,17 +228,17 @@ namespace MatterHackers.Agg
         {
             if (m_outline.Sorted) Reset();
             if (m_auto_close) ClosePolygon();
-            m_VectorClipper.move_to(m_start_x = m_VectorClipper.upscale(x),
-                              m_start_y = m_VectorClipper.upscale(y));
+            m_VectorClipper.MoveTo(m_start_x = upscale(x),
+                              m_start_y = upscale(y));
             m_status = Status.MoveTo;
         }
 
         //------------------------------------------------------------------------
         public void LineTo(double x, double y)
         {
-            m_VectorClipper.line_to(m_outline,
-                              m_VectorClipper.upscale(x),
-                              m_VectorClipper.upscale(y));
+            m_VectorClipper.LineTo(m_outline,
+                              upscale(x),
+                              upscale(y));
             m_status = Status.LineTo;
         }
 
@@ -237,40 +246,43 @@ namespace MatterHackers.Agg
         {
             if (m_status == Status.LineTo)
             {
-                m_VectorClipper.line_to(m_outline, m_start_x, m_start_y);
+                m_VectorClipper.LineTo(m_outline, m_start_x, m_start_y);
                 m_status = Status.Closed;
             }
         }
 
-        void AddVertex(VertexData vertexData)
+        void AddVertex(ShapePath.FlagsAndCommand cmd, double x, double y)
         {
-            if (ShapePath.IsMoveTo(vertexData.command))
+            switch (cmd)
             {
-                MoveTo(vertexData.position.x, vertexData.position.y);
-            }
-            else
-            {
-                if (ShapePath.IsVertextCommand(vertexData.command))
-                {
-                    LineTo(vertexData.position.x, vertexData.position.y);
-                }
-                else
-                {
-                    if (ShapePath.IsClose(vertexData.command))
+                case ShapePath.FlagsAndCommand.CommandMoveTo:
                     {
-                        ClosePolygon();
-                    }
-                }
+                        MoveTo(x, y);
+                    } break;
+                case ShapePath.FlagsAndCommand.CommandLineTo:
+                case ShapePath.FlagsAndCommand.CommandCurve3:
+                case ShapePath.FlagsAndCommand.CommandCurve4:
+                    {
+                        LineTo(x, y);
+                    } break;
+                default:
+                    {
+                        if (ShapePath.IsClose(cmd))
+                        {
+                            ClosePolygon();
+                        }
+                    } break;
             }
+
         }
         //------------------------------------------------------------------------
         void EdgeInt32(int x1, int y1, int x2, int y2)
         {
             if (m_outline.Sorted) Reset();
-            m_VectorClipper.move_to(m_VectorClipper.downscale(x1), m_VectorClipper.downscale(y1));
-            m_VectorClipper.line_to(m_outline,
-                              m_VectorClipper.downscale(x2),
-                              m_VectorClipper.downscale(y2));
+            m_VectorClipper.MoveTo(downscale(x1), downscale(y1));
+            m_VectorClipper.LineTo(m_outline,
+                              downscale(x2),
+                               downscale(y2));
             m_status = Status.MoveTo;
         }
 
@@ -278,10 +290,10 @@ namespace MatterHackers.Agg
         void Edge(double x1, double y1, double x2, double y2)
         {
             if (m_outline.Sorted) Reset();
-            m_VectorClipper.move_to(m_VectorClipper.upscale(x1), m_VectorClipper.upscale(y1));
-            m_VectorClipper.line_to(m_outline,
-                              m_VectorClipper.upscale(x2),
-                              m_VectorClipper.upscale(y2));
+            m_VectorClipper.MoveTo(upscale(x1), upscale(y1));
+            m_VectorClipper.LineTo(m_outline,
+                              upscale(x2),
+                              upscale(y2));
             m_status = Status.MoveTo;
         }
 
@@ -301,10 +313,9 @@ namespace MatterHackers.Agg
             {
                 Reset();
             }
-
             while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
-                AddVertex(new VertexData(cmd, new Vector2(x, y)));
+                AddVertex(cmd, x, y);
             }
         }
 
@@ -321,7 +332,7 @@ namespace MatterHackers.Agg
             }
             while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
-                AddVertex(new VertexData(cmd, new Vector2(x, y)));
+                AddVertex(cmd, x, y);
             }
 
         }
@@ -348,8 +359,8 @@ namespace MatterHackers.Agg
 
             m_outline.SortCells();
 
-            if (m_outline.TotalCells == 0) return false;                 
-             
+            if (m_outline.TotalCells == 0) return false;
+
             m_scan_y = m_outline.MinY;
             return true;
         }

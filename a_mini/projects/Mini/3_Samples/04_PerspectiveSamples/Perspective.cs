@@ -101,8 +101,8 @@ namespace MatterHackers.Agg.Sample_Perspective
                 }
                 image = new ChildImage(backBuffer, new BlenderBGR());
             }
-            ClipProxyImage clippingProxy = new ClipProxyImage(image);
-            clippingProxy.Clear(ColorRGBA.White);
+            ClipProxyImage dest = new ClipProxyImage(image);
+            dest.Clear(ColorRGBA.White);
 
             g_rasterizer.SetVectorClipBox(0, 0, Width, Height);
 
@@ -121,15 +121,12 @@ namespace MatterHackers.Agg.Sample_Perspective
                 {
                     //--------------------------
                     // Render transformed lion
-                    //
-                    VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, txBilinear);
-                    var vxlist = new System.Collections.Generic.List<VertexData>();
-                    trans.DoTransform(vxlist);
+                    // 
 
-                    scanlineRenderer.RenderSolidAllPaths(clippingProxy,
+                    scanlineRenderer.RenderSolidAllPaths(dest,
                         g_rasterizer,
                         g_scanline,
-                        new VertexStorage(vxlist),
+                        txBilinear.TransformToVxs(lionShape.Path),
                         lionShape.Colors,
                         lionShape.PathIndexList,
                         lionShape.NumPaths);
@@ -147,14 +144,14 @@ namespace MatterHackers.Agg.Sample_Perspective
                     ell_stroke.Width = 3;
 
                     var trans_ell = txBilinear.TransformToSinglePath(ell.MakeVxs());
- 
+
                     var trans_ell_stroke = txBilinear.TransformToSinglePath(ell_stroke.MakeVxs());
 
                     g_rasterizer.AddPath(trans_ell);
-                    scanlineRenderer.RenderScanlineSolidAA(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
+                    scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
 
                     g_rasterizer.AddPath(trans_ell_stroke);
-                    scanlineRenderer.RenderScanlineSolidAA(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
+                    scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
                 }
             }
             else
@@ -162,21 +159,12 @@ namespace MatterHackers.Agg.Sample_Perspective
                 var txPerspective = new Perspective(lionShape.Bounds.Left, lionShape.Bounds.Bottom, lionShape.Bounds.Right, lionShape.Bounds.Top, quadPolygonControl.polygon());
                 if (txPerspective.is_valid())
                 {
-                    //lion:
-                    //1. create transform version of lion
-                    //var txLion = new VertexSourceApplyTransform(lionShape.Path, txPerspective);
-                    //2.render it
-                    //var vxlist = new System.Collections.Generic.List<VertexData>();
-                    //txLion.DoTransform(vxlist);
-                    var vxs = txPerspective.TransformToVxs(lionShape.Path);
-
-                    //var vxs = txLion.DoTransformToNewVxStorage();
 
 
-                    scanlineRenderer.RenderSolidAllPaths(clippingProxy,
+                    scanlineRenderer.RenderSolidAllPaths(dest,
                         g_rasterizer,
                         g_scanline,
-                        vxs,
+                        txPerspective.TransformToVxs(lionShape.Path),
                         lionShape.Colors,
                         lionShape.PathIndexList,
                         lionShape.NumPaths);
@@ -187,7 +175,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     var filledEllipse = new MatterHackers.Agg.VertexSource.Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
                                       (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
                                       200);
-                    
+
                     var ellipseVertext = txPerspective.TransformToVxs(filledEllipse.MakeVxs());
                     //2. create transform version of fill ellipse
                     //var txFillEllipse = new VertexSourceApplyTransform(filledEllipse, txPerspective);
@@ -195,8 +183,8 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //g_rasterizer.AddPath(txFillEllipse);
                     g_rasterizer.AddPath(new SinglePath(ellipseVertext));
                     //4. render it
-
-                    scanlineRenderer.RenderScanlineSolidAA(clippingProxy,
+                    
+                    scanlineRenderer.RenderScanlineSolidAA(dest,
                         g_rasterizer,
                         g_scanline,
                         ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
@@ -212,7 +200,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //3. add
                     g_rasterizer.AddPath(txOutline);
                     //4. render                      
-                    scanlineRenderer.RenderScanlineSolidAA(clippingProxy,
+                    scanlineRenderer.RenderScanlineSolidAA(dest,
                         g_rasterizer,
                         g_scanline,
                         ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
@@ -222,7 +210,7 @@ namespace MatterHackers.Agg.Sample_Perspective
             //--------------------------
             // Render the "quad" tool and controls
             g_rasterizer.AddPath(quadPolygonControl);
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxy, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
+            scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
 
 
         }
