@@ -36,8 +36,8 @@ namespace MatterHackers.Agg.Font
 
     public class TypeFacePrinter : IVertexSource
     {
-        StyledTypeFace typeFaceStyle; 
-        String text = ""; 
+        StyledTypeFace typeFaceStyle;
+        String text = "";
         Vector2 totalSizeCach;
         public TypeFacePrinter(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
             : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
@@ -89,7 +89,7 @@ namespace MatterHackers.Agg.Font
         public Vector2 Origin { get; set; }
 
 
-        
+
 
         public RectangleDouble LocalBounds
         {
@@ -302,7 +302,8 @@ namespace MatterHackers.Agg.Font
 
 #if true
         IEnumerator<VertexData> currentEnumerator;
-       
+
+
         public void RewindZero()
         {
             currentEnumerator = GetVertexIter().GetEnumerator();
@@ -317,6 +318,16 @@ namespace MatterHackers.Agg.Font
             currentEnumerator.MoveNext();
 
             return command;
+        }
+        public VertexStorage CreateVxs()
+        {
+            List<VertexData> list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return new VertexStorage(list);
+            //return new SinglePath(new VertexStorage(list));
         }
 #else
         public void rewind(int pathId)

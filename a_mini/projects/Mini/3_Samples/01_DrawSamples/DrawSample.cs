@@ -106,17 +106,19 @@ namespace MatterHackers.Agg.Sample_Draw
 
             // draw some text
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
+            VertexStorage vxs = textPrinter.CreateVxs();
 
-            IVertexSource translatedText = new VertexSourceApplyTransform(textPrinter, Affine.NewTranslation(
-                new Vector2(width / 2, height / 4 * 3)));
-            g.Render(translatedText, ColorRGBA.Red);
-            Stroke strokedText = new Stroke(translatedText);
+            var affTx = Affine.NewTranslation(new Vector2(width / 2, height / 4 * 3));
+            SinglePath s1 = affTx.TransformToSinglePath(vxs);
+
+            g.Render(s1, ColorRGBA.Red);
+            Stroke strokedText = new Stroke(s1);
             g.Render(strokedText, ColorRGBA.Black);
 
-            IVertexSource rotatedText = new VertexSourceApplyTransform(textPrinter, Affine.NewRotation(MathHelper.DegreesToRadians(90)));
-            IVertexSource rotatedTranslatedText = new VertexSourceApplyTransform(rotatedText, Affine.NewTranslation(
-                new Vector2(40, height / 2)));
-            g.Render(rotatedTranslatedText, ColorRGBA.Black);
+            var aff2 = Affine.NewMatix(
+                AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
+                AffinePlan.Translate(40, height / 2)); 
+            g.Render(aff2.TransformToSinglePath(vxs), ColorRGBA.Black);
         }
     }
 
