@@ -1060,7 +1060,7 @@ namespace MatterHackers.Agg.VertexSource
     }
 
     //-----------------------------------------------------------------curve3
-    public sealed class Curve3 : IVertexSource
+    public sealed class Curve3 //: IVertexSource
     {
         Curve3Inc m_curve_inc = new Curve3Inc();
         curve3_div m_curve_div = new curve3_div();
@@ -1192,7 +1192,7 @@ namespace MatterHackers.Agg.VertexSource
     }
 
     //-----------------------------------------------------------------curve4
-    public sealed class Curve4 : IVertexSource
+    public sealed class Curve4 //: IVertexSource
     {
         curve4_inc m_curve_inc = new curve4_inc();
         curve4_div m_curve_div = new curve4_div();

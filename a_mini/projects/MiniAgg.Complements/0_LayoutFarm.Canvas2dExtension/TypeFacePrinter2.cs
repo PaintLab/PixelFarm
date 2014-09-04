@@ -34,7 +34,7 @@ using MatterHackers.Agg.Font;
 namespace LayoutFarm.Agg.Font
 {
 
-    public class TypeFacePrinter2 : IVertexSource
+    public class TypeFacePrinter2  : IVertexSource
     {
         StyledTypeFace typeFaceStyle;
         String text = "";
@@ -79,7 +79,7 @@ namespace LayoutFarm.Agg.Font
 
 
         }
-        public TypeFacePrinter2(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
+        TypeFacePrinter2(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
         {
             this.typeFaceStyle = typeFaceStyle;
             this.text = text;
@@ -302,7 +302,7 @@ namespace LayoutFarm.Agg.Font
 
 #if true
         IEnumerator<VertexData> currentEnumerator;
-        
+
         public void RewindZero()
         {
             currentEnumerator = GetVertexIter().GetEnumerator();
