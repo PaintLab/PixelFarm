@@ -562,7 +562,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                             yield return new VertexData(cmd,new Vector2(x,y));
                         }break;
                 }
-            }             
+            }
+             
         }
 
 

@@ -893,21 +893,21 @@ namespace MatterHackers.Agg.Transform
 
 
         //----------------------------------------------------------------------------------------------
-        public Agg.VertexSource.SinglePath TransformToSinglePath(Agg.VertexSource.PathStorage src)
+        public Agg.SinglePath TransformToSinglePath(Agg.VertexSource.PathStorage src)
         {
-            return new VertexSource.SinglePath(TransformToVxs(src));
+            return new SinglePath(TransformToVxs(src));
         }
-        public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
+        public Agg.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             return TransformToVxs(src.Vsx);
         }
-        public Agg.VertexSource.SinglePath TransformToSinglePath(Agg.VertexSource.VertexStorage src)
+        public Agg.SinglePath TransformToSinglePath(Agg.VertexStorage src)
         {
-            return new VertexSource.SinglePath(this.TransformToVxs(src));
+            return new SinglePath(this.TransformToVxs(src));
         }
-        public Agg.VertexSource.VertexStorage TransformToVxs(Agg.VertexSource.VertexStorage src)
+        public Agg.VertexStorage TransformToVxs(Agg.VertexStorage src)
         {
-            var data = new System.Collections.Generic.List<Agg.VertexSource.VertexData>();
+            var data = new System.Collections.Generic.List<Agg.VertexData>();
 
             ShapePath.FlagsAndCommand cmd;
             double x, y;
@@ -916,23 +916,23 @@ namespace MatterHackers.Agg.Transform
             {
                 cmd = src.GetVertex(i, out x, out y);
                 this.Transform(ref x, ref y);
-                data.Add(new VertexSource.VertexData(cmd, new VectorMath.Vector2(x, y)));
+                data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
             }
-            return new Agg.VertexSource.VertexStorage(data);
+            return new Agg.VertexStorage(data);
         }
-        public Agg.VertexSource.VertexStorage Tranform(Agg.VertexSource.SinglePath src)
+        public Agg.VertexStorage Tranform(Agg.SinglePath src)
         {
-            var data = new System.Collections.Generic.List<Agg.VertexSource.VertexData>();
+            var data = new System.Collections.Generic.List<Agg.VertexData>();
             src.RewindZero();
             ShapePath.FlagsAndCommand cmd;
             double x, y;
             while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 this.Transform(ref x, ref y);
-                data.Add(new VertexSource.VertexData(cmd, new VectorMath.Vector2(x, y)));
+                data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
             }
 
-            return new Agg.VertexSource.VertexStorage(data);
+            return new Agg.VertexStorage(data);
         }
         // Check to see if two matrices are equal
         //public bool is_equal(Affine m, double epsilon)

@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using MatterHackers.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace MatterHackers.Agg 
 {
     public struct VertexData
     {
