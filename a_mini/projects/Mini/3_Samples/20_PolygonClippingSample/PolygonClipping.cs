@@ -538,7 +538,31 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
         public IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotImplementedException();
+            //--------------
+            //rewind
+            m_angle = m_start_angle;
+            m_curr_r = m_r1;
+            m_start = true;
+            //--------------
+
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            for(;;)
+            {
+                cmd = GetNextVertex(out x, out y);
+                switch(cmd)
+                {
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        {
+                           yield return new VertexData(cmd,new Vector2(x,y));                            
+                           yield break;
+                        }
+                    default:
+                        {
+                            yield return new VertexData(cmd,new Vector2(x,y));
+                        }break;
+                }
+            }             
         }
 
 
@@ -548,6 +572,21 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_curr_r = m_r1;
             m_start = true;
         }
+        public VertexStorage MakeVxs()
+        {
+            VertexStorage vxs = new VertexStorage();
+            List<VertexData> list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return vxs;
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
+
         public bool IsDynamicVertexGen
         {
             get

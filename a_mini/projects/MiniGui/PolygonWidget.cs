@@ -57,9 +57,24 @@ namespace MatterHackers.Agg.UI
 
         public IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotImplementedException();
+            this.RewindZero();
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            for (; ; )
+            {
+                cmd = GetNextVertex(out x, out y);
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    yield return new VertexData(cmd, x, y);
+                    yield break;
+                }
+                else
+                {
+                    yield return new VertexData(cmd, x, y);
+                }
+            }
         }
-         
+
         public void RewindZero()
         {
             m_vertex = 0;
@@ -96,7 +111,29 @@ namespace MatterHackers.Agg.UI
             ++m_vertex;
             return (m_vertex == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
         }
-    };
+
+
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> vlist = new List<VertexData>();
+            this.RewindZero();
+            for (; ; )
+            {
+                double x, y;
+                var cmd = this.GetNextVertex(out x, out y);
+                vlist.Add(new VertexData(cmd, x, y));
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    break;
+                }
+            }
+            return new VertexStorage(vlist);
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
+    }
 
     public class polygon_ctrl_impl : UI.SimpleVertexSourceWidget
     {
@@ -157,7 +194,7 @@ namespace MatterHackers.Agg.UI
         public void AddYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] += newYN; }
 
         public double[] polygon() { return m_polygon; }
-         
+
 
         public double LineWidth
         {
@@ -181,7 +218,7 @@ namespace MatterHackers.Agg.UI
         }
 
         public override int num_paths() { return 1; }
-        
+
         public override void RewindZero()
         {
             if (needToRecalculateBounds)
@@ -220,6 +257,22 @@ namespace MatterHackers.Agg.UI
 #endif
         }
 
+        public override VertexStorage MakeVxs()
+        {
+            List<VertexData> vlist = new List<VertexData>();
+            for (; ; )
+            {
+                double x,y;
+                var cmd = GetNextVertex(out x, out y);
+                vlist.Add(new VertexData(cmd, x, y));
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    break;
+                }
+            }
+
+            return new VertexStorage(vlist);
+        }
         public override ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
@@ -528,6 +581,6 @@ namespace MatterHackers.Agg.UI
 
         public void line_color(IColor c) { m_color = c; }
         public override IColor color(int i) { return m_color; }
-       
+
     }
 }

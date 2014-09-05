@@ -25,13 +25,22 @@ namespace MatterHackers.Agg.VertexSource
         public void RewindZero()
         {
             this.currentIterIndex = startAt;
-        } 
+        }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             var cmd = currentVertex.GetVertex(currentIterIndex, out x, out y);
             currentIterIndex++;
             return cmd;
         }
+        public VertexStorage MakeVxs()
+        {
+            return this.currentVertex;
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return this;
+        }
+
         public IEnumerable<VertexData> GetVertexIter()
         {
             int j = currentVertex.Count;

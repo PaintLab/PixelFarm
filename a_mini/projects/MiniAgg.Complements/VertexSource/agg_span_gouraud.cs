@@ -110,7 +110,20 @@ namespace MatterHackers.Agg.VertexSource
                 m_cmd[6] = ShapePath.FlagsAndCommand.CommandStop;
             }
         }
-
+        public VertexStorage MakeVxs()
+        {
+            VertexStorage vxs = new VertexStorage();
+            List<VertexData> list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return vxs;
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
         public IEnumerable<VertexData> GetVertexIter()
         {
             m_vertex = 0;

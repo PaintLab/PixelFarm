@@ -52,7 +52,14 @@ namespace MatterHackers.Agg.VertexSource
         protected IVertextGenerator GetGenerator() { return generator; }
 
 
-
+        public VertexStorage MakeVxs()
+        {
+            throw new NotSupportedException();
+        }
+        public SinglePath MakeSinglePath()
+        {
+            throw new NotSupportedException();
+        }
         public IEnumerable<VertexData> GetVertexIter()
         {
             this.RewindZero();

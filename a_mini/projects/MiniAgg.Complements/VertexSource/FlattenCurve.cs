@@ -126,7 +126,20 @@ namespace MatterHackers.Agg.VertexSource
                 return true;
             }
         }
-
+        public VertexStorage MakeVxs()
+        {
+            VertexStorage vxs = new VertexStorage();
+            List<VertexData> list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return vxs;
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
         public IEnumerable<VertexData> GetVertexIter()
         {
             VertexData lastPosition = new VertexData();
@@ -190,7 +203,7 @@ namespace MatterHackers.Agg.VertexSource
                 }
             }
         }
-         
+
         public void RewindZero()
         {
             vertextSource.RewindZero();

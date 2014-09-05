@@ -38,7 +38,7 @@ namespace MatterHackers.Agg.VertexSource
             List<VertexData> output = new List<VertexData>();
             foreach (VertexData vx in vtxsrc.GetVertexIter())
             {
-                output.Add(vx); 
+                output.Add(vx);
             }
             return output;
         }
@@ -124,6 +124,15 @@ namespace MatterHackers.Agg.VertexSource
                 transformToApply.Transform(ref x, ref y);
             }
             return cmd;
+        }
+
+        public VertexStorage MakeVxs()
+        {
+            throw new System.NotSupportedException();
+        }
+        public SinglePath MakeSinglePath()
+        {
+            throw new System.NotSupportedException();
         }
     }
 }

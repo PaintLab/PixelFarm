@@ -255,6 +255,19 @@ namespace MatterHackers.Agg.Font
             yield return endVertex;
         }
 
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> vlist = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                vlist.Add(v);
+            }
+            return new VertexStorage(vlist);
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
         private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)
         {
             Vector2 size = GetSize(line);

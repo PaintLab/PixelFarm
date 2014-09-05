@@ -30,6 +30,11 @@ namespace MatterHackers.Agg.VertexSource
             this.command = command;
             this.position = position;
         }
+        public VertexData(ShapePath.FlagsAndCommand command, double x, double y)
+        {
+            this.command = command;
+            this.position = new Vector2(x, y);
+        }
         public bool IsMoveTo
         {
             get { return command == ShapePath.FlagsAndCommand.CommandMoveTo; }
@@ -48,6 +53,10 @@ namespace MatterHackers.Agg.VertexSource
         ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
 
         bool IsDynamicVertexGen { get; }
+
+
+        VertexStorage MakeVxs();
+        SinglePath MakeSinglePath();
     }
 
     public interface IVertexProducer

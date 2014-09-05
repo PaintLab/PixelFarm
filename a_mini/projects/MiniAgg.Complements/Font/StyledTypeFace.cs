@@ -38,6 +38,18 @@ namespace MatterHackers.Agg.Font
             this.glyph = glyph;
         }
 
+
+        public SinglePath MakeSinglePath() { return new SinglePath(this.MakeVxs()); }
+        public VertexStorage MakeVxs()
+        {
+            var list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return new VertexStorage(list);
+        }
+
         public IEnumerable<VertexData> GetVertexIter()
         {
             // return all the data for the glyph
@@ -61,7 +73,7 @@ namespace MatterHackers.Agg.Font
             get { return this.glyph.IsDynamicVertexGen; }
         }
 
-      
+
         public void RewindZero()
         {
             state = 0;

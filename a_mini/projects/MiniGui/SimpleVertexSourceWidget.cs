@@ -93,8 +93,7 @@ namespace MatterHackers.Agg.UI
         public abstract void RewindZero();
         public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
 
-        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); }
-
+        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); } 
         public override void OnDraw(Graphics2D graphics2D)
         {
             var list = new System.Collections.Generic.List<VertexData>();
@@ -121,9 +120,16 @@ namespace MatterHackers.Agg.UI
             base.OnDraw(graphics2D);
         }
 
+        
         public abstract bool IsDynamicVertexGen
         {
             get;
         }
+        public abstract VertexStorage MakeVxs();
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
+
     }
 }

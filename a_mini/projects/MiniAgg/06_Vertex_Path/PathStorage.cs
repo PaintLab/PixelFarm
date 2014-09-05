@@ -277,9 +277,16 @@ namespace MatterHackers.Agg.VertexSource
             vertices.AddVertex(dx_ctrl2, dy_ctrl2, ShapePath.FlagsAndCommand.CommandCurve4);
             vertices.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve4);
         }
-
+        public VertexStorage MakeVxs()
+        {
+            return this.vertices;
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.vertices);
+        }
         public void Curve4(double x_ctrl2, double y_ctrl2,
-                           double x_to, double y_to)
+                       double x_to, double y_to)
         {
             double x0;
             double y0;
@@ -345,7 +352,7 @@ namespace MatterHackers.Agg.VertexSource
                 yield return new VertexData(command, new Vector2(x, y));
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2(0, 0));
-        } 
+        }
         public void RewindZero()
         {
             iteratorIndex = 0;
