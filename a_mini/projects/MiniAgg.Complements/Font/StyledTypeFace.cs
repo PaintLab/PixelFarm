@@ -330,11 +330,12 @@ namespace MatterHackers.Agg.Font
                 }
 
                 Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
-                IVertexSource characterGlyph = new VertexSourceApplyTransform(sourceGlyph, glyphTransform);
-
+                var characterGlyph = glyphTransform.TransformToSinglePath(sourceGlyph.MakeVxs());
+               
                 if (FlatenCurves)
                 {
-                    characterGlyph = new FlattenCurves(characterGlyph);
+                   
+                    characterGlyph = new FlattenCurves(characterGlyph).MakeSinglePath();
                 }
 
                 return characterGlyph;

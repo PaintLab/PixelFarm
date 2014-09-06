@@ -99,7 +99,6 @@
     <Compile Include="06_Transfrom\Perspective.cs" />
     <Compile Include="06_Transfrom\Viewport.cs" />
     <Compile Include="04_ScanlineBasic\VectorClipper.cs" />
-    <Compile Include="06_Vertex_Path\ApplyTransform.cs" />
     <Compile Include="06_Vertex_Path\IVertextGenerator.cs" />
     <Compile Include="06_Vertex_Path\IVertexSource.cs" />
     <Compile Include="06_Vertex_Path\PathStorage.cs" />

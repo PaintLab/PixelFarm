@@ -75,7 +75,7 @@ namespace MatterHackers.Agg.Sample_LionFill
         LionShape lionShape;
         VertexStorage vxStorage;
 
-        VertexSourceApplyTransform transformedPathStorage;
+    
         byte alpha;
         public LionFill()
         {
@@ -123,7 +123,7 @@ namespace MatterHackers.Agg.Sample_LionFill
                 );
 
                 //convert
-                 
+
                 vxStorage = transform.TransformToVxs(lionShape.Path);
             }
             graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);

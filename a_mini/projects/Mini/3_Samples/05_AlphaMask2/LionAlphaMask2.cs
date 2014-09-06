@@ -198,14 +198,16 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
             //int x, y; 
             // Render the lion
-            VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-            var vxlist = new System.Collections.Generic.List<VertexData>();
-            trans.DoTransform(vxlist);
+            //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
+
+            //var vxlist = new System.Collections.Generic.List<VertexData>();
+            //trans.DoTransform(vxlist);
+     
 
             scanlineRenderer.RenderSolidAllPaths(alphaMaskClippingProxy,
                    rasterizer,
                    scanlineCache,
-                   new VertexStorage(vxlist),
+                   transform.TransformToVxs(lionShape.Path),
                    lionShape.Colors,
                    lionShape.PathIndexList,
                    lionShape.NumPaths);

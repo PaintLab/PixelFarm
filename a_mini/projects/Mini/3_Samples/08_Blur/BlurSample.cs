@@ -66,7 +66,8 @@ namespace MatterHackers.Agg.Sample_Blur
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             //shape_mtx *= Affine.NewTranslation(150, 100);
 
-            m_path = new VertexSourceApplyTransform(m_path, shape_mtx).DoTransformToNewSinglePath();
+            //m_path = new VertexSourceApplyTransform(m_path, shape_mtx).DoTransformToNewSinglePath();
+            m_path = shape_mtx.TransformToSinglePath(m_path.MakeVxs());
             m_shape = new FlattenCurves(m_path);
 
             BoundingRect.GetBoundingRectSingle(m_shape, ref m_shape_bounds);
@@ -160,7 +161,7 @@ namespace MatterHackers.Agg.Sample_Blur
                             m_shape_bounds.Right, m_shape_bounds.Top,
                             m_shadow_ctrl.polygon());
 
-            
+
             SinglePath spath;
             if (FlattenCurveCheck)
             {
@@ -172,7 +173,7 @@ namespace MatterHackers.Agg.Sample_Blur
             {
                 var s2 = shadow_persp.TransformToVxs(m_path.MakeVxs());
                 //shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
-                spath = new SinglePath(s2); 
+                spath = new SinglePath(s2);
             }
             // Render shadow 
             //spath = shadow_trans.DoTransformToNewSinglePath();

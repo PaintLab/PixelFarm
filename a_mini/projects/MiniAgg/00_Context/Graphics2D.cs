@@ -150,14 +150,19 @@ namespace MatterHackers.Agg
         }
         public void Render(IVertexSource vertexSource, double x, double y, ColorRGBA color)
         {
-            Render(
-                new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)).DoTransformToNewSinglePath(), color);
+            var inputVxs = vertexSource.MakeVxs();
+            var vxs = Affine.NewTranslation(x, y).TransformToSinglePath(inputVxs);
+            Render(vxs, color);
+
+            //Render(
+            //    new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)).DoTransformToNewSinglePath(), color);
         }
 
         public void Render(IVertexSource vertexSource, Vector2 position, ColorRGBA color)
         {
-            Render(
-                new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)).DoTransformToNewSinglePath(), color);
+            var inputVxs = vertexSource.MakeVxs();
+            var vxs = Affine.NewTranslation(position.x, position.y).TransformToSinglePath(inputVxs);
+            Render(vxs, color);
         }
 
         public abstract void Clear(IColor color);

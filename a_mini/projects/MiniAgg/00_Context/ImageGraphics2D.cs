@@ -131,11 +131,18 @@ namespace MatterHackers.Agg
         {
             rasterizer.Reset();
             Affine transform = GetTransform();
+
             if (!transform.IsIdentity())
             {
-                vertexSource = new VertexSourceApplyTransform(vertexSource, transform).DoTransformToNewSinglePath();
+
+                 
+                var path = transform.TransformToSinglePath(vertexSource.MakeVxs());
+                rasterizer.AddPath(path);
             }
-            rasterizer.AddPath(vertexSource);
+            else
+            {
+                rasterizer.AddPath(vertexSource);
+            }
             if (destImageByte != null)
             {
                 scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, m_ScanlineCache, colorBytes);

@@ -159,7 +159,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 var vxs = transform.TransformToVxs(lionShape.Path);
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
-               // var vxs = trans.DoTransformToNewVxStorage();
+                // var vxs = trans.DoTransformToNewVxStorage();
                 scanlineRenderer.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
@@ -182,16 +182,16 @@ namespace MatterHackers.Agg.Sample_LionOutline
                     : OutlineAARasterizer.OutlineJoin.Round);
                 rasterizer.RoundCap = true;
 
-                VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-                var vxs = trans.DoTransformToNewVxStorage();
-                 
+                //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
+                var vxs = transform.TransformToVxs(lionShape.Path);// trans.DoTransformToNewVxStorage();
+
                 int j = lionShape.NumPaths;
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderSinglePath(
                         new SinglePath(vxs, lionShape.PathIndexList[i]), lionShape.Colors[i]);
                 }
-                
+
             }
 
             base.OnDraw(graphics2D);

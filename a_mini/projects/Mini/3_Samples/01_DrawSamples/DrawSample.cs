@@ -85,9 +85,8 @@ namespace MatterHackers.Agg.Sample_Draw
                     AffinePlan.Translate(width / 2, 150));
 
 
-                var tx = new VertexSourceApplyTransform(ellipsePro.MakeSinglePath(), mat);
-
-                var sp1 = mat.TransformToSinglePath(ellipsePro.MakeVxs());// tx.DoTransformToNewSinglePath();
+                
+                var sp1 = mat.TransformToSinglePath(ellipsePro.MakeVxs());
 
                 g.Render(sp1, ColorRGBA.Yellow);
 
@@ -117,7 +116,7 @@ namespace MatterHackers.Agg.Sample_Draw
 
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
-                AffinePlan.Translate(40, height / 2)); 
+                AffinePlan.Translate(40, height / 2));
             g.Render(aff2.TransformToSinglePath(vxs), ColorRGBA.Black);
         }
     }
