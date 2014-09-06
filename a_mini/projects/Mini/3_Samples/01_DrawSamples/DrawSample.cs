@@ -92,7 +92,7 @@ namespace MatterHackers.Agg.Sample_Draw
                 g.Render(sp1, ColorRGBA.Yellow);
 
                 Stroke ellipseOutline = new Stroke(sp1, 3);
-                g.Render(ellipseOutline, ColorRGBA.Blue);
+                g.Render(ellipseOutline.MakeVxs(), ColorRGBA.Blue);
             }
 
             // and a little polygon
@@ -113,7 +113,7 @@ namespace MatterHackers.Agg.Sample_Draw
 
             g.Render(s1, ColorRGBA.Red);
             Stroke strokedText = new Stroke(s1);
-            g.Render(strokedText, ColorRGBA.Black);
+            g.Render(strokedText.MakeVxs(), ColorRGBA.Black);
 
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),

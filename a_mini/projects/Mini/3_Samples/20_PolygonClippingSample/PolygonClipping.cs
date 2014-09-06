@@ -263,9 +263,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.ClosePolygon();
 
                         graphics2D.Render(ps1, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
-                        graphics2D.Render(stroke, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(stroke.MakeVxs(), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, ps1, stroke);
+                        CreateAndRenderCombined(graphics2D, ps1, new SinglePath(stroke.MakeVxs()));
                     }
                     break;
 
@@ -303,7 +303,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         Stroke stroke_gb_poly = new Stroke(trans_gb_poly);
                         stroke_gb_poly.Width = 0.1;
-                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
+                        graphics2D.Render(stroke_gb_poly.MakeVxs(), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
                         graphics2D.Render(trans_arrows, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
                         CreateAndRenderCombined(graphics2D, trans_gb_poly, trans_arrows);
@@ -334,11 +334,14 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         Stroke stroke_gb_poly = new Stroke(s1);
 
                         stroke_gb_poly.Width = 0.1;
-                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
 
-                        graphics2D.Render(stroke, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, s1, stroke);
+                        graphics2D.Render(stroke_gb_poly.MakeVxs(), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
+
+                        var stroke_vxs = stroke.MakeVxs();
+                        graphics2D.Render(stroke_vxs, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
+
+                        CreateAndRenderCombined(graphics2D, s1, new SinglePath(stroke_vxs));
                     }
                     break;
 
@@ -411,9 +414,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         VertexSourceApplyTransform trans = new VertexSourceApplyTransform(glyph, mtx);
                         FlattenCurves curve = new FlattenCurves(trans);
 
-                        CreateAndRenderCombined(graphics2D, stroke, curve);
+                        CreateAndRenderCombined(graphics2D, new SinglePath(stroke.MakeVxs()), curve);
 
-                        graphics2D.Render(stroke, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(stroke.MakeVxs(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
 
                         graphics2D.Render(curve, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
                     }
@@ -547,23 +550,23 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
             ShapePath.FlagsAndCommand cmd;
             double x, y;
-            for(;;)
+            for (; ; )
             {
                 cmd = GetNextVertex(out x, out y);
-                switch(cmd)
+                switch (cmd)
                 {
                     case ShapePath.FlagsAndCommand.CommandStop:
                         {
-                           yield return new VertexData(cmd,new Vector2(x,y));                            
-                           yield break;
+                            yield return new VertexData(cmd, new Vector2(x, y));
+                            yield break;
                         }
                     default:
                         {
-                            yield return new VertexData(cmd,new Vector2(x,y));
-                        }break;
+                            yield return new VertexData(cmd, new Vector2(x, y));
+                        } break;
                 }
             }
-             
+
         }
 
 

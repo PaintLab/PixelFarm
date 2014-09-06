@@ -183,7 +183,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //g_rasterizer.AddPath(txFillEllipse);
                     g_rasterizer.AddPath(new SinglePath(ellipseVertext));
                     //4. render it
-                    
+
                     scanlineRenderer.RenderScanlineSolidAA(dest,
                         g_rasterizer,
                         g_scanline,
@@ -196,7 +196,7 @@ namespace MatterHackers.Agg.Sample_Perspective
 
                     strokeEllipse.Width = 3;
                     //2. create transform version of outlin  
-                    var txOutline = new VertexSourceApplyTransform(strokeEllipse, txPerspective);
+                    var txOutline = txPerspective.TransformToVxs(strokeEllipse.MakeVxs());// new VertexSourceApplyTransform(strokeEllipse, txPerspective);
                     //3. add
                     g_rasterizer.AddPath(txOutline);
                     //4. render                      

@@ -155,10 +155,11 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 stroke.Width = strokeWidth;
                 stroke.LineJoin = LineJoin.Round;
 
-                VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke, transform);
+                //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke.MakeVxs(), transform);
+                var vxs = transform.TransformToVxs(lionShape.Path);
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
-                var vxs = trans.DoTransformToNewVxStorage();
+               // var vxs = trans.DoTransformToNewVxStorage();
                 scanlineRenderer.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,

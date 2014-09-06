@@ -33,7 +33,7 @@ namespace MatterHackers.Agg.Sample_FloodFill
             {
                 Ellipse elipse = new Ellipse(rand.Next(imageToFillOn.Width), rand.Next(imageToFillOn.Height), rand.Next(10, 60), rand.Next(10, 60));
                 Stroke outline = new Stroke(elipse.MakeSinglePath());
-                imageToFillGraphics.Render(outline, ColorRGBA.Black);
+                imageToFillGraphics.Render(outline.MakeVxs(), ColorRGBA.Black);
             }
 
             this.PixelSize = 32;

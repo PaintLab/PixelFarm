@@ -25,7 +25,7 @@ namespace MatterHackers.Agg.VertexSource
 {
 
     //------------------------------------------------------conv_adaptor_vcgen
-    public abstract class VertexSourceAdapter : IVertexSource
+    public abstract class VertexSourceAdapter  
     {
         ////null pattern 
         readonly IVertexSource vtxsrc;
@@ -51,15 +51,20 @@ namespace MatterHackers.Agg.VertexSource
 
         protected IVertextGenerator GetGenerator() { return generator; }
 
-
-        public VertexStorage MakeVxs()
-        {
-            throw new NotSupportedException();
-        }
         public SinglePath MakeSinglePath()
         {
-            throw new NotSupportedException();
+            return new SinglePath(this.MakeVxs());
         }
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> list = new List<VertexData>();
+            foreach (VertexData vx in this.GetVertexIter())
+            {
+                list.Add(vx);
+            }
+            return new VertexStorage(list);
+        } 
+        //---------------------------------------------------------
         public IEnumerable<VertexData> GetVertexIter()
         {
             this.RewindZero();
@@ -182,6 +187,7 @@ namespace MatterHackers.Agg.VertexSource
                 }
             }
             return command;
-        }
+        } 
+        //---------------------------------------------------------
     }
 }

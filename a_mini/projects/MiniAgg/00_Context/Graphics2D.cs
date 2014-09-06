@@ -168,8 +168,9 @@ namespace MatterHackers.Agg
             m_LinesToDraw.Clear();
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);
-            Stroke StrockedLineToDraw = new Stroke(m_LinesToDraw);
-            Render(StrockedLineToDraw, color);
+
+            Stroke strokedLineToDraw = new Stroke(m_LinesToDraw);
+            Render(strokedLineToDraw.MakeVxs(), color);
         }
 
         public abstract void SetClippingRect(RectangleDouble rect_d);

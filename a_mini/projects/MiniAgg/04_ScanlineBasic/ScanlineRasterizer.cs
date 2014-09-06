@@ -156,7 +156,7 @@ namespace MatterHackers.Agg
 
         public RectangleDouble GetVectorClipBox()
         {
-            return m_VectorClipper.GetVectorClipBox(); 
+            return m_VectorClipper.GetVectorClipBox();
         }
 
         public void SetVectorClipBox(RectangleDouble clippingRect)
@@ -318,7 +318,10 @@ namespace MatterHackers.Agg
                 AddVertex(cmd, x, y);
             }
         }
-
+        public void AddPath(VertexStorage vxs)
+        {
+            this.AddPath(new SinglePath(vxs));
+        }
         public void AddPath(SinglePath spath)
         {
             double x = 0;
