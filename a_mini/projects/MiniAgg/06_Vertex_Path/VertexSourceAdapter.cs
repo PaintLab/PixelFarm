@@ -34,28 +34,28 @@ namespace MatterHackers.Agg.VertexSource
         ShapePath.FlagsAndCommand m_last_cmd;
         double m_start_x;
         double m_start_y;
+
         enum Status
         {
             Initial,
             Accumulate,
             Generate
         }
-        public VertexSourceAdapter(IVertexSource vertexSource, IVertextGenerator generator)
+        public VertexSourceAdapter(
+            IVertexSource vertexSource,
+            IVertextGenerator generator)
         {
             this.vtxsrc = vertexSource;
             this.generator = generator;
             m_status = Status.Initial;
         }
 
-        public bool IsDynamicVertexGen { get { return this.vtxsrc.IsDynamicVertexGen; } }
+        public bool IsDynamicVertexGen { get { return true; } }
 
         protected IVertextGenerator GetGenerator() { return generator; }
 
-        public SinglePath MakeSinglePath()
-        {
-            return new SinglePath(this.MakeVxs());
-        }
-        public VertexStorage MakeVxs()
+
+        public VertexStorage MakeVxs(VertexStorage vxs)
         {
             List<VertexData> list = new List<VertexData>();
             foreach (VertexData vx in this.GetVertexIter())
@@ -73,18 +73,19 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x;
                 double y;
-                command = GetNextVertex(out x, out y);
+                command = GetNextVertex3(out x, out y);
 
-                yield return new VertexData(command, new Vector2(x, y));
+                yield return new VertexData(command, x, y);
 
             } while (command != ShapePath.FlagsAndCommand.CommandStop);
         }
+       
         public void RewindZero()
         {
             vtxsrc.RewindZero();
             m_status = Status.Initial;
         }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex3(out double x, out double y)
         {
             x = 0;
             y = 0;

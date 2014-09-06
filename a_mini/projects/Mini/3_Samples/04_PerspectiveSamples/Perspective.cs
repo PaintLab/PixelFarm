@@ -145,7 +145,7 @@ namespace MatterHackers.Agg.Sample_Perspective
 
                     var trans_ell = txBilinear.TransformToSinglePath(ell.MakeVxs());
 
-                    var trans_ell_stroke = txBilinear.TransformToSinglePath(ell_stroke.MakeVxs());
+                    var trans_ell_stroke = txBilinear.TransformToSinglePath(ell_stroke.MakeVxs(s1.MakeVxs()));
 
                     g_rasterizer.AddPath(trans_ell);
                     scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
@@ -192,10 +192,11 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //--------------------------------------------------------
                     //outline Ellipse
                     //1. create original version of stroke ellipse 
-                    var strokeEllipse = new Stroke(new SinglePath(filledEllipse.MakeVxs())); 
+                    var vxs = filledEllipse.MakeVxs();
+                    var strokeEllipse = new Stroke(new SinglePath(vxs)); 
                     strokeEllipse.Width = 3;
                     //2. create transform version of outlin  
-                    var txOutline = txPerspective.TransformToVxs(strokeEllipse.MakeVxs());// new VertexSourceApplyTransform(strokeEllipse, txPerspective);
+                    var txOutline = txPerspective.TransformToVxs(strokeEllipse.MakeVxs(vxs));// new VertexSourceApplyTransform(strokeEllipse, txPerspective);
                     //3. add
                     g_rasterizer.AddPath(txOutline);
                     //4. render                      
@@ -208,8 +209,8 @@ namespace MatterHackers.Agg.Sample_Perspective
 
             //--------------------------
             // Render the "quad" tool and controls
-            var vxs = quadPolygonControl.MakeVxs();
-            g_rasterizer.AddPath(vxs);
+            var vxs2 = quadPolygonControl.MakeVxs(); 
+            g_rasterizer.AddPath(vxs2);
             //g_rasterizer.AddPath(quadPolygonControl);
             scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
 

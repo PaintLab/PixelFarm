@@ -263,9 +263,10 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.ClosePolygon();
 
                         graphics2D.Render(ps1, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
-                        graphics2D.Render(stroke.MakeVxs(), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, ps1, new SinglePath(stroke.MakeVxs()));
+                        var vxs = ps2.MakeVxs();
+                        graphics2D.Render(stroke.MakeVxs(vxs), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        CreateAndRenderCombined(graphics2D, ps1, new SinglePath(vxs));
                     }
                     break;
 
@@ -296,17 +297,21 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //mtx2 *= Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
                         Affine mtx2 = mtx1 * Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
 
-                        VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
-                        VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
+                        //VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
+                        //VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
+                        var trans_gb_poly = mtx1.TransformToVxs(gb_poly);
+                        var trans_arrows = mtx2.TransformToVxs(arrows);
 
                         graphics2D.Render(trans_gb_poly, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
 
-                        Stroke stroke_gb_poly = new Stroke(trans_gb_poly);
-                        stroke_gb_poly.Width = 0.1;
-                        graphics2D.Render(stroke_gb_poly.MakeVxs(), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
+                        //Stroke stroke_gb_poly = new Stroke(new SinglePath(trans_gb_poly));
+                        var stroke_gb_poly = new Stroke(new SinglePath(trans_gb_poly), 0.1).MakeVxs(trans_gb_poly);
+
+                        //stroke_gb_poly.Width = 0.1;
+                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
                         graphics2D.Render(trans_arrows, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, trans_gb_poly, trans_arrows);
+                        CreateAndRenderCombined(graphics2D, new SinglePath(trans_gb_poly), new SinglePath(trans_arrows));
                     }
                     break;
 
@@ -332,13 +337,11 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         graphics2D.Render(s1, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
 
                         Stroke stroke_gb_poly = new Stroke(s1);
-
                         stroke_gb_poly.Width = 0.1;
 
+                        graphics2D.Render(stroke_gb_poly.MakeVxs(s1.MakeVxs()), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
 
-                        graphics2D.Render(stroke_gb_poly.MakeVxs(), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
-
-                        var stroke_vxs = stroke.MakeVxs();
+                        var stroke_vxs = stroke.MakeVxs(sp.MakeVxs());
                         graphics2D.Render(stroke_vxs, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
                         CreateAndRenderCombined(graphics2D, s1, new SinglePath(stroke_vxs));
@@ -414,9 +417,11 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         VertexSourceApplyTransform trans = new VertexSourceApplyTransform(glyph, mtx);
                         FlattenCurves curve = new FlattenCurves(trans);
 
-                        CreateAndRenderCombined(graphics2D, new SinglePath(stroke.MakeVxs()), curve);
+                        var sp1 = stroke.MakeVxs(sp.MakeVxs());
 
-                        graphics2D.Render(stroke.MakeVxs(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        CreateAndRenderCombined(graphics2D, new SinglePath(sp1), curve);
+
+                        graphics2D.Render(stroke.MakeVxs(sp1), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
 
                         graphics2D.Render(curve, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
                     }

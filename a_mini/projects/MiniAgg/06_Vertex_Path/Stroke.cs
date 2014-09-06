@@ -74,10 +74,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             get { return this.GetGenerator().Shorten; }
             set { this.GetGenerator().Shorten = value; }
-        }
-    
-       
-
+        } 
 
     }
 }

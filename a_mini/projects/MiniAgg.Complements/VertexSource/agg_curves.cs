@@ -1077,7 +1077,7 @@ namespace MatterHackers.Agg.VertexSource
             : base()
         {
             m_approximation_method = Curves.CurveApproximationMethod.curve_div;
-            init(x1, y1, cx, cy, x2, y2);
+            Init(x1, y1, cx, cy, x2, y2);
         }
 
 
@@ -1087,7 +1087,7 @@ namespace MatterHackers.Agg.VertexSource
             m_curve_div.reset();
         }
 
-        public void init(double x1, double y1,
+        public void Init(double x1, double y1,
                double cx, double cy,
                double x2, double y2)
         {
@@ -1210,13 +1210,13 @@ namespace MatterHackers.Agg.VertexSource
             : base()
         {
             m_approximation_method = Curves.CurveApproximationMethod.curve_div;
-            init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+            Init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
         }
 
         public Curve4(curve4_points cp)
         {
             m_approximation_method = Curves.CurveApproximationMethod.curve_div;
-            init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
+            Init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
         }
 
         public bool IsDynamicVertexGen { get { return false; } }
@@ -1226,7 +1226,7 @@ namespace MatterHackers.Agg.VertexSource
             m_curve_div.reset();
         }
 
-        public void init(double x1, double y1,
+        public void Init(double x1, double y1,
                double cx1, double cy1,
                double cx2, double cy2,
                double x2, double y2)
@@ -1243,7 +1243,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void init(curve4_points cp)
         {
-            init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
+            Init(cp[0], cp[1], cp[2], cp[3], cp[4], cp[5], cp[6], cp[7]);
         }
 
         public void approximation_method(Curves.CurveApproximationMethod v)

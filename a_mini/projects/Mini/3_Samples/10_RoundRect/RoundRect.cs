@@ -153,7 +153,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             {
                 Stroke p = new Stroke(r);
                 p.Width = 1;
-                ras.AddPath(p.MakeVxs());
+                ras.AddPath(p.MakeVxs(r.MakeVxs()));
             }
             else
             {

@@ -47,23 +47,24 @@ namespace MatterHackers.Agg.UI
             {
                 if (localBoundsComeFromPoints)
                 {
-                    RectangleDouble localBounds = new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
+                    RectangleDouble localBounds = this.CalculateLocalBounds();
+                    //new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
 
-                    this.RewindZero();
-                    double x;
-                    double y;
-                    ShapePath.FlagsAndCommand cmd;
-                    int numPoint = 0;
-                    while (!ShapePath.IsStop(cmd = GetNextVertex(out x, out y)))
-                    {
-                        numPoint++;
-                        localBounds.ExpandToInclude(x, y);
-                    }
+                    //this.RewindZero();
+                    //double x;
+                    //double y;
+                    //ShapePath.FlagsAndCommand cmd;
+                    //int numPoint = 0;
+                    //while (!ShapePath.IsStop(cmd = GetNextVertex(out x, out y)))
+                    //{
+                    //    numPoint++;
+                    //    localBounds.ExpandToInclude(x, y);
+                    //}
 
-                    if (numPoint == 0)
-                    {
-                        localBounds = new RectangleDouble();
-                    }
+                    //if (numPoint == 0)
+                    //{
+                    //    localBounds = new RectangleDouble();
+                    //}
 
                     return localBounds;
                 }
@@ -89,38 +90,26 @@ namespace MatterHackers.Agg.UI
 
         public abstract int num_paths();
         public abstract IEnumerable<VertexData> GetVertexIter();
-       
+
         public abstract void RewindZero();
         public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
+        protected abstract RectangleDouble CalculateLocalBounds();
 
-        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); } 
+        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            var list = new System.Collections.Generic.List<VertexData>();
-            this.RewindZero();
 
-            ShapePath.FlagsAndCommand cmd;
-            double x, y;
-            while ((cmd = this.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-            {
-                list.Add(new VertexData(cmd, new Vector2(x, y)));
-            }
+            var list = new System.Collections.Generic.List<VertexData>();
+            var vxs = this.MakeVxs();
             //foreach (var v in this.GetVertexIter())
             //{
-
+            //    list.Add(v);
             //}
-            graphics2D.Render(new SinglePath(new VertexStorage(list), 0),
+            graphics2D.Render(new SinglePath(vxs, 0),
                 color(0).GetAsRGBA_Bytes());
-
-
-            //for (int i = 0; i < num_paths(); i++)
-            //{
-            //    graphics2D.Render(this, i, color(i).GetAsRGBA_Bytes());
-            //}
             base.OnDraw(graphics2D);
         }
 
-        
         public abstract bool IsDynamicVertexGen
         {
             get;

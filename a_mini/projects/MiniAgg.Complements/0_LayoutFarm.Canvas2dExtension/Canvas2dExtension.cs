@@ -121,7 +121,8 @@ namespace MatterHackers.Agg
             RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
             Stroke rectOutline = new Stroke(rect, strokeWidth);
 
-            gx.Render(rectOutline.MakeVxs(), color);
+             
+            gx.Render(rectOutline.MakeVxs(rect.MakeVxs()), color);
         }
 
         public static void Rectangle(this Graphics2D gx, RectangleDouble rect, ColorRGBA color, double strokeWidth = 1)

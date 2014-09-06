@@ -214,7 +214,19 @@ namespace MatterHackers.Agg.UI
         // Vertex source interface
         public override IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotSupportedException();
+            this.RewindZero();
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            for (; ; )
+            {
+                cmd = this.GetNextVertex(out x, out y);
+                yield return new VertexData(cmd, x, y);
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    yield break;
+                }
+            }
+
         }
 
         public override int num_paths() { return 1; }
@@ -259,31 +271,54 @@ namespace MatterHackers.Agg.UI
 
         public override VertexStorage MakeVxs()
         {
-            List<VertexData> vlist = new List<VertexData>();
-
+            List<VertexData> vlist = new List<VertexData>(); 
             this.RewindZero();
+            //this polygon control has  2 subcontrol
+            //stroke and ellipse
+            
             for (; ; )
             {
                 double x, y;
-                var cmd = GetNextVertex2(out x, out y);
+                var cmd = GetNextVertex2(this.m_stroke, out x, out y);
                 vlist.Add(new VertexData(cmd, x, y));
                 if (cmd == ShapePath.FlagsAndCommand.CommandStop)
                 {
                     break;
                 }
-            }
+            } 
 
             return new VertexStorage(vlist);
         }
+        protected override RectangleDouble CalculateLocalBounds()
+        {
+            RectangleDouble localBounds = new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
 
-        ShapePath.FlagsAndCommand GetNextVertex2(out double x, out double y)
+            this.RewindZero();
+            double x;
+            double y;
+            ShapePath.FlagsAndCommand cmd;
+            int numPoint = 0;
+            while (!ShapePath.IsStop(cmd = GetNextVertex2(this.m_stroke, out x, out y)))
+            {
+                numPoint++;
+                localBounds.ExpandToInclude(x, y);
+            }
+
+            if (numPoint == 0)
+            {
+                localBounds = new RectangleDouble();
+            }
+
+            return localBounds; throw new NotImplementedException();
+        }
+        ShapePath.FlagsAndCommand GetNextVertex2(Stroke m_stroke, out double x, out double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
             double r = m_point_radius;
             if (m_status == 0)
             {
-                cmd = m_stroke.GetNextVertex(out x, out y);
-                if (!ShapePath.IsStop(cmd))
+                cmd = m_stroke.GetNextVertex3(out x, out y);
+                if (cmd != ShapePath.FlagsAndCommand.CommandStop)
                 {
                     ParentToChildTransform.Transform(ref x, ref y);
                     return cmd;
@@ -311,12 +346,13 @@ namespace MatterHackers.Agg.UI
         }
         public override ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
+
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
             double r = m_point_radius;
             if (m_status == 0)
             {
-                cmd = m_stroke.GetNextVertex(out x, out y);
-                if (!ShapePath.IsStop(cmd))
+                cmd = m_stroke.GetNextVertex3(out x, out y);
+                if (cmd != ShapePath.FlagsAndCommand.CommandStop)
                 {
                     ParentToChildTransform.Transform(ref x, ref y);
                     return cmd;

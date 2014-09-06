@@ -160,28 +160,31 @@ namespace MatterHackers.Agg.Sample_Blur
                             m_shape_bounds.Right, m_shape_bounds.Top,
                             m_shadow_ctrl.polygon());
 
-            VertexSourceApplyTransform shadow_trans;
+            
+            SinglePath spath;
             if (FlattenCurveCheck)
             {
-                shadow_trans = new VertexSourceApplyTransform(m_shape, shadow_persp);
-
+                var s2 = shadow_persp.TransformToVxs(m_shape.MakeVxs());
+                spath = new SinglePath(s2);
+                //shadow_trans = new VertexSourceApplyTransform(m_shape, shadow_persp);
             }
             else
             {
-                shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
-                // this will make it very smooth after the transform
-                //shadow_trans = new conv_curve(shadow_trans);
-                //m_ras.AddPath(shadow_trans);
+                var s2 = shadow_persp.TransformToVxs(m_path.MakeVxs());
+                //shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
+                spath = new SinglePath(s2); 
             }
-            // Render shadow
-            m_ras.AddPath(shadow_trans.DoTransformToNewSinglePath());
+            // Render shadow 
+            //spath = shadow_trans.DoTransformToNewSinglePath();
+            m_ras.AddPath(spath);
+
 
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).GetAsRGBA_Bytes());
 
             // Calculate the bounding box and extend it by the blur radius
             RectangleDouble bbox = new RectangleDouble();
-            BoundingRect.GetBoundingRectSingle(shadow_trans, ref bbox);
+            BoundingRect.GetBoundingRectSingle(spath, ref bbox);
 
             double m_radius = this.BlurRadius;
 
