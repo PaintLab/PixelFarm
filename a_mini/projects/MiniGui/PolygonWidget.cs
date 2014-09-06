@@ -214,7 +214,7 @@ namespace MatterHackers.Agg.UI
         // Vertex source interface
         public override IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public override int num_paths() { return 1; }
@@ -260,10 +260,12 @@ namespace MatterHackers.Agg.UI
         public override VertexStorage MakeVxs()
         {
             List<VertexData> vlist = new List<VertexData>();
+
+            this.RewindZero();
             for (; ; )
             {
-                double x,y;
-                var cmd = GetNextVertex(out x, out y);
+                double x, y;
+                var cmd = GetNextVertex2(out x, out y);
                 vlist.Add(new VertexData(cmd, x, y));
                 if (cmd == ShapePath.FlagsAndCommand.CommandStop)
                 {
@@ -272,6 +274,40 @@ namespace MatterHackers.Agg.UI
             }
 
             return new VertexStorage(vlist);
+        }
+
+        ShapePath.FlagsAndCommand GetNextVertex2(out double x, out double y)
+        {
+            ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
+            double r = m_point_radius;
+            if (m_status == 0)
+            {
+                cmd = m_stroke.GetNextVertex(out x, out y);
+                if (!ShapePath.IsStop(cmd))
+                {
+                    ParentToChildTransform.Transform(ref x, ref y);
+                    return cmd;
+                }
+                if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
+                m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
+                ++m_status;
+            }
+            cmd = m_ellipse.GetNextVertex(out x, out y);
+            if (!ShapePath.IsStop(cmd))
+            {
+                ParentToChildTransform.Transform(ref x, ref y);
+                return cmd;
+            }
+            if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
+            if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
+            m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
+            ++m_status;
+            cmd = m_ellipse.GetNextVertex(out x, out y);
+            if (!ShapePath.IsStop(cmd))
+            {
+                ParentToChildTransform.Transform(ref x, ref y);
+            }
+            return cmd;
         }
         public override ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {

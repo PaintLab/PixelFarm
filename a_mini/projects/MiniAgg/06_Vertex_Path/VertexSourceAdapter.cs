@@ -25,7 +25,7 @@ namespace MatterHackers.Agg.VertexSource
 {
 
     //------------------------------------------------------conv_adaptor_vcgen
-    public abstract class VertexSourceAdapter  
+    public abstract class VertexSourceAdapter
     {
         ////null pattern 
         readonly IVertexSource vtxsrc;
@@ -63,9 +63,9 @@ namespace MatterHackers.Agg.VertexSource
                 list.Add(vx);
             }
             return new VertexStorage(list);
-        } 
+        }
         //---------------------------------------------------------
-        public IEnumerable<VertexData> GetVertexIter()
+        IEnumerable<VertexData> GetVertexIter()
         {
             this.RewindZero();
             ShapePath.FlagsAndCommand command = ShapePath.FlagsAndCommand.CommandStop;
@@ -187,7 +187,7 @@ namespace MatterHackers.Agg.VertexSource
                 }
             }
             return command;
-        } 
+        }
         //---------------------------------------------------------
     }
 }

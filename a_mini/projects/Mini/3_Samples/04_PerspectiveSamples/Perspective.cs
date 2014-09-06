@@ -192,8 +192,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //--------------------------------------------------------
                     //outline Ellipse
                     //1. create original version of stroke ellipse 
-                    var strokeEllipse = new Stroke(new SinglePath(filledEllipse.MakeVxs()));
-
+                    var strokeEllipse = new Stroke(new SinglePath(filledEllipse.MakeVxs())); 
                     strokeEllipse.Width = 3;
                     //2. create transform version of outlin  
                     var txOutline = txPerspective.TransformToVxs(strokeEllipse.MakeVxs());// new VertexSourceApplyTransform(strokeEllipse, txPerspective);
@@ -209,7 +208,9 @@ namespace MatterHackers.Agg.Sample_Perspective
 
             //--------------------------
             // Render the "quad" tool and controls
-            g_rasterizer.AddPath(quadPolygonControl);
+            var vxs = quadPolygonControl.MakeVxs();
+            g_rasterizer.AddPath(vxs);
+            //g_rasterizer.AddPath(quadPolygonControl);
             scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
 
 
