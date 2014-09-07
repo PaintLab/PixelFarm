@@ -7,7 +7,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    class ContourGenerator  : IVertextGenerator
+    class ContourGenerator   
     {
         StrokeMath m_stroker;
         double m_width;

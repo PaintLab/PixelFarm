@@ -73,7 +73,6 @@
     <Compile Include="VertexSource\ContourGenerator.cs" />
     <Compile Include="VertexSource\Ellipse.cs" />
     <Compile Include="VertexSource\FlattenCurve.cs" />
-    <Compile Include="VertexSource\IVertextGenerator.cs" />
     <Compile Include="VertexSource\Point2D.cs" />
     <Compile Include="VertexSource\RoundedRect.cs" />
     <Compile Include="Font\LiberationSansFont.cs" />
@@ -84,7 +83,6 @@
     <Compile Include="Font\UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests.cs" />
-    <Compile Include="VertexSource\VertexSourceAdapter.cs" />
     <Compile Include="VertexSource\VertexSourceIO.cs" />
   </ItemGroup>
   <ItemGroup>

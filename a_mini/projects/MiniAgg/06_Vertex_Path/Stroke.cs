@@ -29,7 +29,6 @@ namespace MatterHackers.Agg.VertexSource
         StrokeGenerator strokeGen;
         public Stroke(double inWidth)
         {
-
             this.strokeGen = new StrokeGenerator();
             this.Width = inWidth;
         }

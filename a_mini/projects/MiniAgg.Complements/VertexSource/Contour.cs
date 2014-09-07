@@ -22,11 +22,18 @@
 //----------------------------------------------------------------------------
 namespace MatterHackers.Agg.VertexSource
 {
-    public sealed class Contour : VertexSourceAdapter
+    public sealed class Contour //: VertexSourceAdapter
     {
-        public Contour(IVertexSource vertexSource) :
-            base(vertexSource, new ContourGenerator())
+        ContourGenerator generator;
+        IVertexSource vertexSource;
+        public Contour(IVertexSource vertexSource)  
         {
+            this.generator = new ContourGenerator();
+            this.vertexSource = vertexSource;
+        }
+        ContourGenerator GetGenerator()
+        {
+            return this.generator;
         }
         public LineJoin LineJoin
         {
@@ -54,7 +61,7 @@ namespace MatterHackers.Agg.VertexSource
             get { return this.GetGenerator().Width; }
             set { this.GetGenerator().Width = value; }
         }
-        public void miter_limit_theta(double t) { base.GetGenerator().SetMiterLimitTheta(t); }
+        public void miter_limit_theta(double t) { this.GetGenerator().SetMiterLimitTheta(t); }
 
 
         public bool AutoDetectOrientation
@@ -66,6 +73,6 @@ namespace MatterHackers.Agg.VertexSource
         {
             get { return this.GetGenerator().ApproximateScale; }
             set { this.GetGenerator().ApproximateScale = value; }
-        } 
+        }
     }
 }
