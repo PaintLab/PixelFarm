@@ -151,7 +151,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new gamma_none());
-            
+
             //----------------------------------------
             PathStorage ps = new PathStorage();
             ps.Clear();
@@ -160,9 +160,10 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ps.LineTo(m_x[2], m_y[2]);
             ps.LineTo(m_x[0], m_y[0]);
             //----------------------------------------
-            Stroke stroke = new Stroke(ps); 
-            stroke.Width = 2;
-            rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
+            //Stroke stroke = new Stroke(ps);
+            //stroke.Width = 2;
+            //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
+            rasterizer.AddPath(StrokeHelp.CreateStrokeVxs(ps.MakeSinglePath(), 2));
             //----------------------------------------
 
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));

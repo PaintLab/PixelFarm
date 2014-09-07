@@ -27,7 +27,7 @@ namespace MatterHackers.Agg.VertexSource
     {
 
         StrokeGenerator strokeGen;
-        public Stroke(IVertexSource vertexSource, double inWidth = 1)
+        public Stroke(double inWidth)
         {
 
             this.strokeGen = new StrokeGenerator();
@@ -104,7 +104,7 @@ namespace MatterHackers.Agg.VertexSource
                 {
                     case ShapePath.FlagsAndCommand.CommandStop:
                         {
-                          
+
                         } break;
                     case ShapePath.FlagsAndCommand.CommandEndPoly:
                         {
@@ -142,7 +142,20 @@ namespace MatterHackers.Agg.VertexSource
             return new VertexStorage(list, hasMoreThanOnePart);
 
         }
-       
-        
+
+
+    }
+    public static class StrokeHelp
+    {
+        public static VertexStorage MakeVxs2(VertexStorage vxs, double w)
+        {
+            Stroke stroke = new Stroke(w);
+            return stroke.MakeVxs(vxs);
+        }
+        public static VertexStorage CreateStrokeVxs(SinglePath p, double w)
+        {
+            Stroke stroke = new Stroke(w);
+            return stroke.MakeVxs(p.MakeVxs());
+        }
     }
 }

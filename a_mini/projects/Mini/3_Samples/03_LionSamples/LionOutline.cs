@@ -133,7 +133,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(ColorRGBA.White);
 
-            Affine transform = Affine.NewMatix(
+            Affine affTx = Affine.NewMatix(
                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                     AffinePlan.Scale(spriteScale, spriteScale),
                     AffinePlan.Rotate(angle + Math.PI),
@@ -150,13 +150,12 @@ namespace MatterHackers.Agg.Sample_LionOutline
             {
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
-                Stroke stroke = new Stroke(lionShape.Path);
-
-                stroke.Width = strokeWidth;
+                Stroke stroke = new Stroke(strokeWidth); 
                 stroke.LineJoin = LineJoin.Round;
 
-                //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke.MakeVxs(), transform);
-                var vxs = transform.TransformToVxs(lionShape.Path);
+
+                var vxs = affTx.TransformToVxs(lionShape.Path);
+                
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
                 // var vxs = trans.DoTransformToNewVxStorage();
@@ -164,14 +163,14 @@ namespace MatterHackers.Agg.Sample_LionOutline
                     imageClippingProxy,
                     rasterizer,
                     scanlineCache,
-                    vxs,
+                    vxs ,
                     lionShape.Colors,
                     lionShape.PathIndexList,
                     lionShape.NumPaths);
             }
             else
             {
-                double w = strokeWidth * transform.GetScale();
+                double w = strokeWidth * affTx.GetScale();
 
                 LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new gamma_none());
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
@@ -183,13 +182,13 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 rasterizer.RoundCap = true;
 
                 //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-                var vxs = transform.TransformToVxs(lionShape.Path);// trans.DoTransformToNewVxStorage();
+                var vxs = affTx.TransformToVxs(lionShape.Path);// trans.DoTransformToNewVxStorage();
 
                 int j = lionShape.NumPaths;
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderSinglePath(
-                        new SinglePath(vxs, 
+                        new SinglePath(vxs,
                             lionShape.PathIndexList[i]),
                             lionShape.Colors[i]);
                 }

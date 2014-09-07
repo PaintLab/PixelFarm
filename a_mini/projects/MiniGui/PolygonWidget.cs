@@ -165,7 +165,7 @@ namespace MatterHackers.Agg.UI
             m_node = (-1);
             m_edge = (-1);
             m_vs = new simple_polygon_vertex_source(m_polygon, m_num_points, false);
-            m_stroke = new Stroke(m_vs);
+            m_stroke = new Stroke(1);
             m_point_radius = (point_radius);
             m_status = (0);
             m_dx = (0.0);

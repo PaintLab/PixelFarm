@@ -85,13 +85,13 @@ namespace MatterHackers.Agg.Sample_Draw
                     AffinePlan.Translate(width / 2, 150));
 
 
-                
+
                 var sp1 = mat.TransformToSinglePath(ellipsePro.MakeVxs());
 
                 g.Render(sp1, ColorRGBA.Yellow);
 
-                Stroke ellipseOutline = new Stroke(sp1, 3);
-                g.Render(ellipseOutline.MakeVxs(sp1.MakeVxs()), ColorRGBA.Blue);
+                //Stroke ellipseOutline = new Stroke(sp1, 3);
+                g.Render(StrokeHelp.CreateStrokeVxs(sp1, 3), ColorRGBA.Blue);
             }
 
             // and a little polygon
@@ -111,8 +111,10 @@ namespace MatterHackers.Agg.Sample_Draw
             SinglePath s1 = affTx.TransformToSinglePath(vxs);
 
             g.Render(s1, ColorRGBA.Red);
-            Stroke strokedText = new Stroke(s1);
-            g.Render(strokedText.MakeVxs(s1.MakeVxs()), ColorRGBA.Black);
+
+            g.Render(
+                StrokeHelp.CreateStrokeVxs(s1, 1),
+                ColorRGBA.Black);
 
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
