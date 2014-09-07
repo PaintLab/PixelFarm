@@ -350,7 +350,7 @@ namespace MatterHackers.Agg.VertexSource
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2(0, 0));
         }
-        public void RewindZero()
+        public void RewindZ()
         {
             iteratorIndex = 0;
         }
@@ -510,7 +510,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
-            s.RewindZero();
+            s.RewindZ();
             while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, cmd_flags);
@@ -523,7 +523,7 @@ namespace MatterHackers.Agg.VertexSource
         public void JoinPath(SinglePath s)
         {
             double x, y;
-            s.RewindZero();
+            s.RewindZ();
             ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
             if (cmd == ShapePath.FlagsAndCommand.CommandStop)
             {

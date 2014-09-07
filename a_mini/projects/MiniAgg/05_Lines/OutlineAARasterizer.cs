@@ -584,29 +584,14 @@ namespace MatterHackers.Agg.Lines
         //    AddPath(vs, 0);
         //}
 
-        //public void AddPath(IVertexSource vs, int path_id)
-        //{
-        //    double x;
-        //    double y;
-
-        //    ShapePath.FlagsAndCommand cmd;
-        //    vs.Rewind(path_id);
-        //    while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-        //    {
-        //        //index++;
-        //        //if (index == 0
-        //        //  || (index > start && index < start + num))
-        //        AddVertex(x, y, cmd);
-        //    }
-        //    Render(false);
-        //}
+       
         void AddPath(SinglePath s)
         {
             double x;
             double y;
 
             ShapePath.FlagsAndCommand cmd;
-            s.RewindZero();
+            s.RewindZ();
             while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 //index++;

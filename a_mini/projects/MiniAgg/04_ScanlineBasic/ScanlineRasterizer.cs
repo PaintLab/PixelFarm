@@ -298,25 +298,7 @@ namespace MatterHackers.Agg
         public void AddPath(IVertexSource vs)
         {
             this.AddPath(vs.MakeSinglePath());
-        }
-
-
-        //public void AddPath(IVertexSource vs)
-        //{
-        //    double x = 0;
-        //    double y = 0;
-
-        //    ShapePath.FlagsAndCommand cmd;
-        //    vs.RewindZero();
-        //    if (m_outline.Sorted)
-        //    {
-        //        Reset();
-        //    }
-        //    while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-        //    {
-        //        AddVertex(cmd, x, y);
-        //    }
-        //}
+        } 
         //-------------------------------------------------------------------
         public void AddPath(VertexStorage vxs)
         {
@@ -329,7 +311,7 @@ namespace MatterHackers.Agg
             double y = 0;
 
             ShapePath.FlagsAndCommand cmd;
-            spath.RewindZero();
+            spath.RewindZ();
             if (m_outline.Sorted)
             {
                 Reset();

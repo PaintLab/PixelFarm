@@ -112,13 +112,13 @@ namespace MatterHackers.Agg.VertexSource
         }
         public VertexStorage MakeVxs()
         {
-            VertexStorage vxs = new VertexStorage();
+            
             List<VertexData> list = new List<VertexData>();
             foreach (var v in this.GetVertexIter())
             {
                 list.Add(v);
             }
-            return vxs;
+            return new VertexStorage(list);
         }
         public SinglePath MakeSinglePath()
         {

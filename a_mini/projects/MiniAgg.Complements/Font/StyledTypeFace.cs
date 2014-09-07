@@ -77,8 +77,8 @@ namespace MatterHackers.Agg.Font
         public void RewindZero()
         {
             state = 0;
-            underline.RewindZero();
-            glyph.RewindZero();
+            underline.RewindZ();
+            glyph.RewindZ();
         }
 
         int state = 0;

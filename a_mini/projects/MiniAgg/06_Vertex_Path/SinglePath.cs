@@ -22,15 +22,13 @@ namespace MatterHackers.Agg
             this.startAt = startAt;
             this.currentIterIndex = startAt;
         }
-        public void RewindZero()
+        public void RewindZ()
         {
             this.currentIterIndex = startAt;
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            var cmd = vxs.GetVertex(currentIterIndex, out x, out y);
-          
-
+            var cmd = vxs.GetVertex(currentIterIndex, out x, out y); 
             currentIterIndex++;
             return cmd;
         }

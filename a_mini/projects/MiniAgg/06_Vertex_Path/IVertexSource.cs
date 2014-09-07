@@ -53,8 +53,7 @@ namespace MatterHackers.Agg
     }
 
     public interface IVertexSource
-    {
-        
+    {   
         VertexStorage MakeVxs();
         SinglePath MakeSinglePath();
     }

@@ -44,7 +44,7 @@ namespace MatterHackers.Agg
             y2 = 0;
 
             //--------------------------
-            vs.RewindZero();
+            vs.RewindZ();
             //--------------------------
 
             for (i = 0; i < num; i++)
@@ -130,7 +130,7 @@ namespace MatterHackers.Agg
             x2 = 0;
             y2 = 0;
 
-            vs.RewindZero();
+            vs.RewindZ();
             ShapePath.FlagsAndCommand PathAndFlags;
             while (!ShapePath.IsStop(PathAndFlags = vs.GetNextVertex(out x, out y)))
             {

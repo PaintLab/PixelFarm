@@ -74,14 +74,7 @@ namespace MatterHackers.Agg
             {
                 List<VertexData> vxData = new List<VertexData>();
                 //then transform
-                var s1 = new SinglePath(transform.Tranform(vertexSource));
-
-                //VertexSourceApplyTransform vertexTx = new VertexSourceApplyTransform(vertexSource, transform);
-                //vertexSource.RewindZero();
-                //vertexTx.DoTransform(vxData);
-                ////VertexStorage newvx = new VertexStorage(vxData);
-                //rasterizer.AddPath(new SinglePath(new VertexStorage(vxData), 0));
-
+                var s1 = new SinglePath(transform.Tranform(vertexSource));  
                 rasterizer.AddPath(s1);
             }
             else
