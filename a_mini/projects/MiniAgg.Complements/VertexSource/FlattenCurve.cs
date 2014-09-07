@@ -49,19 +49,22 @@ namespace MatterHackers.Agg.VertexSource
     // Class conv_curve recognizes commands path_cmd_curve3 and path_cmd_curve4 
     // and converts these vertices into a move_to/line_to sequence. 
     //-----------------------------------------------------------------------
-    public class FlattenCurves : IVertexSource
+    public class FlattenCurves
     {
         double lastX;
         double lastY;
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
-        readonly IVertexSource vertextSource;
+        readonly SinglePath vertextSource;
 
-        public FlattenCurves(IVertexSource vertextSource)
+        public FlattenCurves(SinglePath spath)
         {
-            this.vertextSource = vertextSource;
+            this.vertextSource = spath;
         }
-
+        public FlattenCurves(VertexStorage vxs)
+        {
+            this.vertextSource = new SinglePath(vxs);
+        }
         public double ApproximationScale
         {
             get
@@ -128,24 +131,24 @@ namespace MatterHackers.Agg.VertexSource
         }
         public VertexStorage MakeVxs()
         {
-            
+
             List<VertexData> list = new List<VertexData>();
             foreach (var v in this.GetVertexIter())
             {
                 list.Add(v);
             }
             return new VertexStorage(list);
-           
+
         }
         public SinglePath MakeSinglePath()
         {
             return new SinglePath(this.MakeVxs());
         }
-        public IEnumerable<VertexData> GetVertexIter()
+        IEnumerable<VertexData> GetVertexIter()
         {
             this.RewindZero();
             VertexData lastPosition = new VertexData();
-            
+
             IEnumerator<VertexData> vertexDataEnumerator = vertextSource.GetVertexIter().GetEnumerator();
             while (vertexDataEnumerator.MoveNext())
             {
@@ -206,7 +209,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void RewindZero()
+        void RewindZero()
         {
             vertextSource.RewindZero();
             lastX = 0.0;
@@ -214,7 +217,7 @@ namespace MatterHackers.Agg.VertexSource
             m_curve3.reset();
             m_curve4.reset();
         }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (!ShapePath.IsStop(m_curve3.GetNextVertex(out x, out y)))
             {

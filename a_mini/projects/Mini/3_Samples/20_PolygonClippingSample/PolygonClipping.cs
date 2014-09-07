@@ -108,7 +108,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             return output;
         }
 
-        private static List<List<IntPoint>> CreatePolygons(IVertexSource a)
+        private static List<List<IntPoint>> CreatePolygons(SinglePath a)
         {
             List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
             List<IntPoint> currentPoly = null;
@@ -411,11 +411,12 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
 
-                        CreateAndRenderCombined(graphics2D, new SinglePath(sp1), new SinglePath(curve.MakeVxs()));
+                        var curveVxs = curve.MakeVxs();
+                        CreateAndRenderCombined(graphics2D, new SinglePath(sp1), new SinglePath(curveVxs));
 
                         graphics2D.Render(stroke.MakeVxs(sp1), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
 
-                        graphics2D.Render(curve, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(curveVxs, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
                     }
                     break;
             }
@@ -622,7 +623,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         int m_contours;
         int m_points;
 
-        conv_poly_counter(IVertexSource src)
+        conv_poly_counter(SinglePath src)
         {
             m_contours = 0;
             m_points = 0;

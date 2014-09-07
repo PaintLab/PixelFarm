@@ -311,13 +311,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             return new SinglePath(this.MakeVxs());
         }
-        public bool IsDynamicVertexGen
-        {
-            get
-            {
-                return true;
-            }
-        }
+       
     }
 }
 

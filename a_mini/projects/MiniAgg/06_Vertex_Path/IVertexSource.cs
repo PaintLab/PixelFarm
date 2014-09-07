@@ -54,21 +54,11 @@ namespace MatterHackers.Agg
 
     public interface IVertexSource
     {
-        IEnumerable<VertexData> GetVertexIter();
-        void RewindZero();
-         ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
-
-        bool IsDynamicVertexGen { get; }
-
-
+        
         VertexStorage MakeVxs();
         SinglePath MakeSinglePath();
     }
 
-    public interface IVertexProducer
-    {
-        VertexStorage MakeVxs();
-        SinglePath MakeSinglePath();
-    }
+
 
 }

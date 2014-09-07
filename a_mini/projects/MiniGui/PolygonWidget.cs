@@ -80,13 +80,7 @@ namespace MatterHackers.Agg.UI
             m_vertex = 0;
         }
 
-        public bool IsDynamicVertexGen
-        {
-            get
-            {
-                return false;
-            }
-        }
+        
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
@@ -242,13 +236,7 @@ namespace MatterHackers.Agg.UI
             m_status = 0;
 
         }
-        public override bool IsDynamicVertexGen
-        {
-            get
-            {
-                return true;
-            }
-        }
+       
         void RecalculateBounds()
         {
             needToRecalculateBounds = false;

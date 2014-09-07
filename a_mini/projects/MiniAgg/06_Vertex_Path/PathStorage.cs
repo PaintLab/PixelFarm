@@ -337,10 +337,7 @@ namespace MatterHackers.Agg.VertexSource
             return vertices.GetLastY();
         }
 
-        public bool IsDynamicVertexGen
-        {
-            get { return false; }
-        }
+        
         public IEnumerable<VertexData> GetVertexIter()
         {
             int count = vertices.Count;

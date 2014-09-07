@@ -68,13 +68,7 @@ namespace MatterHackers.Agg
             }
 
         }
-        public bool IsDynamicVertexGen
-        {
-            get
-            {
-                return false;
-            }
-        }
+        
 
 
 

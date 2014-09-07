@@ -295,7 +295,7 @@ namespace MatterHackers.Agg
                               upscale(y2));
             m_status = Status.MoveTo;
         }
-        public void AddPath(IVertexProducer vs)
+        public void AddPath(IVertexSource vs)
         {
             this.AddPath(vs.MakeSinglePath());
         }

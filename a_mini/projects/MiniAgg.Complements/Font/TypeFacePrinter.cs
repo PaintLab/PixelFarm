@@ -203,7 +203,7 @@ namespace MatterHackers.Agg.Font
                 }
             }
         }
-        public bool IsDynamicVertexGen { get { return true; } }
+        
         public IEnumerable<VertexData> GetVertexIter()
         {
             if (text != null && text.Length > 0)
@@ -219,18 +219,31 @@ namespace MatterHackers.Agg.Font
 
                     for (int currentChar = 0; currentChar < line.Length; currentChar++)
                     {
-                        IVertexSource currentGlyph = typeFaceStyle.GetGlyphForCharacter(line[currentChar]);
+                        var currentGlyph = typeFaceStyle.GetGlyphForCharacter(line[currentChar]);
 
                         if (currentGlyph != null)
                         {
-                            foreach (VertexData vertexData in currentGlyph.GetVertexIter())
+                            int j = currentGlyph.Count;
+                            for (int i = 0; i < j; ++i)
                             {
-                                if (vertexData.command != ShapePath.FlagsAndCommand.CommandStop)
+                                double x, y;
+                                var cmd = currentGlyph.GetVertex(i, out x, out y);
+                                if (cmd != ShapePath.FlagsAndCommand.CommandStop)
                                 {
-                                    VertexData offsetVertex = new VertexData(vertexData.command, vertexData.position + currentOffset + Origin);
-                                    yield return offsetVertex;
+                                    yield return new VertexData(cmd,
+                                        (x + currentOffset.x + Origin.x),
+                                        (y + currentOffset.y + Origin.y));
+                                     
                                 }
                             }
+                            //foreach (VertexData vertexData in currentGlyph.GetVertexIter())
+                            //{
+                            //    if (vertexData.command != ShapePath.FlagsAndCommand.CommandStop)
+                            //    {
+                            //        VertexData offsetVertex = new VertexData(vertexData.command, vertexData.position + currentOffset + Origin);
+                            //        yield return offsetVertex;
+                            //    }
+                            //}
                         }
 
                         // get the advance for the next character

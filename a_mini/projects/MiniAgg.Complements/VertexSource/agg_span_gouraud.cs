@@ -135,14 +135,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public bool IsDynamicVertexGen
-        {
-            get
-            {
-                return false;
-            }
-        }
-
+       
         // Vertex Source Interface to feed the coordinates to the rasterizer
 
         public void RewindZero()

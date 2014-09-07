@@ -107,10 +107,7 @@ namespace MatterHackers.Agg.UI
             base.OnDraw(graphics2D);
         }
 
-        public abstract bool IsDynamicVertexGen
-        {
-            get;
-        }
+       
         public abstract VertexStorage MakeVxs();
         public SinglePath MakeSinglePath()
         {

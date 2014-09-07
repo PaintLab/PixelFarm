@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Sample_Blur
         //CheckBox m_channel_b;
         //CheckBox m_FlattenCurves;
 
-        IVertexSource m_path;
+        SinglePath m_path;
         FlattenCurves m_shape;
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
@@ -61,7 +61,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
             m_sl = new ScanlinePacked8();
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
-            m_path = typeFaceForLargeA.GetGlyphForCharacter('a');
+            m_path = new SinglePath(typeFaceForLargeA.GetGlyphForCharacter('a'));
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             //shape_mtx *= Affine.NewTranslation(150, 100);
@@ -70,7 +70,7 @@ namespace MatterHackers.Agg.Sample_Blur
             m_path = shape_mtx.TransformToSinglePath(m_path.MakeVxs());
             m_shape = new FlattenCurves(m_path);
 
-            BoundingRect.GetBoundingRectSingle(m_shape, ref m_shape_bounds);
+            BoundingRect.GetBoundingRectSingle(new SinglePath(m_shape.MakeVxs()), ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);

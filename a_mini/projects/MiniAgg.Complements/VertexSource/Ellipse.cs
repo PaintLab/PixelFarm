@@ -32,7 +32,7 @@ namespace MatterHackers.Agg.VertexSource
 
 
 
-    public class Ellipse : IVertexProducer
+    public class Ellipse 
     {
         public double originX;
         public double originY;
