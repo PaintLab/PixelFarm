@@ -189,7 +189,9 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderSinglePath(
-                        new SinglePath(vxs, lionShape.PathIndexList[i]), lionShape.Colors[i]);
+                        new SinglePath(vxs, 
+                            lionShape.PathIndexList[i]),
+                            lionShape.Colors[i]);
                 }
 
             }

@@ -410,11 +410,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         Affine mtx = Affine.NewMatix(
                             AffinePlan.Scale(4),
                             AffinePlan.Translate(220, 200));
-
-                        //mtx *= Affine.NewScaling(4.0);
-                        //mtx *= Affine.NewTranslation(220, 200);
-
-                        //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(glyph, mtx);
+ 
                         var t_glyph = mtx.TransformToSinglePath(glyph);
                         FlattenCurves curve = new FlattenCurves(t_glyph);
                         

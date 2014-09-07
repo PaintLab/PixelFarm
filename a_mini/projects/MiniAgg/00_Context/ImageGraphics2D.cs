@@ -132,16 +132,15 @@ namespace MatterHackers.Agg
             rasterizer.Reset();
             Affine transform = GetTransform();
 
+            var vxs = vertexSource.MakeVxs();
             if (!transform.IsIdentity())
             {
-
-                 
-                var path = transform.TransformToSinglePath(vertexSource.MakeVxs());
+                var path = transform.TransformToSinglePath(vxs);
                 rasterizer.AddPath(path);
             }
             else
             {
-                rasterizer.AddPath(vertexSource);
+                rasterizer.AddPath(vxs);
             }
             if (destImageByte != null)
             {
