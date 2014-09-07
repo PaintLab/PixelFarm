@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using MatterHackers.VectorMath;
 
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
     public struct VertexData
     {
@@ -44,6 +44,12 @@ namespace MatterHackers.Agg
         {
             get { return command == ShapePath.FlagsAndCommand.CommandLineTo; }
         }
+#if DEBUG
+        public override string ToString()
+        {
+            return command + " " + this.position.x + "," + this.position.y;
+        }
+#endif
     }
 
     public interface IVertexSource

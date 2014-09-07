@@ -29,7 +29,7 @@ namespace MatterHackers.Agg.VertexSource
         }
     }
     //============================================================vcgen_stroke
-    class StrokeGenerator : IVertextGenerator
+    class StrokeGenerator  
     {
         StrokeMath m_stroker;
 
@@ -136,7 +136,34 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
+        public void MakeVxs(System.Collections.Generic.List<VertexData> vlist)
+        {
+            this.RewindZero2();
+            double x = 0, y = 0;
+            for (; ; )
+            {
+                var cmd = GetNextVertex2(ref x, ref y);
+                vlist.Add(new VertexData(cmd, x, y));
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    break;
+                }
+            }
+
+        }
         // Vertex Source Interface
+        void RewindZero2()
+        {
+            if (m_status == StrokeMath.Status.Init)
+            {
+                m_src_vertices.Close(m_closed != 0);
+                ShapePath.ShortenPath(m_src_vertices, m_shorten, m_closed);
+                if (m_src_vertices.Count < 3) m_closed = 0;
+            }
+            m_status = StrokeMath.Status.Ready;
+            m_src_vertex = 0;
+            m_out_vertex = 0;
+        }
         public void RewindZero()
         {
             if (m_status == StrokeMath.Status.Init)
@@ -149,8 +176,7 @@ namespace MatterHackers.Agg.VertexSource
             m_src_vertex = 0;
             m_out_vertex = 0;
         }
-
-        public ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y)
+        ShapePath.FlagsAndCommand GetNextVertex2(ref double x, ref double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandLineTo;
             while (!ShapePath.IsStop(cmd))
@@ -158,7 +184,7 @@ namespace MatterHackers.Agg.VertexSource
                 switch (m_status)
                 {
                     case StrokeMath.Status.Init:
-                        this.RewindZero();
+                        this.RewindZero2();
                         goto case StrokeMath.Status.Ready;
 
                     case StrokeMath.Status.Ready:
@@ -287,5 +313,6 @@ namespace MatterHackers.Agg.VertexSource
             }
             return cmd;
         }
+    
     }
 }

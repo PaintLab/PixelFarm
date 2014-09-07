@@ -99,13 +99,11 @@
     <Compile Include="06_Transfrom\Perspective.cs" />
     <Compile Include="06_Transfrom\Viewport.cs" />
     <Compile Include="04_ScanlineBasic\VectorClipper.cs" />
-    <Compile Include="06_Vertex_Path\IVertextGenerator.cs" />
     <Compile Include="06_Vertex_Path\IVertexSource.cs" />
     <Compile Include="06_Vertex_Path\PathStorage.cs" />
     <Compile Include="06_Vertex_Path\Stroke.cs" />
     <Compile Include="06_Vertex_Path\StrokeGenerator.cs" />
     <Compile Include="06_Vertex_Path\StrokeMath.cs" />
-    <Compile Include="06_Vertex_Path\VertexSourceAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniVectorMath\MiniVectorMath.csproj">

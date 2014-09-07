@@ -296,12 +296,12 @@ namespace MatterHackers.Agg
                               upscale(y2));
             m_status = Status.MoveTo;
         }
-
-        //-------------------------------------------------------------------
         public void AddPath(IVertexProducer vs)
         {
             this.AddPath(vs.MakeSinglePath());
         }
+
+
         public void AddPath(IVertexSource vs)
         {
             double x = 0;
@@ -318,12 +318,14 @@ namespace MatterHackers.Agg
                 AddVertex(cmd, x, y);
             }
         }
+        //-------------------------------------------------------------------
         public void AddPath(VertexStorage vxs)
         {
             this.AddPath(new SinglePath(vxs));
         }
         public void AddPath(SinglePath spath)
         {
+
             double x = 0;
             double y = 0;
 
@@ -333,13 +335,29 @@ namespace MatterHackers.Agg
             {
                 Reset();
             }
-            while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            if (spath.VxsHasMoreThanOnePart)
             {
-                AddVertex(cmd, x, y);
+                var vxs = spath.MakeVxs();
+                int j = vxs.Count;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    var cmd2 = vxs.GetVertex(i, out x, out y);
+                    if (cmd2 != ShapePath.FlagsAndCommand.CommandStop)
+                    {
+                        AddVertex(cmd2, x, y);
+                    } 
+                }
             }
+            else
+            {
+                while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+                {
 
+                    AddVertex(cmd, x, y);
+                }
+            }
         }
-
 
         public int MinX { get { return m_outline.MinX; } }
         public int MinY { get { return m_outline.MinY; } }

@@ -24,8 +24,8 @@ namespace MatterHackers.Agg.VertexSource
         void RemoveAll();
         void AddVertex(double x, double y, ShapePath.FlagsAndCommand unknown);
                  
-        void RewindZero();
-        ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y);
+        //void RewindZero();
+        //ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y);
 
 
         LineCap LineCap { get; set; }
