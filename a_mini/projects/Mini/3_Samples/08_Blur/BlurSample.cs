@@ -320,11 +320,11 @@ namespace MatterHackers.Agg.Sample_Blur
             //------------------
             if (FlattenCurveCheck)
             {
-                m_ras.AddPath(m_shape);
+                m_ras.AddPath(m_shape.MakeVxs());
             }
             else
             {
-                m_ras.AddPath(m_path);
+                m_ras.AddPath(m_path.MakeVxs());
             }
 
             scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl,

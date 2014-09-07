@@ -56,7 +56,7 @@ namespace MatterHackers.Agg
     {
         IEnumerable<VertexData> GetVertexIter();
         void RewindZero();
-        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
+         ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
 
         bool IsDynamicVertexGen { get; }
 

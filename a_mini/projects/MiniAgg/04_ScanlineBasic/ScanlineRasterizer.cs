@@ -81,8 +81,7 @@ namespace MatterHackers.Agg
         void ResetGamma(IGammaFunction gamma_function);
 
         bool SweepScanline(IScanline sl);
-        void Reset();
-        void AddPath(IVertexSource vs);
+        void Reset(); 
         void AddPath(SinglePath spath);
         bool RewindScanlines();
     }
@@ -302,22 +301,22 @@ namespace MatterHackers.Agg
         }
 
 
-        public void AddPath(IVertexSource vs)
-        {
-            double x = 0;
-            double y = 0;
+        //public void AddPath(IVertexSource vs)
+        //{
+        //    double x = 0;
+        //    double y = 0;
 
-            ShapePath.FlagsAndCommand cmd;
-            vs.RewindZero();
-            if (m_outline.Sorted)
-            {
-                Reset();
-            }
-            while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-            {
-                AddVertex(cmd, x, y);
-            }
-        }
+        //    ShapePath.FlagsAndCommand cmd;
+        //    vs.RewindZero();
+        //    if (m_outline.Sorted)
+        //    {
+        //        Reset();
+        //    }
+        //    while ((cmd = vs.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+        //    {
+        //        AddVertex(cmd, x, y);
+        //    }
+        //}
         //-------------------------------------------------------------------
         public void AddPath(VertexStorage vxs)
         {

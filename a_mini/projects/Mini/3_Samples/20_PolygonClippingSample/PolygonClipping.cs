@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        PathStorage CombinePaths(IVertexSource a, IVertexSource b, ClipType clipType)
+        PathStorage CombinePaths(SinglePath a, SinglePath b, ClipType clipType)
         {
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
@@ -223,7 +223,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         graphics2D.Render(ps1, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
                         graphics2D.Render(ps2, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, ps1, ps2);
+                        CreateAndRenderCombined(graphics2D, ps1.MakeSinglePath(), ps2.MakeSinglePath());
                     }
                     break;
 
@@ -266,7 +266,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         var vxs = ps2.MakeVxs();
                         graphics2D.Render(stroke.MakeVxs(vxs), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
-                        CreateAndRenderCombined(graphics2D, ps1, new SinglePath(vxs));
+                        CreateAndRenderCombined(graphics2D, ps1.MakeSinglePath(), new SinglePath(vxs));
                     }
                     break;
 
@@ -304,7 +304,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         graphics2D.Render(trans_gb_poly, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
 
-                       
+
 
                         //stroke_gb_poly.Width = 0.1;
                         graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
@@ -411,7 +411,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
 
-                        CreateAndRenderCombined(graphics2D, new SinglePath(sp1), curve);
+                        CreateAndRenderCombined(graphics2D, new SinglePath(sp1), new SinglePath(curve.MakeVxs()));
 
                         graphics2D.Render(stroke.MakeVxs(sp1), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
 
@@ -421,7 +421,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             }
         }
 
-        void CreateAndRenderCombined(Graphics2D graphics2D, IVertexSource ps1, IVertexSource ps2)
+
+        void CreateAndRenderCombined(Graphics2D graphics2D, SinglePath ps1, SinglePath ps2)
         {
             PathStorage combined = null;
 
@@ -449,7 +450,6 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                 graphics2D.Render(combined, new ColorRGBAf(0.5, 0.0, 0, 0.5).GetAsRGBA_Bytes());
             }
         }
-
         public override void MouseDrag(int x, int y)
         {
             m_x = x;

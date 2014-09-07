@@ -156,7 +156,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             }
             else
             {
-                ras.AddPath(r);
+                ras.AddPath(r.MakeVxs());
             }
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
 
