@@ -43,8 +43,8 @@ namespace MatterHackers.Agg
             for (int i = 0; i < j; ++i)
             {
                 VertexData vxdata = vxlist[i];
-                m_coord_xy[n++] = vxdata.position.x;
-                m_coord_xy[n++] = vxdata.position.y;
+                m_coord_xy[n++] = vxdata.x;
+                m_coord_xy[n++] = vxdata.y;
                 m_CommandAndFlags[i] = vxdata.command;
             }
         }

@@ -24,33 +24,35 @@ namespace MatterHackers.Agg
     public struct VertexData
     {
         public ShapePath.FlagsAndCommand command;
-        public Vector2 position;
+        public double x;
+        public double y;
         public VertexData(ShapePath.FlagsAndCommand command, Vector2 position)
         {
             this.command = command;
-            this.position = position;
+            this.x = position.x;
+            this.y = position.y;
         }
         public VertexData(ShapePath.FlagsAndCommand command, double x, double y)
         {
             this.command = command;
-            this.position = new Vector2(x, y);
-        }
-        public bool IsMoveTo
-        {
-            get { return command == ShapePath.FlagsAndCommand.CommandMoveTo; }
+            this.x = x;
+            this.y = y;
         }
 
-        public bool IsLineTo
+        public Vector2 position
         {
-            get { return command == ShapePath.FlagsAndCommand.CommandLineTo; }
+            get { return new Vector2(this.x, this.y); }
+            set { this.x = value.x; this.y = value.y; }
         }
+
+
 #if DEBUG
         public override string ToString()
         {
-            return command + " " + this.position.x + "," + this.position.y;
+            return command + " " + this.x + "," + this.y;
         }
 #endif
     }
-     
+
 
 }

@@ -117,15 +117,15 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             bool addedFirst = false;
             foreach (VertexData vertexData in a.GetVertexIter())
             {
-                if (vertexData.IsLineTo)
+                if (vertexData.command == ShapePath.FlagsAndCommand.CommandLineTo)
                 {
                     if (!addedFirst)
                     {
-                        currentPoly.Add(new IntPoint((long)(last.position.x * 1000), (long)(last.position.y * 1000)));
+                        currentPoly.Add(new IntPoint((long)(last.x * 1000), (long)(last.y * 1000)));
                         addedFirst = true;
                         first = last;
                     }
-                    currentPoly.Add(new IntPoint((long)(vertexData.position.x * 1000), (long)(vertexData.position.y * 1000)));
+                    currentPoly.Add(new IntPoint((long)(vertexData.x * 1000), (long)(vertexData.y * 1000)));
                     last = vertexData;
                 }
                 else
@@ -133,7 +133,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                     addedFirst = false;
                     currentPoly = new List<IntPoint>();
                     allPolys.Add(currentPoly);
-                    if (vertexData.IsMoveTo)
+                    if (vertexData.command == ShapePath.FlagsAndCommand.CommandMoveTo)
                     {
                         last = vertexData;
                     }

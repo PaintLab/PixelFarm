@@ -523,6 +523,9 @@ namespace MatterHackers.Agg.VertexSource
         public void JoinPath(VertexSnap s)
         {
             double x, y;
+
+
+
             s.RewindZero();
             ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
             if (cmd == ShapePath.FlagsAndCommand.CommandStop)

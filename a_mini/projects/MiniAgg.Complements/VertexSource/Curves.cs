@@ -174,12 +174,12 @@ namespace MatterHackers.Agg.VertexSource
             m_num_steps = (0);
             m_step = (0);
             m_scale = (1.0);
-            init(x1, y1, x2, y2, x3, y3);
+            Init(x1, y1, x2, y2, x3, y3);
         }
 
-        public void reset() { m_num_steps = 0; m_step = -1; }
+        public void Reset() { m_num_steps = 0; m_step = -1; }
 
-        public void init(double x1, double y1,
+        public void Init(double x1, double y1,
                   double cx, double cy,
                   double x2, double y2)
         {
@@ -490,8 +490,7 @@ namespace MatterHackers.Agg.VertexSource
     //-------------------------------------------------------------curve4_points
     public sealed class Curve4Points
     {
-        //double[] cp = new double[8];
-
+       
         public readonly double c0, c1, c2, c3, c4, c5, c6, c7;
         public Curve4Points() { }
         public Curve4Points(double x1, double y1,
@@ -499,29 +498,13 @@ namespace MatterHackers.Agg.VertexSource
                       double x3, double y3,
                       double x4, double y4)
         {
-            //cp[0] = x1; cp[1] = y1; cp[2] = x2; cp[3] = y2;
-            //cp[4] = x3; cp[5] = y3; cp[6] = x4; cp[7] = y4;
+            
             c0 = x1; c1 = y1;
             c2 = x2; c3 = y2;
             c4 = x3; c5 = y3;
             c6 = x4; c7 = y4;
         }
-        //public void init(double x1, double y1,
-        //          double x2, double y2,
-        //          double x3, double y3,
-        //          double x4, double y4)
-        //{
-        //    cp[0] = x1; cp[1] = y1; cp[2] = x2; cp[3] = y2;
-        //    cp[4] = x3; cp[5] = y3; cp[6] = x4; cp[7] = y4;
-        //}
-
-        //public double this[int i]
-        //{
-        //    get
-        //    {
-        //        return cp[i];
-        //    }
-        //}
+        
     }
 
     //-------------------------------------------------------------curve4_inc
@@ -754,7 +737,7 @@ namespace MatterHackers.Agg.VertexSource
             m_angle_tolerance = (0.0);
             m_cusp_limit = (0.0);
             m_count = (0);
-            init(x1, y1, x2, y2, x3, y3, x4, y4);
+            Init(x1, y1, x2, y2, x3, y3, x4, y4);
         }
 
         public Curve4Div(Curve4Points cp)
@@ -762,15 +745,15 @@ namespace MatterHackers.Agg.VertexSource
             m_approximation_scale = (1.0);
             m_angle_tolerance = (0.0);
             m_count = (0);
-            init(
+            Init(
                     cp.c0, cp.c1,
                     cp.c2, cp.c3,
                     cp.c4, cp.c5,
                     cp.c6, cp.c7);
         }
 
-        public void reset() { m_points.Clear(); m_count = 0; }
-        public void init(double x1, double y1,
+        public void Reset() { m_points.Clear(); m_count = 0; }
+        public void Init(double x1, double y1,
                   double x2, double y2,
                   double x3, double y3,
                   double x4, double y4)
@@ -778,44 +761,37 @@ namespace MatterHackers.Agg.VertexSource
             m_points.Clear();
             m_distance_tolerance_square = 0.5 / m_approximation_scale;
             m_distance_tolerance_square *= m_distance_tolerance_square;
-            bezier(x1, y1, x2, y2, x3, y3, x4, y4);
+            AddBezier(x1, y1, x2, y2, x3, y3, x4, y4);
             m_count = 0;
         }
 
 
-        public void init(Curve4Points cp)
+        public void Init(Curve4Points cp)
         {
-            init(
+            Init(
                     cp.c0, cp.c1,
                     cp.c2, cp.c3,
                     cp.c4, cp.c5,
                     cp.c6, cp.c7);
         }
-
-        public void approximation_method(Curves.CurveApproximationMethod method) { }
-
-        public Curves.CurveApproximationMethod approximation_method()
+        public double ApproximationScale
         {
-            return Curves.CurveApproximationMethod.Div;
+            get { return this.m_approximation_scale; }
+            set { this.m_approximation_scale = value; }
+        }
+        public double AngleTolerance
+        {
+            get { return this.m_angle_tolerance; }
+            set { this.m_angle_tolerance = value; }
         }
 
-        public void approximation_scale(double s) { m_approximation_scale = s; }
-        public double approximation_scale() { return m_approximation_scale; }
-
-        public void angle_tolerance(double a) { m_angle_tolerance = a; }
-        public double angle_tolerance() { return m_angle_tolerance; }
-
-        public void cusp_limit(double v)
+        public double CuspLimit
         {
-            m_cusp_limit = (v == 0.0) ? 0.0 : Math.PI - v;
+            get { return (m_cusp_limit == 0.0) ? 0.0 : Math.PI - m_cusp_limit; }
+            set { m_cusp_limit = (value == 0.0) ? 0.0 : Math.PI - value; }
         }
 
-        public double cusp_limit()
-        {
-            return (m_cusp_limit == 0.0) ? 0.0 : Math.PI - m_cusp_limit;
-        }
-
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
             vertexData.command = FlagsAndCommand.CommandMoveTo;
@@ -853,22 +829,22 @@ namespace MatterHackers.Agg.VertexSource
             return (m_count == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
         }
 
-        private void bezier(double x1, double y1,
-                    double x2, double y2,
-                    double x3, double y3,
-                    double x4, double y4)
+        void AddBezier(double x1, double y1,
+                  double x2, double y2,
+                  double x3, double y3,
+                  double x4, double y4)
         {
             m_points.AddVertex(new Vector2(x1, y1));
-            recursive_bezier(x1, y1, x2, y2, x3, y3, x4, y4, 0);
+            AddRecursiveBezier(x1, y1, x2, y2, x3, y3, x4, y4, 0);
             m_points.AddVertex(new Vector2(x4, y4));
         }
 
 
-        private void recursive_bezier(double x1, double y1,
-                              double x2, double y2,
-                              double x3, double y3,
-                              double x4, double y4,
-                              int level)
+        void AddRecursiveBezier(double x1, double y1,
+                            double x2, double y2,
+                            double x3, double y3,
+                            double x4, double y4,
+                            int level)
         {
             if (level > Curves.CURVE_RECURSION_LIMIT)
             {
@@ -1080,8 +1056,8 @@ namespace MatterHackers.Agg.VertexSource
 
             // Continue subdivision
             //----------------------
-            recursive_bezier(x1, y1, x12, y12, x123, y123, x1234, y1234, level + 1);
-            recursive_bezier(x1234, y1234, x234, y234, x34, y34, x4, y4, level + 1);
+            AddRecursiveBezier(x1, y1, x12, y12, x123, y123, x1234, y1234, level + 1);
+            AddRecursiveBezier(x1234, y1234, x234, y234, x34, y34, x4, y4, level + 1);
         }
     }
 
@@ -1107,9 +1083,9 @@ namespace MatterHackers.Agg.VertexSource
         }
 
 
-        public void reset()
+        public void Reset()
         {
-            m_curve_inc.reset();
+            m_curve_inc.Reset();
             m_curve_div.reset();
         }
 
@@ -1119,7 +1095,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
             {
-                m_curve_inc.init(x1, y1, cx, cy, x2, y2);
+                m_curve_inc.Init(x1, y1, cx, cy, x2, y2);
             }
             else
             {
@@ -1247,7 +1223,7 @@ namespace MatterHackers.Agg.VertexSource
         public void Reset()
         {
             m_curve_inc.reset();
-            m_curve_div.reset();
+            m_curve_div.Reset();
         }
 
         public void Init(double x1, double y1,
@@ -1261,11 +1237,11 @@ namespace MatterHackers.Agg.VertexSource
             }
             else
             {
-                m_curve_div.init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+                m_curve_div.Init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
             }
         }
 
-        public void init(Curve4Points cp)
+        public void Init(Curve4Points cp)
         {
             Init(
                     cp.c0, cp.c1,
@@ -1274,42 +1250,43 @@ namespace MatterHackers.Agg.VertexSource
                     cp.c6, cp.c7);
         }
 
-        public void approximation_method(Curves.CurveApproximationMethod v)
+
+        public Curves.CurveApproximationMethod ApproximationMethod
         {
-            m_approximation_method = v;
+            get { return m_approximation_method; }
+            set { m_approximation_method = value; }
+
         }
 
-        public Curves.CurveApproximationMethod approximation_method()
+
+        public double ApproximationScale
         {
-            return m_approximation_method;
+            get { return m_curve_inc.approximation_scale(); }
+            set
+            {
+                this.m_curve_inc.approximation_scale(value);
+                this.m_curve_div.ApproximationScale = value;
+            }
         }
 
-        public void approximation_scale(double s)
+        public double AngleTolerance
         {
-            m_curve_inc.approximation_scale(s);
-            m_curve_div.approximation_scale(s);
-        }
-        public double approximation_scale() { return m_curve_inc.approximation_scale(); }
-
-        public void angle_tolerance(double v)
-        {
-            m_curve_div.angle_tolerance(v);
+            get { return m_curve_div.AngleTolerance; }
+            set
+            {
+                m_curve_div.AngleTolerance = value;
+                m_curve_inc.angle_tolerance(value);
+            }
         }
 
-        public double angle_tolerance()
+        public double CuspLimit
         {
-            return m_curve_div.angle_tolerance();
+            get { return this.m_curve_div.CuspLimit; }
+            set { this.m_curve_div.CuspLimit = value; }
+
         }
 
-        public void cusp_limit(double v)
-        {
-            m_curve_div.cusp_limit(v);
-        }
 
-        public double cusp_limit()
-        {
-            return m_curve_div.cusp_limit();
-        }
 
         public IEnumerable<VertexData> GetVertexIter()
         {
@@ -1319,7 +1296,7 @@ namespace MatterHackers.Agg.VertexSource
             }
             else
             {
-                return m_curve_div.Vertices();
+                return m_curve_div.GetVertexIter();
             }
         }
 

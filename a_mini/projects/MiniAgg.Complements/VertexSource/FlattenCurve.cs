@@ -68,13 +68,13 @@ namespace MatterHackers.Agg.VertexSource
         {
             get
             {
-                return m_curve4.approximation_scale();
+                return m_curve4.ApproximationScale;
             }
 
             set
             {
                 m_curve3.approximation_scale(value);
-                m_curve4.approximation_scale(value);
+                m_curve4.ApproximationScale = value;
             }
         }
 
@@ -84,12 +84,13 @@ namespace MatterHackers.Agg.VertexSource
             set
             {
                 m_curve3.approximation_method(value);
-                m_curve4.approximation_method(value);
+                m_curve4.ApproximationMethod = value;
             }
 
             get
             {
-                return m_curve4.approximation_method();
+
+                return m_curve4.ApproximationMethod;
             }
         }
 
@@ -98,12 +99,12 @@ namespace MatterHackers.Agg.VertexSource
             set
             {
                 m_curve3.angle_tolerance(value);
-                m_curve4.angle_tolerance(value);
+                m_curve4.AngleTolerance = value;
             }
 
             get
             {
-                return m_curve4.angle_tolerance();
+                return m_curve4.AngleTolerance;
             }
         }
 
@@ -112,12 +113,13 @@ namespace MatterHackers.Agg.VertexSource
             set
             {
                 m_curve3.cusp_limit(value);
-                m_curve4.cusp_limit(value);
+                m_curve4.CuspLimit = value;
             }
 
             get
             {
-                return m_curve4.cusp_limit();
+                return m_curve4.CuspLimit;
+
             }
         }
 
@@ -149,7 +151,7 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             vertexDataEnumerator.MoveNext();
                             VertexData vertexDataEnd = vertexDataEnumerator.Current;
-                            m_curve3.Init(lastPosition.position.x, lastPosition.position.y, vertexData.position.x, vertexData.position.y, vertexDataEnd.position.x, vertexDataEnd.position.y);
+                            m_curve3.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataEnd.x, vertexDataEnd.y);
                             IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
                             do
@@ -172,7 +174,7 @@ namespace MatterHackers.Agg.VertexSource
                             VertexData vertexDataControl = vertexDataEnumerator.Current;
                             vertexDataEnumerator.MoveNext();
                             VertexData vertexDataEnd = vertexDataEnumerator.Current;
-                            m_curve4.Init(lastPosition.position.x, lastPosition.position.y, vertexData.position.x, vertexData.position.y, vertexDataControl.position.x, vertexDataControl.position.y, vertexDataEnd.position.x, vertexDataEnd.position.y);
+                            m_curve4.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
 
@@ -202,7 +204,7 @@ namespace MatterHackers.Agg.VertexSource
         void RewindZero()
         {
             vertextSource.RewindZero();
-            m_curve3.reset();
+            m_curve3.Reset();
             m_curve4.Reset();
         }
 

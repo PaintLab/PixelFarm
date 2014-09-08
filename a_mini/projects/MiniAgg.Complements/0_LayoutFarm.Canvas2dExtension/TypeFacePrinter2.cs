@@ -329,8 +329,8 @@ namespace LayoutFarm.Agg.Font
 
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            x = currentEnumerator.Current.position.x;
-            y = currentEnumerator.Current.position.y;
+            x = currentEnumerator.Current.x;
+            y = currentEnumerator.Current.y;
             ShapePath.FlagsAndCommand command = currentEnumerator.Current.command;
             currentEnumerator.MoveNext();
             return command;

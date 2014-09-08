@@ -119,8 +119,8 @@ namespace MatterHackers.Agg.VertexSource
         {
             VertexData vertexData = new VertexData();
             vertexData.command = FlagsAndCommand.CommandMoveTo;
-            vertexData.position.x = originX + radiusX;
-            vertexData.position.y = originY;
+            vertexData.x = originX + radiusX;
+            vertexData.y = originY;
             yield return vertexData;
 
             double anglePerStep = MathHelper.Tau / (double)numSteps;
@@ -132,19 +132,19 @@ namespace MatterHackers.Agg.VertexSource
 
                 if (m_cw)
                 {
-                    vertexData.position.x = originX + Math.Cos(MathHelper.Tau - angle) * radiusX;
-                    vertexData.position.y = originY + Math.Sin(MathHelper.Tau - angle) * radiusY;
+                    vertexData.x = originX + Math.Cos(MathHelper.Tau - angle) * radiusX;
+                    vertexData.y = originY + Math.Sin(MathHelper.Tau - angle) * radiusY;
                     yield return vertexData;
                 }
                 else
                 {
-                    vertexData.position.x = originX + Math.Cos(angle) * radiusX;
-                    vertexData.position.y = originY + Math.Sin(angle) * radiusY;
+                    vertexData.x = originX + Math.Cos(angle) * radiusX;
+                    vertexData.y = originY + Math.Sin(angle) * radiusY;
                     yield return vertexData;
                 }
             }
 
-            vertexData.position = new Vector2();
+            vertexData.x = vertexData.y = 0;
             vertexData.command = FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
             yield return vertexData;
             vertexData.command = FlagsAndCommand.CommandStop;
