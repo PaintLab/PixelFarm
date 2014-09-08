@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using MatterHackers.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace MatterHackers.Agg
 {
     public class VertexStorage
     {
@@ -28,6 +28,7 @@ namespace MatterHackers.Agg.VertexSource
         int m_allocated_vertices;
         double[] m_coord_xy;
         ShapePath.FlagsAndCommand[] m_CommandAndFlags;
+       
 
         public VertexStorage()
         {
@@ -38,15 +39,21 @@ namespace MatterHackers.Agg.VertexSource
             int j = this.m_num_vertices = vxlist.Count;
             m_coord_xy = new double[(j << 1) + 2];
             m_CommandAndFlags = new ShapePath.FlagsAndCommand[j + 2];
+            int n = 0;
             for (int i = 0; i < j; ++i)
             {
                 VertexData vxdata = vxlist[i];
-                m_coord_xy[i << 1] = vxdata.position.x;
-                m_coord_xy[(i << 1) + 1] = vxdata.position.y;
+                m_coord_xy[n++] = vxdata.position.x;
+                m_coord_xy[n++] = vxdata.position.y;
                 m_CommandAndFlags[i] = vxdata.command;
             }
-
         }
+        public VertexStorage(List<VertexData> vxlist, bool hasMoreThanOnePart)
+            : this(vxlist)
+        {
+            this.HasMoreThanOnePart = hasMoreThanOnePart;
+        }
+        public bool HasMoreThanOnePart { get; set; }
         public void FreeAll()
         {
             m_coord_xy = null;
@@ -130,12 +137,13 @@ namespace MatterHackers.Agg.VertexSource
 
         public ShapePath.FlagsAndCommand GetPrevVertex(out double x, out double y)
         {
+
             if (m_num_vertices > 1)
             {
                 return GetVertex((int)(m_num_vertices - 2), out x, out y);
             }
-            x = new double();
-            y = new double();
+            x = 0;
+            y = 0;
             return ShapePath.FlagsAndCommand.CommandStop;
         }
         public double GetLastX()
@@ -162,6 +170,7 @@ namespace MatterHackers.Agg.VertexSource
             x = m_coord_xy[i];
             y = m_coord_xy[i + 1];
             return m_CommandAndFlags[index];
+                                 
         }
         public void GetVertexXY(int index, out double x, out double y)
         {

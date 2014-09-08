@@ -52,11 +52,11 @@ namespace MatterHackers.Agg.VertexSource
                      double d)
         {
             m_vertex = (0);
-            colors(c1, c2, c3);
-            triangle(x1, y1, x2, y2, x3, y3, d);
+            SetColor(c1, c2, c3);
+            SetTriangle(x1, y1, x2, y2, x3, y3, d);
         }
 
-        public void colors(IColor c1, IColor c2, IColor c3)
+        public void SetColor(IColor c1, IColor c2, IColor c3)
         {
             m_coord[0].color = c1.GetAsRGBA_Bytes();
             m_coord[1].color = c2.GetAsRGBA_Bytes();
@@ -70,7 +70,7 @@ namespace MatterHackers.Agg.VertexSource
         // It's necessary to achieve numerical stability. 
         // However, the coordinates to interpolate colors are calculated
         // as miter joins (calc_intersection).
-        public void triangle(double x1, double y1,
+        public void SetTriangle(double x1, double y1,
                       double x2, double y2,
                       double x3, double y3,
                       double d)
@@ -110,28 +110,39 @@ namespace MatterHackers.Agg.VertexSource
                 m_cmd[6] = ShapePath.FlagsAndCommand.CommandStop;
             }
         }
-
+        public VertexStorage MakeVxs()
+        {
+            
+            List<VertexData> list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+                if (v.command == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    break;
+                }
+               
+            }
+            return new VertexStorage(list);
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
         public IEnumerable<VertexData> GetVertexIter()
         {
             m_vertex = 0;
             for (int i = 0; i < 8; ++i)
             {
                 yield return new VertexData(
-                    m_cmd[m_vertex],
+                    m_cmd[i],
                     new VectorMath.Vector2(m_x[i], m_y[i]));
             }
         }
 
-        public bool IsDynamicVertexGen
-        {
-            get
-            {
-                return false;
-            }
-        }
-
+       
         // Vertex Source Interface to feed the coordinates to the rasterizer
-        
+
         public void RewindZero()
         {
             m_vertex = 0;

@@ -405,7 +405,7 @@ namespace MatterHackers.Agg.Font
             }
         }
 
-        internal IVertexSource GetGlyphForCharacter(char character)
+        internal VertexStorage  GetGlyphForCharacter(char character)
         {
             // TODO: check for multi character glyphs (we don't currently support them in the reader).
             Glyph glyph;
@@ -414,7 +414,8 @@ namespace MatterHackers.Agg.Font
                 //PathStorage writeableGlyph = new PathStorage(glyph.glyphData);
                 //writeableGlyph.ShareVertexData(glyph.glyphData);
                 //return writeableGlyph;
-                return new PathStorage(glyph.glyphData);
+                return glyph.glyphData.MakeVxs();
+                //return new PathStorage(glyph.glyphData);
             }
 
             return null;

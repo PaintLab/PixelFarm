@@ -28,35 +28,35 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public static void Save(IVertexSource vertexSource, string pathAndFileName, bool oldStyle = true)
-        {
-            if (oldStyle)
-            {
-                using (StreamWriter outFile = new StreamWriter(pathAndFileName))
-                {
-                    vertexSource.RewindZero();
-                    double x;
-                    double y;
-                    ShapePath.FlagsAndCommand flagsAndCommand = vertexSource.GetNextVertex(out x, out y);
-                    do
-                    {
-                        outFile.WriteLine("{0}, {1}, {2}", x, y, flagsAndCommand.ToString());
-                        flagsAndCommand = vertexSource.GetNextVertex(out x, out y);
-                    }
-                    while (flagsAndCommand != ShapePath.FlagsAndCommand.CommandStop);
-                }
-            }
-            else
-            {
-                using (StreamWriter outFile = new StreamWriter(pathAndFileName))
-                {
-                    foreach (VertexData vertexData in vertexSource.GetVertexIter())
-                    {
-                        outFile.WriteLine("{0}, {1}, {2}", vertexData.position.x, vertexData.position.y, vertexData.command.ToString());
-                    }
-                }
-            }
-        }
+        //public static void Save(IVertexSource vertexSource, string pathAndFileName, bool oldStyle = true)
+        //{
+        //    if (oldStyle)
+        //    {
+        //        using (StreamWriter outFile = new StreamWriter(pathAndFileName))
+        //        {
+        //            vertexSource.RewindZero();
+        //            double x;
+        //            double y;
+        //            ShapePath.FlagsAndCommand flagsAndCommand = vertexSource.GetNextVertex(out x, out y);
+        //            do
+        //            {
+        //                outFile.WriteLine("{0}, {1}, {2}", x, y, flagsAndCommand.ToString());
+        //                flagsAndCommand = vertexSource.GetNextVertex(out x, out y);
+        //            }
+        //            while (flagsAndCommand != ShapePath.FlagsAndCommand.CommandStop);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        using (StreamWriter outFile = new StreamWriter(pathAndFileName))
+        //        {
+        //            foreach (VertexData vertexData in vertexSource.GetVertexIter())
+        //            {
+        //                outFile.WriteLine("{0}, {1}, {2}", vertexData.position.x, vertexData.position.y, vertexData.command.ToString());
+        //            }
+        //        }
+        //    }
+        //}
 
 
         //-------------------------------------------------

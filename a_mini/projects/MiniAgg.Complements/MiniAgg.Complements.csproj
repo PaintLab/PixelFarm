@@ -45,7 +45,6 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
     <Compile Include="BoundingRect.cs" />
     <Compile Include="Base\Queue.cs" />
-    <Compile Include="Base\ScanlineHitTest.cs" />
     <Compile Include="BorderDouble.cs" />
     <Compile Include="Base\agg_gamma_functions.cs" />
     <Compile Include="Base\ClipProxyImage.cs" />
@@ -66,7 +65,6 @@
     <Compile Include="UnitTests2.cs" />
     <Compile Include="VertexSource\agg_bspline.cs" />
     <Compile Include="VertexSource\agg_curves.cs" />
-    <Compile Include="VertexSource\agg_gsv_text.cs" />
     <Compile Include="VertexSource\agg_span_gouraud.cs" />
     <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
     <Compile Include="VertexSource\agg_span_subdiv_adaptor.cs" />

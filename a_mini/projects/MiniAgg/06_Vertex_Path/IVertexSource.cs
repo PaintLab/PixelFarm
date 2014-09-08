@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using MatterHackers.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace MatterHackers.Agg
 {
     public struct VertexData
     {
@@ -30,6 +30,11 @@ namespace MatterHackers.Agg.VertexSource
             this.command = command;
             this.position = position;
         }
+        public VertexData(ShapePath.FlagsAndCommand command, double x, double y)
+        {
+            this.command = command;
+            this.position = new Vector2(x, y);
+        }
         public bool IsMoveTo
         {
             get { return command == ShapePath.FlagsAndCommand.CommandMoveTo; }
@@ -39,20 +44,20 @@ namespace MatterHackers.Agg.VertexSource
         {
             get { return command == ShapePath.FlagsAndCommand.CommandLineTo; }
         }
+#if DEBUG
+        public override string ToString()
+        {
+            return command + " " + this.position.x + "," + this.position.y;
+        }
+#endif
     }
 
     public interface IVertexSource
-    {
-        IEnumerable<VertexData> GetVertexIter();
-        // for a PathStorage this is the vertex index.  
-        
-        void RewindZero();
-        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
-
-
-        bool IsDynamicVertexGen { get; }
+    {   
+        VertexStorage MakeVxs();
+        SinglePath MakeSinglePath();
     }
 
 
-   
+
 }

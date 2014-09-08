@@ -277,9 +277,16 @@ namespace MatterHackers.Agg.VertexSource
             vertices.AddVertex(dx_ctrl2, dy_ctrl2, ShapePath.FlagsAndCommand.CommandCurve4);
             vertices.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve4);
         }
-
+        public VertexStorage MakeVxs()
+        {
+            return this.vertices;
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.vertices);
+        }
         public void Curve4(double x_ctrl2, double y_ctrl2,
-                           double x_to, double y_to)
+                       double x_to, double y_to)
         {
             double x0;
             double y0;
@@ -330,10 +337,7 @@ namespace MatterHackers.Agg.VertexSource
             return vertices.GetLastY();
         }
 
-        public bool IsDynamicVertexGen
-        {
-            get { return false; }
-        }
+        
         public IEnumerable<VertexData> GetVertexIter()
         {
             int count = vertices.Count;
@@ -345,8 +349,8 @@ namespace MatterHackers.Agg.VertexSource
                 yield return new VertexData(command, new Vector2(x, y));
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2(0, 0));
-        } 
-        public void RewindZero()
+        }
+        public void RewindZ()
         {
             iteratorIndex = 0;
         }
@@ -506,7 +510,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
-            s.RewindZero();
+            s.RewindZ();
             while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, cmd_flags);
@@ -519,7 +523,7 @@ namespace MatterHackers.Agg.VertexSource
         public void JoinPath(SinglePath s)
         {
             double x, y;
-            s.RewindZero();
+            s.RewindZ();
             ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
             if (cmd == ShapePath.FlagsAndCommand.CommandStop)
             {

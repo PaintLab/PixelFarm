@@ -74,9 +74,9 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
     //--------------------------------------------------
     public class LionFill : SimpleSprite
     {
-        VertexStorage vxStorage; 
-        LionShape lionShape; 
-        VertexSourceApplyTransform transformedPathStorage;
+        VertexStorage vxStorage;
+        LionShape lionShape;
+        bool needUpdate;
         byte alpha;
         public LionFill()
         {
@@ -146,7 +146,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-            transformedPathStorage = null;
+            this.needUpdate = true;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
@@ -165,11 +165,12 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
                 );
 
                 //convert
-                System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
-                transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
-                transformedPathStorage.DoTransform(list);
+                //System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
+                vxStorage = transform.TransformToVxs(lionShape.Path);
+                //transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
+                //transformedPathStorage.DoTransform(list);
 
-                vxStorage = new VertexStorage(list);
+                //vxStorage = new VertexStorage(list);
             }
 
             //graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);

@@ -29,13 +29,28 @@ namespace MatterHackers.Agg.Font
     public class GlyphWithUnderline : IVertexSource
     {
 
-        IVertexSource underline;
-        IVertexSource glyph;
+        SinglePath underline;
+        SinglePath glyph;
 
-        public GlyphWithUnderline(IVertexSource glyph, int advanceForCharacter, int Underline_position, int Underline_thickness)
+        public GlyphWithUnderline(VertexStorage glyph, int advanceForCharacter, int Underline_position, int Underline_thickness)
         {
-            underline = new RoundedRect(new RectangleDouble(0, Underline_position, advanceForCharacter, Underline_position + Underline_thickness), 0);
-            this.glyph = glyph;
+            underline = new SinglePath(
+                new RoundedRect(new RectangleDouble(0,
+                    Underline_position, advanceForCharacter,
+                    Underline_position + Underline_thickness), 0).MakeVxs());
+            this.glyph = new SinglePath(glyph);
+        }
+
+
+        public SinglePath MakeSinglePath() { return new SinglePath(this.MakeVxs()); }
+        public VertexStorage MakeVxs()
+        {
+            var list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return new VertexStorage(list);
         }
 
         public IEnumerable<VertexData> GetVertexIter()
@@ -56,17 +71,14 @@ namespace MatterHackers.Agg.Font
                 yield return vertexData;
             }
         }
-        public bool IsDynamicVertexGen
-        {
-            get { return this.glyph.IsDynamicVertexGen; }
-        }
-
       
+
+
         public void RewindZero()
         {
             state = 0;
-            underline.RewindZero();
-            glyph.RewindZero();
+            underline.RewindZ();
+            glyph.RewindZ();
         }
 
         int state = 0;
@@ -280,49 +292,61 @@ namespace MatterHackers.Agg.Font
                 return imageForCharacter;
             }
 
-            IVertexSource glyphForCharacter = GetGlyphForCharacter(character);
-            if (glyphForCharacter == null)
+            var glyphVxs = GetGlyphForCharacter(character);
+            if (glyphVxs == null)
             {
                 return null;
             }
 
 
-            glyphForCharacter.RewindZero();
+
             double x, y;
-            ShapePath.FlagsAndCommand curCommand = glyphForCharacter.GetNextVertex(out x, out y);
+
+
+            int j = glyphVxs.Count;
+            glyphVxs.GetVertex(0, out x, out y);
             RectangleDouble bounds = new RectangleDouble(x, y, x, y);
-            while (curCommand != ShapePath.FlagsAndCommand.CommandStop)
+            for (int i = 0; i < j; ++i)
             {
-                bounds.ExpandToInclude(x, y);
-                curCommand = glyphForCharacter.GetNextVertex(out x, out y);
+                var cmd = glyphVxs.GetVertex(i, out x, out y);
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    break;
+                }
+                else
+                {
+                    bounds.ExpandToInclude(x, y);
+                }
             }
+
 
             ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
             var gfx = Graphics2D.CreateFromImage(charImage);
-            gfx.Render(glyphForCharacter, xFraction, yFraction, ColorRGBA.Black);
+            gfx.Render(new SinglePath(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
             characterImageCache[character] = charImage;
 
             return charImage;
         }
 
-        public IVertexSource GetGlyphForCharacter(char character)
+        public VertexStorage GetGlyphForCharacter(char character)
         {
             // scale it to the correct size.
 
-            IVertexSource sourceGlyph = typeFace.GetGlyphForCharacter(character);
+            VertexStorage sourceGlyph = typeFace.GetGlyphForCharacter(character);
             if (sourceGlyph != null)
             {
                 if (DoUnderline)
                 {
-                    sourceGlyph = new GlyphWithUnderline(sourceGlyph, typeFace.GetAdvanceForCharacter(character), typeFace.Underline_position, typeFace.Underline_thickness);
+                    sourceGlyph = new GlyphWithUnderline(sourceGlyph,
+                        typeFace.GetAdvanceForCharacter(character),
+                        typeFace.Underline_position,
+                        typeFace.Underline_thickness).MakeVxs();
                 }
-
                 Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
-                IVertexSource characterGlyph = new VertexSourceApplyTransform(sourceGlyph, glyphTransform);
-
+                var characterGlyph = glyphTransform.TransformToVxs(sourceGlyph);
                 if (FlatenCurves)
                 {
-                    characterGlyph = new FlattenCurves(characterGlyph);
+                    characterGlyph = new FlattenCurves(characterGlyph).MakeVxs();
                 }
 
                 return characterGlyph;

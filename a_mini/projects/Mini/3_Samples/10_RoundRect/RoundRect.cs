@@ -134,12 +134,14 @@ namespace MatterHackers.Agg.Sample_RoundRect
 
             // Render two "control" circles
             e.Reset(m_x[0], m_y[0], 3, 3, 16);
-            ras.AddPath(e);
+            ras.AddPath(e.MakeSinglePath());
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+
             e.Reset(m_x[1], m_y[1], 3, 3, 16);
-            ras.AddPath(e);
+            ras.AddPath(e.MakeSinglePath());
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+
 
             double d = this.SubPixelOffset;
 
@@ -149,14 +151,12 @@ namespace MatterHackers.Agg.Sample_RoundRect
             r.normalize_radius();
             if (this.FillRoundRect)
             {
-                Stroke p = new Stroke(r);
-                 
-                p.Width = 1;
-                ras.AddPath(p);
+               
+                ras.AddPath(new Stroke(1).MakeVxs(r.MakeVxs()));
             }
             else
             {
-                ras.AddPath(r);
+                ras.AddPath(r.MakeVxs());
             }
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
 

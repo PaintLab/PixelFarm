@@ -46,10 +46,10 @@ namespace MatterHackers.Agg
 
                 int distBetween = backBuffer.GetBytesBetweenPixelsInclusive();
 
-                var redImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);                 
-                var greenImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);             
+                var redImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);
+                var greenImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);
                 var blueImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 0, 8);
-    
+
 
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
                 ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
@@ -68,16 +68,16 @@ namespace MatterHackers.Agg
                     new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
 
                 VertexSource.Ellipse er = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.AddPath(er);
+                ras.AddPath(er.MakeSinglePath());
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
                 scanlineRenderer.RenderScanlineSolidAA(clippingProxyRed, ras, sl, FillColor);
 
                 VertexSource.Ellipse eg = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.AddPath(eg);
+                ras.AddPath(eg.MakeSinglePath());
                 scanlineRenderer.RenderScanlineSolidAA(clippingProxyGreen, ras, sl, FillColor);
 
                 VertexSource.Ellipse eb = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
-                ras.AddPath(eb);
+                ras.AddPath(eb.MakeSinglePath());
                 scanlineRenderer.RenderScanlineSolidAA(clippingProxyBlue, ras, sl, FillColor);
             }
             //            else if (graphics2D.DestImageFloat != null)

@@ -75,7 +75,8 @@ namespace MatterHackers.Agg.Sample_Draw
             //clear the image to white
             g.Clear(ColorRGBA.White);
             // draw a circle
-            Ellipse ellipseTest = new Ellipse(0, 0, 100, 50);
+
+            Ellipse ellipsePro = new Ellipse(0, 0, 100, 50);
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
 
@@ -84,12 +85,13 @@ namespace MatterHackers.Agg.Sample_Draw
                     AffinePlan.Translate(width / 2, 150));
 
 
-                var tx = new VertexSourceApplyTransform(ellipseTest, mat);
-                var sp1 = tx.DoTransformToNewSinglePath();
+
+                var sp1 = mat.TransformToSinglePath(ellipsePro.MakeVxs());
+
                 g.Render(sp1, ColorRGBA.Yellow);
 
-                Stroke ellipseOutline = new Stroke(sp1, 3);
-                g.Render(ellipseOutline, ColorRGBA.Blue);
+                //Stroke ellipseOutline = new Stroke(sp1, 3);
+                g.Render(StrokeHelp.CreateStrokeVxs(sp1, 3), ColorRGBA.Blue);
             }
 
             // and a little polygon
@@ -103,17 +105,21 @@ namespace MatterHackers.Agg.Sample_Draw
 
             // draw some text
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
+            VertexStorage vxs = textPrinter.CreateVxs();
 
-            IVertexSource translatedText = new VertexSourceApplyTransform(textPrinter, Affine.NewTranslation(
-                new Vector2(width / 2, height / 4 * 3)));
-            g.Render(translatedText, ColorRGBA.Red);
-            Stroke strokedText = new Stroke(translatedText);
-            g.Render(strokedText, ColorRGBA.Black);
+            var affTx = Affine.NewTranslation(new Vector2(width / 2, height / 4 * 3));
+            SinglePath s1 = affTx.TransformToSinglePath(vxs);
 
-            IVertexSource rotatedText = new VertexSourceApplyTransform(textPrinter, Affine.NewRotation(MathHelper.DegreesToRadians(90)));
-            IVertexSource rotatedTranslatedText = new VertexSourceApplyTransform(rotatedText, Affine.NewTranslation(
-                new Vector2(40, height / 2)));
-            g.Render(rotatedTranslatedText, ColorRGBA.Black);
+            g.Render(s1, ColorRGBA.Red);
+
+            g.Render(
+                StrokeHelp.CreateStrokeVxs(s1, 1),
+                ColorRGBA.Black);
+
+            var aff2 = Affine.NewMatix(
+                AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
+                AffinePlan.Translate(40, height / 2));
+            g.Render(aff2.TransformToSinglePath(vxs), ColorRGBA.Black);
         }
     }
 

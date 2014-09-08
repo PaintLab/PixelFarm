@@ -132,6 +132,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public IEnumerable<VertexData> GetVertexIter()
         {
+
             currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
@@ -198,7 +199,7 @@ namespace MatterHackers.Agg.VertexSource
 
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW, new Vector2());
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
-        } 
+        }
         public void RewindZero()
         {
             state = 0;
@@ -296,14 +297,21 @@ namespace MatterHackers.Agg.VertexSource
             return cmd;
         }
 
-
-        public bool IsDynamicVertexGen
+        public VertexStorage MakeVxs()
         {
-            get
+            RewindZero();
+            List<VertexData> vlist = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
             {
-                return true;
+                vlist.Add(v);
             }
+            return new VertexStorage(vlist);
         }
-    };
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
+       
+    }
 }
 

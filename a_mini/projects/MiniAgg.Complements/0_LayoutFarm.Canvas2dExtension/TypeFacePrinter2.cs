@@ -34,7 +34,7 @@ using MatterHackers.Agg.Font;
 namespace LayoutFarm.Agg.Font
 {
 
-    public class TypeFacePrinter2 : IVertexSource
+    public class TypeFacePrinter2  : IVertexSource
     {
         StyledTypeFace typeFaceStyle;
         String text = "";
@@ -74,25 +74,34 @@ namespace LayoutFarm.Agg.Font
 
         public TypeFacePrinter2(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
             : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
-        {
-
-
+        { 
 
         }
-        public TypeFacePrinter2(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
+        TypeFacePrinter2(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
         {
             this.typeFaceStyle = typeFaceStyle;
             this.text = text;
             this.Justification = justification;
             this.Origin = origin;
             this.Baseline = baseline;
-        }
-
+        } 
         public TypeFacePrinter2(String text, TypeFacePrinter2 copyPropertiesFrom)
             : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
         {
         }
-
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> vlist = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                vlist.Add(v);
+            }
+            return new VertexStorage(vlist);
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
         public RectangleDouble LocalBounds
         {
             get
@@ -219,16 +228,20 @@ namespace LayoutFarm.Agg.Font
 
                     for (int currentChar = 0; currentChar < line.Length; currentChar++)
                     {
-                        IVertexSource currentGlyph = typeFaceStyle.GetGlyphForCharacter(line[currentChar]);
+                        var currentGlyph = typeFaceStyle.GetGlyphForCharacter(line[currentChar]);
 
                         if (currentGlyph != null)
                         {
-                            foreach (VertexData vertexData in currentGlyph.GetVertexIter())
+                            int j = currentGlyph.Count;
+                            for (int i = 0; i < j; ++i)
                             {
-                                if (vertexData.command != ShapePath.FlagsAndCommand.CommandStop)
+                                double x, y;
+                                var cmd = currentGlyph.GetVertex(i, out x, out y);
+                                if (cmd != ShapePath.FlagsAndCommand.CommandStop)
                                 {
-                                    VertexData offsetVertex = new VertexData(vertexData.command, vertexData.position + currentOffset + Origin);
-                                    yield return offsetVertex;
+                                    yield return new VertexData(cmd, 
+                                        (x + currentOffset.x + Origin.x),
+                                        (y + currentOffset.y + Origin.y));
                                 }
                             }
                         }
@@ -302,7 +315,7 @@ namespace LayoutFarm.Agg.Font
 
 #if true
         IEnumerator<VertexData> currentEnumerator;
-        
+
         public void RewindZero()
         {
             currentEnumerator = GetVertexIter().GetEnumerator();

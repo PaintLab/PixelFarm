@@ -62,7 +62,11 @@ namespace MatterHackers.Agg
         {
             return Rasterizer.GetVectorClipBox();
         }
-        public override void Render(SinglePath vertexSource, ColorRGBA colorBytes)
+        public override void Render(IVertexSource vertexSource, ColorRGBA color)
+        {
+            Render(new SinglePath(vertexSource.MakeVxs()), color);
+        }
+        public override void Render(SinglePath vertexSource, ColorRGBA color)
         {
             rasterizer.Reset();
             Affine transform = GetTransform();
@@ -70,14 +74,7 @@ namespace MatterHackers.Agg
             {
                 List<VertexData> vxData = new List<VertexData>();
                 //then transform
-                var s1 = new SinglePath(transform.Tranform(vertexSource));
-
-                //VertexSourceApplyTransform vertexTx = new VertexSourceApplyTransform(vertexSource, transform);
-                //vertexSource.RewindZero();
-                //vertexTx.DoTransform(vxData);
-                ////VertexStorage newvx = new VertexStorage(vxData);
-                //rasterizer.AddPath(new SinglePath(new VertexStorage(vxData), 0));
-
+                var s1 = new SinglePath(transform.Tranform(vertexSource));  
                 rasterizer.AddPath(s1);
             }
             else
@@ -89,7 +86,7 @@ namespace MatterHackers.Agg
 
             if (destImageByte != null)
             {
-                scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
+                scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, m_ScanlineCache, color);
                 DestImage.MarkImageChanged();
             }
             else
@@ -98,55 +95,7 @@ namespace MatterHackers.Agg
                 //destImageFloat.MarkImageChanged();
             }
         }
-        //public override void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes)
-        //{
-        //    rasterizer.Reset();
-        //    Affine transform = GetTransform();
 
-
-        //    if (!transform.IsIdentity())
-        //    {
-        //        List<VertexData> vxData = new List<VertexData>();
-        //        //then transform
-        //        VertexSourceApplyTransform vertexTx = new VertexSourceApplyTransform(vertexSource, transform);
-        //        vertexSource.Rewind(pathIndexToRender);
-        //        vertexTx.DoTransform(vxData);
-        //    }
-
-        //    rasterizer.AddPath(new SinglePath(vertexSource, pathIndexToRender));
-        //    //rasterizer.AddPath(vertexSource, pathIndexToRender);
-
-        //    if (destImageByte != null)
-        //    {
-        //        scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
-        //        DestImage.MarkImageChanged();
-        //    }
-        //    else
-        //    {
-        //        //scanlineRenderer.RenderSolid(destImageFloat, rasterizer, m_ScanlineCache, colorBytes.GetAsRGBA_Floats());
-        //        //destImageFloat.MarkImageChanged();
-        //    }
-        //}
-        public override void Render(IVertexSource vertexSource, ColorRGBA colorBytes)
-        {
-            rasterizer.Reset();
-            Affine transform = GetTransform();
-            if (!transform.IsIdentity())
-            {
-                vertexSource = new VertexSourceApplyTransform(vertexSource, transform).DoTransformToNewSinglePath();
-            }
-            rasterizer.AddPath(vertexSource);
-            if (destImageByte != null)
-            {
-                scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, m_ScanlineCache, colorBytes);
-                DestImage.MarkImageChanged();
-            }
-            else
-            {
-                //scanlineRenderer.RenderSolid(destImageFloat, rasterizer, m_ScanlineCache, colorBytes.GetAsRGBA_Floats());
-                //destImageFloat.MarkImageChanged();
-            }
-        }
 
         void DrawImageGetDestBounds(IImage sourceImage,
             double DestX, double DestY,

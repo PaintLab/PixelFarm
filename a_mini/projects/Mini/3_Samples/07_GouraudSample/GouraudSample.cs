@@ -74,7 +74,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            var image = new ChildImage(backBuffer, new BlenderBGRA()); 
+            var image = new ChildImage(backBuffer, new BlenderBGRA());
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(image);
 
@@ -99,54 +99,58 @@ namespace MatterHackers.Agg.Sample_Gouraud
             double y3 = (m_y[0] + m_y[2]) / 2 - (yc - (m_y[0] + m_y[2]) / 2);
 
 
-            span_gen.colors(new ColorRGBAf(1, 0, 0, alpha).GetAsRGBA_Bytes(),
+            span_gen.SetColor(new ColorRGBAf(1, 0, 0, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(0, 1, 0, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(brc, brc, brc, alpha).GetAsRGBA_Bytes());
 
-            span_gen.triangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
-            ras.AddPath(span_gen);
+            span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
+            ras.AddPath(new SinglePath(span_gen.MakeVxs()));
+
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
-            span_gen.colors(new ColorRGBAf(0, 1, 0, alpha).GetAsRGBA_Bytes(),
+            span_gen.SetColor(new ColorRGBAf(0, 1, 0, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(0, 0, 1, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(brc, brc, brc, alpha).GetAsRGBA_Bytes());
-            span_gen.triangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
-            ras.AddPath(span_gen);
+
+            span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
+            ras.AddPath(new SinglePath(span_gen.MakeVxs()));
             scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
-            span_gen.colors(new ColorRGBAf(0, 0, 1, alpha).GetAsRGBA_Bytes(),
+            span_gen.SetColor(new ColorRGBAf(0, 0, 1, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(1, 0, 0, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(brc, brc, brc, alpha).GetAsRGBA_Bytes());
-            span_gen.triangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
-            ras.AddPath(span_gen);
+            span_gen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
+            ras.AddPath(new SinglePath(span_gen.MakeVxs()));
             scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
             brc = 1 - brc;
-            span_gen.colors(new ColorRGBAf(1, 0, 0, alpha).GetAsRGBA_Bytes(),
+            span_gen.SetColor(new ColorRGBAf(1, 0, 0, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(0, 1, 0, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(brc, brc, brc, alpha).GetAsRGBA_Bytes());
-            span_gen.triangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
-            ras.AddPath(span_gen);
+            span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
+            ras.AddPath(new SinglePath(span_gen.MakeVxs()));
             scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
-            span_gen.colors(new ColorRGBAf(0, 1, 0, alpha).GetAsRGBA_Bytes(),
+            span_gen.SetColor(new ColorRGBAf(0, 1, 0, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(0, 0, 1, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(brc, brc, brc, alpha).GetAsRGBA_Bytes());
-            span_gen.triangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
-            ras.AddPath(span_gen);
+            span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
+
+            ras.AddPath(new SinglePath(span_gen.MakeVxs()));
             scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
 
 
-            span_gen.colors(new ColorRGBAf(0, 0, 1, alpha).GetAsRGBA_Bytes(),
+            span_gen.SetColor(new ColorRGBAf(0, 0, 1, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(1, 0, 0, alpha).GetAsRGBA_Bytes(),
                             new ColorRGBAf(brc, brc, brc, alpha).GetAsRGBA_Bytes());
-            span_gen.triangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
-            ras.AddPath(span_gen);
+            span_gen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
+
+            ras.AddPath(new SinglePath(span_gen.MakeVxs()));
             scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
         }
         public override void Draw(Graphics2D g)
@@ -161,7 +165,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            var pf = new ChildImage(backBuffer, new BlenderBGRA()); 
+            var pf = new ChildImage(backBuffer, new BlenderBGRA());
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(pf);
             ren_base.Clear(new ColorRGBAf(1.0, 1.0, 1.0).GetAsRGBA_Bytes());

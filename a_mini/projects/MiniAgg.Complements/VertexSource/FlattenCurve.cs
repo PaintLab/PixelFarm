@@ -49,19 +49,22 @@ namespace MatterHackers.Agg.VertexSource
     // Class conv_curve recognizes commands path_cmd_curve3 and path_cmd_curve4 
     // and converts these vertices into a move_to/line_to sequence. 
     //-----------------------------------------------------------------------
-    public class FlattenCurves : IVertexSource
+    public class FlattenCurves
     {
         double lastX;
         double lastY;
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
-        readonly IVertexSource vertextSource;
+        readonly SinglePath vertextSource;
 
-        public FlattenCurves(IVertexSource vertextSource)
+        public FlattenCurves(SinglePath spath)
         {
-            this.vertextSource = vertextSource;
+            this.vertextSource = spath;
         }
-
+        public FlattenCurves(VertexStorage vxs)
+        {
+            this.vertextSource = new SinglePath(vxs);
+        }
         public double ApproximationScale
         {
             get
@@ -126,9 +129,24 @@ namespace MatterHackers.Agg.VertexSource
                 return true;
             }
         }
-
-        public IEnumerable<VertexData> GetVertexIter()
+        public VertexStorage MakeVxs()
         {
+
+            List<VertexData> list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return new VertexStorage(list);
+
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
+        IEnumerable<VertexData> GetVertexIter()
+        {
+            this.RewindZero();
             VertexData lastPosition = new VertexData();
 
             IEnumerator<VertexData> vertexDataEnumerator = vertextSource.GetVertexIter().GetEnumerator();
@@ -141,7 +159,7 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             vertexDataEnumerator.MoveNext();
                             VertexData vertexDataEnd = vertexDataEnumerator.Current;
-                            m_curve3.init(lastPosition.position.x, lastPosition.position.y, vertexData.position.x, vertexData.position.y, vertexDataEnd.position.x, vertexDataEnd.position.y);
+                            m_curve3.Init(lastPosition.position.x, lastPosition.position.y, vertexData.position.x, vertexData.position.y, vertexDataEnd.position.x, vertexDataEnd.position.y);
                             IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
                             do
@@ -164,7 +182,7 @@ namespace MatterHackers.Agg.VertexSource
                             VertexData vertexDataControl = vertexDataEnumerator.Current;
                             vertexDataEnumerator.MoveNext();
                             VertexData vertexDataEnd = vertexDataEnumerator.Current;
-                            m_curve4.init(lastPosition.position.x, lastPosition.position.y, vertexData.position.x, vertexData.position.y, vertexDataControl.position.x, vertexDataControl.position.y, vertexDataEnd.position.x, vertexDataEnd.position.y);
+                            m_curve4.Init(lastPosition.position.x, lastPosition.position.y, vertexData.position.x, vertexData.position.y, vertexDataControl.position.x, vertexDataControl.position.y, vertexDataEnd.position.x, vertexDataEnd.position.y);
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
 
@@ -190,16 +208,16 @@ namespace MatterHackers.Agg.VertexSource
                 }
             }
         }
-         
-        public void RewindZero()
+
+        void RewindZero()
         {
-            vertextSource.RewindZero();
+            vertextSource.RewindZ();
             lastX = 0.0;
             lastY = 0.0;
             m_curve3.reset();
             m_curve4.reset();
         }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (!ShapePath.IsStop(m_curve3.GetNextVertex(out x, out y)))
             {
@@ -226,7 +244,7 @@ namespace MatterHackers.Agg.VertexSource
                 case ShapePath.FlagsAndCommand.CommandCurve3:
                     vertextSource.GetNextVertex(out end_x, out end_y);
 
-                    m_curve3.init(lastX, lastY, x, y, end_x, end_y);
+                    m_curve3.Init(lastX, lastY, x, y, end_x, end_y);
 
                     m_curve3.GetNextVertex(out x, out y);    // First call returns path_cmd_move_to
                     m_curve3.GetNextVertex(out x, out y);    // This is the first vertex of the curve
@@ -237,7 +255,7 @@ namespace MatterHackers.Agg.VertexSource
                     vertextSource.GetNextVertex(out ct2_x, out ct2_y);
                     vertextSource.GetNextVertex(out end_x, out end_y);
 
-                    m_curve4.init(lastX, lastY, x, y, ct2_x, ct2_y, end_x, end_y);
+                    m_curve4.Init(lastX, lastY, x, y, ct2_x, ct2_y, end_x, end_y);
 
                     m_curve4.GetNextVertex(out x, out y);    // First call returns path_cmd_move_to
                     m_curve4.GetNextVertex(out x, out y);    // This is the first vertex of the curve

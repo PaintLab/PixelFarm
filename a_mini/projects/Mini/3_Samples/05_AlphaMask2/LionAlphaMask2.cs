@@ -99,11 +99,11 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                 if (i == num - 1)
                 {
                     ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
-                    rasterizer.AddPath(ellipseForMask);
+                    rasterizer.AddPath(ellipseForMask.MakeSinglePath());
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
 
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
-                    rasterizer.AddPath(ellipseForMask);
+                    rasterizer.AddPath(ellipseForMask.MakeSinglePath());
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
                 }
                 else
@@ -116,7 +116,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     // set the color to draw into the alpha channel.
                     // there is not very much reason to set the alpha as you will get the amount of 
                     // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-                    rasterizer.AddPath(ellipseForMask);
+                    rasterizer.AddPath(ellipseForMask.MakeVxs());
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack,
                        ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
@@ -190,7 +190,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                         rect.normalize_radius();
 
                         // Drawing as an outline
-                        rasterizer.AddPath(rect);
+                        rasterizer.AddPath(rect.MakeVxs());
                         scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9, .9, .9));
                     }
                 }
@@ -198,14 +198,16 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
             //int x, y; 
             // Render the lion
-            VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-            var vxlist = new System.Collections.Generic.List<VertexData>();
-            trans.DoTransform(vxlist);
+            //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
+
+            //var vxlist = new System.Collections.Generic.List<VertexData>();
+            //trans.DoTransform(vxlist);
+
 
             scanlineRenderer.RenderSolidAllPaths(alphaMaskClippingProxy,
                    rasterizer,
                    scanlineCache,
-                   new VertexStorage(vxlist),
+                   transform.TransformToVxs(lionShape.Path),
                    lionShape.Colors,
                    lionShape.PathIndexList,
                    lionShape.NumPaths);

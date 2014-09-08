@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Sample_Blur
         //CheckBox m_channel_b;
         //CheckBox m_FlattenCurves;
 
-        IVertexSource m_path;
+        SinglePath m_path;
         FlattenCurves m_shape;
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
@@ -61,15 +61,16 @@ namespace MatterHackers.Agg.Sample_Blur
 
             m_sl = new ScanlinePacked8();
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
-            m_path = typeFaceForLargeA.GetGlyphForCharacter('a');
+            m_path = new SinglePath(typeFaceForLargeA.GetGlyphForCharacter('a'));
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             //shape_mtx *= Affine.NewTranslation(150, 100);
 
-            m_path = new VertexSourceApplyTransform(m_path, shape_mtx).DoTransformToNewSinglePath();
+            //m_path = new VertexSourceApplyTransform(m_path, shape_mtx).DoTransformToNewSinglePath();
+            m_path = shape_mtx.TransformToSinglePath(m_path.MakeVxs());
             m_shape = new FlattenCurves(m_path);
 
-            BoundingRect.GetBoundingRectSingle(m_shape, ref m_shape_bounds);
+            BoundingRect.GetBoundingRectSingle(new SinglePath(m_shape.MakeVxs()), ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
@@ -155,32 +156,36 @@ namespace MatterHackers.Agg.Sample_Blur
 
 
 
-            Perspective shadow_persp = new Perspective(m_shape_bounds.Left, m_shape_bounds.Bottom,
-                                                m_shape_bounds.Right, m_shape_bounds.Top,
-                                                m_shadow_ctrl.polygon());
+            Perspective shadow_persp = new Perspective(
+                            m_shape_bounds.Left, m_shape_bounds.Bottom,
+                            m_shape_bounds.Right, m_shape_bounds.Top,
+                            m_shadow_ctrl.polygon());
 
-            VertexSourceApplyTransform shadow_trans;
+
+            SinglePath spath;
             if (FlattenCurveCheck)
             {
-                shadow_trans = new VertexSourceApplyTransform(m_shape, shadow_persp);
-
+                var s2 = shadow_persp.TransformToVxs(m_shape.MakeVxs());
+                spath = new SinglePath(s2);
+                //shadow_trans = new VertexSourceApplyTransform(m_shape, shadow_persp);
             }
             else
             {
-                shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
-                // this will make it very smooth after the transform
-                //shadow_trans = new conv_curve(shadow_trans);
-                //m_ras.AddPath(shadow_trans);
+                var s2 = shadow_persp.TransformToVxs(m_path.MakeVxs());
+                //shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
+                spath = new SinglePath(s2);
             }
-            // Render shadow
-            m_ras.AddPath(shadow_trans.DoTransformToNewSinglePath());
+            // Render shadow 
+            //spath = shadow_trans.DoTransformToNewSinglePath();
+            m_ras.AddPath(spath);
+
 
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).GetAsRGBA_Bytes());
 
             // Calculate the bounding box and extend it by the blur radius
             RectangleDouble bbox = new RectangleDouble();
-            BoundingRect.GetBoundingRectSingle(shadow_trans, ref bbox);
+            BoundingRect.GetBoundingRectSingle(spath, ref bbox);
 
             double m_radius = this.BlurRadius;
 
@@ -315,11 +320,11 @@ namespace MatterHackers.Agg.Sample_Blur
             //------------------
             if (FlattenCurveCheck)
             {
-                m_ras.AddPath(m_shape);
+                m_ras.AddPath(m_shape.MakeVxs());
             }
             else
             {
-                m_ras.AddPath(m_path);
+                m_ras.AddPath(m_path.MakeVxs());
             }
 
             scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl,

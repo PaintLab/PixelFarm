@@ -44,7 +44,7 @@ namespace MatterHackers.Agg
             y2 = 0;
 
             //--------------------------
-            vs.RewindZero();
+            vs.RewindZ();
             //--------------------------
 
             for (i = 0; i < num; i++)
@@ -92,7 +92,7 @@ namespace MatterHackers.Agg
         {
             return GetBoundingRect(vs, gi, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
         }
-        public static bool GetBoundingRectSingle(IVertexSource vs, ref RectangleDouble rect)
+        public static bool GetBoundingRectSingle(SinglePath vs, ref RectangleDouble rect)
         {
             double x1, y1, x2, y2;
             bool rValue = GetBoundingRectSingle(vs, out x1, out y1, out x2, out y2);
@@ -117,7 +117,7 @@ namespace MatterHackers.Agg
         //-----------------------------------------------------bounding_rect_single
         //template<class VertexSource, class CoordT> 
         static bool GetBoundingRectSingle(
-          IVertexSource vs,
+          SinglePath vs,
           out double x1, out double y1,
           out double x2, out double y2)
         {
@@ -130,7 +130,7 @@ namespace MatterHackers.Agg
             x2 = 0;
             y2 = 0;
 
-            vs.RewindZero();
+            vs.RewindZ();
             ShapePath.FlagsAndCommand PathAndFlags;
             while (!ShapePath.IsStop(PathAndFlags = vs.GetNextVertex(out x, out y)))
             {

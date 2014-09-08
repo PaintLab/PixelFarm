@@ -29,7 +29,7 @@ namespace MatterHackers.Agg.VertexSource
         }
     }
     //============================================================vcgen_stroke
-    class StrokeGenerator : IGenerator
+    class StrokeGenerator  
     {
         StrokeMath m_stroker;
 
@@ -136,8 +136,23 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        // Vertex Source Interface
-        public void RewindZero()
+        public void MakeVxs(System.Collections.Generic.List<VertexData> vlist)
+        {
+            this.Rewind();
+            double x = 0, y = 0;
+            for (; ; )
+            {
+                var cmd = GetNextVertex(ref x, ref y);
+                vlist.Add(new VertexData(cmd, x, y));
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    break;
+                }
+            }
+
+        }
+        
+        void Rewind()
         {
             if (m_status == StrokeMath.Status.Init)
             {
@@ -149,8 +164,8 @@ namespace MatterHackers.Agg.VertexSource
             m_src_vertex = 0;
             m_out_vertex = 0;
         }
-
-        public ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y)
+       
+        ShapePath.FlagsAndCommand GetNextVertex(ref double x, ref double y)
         {
             ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandLineTo;
             while (!ShapePath.IsStop(cmd))
@@ -158,7 +173,7 @@ namespace MatterHackers.Agg.VertexSource
                 switch (m_status)
                 {
                     case StrokeMath.Status.Init:
-                        this.RewindZero();
+                        this.Rewind();
                         goto case StrokeMath.Status.Ready;
 
                     case StrokeMath.Status.Ready:
@@ -287,5 +302,6 @@ namespace MatterHackers.Agg.VertexSource
             }
             return cmd;
         }
+    
     }
 }
