@@ -81,7 +81,7 @@ namespace MatterHackers.Agg
         void ResetGamma(IGammaFunction gamma_function);
 
         bool SweepScanline(IScanline sl);
-        void Reset(); 
+        void Reset();
         void AddPath(SinglePath spath);
         bool RewindScanlines();
     }
@@ -298,7 +298,7 @@ namespace MatterHackers.Agg
         public void AddPath(IVertexSource vs)
         {
             this.AddPath(vs.MakeSinglePath());
-        } 
+        }
         //-------------------------------------------------------------------
         public void AddPath(VertexStorage vxs)
         {
@@ -310,7 +310,7 @@ namespace MatterHackers.Agg
             double x = 0;
             double y = 0;
 
-            
+
             spath.RewindZ();
             if (m_outline.Sorted)
             {
@@ -327,27 +327,18 @@ namespace MatterHackers.Agg
                     if (cmd2 != ShapePath.FlagsAndCommand.CommandStop)
                     {
                         AddVertex(cmd2, x, y);
-                    } 
+                    }
                 }
             }
             else
             {
-                var vxs = spath.MakeVxs();
-                int j = vxs.Count;
-
-                for (int i = 0; i < j; ++i)
+                
+                ShapePath.FlagsAndCommand cmd;
+                while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
                 {
-                    var cmd2 = vxs.GetVertex(i, out x, out y);
-                    if (cmd2 != ShapePath.FlagsAndCommand.CommandStop)
-                    {
-                        AddVertex(cmd2, x, y);
-                    }
-                }
-                //while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-                //{
 
-                //    AddVertex(cmd, x, y);
-                //}
+                    AddVertex(cmd, x, y);
+                }
             }
         }
 
