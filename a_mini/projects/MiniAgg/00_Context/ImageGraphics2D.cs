@@ -62,7 +62,7 @@ namespace MatterHackers.Agg
         {
             return Rasterizer.GetVectorClipBox();
         }
-       
+
         public override void Render(VertexSnap vertexSource, ColorRGBA color)
         {
             rasterizer.Reset();
@@ -71,7 +71,7 @@ namespace MatterHackers.Agg
             {
                 List<VertexData> vxData = new List<VertexData>();
                 //then transform
-                var s1 = new VertexSnap(transform.Tranform(vertexSource));  
+                var s1 = new VertexSnap(transform.Tranform(vertexSource));
                 rasterizer.AddPath(s1);
             }
             else
@@ -135,15 +135,15 @@ namespace MatterHackers.Agg
 
             destRectTransform = Affine.NewMatix(plan);
 
-            int SourceBufferWidth = (int)sourceImage.Width;
-            int SourceBufferHeight = (int)sourceImage.Height;
+            int srcBuffWidth = sourceImage.Width;
+            int srcBuffHeight = sourceImage.Height;
 
             drawImageRectPath.Clear();
 
             drawImageRectPath.MoveTo(0, 0);
-            drawImageRectPath.LineTo(SourceBufferWidth, 0);
-            drawImageRectPath.LineTo(SourceBufferWidth, SourceBufferHeight);
-            drawImageRectPath.LineTo(0, SourceBufferHeight);
+            drawImageRectPath.LineTo(srcBuffWidth, 0);
+            drawImageRectPath.LineTo(srcBuffWidth, srcBuffHeight);
+            drawImageRectPath.LineTo(0, srcBuffHeight);
             drawImageRectPath.ClosePolygon();
         }
 
@@ -154,16 +154,16 @@ namespace MatterHackers.Agg
                 destRectTransform *= Affine.NewTranslation(-destImageByte.OriginOffset.x, -destImageByte.OriginOffset.y);
             }
 
-            //var transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
-            var sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);// transfromedRect.DoTransformToNewVertexSnap();
+
+            var sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
             Rasterizer.AddPath(sp1);
             {
-                //ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);
+
                 ChildImage destImageWithClipping = new ChildImage(destImageByte, destImageByte.GetRecieveBlender());
                 scanlineRenderer.GenerateAndRender(
-                    Rasterizer,
-                    drawImageScanlineCache,
                     destImageWithClipping,
+                    Rasterizer,
+                    drawImageScanlineCache,                   
                     spanImageFilter);
             }
         }
@@ -210,25 +210,25 @@ namespace MatterHackers.Agg
 		        m_OutFinalBlitBounds.SetRect(0,0,0,0);
 	        }
 #endif
-            bool IsScaled = (scaleX != 1 || scaleY != 1);
+            bool isScale = (scaleX != 1 || scaleY != 1);
 
-            bool IsRotated = true;
+            bool isRotated = true;
             if (Math.Abs(angleRadians) < (0.1 * MathHelper.Tau / 360))
             {
-                IsRotated = false;
+                isRotated = false;
                 angleRadians = 0;
             }
 
             //bool IsMipped = false;
             double sourceOriginOffsetX = source.OriginOffset.x;
             double sourceOriginOffsetY = source.OriginOffset.y;
-            bool CanUseMipMaps = IsScaled;
+            bool canUseMipMaps = isScale;
             if (scaleX > 0.5 || scaleY > 0.5)
             {
-                CanUseMipMaps = false;
+                canUseMipMaps = false;
             }
 
-            bool renderRequriesSourceSampling = IsScaled || IsRotated || destX != (int)destX || destY != (int)destY;
+            bool renderRequriesSourceSampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
             // this is the fast drawing path
             if (renderRequriesSourceSampling)
@@ -325,7 +325,7 @@ namespace MatterHackers.Agg
 
             if (DestImage != null)
             {
-              
+
                 int width = DestImage.Width;
                 int height = DestImage.Height;
                 byte[] buffer = DestImage.GetBuffer();

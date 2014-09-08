@@ -17,7 +17,8 @@ namespace MatterHackers.Agg
 
         public void RenderScanlineSolidAA(IImage destImage,
             ScanlineRasterizer rasterizer,
-            IScanline scline, ColorRGBA color)
+            IScanline scline,
+            ColorRGBA color)
         {
             if (rasterizer.RewindScanlines())
             {
@@ -29,7 +30,9 @@ namespace MatterHackers.Agg
             }
         }
 
-        protected virtual void RenderSolidSingleScanLine(IImage destImage, IScanline scline, ColorRGBA color)
+        protected virtual void RenderSolidSingleScanLine(IImage destImage,
+            IScanline scline,
+            ColorRGBA color)
         {
             int y = scline.Y;
             int num_spans = scline.SpanCount;
@@ -54,7 +57,7 @@ namespace MatterHackers.Agg
 
         public void RenderSolidAllPaths(IImage destImage,
             ScanlineRasterizer ras,
-            IScanline sl,
+            IScanline scline,
             VertexStorage vx,
             ColorRGBA[] color_storage,
             int[] path_id,
@@ -64,11 +67,11 @@ namespace MatterHackers.Agg
             {
                 ras.Reset();
                 ras.AddPath(new VertexSnap(vx, path_id[i]));
-                RenderScanlineSolidAA(destImage, ras, sl, color_storage[i]);
+                RenderScanlineSolidAA(destImage, ras, scline, color_storage[i]);
             }
         }
 
-        void GenerateAndRenderSingleScanline(IScanline scline, IImage destImage, ISpanGenerator span_gen)
+        void GenerateAndRenderSingleScanline(IImage destImage, IScanline scline, ISpanGenerator span_gen)
         {
             int y = scline.Y;
             int num_spans = scline.SpanCount;
@@ -96,8 +99,9 @@ namespace MatterHackers.Agg
         }
 
 
-        public void GenerateAndRender(ScanlineRasterizer rasterizer,
-             IScanline scline, IImage destImage,
+        public void GenerateAndRender(IImage destImage,
+             ScanlineRasterizer rasterizer,
+             IScanline scline,
              ISpanGenerator spanGenerator)
         {
             if (rasterizer.RewindScanlines())
@@ -106,7 +110,7 @@ namespace MatterHackers.Agg
                 spanGenerator.Prepare();
                 while (rasterizer.SweepScanline(scline))
                 {
-                    GenerateAndRenderSingleScanline(scline, destImage, spanGenerator);
+                    GenerateAndRenderSingleScanline(destImage, scline, spanGenerator);
                 }
             }
         }

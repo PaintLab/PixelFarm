@@ -107,7 +107,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             ras.AddPath(new VertexSnap(span_gen.MakeVxs()));
 
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
+            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
@@ -116,7 +116,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 
             span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
             ras.AddPath(new VertexSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
+            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 0, 1, alpha),
@@ -124,7 +124,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
                             ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
             ras.AddPath(new VertexSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
+            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             brc = 1 - brc;
@@ -133,7 +133,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
                            ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
             ras.AddPath(new VertexSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
+            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
@@ -142,7 +142,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
 
             ras.AddPath(new VertexSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
+            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 0, 1, alpha),
@@ -151,7 +151,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             span_gen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
 
             ras.AddPath(new VertexSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ras, sl, ren_base, span_gen);
+            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
         }
         public override void Draw(Graphics2D g)
         {
