@@ -37,11 +37,26 @@ namespace MatterHackers.Agg.Font
     public class TypeFacePrinter : IVertexSource
     {
         StyledTypeFace typeFaceStyle;
-
         String text = "";
-
         Vector2 totalSizeCach;
+        public TypeFacePrinter(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
+            : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
+        {
+        }
 
+        public TypeFacePrinter(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
+        {
+            this.typeFaceStyle = typeFaceStyle;
+            this.text = text;
+            this.Justification = justification;
+            this.Origin = origin;
+            this.Baseline = baseline;
+        }
+
+        public TypeFacePrinter(String text, TypeFacePrinter copyPropertiesFrom)
+            : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
+        {
+        }
         public Justification Justification { get; set; }
         public Baseline Baseline { get; set; }
 
@@ -74,24 +89,7 @@ namespace MatterHackers.Agg.Font
         public Vector2 Origin { get; set; }
 
 
-        public TypeFacePrinter(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
-            : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
-        {
-        }
 
-        public TypeFacePrinter(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
-        {
-            this.typeFaceStyle = typeFaceStyle;
-            this.text = text;
-            this.Justification = justification;
-            this.Origin = origin;
-            this.Baseline = baseline;
-        }
-
-        public TypeFacePrinter(String text, TypeFacePrinter copyPropertiesFrom)
-            : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
-        {
-        }
 
         public RectangleDouble LocalBounds
         {
@@ -133,24 +131,26 @@ namespace MatterHackers.Agg.Font
             }
         }
 
-        public void Render(Graphics2D graphics2D, ColorRGBA color, IVertexSourceProxy vertexSourceToApply)
-        {
-            vertexSourceToApply.VertexSource = this;
-            rewind(0);
-            if (DrawFromHintedCache)
-            {
-                // TODO: make this work
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-            else
-            {
-                graphics2D.Render(vertexSourceToApply, color);
-            }
-        }
+        //public void Render(Graphics2D graphics2D,
+        //    ColorRGBA color, 
+        //    IVertexSourceProxy vertexSourceToApply)
+        //{
+        //    vertexSourceToApply.VertexSource = this;
+        //    Rewind(0);
+        //    if (DrawFromHintedCache)
+        //    {
+        //        // TODO: make this work
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //    else
+        //    {
+        //        graphics2D.Render(vertexSourceToApply, color);
+        //    }
+        //}
 
         public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
-            rewind(0);
+            this.RewindZero();
             if (DrawFromHintedCache)
             {
                 RenderFromCache(graphics2D, color);
@@ -203,8 +203,8 @@ namespace MatterHackers.Agg.Font
                 }
             }
         }
-
-        public IEnumerable<VertexData> Vertices()
+        
+        public IEnumerable<VertexData> GetVertexIter()
         {
             if (text != null && text.Length > 0)
             {
@@ -219,18 +219,31 @@ namespace MatterHackers.Agg.Font
 
                     for (int currentChar = 0; currentChar < line.Length; currentChar++)
                     {
-                        IVertexSource currentGlyph = typeFaceStyle.GetGlyphForCharacter(line[currentChar]);
+                        var currentGlyph = typeFaceStyle.GetGlyphForCharacter(line[currentChar]);
 
                         if (currentGlyph != null)
                         {
-                            foreach (VertexData vertexData in currentGlyph.Vertices())
+                            int j = currentGlyph.Count;
+                            for (int i = 0; i < j; ++i)
                             {
-                                if (vertexData.command != ShapePath.FlagsAndCommand.CommandStop)
+                                double x, y;
+                                var cmd = currentGlyph.GetVertex(i, out x, out y);
+                                if (cmd != ShapePath.FlagsAndCommand.CommandStop)
                                 {
-                                    VertexData offsetVertex = new VertexData(vertexData.command, vertexData.position + currentOffset + Origin);
-                                    yield return offsetVertex;
+                                    yield return new VertexData(cmd,
+                                        (x + currentOffset.x + Origin.x),
+                                        (y + currentOffset.y + Origin.y));
+                                     
                                 }
                             }
+                            //foreach (VertexData vertexData in currentGlyph.GetVertexIter())
+                            //{
+                            //    if (vertexData.command != ShapePath.FlagsAndCommand.CommandStop)
+                            //    {
+                            //        VertexData offsetVertex = new VertexData(vertexData.command, vertexData.position + currentOffset + Origin);
+                            //        yield return offsetVertex;
+                            //    }
+                            //}
                         }
 
                         // get the advance for the next character
@@ -255,6 +268,19 @@ namespace MatterHackers.Agg.Font
             yield return endVertex;
         }
 
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> vlist = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                vlist.Add(v);
+            }
+            return new VertexStorage(vlist);
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
         private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)
         {
             Vector2 size = GetSize(line);
@@ -302,13 +328,14 @@ namespace MatterHackers.Agg.Font
 
 #if true
         IEnumerator<VertexData> currentEnumerator;
-        public void rewind(int layerIndex)
+
+
+        public void RewindZero()
         {
-            currentEnumerator = Vertices().GetEnumerator();
+            currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();
         }
-
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.position.x;
             y = currentEnumerator.Current.position.y;
@@ -317,6 +344,16 @@ namespace MatterHackers.Agg.Font
             currentEnumerator.MoveNext();
 
             return command;
+        }
+        public VertexStorage CreateVxs()
+        {
+            List<VertexData> list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return new VertexStorage(list);
+            //return new SinglePath(new VertexStorage(list));
         }
 #else
         public void rewind(int pathId)

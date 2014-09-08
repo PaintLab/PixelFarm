@@ -21,56 +21,53 @@
 
 //#include "agg_clip_liang_barsky.h"
 
-using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.poly_subpixel_scale_e;
+using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 using MatterHackers.Agg.Lines;
 
 namespace MatterHackers.Agg
 {
-     
-    
-    public class VectorClipper
-    {
-        public RectangleInt clipBox;
-        private int m_x1;
-        private int m_y1;
-        private int m_f1;
-        private bool m_clipping;
 
-        int mul_div(double a, double b, double c)
-        {
-            return AggBasics.iround(a * b / c);
-        }
-        int xi(int v) { return v; }
-        int yi(int v) { return v; }
-        public int upscale(double v) { return AggBasics.iround(v * (int)poly_subpixel_scale_e.poly_subpixel_scale); }
-        public int downscale(int v) { return v / (int)poly_subpixel_scale_e.poly_subpixel_scale; }
+
+    class VectorClipper
+    {
+        RectangleInt clipBox;
+        int m_x1;
+        int m_y1;
+        int m_f1;
+        bool m_clipping;
 
         //--------------------------------------------------------------------
         public VectorClipper()
         {
-            clipBox = new RectangleInt(0,0,0,0);
-            m_x1 = (0);
-            m_y1 = (0);
-            m_f1 = (0);
-            m_clipping = (false);
+            clipBox = new RectangleInt(0, 0, 0, 0);
+            m_x1 = m_y1 = m_f1 = 0;
+            m_clipping = false;
+        }
+        //--------------------------------------------------------------------
+        public RectangleDouble GetVectorClipBox()
+        {
+            return new RectangleDouble(
+                downscale(clipBox.Left),
+                downscale(clipBox.Bottom),
+                downscale(clipBox.Right),
+                downscale(clipBox.Top));
         }
 
-        //--------------------------------------------------------------------
-        public void reset_clipping()
+
+        public void ResetClipping()
         {
             m_clipping = false;
         }
 
         //--------------------------------------------------------------------
-        public void clip_box(int x1, int y1, int x2, int y2)
+        public void ClipBox(int x1, int y1, int x2, int y2)
         {
             clipBox = new RectangleInt(x1, y1, x2, y2);
             clipBox.normalize();
             m_clipping = true;
         }
-
         //--------------------------------------------------------------------
-        public void move_to(int x1, int y1)
+        public void MoveTo(int x1, int y1)
         {
             m_x1 = x1;
             m_y1 = y1;
@@ -81,21 +78,21 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        private void line_clip_y(RasterizerCellsAA ras,
-                                    int x1, int y1, 
-                                    int x2, int y2,
-                                    int f1, int f2)
+        void LineClipY(CellAARasterizer ras,
+                                  int x1, int y1,
+                                  int x2, int y2,
+                                  int f1, int f2)
         {
             f1 &= 10;
             f2 &= 10;
-            if((f1 | f2) == 0)
+            if ((f1 | f2) == 0)
             {
                 // Fully visible
-                ras.line(x1, y1, x2, y2); 
+                ras.DrawLine(x1, y1, x2, y2);
             }
             else
             {
-                if(f1 == f2)
+                if (f1 == f2)
                 {
                     // Invisible by Y
                     return;
@@ -106,42 +103,42 @@ namespace MatterHackers.Agg
                 int tx2 = x2;
                 int ty2 = y2;
 
-                if((f1 & 8) != 0) // y1 < clip.y1
+                if ((f1 & 8) != 0) // y1 < clip.y1
                 {
-                    tx1 = x1 + mul_div(clipBox.Bottom-y1, x2-x1, y2-y1);
+                    tx1 = x1 + mul_div(clipBox.Bottom - y1, x2 - x1, y2 - y1);
                     ty1 = clipBox.Bottom;
                 }
 
-                if((f1 & 2) != 0) // y1 > clip.y2
+                if ((f1 & 2) != 0) // y1 > clip.y2
                 {
-                    tx1 = x1 + mul_div(clipBox.Top-y1, x2-x1, y2-y1);
+                    tx1 = x1 + mul_div(clipBox.Top - y1, x2 - x1, y2 - y1);
                     ty1 = clipBox.Top;
                 }
 
-                if((f2 & 8) != 0) // y2 < clip.y1
+                if ((f2 & 8) != 0) // y2 < clip.y1
                 {
-                    tx2 = x1 + mul_div(clipBox.Bottom-y1, x2-x1, y2-y1);
+                    tx2 = x1 + mul_div(clipBox.Bottom - y1, x2 - x1, y2 - y1);
                     ty2 = clipBox.Bottom;
                 }
 
-                if((f2 & 2) != 0) // y2 > clip.y2
+                if ((f2 & 2) != 0) // y2 > clip.y2
                 {
-                    tx2 = x1 + mul_div(clipBox.Top-y1, x2-x1, y2-y1);
+                    tx2 = x1 + mul_div(clipBox.Top - y1, x2 - x1, y2 - y1);
                     ty2 = clipBox.Top;
                 }
 
-                ras.line(tx1, ty1, tx2, ty2); 
+                ras.DrawLine(tx1, ty1, tx2, ty2);
             }
         }
 
         //--------------------------------------------------------------------
-        internal void line_to(RasterizerCellsAA ras, int x2, int y2)
+        internal void LineTo(CellAARasterizer ras, int x2, int y2)
         {
-            if(m_clipping)
+            if (m_clipping)
             {
                 int f2 = ClipLiangBarsky.clipping_flags(x2, y2, clipBox);
 
-                if((m_f1 & 10) == (f2 & 10) && (m_f1 & 10) != 0)
+                if ((m_f1 & 10) == (f2 & 10) && (m_f1 & 10) != 0)
                 {
                     // Invisible by Y
                     m_x1 = x2;
@@ -152,81 +149,88 @@ namespace MatterHackers.Agg
 
                 int x1 = m_x1;
                 int y1 = m_y1;
-                int   f1 = m_f1;
+                int f1 = m_f1;
                 int y3, y4;
                 int f3, f4;
 
-                switch(((f1 & 5) << 1) | (f2 & 5))
+                switch (((f1 & 5) << 1) | (f2 & 5))
                 {
-                case 0: // Visible by X
-                    line_clip_y(ras, x1, y1, x2, y2, f1, f2);
-                    break;
+                    case 0: // Visible by X
+                        LineClipY(ras, x1, y1, x2, y2, f1, f2);
+                        break;
 
-                case 1: // x2 > clip.x2
-                    y3 = y1 + mul_div(clipBox.Right-x1, y2-y1, x2-x1);
-                    f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
-                    line_clip_y(ras, x1, y1, clipBox.Right, y3, f1, f3);
-                    line_clip_y(ras, clipBox.Right, y3, clipBox.Right, y2, f3, f2);
-                    break;
+                    case 1: // x2 > clip.x2
+                        y3 = y1 + mul_div(clipBox.Right - x1, y2 - y1, x2 - x1);
+                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        LineClipY(ras, x1, y1, clipBox.Right, y3, f1, f3);
+                        LineClipY(ras, clipBox.Right, y3, clipBox.Right, y2, f3, f2);
+                        break;
 
-                case 2: // x1 > clip.x2
-                    y3 = y1 + mul_div(clipBox.Right-x1, y2-y1, x2-x1);
-                    f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
-                    line_clip_y(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
-                    line_clip_y(ras, clipBox.Right, y3, x2, y2, f3, f2);
-                    break;
+                    case 2: // x1 > clip.x2
+                        y3 = y1 + mul_div(clipBox.Right - x1, y2 - y1, x2 - x1);
+                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
+                        LineClipY(ras, clipBox.Right, y3, x2, y2, f3, f2);
+                        break;
 
-                case 3: // x1 > clip.x2 && x2 > clip.x2
-                    line_clip_y(ras, clipBox.Right, y1, clipBox.Right, y2, f1, f2);
-                    break;
+                    case 3: // x1 > clip.x2 && x2 > clip.x2
+                        LineClipY(ras, clipBox.Right, y1, clipBox.Right, y2, f1, f2);
+                        break;
 
-                case 4: // x2 < clip.x1
-                    y3 = y1 + mul_div(clipBox.Left-x1, y2-y1, x2-x1);
-                    f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
-                    line_clip_y(ras, x1, y1, clipBox.Left, y3, f1, f3);
-                    line_clip_y(ras, clipBox.Left, y3, clipBox.Left, y2, f3, f2);
-                    break;
+                    case 4: // x2 < clip.x1
+                        y3 = y1 + mul_div(clipBox.Left - x1, y2 - y1, x2 - x1);
+                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        LineClipY(ras, x1, y1, clipBox.Left, y3, f1, f3);
+                        LineClipY(ras, clipBox.Left, y3, clipBox.Left, y2, f3, f2);
+                        break;
 
-                case 6: // x1 > clip.x2 && x2 < clip.x1
-                    y3 = y1 + mul_div(clipBox.Right-x1, y2-y1, x2-x1);
-                    y4 = y1 + mul_div(clipBox.Left-x1, y2-y1, x2-x1);
-                    f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
-                    f4 = ClipLiangBarsky.clipping_flags_y(y4, clipBox);
-                    line_clip_y(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
-                    line_clip_y(ras, clipBox.Right, y3, clipBox.Left, y4, f3, f4);
-                    line_clip_y(ras, clipBox.Left, y4, clipBox.Left, y2, f4, f2);
-                    break;
+                    case 6: // x1 > clip.x2 && x2 < clip.x1
+                        y3 = y1 + mul_div(clipBox.Right - x1, y2 - y1, x2 - x1);
+                        y4 = y1 + mul_div(clipBox.Left - x1, y2 - y1, x2 - x1);
+                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        f4 = ClipLiangBarsky.clipping_flags_y(y4, clipBox);
+                        LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
+                        LineClipY(ras, clipBox.Right, y3, clipBox.Left, y4, f3, f4);
+                        LineClipY(ras, clipBox.Left, y4, clipBox.Left, y2, f4, f2);
+                        break;
 
-                case 8: // x1 < clip.x1
-                    y3 = y1 + mul_div(clipBox.Left-x1, y2-y1, x2-x1);
-                    f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
-                    line_clip_y(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
-                    line_clip_y(ras, clipBox.Left, y3, x2, y2, f3, f2);
-                    break;
+                    case 8: // x1 < clip.x1
+                        y3 = y1 + mul_div(clipBox.Left - x1, y2 - y1, x2 - x1);
+                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
+                        LineClipY(ras, clipBox.Left, y3, x2, y2, f3, f2);
+                        break;
 
-                case 9:  // x1 < clip.x1 && x2 > clip.x2
-                    y3 = y1 + mul_div(clipBox.Left-x1, y2-y1, x2-x1);
-                    y4 = y1 + mul_div(clipBox.Right-x1, y2-y1, x2-x1);
-                    f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
-                    f4 = ClipLiangBarsky.clipping_flags_y(y4, clipBox);
-                    line_clip_y(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
-                    line_clip_y(ras, clipBox.Left, y3, clipBox.Right, y4, f3, f4);
-                    line_clip_y(ras, clipBox.Right, y4, clipBox.Right, y2, f4, f2);
-                    break;
+                    case 9:  // x1 < clip.x1 && x2 > clip.x2
+                        y3 = y1 + mul_div(clipBox.Left - x1, y2 - y1, x2 - x1);
+                        y4 = y1 + mul_div(clipBox.Right - x1, y2 - y1, x2 - x1);
+                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        f4 = ClipLiangBarsky.clipping_flags_y(y4, clipBox);
+                        LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
+                        LineClipY(ras, clipBox.Left, y3, clipBox.Right, y4, f3, f4);
+                        LineClipY(ras, clipBox.Right, y4, clipBox.Right, y2, f4, f2);
+                        break;
 
-                case 12: // x1 < clip.x1 && x2 < clip.x1
-                    line_clip_y(ras, clipBox.Left, y1, clipBox.Left, y2, f1, f2);
-                    break;
+                    case 12: // x1 < clip.x1 && x2 < clip.x1
+                        LineClipY(ras, clipBox.Left, y1, clipBox.Left, y2, f1, f2);
+                        break;
                 }
                 m_f1 = f2;
             }
             else
             {
-                ras.line(m_x1, m_y1, 
-                         x2,   y2); 
+                ras.DrawLine(m_x1, m_y1,
+                         x2, y2);
             }
             m_x1 = x2;
             m_y1 = y2;
+        }
+
+        public static int upscale(double v) { return AggBasics.iround(v * (int)poly_subpixel_scale_e.SCALE); }
+        public static int downscale(int v) { return v / (int)poly_subpixel_scale_e.SCALE; }
+        static int mul_div(double a, double b, double c)
+        {
+            return AggBasics.iround(a * b / c);
         }
     }
 }

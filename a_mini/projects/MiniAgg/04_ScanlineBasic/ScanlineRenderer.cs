@@ -14,12 +14,13 @@ namespace MatterHackers.Agg
     public class ScanlineRenderer
     {
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
-        public void render_scanlines_aa_solid(IImage destImage, IRasterizer rasterizer, IScanline scline, ColorRGBA color)
-        {
-            if (rasterizer.rewind_scanlines())
+
+        public void RenderScanlineSolidAA(IImage destImage, IRasterizer rasterizer, IScanline scline, ColorRGBA color)
+        {      
+            if (rasterizer.RewindScanlines())
             {
-                scline.ResetSpans(rasterizer.min_x(), rasterizer.max_x());
-                while (rasterizer.sweep_scanline(scline))
+                scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
+                while (rasterizer.SweepScanline(scline))
                 {
                     RenderSolidSingleScanLine(destImage, scline, color);
                 }
@@ -54,21 +55,19 @@ namespace MatterHackers.Agg
         public void RenderSolidAllPaths(IImage destImage,
             IRasterizer ras,
             IScanline sl,
-            IVertexSource vs,
+            VertexStorage vx,
             ColorRGBA[] color_storage,
             int[] path_id,
             int num_paths)
-        {
+        {   
             for (int i = 0; i < num_paths; i++)
             {
-                ras.reset();
-
-                ras.add_path(vs, path_id[i]);
-
-                render_scanlines_aa_solid(destImage, ras, sl, color_storage[i]);
+                ras.Reset();
+                ras.AddPath(new SinglePath(vx, path_id[i])); 
+                RenderScanlineSolidAA(destImage, ras, sl, color_storage[i]);
             }
         }
-
+        
         void GenerateAndRenderSingleScanline(IScanline scline, IImage destImage, ISpanGenerator span_gen)
         {
             int y = scline.Y;
@@ -86,11 +85,11 @@ namespace MatterHackers.Agg
                     tempSpanColors.Clear(len);
                 }
 
-                span_gen.generate(tempSpanColors.Array, 0, x, y, len);
+                span_gen.Generate(tempSpanColors.Array, 0, x, y, len);
 
                 bool useFirstCoverForAll = span.len < 0;
 
-                destImage.blend_color_hspan(x, y, len, 
+                destImage.blend_color_hspan(x, y, len,
                     tempSpanColors.Array, 0,
                     covers, span.cover_index, useFirstCoverForAll);
             }
@@ -100,12 +99,12 @@ namespace MatterHackers.Agg
         public void GenerateAndRender(IRasterizer rasterizer,
              IScanline scline, IImage destImage,
              ISpanGenerator spanGenerator)
-        {   
-            if (rasterizer.rewind_scanlines())
+        {
+            if (rasterizer.RewindScanlines())
             {
-                scline.ResetSpans(rasterizer.min_x(), rasterizer.max_x());
-                spanGenerator.prepare();
-                while (rasterizer.sweep_scanline(scline))
+                scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
+                spanGenerator.Prepare();
+                while (rasterizer.SweepScanline(scline))
                 {
                     GenerateAndRenderSingleScanline(scline, destImage, spanGenerator);
                 }

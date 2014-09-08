@@ -131,11 +131,12 @@ namespace MatterHackers.Agg
         // The possible coordinate capacity in bits can be calculated by formula:
         // sizeof(int) * 8 - poly_subpixel_shift, i.e, for 32-bit integers and
         // 8-bits fractional part the capacity is 24 bits.
-        public enum poly_subpixel_scale_e
+
+        public static class PolySubPixelScale
         {
-            poly_subpixel_shift = 8,                      //----poly_subpixel_shift
-            poly_subpixel_scale = 1 << poly_subpixel_shift, //----poly_subpixel_scale 
-            poly_subpixel_mask = poly_subpixel_scale - 1,  //----poly_subpixel_mask 
+            public const int SHIFT = 8;                     //----poly_subpixel_shif
+            public const int SCALE = 1 << SHIFT; //----poly_subpixel_scale 
+            public const int MASK = SCALE - 1;  //----poly_subpixel_mask 
         }
     }
 }

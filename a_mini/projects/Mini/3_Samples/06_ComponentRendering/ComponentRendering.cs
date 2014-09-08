@@ -46,10 +46,10 @@ namespace MatterHackers.Agg
 
                 int distBetween = backBuffer.GetBytesBetweenPixelsInclusive();
 
-                var redImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);                 
-                var greenImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);             
+                var redImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);
+                var greenImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);
                 var blueImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 0, 8);
-    
+
 
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
                 ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
@@ -60,7 +60,7 @@ namespace MatterHackers.Agg
                 ScanlinePacked8 sl = new ScanlinePacked8();
 
                 ColorRGBA clearColor = this.UseBlackBlackground ? new ColorRGBA(0, 0, 0) : new ColorRGBA(255, 255, 255);
-                clippingProxy.clear(clearColor);
+                clippingProxy.Clear(clearColor);
                 //alphaSlider.View.BackgroundColor = clearColor;
 
                 ColorRGBA FillColor = this.UseBlackBlackground ?
@@ -68,17 +68,17 @@ namespace MatterHackers.Agg
                     new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
 
                 VertexSource.Ellipse er = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.add_path(er);
+                ras.AddPath(er.MakeSinglePath());
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-                scanlineRenderer.render_scanlines_aa_solid(clippingProxyRed, ras, sl, FillColor);
+                scanlineRenderer.RenderScanlineSolidAA(clippingProxyRed, ras, sl, FillColor);
 
                 VertexSource.Ellipse eg = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.add_path(eg);
-                scanlineRenderer.render_scanlines_aa_solid(clippingProxyGreen, ras, sl, FillColor);
+                ras.AddPath(eg.MakeSinglePath());
+                scanlineRenderer.RenderScanlineSolidAA(clippingProxyGreen, ras, sl, FillColor);
 
                 VertexSource.Ellipse eb = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
-                ras.add_path(eb);
-                scanlineRenderer.render_scanlines_aa_solid(clippingProxyBlue, ras, sl, FillColor);
+                ras.AddPath(eb.MakeSinglePath());
+                scanlineRenderer.RenderScanlineSolidAA(clippingProxyBlue, ras, sl, FillColor);
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

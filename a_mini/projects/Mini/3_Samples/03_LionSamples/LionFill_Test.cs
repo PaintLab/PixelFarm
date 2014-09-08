@@ -74,15 +74,14 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
     //--------------------------------------------------
     public class LionFill : SimpleSprite
     {
-
+        VertexStorage vxStorage;
         LionShape lionShape;
-        Affine transform = Affine.IdentityMatrix;
-        VertexSourceApplyTransform transformedPathStorage;
+        bool needUpdate;
         byte alpha;
         public LionFill()
         {
             lionShape = new LionShape();
-            TestLoadLionFromBinaryFile(); 
+            TestLoadLionFromBinaryFile();
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
@@ -147,7 +146,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-            transformedPathStorage = null;
+            this.needUpdate = true;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
@@ -155,20 +154,29 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
 
             //freeze to bitmap ?
 
-            if (transformedPathStorage == null)
+            if (vxStorage == null)
             {
-                transform = Affine.NewMatix(
-                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-                     AffinePlan.Scale(spriteScale, spriteScale),
-                     AffinePlan.Rotate(angle + Math.PI),
-                     AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-                     AffinePlan.Translate(Width / 2, Height / 2)
-              );
-                transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
+                var transform = Affine.NewMatix(
+                        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                        AffinePlan.Scale(spriteScale, spriteScale),
+                        AffinePlan.Rotate(angle + Math.PI),
+                        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                        AffinePlan.Translate(Width / 2, Height / 2)
+                );
+
+                //convert
+                //System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
+                vxStorage = transform.TransformToVxs(lionShape.Path);
+                //transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
+                //transformedPathStorage.DoTransform(list);
+
+                //vxStorage = new VertexStorage(list);
             }
 
-            graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+            //graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+            graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
+            base.OnDraw(graphics2D);
             if (!IsFreezed)
             {
                 //var destImage = graphics2D.DestImage;

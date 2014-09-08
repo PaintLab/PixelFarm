@@ -167,9 +167,11 @@ namespace Mini
         }
 
         private void cmdTestRasterImage_Click(object sender, EventArgs e)
-        { 
+        {
 
 
-        } 
+        }
+
+       
     }
 }

@@ -29,7 +29,7 @@ namespace MatterHackers.Agg.UI
     {
 
         bool localBoundsComeFromPoints = true;
-        
+
         public SimpleVertexSourceWidget()
         {
             throw new Exception("this is depricated");
@@ -47,23 +47,24 @@ namespace MatterHackers.Agg.UI
             {
                 if (localBoundsComeFromPoints)
                 {
-                    RectangleDouble localBounds = new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
+                    RectangleDouble localBounds = this.CalculateLocalBounds();
+                    //new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
 
-                    rewind(0);
-                    double x;
-                    double y;
-                    ShapePath.FlagsAndCommand cmd;
-                    int numPoint = 0;
-                    while (!ShapePath.is_stop(cmd = vertex(out x, out y)))
-                    {
-                        numPoint++;
-                        localBounds.ExpandToInclude(x, y);
-                    }
+                    //this.RewindZero();
+                    //double x;
+                    //double y;
+                    //ShapePath.FlagsAndCommand cmd;
+                    //int numPoint = 0;
+                    //while (!ShapePath.IsStop(cmd = GetNextVertex(out x, out y)))
+                    //{
+                    //    numPoint++;
+                    //    localBounds.ExpandToInclude(x, y);
+                    //}
 
-                    if (numPoint == 0)
-                    {
-                        localBounds = new RectangleDouble();
-                    }
+                    //if (numPoint == 0)
+                    //{
+                    //    localBounds = new RectangleDouble();
+                    //}
 
                     return localBounds;
                 }
@@ -73,7 +74,7 @@ namespace MatterHackers.Agg.UI
                 }
             }
 
-            set 
+            set
             {
                 if (localBoundsComeFromPoints)
                 {
@@ -88,19 +89,30 @@ namespace MatterHackers.Agg.UI
         }
 
         public abstract int num_paths();
-        public abstract IEnumerable<VertexData> Vertices();
-        public abstract void rewind(int path_id);
-        public abstract ShapePath.FlagsAndCommand vertex(out double x, out double y);
+        public abstract IEnumerable<VertexData> GetVertexIter();
 
-        public virtual IColor color(int i) { return (IColor)new ColorRGBAf(); }
+        public abstract void RewindZero();
+        public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
+        protected abstract RectangleDouble CalculateLocalBounds();
 
+        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            for (int i = 0; i < num_paths(); i++)
-            {
-                graphics2D.Render(this, i, color(i).GetAsRGBA_Bytes());
-            }
+
+            var list = new System.Collections.Generic.List<VertexData>();
+            var vxs = this.MakeVxs();
+             
+            graphics2D.Render(new SinglePath(vxs, 0),
+                color(0).GetAsRGBA_Bytes());
             base.OnDraw(graphics2D);
         }
+
+       
+        public abstract VertexStorage MakeVxs();
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
+
     }
 }

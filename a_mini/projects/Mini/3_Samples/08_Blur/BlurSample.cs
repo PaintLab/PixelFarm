@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Sample_Blur
         //CheckBox m_channel_b;
         //CheckBox m_FlattenCurves;
 
-        IVertexSource m_path;
+        SinglePath m_path;
         FlattenCurves m_shape;
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
@@ -61,15 +61,16 @@ namespace MatterHackers.Agg.Sample_Blur
 
             m_sl = new ScanlinePacked8();
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
-            m_path = typeFaceForLargeA.GetGlyphForCharacter('a');
+            m_path = new SinglePath(typeFaceForLargeA.GetGlyphForCharacter('a'));
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             //shape_mtx *= Affine.NewTranslation(150, 100);
 
-            m_path = new VertexSourceApplyTransform(m_path, shape_mtx);
+            //m_path = new VertexSourceApplyTransform(m_path, shape_mtx).DoTransformToNewSinglePath();
+            m_path = shape_mtx.TransformToSinglePath(m_path.MakeVxs());
             m_shape = new FlattenCurves(m_path);
 
-            bounding_rect.bounding_rect_single(m_shape, 0, ref m_shape_bounds);
+            BoundingRect.GetBoundingRectSingle(new SinglePath(m_shape.MakeVxs()), ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
@@ -79,7 +80,7 @@ namespace MatterHackers.Agg.Sample_Blur
             m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
             m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
-            m_shadow_ctrl.line_color(new ColorRGBAf(0, 0.3, 0.5, 0.3));
+            m_shadow_ctrl.line_color(new ColorRGBAf(0, 0.3, 0.5, 0.3).GetAsRGBA_Bytes());
         }
 
         [DemoConfig]
@@ -150,36 +151,41 @@ namespace MatterHackers.Agg.Sample_Blur
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
-            clippingProxy.clear(ColorRGBA.White);
+            clippingProxy.Clear(ColorRGBA.White);
             m_ras.SetVectorClipBox(0, 0, Width, Height);
 
-            Affine move = Affine.NewTranslation(10, 10);
 
-            Perspective shadow_persp = new Perspective(m_shape_bounds.Left, m_shape_bounds.Bottom,
-                                                m_shape_bounds.Right, m_shape_bounds.Top,
-                                                m_shadow_ctrl.polygon());
 
-            IVertexSource shadow_trans;
+            Perspective shadow_persp = new Perspective(
+                            m_shape_bounds.Left, m_shape_bounds.Bottom,
+                            m_shape_bounds.Right, m_shape_bounds.Top,
+                            m_shadow_ctrl.polygon());
+
+
+            SinglePath spath;
             if (FlattenCurveCheck)
             {
-                shadow_trans = new VertexSourceApplyTransform(m_shape, shadow_persp);
+                var s2 = shadow_persp.TransformToVxs(m_shape.MakeVxs());
+                spath = new SinglePath(s2);
+                //shadow_trans = new VertexSourceApplyTransform(m_shape, shadow_persp);
             }
             else
             {
-                shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
-                // this will make it very smooth after the transform
-                //shadow_trans = new conv_curve(shadow_trans);
+                var s2 = shadow_persp.TransformToVxs(m_path.MakeVxs());
+                //shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
+                spath = new SinglePath(s2);
             }
+            // Render shadow 
+            //spath = shadow_trans.DoTransformToNewSinglePath();
+            m_ras.AddPath(spath);
 
 
-            // Render shadow
-            m_ras.add_path(shadow_trans);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).GetAsRGBA_Bytes());
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).GetAsRGBA_Bytes());
 
             // Calculate the bounding box and extend it by the blur radius
             RectangleDouble bbox = new RectangleDouble();
-            bounding_rect.bounding_rect_single(shadow_trans, 0, ref bbox);
+            BoundingRect.GetBoundingRectSingle(spath, ref bbox);
 
             double m_radius = this.BlurRadius;
 
@@ -224,7 +230,7 @@ namespace MatterHackers.Agg.Sample_Blur
                 if (boundsRect.clip(new RectangleInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
                 {
                     //check if intersect 
-                    ChildImage image2 = new ChildImage(widgetsSubImage, new BlenderBGRA(), x1, y2, x2, y1); 
+                    ChildImage image2 = new ChildImage(widgetsSubImage, new BlenderBGRA(), x1, y2, x2, y1);
                     // Blur it
                     switch (BlurMethod)
                     {
@@ -314,14 +320,15 @@ namespace MatterHackers.Agg.Sample_Blur
             //------------------
             if (FlattenCurveCheck)
             {
-                m_ras.add_path(m_shape);
+                m_ras.AddPath(m_shape.MakeVxs());
             }
             else
             {
-                m_ras.add_path(m_path);
+                m_ras.AddPath(m_path.MakeVxs());
             }
 
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.6, 0.9, 0.7, 0.8).GetAsRGBA_Bytes());
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl,
+                new ColorRGBAf(0.6, 0.9, 0.7, 0.8).GetAsRGBA_Bytes());
 
             graphics2D.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
 

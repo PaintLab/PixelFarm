@@ -24,13 +24,13 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
         public void draw(ScanlineRasterizer ras, IScanline sl, IImage destImage, ColorRGBA color,
                   double x, double y)
         {
-            ras.reset();
-            ras.move_to_d(x * m_size, y * m_size);
-            ras.line_to_d(x * m_size + m_size, y * m_size);
-            ras.line_to_d(x * m_size + m_size, y * m_size + m_size);
-            ras.line_to_d(x * m_size, y * m_size + m_size);
+            ras.Reset();
+            ras.MoveTo(x * m_size, y * m_size);
+            ras.LineTo(x * m_size + m_size, y * m_size);
+            ras.LineTo(x * m_size + m_size, y * m_size + m_size);
+            ras.LineTo(x * m_size, y * m_size + m_size);
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(destImage, ras, sl, color);
+            scanlineRenderer.RenderScanlineSolidAA(destImage, ras, sl, color);
         }
     }
 
@@ -133,7 +133,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            clippingProxyNormal.clear(ColorRGBA.White);
+            clippingProxyNormal.Clear(ColorRGBA.White);
             ScanlineRasterizer rasterizer = new ScanlineRasterizer();
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 
@@ -141,29 +141,32 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
             renderer_enlarged_test1 ren_en = new renderer_enlarged_test1(size_mul);
 
-            rasterizer.reset();
-            rasterizer.move_to_d(m_x[0] / size_mul, m_y[0] / size_mul);
-            rasterizer.line_to_d(m_x[1] / size_mul, m_y[1] / size_mul);
-            rasterizer.line_to_d(m_x[2] / size_mul, m_y[2] / size_mul);
-            ren_en.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            rasterizer.Reset();
+            rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
+            rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
+            rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
+            ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new gamma_none());
+
             //----------------------------------------
             PathStorage ps = new PathStorage();
-            Stroke pg = new Stroke(ps);
-            pg.width(2);
             ps.Clear();
             ps.MoveTo(m_x[0], m_y[0]);
             ps.LineTo(m_x[1], m_y[1]);
             ps.LineTo(m_x[2], m_y[2]);
             ps.LineTo(m_x[0], m_y[0]);
+            //----------------------------------------
+            //Stroke stroke = new Stroke(ps);
+            //stroke.Width = 2;
+            //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
+            rasterizer.AddPath(StrokeHelp.CreateStrokeVxs(ps.MakeSinglePath(), 2));
+            //----------------------------------------
 
-            rasterizer.add_path(pg);
-
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

@@ -64,7 +64,7 @@ namespace MatterHackers.Agg
     //------------------------------------------------------------------------
     public class VertexSequence : ArrayList<VertexDistance>
     {
-        public override void AddItem(VertexDistance val)
+        public override void AddVertex(VertexDistance val)
         {
             if (base.Count > 1)
             {
@@ -73,28 +73,30 @@ namespace MatterHackers.Agg
                     base.RemoveLast();
                 }
             }
-            base.AddItem(val);
+            base.AddVertex(val);
         }
 
-        public void modify_last(VertexDistance val)
+        public void ReplaceLast(VertexDistance val)
         {
             base.RemoveLast();
-            AddItem(val);
+            AddVertex(val);
         }
 
-        public void close(bool closed)
+        public void Close(bool closed)
         {
             int snapSize = base.Count;
+            var vtxArray = this.Array;
+
             while (snapSize > 1)
             {
-                if (Array[snapSize - 2].IsEqual(Array[snapSize - 1]))
+                if (vtxArray[snapSize - 2].IsEqual(vtxArray[snapSize - 1]))
                 {
                     break;
                 }
                 VertexDistance t = this[snapSize - 1];
                 base.RemoveLast();
                 snapSize--;
-                modify_last(t);
+                ReplaceLast(t);
             }
 
             if (closed)
@@ -146,10 +148,10 @@ namespace MatterHackers.Agg
         }
         public bool IsEqual(VertexDistance val)
         {
-            bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.vertex_dist_epsilon;
+            bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.VERTEX_DISTANCE_EPSILON;
             if (!ret)
             {
-                dist = 1.0 / AggMath.vertex_dist_epsilon;
+                dist = 1.0 / AggMath.VERTEX_DISTANCE_EPSILON;
             }
             return ret;
         }

@@ -117,11 +117,12 @@ namespace MatterHackers.Agg
         }
 
 
-        public abstract void Render(IVertexSource vertexSource, int pathIndexToRender, ColorRGBA colorBytes);
-
+       
+        public abstract void Render(IVertexSource vertexSource, ColorRGBA colorBytes);
+        public abstract void Render(SinglePath vertexSource, ColorRGBA colorBytes);
         public void Render(IImage imageSource, int x, int y)
         {
-            //base.Render(imageSource, x, y);
+            
             Render(imageSource, x, y, 0, 1, 1);
         }
 
@@ -135,27 +136,33 @@ namespace MatterHackers.Agg
             double angleRadians,
             double scaleX, double ScaleY);
 
-        public void Render(IVertexSource vertexSource, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
+        public void Render(VertexStorage vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)
             {
-                Render(vertexSource, pathIdArray[i], colorArray[i]);
+                //Render(vertexSource, pathIdArray[i], colorArray[i]);
+                Render(new SinglePath(vxStorage, pathIdArray[i]), colorArray[i]);
             }
         }
-
-        public void Render(IVertexSource vertexSource, ColorRGBA color)
+        public void Render(VertexStorage vxStorage, ColorRGBA c)
         {
-            Render(vertexSource, 0, color);
+            Render(new SinglePath(vxStorage, 0), c);
         }
-
-        public void Render(IVertexSource vertexSource, double x, double y, ColorRGBA color)
+        public void Render(SinglePath vertexSource, double x, double y, ColorRGBA color)
         {
-            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)), 0, color);
+            var inputVxs = vertexSource.MakeVxs();
+            var vxs = Affine.NewTranslation(x, y).TransformToSinglePath(inputVxs);
+            Render(vxs, color);
+
+            //Render(
+            //    new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)).DoTransformToNewSinglePath(), color);
         }
 
         public void Render(IVertexSource vertexSource, Vector2 position, ColorRGBA color)
         {
-            Render(new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(position.x, position.y)), 0, color);
+            var inputVxs = vertexSource.MakeVxs();
+            var vxs = Affine.NewTranslation(position.x, position.y).TransformToSinglePath(inputVxs);
+            Render(vxs, color);
         }
 
         public abstract void Clear(IColor color);
@@ -166,8 +173,9 @@ namespace MatterHackers.Agg
             m_LinesToDraw.Clear();
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);
-            Stroke StrockedLineToDraw = new Stroke(m_LinesToDraw);
-            Render(StrockedLineToDraw, color);
+
+             
+            Render(new Stroke(1).MakeVxs(m_LinesToDraw.MakeVxs()), color);
         }
 
         public abstract void SetClippingRect(RectangleDouble rect_d);

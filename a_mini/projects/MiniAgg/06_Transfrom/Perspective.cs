@@ -540,7 +540,7 @@ namespace MatterHackers.Agg.Transform
         public bool is_valid(double epsilon)
         {
             return Math.Abs(sx) > epsilon &&
-                Math.Abs(sy) > epsilon && 
+                Math.Abs(sy) > epsilon &&
                 Math.Abs(w2) > epsilon;
         }
 
@@ -616,6 +616,31 @@ namespace MatterHackers.Agg.Transform
         {
             x = Math.Sqrt(sx * sx + shx * shx);
             y = Math.Sqrt(shy * shy + sy * sy);
+        }
+
+        //-------------------------------------------------------------------------
+        public Agg.SinglePath TransformToSinglePath(Agg.VertexSource.PathStorage src)
+        {
+            return new SinglePath(TransformToVxs(src));
+        }
+        public Agg.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
+        {
+            return TransformToVxs(src.Vsx);
+        }
+        public Agg.VertexStorage TransformToVxs(Agg.VertexStorage src)
+        {
+            var data = new System.Collections.Generic.List<Agg.VertexData>();
+
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            int count = src.Count;
+            for (int i = 0; i < count; ++i)
+            {
+                cmd = src.GetVertex(i, out x, out y);
+                this.Transform(ref x, ref y);
+                data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
+            }
+            return new Agg.VertexStorage(data);
         }
     }
 }

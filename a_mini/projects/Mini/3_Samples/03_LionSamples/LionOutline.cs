@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
             "and when so called miter limit is exceded, they are not as accurate as generated " +
             "by the stroke converter (conv_stroke). To see the difference, maximize the window" +
             " and try to rotate and scale the �lion� with and without using the scanline " +
-            "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")] 
+            "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")]
     public class LionFillOutlineExample : DemoBase
     {
         lion_outline lionFill;
@@ -129,11 +129,11 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
             int strokeWidth = 1;
 
-            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA()); 
+            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
-            imageClippingProxy.clear(ColorRGBA.White);
+            imageClippingProxy.Clear(ColorRGBA.White);
 
-            Affine transform = Affine.NewMatix( 
+            Affine affTx = Affine.NewMatix(
                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                     AffinePlan.Scale(spriteScale, spriteScale),
                     AffinePlan.Rotate(angle + Math.PI),
@@ -150,29 +150,49 @@ namespace MatterHackers.Agg.Sample_LionOutline
             {
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
-                Stroke stroke = new Stroke(lionShape.Path);
-                stroke.width(strokeWidth);
-                stroke.line_join(LineJoin.Round);
-                VertexSourceApplyTransform trans = new VertexSourceApplyTransform(stroke, transform);
+                Stroke stroke = new Stroke(strokeWidth); 
+                stroke.LineJoin = LineJoin.Round;
+
+
+                var vxs = affTx.TransformToVxs(lionShape.Path);
+                
                 ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-                scanlineRenderer.RenderSolidAllPaths(imageClippingProxy, rasterizer, scanlineCache, trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+
+                // var vxs = trans.DoTransformToNewVxStorage();
+                scanlineRenderer.RenderSolidAllPaths(
+                    imageClippingProxy,
+                    rasterizer,
+                    scanlineCache,
+                    vxs ,
+                    lionShape.Colors,
+                    lionShape.PathIndexList,
+                    lionShape.NumPaths);
             }
             else
             {
-                double w = strokeWidth * transform.GetScale();
+                double w = strokeWidth * affTx.GetScale();
 
                 LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new gamma_none());
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
-                rasterizer_outline_aa rasterizer = new rasterizer_outline_aa(outlineRenderer);
+                OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
 
-                rasterizer.line_join(RenderAccurateJoins ?
-                    rasterizer_outline_aa.outline_aa_join_e.outline_miter_accurate_join
-                    : rasterizer_outline_aa.outline_aa_join_e.outline_round_join);
-                rasterizer.round_cap(true);
+                rasterizer.LineJoin = (RenderAccurateJoins ?
+                    OutlineAARasterizer.OutlineJoin.AccurateJoin
+                    : OutlineAARasterizer.OutlineJoin.Round);
+                rasterizer.RoundCap = true;
 
-                VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
+                //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
+                var vxs = affTx.TransformToVxs(lionShape.Path);// trans.DoTransformToNewVxStorage();
 
-                rasterizer.RenderAllPaths(trans, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+                int j = lionShape.NumPaths;
+                for (int i = 0; i < j; ++i)
+                {
+                    rasterizer.RenderSinglePath(
+                        new SinglePath(vxs,
+                            lionShape.PathIndexList[i]),
+                            lionShape.Colors[i]);
+                }
+
             }
 
             base.OnDraw(graphics2D);

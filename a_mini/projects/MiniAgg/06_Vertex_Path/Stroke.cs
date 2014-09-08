@@ -20,37 +20,141 @@
 // conv_stroke
 //
 //----------------------------------------------------------------------------
+using System.Collections.Generic;
 namespace MatterHackers.Agg.VertexSource
 {
-    public sealed class Stroke : VertexSourceAdapter
+    public sealed class Stroke
     {
-        public Stroke(IVertexSource vertexSource, double inWidth = 1)
-            : base(vertexSource, new StrokeGenerator())
+
+        StrokeGenerator strokeGen;
+        public Stroke(double inWidth)
         {
-            width(inWidth);
+            this.strokeGen = new StrokeGenerator();
+            this.Width = inWidth;
+        }
+        StrokeGenerator GetGenerator()
+        {
+            return this.strokeGen;
+        }
+        public LineCap LineCap
+        {
+            get { return this.GetGenerator().LineCap; }
+            set { this.GetGenerator().LineCap = value; }
+        }
+        public LineJoin LineJoin
+        {
+            get { return this.GetGenerator().LineJoin; }
+            set { this.GetGenerator().LineJoin = value; }
+        }
+        public InnerJoin InnerJoin
+        {
+            get { return this.GetGenerator().InnerJoin; }
+            set { this.GetGenerator().InnerJoin = value; }
+        }
+        public double MiterLimit
+        {
+            get { return this.GetGenerator().MiterLimit; }
+            set { this.GetGenerator().MiterLimit = value; }
+        }
+        public double InnerMiterLimit
+        {
+            get { return this.GetGenerator().InnerMiterLimit; }
+            set { this.GetGenerator().InnerMiterLimit = value; }
+        }
+        public double Width
+        {
+            get { return this.GetGenerator().Width; }
+            set { this.GetGenerator().Width = value; }
         }
 
-        public void line_cap(LineCap lc) { base.GetGenerator().line_cap(lc); }
-        public void line_join(LineJoin lj) { base.GetGenerator().line_join(lj); }
-        public void inner_join(InnerJoin ij) { base.GetGenerator().inner_join(ij); }
+        public void SetMiterLimitTheta(double t)
+        {
+            this.GetGenerator().SetMiterLimitTheta(t);
+        }
+        public double ApproximateScale
+        {
+            get { return this.GetGenerator().ApproximateScale; }
+            set { this.GetGenerator().ApproximateScale = value; }
+        }
+        public double Shorten
+        {
+            get { return this.GetGenerator().Shorten; }
+            set { this.GetGenerator().Shorten = value; }
+        }
+        public VertexStorage MakeVxs(VertexStorage vxs)
+        {
+            List<VertexData> list = new List<VertexData>();
+            StrokeGenerator generator = GetGenerator();
 
-        public LineCap line_cap() { return base.GetGenerator().line_cap(); }
-        public LineJoin line_join() { return base.GetGenerator().line_join(); }
-        public InnerJoin inner_join() { return base.GetGenerator().inner_join(); }
+            int j = vxs.Count;
+            double x, y;
 
-        public double Width { get { return width(); } set { width(value); } }
-        public void width(double w) { base.GetGenerator().width(w); }
-        public void miter_limit(double ml) { base.GetGenerator().miter_limit(ml); }
-        public void miter_limit_theta(double t) { base.GetGenerator().miter_limit_theta(t); }
-        public void inner_miter_limit(double ml) { base.GetGenerator().inner_miter_limit(ml); }
-        public void approximation_scale(double approxScale) { base.GetGenerator().approximation_scale(approxScale); }
+            generator.RemoveAll();
+            //1st vertex
 
-        public double width() { return base.GetGenerator().width(); }
-        public double miter_limit() { return base.GetGenerator().miter_limit(); }
-        public double inner_miter_limit() { return base.GetGenerator().inner_miter_limit(); }
-        public double approximation_scale() { return base.GetGenerator().approximation_scale(); }
+            vxs.GetVertex(0, out x, out y);
+            generator.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);
+            double startX = x, startY = y;
+            bool hasMoreThanOnePart = false;
+            for (int i = 0; i < j; ++i)
+            {
+                var cmd = vxs.GetVertex(i, out x, out y);
+                switch (ShapePath.FlagsAndCommand.CommandsMask & cmd)
+                {
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        {
 
-        public void shorten(double s) { base.GetGenerator().shorten(s); }
-        public double shorten() { return base.GetGenerator().shorten(); }
+                        } break;
+                    case ShapePath.FlagsAndCommand.CommandEndPoly:
+                        {
+                            generator.AddVertex(x, y, cmd);
+                            if (i < j - 2)
+                            {
+                                generator.AddVertex(startX, startY, ShapePath.FlagsAndCommand.CommandLineTo);
+                                generator.MakeVxs(list);
+                                generator.RemoveAll();
+                                hasMoreThanOnePart = true;
+                            }
+                            //end this polygon
+
+                        } break;
+                    case ShapePath.FlagsAndCommand.CommandLineTo:
+                    case ShapePath.FlagsAndCommand.CommandCurve3:
+                    case ShapePath.FlagsAndCommand.CommandCurve4:
+                        {
+
+                            generator.AddVertex(x, y, cmd);
+
+                        } break;
+                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        {
+                            generator.AddVertex(x, y, cmd);
+                            startX = x;
+                            startY = y;
+                        } break;
+                }
+            }
+
+
+            generator.MakeVxs(list);
+            generator.RemoveAll();
+            return new VertexStorage(list, hasMoreThanOnePart);
+
+        }
+
+
+    }
+    public static class StrokeHelp
+    {
+        public static VertexStorage MakeVxs2(VertexStorage vxs, double w)
+        {
+            Stroke stroke = new Stroke(w);
+            return stroke.MakeVxs(vxs);
+        }
+        public static VertexStorage CreateStrokeVxs(SinglePath p, double w)
+        {
+            Stroke stroke = new Stroke(w);
+            return stroke.MakeVxs(p.MakeVxs());
+        }
     }
 }

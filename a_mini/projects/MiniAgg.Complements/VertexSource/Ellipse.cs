@@ -28,16 +28,21 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    public class Ellipse : IVertexSource
+
+
+
+
+    public class Ellipse 
     {
         public double originX;
         public double originY;
         public double radiusX;
         public double radiusY;
-        private double m_scale;
-        private int numSteps;
-        private int m_step;
-        private bool m_cw;
+
+        double m_scale;
+        int numSteps;
+        int m_step;
+        bool m_cw;
 
         public Ellipse()
         {
@@ -60,7 +65,7 @@ namespace MatterHackers.Agg.VertexSource
             : this(origin.x, origin.y, RadiusX, RadiusY, num_steps, cw)
         {
         }
-        
+
         public Ellipse(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps = 0, bool cw = false)
         {
             this.originX = OriginX;
@@ -73,22 +78,22 @@ namespace MatterHackers.Agg.VertexSource
             m_cw = cw;
             if (numSteps == 0)
             {
-                calc_num_steps();
+                CalculateNumSteps();
             }
         }
 
-        public void init(double OriginX, double OriginY, double RadiusX, double RadiusY)
+        void Init(double OriginX, double OriginY, double RadiusX, double RadiusY)
         {
-            init(OriginX, OriginY, RadiusX, RadiusY, 0, false);
+            Init(OriginX, OriginY, RadiusX, RadiusY, 0, false);
         }
 
-        public void init(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps)
+        public void Reset(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps)
         {
-            init(OriginX, OriginY, RadiusX, RadiusY, num_steps, false);
+            Init(OriginX, OriginY, RadiusX, RadiusY, num_steps, false);
         }
 
-        public void init(double OriginX, double OriginY, double RadiusX, double RadiusY,
-                  int num_steps, bool cw)
+        void Init(double OriginX, double OriginY, double RadiusX, double RadiusY,
+                int num_steps, bool cw)
         {
             originX = OriginX;
             originY = OriginY;
@@ -99,17 +104,18 @@ namespace MatterHackers.Agg.VertexSource
             m_cw = cw;
             if (numSteps == 0)
             {
-                calc_num_steps();
+                CalculateNumSteps();
             }
         }
 
         public void approximation_scale(double scale)
-        {   
+        {
             m_scale = scale;
-            calc_num_steps();
+            CalculateNumSteps();
         }
 
-        public IEnumerable<VertexData> Vertices()
+      
+        public IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
             vertexData.command = FlagsAndCommand.CommandMoveTo;
@@ -120,7 +126,7 @@ namespace MatterHackers.Agg.VertexSource
             double anglePerStep = MathHelper.Tau / (double)numSteps;
             double angle = 0;
             vertexData.command = FlagsAndCommand.CommandLineTo;
-            for(int i=1; i<numSteps; i++)
+            for (int i = 1; i < numSteps; i++)
             {
                 angle += anglePerStep;
 
@@ -145,16 +151,12 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
         }
 
-        public void rewind(int path_id)
-        {
-            m_step = 0;
-        }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
-            if (m_step == numSteps) 
+            if (m_step == numSteps)
             {
                 ++m_step;
                 return FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
@@ -177,11 +179,32 @@ namespace MatterHackers.Agg.VertexSource
             return ((m_step == 1) ? FlagsAndCommand.CommandMoveTo : FlagsAndCommand.CommandLineTo);
         }
 
-        private void calc_num_steps()
+        void CalculateNumSteps()
         {
             double ra = (Math.Abs(radiusX) + Math.Abs(radiusY)) / 2;
             double da = Math.Acos(ra / (ra + 0.125 / m_scale)) * 2;
             numSteps = (int)Math.Round(2 * Math.PI / da);
         }
-    };
+
+        //-------------------------------------------------------
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(MakeVxs());
+        }
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> list = new List<VertexData>();
+            foreach (VertexData vx in this.GetVertexIter())
+            {
+                list.Add(vx);
+            }
+            return new VertexStorage(list);
+        }
+        //-------------------------------------------------------
+    }
+
+
+
+
+
 }

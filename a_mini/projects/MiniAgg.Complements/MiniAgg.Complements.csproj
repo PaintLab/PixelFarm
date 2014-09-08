@@ -43,13 +43,13 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
-    <Compile Include="agg_bounding_rect.cs" />
+    <Compile Include="BoundingRect.cs" />
     <Compile Include="Base\Queue.cs" />
-    <Compile Include="Base\ScanlineHitTest.cs" />
     <Compile Include="BorderDouble.cs" />
     <Compile Include="Base\agg_gamma_functions.cs" />
     <Compile Include="Base\ClipProxyImage.cs" />
     <Compile Include="Base\ProxyImage.cs" />
+    <Compile Include="Filter\agg_image_filters.cs" />
     <Compile Include="Filter\agg_pattern_filters_rgba.cs" />
     <Compile Include="Image\agg_alpha_mask_u8.cs" />
     <Compile Include="VertexSource\agg_span_gradient.cs" />
@@ -65,7 +65,6 @@
     <Compile Include="UnitTests2.cs" />
     <Compile Include="VertexSource\agg_bspline.cs" />
     <Compile Include="VertexSource\agg_curves.cs" />
-    <Compile Include="VertexSource\agg_gsv_text.cs" />
     <Compile Include="VertexSource\agg_span_gouraud.cs" />
     <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
     <Compile Include="VertexSource\agg_span_subdiv_adaptor.cs" />

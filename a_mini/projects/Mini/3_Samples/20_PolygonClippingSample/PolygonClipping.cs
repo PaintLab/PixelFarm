@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        PathStorage CombinePaths(IVertexSource a, IVertexSource b, ClipType clipType)
+        PathStorage CombinePaths(SinglePath a, SinglePath b, ClipType clipType)
         {
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
@@ -64,35 +64,58 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             foreach (List<IntPoint> polygon in intersectedPolys)
             {
                 bool first = true;
-                foreach (IntPoint point in polygon)
+                int j = polygon.Count;
+
+                if (j > 0)
                 {
-                    if (first)
+                    //first one
+                    IntPoint point = polygon[0];
+
+                    output.AddVertex(point.X / 1000.0,
+                        point.Y / 1000.0,
+                        ShapePath.FlagsAndCommand.CommandMoveTo);
+
+                    //next ...
+                    if (j > 1)
                     {
-                        output.Add(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
-                        first = false;
-                    }
-                    else
-                    {
-                        output.Add(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
+                        for (int i = 1; i < j; ++i)
+                        {
+                            point = polygon[i];
+                            output.AddVertex(point.X / 1000.0,
+                                point.Y / 1000.0,
+                                ShapePath.FlagsAndCommand.CommandLineTo);
+                        }
                     }
                 }
+                //foreach (IntPoint point in polygon)
+                //{
+                //    if (first)
+                //    {
+                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
+                //        first = false;
+                //    }
+                //    else
+                //    {
+                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
+                //    }
+                //}
 
                 output.ClosePolygon();
             }
 
-            output.Add(0, 0, ShapePath.FlagsAndCommand.CommandStop);
+            output.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandStop);
 
             return output;
         }
 
-        private static List<List<IntPoint>> CreatePolygons(IVertexSource a)
+        private static List<List<IntPoint>> CreatePolygons(SinglePath a)
         {
             List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
             List<IntPoint> currentPoly = null;
             VertexData last = new VertexData();
             VertexData first = new VertexData();
             bool addedFirst = false;
-            foreach (VertexData vertexData in a.Vertices())
+            foreach (VertexData vertexData in a.GetVertexIter())
             {
                 if (vertexData.IsLineTo)
                 {
@@ -200,7 +223,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         graphics2D.Render(ps1, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
                         graphics2D.Render(ps2, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, ps1, ps2);
+                        CreateAndRenderCombined(graphics2D, ps1.MakeSinglePath(), ps2.MakeSinglePath());
                     }
                     break;
 
@@ -211,11 +234,13 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //
                         PathStorage ps1 = new PathStorage();
                         PathStorage ps2 = new PathStorage();
-                        Stroke stroke = new Stroke(ps2);
-                        stroke.width(10.0);
+                        Stroke stroke = new Stroke(1);
 
+                        stroke.Width = 10;
                         double x = m_x - Width / 2 + 100;
                         double y = m_y - Height / 2 + 100;
+
+                        //-----------------------------------------
                         ps1.MoveTo(x + 140, y + 145);
                         ps1.LineTo(x + 225, y + 44);
                         ps1.LineTo(x + 296, y + 219);
@@ -227,7 +252,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps1.MoveTo(x + 220 - 50, y + 222);
                         ps1.LineTo(x + 265 - 50, y + 331);
                         ps1.LineTo(x + 363 - 50, y + 249);
-                        ps1.close_polygon(ShapePath.FlagsAndCommand.FlagCCW);
+                        ps1.ClosePolygonCCW();
+                        //-----------------------------------------
+
 
                         ps2.MoveTo(100 + 32, 100 + 77);
                         ps2.LineTo(100 + 473, 100 + 263);
@@ -236,9 +263,10 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.ClosePolygon();
 
                         graphics2D.Render(ps1, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
-                        graphics2D.Render(stroke, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, ps1, stroke);
+                        var vxs = ps2.MakeVxs();
+                        graphics2D.Render(stroke.MakeVxs(vxs), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        CreateAndRenderCombined(graphics2D, ps1.MakeSinglePath(), new SinglePath(vxs));
                     }
                     break;
 
@@ -257,8 +285,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //Affine mtx1 = Affine.NewIdentity();                        
                         //mtx1 *= Affine.NewTranslation(-1150, -1150);
                         //mtx1 *= Affine.NewScaling(2.0);
-                        Affine mtx1 = Affine.NewMatix( 
-                                AffinePlan.Translate(-1150,-1150),
+                        Affine mtx1 = Affine.NewMatix(
+                                AffinePlan.Translate(-1150, -1150),
                                 AffinePlan.Scale(2)
                              );
 
@@ -269,18 +297,20 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //mtx2 *= Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
                         Affine mtx2 = mtx1 * Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
 
-                        VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
-                        VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
+                        //VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
+                        //VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
+                        var trans_gb_poly = mtx1.TransformToVxs(gb_poly);
+                        var trans_arrows = mtx2.TransformToVxs(arrows);
 
                         graphics2D.Render(trans_gb_poly, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
 
-                        Stroke stroke_gb_poly = new Stroke(trans_gb_poly);
-                        stroke_gb_poly.Width = 0.1;
-                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
 
+
+                        //stroke_gb_poly.Width = 0.1;
+                        graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
                         graphics2D.Render(trans_arrows, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, trans_gb_poly, trans_arrows);
+                        CreateAndRenderCombined(graphics2D, new SinglePath(trans_gb_poly), new SinglePath(trans_arrows));
                     }
                     break;
 
@@ -290,27 +320,27 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         // Great Britain and a Spiral
                         //
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
-                        Stroke stroke = new Stroke(sp);
-                        stroke.width(15.0);
+
 
                         PathStorage gb_poly = new PathStorage();
                         MatterHackers.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
-                        Affine mtx = Affine.NewMatix( 
+                        Affine mtx = Affine.NewMatix(
                                 AffinePlan.Translate(-1150, -1150),
-                                AffinePlan.Scale(2) );
+                                AffinePlan.Scale(2));
 
-                        VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx);
 
-                        graphics2D.Render(trans_gb_poly, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
+                        var s1 = mtx.TransformToSinglePath(gb_poly);
+                        graphics2D.Render(s1, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
 
-                        Stroke stroke_gb_poly = new Stroke(trans_gb_poly);
-                        stroke_gb_poly.width(0.1);
-                        graphics2D.Render(stroke_gb_poly, new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
 
-                        graphics2D.Render(stroke, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, trans_gb_poly, stroke);
+                        graphics2D.Render(new Stroke(0.1).MakeVxs(s1.MakeVxs()), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
+
+                        var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs());
+                        graphics2D.Render(stroke_vxs, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
+
+                        CreateAndRenderCombined(graphics2D, s1, new SinglePath(stroke_vxs));
                     }
                     break;
 
@@ -320,79 +350,80 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         // Spiral and glyph
                         //
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
-                        Stroke stroke = new Stroke(sp);
-                        stroke.width(15.0);
+                        Stroke stroke = new Stroke(15);
+
 
                         PathStorage glyph = new PathStorage();
                         glyph.MoveTo(28.47, 6.45);
-                        glyph.curve3(21.58, 1.12, 19.82, 0.29);
-                        glyph.curve3(17.19, -0.93, 14.21, -0.93);
-                        glyph.curve3(9.57, -0.93, 6.57, 2.25);
-                        glyph.curve3(3.56, 5.42, 3.56, 10.60);
-                        glyph.curve3(3.56, 13.87, 5.03, 16.26);
-                        glyph.curve3(7.03, 19.58, 11.99, 22.51);
-                        glyph.curve3(16.94, 25.44, 28.47, 29.64);
+                        glyph.Curve3(21.58, 1.12, 19.82, 0.29);
+                        glyph.Curve3(17.19, -0.93, 14.21, -0.93);
+                        glyph.Curve3(9.57, -0.93, 6.57, 2.25);
+                        glyph.Curve3(3.56, 5.42, 3.56, 10.60);
+                        glyph.Curve3(3.56, 13.87, 5.03, 16.26);
+                        glyph.Curve3(7.03, 19.58, 11.99, 22.51);
+                        glyph.Curve3(16.94, 25.44, 28.47, 29.64);
                         glyph.LineTo(28.47, 31.40);
-                        glyph.curve3(28.47, 38.09, 26.34, 40.58);
-                        glyph.curve3(24.22, 43.07, 20.17, 43.07);
-                        glyph.curve3(17.09, 43.07, 15.28, 41.41);
-                        glyph.curve3(13.43, 39.75, 13.43, 37.60);
+                        glyph.Curve3(28.47, 38.09, 26.34, 40.58);
+                        glyph.Curve3(24.22, 43.07, 20.17, 43.07);
+                        glyph.Curve3(17.09, 43.07, 15.28, 41.41);
+                        glyph.Curve3(13.43, 39.75, 13.43, 37.60);
                         glyph.LineTo(13.53, 34.77);
-                        glyph.curve3(13.53, 32.52, 12.38, 31.30);
-                        glyph.curve3(11.23, 30.08, 9.38, 30.08);
-                        glyph.curve3(7.57, 30.08, 6.42, 31.35);
-                        glyph.curve3(5.27, 32.62, 5.27, 34.81);
-                        glyph.curve3(5.27, 39.01, 9.57, 42.53);
-                        glyph.curve3(13.87, 46.04, 21.63, 46.04);
-                        glyph.curve3(27.59, 46.04, 31.40, 44.04);
-                        glyph.curve3(34.28, 42.53, 35.64, 39.31);
-                        glyph.curve3(36.52, 37.21, 36.52, 30.71);
+                        glyph.Curve3(13.53, 32.52, 12.38, 31.30);
+                        glyph.Curve3(11.23, 30.08, 9.38, 30.08);
+                        glyph.Curve3(7.57, 30.08, 6.42, 31.35);
+                        glyph.Curve3(5.27, 32.62, 5.27, 34.81);
+                        glyph.Curve3(5.27, 39.01, 9.57, 42.53);
+                        glyph.Curve3(13.87, 46.04, 21.63, 46.04);
+                        glyph.Curve3(27.59, 46.04, 31.40, 44.04);
+                        glyph.Curve3(34.28, 42.53, 35.64, 39.31);
+                        glyph.Curve3(36.52, 37.21, 36.52, 30.71);
                         glyph.LineTo(36.52, 15.53);
-                        glyph.curve3(36.52, 9.13, 36.77, 7.69);
-                        glyph.curve3(37.01, 6.25, 37.57, 5.76);
-                        glyph.curve3(38.13, 5.27, 38.87, 5.27);
-                        glyph.curve3(39.65, 5.27, 40.23, 5.62);
-                        glyph.curve3(41.26, 6.25, 44.19, 9.18);
+                        glyph.Curve3(36.52, 9.13, 36.77, 7.69);
+                        glyph.Curve3(37.01, 6.25, 37.57, 5.76);
+                        glyph.Curve3(38.13, 5.27, 38.87, 5.27);
+                        glyph.Curve3(39.65, 5.27, 40.23, 5.62);
+                        glyph.Curve3(41.26, 6.25, 44.19, 9.18);
                         glyph.LineTo(44.19, 6.45);
-                        glyph.curve3(38.72, -0.88, 33.74, -0.88);
-                        glyph.curve3(31.35, -0.88, 29.93, 0.78);
-                        glyph.curve3(28.52, 2.44, 28.47, 6.45);
+                        glyph.Curve3(38.72, -0.88, 33.74, -0.88);
+                        glyph.Curve3(31.35, -0.88, 29.93, 0.78);
+                        glyph.Curve3(28.52, 2.44, 28.47, 6.45);
                         glyph.ClosePolygon();
 
                         glyph.MoveTo(28.47, 9.62);
                         glyph.LineTo(28.47, 26.66);
-                        glyph.curve3(21.09, 23.73, 18.95, 22.51);
-                        glyph.curve3(15.09, 20.36, 13.43, 18.02);
-                        glyph.curve3(11.77, 15.67, 11.77, 12.89);
-                        glyph.curve3(11.77, 9.38, 13.87, 7.06);
-                        glyph.curve3(15.97, 4.74, 18.70, 4.74);
-                        glyph.curve3(22.41, 4.74, 28.47, 9.62);
+                        glyph.Curve3(21.09, 23.73, 18.95, 22.51);
+                        glyph.Curve3(15.09, 20.36, 13.43, 18.02);
+                        glyph.Curve3(11.77, 15.67, 11.77, 12.89);
+                        glyph.Curve3(11.77, 9.38, 13.87, 7.06);
+                        glyph.Curve3(15.97, 4.74, 18.70, 4.74);
+                        glyph.Curve3(22.41, 4.74, 28.47, 9.62);
                         glyph.ClosePolygon();
 
                         //Affine mtx = Affine.NewIdentity();
                         //mtx *= Affine.NewScaling(4.0);
                         //mtx *= Affine.NewTranslation(220, 200);
-                        Affine mtx = Affine.NewMatix( 
+                        Affine mtx = Affine.NewMatix(
                             AffinePlan.Scale(4),
-                            AffinePlan.Translate(220, 200) );
+                            AffinePlan.Translate(220, 200));
 
-                        //mtx *= Affine.NewScaling(4.0);
-                        //mtx *= Affine.NewTranslation(220, 200);
+                        var t_glyph = mtx.TransformToSinglePath(glyph);
+                        FlattenCurves curve = new FlattenCurves(t_glyph);
 
-                        VertexSourceApplyTransform trans = new VertexSourceApplyTransform(glyph, mtx);
-                        FlattenCurves curve = new FlattenCurves(trans);
+                        var sp1 = stroke.MakeVxs(sp.MakeVxs());
 
-                        CreateAndRenderCombined(graphics2D, stroke, curve);
+                        var curveVxs = curve.MakeVxs();
+                        CreateAndRenderCombined(graphics2D, new SinglePath(sp1), new SinglePath(curveVxs));
 
-                        graphics2D.Render(stroke, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(stroke.MakeVxs(sp1), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
 
-                        graphics2D.Render(curve, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(curveVxs, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
                     }
                     break;
             }
         }
 
-        private void CreateAndRenderCombined(Graphics2D graphics2D, IVertexSource ps1, IVertexSource ps2)
+
+        void CreateAndRenderCombined(Graphics2D graphics2D, SinglePath ps1, SinglePath ps2)
         {
             PathStorage combined = null;
 
@@ -420,7 +451,6 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                 graphics2D.Render(combined, new ColorRGBAf(0.5, 0.0, 0, 0.5).GetAsRGBA_Bytes());
             }
         }
-
         public override void MouseDrag(int x, int y)
         {
             m_x = x;
@@ -507,19 +537,66 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_dr = m_step / 90.0;
         }
 
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotImplementedException();
+            //--------------
+            //rewind
+            m_angle = m_start_angle;
+            m_curr_r = m_r1;
+            m_start = true;
+            //--------------
+
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            for (; ; )
+            {
+                cmd = GetNextVertex(out x, out y);
+                switch (cmd)
+                {
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        {
+                            yield return new VertexData(cmd, new Vector2(x, y));
+                            yield break;
+                        }
+                    default:
+                        {
+                            yield return new VertexData(cmd, new Vector2(x, y));
+                        } break;
+                }
+            }
+
         }
 
-        public void rewind(int index)
+
+        public void RewindZero()
         {
             m_angle = m_start_angle;
             m_curr_r = m_r1;
             m_start = true;
         }
+        public VertexStorage MakeVxs()
+        {
+            VertexStorage vxs = new VertexStorage();
+            List<VertexData> list = new List<VertexData>();
+            foreach (var v in this.GetVertexIter())
+            {
+                list.Add(v);
+            }
+            return vxs;
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public bool IsDynamicVertexGen
+        {
+            get
+            {
+                return false;
+            }
+        }
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -546,19 +623,19 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         int m_contours;
         int m_points;
 
-        conv_poly_counter(IVertexSource src)
+        conv_poly_counter(SinglePath src)
         {
             m_contours = 0;
             m_points = 0;
 
-            foreach (VertexData vertexData in src.Vertices())
+            foreach (VertexData vertexData in src.GetVertexIter())
             {
                 if (ShapePath.IsVertextCommand(vertexData.command))
                 {
                     ++m_points;
                 }
 
-                if (ShapePath.is_move_to(vertexData.command))
+                if (ShapePath.IsMoveTo(vertexData.command))
                 {
                     ++m_contours;
                 }

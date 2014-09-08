@@ -55,17 +55,33 @@ namespace MatterHackers.Agg.UI
         public void close(bool f) { m_close = f; }
         public bool close() { return m_close; }
 
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotImplementedException();
+            this.RewindZero();
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            for (; ; )
+            {
+                cmd = GetNextVertex(out x, out y);
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    yield return new VertexData(cmd, x, y);
+                    yield break;
+                }
+                else
+                {
+                    yield return new VertexData(cmd, x, y);
+                }
+            }
         }
 
-        public void rewind(int idx)
+        public void RewindZero()
         {
             m_vertex = 0;
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -89,7 +105,29 @@ namespace MatterHackers.Agg.UI
             ++m_vertex;
             return (m_vertex == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
         }
-    };
+
+
+        public VertexStorage MakeVxs()
+        {
+            List<VertexData> vlist = new List<VertexData>();
+            this.RewindZero();
+            for (; ; )
+            {
+                double x, y;
+                var cmd = this.GetNextVertex(out x, out y);
+                vlist.Add(new VertexData(cmd, x, y));
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    break;
+                }
+            }
+            return new VertexStorage(vlist);
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.MakeVxs());
+        }
+    }
 
     public class polygon_ctrl_impl : UI.SimpleVertexSourceWidget
     {
@@ -121,13 +159,14 @@ namespace MatterHackers.Agg.UI
             m_node = (-1);
             m_edge = (-1);
             m_vs = new simple_polygon_vertex_source(m_polygon, m_num_points, false);
-            m_stroke = new Stroke(m_vs);
+            m_stroke = new Stroke(1);
             m_point_radius = (point_radius);
             m_status = (0);
             m_dx = (0.0);
             m_dy = (0.0);
             m_in_polygon_check = (true);
-            m_stroke.width(1.0);
+
+            m_stroke.Width = 1;
         }
 
         public override void OnParentChanged(EventArgs e)
@@ -140,18 +179,24 @@ namespace MatterHackers.Agg.UI
         }
 
         public int num_points() { return m_num_points; }
-        public double GetXN(int n) { return m_polygon[n * 2]; }
+        public double GetXN(int n) { return m_polygon[n << 1]; }
+        public double GetYN(int n) { return m_polygon[(n << 1) + 1]; }
+
         public void SetXN(int n, double newXN) { needToRecalculateBounds = true; m_polygon[n * 2] = newXN; }
         public void AddXN(int n, double newXN) { needToRecalculateBounds = true; m_polygon[n * 2] += newXN; }
 
-        public double GetYN(int n) { return m_polygon[n * 2 + 1]; }
+
         public void SetYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] = newYN; }
         public void AddYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] += newYN; }
 
         public double[] polygon() { return m_polygon; }
 
-        public void line_width(double w) { m_stroke.width(w); }
-        public double line_width() { return m_stroke.width(); }
+
+        public double LineWidth
+        {
+            get { return this.m_stroke.Width; }
+            set { this.m_stroke.Width = value; }
+        }
 
         public void point_radius(double r) { m_point_radius = r; }
         public double point_radius() { return m_point_radius; }
@@ -163,22 +208,35 @@ namespace MatterHackers.Agg.UI
         public bool close() { return m_vs.close(); }
 
         // Vertex source interface
-        public override IEnumerable<VertexData> Vertices()
+        public override IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotImplementedException();
+            this.RewindZero();
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            for (; ; )
+            {
+                cmd = this.GetNextVertex(out x, out y);
+                yield return new VertexData(cmd, x, y);
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    yield break;
+                }
+            }
+
         }
 
         public override int num_paths() { return 1; }
-        public override void rewind(int path_id)
+
+        public override void RewindZero()
         {
             if (needToRecalculateBounds)
             {
                 RecalculateBounds();
             }
             m_status = 0;
-            m_stroke.rewind(0);
-        }
 
+        }
+       
         void RecalculateBounds()
         {
             needToRecalculateBounds = false;
@@ -201,38 +259,156 @@ namespace MatterHackers.Agg.UI
 #endif
         }
 
-        public override ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public override VertexStorage MakeVxs()
         {
-            ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
-            double r = m_point_radius;
-            if (m_status == 0)
+            List<VertexData> vlist = new List<VertexData>();
+            this.RewindZero();
+            //this polygon control has  2 subcontrol
+            //stroke and ellipse 
+            var s_vxs = this.m_stroke.MakeVxs(this.m_vs.MakeVxs());
+            int j = s_vxs.Count;
+            double x, y;
+            for (int i = 0; i < j; ++i)
             {
-                cmd = m_stroke.vertex(out x, out y);
-                if (!ShapePath.is_stop(cmd))
+                var cmd = s_vxs.GetVertex(i, out x, out y);
+                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
                 {
-                    ParentToChildTransform.Transform(ref x, ref y);
-                    return cmd;
+                    break;
                 }
-                if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-                m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
-                ++m_status;
+                else
+                {
+                    vlist.Add(new VertexData(cmd, x, y));
+                }
             }
-            cmd = m_ellipse.vertex(out x, out y);
-            if (!ShapePath.is_stop(cmd))
-            {
-                ParentToChildTransform.Transform(ref x, ref y);
-                return cmd;
-            }
-            if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
+            //------------------------------------------------------------
+            //draw each polygon point
+            double r = m_point_radius;
+            
             if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-            m_ellipse.init(GetXN(m_status), GetYN(m_status), r, r, 32);
-            ++m_status;
-            cmd = m_ellipse.vertex(out x, out y);
-            if (!ShapePath.is_stop(cmd))
+
+            int n_count = m_polygon.Length / 2;
+            for (int m = 0; m < n_count; ++m)
             {
-                ParentToChildTransform.Transform(ref x, ref y);
+
+                m_ellipse.Reset(GetXN(m), GetYN(m), r, r, 32);
+                var ellipseVxs = m_ellipse.MakeVxs();
+                j = ellipseVxs.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    var cmd = ellipseVxs.GetVertex(i, out x, out y);
+                    if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                    {
+                        break;
+                    }
+                    vlist.Add(new VertexData(cmd, x, y));
+                }
+                m_status++;
             }
-            return cmd;
+            //------------------------------------------------------------
+
+            //close with stop
+            vlist.Add(new VertexData(ShapePath.FlagsAndCommand.CommandStop, 0, 0));
+            return new VertexStorage(vlist);
+        }
+        protected override RectangleDouble CalculateLocalBounds()
+        {
+            RectangleDouble localBounds = new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
+            this.RewindZero();
+            var vxs = this.MakeVxs();
+            int j = vxs.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                double x, y;
+                vxs.GetVertexXY(i, out x, out y);
+                localBounds.ExpandToInclude(x, y);
+            }
+            //double x;
+            //double y;
+            //ShapePath.FlagsAndCommand cmd;
+            //int numPoint = 0;
+            //while (!ShapePath.IsStop(cmd = GetNextVertex2(this.m_stroke, out x, out y)))
+            //{
+            //    numPoint++;
+            //    localBounds.ExpandToInclude(x, y);
+            //}
+
+            //if (numPoint == 0)
+            //{
+            //    localBounds = new RectangleDouble();
+            //}
+
+            return localBounds; throw new NotImplementedException();
+        }
+        //ShapePath.FlagsAndCommand GetNextVertex2(Stroke m_stroke, out double x, out double y)
+        //{
+        //    ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
+        //    double r = m_point_radius;
+        //    //1. stroke
+
+        //    if (m_status == 0)
+        //    {
+        //        cmd = m_stroke.GetNextVertex3(out x, out y);
+        //        if (cmd != ShapePath.FlagsAndCommand.CommandStop)
+        //        {
+        //            ParentToChildTransform.Transform(ref x, ref y);
+        //            return cmd;
+        //        }
+        //        if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
+        //        m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
+        //        ++m_status;
+        //    }
+        //    //2. ellipse
+        //    cmd = m_ellipse.GetNextVertex(out x, out y);
+        //    if (!ShapePath.IsStop(cmd))
+        //    {
+        //        ParentToChildTransform.Transform(ref x, ref y);
+        //        return cmd;
+        //    }
+        //    if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
+        //    if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
+        //    m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
+        //    ++m_status;
+        //    cmd = m_ellipse.GetNextVertex(out x, out y);
+        //    if (!ShapePath.IsStop(cmd))
+        //    {
+        //        ParentToChildTransform.Transform(ref x, ref y);
+        //    }
+        //    return cmd;
+        //}
+        public override ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        {
+            throw new NotSupportedException();
+
+            //ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
+            //double r = m_point_radius;
+            //if (m_status == 0)
+            //{
+            //    cmd = m_stroke.GetNextVertex3(out x, out y);
+            //    if (cmd != ShapePath.FlagsAndCommand.CommandStop)
+            //    {
+            //        ParentToChildTransform.Transform(ref x, ref y);
+            //        return cmd;
+            //    }
+            //    if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
+            //    m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
+            //    ++m_status;
+            //}
+            //cmd = m_ellipse.GetNextVertex(out x, out y);
+            //if (!ShapePath.IsStop(cmd))
+            //{
+            //    ParentToChildTransform.Transform(ref x, ref y);
+            //    return cmd;
+            //}
+            //if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
+            //if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
+            //m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
+            //++m_status;
+            //cmd = m_ellipse.GetNextVertex(out x, out y);
+            //if (!ShapePath.IsStop(cmd))
+            //{
+            //    ParentToChildTransform.Transform(ref x, ref y);
+            //}
+            //return cmd;
         }
 
         public override void OnMouseDown(MouseEventArgs mouseEvent)
@@ -503,10 +679,12 @@ namespace MatterHackers.Agg.UI
         public PolygonEditWidget(int np, double point_radius)
             : base(np, point_radius)
         {
-            m_color = new ColorRGBAf(0.0, 0.0, 0.0);
+            //m_color = new ColorRGBAf(0.0, 0.0, 0.0);
+            m_color = ColorRGBA.Black;
         }
 
         public void line_color(IColor c) { m_color = c; }
         public override IColor color(int i) { return m_color; }
-    };
+
+    }
 }

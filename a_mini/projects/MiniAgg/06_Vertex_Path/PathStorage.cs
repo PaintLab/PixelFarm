@@ -34,23 +34,33 @@ namespace MatterHackers.Agg.VertexSource
     //
     // See also: vertex_source concept
     //------------------------------------------------------------------------
-    public partial class PathStorage : IVertexSource, IVertexDest
-    {
-         
-        private VertexStorage vertices;
-        private int iteratorIndex;
 
+
+    public sealed class PathStorage : IVertexSource, IVertexDest
+    {
+        VertexStorage vertices;
+        int iteratorIndex;
         public PathStorage()
         {
             vertices = new VertexStorage();
         }
-
-        public void AddItem(Vector2 vertex)
+        public PathStorage(PathStorage pathStorageToShareFrom)
+        {
+            //for share
+            vertices = pathStorageToShareFrom.vertices;
+        }
+        internal VertexStorage Vsx
+        {
+            get
+            {
+                return this.vertices;
+            }
+        }
+        public void AddVertex(double x, double y)
         {
             throw new System.NotImplementedException();
         }
-
-        public void Add(double x, double y, ShapePath.FlagsAndCommand flagsAndCommand)
+        public void AddVertex(double x, double y, ShapePath.FlagsAndCommand flagsAndCommand)
         {
             vertices.AddVertex(x, y, flagsAndCommand);
         }
@@ -60,41 +70,37 @@ namespace MatterHackers.Agg.VertexSource
             get { return vertices.Count; }
         }
 
-        public Vector2 this[int i]
+        public void Clear()
         {
-            get
-            {
-
-                throw new NotImplementedException("make this work");
-            }
+            vertices.Clear();
+            iteratorIndex = 0;
         }
 
-        public void Clear() { vertices.remove_all(); iteratorIndex = 0; }
-        public void free_all() { vertices.free_all(); iteratorIndex = 0; }
-
-
-
-
+        public void ClearAll()
+        {
+            vertices.FreeAll();
+            iteratorIndex = 0;
+        }
 
         // Make path functions
         //--------------------------------------------------------------------
-        public int start_new_path()
+        public int StartNewPath()
         {
-            if (!ShapePath.is_stop(vertices.last_command()))
+            if (!ShapePath.IsStop(vertices.GetLastCommand()))
             {
                 vertices.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandStop);
             }
-            return vertices.total_vertices();
+            return vertices.Count;
         }
 
 
-        public void rel_to_abs(ref double x, ref double y)
+        public void RelToAbs(ref double x, ref double y)
         {
-            if (vertices.total_vertices() != 0)
+            if (vertices.Count != 0)
             {
                 double x2;
                 double y2;
-                if (ShapePath.IsVertextCommand(vertices.last_vertex(out x2, out y2)))
+                if (ShapePath.IsVertextCommand(vertices.GetLastVertex(out x2, out y2)))
                 {
                     x += x2;
                     y += y2;
@@ -187,8 +193,7 @@ namespace MatterHackers.Agg.VertexSource
         /// <param name="yControl"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void curve3(double xControl, double yControl,
-                                   double x, double y)
+        public void Curve3(double xControl, double yControl, double x, double y)
         {
             vertices.AddVertex(xControl, yControl, ShapePath.FlagsAndCommand.CommandCurve3);
             vertices.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve3);
@@ -201,10 +206,10 @@ namespace MatterHackers.Agg.VertexSource
         /// <param name="yControl"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void curve3_rel(double dx_ctrl, double dy_ctrl, double dx_to, double dy_to)
+        public void Curve3Rel(double dx_ctrl, double dy_ctrl, double dx_to, double dy_to)
         {
-            rel_to_abs(ref dx_ctrl, ref dy_ctrl);
-            rel_to_abs(ref dx_to, ref dy_to);
+            RelToAbs(ref dx_ctrl, ref dy_ctrl);
+            RelToAbs(ref dx_to, ref dy_to);
             vertices.AddVertex(dx_ctrl, dy_ctrl, ShapePath.FlagsAndCommand.CommandCurve3);
             vertices.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve3);
         }
@@ -216,16 +221,16 @@ namespace MatterHackers.Agg.VertexSource
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void curve3(double x, double y)
+        public void Curve3(double x, double y)
         {
             double x0;
             double y0;
-            if (ShapePath.IsVertextCommand(vertices.last_vertex(out x0, out y0)))
+            if (ShapePath.IsVertextCommand(vertices.GetLastVertex(out x0, out y0)))
             {
                 double x_ctrl;
                 double y_ctrl;
-                ShapePath.FlagsAndCommand cmd = vertices.prev_vertex(out x_ctrl, out y_ctrl);
-                if (ShapePath.is_curve(cmd))
+                ShapePath.FlagsAndCommand cmd = vertices.GetPrevVertex(out x_ctrl, out y_ctrl);
+                if (ShapePath.IsCurve(cmd))
                 {
                     x_ctrl = x0 + x0 - x_ctrl;
                     y_ctrl = y0 + y0 - y_ctrl;
@@ -235,7 +240,7 @@ namespace MatterHackers.Agg.VertexSource
                     x_ctrl = x0;
                     y_ctrl = y0;
                 }
-                curve3(x_ctrl, y_ctrl, x, y);
+                Curve3(x_ctrl, y_ctrl, x, y);
             }
         }
 
@@ -246,13 +251,13 @@ namespace MatterHackers.Agg.VertexSource
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void curve3_rel(double dx_to, double dy_to)
+        public void Curve3Rel(double dx_to, double dy_to)
         {
-            rel_to_abs(ref dx_to, ref dy_to);
-            curve3(dx_to, dy_to);
+            RelToAbs(ref dx_to, ref dy_to);
+            Curve3(dx_to, dy_to);
         }
 
-        public void curve4(double x_ctrl1, double y_ctrl1,
+        public void Curve4(double x_ctrl1, double y_ctrl1,
                                    double x_ctrl2, double y_ctrl2,
                                    double x_to, double y_to)
         {
@@ -261,29 +266,36 @@ namespace MatterHackers.Agg.VertexSource
             vertices.AddVertex(x_to, y_to, ShapePath.FlagsAndCommand.CommandCurve4);
         }
 
-        public void curve4_rel(double dx_ctrl1, double dy_ctrl1,
+        public void Curve4Rel(double dx_ctrl1, double dy_ctrl1,
                                        double dx_ctrl2, double dy_ctrl2,
                                        double dx_to, double dy_to)
         {
-            rel_to_abs(ref dx_ctrl1, ref dy_ctrl1);
-            rel_to_abs(ref dx_ctrl2, ref dy_ctrl2);
-            rel_to_abs(ref dx_to, ref dy_to);
+            RelToAbs(ref dx_ctrl1, ref dy_ctrl1);
+            RelToAbs(ref dx_ctrl2, ref dy_ctrl2);
+            RelToAbs(ref dx_to, ref dy_to);
             vertices.AddVertex(dx_ctrl1, dy_ctrl1, ShapePath.FlagsAndCommand.CommandCurve4);
             vertices.AddVertex(dx_ctrl2, dy_ctrl2, ShapePath.FlagsAndCommand.CommandCurve4);
             vertices.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve4);
         }
-
-        public void curve4(double x_ctrl2, double y_ctrl2,
-                                   double x_to, double y_to)
+        public VertexStorage MakeVxs()
+        {
+            return this.vertices;
+        }
+        public SinglePath MakeSinglePath()
+        {
+            return new SinglePath(this.vertices);
+        }
+        public void Curve4(double x_ctrl2, double y_ctrl2,
+                       double x_to, double y_to)
         {
             double x0;
             double y0;
-            if (ShapePath.IsVertextCommand(last_vertex(out x0, out y0)))
+            if (ShapePath.IsVertextCommand(GetLastVertex(out x0, out y0)))
             {
                 double x_ctrl1;
                 double y_ctrl1;
-                ShapePath.FlagsAndCommand cmd = prev_vertex(out x_ctrl1, out y_ctrl1);
-                if (ShapePath.is_curve(cmd))
+                ShapePath.FlagsAndCommand cmd = GetPrevVertex(out x_ctrl1, out y_ctrl1);
+                if (ShapePath.IsCurve(cmd))
                 {
                     x_ctrl1 = x0 + x0 - x_ctrl1;
                     y_ctrl1 = y0 + y0 - y_ctrl1;
@@ -293,289 +305,271 @@ namespace MatterHackers.Agg.VertexSource
                     x_ctrl1 = x0;
                     y_ctrl1 = y0;
                 }
-                curve4(x_ctrl1, y_ctrl1, x_ctrl2, y_ctrl2, x_to, y_to);
+                Curve4(x_ctrl1, y_ctrl1, x_ctrl2, y_ctrl2, x_to, y_to);
             }
         }
 
-        public void curve4_rel(double dx_ctrl2, double dy_ctrl2,
+        public void Curve4Rel(double dx_ctrl2, double dy_ctrl2,
                                        double dx_to, double dy_to)
         {
-            rel_to_abs(ref dx_ctrl2, ref dy_ctrl2);
-            rel_to_abs(ref dx_to, ref dy_to);
-            curve4(dx_ctrl2, dy_ctrl2, dx_to, dy_to);
+            RelToAbs(ref dx_ctrl2, ref dy_ctrl2);
+            RelToAbs(ref dx_to, ref dy_to);
+            Curve4(dx_ctrl2, dy_ctrl2, dx_to, dy_to);
         }
 
-        public int total_vertices()
+        ShapePath.FlagsAndCommand GetLastVertex(out double x, out double y)
         {
-            return vertices.total_vertices();
+            return vertices.GetLastVertex(out x, out y);
         }
 
-        public ShapePath.FlagsAndCommand last_vertex(out double x, out double y)
+        ShapePath.FlagsAndCommand GetPrevVertex(out double x, out double y)
         {
-            return vertices.last_vertex(out x, out y);
+            return vertices.GetPrevVertex(out x, out y);
         }
 
-        public ShapePath.FlagsAndCommand prev_vertex(out double x, out double y)
+        double GetLastX()
         {
-            return vertices.prev_vertex(out x, out y);
+            return vertices.GetLastX();
         }
 
-        public double GetLastX()
+        double GetLastY()
         {
-            return vertices.last_x();
+            return vertices.GetLastY();
         }
 
-        public double GetLastY()
+        
+        public IEnumerable<VertexData> GetVertexIter()
         {
-            return vertices.last_y();
-        }
-
-        public ShapePath.FlagsAndCommand vertex(int index, out double x, out double y)
-        {
-            return vertices.vertex(index, out x, out y);
-        }
-
-        public ShapePath.FlagsAndCommand command(int index)
-        {
-            return vertices.command(index);
-        }
-
-        public void modify_vertex(int index, double x, double y)
-        {
-            vertices.modify_vertex(index, x, y);
-        }
-
-        public void modify_vertex(int index, double x, double y, ShapePath.FlagsAndCommand PathAndFlags)
-        {
-            vertices.modify_vertex(index, x, y, PathAndFlags);
-        }
-
-        public void modify_command(int index, ShapePath.FlagsAndCommand PathAndFlags)
-        {
-            vertices.modify_command(index, PathAndFlags);
-        }
-
-        public IEnumerable<VertexData> Vertices()
-        {
-            int count = vertices.total_vertices();
+            int count = vertices.Count;
             for (int i = 0; i < count; i++)
             {
                 double x = 0;
                 double y = 0;
-                ShapePath.FlagsAndCommand command = vertices.vertex(i, out x, out y);
+                ShapePath.FlagsAndCommand command = vertices.GetVertex(i, out x, out y);
                 yield return new VertexData(command, new Vector2(x, y));
             }
-
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2(0, 0));
         }
-
-        public virtual void rewind(int pathId)
+        public void RewindZ()
         {
-            iteratorIndex = pathId;
+            iteratorIndex = 0;
         }
-
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            if (iteratorIndex >= vertices.total_vertices())
+            if (iteratorIndex >= vertices.Count)
             {
                 x = 0;
                 y = 0;
                 return ShapePath.FlagsAndCommand.CommandStop;
             }
-
-            return vertices.vertex(iteratorIndex++, out x, out y);
+            return vertices.GetVertex(iteratorIndex++, out x, out y);
         }
+        //----------------------------------------------------------------
 
         // Arrange the orientation of a polygon, all polygons in a path, 
         // or in all paths. After calling arrange_orientations() or 
         // arrange_orientations_all_paths(), all the polygons will have 
         // the same orientation, i.e. path_flags_cw or path_flags_ccw
         //--------------------------------------------------------------------
-        public int arrange_polygon_orientation(int start, ShapePath.FlagsAndCommand orientation)
+        int ArrangePolygonOrientation(int start, bool closewise)
         {
-            if (orientation == ShapePath.FlagsAndCommand.FlagNone) return start;
+            //if (orientation == ShapePath.FlagsAndCommand.FlagNone) return start;
 
             // Skip all non-vertices at the beginning
-            while (start < vertices.total_vertices() &&
-                  !ShapePath.IsVertextCommand(vertices.command(start))) ++start;
+            ShapePath.FlagsAndCommand orientFlags = closewise ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
+
+            int vcount = vertices.Count;
+            while (start < vcount &&
+                  !ShapePath.IsVertextCommand(vertices.GetCommand(start)))
+            {
+                ++start;
+            }
 
             // Skip all insignificant move_to
-            while (start + 1 < vertices.total_vertices() &&
-                  ShapePath.is_move_to(vertices.command(start)) &&
-                  ShapePath.is_move_to(vertices.command(start + 1))) ++start;
+            while (start + 1 < vcount &&
+                  ShapePath.IsMoveTo(vertices.GetCommand(start)) &&
+                  ShapePath.IsMoveTo(vertices.GetCommand(start + 1)))
+            {
+                ++start;
+            }
 
             // Find the last vertex
             int end = start + 1;
-            while (end < vertices.total_vertices() &&
-                  !ShapePath.is_next_poly(vertices.command(end))) ++end;
+            while (end < vcount &&
+                  !ShapePath.IsNextPoly(vertices.GetCommand(end)))
+            {
+                ++end;
+            }
+
 
             if (end - start > 2)
             {
-                if (perceive_polygon_orientation(start, end) != orientation)
+                if (PerceivePolygonOrientation(start, end) != orientFlags)
                 {
                     // Invert polygon, set orientation flag, and skip all end_poly
-                    invert_polygon(start, end);
-                    ShapePath.FlagsAndCommand PathAndFlags;
-                    while (end < vertices.total_vertices() &&
-                          ShapePath.is_end_poly(PathAndFlags = vertices.command(end)))
+                    InvertPolygon(start, end);
+                    ShapePath.FlagsAndCommand flags;
+                    while (end < vertices.Count &&
+                          ShapePath.IsEndPoly(flags = vertices.GetCommand(end)))
                     {
-                        vertices.modify_command(end++, PathAndFlags | orientation);// Path.set_orientation(cmd, orientation));
+                        vertices.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
                     }
                 }
             }
             return end;
         }
 
-        public int arrange_orientations(int start, ShapePath.FlagsAndCommand orientation)
+        int ArrangeOrientations(int start, bool closewise)
         {
-            if (orientation != ShapePath.FlagsAndCommand.FlagNone)
+
+            while (start < vertices.Count)
             {
-                while (start < vertices.total_vertices())
+                start = ArrangePolygonOrientation(start, closewise);
+                if (ShapePath.IsStop(vertices.GetCommand(start)))
                 {
-                    start = arrange_polygon_orientation(start, orientation);
-                    if (ShapePath.is_stop(vertices.command(start)))
-                    {
-                        ++start;
-                        break;
-                    }
+                    ++start;
+                    break;
                 }
             }
+
             return start;
         }
 
-        public void arrange_orientations_all_paths(ShapePath.FlagsAndCommand orientation)
+        public void ArrangeOrientationsAll(bool closewise)
         {
-            if (orientation != ShapePath.FlagsAndCommand.FlagNone)
+            int start = 0;
+            while (start < vertices.Count)
             {
-                int start = 0;
-                while (start < vertices.total_vertices())
-                {
-                    start = arrange_orientations(start, orientation);
-                }
+                start = ArrangeOrientations(start, closewise);
             }
         }
+
+
+        //public void ArrangeOrientationsAll(ShapePath.FlagsAndCommand orientation)
+        //{
+        //    if (orientation != ShapePath.FlagsAndCommand.FlagNone)
+        //    {
+
+        //    }
+        //}
 
         // Flip all vertices horizontally or vertically, 
         // between x1 and x2, or between y1 and y2 respectively
         //--------------------------------------------------------------------
-        public void flip_x(double x1, double x2)
+        public void FlipX(double x1, double x2)
         {
             int i;
             double x, y;
-            for (i = 0; i < vertices.total_vertices(); i++)
+            int count = this.vertices.Count;
+            for (i = 0; i < count; ++i)
             {
-                ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(i, out x, out y);
-                if (ShapePath.IsVertextCommand(PathAndFlags))
+                ShapePath.FlagsAndCommand flags = vertices.GetVertex(i, out x, out y);
+                if (ShapePath.IsVertextCommand(flags))
                 {
-                    vertices.modify_vertex(i, x2 - x + x1, y);
+                    vertices.ReplaceVertex(i, x2 - x + x1, y);
                 }
             }
         }
 
-        public void flip_y(double y1, double y2)
+        public void FlipY(double y1, double y2)
         {
             int i;
             double x, y;
-            for (i = 0; i < vertices.total_vertices(); i++)
+            int count = this.vertices.Count;
+            for (i = 0; i < count; ++i)
             {
-                ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(i, out x, out y);
-                if (ShapePath.IsVertextCommand(PathAndFlags))
+                ShapePath.FlagsAndCommand flags = vertices.GetVertex(i, out x, out y);
+                if (ShapePath.IsVertextCommand(flags))
                 {
-                    vertices.modify_vertex(i, x, y2 - y + y1);
+                    vertices.ReplaceVertex(i, x, y2 - y + y1);
                 }
             }
         }
-
-        public void end_poly()
-        {
-            close_polygon(ShapePath.FlagsAndCommand.FlagClose);
-        }
-
-        public void end_poly(ShapePath.FlagsAndCommand flags)
-        {
-            if (ShapePath.IsVertextCommand(vertices.last_command()))
-            {
-                vertices.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandEndPoly | flags);
-            }
-        }
-
-
         public void ClosePolygon()
         {
-            close_polygon(ShapePath.FlagsAndCommand.FlagNone);
+            ClosePolygon(ShapePath.FlagsAndCommand.FlagNone);
         }
-
-        public void close_polygon(ShapePath.FlagsAndCommand flags)
+        public void ClosePolygonCCW()
         {
-            end_poly(ShapePath.FlagsAndCommand.FlagClose | flags);
+            ClosePolygon(ShapePath.FlagsAndCommand.FlagCCW);
         }
-
-        // Concatenate path. The path is added as is.
-        public void concat_path(IVertexSource vs)
+        void ClosePolygon(ShapePath.FlagsAndCommand flags)
         {
-            concat_path(vs, 0);
-        }
+            var flags2 = flags | ShapePath.FlagsAndCommand.FlagClose;
 
-        public void concat_path(IVertexSource vs, int path_id)
-        {
-            double x, y;
-            ShapePath.FlagsAndCommand PathAndFlags;
-            vs.rewind(path_id);
-            while (!ShapePath.is_stop(PathAndFlags = vs.vertex(out x, out y)))
+            if (ShapePath.IsVertextCommand(vertices.GetLastCommand()))
             {
-                vertices.AddVertex(x, y, PathAndFlags);
+                vertices.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandEndPoly | flags2);
             }
         }
 
+        //// Concatenate path. The path is added as is.
+
+
+        public void ConcatPath(SinglePath s)
+        {
+            double x, y;
+            ShapePath.FlagsAndCommand cmd_flags;
+            s.RewindZ();
+            while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            {
+                vertices.AddVertex(x, y, cmd_flags);
+            }
+        }
         //--------------------------------------------------------------------
         // Join path. The path is joined with the existing one, that is, 
         // it behaves as if the pen of a plotter was always down (drawing)
-        //template<class VertexSource> 
-        public void join_path(PathStorage vs)
-        {
-            join_path(vs, 0);
-
-        }
-
-        public void join_path(PathStorage vs, int path_id)
+        //template<class VertexSource>  
+        public void JoinPath(SinglePath s)
         {
             double x, y;
-            vs.rewind(path_id);
-            ShapePath.FlagsAndCommand PathAndFlags = vs.vertex(out x, out y);
-            if (!ShapePath.is_stop(PathAndFlags))
+            s.RewindZ();
+            ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
+            if (cmd == ShapePath.FlagsAndCommand.CommandStop)
             {
-                if (ShapePath.IsVertextCommand(PathAndFlags))
+                return;
+            }
+
+            if (ShapePath.IsVertextCommand(cmd))
+            {
+                double x0, y0;
+                ShapePath.FlagsAndCommand flags0 = GetLastVertex(out x0, out y0);
+
+                if (ShapePath.IsVertextCommand(flags0))
                 {
-                    double x0, y0;
-                    ShapePath.FlagsAndCommand PathAndFlags0 = last_vertex(out x0, out y0);
-                    if (ShapePath.IsVertextCommand(PathAndFlags0))
+                    if (AggMath.calc_distance(x, y, x0, y0) > AggMath.VERTEX_DISTANCE_EPSILON)
                     {
-                        if (AggMath.calc_distance(x, y, x0, y0) > AggMath.vertex_dist_epsilon)
+                        if (ShapePath.IsMoveTo(cmd))
                         {
-                            if (ShapePath.is_move_to(PathAndFlags)) PathAndFlags = ShapePath.FlagsAndCommand.CommandLineTo;
-                            vertices.AddVertex(x, y, PathAndFlags);
+                            cmd = ShapePath.FlagsAndCommand.CommandLineTo;
                         }
+                        vertices.AddVertex(x, y, cmd);
+                    }
+                }
+                else
+                {
+                    if (ShapePath.IsStop(flags0))
+                    {
+                        cmd = ShapePath.FlagsAndCommand.CommandMoveTo;
                     }
                     else
                     {
-                        if (ShapePath.is_stop(PathAndFlags0))
+                        if (ShapePath.IsMoveTo(cmd))
                         {
-                            PathAndFlags = ShapePath.FlagsAndCommand.CommandMoveTo;
+                            cmd = ShapePath.FlagsAndCommand.CommandLineTo;
                         }
-                        else
-                        {
-                            if (ShapePath.is_move_to(PathAndFlags)) PathAndFlags = ShapePath.FlagsAndCommand.CommandLineTo;
-                        }
-                        vertices.AddVertex(x, y, PathAndFlags);
                     }
-                }
-                while (!ShapePath.is_stop(PathAndFlags = vs.vertex(out x, out y)))
-                {
-                    vertices.AddVertex(x, y, ShapePath.is_move_to(PathAndFlags) ?
-                                                    ShapePath.FlagsAndCommand.CommandLineTo :
-                                                    PathAndFlags);
+                    vertices.AddVertex(x, y, cmd);
                 }
             }
+
+            while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            {
+                vertices.AddVertex(x, y, ShapePath.IsMoveTo(cmd) ?
+                                      ShapePath.FlagsAndCommand.CommandLineTo :
+                                                cmd);
+            }
+
         }
 
         /*
@@ -595,104 +589,100 @@ namespace MatterHackers.Agg.VertexSource
             join_path(poly);
         }
          */
-
         //--------------------------------------------------------------------
-        public void translate(double dx, double dy)
-        {
-            translate(dx, dy, 0);
-        }
 
-        public void translate(double dx, double dy, int path_id)
-        {
-            int num_ver = vertices.total_vertices();
-            for (; path_id < num_ver; path_id++)
-            {
-                double x, y;
-                ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(path_id, out x, out y);
-                if (ShapePath.is_stop(PathAndFlags)) break;
-                if (ShapePath.IsVertextCommand(PathAndFlags))
-                {
-                    x += dx;
-                    y += dy;
-                    vertices.modify_vertex(path_id, x, y);
-                }
-            }
-        }
 
-        public void translate_all_paths(double dx, double dy)
+        //public void Translate(double dx, double dy, int path_id)
+        //{
+        //    int num_ver = vertices.Count;
+        //    for (; path_id < num_ver; path_id++)
+        //    {
+        //        double x, y;
+        //        ShapePath.FlagsAndCommand flags = this.vertices.GetVertex(path_id, out x, out y);
+        //        if (ShapePath.IsStop(flags)) break;
+        //        if (ShapePath.IsVertextCommand(flags))
+        //        {
+        //            x += dx;
+        //            y += dy;
+        //            vertices.ReplaceVertex(path_id, x, y);
+        //        }
+        //    }
+        //}
+
+        public void TranslateAll(double dx, double dy)
         {
             int index;
-            int num_ver = vertices.total_vertices();
+            int num_ver = vertices.Count;
             for (index = 0; index < num_ver; index++)
             {
                 double x, y;
-                if (ShapePath.IsVertextCommand(vertices.vertex(index, out x, out y)))
+                if (ShapePath.IsVertextCommand(vertices.GetVertex(index, out x, out y)))
                 {
                     x += dx;
                     y += dy;
-                    vertices.modify_vertex(index, x, y);
+                    vertices.ReplaceVertex(index, x, y);
                 }
             }
         }
 
         //--------------------------------------------------------------------
-        public void transform(Transform.Affine trans)
-        {
-            transform(trans, 0);
-        }
 
-        public void transform(Transform.Affine trans, int path_id)
-        {
-            int num_ver = vertices.total_vertices();
-            for (; path_id < num_ver; path_id++)
-            {
-                double x, y;
-                ShapePath.FlagsAndCommand PathAndFlags = vertices.vertex(path_id, out x, out y);
-                if (ShapePath.is_stop(PathAndFlags)) break;
-                if (ShapePath.IsVertextCommand(PathAndFlags))
-                {
-                    trans.Transform(ref x, ref y);
-                    vertices.modify_vertex(path_id, x, y);
-                }
-            }
-        }
+
+        //public void Transform(Transform.Affine trans, int path_id)
+        //{
+        //    int num_ver = vertices.Count;
+        //    for (; path_id < num_ver; path_id++)
+        //    {
+        //        double x, y;
+        //        ShapePath.FlagsAndCommand cmd = vertices.GetVertex(path_id, out x, out y);
+        //        if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+        //        {
+        //            break;
+        //        }
+        //        if (ShapePath.IsVertextCommand(cmd))
+        //        {
+        //            trans.Transform(ref x, ref y);
+        //            vertices.ReplaceVertex(path_id, x, y);
+        //        }
+        //    }
+        //}
 
         //--------------------------------------------------------------------
-        public void transform_all_paths(Transform.Affine trans)
+        public void TransformAll(Transform.Affine trans)
         {
             int index;
-            int num_ver = vertices.total_vertices();
+            int num_ver = vertices.Count;
             for (index = 0; index < num_ver; index++)
             {
                 double x, y;
-                if (ShapePath.IsVertextCommand(vertices.vertex(index, out x, out y)))
+                if (ShapePath.IsVertextCommand(vertices.GetVertex(index, out x, out y)))
                 {
                     trans.Transform(ref x, ref y);
-                    vertices.modify_vertex(index, x, y);
+                    vertices.ReplaceVertex(index, x, y);
                 }
             }
         }
 
-        public void invert_polygon(int start)
+        public void InvertPolygon(int start)
         {
             // Skip all non-vertices at the beginning
-            while (start < vertices.total_vertices() &&
-                  !ShapePath.IsVertextCommand(vertices.command(start))) ++start;
+            while (start < vertices.Count &&
+                  !ShapePath.IsVertextCommand(vertices.GetCommand(start))) ++start;
 
             // Skip all insignificant move_to
-            while (start + 1 < vertices.total_vertices() &&
-                  ShapePath.is_move_to(vertices.command(start)) &&
-                  ShapePath.is_move_to(vertices.command(start + 1))) ++start;
+            while (start + 1 < vertices.Count &&
+                  ShapePath.IsMoveTo(vertices.GetCommand(start)) &&
+                  ShapePath.IsMoveTo(vertices.GetCommand(start + 1))) ++start;
 
             // Find the last vertex
             int end = start + 1;
-            while (end < vertices.total_vertices() &&
-                  !ShapePath.is_next_poly(vertices.command(end))) ++end;
+            while (end < vertices.Count &&
+                  !ShapePath.IsNextPoly(vertices.GetCommand(end))) ++end;
 
-            invert_polygon(start, end);
+            InvertPolygon(start, end);
         }
 
-        private ShapePath.FlagsAndCommand perceive_polygon_orientation(int start, int end)
+        ShapePath.FlagsAndCommand PerceivePolygonOrientation(int start, int end)
         {
             // Calculate signed area (double area to be exact)
             //---------------------
@@ -702,39 +692,34 @@ namespace MatterHackers.Agg.VertexSource
             for (i = 0; i < np; i++)
             {
                 double x1, y1, x2, y2;
-                vertices.vertex(start + i, out x1, out y1);
-                vertices.vertex(start + (i + 1) % np, out x2, out y2);
+                vertices.GetVertexXY(start + i, out x1, out y1);
+                vertices.GetVertexXY(start + (i + 1) % np, out x2, out y2);
                 area += x1 * y2 - y1 * x2;
             }
             return (area < 0.0) ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
         }
 
-        private void invert_polygon(int start, int end)
+        void InvertPolygon(int start, int end)
         {
             int i;
-            ShapePath.FlagsAndCommand tmp_PathAndFlags = vertices.command(start);
+            ShapePath.FlagsAndCommand tmp_PathAndFlags = vertices.GetCommand(start);
 
             --end; // Make "end" inclusive
 
             // Shift all commands to one position
             for (i = start; i < end; i++)
             {
-                vertices.modify_command(i, vertices.command(i + 1));
+                vertices.ReplaceCommand(i, vertices.GetCommand(i + 1));
             }
 
             // Assign starting command to the ending command
-            vertices.modify_command(end, tmp_PathAndFlags);
+            vertices.ReplaceCommand(end, tmp_PathAndFlags);
 
             // Reverse the polygon
             while (end > start)
             {
-                vertices.swap_vertices(start++, end--);
+                vertices.SwapVertices(start++, end--);
             }
-        }
-
-        public void ShareVertexData(PathStorage pathStorageToShareFrom)
-        {
-            vertices = pathStorageToShareFrom.vertices;
         }
 
 

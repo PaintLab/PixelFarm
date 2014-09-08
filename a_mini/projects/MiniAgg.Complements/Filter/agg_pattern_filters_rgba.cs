@@ -20,18 +20,22 @@ using MatterHackers.Agg.Image;
 
 namespace MatterHackers.Agg
 {
-    
+
 
     public struct pattern_filter_bilinear_RGBA_Bytes : IPatternFilter
     {
-        public int dilation() { return 1; }
+        public int Dilation { get { return 1; } }
 
-        public void pixel_low_res(ColorRGBA[][] buf, ColorRGBA[] p, int offset, int x, int y)
+        public void SetPixelLowRes(ColorRGBA[][] buf, ColorRGBA[] p, int offset, int x, int y)
         {
             p[offset] = buf[y][x];
         }
 
-        public void pixel_high_res(ImageBase sourceImage, ColorRGBA[] destBuffer, int destBufferOffset, int x, int y)
+        public void SetPixelHighRes(ImageBase sourceImage, 
+            ColorRGBA[] destBuffer,
+            int destBufferOffset, 
+            int x, 
+            int y)
         {
             int r, g, b, a;
             r = g = b = a = LineAABasics.SUBPIXEL_SCALE * LineAABasics.SUBPIXEL_SCALE / 2;
@@ -81,5 +85,5 @@ namespace MatterHackers.Agg
             destBuffer[destBufferOffset].blue = (byte)(b >> LineAABasics.SUBPIXEL_SHIFT * 2);
             destBuffer[destBufferOffset].alpha = (byte)(a >> LineAABasics.SUBPIXEL_SHIFT * 2);
         }
-    };
+    } 
 }

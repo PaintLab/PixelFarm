@@ -113,18 +113,18 @@ namespace MatterHackers.Agg.Sample_RoundRect
 
             IImage backBuffer = widgetsSubImage;
 
-            GammaLookUpTable gamma = new GammaLookUpTable(this.Gamma);
-            IRecieveBlenderByte NormalBlender = new BlenderBGRA();
-            IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
-            var rasterNormal = new ChildImage(backBuffer, NormalBlender); 
-            var rasterGamma = new ChildImage(backBuffer, GammaBlender); 
-            ClipProxyImage clippingProxyNormal = new ClipProxyImage(rasterNormal);
-            ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            clippingProxyNormal.clear(this.WhiteOnBlack ? new ColorRGBAf(0, 0, 0) : new ColorRGBAf(1, 1, 1));
+            var normalBlender = new BlenderBGRA();
+            var gammaBlender = new BlenderGammaBGRA(this.Gamma);
+            var rasterNormal = new ChildImage(backBuffer, normalBlender);
+            var rasterGamma = new ChildImage(backBuffer, gammaBlender);
+            var clippingProxyNormal = new ClipProxyImage(rasterNormal);
+            var clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            ScanlineRasterizer ras = new ScanlineRasterizer();
-            ScanlinePacked8 sl = new ScanlinePacked8();
+            clippingProxyNormal.Clear(this.WhiteOnBlack ? new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes() : new ColorRGBAf(1, 1, 1).GetAsRGBA_Bytes());
+
+            var ras = new ScanlineRasterizer();
+            var sl = new ScanlinePacked8();
 
             VertexSource.Ellipse e = new VertexSource.Ellipse();
 
@@ -133,31 +133,32 @@ namespace MatterHackers.Agg.Sample_RoundRect
             //ras.clip_box(0, 0, width(), height());
 
             // Render two "control" circles
-            e.init(m_x[0], m_y[0], 3, 3, 16);
-            ras.add_path(e);
+            e.Reset(m_x[0], m_y[0], 3, 3, 16);
+            ras.AddPath(e.MakeSinglePath());
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
-            e.init(m_x[1], m_y[1], 3, 3, 16);
-            ras.add_path(e);
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+
+            e.Reset(m_x[1], m_y[1], 3, 3, 16);
+            ras.AddPath(e.MakeSinglePath());
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+
 
             double d = this.SubPixelOffset;
-           
+
             // Creating a rounded rectangle
             VertexSource.RoundedRect r = new VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d,
                 this.Radius);
             r.normalize_radius();
             if (this.FillRoundRect)
             {
-                Stroke p = new Stroke(r);
-                p.width(1.0);
-                ras.add_path(p);
+               
+                ras.AddPath(new Stroke(1).MakeVxs(r.MakeVxs()));
             }
             else
             {
-                ras.add_path(r);
+                ras.AddPath(r.MakeVxs());
             }
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
+            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
 
 
         }
@@ -186,8 +187,8 @@ namespace MatterHackers.Agg.Sample_RoundRect
         {
             m_idx = -1;
 
-        } 
-         
+        }
+
     }
- 
+
 }

@@ -95,7 +95,7 @@ namespace MatterHackers.Agg.Image
         public int bounding_xmax() { return m_ClippingRect.Right; }
         public int bounding_ymax() { return m_ClippingRect.Top; }
 
-        public void clear(IColor in_c)
+        public void Clear(IColor in_c)
         {
 
             ColorRGBA c = ColorRGBA.Make(in_c.Red0To255, in_c.Green0To255, in_c.Blue0To255, in_c.Alpha0To255);

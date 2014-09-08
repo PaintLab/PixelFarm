@@ -19,41 +19,45 @@
 using System.Collections.Generic;
 using MatterHackers.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace MatterHackers.Agg
 {
     public struct VertexData
     {
         public ShapePath.FlagsAndCommand command;
         public Vector2 position;
-
         public VertexData(ShapePath.FlagsAndCommand command, Vector2 position)
         {
             this.command = command;
             this.position = position;
         }
-
-
+        public VertexData(ShapePath.FlagsAndCommand command, double x, double y)
+        {
+            this.command = command;
+            this.position = new Vector2(x, y);
+        }
         public bool IsMoveTo
         {
-            get { return ShapePath.is_move_to(command); }
+            get { return command == ShapePath.FlagsAndCommand.CommandMoveTo; }
         }
 
         public bool IsLineTo
         {
-            get { return ShapePath.is_line_to(command); }
+            get { return command == ShapePath.FlagsAndCommand.CommandLineTo; }
         }
+#if DEBUG
+        public override string ToString()
+        {
+            return command + " " + this.position.x + "," + this.position.y;
+        }
+#endif
     }
 
     public interface IVertexSource
-    {
-        IEnumerable<VertexData> Vertices();
-
-        void rewind(int pathId = 0); // for a PathStorage this is the vertex index.
-        ShapePath.FlagsAndCommand vertex(out double x, out double y);
+    {   
+        VertexStorage MakeVxs();
+        SinglePath MakeSinglePath();
     }
 
-    public interface IVertexSourceProxy : IVertexSource
-    {
-        IVertexSource VertexSource { get; set; }
-    }
+
+
 }
