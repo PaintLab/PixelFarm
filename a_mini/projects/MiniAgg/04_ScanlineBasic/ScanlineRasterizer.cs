@@ -308,7 +308,7 @@ namespace MatterHackers.Agg
             double y = 0;
 
 
-            spath.RewindZ();
+            spath.RewindZero();
             if (m_outline.Sorted)
             {
                 Reset();

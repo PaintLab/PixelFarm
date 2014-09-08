@@ -510,7 +510,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
-            s.RewindZ();
+            s.RewindZero();
             while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, cmd_flags);
@@ -523,7 +523,7 @@ namespace MatterHackers.Agg.VertexSource
         public void JoinPath(VertexSnap s)
         {
             double x, y;
-            s.RewindZ();
+            s.RewindZero();
             ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
             if (cmd == ShapePath.FlagsAndCommand.CommandStop)
             {

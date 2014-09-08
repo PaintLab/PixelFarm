@@ -121,7 +121,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             var clippingProxyNormal = new ClipProxyImage(rasterNormal);
             var clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            clippingProxyNormal.Clear(this.WhiteOnBlack ? new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes() : new ColorRGBAf(1, 1, 1).GetAsRGBA_Bytes());
+            clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
 
             var ras = new ScanlineRasterizer();
             var sl = new ScanlinePacked8();
@@ -151,7 +151,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             r.normalize_radius();
             if (this.FillRoundRect)
             {
-               
+
                 ras.AddPath(new Stroke(1).MakeVxs(r.MakeVxs()));
             }
             else

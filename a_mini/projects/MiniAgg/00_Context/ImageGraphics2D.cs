@@ -261,9 +261,9 @@ namespace MatterHackers.Agg
 
                 SpanImageFilter spanImageFilter;
                 var interpolator = new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
+                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
-                spanImageFilter = new SpanImageFilterRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes(), interpolator);
+                spanImageFilter = new SpanImageFilterRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
 
                 DrawImage(source, spanImageFilter, destRectTransform);
 #if false // this is some debug you can enable to visualize the dest bounding box
@@ -283,7 +283,7 @@ namespace MatterHackers.Agg
 
 
                 var interpolator = new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).GetAsRGBA_Bytes());
+                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 SpanImageFilter spanImageFilter = null;
                 switch (source.BitDepth)

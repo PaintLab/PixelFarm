@@ -22,7 +22,7 @@ namespace MatterHackers.Agg
             this.startAt = startAt;
             this.currentIterIndex = startAt;
         }
-        public void RewindZ()
+        public void RewindZero()
         {
             this.currentIterIndex = startAt;
         }

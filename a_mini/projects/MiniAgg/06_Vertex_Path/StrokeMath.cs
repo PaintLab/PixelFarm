@@ -190,11 +190,12 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void CreateJoin(IVertexDest vc, VertexDistance v0,
-                                        VertexDistance v1,
-                                        VertexDistance v2,
-                                        double len1,
-                                        double len2)
+        public void CreateJoin(IVertexDest vc,
+                               VertexDistance v0,
+                               VertexDistance v1,
+                               VertexDistance v2,
+                               double len1,
+                               double len2)
         {
             double dx1 = m_width * (v1.y - v0.y) / len1;
             double dy1 = m_width * (v1.x - v0.x) / len1;
@@ -333,7 +334,7 @@ namespace MatterHackers.Agg.VertexSource
 
         static void AddVertex(IVertexDest vc, double x, double y)
         {
-            vc.AddVertex(x, y); 
+            vc.AddVertex(x, y);
         }
 
         void CreateArc(IVertexDest vc,

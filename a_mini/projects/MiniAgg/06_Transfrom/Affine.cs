@@ -923,7 +923,7 @@ namespace MatterHackers.Agg.Transform
         public Agg.VertexStorage Tranform(Agg.VertexSnap src)
         {
             var data = new System.Collections.Generic.List<Agg.VertexData>();
-            src.RewindZ();
+            src.RewindZero();
             ShapePath.FlagsAndCommand cmd;
             double x, y;
             while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)

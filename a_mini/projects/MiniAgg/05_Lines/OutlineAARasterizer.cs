@@ -591,7 +591,7 @@ namespace MatterHackers.Agg.Lines
             double y;
 
             ShapePath.FlagsAndCommand cmd;
-            s.RewindZ();
+            s.RewindZero();
             while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 //index++;

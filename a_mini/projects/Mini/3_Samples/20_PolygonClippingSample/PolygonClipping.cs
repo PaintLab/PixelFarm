@@ -220,8 +220,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
 
-                        graphics2D.Render(ps1.MakeVertexSnap(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
-                        graphics2D.Render(ps2.MakeVertexSnap(), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));
+                        graphics2D.Render(ps2.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0, 0.6, 0, 0.1));
 
                         CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), ps2.MakeVertexSnap());
                     }
@@ -262,10 +262,11 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.ClosePolygon();
 
-                        graphics2D.Render(ps1.MakeVertexSnap(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));
+
 
                         var vxs = ps2.MakeVxs();
-                        graphics2D.Render(stroke.MakeVxs(vxs), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0, 0.6, 0, 0.1));
                         CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), new VertexSnap(vxs));
                     }
                     break;
@@ -302,13 +303,11 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         var trans_gb_poly = mtx1.TransformToVxs(gb_poly);
                         var trans_arrows = mtx2.TransformToVxs(arrows);
 
-                        graphics2D.Render(trans_gb_poly, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
-
-
+                        graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
 
                         //stroke_gb_poly.Width = 0.1;
-                        graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
-                        graphics2D.Render(trans_arrows, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
+                        graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
 
                         CreateAndRenderCombined(graphics2D, new VertexSnap(trans_gb_poly), new VertexSnap(trans_arrows));
                     }
@@ -331,14 +330,10 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
 
                         var s1 = mtx.TransformToVertexSnap(gb_poly);
-                        graphics2D.Render(s1, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
-
-
-
-                        graphics2D.Render(new Stroke(0.1).MakeVxs(s1.GetInternalVxs()), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
-
+                        graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
+                        graphics2D.Render(new Stroke(0.1).MakeVxs(s1.GetInternalVxs()), ColorRGBA.Black);
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs());
-                        graphics2D.Render(stroke_vxs, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
 
                         CreateAndRenderCombined(graphics2D, s1, new VertexSnap(stroke_vxs));
                     }
@@ -414,9 +409,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         var curveVxs = curve.MakeVxs();
                         CreateAndRenderCombined(graphics2D, new VertexSnap(sp1), new VertexSnap(curveVxs));
 
-                        graphics2D.Render(stroke.MakeVxs(sp1), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));
 
-                        graphics2D.Render(curveVxs, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0, 0.6, 0, 0.1));
                     }
                     break;
             }
@@ -448,7 +443,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
             if (combined != null)
             {
-                graphics2D.Render(combined.MakeVertexSnap(), new ColorRGBAf(0.5, 0.0, 0, 0.5).GetAsRGBA_Bytes());
+                graphics2D.Render(combined.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0.5, 0.0, 0, 0.5));
             }
         }
         public override void MouseDrag(int x, int y)
@@ -589,13 +584,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             return new VertexSnap(this.MakeVxs());
         }
 
-        public bool IsDynamicVertexGen
-        {
-            get
-            {
-                return false;
-            }
-        }
+
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
