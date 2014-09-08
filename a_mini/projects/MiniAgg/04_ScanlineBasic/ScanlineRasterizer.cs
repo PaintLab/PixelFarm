@@ -310,7 +310,7 @@ namespace MatterHackers.Agg
             double x = 0;
             double y = 0;
 
-            ShapePath.FlagsAndCommand cmd;
+            
             spath.RewindZ();
             if (m_outline.Sorted)
             {
@@ -332,11 +332,22 @@ namespace MatterHackers.Agg
             }
             else
             {
-                while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-                {
+                var vxs = spath.MakeVxs();
+                int j = vxs.Count;
 
-                    AddVertex(cmd, x, y);
+                for (int i = 0; i < j; ++i)
+                {
+                    var cmd2 = vxs.GetVertex(i, out x, out y);
+                    if (cmd2 != ShapePath.FlagsAndCommand.CommandStop)
+                    {
+                        AddVertex(cmd2, x, y);
+                    }
                 }
+                //while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+                //{
+
+                //    AddVertex(cmd, x, y);
+                //}
             }
         }
 

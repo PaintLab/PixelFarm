@@ -117,6 +117,11 @@ namespace MatterHackers.Agg.VertexSource
             foreach (var v in this.GetVertexIter())
             {
                 list.Add(v);
+                if (v.command == ShapePath.FlagsAndCommand.CommandStop)
+                {
+                    break;
+                }
+               
             }
             return new VertexStorage(list);
         }
@@ -130,7 +135,7 @@ namespace MatterHackers.Agg.VertexSource
             for (int i = 0; i < 8; ++i)
             {
                 yield return new VertexData(
-                    m_cmd[m_vertex],
+                    m_cmd[i],
                     new VectorMath.Vector2(m_x[i], m_y[i]));
             }
         }

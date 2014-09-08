@@ -170,6 +170,7 @@ namespace MatterHackers.Agg
             x = m_coord_xy[i];
             y = m_coord_xy[i + 1];
             return m_CommandAndFlags[index];
+                                 
         }
         public void GetVertexXY(int index, out double x, out double y)
         {
