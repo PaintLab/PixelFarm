@@ -281,9 +281,9 @@ namespace MatterHackers.Agg.VertexSource
         {
             return this.vertices;
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.vertices);
+            return new VertexSnap(this.vertices);
         }
         public void Curve4(double x_ctrl2, double y_ctrl2,
                        double x_to, double y_to)
@@ -506,7 +506,7 @@ namespace MatterHackers.Agg.VertexSource
         //// Concatenate path. The path is added as is.
 
 
-        public void ConcatPath(SinglePath s)
+        public void ConcatPath(VertexSnap s)
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
@@ -520,7 +520,7 @@ namespace MatterHackers.Agg.VertexSource
         // Join path. The path is joined with the existing one, that is, 
         // it behaves as if the pen of a plotter was always down (drawing)
         //template<class VertexSource>  
-        public void JoinPath(SinglePath s)
+        public void JoinPath(VertexSnap s)
         {
             double x, y;
             s.RewindZ();

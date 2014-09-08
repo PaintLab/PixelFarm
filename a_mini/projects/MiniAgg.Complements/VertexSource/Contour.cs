@@ -25,8 +25,8 @@ namespace MatterHackers.Agg.VertexSource
     public sealed class Contour  
     {
         ContourGenerator generator;
-        SinglePath vertexSource;
-        public Contour(SinglePath vertexSource)  
+        VertexSnap vertexSource;
+        public Contour(VertexSnap vertexSource)  
         {
             this.generator = new ContourGenerator();
             this.vertexSource = vertexSource;

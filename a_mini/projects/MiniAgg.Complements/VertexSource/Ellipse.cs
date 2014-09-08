@@ -187,9 +187,9 @@ namespace MatterHackers.Agg.VertexSource
         }
 
         //-------------------------------------------------------
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(MakeVxs());
+            return new VertexSnap(MakeVxs());
         }
         public VertexStorage MakeVxs()
         {

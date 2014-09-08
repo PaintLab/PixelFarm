@@ -163,7 +163,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             //Stroke stroke = new Stroke(ps);
             //stroke.Width = 2;
             //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
-            rasterizer.AddPath(StrokeHelp.CreateStrokeVxs(ps.MakeSinglePath(), 2));
+            rasterizer.AddPath(StrokeHelp.CreateStrokeVxs(ps.MakeVertexSnap(), 2));
             //----------------------------------------
 
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));

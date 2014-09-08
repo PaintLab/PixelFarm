@@ -98,9 +98,9 @@ namespace LayoutFarm.Agg.Font
             }
             return new VertexStorage(vlist);
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
         public RectangleDouble LocalBounds
         {
@@ -166,7 +166,7 @@ namespace LayoutFarm.Agg.Font
             }
             else
             {
-                graphics2D.Render(this.MakeSinglePath(), color);
+                graphics2D.Render(this.MakeVertexSnap(), color);
             }
         }
 

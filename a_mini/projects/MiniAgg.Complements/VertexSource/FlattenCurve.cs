@@ -55,15 +55,15 @@ namespace MatterHackers.Agg.VertexSource
         double lastY;
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
-        readonly SinglePath vertextSource;
+        readonly VertexSnap vertextSource;
 
-        public FlattenCurves(SinglePath spath)
+        public FlattenCurves(VertexSnap spath)
         {
             this.vertextSource = spath;
         }
         public FlattenCurves(VertexStorage vxs)
         {
-            this.vertextSource = new SinglePath(vxs);
+            this.vertextSource = new VertexSnap(vxs);
         }
         public double ApproximationScale
         {
@@ -140,9 +140,9 @@ namespace MatterHackers.Agg.VertexSource
             return new VertexStorage(list);
 
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
         IEnumerable<VertexData> GetVertexIter()
         {

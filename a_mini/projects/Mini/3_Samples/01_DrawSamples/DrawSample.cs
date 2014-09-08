@@ -86,7 +86,7 @@ namespace MatterHackers.Agg.Sample_Draw
 
 
 
-                var sp1 = mat.TransformToSinglePath(ellipsePro.MakeVxs());
+                var sp1 = mat.TransformToVertexSnap(ellipsePro.MakeVxs());
 
                 g.Render(sp1, ColorRGBA.Yellow);
 
@@ -101,14 +101,14 @@ namespace MatterHackers.Agg.Sample_Draw
             littlePoly.LineTo(200, 200);
             littlePoly.LineTo(50, 150);
             littlePoly.LineTo(50, 50);
-            g.Render(littlePoly.MakeSinglePath(), ColorRGBA.Cyan);
+            g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
 
             // draw some text
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
             VertexStorage vxs = textPrinter.CreateVxs();
 
             var affTx = Affine.NewTranslation(new Vector2(width / 2, height / 4 * 3));
-            SinglePath s1 = affTx.TransformToSinglePath(vxs);
+            VertexSnap s1 = affTx.TransformToVertexSnap(vxs);
 
             g.Render(s1, ColorRGBA.Red);
 
@@ -119,7 +119,7 @@ namespace MatterHackers.Agg.Sample_Draw
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
                 AffinePlan.Translate(40, height / 2));
-            g.Render(aff2.TransformToSinglePath(vxs), ColorRGBA.Black);
+            g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
         }
     }
 

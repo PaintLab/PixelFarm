@@ -99,11 +99,11 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                 if (i == num - 1)
                 {
                     ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
-                    rasterizer.AddPath(ellipseForMask.MakeSinglePath());
+                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
 
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
-                    rasterizer.AddPath(ellipseForMask.MakeSinglePath());
+                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
                 }
                 else

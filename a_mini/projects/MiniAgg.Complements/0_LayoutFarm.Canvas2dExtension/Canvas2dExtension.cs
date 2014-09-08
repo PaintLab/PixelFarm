@@ -156,7 +156,7 @@ namespace MatterHackers.Agg
                 throw new ArgumentException();
             }
             RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
-            gx.Render(rect.MakeSinglePath(), fillColor.GetAsRGBA_Bytes());
+            gx.Render(rect.MakeVertexSnap(), fillColor.GetAsRGBA_Bytes());
         }
         public static void Circle(this Agg.Graphics2D g, double x, double y, double radius, ColorRGBA color)
         {

@@ -497,13 +497,13 @@ namespace MatterHackers.Agg.Font
             // render the legend
             StyledTypeFace legendFont = new StyledTypeFace(this, 12);
             Vector2 textPos = new Vector2(x + width / 2, y + typeFaceNameStyle.EmSizeInPixels * 1.5);
-            graphics2D.Render(new TypeFacePrinter("Descent").MakeSinglePath(), textPos, descentColor); textPos.y += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("Underline").MakeSinglePath(), textPos, underlineColor); textPos.y += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("X Height").MakeSinglePath(), textPos, xHeightColor); textPos.y += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("CapHeight").MakeSinglePath(), textPos, capHeightColor); textPos.y += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("Ascent").MakeSinglePath(), textPos, ascentColor); textPos.y += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("Origin").MakeSinglePath(), textPos, originColor); textPos.y += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("Bounding Box").MakeSinglePath(), textPos, boundingBoxColor);
+            graphics2D.Render(new TypeFacePrinter("Descent").MakeVertexSnap(), textPos, descentColor); textPos.y += legendFont.EmSizeInPixels;
+            graphics2D.Render(new TypeFacePrinter("Underline").MakeVertexSnap(), textPos, underlineColor); textPos.y += legendFont.EmSizeInPixels;
+            graphics2D.Render(new TypeFacePrinter("X Height").MakeVertexSnap(), textPos, xHeightColor); textPos.y += legendFont.EmSizeInPixels;
+            graphics2D.Render(new TypeFacePrinter("CapHeight").MakeVertexSnap(), textPos, capHeightColor); textPos.y += legendFont.EmSizeInPixels;
+            graphics2D.Render(new TypeFacePrinter("Ascent").MakeVertexSnap(), textPos, ascentColor); textPos.y += legendFont.EmSizeInPixels;
+            graphics2D.Render(new TypeFacePrinter("Origin").MakeVertexSnap(), textPos, originColor); textPos.y += legendFont.EmSizeInPixels;
+            graphics2D.Render(new TypeFacePrinter("Bounding Box").MakeVertexSnap(), textPos, boundingBoxColor);
         }
     }
 }

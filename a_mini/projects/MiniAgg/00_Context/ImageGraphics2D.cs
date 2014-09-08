@@ -63,7 +63,7 @@ namespace MatterHackers.Agg
             return Rasterizer.GetVectorClipBox();
         }
        
-        public override void Render(SinglePath vertexSource, ColorRGBA color)
+        public override void Render(VertexSnap vertexSource, ColorRGBA color)
         {
             rasterizer.Reset();
             Affine transform = GetTransform();
@@ -71,7 +71,7 @@ namespace MatterHackers.Agg
             {
                 List<VertexData> vxData = new List<VertexData>();
                 //then transform
-                var s1 = new SinglePath(transform.Tranform(vertexSource));  
+                var s1 = new VertexSnap(transform.Tranform(vertexSource));  
                 rasterizer.AddPath(s1);
             }
             else
@@ -155,7 +155,7 @@ namespace MatterHackers.Agg
             }
 
             //var transfromedRect = new VertexSourceApplyTransform(drawImageRectPath, destRectTransform);
-            var sp1 = destRectTransform.TransformToSinglePath(drawImageRectPath);// transfromedRect.DoTransformToNewSinglePath();
+            var sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);// transfromedRect.DoTransformToNewVertexSnap();
             Rasterizer.AddPath(sp1);
             {
                 //ClipProxyImage destImageWithClipping = new ClipProxyImage(destImageByte);

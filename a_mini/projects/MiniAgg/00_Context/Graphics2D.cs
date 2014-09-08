@@ -115,7 +115,7 @@ namespace MatterHackers.Agg
                 return destImageByte;
             }
         } 
-        public abstract void Render(SinglePath vertexSource, ColorRGBA colorBytes);
+        public abstract void Render(VertexSnap vertexSource, ColorRGBA colorBytes);
         public void Render(IImage imageSource, int x, int y)
         {
             
@@ -137,24 +137,24 @@ namespace MatterHackers.Agg
             for (int i = 0; i < numPaths; i++)
             {
                 //Render(vertexSource, pathIdArray[i], colorArray[i]);
-                Render(new SinglePath(vxStorage, pathIdArray[i]), colorArray[i]);
+                Render(new VertexSnap(vxStorage, pathIdArray[i]), colorArray[i]);
             }
         }
         public void Render(VertexStorage vxStorage, ColorRGBA c)
         {
-            Render(new SinglePath(vxStorage, 0), c);
+            Render(new VertexSnap(vxStorage, 0), c);
         }
-        public void Render(SinglePath vertexSource, double x, double y, ColorRGBA color)
+        public void Render(VertexSnap vertexSource, double x, double y, ColorRGBA color)
         {
-            var inputVxs = vertexSource.MakeVxs();
-            var vxs = Affine.NewTranslation(x, y).TransformToSinglePath(inputVxs);
+            var inputVxs = vertexSource.GetInternalVxs();
+            var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
             Render(vxs, color); 
         }
 
-        public void Render(SinglePath vertexSource, Vector2 position, ColorRGBA color)
+        public void Render(VertexSnap vertexSource, Vector2 position, ColorRGBA color)
         {
-            var inputVxs = vertexSource.MakeVxs();
-            var vxs = Affine.NewTranslation(position.x, position.y).TransformToSinglePath(inputVxs);
+            var inputVxs = vertexSource.GetInternalVxs();
+            var vxs = Affine.NewTranslation(position.x, position.y).TransformToVertexSnap(inputVxs);
             Render(vxs, color);
         }
 

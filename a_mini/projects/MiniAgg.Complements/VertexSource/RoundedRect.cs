@@ -307,9 +307,9 @@ namespace MatterHackers.Agg.VertexSource
             }
             return new VertexStorage(vlist);
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
        
     }

@@ -125,9 +125,9 @@ namespace MatterHackers.Agg.VertexSource
             }
             return new VertexStorage(list);
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
         public IEnumerable<VertexData> GetVertexIter()
         {

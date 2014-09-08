@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        PathStorage CombinePaths(SinglePath a, SinglePath b, ClipType clipType)
+        PathStorage CombinePaths(VertexSnap a, VertexSnap b, ClipType clipType)
         {
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
@@ -108,7 +108,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             return output;
         }
 
-        private static List<List<IntPoint>> CreatePolygons(SinglePath a)
+        private static List<List<IntPoint>> CreatePolygons(VertexSnap a)
         {
             List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
             List<IntPoint> currentPoly = null;
@@ -220,10 +220,10 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
 
-                        graphics2D.Render(ps1.MakeSinglePath(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
-                        graphics2D.Render(ps2.MakeSinglePath(), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(ps1.MakeVertexSnap(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(ps2.MakeVertexSnap(), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, ps1.MakeSinglePath(), ps2.MakeSinglePath());
+                        CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), ps2.MakeVertexSnap());
                     }
                     break;
 
@@ -262,11 +262,11 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.ClosePolygon();
 
-                        graphics2D.Render(ps1.MakeSinglePath(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(ps1.MakeVertexSnap(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
 
                         var vxs = ps2.MakeVxs();
                         graphics2D.Render(stroke.MakeVxs(vxs), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
-                        CreateAndRenderCombined(graphics2D, ps1.MakeSinglePath(), new SinglePath(vxs));
+                        CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), new VertexSnap(vxs));
                     }
                     break;
 
@@ -310,7 +310,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
                         graphics2D.Render(trans_arrows, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, new SinglePath(trans_gb_poly), new SinglePath(trans_arrows));
+                        CreateAndRenderCombined(graphics2D, new VertexSnap(trans_gb_poly), new VertexSnap(trans_arrows));
                     }
                     break;
 
@@ -330,17 +330,17 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                                 AffinePlan.Scale(2));
 
 
-                        var s1 = mtx.TransformToSinglePath(gb_poly);
+                        var s1 = mtx.TransformToVertexSnap(gb_poly);
                         graphics2D.Render(s1, new ColorRGBAf(0.5, 0.5, 0, 0.1).GetAsRGBA_Bytes());
 
 
 
-                        graphics2D.Render(new Stroke(0.1).MakeVxs(s1.MakeVxs()), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
+                        graphics2D.Render(new Stroke(0.1).MakeVxs(s1.GetInternalVxs()), new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes());
 
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs());
                         graphics2D.Render(stroke_vxs, new ColorRGBAf(0.0, 0.5, 0.5, 0.1).GetAsRGBA_Bytes());
 
-                        CreateAndRenderCombined(graphics2D, s1, new SinglePath(stroke_vxs));
+                        CreateAndRenderCombined(graphics2D, s1, new VertexSnap(stroke_vxs));
                     }
                     break;
 
@@ -406,13 +406,13 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                             AffinePlan.Scale(4),
                             AffinePlan.Translate(220, 200));
 
-                        var t_glyph = mtx.TransformToSinglePath(glyph);
+                        var t_glyph = mtx.TransformToVertexSnap(glyph);
                         FlattenCurves curve = new FlattenCurves(t_glyph);
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
 
                         var curveVxs = curve.MakeVxs();
-                        CreateAndRenderCombined(graphics2D, new SinglePath(sp1), new SinglePath(curveVxs));
+                        CreateAndRenderCombined(graphics2D, new VertexSnap(sp1), new VertexSnap(curveVxs));
 
                         graphics2D.Render(stroke.MakeVxs(sp1), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
 
@@ -423,7 +423,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         }
 
 
-        void CreateAndRenderCombined(Graphics2D graphics2D, SinglePath ps1, SinglePath ps2)
+        void CreateAndRenderCombined(Graphics2D graphics2D, VertexSnap ps1, VertexSnap ps2)
         {
             PathStorage combined = null;
 
@@ -448,7 +448,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
             if (combined != null)
             {
-                graphics2D.Render(combined.MakeSinglePath(), new ColorRGBAf(0.5, 0.0, 0, 0.5).GetAsRGBA_Bytes());
+                graphics2D.Render(combined.MakeVertexSnap(), new ColorRGBAf(0.5, 0.0, 0, 0.5).GetAsRGBA_Bytes());
             }
         }
         public override void MouseDrag(int x, int y)
@@ -584,9 +584,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             }
             return vxs;
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
 
         public bool IsDynamicVertexGen
@@ -623,7 +623,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         int m_contours;
         int m_points;
 
-        conv_poly_counter(SinglePath src)
+        conv_poly_counter(VertexSnap src)
         {
             m_contours = 0;
             m_points = 0;

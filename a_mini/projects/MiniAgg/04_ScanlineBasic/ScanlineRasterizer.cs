@@ -82,7 +82,7 @@ namespace MatterHackers.Agg
 
         bool SweepScanline(IScanline sl);
         void Reset();
-        void AddPath(SinglePath spath);
+        void AddPath(VertexSnap spath);
         bool RewindScanlines();
     }
 
@@ -299,9 +299,9 @@ namespace MatterHackers.Agg
         //-------------------------------------------------------------------
         public void AddPath(VertexStorage vxs)
         {
-            this.AddPath(new SinglePath(vxs));
+            this.AddPath(new VertexSnap(vxs));
         }
-        public void AddPath(SinglePath spath)
+        public void AddPath(VertexSnap spath)
         {
 
             double x = 0;
@@ -315,7 +315,7 @@ namespace MatterHackers.Agg
             }
             if (spath.VxsHasMoreThanOnePart)
             {
-                var vxs = spath.MakeVxs();
+                var vxs = spath.GetInternalVxs();
                 int j = vxs.Count;
 
                 for (int i = 0; i < j; ++i)

@@ -893,17 +893,17 @@ namespace MatterHackers.Agg.Transform
 
 
         //----------------------------------------------------------------------------------------------
-        public Agg.SinglePath TransformToSinglePath(Agg.VertexSource.PathStorage src)
+        public Agg.VertexSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
         {
-            return new SinglePath(TransformToVxs(src));
+            return new VertexSnap(TransformToVxs(src));
         }
         public Agg.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             return TransformToVxs(src.Vsx);
         }
-        public Agg.SinglePath TransformToSinglePath(Agg.VertexStorage src)
+        public Agg.VertexSnap TransformToVertexSnap(Agg.VertexStorage src)
         {
-            return new SinglePath(this.TransformToVxs(src));
+            return new VertexSnap(this.TransformToVxs(src));
         }
         public Agg.VertexStorage TransformToVxs(Agg.VertexStorage src)
         {
@@ -920,7 +920,7 @@ namespace MatterHackers.Agg.Transform
             }
             return new Agg.VertexStorage(data);
         }
-        public Agg.VertexStorage Tranform(Agg.SinglePath src)
+        public Agg.VertexStorage Tranform(Agg.VertexSnap src)
         {
             var data = new System.Collections.Generic.List<Agg.VertexData>();
             src.RewindZ();

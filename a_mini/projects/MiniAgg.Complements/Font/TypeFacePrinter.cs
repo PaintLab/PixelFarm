@@ -157,7 +157,7 @@ namespace MatterHackers.Agg.Font
             }
             else
             {
-                graphics2D.Render(new SinglePath(this.MakeVxs()), color);
+                graphics2D.Render(new VertexSnap(this.MakeVxs()), color);
             }
         }
 
@@ -277,9 +277,9 @@ namespace MatterHackers.Agg.Font
             }
             return new VertexStorage(vlist);
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
         private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)
         {
@@ -353,7 +353,7 @@ namespace MatterHackers.Agg.Font
                 list.Add(v);
             }
             return new VertexStorage(list);
-            //return new SinglePath(new VertexStorage(list));
+            //return new VertexSnap(new VertexStorage(list));
         }
 #else
         public void rewind(int pathId)
