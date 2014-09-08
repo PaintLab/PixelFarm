@@ -119,7 +119,7 @@ namespace MatterHackers.Agg
         public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
         {
             RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
-         
+
 
             gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
         }
@@ -134,29 +134,31 @@ namespace MatterHackers.Agg
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectangleDouble rect, IColor fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectangleDouble rect, ColorRGBA fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectangleInt rect, IColor fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectangleInt rect, ColorRGBA fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, Vector2 leftBottom, Vector2 rightTop, IColor fillColor)
+        public static void FillRectangle(this Graphics2D gx, Vector2 leftBottom,
+            Vector2 rightTop, ColorRGBA fillColor)
         {
             gx.FillRectangle(leftBottom.x, leftBottom.y, rightTop.x, rightTop.y, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, double left, double bottom, double right, double top, IColor fillColor)
+        public static void FillRectangle(this Graphics2D gx, double left,
+            double bottom, double right, double top, ColorRGBA fillColor)
         {
             if (right < left || top < bottom)
             {
                 throw new ArgumentException();
             }
             RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
-            gx.Render(rect.MakeVertexSnap(), fillColor.GetAsRGBA_Bytes());
+            gx.Render(rect.MakeVertexSnap(), fillColor);
         }
         public static void Circle(this Agg.Graphics2D g, double x, double y, double radius, ColorRGBA color)
         {

@@ -74,7 +74,6 @@
     <Compile Include="01_Base\NativeBufferMan.cs" />
     <Compile Include="03_PixelBuffer\GammaLookUpTable.cs" />
     <Compile Include="00_Context\Graphics2D.cs" />
-    <Compile Include="02_Color\IColor.cs" />
     <Compile Include="05_Lines\ImageLineRenderer.cs" />
     <Compile Include="03_PixelBuffer\IImage.cs" />
     <Compile Include="03_PixelBuffer\ImageBase.cs" />

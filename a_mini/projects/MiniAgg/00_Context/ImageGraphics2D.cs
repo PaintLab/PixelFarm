@@ -318,14 +318,14 @@ namespace MatterHackers.Agg
         //    throw new NotImplementedException();
         //}
 
-        public override void Clear(IColor iColor)
+        public override void Clear(ColorRGBA color)
         {
             RectangleDouble clippingRect = GetClippingRect();
             RectangleInt clippingRectInt = new RectangleInt((int)clippingRect.Left, (int)clippingRect.Bottom, (int)clippingRect.Right, (int)clippingRect.Top);
 
             if (DestImage != null)
             {
-                ColorRGBA color = iColor.GetAsRGBA_Bytes();
+              
                 int width = DestImage.Width;
                 int height = DestImage.Height;
                 byte[] buffer = DestImage.GetBuffer();
@@ -333,7 +333,7 @@ namespace MatterHackers.Agg
                 {
                     case 8:
                         {
-                            byte byteColor = (byte)iColor.Red0To255;
+                            byte byteColor = (byte)color.Red0To255;
                             for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
                             {
                                 int bufferOffset = DestImage.GetBufferOffsetXY((int)clippingRect.Left, y);

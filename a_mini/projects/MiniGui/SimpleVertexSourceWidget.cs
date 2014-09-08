@@ -95,7 +95,7 @@ namespace MatterHackers.Agg.UI
         public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
         protected abstract RectangleDouble CalculateLocalBounds();
 
-        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); }
+        public virtual ColorRGBA color(int i) { return new ColorRGBAf().GetAsRGBA_Bytes(); }
         public override void OnDraw(Graphics2D graphics2D)
         {
 
@@ -103,7 +103,7 @@ namespace MatterHackers.Agg.UI
             var vxs = this.MakeVxs();
 
             graphics2D.Render(new VertexSnap(vxs, 0),
-                color(0).GetAsRGBA_Bytes());
+                color(0));
             base.OnDraw(graphics2D);
         }
 

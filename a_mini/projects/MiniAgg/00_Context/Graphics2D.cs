@@ -158,7 +158,7 @@ namespace MatterHackers.Agg
             Render(vxs, color);
         }
 
-        public abstract void Clear(IColor color);
+        public abstract void Clear(ColorRGBA color);
 
         public void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {

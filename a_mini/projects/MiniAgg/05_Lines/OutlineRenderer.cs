@@ -1656,7 +1656,7 @@ namespace MatterHackers.Agg.Lines
         public delegate bool CompareFunction(int value);
         public ColorRGBA color() { return m_color; }
 
-        public void color(IColor c) { m_color = c.GetAsRGBA_Bytes(); }
+        public void color(ColorRGBA c) { m_color = c; }
         public abstract void semidot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2);
         public abstract void semidot_hline(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2, int x1, int y1, int x2);
         public abstract void pie(int xc, int yc, int x1, int y1, int x2, int y2);

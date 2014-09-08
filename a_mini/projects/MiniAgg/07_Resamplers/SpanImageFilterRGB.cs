@@ -269,14 +269,14 @@ namespace MatterHackers.Agg
 
         //--------------------------------------------------------------------
         public SpanImageFilterRGB_BilinearClip(IImageBufferAccessor src,
-                                            IColor back_color,
+                                            ColorRGBA back_color,
                                             ISpanInterpolator inter)
             : base(src, inter, null)
         {
-            m_OutsideSourceColor = back_color.GetAsRGBA_Bytes();
+            m_OutsideSourceColor = back_color;
         }
-        public IColor background_color() { return m_OutsideSourceColor; }
-        public void background_color(IColor v) { m_OutsideSourceColor = v.GetAsRGBA_Bytes(); }
+        public ColorRGBA background_color() { return m_OutsideSourceColor; }
+        public void background_color(ColorRGBA v) { m_OutsideSourceColor = v; }
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {

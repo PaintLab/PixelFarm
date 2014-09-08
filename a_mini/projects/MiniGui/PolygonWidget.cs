@@ -672,7 +672,7 @@ namespace MatterHackers.Agg.UI
     //template<class ColorT> 
     public class PolygonEditWidget : polygon_ctrl_impl
     {
-        IColor m_color;
+        ColorRGBA m_color;
 
         public PolygonEditWidget(int np) : this(np, 5) { }
 
@@ -683,8 +683,8 @@ namespace MatterHackers.Agg.UI
             m_color = ColorRGBA.Black;
         }
 
-        public void line_color(IColor c) { m_color = c; }
-        public override IColor color(int i) { return m_color; }
+        public void line_color(ColorRGBA c) { m_color = c; }
+        public override ColorRGBA color(int i) { return m_color; }
 
     }
 }

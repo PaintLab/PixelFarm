@@ -28,12 +28,12 @@ namespace MatterHackers.Agg.Image
 {
     public sealed class ClipProxyImage : ProxyImage
     {
-        RectangleInt m_ClippingRect; 
+        RectangleInt m_ClippingRect;
         public ClipProxyImage(IImage refImage)
             : base(refImage)
         {
             m_ClippingRect = new RectangleInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
-        } 
+        }
 
         public bool SetClippingBox(int x1, int y1, int x2, int y2)
         {
@@ -95,11 +95,10 @@ namespace MatterHackers.Agg.Image
         public int bounding_xmax() { return m_ClippingRect.Right; }
         public int bounding_ymax() { return m_ClippingRect.Top; }
 
-        public void Clear(IColor in_c)
+        public void Clear(ColorRGBA in_c)
         {
 
-            ColorRGBA c = ColorRGBA.Make(in_c.Red0To255, in_c.Green0To255, in_c.Blue0To255, in_c.Alpha0To255);
-
+            ColorRGBA c = in_c; 
             int w = this.Width;
             if (w != 0)
             {

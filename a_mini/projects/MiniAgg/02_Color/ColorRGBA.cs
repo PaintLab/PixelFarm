@@ -506,8 +506,8 @@ namespace MatterHackers.Agg
             return ret.GetAsRGBA_Bytes();
         }
 
-
-        public static IColor no_color() { return new ColorRGBAf(0, 0, 0, 0).GetAsRGBA_Bytes(); }
+        static ColorRGBA transparentColor = new ColorRGBAf(0, 0, 0, 0).GetAsRGBA_Bytes();
+        public static ColorRGBA no_color() { return transparentColor; }
 
         public static ColorRGBAf from_wavelength(float wl)
         {
@@ -644,8 +644,8 @@ namespace MatterHackers.Agg
         }
     }
 
-    public struct ColorRGBA : IColor
-    {   
+    public struct ColorRGBA
+    {
         //--------------
         //BGRA *** 
         public byte blue;
@@ -656,15 +656,11 @@ namespace MatterHackers.Agg
 
         public const int COVER_SHIFT = 8;
         public const int COVER_SIZE = 1 << COVER_SHIFT;  //----cover_size 
-        public const int COVER_MASK = COVER_SIZE - 1;    //----cover_mask 
-        //public const int cover_none  = 0,                 //----cover_none 
-        //public const int cover_full  = cover_mask         //----cover_full 
+        public const int COVER_MASK = COVER_SIZE - 1;    //----cover_mask   
 
         public const int BASE_SHIFT = 8;
         public const int BASE_SCALE = (1 << BASE_SHIFT);
         public const int BASE_MASK = (BASE_SCALE - 1);
-
-
 
 
         public static readonly ColorRGBA White = new ColorRGBA(255, 255, 255, 255);
@@ -707,26 +703,20 @@ namespace MatterHackers.Agg
 
         public float Red0To1
         {
-            get { return red / 255.0f; }
-            //set { red = (byte)Math.Max(0, Math.Min((int)(value * 255), 255)); }
+            get { return red / 255.0f; } 
         }
         public float Green0To1
         {
-            get { return green / 255.0f; }
-            //set { green = (byte)Math.Max(0, Math.Min((int)(value * 255), 255)); }
+            get { return green / 255.0f; } 
         }
         public float Blue0To1
         {
-            get { return blue / 255.0f; }
-            //set { blue = (byte)Math.Max(0, Math.Min((int)(value * 255), 255)); }
+            get { return blue / 255.0f; } 
         }
         public float Alpha0To1
         {
-            get { return alpha / 255.0f; }
-            //set { alpha = (byte)Math.Max(0, Math.Min((int)(value * 255), 255)); }
-        }
-
-
+            get { return alpha / 255.0f; } 
+        } 
 
         public ColorRGBA(byte r_, byte g_, byte b_)
         {
@@ -852,18 +842,7 @@ namespace MatterHackers.Agg
             return this;
         }
 
-        //public string GetAsHTMLString()
-        //{
-        //    string html = string.Format("#{0:X2}{1:X2}{2:X2}", red, green, blue);
-        //    return html;
-        //}
-
-        void clear()
-        {
-            red = green = blue = alpha = 0;
-        }
-
-        public ColorRGBA gradient(ColorRGBA c, double k)
+        public ColorRGBA CreateGradient(ColorRGBA c, double k)
         {
             ColorRGBA ret = new ColorRGBA();
             int ik = AggBasics.uround(k * BASE_SCALE);
@@ -881,7 +860,6 @@ namespace MatterHackers.Agg
             temp.green = (byte)((A.green + B.green) > 255 ? 255 : (A.green + B.green));
             temp.blue = (byte)((A.blue + B.blue) > 255 ? 255 : (A.blue + B.blue));
             temp.alpha = (byte)((A.alpha + B.alpha) > 255 ? 255 : (A.alpha + B.alpha));
-
 
             return temp;
         }
@@ -907,7 +885,7 @@ namespace MatterHackers.Agg
             return new ColorRGBA(temp);
         }
 
-        public void add(ColorRGBA c, int cover)
+        public void AddColor(ColorRGBA c, int cover)
         {
             int cr, cg, cb, ca;
             if (cover == COVER_MASK)
@@ -937,15 +915,15 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void apply_gamma_dir(GammaLookUpTable gamma)
+        public void ApplyGammaDir(GammaLookUpTable gamma)
         {
             Red0To255 = gamma.dir((byte)Red0To255);
             Green0To255 = gamma.dir((byte)Green0To255);
             Blue0To255 = gamma.dir((byte)Blue0To255);
         }
-         
+
         //-------------------------------------------------------------rgb8_packed
-        static public ColorRGBA rgb8_packed(int v)
+        static public ColorRGBA CreatRGB8Packed(int v)
         {
             return new ColorRGBA((byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
         }
