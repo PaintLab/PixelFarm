@@ -24,7 +24,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.UI
 {
-    class simple_polygon_vertex_source : IVertexSource
+    class simple_polygon_vertex_source
     {
         double[] m_polygon;
         int m_num_points;
@@ -80,7 +80,7 @@ namespace MatterHackers.Agg.UI
             m_vertex = 0;
         }
 
-        
+
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
@@ -236,7 +236,7 @@ namespace MatterHackers.Agg.UI
             m_status = 0;
 
         }
-       
+
         void RecalculateBounds()
         {
             needToRecalculateBounds = false;
@@ -283,7 +283,7 @@ namespace MatterHackers.Agg.UI
             //------------------------------------------------------------
             //draw each polygon point
             double r = m_point_radius;
-            
+
             if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
 
             int n_count = m_polygon.Length / 2;

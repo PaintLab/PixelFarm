@@ -30,7 +30,7 @@ namespace MatterHackers.Agg.VertexSource
     //
     // See Implemantation agg_rounded_rect.cpp
     //
-    public class RoundedRect : IVertexSource
+    public class RoundedRect  
     {
         RectangleDouble bounds;
         Vector2 leftBottomRadius;

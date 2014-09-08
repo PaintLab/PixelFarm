@@ -36,7 +36,7 @@ namespace MatterHackers.Agg.VertexSource
     //------------------------------------------------------------------------
 
 
-    public sealed class PathStorage : IVertexSource, IVertexDest
+    public sealed class PathStorage : IVertexDest
     {
         VertexStorage vertices;
         int iteratorIndex;
@@ -229,7 +229,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x_ctrl;
                 double y_ctrl;
-                ShapePath.FlagsAndCommand cmd = vertices.GetPrevVertex(out x_ctrl, out y_ctrl);
+                ShapePath.FlagsAndCommand cmd = vertices.GetBeforeLastVetex(out x_ctrl, out y_ctrl);
                 if (ShapePath.IsCurve(cmd))
                 {
                     x_ctrl = x0 + x0 - x_ctrl;
@@ -294,7 +294,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x_ctrl1;
                 double y_ctrl1;
-                ShapePath.FlagsAndCommand cmd = GetPrevVertex(out x_ctrl1, out y_ctrl1);
+                ShapePath.FlagsAndCommand cmd = GetBeforeLastVertex(out x_ctrl1, out y_ctrl1);
                 if (ShapePath.IsCurve(cmd))
                 {
                     x_ctrl1 = x0 + x0 - x_ctrl1;
@@ -322,9 +322,9 @@ namespace MatterHackers.Agg.VertexSource
             return vertices.GetLastVertex(out x, out y);
         }
 
-        ShapePath.FlagsAndCommand GetPrevVertex(out double x, out double y)
+        ShapePath.FlagsAndCommand GetBeforeLastVertex(out double x, out double y)
         {
-            return vertices.GetPrevVertex(out x, out y);
+            return vertices.GetBeforeLastVetex(out x, out y);
         }
 
         double GetLastX()
@@ -337,7 +337,7 @@ namespace MatterHackers.Agg.VertexSource
             return vertices.GetLastY();
         }
 
-        
+
         public IEnumerable<VertexData> GetVertexIter()
         {
             int count = vertices.Count;

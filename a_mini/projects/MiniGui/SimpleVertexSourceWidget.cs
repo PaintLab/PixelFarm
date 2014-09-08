@@ -25,7 +25,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.UI
 {
-    abstract public class SimpleVertexSourceWidget : GuiWidget, IVertexSource
+    abstract public class SimpleVertexSourceWidget : GuiWidget
     {
 
         bool localBoundsComeFromPoints = true;
@@ -101,13 +101,13 @@ namespace MatterHackers.Agg.UI
 
             var list = new System.Collections.Generic.List<VertexData>();
             var vxs = this.MakeVxs();
-             
+
             graphics2D.Render(new SinglePath(vxs, 0),
                 color(0).GetAsRGBA_Bytes());
             base.OnDraw(graphics2D);
         }
 
-       
+
         public abstract VertexStorage MakeVxs();
         public SinglePath MakeSinglePath()
         {

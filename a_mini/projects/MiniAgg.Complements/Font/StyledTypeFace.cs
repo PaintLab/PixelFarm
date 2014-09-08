@@ -26,7 +26,7 @@ using MatterHackers.Agg.Image;
 
 namespace MatterHackers.Agg.Font
 {
-    public class GlyphWithUnderline : IVertexSource
+    public class GlyphWithUnderline  
     {
 
         SinglePath underline;

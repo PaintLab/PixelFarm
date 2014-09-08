@@ -22,7 +22,7 @@ using System.Collections.Generic;
 namespace MatterHackers.Agg.VertexSource
 {
     //============================================================span_gouraud
-    public class SpanGourand : IVertexSource
+    public class SpanGourand 
     {
         CoordAndColor[] m_coord = new CoordAndColor[3];
         double[] m_x = new double[8];

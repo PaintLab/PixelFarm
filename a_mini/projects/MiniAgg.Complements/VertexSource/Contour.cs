@@ -22,11 +22,11 @@
 //----------------------------------------------------------------------------
 namespace MatterHackers.Agg.VertexSource
 {
-    public sealed class Contour //: VertexSourceAdapter
+    public sealed class Contour  
     {
         ContourGenerator generator;
-        IVertexSource vertexSource;
-        public Contour(IVertexSource vertexSource)  
+        SinglePath vertexSource;
+        public Contour(SinglePath vertexSource)  
         {
             this.generator = new ContourGenerator();
             this.vertexSource = vertexSource;

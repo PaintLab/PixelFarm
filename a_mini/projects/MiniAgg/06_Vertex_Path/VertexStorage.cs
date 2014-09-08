@@ -135,7 +135,7 @@ namespace MatterHackers.Agg
             return ShapePath.FlagsAndCommand.CommandStop;
         }
 
-        public ShapePath.FlagsAndCommand GetPrevVertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetBeforeLastVetex(out double x, out double y)
         {
 
             if (m_num_vertices > 1)

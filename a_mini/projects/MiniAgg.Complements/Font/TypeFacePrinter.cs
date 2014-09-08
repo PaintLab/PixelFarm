@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Font
 
 
 
-    public class TypeFacePrinter : IVertexSource
+    public class TypeFacePrinter 
     {
         StyledTypeFace typeFaceStyle;
         String text = "";
@@ -157,7 +157,7 @@ namespace MatterHackers.Agg.Font
             }
             else
             {
-                graphics2D.Render(this, color);
+                graphics2D.Render(new SinglePath(this.MakeVxs()), color);
             }
         }
 
@@ -203,7 +203,7 @@ namespace MatterHackers.Agg.Font
                 }
             }
         }
-        
+
         public IEnumerable<VertexData> GetVertexIter()
         {
             if (text != null && text.Length > 0)
@@ -233,7 +233,7 @@ namespace MatterHackers.Agg.Font
                                     yield return new VertexData(cmd,
                                         (x + currentOffset.x + Origin.x),
                                         (y + currentOffset.y + Origin.y));
-                                     
+
                                 }
                             }
                             //foreach (VertexData vertexData in currentGlyph.GetVertexIter())

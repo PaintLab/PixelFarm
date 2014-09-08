@@ -114,11 +114,7 @@ namespace MatterHackers.Agg
             {
                 return destImageByte;
             }
-        }
-
-
-       
-        public abstract void Render(IVertexSource vertexSource, ColorRGBA colorBytes);
+        } 
         public abstract void Render(SinglePath vertexSource, ColorRGBA colorBytes);
         public void Render(IImage imageSource, int x, int y)
         {
@@ -152,13 +148,10 @@ namespace MatterHackers.Agg
         {
             var inputVxs = vertexSource.MakeVxs();
             var vxs = Affine.NewTranslation(x, y).TransformToSinglePath(inputVxs);
-            Render(vxs, color);
-
-            //Render(
-            //    new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)).DoTransformToNewSinglePath(), color);
+            Render(vxs, color); 
         }
 
-        public void Render(IVertexSource vertexSource, Vector2 position, ColorRGBA color)
+        public void Render(SinglePath vertexSource, Vector2 position, ColorRGBA color)
         {
             var inputVxs = vertexSource.MakeVxs();
             var vxs = Affine.NewTranslation(position.x, position.y).TransformToSinglePath(inputVxs);

@@ -295,10 +295,7 @@ namespace MatterHackers.Agg
                               upscale(y2));
             m_status = Status.MoveTo;
         }
-        public void AddPath(IVertexSource vs)
-        {
-            this.AddPath(vs.MakeSinglePath());
-        }
+    
         //-------------------------------------------------------------------
         public void AddPath(VertexStorage vxs)
         {
@@ -331,8 +328,7 @@ namespace MatterHackers.Agg
                 }
             }
             else
-            {
-                
+            {   
                 ShapePath.FlagsAndCommand cmd;
                 while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
                 {

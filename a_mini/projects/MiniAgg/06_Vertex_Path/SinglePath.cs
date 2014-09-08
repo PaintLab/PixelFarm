@@ -5,7 +5,7 @@ using MatterHackers.VectorMath;
 namespace MatterHackers.Agg
 {
     //----------------------------------------
-    public struct SinglePath : IVertexSource
+    public struct SinglePath
     {
         int startAt;
         VertexStorage vxs;
@@ -28,7 +28,7 @@ namespace MatterHackers.Agg
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            var cmd = vxs.GetVertex(currentIterIndex, out x, out y); 
+            var cmd = vxs.GetVertex(currentIterIndex, out x, out y);
             currentIterIndex++;
             return cmd;
         }
@@ -66,7 +66,7 @@ namespace MatterHackers.Agg
             }
 
         }
-        
+
 
 
 

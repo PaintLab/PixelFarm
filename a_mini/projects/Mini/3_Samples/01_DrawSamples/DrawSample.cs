@@ -101,7 +101,7 @@ namespace MatterHackers.Agg.Sample_Draw
             littlePoly.LineTo(200, 200);
             littlePoly.LineTo(50, 150);
             littlePoly.LineTo(50, 50);
-            g.Render(littlePoly, ColorRGBA.Cyan);
+            g.Render(littlePoly.MakeSinglePath(), ColorRGBA.Cyan);
 
             // draw some text
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);

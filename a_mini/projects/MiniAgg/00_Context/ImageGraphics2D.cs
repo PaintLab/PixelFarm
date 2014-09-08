@@ -62,10 +62,7 @@ namespace MatterHackers.Agg
         {
             return Rasterizer.GetVectorClipBox();
         }
-        public override void Render(IVertexSource vertexSource, ColorRGBA color)
-        {
-            Render(new SinglePath(vertexSource.MakeVxs()), color);
-        }
+       
         public override void Render(SinglePath vertexSource, ColorRGBA color)
         {
             rasterizer.Reset();

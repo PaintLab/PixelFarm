@@ -220,8 +220,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
 
-                        graphics2D.Render(ps1, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
-                        graphics2D.Render(ps2, new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(ps1.MakeSinglePath(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(ps2.MakeSinglePath(), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
 
                         CreateAndRenderCombined(graphics2D, ps1.MakeSinglePath(), ps2.MakeSinglePath());
                     }
@@ -262,7 +262,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.ClosePolygon();
 
-                        graphics2D.Render(ps1, new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
+                        graphics2D.Render(ps1.MakeSinglePath(), new ColorRGBAf(0, 0, 0, 0.1).GetAsRGBA_Bytes());
 
                         var vxs = ps2.MakeVxs();
                         graphics2D.Render(stroke.MakeVxs(vxs), new ColorRGBAf(0, 0.6, 0, 0.1).GetAsRGBA_Bytes());
@@ -448,7 +448,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
             if (combined != null)
             {
-                graphics2D.Render(combined, new ColorRGBAf(0.5, 0.0, 0, 0.5).GetAsRGBA_Bytes());
+                graphics2D.Render(combined.MakeSinglePath(), new ColorRGBAf(0.5, 0.0, 0, 0.5).GetAsRGBA_Bytes());
             }
         }
         public override void MouseDrag(int x, int y)
@@ -509,7 +509,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
 
 
-    public class spiral : IVertexSource
+    public class spiral
     {
         double m_x;
         double m_y;
