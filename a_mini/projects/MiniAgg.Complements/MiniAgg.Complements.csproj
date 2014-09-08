@@ -63,9 +63,9 @@
     <Compile Include="Image\Transposer.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="UnitTests2.cs" />
-    <Compile Include="VertexSource\agg_bspline.cs" />
-    <Compile Include="VertexSource\agg_curves.cs" />
-    <Compile Include="VertexSource\agg_span_gouraud.cs" />
+    <Compile Include="VertexSource\BSpline.cs" />
+    <Compile Include="VertexSource\Curves.cs" />
+    <Compile Include="VertexSource\SpanGourand.cs" />
     <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
     <Compile Include="VertexSource\agg_span_subdiv_adaptor.cs" />
     <Compile Include="VertexSource\Arc.cs" />
@@ -73,7 +73,6 @@
     <Compile Include="VertexSource\ContourGenerator.cs" />
     <Compile Include="VertexSource\Ellipse.cs" />
     <Compile Include="VertexSource\FlattenCurve.cs" />
-    <Compile Include="VertexSource\Point2D.cs" />
     <Compile Include="VertexSource\RoundedRect.cs" />
     <Compile Include="Font\LiberationSansFont.cs" />
     <Compile Include="Font\StyledTypeFace.cs" />
