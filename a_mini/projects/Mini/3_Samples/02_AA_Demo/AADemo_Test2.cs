@@ -169,12 +169,8 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
             var childImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-
-
-            IRecieveBlenderByte rasterBlender = new BlenderBGRA();
-            IRecieveBlenderByte gammaBlender = new BlenderGammaBGRA(this.GammaValue);
-
-            var rasterGamma = new ChildImage(childImage, gammaBlender);
+            //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
+            var rasterGamma = new ChildImage(childImage, new BlenderGammaBGRA(this.GammaValue));
 
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(childImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
@@ -200,15 +196,14 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             //-----------------------------------------------------------------------------------------------------------
             rasterizer.ResetGamma(new gamma_none());
 
-            PathStorage ps = new PathStorage();
-
+            PathStorage ps = new PathStorage(); 
             ps.Clear();
             ps.MoveTo(m_x[0], m_y[0]);
             ps.LineTo(m_x[1], m_y[1]);
             ps.LineTo(m_x[2], m_y[2]);
             ps.LineTo(m_x[0], m_y[0]);
 
-            rasterizer.AddPath((new Stroke(2 )).MakeVxs(ps.MakeVxs()));
+            rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.MakeVxs()));
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
 

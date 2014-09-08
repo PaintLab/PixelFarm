@@ -70,23 +70,8 @@ namespace MatterHackers.Agg
     //
     // filling_rule() and gamma() can be called anytime before "sweeping".
     //------------------------------------------------------------------------
-    public interface IRasterizer
-    {
-
-        int MinX { get; }
-        int MinY { get; }
-        int MaxX { get; }
-        int MaxY { get; }
-
-        void ResetGamma(IGammaFunction gamma_function);
-
-        bool SweepScanline(IScanline sl);
-        void Reset();
-        void AddPath(VertexSnap spath);
-        bool RewindScanlines();
-    }
-
-    public sealed class ScanlineRasterizer : IRasterizer
+    
+    public sealed class ScanlineRasterizer  
     {
         CellAARasterizer m_outline;
         VectorClipper m_VectorClipper;

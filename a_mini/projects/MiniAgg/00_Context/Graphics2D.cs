@@ -36,9 +36,9 @@ namespace MatterHackers.Agg
 
     public abstract class Graphics2D
     {
-        const int cover_full = 255;
+        const int COVER_FULL = 255;
         protected IImage destImageByte;
-        protected Stroke StrockedText;
+        
         protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
 
@@ -55,11 +55,9 @@ namespace MatterHackers.Agg
 
         internal void Initialize(IImage destImage, ScanlineRasterizer rasterizer)
         {
-            destImageByte = destImage;
-            //destImageFloat = null;
+            destImageByte = destImage; 
             this.rasterizer = rasterizer;
-        }
-
+        } 
 
         public int TransformStackCount
         {

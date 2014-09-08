@@ -30,7 +30,8 @@ namespace MatterHackers.Agg.Sample_Draw
         {
             //1.
             // clear the image to white
-            {
+            {   
+
                 g.Clear(ColorRGBA.White);
                 // draw a circle
                 g.Circle(50, 50, 30, ColorRGBA.Blue);

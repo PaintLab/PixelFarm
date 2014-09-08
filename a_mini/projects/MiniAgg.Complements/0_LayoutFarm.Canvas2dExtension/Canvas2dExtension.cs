@@ -36,7 +36,11 @@ namespace MatterHackers.Agg
     public static class Canvas2dExtension
     {
 
-        public static void DrawString(this Graphics2D gx, string Text, double x, double y, double pointSize = 12,
+        public static void DrawString(this Graphics2D gx,
+            string Text,
+            double x,
+            double y,
+            double pointSize = 12,
             Justification justification = Justification.Left,
             Baseline baseline = Baseline.Text,
             ColorRGBA color = new ColorRGBA(),
@@ -58,7 +62,11 @@ namespace MatterHackers.Agg
             stringPrinter.DrawFromHintedCache = drawFromHintedCache;
             stringPrinter.Render(gx, color);
         }
-        public static void DrawString2(this Graphics2D gx, string text, double x, double y, double pointSize = 12,
+        public static void DrawString2(this Graphics2D gx,
+           string text,
+           double x,
+           double y,
+           double pointSize = 12,
            Justification justification = Justification.Left,
            Baseline baseline = Baseline.Text,
            ColorRGBA color = new ColorRGBA(),
@@ -66,8 +74,7 @@ namespace MatterHackers.Agg
            ColorRGBA backgroundColor = new ColorRGBA())
         {
 
-            //1. parse text 
-
+            //1. parse text  
             var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
                 text,
                 pointSize,
