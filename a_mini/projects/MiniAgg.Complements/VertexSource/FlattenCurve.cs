@@ -152,6 +152,7 @@ namespace MatterHackers.Agg.VertexSource
                             vertexDataEnumerator.MoveNext();
                             VertexData vertexDataEnd = vertexDataEnumerator.Current;
                             m_curve3.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataEnd.x, vertexDataEnd.y);
+
                             IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
                             do

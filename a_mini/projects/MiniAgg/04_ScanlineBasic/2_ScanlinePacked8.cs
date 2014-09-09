@@ -45,8 +45,9 @@ namespace MatterHackers.Agg
         byte[] m_covers;      
         ScanlineSpan[] m_spans;
 
-        int m_cover_index;
         int last_span_index;
+        int m_cover_index;
+        
         int last_x;
         int lineY;
 

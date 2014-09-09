@@ -99,7 +99,7 @@ namespace MatterHackers.Agg
                 y = lp.y2 - (lp.x2 - lp.x1);
             }
         }
-    };
+    }
 
     //==========================================================line_parameters
     public class LineParameters

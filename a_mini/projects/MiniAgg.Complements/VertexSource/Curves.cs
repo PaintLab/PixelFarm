@@ -242,58 +242,114 @@ namespace MatterHackers.Agg.VertexSource
             get { return 0; }
             set { }
         }
-
-
         public IEnumerable<VertexData> GetVertexIter()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
+            //RewindZero();
+            //if (m_num_steps == 0)
+            //{
+            //    m_step = -1; 
+            //}
+            //m_step = m_num_steps;
+            //m_fx = m_saved_fx;
+            //m_fy = m_saved_fy;
+            //m_dfx = m_saved_dfx;
+            //m_dfy = m_saved_dfy;
+            ////-----------------------
+            ////2. iter
+
+            //int j = m_points.Count;
+            //if (j > 0)
+            //{
+            //    //first cmd 
+            //    //cmd0
+            //    yield return new VertexData(ShapePath.FlagsAndCommand.CommandMoveTo, m_points[0]);
+            //    //others
+            //    for (int i = 1; i < j; i++)
+            //    {
+            //        yield return new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, m_points[i]);
+
+            //    }
+            //}
+            //yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
         }
 
-        public void RewindZero()
-        {
-            if (m_num_steps == 0)
-            {
-                m_step = -1;
-                return;
-            }
-            m_step = m_num_steps;
-            m_fx = m_saved_fx;
-            m_fy = m_saved_fy;
-            m_dfx = m_saved_dfx;
-            m_dfy = m_saved_dfy;
-        }
+        //void RewindZero()
+        //{
+        //    if (m_num_steps == 0)
+        //    {
+        //        m_step = -1;
+        //        return;
+        //    }
+        //    m_step = m_num_steps;
+        //    m_fx = m_saved_fx;
+        //    m_fy = m_saved_fy;
+        //    m_dfx = m_saved_dfx;
+        //    m_dfy = m_saved_dfy;
 
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            if (m_step < 0)
-            {
-                x = 0;
-                y = 0;
-                return ShapePath.FlagsAndCommand.CommandStop;
-            }
-            if (m_step == m_num_steps)
-            {
-                x = m_start_x;
-                y = m_start_y;
-                --m_step;
-                return ShapePath.FlagsAndCommand.CommandMoveTo;
-            }
-            if (m_step == 0)
-            {
-                x = m_end_x;
-                y = m_end_y;
-                --m_step;
-                return ShapePath.FlagsAndCommand.CommandLineTo;
-            }
-            m_fx += m_dfx;
-            m_fy += m_dfy;
-            m_dfx += m_ddfx;
-            m_dfy += m_ddfy;
-            x = m_fx;
-            y = m_fy;
-            --m_step;
-            return ShapePath.FlagsAndCommand.CommandLineTo;
-        }
+
+        //    if (m_step < 0)
+        //    {
+        //        x = 0;
+        //        y = 0;
+        //        return ShapePath.FlagsAndCommand.CommandStop;
+        //    }
+        //    if (m_step == m_num_steps)
+        //    {
+        //        x = m_start_x;
+        //        y = m_start_y;
+        //        --m_step;
+        //        return ShapePath.FlagsAndCommand.CommandMoveTo;
+        //    }
+        //    if (m_step == 0)
+        //    {
+        //        x = m_end_x;
+        //        y = m_end_y;
+        //        --m_step;
+        //        return ShapePath.FlagsAndCommand.CommandLineTo;
+        //    }
+        //    m_fx += m_dfx;
+        //    m_fy += m_dfy;
+        //    m_dfx += m_ddfx;
+        //    m_dfy += m_ddfy;
+        //    x = m_fx;
+        //    y = m_fy;
+        //    --m_step;
+        //    return ShapePath.FlagsAndCommand.CommandLineTo;
+
+        //}
+
+        //ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        //{
+        //    if (m_step < 0)
+        //    {
+        //        x = 0;
+        //        y = 0;
+        //        return ShapePath.FlagsAndCommand.CommandStop;
+        //    }
+        //    if (m_step == m_num_steps)
+        //    {
+        //        x = m_start_x;
+        //        y = m_start_y;
+        //        --m_step;
+        //        return ShapePath.FlagsAndCommand.CommandMoveTo;
+        //    }
+        //    if (m_step == 0)
+        //    {
+        //        x = m_end_x;
+        //        y = m_end_y;
+        //        --m_step;
+        //        return ShapePath.FlagsAndCommand.CommandLineTo;
+        //    }
+        //    m_fx += m_dfx;
+        //    m_fy += m_dfy;
+        //    m_dfx += m_ddfx;
+        //    m_dfy += m_ddfy;
+        //    x = m_fx;
+        //    y = m_fy;
+        //    --m_step;
+        //    return ShapePath.FlagsAndCommand.CommandLineTo;
+        //}
 
     }
 
@@ -358,8 +414,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public IEnumerable<VertexData> GetVertexIter()
         {
-            int j = m_points.Count;
-
+            int j = m_points.Count; 
             if (j > 0)
             {
                 //first cmd 
@@ -369,36 +424,29 @@ namespace MatterHackers.Agg.VertexSource
                 for (int i = 1; i < j; i++)
                 {
                     yield return new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, m_points[i]);
-                    //if (i == 0)
-                    //{
-                    //    yield return new VertexData(ShapePath.FlagsAndCommand.CommandMoveTo, m_points[i]);
-                    //}
-                    //else
-                    //{
 
-                    //}
                 }
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
         }
-        public void RewindZero()
-        {
-            m_count = 0;
-        }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            if (m_count >= m_points.Count)
-            {
-                x = 0;
-                y = 0;
-                return ShapePath.FlagsAndCommand.CommandStop;
-            }
+        //public void RewindZero()
+        //{
+        //    m_count = 0;
+        //}
+        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        //{
+        //    if (m_count >= m_points.Count)
+        //    {
+        //        x = 0;
+        //        y = 0;
+        //        return ShapePath.FlagsAndCommand.CommandStop;
+        //    }
 
-            Vector2 p = m_points[m_count++];
-            x = p.x;
-            y = p.y;
-            return (m_count == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
-        }
+        //    Vector2 p = m_points[m_count++];
+        //    x = p.x;
+        //    y = p.y;
+        //    return (m_count == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
+        //}
 
         void AddBezier(double x1, double y1,
                     double x2, double y2,
@@ -824,24 +872,24 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
         }
 
-        public void RewindZero()
-        {
-            m_count = 0;
-        }
+        //public void RewindZero()
+        //{
+        //    m_count = 0;
+        //}
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
-        {
-            if (m_count >= m_points.Count)
-            {
-                x = 0;
-                y = 0;
-                return ShapePath.FlagsAndCommand.CommandStop;
-            }
-            Vector2 p = m_points[m_count++];
-            x = p.x;
-            y = p.y;
-            return (m_count == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
-        }
+        //public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        //{
+        //    if (m_count >= m_points.Count)
+        //    {
+        //        x = 0;
+        //        y = 0;
+        //        return ShapePath.FlagsAndCommand.CommandStop;
+        //    }
+        //    Vector2 p = m_points[m_count++];
+        //    x = p.x;
+        //    y = p.y;
+        //    return (m_count == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
+        //}
 
         void AddBezier(double x1, double y1,
                   double x2, double y2,
@@ -1164,28 +1212,28 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void RewindZero()
-        {
-            if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
-            {
-                m_curve_inc.RewindZero();
-            }
-            else
-            {
-                m_curve_div.RewindZero();
-            }
-        }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
-            {
-                return m_curve_inc.GetNextVertex(out x, out y);
-            }
-            else
-            {
-                return m_curve_div.GetNextVertex(out x, out y);
-            }
-        }
+        //public void RewindZero()
+        //{
+        //    if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
+        //    {
+        //        m_curve_inc.RewindZero();
+        //    }
+        //    else
+        //    {
+        //        m_curve_div.RewindZero();
+        //    }
+        //}
+        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        //{
+        //    if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
+        //    {
+        //        return m_curve_inc.GetNextVertex(out x, out y);
+        //    }
+        //    else
+        //    {
+        //        return m_curve_div.GetNextVertex(out x, out y);
+        //    }
+        //}
 
     }
 
@@ -1285,7 +1333,6 @@ namespace MatterHackers.Agg.VertexSource
         {
             get { return this.m_curve_div.CuspLimit; }
             set { this.m_curve_div.CuspLimit = value; }
-
         }
 
 
@@ -1302,24 +1349,24 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void RewindZero()
-        {
-            if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
-            {
-                m_curve_inc.RewindZero();
-            }
-            else
-            {
-                m_curve_div.RewindZero();
-            }
-        }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
-            {
-                return m_curve_inc.GetNextVertex(out x, out y);
-            }
-            return m_curve_div.vertex(out x, out y);
-        }
+        //public void RewindZero()
+        //{
+        //    if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
+        //    {
+        //        m_curve_inc.RewindZero();
+        //    }
+        //    else
+        //    {
+        //        m_curve_div.RewindZero();
+        //    }
+        //}
+        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        //{
+        //    if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
+        //    {
+        //        return m_curve_inc.GetNextVertex(out x, out y);
+        //    }
+        //    return m_curve_div.vertex(out x, out y);
+        //}
     }
 }
