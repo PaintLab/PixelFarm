@@ -30,7 +30,7 @@ namespace MatterHackers.Agg.VertexSource
     //
     // See Implemantation agg_rounded_rect.cpp
     //
-    public class RoundedRect  
+    public class RoundedRect
     {
         RectangleDouble bounds;
         Vector2 leftBottomRadius;
@@ -75,25 +75,25 @@ namespace MatterHackers.Agg.VertexSource
         {
         }
 
-        public void rect(double left, double bottom, double right, double top)
+        public void SetRect(double left, double bottom, double right, double top)
         {
             bounds = new RectangleDouble(left, bottom, right, top);
             if (left > right) { bounds.Left = right; bounds.Right = left; }
             if (bottom > top) { bounds.Bottom = top; bounds.Top = bottom; }
         }
 
-        public void radius(double r)
+        public void SetRadius(double r)
         {
             leftBottomRadius.x = leftBottomRadius.y = rightBottomRadius.x = rightBottomRadius.y = rightTopRadius.x = rightTopRadius.y = leftTopRadius.x = leftTopRadius.y = r;
         }
 
-        public void radius(double rx, double ry)
+        public void SetRadius(double rx, double ry)
         {
             leftBottomRadius.x = rightBottomRadius.x = rightTopRadius.x = leftTopRadius.x = rx;
             leftBottomRadius.y = rightBottomRadius.y = rightTopRadius.y = leftTopRadius.y = ry;
         }
 
-        public void radius(double leftBottomRadius, double rightBottomRadius, double rightTopRadius, double leftTopRadius)
+        public void SetRadius(double leftBottomRadius, double rightBottomRadius, double rightTopRadius, double leftTopRadius)
         {
             this.leftBottomRadius = new Vector2(leftBottomRadius, leftBottomRadius);
             this.rightBottomRadius = new Vector2(rightBottomRadius, rightBottomRadius);
@@ -108,7 +108,7 @@ namespace MatterHackers.Agg.VertexSource
             rightTopRadius.x = rx3; rightTopRadius.y = ry3; leftTopRadius.x = rx4; leftTopRadius.y = ry4;
         }
 
-        public void normalize_radius()
+        public void NormalizeRadius()
         {
             double dx = Math.Abs(bounds.Top - bounds.Bottom);
             double dy = Math.Abs(bounds.Right - bounds.Left);
@@ -127,8 +127,12 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void approximation_scale(double s) { currentProcessingArc.approximation_scale(s); }
-        public double approximation_scale() { return currentProcessingArc.approximation_scale(); }
+        public double ApproximationScale
+        {
+            get { return currentProcessingArc.approximation_scale(); }
+            set { currentProcessingArc.approximation_scale(value); }
+        }
+
 
         public IEnumerable<VertexData> GetVertexIter()
         {
@@ -311,7 +315,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             return new VertexSnap(this.MakeVxs());
         }
-       
+
     }
 }
 

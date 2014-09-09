@@ -187,7 +187,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     if ((i + j) % 2 != 0)
                     {
                         VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * RectWidth, j * RectWidth, (i + 1) * RectWidth, (j + 1) * RectWidth, 0);
-                        rect.normalize_radius();
+                        rect.NormalizeRadius();
 
                         // Drawing as an outline
                         rasterizer.AddPath(rect.MakeVxs());

@@ -148,7 +148,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             // Creating a rounded rectangle
             VertexSource.RoundedRect r = new VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d,
                 this.Radius);
-            r.normalize_radius();
+            r.NormalizeRadius();
             if (this.FillRoundRect)
             {
 

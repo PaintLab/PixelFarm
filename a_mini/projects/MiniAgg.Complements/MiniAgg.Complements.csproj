@@ -51,7 +51,7 @@
     <Compile Include="Base\ProxyImage.cs" />
     <Compile Include="Filter\agg_image_filters.cs" />
     <Compile Include="Filter\agg_pattern_filters_rgba.cs" />
-    <Compile Include="Image\agg_alpha_mask_u8.cs" />
+    <Compile Include="Image\AlphaMask.cs" />
     <Compile Include="VertexSource\agg_span_gradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />

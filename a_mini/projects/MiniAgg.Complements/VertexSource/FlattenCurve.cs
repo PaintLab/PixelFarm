@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.VertexSource
 
             set
             {
-                m_curve3.approximation_scale(value);
+                m_curve3.ApproximationScale = value;
                 m_curve4.ApproximationScale = value;
             }
         }
@@ -83,7 +83,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             set
             {
-                m_curve3.approximation_method(value);
+                m_curve3.ApproximationMethod = value;
                 m_curve4.ApproximationMethod = value;
             }
 
@@ -98,7 +98,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             set
             {
-                m_curve3.angle_tolerance(value);
+                m_curve3.AngleTolerance = value;
                 m_curve4.AngleTolerance = value;
             }
 
@@ -112,7 +112,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             set
             {
-                m_curve3.cusp_limit(value);
+                m_curve3.CuspLimit = value;
                 m_curve4.CuspLimit = value;
             }
 

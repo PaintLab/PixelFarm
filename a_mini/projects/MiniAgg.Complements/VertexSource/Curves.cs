@@ -221,26 +221,30 @@ namespace MatterHackers.Agg.VertexSource
         }
 
 
-        public void approximation_method(Curves.CurveApproximationMethod method) { }
-        public Curves.CurveApproximationMethod approximation_method() { return Curves.CurveApproximationMethod.Inc; }
 
-        public void approximation_scale(double s)
+        public Curves.CurveApproximationMethod ApproximationMethod
         {
-            m_scale = s;
+            get { return Curves.CurveApproximationMethod.Inc; }
+            set { }
+        }
+        public double ApproximationScale
+        {
+            get { return this.m_scale; }
+            set { this.m_scale = value; }
+        }
+        public double AngleTolerance
+        {
+            get { return 0; }
+            set { }
+        }
+        public double CuspLimit
+        {
+            get { return 0; }
+            set { }
         }
 
-        public double approximation_scale()
-        {
-            return m_scale;
-        }
 
-        public void angle_tolerance(double angle) { }
-        public double angle_tolerance() { return 0.0; }
-
-        public void cusp_limit(double limit) { }
-        public double cusp_limit() { return 0.0; }
-
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -259,7 +263,7 @@ namespace MatterHackers.Agg.VertexSource
             m_dfy = m_saved_dfy;
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (m_step < 0)
             {
@@ -317,35 +321,42 @@ namespace MatterHackers.Agg.VertexSource
             m_approximation_scale = (1.0);
             m_angle_tolerance = (0.0);
             m_count = 0;
-            init(x1, y1, cx, cy, x2, y2);
+            Init(x1, y1, cx, cy, x2, y2);
         }
 
-        public void reset() { m_points.Clear(); m_count = 0; }
-        public void init(double x1, double y1,
-                  double cx, double cy,
-                  double x2, double y2)
+        public void Reset() { m_points.Clear(); m_count = 0; }
+        public void Init(double x1, double y1,
+                double cx, double cy,
+                double x2, double y2)
         {
             m_points.Clear();
             m_distance_tolerance_square = 0.5 / m_approximation_scale;
             m_distance_tolerance_square *= m_distance_tolerance_square;
-            bezier(x1, y1, cx, cy, x2, y2);
+            AddBezier(x1, y1, cx, cy, x2, y2);
             m_count = 0;
         }
 
+        public Curves.CurveApproximationMethod ApproximationMethod
+        {
+            get { return Curves.CurveApproximationMethod.Div; }
+        }
+        public double ApproximationScale
+        {
+            get { return this.m_approximation_scale; }
+            set { this.m_approximation_scale = value; }
+        }
+        public double AngleTolerance
+        {
+            get { return this.m_angle_tolerance; }
+            set { this.m_angle_tolerance = value; }
+        }
+        public double CuspLimit
+        {
+            get { return 0; }
+            set { }
+        }
 
-        public void approximation_method(Curves.CurveApproximationMethod method) { }
-        public Curves.CurveApproximationMethod approximation_method() { return Curves.CurveApproximationMethod.Div; }
-
-        public void approximation_scale(double s) { m_approximation_scale = s; }
-        public double approximation_scale() { return m_approximation_scale; }
-
-        public void angle_tolerance(double a) { m_angle_tolerance = a; }
-        public double angle_tolerance() { return m_angle_tolerance; }
-
-        public void cusp_limit(double limit) { }
-        public double cusp_limit() { return 0.0; }
-
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             int j = m_points.Count;
 
@@ -374,7 +385,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             m_count = 0;
         }
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (m_count >= m_points.Count)
             {
@@ -389,16 +400,16 @@ namespace MatterHackers.Agg.VertexSource
             return (m_count == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
         }
 
-        private void bezier(double x1, double y1,
+        void AddBezier(double x1, double y1,
                     double x2, double y2,
                     double x3, double y3)
         {
             m_points.AddVertex(new Vector2(x1, y1));
-            recursive_bezier(x1, y1, x2, y2, x3, y3, 0);
+            AddRecursiveBezier(x1, y1, x2, y2, x3, y3, 0);
             m_points.AddVertex(new Vector2(x3, y3));
         }
 
-        private void recursive_bezier(double x1, double y1,
+        private void AddRecursiveBezier(double x1, double y1,
                               double x2, double y2,
                               double x3, double y3,
                               int level)
@@ -482,15 +493,15 @@ namespace MatterHackers.Agg.VertexSource
 
             // Continue subdivision
             //----------------------
-            recursive_bezier(x1, y1, x12, y12, x123, y123, level + 1);
-            recursive_bezier(x123, y123, x23, y23, x3, y3, level + 1);
+            AddRecursiveBezier(x1, y1, x12, y12, x123, y123, level + 1);
+            AddRecursiveBezier(x123, y123, x23, y23, x3, y3, level + 1);
         }
     }
 
     //-------------------------------------------------------------curve4_points
     public sealed class Curve4Points
     {
-       
+
         public readonly double c0, c1, c2, c3, c4, c5, c6, c7;
         public Curve4Points() { }
         public Curve4Points(double x1, double y1,
@@ -498,13 +509,13 @@ namespace MatterHackers.Agg.VertexSource
                       double x3, double y3,
                       double x4, double y4)
         {
-            
+
             c0 = x1; c1 = y1;
             c2 = x2; c3 = y2;
             c4 = x3; c5 = y3;
             c6 = x4; c7 = y4;
         }
-        
+
     }
 
     //-------------------------------------------------------------curve4_inc
@@ -547,7 +558,7 @@ namespace MatterHackers.Agg.VertexSource
             m_num_steps = (0);
             m_step = (0);
             m_scale = (1.0);
-            init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+            Init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
         }
 
         public Curve4Inc(Curve4Points cp)
@@ -555,15 +566,15 @@ namespace MatterHackers.Agg.VertexSource
             m_num_steps = (0);
             m_step = (0);
             m_scale = (1.0);
-            init(
+            Init(
                     cp.c0, cp.c1,
                     cp.c2, cp.c3,
                     cp.c4, cp.c5,
                     cp.c6, cp.c7);
         }
 
-        public void reset() { m_num_steps = 0; m_step = -1; }
-        public void init(double x1, double y1,
+        public void Reset() { m_num_steps = 0; m_step = -1; }
+        public void Init(double x1, double y1,
                   double cx1, double cy1,
                   double cx2, double cy2,
                   double x2, double y2)
@@ -621,34 +632,37 @@ namespace MatterHackers.Agg.VertexSource
             m_step = m_num_steps;
         }
 
-        public void init(Curve4Points cp)
+        public void Init(Curve4Points cp)
         {
-            init(cp.c0, cp.c1,
+            Init(cp.c0, cp.c1,
                     cp.c2, cp.c3,
                     cp.c4, cp.c5,
                     cp.c6, cp.c7);
         }
-
-        public void approximation_method(Curves.CurveApproximationMethod method) { }
-        public Curves.CurveApproximationMethod approximation_method() { return Curves.CurveApproximationMethod.Inc; }
-
-        public void approximation_scale(double s)
+        public Curves.CurveApproximationMethod ApproximationMethod
         {
-            m_scale = s;
+            get { return Curves.CurveApproximationMethod.Inc; }
+            set { }
+        }
+        public double ApproximationScale
+        {
+            get { return this.m_scale; }
+            set { this.m_scale = value; }
+        }
+        public double AngleTolerance
+        {
+            get { return 0; }
+            set { }
+        }
+        public double CuspLmit
+        {
+            get { return 0; }
+            set { }
+
         }
 
-        public double approximation_scale()
-        {
-            return m_scale;
-        }
 
-        public void angle_tolerance(double angle) { }
-        public double angle_tolerance() { return 0.0; }
-
-        public void cusp_limit(double limit) { }
-        public double cusp_limit() { return 0.0; }
-
-        public IEnumerable<VertexData> Vertices()
+        public IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
         }
@@ -669,7 +683,7 @@ namespace MatterHackers.Agg.VertexSource
             m_ddfy = m_saved_ddfy;
         }
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             if (m_step < 0)
             {
@@ -1086,7 +1100,7 @@ namespace MatterHackers.Agg.VertexSource
         public void Reset()
         {
             m_curve_inc.Reset();
-            m_curve_div.reset();
+            m_curve_div.Reset();
         }
 
         public void Init(double x1, double y1,
@@ -1099,63 +1113,51 @@ namespace MatterHackers.Agg.VertexSource
             }
             else
             {
-                m_curve_div.init(x1, y1, cx, cy, x2, y2);
+                m_curve_div.Init(x1, y1, cx, cy, x2, y2);
+            }
+        }
+        public Curves.CurveApproximationMethod ApproximationMethod
+        {
+            get { return this.m_approximation_method; }
+            set { this.m_approximation_method = value; }
+        }
+        public double ApproximationScale
+        {
+            get
+            {
+                return this.m_curve_inc.ApproximationScale;
+            }
+            set
+            {
+                m_curve_inc.ApproximationScale = m_curve_div.ApproximationScale = value;
+
             }
         }
 
-        public void approximation_method(Curves.CurveApproximationMethod v)
+        public double AngleTolerance
         {
-            m_approximation_method = v;
+            get { return this.m_curve_div.AngleTolerance; }
+            set { this.m_curve_div.AngleTolerance = value; }
         }
 
-        public Curves.CurveApproximationMethod approximation_method()
+        public double CuspLimit
         {
-            return m_approximation_method;
-        }
-
-        public void approximation_scale(double s)
-        {
-            m_curve_inc.approximation_scale(s);
-            m_curve_div.approximation_scale(s);
-        }
-
-        public double approximation_scale()
-        {
-            return m_curve_inc.approximation_scale();
-        }
-
-        public void angle_tolerance(double a)
-        {
-            m_curve_div.angle_tolerance(a);
-        }
-
-        public double angle_tolerance()
-        {
-            return m_curve_div.angle_tolerance();
-        }
-
-        public void cusp_limit(double v)
-        {
-            m_curve_div.cusp_limit(v);
-        }
-
-        public double cusp_limit()
-        {
-            return m_curve_div.cusp_limit();
+            get { return this.m_curve_div.CuspLimit; }
+            set { this.m_curve_div.CuspLimit = value; }
         }
 
         public IEnumerable<VertexData> GetVertexIter()
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
             {
-                foreach (VertexData vertexData in m_curve_inc.Vertices())
+                foreach (VertexData vertexData in m_curve_inc.GetVertexIter())
                 {
                     yield return vertexData;
                 }
             }
             else
             {
-                foreach (VertexData vertexData in m_curve_div.Vertices())
+                foreach (VertexData vertexData in m_curve_div.GetVertexIter())
                 {
                     yield return vertexData;
                 }
@@ -1177,11 +1179,11 @@ namespace MatterHackers.Agg.VertexSource
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
             {
-                return m_curve_inc.vertex(out x, out y);
+                return m_curve_inc.GetNextVertex(out x, out y);
             }
             else
             {
-                return m_curve_div.vertex(out x, out y);
+                return m_curve_div.GetNextVertex(out x, out y);
             }
         }
 
@@ -1222,7 +1224,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void Reset()
         {
-            m_curve_inc.reset();
+            m_curve_inc.Reset();
             m_curve_div.Reset();
         }
 
@@ -1233,7 +1235,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
             {
-                m_curve_inc.init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+                m_curve_inc.Init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
             }
             else
             {
@@ -1261,10 +1263,10 @@ namespace MatterHackers.Agg.VertexSource
 
         public double ApproximationScale
         {
-            get { return m_curve_inc.approximation_scale(); }
+            get { return m_curve_inc.ApproximationScale; }
             set
             {
-                this.m_curve_inc.approximation_scale(value);
+                this.m_curve_inc.ApproximationScale = value;
                 this.m_curve_div.ApproximationScale = value;
             }
         }
@@ -1275,7 +1277,7 @@ namespace MatterHackers.Agg.VertexSource
             set
             {
                 m_curve_div.AngleTolerance = value;
-                m_curve_inc.angle_tolerance(value);
+                m_curve_inc.AngleTolerance = value;
             }
         }
 
@@ -1292,7 +1294,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
             {
-                return m_curve_inc.Vertices();
+                return m_curve_inc.GetVertexIter();
             }
             else
             {
@@ -1315,7 +1317,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
             {
-                return m_curve_inc.vertex(out x, out y);
+                return m_curve_inc.GetNextVertex(out x, out y);
             }
             return m_curve_div.vertex(out x, out y);
         }
