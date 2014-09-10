@@ -100,12 +100,7 @@ namespace MatterHackers.Agg
             get { return rasterizer; }
         }
 
-        public abstract IScanline ScanlineCache
-        {
-            get;
-            set;
-        }
-
+       
         public IImage DestImage
         {
             get

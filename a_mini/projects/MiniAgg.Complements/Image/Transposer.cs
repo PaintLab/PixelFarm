@@ -36,62 +36,62 @@ namespace MatterHackers.Agg.Image
             return linkedImage.GetPixel(y, x);
         }
 
-        public override void copy_pixel(int x, int y, byte[] c, int ByteOffset)
+        //public override void CopyPixel(int x, int y, byte[] c, int byteOffset)
+        //{
+        //    linkedImage.CopyPixel(y, x, c, byteOffset);
+        //}
+
+        public override void CopyHL(int x, int y, int len, ColorRGBA c)
         {
-            linkedImage.copy_pixel(y, x, c, ByteOffset);
+            linkedImage.CopyVL(y, x, len, c);
         }
 
-        public override void copy_hline(int x, int y, int len, ColorRGBA c)
-        {
-            linkedImage.copy_vline(y, x, len, c);
-        }
 
-
-        public override void copy_vline(int x, int y,
+        public override void CopyVL(int x, int y,
                                    int len,
                                    ColorRGBA c)
         {
-            linkedImage.copy_hline(y, x, len, c);
+            linkedImage.CopyHL(y, x, len, c);
         }
 
-        public override void blend_hline(int x1, int y,int x2, ColorRGBA c, byte cover)
+        public override void BlendHL(int x1, int y,int x2, ColorRGBA c, byte cover)
         {
-            linkedImage.blend_vline(y, x1, x2, c, cover);
+            linkedImage.BlendVL(y, x1, x2, c, cover);
         }
 
-        public override void blend_vline(int x, int y1, int y2, ColorRGBA c, byte cover)
+        public override void BlendVL(int x, int y1, int y2, ColorRGBA c, byte cover)
         {
-            linkedImage.blend_hline(y1, x, y2, c, cover);
+            linkedImage.BlendHL(y1, x, y2, c, cover);
         }
 
-        public override void blend_solid_hspan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
+        public override void BlendSolidHSpan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
         {
-            linkedImage.blend_solid_vspan(y, x, len, c, covers, coversIndex);
+            linkedImage.BlendSolidVSpan(y, x, len, c, covers, coversIndex);
         }
 
-        public override void blend_solid_vspan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
+        public override void BlendSolidVSpan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
         {
-            linkedImage.blend_solid_hspan(y, x, len, c, covers, coversIndex);
+            linkedImage.BlendSolidHSpan(y, x, len, c, covers, coversIndex);
         }
 
-        public override void copy_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
+        public override void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
         {
-            linkedImage.copy_color_vspan(y, x, len, colors, colorsIndex);
+            linkedImage.CopyColorVSpan(y, x, len, colors, colorsIndex);
         }
 
-        public override void copy_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
+        public override void CopyColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
         {
-            linkedImage.copy_color_hspan(y, x, len, colors, colorsIndex);
+            linkedImage.CopyColorHSpan(y, x, len, colors, colorsIndex);
         }
 
-        public override void blend_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
+        public override void BlendColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
-            linkedImage.blend_color_vspan(y, x, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
+            linkedImage.BlendColorVSpan(y, x, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-        public override void blend_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
+        public override void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
-            linkedImage.blend_color_hspan(y, x, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
+            linkedImage.BlendColorHSpan(y, x, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
     };
 }

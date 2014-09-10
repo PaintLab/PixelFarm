@@ -26,6 +26,7 @@ namespace MatterHackers.Agg
         public ShapePath.FlagsAndCommand command;
         public double x;
         public double y;
+
         public VertexData(ShapePath.FlagsAndCommand command, Vector2 position)
         {
             this.command = command;

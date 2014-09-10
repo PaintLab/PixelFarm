@@ -688,22 +688,22 @@ namespace MatterHackers.Agg
 
         public int Red0To255
         {
-            get { return (int)red; }
+            get { return red; }
             set { red = (byte)value; }
         }
         public int Green0To255
         {
-            get { return (int)green; }
+            get { return green; }
             set { green = (byte)value; }
         }
         public int Blue0To255
         {
-            get { return (int)blue; }
+            get { return blue; }
             set { blue = (byte)value; }
         }
         public int Alpha0To255
         {
-            get { return (int)alpha; }
+            get { return alpha; }
             set { alpha = (byte)value; }
         }
 

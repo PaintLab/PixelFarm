@@ -77,10 +77,10 @@ namespace MatterHackers.Agg.Image
             return linkedImage.GetPixel(x, y);
         }
 
-        public virtual void copy_pixel(int x, int y, byte[] c, int ByteOffset)
-        {
-            linkedImage.copy_pixel(x, y, c, ByteOffset);
-        }
+        //public virtual void CopyPixel(int x, int y, byte[] c, int byteOffset)
+        //{
+        //    linkedImage.CopyPixel(x, y, c, byteOffset);
+        //}
 
         public virtual void CopyFrom(IImage sourceRaster)
         {
@@ -97,59 +97,59 @@ namespace MatterHackers.Agg.Image
             linkedImage.SetPixel(x, y, color);
         }
 
-        public virtual void BlendPixel(int x, int y, ColorRGBA sourceColor, byte cover)
+        //public virtual void BlendPixel(int x, int y, ColorRGBA sourceColor, byte cover)
+        //{
+        //    linkedImage.BlendPixel(x, y, sourceColor, cover);
+        //}
+
+        public virtual void CopyHL(int x, int y, int len, ColorRGBA sourceColor)
         {
-            linkedImage.BlendPixel(x, y, sourceColor, cover);
+            linkedImage.CopyHL(x, y, len, sourceColor);
         }
 
-        public virtual void copy_hline(int x, int y, int len, ColorRGBA sourceColor)
+        public virtual void CopyVL(int x, int y, int len, ColorRGBA sourceColor)
         {
-            linkedImage.copy_hline(x, y, len, sourceColor);
+            linkedImage.CopyVL(x, y, len, sourceColor);
         }
 
-        public virtual void copy_vline(int x, int y, int len, ColorRGBA sourceColor)
+        public virtual void BlendHL(int x1, int y, int x2, ColorRGBA sourceColor, byte cover)
         {
-            linkedImage.copy_vline(x, y, len, sourceColor);
+            linkedImage.BlendHL(x1, y, x2, sourceColor, cover);
         }
 
-        public virtual void blend_hline(int x1, int y, int x2, ColorRGBA sourceColor, byte cover)
+        public virtual void BlendVL(int x, int y1, int y2, ColorRGBA sourceColor, byte cover)
         {
-            linkedImage.blend_hline(x1, y, x2, sourceColor, cover);
+            linkedImage.BlendVL(x, y1, y2, sourceColor, cover);
         }
 
-        public virtual void blend_vline(int x, int y1, int y2, ColorRGBA sourceColor, byte cover)
+        public virtual void BlendSolidHSpan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
         {
-            linkedImage.blend_vline(x, y1, y2, sourceColor, cover);
+            linkedImage.BlendSolidHSpan(x, y, len, c, covers, coversIndex);
         }
 
-        public virtual void blend_solid_hspan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
+        public virtual void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorIndex)
         {
-            linkedImage.blend_solid_hspan(x, y, len, c, covers, coversIndex);
+            linkedImage.CopyColorHSpan(x, y, len, colors, colorIndex);
         }
 
-        public virtual void copy_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorIndex)
+        public virtual void CopyColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorIndex)
         {
-            linkedImage.copy_color_hspan(x, y, len, colors, colorIndex);
+            linkedImage.CopyColorVSpan(x, y, len, colors, colorIndex);
         }
 
-        public virtual void copy_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorIndex)
+        public virtual void BlendSolidVSpan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
         {
-            linkedImage.copy_color_vspan(x, y, len, colors, colorIndex);
+            linkedImage.BlendSolidVSpan(x, y, len, c, covers, coversIndex);
         }
 
-        public virtual void blend_solid_vspan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
+        public virtual void BlendColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
-            linkedImage.blend_solid_vspan(x, y, len, c, covers, coversIndex);
+            linkedImage.BlendColorHSpan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-        public virtual void blend_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
+        public virtual void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
-            linkedImage.blend_color_hspan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
-        }
-
-        public virtual void blend_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
-        {
-            linkedImage.blend_color_vspan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
+            linkedImage.BlendColorVSpan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
         public byte[] GetBuffer()

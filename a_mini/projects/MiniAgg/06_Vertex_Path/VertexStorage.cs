@@ -28,7 +28,7 @@ namespace MatterHackers.Agg
         int m_allocated_vertices;
         double[] m_coord_xy;
         ShapePath.FlagsAndCommand[] m_CommandAndFlags;
-       
+
 
         public VertexStorage()
         {
@@ -39,14 +39,19 @@ namespace MatterHackers.Agg
             int j = this.m_num_vertices = vxlist.Count;
             m_coord_xy = new double[(j << 1) + 2];
             m_CommandAndFlags = new ShapePath.FlagsAndCommand[j + 2];
+
+
             int n = 0;
-            for (int i = 0; i < j; ++i)
+            int m = 0;
+            for (int i = j - 1; i >= 0; --i)
             {
-                VertexData vxdata = vxlist[i];
-                m_coord_xy[n++] = vxdata.x;
-                m_coord_xy[n++] = vxdata.y;
-                m_CommandAndFlags[i] = vxdata.command;
+                VertexData vxdata = vxlist[n];
+                m_coord_xy[m++] = vxdata.x;
+                m_coord_xy[m++] = vxdata.y;
+                m_CommandAndFlags[n] = vxdata.command;
+                n++;
             }
+
         }
         public VertexStorage(List<VertexData> vxlist, bool hasMoreThanOnePart)
             : this(vxlist)
@@ -70,8 +75,11 @@ namespace MatterHackers.Agg
         }
         public void AddVertex(double x, double y, ShapePath.FlagsAndCommand CommandAndFlags)
         {
-            AllocIfRequired(m_num_vertices);
-
+            if (m_num_vertices >= m_allocated_vertices)
+            {
+                AllocIfRequired(m_num_vertices);
+            }
+            //-----------------------------------------------------
             m_coord_xy[m_num_vertices << 1] = x;
             m_coord_xy[(m_num_vertices << 1) + 1] = y;
             m_CommandAndFlags[m_num_vertices] = CommandAndFlags;
@@ -170,7 +178,7 @@ namespace MatterHackers.Agg
             x = m_coord_xy[i];
             y = m_coord_xy[i + 1];
             return m_CommandAndFlags[index];
-                                 
+
         }
         public void GetVertexXY(int index, out double x, out double y)
         {

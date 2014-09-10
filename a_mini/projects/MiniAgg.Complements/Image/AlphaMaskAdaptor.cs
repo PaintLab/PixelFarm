@@ -70,12 +70,12 @@ namespace MatterHackers.Agg.Image
             m_mask = mask;
         }
 
-        public void copy_pixel(int x, int y, ColorRGBA c)
-        {
-            linkedImage.BlendPixel(x, y, c, m_mask.pixel(x, y));
-        }
+        //public void copy_pixel(int x, int y, ColorRGBA c)
+        //{
+        //    linkedImage.BlendPixel(x, y, c, m_mask.pixel(x, y));
+        //}
 
-        public override void copy_hline(int x, int y, int len, ColorRGBA c)
+        public override void CopyHL(int x, int y, int len, ColorRGBA c)
         {
             throw new NotImplementedException();
             /*
@@ -91,24 +91,24 @@ namespace MatterHackers.Agg.Image
              */
         }
 
-        public override void blend_hline(int x1, int y, int x2, ColorRGBA c, byte cover)
+        public override void BlendHL(int x1, int y, int x2, ColorRGBA c, byte cover)
         {
             int len = x2 - x1 + 1;
             if (cover == cover_full)
             {
                 realloc_span(len);
                 m_mask.combine_hspanFullCover(x1, y, m_spans, 0, (int)len);
-                linkedImage.blend_solid_hspan(x1, y, (int)len, c, m_spans, 0);
+                linkedImage.BlendSolidHSpan(x1, y, (int)len, c, m_spans, 0);
             }
             else
             {
                 init_span(len, cover);
                 m_mask.combine_hspan(x1, y, m_spans, 0, (int)len);
-                linkedImage.blend_solid_hspan(x1, y, (int)len, c, m_spans, 0);
+                linkedImage.BlendSolidHSpan(x1, y, (int)len, c, m_spans, 0);
             }
         }
 
-        public override void copy_vline(int x, int y, int len, ColorRGBA c)
+        public override void CopyVL(int x, int y, int len, ColorRGBA c)
         {
             throw new NotImplementedException(); /*
             realloc_span((int)len);
@@ -123,7 +123,7 @@ namespace MatterHackers.Agg.Image
                                                   */
         }
 
-        public override void blend_vline(int x, int y1, int y2, ColorRGBA c, byte cover)
+        public override void BlendVL(int x, int y1, int y2, ColorRGBA c, byte cover)
         {
             throw new NotImplementedException(); /*
             int len = y2 - y1 + 1;
@@ -140,14 +140,14 @@ namespace MatterHackers.Agg.Image
                                                   */
         }
 
-        public override void blend_solid_hspan(int x, int y, int len, ColorRGBA color, byte[] covers, int coversIndex)
+        public override void BlendSolidHSpan(int x, int y, int len, ColorRGBA color, byte[] covers, int coversIndex)
         {
             byte[] buffer = m_spans;
             m_mask.combine_hspan(x, y, covers, coversIndex, len);
-            linkedImage.blend_solid_hspan(x, y, len, color, covers, coversIndex);
+            linkedImage.BlendSolidHSpan(x, y, len, color, covers, coversIndex);
         }
 
-        public override void blend_solid_vspan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
+        public override void BlendSolidVSpan(int x, int y, int len, ColorRGBA c, byte[] covers, int coversIndex)
         {
             throw new System.NotImplementedException();
 #if false
@@ -163,7 +163,7 @@ namespace MatterHackers.Agg.Image
 #endif
         }
 
-        public override void copy_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
+        public override void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
         {
             throw new System.NotImplementedException();
 #if false
@@ -179,7 +179,7 @@ namespace MatterHackers.Agg.Image
 #endif
         }
 
-        public override void copy_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
+        public override void CopyColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
         {
             throw new System.NotImplementedException();
 #if false
@@ -195,7 +195,7 @@ namespace MatterHackers.Agg.Image
 #endif
         }
 
-        public override void blend_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
+        public override void BlendColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
             throw new System.NotImplementedException();
 #if false
@@ -219,7 +219,7 @@ namespace MatterHackers.Agg.Image
 #endif
         }
 
-        public override void blend_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
+        public override void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
             throw new System.NotImplementedException();
 #if false

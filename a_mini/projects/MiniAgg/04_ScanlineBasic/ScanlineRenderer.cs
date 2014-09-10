@@ -43,12 +43,12 @@ namespace MatterHackers.Agg
                 int x = span.x;
                 if (span.len > 0)
                 {
-                    destImage.blend_solid_hspan(x, y, span.len, color, covers, span.cover_index);
+                    destImage.BlendSolidHSpan(x, y, span.len, color, covers, span.cover_index);
                 }
                 else
                 {
                     int x2 = (x - (int)span.len - 1);
-                    destImage.blend_hline(x, y, x2, color, covers[span.cover_index]);
+                    destImage.BlendHL(x, y, x2, color, covers[span.cover_index]);
                 }
 
             }
@@ -92,7 +92,7 @@ namespace MatterHackers.Agg
 
                 bool useFirstCoverForAll = span.len < 0;
 
-                destImage.blend_color_hspan(x, y, len,
+                destImage.BlendColorHSpan(x, y, len,
                     tempSpanColors.Array, 0,
                     covers, span.cover_index, useFirstCoverForAll);
             }

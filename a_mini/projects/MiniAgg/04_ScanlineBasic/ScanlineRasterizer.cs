@@ -90,8 +90,7 @@ namespace MatterHackers.Agg
         const int AA_SCALE = 1 << AA_SHIFT;
         const int AA_MASK = AA_SCALE - 1;
         const int AA_SCALE2 = AA_SCALE * 2;
-        const int AA_MASK2 = AA_SCALE2 - 1;
-
+        const int AA_MASK2 = AA_SCALE2 - 1; 
         //---------------------------
 
         enum Status
