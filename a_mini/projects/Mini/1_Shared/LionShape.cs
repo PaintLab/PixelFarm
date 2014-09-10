@@ -174,7 +174,7 @@ namespace MatterHackers.Agg
                     // New color. Every new color creates new path in the path object.
                     path.ClosePolygon();
 
-                    colors[npaths] = ColorRGBA.rgb8_packed((int)newColor);
+                    colors[npaths] = ColorRGBA.CreatRGB8Packed((int)newColor);
                     path_idx[npaths] = path.StartNewPath();
                     npaths++;
                 }

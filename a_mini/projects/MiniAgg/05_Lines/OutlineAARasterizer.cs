@@ -585,13 +585,13 @@ namespace MatterHackers.Agg.Lines
         //}
 
        
-        void AddPath(SinglePath s)
+        void AddPath(VertexSnap s)
         {
             double x;
             double y;
 
             ShapePath.FlagsAndCommand cmd;
-            s.RewindZ();
+            s.RewindZero();
             while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 //index++;
@@ -601,7 +601,7 @@ namespace MatterHackers.Agg.Lines
             }
             Render(false);
         }
-        public void RenderSinglePath(SinglePath s, ColorRGBA c)
+        public void RenderVertexSnap(VertexSnap s, ColorRGBA c)
         {
             m_ren.color(c);
             AddPath(s);

@@ -27,11 +27,8 @@ of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 
-//#define USE_VBO
-
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -41,17 +38,17 @@ using MatterHackers.Agg.Image;
 using MatterHackers.PolygonMesh;
 using MatterHackers.VectorMath;
 
-using OpenTK.Graphics.OpenGL;
-
 namespace MatterHackers.RenderOpenGl
 {
     public struct TriangleVertexData
     {
         public float textureU;
         public float textureV;
+
         public float normalsX;
         public float normalsY;
         public float normalsZ;
+
         public float positionsX;
         public float positionsY;
         public float positionsZ;
@@ -62,64 +59,31 @@ namespace MatterHackers.RenderOpenGl
     public class SubTriangleMesh
     {
         public ImageBuffer texture = null;
-#if USE_VBO
-        public int count;
-        public int vboHandle;
-#else
         public VectorPOD<TriangleVertexData> vertexDatas = new VectorPOD<TriangleVertexData>();
-#endif
     }
 
     public class GLMeshTrianglePlugin
     {
-        struct RemoveData
-        {
-            internal int vboHandle;
-
-            public RemoveData(int vboHandle)
-            {
-                this.vboHandle = vboHandle;
-            }
-        }
-
         public delegate void DrawToGL(Mesh meshToRender);
 
         private static ConditionalWeakTable<Mesh, GLMeshTrianglePlugin> meshesWithCacheData = new ConditionalWeakTable<Mesh, GLMeshTrianglePlugin>();
 
-        private static List<RemoveData> glDataNeedingToBeDeleted = new List<RemoveData>();
-
         public List<SubTriangleMesh> subMeshs;
 
         private int meshUpdateCount;
-
-        static public void DeleteUnusedGLResources()
-        {
-            using (TimedLock.Lock(glDataNeedingToBeDeleted, "GLMeshPluginDeleteUnused"))
-            {
-                // We run this in here to ensure that we are on the correct thread and have the correct
-                // glcontext realized.
-                for (int i = glDataNeedingToBeDeleted.Count - 1; i >= 0; i--)
-                {
-                    //GL.DeleteBuffers(glDataNeedingToBeDeleted[i].vboHandle);
-                    glDataNeedingToBeDeleted.RemoveAt(i);
-                }
-            }
-        }
 
         static public GLMeshTrianglePlugin Get(Mesh meshToGetDisplayListFor)
         {
             GLMeshTrianglePlugin plugin;
             meshesWithCacheData.TryGetValue(meshToGetDisplayListFor, out plugin);
 
-                if (plugin != null && meshToGetDisplayListFor.ChangedCount != plugin.meshUpdateCount)
-                {
-                    plugin.meshUpdateCount = meshToGetDisplayListFor.ChangedCount;
-                    plugin.AddRemoveData();
-                    plugin.CreateRenderData(meshToGetDisplayListFor);
-                    plugin.meshUpdateCount = meshToGetDisplayListFor.ChangedCount;
-                }
-
-            DeleteUnusedGLResources();
+            if (plugin != null && meshToGetDisplayListFor.ChangedCount != plugin.meshUpdateCount)
+            {
+                plugin.meshUpdateCount = meshToGetDisplayListFor.ChangedCount;
+                plugin.AddRemoveData();
+                plugin.CreateRenderData(meshToGetDisplayListFor);
+                plugin.meshUpdateCount = meshToGetDisplayListFor.ChangedCount;
+            }
 
             if (plugin == null)
             {
@@ -141,15 +105,6 @@ namespace MatterHackers.RenderOpenGl
 
         void AddRemoveData()
         {
-#if USE_VBO
-            using (TimedLock.Lock(glDataNeedingToBeDeleted, "~GLMeshPlugin"))
-            {
-                foreach (SubMesh subMesh in subMeshs)
-                {
-                    glDataNeedingToBeDeleted.Add(new RemoveData(subMesh.vboHandle));
-                }
-            }
-#endif
         }
 
         ~GLMeshTrianglePlugin()
@@ -178,17 +133,8 @@ namespace MatterHackers.RenderOpenGl
                     newSubMesh.texture = faceTexture;
                     subMeshs.Add(newSubMesh);
 
-#if USE_VBO
-                    if (currentSubMesh != null)
-                    {
-                        CreateVBOForSubMesh(vertexDatas, currentSubMesh);
-                        vertexDatas.Clear();
-                    }
-                    currentSubMesh = subMeshs[subMeshs.Count - 1];
-#else
                     currentSubMesh = subMeshs[subMeshs.Count - 1];
                     vertexDatas = currentSubMesh.vertexDatas;
-#endif
                 }
 
                 Vector2[] textureUV = new Vector2[2];
@@ -228,19 +174,6 @@ namespace MatterHackers.RenderOpenGl
                     vertexIndex++;
                 }
             }
-
-            CreateVBOForSubMesh(vertexDatas, currentSubMesh);
-        }
-
-        private static void CreateVBOForSubMesh(VectorPOD<TriangleVertexData> vertexDatas, SubTriangleMesh currentSubMesh)
-        {
-#if USE_VBO
-            currentSubMesh.count = vertexDatas.Count;
-            currentSubMesh.vboHandle = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, currentSubMesh.vboHandle);
-            GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(currentSubMesh.count * VertexData.Stride), vertexDatas.Array, BufferUsageHint.StaticDraw);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-#endif
         }
 
         public void Render()

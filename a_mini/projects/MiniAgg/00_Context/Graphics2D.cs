@@ -36,9 +36,9 @@ namespace MatterHackers.Agg
 
     public abstract class Graphics2D
     {
-        const int cover_full = 255;
+        const int COVER_FULL = 255;
         protected IImage destImageByte;
-        protected Stroke StrockedText;
+        
         protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
 
@@ -55,11 +55,9 @@ namespace MatterHackers.Agg
 
         internal void Initialize(IImage destImage, ScanlineRasterizer rasterizer)
         {
-            destImageByte = destImage;
-            //destImageFloat = null;
+            destImageByte = destImage; 
             this.rasterizer = rasterizer;
-        }
-
+        } 
 
         public int TransformStackCount
         {
@@ -102,24 +100,15 @@ namespace MatterHackers.Agg
             get { return rasterizer; }
         }
 
-        public abstract IScanline ScanlineCache
-        {
-            get;
-            set;
-        }
-
+       
         public IImage DestImage
         {
             get
             {
                 return destImageByte;
             }
-        }
-
-
-       
-        public abstract void Render(IVertexSource vertexSource, ColorRGBA colorBytes);
-        public abstract void Render(SinglePath vertexSource, ColorRGBA colorBytes);
+        } 
+        public abstract void Render(VertexSnap vertexSource, ColorRGBA colorBytes);
         public void Render(IImage imageSource, int x, int y)
         {
             
@@ -141,31 +130,28 @@ namespace MatterHackers.Agg
             for (int i = 0; i < numPaths; i++)
             {
                 //Render(vertexSource, pathIdArray[i], colorArray[i]);
-                Render(new SinglePath(vxStorage, pathIdArray[i]), colorArray[i]);
+                Render(new VertexSnap(vxStorage, pathIdArray[i]), colorArray[i]);
             }
         }
         public void Render(VertexStorage vxStorage, ColorRGBA c)
         {
-            Render(new SinglePath(vxStorage, 0), c);
+            Render(new VertexSnap(vxStorage, 0), c);
         }
-        public void Render(SinglePath vertexSource, double x, double y, ColorRGBA color)
+        public void Render(VertexSnap vertexSource, double x, double y, ColorRGBA color)
         {
-            var inputVxs = vertexSource.MakeVxs();
-            var vxs = Affine.NewTranslation(x, y).TransformToSinglePath(inputVxs);
-            Render(vxs, color);
-
-            //Render(
-            //    new VertexSourceApplyTransform(vertexSource, Affine.NewTranslation(x, y)).DoTransformToNewSinglePath(), color);
+            var inputVxs = vertexSource.GetInternalVxs();
+            var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
+            Render(vxs, color); 
         }
 
-        public void Render(IVertexSource vertexSource, Vector2 position, ColorRGBA color)
+        public void Render(VertexSnap vertexSource, Vector2 position, ColorRGBA color)
         {
-            var inputVxs = vertexSource.MakeVxs();
-            var vxs = Affine.NewTranslation(position.x, position.y).TransformToSinglePath(inputVxs);
+            var inputVxs = vertexSource.GetInternalVxs();
+            var vxs = Affine.NewTranslation(position.x, position.y).TransformToVertexSnap(inputVxs);
             Render(vxs, color);
         }
 
-        public abstract void Clear(IColor color);
+        public abstract void Clear(ColorRGBA color);
 
         public void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {

@@ -120,8 +120,8 @@ namespace MatterHackers.Agg.VertexSource
             // go to the start
             VertexData vertexData = new VertexData();
             vertexData.command = FlagsAndCommand.CommandMoveTo;
-            vertexData.position.x = originX + Math.Cos(startAngle) * radiusX;
-            vertexData.position.y = originY + Math.Sin(startAngle) * radiusY;
+            vertexData.x = originX + Math.Cos(startAngle) * radiusX;
+            vertexData.y = originY + Math.Sin(startAngle) * radiusY;
             yield return vertexData;
 
             double angle = startAngle;
@@ -130,13 +130,13 @@ namespace MatterHackers.Agg.VertexSource
             {
                 angle += flatenDeltaAngle;
 
-                vertexData.position.x = originX + Math.Cos(angle) * radiusX;
-                vertexData.position.y = originY + Math.Sin(angle) * radiusY;
+                vertexData.x = originX + Math.Cos(angle) * radiusX;
+                vertexData.y = originY + Math.Sin(angle) * radiusY;
                 yield return vertexData;
             }
 
-            vertexData.position.x = originX + Math.Cos(endAngle) * radiusX;
-            vertexData.position.y = originY + Math.Sin(endAngle) * radiusY;
+            vertexData.x = originX + Math.Cos(endAngle) * radiusX;
+            vertexData.y = originY + Math.Sin(endAngle) * radiusY;
             yield return vertexData;
 
             vertexData.command = FlagsAndCommand.CommandStop;

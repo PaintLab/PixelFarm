@@ -1278,7 +1278,7 @@ namespace MatterHackers.Agg.Image
                     Sum2Array[x].to_pix(ref BufferArray[x]);
                 }
 
-                img.copy_color_hspan(0, y, w, BufferArray, 0);
+                img.CopyColorHSpan(0, y, w, BufferArray, 0);
             }
         }
 

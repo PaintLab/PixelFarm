@@ -26,23 +26,23 @@ using MatterHackers.Agg.Image;
 
 namespace MatterHackers.Agg.Font
 {
-    public class GlyphWithUnderline : IVertexSource
+    public class GlyphWithUnderline  
     {
 
-        SinglePath underline;
-        SinglePath glyph;
+        VertexSnap underline;
+        VertexSnap glyph;
 
         public GlyphWithUnderline(VertexStorage glyph, int advanceForCharacter, int Underline_position, int Underline_thickness)
         {
-            underline = new SinglePath(
+            underline = new VertexSnap(
                 new RoundedRect(new RectangleDouble(0,
                     Underline_position, advanceForCharacter,
                     Underline_position + Underline_thickness), 0).MakeVxs());
-            this.glyph = new SinglePath(glyph);
+            this.glyph = new VertexSnap(glyph);
         }
 
 
-        public SinglePath MakeSinglePath() { return new SinglePath(this.MakeVxs()); }
+        public VertexSnap MakeVertexSnap() { return new VertexSnap(this.MakeVxs()); }
         public VertexStorage MakeVxs()
         {
             var list = new List<VertexData>();
@@ -77,8 +77,8 @@ namespace MatterHackers.Agg.Font
         public void RewindZero()
         {
             state = 0;
-            underline.RewindZ();
-            glyph.RewindZ();
+            underline.RewindZero();
+            glyph.RewindZero();
         }
 
         int state = 0;
@@ -322,7 +322,7 @@ namespace MatterHackers.Agg.Font
 
             ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
             var gfx = Graphics2D.CreateFromImage(charImage);
-            gfx.Render(new SinglePath(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
+            gfx.Render(new VertexSnap(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
             characterImageCache[character] = charImage;
 
             return charImage;

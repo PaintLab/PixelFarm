@@ -21,10 +21,10 @@ using MatterHackers.VectorMath;
 
 using MatterHackers.Agg.Image;
 
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
-    
-    public interface IImage 
+
+    public interface IImage
     {
         Vector2 OriginOffset
         {
@@ -35,7 +35,7 @@ namespace MatterHackers.Agg
         int Width { get; }
         int Height { get; }
         RectangleInt GetBounds();
-        
+
         int GetBufferOffsetXY(int x, int y);
         void MarkImageChanged();
 
@@ -44,35 +44,35 @@ namespace MatterHackers.Agg
 
         IRecieveBlenderByte GetRecieveBlender();
         void SetRecieveBlender(IRecieveBlenderByte value);
-        
+
 
         byte[] GetBuffer();
 
         ColorRGBA GetPixel(int x, int y);
-        void copy_pixel(int x, int y, byte[] c, int ByteOffset);
-        
+        //void CopyPixel(int x, int y, byte[] c, int byteOffset);
+
         void CopyFrom(IImage sourceImage);
         void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
 
         void SetPixel(int x, int y, ColorRGBA color);
-        void BlendPixel(int x, int y, ColorRGBA sourceColor, byte cover);
+        //void BlendPixel(int x, int y, ColorRGBA sourceColor, byte cover);
 
         // line stuff
-        void copy_hline(int x, int y, int len, ColorRGBA sourceColor);
-        void copy_vline(int x, int y, int len, ColorRGBA sourceColor);
+        void CopyHL(int x, int y, int len, ColorRGBA sourceColor);
+        void CopyVL(int x, int y, int len, ColorRGBA sourceColor);
 
-        void blend_hline(int x, int y, int x2, ColorRGBA sourceColor, byte cover);
-        void blend_vline(int x, int y1, int y2, ColorRGBA sourceColor, byte cover);
+        void BlendHL(int x, int y, int x2, ColorRGBA sourceColor, byte cover);
+        void BlendVL(int x, int y1, int y2, ColorRGBA sourceColor, byte cover);
 
         // color stuff
-        void copy_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorIndex);
-        void copy_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorIndex);
+        void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorIndex);
+        void CopyColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorIndex);
 
-        void blend_solid_hspan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex);
-        void blend_solid_vspan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex);
+        void BlendSolidHSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex);
+        void BlendSolidVSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex);
 
-        void blend_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
-        void blend_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
+        void BlendColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
+        void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
     }
-     
+
 }

@@ -35,7 +35,7 @@ namespace MatterHackers.Agg
     // outside the given with init() X-range. Extrapolation is a simple linear 
     // function.
     //------------------------------------------------------------------------
-    public sealed class bspline
+    public sealed class BSpline
     {
         private int m_max;
         private int m_num;
@@ -45,7 +45,7 @@ namespace MatterHackers.Agg
         private int m_last_idx;
 
         //------------------------------------------------------------------------
-        public bspline()
+        public BSpline()
         {
             m_max = (0);
             m_num = (0);
@@ -55,7 +55,7 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        public bspline(int num)
+        public BSpline(int num)
         {
             m_max = (0);
             m_num = (0);
@@ -63,26 +63,26 @@ namespace MatterHackers.Agg
             m_yOffset = (0);
             m_last_idx = -1;
 
-            init(num);
+            Init(num);
         }
 
         //------------------------------------------------------------------------
-        public bspline(int num, double[] x, double[] y)
+        public BSpline(int num, double[] x, double[] y)
         {
             m_max = (0);
             m_num = (0);
             m_xOffset = (0);
             m_yOffset = (0);
             m_last_idx = -1;
-            init(num, x, y);
+            Init(num, x, y);
         }
 
 
         //------------------------------------------------------------------------
-        void init(int max)
+        void Init(int max)
         {
             if (max > 2 && max > m_max)
-            {   
+            {
                 m_am = new double[max * 3];
                 m_max = max;
                 m_xOffset = m_max;
@@ -90,9 +90,9 @@ namespace MatterHackers.Agg
             }
             m_num = 0;
             m_last_idx = -1;
-        } 
+        }
         //------------------------------------------------------------------------
-        public void add_point(double x, double y)
+        public void AddPoint(double x, double y)
         {
             if (m_num < m_max)
             {
@@ -104,7 +104,7 @@ namespace MatterHackers.Agg
 
 
         //------------------------------------------------------------------------
-        public void prepare()
+        public void Prepare()
         {
             if (m_num > 2)
             {
@@ -168,22 +168,22 @@ namespace MatterHackers.Agg
 
 
         //------------------------------------------------------------------------
-        public void init(int num, double[] x, double[] y)
+        void Init(int num, double[] x, double[] y)
         {
             if (num > 2)
             {
-                init(num);
+                Init(num);
                 int i;
                 for (i = 0; i < num; i++)
                 {
-                    add_point(x[i], y[i]);
+                    AddPoint(x[i], y[i]);
                 }
-                prepare();
+                Prepare();
             }
             m_last_idx = -1;
         }
         //------------------------------------------------------------------------
-        void bsearch(int n, int xOffset, double x0, out int i)
+        void BSearch(int n, int xOffset, double x0, out int i)
         {
             int j = n - 1;
             int k;
@@ -199,8 +199,8 @@ namespace MatterHackers.Agg
 
 
         //------------------------------------------------------------------------
-        double interpolation(double x, int i)
-        {
+        double Interpolate(double x, int i)
+        {   
             int j = i + 1;
             double d = m_am[m_xOffset + i] - m_am[m_xOffset + j];
             double h = x - m_am[m_xOffset + j];
@@ -212,7 +212,7 @@ namespace MatterHackers.Agg
 
 
         //------------------------------------------------------------------------
-        double extrapolation_left(double x)
+        double ExtrapolateLeft(double x)
         {
             double d = m_am[m_xOffset + 1] - m_am[m_xOffset + 0];
             return (-d * m_am[1] / 6 + (m_am[m_yOffset + 1] - m_am[m_yOffset + 0]) / d) *
@@ -221,7 +221,7 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        double extrapolation_right(double x)
+        double ExtrapolateRight(double x)
         {
             double d = m_am[m_xOffset + m_num - 1] - m_am[m_xOffset + m_num - 2];
             return (d * m_am[m_num - 2] / 6 + (m_am[m_yOffset + m_num - 1] - m_am[m_yOffset + m_num - 2]) / d) *
@@ -230,36 +230,36 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        public double get(double x)
+        public double Get(double x)
         {
             if (m_num > 2)
             {
                 int i;
 
                 // Extrapolation on the left
-                if (x < m_am[m_xOffset + 0]) return extrapolation_left(x);
+                if (x < m_am[m_xOffset + 0]) return ExtrapolateLeft(x);
 
                 // Extrapolation on the right
-                if (x >= m_am[m_xOffset + m_num - 1]) return extrapolation_right(x);
+                if (x >= m_am[m_xOffset + m_num - 1]) return ExtrapolateRight(x);
 
                 // Interpolation
-                bsearch(m_num, m_xOffset, x, out i);
-                return interpolation(x, i);
+                BSearch(m_num, m_xOffset, x, out i);
+                return Interpolate(x, i);
             }
             return 0.0;
         }
 
 
         //------------------------------------------------------------------------
-        public double get_stateful(double x)
+        public double GetStateful(double x)
         {
             if (m_num > 2)
             {
                 // Extrapolation on the left
-                if (x < m_am[m_xOffset + 0]) return extrapolation_left(x);
+                if (x < m_am[m_xOffset + 0]) return ExtrapolateLeft(x);
 
                 // Extrapolation on the right
-                if (x >= m_am[m_xOffset + m_num - 1]) return extrapolation_right(x);
+                if (x >= m_am[m_xOffset + m_num - 1]) return ExtrapolateRight(x);
 
                 if (m_last_idx >= 0)
                 {
@@ -284,16 +284,16 @@ namespace MatterHackers.Agg
                             else
                             {
                                 // Else perform full search
-                                bsearch(m_num, m_xOffset, x, out m_last_idx);
+                                BSearch(m_num, m_xOffset, x, out m_last_idx);
                             }
                     }
-                    return interpolation(x, m_last_idx);
+                    return Interpolate(x, m_last_idx);
                 }
                 else
                 {
                     // Interpolation
-                    bsearch(m_num, m_xOffset, x, out m_last_idx);
-                    return interpolation(x, m_last_idx);
+                    BSearch(m_num, m_xOffset, x, out m_last_idx);
+                    return Interpolate(x, m_last_idx);
                 }
             }
             return 0.0;

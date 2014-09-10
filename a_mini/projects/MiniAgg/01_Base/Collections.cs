@@ -43,6 +43,14 @@ namespace MatterHackers.Agg
         {
             Allocate(cap, 0);
         }
+        public ArrayList(ArrayList<T> srcCopy, int plusSize)
+        {
+            Allocate(srcCopy.AllocatedSize, srcCopy.AllocatedSize + plusSize);
+            if (srcCopy.currentSize != 0)
+            {
+                srcCopy.internalArray.CopyTo(internalArray, 0);
+            }
+        }
         public void RemoveLast()
         {
             if (currentSize != 0)
@@ -50,14 +58,7 @@ namespace MatterHackers.Agg
                 currentSize--;
             }
         }
-        public void CopyFrom(ArrayList<T> vetorToCopy)
-        {
-            Allocate(vetorToCopy.currentSize);
-            if (vetorToCopy.currentSize != 0)
-            {
-                vetorToCopy.internalArray.CopyTo(internalArray, 0);
-            }
-        }
+
         public int Count
         {
             get { return currentSize; }
@@ -103,7 +104,7 @@ namespace MatterHackers.Agg
             Allocate(size, 0);
         }
 
-        public void Allocate(int size, int extraTail)
+        void Allocate(int size, int extraTail)
         {
             Clear(size, extraTail);
             currentSize = size;

@@ -56,7 +56,7 @@
     <Compile Include="06_Transfrom\SimulEqGeneral.cs" />
     <Compile Include="06_Vertex_Path\LineCapAndJoin.cs" />
     <Compile Include="04_ScanlineBasic\LinesAA.cs" />
-    <Compile Include="06_Vertex_Path\SinglePath.cs" />
+    <Compile Include="06_Vertex_Path\VertexSnap.cs" />
     <Compile Include="06_Vertex_Path\VertexStorage.cs" />
     <Compile Include="01_Base\AggMath.cs" />
     <Compile Include="04_ScanlineBasic\CellAARasterizer.cs" />
@@ -74,14 +74,12 @@
     <Compile Include="01_Base\NativeBufferMan.cs" />
     <Compile Include="03_PixelBuffer\GammaLookUpTable.cs" />
     <Compile Include="00_Context\Graphics2D.cs" />
-    <Compile Include="02_Color\IColor.cs" />
     <Compile Include="05_Lines\ImageLineRenderer.cs" />
     <Compile Include="03_PixelBuffer\IImage.cs" />
     <Compile Include="03_PixelBuffer\ImageBase.cs" />
     <Compile Include="00_Context\ImageGraphics2D.cs" />
     <Compile Include="03_PixelBuffer\PixelBlenderRGB.cs" />
     <Compile Include="03_PixelBuffer\PixelBlenderRGBA.cs" />
-    <Compile Include="06_Vertex_Path\IMarkers.cs" />
     <Compile Include="04_ScanlineBasic\1_IScanline.cs" />
     <Compile Include="06_Vertex_Path\IVertexDest.cs" />
     <Compile Include="05_Lines\OutlineRenderer.cs" />
@@ -99,7 +97,7 @@
     <Compile Include="06_Transfrom\Perspective.cs" />
     <Compile Include="06_Transfrom\Viewport.cs" />
     <Compile Include="04_ScanlineBasic\VectorClipper.cs" />
-    <Compile Include="06_Vertex_Path\IVertexSource.cs" />
+    <Compile Include="06_Vertex_Path\VertexData.cs" />
     <Compile Include="06_Vertex_Path\PathStorage.cs" />
     <Compile Include="06_Vertex_Path\Stroke.cs" />
     <Compile Include="06_Vertex_Path\StrokeGenerator.cs" />

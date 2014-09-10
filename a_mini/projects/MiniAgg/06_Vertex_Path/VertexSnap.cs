@@ -5,40 +5,41 @@ using MatterHackers.VectorMath;
 namespace MatterHackers.Agg
 {
     //----------------------------------------
-    public struct SinglePath : IVertexSource
+    public struct VertexSnap
     {
         int startAt;
         VertexStorage vxs;
         int currentIterIndex;
-        public SinglePath(VertexStorage vxs)
+        public VertexSnap(VertexStorage vxs)
         {
             this.vxs = vxs;
             this.startAt = 0;
             this.currentIterIndex = startAt;
         }
-        public SinglePath(VertexStorage vxs, int startAt)
+        public VertexSnap(VertexStorage vxs, int startAt)
         {
             this.vxs = vxs;
             this.startAt = startAt;
             this.currentIterIndex = startAt;
         }
-        public void RewindZ()
+        public void RewindZero()
         {
             this.currentIterIndex = startAt;
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            var cmd = vxs.GetVertex(currentIterIndex, out x, out y); 
+            var cmd = vxs.GetVertex(currentIterIndex, out x, out y);
             currentIterIndex++;
             return cmd;
         }
-        public VertexStorage MakeVxs()
+
+        public VertexStorage GetInternalVxs()
         {
             return this.vxs;
         }
-        public SinglePath MakeSinglePath()
+        public int StartAt
         {
-            return this;
+            get { return this.startAt; }
         }
         public bool VxsHasMoreThanOnePart
         {
@@ -66,8 +67,6 @@ namespace MatterHackers.Agg
             }
 
         }
-        
-
 
 
     }

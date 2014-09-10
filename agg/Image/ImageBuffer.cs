@@ -440,7 +440,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void FlipY()
+        public void InvertYLookupTable()
         {
             strideInBytes *= -1;
             bufferFirstPixel = bufferOffset;
@@ -451,6 +451,23 @@ namespace MatterHackers.Agg.Image
             }
 
             SetUpLookupTables();
+        }
+
+        public void FlipY()
+        {
+            byte[] buffer = GetBuffer();
+            for(int y=0; y<Height/2; y++)
+            {
+                int bottomBuffer = GetBufferOffsetY(y);
+                int topBuffer = GetBufferOffsetY(Height-y-1);
+                for (int x = 0; x < StrideInBytes(); x++)
+                {
+                    byte hold = buffer[bottomBuffer + x];
+                    buffer[bottomBuffer + x] = buffer[topBuffer + x];
+                    buffer[topBuffer + x] = hold;
+                }
+
+            }
         }
 
         public void SetBuffer(byte[] byteBuffer, int bufferOffset)

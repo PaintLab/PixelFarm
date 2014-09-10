@@ -24,15 +24,11 @@ SOFTWARE.
 
 using System;
 using System.Runtime.InteropServices;
- 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MatterHackers.VectorMath
 {
-
-    public class JsonIgnoreAttribute : Attribute
-    {
-
-    }
     /// <summary>
     /// Represents a 3D vector using three double-precision floating-point numbers.
     /// </summary>

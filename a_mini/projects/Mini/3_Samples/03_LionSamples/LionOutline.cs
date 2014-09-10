@@ -187,8 +187,8 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 int j = lionShape.NumPaths;
                 for (int i = 0; i < j; ++i)
                 {
-                    rasterizer.RenderSinglePath(
-                        new SinglePath(vxs,
+                    rasterizer.RenderVertexSnap(
+                        new VertexSnap(vxs,
                             lionShape.PathIndexList[i]),
                             lionShape.Colors[i]);
                 }

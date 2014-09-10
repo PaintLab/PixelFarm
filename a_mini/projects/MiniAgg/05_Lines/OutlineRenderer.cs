@@ -1656,7 +1656,7 @@ namespace MatterHackers.Agg.Lines
         public delegate bool CompareFunction(int value);
         public ColorRGBA color() { return m_color; }
 
-        public void color(IColor c) { m_color = c.GetAsRGBA_Bytes(); }
+        public void color(ColorRGBA c) { m_color = c; }
         public abstract void semidot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2);
         public abstract void semidot_hline(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2, int x1, int y1, int x2);
         public abstract void pie(int xc, int yc, int x1, int y1, int x2, int y2);
@@ -1722,12 +1722,12 @@ namespace MatterHackers.Agg.Lines
 
         public void blend_solid_hspan(int x, int y, int len, byte[] covers, int coversOffset)
         {
-            destImageSurface.blend_solid_hspan(x, y, len, color(), covers, coversOffset);
+            destImageSurface.BlendSolidHSpan(x, y, len, color(), covers, coversOffset);
         }
 
         public void blend_solid_vspan(int x, int y, int len, byte[] covers, int coversOffset)
         {
-            destImageSurface.blend_solid_vspan(x, y, len, color(), covers, coversOffset);
+            destImageSurface.BlendSolidVSpan(x, y, len, color(), covers, coversOffset);
         }
 
         public static bool accurate_join_only() { return false; }
@@ -1762,7 +1762,7 @@ namespace MatterHackers.Agg.Lines
                 di.inc_x();
             }
             while (++x1 <= x2);
-            destImageSurface.blend_solid_hspan(x0, y1,
+            destImageSurface.BlendSolidHSpan(x0, y1,
                                      Offset1 - Offset0,
                                      color(), covers,
                                      Offset0);
@@ -1832,7 +1832,7 @@ namespace MatterHackers.Agg.Lines
                 di.inc_x();
             }
             while (++xh1 <= xh2);
-            destImageSurface.blend_solid_hspan(xh0, yh1, index1 - index0, color(), covers, index0);
+            destImageSurface.BlendSolidHSpan(xh0, yh1, index1 - index0, color(), covers, index0);
         }
 
         public override void pie(int xc, int yc, int x1, int y1, int x2, int y2)

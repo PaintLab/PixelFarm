@@ -99,11 +99,11 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                 if (i == num - 1)
                 {
                     ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
-                    rasterizer.AddPath(ellipseForMask.MakeSinglePath());
+                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
 
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
-                    rasterizer.AddPath(ellipseForMask.MakeSinglePath());
+                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                     scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
                 }
                 else
@@ -187,7 +187,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     if ((i + j) % 2 != 0)
                     {
                         VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * RectWidth, j * RectWidth, (i + 1) * RectWidth, (j + 1) * RectWidth, 0);
-                        rect.normalize_radius();
+                        rect.NormalizeRadius();
 
                         // Drawing as an outline
                         rasterizer.AddPath(rect.MakeVxs());
