@@ -51,7 +51,7 @@
     <Compile Include="Base\ProxyImage.cs" />
     <Compile Include="Filter\agg_image_filters.cs" />
     <Compile Include="Filter\agg_pattern_filters_rgba.cs" />
-    <Compile Include="Image\agg_alpha_mask_u8.cs" />
+    <Compile Include="Image\AlphaMask.cs" />
     <Compile Include="VertexSource\agg_span_gradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
@@ -63,9 +63,9 @@
     <Compile Include="Image\Transposer.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="UnitTests2.cs" />
-    <Compile Include="VertexSource\agg_bspline.cs" />
-    <Compile Include="VertexSource\agg_curves.cs" />
-    <Compile Include="VertexSource\agg_span_gouraud.cs" />
+    <Compile Include="VertexSource\BSpline.cs" />
+    <Compile Include="VertexSource\Curves.cs" />
+    <Compile Include="VertexSource\SpanGourand.cs" />
     <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
     <Compile Include="VertexSource\agg_span_subdiv_adaptor.cs" />
     <Compile Include="VertexSource\Arc.cs" />
@@ -73,7 +73,6 @@
     <Compile Include="VertexSource\ContourGenerator.cs" />
     <Compile Include="VertexSource\Ellipse.cs" />
     <Compile Include="VertexSource\FlattenCurve.cs" />
-    <Compile Include="VertexSource\Point2D.cs" />
     <Compile Include="VertexSource\RoundedRect.cs" />
     <Compile Include="Font\LiberationSansFont.cs" />
     <Compile Include="Font\StyledTypeFace.cs" />
@@ -94,6 +93,9 @@
       <Project>{16026D20-5321-4FFB-AEF7-4A1C9AEC32B2}</Project>
       <Name>MiniVectorMath</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Painter\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

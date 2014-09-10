@@ -24,7 +24,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.UI
 {
-    class simple_polygon_vertex_source : IVertexSource
+    class simple_polygon_vertex_source
     {
         double[] m_polygon;
         int m_num_points;
@@ -80,7 +80,7 @@ namespace MatterHackers.Agg.UI
             m_vertex = 0;
         }
 
-        
+
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
@@ -123,9 +123,9 @@ namespace MatterHackers.Agg.UI
             }
             return new VertexStorage(vlist);
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
     }
 
@@ -236,7 +236,7 @@ namespace MatterHackers.Agg.UI
             m_status = 0;
 
         }
-       
+
         void RecalculateBounds()
         {
             needToRecalculateBounds = false;
@@ -283,7 +283,7 @@ namespace MatterHackers.Agg.UI
             //------------------------------------------------------------
             //draw each polygon point
             double r = m_point_radius;
-            
+
             if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
 
             int n_count = m_polygon.Length / 2;
@@ -672,7 +672,7 @@ namespace MatterHackers.Agg.UI
     //template<class ColorT> 
     public class PolygonEditWidget : polygon_ctrl_impl
     {
-        IColor m_color;
+        ColorRGBA m_color;
 
         public PolygonEditWidget(int np) : this(np, 5) { }
 
@@ -683,8 +683,8 @@ namespace MatterHackers.Agg.UI
             m_color = ColorRGBA.Black;
         }
 
-        public void line_color(IColor c) { m_color = c; }
-        public override IColor color(int i) { return m_color; }
+        public void line_color(ColorRGBA c) { m_color = c; }
+        public override ColorRGBA color(int i) { return m_color; }
 
     }
 }

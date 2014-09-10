@@ -46,7 +46,8 @@ namespace MatterHackers.Agg
         {
             int y = scanLineCache.y();
             int num_spans = scanLineCache.num_spans();
-            ScanlineSpan scanlineSpan = scanLineCache.begin(); 
+            ScanlineSpan scanlineSpan = scanLineCache.begin();
+
             byte[] ManagedCoversArray = scanLineCache.GetCovers();
             for (; ; )
             {
@@ -57,10 +58,9 @@ namespace MatterHackers.Agg
                 do
                 {
                     int a = (ManagedCoversArray[coverIndex++] * color.Alpha0To255) >> 8;
-                    m_square.draw(
-                            destImage.NewGraphics2D().Rasterizer, m_sl, destImage,
-                            new RGBA_Bytes(color.Red0To255, color.Green0To255, color.Blue0To255, a),
-                            x, y);
+                    m_square.draw(destImage.NewGraphics2D().Rasterizer, m_sl, destImage,
+                                    new RGBA_Bytes(color.Red0To255, color.Green0To255, color.Blue0To255, a),
+                                    x, y);
                     ++x;
                 }
                 while (--num_pix > 0);
@@ -88,7 +88,7 @@ namespace MatterHackers.Agg
             m_x[1] = 369; m_y[1] = 170;
             m_x[2] = 143; m_y[2] = 310;
 
-            pixelSizeSlider = new Slider(new Vector2(30, 30), 600 - 60);
+            pixelSizeSlider = new Slider(new Vector2(30, 30), 600-60);
             gammaSlider = new Slider(new Vector2(30, 70), 600 - 60);
 
             pixelSizeSlider.ValueChanged += new EventHandler(NeedsRedraw);
@@ -236,22 +236,22 @@ namespace MatterHackers.Agg
             base.OnMouseUp(mouseEvent);
         }
 
-        [STAThread]
-        public static void Main(string[] args)
-        {
-            AppWidgetFactory appWidget = new aa_demoFactory();
-            appWidget.CreateWidgetAndRunInWindow();
-        }
-    }
+		[STAThread]
+		public static void Main(string[] args)
+		{
+			AppWidgetFactory appWidget = new aa_demoFactory();
+			appWidget.CreateWidgetAndRunInWindow();
+		}
+	}
 
     public class aa_demoFactory : AppWidgetFactory
     {
-        public override GuiWidget NewWidget()
+		public override GuiWidget NewWidget()
         {
             return new aa_demo();
         }
 
-        public override AppWidgetInfo GetAppParameters()
+		public override AppWidgetInfo GetAppParameters()
         {
             AppWidgetInfo appWidgetInfo = new AppWidgetInfo(
             "Vector",

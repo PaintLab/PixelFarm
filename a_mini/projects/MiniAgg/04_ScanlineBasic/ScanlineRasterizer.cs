@@ -34,7 +34,6 @@ using System;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 using filling_rule_e = MatterHackers.Agg.FillingRule;
-using status = MatterHackers.Agg.ScanlineRasterizer.Status;
 using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 
 namespace MatterHackers.Agg
@@ -70,26 +69,11 @@ namespace MatterHackers.Agg
     //
     // filling_rule() and gamma() can be called anytime before "sweeping".
     //------------------------------------------------------------------------
-    public interface IRasterizer
-    {
 
-        int MinX { get; }
-        int MinY { get; }
-        int MaxX { get; }
-        int MaxY { get; }
-
-        void ResetGamma(IGammaFunction gamma_function);
-
-        bool SweepScanline(IScanline sl);
-        void Reset();
-        void AddPath(SinglePath spath);
-        bool RewindScanlines();
-    }
-
-    public sealed class ScanlineRasterizer : IRasterizer
+    public sealed class ScanlineRasterizer
     {
         CellAARasterizer m_outline;
-        VectorClipper m_VectorClipper;
+        VectorClipper m_vectorClipper;
 
         int[] m_gammaLut = new int[AA_SCALE];
 
@@ -106,11 +90,10 @@ namespace MatterHackers.Agg
         const int AA_SCALE = 1 << AA_SHIFT;
         const int AA_MASK = AA_SCALE - 1;
         const int AA_SCALE2 = AA_SCALE * 2;
-        const int AA_MASK2 = AA_SCALE2 - 1;
-
+        const int AA_MASK2 = AA_SCALE2 - 1; 
         //---------------------------
 
-        public enum Status
+        enum Status
         {
             Initial,
             MoveTo,
@@ -127,7 +110,7 @@ namespace MatterHackers.Agg
         ScanlineRasterizer(VectorClipper rasterizer_sl_clip)
         {
             m_outline = new CellAARasterizer();
-            m_VectorClipper = rasterizer_sl_clip;
+            m_vectorClipper = rasterizer_sl_clip;
             m_filling_rule = FillingRule.NonZero;
             m_auto_close = true;
             m_start_x = 0;
@@ -150,12 +133,12 @@ namespace MatterHackers.Agg
         public void ResetClipping()
         {
             Reset();
-            m_VectorClipper.ResetClipping();
+            m_vectorClipper.ResetClipping();
         }
 
         public RectangleDouble GetVectorClipBox()
         {
-            return m_VectorClipper.GetVectorClipBox();
+            return m_vectorClipper.GetVectorClipBox();
         }
 
         public void SetVectorClipBox(RectangleDouble clippingRect)
@@ -166,7 +149,7 @@ namespace MatterHackers.Agg
         public void SetVectorClipBox(double x1, double y1, double x2, double y2)
         {
             Reset();
-            m_VectorClipper.ClipBox(
+            m_vectorClipper.ClipBox(
                                 upscale(x1), upscale(y1),
                                 upscale(x2), upscale(y2));
         }
@@ -208,15 +191,16 @@ namespace MatterHackers.Agg
         {
             if (m_outline.Sorted) Reset();
             if (m_auto_close) ClosePolygon();
-            m_VectorClipper.MoveTo(m_start_x = downscale(x),
-                              m_start_y = downscale(y));
+            m_vectorClipper.MoveTo(
+                    m_start_x = downscale(x),
+                    m_start_y = downscale(y));
             m_status = Status.MoveTo;
         }
 
         //------------------------------------------------------------------------
         void LineTo(int x, int y)
         {
-            m_VectorClipper.LineTo(m_outline,
+            m_vectorClipper.LineTo(m_outline,
                              downscale(x),
                              downscale(y));
             m_status = Status.LineTo;
@@ -227,15 +211,16 @@ namespace MatterHackers.Agg
         {
             if (m_outline.Sorted) Reset();
             if (m_auto_close) ClosePolygon();
-            m_VectorClipper.MoveTo(m_start_x = upscale(x),
-                              m_start_y = upscale(y));
+            m_vectorClipper.MoveTo(
+                m_start_x = upscale(x),
+                m_start_y = upscale(y));
             m_status = Status.MoveTo;
         }
 
         //------------------------------------------------------------------------
         public void LineTo(double x, double y)
         {
-            m_VectorClipper.LineTo(m_outline,
+            m_vectorClipper.LineTo(m_outline,
                               upscale(x),
                               upscale(y));
             m_status = Status.LineTo;
@@ -245,7 +230,7 @@ namespace MatterHackers.Agg
         {
             if (m_status == Status.LineTo)
             {
-                m_VectorClipper.LineTo(m_outline, m_start_x, m_start_y);
+                m_vectorClipper.LineTo(m_outline, m_start_x, m_start_y);
                 m_status = Status.Closed;
             }
         }
@@ -278,8 +263,8 @@ namespace MatterHackers.Agg
         void EdgeInt32(int x1, int y1, int x2, int y2)
         {
             if (m_outline.Sorted) Reset();
-            m_VectorClipper.MoveTo(downscale(x1), downscale(y1));
-            m_VectorClipper.LineTo(m_outline,
+            m_vectorClipper.MoveTo(downscale(x1), downscale(y1));
+            m_vectorClipper.LineTo(m_outline,
                               downscale(x2),
                                downscale(y2));
             m_status = Status.MoveTo;
@@ -289,36 +274,33 @@ namespace MatterHackers.Agg
         void Edge(double x1, double y1, double x2, double y2)
         {
             if (m_outline.Sorted) Reset();
-            m_VectorClipper.MoveTo(upscale(x1), upscale(y1));
-            m_VectorClipper.LineTo(m_outline,
+            m_vectorClipper.MoveTo(upscale(x1), upscale(y1));
+            m_vectorClipper.LineTo(m_outline,
                               upscale(x2),
                               upscale(y2));
             m_status = Status.MoveTo;
         }
-        public void AddPath(IVertexSource vs)
-        {
-            this.AddPath(vs.MakeSinglePath());
-        }
+
         //-------------------------------------------------------------------
         public void AddPath(VertexStorage vxs)
         {
-            this.AddPath(new SinglePath(vxs));
+            this.AddPath(new VertexSnap(vxs));
         }
-        public void AddPath(SinglePath spath)
+        public void AddPath(VertexSnap spath)
         {
 
             double x = 0;
             double y = 0;
 
 
-            spath.RewindZ();
+            spath.RewindZero();
             if (m_outline.Sorted)
             {
                 Reset();
             }
             if (spath.VxsHasMoreThanOnePart)
             {
-                var vxs = spath.MakeVxs();
+                var vxs = spath.GetInternalVxs();
                 int j = vxs.Count;
 
                 for (int i = 0; i < j; ++i)
@@ -332,7 +314,6 @@ namespace MatterHackers.Agg
             }
             else
             {
-                
                 ShapePath.FlagsAndCommand cmd;
                 while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
                 {
@@ -357,7 +338,7 @@ namespace MatterHackers.Agg
         }
 
         //------------------------------------------------------------------------
-        public bool RewindScanlines()
+        internal bool RewindScanlines()
         {
             if (m_auto_close) ClosePolygon();
 
@@ -369,23 +350,7 @@ namespace MatterHackers.Agg
             return true;
         }
 
-        //------------------------------------------------------------------------
-        bool NavigateScanline(int y)
-        {
-            if (m_auto_close) ClosePolygon();
-
-            m_outline.SortCells();
-
-            if (m_outline.TotalCells == 0 ||
-               y < m_outline.MinY ||
-               y > m_outline.MinY)
-            {
-                return false;
-            }
-            m_scan_y = y;
-            return true;
-        }
-
+       
         //--------------------------------------------------------------------
         int CalculateAlpha(int area)
         {
@@ -414,7 +379,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        public bool SweepScanline(IScanline scline)
+        internal bool SweepScanline(IScanline scline)
         {
             for (; ; )
             {
@@ -486,15 +451,7 @@ namespace MatterHackers.Agg
             return true;
         }
 
-        //--------------------------------------------------------------------
-        bool HitTest(int tx, int ty)
-        {
-            if (!NavigateScanline(ty)) return false;
-            //scanline_hit_test sl(tx);
-            //sweep_scanline(sl);
-            //return sl.hit();
-            return true;
-        }
-    };
+         
+    } 
 }
 

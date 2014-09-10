@@ -424,26 +424,26 @@ namespace MatterHackers.Agg
             return bufferFirstPixel + yTableArray[y] + xTableArray[x];
         }
 
-        public void copy_pixel(int x, int y, byte[] c, int ByteOffset)
-        {
-            throw new System.NotImplementedException();
-            //byte* p = GetPixelPointerXY(x, y);
-            //((int*)p)[0] = ((int*)c)[0];
-            //p[OrderR] = c.r;
-            //p[OrderG] = c.g;
-            //p[OrderB] = c.b;
-            //p[OrderA] = c.a;
-        }
+        //public void CopyPixel(int x, int y, byte[] c, int ByteOffset)
+        //{
+        //    throw new System.NotImplementedException();
+        //    //byte* p = GetPixelPointerXY(x, y);
+        //    //((int*)p)[0] = ((int*)c)[0];
+        //    //p[OrderR] = c.r;
+        //    //p[OrderG] = c.g;
+        //    //p[OrderB] = c.b;
+        //    //p[OrderA] = c.a;
+        //}
 
-        public void BlendPixel(int x, int y, ColorRGBA c, byte cover)
-        {
-            throw new System.NotImplementedException();
-            /*
-            cob_type::copy_or_blend_pix(
-                (value_type*)m_rbuf->row_ptr(x, y, 1)  + x + x + x, 
-                c.r, c.g, c.b, c.a, 
-                cover);*/
-        }
+        //public void BlendPixel(int x, int y, ColorRGBA c, byte cover)
+        //{
+        //    throw new System.NotImplementedException();
+        //    /*
+        //    cob_type::copy_or_blend_pix(
+        //        (value_type*)m_rbuf->row_ptr(x, y, 1)  + x + x + x, 
+        //        c.r, c.g, c.b, c.a, 
+        //        cover);*/
+        //}
 
         public void SetPixel(int x, int y, ColorRGBA color)
         {
@@ -452,7 +452,7 @@ namespace MatterHackers.Agg
             recieveBlender.CopyPixels(GetBuffer(), GetBufferOffsetXY(x, y), color, 1);
         }
 
-        public void copy_hline(int x, int y, int len, ColorRGBA sourceColor)
+        public void CopyHL(int x, int y, int len, ColorRGBA sourceColor)
         {
             int bufferOffset;
             byte[] buffer = GetPixelPointerXY(x, y, out bufferOffset);
@@ -460,7 +460,7 @@ namespace MatterHackers.Agg
             recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
         }
 
-        public void copy_vline(int x, int y, int len, ColorRGBA sourceColor)
+        public void CopyVL(int x, int y, int len, ColorRGBA sourceColor)
         {
             throw new NotImplementedException();
 #if false
@@ -476,7 +476,7 @@ namespace MatterHackers.Agg
         }
 
 
-        public void blend_hline(int x1, int y, int x2, ColorRGBA sourceColor, byte cover)
+        public void BlendHL(int x1, int y, int x2, ColorRGBA sourceColor, byte cover)
         {
             if (sourceColor.alpha != 0)
             {
@@ -502,7 +502,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void blend_vline(int x, int y1, int y2, ColorRGBA sourceColor, byte cover)
+        public void BlendVL(int x, int y1, int y2, ColorRGBA sourceColor, byte cover)
         {
             throw new NotImplementedException();
 #if false
@@ -552,7 +552,7 @@ namespace MatterHackers.Agg
 #endif
         }
 
-        public void blend_solid_hspan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex)
+        public void BlendSolidHSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex)
         {
             int colorAlpha = sourceColor.alpha;
             if (colorAlpha != 0)
@@ -581,7 +581,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void blend_solid_vspan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex)
+        public void BlendSolidVSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex)
         {
             if (sourceColor.alpha != 0)
             {
@@ -609,7 +609,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public void copy_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
+        public void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
         {
             int bufferOffset = GetBufferOffsetXY(x, y);
 
@@ -623,7 +623,7 @@ namespace MatterHackers.Agg
             while (--len != 0);
         }
 
-        public void copy_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
+        public void CopyColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
         {
             int bufferOffset = GetBufferOffsetXY(x, y);
 
@@ -637,13 +637,13 @@ namespace MatterHackers.Agg
             while (--len != 0);
         }
 
-        public void blend_color_hspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
+        public void BlendColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
             int bufferOffset = GetBufferOffsetXY(x, y);
             recieveBlender.BlendPixels(m_ByteBuffer, bufferOffset, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
         }
 
-        public void blend_color_vspan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
+        public void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
             int bufferOffset = GetBufferOffsetXY(x, y);
 

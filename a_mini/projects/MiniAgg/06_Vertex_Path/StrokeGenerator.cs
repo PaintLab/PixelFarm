@@ -29,6 +29,7 @@ namespace MatterHackers.Agg.VertexSource
         }
     }
     //============================================================vcgen_stroke
+
     class StrokeGenerator  
     {
         StrokeMath m_stroker;

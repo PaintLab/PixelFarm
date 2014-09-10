@@ -35,7 +35,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-//using MatterHackers.RenderOpenGl;
+using MatterHackers.RenderOpenGl;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.RasterizerScanline;
 
@@ -51,10 +51,6 @@ namespace MatterHackers.Agg.UI
         bool externallyLocked = false;
         bool currentlyLocked = false;
 
-        public WindowsFormsBitmapBackBuffer()
-        {
-
-        }
         internal void Lock()
         {
             bitmapData = windowsBitmap.LockBits(new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);

@@ -22,12 +22,24 @@ namespace MatterHackers.Agg
         public RayTracerTestWidget()
         {
             //CalculateIntersectCostsAndSaveToFile();
+
+            FlowLayoutWidget leftToRight = new FlowLayoutWidget();
+            leftToRight.HAnchor |= HAnchor.ParentLeftRight;
+            leftToRight.VAnchor |= VAnchor.ParentBottomTop;
             
             SuspendLayout();
             previewWindowRayTrace = new PreviewWindowRayTrace();
             AnchorAll();
             previewWindowRayTrace.AnchorAll();
-            AddChild(previewWindowRayTrace);
+
+            leftToRight.AddChild(previewWindowRayTrace);
+
+            GuiWidget zBuffer = new GuiWidget(HAnchor.ParentLeftRight, VAnchor.ParentBottomTop);
+            zBuffer.BackgroundColor = RGBA_Bytes.Blue;
+            leftToRight.AddChild(zBuffer);
+
+            AddChild(leftToRight);
+
             ResumeLayout();
         }
 
@@ -132,7 +144,7 @@ namespace MatterHackers.Agg
             "Other",
             "A Simple Ray Tracer test",
             "A sample application to show the current capabilities of the RayTracer.",
-            150,
+            300,
             100);
 
             return appWidgetInfo;

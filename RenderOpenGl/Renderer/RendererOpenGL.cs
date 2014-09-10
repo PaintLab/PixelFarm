@@ -30,17 +30,13 @@ either expressed or implied, of the FreeBSD Project.
 //#define AA_TIPS
 
 using System;
-using System.Collections.Generic;
-
 using MatterHackers.Agg;
 using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
 using MatterHackers.Agg.Transform;
+using MatterHackers.Agg.VertexSource;
+using MatterHackers.RenderOpenGl.OpenGl;
 using MatterHackers.VectorMath;
-
 using Tesselate;
-
-using OpenTK.Graphics.OpenGL;
 
 namespace MatterHackers.RenderOpenGl
 {
@@ -70,10 +66,10 @@ namespace MatterHackers.RenderOpenGl
 
         public override void SetClippingRect(RectangleDouble clippingRect)
         {
-            cachedClipRect = clippingRect;
+			cachedClipRect = clippingRect;
             GL.Scissor((int)Math.Floor(Math.Max(clippingRect.Left, 0)), (int)Math.Floor(Math.Max(clippingRect.Bottom, 0)),
                 (int)Math.Ceiling(Math.Max(clippingRect.Width, 0)), (int)Math.Ceiling(Math.Max(clippingRect.Height, 0)));
-            GL.Enable(EnableCap.ScissorTest);
+			GL.Enable(EnableCap.ScissorTest);
         }
 
         public override IScanlineCache ScanlineCache
@@ -84,7 +80,7 @@ namespace MatterHackers.RenderOpenGl
 
         public void PushOrthoProjection()
         {
-            GL.PushAttrib(AttribMask.TransformBit | AttribMask.EnableBit);
+			GL.PushAttrib(AttribMask.TransformBit | AttribMask.EnableBit);
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.PushMatrix();
@@ -98,7 +94,7 @@ namespace MatterHackers.RenderOpenGl
 
         public void PopOrthoProjection()
         {
-            GL.MatrixMode(MatrixMode.Projection);
+			GL.MatrixMode(MatrixMode.Projection);
             GL.PopMatrix();
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PopMatrix();
@@ -107,39 +103,68 @@ namespace MatterHackers.RenderOpenGl
 
         public static void SendShapeToTesselator(VertexTesselatorAbstract tesselator, IVertexSource vertexSource)
         {
-            tesselator.BeginPolygon();
-
-            ShapePath.FlagsAndCommand PathAndFlags = 0;
-            double x, y;
-            bool haveBegunContour = false;
-            while (!ShapePath.is_stop(PathAndFlags = vertexSource.vertex(out x, out y)))
+            
+#if !DEBUG
+            try
+#endif
             {
-                if (ShapePath.is_close(PathAndFlags)
-                    || (haveBegunContour && ShapePath.is_move_to(PathAndFlags)))
-                {
-                    tesselator.EndContour();
-                    haveBegunContour = false;
-                }
+                tesselator.BeginPolygon();
 
-                if (!ShapePath.is_close(PathAndFlags))
+                ShapePath.FlagsAndCommand PathAndFlags = 0;
+                double x, y;
+                bool haveBegunContour = false;
+                while (!ShapePath.is_stop(PathAndFlags = vertexSource.vertex(out x, out y)))
                 {
-                    if (!haveBegunContour)
+                    if (ShapePath.is_close(PathAndFlags)
+                        || (haveBegunContour && ShapePath.is_move_to(PathAndFlags)))
                     {
-                        tesselator.BeginContour();
-                        haveBegunContour = true;
+                        tesselator.EndContour();
+                        haveBegunContour = false;
                     }
 
-                    tesselator.AddVertex(x, y);
+                    if (!ShapePath.is_close(PathAndFlags))
+                    {
+                        if (!haveBegunContour)
+                        {
+                            tesselator.BeginContour();
+                            haveBegunContour = true;
+                        }
+
+                        tesselator.AddVertex(x, y);
+                    }
                 }
-            }
 
-            if (haveBegunContour)
+                if (haveBegunContour)
+                {
+                    tesselator.EndContour();
+                }
+
+                tesselator.EndPolygon();
+            }
+#if !DEBUG
+            catch
             {
-                tesselator.EndContour();
             }
-
-            tesselator.EndPolygon();
+#endif
         }
+
+		static byte[] CreateBufferForAATexture()
+		{
+			byte[] hardwarePixelBuffer = new byte[1024 * 4 * 4];
+			for (int y = 0; y < 4; y++)
+			{
+				byte alpha = 0;
+				for (int x = 0; x < 1024; x++)
+				{
+					hardwarePixelBuffer[(y * 1024 + x) * 4 + 0] = 255;
+					hardwarePixelBuffer[(y * 1024 + x) * 4 + 1] = 255;
+					hardwarePixelBuffer[(y * 1024 + x) * 4 + 2] = 255;
+					hardwarePixelBuffer[(y * 1024 + x) * 4 + 3] = alpha;
+					alpha = 255;
+				}
+			}
+			return hardwarePixelBuffer;
+		}
 
         static int AATextureHandle = -1;
         void CheckLineImageCache()
@@ -147,9 +172,7 @@ namespace MatterHackers.RenderOpenGl
             if (AATextureHandle == -1)
             {
                 // Create the texture handle and display list handle
-                int[] textureHandle = new int[1];
-                GL.GenTextures(1, textureHandle);
-                AATextureHandle = textureHandle[0];
+                GL.GenTextures(1, out AATextureHandle);
 
                 // Set up some texture parameters for openGL
                 GL.BindTexture(TextureTarget.Texture2D, AATextureHandle);
@@ -159,19 +182,7 @@ namespace MatterHackers.RenderOpenGl
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
 
-                byte[] hardwarePixelBuffer = new byte[1024 * 4 * 4];
-                for (int y = 0; y < 4; y++)
-                {
-                    byte alpha = 0;
-                    for (int x = 0; x < 1024; x++)
-                    {
-                        hardwarePixelBuffer[(y * 1024 + x) * 4 + 0] = 255;
-                        hardwarePixelBuffer[(y * 1024 + x) * 4 + 1] = 255;
-                        hardwarePixelBuffer[(y * 1024 + x) * 4 + 2] = 255;
-                        hardwarePixelBuffer[(y * 1024 + x) * 4 + 3] = alpha;
-                        alpha = 255;
-                    }
-                }
+                byte[] hardwarePixelBuffer = CreateBufferForAATexture();
 
                 // Create the texture
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 1024, 4,
@@ -181,7 +192,7 @@ namespace MatterHackers.RenderOpenGl
 
         void DrawAAShape(IVertexSource vertexSource)
         {
-            CheckLineImageCache();
+			CheckLineImageCache();
             GL.Enable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, AATextureHandle);
 
@@ -194,16 +205,14 @@ namespace MatterHackers.RenderOpenGl
 
         public override void Render(IVertexSource vertexSource, int pathIndexToRender, RGBA_Bytes colorBytes)
         {
-            PushOrthoProjection();
+			PushOrthoProjection();
 
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Enable(EnableCap.Blend);
 
             vertexSource.rewind(pathIndexToRender);
 
-            RGBA_Floats color = colorBytes.GetAsRGBA_Floats();
-
-            GL.Color4(color.red, color.green, color.blue, color.alpha);
+            GL.Color4(colorBytes.red, colorBytes.green, colorBytes.blue, colorBytes.alpha);
 
             Affine transform = GetTransform();
             if (!transform.is_identity())
@@ -264,7 +273,7 @@ namespace MatterHackers.RenderOpenGl
 
             // Prepare openGL for rendering
             PushOrthoProjection();
-            GL.Disable(EnableCap.Lighting);
+			GL.Disable(EnableCap.Lighting);
             GL.Enable(EnableCap.Texture2D);
             GL.Disable(EnableCap.DepthTest);
             
@@ -276,7 +285,7 @@ namespace MatterHackers.RenderOpenGl
             GL.Scale(scaleX, scaleY, 1);
 
             RGBA_Bytes color = RGBA_Bytes.White;
-            GL.Color4(color.Red0To1, color.Green0To1, color.Blue0To1, color.Alpha0To1);
+            GL.Color4((byte)color.Red0To255, (byte)color.Green0To255, (byte)color.Blue0To255, (byte)color.Alpha0To255);
 
             glPlugin.DrawToGL();
 

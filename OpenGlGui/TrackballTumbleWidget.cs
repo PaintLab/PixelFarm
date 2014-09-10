@@ -28,17 +28,12 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-using MatterHackers.Agg;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.Agg.UI;
 using MatterHackers.VectorMath;
 
-using OpenTK.Graphics.OpenGL;
+using MatterHackers.RenderOpenGl.OpenGl;
 
 namespace MatterHackers.Agg.OpenGlGui
 {
@@ -260,7 +255,8 @@ namespace MatterHackers.Agg.OpenGlGui
 
         void SetGlContext()
         {
-            GL.ClearDepth(1.0);
+			#if USE_OPENGL
+			GL.ClearDepth(1.0);
             //GL.ClearColor(1, 1, 1, 1);
             GL.Clear(ClearBufferMask.DepthBufferBit);	// Clear the Depth Buffer
             //GL.Clear(GL._COLOR_BUFFER_BIT);	// Clear the Depth Buffer
@@ -284,7 +280,6 @@ namespace MatterHackers.Agg.OpenGlGui
             GL.CullFace(CullFaceMode.Back);
 
             GL.DepthFunc(DepthFunction.Lequal);
-            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
             GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.AmbientAndDiffuse);
 
@@ -313,11 +308,13 @@ namespace MatterHackers.Agg.OpenGlGui
             lightDirection0[2] = (float)lightDirectionVector.z;
             GL.Light(LightName.Light0, LightParameter.Position, lightDirection0);
             GL.Light(LightName.Light1, LightParameter.Position, lightDirection1);
+			#endif
         }
 
         void UnsetGlContext()
         {
-            GL.MatrixMode(MatrixMode.Projection);
+			#if USE_OPENGL
+			GL.MatrixMode(MatrixMode.Projection);
             GL.PopMatrix();
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -332,6 +329,7 @@ namespace MatterHackers.Agg.OpenGlGui
             GL.Disable(EnableCap.Light1);
 
             GL.PopAttrib();
+			#endif
         }
 
         public Matrix4X4 GetProjectionMatrix()

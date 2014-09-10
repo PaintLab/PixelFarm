@@ -22,7 +22,7 @@ using System.Collections.Generic;
 namespace MatterHackers.Agg.VertexSource
 {
     //============================================================span_gouraud
-    public class SpanGourand : IVertexSource
+    public class SpanGourand 
     {
         CoordAndColor[] m_coord = new CoordAndColor[3];
         double[] m_x = new double[8];
@@ -56,11 +56,11 @@ namespace MatterHackers.Agg.VertexSource
             SetTriangle(x1, y1, x2, y2, x3, y3, d);
         }
 
-        public void SetColor(IColor c1, IColor c2, IColor c3)
+        public void SetColor(ColorRGBA c1, ColorRGBA c2, ColorRGBA c3)
         {
-            m_coord[0].color = c1.GetAsRGBA_Bytes();
-            m_coord[1].color = c2.GetAsRGBA_Bytes();
-            m_coord[2].color = c3.GetAsRGBA_Bytes();
+            m_coord[0].color = c1;
+            m_coord[1].color = c2;
+            m_coord[2].color = c3;
         }
 
         //--------------------------------------------------------------------
@@ -125,9 +125,9 @@ namespace MatterHackers.Agg.VertexSource
             }
             return new VertexStorage(list);
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
         public IEnumerable<VertexData> GetVertexIter()
         {

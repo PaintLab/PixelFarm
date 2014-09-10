@@ -34,7 +34,7 @@ using MatterHackers.Agg.Font;
 namespace LayoutFarm.Agg.Font
 {
 
-    public class TypeFacePrinter2  : IVertexSource
+    public class TypeFacePrinter2
     {
         StyledTypeFace typeFaceStyle;
         String text = "";
@@ -74,7 +74,7 @@ namespace LayoutFarm.Agg.Font
 
         public TypeFacePrinter2(String text = "", double pointSize = 12, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
             : this(text, new StyledTypeFace(LiberationSansFont.Instance, pointSize), origin, justification, baseline)
-        { 
+        {
 
         }
         TypeFacePrinter2(String text, StyledTypeFace typeFaceStyle, Vector2 origin = new Vector2(), Justification justification = Justification.Left, Baseline baseline = Baseline.Text)
@@ -84,7 +84,7 @@ namespace LayoutFarm.Agg.Font
             this.Justification = justification;
             this.Origin = origin;
             this.Baseline = baseline;
-        } 
+        }
         public TypeFacePrinter2(String text, TypeFacePrinter2 copyPropertiesFrom)
             : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
         {
@@ -98,9 +98,9 @@ namespace LayoutFarm.Agg.Font
             }
             return new VertexStorage(vlist);
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
         public RectangleDouble LocalBounds
         {
@@ -166,7 +166,7 @@ namespace LayoutFarm.Agg.Font
             }
             else
             {
-                graphics2D.Render(this, color);
+                graphics2D.Render(this.MakeVertexSnap(), color);
             }
         }
 
@@ -239,7 +239,7 @@ namespace LayoutFarm.Agg.Font
                                 var cmd = currentGlyph.GetVertex(i, out x, out y);
                                 if (cmd != ShapePath.FlagsAndCommand.CommandStop)
                                 {
-                                    yield return new VertexData(cmd, 
+                                    yield return new VertexData(cmd,
                                         (x + currentOffset.x + Origin.x),
                                         (y + currentOffset.y + Origin.y));
                                 }
@@ -329,8 +329,8 @@ namespace LayoutFarm.Agg.Font
 
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            x = currentEnumerator.Current.position.x;
-            y = currentEnumerator.Current.position.y;
+            x = currentEnumerator.Current.x;
+            y = currentEnumerator.Current.y;
             ShapePath.FlagsAndCommand command = currentEnumerator.Current.command;
             currentEnumerator.MoveNext();
             return command;

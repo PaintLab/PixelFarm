@@ -36,7 +36,7 @@ namespace MatterHackers.Agg.VertexSource
     //------------------------------------------------------------------------
 
 
-    public sealed class PathStorage : IVertexSource, IVertexDest
+    public sealed class PathStorage : IVertexDest
     {
         VertexStorage vertices;
         int iteratorIndex;
@@ -229,7 +229,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x_ctrl;
                 double y_ctrl;
-                ShapePath.FlagsAndCommand cmd = vertices.GetPrevVertex(out x_ctrl, out y_ctrl);
+                ShapePath.FlagsAndCommand cmd = vertices.GetBeforeLastVetex(out x_ctrl, out y_ctrl);
                 if (ShapePath.IsCurve(cmd))
                 {
                     x_ctrl = x0 + x0 - x_ctrl;
@@ -281,9 +281,9 @@ namespace MatterHackers.Agg.VertexSource
         {
             return this.vertices;
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.vertices);
+            return new VertexSnap(this.vertices);
         }
         public void Curve4(double x_ctrl2, double y_ctrl2,
                        double x_to, double y_to)
@@ -294,7 +294,7 @@ namespace MatterHackers.Agg.VertexSource
             {
                 double x_ctrl1;
                 double y_ctrl1;
-                ShapePath.FlagsAndCommand cmd = GetPrevVertex(out x_ctrl1, out y_ctrl1);
+                ShapePath.FlagsAndCommand cmd = GetBeforeLastVertex(out x_ctrl1, out y_ctrl1);
                 if (ShapePath.IsCurve(cmd))
                 {
                     x_ctrl1 = x0 + x0 - x_ctrl1;
@@ -322,9 +322,9 @@ namespace MatterHackers.Agg.VertexSource
             return vertices.GetLastVertex(out x, out y);
         }
 
-        ShapePath.FlagsAndCommand GetPrevVertex(out double x, out double y)
+        ShapePath.FlagsAndCommand GetBeforeLastVertex(out double x, out double y)
         {
-            return vertices.GetPrevVertex(out x, out y);
+            return vertices.GetBeforeLastVetex(out x, out y);
         }
 
         double GetLastX()
@@ -337,7 +337,7 @@ namespace MatterHackers.Agg.VertexSource
             return vertices.GetLastY();
         }
 
-        
+
         public IEnumerable<VertexData> GetVertexIter()
         {
             int count = vertices.Count;
@@ -506,11 +506,11 @@ namespace MatterHackers.Agg.VertexSource
         //// Concatenate path. The path is added as is.
 
 
-        public void ConcatPath(SinglePath s)
+        public void ConcatPath(VertexSnap s)
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
-            s.RewindZ();
+            s.RewindZero();
             while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, cmd_flags);
@@ -520,10 +520,13 @@ namespace MatterHackers.Agg.VertexSource
         // Join path. The path is joined with the existing one, that is, 
         // it behaves as if the pen of a plotter was always down (drawing)
         //template<class VertexSource>  
-        public void JoinPath(SinglePath s)
+        public void JoinPath(VertexSnap s)
         {
             double x, y;
-            s.RewindZ();
+
+
+
+            s.RewindZero();
             ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
             if (cmd == ShapePath.FlagsAndCommand.CommandStop)
             {

@@ -25,7 +25,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.UI
 {
-    abstract public class SimpleVertexSourceWidget : GuiWidget, IVertexSource
+    abstract public class SimpleVertexSourceWidget : GuiWidget
     {
 
         bool localBoundsComeFromPoints = true;
@@ -95,23 +95,23 @@ namespace MatterHackers.Agg.UI
         public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
         protected abstract RectangleDouble CalculateLocalBounds();
 
-        public virtual IColor color(int i) { return (IColor)new ColorRGBAf().GetAsRGBA_Bytes(); }
+        public virtual ColorRGBA color(int i) { return new ColorRGBAf().ToColorRGBA(); }
         public override void OnDraw(Graphics2D graphics2D)
         {
 
             var list = new System.Collections.Generic.List<VertexData>();
             var vxs = this.MakeVxs();
-             
-            graphics2D.Render(new SinglePath(vxs, 0),
-                color(0).GetAsRGBA_Bytes());
+
+            graphics2D.Render(new VertexSnap(vxs, 0),
+                color(0));
             base.OnDraw(graphics2D);
         }
 
-       
+
         public abstract VertexStorage MakeVxs();
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
 
     }

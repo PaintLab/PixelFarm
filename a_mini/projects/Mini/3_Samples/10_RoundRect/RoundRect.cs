@@ -121,7 +121,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             var clippingProxyNormal = new ClipProxyImage(rasterNormal);
             var clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-            clippingProxyNormal.Clear(this.WhiteOnBlack ? new ColorRGBAf(0, 0, 0).GetAsRGBA_Bytes() : new ColorRGBAf(1, 1, 1).GetAsRGBA_Bytes());
+            clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
 
             var ras = new ScanlineRasterizer();
             var sl = new ScanlinePacked8();
@@ -134,12 +134,12 @@ namespace MatterHackers.Agg.Sample_RoundRect
 
             // Render two "control" circles
             e.Reset(m_x[0], m_y[0], 3, 3, 16);
-            ras.AddPath(e.MakeSinglePath());
+            ras.AddPath(e.MakeVertexSnap());
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
             e.Reset(m_x[1], m_y[1], 3, 3, 16);
-            ras.AddPath(e.MakeSinglePath());
+            ras.AddPath(e.MakeVertexSnap());
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
 
@@ -148,10 +148,10 @@ namespace MatterHackers.Agg.Sample_RoundRect
             // Creating a rounded rectangle
             VertexSource.RoundedRect r = new VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d,
                 this.Radius);
-            r.normalize_radius();
+            r.NormalizeRadius();
             if (this.FillRoundRect)
             {
-               
+
                 ras.AddPath(new Stroke(1).MakeVxs(r.MakeVxs()));
             }
             else

@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Font
 
 
 
-    public class TypeFacePrinter : IVertexSource
+    public class TypeFacePrinter 
     {
         StyledTypeFace typeFaceStyle;
         String text = "";
@@ -157,7 +157,7 @@ namespace MatterHackers.Agg.Font
             }
             else
             {
-                graphics2D.Render(this, color);
+                graphics2D.Render(new VertexSnap(this.MakeVxs()), color);
             }
         }
 
@@ -203,7 +203,7 @@ namespace MatterHackers.Agg.Font
                 }
             }
         }
-        
+
         public IEnumerable<VertexData> GetVertexIter()
         {
             if (text != null && text.Length > 0)
@@ -233,7 +233,7 @@ namespace MatterHackers.Agg.Font
                                     yield return new VertexData(cmd,
                                         (x + currentOffset.x + Origin.x),
                                         (y + currentOffset.y + Origin.y));
-                                     
+
                                 }
                             }
                             //foreach (VertexData vertexData in currentGlyph.GetVertexIter())
@@ -277,9 +277,9 @@ namespace MatterHackers.Agg.Font
             }
             return new VertexStorage(vlist);
         }
-        public SinglePath MakeSinglePath()
+        public VertexSnap MakeVertexSnap()
         {
-            return new SinglePath(this.MakeVxs());
+            return new VertexSnap(this.MakeVxs());
         }
         private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)
         {
@@ -337,8 +337,8 @@ namespace MatterHackers.Agg.Font
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
-            x = currentEnumerator.Current.position.x;
-            y = currentEnumerator.Current.position.y;
+            x = currentEnumerator.Current.x;
+            y = currentEnumerator.Current.y;
             ShapePath.FlagsAndCommand command = currentEnumerator.Current.command;
 
             currentEnumerator.MoveNext();
@@ -353,7 +353,7 @@ namespace MatterHackers.Agg.Font
                 list.Add(v);
             }
             return new VertexStorage(list);
-            //return new SinglePath(new VertexStorage(list));
+            //return new VertexSnap(new VertexStorage(list));
         }
 #else
         public void rewind(int pathId)

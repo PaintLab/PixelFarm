@@ -39,6 +39,8 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.PolygonMesh
 {
+    public delegate bool ReportProgress(double progress0To1, string processingState);
+
     [DebuggerDisplay("ID = {Data.ID}")]
     public class Mesh
     {
@@ -111,11 +113,20 @@ namespace MatterHackers.PolygonMesh
             CleanAndMergMesh();
         }
 
-        public void CleanAndMergMesh(BackgroundWorker backgroundWorker = null, int startPercent = 0, int endPercent = 0)
+        public void CleanAndMergMesh(ReportProgress reportProgress = null)
         {
-            SortVertices();
-            MergeVertices(backgroundWorker, startPercent, endPercent);
-            //MergeMeshEdges();
+            if (reportProgress != null)
+            {
+                SortVertices((double progress0To1, string processingState) => { return reportProgress(progress0To1 * .41, processingState); });
+                MergeVertices((double progress0To1, string processingState) => { return reportProgress(progress0To1 * .23 + .41, processingState); });
+                MergeMeshEdges((double progress0To1, string processingState) => { return reportProgress(progress0To1 * .36 + .64, processingState); });
+            }
+            else
+            {
+                SortVertices();
+                MergeVertices();
+                MergeMeshEdges();
+            }
         }
 
         public List<Face> Faces
@@ -370,12 +381,20 @@ namespace MatterHackers.PolygonMesh
             throw new NotImplementedException();
         }
 
-        public void SortVertices()
+        public void SortVertices(ReportProgress reportProgress = null)
         {
+            if (reportProgress != null)
+            {
+                reportProgress(0, "Sorting Vertices");
+            }
             Vertices.Sort();
+            if (reportProgress != null)
+            {
+                reportProgress(1, "Sorting Vertices");
+            }
         }
 
-        public void MergeVertices(BackgroundWorker backgroundWorker = null, int startPercent = 0, int endPercent = 0, double maxDistanceToConsiderVertexAsSame = 0)
+        public void MergeVertices(ReportProgress reportProgress = null, double maxDistanceToConsiderVertexAsSame = 0)
         {
             HashSet<Vertex> markedForDeletion = new HashSet<Vertex>();
             Stopwatch maxProgressReport = new Stopwatch();
@@ -399,16 +418,21 @@ namespace MatterHackers.PolygonMesh
                         }
                     }
 
-                    if (backgroundWorker != null)
+                    if (reportProgress != null)
                     {
-                        if (backgroundWorker.WorkerReportsProgress && maxProgressReport.ElapsedMilliseconds > 200)
+                        if (maxProgressReport.ElapsedMilliseconds > 200)
                         {
-                            backgroundWorker.ReportProgress(startPercent + (endPercent - startPercent) * i / Vertices.Count);
+                            reportProgress(i / (double)Vertices.Count, "Merging Vertices");
+                            maxProgressReport.Restart();
                         }
                     }
                 }
             }
 
+            if (reportProgress != null)
+            {
+                reportProgress(1, "Deleting Unused Vertices");
+            }
             RemoveVerticesMarkedForDeletion(markedForDeletion);
         }
 
@@ -424,7 +448,7 @@ namespace MatterHackers.PolygonMesh
                 }
             }
 
-            // we put them in in the same order they were in, se we keep the state
+            // we put them in in the same order they were in, so we keep the state
             NonDeleteVertices.IsSorted = vertices.IsSorted;
             vertices = NonDeleteVertices;
         }
@@ -437,7 +461,6 @@ namespace MatterHackers.PolygonMesh
                 throw new Exception("Both vertexes have to be part of this mesh to be merged.");
             }
 #endif
-
             // fix up the mesh edges
             List<MeshEdge> connectedMeshEdges = vertexToDelete.GetConnectedMeshEdges();
             foreach (MeshEdge meshEdgeToFix in connectedMeshEdges)
@@ -650,28 +673,68 @@ namespace MatterHackers.PolygonMesh
             edgeToDelete.NextMeshEdgeFromEnd[1] = null;
         }
 
-        public void MergeMeshEdges()
+        public void MergeMeshEdges(ReportProgress reportProgress = null)
         {
+            HashSet<MeshEdge> markedForDeletion = new HashSet<MeshEdge>();
+            Stopwatch maxProgressReport = new Stopwatch();
+            maxProgressReport.Start();
+
             for (int i = 0; i < meshEdges.Count; i++)
             {
                 MeshEdge currentMeshEdge = meshEdges[i];
-                Vertex vertex0 = currentMeshEdge.VertexOnEnd[0];
-                Vertex vertex1 = currentMeshEdge.VertexOnEnd[1];
-                
-                // find out if there is another edge attached to the same vertexes
-                List<MeshEdge> meshEdgesToDelete = FindMeshEdges(vertex0, vertex1);
-
-                foreach(MeshEdge meshEdgeToDelete in meshEdgesToDelete)
+                if (!markedForDeletion.Contains(currentMeshEdge))
                 {
-                    if (meshEdgeToDelete != currentMeshEdge)
+                    Vertex vertex0 = currentMeshEdge.VertexOnEnd[0];
+                    Vertex vertex1 = currentMeshEdge.VertexOnEnd[1];
+
+                    // find out if there is another edge attached to the same vertexes
+                    List<MeshEdge> meshEdgesToDelete = FindMeshEdges(vertex0, vertex1);
+
+                    if (meshEdgesToDelete.Count > 1)
                     {
-                        MergeMeshEdges(currentMeshEdge, meshEdgeToDelete);
+                        foreach (MeshEdge meshEdgeToDelete in meshEdgesToDelete)
+                        {
+                            if (meshEdgeToDelete != currentMeshEdge)
+                            {
+                                if (!markedForDeletion.Contains(meshEdgeToDelete))
+                                {
+                                    MergeMeshEdges(currentMeshEdge, meshEdgeToDelete, false);
+                                    markedForDeletion.Add(meshEdgeToDelete);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (reportProgress != null)
+                {
+                    if (maxProgressReport.ElapsedMilliseconds > 200)
+                    {
+                        reportProgress(i / (double)meshEdges.Count, "Merging Mesh Edges");
+                        maxProgressReport.Restart();
                     }
                 }
             }
+
+            RemoveMeshEdgesMarkedForDeletion(markedForDeletion);
         }
 
-        public void MergeMeshEdges(MeshEdge edgeToKeep, MeshEdge edgeToDelete)
+        private void RemoveMeshEdgesMarkedForDeletion(HashSet<MeshEdge> markedForDeletion)
+        {
+            List<MeshEdge> NonDeleteMeshEdges = new List<MeshEdge>();
+            for (int i = 0; i < meshEdges.Count; i++)
+            {
+                MeshEdge meshEdgeToCheck = meshEdges[i];
+                if (!markedForDeletion.Contains(meshEdgeToCheck))
+                {
+                    NonDeleteMeshEdges.Add(meshEdgeToCheck);
+                }
+            }
+
+            meshEdges = NonDeleteMeshEdges;
+        }
+
+        public void MergeMeshEdges(MeshEdge edgeToKeep, MeshEdge edgeToDelete, bool doActualDeletion = true)
         {
             // make sure they sare vertexes (or they can't be merged)
             if (!edgeToDelete.IsConnectedTo(edgeToKeep.VertexOnEnd[0]) 
@@ -700,7 +763,10 @@ namespace MatterHackers.PolygonMesh
                 faceEdge.AddToRadialLoop(edgeToKeep);
             }
 
-            meshEdges.Remove(edgeToDelete);
+            if (doActualDeletion)
+            {
+                meshEdges.Remove(edgeToDelete);
+            }
         }
 
         #endregion // MeshEdge

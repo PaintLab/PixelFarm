@@ -23,8 +23,8 @@ namespace MatterHackers.Agg
             m_idx = (-1);
             m_gamma = new MatterHackers.Agg.UI.Slider(3, 3, 480 - 3, 8);
 
-            m_x[0] = 100; m_y[0] = 100;
-            m_x[1] = 500; m_y[1] = 350;
+            m_x[0] = 100;   m_y[0] = 100;
+            m_x[1] = 500;   m_y[1] = 350;
             AddChild(m_gamma);
             m_gamma.Text = "gamma={0:F3}";
             m_gamma.SetRange(0.0, 3.0);
@@ -67,12 +67,12 @@ namespace MatterHackers.Agg
             r.normalize_radius();
 
             // Drawing as an outline
-            Stroke p = new Stroke(r);
-            p.width(1.0);
-            ras.add_path(p);
+                Stroke p = new Stroke(r);
+                p.width(1.0);
+                ras.add_path(p);
 
-            //Renderer.RenderSolid(clippingProxyGamma, ras, sl, new RGBA_Bytes(0, 0, 0));
-            scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, ras, sl, new RGBA_Bytes(255, 1, 1));
+                //Renderer.RenderSolid(clippingProxyGamma, ras, sl, new RGBA_Bytes(0, 0, 0));
+                scanlineRenderer.render_scanlines_aa_solid(clippingProxyGamma, ras, sl, new RGBA_Bytes(255, 1, 1));
 
 
 
@@ -302,13 +302,13 @@ namespace MatterHackers.Agg
 
         public override void OnMouseDown(MouseEventArgs mouseEvent)
         {
-            if (mouseEvent.Button == MouseButtons.Left)
+            if(mouseEvent.Button == MouseButtons.Left)
             {
                 for (int i = 0; i < 2; i++)
                 {
                     double x = mouseEvent.X;
                     double y = mouseEvent.Y;
-                    if (Math.Sqrt((x - m_x[i]) * (x - m_x[i]) + (y - m_y[i]) * (y - m_y[i])) < 5.0)
+                    if(Math.Sqrt( (x-m_x[i]) * (x-m_x[i]) + (y-m_y[i]) * (y-m_y[i]) ) < 5.0)
                     {
                         m_dx = x - m_x[i];
                         m_dy = y - m_y[i];
@@ -326,7 +326,7 @@ namespace MatterHackers.Agg
         {
             if (mouseEvent.Button == MouseButtons.Left)
             {
-                if (m_idx >= 0)
+                if(m_idx >= 0)
                 {
                     m_x[m_idx] = mouseEvent.X - m_dx;
                     m_y[m_idx] = mouseEvent.Y - m_dy;

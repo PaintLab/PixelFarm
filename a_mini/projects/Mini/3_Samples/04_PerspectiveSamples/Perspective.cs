@@ -138,13 +138,13 @@ namespace MatterHackers.Agg.Sample_Perspective
                                      (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
                                      200);
 
-                    SinglePath s1 = ell.MakeSinglePath();
+                    VertexSnap s1 = ell.MakeVertexSnap();
                      
                     
 
-                    var trans_ell = txBilinear.TransformToSinglePath(ell.MakeVxs());
+                    var trans_ell = txBilinear.TransformToVertexSnap(ell.MakeVxs());
 
-                    var trans_ell_stroke = txBilinear.TransformToSinglePath(new Stroke(3).MakeVxs(s1.MakeVxs()));
+                    var trans_ell_stroke = txBilinear.TransformToVertexSnap(new Stroke(3).MakeVxs(s1.GetInternalVxs()));
 
                     g_rasterizer.AddPath(trans_ell);
                     scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
@@ -180,7 +180,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //var txFillEllipse = new VertexSourceApplyTransform(filledEllipse, txPerspective);
                     //3. add
                     //g_rasterizer.AddPath(txFillEllipse);
-                    g_rasterizer.AddPath(new SinglePath(ellipseVertext));
+                    g_rasterizer.AddPath(new VertexSnap(ellipseVertext));
                     //4. render it
 
                     scanlineRenderer.RenderScanlineSolidAA(dest,
