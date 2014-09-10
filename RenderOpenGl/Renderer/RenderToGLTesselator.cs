@@ -29,18 +29,9 @@ either expressed or implied, of the FreeBSD Project.
 
 //#define AA_TIPS
 
-using System;
 using System.Collections.Generic;
-
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
-using MatterHackers.VectorMath;
-
+using MatterHackers.RenderOpenGl.OpenGl;
 using Tesselate;
-
-using OpenTK.Graphics.OpenGL;
 
 namespace MatterHackers.RenderOpenGl
 {
@@ -77,7 +68,7 @@ namespace MatterHackers.RenderOpenGl
 
         public void BeginCallBack(Tesselator.TriangleListType type)
         {
-            switch (type)
+			switch (type)
             {
                 case Tesselator.TriangleListType.Triangles:
                     GL.Begin(BeginMode.Triangles);
@@ -95,17 +86,18 @@ namespace MatterHackers.RenderOpenGl
 
         public void EndCallBack()
         {
-            GL.End();
+			GL.End();
         }
 
         public void VertexCallBack(int index)
         {
-            GL.Vertex2(m_Vertices[index].m_X, m_Vertices[index].m_Y);
+			GL.Vertex2(m_Vertices[index].m_X, m_Vertices[index].m_Y);
         }
 
         public void EdgeFlagCallBack(bool IsEdge)
         {
-            GL.EdgeFlag(IsEdge);
+            // this is not set as it is only used in GL_POLYGON_MODE and GL_POINT or GL_LINE (which we currenly don't use)
+			//GL.EdgeFlag(IsEdge);
         }
 
         public void CombineCallBack(double[] coords3, int[] data4,

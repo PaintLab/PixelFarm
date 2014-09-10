@@ -46,52 +46,105 @@ namespace MatterHackers.PolygonMesh.Processors
 {
     public static class StlProcessing
     {
-        public static void Save(Mesh meshToSave, string fileName)
+        public enum OutputType { Ascii, Binary };
+
+        public static void Save(Mesh meshToSave, string fileName, OutputType outputType = OutputType.Binary)
         {
             FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.Write);
 
-            Save(meshToSave, file);
+            Save(meshToSave, file, outputType);
             file.Close();
         }
 
-        public static void Save(Mesh meshToSave, Stream stream)
+        public static void Save(Mesh meshToSave, Stream stream, OutputType outputType)
         {
-            StreamWriter streamWriter = new StreamWriter(stream);
-
-            streamWriter.WriteLine("solid Default");
-
-            foreach(Face face in meshToSave.Faces)
+            switch (outputType)
             {
-                List<Vector3> positionsCCW = new List<Vector3>();
-                foreach (FaceEdge faceEdge in face.FaceEdges())
-                {
-                    positionsCCW.Add(faceEdge.firstVertex.Position);
-                }
+                case OutputType.Ascii:
+                    {
+                        StreamWriter streamWriter = new StreamWriter(stream);
 
-                int numPolys = positionsCCW.Count - 2;
-                int secondIndex = 1;
-                int thirdIndex = 2;
-                for(int polyIndex = 0; polyIndex < numPolys; polyIndex++)
-                {
-                    streamWriter.WriteLine("  facet normal " + FormatForStl(face.normal));
-                    streamWriter.WriteLine("    outer loop");
-                    streamWriter.WriteLine("      vertex " + FormatForStl(positionsCCW[0]));
-                    streamWriter.WriteLine("      vertex " + FormatForStl(positionsCCW[secondIndex]));
-                    streamWriter.WriteLine("      vertex " + FormatForStl(positionsCCW[thirdIndex]));
-                    streamWriter.WriteLine("    endloop");
-                    streamWriter.WriteLine("  endfacet");
+                        streamWriter.WriteLine("solid Default");
 
-                    secondIndex = thirdIndex;
-                    thirdIndex++;
-                }
+                        foreach (Face face in meshToSave.Faces)
+                        {
+                            List<Vector3> positionsCCW = new List<Vector3>();
+                            foreach (FaceEdge faceEdge in face.FaceEdges())
+                            {
+                                positionsCCW.Add(faceEdge.firstVertex.Position);
+                            }
+
+                            int numPolys = positionsCCW.Count - 2;
+                            int secondIndex = 1;
+                            int thirdIndex = 2;
+                            for (int polyIndex = 0; polyIndex < numPolys; polyIndex++)
+                            {
+                                streamWriter.WriteLine("  facet normal " + FormatForStl(face.normal));
+                                streamWriter.WriteLine("    outer loop");
+                                streamWriter.WriteLine("      vertex " + FormatForStl(positionsCCW[0]));
+                                streamWriter.WriteLine("      vertex " + FormatForStl(positionsCCW[secondIndex]));
+                                streamWriter.WriteLine("      vertex " + FormatForStl(positionsCCW[thirdIndex]));
+                                streamWriter.WriteLine("    endloop");
+                                streamWriter.WriteLine("  endfacet");
+
+                                secondIndex = thirdIndex;
+                                thirdIndex++;
+                            }
+                        }
+
+                        streamWriter.WriteLine("endsolid Default");
+
+                        streamWriter.Close();
+                    }
+                    break;
+
+                case OutputType.Binary:
+                    using (BinaryWriter bw = new BinaryWriter(stream))
+                    {
+                        // 80 bytes of nothing
+                        bw.Write(new Byte[80]);
+                        // the number of tranigles
+                        bw.Write(meshToSave.Faces.Count);
+                        int binaryPolyCount = 0;
+                        foreach (Face face in meshToSave.Faces)
+                        {
+                            List<Vector3> positionsCCW = new List<Vector3>();
+                            foreach (FaceEdge faceEdge in face.FaceEdges())
+                            {
+                                positionsCCW.Add(faceEdge.firstVertex.Position);
+                            }
+
+                            int numPolys = positionsCCW.Count - 2;
+                            int secondIndex = 1;
+                            int thirdIndex = 2;
+                            for (int polyIndex = 0; polyIndex < numPolys; polyIndex++)
+                            {
+                                binaryPolyCount++;
+                                // save the normal (all 0 so it can compress better)
+                                bw.Write((float)0);
+                                bw.Write((float)0);
+                                bw.Write((float)0);
+                                // save the position
+                                bw.Write((float)positionsCCW[0].x); bw.Write((float)positionsCCW[0].y); bw.Write((float)positionsCCW[0].z);
+                                bw.Write((float)positionsCCW[secondIndex].x); bw.Write((float)positionsCCW[secondIndex].y); bw.Write((float)positionsCCW[secondIndex].z);
+                                bw.Write((float)positionsCCW[thirdIndex].x); bw.Write((float)positionsCCW[thirdIndex].y); bw.Write((float)positionsCCW[thirdIndex].z);
+
+                                // and the attribute
+                                bw.Write((ushort)0);
+
+                                secondIndex = thirdIndex;
+                                thirdIndex++;
+                            }
+                        }
+                        bw.BaseStream.Position = 80;
+                        // the number of tranigles
+                        bw.Write(binaryPolyCount);
+                    }
+                    break;
             }
-
-            streamWriter.WriteLine("endsolid Default");
-
-            streamWriter.Close();
         }
 
-        public static Mesh Load(string fileName)
+        public static Mesh Load(string fileName, ReportProgress reportProgress = null)
         {
             Mesh loadedMesh = null;
             if (Path.GetExtension(fileName).ToUpper() == ".STL")
@@ -102,9 +155,7 @@ namespace MatterHackers.PolygonMesh.Processors
                     {
                         Stream fileStream = File.OpenRead(fileName);
 
-                        DoWorkEventArgs doWorkEventArgs = new DoWorkEventArgs(fileStream);
-                        ParseFileContents(null, doWorkEventArgs);
-                        loadedMesh = (Mesh)doWorkEventArgs.Result;
+                        loadedMesh = ParseFileContents(fileStream, reportProgress);
                     }
                 }
 #if DEBUG
@@ -123,14 +174,12 @@ namespace MatterHackers.PolygonMesh.Processors
             return loadedMesh;
         }
 
-        public static Mesh Load(Stream fileStream)
+        public static Mesh Load(Stream fileStream, ReportProgress reportProgress = null)
         {
             Mesh loadedMesh = null;
             try
             {
-                DoWorkEventArgs doWorkEventArgs = new DoWorkEventArgs(fileStream);
-                ParseFileContents(null, doWorkEventArgs);
-                loadedMesh = (Mesh)doWorkEventArgs.Result;
+                loadedMesh = ParseFileContents(fileStream, reportProgress);
             }
 #if DEBUG
             catch (IOException)
@@ -147,47 +196,17 @@ namespace MatterHackers.PolygonMesh.Processors
             return loadedMesh;
         }
 
-        public static void LoadInBackground(BackgroundWorker backgroundWorker, string fileName)
+        public static Mesh ParseFileContents(Stream stlStream, ReportProgress reportProgress)
         {
-            if (Path.GetExtension(fileName).ToUpper() == ".STL")
-            {
-                try
-                {
-                    if (File.Exists(fileName))
-                    {
-                        Stream fileStream = File.OpenRead(fileName);
-
-                        backgroundWorker.DoWork += new DoWorkEventHandler(ParseFileContents);
-
-                        backgroundWorker.RunWorkerAsync(fileStream);
-                    }
-                    else
-                    {
-                        backgroundWorker.RunWorkerAsync(null);
-                    }
-                }
-                catch (IOException)
-                {
-                }
-            }
-            else
-            {
-                backgroundWorker.RunWorkerAsync(null);
-            }
-        }
-
-        public static void ParseFileContents(object sender, DoWorkEventArgs doWorkEventArgs)
-        {
-            BackgroundWorker backgroundWorker = sender as BackgroundWorker;
-
             Stopwatch time = new Stopwatch();
             time.Start();
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
-            Stream stlStream = (Stream)doWorkEventArgs.Argument;
+            double parsingFileRatio = .5;
+
             if (stlStream == null)
             {
-                return;
+                return null;
             }
 
             //MemoryStream stlStream = new MemoryStream();
@@ -201,7 +220,7 @@ namespace MatterHackers.PolygonMesh.Processors
             long bytesInFile = stlStream.Length;
             if (bytesInFile <= 80)
             {
-                return;
+                return null;
             }
 
             byte[] first160Bytes = new byte[160];
@@ -259,19 +278,14 @@ namespace MatterHackers.PolygonMesh.Processors
                     }
                     line = stlReader.ReadLine();
 
-                    if (sender != null)
+                    if (reportProgress != null && maxProgressReport.ElapsedMilliseconds > 200)
                     {
-                        if (backgroundWorker.CancellationPending)
+                        if (!reportProgress(stlStream.Position / (double)bytesInFile * parsingFileRatio, "Loading Polygons"))
                         {
                             stlStream.Close();
-                            return;
+                            return null;
                         }
-
-                        if (backgroundWorker.WorkerReportsProgress && maxProgressReport.ElapsedMilliseconds > 200)
-                        {
-                            backgroundWorker.ReportProgress((int)Math.Min((stlStream.Position * 100 / bytesInFile), 99));
-                            maxProgressReport.Restart();
-                        }
+                        maxProgressReport.Restart();
                     }
                 }
             }
@@ -293,7 +307,7 @@ namespace MatterHackers.PolygonMesh.Processors
                 if (fileContents.Length < numBytesRequiredForVertexData || numTriangles < 4)
                 {
                     stlStream.Close();
-                    return;
+                    return null;
                 }
                 Vector3[] vector = new Vector3[3];
                 for (int i = 0; i < numTriangles; i++)
@@ -310,19 +324,14 @@ namespace MatterHackers.PolygonMesh.Processors
                     }
                     currentPosition += 2; // skip the attribute
 
-                    if (sender != null)
+                    if (reportProgress != null && maxProgressReport.ElapsedMilliseconds > 200)
                     {
-                        if (backgroundWorker.CancellationPending)
+                        if (!reportProgress(i / (double)numTriangles * parsingFileRatio, "Loading Polygons"))
                         {
                             stlStream.Close();
-                            return;
+                            return null;
                         }
-
-                        if(backgroundWorker.WorkerReportsProgress && maxProgressReport.ElapsedMilliseconds > 200)
-                        {
-                            backgroundWorker.ReportProgress(i * 91 / (int)numTriangles);
-                            maxProgressReport.Restart();
-                        }
+                        maxProgressReport.Restart();
                     }
 
                     if (!Vector3.Collinear(vector[0], vector[1], vector[2]))
@@ -337,14 +346,22 @@ namespace MatterHackers.PolygonMesh.Processors
             }
 
             // merge all the vetexes that are in the same place together
-            meshFromStlFile.CleanAndMergMesh(backgroundWorker, 92, 100);
-
-            doWorkEventArgs.Result = meshFromStlFile;
+            meshFromStlFile.CleanAndMergMesh(
+                (double progress0To1, string processingState) => 
+                {
+                    if (reportProgress != null)
+                    {
+                        reportProgress(parsingFileRatio + progress0To1 * (1 - parsingFileRatio), processingState);
+                    }
+                    return true;
+                }
+            );
 
             time.Stop();
             Debug.WriteLine(string.Format("STL Load in {0:0.00}s", time.Elapsed.TotalSeconds));
 
             stlStream.Close();
+            return meshFromStlFile;
         }
 
         public static string FormatForStl(Vector3 value)

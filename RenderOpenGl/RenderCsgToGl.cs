@@ -31,13 +31,12 @@ using System;
 using System.Collections.Generic;
 using MatterHackers.Agg;
 using MatterHackers.Csg;
-using MatterHackers.PolygonMesh;
-using MatterHackers.VectorMath;
-using MatterHackers.Csg.Solids;
 using MatterHackers.Csg.Operations;
+using MatterHackers.Csg.Solids;
 using MatterHackers.Csg.Transform;
-
-using OpenTK.Graphics.OpenGL;
+using MatterHackers.PolygonMesh;
+using MatterHackers.RenderOpenGl.OpenGl;
+using MatterHackers.VectorMath;
 
 namespace MatterHackers.RenderOpenGl
 {
@@ -105,7 +104,7 @@ namespace MatterHackers.RenderOpenGl
             return cube;
         }
 
-        public void RenderToGlRecursive(Box.BoxPrimitive objectToProcess)
+        public void RenderToGlRecursive(BoxPrimitive objectToProcess)
         {
             if (objectToProcess.CreateCentered)
             {
@@ -183,10 +182,12 @@ namespace MatterHackers.RenderOpenGl
         #region Transform
         public void RenderToGlRecursive(TransformBase objectToProcess)
         {
-            GL.PushMatrix();
+			#if USE_OPENGL
+			GL.PushMatrix();
             GL.MultMatrix(objectToProcess.transform.GetAsDoubleArray());
             RenderToGlRecursive((dynamic)objectToProcess.objectToTransform);
             GL.PopMatrix();
+			#endif
         }
         #endregion
 

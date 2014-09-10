@@ -39,8 +39,6 @@ using MatterHackers.Agg.Image;
 using MatterHackers.PolygonMesh;
 using MatterHackers.VectorMath;
 
-using OpenTK.Graphics.OpenGL;
-
 namespace MatterHackers.RenderOpenGl
 {
     public struct WireVertexData
@@ -54,65 +52,38 @@ namespace MatterHackers.RenderOpenGl
 
     public class GLMeshWirePlugin
     {
-        struct RemoveData
-        {
-            internal int vboHandle;
-
-            public RemoveData(int vboHandle)
-            {
-                this.vboHandle = vboHandle;
-            }
-        }
-
         public delegate void DrawToGL(Mesh meshToRender);
 
         private static ConditionalWeakTable<Mesh, GLMeshWirePlugin> meshesWithCacheData = new ConditionalWeakTable<Mesh, GLMeshWirePlugin>();
 
-        private static List<RemoveData> glDataNeedingToBeDeleted = new List<RemoveData>();
-
-        public VectorPOD<WireVertexData> manifoldData =new VectorPOD<WireVertexData>();
+        public VectorPOD<WireVertexData> edgeLinesData = new VectorPOD<WireVertexData>();
 
         private int meshUpdateCount;
         private double nonPlanarAngleRequired;
-
-        static public void DeleteUnusedGLResources()
-        {
-            using (TimedLock.Lock(glDataNeedingToBeDeleted, "GLMeshPluginDeleteUnused"))
-            {
-                // We run this in here to ensure that we are on the correct thread and have the correct
-                // glcontext realized.
-                for (int i = glDataNeedingToBeDeleted.Count - 1; i >= 0; i--)
-                {
-                    //GL.DeleteBuffers(glDataNeedingToBeDeleted[i].vboHandle);
-                    glDataNeedingToBeDeleted.RemoveAt(i);
-                }
-            }
-        }
 
         static public GLMeshWirePlugin Get(Mesh meshToGetDisplayListFor, double nonPlanarAngleRequired = 0)
         {
             GLMeshWirePlugin plugin;
             meshesWithCacheData.TryGetValue(meshToGetDisplayListFor, out plugin);
 
-            if (plugin != null 
+            if (plugin != null
                 && (meshToGetDisplayListFor.ChangedCount != plugin.meshUpdateCount
                 || nonPlanarAngleRequired != plugin.nonPlanarAngleRequired))
             {
                 plugin.meshUpdateCount = meshToGetDisplayListFor.ChangedCount;
                 plugin.AddRemoveData();
-                plugin.CreateRenderData(meshToGetDisplayListFor);
+                plugin.CreateRenderData(meshToGetDisplayListFor, nonPlanarAngleRequired);
                 plugin.meshUpdateCount = meshToGetDisplayListFor.ChangedCount;
                 plugin.nonPlanarAngleRequired = nonPlanarAngleRequired;
             }
-
-            DeleteUnusedGLResources();
 
             if (plugin == null)
             {
                 GLMeshWirePlugin newPlugin = new GLMeshWirePlugin();
                 meshesWithCacheData.Add(meshToGetDisplayListFor, newPlugin);
-                newPlugin.CreateRenderData(meshToGetDisplayListFor);
+                newPlugin.CreateRenderData(meshToGetDisplayListFor, nonPlanarAngleRequired);
                 newPlugin.meshUpdateCount = meshToGetDisplayListFor.ChangedCount;
+                newPlugin.nonPlanarAngleRequired = nonPlanarAngleRequired;
 
                 return newPlugin;
             }
@@ -134,23 +105,48 @@ namespace MatterHackers.RenderOpenGl
             AddRemoveData();
         }
 
-        private void CreateRenderData(Mesh meshToBuildListFor)
+        private void CreateRenderData(Mesh meshToBuildListFor, double nonPlanarAngleRequired = 0)
         {
-            manifoldData = new VectorPOD<WireVertexData>();
+            edgeLinesData = new VectorPOD<WireVertexData>();
             // first make sure all the textures are created
             foreach (MeshEdge meshEdge in meshToBuildListFor.meshEdges)
             {
-                WireVertexData tempVertex;
-                tempVertex.positionsX = (float)meshEdge.VertexOnEnd[0].Position.x;
-                tempVertex.positionsY = (float)meshEdge.VertexOnEnd[0].Position.y;
-                tempVertex.positionsZ = (float)meshEdge.VertexOnEnd[0].Position.z;
-                manifoldData.Add(tempVertex);
-
-                tempVertex.positionsX = (float)meshEdge.VertexOnEnd[1].Position.x;
-                tempVertex.positionsY = (float)meshEdge.VertexOnEnd[1].Position.y;
-                tempVertex.positionsZ = (float)meshEdge.VertexOnEnd[1].Position.z;
-                manifoldData.Add(tempVertex);
+                if (nonPlanarAngleRequired > 0)
+                {
+                    if (meshEdge.GetNumFacesSharingEdge() == 2)
+                    {
+                        FaceEdge firstFaceEdge = meshEdge.firstFaceEdge;
+                        FaceEdge nextFaceEdge = meshEdge.firstFaceEdge.radialNextFaceEdge;
+                        double angle = Vector3.CalculateAngle(firstFaceEdge.containingFace.normal, nextFaceEdge.containingFace.normal);
+                        if (angle > MathHelper.Tau * .1)
+                        {
+                            edgeLinesData.Add(AddVertex(meshEdge.VertexOnEnd[0].Position, meshEdge.VertexOnEnd[1].Position));
+                        }
+                    }
+                    else
+                    {
+                        edgeLinesData.Add(AddVertex(meshEdge.VertexOnEnd[0].Position, meshEdge.VertexOnEnd[1].Position));
+                    }
+                }
+                else
+                {
+                    edgeLinesData.Add(AddVertex(meshEdge.VertexOnEnd[0].Position, meshEdge.VertexOnEnd[1].Position));
+                }
             }
+        }
+
+        private WireVertexData AddVertex(Vector3 vertex0, Vector3 vertex1)
+        {
+            WireVertexData tempVertex;
+            tempVertex.positionsX = (float)vertex0.x;
+            tempVertex.positionsY = (float)vertex0.y;
+            tempVertex.positionsZ = (float)vertex0.z;
+            edgeLinesData.Add(tempVertex);
+
+            tempVertex.positionsX = (float)vertex1.x;
+            tempVertex.positionsY = (float)vertex1.y;
+            tempVertex.positionsZ = (float)vertex1.z;
+            return tempVertex;
         }
 
         public void Render()

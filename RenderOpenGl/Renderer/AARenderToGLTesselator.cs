@@ -29,18 +29,8 @@ either expressed or implied, of the FreeBSD Project.
 
 //#define AA_TIPS
 
-using System;
-using System.Collections.Generic;
-
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
 using MatterHackers.VectorMath;
-
-using Tesselate;
-
-using OpenTK.Graphics.OpenGL;
+using MatterHackers.RenderOpenGl.OpenGl;
 
 namespace MatterHackers.RenderOpenGl
 {
@@ -52,7 +42,7 @@ namespace MatterHackers.RenderOpenGl
 
         protected void DrawNonAATriangle(Vector2 p0, Vector2 p1, Vector2 p2)
         {
-            GL.Begin(BeginMode.Triangles);
+			GL.Begin(BeginMode.Triangles);
             {
                 // P1
                 GL.TexCoord2(.2, .25);
@@ -103,7 +93,6 @@ namespace MatterHackers.RenderOpenGl
 
             Vector2 edgeP0Offset = p0 + Normal;
             Vector2 edgeP1Offset = p1 + Normal;
-
             GL.Begin(BeginMode.TriangleFan);
             {
                 GL.TexCoord2(1 / 1023.0, .25);
@@ -143,6 +132,7 @@ namespace MatterHackers.RenderOpenGl
                 GL.Vertex2(p0.x + edgeP2P1Normal.x, p0.y + edgeP2P1Normal.y);
             }
             GL.End();
+
 #endif
         }
 

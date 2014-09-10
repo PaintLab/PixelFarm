@@ -25,20 +25,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies, 
 either expressed or implied, of the FreeBSD Project.
-
 */
+
 #define ON_IMAGE_CHANGED_ALWAYS_CREATE_IMAGE
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.CompilerServices;
 
 using MatterHackers.Agg;
 using MatterHackers.Agg.Image;
-using MatterHackers.VectorMath;
 
-using OpenTK.Graphics.OpenGL;
+using MatterHackers.RenderOpenGl.OpenGl;
 
 namespace MatterHackers.RenderOpenGl
 {
@@ -58,22 +56,6 @@ namespace MatterHackers.RenderOpenGl
         private int imageUpdateCount;
         private bool createdWithMipMaps;
 
-        static int glMajorVersion = 0;
-        static public int GLMajorVersion 
-        {
-            get
-            {
-                if (glMajorVersion == 0)
-                {
-                    string versionOpenGL = GL.GetString(StringName.Version);
-                    glMajorVersion = int.Parse(versionOpenGL[0].ToString());
-                    int minor = int.Parse(versionOpenGL[2].ToString());
-                }
-
-                return glMajorVersion;
-            }
-        }
-
         static public ImageGlPlugin GetImageGlPlugin(ImageBuffer imageToGetDisplayListFor, bool createAndUseMipMaps, bool TextureMagFilterLinear = true)
         {
             ImageGlPlugin plugin;
@@ -86,7 +68,9 @@ namespace MatterHackers.RenderOpenGl
                 for (int i = glDataNeedingToBeDeleted.Count - 1; i >= 0; i-- )
                 {
                     int textureToDelete = glDataNeedingToBeDeleted[i].glTextureHandle;
-                    GL.DeleteTextures(1, ref textureToDelete);
+					#if USE_OPENGL
+					GL.DeleteTextures(1, ref textureToDelete);
+					#endif
                     glDataNeedingToBeDeleted.RemoveAt(i);
                 }
             }
@@ -95,7 +79,9 @@ namespace MatterHackers.RenderOpenGl
             if (plugin != null && imageToGetDisplayListFor.ChangedCount != plugin.imageUpdateCount)
             {
                 int textureToDelete = plugin.GLTextureHandle;
-                GL.DeleteTextures(1, ref textureToDelete);
+			#if USE_OPENGL
+				GL.DeleteTextures(1, ref textureToDelete);
+			#endif
                 plugin.glData.glTextureHandle = 0;
                 imagesWithCacheData.Remove(imageToGetDisplayListFor.GetBuffer());
                 plugin = null;
@@ -116,7 +102,7 @@ namespace MatterHackers.RenderOpenGl
                 ImageGlPlugin newPlugin = new ImageGlPlugin();
                 imagesWithCacheData.Add(imageToGetDisplayListFor.GetBuffer(), newPlugin);
                 newPlugin.createdWithMipMaps = createAndUseMipMaps;
-                newPlugin.CreateGlDataForImage(imageToGetDisplayListFor);
+                newPlugin.CreateGlDataForImage(imageToGetDisplayListFor, TextureMagFilterLinear);
                 newPlugin.imageUpdateCount = imageToGetDisplayListFor.ChangedCount;
                 return newPlugin;
             }
@@ -210,29 +196,27 @@ namespace MatterHackers.RenderOpenGl
             }
         }
 
-        bool hwSupportNonPowerOfTwoTextures = false;
-        bool checkedForHwSupportNonPowerOfTwoTextures = false;
+        bool hwSupportsOnlyPowerOfTwoTextures = true;
+        bool checkedForHwSupportsOnlyPowerOfTwoTextures = false;
         int SmallestHardwareCompatibleTextureSize(int size)
         {
-            if (!checkedForHwSupportNonPowerOfTwoTextures)
+            if (!checkedForHwSupportsOnlyPowerOfTwoTextures)
             {
                 {
-                    // Compatible context (GL 1.0-2.1)
+					#if USE_OPENGL
+					// Compatible context (GL 1.0-2.1)
                     string extensions = GL.GetString(StringName.Extensions);
                     if (extensions.Contains("ARB_texture_non_power_of_two"))
                     {
-                        hwSupportNonPowerOfTwoTextures = true;
+                        hwSupportsOnlyPowerOfTwoTextures = false;
                     }
+					#endif
                 }
 
-                checkedForHwSupportNonPowerOfTwoTextures = true;
+                checkedForHwSupportsOnlyPowerOfTwoTextures = true;
             }
 
-            if (hwSupportNonPowerOfTwoTextures)
-            {
-                return size;
-            }
-            else
+            if (hwSupportsOnlyPowerOfTwoTextures)
             {
                 int pow2Size = 1;
                 while (pow2Size < size)
@@ -240,6 +224,10 @@ namespace MatterHackers.RenderOpenGl
                     pow2Size <<= 1;
                 }
                 return pow2Size;
+            }
+            else
+            {
+                return size;
             }
         }
 
@@ -289,9 +277,8 @@ namespace MatterHackers.RenderOpenGl
             }
 
             // Create the texture handle and display list handle
-            int[] glTextures = new int[1];
-            GL.GenTextures(1, glTextures);
-            glData.glTextureHandle = glTextures[0];
+			#if USE_OPENGL
+            GL.GenTextures(1, out glData.glTextureHandle);
 
             // Set up some texture parameters for openGL
             GL.BindTexture(TextureTarget.Texture2D, glData.glTextureHandle);
@@ -319,6 +306,7 @@ namespace MatterHackers.RenderOpenGl
 			// Create the texture
             switch (bufferedImage.BitDepth)
             {
+#if false // not implemented in our gl wrapper and never used in our current code
                 case 8:
                     GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Luminance, hardwareWidth, hardwareHeight,
                         0, PixelFormat.Luminance, PixelType.UnsignedByte, hardwareExpandedPixelBuffer);
@@ -328,6 +316,7 @@ namespace MatterHackers.RenderOpenGl
                     GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, hardwareWidth, hardwareHeight,
                         0, PixelFormat.Rgb, PixelType.UnsignedByte, hardwareExpandedPixelBuffer);
                     break;
+#endif
 
                 case 32:
                     GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, hardwareWidth, hardwareHeight,
@@ -341,39 +330,33 @@ namespace MatterHackers.RenderOpenGl
 
             if (createdWithMipMaps)
             {
-                if (GLMajorVersion < 3)
+                switch (bufferedImage.BitDepth)
                 {
-                    switch (bufferedImage.BitDepth)
-                    {
-                        case 32:
+                    case 32:
+                        {
+                            ImageBuffer sourceImage = new ImageBuffer(bufferedImage);
+                            ImageBuffer tempImage = new ImageBuffer(sourceImage.Width / 2, sourceImage.Height / 2, 32, new BlenderBGRA());
+                            tempImage.NewGraphics2D().Render(sourceImage, 0, 0, 0, .5, .5);
+                            int mipLevel = 1;
+                            while (sourceImage.Width > 1 && sourceImage.Height > 1)
                             {
-                                ImageBuffer sourceImage = new ImageBuffer(bufferedImage);
-                                ImageBuffer tempImage = new ImageBuffer(sourceImage.Width / 2, sourceImage.Height / 2, 32, new BlenderBGRA());
-                                tempImage.NewGraphics2D().Render(sourceImage, 0, 0, 0, .5, .5);
-                                int mipLevel = 1;
-                                while (sourceImage.Width > 1 && sourceImage.Height > 1)
-                                {
-                                    GL.TexImage2D(TextureTarget.Texture2D, mipLevel++, PixelInternalFormat.Rgba, tempImage.Width, tempImage.Height,
-                                        0, PixelFormat.Bgra, PixelType.UnsignedByte, tempImage.GetBuffer());
-                                    sourceImage = new ImageBuffer(tempImage);
-                                    tempImage = new ImageBuffer(Math.Max(1, sourceImage.Width / 2), Math.Max(1, sourceImage.Height / 2), 32, new BlenderBGRA());
-                                    tempImage.NewGraphics2D().Render(sourceImage, 0, 0,
-                                        0,
-                                        (double)tempImage.Width / (double)sourceImage.Width,
-                                        (double)tempImage.Height / (double)sourceImage.Height);
-                                }
+                                GL.TexImage2D(TextureTarget.Texture2D, mipLevel++, PixelInternalFormat.Rgba, tempImage.Width, tempImage.Height,
+                                    0, PixelFormat.Bgra, PixelType.UnsignedByte, tempImage.GetBuffer());
+                                sourceImage = new ImageBuffer(tempImage);
+                                tempImage = new ImageBuffer(Math.Max(1, sourceImage.Width / 2), Math.Max(1, sourceImage.Height / 2), 32, new BlenderBGRA());
+                                tempImage.NewGraphics2D().Render(sourceImage, 0, 0,
+                                    0,
+                                    (double)tempImage.Width / (double)sourceImage.Width,
+                                    (double)tempImage.Height / (double)sourceImage.Height);
                             }
-                            break;
+                        }
+                        break;
 
-                        default:
-                            throw new NotImplementedException();
-                    }
-                }
-                else
-                {
-                    GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+                    default:
+                        throw new NotImplementedException();
                 }
             }
+			#endif
 
 			float texCoordX = imageWidth / (float)hardwareWidth;
             float texCoordY = imageHeight / (float)hardwareHeight;
@@ -392,7 +375,7 @@ namespace MatterHackers.RenderOpenGl
 
         public void DrawToGL()
         {
-
+			#if USE_OPENGL
             GL.BindTexture(TextureTarget.Texture2D, GLTextureHandle);
 #if true
             GL.Begin(BeginMode.TriangleFan);
@@ -415,6 +398,7 @@ namespace MatterHackers.RenderOpenGl
             GL.DisableClientState(ArrayCap.TextureCoordArray);
             GL.DisableClientState(ArrayCap.VertexArray);
 #endif
+			#endif
         }
     }
 }

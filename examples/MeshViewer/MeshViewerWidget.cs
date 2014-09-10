@@ -76,9 +76,52 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-        double partScale;
         public ImageBuffer BedImage;
-        TextWidget centeredInfoText;
+
+        // need to know about (or just rebuild)
+        
+        // Bed Center Change
+        // Bed Size Change
+        // Part Centering
+        // Bed Rectange on Image
+        // Bed Image Change
+        // Bed Shape Change
+
+        public class PartProcessingInfo : FlowLayoutWidget
+        {
+            internal ProgressControl progressControl;
+            internal TextWidget centeredInfoText;
+            internal TextWidget centeredInfoDescription;
+
+            internal PartProcessingInfo(string startingTextMessage)
+                : base(FlowDirection.TopToBottom)
+            {
+                progressControl = new ProgressControl("", RGBA_Bytes.Black, RGBA_Bytes.Black);
+                progressControl.HAnchor = HAnchor.ParentCenter;
+                AddChild(progressControl);
+                progressControl.Visible = false;
+                progressControl.ProgressChanged += (sender, e) =>
+                {
+                    progressControl.Visible = true;
+                };
+
+                centeredInfoText = new TextWidget(startingTextMessage);
+                centeredInfoText.HAnchor = HAnchor.ParentCenter;
+                centeredInfoText.AutoExpandBoundsToText = true;
+                AddChild(centeredInfoText);
+
+                centeredInfoDescription = new TextWidget("");
+                centeredInfoDescription.HAnchor = HAnchor.ParentCenter;
+                centeredInfoDescription.AutoExpandBoundsToText = true;
+                AddChild(centeredInfoDescription);
+
+                VAnchor |= VAnchor.ParentCenter;
+                HAnchor |= HAnchor.ParentCenter;
+            }
+        }
+
+        public PartProcessingInfo partProcessingInfo;
+
         TrackballTumbleWidget trackballTumbleWidget;
         public TrackballTumbleWidget TrackballTumbleWidget
         {
@@ -108,7 +151,7 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-        public Matrix4X4 SelectedMeshTransform 
+        public ScaleRotateTranslate SelectedMeshTransform 
         {
             get 
             {
@@ -117,7 +160,7 @@ namespace MatterHackers.MeshVisualizer
                     return MeshTransforms[selectedMeshIndex];
                 }
 
-                return Matrix4X4.Identity;
+                return ScaleRotateTranslate.Identity();
             }
 
             set
@@ -126,8 +169,8 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-        List<Matrix4X4> meshTransforms = new List<Matrix4X4>();
-        public List<Matrix4X4> MeshTransforms { get { return meshTransforms; } }
+        List<ScaleRotateTranslate> meshTransforms = new List<ScaleRotateTranslate>();
+        public List<ScaleRotateTranslate> MeshTransforms { get { return meshTransforms; } }
 
         List<Mesh> meshesToRender = new List<Mesh>();
         public List<Mesh> Meshes { get { return meshesToRender; } }
@@ -140,11 +183,10 @@ namespace MatterHackers.MeshVisualizer
 
         public enum BedShape { Rectangular, Circular };
         BedShape bedShape = BedShape.Rectangular;
+        Vector2 bedCenter;
 
-        public MeshViewerWidget(Vector3 displayVolume, double scale, BedShape bedShape, string startingTextMessage = "")
+        public MeshViewerWidget(Vector3 displayVolume, Vector2 bedCenter, BedShape bedShape, string startingTextMessage = "")
         {
-            this.bedShape = bedShape;
-            this.displayVolume = displayVolume;
             RenderType = RenderTypes.Shaded;
             RenderBed = true;
             RenderBuildVolume = false;
@@ -153,12 +195,40 @@ namespace MatterHackers.MeshVisualizer
             BedColor = new RGBA_Floats(.8, .8, .8, .5).GetAsRGBA_Bytes();
             BuildVolumeColor = new RGBA_Floats(.2, .8, .3, .2).GetAsRGBA_Bytes();
 
-            this.partScale = scale;
             trackballTumbleWidget = new TrackballTumbleWidget();
             trackballTumbleWidget.DrawRotationHelperCircle = false;
             trackballTumbleWidget.DrawGlContent += trackballTumbleWidget_DrawGlContent;
+            trackballTumbleWidget.TransformState = TrackBallController.MouseDownType.Rotation;
 
             AddChild(trackballTumbleWidget);
+
+            CreatePrintBed(displayVolume, bedCenter, bedShape);
+
+            trackballTumbleWidget.AnchorAll();
+
+            partProcessingInfo = new PartProcessingInfo(startingTextMessage);
+
+            GuiWidget labelContainer = new GuiWidget();
+            labelContainer.AnchorAll();
+            labelContainer.AddChild(partProcessingInfo);
+            labelContainer.Selectable = false;
+
+            this.AddChild(labelContainer);
+        }
+
+        public void CreatePrintBed(Vector3 displayVolume, Vector2 bedCenter, BedShape bedShape)
+        {
+            if(this.bedCenter == bedCenter 
+                && this.bedShape == bedShape
+                && this.displayVolume == displayVolume)
+            {
+                return;
+            }
+
+            this.bedCenter = bedCenter;
+            this.bedShape = bedShape;
+            displayVolume = Vector3.ComponentMax(displayVolume, new Vector3(1,1,1));
+            this.displayVolume = displayVolume;
 
             switch (bedShape)
             {
@@ -220,6 +290,7 @@ namespace MatterHackers.MeshVisualizer
                                 }
                             }
                         }
+                        
                         foreach (Vertex vertex in printerBed.Vertices)
                         {
                             vertex.Position = vertex.Position - new Vector3(0, 0, 2.2);
@@ -231,19 +302,7 @@ namespace MatterHackers.MeshVisualizer
                     throw new NotImplementedException();
             }
 
-            trackballTumbleWidget.AnchorAll();
-
-            centeredInfoText = new TextWidget(startingTextMessage);
-            centeredInfoText.HAnchor = HAnchor.ParentCenter;
-            centeredInfoText.VAnchor = VAnchor.ParentCenter;
-            centeredInfoText.AutoExpandBoundsToText = true;
-
-            GuiWidget labelContainer = new GuiWidget();
-            labelContainer.AnchorAll();
-            labelContainer.AddChild(centeredInfoText);
-            labelContainer.Selectable = false;
-
-            this.AddChild(labelContainer);
+            Invalidate();
         }
 
         public override void OnClosed(EventArgs e)
@@ -266,7 +325,7 @@ namespace MatterHackers.MeshVisualizer
                     drawColor = SelectedPartColor;
                 }
 
-                RenderMeshToGl.Render(meshToRender, drawColor, MeshTransforms[i], RenderType);
+                RenderMeshToGl.Render(meshToRender, drawColor, MeshTransforms[i].TotalTransform, RenderType);
             }
 
             // we don't want to render the bed or bulid volume before we load a model.
@@ -288,11 +347,12 @@ namespace MatterHackers.MeshVisualizer
         {
             if (File.Exists(meshPathAndFileName))
             {
+                partProcessingInfo.Visible = true;
+                partProcessingInfo.progressControl.PercentComplete = 0;
+
                 backgroundWorker = new BackgroundWorker();
-                backgroundWorker.WorkerReportsProgress = true;
                 backgroundWorker.WorkerSupportsCancellation = true;
 
-                backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
                 backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
 
                 bool loadingMeshFile = false;
@@ -300,7 +360,15 @@ namespace MatterHackers.MeshVisualizer
                 {
                     case ".STL":
                         {
-                            StlProcessing.LoadInBackground(backgroundWorker, meshPathAndFileName);
+                            backgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
+                            {
+                                Mesh loadedMesh = StlProcessing.Load(meshPathAndFileName, backgroundWorker_ProgressChanged);
+
+                                SetMeshAfterLoad(loadedMesh);
+
+                                e.Result = loadedMesh;
+                            };
+                            backgroundWorker.RunWorkerAsync();
                             loadingMeshFile = true;
                         }
                         break;
@@ -320,16 +388,16 @@ namespace MatterHackers.MeshVisualizer
 
                 if (loadingMeshFile)
                 {
-                    centeredInfoText.Text = "Loading Mesh...";
+                    partProcessingInfo.centeredInfoText.Text = "Loading Mesh...";
                 }
                 else
                 {
-                    centeredInfoText.Text = string.Format("Sorry! No 3D view available\nfor this file type '{0}'.", Path.GetExtension(meshPathAndFileName).ToUpper());
+                    partProcessingInfo.centeredInfoText.Text = string.Format("Sorry! No 3D view available\nfor this file type '{0}'.", Path.GetExtension(meshPathAndFileName).ToUpper());
                 }
             }
             else
             {
-                centeredInfoText.Text = string.Format("{0}\n'{1}'", "File not found on disk.", Path.GetFileName(meshPathAndFileName));
+                partProcessingInfo.centeredInfoText.Text = string.Format("{0}\n'{1}'", "File not found on disk.", Path.GetFileName(meshPathAndFileName));
             }
         }
 
@@ -339,40 +407,42 @@ namespace MatterHackers.MeshVisualizer
 
             if (loadedMesh == null)
             {
-                centeredInfoText.Text = string.Format("Sorry! No 3D view available\nfor this file.");
+                partProcessingInfo.centeredInfoText.Text = string.Format("Sorry! No 3D view available\nfor this file.");
             }
             else
             {
+                meshTransforms.Add(ScaleRotateTranslate.Identity());
+
+                int index = meshTransforms.Count - 1;
+                // get the ScaleRotateTranslate matrices set up
+                {
+                    AxisAlignedBoundingBox bounds = loadedMesh.GetAxisAlignedBoundingBox(meshTransforms[index].TotalTransform);
+                    Vector3 boundsCenter = (bounds.maxXYZ + bounds.minXYZ) / 2;
+                    loadedMesh.Translate(-boundsCenter);
+                }
+
+                // make sure the mesh is centered and on the bed
+                {
+                    AxisAlignedBoundingBox bounds = loadedMesh.GetAxisAlignedBoundingBox(meshTransforms[index].TotalTransform);
+                    Vector3 boundsCenter = (bounds.maxXYZ + bounds.minXYZ) / 2;
+                    ScaleRotateTranslate moved = meshTransforms[index];
+                    moved.translation *= Matrix4X4.CreateTranslation(-boundsCenter + new Vector3(0, 0, bounds.ZSize / 2));
+                    meshTransforms[index] = moved;
+                }
+
                 Meshes.Add(loadedMesh);
-                meshTransforms.Add(Matrix4X4.Identity);
 
                 trackballTumbleWidget.TrackBallController = new TrackBallController();
                 trackballTumbleWidget.OnBoundsChanged(null);
                 trackballTumbleWidget.TrackBallController.Scale = .03;
                 trackballTumbleWidget.TrackBallController.Rotate(Quaternion.FromEulerAngles(new Vector3(0, 0, MathHelper.Tau / 16)));
                 trackballTumbleWidget.TrackBallController.Rotate(Quaternion.FromEulerAngles(new Vector3(-MathHelper.Tau * .19, 0, 0)));
-                if (partScale != 1)
-                {
-                    foreach (Vertex vertex in Meshes[0].Vertices)
-                    {
-                        vertex.Position = vertex.Position * partScale;
-                    }
-                }
-
-                // make sure the mesh is centered and on the bed
-                {
-                    int index = Meshes.Count - 1;
-                    AxisAlignedBoundingBox bounds = loadedMesh.GetAxisAlignedBoundingBox(meshTransforms[index]);
-                    Vector3 boundsCenter = (bounds.maxXYZ + bounds.minXYZ) / 2;
-                    meshTransforms[index] *= Matrix4X4.CreateTranslation(-boundsCenter + new Vector3(0, 0, bounds.ZSize / 2));
-                }
             }
         }
 
         void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            SetMeshAfterLoad((Mesh)e.Result);
-            centeredInfoText.Text = "";
+            partProcessingInfo.Visible = false;
 
             if (LoadDone != null)
             {
@@ -380,9 +450,16 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-        void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        bool backgroundWorker_ProgressChanged(double progress0To1, string processingState)
         {
-            centeredInfoText.Text = string.Format("Loading Mesh {0}%...", e.ProgressPercentage);
+            UiThread.RunOnIdle((object state) =>
+            {
+                int percentComplete = (int)(progress0To1 * 100 + .5);
+                partProcessingInfo.centeredInfoText.Text = "Loading Mesh {0}%...".FormatWith(percentComplete);
+                partProcessingInfo.progressControl.PercentComplete = percentComplete;
+                partProcessingInfo.centeredInfoDescription.Text = processingState;
+            });
+            return true;
         }
 
         public override void OnMouseDown(MouseEventArgs mouseEvent)
