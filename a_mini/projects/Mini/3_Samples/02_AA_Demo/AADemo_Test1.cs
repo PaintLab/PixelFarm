@@ -150,7 +150,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             //----------------------------------------
             ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
-            rasterizer.ResetGamma(new gamma_none());
+            rasterizer.ResetGamma(new GammaNone());
 
             //----------------------------------------
             PathStorage ps = new PathStorage();
