@@ -42,7 +42,7 @@ namespace MatterHackers.Agg.Sample_Blur
         //ReferenceImage m_rbuf2;
 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
-        RecursiveBlur m_recursive_blur = new RecursiveBlur(new recursive_blur_calc_rgb());
+        RecursiveBlur m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
 
         RectangleDouble m_shape_bounds;
 

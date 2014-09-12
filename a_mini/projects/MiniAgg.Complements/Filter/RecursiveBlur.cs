@@ -39,7 +39,7 @@ namespace MatterHackers.Agg.Image
         public int g;
         public int b;
         public int a;
-    };
+    }
 
     struct stack_blur_tables
     {
@@ -722,7 +722,7 @@ namespace MatterHackers.Agg.Image
                 {
                     return this.blurValues[this.currentTailIndex];
                 }
-            } 
+            }
         }
 
         private void stack_blur_bgra32(ImageBase img, int radius, int ry)
@@ -748,7 +748,7 @@ namespace MatterHackers.Agg.Image
                            (byte)((dest) & 0xff)));
                     i++;
                 }
-            } 
+            }
         }
 
 
@@ -1079,7 +1079,7 @@ namespace MatterHackers.Agg.Image
             v.b = (int)((b * mul) >> shr);
             v.a = (int)((a * mul) >> shr);
         }
-    };
+    }
 
 
     //=====================================================stack_blur_calc_rgb
@@ -1126,7 +1126,7 @@ namespace MatterHackers.Agg.Image
             v.g = (int)((g * mul) >> shr);
             v.b = (int)((b * mul) >> shr);
         }
-    };
+    }
 
 
     //====================================================stack_blur_calc_gray
@@ -1163,7 +1163,7 @@ namespace MatterHackers.Agg.Image
         {
             a.r = (int)((v * mul) >> shr);
         }
-    };
+    }
 #endif
 
     public abstract class RecursizeBlurCalculator
@@ -1172,13 +1172,13 @@ namespace MatterHackers.Agg.Image
 
         public abstract RecursizeBlurCalculator CreateNew();
 
-        public abstract void from_pix(ColorRGBA c);
+        public abstract void FromPix(ColorRGBA c);
 
-        public abstract void calc(double b1, double b2, double b3, double b4,
+        public abstract void Calc(double b1, double b2, double b3, double b4,
             RecursizeBlurCalculator c1, RecursizeBlurCalculator c2, RecursizeBlurCalculator c3, RecursizeBlurCalculator c4);
 
-        public abstract void to_pix(ref ColorRGBA c);
-    };
+        public abstract void ToPix(ref ColorRGBA c);
+    }
 
     //===========================================================recursive_blur
     public sealed class RecursiveBlur
@@ -1252,30 +1252,30 @@ namespace MatterHackers.Agg.Image
             for (y = 0; y < h; y++)
             {
                 RecursizeBlurCalculator c = m_RecursizeBlurCalculatorFactory;
-                c.from_pix(img.GetPixel(0, y));
-                Sum1Array[0].calc(b, b1, b2, b3, c, c, c, c);
-                c.from_pix(img.GetPixel(1, y));
-                Sum1Array[1].calc(b, b1, b2, b3, c, Sum1Array[0], Sum1Array[0], Sum1Array[0]);
-                c.from_pix(img.GetPixel(2, y));
-                Sum1Array[2].calc(b, b1, b2, b3, c, Sum1Array[1], Sum1Array[0], Sum1Array[0]);
+                c.FromPix(img.GetPixel(0, y));
+                Sum1Array[0].Calc(b, b1, b2, b3, c, c, c, c);
+                c.FromPix(img.GetPixel(1, y));
+                Sum1Array[1].Calc(b, b1, b2, b3, c, Sum1Array[0], Sum1Array[0], Sum1Array[0]);
+                c.FromPix(img.GetPixel(2, y));
+                Sum1Array[2].Calc(b, b1, b2, b3, c, Sum1Array[1], Sum1Array[0], Sum1Array[0]);
 
                 for (x = 3; x < w; ++x)
                 {
-                    c.from_pix(img.GetPixel(x, y));
-                    Sum1Array[x].calc(b, b1, b2, b3, c, Sum1Array[x - 1], Sum1Array[x - 2], Sum1Array[x - 3]);
+                    c.FromPix(img.GetPixel(x, y));
+                    Sum1Array[x].Calc(b, b1, b2, b3, c, Sum1Array[x - 1], Sum1Array[x - 2], Sum1Array[x - 3]);
                 }
 
-                Sum2Array[wm].calc(b, b1, b2, b3, Sum1Array[wm], Sum1Array[wm], Sum1Array[wm], Sum1Array[wm]);
-                Sum2Array[wm - 1].calc(b, b1, b2, b3, Sum1Array[wm - 1], Sum2Array[wm], Sum2Array[wm], Sum2Array[wm]);
-                Sum2Array[wm - 2].calc(b, b1, b2, b3, Sum1Array[wm - 2], Sum2Array[wm - 1], Sum2Array[wm], Sum2Array[wm]);
-                Sum2Array[wm].to_pix(ref BufferArray[wm]);
-                Sum2Array[wm - 1].to_pix(ref BufferArray[wm - 1]);
-                Sum2Array[wm - 2].to_pix(ref BufferArray[wm - 2]);
+                Sum2Array[wm].Calc(b, b1, b2, b3, Sum1Array[wm], Sum1Array[wm], Sum1Array[wm], Sum1Array[wm]);
+                Sum2Array[wm - 1].Calc(b, b1, b2, b3, Sum1Array[wm - 1], Sum2Array[wm], Sum2Array[wm], Sum2Array[wm]);
+                Sum2Array[wm - 2].Calc(b, b1, b2, b3, Sum1Array[wm - 2], Sum2Array[wm - 1], Sum2Array[wm], Sum2Array[wm]);
+                Sum2Array[wm].ToPix(ref BufferArray[wm]);
+                Sum2Array[wm - 1].ToPix(ref BufferArray[wm - 1]);
+                Sum2Array[wm - 2].ToPix(ref BufferArray[wm - 2]);
 
                 for (x = wm - 3; x >= 0; --x)
                 {
-                    Sum2Array[x].calc(b, b1, b2, b3, Sum1Array[x], Sum2Array[x + 1], Sum2Array[x + 2], Sum2Array[x + 3]);
-                    Sum2Array[x].to_pix(ref BufferArray[x]);
+                    Sum2Array[x].Calc(b, b1, b2, b3, Sum1Array[x], Sum2Array[x + 1], Sum2Array[x + 2], Sum2Array[x + 3]);
+                    Sum2Array[x].ToPix(ref BufferArray[x]);
                 }
 
                 img.CopyColorHSpan(0, y, w, BufferArray, 0);
@@ -1293,24 +1293,24 @@ namespace MatterHackers.Agg.Image
             blur_x(img, radius);
             blur_y(img, radius);
         }
-    };
+    }
 
     //=================================================recursive_blur_calc_rgb
-    public sealed class recursive_blur_calc_rgb : RecursizeBlurCalculator
+    public sealed class RecursiveBlurCalcRGB : RecursizeBlurCalculator
     {
         public override RecursizeBlurCalculator CreateNew()
         {
-            return new recursive_blur_calc_rgb();
+            return new RecursiveBlurCalcRGB();
         }
 
-        public override void from_pix(ColorRGBA c)
+        public override void FromPix(ColorRGBA c)
         {
             r = c.red;
             g = c.green;
             b = c.blue;
         }
 
-        public override void calc(double b1, double b2, double b3, double b4,
+        public override void Calc(double b1, double b2, double b3, double b4,
             RecursizeBlurCalculator c1, RecursizeBlurCalculator c2, RecursizeBlurCalculator c3, RecursizeBlurCalculator c4)
         {
             r = b1 * c1.r + b2 * c2.r + b3 * c3.r + b4 * c4.r;
@@ -1318,23 +1318,23 @@ namespace MatterHackers.Agg.Image
             b = b1 * c1.b + b2 * c2.b + b3 * c3.b + b4 * c4.b;
         }
 
-        public override void to_pix(ref ColorRGBA c)
+        public override void ToPix(ref ColorRGBA c)
         {
             c.red = (byte)AggBasics.uround(r);
             c.green = (byte)AggBasics.uround(g);
             c.blue = (byte)AggBasics.uround(b);
         }
-    };
+    }
 
     //=================================================recursive_blur_calc_rgba
-    public sealed class recursive_blur_calc_rgba : RecursizeBlurCalculator
+    public sealed class RecursiveBlueCalcRGBA : RecursizeBlurCalculator
     {
         public override RecursizeBlurCalculator CreateNew()
         {
-            return new recursive_blur_calc_rgba();
+            return new RecursiveBlueCalcRGBA();
         }
 
-        public override void from_pix(ColorRGBA c)
+        public override void FromPix(ColorRGBA c)
         {
             r = c.red;
             g = c.green;
@@ -1342,7 +1342,7 @@ namespace MatterHackers.Agg.Image
             a = c.alpha;
         }
 
-        public override void calc(double b1, double b2, double b3, double b4,
+        public override void Calc(double b1, double b2, double b3, double b4,
             RecursizeBlurCalculator c1, RecursizeBlurCalculator c2, RecursizeBlurCalculator c3, RecursizeBlurCalculator c4)
         {
             r = b1 * c1.r + b2 * c2.r + b3 * c3.r + b4 * c4.r;
@@ -1351,37 +1351,37 @@ namespace MatterHackers.Agg.Image
             a = b1 * c1.a + b2 * c2.a + b3 * c3.a + b4 * c4.a;
         }
 
-        public override void to_pix(ref ColorRGBA c)
+        public override void ToPix(ref ColorRGBA c)
         {
             c.red = (byte)AggBasics.uround(r);
             c.green = (byte)AggBasics.uround(g);
             c.blue = (byte)AggBasics.uround(b);
             c.alpha = (byte)AggBasics.uround(a);
         }
-    };
+    }
 
     //================================================recursive_blur_calc_gray
-    public sealed class recursive_blur_calc_gray : RecursizeBlurCalculator
+    public sealed class RecursiveBlurCalcGray : RecursizeBlurCalculator
     {
         public override RecursizeBlurCalculator CreateNew()
         {
-            return new recursive_blur_calc_gray();
+            return new RecursiveBlurCalcGray();
         }
 
-        public override void from_pix(ColorRGBA c)
+        public override void FromPix(ColorRGBA c)
         {
             r = c.red;
         }
 
-        public override void calc(double b1, double b2, double b3, double b4,
+        public override void Calc(double b1, double b2, double b3, double b4,
             RecursizeBlurCalculator c1, RecursizeBlurCalculator c2, RecursizeBlurCalculator c3, RecursizeBlurCalculator c4)
         {
             r = b1 * c1.r + b2 * c2.r + b3 * c3.r + b4 * c4.r;
         }
 
-        public override void to_pix(ref ColorRGBA c)
+        public override void ToPix(ref ColorRGBA c)
         {
             c.red = (byte)AggBasics.uround(r);
         }
-    };
+    }
 }

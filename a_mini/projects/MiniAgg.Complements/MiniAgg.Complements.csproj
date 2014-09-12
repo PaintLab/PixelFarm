@@ -46,13 +46,13 @@
     <Compile Include="BoundingRect.cs" />
     <Compile Include="Base\Queue.cs" />
     <Compile Include="BorderDouble.cs" />
-    <Compile Include="Base\agg_gamma_functions.cs" />
+    <Compile Include="Base\GammaFuntions.cs" />
     <Compile Include="Base\ClipProxyImage.cs" />
     <Compile Include="Base\ProxyImage.cs" />
     <Compile Include="Filter\ImageFilters.cs" />
     <Compile Include="Filter\PatternFilterBilnearColorRGBA.cs" />
     <Compile Include="Image\AlphaMask.cs" />
-    <Compile Include="VertexSource\agg_span_gradient.cs" />
+    <Compile Include="VertexSource\SpanGradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
     <Compile Include="Image\Gray.cs" />
@@ -66,8 +66,8 @@
     <Compile Include="VertexSource\BSpline.cs" />
     <Compile Include="VertexSource\Curves.cs" />
     <Compile Include="VertexSource\SpanGourand.cs" />
-    <Compile Include="VertexSource\agg_span_gouraud_rgba.cs" />
-    <Compile Include="VertexSource\agg_span_subdiv_adaptor.cs" />
+    <Compile Include="VertexSource\SpanGouraudRGBA.cs" />
+    <Compile Include="VertexSource\SpanSubDivAdapter.cs" />
     <Compile Include="VertexSource\Arc.cs" />
     <Compile Include="VertexSource\Contour.cs" />
     <Compile Include="VertexSource\ContourGenerator.cs" />
@@ -94,9 +94,7 @@
       <Name>MiniVectorMath</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Painter\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
