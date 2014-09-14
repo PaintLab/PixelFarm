@@ -61,7 +61,7 @@ namespace MatterHackers.Agg.VertexSource
             get { return this.GetGenerator().Width; }
             set { this.GetGenerator().Width = value; }
         }
-        public void miter_limit_theta(double t) { this.GetGenerator().SetMiterLimitTheta(t); }
+        public void SetMiterLimitTheta(double t) { this.GetGenerator().SetMiterLimitTheta(t); }
 
 
         public bool AutoDetectOrientation

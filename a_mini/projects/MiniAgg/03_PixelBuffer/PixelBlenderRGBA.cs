@@ -181,15 +181,15 @@ namespace MatterHackers.Agg.Image
     {
         public int NumPixelBits { get { return 32; } }
 
-        public const byte base_mask = 255;
-    };
+        public const byte BASE_MASK = 255;
+    }
 
     public class BlenderBaseBGRAFloat
     {
         public int NumPixelBits { get { return 128; } }
 
-        public const byte base_mask = 255;
-    };
+        public const byte BASE_MASK = 255;
+    }
 
     public sealed class BlenderBGRA : BlenderBaseBGRA, IRecieveBlenderByte
     {
@@ -237,7 +237,7 @@ namespace MatterHackers.Agg.Image
                         buffer[bufferOffset + ImageBase.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
                         buffer[bufferOffset + ImageBase.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
                         buffer[bufferOffset + ImageBase.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
-                        buffer[bufferOffset + ImageBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)ColorRGBA.BASE_SHIFT));
+                        buffer[bufferOffset + ImageBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorRGBA.BASE_SHIFT));
                     }
                 }
             }
@@ -358,7 +358,7 @@ namespace MatterHackers.Agg.Image
             m_gamma = g;
         }
 
-        public void gamma(GammaLookUpTable g)
+        public void SetGammaTable(GammaLookUpTable g)
         {
             m_gamma = g;
         }
@@ -392,7 +392,7 @@ namespace MatterHackers.Agg.Image
                 buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
                 buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
                 buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
-                buffer[ImageBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + base_mask) >> (int)ColorRGBA.BASE_SHIFT));
+                buffer[ImageBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorRGBA.BASE_SHIFT));
             }
         }
 
@@ -440,7 +440,7 @@ namespace MatterHackers.Agg.Image
         {
             //unsafe
             {
-                int oneOverAlpha = base_mask - sourceColor.alpha;
+                int oneOverAlpha = BASE_MASK - sourceColor.alpha;
                 unchecked
                 {
 #if false
@@ -470,7 +470,7 @@ namespace MatterHackers.Agg.Image
                     pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
                     pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
                     pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(oneOverAlpha * (base_mask - a) + 255) >> 8]);
+                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(oneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
 #endif
                 }
             }
@@ -501,7 +501,7 @@ namespace MatterHackers.Agg.Image
                             }
                             else
                             {
-                                int OneOverAlpha = base_mask - sourceColor.alpha;
+                                int OneOverAlpha = BASE_MASK - sourceColor.alpha;
                                 unchecked
                                 {
                                     int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
@@ -511,7 +511,7 @@ namespace MatterHackers.Agg.Image
                                     pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
                                     pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
                                     pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                                 }
                             }
 #endif
@@ -538,7 +538,7 @@ namespace MatterHackers.Agg.Image
                             }
                             else
                             {
-                                int OneOverAlpha = base_mask - alpha;
+                                int OneOverAlpha = BASE_MASK - alpha;
                                 unchecked
                                 {
                                     int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
@@ -548,7 +548,7 @@ namespace MatterHackers.Agg.Image
                                     pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
                                     pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
                                     pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                                 }
                             }
                             sourceColorsOffset++;
@@ -572,7 +572,7 @@ namespace MatterHackers.Agg.Image
                     }
                     else if (alpha > 0)
                     {
-                        int OneOverAlpha = base_mask - alpha;
+                        int OneOverAlpha = BASE_MASK - alpha;
                         unchecked
                         {
                             int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
@@ -582,7 +582,7 @@ namespace MatterHackers.Agg.Image
                             pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
                             pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
                             pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                            pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(OneOverAlpha * (base_mask - a) + 255) >> 8]);
+                            pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                         }
                     }
                     sourceColorsOffset++;
@@ -633,7 +633,7 @@ namespace MatterHackers.Agg.Image
             //unsafe
             {
                 int sourceA = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.alpha + 255) >> 8]);
-                int oneOverAlpha = base_mask - sourceA;
+                int oneOverAlpha = BASE_MASK - sourceA;
                 unchecked
                 {
                     int sourceR = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.red + 255) >> 8]);
@@ -865,7 +865,7 @@ namespace MatterHackers.Agg.Image
                             }
                             else
                             {
-                                float OneOverAlpha = base_mask - alpha;
+                                float OneOverAlpha = BASE_MASK - alpha;
                                 unchecked
                                 {
                                     float r = pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + sourceColor.red;

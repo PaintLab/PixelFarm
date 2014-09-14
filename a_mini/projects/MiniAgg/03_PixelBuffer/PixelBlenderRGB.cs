@@ -146,8 +146,8 @@ namespace MatterHackers.Agg.Image
     public class BlenderBaseBGR
     {
         public int NumPixelBits { get { return 24; } }
-        public const byte base_mask = 255;
-    };
+        public const byte BASE_MASK = 255;
+    }
 
     public sealed class BlenderBGR : BlenderBaseBGR, IRecieveBlenderByte
     {
@@ -250,7 +250,7 @@ namespace MatterHackers.Agg.Image
             m_gamma = g;
         }
 
-        public void gamma(GammaLookUpTable g)
+        public void SetGammaTable(GammaLookUpTable g)
         {
             m_gamma = g;
         }
@@ -333,7 +333,7 @@ namespace MatterHackers.Agg.Image
             }
             else
             {
-                int OneOverAlpha = base_mask - sourceColor.alpha;
+                int OneOverAlpha = BASE_MASK - sourceColor.alpha;
                 unchecked
                 {
                     int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];

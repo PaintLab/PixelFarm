@@ -24,7 +24,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.UI
 {
-    class simple_polygon_vertex_source
+    class SimplePolygonVertexSource
     {
         double[] m_polygon;
         int m_num_points;
@@ -32,18 +32,18 @@ namespace MatterHackers.Agg.UI
         bool m_roundoff;
         bool m_close;
 
-        public simple_polygon_vertex_source(double[] polygon, int np)
+        public SimplePolygonVertexSource(double[] polygon, int np)
             : this(polygon, np, false, true)
         {
         }
 
-        public simple_polygon_vertex_source(double[] polygon, int np,
+        public SimplePolygonVertexSource(double[] polygon, int np,
                                      bool roundoff)
             : this(polygon, np, roundoff, true)
         {
         }
 
-        public simple_polygon_vertex_source(double[] polygon, int np, bool roundoff, bool close)
+        public SimplePolygonVertexSource(double[] polygon, int np, bool roundoff, bool close)
         {
             m_polygon = (polygon);
             m_num_points = (np);
@@ -52,8 +52,8 @@ namespace MatterHackers.Agg.UI
             m_close = (close);
         }
 
-        public void close(bool f) { m_close = f; }
-        public bool close() { return m_close; }
+        public void Close(bool f) { m_close = f; }
+        public bool Close() { return m_close; }
 
         public IEnumerable<VertexData> GetVertexIter()
         {
@@ -79,8 +79,6 @@ namespace MatterHackers.Agg.UI
         {
             m_vertex = 0;
         }
-
-
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
@@ -129,13 +127,13 @@ namespace MatterHackers.Agg.UI
         }
     }
 
-    public class polygon_ctrl_impl : UI.SimpleVertexSourceWidget
+    public class PolygonControlImpl : UI.SimpleVertexSourceWidget
     {
         double[] m_polygon;
         int m_num_points;
         int m_node;
         int m_edge;
-        simple_polygon_vertex_source m_vs;
+        SimplePolygonVertexSource m_vs;
         Stroke m_stroke;
         VertexSource.Ellipse m_ellipse;
         double m_point_radius;
@@ -148,9 +146,9 @@ namespace MatterHackers.Agg.UI
         public delegate void ChangedHandler(object sender, EventArgs e);
         public event ChangedHandler Changed;
 
-        public polygon_ctrl_impl(int np) : this(np, 5) { }
+        public PolygonControlImpl(int np) : this(np, 5) { }
 
-        public polygon_ctrl_impl(int np, double point_radius)
+        public PolygonControlImpl(int np, double point_radius)
             : base(new Vector2())
         {
             m_ellipse = new MatterHackers.Agg.VertexSource.Ellipse();
@@ -158,7 +156,7 @@ namespace MatterHackers.Agg.UI
             m_num_points = (np);
             m_node = (-1);
             m_edge = (-1);
-            m_vs = new simple_polygon_vertex_source(m_polygon, m_num_points, false);
+            m_vs = new SimplePolygonVertexSource(m_polygon, m_num_points, false);
             m_stroke = new Stroke(1);
             m_point_radius = (point_radius);
             m_status = (0);
@@ -204,8 +202,8 @@ namespace MatterHackers.Agg.UI
         public void in_polygon_check(bool f) { m_in_polygon_check = f; }
         public bool in_polygon_check() { return m_in_polygon_check; }
 
-        public void close(bool f) { m_vs.close(f); }
-        public bool close() { return m_vs.close(); }
+        public void close(bool f) { m_vs.Close(f); }
+        public bool close() { return m_vs.Close(); }
 
         // Vertex source interface
         public override IEnumerable<VertexData> GetVertexIter()
@@ -666,11 +664,9 @@ namespace MatterHackers.Agg.UI
         }
     };
 
-
-
     //----------------------------------------------------------polygon_ctrl
     //template<class ColorT> 
-    public class PolygonEditWidget : polygon_ctrl_impl
+    public class PolygonEditWidget : PolygonControlImpl
     {
         ColorRGBA m_color;
 
