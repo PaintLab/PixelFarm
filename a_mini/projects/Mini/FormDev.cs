@@ -158,7 +158,7 @@ namespace Mini
             var source = new int[width * height];
             var dest = new int[width * height];
             Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
-            MatterHackers.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
+            MatterHackers.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
             Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
 
             bmp.UnlockBits(bitmapData);
