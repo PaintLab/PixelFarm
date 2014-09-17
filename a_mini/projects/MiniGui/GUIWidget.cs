@@ -1743,8 +1743,8 @@ namespace MatterHackers.Agg.UI
 
             if (DebugShowBounds)
             {
-                graphics2D.Line(LocalBounds.Left, LocalBounds.Bottom, LocalBounds.Right, LocalBounds.Top, ColorRGBA.Green);
-                graphics2D.Line(LocalBounds.Left, LocalBounds.Top, LocalBounds.Right, LocalBounds.Bottom, ColorRGBA.Green);
+                graphics2D.dbugLine(LocalBounds.Left, LocalBounds.Bottom, LocalBounds.Right, LocalBounds.Top, ColorRGBA.Green);
+                graphics2D.dbugLine(LocalBounds.Left, LocalBounds.Top, LocalBounds.Right, LocalBounds.Bottom, ColorRGBA.Green);
                 graphics2D.Rectangle(LocalBounds, ColorRGBA.Red);
             }
             if (showSize)

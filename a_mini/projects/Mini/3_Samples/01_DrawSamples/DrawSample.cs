@@ -36,7 +36,7 @@ namespace MatterHackers.Agg.Sample_Draw
                 // draw a circle
                 g.Circle(50, 50, 30, ColorRGBA.Blue);
                 // draw a line
-                g.Line(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
+                g.dbugLine(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
                 // draw a filled box
                 g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
 

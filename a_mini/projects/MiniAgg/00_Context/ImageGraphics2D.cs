@@ -34,11 +34,6 @@ namespace MatterHackers.Agg
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
-        public ImageGraphics2D()
-        {
-
-        }
-
         public ImageGraphics2D(IImage destImage,
             ScanlineRasterizer rasterizer,
             ScanlinePacked8 scanline)
@@ -47,7 +42,7 @@ namespace MatterHackers.Agg
             this.scanline = scanline;
         }
 
-      
+
 
         public override void SetClippingRect(RectangleDouble clippingRect)
         {
@@ -73,8 +68,8 @@ namespace MatterHackers.Agg
             else
             {
                 rasterizer.AddPath(vertexSource);
-            } 
-            
+            }
+
             if (destImageByte != null)
             {
                 scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);
@@ -98,29 +93,29 @@ namespace MatterHackers.Agg
             AffinePlan[] plan = new AffinePlan[4];
             int i = 0;
             if (hotspotOffsetX != 0.0f || hotSpotOffsetY != 0.0f)
-            {   
+            {
                 plan[i] = AffinePlan.Translate(-hotspotOffsetX, -hotSpotOffsetY);
                 i++;
             }
 
             if (scaleX != 1 || scaleY != 1)
             {
-                 
+
                 plan[i] = AffinePlan.Scale(scaleX, scaleY);
                 i++;
             }
 
             if (angleRad != 0)
             {
-                 
+
                 plan[i] = AffinePlan.Rotate(angleRad);
                 i++;
             }
 
             if (destX != 0 || destY != 0)
-            { 
+            {
                 plan[i] = AffinePlan.Translate(destX, destY);
-                i++; 
+                i++;
             }
 
             destRectTransform = Affine.NewMatix(plan);
@@ -142,13 +137,13 @@ namespace MatterHackers.Agg
             if (destImageByte.OriginOffset.x != 0 || destImageByte.OriginOffset.y != 0)
             {
                 destRectTransform *= Affine.NewTranslation(-destImageByte.OriginOffset.x, -destImageByte.OriginOffset.y);
-            } 
+            }
 
             var sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
             Rasterizer.AddPath(sp1);
             {
 
- 
+
                 scanlineRenderer.GenerateAndRender(
                     new ChildImage(destImageByte, destImageByte.GetRecieveBlender()),
                     Rasterizer,
