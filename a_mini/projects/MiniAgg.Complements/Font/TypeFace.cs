@@ -24,7 +24,7 @@ using System.Text.RegularExpressions;
 using MatterHackers.Agg.Transform;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
-//using LayoutFarm.Canvas2dExtension;
+
 namespace MatterHackers.Agg.Font
 {
     public class TypeFace

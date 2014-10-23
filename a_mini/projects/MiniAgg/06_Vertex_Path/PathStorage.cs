@@ -510,11 +510,18 @@ namespace MatterHackers.Agg.VertexSource
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
-            s.RewindZero();
-            while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+
+            var snapIter = s.GetVertexSnapIter();
+
+            while ((cmd_flags = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, cmd_flags);
             }
+            //s.RewindZero();
+            //while ((cmd_flags = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            //{
+            //    vertices.AddVertex(x, y, cmd_flags);
+            //}
         }
         //--------------------------------------------------------------------
         // Join path. The path is joined with the existing one, that is, 
@@ -523,11 +530,8 @@ namespace MatterHackers.Agg.VertexSource
         public void JoinPath(VertexSnap s)
         {
             double x, y;
-
-
-
-            s.RewindZero();
-            ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
+            var snapIter = s.GetVertexSnapIter(); 
+            ShapePath.FlagsAndCommand cmd = snapIter.GetNextVertex(out x, out y);
             if (cmd == ShapePath.FlagsAndCommand.CommandStop)
             {
                 return;
@@ -566,13 +570,59 @@ namespace MatterHackers.Agg.VertexSource
                 }
             }
 
-            while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 vertices.AddVertex(x, y, ShapePath.IsMoveTo(cmd) ?
                                       ShapePath.FlagsAndCommand.CommandLineTo :
                                                 cmd);
             }
+            //---------------
+            //s.RewindZero();
+            //ShapePath.FlagsAndCommand cmd = s.GetNextVertex(out x, out y);
+            //if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+            //{
+            //    return;
+            //}
 
+            //if (ShapePath.IsVertextCommand(cmd))
+            //{
+            //    double x0, y0;
+            //    ShapePath.FlagsAndCommand flags0 = GetLastVertex(out x0, out y0);
+
+            //    if (ShapePath.IsVertextCommand(flags0))
+            //    {
+            //        if (AggMath.calc_distance(x, y, x0, y0) > AggMath.VERTEX_DISTANCE_EPSILON)
+            //        {
+            //            if (ShapePath.IsMoveTo(cmd))
+            //            {
+            //                cmd = ShapePath.FlagsAndCommand.CommandLineTo;
+            //            }
+            //            vertices.AddVertex(x, y, cmd);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (ShapePath.IsStop(flags0))
+            //        {
+            //            cmd = ShapePath.FlagsAndCommand.CommandMoveTo;
+            //        }
+            //        else
+            //        {
+            //            if (ShapePath.IsMoveTo(cmd))
+            //            {
+            //                cmd = ShapePath.FlagsAndCommand.CommandLineTo;
+            //            }
+            //        }
+            //        vertices.AddVertex(x, y, cmd);
+            //    }
+            //}
+
+            //while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            //{
+            //    vertices.AddVertex(x, y, ShapePath.IsMoveTo(cmd) ?
+            //                          ShapePath.FlagsAndCommand.CommandLineTo :
+            //                                    cmd);
+            //}
         }
 
         /*

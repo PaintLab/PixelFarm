@@ -923,16 +923,29 @@ namespace MatterHackers.Agg.Transform
         public Agg.VertexStorage Tranform(Agg.VertexSnap src)
         {
             var data = new System.Collections.Generic.List<Agg.VertexData>();
-            src.RewindZero();
+            var snapIter = src.GetVertexSnapIter();
+             
             ShapePath.FlagsAndCommand cmd;
             double x, y;
-            while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 this.Transform(ref x, ref y);
                 data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
             }
 
             return new Agg.VertexStorage(data);
+
+            //--------------------
+            //src.RewindZero();
+            //ShapePath.FlagsAndCommand cmd;
+            //double x, y;
+            //while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            //{
+            //    this.Transform(ref x, ref y);
+            //    data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
+            //}
+
+            //return new Agg.VertexStorage(data);
         }
         // Check to see if two matrices are equal
         //public bool is_equal(Affine m, double epsilon)

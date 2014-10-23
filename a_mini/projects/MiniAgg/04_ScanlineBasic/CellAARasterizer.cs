@@ -384,7 +384,7 @@ namespace MatterHackers.Agg
         public void GetCells(int y, out CellAA[] cellData, out int offset, out int num)
         {
             cellData = m_sorted_cells.GetArray();
-            var d = m_sorted_y[y - m_min_y];
+            SortedY d = m_sorted_y[y - m_min_y];
             offset = d.start;
             num = d.num;
         }

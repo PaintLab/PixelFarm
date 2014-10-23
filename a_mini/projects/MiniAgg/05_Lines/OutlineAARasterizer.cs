@@ -588,18 +588,33 @@ namespace MatterHackers.Agg.Lines
         void AddPath(VertexSnap s)
         {
             double x;
-            double y;
-
+            double y; 
             ShapePath.FlagsAndCommand cmd;
-            s.RewindZero();
-            while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+
+            var snapIter = s.GetVertexSnapIter(); 
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 //index++;
                 //if (index == 0
                 //  || (index > start && index < start + num))
                 AddVertex(x, y, cmd);
             }
+
+
+            ////----------------
+            //s.RewindZero(); 
+            //while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            //{
+            //    //index++;
+            //    //if (index == 0
+            //    //  || (index > start && index < start + num))
+            //    AddVertex(x, y, cmd);
+            //}
+
+
+
             Render(false);
+
         }
         public void RenderVertexSnap(VertexSnap s, ColorRGBA c)
         {

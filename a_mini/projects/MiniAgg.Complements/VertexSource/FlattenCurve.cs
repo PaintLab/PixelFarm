@@ -126,32 +126,34 @@ namespace MatterHackers.Agg.VertexSource
 
         public VertexStorage MakeVxs()
         {
-
             List<VertexData> list = new List<VertexData>();
-            foreach (var v in this.GetVertexIter())
-            {
-                list.Add(v);
-            }
-            return new VertexStorage(list);
 
-        }
+             
+            var snapIter = vertextSource.GetVertexSnapIter();
+            m_curve3.Reset();
+            m_curve4.Reset();
 
-        IEnumerable<VertexData> GetVertexIter()
-        {
-            this.RewindZero();
             VertexData lastPosition = new VertexData();
 
-            IEnumerator<VertexData> vertexDataEnumerator = vertextSource.GetVertexIter().GetEnumerator();
-            while (vertexDataEnumerator.MoveNext())
+
+            double x, y;
+            ShapePath.FlagsAndCommand cmd;
+
+
+            do
             {
-                VertexData vertexData = vertexDataEnumerator.Current;
-                switch (vertexData.command)
+                cmd = snapIter.GetNextVertex(out x, out y);
+                VertexData vertexData = new VertexData(cmd, x, y);
+
+                switch (cmd)
                 {
                     case ShapePath.FlagsAndCommand.CommandCurve3:
                         {
-                            vertexDataEnumerator.MoveNext();
-                            VertexData vertexDataEnd = vertexDataEnumerator.Current;
-                            m_curve3.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataEnd.x, vertexDataEnd.y);
+                            double tmp_vx, tmp_vy;
+                            cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
+                            VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
+
+                            m_curve3.Init(lastPosition.x, lastPosition.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
 
                             IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
@@ -163,7 +165,8 @@ namespace MatterHackers.Agg.VertexSource
                                     break;
                                 }
                                 vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
-                                yield return vertexData;
+
+                                list.Add(vertexData);
                                 lastPosition = vertexData;
                             } while (!ShapePath.IsStop(curveIterator.Current.command));
                         }
@@ -171,11 +174,14 @@ namespace MatterHackers.Agg.VertexSource
 
                     case ShapePath.FlagsAndCommand.CommandCurve4:
                         {
-                            vertexDataEnumerator.MoveNext();
-                            VertexData vertexDataControl = vertexDataEnumerator.Current;
-                            vertexDataEnumerator.MoveNext();
-                            VertexData vertexDataEnd = vertexDataEnumerator.Current;
-                            m_curve4.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
+                            double tmp_vx, tmp_vy;
+
+                            cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
+                            VertexData vertexDataControl = new VertexData(cmd, tmp_vx, tmp_vy);
+                            cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
+                            VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
+
+                            m_curve4.Init(lastPosition.x, lastPosition.y, x, y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
 
@@ -188,26 +194,161 @@ namespace MatterHackers.Agg.VertexSource
                                     break;
                                 }
                                 vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
-                                yield return vertexData;
+                                list.Add(vertexData);
                                 lastPosition = vertexData;
                             }
                         }
                         break;
 
                     default:
-                        yield return vertexData;
+                        list.Add(vertexData);
                         lastPosition = vertexData;
                         break;
                 }
-            }
+            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+
+
+            //IEnumerator<VertexData> vertexDataEnumerator = vertextSource.GetVertexIter().GetEnumerator();
+
+            //while (vertexDataEnumerator.MoveNext())
+            //{
+            //    VertexData vertexData = vertexDataEnumerator.Current;
+            //    switch (vertexData.command)
+            //    {
+            //        case ShapePath.FlagsAndCommand.CommandCurve3:
+            //            {
+            //                vertexDataEnumerator.MoveNext();
+            //                VertexData vertexDataEnd = vertexDataEnumerator.Current;
+            //                m_curve3.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataEnd.x, vertexDataEnd.y);
+
+            //                IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
+            //                curveIterator.MoveNext(); // First call returns path_cmd_move_to
+            //                do
+            //                {
+            //                    curveIterator.MoveNext();
+            //                    if (ShapePath.IsStop(curveIterator.Current.command))
+            //                    {
+            //                        break;
+            //                    }
+            //                    vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
+
+            //                    list.Add(vertexData);
+            //                    lastPosition = vertexData;
+            //                } while (!ShapePath.IsStop(curveIterator.Current.command));
+            //            }
+            //            break;
+
+            //        case ShapePath.FlagsAndCommand.CommandCurve4:
+            //            {
+            //                vertexDataEnumerator.MoveNext();
+            //                VertexData vertexDataControl = vertexDataEnumerator.Current;
+            //                vertexDataEnumerator.MoveNext();
+            //                VertexData vertexDataEnd = vertexDataEnumerator.Current;
+            //                m_curve4.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
+            //                IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
+            //                curveIterator.MoveNext(); // First call returns path_cmd_move_to
+
+            //                while (!ShapePath.IsStop(vertexData.command))
+            //                {
+            //                    curveIterator.MoveNext();
+
+            //                    if (ShapePath.IsStop(curveIterator.Current.command))
+            //                    {
+            //                        break;
+            //                    }
+            //                    vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
+            //                    list.Add(vertexData);
+            //                    lastPosition = vertexData;
+            //                }
+            //            }
+            //            break;
+
+            //        default:
+            //            list.Add(vertexData);
+            //            lastPosition = vertexData;
+            //            break;
+            //    }
+            //}
+
+            return new VertexStorage(list);
+
         }
 
-        void RewindZero()
-        {
-            vertextSource.RewindZero();
-            m_curve3.Reset();
-            m_curve4.Reset();
-        }
+
+        //public VertexStorage MakeVxs2()
+        //{
+        //    List<VertexData> list = new List<VertexData>();
+
+        //    vertextSource.RewindZero();
+        //    m_curve3.Reset();
+        //    m_curve4.Reset();
+
+        //    VertexData lastPosition = new VertexData();
+
+        //    IEnumerator<VertexData> vertexDataEnumerator = vertextSource.GetVertexIter().GetEnumerator();
+        //    while (vertexDataEnumerator.MoveNext())
+        //    {
+        //        VertexData vertexData = vertexDataEnumerator.Current;
+        //        switch (vertexData.command)
+        //        {
+        //            case ShapePath.FlagsAndCommand.CommandCurve3:
+        //                {
+        //                    vertexDataEnumerator.MoveNext();
+        //                    VertexData vertexDataEnd = vertexDataEnumerator.Current;
+        //                    m_curve3.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataEnd.x, vertexDataEnd.y);
+
+        //                    IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
+        //                    curveIterator.MoveNext(); // First call returns path_cmd_move_to
+        //                    do
+        //                    {
+        //                        curveIterator.MoveNext();
+        //                        if (ShapePath.IsStop(curveIterator.Current.command))
+        //                        {
+        //                            break;
+        //                        }
+        //                        vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
+
+        //                        list.Add(vertexData);
+        //                        lastPosition = vertexData;
+        //                    } while (!ShapePath.IsStop(curveIterator.Current.command));
+        //                }
+        //                break;
+
+        //            case ShapePath.FlagsAndCommand.CommandCurve4:
+        //                {
+        //                    vertexDataEnumerator.MoveNext();
+        //                    VertexData vertexDataControl = vertexDataEnumerator.Current;
+        //                    vertexDataEnumerator.MoveNext();
+        //                    VertexData vertexDataEnd = vertexDataEnumerator.Current;
+        //                    m_curve4.Init(lastPosition.x, lastPosition.y, vertexData.x, vertexData.y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
+        //                    IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
+        //                    curveIterator.MoveNext(); // First call returns path_cmd_move_to
+
+        //                    while (!ShapePath.IsStop(vertexData.command))
+        //                    {
+        //                        curveIterator.MoveNext();
+
+        //                        if (ShapePath.IsStop(curveIterator.Current.command))
+        //                        {
+        //                            break;
+        //                        }
+        //                        vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
+        //                        list.Add(vertexData);
+        //                        lastPosition = vertexData;
+        //                    }
+        //                }
+        //                break;
+
+        //            default:
+        //                list.Add(vertexData);
+        //                lastPosition = vertexData;
+        //                break;
+        //        }
+        //    }
+
+        //    return new VertexStorage(list);
+
+        //}
 
     }
 }

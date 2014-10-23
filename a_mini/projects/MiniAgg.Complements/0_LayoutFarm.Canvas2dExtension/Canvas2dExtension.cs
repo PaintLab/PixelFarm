@@ -37,7 +37,7 @@ namespace MatterHackers.Agg
     {
 
         public static void DrawString(this Graphics2D gx,
-            string Text,
+            string text,
             double x,
             double y,
             double pointSize = 12,
@@ -48,7 +48,7 @@ namespace MatterHackers.Agg
             ColorRGBA backgroundColor = new ColorRGBA())
         {
 
-            TypeFacePrinter stringPrinter = new TypeFacePrinter(Text, pointSize, new Vector2(x, y), justification, baseline);
+            TypeFacePrinter stringPrinter = new TypeFacePrinter(text, pointSize, new Vector2(x, y), justification, baseline);
             if (color.Alpha0To255 == 0)
             {
                 color = ColorRGBA.Black;
@@ -94,35 +94,35 @@ namespace MatterHackers.Agg
             stringPrinter.Render(gx, color);
         }
 
-        public static void DrawString3(this Graphics2D gx, string Text,
-           double x, double y,
-           double pointSize = 12,
-           Justification justification = Justification.Left,
-           Baseline baseline = Baseline.Text,
-           ColorRGBA color = new ColorRGBA(),
-           bool drawFromHintedCache = false,
-           ColorRGBA backgroundColor = new ColorRGBA())
-        {
+        //public static void DrawString3(this Graphics2D gx, string Text,
+        //   double x, double y,
+        //   double pointSize = 12,
+        //   Justification justification = Justification.Left,
+        //   Baseline baseline = Baseline.Text,
+        //   ColorRGBA color = new ColorRGBA(),
+        //   bool drawFromHintedCache = false,
+        //   ColorRGBA backgroundColor = new ColorRGBA())
+        //{
 
-            var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
-                Text,
-                pointSize,
-                new Vector2(x, y),
-                justification, baseline);
+        //    var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
+        //        Text,
+        //        pointSize,
+        //        new Vector2(x, y),
+        //        justification, baseline);
 
-            if (color.Alpha0To255 == 0)
-            {
-                color = ColorRGBA.Black;
-            }
+        //    if (color.Alpha0To255 == 0)
+        //    {
+        //        color = ColorRGBA.Black;
+        //    }
 
-            if (backgroundColor.Alpha0To255 != 0)
-            {
-                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-            }
+        //    if (backgroundColor.Alpha0To255 != 0)
+        //    {
+        //        gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
+        //    }
 
-            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-            stringPrinter.Render(gx, color);
-        }
+        //    stringPrinter.DrawFromHintedCache = drawFromHintedCache;
+        //    stringPrinter.Render(gx, color);
+        //}
         public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
         {
             RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);

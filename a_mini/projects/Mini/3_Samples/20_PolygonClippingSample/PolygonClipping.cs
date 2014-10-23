@@ -115,9 +115,14 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             VertexData last = new VertexData();
             VertexData first = new VertexData();
             bool addedFirst = false;
-            foreach (VertexData vertexData in a.GetVertexIter())
+
+            var snapIter = a.GetVertexSnapIter();
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            cmd = snapIter.GetNextVertex(out x, out y);
+            do
             {
-                if (vertexData.command == ShapePath.FlagsAndCommand.CommandLineTo)
+                if (cmd == ShapePath.FlagsAndCommand.CommandLineTo)
                 {
                     if (!addedFirst)
                     {
@@ -125,24 +130,55 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         addedFirst = true;
                         first = last;
                     }
-                    currentPoly.Add(new IntPoint((long)(vertexData.x * 1000), (long)(vertexData.y * 1000)));
-                    last = vertexData;
+                    currentPoly.Add(new IntPoint((long)(x * 1000), (long)(y * 1000)));
+                    last = new VertexData(cmd, x, y);
                 }
                 else
                 {
                     addedFirst = false;
                     currentPoly = new List<IntPoint>();
                     allPolys.Add(currentPoly);
-                    if (vertexData.command == ShapePath.FlagsAndCommand.CommandMoveTo)
+                    if (cmd == ShapePath.FlagsAndCommand.CommandMoveTo)
                     {
-                        last = vertexData;
+                        last = new VertexData(cmd, x, y);
                     }
                     else
                     {
                         last = first;
                     }
                 }
-            }
+            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+
+
+
+            //foreach (VertexData vertexData in a.GetVertexIter())
+            //{
+            //    if (vertexData.command == ShapePath.FlagsAndCommand.CommandLineTo)
+            //    {
+            //        if (!addedFirst)
+            //        {
+            //            currentPoly.Add(new IntPoint((long)(last.x * 1000), (long)(last.y * 1000)));
+            //            addedFirst = true;
+            //            first = last;
+            //        }
+            //        currentPoly.Add(new IntPoint((long)(vertexData.x * 1000), (long)(vertexData.y * 1000)));
+            //        last = vertexData;
+            //    }
+            //    else
+            //    {
+            //        addedFirst = false;
+            //        currentPoly = new List<IntPoint>();
+            //        allPolys.Add(currentPoly);
+            //        if (vertexData.command == ShapePath.FlagsAndCommand.CommandMoveTo)
+            //        {
+            //            last = vertexData;
+            //        }
+            //        else
+            //        {
+            //            last = first;
+            //        }
+            //    }
+            //}
 
             return allPolys;
         }
@@ -617,18 +653,39 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             m_contours = 0;
             m_points = 0;
 
-            foreach (VertexData vertexData in src.GetVertexIter())
+            var snapIter = src.GetVertexSnapIter();
+
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+
+            do
             {
-                if (ShapePath.IsVertextCommand(vertexData.command))
+
+                cmd = snapIter.GetNextVertex(out x, out y);
+                if (ShapePath.IsVertextCommand(cmd))
                 {
                     ++m_points;
                 }
 
-                if (ShapePath.IsMoveTo(vertexData.command))
+                if (ShapePath.IsMoveTo(cmd))
                 {
                     ++m_contours;
                 }
-            }
+
+            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+
+            //foreach (VertexData vertexData in src.GetVertexIter())
+            //{
+            //    if (ShapePath.IsVertextCommand(vertexData.command))
+            //    {
+            //        ++m_points;
+            //    }
+
+            //    if (ShapePath.IsMoveTo(vertexData.command))
+            //    {
+            //        ++m_contours;
+            //    }
+            //}
         }
     }
 }

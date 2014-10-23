@@ -130,9 +130,11 @@ namespace MatterHackers.Agg
             x2 = 0;
             y2 = 0;
 
-            vs.RewindZero();
+             
+            var vsnapIter = vs.GetVertexSnapIter();
+
             ShapePath.FlagsAndCommand PathAndFlags;
-            while (!ShapePath.IsStop(PathAndFlags = vs.GetNextVertex(out x, out y)))
+            while (!ShapePath.IsStop(PathAndFlags = vsnapIter.GetNextVertex(out x, out y)))
             {
                 if (ShapePath.IsVertextCommand(PathAndFlags))
                 {
