@@ -101,7 +101,7 @@ namespace MatterHackers.Agg.UI
             }
         }
 
-        public LayoutEngine LayoutEngine { get; set; }
+         
 
         private string name;
 
@@ -1631,12 +1631,12 @@ namespace MatterHackers.Agg.UI
         {
             if (Visible && layoutSuspendCount < 1)
             {
-                if (LayoutEngine != null)
-                {
-                    SuspendLayout();
-                    LayoutEngine.Layout(layoutEventArgs);
-                    ResumeLayout();
-                }
+                //if (LayoutEngine != null)
+                //{
+                //    SuspendLayout();
+                //    LayoutEngine.Layout(layoutEventArgs);
+                //    ResumeLayout();
+                //}
 
                 if (Layout != null)
                 {

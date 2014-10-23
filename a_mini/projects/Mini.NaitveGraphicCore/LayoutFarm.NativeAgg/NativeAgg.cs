@@ -53,6 +53,8 @@ namespace LayoutFarm.NativeAgg
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     delegate IntPtr SpriteGetInternalPathStore(IntPtr sprite);
+
+
     //-----------------------------------------------------------
     static class NativeAggInterOp
     {
@@ -60,9 +62,10 @@ namespace LayoutFarm.NativeAgg
         //-------------------------------------------------
         static ManagedListenerDel managedListener;
         static bool initOnce;
-        static object syncRoot = new object();
-        //-------------------------------------------------
+        static object syncRoot = new object(); 
         static IntPtr unmangedCallBack;
+        //-------------------------------------------------
+
 
         [NativeFunc]
         static CallServices callServices;
@@ -90,9 +93,7 @@ namespace LayoutFarm.NativeAgg
         internal static TestCallBack testCallBack;
         //-------------------------------------------------
 
-        /// <summary>
-        /// load sqlite3 library
-        /// </summary>
+       
         public static void LoadLib()
         {
             lock (syncRoot)

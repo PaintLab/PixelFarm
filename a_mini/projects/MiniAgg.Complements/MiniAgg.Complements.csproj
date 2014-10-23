@@ -61,7 +61,6 @@
     <Compile Include="Filter\RecursiveBlur.cs" />
     <Compile Include="Filter\StackBlur.cs" />
     <Compile Include="Image\Transposer.cs" />
-    <Compile Include="StringHelper.cs" />
     <Compile Include="UnitTests2.cs" />
     <Compile Include="VertexSource\BSpline.cs" />
     <Compile Include="VertexSource\Curves.cs" />
