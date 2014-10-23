@@ -90,7 +90,7 @@ namespace MatterHackers.Agg
         const int AA_SCALE = 1 << AA_SHIFT;
         const int AA_MASK = AA_SCALE - 1;
         const int AA_SCALE2 = AA_SCALE * 2;
-        const int AA_MASK2 = AA_SCALE2 - 1; 
+        const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
 
         enum Status
@@ -189,8 +189,8 @@ namespace MatterHackers.Agg
         //--------------------------------------------------------------------
         void MoveTo(int x, int y)
         {
-            if (m_outline.Sorted) Reset();
-            if (m_auto_close) ClosePolygon();
+            if (m_outline.Sorted) { Reset(); }
+            if (m_auto_close) { ClosePolygon(); }
             m_vectorClipper.MoveTo(
                     m_start_x = downscale(x),
                     m_start_y = downscale(y));
@@ -209,8 +209,9 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         public void MoveTo(double x, double y)
         {
-            if (m_outline.Sorted) Reset();
-            if (m_auto_close) ClosePolygon();
+            if (m_outline.Sorted) { Reset(); }
+            if (m_auto_close) { ClosePolygon(); }
+
             m_vectorClipper.MoveTo(
                 m_start_x = upscale(x),
                 m_start_y = upscale(y));
@@ -262,7 +263,7 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         void EdgeInt32(int x1, int y1, int x2, int y2)
         {
-            if (m_outline.Sorted) Reset();
+            if (m_outline.Sorted) { Reset(); }
             m_vectorClipper.MoveTo(downscale(x1), downscale(y1));
             m_vectorClipper.LineTo(m_outline,
                               downscale(x2),
@@ -273,7 +274,7 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         void Edge(double x1, double y1, double x2, double y2)
         {
-            if (m_outline.Sorted) Reset();
+            if (m_outline.Sorted) { Reset(); }
             m_vectorClipper.MoveTo(upscale(x1), upscale(y1));
             m_vectorClipper.LineTo(m_outline,
                               upscale(x2),
@@ -293,11 +294,11 @@ namespace MatterHackers.Agg
             double y = 0;
 
 
-            spath.RewindZero();
             if (m_outline.Sorted)
             {
                 Reset();
             }
+
             if (spath.VxsHasMoreThanOnePart)
             {
                 var vxs = spath.GetInternalVxs();
@@ -314,13 +315,43 @@ namespace MatterHackers.Agg
             }
             else
             {
+                var snapIter = spath.GetVertexSnapIter();
                 ShapePath.FlagsAndCommand cmd;
-                while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
                 {
-
                     AddVertex(cmd, x, y);
                 }
             }
+
+            //--------------------
+            //spath.RewindZero();
+            //if (m_outline.Sorted)
+            //{
+            //    Reset();
+            //}
+            //if (spath.VxsHasMoreThanOnePart)
+            //{
+            //    var vxs = spath.GetInternalVxs();
+            //    int j = vxs.Count;
+
+            //    for (int i = 0; i < j; ++i)
+            //    {
+            //        var cmd2 = vxs.GetVertex(i, out x, out y);
+            //        if (cmd2 != ShapePath.FlagsAndCommand.CommandStop)
+            //        {
+            //            AddVertex(cmd2, x, y);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    ShapePath.FlagsAndCommand cmd;
+            //    while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            //    {
+
+            //        AddVertex(cmd, x, y);
+            //    }
+            //}
         }
 
         public int MinX { get { return m_outline.MinX; } }
@@ -340,7 +371,7 @@ namespace MatterHackers.Agg
         //------------------------------------------------------------------------
         internal bool RewindScanlines()
         {
-            if (m_auto_close) ClosePolygon();
+            if (m_auto_close) { ClosePolygon(); }
 
             m_outline.SortCells();
 
@@ -350,7 +381,7 @@ namespace MatterHackers.Agg
             return true;
         }
 
-       
+
         //--------------------------------------------------------------------
         int CalculateAlpha(int area)
         {
@@ -400,48 +431,96 @@ namespace MatterHackers.Agg
 
                 while (num_cells != 0)
                 {
-                    CellAA cur_cell = cells[offset];
-                    int x = cur_cell.x;
-                    int area = cur_cell.area;
-                    int alpha;
-
-                    cover += cur_cell.cover;
-
-                    //accumulate all cells with the same X
-                    while (--num_cells != 0)
+                    unsafe
                     {
-                        offset++;
-                        cur_cell = cells[offset];
-                        if (cur_cell.x != x)
+                        fixed (CellAA* cur_cell_h = &cells[0])
                         {
-                            break;
+                            CellAA* cur_cell_ptr = cur_cell_h + offset;
+
+                            int alpha;
+                            int x = cur_cell_ptr->x;
+                            int area = cur_cell_ptr->area;
+                            cover += cur_cell_ptr->cover;
+
+                            //accumulate all cells with the same X
+                            while (--num_cells != 0)
+                            {
+                                offset++; //move next
+                                cur_cell_ptr++; //move next
+
+                                if (cur_cell_ptr->x != x)
+                                {
+                                    break;
+                                }
+
+                                area += cur_cell_ptr->area;
+                                cover += cur_cell_ptr->cover;
+                            }
+
+                            if (area != 0)
+                            {
+                                alpha = CalculateAlpha((cover << (poly_subpixel_scale_e.SHIFT + 1)) - area);
+                                if (alpha != 0)
+                                {
+                                    scline.AddCell(x, alpha);
+                                }
+                                x++;
+                            }
+
+                            if ((num_cells != 0) && (cur_cell_ptr->x > x))
+                            {
+                                alpha = CalculateAlpha(cover << (poly_subpixel_scale_e.SHIFT + 1));
+                                if (alpha != 0)
+                                {
+                                    scline.AddSpan(x, (cur_cell_ptr->x - x), alpha);
+                                }
+                            }
                         }
 
-                        area += cur_cell.area;
-                        cover += cur_cell.cover;
+                        //CellAA cur_cell = cells[offset];
+                        //int x = cur_cell.x;
+                        //int area = cur_cell.area;
+                        //int alpha;
+
+                        //cover += cur_cell.cover;
+
+                        ////accumulate all cells with the same X
+                        //while (--num_cells != 0)
+                        //{
+                        //    offset++;
+                        //    cur_cell = cells[offset];
+                        //    if (cur_cell.x != x)
+                        //    {
+                        //        break;
+                        //    }
+
+                        //    area += cur_cell.area;
+                        //    cover += cur_cell.cover;
+                        //}
+
+                        //if (area != 0)
+                        //{
+                        //    alpha = CalculateAlpha((cover << (poly_subpixel_scale_e.SHIFT + 1)) - area);
+                        //    if (alpha != 0)
+                        //    {
+                        //        scline.AddCell(x, alpha);
+                        //    }
+                        //    x++;
+                        //}
+
+                        //if ((num_cells != 0) && (cur_cell.x > x))
+                        //{
+                        //    alpha = CalculateAlpha(cover << (poly_subpixel_scale_e.SHIFT + 1));
+                        //    if (alpha != 0)
+                        //    {
+                        //        scline.AddSpan(x, (cur_cell.x - x), alpha);
+                        //    }
+                        //} 
                     }
 
-                    if (area != 0)
-                    {
-                        alpha = CalculateAlpha((cover << (poly_subpixel_scale_e.SHIFT + 1)) - area);
-                        if (alpha != 0)
-                        {
-                            scline.AddCell(x, alpha);
-                        }
-                        x++;
-                    }
-
-                    if ((num_cells != 0) && (cur_cell.x > x))
-                    {
-                        alpha = CalculateAlpha(cover << (poly_subpixel_scale_e.SHIFT + 1));
-                        if (alpha != 0)
-                        {
-                            scline.AddSpan(x, (cur_cell.x - x), alpha);
-                        }
-                    }
                 }
 
-                if (scline.SpanCount != 0) break;
+                if (scline.SpanCount != 0) { break; }
 
                 ++m_scan_y;
             }
@@ -451,7 +530,7 @@ namespace MatterHackers.Agg
             return true;
         }
 
-         
-    } 
+
+    }
 }
 

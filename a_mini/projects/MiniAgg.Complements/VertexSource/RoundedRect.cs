@@ -37,7 +37,7 @@ namespace MatterHackers.Agg.VertexSource
         Vector2 rightBottomRadius;
         Vector2 rightTopRadius;
         Vector2 leftTopRadius;
-        int state;
+        
         Arc currentProcessingArc = new Arc();
 
         public RoundedRect(double left, double bottom, double right, double top, double radius)
@@ -204,106 +204,108 @@ namespace MatterHackers.Agg.VertexSource
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW, new Vector2());
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
         }
-        public void RewindZero()
-        {
-            state = 0;
-        }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            x = 0;
-            y = 0;
-            ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
-            switch (state)
-            {
-                case 0:
-                    currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y,
-                               Math.PI, Math.PI + Math.PI * 0.5);
-                    currentProcessingArc.RewindZero();
-                    state++;
-                    goto case 1;
 
-                case 1:
-                    cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.IsStop(cmd))
-                    {
-                        state++;
-                    }
-                    else
-                    {
-                        return cmd;
-                    }
-                    goto case 2;
 
-                case 2:
-                    currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y,
-                               Math.PI + Math.PI * 0.5, 0.0);
-                    currentProcessingArc.RewindZero();
-                    state++;
-                    goto case 3;
+        //void RewindZero()
+        //{
+        //    state = 0;
+        //}
+        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        //{
+        //    x = 0;
+        //    y = 0;
+        //    ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
+        //    switch (state)
+        //    {
+        //        case 0:
+        //            currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y,
+        //                       Math.PI, Math.PI + Math.PI * 0.5);
+        //            currentProcessingArc.RewindZero();
+        //            state++;
+        //            goto case 1;
 
-                case 3:
-                    cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.IsStop(cmd))
-                    {
-                        state++;
-                    }
-                    else
-                    {
-                        return ShapePath.FlagsAndCommand.CommandLineTo;
-                    }
-                    goto case 4;
+        //        case 1:
+        //            cmd = currentProcessingArc.vertex(out x, out y);
+        //            if (ShapePath.IsStop(cmd))
+        //            {
+        //                state++;
+        //            }
+        //            else
+        //            {
+        //                return cmd;
+        //            }
+        //            goto case 2;
 
-                case 4:
-                    currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y,
-                               0.0, Math.PI * 0.5);
-                    currentProcessingArc.RewindZero();
-                    state++;
-                    goto case 5;
+        //        case 2:
+        //            currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y,
+        //                       Math.PI + Math.PI * 0.5, 0.0);
+        //            currentProcessingArc.RewindZero();
+        //            state++;
+        //            goto case 3;
 
-                case 5:
-                    cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.IsStop(cmd))
-                    {
-                        state++;
-                    }
-                    else
-                    {
-                        return ShapePath.FlagsAndCommand.CommandLineTo;
-                    }
-                    goto case 6;
+        //        case 3:
+        //            cmd = currentProcessingArc.vertex(out x, out y);
+        //            if (ShapePath.IsStop(cmd))
+        //            {
+        //                state++;
+        //            }
+        //            else
+        //            {
+        //                return ShapePath.FlagsAndCommand.CommandLineTo;
+        //            }
+        //            goto case 4;
 
-                case 6:
-                    currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y,
-                               Math.PI * 0.5, Math.PI);
-                    currentProcessingArc.RewindZero();
-                    state++;
-                    goto case 7;
+        //        case 4:
+        //            currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y,
+        //                       0.0, Math.PI * 0.5);
+        //            currentProcessingArc.RewindZero();
+        //            state++;
+        //            goto case 5;
 
-                case 7:
-                    cmd = currentProcessingArc.vertex(out x, out y);
-                    if (ShapePath.IsStop(cmd))
-                    {
-                        state++;
-                    }
-                    else
-                    {
-                        return ShapePath.FlagsAndCommand.CommandLineTo;
-                    }
-                    goto case 8;
+        //        case 5:
+        //            cmd = currentProcessingArc.vertex(out x, out y);
+        //            if (ShapePath.IsStop(cmd))
+        //            {
+        //                state++;
+        //            }
+        //            else
+        //            {
+        //                return ShapePath.FlagsAndCommand.CommandLineTo;
+        //            }
+        //            goto case 6;
 
-                case 8:
-                    cmd = ShapePath.FlagsAndCommand.CommandEndPoly
-                        | ShapePath.FlagsAndCommand.FlagClose
-                        | ShapePath.FlagsAndCommand.FlagCCW;
-                    state++;
-                    break;
-            }
-            return cmd;
-        }
+        //        case 6:
+        //            currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y,
+        //                       Math.PI * 0.5, Math.PI);
+        //            currentProcessingArc.RewindZero();
+        //            state++;
+        //            goto case 7;
+
+        //        case 7:
+        //            cmd = currentProcessingArc.vertex(out x, out y);
+        //            if (ShapePath.IsStop(cmd))
+        //            {
+        //                state++;
+        //            }
+        //            else
+        //            {
+        //                return ShapePath.FlagsAndCommand.CommandLineTo;
+        //            }
+        //            goto case 8;
+
+        //        case 8:
+        //            cmd = ShapePath.FlagsAndCommand.CommandEndPoly
+        //                | ShapePath.FlagsAndCommand.FlagClose
+        //                | ShapePath.FlagsAndCommand.FlagCCW;
+        //            state++;
+        //            break;
+        //    }
+        //    return cmd;
+        //}
 
         public VertexStorage MakeVxs()
         {
-            RewindZero();
+            
             List<VertexData> vlist = new List<VertexData>();
             foreach (var v in this.GetVertexIter())
             {

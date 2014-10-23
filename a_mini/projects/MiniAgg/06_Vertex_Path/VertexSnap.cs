@@ -5,33 +5,34 @@ using MatterHackers.VectorMath;
 namespace MatterHackers.Agg
 {
     //----------------------------------------
+    public struct VertexSnapIter
+    {
+        int currentIterIndex;
+        VertexStorage vxs;
+        internal VertexSnapIter(VertexSnap vsnap)
+        { 
+            this.vxs = vsnap.GetInternalVxs();
+            this.currentIterIndex = vsnap.StartAt;
+        }
+        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        {
+            return vxs.GetVertex(currentIterIndex++, out x, out y);   
+        }
+    }
     public struct VertexSnap
     {
-        int startAt;      
-        int currentIterIndex;
-
+        int startAt;
         VertexStorage vxs;
+      
         public VertexSnap(VertexStorage vxs)
         {
             this.vxs = vxs;
-            this.startAt = 0;
-            this.currentIterIndex = startAt;
+            this.startAt = 0; 
         }
         public VertexSnap(VertexStorage vxs, int startAt)
         {
             this.vxs = vxs;
-            this.startAt = startAt;
-            this.currentIterIndex = startAt;
-        }
-        public void RewindZero()
-        {
-            this.currentIterIndex = startAt;
-        }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            var cmd = vxs.GetVertex(currentIterIndex, out x, out y);
-            currentIterIndex++;
-            return cmd;
+            this.startAt = startAt; 
         }
 
         public VertexStorage GetInternalVxs()
@@ -46,29 +47,13 @@ namespace MatterHackers.Agg
         {
             get { return this.vxs.HasMoreThanOnePart; }
         }
-        public IEnumerable<VertexData> GetVertexIter()
+        public VertexSnapIter GetVertexSnapIter()
         {
-            int j = vxs.Count;
-            currentIterIndex = 0;
-            for (int i = 0; i < j; ++i)
-            {
-                currentIterIndex++;
-                double x, y;
-                ShapePath.FlagsAndCommand cmd;
-                cmd = vxs.GetVertex(i, out x, out y);
-                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
-                {
-                    yield return new VertexData(cmd, new Vector2(x, y));
-                    break;
-                }
-                else
-                {
-                    yield return new VertexData(cmd, new Vector2(x, y));
-                }
-            }
-
+            return new VertexSnapIter(this);
         }
-
+        
+        
+       
 
     }
 }

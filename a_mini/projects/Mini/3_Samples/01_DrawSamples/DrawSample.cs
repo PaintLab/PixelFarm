@@ -30,19 +30,19 @@ namespace MatterHackers.Agg.Sample_Draw
         {
             //1.
             // clear the image to white
-            {   
+            {
 
                 g.Clear(ColorRGBA.White);
                 // draw a circle
                 g.Circle(50, 50, 30, ColorRGBA.Blue);
                 // draw a line
+
                 g.dbugLine(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
                 // draw a filled box
                 g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
 
                 // and an outline around it
                 g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
-
 
 
                 // draw some text
