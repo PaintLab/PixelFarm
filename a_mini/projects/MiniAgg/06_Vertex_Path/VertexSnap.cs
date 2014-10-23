@@ -7,9 +7,10 @@ namespace MatterHackers.Agg
     //----------------------------------------
     public struct VertexSnap
     {
-        int startAt;
-        VertexStorage vxs;
+        int startAt;      
         int currentIterIndex;
+
+        VertexStorage vxs;
         public VertexSnap(VertexStorage vxs)
         {
             this.vxs = vxs;

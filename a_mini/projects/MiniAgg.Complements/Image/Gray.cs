@@ -29,18 +29,18 @@ using MatterHackers.Agg;
 
 namespace MatterHackers.Agg.Image
 {
-    public class blender_gray : IRecieveBlenderByte
+    public class BlenderGray : IRecieveBlenderByte
     {
         public int NumPixelBits { get { return 8; } }
 
-        public const byte BASE_SHIFT = 255;
-        const int base_shift = 8;
+        const byte BASE_MASK = 255;
+        const int BASE_SHIFT = 8;
 
         static int[] m_Saturate9BitToByte = new int[1 << 9];
 
-        private int bytesBetweenPixelsInclusive;
+        int bytesBetweenPixelsInclusive;
 
-        public blender_gray(int bytesBetweenPixelsInclusive)
+        public BlenderGray(int bytesBetweenPixelsInclusive)
         {
             this.bytesBetweenPixelsInclusive = bytesBetweenPixelsInclusive;
 
@@ -73,12 +73,12 @@ namespace MatterHackers.Agg.Image
 
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
-            int OneOverAlpha = BASE_SHIFT - sourceColor.alpha;
+            int OneOverAlpha = BASE_MASK - sourceColor.alpha;
             unchecked
             {
                 int y = (sourceColor.red * 77) + (sourceColor.green * 151) + (sourceColor.blue * 28);
                 int gray = (y >> 8);
-                gray = (byte)((((gray - (int)(pDestBuffer[bufferOffset])) * sourceColor.alpha) + ((int)(pDestBuffer[bufferOffset]) << base_shift)) >> base_shift);
+                gray = (byte)((((gray - (int)(pDestBuffer[bufferOffset])) * sourceColor.alpha) + ((int)(pDestBuffer[bufferOffset]) << BASE_SHIFT)) >> BASE_SHIFT);
                 pDestBuffer[bufferOffset] = (byte)gray;
             }
         }
@@ -134,18 +134,18 @@ namespace MatterHackers.Agg.Image
         }
     }
 
-    public class blenderGrayFromRed : IRecieveBlenderByte
+    public class BlenderGrayFromRed : IRecieveBlenderByte
     {
-        public int NumPixelBits { get { return 8; } }
 
-        public const byte base_mask = 255;
-        const int base_shift = 8;
+
+        const byte BASE_MASK = 255;
+        const int BASE_SHIFT = 8;
 
         static int[] m_Saturate9BitToByte = new int[1 << 9];
 
-        private int bytesBetweenPixelsInclusive;
+        int bytesBetweenPixelsInclusive;
 
-        public blenderGrayFromRed(int bytesBetweenPixelsInclusive)
+        public BlenderGrayFromRed(int bytesBetweenPixelsInclusive)
         {
             this.bytesBetweenPixelsInclusive = bytesBetweenPixelsInclusive;
 
@@ -157,10 +157,10 @@ namespace MatterHackers.Agg.Image
                 }
             }
         }
-
+        public int NumPixelBits { get { return 8; } }
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            byte  value = buffer[bufferOffset];
+            byte value = buffer[bufferOffset];
             return new ColorRGBA(value, value, value, 255);
         }
 
@@ -176,10 +176,10 @@ namespace MatterHackers.Agg.Image
 
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
-            int OneOverAlpha = base_mask - sourceColor.alpha;
+            int OneOverAlpha = BASE_MASK - sourceColor.alpha;
             unchecked
             {
-                byte gray = (byte)((((sourceColor.red - (int)(pDestBuffer[bufferOffset])) * sourceColor.alpha) + ((int)(pDestBuffer[bufferOffset]) << base_shift)) >> base_shift);
+                byte gray = (byte)((((sourceColor.red - (int)(pDestBuffer[bufferOffset])) * sourceColor.alpha) + ((int)(pDestBuffer[bufferOffset]) << BASE_SHIFT)) >> BASE_SHIFT);
                 pDestBuffer[bufferOffset] = (byte)gray;
             }
         }
@@ -235,18 +235,18 @@ namespace MatterHackers.Agg.Image
         }
     }
 
-    public class blenderGrayClampedMax : IRecieveBlenderByte
+    public class BlenderGrayClampedMax : IRecieveBlenderByte
     {
-        public int NumPixelBits { get { return 8; } }
 
-        public const byte base_mask = 255;
-        const int base_shift = 8;
+
+        const byte BASE_MASK = 255;
+        const int BASE_SHIFT = 8;
 
         static int[] m_Saturate9BitToByte = new int[1 << 9];
 
-        private int bytesBetweenPixelsInclusive;
+        int bytesBetweenPixelsInclusive;
 
-        public blenderGrayClampedMax(int bytesBetweenPixelsInclusive)
+        public BlenderGrayClampedMax(int bytesBetweenPixelsInclusive)
         {
             this.bytesBetweenPixelsInclusive = bytesBetweenPixelsInclusive;
 
@@ -258,7 +258,7 @@ namespace MatterHackers.Agg.Image
                 }
             }
         }
-
+        public int NumPixelBits { get { return 8; } }
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
             byte value = buffer[bufferOffset];
@@ -278,11 +278,11 @@ namespace MatterHackers.Agg.Image
 
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
-            int OneOverAlpha = base_mask - sourceColor.alpha;
+            int OneOverAlpha = BASE_MASK - sourceColor.alpha;
             unchecked
             {
                 byte clampedMax = Math.Min(Math.Max(sourceColor.red, Math.Max(sourceColor.green, sourceColor.blue)), (byte)255);
-                byte gray = (byte)((((clampedMax - (int)(pDestBuffer[bufferOffset])) * sourceColor.alpha) + ((int)(pDestBuffer[bufferOffset]) << base_shift)) >> base_shift);
+                byte gray = (byte)((((clampedMax - (int)(pDestBuffer[bufferOffset])) * sourceColor.alpha) + ((int)(pDestBuffer[bufferOffset]) << BASE_SHIFT)) >> BASE_SHIFT);
                 pDestBuffer[bufferOffset] = (byte)gray;
             }
         }

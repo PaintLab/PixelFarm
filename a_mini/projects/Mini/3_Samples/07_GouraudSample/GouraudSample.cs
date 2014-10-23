@@ -184,7 +184,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #endif
 
 
-            ras.ResetGamma(new gamma_none());
+            ras.ResetGamma(new GammaNone());
             //m_dilation.Render(ras, sl, ren_base);
             //m_gamma.Render(ras, sl, ren_base);
             //m_alpha.Render(ras, sl, ren_base);

@@ -443,8 +443,8 @@ namespace MatterHackers.Agg.Font
 
             return 0;
         }
-
-        public void ShowDebugInfo(Graphics2D graphics2D)
+#if DEBUG
+        public void dbugShowDebugInfo(Graphics2D graphics2D)
         {
             StyledTypeFace typeFaceNameStyle = new StyledTypeFace(this, 30);
             TypeFacePrinter fontNamePrinter = new TypeFacePrinter(this.fontFamily + " - 30 point", typeFaceNameStyle);
@@ -463,7 +463,7 @@ namespace MatterHackers.Agg.Font
             ColorRGBA underlineColor = new ColorRGBA(0, 150, 55);
 
             // the origin
-            graphics2D.Line(x, y, x + width, y, originColor);
+            graphics2D.dbugLine(x, y, x + width, y, originColor);
 
             graphics2D.Rectangle(x + bounds.Left, y + bounds.Bottom, x + bounds.Right, y + bounds.Top, boundingBoxColor);
 
@@ -472,19 +472,19 @@ namespace MatterHackers.Agg.Font
             width = width * 3;
 
             double temp = typeFaceNameStyle.AscentInPixels;
-            graphics2D.Line(x, y + temp, x + width, y + temp, ascentColor);
+            graphics2D.dbugLine(x, y + temp, x + width, y + temp, ascentColor);
 
             temp = typeFaceNameStyle.DescentInPixels;
-            graphics2D.Line(x, y + temp, x + width, y + temp, descentColor);
+            graphics2D.dbugLine(x, y + temp, x + width, y + temp, descentColor);
 
             temp = typeFaceNameStyle.XHeightInPixels;
-            graphics2D.Line(x, y + temp, x + width, y + temp, xHeightColor);
+            graphics2D.dbugLine(x, y + temp, x + width, y + temp, xHeightColor);
 
             temp = typeFaceNameStyle.CapHeightInPixels;
-            graphics2D.Line(x, y + temp, x + width, y + temp, capHeightColor);
+            graphics2D.dbugLine(x, y + temp, x + width, y + temp, capHeightColor);
 
             temp = typeFaceNameStyle.UnderlinePositionInPixels;
-            graphics2D.Line(x, y + temp, x + width, y + temp, underlineColor);
+            graphics2D.dbugLine(x, y + temp, x + width, y + temp, underlineColor);
 
             Affine textTransform = Affine.NewMatix(AffinePlan.Translate(10, origX));
             //textTransform = Affine.NewIdentity();
@@ -505,6 +505,7 @@ namespace MatterHackers.Agg.Font
             graphics2D.Render(new TypeFacePrinter("Origin").MakeVertexSnap(), textPos, originColor); textPos.y += legendFont.EmSizeInPixels;
             graphics2D.Render(new TypeFacePrinter("Bounding Box").MakeVertexSnap(), textPos, boundingBoxColor);
         }
+#endif
     }
 }
 

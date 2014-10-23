@@ -2,7 +2,7 @@
 //ref:  adapt from snippetsfor.net/CSharp/StackBlur
 using System;
 using System.Runtime.InteropServices;
-namespace MatterHackers
+namespace MatterHackers.Agg.Image
 {
 
    

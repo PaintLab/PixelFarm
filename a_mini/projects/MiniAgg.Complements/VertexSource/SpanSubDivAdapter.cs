@@ -22,7 +22,7 @@ namespace MatterHackers.Agg
 {
 
     //=================================================span_subdiv_adaptor
-    public class span_subdiv_adaptor : ISpanInterpolator
+    public class SpanSubDivAdapter : ISpanInterpolator
     {
         int m_subdiv_shift;
         int m_subdiv_size;
@@ -38,12 +38,12 @@ namespace MatterHackers.Agg
 
 
         //----------------------------------------------------------------
-        public span_subdiv_adaptor(ISpanInterpolator interpolator)
+        public SpanSubDivAdapter(ISpanInterpolator interpolator)
             : this(interpolator, 4)
         {
         }
 
-        public span_subdiv_adaptor(ISpanInterpolator interpolator, int subdiv_shift)
+        public SpanSubDivAdapter(ISpanInterpolator interpolator, int subdiv_shift)
         {
             m_subdiv_shift = subdiv_shift;
             m_subdiv_size = 1 << m_subdiv_shift;
@@ -51,7 +51,7 @@ namespace MatterHackers.Agg
             m_interpolator = interpolator;
         }
 
-        public span_subdiv_adaptor(ISpanInterpolator interpolator,
+        public SpanSubDivAdapter(ISpanInterpolator interpolator,
                              double x, double y, int len,
                              int subdiv_shift)
             : this(interpolator, subdiv_shift)
@@ -64,10 +64,12 @@ namespace MatterHackers.Agg
             throw new System.NotImplementedException();
         }
 
-        //----------------------------------------------------------------
-        public ISpanInterpolator interpolator() { return m_interpolator; }
-        public void interpolator(ISpanInterpolator intr) { m_interpolator = intr; }
 
+        public ISpanInterpolator Interpolator
+        {
+            get { return this.m_interpolator; }
+            set { this.m_interpolator = value; }
+        }
         //----------------------------------------------------------------
         public Transform.ITransform GetTransformer()
         {
@@ -79,12 +81,16 @@ namespace MatterHackers.Agg
         }
 
         //----------------------------------------------------------------
-        public int subdiv_shift() { return m_subdiv_shift; }
-        public void subdiv_shift(int shift)
+        
+        public int SubDivShift
         {
-            m_subdiv_shift = shift;
-            m_subdiv_size = 1 << m_subdiv_shift;
-            m_subdiv_mask = m_subdiv_size - 1;
+            get { return this.m_subdiv_shift; }
+            set
+            {
+                m_subdiv_shift = value;
+                m_subdiv_size = 1 << m_subdiv_shift;
+                m_subdiv_mask = m_subdiv_size - 1;
+            }
         }
 
         //----------------------------------------------------------------
@@ -127,5 +133,5 @@ namespace MatterHackers.Agg
         {
             m_interpolator.GetLocalScale(out x, out y);
         }
-    } 
+    }
 }

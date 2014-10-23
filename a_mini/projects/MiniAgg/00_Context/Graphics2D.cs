@@ -37,27 +37,68 @@ namespace MatterHackers.Agg
     public abstract class Graphics2D
     {
         const int COVER_FULL = 255;
+
         protected IImage destImageByte;
-        
-        protected Stack<Affine> affineTransformStack = new Stack<Affine>();
         protected ScanlineRasterizer rasterizer;
 
-        public Graphics2D()
-        {
-            affineTransformStack.Push(Affine.IdentityMatrix);
-        }
+        Stack<Affine> affineTransformStack = new Stack<Affine>();
+       
+
 
         public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
-            : this()
         {
-            Initialize(destImage, rasterizer);
+            affineTransformStack.Push(Affine.IdentityMatrix);
+            destImageByte = destImage;
+            this.rasterizer = rasterizer;
         }
 
-        internal void Initialize(IImage destImage, ScanlineRasterizer rasterizer)
+
+        //------------------------------------------------------------------------
+        public abstract void Clear(ColorRGBA color);
+        public abstract void SetClippingRect(RectangleDouble rect_d);
+        public abstract RectangleDouble GetClippingRect();
+        public abstract void Render(VertexSnap vertexSource, ColorRGBA colorBytes);
+        //------------------------------------------------------------------------
+        public abstract void Render(IImage imageSource,
+            double x, double y,
+            double angleRadians,
+            double scaleX, double ScaleY);
+
+        public void Render(IImage imageSource, int x, int y)
         {
-            destImageByte = destImage; 
-            this.rasterizer = rasterizer;
-        } 
+            Render(imageSource, x, y, 0, 1, 1);
+        }
+
+        public void Render(IImage imageSource, double x, double y)
+        {
+            Render(imageSource, x, y, 0, 1, 1);
+        }
+
+
+        public void Render(VertexStorage vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
+        {
+            for (int i = 0; i < numPaths; i++)
+            {
+                Render(new VertexSnap(vxStorage, pathIdArray[i]), colorArray[i]);
+            }
+        }
+        public void Render(VertexStorage vxStorage, ColorRGBA c)
+        {
+            Render(new VertexSnap(vxStorage, 0), c);
+        }
+        public void Render(VertexSnap vertexSource, double x, double y, ColorRGBA color)
+        {
+            var inputVxs = vertexSource.GetInternalVxs();
+            var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
+            Render(vxs, color);
+        }
+
+        public void Render(VertexSnap vertexSource, Vector2 position, ColorRGBA color)
+        {
+            var inputVxs = vertexSource.GetInternalVxs();
+            var vxs = Affine.NewTranslation(position.x, position.y).TransformToVertexSnap(inputVxs);
+            Render(vxs, color);
+        }
 
         public int TransformStackCount
         {
@@ -100,82 +141,14 @@ namespace MatterHackers.Agg
             get { return rasterizer; }
         }
 
-       
+
         public IImage DestImage
         {
             get
             {
                 return destImageByte;
             }
-        } 
-        public abstract void Render(VertexSnap vertexSource, ColorRGBA colorBytes);
-        public void Render(IImage imageSource, int x, int y)
-        {
-            
-            Render(imageSource, x, y, 0, 1, 1);
         }
-
-        public void Render(IImage imageSource, double x, double y)
-        {
-            Render(imageSource, x, y, 0, 1, 1);
-        }
-
-        public abstract void Render(IImage imageSource,
-            double x, double y,
-            double angleRadians,
-            double scaleX, double ScaleY);
-
-        public void Render(VertexStorage vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
-        {
-            for (int i = 0; i < numPaths; i++)
-            {
-                //Render(vertexSource, pathIdArray[i], colorArray[i]);
-                Render(new VertexSnap(vxStorage, pathIdArray[i]), colorArray[i]);
-            }
-        }
-        public void Render(VertexStorage vxStorage, ColorRGBA c)
-        {
-            Render(new VertexSnap(vxStorage, 0), c);
-        }
-        public void Render(VertexSnap vertexSource, double x, double y, ColorRGBA color)
-        {
-            var inputVxs = vertexSource.GetInternalVxs();
-            var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
-            Render(vxs, color); 
-        }
-
-        public void Render(VertexSnap vertexSource, Vector2 position, ColorRGBA color)
-        {
-            var inputVxs = vertexSource.GetInternalVxs();
-            var vxs = Affine.NewTranslation(position.x, position.y).TransformToVertexSnap(inputVxs);
-            Render(vxs, color);
-        }
-
-        public abstract void Clear(ColorRGBA color);
-
-        public void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
-        {
-            PathStorage m_LinesToDraw = new PathStorage();
-            m_LinesToDraw.Clear();
-            m_LinesToDraw.MoveTo(x1, y1);
-            m_LinesToDraw.LineTo(x2, y2);
-
-             
-            Render(new Stroke(1).MakeVxs(m_LinesToDraw.MakeVxs()), color);
-        }
-
-        public abstract void SetClippingRect(RectangleDouble rect_d);
-        public abstract RectangleDouble GetClippingRect();
-
-
-
-        public static void AssertDebugNotDefined()
-        {
-#if DEBUG
-            throw new Exception("DEBUG is defined and should not be!");
-#endif
-        }
-
         //================
         public static Graphics2D CreateFromImage(IImage img)
         {
@@ -188,8 +161,17 @@ namespace MatterHackers.Agg
             return imageRenderer;
         }
 
+#if DEBUG
+        public void dbugLine(double x1, double y1, double x2, double y2, ColorRGBA color)
+        {
+            PathStorage m_LinesToDraw = new PathStorage();
+            m_LinesToDraw.Clear();
+            m_LinesToDraw.MoveTo(x1, y1);
+            m_LinesToDraw.LineTo(x2, y2);
 
-
+            Render(new Stroke(1).MakeVxs(m_LinesToDraw.MakeVxs()), color);
+        }
+#endif
 
 
 

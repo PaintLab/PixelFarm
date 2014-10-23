@@ -172,7 +172,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
             {
                 double w = strokeWidth * affTx.GetScale();
 
-                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new gamma_none());
+                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new GammaNone());
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
 

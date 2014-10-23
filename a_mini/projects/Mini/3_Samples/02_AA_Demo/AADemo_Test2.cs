@@ -194,7 +194,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //-----------------------------------------------------------------------------------------------------------
-            rasterizer.ResetGamma(new gamma_none());
+            rasterizer.ResetGamma(new GammaNone());
 
             PathStorage ps = new PathStorage(); 
             ps.Clear();

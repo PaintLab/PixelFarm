@@ -46,9 +46,9 @@ namespace MatterHackers.Agg
 
                 int distBetween = backBuffer.GetBytesBetweenPixelsInclusive();
 
-                var redImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);
-                var greenImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);
-                var blueImageBuffer = new ChildImage(backBuffer, new blender_gray(distBetween), distBetween, 0, 8);
+                var redImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 2, 8);
+                var greenImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 1, 8);
+                var blueImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 0, 8);
 
 
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);

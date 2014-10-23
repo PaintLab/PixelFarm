@@ -22,7 +22,7 @@ namespace MatterHackers.Agg
 {
 
 
-    public struct pattern_filter_bilinear_RGBA_Bytes : IPatternFilter
+    public struct PatternFilterBilnearColorRGBA : IPatternFilter
     {
         public int Dilation { get { return 1; } }
 

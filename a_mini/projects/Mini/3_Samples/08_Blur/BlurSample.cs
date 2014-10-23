@@ -42,7 +42,7 @@ namespace MatterHackers.Agg.Sample_Blur
         //ReferenceImage m_rbuf2;
 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
-        RecursiveBlur m_recursive_blur = new RecursiveBlur(new recursive_blur_calc_rgb());
+        RecursiveBlur m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
 
         RectangleDouble m_shape_bounds;
 
@@ -243,7 +243,7 @@ namespace MatterHackers.Agg.Sample_Blur
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
-                                stack_blur test = new stack_blur();
+                                StackBlur test = new StackBlur();
                                 test.Blur(image2, AggBasics.uround(m_radius), AggBasics.uround(m_radius));
 
                             } break;

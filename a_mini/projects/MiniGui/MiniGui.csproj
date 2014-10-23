@@ -41,7 +41,6 @@
     <Compile Include="KeyEventArgs.cs" />
     <Compile Include="KeyPressEventArgs.cs" />
     <Compile Include="Keys.cs" />
-    <Compile Include="LayoutEngine.cs" />
     <Compile Include="LayoutEventArgs.cs" />
     <Compile Include="MouseButtons.cs" />
     <Compile Include="MouseEventArgs.cs" />

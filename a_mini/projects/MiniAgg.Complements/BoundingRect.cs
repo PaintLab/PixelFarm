@@ -29,8 +29,8 @@ namespace MatterHackers.Agg
         static bool GetBoundingRect(PathStorage vs, int[] gi,
                          int num,
                          out double x1,
-                         out double y1, 
-                         out double x2, 
+                         out double y1,
+                         out double x2,
                          out double y2)
         {
             int i;
@@ -55,8 +55,8 @@ namespace MatterHackers.Agg
                 {
                     switch (flags)
                     {
-                        
-                            
+
+
                         //if is vertext cmd
                         case ShapePath.FlagsAndCommand.CommandLineTo:
                         case ShapePath.FlagsAndCommand.CommandMoveTo:

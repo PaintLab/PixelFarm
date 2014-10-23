@@ -21,15 +21,15 @@ using System;
 namespace MatterHackers.Agg
 {
      
-    public struct gamma_none : IGammaFunction
+    public struct GammaNone : IGammaFunction
     {
         public double GetGamma(double x) { return x; }
     }
     //==============================================================gamma_power
-    public class gamma_power : IGammaFunction
+    public class GammaPower : IGammaFunction
     {
-        public gamma_power() { m_gamma = 1.0; }
-        public gamma_power(double g) { m_gamma = g; }
+        public GammaPower() { m_gamma = 1.0; }
+        public GammaPower(double g) { m_gamma = g; }
 
         public void gamma(double g) { m_gamma = g; }
         public double gamma() { return m_gamma; }
@@ -42,10 +42,10 @@ namespace MatterHackers.Agg
     }
 
     //==========================================================gamma_threshold
-    public class gamma_threshold : IGammaFunction
+    public class GammaThreshold : IGammaFunction
     {
-        public gamma_threshold() { m_threshold = 0.5; }
-        public gamma_threshold(double t) { m_threshold = t; }
+        public GammaThreshold() { m_threshold = 0.5; }
+        public GammaThreshold(double t) { m_threshold = t; }
 
         public void threshold(double t) { m_threshold = t; }
         public double threshold() { return m_threshold; }
@@ -95,13 +95,13 @@ namespace MatterHackers.Agg
     }
 
     //==========================================================gamma_multiply
-    public class gamma_multiply : IGammaFunction
+    public class GammaMultiply : IGammaFunction
     {
-        public gamma_multiply()
+        public GammaMultiply()
         {
             m_mul = (1.0);
         }
-        public gamma_multiply(double v)
+        public GammaMultiply(double v)
         {
             m_mul = (v);
         }
