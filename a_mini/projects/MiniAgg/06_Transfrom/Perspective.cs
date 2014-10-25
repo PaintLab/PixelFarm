@@ -638,7 +638,7 @@ namespace MatterHackers.Agg.Transform
             {
                 cmd = src.GetVertex(i, out x, out y);
                 this.Transform(ref x, ref y);
-                data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
+                data.Add(new VertexData(cmd, x, y));
             }
             return new Agg.VertexStorage(data);
         }

@@ -264,8 +264,8 @@ namespace MatterHackers.Agg.Font
                 }
             }
 
-            VertexData endVertex = new VertexData(ShapePath.FlagsAndCommand.CommandStop, Vector2.Zero);
-            yield return endVertex;
+             
+            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
 
         public VertexStorage MakeVxs()

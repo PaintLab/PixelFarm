@@ -17,8 +17,9 @@ namespace MatterHackers.Agg
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             return vxs.GetVertex(currentIterIndex++, out x, out y);   
-        }
+        }        
     }
+    
     public struct VertexSnap
     {
         int startAt;

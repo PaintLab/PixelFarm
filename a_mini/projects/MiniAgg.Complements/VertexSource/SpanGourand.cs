@@ -22,7 +22,7 @@ using System.Collections.Generic;
 namespace MatterHackers.Agg.VertexSource
 {
     //============================================================span_gouraud
-    public class SpanGourand 
+    public class SpanGourand
     {
         CoordAndColor[] m_coord = new CoordAndColor[3];
         double[] m_x = new double[8];
@@ -112,7 +112,7 @@ namespace MatterHackers.Agg.VertexSource
         }
         public VertexStorage MakeVxs()
         {
-            
+
             List<VertexData> list = new List<VertexData>();
             foreach (var v in this.GetVertexIter())
             {
@@ -121,7 +121,7 @@ namespace MatterHackers.Agg.VertexSource
                 {
                     break;
                 }
-               
+
             }
             return new VertexStorage(list);
         }
@@ -136,11 +136,12 @@ namespace MatterHackers.Agg.VertexSource
             {
                 yield return new VertexData(
                     m_cmd[i],
-                    new VectorMath.Vector2(m_x[i], m_y[i]));
+                    m_x[i],
+                    m_y[i]);
             }
         }
 
-       
+
         // Vertex Source Interface to feed the coordinates to the rasterizer
 
         public void RewindZero()

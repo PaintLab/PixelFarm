@@ -74,17 +74,7 @@ namespace MatterHackers.Agg.Font
                 }
 
             } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-
-            //foreach (VertexData vertexData in glyph.GetVertexIter())
-            //{
-            //    if (ShapePath.IsStop(vertexData.command))
-            //    {
-            //        break;
-            //    }
-            //    yield return vertexData;
-            //}
-
-            // then the underline
+             
 
             snapIter = underline.GetVertexSnapIter();
             do
@@ -92,50 +82,9 @@ namespace MatterHackers.Agg.Font
                 cmd = snapIter.GetNextVertex(out x, out y);
                 yield return new VertexData(cmd, x, y);
 
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-
-            //while ((cmd = snapIter.GetNextVertex(out x, out y)))//!= ShapePath.FlagsAndCommand.CommandStop)
-            //{
-
-            //}
-            //foreach (VertexData vertexData in underline.GetVertexIter())
-            //{
-            //    yield return vertexData;
-            //}
-        }
-
-
-
-        //public void RewindZero()
-        //{
-        //    state = 0;
-        //    underline.RewindZero();
-        //    glyph.RewindZero();
-        //}
-
-        //int state = 0;
-        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        //{
-        //    x = 0;
-        //    y = 0;
-        //    ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
-        //    switch (state)
-        //    {
-        //        case 0:
-        //            cmd = glyph.GetNextVertex(out x, out y);
-        //            if (ShapePath.IsStop(cmd))
-        //            {
-        //                state++;
-        //                goto case 1;
-        //            }
-        //            return cmd;
-
-        //        case 1:
-        //            cmd = underline.GetNextVertex(out x, out y);
-        //            break;
-        //    }
-        //    return cmd;
-        //}
+            } while (cmd != ShapePath.FlagsAndCommand.CommandStop); 
+        } 
+       
     }
 
     public class StyledTypeFaceImageCache

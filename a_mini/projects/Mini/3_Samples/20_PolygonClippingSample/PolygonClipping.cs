@@ -586,12 +586,12 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                 {
                     case ShapePath.FlagsAndCommand.CommandStop:
                         {
-                            yield return new VertexData(cmd, new Vector2(x, y));
+                            yield return new VertexData(cmd, x, y);
                             yield break;
                         }
                     default:
                         {
-                            yield return new VertexData(cmd, new Vector2(x, y));
+                            yield return new VertexData(cmd, x, y);
                         } break;
                 }
             }

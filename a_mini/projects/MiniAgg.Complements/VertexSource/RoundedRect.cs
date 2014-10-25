@@ -201,8 +201,8 @@ namespace MatterHackers.Agg.VertexSource
                 //yield return vertexData;
             }
 
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW, new Vector2());
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
+            yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
+            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
 
 

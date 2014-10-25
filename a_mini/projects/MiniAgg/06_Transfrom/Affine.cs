@@ -916,7 +916,7 @@ namespace MatterHackers.Agg.Transform
             {
                 cmd = src.GetVertex(i, out x, out y);
                 this.Transform(ref x, ref y);
-                data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
+                data.Add(new VertexData(cmd, x, y));
             }
             return new Agg.VertexStorage(data);
         }
@@ -924,13 +924,13 @@ namespace MatterHackers.Agg.Transform
         {
             var data = new System.Collections.Generic.List<Agg.VertexData>();
             var snapIter = src.GetVertexSnapIter();
-             
+
             ShapePath.FlagsAndCommand cmd;
             double x, y;
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 this.Transform(ref x, ref y);
-                data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
+                data.Add(new VertexData(cmd, x, y));
             }
 
             return new Agg.VertexStorage(data);

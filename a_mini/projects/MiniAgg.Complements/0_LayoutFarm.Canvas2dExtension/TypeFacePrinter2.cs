@@ -262,10 +262,8 @@ namespace LayoutFarm.Agg.Font
                     currentOffset.x = 0;
                     currentOffset.y -= typeFaceStyle.EmSizeInPixels;
                 }
-            }
-
-            VertexData endVertex = new VertexData(ShapePath.FlagsAndCommand.CommandStop, Vector2.Zero);
-            yield return endVertex;
+            }             
+            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
 
         private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)

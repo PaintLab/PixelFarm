@@ -577,13 +577,7 @@ namespace MatterHackers.Agg.Lines
                     LineTo(x, y);
                     break;
             }
-        }
-
-        //public void AddPath(IVertexSource vs)
-        //{
-        //    AddPath(vs, 0);
-        //}
-
+        } 
        
         void AddPath(VertexSnap s)
         {
@@ -593,24 +587,10 @@ namespace MatterHackers.Agg.Lines
 
             var snapIter = s.GetVertexSnapIter(); 
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-            {
-                //index++;
-                //if (index == 0
-                //  || (index > start && index < start + num))
+            { 
                 AddVertex(x, y, cmd);
             }
-
-
-            ////----------------
-            //s.RewindZero(); 
-            //while ((cmd = s.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-            //{
-            //    //index++;
-            //    //if (index == 0
-            //    //  || (index > start && index < start + num))
-            //    AddVertex(x, y, cmd);
-            //}
-
+             
 
 
             Render(false);

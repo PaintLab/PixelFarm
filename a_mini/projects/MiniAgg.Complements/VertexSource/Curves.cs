@@ -427,7 +427,7 @@ namespace MatterHackers.Agg.VertexSource
 
                 }
             }
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
+            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
         //public void RewindZero()
         //{
