@@ -63,7 +63,7 @@ namespace MatterHackers.Agg
             int[] path_id,
             int num_paths)
         {
-            for (int i = 0; i < num_paths; i++)
+            for (int i = 0; i < num_paths; ++i)
             {
                 ras.Reset();
                 ras.AddPath(new VertexSnap(vx, path_id[i]));

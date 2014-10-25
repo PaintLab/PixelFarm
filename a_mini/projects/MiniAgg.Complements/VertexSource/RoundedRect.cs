@@ -37,7 +37,7 @@ namespace MatterHackers.Agg.VertexSource
         Vector2 rightBottomRadius;
         Vector2 rightTopRadius;
         Vector2 leftTopRadius;
-        
+
         Arc currentProcessingArc = new Arc();
 
         public RoundedRect(double left, double bottom, double right, double top, double radius)
@@ -101,7 +101,7 @@ namespace MatterHackers.Agg.VertexSource
             this.leftTopRadius = new Vector2(leftTopRadius, leftTopRadius);
         }
 
-        public void radius(double rx1, double ry1, double rx2, double ry2,
+        public void SetRadius(double rx1, double ry1, double rx2, double ry2,
                               double rx3, double ry3, double rx4, double ry4)
         {
             leftBottomRadius.x = rx1; leftBottomRadius.y = ry1; rightBottomRadius.x = rx2; rightBottomRadius.y = ry2;
@@ -129,15 +129,15 @@ namespace MatterHackers.Agg.VertexSource
 
         public double ApproximationScale
         {
-            get { return currentProcessingArc.approximation_scale(); }
-            set { currentProcessingArc.approximation_scale(value); }
+            get { return currentProcessingArc.ApproximateScale; }
+            set { currentProcessingArc.ApproximateScale = value; }
         }
 
 
         public IEnumerable<VertexData> GetVertexIter()
         {
 
-            currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
+            currentProcessingArc.Init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
                 if (ShapePath.IsStop(vertexData.command))
@@ -146,22 +146,7 @@ namespace MatterHackers.Agg.VertexSource
                 }
                 yield return vertexData;
             }
-            currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
-            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
-            {
-                if (ShapePath.IsMoveTo(vertexData.command))
-                {
-                    // skip the initial moveto
-                    continue;
-                }
-                if (ShapePath.IsStop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
-
-            currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y, 0.0, Math.PI * 0.5);
+            currentProcessingArc.Init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
                 if (ShapePath.IsMoveTo(vertexData.command))
@@ -176,7 +161,22 @@ namespace MatterHackers.Agg.VertexSource
                 yield return vertexData;
             }
 
-            currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y, Math.PI * 0.5, Math.PI);
+            currentProcessingArc.Init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y, 0.0, Math.PI * 0.5);
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
+            {
+                if (ShapePath.IsMoveTo(vertexData.command))
+                {
+                    // skip the initial moveto
+                    continue;
+                }
+                if (ShapePath.IsStop(vertexData.command))
+                {
+                    break;
+                }
+                yield return vertexData;
+            }
+
+            currentProcessingArc.Init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y, Math.PI * 0.5, Math.PI);
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
                 switch (vertexData.command)
@@ -189,123 +189,14 @@ namespace MatterHackers.Agg.VertexSource
                         yield return vertexData;
                         break;
                 }
-                //if (ShapePath.IsMoveTo(vertexData.command))
-                //{
-                //    // skip the initial moveto
-                //    continue;
-                //}
-                //if (ShapePath.IsStop(vertexData.command))
-                //{
-                //    break;
-                //}
-                //yield return vertexData;
             }
 
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
-
-
-        //void RewindZero()
-        //{
-        //    state = 0;
-        //}
-        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        //{
-        //    x = 0;
-        //    y = 0;
-        //    ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
-        //    switch (state)
-        //    {
-        //        case 0:
-        //            currentProcessingArc.init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y,
-        //                       Math.PI, Math.PI + Math.PI * 0.5);
-        //            currentProcessingArc.RewindZero();
-        //            state++;
-        //            goto case 1;
-
-        //        case 1:
-        //            cmd = currentProcessingArc.vertex(out x, out y);
-        //            if (ShapePath.IsStop(cmd))
-        //            {
-        //                state++;
-        //            }
-        //            else
-        //            {
-        //                return cmd;
-        //            }
-        //            goto case 2;
-
-        //        case 2:
-        //            currentProcessingArc.init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y,
-        //                       Math.PI + Math.PI * 0.5, 0.0);
-        //            currentProcessingArc.RewindZero();
-        //            state++;
-        //            goto case 3;
-
-        //        case 3:
-        //            cmd = currentProcessingArc.vertex(out x, out y);
-        //            if (ShapePath.IsStop(cmd))
-        //            {
-        //                state++;
-        //            }
-        //            else
-        //            {
-        //                return ShapePath.FlagsAndCommand.CommandLineTo;
-        //            }
-        //            goto case 4;
-
-        //        case 4:
-        //            currentProcessingArc.init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y,
-        //                       0.0, Math.PI * 0.5);
-        //            currentProcessingArc.RewindZero();
-        //            state++;
-        //            goto case 5;
-
-        //        case 5:
-        //            cmd = currentProcessingArc.vertex(out x, out y);
-        //            if (ShapePath.IsStop(cmd))
-        //            {
-        //                state++;
-        //            }
-        //            else
-        //            {
-        //                return ShapePath.FlagsAndCommand.CommandLineTo;
-        //            }
-        //            goto case 6;
-
-        //        case 6:
-        //            currentProcessingArc.init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y,
-        //                       Math.PI * 0.5, Math.PI);
-        //            currentProcessingArc.RewindZero();
-        //            state++;
-        //            goto case 7;
-
-        //        case 7:
-        //            cmd = currentProcessingArc.vertex(out x, out y);
-        //            if (ShapePath.IsStop(cmd))
-        //            {
-        //                state++;
-        //            }
-        //            else
-        //            {
-        //                return ShapePath.FlagsAndCommand.CommandLineTo;
-        //            }
-        //            goto case 8;
-
-        //        case 8:
-        //            cmd = ShapePath.FlagsAndCommand.CommandEndPoly
-        //                | ShapePath.FlagsAndCommand.FlagClose
-        //                | ShapePath.FlagsAndCommand.FlagCCW;
-        //            state++;
-        //            break;
-        //    }
-        //    return cmd;
-        //}
-
         public VertexStorage MakeVxs()
         {
-            
+
             List<VertexData> vlist = new List<VertexData>();
             foreach (var v in this.GetVertexIter())
             {

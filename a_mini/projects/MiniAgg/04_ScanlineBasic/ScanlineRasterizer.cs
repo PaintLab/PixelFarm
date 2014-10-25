@@ -322,36 +322,7 @@ namespace MatterHackers.Agg
                     AddVertex(cmd, x, y);
                 }
             }
-
-            //--------------------
-            //spath.RewindZero();
-            //if (m_outline.Sorted)
-            //{
-            //    Reset();
-            //}
-            //if (spath.VxsHasMoreThanOnePart)
-            //{
-            //    var vxs = spath.GetInternalVxs();
-            //    int j = vxs.Count;
-
-            //    for (int i = 0; i < j; ++i)
-            //    {
-            //        var cmd2 = vxs.GetVertex(i, out x, out y);
-            //        if (cmd2 != ShapePath.FlagsAndCommand.CommandStop)
-            //        {
-            //            AddVertex(cmd2, x, y);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    ShapePath.FlagsAndCommand cmd;
-            //    while ((cmd = spath.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-            //    {
-
-            //        AddVertex(cmd, x, y);
-            //    }
-            //}
+             
         }
 
         public int MinX { get { return m_outline.MinX; } }

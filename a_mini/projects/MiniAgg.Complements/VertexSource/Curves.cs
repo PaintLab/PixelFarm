@@ -429,25 +429,7 @@ namespace MatterHackers.Agg.VertexSource
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
-        //public void RewindZero()
-        //{
-        //    m_count = 0;
-        //}
-        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        //{
-        //    if (m_count >= m_points.Count)
-        //    {
-        //        x = 0;
-        //        y = 0;
-        //        return ShapePath.FlagsAndCommand.CommandStop;
-        //    }
-
-        //    Vector2 p = m_points[m_count++];
-        //    x = p.x;
-        //    y = p.y;
-        //    return (m_count == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
-        //}
-
+        
         void AddBezier(double x1, double y1,
                     double x2, double y2,
                     double x3, double y3)
@@ -705,11 +687,8 @@ namespace MatterHackers.Agg.VertexSource
         public double CuspLmit
         {
             get { return 0; }
-            set { }
-
-        }
-
-
+            set { } 
+        } 
         public IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();

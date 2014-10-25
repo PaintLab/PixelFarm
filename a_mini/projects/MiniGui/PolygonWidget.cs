@@ -54,32 +54,9 @@ namespace MatterHackers.Agg.UI
 
         public void Close(bool f) { m_close = f; }
         public bool Close() { return m_close; }
-
-        public IEnumerable<VertexData> GetVertexIter()
-        {
-            this.RewindZero();
-            ShapePath.FlagsAndCommand cmd;
-            double x, y;
-            for (; ; )
-            {
-                cmd = GetNextVertex(out x, out y);
-                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
-                {
-                    yield return new VertexData(cmd, x, y);
-                    yield break;
-                }
-                else
-                {
-                    yield return new VertexData(cmd, x, y);
-                }
-            }
-        }
-
-        public void RewindZero()
-        {
-            m_vertex = 0;
-        }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+         
+ 
+        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
@@ -108,7 +85,7 @@ namespace MatterHackers.Agg.UI
         public VertexStorage MakeVxs()
         {
             List<VertexData> vlist = new List<VertexData>();
-            this.RewindZero();
+            m_vertex = 0;
             for (; ; )
             {
                 double x, y;
