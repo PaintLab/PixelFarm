@@ -53,6 +53,7 @@
     <Compile Include="Filter\ImageFilters.cs" />
     <Compile Include="Filter\PatternFilterBilnearColorRGBA.cs" />
     <Compile Include="Image\AlphaMask.cs" />
+    <Compile Include="VertexSource\SimpleRect.cs" />
     <Compile Include="VertexSource\SpanGradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />

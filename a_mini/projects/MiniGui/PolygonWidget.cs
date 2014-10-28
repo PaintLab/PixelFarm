@@ -54,8 +54,8 @@ namespace MatterHackers.Agg.UI
 
         public void Close(bool f) { m_close = f; }
         public bool Close() { return m_close; }
-         
- 
+
+
         ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
             x = 0;

@@ -28,94 +28,57 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-
-
-
-
-    public class Ellipse 
+    public class Ellipse
     {
         public double originX;
         public double originY;
         public double radiusX;
         public double radiusY;
 
-        double m_scale;
+        double m_scale = 1;
         int numSteps;
-        int m_step;
         bool m_cw;
 
         public Ellipse()
         {
-            originX = 0.0;
-            originY = 0.0;
-            radiusX = 1.0;
-            radiusY = 1.0;
-            m_scale = 1.0;
-            numSteps = 4;
-            m_step = 0;
-            m_cw = false;
+
+            Init(0, 0, 1, 1, 4, false);
+        }
+        public Ellipse(double originX, double originY, double radiusX, double radiusY, int num_steps = 0, bool cw = false)
+        { 
+            Init(originX, originY, radiusX, radiusY, num_steps, cw); 
+        }
+        public void Reset(double originX, double originY, double radiusX, double radiusY, int num_steps)
+        {
+            Init(originX, originY, radiusX, radiusY, num_steps, false);
         }
 
-        public Ellipse(Vector2 origin, double Radius)
-            : this(origin.x, origin.y, Radius, Radius, 0, false)
+        void Init(double ox, double oy,
+                 double rx, double ry,
+                 int num_steps, bool cw)
         {
-        }
-
-        public Ellipse(Vector2 origin, double RadiusX, double RadiusY, int num_steps = 0, bool cw = false)
-            : this(origin.x, origin.y, RadiusX, RadiusY, num_steps, cw)
-        {
-        }
-
-        public Ellipse(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps = 0, bool cw = false)
-        {
-            this.originX = OriginX;
-            this.originY = OriginY;
-            this.radiusX = RadiusX;
-            this.radiusY = RadiusY;
-            m_scale = 1;
+            originX = ox;
+            originY = oy;
+            radiusX = rx;
+            radiusY = ry;
             numSteps = num_steps;
-            m_step = 0;
             m_cw = cw;
             if (numSteps == 0)
             {
                 CalculateNumSteps();
             }
         }
-
-        void Init(double OriginX, double OriginY, double RadiusX, double RadiusY)
+        public double ApproximateScale
         {
-            Init(OriginX, OriginY, RadiusX, RadiusY, 0, false);
-        }
-
-        public void Reset(double OriginX, double OriginY, double RadiusX, double RadiusY, int num_steps)
-        {
-            Init(OriginX, OriginY, RadiusX, RadiusY, num_steps, false);
-        }
-
-        void Init(double OriginX, double OriginY, double RadiusX, double RadiusY,
-                int num_steps, bool cw)
-        {
-            originX = OriginX;
-            originY = OriginY;
-            radiusX = RadiusX;
-            radiusY = RadiusY;
-            numSteps = num_steps;
-            m_step = 0;
-            m_cw = cw;
-            if (numSteps == 0)
+            get { return this.m_scale; }
+            set
             {
+                this.m_scale = value;
                 CalculateNumSteps();
             }
-        }
+        } 
 
-        public void approximation_scale(double scale)
-        {
-            m_scale = scale;
-            CalculateNumSteps();
-        }
-
-      
-        public IEnumerable<VertexData> GetVertexIter()
+        IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
             vertexData.command = FlagsAndCommand.CommandMoveTo;
@@ -152,32 +115,32 @@ namespace MatterHackers.Agg.VertexSource
         }
 
 
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            x = 0;
-            y = 0;
-            if (m_step == numSteps)
-            {
-                ++m_step;
-                return FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
-            }
+        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        //{
+        //    x = 0;
+        //    y = 0;
+        //    if (m_step == numSteps)
+        //    {
+        //        ++m_step;
+        //        return FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
+        //    }
 
-            if (m_step > numSteps)
-            {
-                return FlagsAndCommand.CommandStop;
-            }
+        //    if (m_step > numSteps)
+        //    {
+        //        return FlagsAndCommand.CommandStop;
+        //    }
 
-            double angle = (double)(m_step) / (double)(numSteps) * 2.0 * Math.PI;
-            if (m_cw)
-            {
-                angle = 2.0 * Math.PI - angle;
-            }
+        //    double angle = (double)(m_step) / (double)(numSteps) * 2.0 * Math.PI;
+        //    if (m_cw)
+        //    {
+        //        angle = 2.0 * Math.PI - angle;
+        //    }
 
-            x = originX + Math.Cos(angle) * radiusX;
-            y = originY + Math.Sin(angle) * radiusY;
-            m_step++;
-            return ((m_step == 1) ? FlagsAndCommand.CommandMoveTo : FlagsAndCommand.CommandLineTo);
-        }
+        //    x = originX + Math.Cos(angle) * radiusX;
+        //    y = originY + Math.Sin(angle) * radiusY;
+        //    m_step++;
+        //    return ((m_step == 1) ? FlagsAndCommand.CommandMoveTo : FlagsAndCommand.CommandLineTo);
+        //}
 
         void CalculateNumSteps()
         {

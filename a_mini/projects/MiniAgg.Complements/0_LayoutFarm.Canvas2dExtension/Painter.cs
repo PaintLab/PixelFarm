@@ -33,10 +33,10 @@ using MatterHackers.Agg.Font;
 
 namespace MatterHackers.Agg
 {
-    public class Painter
+    public class CanvasPainter
     {
         Graphics2D gx;
-        public Painter(Graphics2D graphic2d)
+        public CanvasPainter(Graphics2D graphic2d)
         {
             this.gx = graphic2d;
         }
@@ -44,11 +44,26 @@ namespace MatterHackers.Agg
         {
             get { return this.gx; }
         }
+        /// <summary>
+        /// draw circle
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="radius"></param>
+        /// <param name="color"></param>
         public void Circle(double x, double y, double radius, ColorRGBA color)
         {
             Ellipse elipse = new Ellipse(x, y, radius, radius);
             gx.Render(elipse.MakeVxs(), color);
         }
+        /// <summary>
+        /// draw line
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="color"></param>
         public void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
             PathStorage m_LinesToDraw = new PathStorage();
@@ -57,6 +72,22 @@ namespace MatterHackers.Agg
             m_LinesToDraw.LineTo(x2, y2);
             gx.Render(new Stroke(1).MakeVxs(m_LinesToDraw.MakeVxs()), color);
         }
+        /// <summary>
+        /// draw rectangle
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="bottom"></param>
+        /// <param name="right"></param>
+        /// <param name="top"></param>
+        /// <param name="color"></param>
+        /// <param name="strokeWidth"></param>
+        public void Rectangle(double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
+        {
+
+            SimpleRect simpleRect = new SimpleRect(left + .5, bottom + .5, right - .5, top - .5); 
+            gx.Render(new Stroke(strokeWidth).MakeVxs(simpleRect.MakeVxs()), color);
+        }
+
         public void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor)
         {
             if (right < left || top < bottom)
@@ -66,11 +97,7 @@ namespace MatterHackers.Agg
             RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
             gx.Render(rect.MakeVertexSnap(), fillColor);
         }
-        public void Rectangle(double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
-        {
-            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
-            gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
-        }
+
         public void DrawString(
             string text,
             double x,

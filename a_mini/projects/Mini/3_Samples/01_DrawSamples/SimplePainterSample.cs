@@ -30,13 +30,14 @@ namespace MatterHackers.Agg.SimplePainter
         {
             //1.
             // clear the image to white
-            Painter p = new Painter(g);
+            CanvasPainter p = new CanvasPainter(g);
 
             g.Clear(ColorRGBA.White);
 
             // draw a circle            
             p.Circle(50, 50, 30, ColorRGBA.Blue);
             p.Line(10, 100, 520, 50, new ColorRGBA(20, 200, 200)); 
+
             // draw a filled box
             p.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow); 
             // and an outline around it

@@ -126,7 +126,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             var ras = new ScanlineRasterizer();
             var sl = new ScanlinePacked8();
 
-            VertexSource.Ellipse e = new VertexSource.Ellipse();
+            Ellipse e = new Ellipse();
 
             // TODO: If you drag the control circles below the bottom of the window we get an exception.  This does not happen in AGG.
             // It needs to be debugged.  Turning on clipping fixes it.  But standard agg works without clipping.  Could be a bigger problem than this.
