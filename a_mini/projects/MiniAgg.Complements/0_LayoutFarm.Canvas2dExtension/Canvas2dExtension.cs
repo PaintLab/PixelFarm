@@ -125,9 +125,7 @@ namespace MatterHackers.Agg
         //}
         public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
         {
-            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
-
-
+            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0); 
             gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
         }
 
@@ -167,13 +165,13 @@ namespace MatterHackers.Agg
             RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
             gx.Render(rect.MakeVertexSnap(), fillColor);
         }
-        public static void Circle(this Agg.Graphics2D g, double x, double y, double radius, ColorRGBA color)
+        public static void Circle(this Graphics2D g, double x, double y, double radius, ColorRGBA color)
         {
             Ellipse elipse = new Ellipse(x, y, radius, radius);
             g.Render(elipse.MakeVxs(), color);
 
         }
-        public static void Circle(this Agg.Graphics2D g, Vector2 origin, double radius, ColorRGBA color)
+        public static void Circle(this Graphics2D g, Vector2 origin, double radius, ColorRGBA color)
         {
             Circle(g, origin.x, origin.y, radius, color);
         }
