@@ -155,12 +155,8 @@ namespace MatterHackers.Agg.Transform
             double ty = y;
             double xy = tx * ty;
             x = rc00 + rc10 * xy + rc20 * tx + rc30 * ty;
-            y = rc01 + rc11 * xy + rc21 * tx + rc31 * ty;
-
-        }
-
-
-
+            y = rc01 + rc11 * xy + rc21 * tx + rc31 * ty; 
+        } 
         //-------------------------------------------------------------------------
         public VertexSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
         {

@@ -619,17 +619,17 @@ namespace MatterHackers.Agg.Transform
         }
 
         //-------------------------------------------------------------------------
-        public Agg.VertexSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
+        public VertexSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
         {
             return new VertexSnap(TransformToVxs(src));
         }
-        public Agg.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
+        public VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             return TransformToVxs(src.Vsx);
         }
-        public Agg.VertexStorage TransformToVxs(Agg.VertexStorage src)
+        public VertexStorage TransformToVxs(VertexStorage src)
         {
-             
+
             var vxs = new VertexStorage();
             ShapePath.FlagsAndCommand cmd;
             double x, y;
@@ -637,7 +637,7 @@ namespace MatterHackers.Agg.Transform
             for (int i = 0; i < count; ++i)
             {
                 cmd = src.GetVertex(i, out x, out y);
-                this.Transform(ref x, ref y);                 
+                this.Transform(ref x, ref y);
                 vxs.AddVertex(x, y, cmd);
             }
             return vxs;

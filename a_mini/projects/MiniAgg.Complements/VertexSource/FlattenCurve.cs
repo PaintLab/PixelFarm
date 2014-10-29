@@ -54,23 +54,22 @@ namespace MatterHackers.Agg.VertexSource
 
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
-        readonly VertexSnap vertextSource;
+        readonly VertexSnap vsnap;
 
         public FlattenCurves(VertexSnap spath)
         {
-            this.vertextSource = spath;
+            this.vsnap = spath;
         }
         public FlattenCurves(VertexStorage vxs)
         {
-            this.vertextSource = new VertexSnap(vxs);
+            this.vsnap = new VertexSnap(vxs);
         }
         public double ApproximationScale
         {
             get
             {
                 return m_curve4.ApproximationScale;
-            }
-
+            } 
             set
             {
                 m_curve3.ApproximationScale = value;
@@ -81,62 +80,56 @@ namespace MatterHackers.Agg.VertexSource
 
         public Curves.CurveApproximationMethod ApproximationMethod
         {
+            get
+            { 
+                return m_curve4.ApproximationMethod;
+            }
             set
             {
                 m_curve3.ApproximationMethod = value;
                 m_curve4.ApproximationMethod = value;
-            }
-
-            get
-            {
-
-                return m_curve4.ApproximationMethod;
-            }
+            } 
         }
 
         public double AngleTolerance
         {
-            set
-            {
-                m_curve3.AngleTolerance = value;
-                m_curve4.AngleTolerance = value;
-            }
-
             get
             {
                 return m_curve4.AngleTolerance;
             }
+            set
+            {
+                m_curve3.AngleTolerance = value;
+                m_curve4.AngleTolerance = value;
+            } 
         }
 
         public double CuspLimit
         {
-            set
-            {
-                m_curve3.CuspLimit = value;
-                m_curve4.CuspLimit = value;
-            }
             get
             {
                 return m_curve4.CuspLimit;
             }
+            set
+            {
+                m_curve3.CuspLimit = value;
+                m_curve4.CuspLimit = value;
+            } 
         }
 
         public VertexStorage MakeVxs()
         {
 
-            VertexStorage vxs = new VertexStorage();
+            VertexStorage vxs = new VertexStorage();                       
 
-            var snapIter = vertextSource.GetVertexSnapIter();
+            VertexData lastVertextData = new VertexData();
             m_curve3.Reset();
             m_curve4.Reset();
 
-            VertexData lastPosition = new VertexData();
-
-
+            var snapIter = vsnap.GetVertexSnapIter();
+                         
             double x, y;
-            ShapePath.FlagsAndCommand cmd;
-
-
+            ShapePath.FlagsAndCommand cmd; 
             do
             {
                 cmd = snapIter.GetNextVertex(out x, out y);
@@ -150,22 +143,27 @@ namespace MatterHackers.Agg.VertexSource
                             cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
 
                             VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
-                            m_curve3.Init(lastPosition.x, lastPosition.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
+                            m_curve3.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
 
                             IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
+
                             do
                             {
                                 curveIterator.MoveNext();
-                                if (ShapePath.IsStop(curveIterator.Current.command))
+                                VertexData currentVertextData = curveIterator.Current;
+                                if (ShapePath.IsStop(currentVertextData.command))
                                 {
                                     break;
-                                }
+                                } 
+                                
+                                vertexData = new VertexData(
+                                   ShapePath.FlagsAndCommand.CommandLineTo,
+                                   currentVertextData.position);
 
-                              
-                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
                                 vxs.AddVertex(vertexData); 
-                                lastPosition = vertexData;
+
+                                lastVertextData = vertexData;
 
                             } while (!ShapePath.IsStop(curveIterator.Current.command));
                         }
@@ -180,7 +178,7 @@ namespace MatterHackers.Agg.VertexSource
                             cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
                             VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
 
-                            m_curve4.Init(lastPosition.x, lastPosition.y, x, y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
+                            m_curve4.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
 
@@ -194,24 +192,21 @@ namespace MatterHackers.Agg.VertexSource
                                 }
 
 
-                                var position = curveIterator.Current.position;
-
-                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position);
-                                //list.Add(vertexData);
+                                var position = curveIterator.Current.position; 
+                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position); 
                                 vxs.AddVertex(vertexData);
-                                lastPosition = vertexData;
+                                lastVertextData = vertexData;
                             }
                         }
                         break;
                     default:
-                        //list.Add(vertexData);
+                      
                         vxs.AddVertex(vertexData);
-                        lastPosition = vertexData;
+                        lastVertextData = vertexData;
                         break;
                 }
             } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-            return vxs;
-            //return new VertexStorage(list);
+            return vxs; 
         }
     }
 }
