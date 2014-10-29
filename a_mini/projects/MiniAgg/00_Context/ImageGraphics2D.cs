@@ -54,7 +54,7 @@ namespace MatterHackers.Agg
             return Rasterizer.GetVectorClipBox();
         }
 
-        public override void Render(VertexSnap vertextSnap, ColorRGBA color)
+        public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
             rasterizer.Reset();
             Affine transform = GetTransform();
@@ -62,7 +62,7 @@ namespace MatterHackers.Agg
             {
                 List<VertexData> vxData = new List<VertexData>();
                 //then transform
-                var s1 = new VertexSnap(transform.Tranform(vertextSnap));
+                var s1 = new VertexStoreSnap(transform.Tranform(vertextSnap));
                 rasterizer.AddPath(s1);
             }
             else

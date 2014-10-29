@@ -285,9 +285,9 @@ namespace MatterHackers.Agg
         //-------------------------------------------------------------------
         public void AddPath(VertexStorage vxs)
         {
-            this.AddPath(new VertexSnap(vxs));
+            this.AddPath(new VertexStoreSnap(vxs));
         }
-        public void AddPath(VertexSnap spath)
+        public void AddPath(VertexStoreSnap spath)
         {
 
             double x = 0;

@@ -49,7 +49,7 @@ namespace MatterHackers.Agg.Sample_Perspective
             OnInitialize();
             base.Init();
         }
-        
+
         [DemoConfig]
         public PerspectiveTransformType PerspectiveTransformType
         {
@@ -131,16 +131,13 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //--------------------------
                     // Render transformed ellipse
                     //
-                    VertexSource.Ellipse ell = new MatterHackers.Agg.VertexSource.Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
+                    Ellipse ell = new Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
                                      (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
                                      200);
 
-                    VertexSnap s1 = ell.MakeVertexSnap();
-                     
-                    
+                    VertexStoreSnap s1 = ell.MakeVertexSnap();
 
                     var trans_ell = txBilinear.TransformToVertexSnap(ell.MakeVxs());
-
                     var trans_ell_stroke = txBilinear.TransformToVertexSnap(new Stroke(3).MakeVxs(s1.GetInternalVxs()));
 
                     g_rasterizer.AddPath(trans_ell);
@@ -177,7 +174,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //var txFillEllipse = new VertexSourceApplyTransform(filledEllipse, txPerspective);
                     //3. add
                     //g_rasterizer.AddPath(txFillEllipse);
-                    g_rasterizer.AddPath(new VertexSnap(ellipseVertext));
+                    g_rasterizer.AddPath(new VertexStoreSnap(ellipseVertext));
                     //4. render it
 
                     scanlineRenderer.RenderScanlineSolidAA(dest,
@@ -188,7 +185,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //--------------------------------------------------------
                     //outline Ellipse
                     //1. create original version of stroke ellipse 
-                    var vxs = filledEllipse.MakeVxs(); 
+                    var vxs = filledEllipse.MakeVxs();
                     //2. create transform version of outlin  
                     var txOutline = txPerspective.TransformToVxs(new Stroke(3).MakeVxs(vxs));// new VertexSourceApplyTransform(strokeEllipse, txPerspective);
                     //3. add
@@ -203,7 +200,7 @@ namespace MatterHackers.Agg.Sample_Perspective
 
             //--------------------------
             // Render the "quad" tool and controls
-            var vxs2 = quadPolygonControl.MakeVxs(); 
+            var vxs2 = quadPolygonControl.MakeVxs();
             g_rasterizer.AddPath(vxs2);
             //g_rasterizer.AddPath(quadPolygonControl);
             scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));

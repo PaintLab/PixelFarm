@@ -150,7 +150,7 @@ namespace MatterHackers.Agg.VertexSource
             Stroke stroke = new Stroke(w);
             return stroke.MakeVxs(vxs);
         }
-        public static VertexStorage CreateStrokeVxs(VertexSnap p, double w)
+        public static VertexStorage CreateStrokeVxs(VertexStoreSnap p, double w)
         {
             Stroke stroke = new Stroke(w);
             return stroke.MakeVxs(p.GetInternalVxs());

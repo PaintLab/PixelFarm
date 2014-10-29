@@ -276,9 +276,9 @@ namespace MatterHackers.Agg.VertexSource
         {
             return this.myvxs;
         }
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.myvxs);
+            return new VertexStoreSnap(this.myvxs);
         }
         public void Curve4(double x_ctrl2, double y_ctrl2,
                        double x_to, double y_to)
@@ -488,7 +488,7 @@ namespace MatterHackers.Agg.VertexSource
         //// Concatenate path. The path is added as is.
 
 
-        public void ConcatPath(VertexSnap s)
+        public void ConcatPath(VertexStoreSnap s)
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
@@ -503,7 +503,7 @@ namespace MatterHackers.Agg.VertexSource
         // Join path. The path is joined with the existing one, that is, 
         // it behaves as if the pen of a plotter was always down (drawing)
         //template<class VertexSource>  
-        public void JoinPath(VertexSnap s)
+        public void JoinPath(VertexStoreSnap s)
         {
             double x, y;
             var snapIter = s.GetVertexSnapIter();

@@ -157,7 +157,7 @@ namespace MatterHackers.Agg.Font
             }
             else
             {
-                graphics2D.Render(new VertexSnap(this.MakeVxs()), color);
+                graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), color);
             }
         }
 
@@ -278,9 +278,9 @@ namespace MatterHackers.Agg.Font
             }
             return vxs;
         }
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs());
         }
         private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)
         {

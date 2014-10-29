@@ -579,7 +579,7 @@ namespace MatterHackers.Agg.Lines
             }
         } 
        
-        void AddPath(VertexSnap s)
+        void AddPath(VertexStoreSnap s)
         {
             double x;
             double y; 
@@ -596,7 +596,7 @@ namespace MatterHackers.Agg.Lines
             Render(false);
 
         }
-        public void RenderVertexSnap(VertexSnap s, ColorRGBA c)
+        public void RenderVertexSnap(VertexStoreSnap s, ColorRGBA c)
         {
             m_ren.color(c);
             AddPath(s);

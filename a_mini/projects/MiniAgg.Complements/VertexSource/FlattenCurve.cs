@@ -54,15 +54,15 @@ namespace MatterHackers.Agg.VertexSource
 
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
-        readonly VertexSnap vsnap;
+        readonly VertexStoreSnap vsnap;
 
-        public FlattenCurves(VertexSnap spath)
+        public FlattenCurves(VertexStoreSnap spath)
         {
             this.vsnap = spath;
         }
         public FlattenCurves(VertexStorage vxs)
         {
-            this.vsnap = new VertexSnap(vxs);
+            this.vsnap = new VertexStoreSnap(vxs);
         }
         public double ApproximationScale
         {

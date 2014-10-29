@@ -69,9 +69,9 @@ namespace MatterHackers.Agg.VertexSource
             m_LinesToDraw.ClosePolygon(); 
             return m_LinesToDraw.MakeVxs();  
         }
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs());
         }
 
     }

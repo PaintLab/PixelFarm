@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Sample_Blur
         //CheckBox m_channel_b;
         //CheckBox m_FlattenCurves;
 
-        VertexSnap m_path;
+        VertexStoreSnap m_path;
         FlattenCurves m_shape;
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
@@ -61,7 +61,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
             m_sl = new ScanlinePacked8();
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
-            m_path = new VertexSnap(typeFaceForLargeA.GetGlyphForCharacter('a'));
+            m_path = new VertexStoreSnap(typeFaceForLargeA.GetGlyphForCharacter('a'));
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             //shape_mtx *= Affine.NewTranslation(150, 100);
@@ -70,7 +70,7 @@ namespace MatterHackers.Agg.Sample_Blur
             m_path = shape_mtx.TransformToVertexSnap(m_path.GetInternalVxs());
             m_shape = new FlattenCurves(m_path);
 
-            BoundingRect.GetBoundingRectSingle(new VertexSnap(m_shape.MakeVxs()), ref m_shape_bounds);
+            BoundingRect.GetBoundingRectSingle(new VertexStoreSnap(m_shape.MakeVxs()), ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
@@ -162,18 +162,18 @@ namespace MatterHackers.Agg.Sample_Blur
                             m_shadow_ctrl.polygon());
 
 
-            VertexSnap spath;
+            VertexStoreSnap spath;
             if (FlattenCurveCheck)
             {
                 var s2 = shadow_persp.TransformToVxs(m_shape.MakeVxs());
-                spath = new VertexSnap(s2);
+                spath = new VertexStoreSnap(s2);
                 //shadow_trans = new VertexSourceApplyTransform(m_shape, shadow_persp);
             }
             else
             {
                 var s2 = shadow_persp.TransformToVxs(m_path.GetInternalVxs());
                 //shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
-                spath = new VertexSnap(s2);
+                spath = new VertexStoreSnap(s2);
             }
             // Render shadow 
             //spath = shadow_trans.DoTransformToNewVertexSnap();

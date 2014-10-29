@@ -45,8 +45,8 @@ namespace MatterHackers.Agg.VertexSource
             Init(0, 0, 1, 1, 4, false);
         }
         public Ellipse(double originX, double originY, double radiusX, double radiusY, int num_steps = 0, bool cw = false)
-        { 
-            Init(originX, originY, radiusX, radiusY, num_steps, cw); 
+        {
+            Init(originX, originY, radiusX, radiusY, num_steps, cw);
         }
         public void Reset(double originX, double originY, double radiusX, double radiusY, int num_steps)
         {
@@ -61,8 +61,9 @@ namespace MatterHackers.Agg.VertexSource
             originY = oy;
             radiusX = rx;
             radiusY = ry;
-            numSteps = num_steps;
             m_cw = cw;
+
+            numSteps = num_steps;          
             if (numSteps == 0)
             {
                 CalculateNumSteps();
@@ -76,7 +77,7 @@ namespace MatterHackers.Agg.VertexSource
                 this.m_scale = value;
                 CalculateNumSteps();
             }
-        } 
+        }
 
         IEnumerable<VertexData> GetVertexIter()
         {
@@ -89,30 +90,36 @@ namespace MatterHackers.Agg.VertexSource
             double anglePerStep = MathHelper.Tau / (double)numSteps;
             double angle = 0;
             vertexData.command = FlagsAndCommand.CommandLineTo;
-            for (int i = 1; i < numSteps; i++)
-            {
-                angle += anglePerStep;
 
-                if (m_cw)
+            if (m_cw)
+            {
+                for (int i = 1; i < numSteps; i++)
                 {
+                    angle += anglePerStep;
                     vertexData.x = originX + Math.Cos(MathHelper.Tau - angle) * radiusX;
                     vertexData.y = originY + Math.Sin(MathHelper.Tau - angle) * radiusY;
                     yield return vertexData;
                 }
-                else
+            }
+            else
+            {
+                for (int i = 1; i < numSteps; i++)
                 {
+                    angle += anglePerStep; 
                     vertexData.x = originX + Math.Cos(angle) * radiusX;
                     vertexData.y = originY + Math.Sin(angle) * radiusY;
-                    yield return vertexData;
+                    yield return vertexData; 
                 }
             }
+
 
             vertexData.x = vertexData.y = 0;
             vertexData.command = FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
             yield return vertexData;
+
             vertexData.command = FlagsAndCommand.CommandStop;
             yield return vertexData;
-        } 
+        }
 
         void CalculateNumSteps()
         {
@@ -122,9 +129,9 @@ namespace MatterHackers.Agg.VertexSource
         }
 
         //-------------------------------------------------------
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(MakeVxs());
+            return new VertexStoreSnap(MakeVxs());
         }
         public VertexStorage MakeVxs()
         {

@@ -91,7 +91,7 @@ namespace MatterHackers.Agg
         {
             return GetBoundingRect(vs, gi, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
         }
-        public static bool GetBoundingRectSingle(VertexSnap vs, ref RectangleDouble rect)
+        public static bool GetBoundingRectSingle(VertexStoreSnap vs, ref RectangleDouble rect)
         {
             double x1, y1, x2, y2;
             bool rValue = GetBoundingRectSingle(vs, out x1, out y1, out x2, out y2);
@@ -116,7 +116,7 @@ namespace MatterHackers.Agg
         //-----------------------------------------------------bounding_rect_single
         //template<class VertexSource, class CoordT> 
         static bool GetBoundingRectSingle(
-          VertexSnap vs,
+          VertexStoreSnap vs,
           out double x1, out double y1,
           out double x2, out double y2)
         {

@@ -100,9 +100,9 @@ namespace LayoutFarm.Agg.Font
             return vxs;
              
         }
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs());
         }
         public RectangleDouble LocalBounds
         {

@@ -46,7 +46,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        PathStorage CombinePaths(VertexSnap a, VertexSnap b, ClipType clipType)
+        PathStorage CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
         {
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
@@ -108,7 +108,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             return output;
         }
 
-        private static List<List<IntPoint>> CreatePolygons(VertexSnap a)
+        private static List<List<IntPoint>> CreatePolygons(VertexStoreSnap a)
         {
             List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
             List<IntPoint> currentPoly = null;
@@ -303,7 +303,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
                         var vxs = ps2.MakeVxs();
                         graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0, 0.6, 0, 0.1));
-                        CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), new VertexSnap(vxs));
+                        CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), new VertexStoreSnap(vxs));
                     }
                     break;
 
@@ -345,7 +345,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
                         graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
 
-                        CreateAndRenderCombined(graphics2D, new VertexSnap(trans_gb_poly), new VertexSnap(trans_arrows));
+                        CreateAndRenderCombined(graphics2D, new VertexStoreSnap(trans_gb_poly), new VertexStoreSnap(trans_arrows));
                     }
                     break;
 
@@ -371,7 +371,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs());
                         graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
 
-                        CreateAndRenderCombined(graphics2D, s1, new VertexSnap(stroke_vxs));
+                        CreateAndRenderCombined(graphics2D, s1, new VertexStoreSnap(stroke_vxs));
                     }
                     break;
 
@@ -443,7 +443,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
 
                         var curveVxs = curve.MakeVxs();
-                        CreateAndRenderCombined(graphics2D, new VertexSnap(sp1), new VertexSnap(curveVxs));
+                        CreateAndRenderCombined(graphics2D, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
 
                         graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));
 
@@ -454,7 +454,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         }
 
 
-        void CreateAndRenderCombined(Graphics2D graphics2D, VertexSnap ps1, VertexSnap ps2)
+        void CreateAndRenderCombined(Graphics2D graphics2D, VertexStoreSnap ps1, VertexStoreSnap ps2)
         {
             PathStorage combined = null;
 
@@ -607,9 +607,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             }
             return vxs;
         }
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs());
         }
 
 
@@ -640,7 +640,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
         int m_contours;
         int m_points;
 
-        conv_poly_counter(VertexSnap src)
+        conv_poly_counter(VertexStoreSnap src)
         {
             m_contours = 0;
             m_points = 0;

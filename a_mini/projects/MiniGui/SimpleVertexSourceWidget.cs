@@ -102,16 +102,16 @@ namespace MatterHackers.Agg.UI
             var list = new System.Collections.Generic.List<VertexData>();
             var vxs = this.MakeVxs();
 
-            graphics2D.Render(new VertexSnap(vxs, 0),
+            graphics2D.Render(new VertexStoreSnap(vxs, 0),
                 color(0));
             base.OnDraw(graphics2D);
         }
 
 
         public abstract VertexStorage MakeVxs();
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs());
         }
 
     }

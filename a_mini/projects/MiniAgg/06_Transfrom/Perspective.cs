@@ -619,9 +619,9 @@ namespace MatterHackers.Agg.Transform
         }
 
         //-------------------------------------------------------------------------
-        public VertexSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
+        public VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
         {
-            return new VertexSnap(TransformToVxs(src));
+            return new VertexStoreSnap(TransformToVxs(src));
         }
         public VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {

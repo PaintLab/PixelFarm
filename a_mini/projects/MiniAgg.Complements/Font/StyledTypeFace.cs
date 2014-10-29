@@ -29,20 +29,20 @@ namespace MatterHackers.Agg.Font
     public class GlyphWithUnderline
     {
 
-        VertexSnap underline;
-        VertexSnap glyph;
+        VertexStoreSnap underline;
+        VertexStoreSnap glyph;
 
         public GlyphWithUnderline(VertexStorage glyph, int advanceForCharacter, int Underline_position, int Underline_thickness)
         {
-            underline = new VertexSnap(
+            underline = new VertexStoreSnap(
                 new RoundedRect(new RectangleDouble(0,
                     Underline_position, advanceForCharacter,
                     Underline_position + Underline_thickness), 0).MakeVxs());
-            this.glyph = new VertexSnap(glyph);
+            this.glyph = new VertexStoreSnap(glyph);
         }
 
 
-        public VertexSnap MakeVertexSnap() { return new VertexSnap(this.MakeVxs()); }
+        public VertexStoreSnap MakeVertexSnap() { return new VertexStoreSnap(this.MakeVxs()); }
         public VertexStorage MakeVxs()
         {
             VertexStorage vxs = new VertexStorage();
@@ -303,7 +303,7 @@ namespace MatterHackers.Agg.Font
 
             ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
             var gfx = Graphics2D.CreateFromImage(charImage);
-            gfx.Render(new VertexSnap(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
+            gfx.Render(new VertexStoreSnap(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
             characterImageCache[character] = charImage;
 
             return charImage;

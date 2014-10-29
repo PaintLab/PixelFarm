@@ -66,7 +66,7 @@ namespace MatterHackers.Agg
             for (int i = 0; i < num_paths; ++i)
             {
                 ras.Reset();
-                ras.AddPath(new VertexSnap(vx, path_id[i]));
+                ras.AddPath(new VertexStoreSnap(vx, path_id[i]));
                 RenderScanlineSolidAA(destImage, ras, scline, color_storage[i]);
             }
         }

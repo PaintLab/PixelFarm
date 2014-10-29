@@ -109,7 +109,7 @@ namespace MatterHackers.Agg.Sample_Draw
             VertexStorage vxs = textPrinter.CreateVxs();
 
             var affTx = Affine.NewTranslation(new Vector2(width / 2, height / 4 * 3));
-            VertexSnap s1 = affTx.TransformToVertexSnap(vxs);
+            VertexStoreSnap s1 = affTx.TransformToVertexSnap(vxs);
 
             g.Render(s1, ColorRGBA.Red);
 
