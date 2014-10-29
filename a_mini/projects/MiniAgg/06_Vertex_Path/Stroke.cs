@@ -78,24 +78,26 @@ namespace MatterHackers.Agg.VertexSource
             get { return strokeGen.Shorten; }
             set { strokeGen.Shorten = value; }
         }
-        public VertexStorage MakeVxs(VertexStorage vxs)
+        public VertexStorage MakeVxs(VertexStorage sourceVxs)
         {
-            List<VertexData> list = new List<VertexData>();
-            StrokeGenerator generator = strokeGen;
+             
+            StrokeGenerator stgen = strokeGen;
+            VertexStorage vxs = new VertexStorage();
 
-            int j = vxs.Count;
+            int j = sourceVxs.Count;
             double x, y;
 
-            generator.RemoveAll();
+            stgen.RemoveAll();
             //1st vertex
 
-            vxs.GetVertex(0, out x, out y);
-            generator.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);
+            sourceVxs.GetVertex(0, out x, out y);
+            stgen.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);
+
             double startX = x, startY = y;
             bool hasMoreThanOnePart = false;
             for (int i = 0; i < j; ++i)
             {
-                var cmd = vxs.GetVertex(i, out x, out y);
+                var cmd = sourceVxs.GetVertex(i, out x, out y);
                 switch (ShapePath.FlagsAndCommand.CommandsMask & cmd)
                 {
                     case ShapePath.FlagsAndCommand.CommandStop:
@@ -104,12 +106,12 @@ namespace MatterHackers.Agg.VertexSource
                         } break;
                     case ShapePath.FlagsAndCommand.CommandEndPoly:
                         {
-                            generator.AddVertex(x, y, cmd);
+                            stgen.AddVertex(x, y, cmd);
                             if (i < j - 2)
                             {
-                                generator.AddVertex(startX, startY, ShapePath.FlagsAndCommand.CommandLineTo);
-                                generator.MakeVxs(list);
-                                generator.RemoveAll();
+                                stgen.AddVertex(startX, startY, ShapePath.FlagsAndCommand.CommandLineTo);
+                                stgen.WriteTo(vxs);
+                                stgen.RemoveAll();
                                 hasMoreThanOnePart = true;
                             }
                             //end this polygon
@@ -120,21 +122,22 @@ namespace MatterHackers.Agg.VertexSource
                     case ShapePath.FlagsAndCommand.CommandCurve4:
                         {
 
-                            generator.AddVertex(x, y, cmd);
+                            stgen.AddVertex(x, y, cmd);
 
                         } break;
                     case ShapePath.FlagsAndCommand.CommandMoveTo:
                         {
-                            generator.AddVertex(x, y, cmd);
+                            stgen.AddVertex(x, y, cmd);
                             startX = x;
                             startY = y;
                         } break;
                 }
-            } 
-            generator.MakeVxs(list);
-            generator.RemoveAll();
+            }
+            stgen.WriteTo(vxs);
+            stgen.RemoveAll();
 
-            return new VertexStorage(list, hasMoreThanOnePart);
+            vxs.HasMoreThanOnePart = hasMoreThanOnePart;
+            return vxs;             
 
         }
 

@@ -31,11 +31,11 @@ namespace MatterHackers.Agg
 
 #if DEBUG
         static int dbugTotal = 0;
-        public readonly int dbugId = dbugGetNewId(); 
+        public readonly int dbugId = dbugGetNewId();
         static int dbugGetNewId()
-        {  
+        {
             return dbugTotal++;
-        } 
+        }
 #endif
         public VertexStorage()
         {
@@ -45,32 +45,8 @@ namespace MatterHackers.Agg
         {
             AllocIfRequired(initsize);
         }
-
-        public VertexStorage(List<VertexData> vxlist)
-        {
-
-            int j = this.m_num_vertices = vxlist.Count;
-            m_coord_xy = new double[(j << 1) + 2];
-            m_CommandAndFlags = new ShapePath.FlagsAndCommand[j + 2];
-
-            int n = 0;
-            int m = 0;
-            for (int i = j - 1; i >= 0; --i)
-            {
-                VertexData vxdata = vxlist[n];
-                m_coord_xy[m++] = vxdata.x;
-                m_coord_xy[m++] = vxdata.y;
-                m_CommandAndFlags[n] = vxdata.command;
-                n++;
-            }
-
-        }
-        public VertexStorage(List<VertexData> vxlist, bool hasMoreThanOnePart)
-            : this(vxlist)
-        {
-            this.HasMoreThanOnePart = hasMoreThanOnePart;
-        }
-        public bool HasMoreThanOnePart { get; private set; }
+         
+        public bool HasMoreThanOnePart { get; set; }
         public void FreeAll()
         {
             m_coord_xy = null;
