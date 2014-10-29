@@ -39,12 +39,12 @@ namespace MatterHackers.Agg.VertexSource
     public sealed class PathStorage : IVertexDest
     {
         VertexStorage myvxs;
-        int iteratorIndex;
+       
         public PathStorage()
         {
             myvxs = new VertexStorage();
-        } 
-        internal VertexStorage Vsx
+        }
+        public VertexStorage Vsx
         {
             get
             {
@@ -68,13 +68,13 @@ namespace MatterHackers.Agg.VertexSource
         public void Clear()
         {
             myvxs.Clear();
-            iteratorIndex = 0;
+          
         }
 
         public void ClearAll()
         {
             myvxs.FreeAll();
-            iteratorIndex = 0;
+          
         }
 
         // Make path functions
@@ -345,20 +345,7 @@ namespace MatterHackers.Agg.VertexSource
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, 0, 0);
         }
-        public void RewindZ()
-        {
-            iteratorIndex = 0;
-        }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            if (iteratorIndex >= myvxs.Count)
-            {
-                x = 0;
-                y = 0;
-                return ShapePath.FlagsAndCommand.CommandStop;
-            }
-            return myvxs.GetVertex(iteratorIndex++, out x, out y);
-        }
+         
         //----------------------------------------------------------------
 
         // Arrange the orientation of a polygon, all polygons in a path, 
