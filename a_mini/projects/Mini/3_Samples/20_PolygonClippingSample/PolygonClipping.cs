@@ -596,22 +596,14 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                 }
             }
 
-        }
-
-
-        //public void RewindZero()
-        //{
-        //    m_angle = m_start_angle;
-        //    m_curr_r = m_r1;
-        //    m_start = true;
-        //}
+        } 
         public VertexStorage MakeVxs()
         {
-            VertexStorage vxs = new VertexStorage();
-            List<VertexData> list = new List<VertexData>();
+
+            var vxs = new VertexStorage();
             foreach (var v in this.GetVertexIter())
             {
-                list.Add(v);
+                vxs.AddVertex(v);
             }
             return vxs;
         }

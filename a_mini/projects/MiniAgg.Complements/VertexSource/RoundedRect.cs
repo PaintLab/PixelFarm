@@ -197,12 +197,12 @@ namespace MatterHackers.Agg.VertexSource
         public VertexStorage MakeVxs()
         {
 
-            List<VertexData> vlist = new List<VertexData>();
+            VertexStorage vxs = new VertexStorage();
             foreach (var v in this.GetVertexIter())
             {
-                vlist.Add(v);
+                vxs.AddVertex(v);
             }
-            return new VertexStorage(vlist);
+            return vxs;
         }
         public VertexSnap MakeVertexSnap()
         {

@@ -115,20 +115,17 @@ namespace MatterHackers.Agg.VertexSource
                 m_curve3.CuspLimit = value;
                 m_curve4.CuspLimit = value;
             }
-
             get
             {
                 return m_curve4.CuspLimit;
-
             }
         }
 
-
         public VertexStorage MakeVxs()
         {
-            List<VertexData> list = new List<VertexData>();
 
-             
+            VertexStorage vxs = new VertexStorage();
+
             var snapIter = vertextSource.GetVertexSnapIter();
             m_curve3.Reset();
             m_curve4.Reset();
@@ -151,8 +148,8 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             double tmp_vx, tmp_vy;
                             cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-                            VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
 
+                            VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
                             m_curve3.Init(lastPosition.x, lastPosition.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
 
                             IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
@@ -164,10 +161,12 @@ namespace MatterHackers.Agg.VertexSource
                                 {
                                     break;
                                 }
-                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
 
-                                list.Add(vertexData);
+                              
+                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
+                                vxs.AddVertex(vertexData); 
                                 lastPosition = vertexData;
+
                             } while (!ShapePath.IsStop(curveIterator.Current.command));
                         }
                         break;
@@ -193,20 +192,26 @@ namespace MatterHackers.Agg.VertexSource
                                 {
                                     break;
                                 }
-                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
-                                list.Add(vertexData);
+
+
+                                var position = curveIterator.Current.position;
+
+                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position);
+                                //list.Add(vertexData);
+                                vxs.AddVertex(vertexData);
                                 lastPosition = vertexData;
                             }
                         }
                         break;
-
                     default:
-                        list.Add(vertexData);
+                        //list.Add(vertexData);
+                        vxs.AddVertex(vertexData);
                         lastPosition = vertexData;
                         break;
                 }
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);  
-            return new VertexStorage(list); 
-        } 
+            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+            return vxs;
+            //return new VertexStorage(list);
+        }
     }
 }

@@ -130,11 +130,10 @@ namespace MatterHackers.Agg.VertexSource
                             startY = y;
                         } break;
                 }
-            }
-
-
+            } 
             generator.MakeVxs(list);
             generator.RemoveAll();
+
             return new VertexStorage(list, hasMoreThanOnePart);
 
         }

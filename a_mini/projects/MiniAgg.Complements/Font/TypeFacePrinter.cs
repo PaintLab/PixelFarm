@@ -270,12 +270,13 @@ namespace MatterHackers.Agg.Font
 
         public VertexStorage MakeVxs()
         {
-            List<VertexData> vlist = new List<VertexData>();
+             
+            VertexStorage vxs = new VertexStorage();
             foreach (var v in this.GetVertexIter())
             {
-                vlist.Add(v);
+                vxs.AddVertex(v); 
             }
-            return new VertexStorage(vlist);
+            return vxs;
         }
         public VertexSnap MakeVertexSnap()
         {
@@ -347,12 +348,13 @@ namespace MatterHackers.Agg.Font
         }
         public VertexStorage CreateVxs()
         {
-            List<VertexData> list = new List<VertexData>();
+             
+            VertexStorage vxs = new VertexStorage();
             foreach (var v in this.GetVertexIter())
             {
-                list.Add(v);
+                vxs.AddVertex(v);
             }
-            return new VertexStorage(list);
+            return vxs;
             //return new VertexSnap(new VertexStorage(list));
         }
 #else

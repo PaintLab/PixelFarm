@@ -113,17 +113,17 @@ namespace MatterHackers.Agg.VertexSource
         public VertexStorage MakeVxs()
         {
 
-            List<VertexData> list = new List<VertexData>();
+            VertexStorage vxs = new VertexStorage();
             foreach (var v in this.GetVertexIter())
             {
-                list.Add(v);
+                vxs.AddVertex(v);
                 if (v.command == ShapePath.FlagsAndCommand.CommandStop)
                 {
                     break;
                 }
 
             }
-            return new VertexStorage(list);
+            return vxs;
         }
         public VertexSnap MakeVertexSnap()
         {

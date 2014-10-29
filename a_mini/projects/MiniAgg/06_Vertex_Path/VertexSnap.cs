@@ -11,8 +11,12 @@ namespace MatterHackers.Agg
         VertexStorage vxs;
         internal VertexSnapIter(VertexSnap vsnap)
         { 
+            
             this.vxs = vsnap.GetInternalVxs();
             this.currentIterIndex = vsnap.StartAt;
+            if (vxs == null)
+            {
+            }
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {

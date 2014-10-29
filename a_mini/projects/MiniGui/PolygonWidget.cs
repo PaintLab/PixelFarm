@@ -84,19 +84,20 @@ namespace MatterHackers.Agg.UI
 
         public VertexStorage MakeVxs()
         {
-            List<VertexData> vlist = new List<VertexData>();
+
+            VertexStorage vxs = new VertexStorage();
             m_vertex = 0;
             for (; ; )
             {
                 double x, y;
                 var cmd = this.GetNextVertex(out x, out y);
-                vlist.Add(new VertexData(cmd, x, y));
+                vxs.AddVertex(x, y, cmd);
                 if (cmd == ShapePath.FlagsAndCommand.CommandStop)
                 {
                     break;
                 }
             }
-            return new VertexStorage(vlist);
+            return vxs;
         }
         public VertexSnap MakeVertexSnap()
         {
@@ -236,7 +237,7 @@ namespace MatterHackers.Agg.UI
 
         public override VertexStorage MakeVxs()
         {
-            List<VertexData> vlist = new List<VertexData>();
+            var vxs = new VertexStorage();
             this.RewindZero();
             //this polygon control has  2 subcontrol
             //stroke and ellipse 
@@ -252,7 +253,7 @@ namespace MatterHackers.Agg.UI
                 }
                 else
                 {
-                    vlist.Add(new VertexData(cmd, x, y));
+                    vxs.AddVertex(x, y, cmd);
                 }
             }
             //------------------------------------------------------------
@@ -275,15 +276,15 @@ namespace MatterHackers.Agg.UI
                     {
                         break;
                     }
-                    vlist.Add(new VertexData(cmd, x, y));
+                    vxs.AddVertex(x, y, cmd);
                 }
                 m_status++;
             }
             //------------------------------------------------------------
 
             //close with stop
-            vlist.Add(new VertexData(ShapePath.FlagsAndCommand.CommandStop, 0, 0));
-            return new VertexStorage(vlist);
+            vxs.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandStop);
+            return vxs;
         }
         protected override RectangleDouble CalculateLocalBounds()
         {

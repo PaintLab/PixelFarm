@@ -629,18 +629,18 @@ namespace MatterHackers.Agg.Transform
         }
         public Agg.VertexStorage TransformToVxs(Agg.VertexStorage src)
         {
-            var data = new System.Collections.Generic.List<Agg.VertexData>();
-
+             
+            var vxs = new VertexStorage();
             ShapePath.FlagsAndCommand cmd;
             double x, y;
             int count = src.Count;
             for (int i = 0; i < count; ++i)
             {
                 cmd = src.GetVertex(i, out x, out y);
-                this.Transform(ref x, ref y);
-                data.Add(new VertexData(cmd, x, y));
+                this.Transform(ref x, ref y);                 
+                vxs.AddVertex(x, y, cmd);
             }
-            return new Agg.VertexStorage(data);
+            return vxs;
         }
     }
 }

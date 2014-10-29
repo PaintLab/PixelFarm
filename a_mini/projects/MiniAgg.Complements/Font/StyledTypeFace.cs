@@ -45,12 +45,12 @@ namespace MatterHackers.Agg.Font
         public VertexSnap MakeVertexSnap() { return new VertexSnap(this.MakeVxs()); }
         public VertexStorage MakeVxs()
         {
-            var list = new List<VertexData>();
+            VertexStorage vxs = new VertexStorage();
             foreach (var v in this.GetVertexIter())
             {
-                list.Add(v);
+                vxs.AddVertex(v);
             }
-            return new VertexStorage(list);
+            return vxs;
         }
 
         public IEnumerable<VertexData> GetVertexIter()

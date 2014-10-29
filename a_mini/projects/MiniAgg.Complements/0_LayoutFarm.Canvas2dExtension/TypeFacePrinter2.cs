@@ -91,12 +91,14 @@ namespace LayoutFarm.Agg.Font
         }
         public VertexStorage MakeVxs()
         {
-            List<VertexData> vlist = new List<VertexData>();
+            var vxs = new VertexStorage();
             foreach (var v in this.GetVertexIter())
             {
-                vlist.Add(v);
+                vxs.AddVertex(v);
+                 
             }
-            return new VertexStorage(vlist);
+            return vxs;
+             
         }
         public VertexSnap MakeVertexSnap()
         {
@@ -262,7 +264,7 @@ namespace LayoutFarm.Agg.Font
                     currentOffset.x = 0;
                     currentOffset.y -= typeFaceStyle.EmSizeInPixels;
                 }
-            }             
+            }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
 

@@ -905,35 +905,36 @@ namespace MatterHackers.Agg.Transform
         {
             return new VertexSnap(this.TransformToVxs(src));
         }
-        public Agg.VertexStorage TransformToVxs(Agg.VertexStorage src)
+        public  VertexStorage TransformToVxs(Agg.VertexStorage src)
         {
-            var data = new System.Collections.Generic.List<Agg.VertexData>();
-
+             
+            VertexStorage vxs = new VertexStorage();
             ShapePath.FlagsAndCommand cmd;
             double x, y;
             int count = src.Count;
             for (int i = 0; i < count; ++i)
             {
                 cmd = src.GetVertex(i, out x, out y);
-                this.Transform(ref x, ref y);
-                data.Add(new VertexData(cmd, x, y));
+                this.Transform(ref x, ref y);                 
+                vxs.AddVertex(x, y, cmd);
             }
-            return new Agg.VertexStorage(data);
+            return vxs;
         }
-        public Agg.VertexStorage Tranform(Agg.VertexSnap src)
+        public VertexStorage Tranform(Agg.VertexSnap src)
         {
-            var data = new System.Collections.Generic.List<Agg.VertexData>();
+            var vxs = new VertexStorage();
             var snapIter = src.GetVertexSnapIter();
 
             ShapePath.FlagsAndCommand cmd;
             double x, y;
+
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 this.Transform(ref x, ref y);
-                data.Add(new VertexData(cmd, x, y));
+                vxs.AddVertex(x, y, cmd);                 
             }
 
-            return new Agg.VertexStorage(data);
+            return vxs;
 
             //--------------------
             //src.RewindZero();
