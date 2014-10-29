@@ -49,10 +49,7 @@ namespace MatterHackers.Agg.Sample_Perspective
             OnInitialize();
             base.Init();
         }
-        //void NeedsRedraw(object sender, EventArgs e)
-        //{
-        //    Invalidate();
-        //}
+        
         [DemoConfig]
         public PerspectiveTransformType PerspectiveTransformType
         {

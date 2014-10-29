@@ -54,6 +54,7 @@
     <Compile Include="04_ScanlineBasic\FillingRule.cs" />
     <Compile Include="04_ScanlineBasic\IGammaFunction.cs" />
     <Compile Include="06_Transfrom\SimulEqGeneral.cs" />
+    <Compile Include="06_Vertex_Path\BoundingRect.cs" />
     <Compile Include="06_Vertex_Path\LineCapAndJoin.cs" />
     <Compile Include="04_ScanlineBasic\LinesAA.cs" />
     <Compile Include="06_Vertex_Path\VertexSnap.cs" />
@@ -81,7 +82,6 @@
     <Compile Include="03_PixelBuffer\PixelBlenderRGB.cs" />
     <Compile Include="03_PixelBuffer\PixelBlenderRGBA.cs" />
     <Compile Include="04_ScanlineBasic\1_IScanline.cs" />
-    <Compile Include="06_Vertex_Path\IVertexDest.cs" />
     <Compile Include="05_Lines\OutlineRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="04_ScanlineBasic\2_ScanlinePacked8.cs" />

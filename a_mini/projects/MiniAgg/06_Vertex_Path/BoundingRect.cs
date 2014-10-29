@@ -24,9 +24,9 @@ using MatterHackers.Agg.VertexSource;
 
 namespace MatterHackers.Agg
 {
-    static public class BoundingRect
+    public static class BoundingRect
     {
-        
+
 
         static bool GetBoundingRect(PathStorage vs, int[] gi,
                          int num,
@@ -45,7 +45,7 @@ namespace MatterHackers.Agg
             y1 = 1;
             x2 = 0;
             y2 = 0;
-            
+
 
             int iterindex = 0;
             for (i = 0; i < num; i++)
@@ -84,7 +84,7 @@ namespace MatterHackers.Agg
             }
             return x1 <= x2 && y1 <= y2;
         }
-       
+
         public static bool GetBoundingRect(PathStorage vs, int[] gi,
                            int num,
                            out RectangleDouble boundingRect)

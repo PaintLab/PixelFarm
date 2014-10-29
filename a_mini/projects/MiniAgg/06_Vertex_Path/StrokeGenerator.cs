@@ -21,13 +21,17 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    public class Vector2Container : ArrayList<Vector2>, IVertexDest
-    {
-        public void AddVertex(double x, double y)
-        {
-            base.AddVertex(new Vector2(x, y));
-        }
-    }
+    //public class Vector2Container : ArrayList<Vector2>, IVertexDest
+    //{
+    //    public Vector2Container()
+    //    {
+
+    //    }
+    //    public void AddVertex(double x, double y)
+    //    {
+    //        base.AddVertex(new Vector2(x, y));
+    //    }
+    //}
     //============================================================vcgen_stroke
 
     class StrokeGenerator
@@ -35,7 +39,8 @@ namespace MatterHackers.Agg.VertexSource
         StrokeMath m_stroker;
 
         VertexSequence m_src_vertices;
-        Vector2Container m_out_vertices;
+        VertexStorage m_out_vertices;
+
 
         double m_shorten;
         int m_closed;
@@ -49,7 +54,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             m_stroker = new StrokeMath();
             m_src_vertices = new VertexSequence();
-            m_out_vertices = new Vector2Container();
+            m_out_vertices = new VertexStorage();
             m_status = StrokeMath.Status.Init;
         }
 
@@ -144,7 +149,7 @@ namespace MatterHackers.Agg.VertexSource
             for (; ; )
             {
                 var cmd = GetNextVertex(ref x, ref y);
-                outputVxs.AddVertex(x, y, cmd);                 
+                outputVxs.AddVertex(x, y, cmd);
                 if (cmd == ShapePath.FlagsAndCommand.CommandStop)
                 {
                     break;
@@ -277,9 +282,10 @@ namespace MatterHackers.Agg.VertexSource
                         }
                         else
                         {
-                            Vector2 c = m_out_vertices[(int)m_out_vertex++];
-                            x = c.x;
-                            y = c.y;
+                            m_out_vertices.GetVertex(m_out_vertex++, out x, out y);
+                            //Vector2 c = m_out_vertices[(int)m_out_vertex++];
+                            //x = c.x;
+                            //y = c.y;
                             return cmd;
                         }
                         break;

@@ -36,15 +36,15 @@ namespace MatterHackers.Agg.VertexSource
     //------------------------------------------------------------------------
 
 
-    public sealed class PathStorage : IVertexDest
+    public sealed class PathStorage  
     {
-        VertexStorage myvxs;
-       
+        VertexStorage myvxs;       
         public PathStorage()
         {
             myvxs = new VertexStorage();
         }
-        public VertexStorage Vsx
+
+        internal VertexStorage Vsx
         {
             get
             {

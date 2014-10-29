@@ -133,9 +133,9 @@ namespace MatterHackers.Agg.VertexSource
             set { this.m_approx_scale = value; }
         }
 
-        public void CreateCap(IVertexDest vc, VertexDistance v0, VertexDistance v1, double len)
+        public void CreateCap(VertexStorage output, VertexDistance v0, VertexDistance v1, double len)
         {
-            vc.Clear();
+            output.Clear();
 
             double dx1 = (v1.y - v0.y) / len;
             double dy1 = (v1.x - v0.x) / len;
@@ -152,8 +152,8 @@ namespace MatterHackers.Agg.VertexSource
                     dx2 = dy1 * m_width_sign;
                     dy2 = dx1 * m_width_sign;
                 }
-                AddVertex(vc, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
-                AddVertex(vc, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
+                AddVertex(output, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
+                AddVertex(output, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
             }
             else
             {
@@ -163,14 +163,14 @@ namespace MatterHackers.Agg.VertexSource
                 int n = (int)(Math.PI / da);
 
                 da = Math.PI / (n + 1);
-                AddVertex(vc, v0.x - dx1, v0.y + dy1);
+                AddVertex(output, v0.x - dx1, v0.y + dy1);
                 if (m_width_sign > 0)
                 {
                     a1 = Math.Atan2(dy1, -dx1);
                     a1 += da;
                     for (i = 0; i < n; i++)
                     {
-                        AddVertex(vc, v0.x + Math.Cos(a1) * m_width,
+                        AddVertex(output, v0.x + Math.Cos(a1) * m_width,
                                        v0.y + Math.Sin(a1) * m_width);
                         a1 += da;
                     }
@@ -181,16 +181,16 @@ namespace MatterHackers.Agg.VertexSource
                     a1 -= da;
                     for (i = 0; i < n; i++)
                     {
-                        AddVertex(vc, v0.x + Math.Cos(a1) * m_width,
+                        AddVertex(output, v0.x + Math.Cos(a1) * m_width,
                                        v0.y + Math.Sin(a1) * m_width);
                         a1 -= da;
                     }
                 }
-                AddVertex(vc, v0.x + dx1, v0.y - dy1);
+                AddVertex(output, v0.x + dx1, v0.y - dy1);
             }
         }
 
-        public void CreateJoin(IVertexDest vc,
+        public void CreateJoin(VertexStorage output,
                                VertexDistance v0,
                                VertexDistance v1,
                                VertexDistance v2,
@@ -202,7 +202,7 @@ namespace MatterHackers.Agg.VertexSource
             double dx2 = m_width * (v2.y - v1.y) / len2;
             double dy2 = m_width * (v2.x - v1.x) / len2;
 
-            vc.Clear();
+            output.Clear();
 
             double cp = AggMath.cross_product(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
             if (cp != 0 && (cp > 0) == (m_width > 0))
@@ -218,12 +218,12 @@ namespace MatterHackers.Agg.VertexSource
                 switch (m_inner_join)
                 {
                     default: // inner_bevel
-                        AddVertex(vc, v1.x + dx1, v1.y - dy1);
-                        AddVertex(vc, v1.x + dx2, v1.y - dy2);
+                        AddVertex(output, v1.x + dx1, v1.y - dy1);
+                        AddVertex(output, v1.x + dx2, v1.y - dy2);
                         break;
 
                     case InnerJoin.Miter:
-                        CreateMiter(vc,
+                        CreateMiter(output,
                                    v0, v1, v2, dx1, dy1, dx2, dy2,
                                    LineJoin.MiterRevert,
                                    limit, 0);
@@ -234,7 +234,7 @@ namespace MatterHackers.Agg.VertexSource
                         cp = (dx1 - dx2) * (dx1 - dx2) + (dy1 - dy2) * (dy1 - dy2);
                         if (cp < len1 * len1 && cp < len2 * len2)
                         {
-                            CreateMiter(vc,
+                            CreateMiter(output,
                                        v0, v1, v2, dx1, dy1, dx2, dy2,
                                        LineJoin.MiterRevert,
                                        limit, 0);
@@ -243,17 +243,17 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             if (m_inner_join == InnerJoin.Jag)
                             {
-                                AddVertex(vc, v1.x + dx1, v1.y - dy1);
-                                AddVertex(vc, v1.x, v1.y);
-                                AddVertex(vc, v1.x + dx2, v1.y - dy2);
+                                AddVertex(output, v1.x + dx1, v1.y - dy1);
+                                AddVertex(output, v1.x, v1.y);
+                                AddVertex(output, v1.x + dx2, v1.y - dy2);
                             }
                             else
                             {
-                                AddVertex(vc, v1.x + dx1, v1.y - dy1);
-                                AddVertex(vc, v1.x, v1.y);
-                                CreateArc(vc, v1.x, v1.y, dx2, -dy2, dx1, -dy1);
-                                AddVertex(vc, v1.x, v1.y);
-                                AddVertex(vc, v1.x + dx2, v1.y - dy2);
+                                AddVertex(output, v1.x + dx1, v1.y - dy1);
+                                AddVertex(output, v1.x, v1.y);
+                                CreateArc(output, v1.x, v1.y, dx2, -dy2, dx1, -dy1);
+                                AddVertex(output, v1.x, v1.y);
+                                AddVertex(output, v1.x + dx2, v1.y - dy2);
                             }
                         }
                         break;
@@ -298,11 +298,11 @@ namespace MatterHackers.Agg.VertexSource
                                              v2.x + dx2, v2.y - dy2,
                                              out dx, out dy))
                         {
-                            AddVertex(vc, dx, dy);
+                            AddVertex(output, dx, dy);
                         }
                         else
                         {
-                            AddVertex(vc, v1.x + dx1, v1.y - dy1);
+                            AddVertex(output, v1.x + dx1, v1.y - dy1);
                         }
                         return;
                     }
@@ -313,7 +313,7 @@ namespace MatterHackers.Agg.VertexSource
                     case LineJoin.Miter:
                     case LineJoin.MiterRevert:
                     case LineJoin.MiterRound:
-                        CreateMiter(vc,
+                        CreateMiter(output,
                                    v0, v1, v2, dx1, dy1, dx2, dy2,
                                    m_line_join,
                                    m_miter_limit,
@@ -321,23 +321,23 @@ namespace MatterHackers.Agg.VertexSource
                         break;
 
                     case LineJoin.Round:
-                        CreateArc(vc, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
+                        CreateArc(output, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
                         break;
 
                     default: // Bevel join
-                        AddVertex(vc, v1.x + dx1, v1.y - dy1);
-                        AddVertex(vc, v1.x + dx2, v1.y - dy2);
+                        AddVertex(output, v1.x + dx1, v1.y - dy1);
+                        AddVertex(output, v1.x + dx2, v1.y - dy2);
                         break;
                 }
             }
         }
 
-        static void AddVertex(IVertexDest vc, double x, double y)
+        static void AddVertex(VertexStorage output, double x, double y)
         {
-            vc.AddVertex(x, y);
+            output.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
         }
 
-        void CreateArc(IVertexDest vc,
+        void CreateArc(VertexStorage output,
                       double x, double y,
                       double dx1, double dy1,
                       double dx2, double dy2)
@@ -349,7 +349,7 @@ namespace MatterHackers.Agg.VertexSource
 
             da = Math.Acos(m_width_abs / (m_width_abs + 0.125 / m_approx_scale)) * 2;
 
-            AddVertex(vc, x + dx1, y + dy1);
+            AddVertex(output, x + dx1, y + dy1);
             if (m_width_sign > 0)
             {
                 if (a1 > a2) a2 += 2 * Math.PI;
@@ -358,7 +358,7 @@ namespace MatterHackers.Agg.VertexSource
                 a1 += da;
                 for (i = 0; i < n; i++)
                 {
-                    AddVertex(vc, x + Math.Cos(a1) * m_width, y + Math.Sin(a1) * m_width);
+                    AddVertex(output, x + Math.Cos(a1) * m_width, y + Math.Sin(a1) * m_width);
                     a1 += da;
                 }
             }
@@ -370,14 +370,14 @@ namespace MatterHackers.Agg.VertexSource
                 a1 -= da;
                 for (i = 0; i < n; i++)
                 {
-                    AddVertex(vc, x + Math.Cos(a1) * m_width, y + Math.Sin(a1) * m_width);
+                    AddVertex(output, x + Math.Cos(a1) * m_width, y + Math.Sin(a1) * m_width);
                     a1 -= da;
                 }
             }
-            AddVertex(vc, x + dx2, y + dy2);
+            AddVertex(output, x + dx2, y + dy2);
         }
 
-        void CreateMiter(IVertexDest vc,
+        void CreateMiter(VertexStorage output,
                         VertexDistance v0,
                         VertexDistance v1,
                         VertexDistance v2,
@@ -407,7 +407,7 @@ namespace MatterHackers.Agg.VertexSource
                 {
                     // Inside the miter limit
                     //---------------------
-                    AddVertex(vc, xi, yi);
+                    AddVertex(output, xi, yi);
                     miter_limit_exceeded = false;
                 }
                 intersection_failed = false;
@@ -430,7 +430,7 @@ namespace MatterHackers.Agg.VertexSource
                     // This case means that the next segment continues 
                     // the previous one (straight line)
                     //-----------------
-                    AddVertex(vc, v1.x + dx1, v1.y - dy1);
+                    AddVertex(output, v1.x + dx1, v1.y - dy1);
                     miter_limit_exceeded = false;
                 }
             }
@@ -446,12 +446,12 @@ namespace MatterHackers.Agg.VertexSource
                         // we use a simple bevel join instead of
                         // "smart" bevel
                         //-------------------
-                        AddVertex(vc, v1.x + dx1, v1.y - dy1);
-                        AddVertex(vc, v1.x + dx2, v1.y - dy2);
+                        AddVertex(output, v1.x + dx1, v1.y - dy1);
+                        AddVertex(output, v1.x + dx2, v1.y - dy2);
                         break;
 
                     case LineJoin.MiterRound:
-                        CreateArc(vc, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
+                        CreateArc(output, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
                         break;
 
                     default:
@@ -460,9 +460,9 @@ namespace MatterHackers.Agg.VertexSource
                         if (intersection_failed)
                         {
                             mlimit *= m_width_sign;
-                            AddVertex(vc, v1.x + dx1 + dy1 * mlimit,
+                            AddVertex(output, v1.x + dx1 + dy1 * mlimit,
                                            v1.y - dy1 + dx1 * mlimit);
-                            AddVertex(vc, v1.x + dx2 - dy2 * mlimit,
+                            AddVertex(output, v1.x + dx2 - dy2 * mlimit,
                                            v1.y - dy2 - dx2 * mlimit);
                         }
                         else
@@ -472,9 +472,9 @@ namespace MatterHackers.Agg.VertexSource
                             double x2 = v1.x + dx2;
                             double y2 = v1.y - dy2;
                             di = (lim - dbevel) / (di - dbevel);
-                            AddVertex(vc, x1 + (xi - x1) * di,
+                            AddVertex(output, x1 + (xi - x1) * di,
                                            y1 + (yi - y1) * di);
-                            AddVertex(vc, x2 + (xi - x2) * di,
+                            AddVertex(output, x2 + (xi - x2) * di,
                                            y2 + (yi - y2) * di);
                         }
                         break;

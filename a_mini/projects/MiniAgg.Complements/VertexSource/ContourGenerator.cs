@@ -7,12 +7,12 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.VertexSource
 {
-    class ContourGenerator   
+    class ContourGenerator
     {
         StrokeMath m_stroker;
         double m_width;
         VertexSequence m_src_vertices;
-        Vector2Container m_out_vertices;
+        VertexStorage m_out_vertices;
         StrokeMath.Status m_status;
         int m_src_vertex;
         int m_out_vertex;
@@ -26,7 +26,7 @@ namespace MatterHackers.Agg.VertexSource
             m_stroker = new StrokeMath();
             m_width = 1;
             m_src_vertices = new VertexSequence();
-            m_out_vertices = new Vector2Container();
+            m_out_vertices = new VertexStorage();
             m_status = StrokeMath.Status.Init;
             m_src_vertex = 0;
             m_closed = false;
@@ -186,9 +186,8 @@ namespace MatterHackers.Agg.VertexSource
                         }
                         else
                         {
-                            Vector2 c = m_out_vertices[m_out_vertex++];
-                            x = c.x;
-                            y = c.y;
+                            m_out_vertices.GetVertex(m_out_vertex++, out x, out y);
+                     
                             return cmd;
                         }
                         break;
