@@ -36,9 +36,16 @@ namespace MatterHackers.Agg
     public class CanvasPainter
     {
         Graphics2D gx;
+        Stroke stroke;
+
         public CanvasPainter(Graphics2D graphic2d)
         {
             this.gx = graphic2d;
+            stroke = new Stroke(1);//default
+        }
+        public void Clear(ColorRGBA color)
+        {
+            gx.Clear(color);
         }
         public Graphics2D Graphics
         {
@@ -70,7 +77,12 @@ namespace MatterHackers.Agg
             m_LinesToDraw.Clear();
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);
-            gx.Render(new Stroke(1).MakeVxs(m_LinesToDraw.MakeVxs()), color);
+            gx.Render(stroke.MakeVxs(m_LinesToDraw.MakeVxs()), color);
+        }
+        public double StrokeWidth
+        {
+            get { return this.stroke.Width; }
+            set { this.stroke.Width = value; }
         }
         /// <summary>
         /// draw rectangle
@@ -81,11 +93,10 @@ namespace MatterHackers.Agg
         /// <param name="top"></param>
         /// <param name="color"></param>
         /// <param name="strokeWidth"></param>
-        public void Rectangle(double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
+        public void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
         {
-
-            SimpleRect simpleRect = new SimpleRect(left + .5, bottom + .5, right - .5, top - .5); 
-            gx.Render(new Stroke(strokeWidth).MakeVxs(simpleRect.MakeVxs()), color);
+            SimpleRect simpleRect = new SimpleRect(left + .5, bottom + .5, right - .5, top - .5);
+            gx.Render(stroke.MakeVxs(simpleRect.MakeVxs()), color);
         }
 
         public void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor)
@@ -94,7 +105,7 @@ namespace MatterHackers.Agg
             {
                 throw new ArgumentException();
             }
-            RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
+            SimpleRect rect = new SimpleRect(left, bottom, right, top);
             gx.Render(rect.MakeVertexSnap(), fillColor);
         }
 

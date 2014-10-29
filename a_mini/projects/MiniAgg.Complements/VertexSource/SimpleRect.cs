@@ -34,27 +34,11 @@ namespace MatterHackers.Agg.VertexSource
     //
     public class SimpleRect
     {
-        RectangleDouble bounds;
-        Vector2 leftBottomRadius;
-        Vector2 rightBottomRadius;
-        Vector2 rightTopRadius;
-        Vector2 leftTopRadius;
-
-        Arc currentProcessingArc = new Arc();
-
+        RectangleDouble bounds; 
         public SimpleRect(double left, double bottom, double right, double top)
         {
-            double radius = 0;
-            bounds = new RectangleDouble(left, bottom, right, top);
-            leftBottomRadius.x = radius;
-            leftBottomRadius.y = radius;
-            rightBottomRadius.x = radius;
-            rightBottomRadius.y = radius;
-            rightTopRadius.x = radius;
-            rightTopRadius.y = radius;
-            leftTopRadius.x = radius;
-            leftTopRadius.y = radius;
-
+           
+            bounds = new RectangleDouble(left, bottom, right, top); 
             if (left > right)
             {
                 bounds.Left = right;
@@ -73,107 +57,17 @@ namespace MatterHackers.Agg.VertexSource
             if (left > right) { bounds.Left = right; bounds.Right = left; }
             if (bottom > top) { bounds.Bottom = top; bounds.Top = bottom; }
         }
-
-        public void SetRadius(double r)
-        {
-            leftBottomRadius.x = leftBottomRadius.y = rightBottomRadius.x = rightBottomRadius.y = rightTopRadius.x = rightTopRadius.y = leftTopRadius.x = leftTopRadius.y = r;
-        }
-         
-        public void NormalizeRadius()
-        {
-            double dx = Math.Abs(bounds.Top - bounds.Bottom);
-            double dy = Math.Abs(bounds.Right - bounds.Left);
-
-            double k = 1.0;
-            double t;
-            t = dx / (leftBottomRadius.x + rightBottomRadius.x); if (t < k) k = t;
-            t = dx / (rightTopRadius.x + leftTopRadius.x); if (t < k) k = t;
-            t = dy / (leftBottomRadius.y + rightBottomRadius.y); if (t < k) k = t;
-            t = dy / (rightTopRadius.y + leftTopRadius.y); if (t < k) k = t;
-
-            if (k < 1.0)
-            {
-                leftBottomRadius.x *= k; leftBottomRadius.y *= k; rightBottomRadius.x *= k; rightBottomRadius.y *= k;
-                rightTopRadius.x *= k; rightTopRadius.y *= k; leftTopRadius.x *= k; leftTopRadius.y *= k;
-            }
-        }
-
-        public double ApproximationScale
-        {
-            get { return currentProcessingArc.ApproximateScale; }
-            set { currentProcessingArc.ApproximateScale = value; }
-        }
-
-
-        public IEnumerable<VertexData> GetVertexIter()
-        {
-
-            currentProcessingArc.Init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
-            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
-            {
-                if (ShapePath.IsStop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
-            currentProcessingArc.Init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
-            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
-            {
-                if (ShapePath.IsMoveTo(vertexData.command))
-                {
-                    // skip the initial moveto
-                    continue;
-                }
-                if (ShapePath.IsStop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
-
-            currentProcessingArc.Init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y, 0.0, Math.PI * 0.5);
-            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
-            {
-                if (ShapePath.IsMoveTo(vertexData.command))
-                {
-                    // skip the initial moveto
-                    continue;
-                }
-                if (ShapePath.IsStop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
-
-            currentProcessingArc.Init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y, Math.PI * 0.5, Math.PI);
-            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
-            {
-                switch (vertexData.command)
-                {
-                    case ShapePath.FlagsAndCommand.CommandMoveTo:
-                        continue;
-                    case ShapePath.FlagsAndCommand.CommandStop:
-                        break;
-                    default:
-                        yield return vertexData;
-                        break;
-                }
-            }
-
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
-        }
+          
         public VertexStorage MakeVxs()
         {
-
-            List<VertexData> vlist = new List<VertexData>();
-            foreach (var v in this.GetVertexIter())
-            {
-                vlist.Add(v);
-            }
-            return new VertexStorage(vlist);
+            PathStorage m_LinesToDraw = new PathStorage();
+            m_LinesToDraw.Clear();             
+            m_LinesToDraw.MoveTo(bounds.Left, bounds.Bottom);
+            m_LinesToDraw.LineTo(bounds.Right, bounds.Bottom);
+            m_LinesToDraw.LineTo(bounds.Right, bounds.Top);
+            m_LinesToDraw.LineTo(bounds.Left, bounds.Top);
+            m_LinesToDraw.ClosePolygon(); 
+            return m_LinesToDraw.MakeVxs();  
         }
         public VertexSnap MakeVertexSnap()
         {

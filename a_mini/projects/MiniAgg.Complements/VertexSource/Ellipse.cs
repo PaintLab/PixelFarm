@@ -112,35 +112,7 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
             vertexData.command = FlagsAndCommand.CommandStop;
             yield return vertexData;
-        }
-
-
-        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        //{
-        //    x = 0;
-        //    y = 0;
-        //    if (m_step == numSteps)
-        //    {
-        //        ++m_step;
-        //        return FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
-        //    }
-
-        //    if (m_step > numSteps)
-        //    {
-        //        return FlagsAndCommand.CommandStop;
-        //    }
-
-        //    double angle = (double)(m_step) / (double)(numSteps) * 2.0 * Math.PI;
-        //    if (m_cw)
-        //    {
-        //        angle = 2.0 * Math.PI - angle;
-        //    }
-
-        //    x = originX + Math.Cos(angle) * radiusX;
-        //    y = originY + Math.Sin(angle) * radiusY;
-        //    m_step++;
-        //    return ((m_step == 1) ? FlagsAndCommand.CommandMoveTo : FlagsAndCommand.CommandLineTo);
-        //}
+        } 
 
         void CalculateNumSteps()
         {

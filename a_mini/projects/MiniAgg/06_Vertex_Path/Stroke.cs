@@ -32,59 +32,56 @@ namespace MatterHackers.Agg.VertexSource
             this.strokeGen = new StrokeGenerator();
             this.Width = inWidth;
         }
-        StrokeGenerator GetGenerator()
-        {
-            return this.strokeGen;
-        }
+       
         public LineCap LineCap
         {
-            get { return this.GetGenerator().LineCap; }
-            set { this.GetGenerator().LineCap = value; }
+            get { return strokeGen.LineCap; }
+            set { strokeGen.LineCap = value; }
         }
         public LineJoin LineJoin
         {
-            get { return this.GetGenerator().LineJoin; }
-            set { this.GetGenerator().LineJoin = value; }
+            get { return strokeGen.LineJoin; }
+            set { strokeGen.LineJoin = value; }
         }
         public InnerJoin InnerJoin
         {
-            get { return this.GetGenerator().InnerJoin; }
-            set { this.GetGenerator().InnerJoin = value; }
+            get { return strokeGen.InnerJoin; }
+            set { strokeGen.InnerJoin = value; }
         }
         public double MiterLimit
         {
-            get { return this.GetGenerator().MiterLimit; }
-            set { this.GetGenerator().MiterLimit = value; }
+            get { return strokeGen.MiterLimit; }
+            set { strokeGen.MiterLimit = value; }
         }
         public double InnerMiterLimit
         {
-            get { return this.GetGenerator().InnerMiterLimit; }
-            set { this.GetGenerator().InnerMiterLimit = value; }
+            get { return strokeGen.InnerMiterLimit; }
+            set { strokeGen.InnerMiterLimit = value; }
         }
         public double Width
         {
-            get { return this.GetGenerator().Width; }
-            set { this.GetGenerator().Width = value; }
+            get { return strokeGen.Width; }
+            set { strokeGen.Width = value; }
         }
 
         public void SetMiterLimitTheta(double t)
         {
-            this.GetGenerator().SetMiterLimitTheta(t);
+            strokeGen.SetMiterLimitTheta(t);
         }
         public double ApproximateScale
         {
-            get { return this.GetGenerator().ApproximateScale; }
-            set { this.GetGenerator().ApproximateScale = value; }
+            get { return strokeGen.ApproximateScale; }
+            set { strokeGen.ApproximateScale = value; }
         }
         public double Shorten
         {
-            get { return this.GetGenerator().Shorten; }
-            set { this.GetGenerator().Shorten = value; }
+            get { return strokeGen.Shorten; }
+            set { strokeGen.Shorten = value; }
         }
         public VertexStorage MakeVxs(VertexStorage vxs)
         {
             List<VertexData> list = new List<VertexData>();
-            StrokeGenerator generator = GetGenerator();
+            StrokeGenerator generator = strokeGen;
 
             int j = vxs.Count;
             double x, y;
