@@ -57,6 +57,9 @@ namespace MatterHackers.Agg
         public abstract void Clear(ColorRGBA color);
         public abstract void SetClippingRect(RectangleDouble rect_d);
         public abstract RectangleDouble GetClippingRect();
+        //------------------------------------------------------------------------
+
+
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
         //------------------------------------------------------------------------
         public abstract void Render(IImage imageSource,
@@ -88,6 +91,7 @@ namespace MatterHackers.Agg
         }
         public void Render(VertexStoreSnap vertexSource, double x, double y, ColorRGBA color)
         {
+            
             var inputVxs = vertexSource.GetInternalVxs();
             var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
             Render(vxs, color);

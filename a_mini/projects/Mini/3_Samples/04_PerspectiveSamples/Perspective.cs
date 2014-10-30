@@ -103,7 +103,7 @@ namespace MatterHackers.Agg.Sample_Perspective
 
             g_rasterizer.SetVectorClipBox(0, 0, Width, Height);
 
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {
 

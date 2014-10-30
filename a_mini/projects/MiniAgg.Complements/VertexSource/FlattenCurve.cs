@@ -177,6 +177,7 @@ namespace MatterHackers.Agg.VertexSource
 
 
                                 var position = curveIterator.Current.position;
+
                                 vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position);
                                 vxs.AddVertex(vertexData);
                                 lastVertextData = vertexData;

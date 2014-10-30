@@ -312,7 +312,7 @@ namespace MatterHackers.Agg
                 }
             }
             else
-            {
+            {   
                 var snapIter = snap.GetVertexSnapIter();
                 ShapePath.FlagsAndCommand cmd;
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)

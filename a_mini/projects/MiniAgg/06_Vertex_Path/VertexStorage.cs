@@ -147,15 +147,30 @@ namespace MatterHackers.Agg
             {
                 AllocIfRequired(m_num_vertices);
             }
-            //-----------------------------------------------------
+            
             m_coord_xy[m_num_vertices << 1] = x;
             m_coord_xy[(m_num_vertices << 1) + 1] = y;
             m_CommandAndFlags[m_num_vertices] = CommandAndFlags;
-
             m_num_vertices++;
         }
+        public void AddVertexCurve3(double x, double y)
+        {
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve3); 
+        }
+        public void AddVertexCurve4(double x, double y)
+        {
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve4);  
+        } 
+        public void AddMoveTo(double x, double y)
+        {
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);  
+        }
 
-
+        public void LineTo(double x, double y)
+        {
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);  
+          
+        } 
         public void ReplaceVertex(int index, double x, double y)
         {
             m_coord_xy[index << 1] = x;
@@ -183,13 +198,7 @@ namespace MatterHackers.Agg
             m_CommandAndFlags[v1] = m_CommandAndFlags[v2];
             m_CommandAndFlags[v2] = cmd;
         }
-        //--------------------------------------------------
-
-
-
-
-
-
+         
         //--------------------------------------------------
 
 

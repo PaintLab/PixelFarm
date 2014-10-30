@@ -91,7 +91,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
             System.Random randGenerator = new Random(1432);
 
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
             int i;
             int num = (int)maskAlphaSliderValue;
             for (i = 0; i < num; i++)
@@ -177,7 +177,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.Clear(ColorRGBA.White);
 
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
             // draw a background to show how the mask is working better
             int RectWidth = 30;
             for (int i = 0; i < 40; i++)

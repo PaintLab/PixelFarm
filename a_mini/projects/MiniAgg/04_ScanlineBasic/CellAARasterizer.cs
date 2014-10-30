@@ -119,9 +119,9 @@ namespace MatterHackers.Agg
             m_min_y = (0x7FFFFFFF);
             m_max_x = (-0x7FFFFFFF);
             m_max_y = (-0x7FFFFFFF);
-            m_sorted = (false);
+            m_sorted = false;
 
-          
+
             ResetCurrentCell();
             this.m_cells = new ArrayList<CellAA>(BLOCK_SIZE);
 
@@ -140,14 +140,14 @@ namespace MatterHackers.Agg
         {
             m_num_used_cells = 0;
 
-            ResetCurrentCell(); 
+            ResetCurrentCell();
 
             m_sorted = false;
             m_min_x = 0x7FFFFFFF;
             m_min_y = 0x7FFFFFFF;
             m_max_x = -0x7FFFFFFF;
             m_max_y = -0x7FFFFFFF;
-        } 
+        }
 
 
         const int DX_LIMIT = (16384 << AggBasics.PolySubPixelScale.SHIFT);
@@ -383,7 +383,7 @@ namespace MatterHackers.Agg
 
         public void GetCells(int y, out CellAA[] cellData, out int offset, out int num)
         {
-            cellData = m_sorted_cells.GetArray();
+            cellData = m_sorted_cells.Array;
             SortedY d = m_sorted_y[y - m_min_y];
             offset = d.start;
             num = d.num;
@@ -405,7 +405,7 @@ namespace MatterHackers.Agg
             cCell_x = x;
             cCell_y = y;
             cCell_cover = 0;
-            cCell_area = 0; 
+            cCell_area = 0;
         }
 
         void WriteCurrentCell()
@@ -424,10 +424,10 @@ namespace MatterHackers.Agg
                     m_cells = new ArrayList<CellAA>(m_cells, BLOCK_SIZE);
                 }
 
-                m_cells.GetArray()[m_num_used_cells] = CellAA.Create(
+                m_cells.SetData(m_num_used_cells, CellAA.Create(
                     cCell_x, cCell_y,
                     cCell_cover, cCell_area,
-                    cCell_left, cCell_right);
+                    cCell_left, cCell_right));
 
                 m_num_used_cells++;
             }

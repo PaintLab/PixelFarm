@@ -241,7 +241,8 @@ namespace MatterHackers.Agg.UI
             this.RewindZero();
             //this polygon control has  2 subcontrol
             //stroke and ellipse 
-            var s_vxs = this.m_stroke.MakeVxs(this.m_vs.MakeVxs());
+
+            VertexStorage s_vxs = this.m_stroke.MakeVxs(this.m_vs.MakeVxs());
             int j = s_vxs.Count;
             double x, y;
             for (int i = 0; i < j; ++i)
@@ -256,16 +257,16 @@ namespace MatterHackers.Agg.UI
                     vxs.AddVertex(x, y, cmd);
                 }
             }
+
             //------------------------------------------------------------
             //draw each polygon point
             double r = m_point_radius;
 
-            if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
+            if (m_node >= 0 && m_node == (int)(m_status)) { r *= 1.2; }
 
             int n_count = m_polygon.Length / 2;
             for (int m = 0; m < n_count; ++m)
             {
-
                 m_ellipse.Reset(GetXN(m), GetYN(m), r, r, 32);
                 var ellipseVxs = m_ellipse.MakeVxs();
                 j = ellipseVxs.Count;

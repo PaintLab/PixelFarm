@@ -89,7 +89,7 @@
     <Compile Include="01_Base\RectangleDouble.cs" />
     <Compile Include="01_Base\RectangleInt.cs" />
     <Compile Include="04_ScanlineBasic\ScanlineRasterizer.cs" />
-    <Compile Include="04_ScanlineBasic\ScanlineRenderer.cs" />
+    <Compile Include="04_ScanlineBasic\ScanlineToBitmapRenderer.cs" />
     <Compile Include="06_Vertex_Path\ShapePath.cs" />
     <Compile Include="06_Transfrom\Affine.cs" />
     <Compile Include="06_Transfrom\Bilinear.cs" />

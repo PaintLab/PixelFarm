@@ -183,8 +183,11 @@ namespace MatterHackers.Agg
         }
 
 
-        public T[] GetArray() { return internalArray; }
 
+        public void SetData(int index, T data)
+        {
+            this.internalArray[index] = data;
+        }
 
         public int Length
         {

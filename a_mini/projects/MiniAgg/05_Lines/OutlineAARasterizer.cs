@@ -57,20 +57,20 @@ namespace MatterHackers.Agg.Lines
             base.AddVertex(val);
         }
 
-        public void modify_last(LineAAVertex val)
+        public void ModifyLast(LineAAVertex val)
         {
             base.RemoveLast();
             AddVertex(val);
         }
 
-        public void close(bool closed)
+        public void Close(bool closed)
         {
             while (base.Count > 1)
             {
                 if (Array[base.Count - 2].Compare(Array[base.Count - 1])) break;
                 LineAAVertex t = this[base.Count - 1];
                 base.RemoveLast();
-                modify_last(t);
+                ModifyLast(t);
             }
 
             if (closed)
@@ -252,7 +252,7 @@ namespace MatterHackers.Agg.Lines
         }
         public void MoveTo(int x, int y)
         {
-            m_src_vertices.modify_last(new LineAAVertex(m_start_x = x, m_start_y = y));
+            m_src_vertices.ModifyLast(new LineAAVertex(m_start_x = x, m_start_y = y));
         }
 
         public void LineTo(int x, int y)
@@ -272,7 +272,7 @@ namespace MatterHackers.Agg.Lines
 
         public void Render(bool close_polygon)
         {
-            m_src_vertices.close(close_polygon);
+            m_src_vertices.Close(close_polygon);
             DrawVarsPart0 dv = new DrawVarsPart0();
             DrawVarsPart1 dv1 = new DrawVarsPart1();
             DrawVarsPart2 dv2 = new DrawVarsPart2();

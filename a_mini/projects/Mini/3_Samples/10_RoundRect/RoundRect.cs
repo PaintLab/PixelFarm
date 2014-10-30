@@ -135,7 +135,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             // Render two "control" circles
             e.Reset(m_x[0], m_y[0], 3, 3, 16);
             ras.AddPath(e.MakeVertexSnap());
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
             e.Reset(m_x[1], m_y[1], 3, 3, 16);

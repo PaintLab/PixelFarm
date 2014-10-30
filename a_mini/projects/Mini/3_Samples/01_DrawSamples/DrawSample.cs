@@ -78,14 +78,13 @@ namespace MatterHackers.Agg.Sample_Draw
             // draw a circle
 
             Ellipse ellipsePro = new Ellipse(0, 0, 100, 50);
+
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
 
                 var mat = Affine.NewMatix(
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
-
-
 
                 var sp1 = mat.TransformToVertexSnap(ellipsePro.MakeVxs());
 
@@ -108,7 +107,7 @@ namespace MatterHackers.Agg.Sample_Draw
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
             VertexStorage vxs = textPrinter.CreateVxs();
 
-            var affTx = Affine.NewTranslation(new Vector2(width / 2, height / 4 * 3));
+            var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStoreSnap s1 = affTx.TransformToVertexSnap(vxs);
 
             g.Render(s1, ColorRGBA.Red);

@@ -106,7 +106,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
             ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
 
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
             scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 

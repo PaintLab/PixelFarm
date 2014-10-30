@@ -11,7 +11,7 @@ namespace MatterHackers.Agg
     /// to bitmap
     /// </summary>
 
-    public class ScanlineRenderer
+    public class ScanlineToBitmapRenderer
     {
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
 
@@ -33,7 +33,7 @@ namespace MatterHackers.Agg
         protected virtual void RenderSolidSingleScanLine(IImage destImage,
             Scanline scline,
             ColorRGBA color)
-        {
+        {            
 
             int y = scline.Y;
             int num_spans = scline.SpanCount;
@@ -114,9 +114,7 @@ namespace MatterHackers.Agg
                     GenerateAndRenderSingleScanline(destImage, scline, spanGenerator);
                 }
             }
-        }
-
-
+        } 
 
 
     }

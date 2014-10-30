@@ -32,12 +32,12 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             ras.LineTo(x * m_size + m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
             scanlineRenderer.RenderScanlineSolidAA(destImage, ras, sl, color);
         }
     }
 
-    class renderer_enlarged_test2 : ScanlineRenderer
+    class renderer_enlarged_test2 : ScanlineToBitmapRenderer
     {
         double m_size;
         square m_square;
@@ -190,7 +190,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
             ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //-----------------------------------------------------------------------------------------------------------

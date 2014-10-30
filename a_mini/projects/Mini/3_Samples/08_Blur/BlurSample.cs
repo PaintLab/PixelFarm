@@ -180,7 +180,7 @@ namespace MatterHackers.Agg.Sample_Blur
             m_ras.AddPath(spath);
 
 
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
             scanlineRenderer.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).ToColorRGBA());
 
             // Calculate the bounding box and extend it by the blur radius
