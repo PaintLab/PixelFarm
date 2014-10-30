@@ -1,4 +1,5 @@
-﻿using System;
+﻿//2014 BSD,WinterDev   
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization;

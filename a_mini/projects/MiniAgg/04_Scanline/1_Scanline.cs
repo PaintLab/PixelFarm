@@ -1,5 +1,6 @@
-using System;
+//2014 BSD,WinterDev   
 
+using System;
 namespace MatterHackers.Agg
 {
     public abstract class Scanline

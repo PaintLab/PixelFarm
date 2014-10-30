@@ -1,4 +1,5 @@
-﻿//BSD 2014, WinterDev
+﻿
+//BSD 2014, WinterDev
 using System.Collections.Generic;
 using MatterHackers.VectorMath;
 

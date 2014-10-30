@@ -1,5 +1,8 @@
-﻿using System;
+﻿//2014 BSD,WinterDev
+//MatterHackers
 
+
+using System;
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;

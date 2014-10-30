@@ -1,4 +1,7 @@
-﻿using System;
+﻿//2014 BSD,WinterDev
+//MatterHackers
+
+using System;
 using System.IO;
 
 using MatterHackers.Agg.Image;

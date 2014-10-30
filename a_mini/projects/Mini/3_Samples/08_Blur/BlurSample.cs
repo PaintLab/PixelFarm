@@ -1,4 +1,8 @@
-﻿using System;
+﻿//2014 BSD,WinterDev
+//MatterHackers
+
+
+using System;
 using System.Diagnostics;
 
 using MatterHackers.Agg.UI;
