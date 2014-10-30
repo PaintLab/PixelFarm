@@ -24,7 +24,8 @@
 using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 using MatterHackers.Agg.Lines;
 
-namespace MatterHackers.Agg
+
+namespace MatterHackers.Agg.JustForScanlineRasterizer
 {
 
 

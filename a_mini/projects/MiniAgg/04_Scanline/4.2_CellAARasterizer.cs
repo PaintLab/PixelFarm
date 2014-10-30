@@ -34,7 +34,7 @@
 using System;
 using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.JustForScanlineRasterizer
 {
     //-----------------------------------------------------------------cell_aa
     // A pixel cell. There're no constructors defined and it was done ***
@@ -525,11 +525,7 @@ namespace MatterHackers.Agg
             delta = y2 - y1;
             cCell_cover += delta;
             cCell_area += (fx2 + (int)poly_subpixel_scale_e.SCALE - first) * delta;
-        }
-
-
-
-
+        } 
 
         //------------
         static class QuickSort

@@ -36,8 +36,12 @@ using MatterHackers.VectorMath;
 using filling_rule_e = MatterHackers.Agg.FillingRule;
 using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 
+
+
 namespace MatterHackers.Agg
 {
+    using MatterHackers.Agg.JustForScanlineRasterizer;
+
     //==================================================rasterizer_scanline_aa
     // Polygon rasterizer that is used to render filled polygons with 
     // high-quality Anti-Aliasing. Internally, by default, the class uses 
@@ -103,14 +107,9 @@ namespace MatterHackers.Agg
 
 
         public ScanlineRasterizer()
-            : this(new VectorClipper())
-        {
-        }
-        //--------------------------------------------------------------------
-        ScanlineRasterizer(VectorClipper rasterizer_sl_clip)
         {
             m_outline = new CellAARasterizer();
-            m_vectorClipper = rasterizer_sl_clip;
+            m_vectorClipper = new VectorClipper();
             m_filling_rule = FillingRule.NonZero;
             m_auto_close = true;
             m_start_x = 0;
@@ -122,6 +121,7 @@ namespace MatterHackers.Agg
                 m_gammaLut[i] = i;
             }
         }
+
 
         //--------------------------------------------------------------------
         public void Reset()
@@ -312,7 +312,7 @@ namespace MatterHackers.Agg
                 }
             }
             else
-            {   
+            {
                 var snapIter = snap.GetVertexSnapIter();
                 ShapePath.FlagsAndCommand cmd;
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
