@@ -81,7 +81,7 @@
     <Compile Include="00_Context\ImageGraphics2D.cs" />
     <Compile Include="03_PixelBuffer\PixelBlenderRGB.cs" />
     <Compile Include="03_PixelBuffer\PixelBlenderRGBA.cs" />
-    <Compile Include="04_ScanlineBasic\1_IScanline.cs" />
+    <Compile Include="04_ScanlineBasic\1_Scanline.cs" />
     <Compile Include="05_Lines\OutlineRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="04_ScanlineBasic\2_ScanlinePacked8.cs" />

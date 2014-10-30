@@ -29,7 +29,7 @@ namespace MatterHackers.Agg
     class ImageGraphics2D : Graphics2D
     {
 
-        IScanline scanline;
+        Scanline scanline;
         PathStorage drawImageRectPath = new PathStorage();
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRenderer scanlineRenderer = new ScanlineRenderer();

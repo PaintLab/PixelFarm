@@ -17,7 +17,7 @@ namespace MatterHackers.Agg
 
         public void RenderScanlineSolidAA(IImage destImage,
             ScanlineRasterizer rasterizer,
-            IScanline scline,
+            Scanline scline,
             ColorRGBA color)
         {
             if (rasterizer.RewindScanlines())
@@ -31,9 +31,10 @@ namespace MatterHackers.Agg
         }
 
         protected virtual void RenderSolidSingleScanLine(IImage destImage,
-            IScanline scline,
+            Scanline scline,
             ColorRGBA color)
         {
+
             int y = scline.Y;
             int num_spans = scline.SpanCount;
             byte[] covers = scline.GetCovers();
@@ -57,7 +58,7 @@ namespace MatterHackers.Agg
 
         public void RenderSolidAllPaths(IImage destImage,
             ScanlineRasterizer ras,
-            IScanline scline,
+            Scanline scline,
             VertexStorage vx,
             ColorRGBA[] color_storage,
             int[] path_id,
@@ -71,7 +72,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        void GenerateAndRenderSingleScanline(IImage destImage, IScanline scline, ISpanGenerator span_gen)
+        void GenerateAndRenderSingleScanline(IImage destImage, Scanline scline, ISpanGenerator span_gen)
         {
             int y = scline.Y;
             int num_spans = scline.SpanCount;
@@ -101,7 +102,7 @@ namespace MatterHackers.Agg
 
         public void GenerateAndRender(IImage destImage,
              ScanlineRasterizer rasterizer,
-             IScanline scline,
+             Scanline scline,
              ISpanGenerator spanGenerator)
         {
             if (rasterizer.RewindScanlines())

@@ -39,36 +39,14 @@ namespace MatterHackers.Agg
     // for details.
     // 
     //------------------------------------------------------------------------
-    public sealed class ScanlinePacked8 : IScanline
+
+
+    public sealed class ScanlinePacked8 : Scanline
     {
-
-        byte[] m_covers;      
-        ScanlineSpan[] m_spans;
-
-        int last_span_index;
-        int m_cover_index;
-        
-        int last_x;
-        int lineY;
-
         public ScanlinePacked8()
         {
-            last_x = 0x7FFFFFF0;
-            m_covers = new byte[1000];
-            m_spans = new ScanlineSpan[1000];
         }
-
-        public ScanlineSpan GetSpan(int index)
-        {
-            return m_spans[index];
-        }
-
-        public int SpanCount
-        {
-            get { return last_span_index; }
-        }
-        //--------------------------------------------------------------------
-        public void ResetSpans(int min_x, int max_x)
+        public override void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 3;
             if (max_len > m_spans.Length)
@@ -81,9 +59,7 @@ namespace MatterHackers.Agg
             last_span_index = 0;
             m_spans[last_span_index].len = 0;
         }
-
-        //--------------------------------------------------------------------
-        public void AddCell(int x, int cover)
+        public override void AddCell(int x, int cover)
         {
             m_covers[m_cover_index] = (byte)cover;
             if (x == last_x + 1 && m_spans[last_span_index].len > 0)
@@ -101,8 +77,8 @@ namespace MatterHackers.Agg
             last_x = x;
             m_cover_index++;
         }
-        //--------------------------------------------------------------------
-        public void AddSpan(int x, int len, int cover)
+
+        public override void AddSpan(int x, int len, int cover)
         {
             if (x == last_x + 1
                 && m_spans[last_span_index].len < 0
@@ -121,26 +97,15 @@ namespace MatterHackers.Agg
             }
             last_x = x + len - 1;
         }
-
-        //--------------------------------------------------------------------
-        public void CloseLine(int y)
-        {
-            lineY = y;
-        }
-
-        //--------------------------------------------------------------------
-        public void ResetSpans()
+        public override void ResetSpans()
         {
             last_x = 0x7FFFFFF0;
-            m_cover_index = 0;
             last_span_index = 0;
+
+            m_cover_index = 0;
             m_spans[last_span_index].len = 0;
         }
 
-        public int Y { get { return lineY; } }
-        public byte[] GetCovers()
-        {
-            return m_covers;
-        }
+
     }
 }

@@ -24,7 +24,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             m_size = size;
         }
 
-        public void draw(ScanlineRasterizer ras, IScanline sl, IImage destImage, ColorRGBA color,
+        public void draw(ScanlineRasterizer ras, Scanline sl, IImage destImage, ColorRGBA color,
                   double x, double y)
         {
             ras.Reset();
@@ -50,7 +50,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             m_size = size;
             m_square = new square(size);
         }
-        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanline, ColorRGBA color)
+        protected override void RenderSolidSingleScanLine(IImage destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;

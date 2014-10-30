@@ -105,35 +105,14 @@ namespace MatterHackers.Agg
     // are better, because switching between two different areas of memory 
     // (that can be very large) occurs less frequently.
     //------------------------------------------------------------------------
-    public sealed class ScanlineUnpacked8 : IScanline
-    {
-        byte[] m_covers;
-        ScanlineSpan[] m_spans;              
-
-        int last_span_index;
-        int minX;
-        int last_x;
-        int lineY;
-
-
+    public sealed class ScanlineUnpacked8 : Scanline
+    {    
+       
+        int minX;         
         public ScanlineUnpacked8()
-        {
-
-            last_x = (0x7FFFFFF0);
-            m_covers = new byte[1000];
-            m_spans = new ScanlineSpan[1000];
-        }
-
-        public ScanlineSpan GetSpan(int index)
-        {
-            return m_spans[index];
-        }
-        public int SpanCount
-        {
-            get { return last_span_index; }
-        }
-        //--------------------------------------------------------------------
-        public void ResetSpans(int min_x, int max_x)
+        { 
+        } 
+        public override void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 2;
             if (max_len > m_spans.Length)
@@ -144,10 +123,8 @@ namespace MatterHackers.Agg
             last_x = 0x7FFFFFF0;
             minX = min_x;
             last_span_index = 0;
-        }
-
-        //--------------------------------------------------------------------
-        public void AddCell(int x, int cover)
+        }  
+        public override void AddCell(int x, int cover)
         {
             x -= minX;
             m_covers[x] = (byte)cover;
@@ -166,9 +143,8 @@ namespace MatterHackers.Agg
                 m_spans[last_span_index].cover_index = (int)x;
             }
             last_x = x;
-        }
-
-        public void AddSpan(int x, int len, int cover)
+        } 
+        public override void AddSpan(int x, int len, int cover)
         {
             x -= minX;
             for (int i = 0; i < len; i++)
@@ -189,28 +165,11 @@ namespace MatterHackers.Agg
                 m_spans[last_span_index].cover_index = (int)x;
             }
             last_x = x + (int)len - 1;
-        }
-
-        //--------------------------------------------------------------------
-        public void CloseLine(int y)
-        {
-            lineY = y;
-        }
-
-        //--------------------------------------------------------------------
-        public void ResetSpans()
+        } 
+        public override void ResetSpans()
         {
             last_x = 0x7FFFFFF0;
             last_span_index = 0;
-        }
-
-        //--------------------------------------------------------------------
-        public int Y { get { return lineY; } }
-
-
-        public byte[] GetCovers()
-        {
-            return m_covers;
-        }
+        } 
     }
 }

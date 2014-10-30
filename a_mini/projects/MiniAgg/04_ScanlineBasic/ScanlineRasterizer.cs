@@ -379,7 +379,7 @@ namespace MatterHackers.Agg
         }
 
         //--------------------------------------------------------------------
-        internal bool SweepScanline(IScanline scline)
+        internal bool SweepScanline(Scanline scline)
         {
             for (; ; )
             {

@@ -634,8 +634,7 @@ namespace MatterHackers.Agg.Transform
         }
         public VertexStorage TransformToVxs(VertexStoreSnap snap)
         {
-            //TODO: use SnapIter
-
+            //TODO: use SnapIter 
             return TransformToVxs(snap.GetInternalVxs());
         }
         public VertexStorage TransformToVxs(VertexStorage src)
