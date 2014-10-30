@@ -82,10 +82,10 @@ namespace MatterHackers.Agg.UI
         }
 
 
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
 
-            VertexStorage vxs = new VertexStorage();
+            VertexStore vxs = new VertexStore();
             m_vertex = 0;
             for (; ; )
             {
@@ -235,14 +235,14 @@ namespace MatterHackers.Agg.UI
 #endif
         }
 
-        public override VertexStorage MakeVxs()
+        public override VertexStore MakeVxs()
         {
-            var vxs = new VertexStorage();
+            var vxs = new VertexStore();
             this.RewindZero();
             //this polygon control has  2 subcontrol
             //stroke and ellipse 
 
-            VertexStorage s_vxs = this.m_stroke.MakeVxs(this.m_vs.MakeVxs());
+            VertexStore s_vxs = this.m_stroke.MakeVxs(this.m_vs.MakeVxs());
             int j = s_vxs.Count;
             double x, y;
             for (int i = 0; i < j; ++i)

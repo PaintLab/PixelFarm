@@ -89,9 +89,9 @@ namespace LayoutFarm.Agg.Font
             : this(text, copyPropertiesFrom.TypeFaceStyle, copyPropertiesFrom.Origin, copyPropertiesFrom.Justification, copyPropertiesFrom.Baseline)
         {
         }
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
-            return new VertexStorage(this.GetVertexIter());             
+            return new VertexStore(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {

@@ -33,7 +33,7 @@ namespace MatterHackers.Agg.Font
         VertexStoreSnap underline;
         VertexStoreSnap glyph;
 
-        public GlyphWithUnderline(VertexStorage glyph, int advanceForCharacter, int Underline_position, int Underline_thickness)
+        public GlyphWithUnderline(VertexStore glyph, int advanceForCharacter, int Underline_position, int Underline_thickness)
         {
             underline = new VertexStoreSnap(
                 new RoundedRect(new RectangleDouble(0,
@@ -42,9 +42,9 @@ namespace MatterHackers.Agg.Font
             this.glyph = new VertexStoreSnap(glyph);
         }
 
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
-            return new VertexStorage(this.GetVertexIter());             
+            return new VertexStore(this.GetVertexIter());             
         }
 
         public IEnumerable<VertexData> GetVertexIter()
@@ -303,11 +303,11 @@ namespace MatterHackers.Agg.Font
             return charImage;
         }
 
-        public VertexStorage GetGlyphForCharacter(char character)
+        public VertexStore GetGlyphForCharacter(char character)
         {
             // scale it to the correct size.
 
-            VertexStorage sourceGlyph = typeFace.GetGlyphForCharacter(character);
+            VertexStore sourceGlyph = typeFace.GetGlyphForCharacter(character);
             if (sourceGlyph != null)
             {
                 if (DoUnderline)
@@ -320,7 +320,7 @@ namespace MatterHackers.Agg.Font
 
 
                 Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
-                VertexStorage characterGlyph = glyphTransform.TransformToVxs(sourceGlyph);
+                VertexStore characterGlyph = glyphTransform.TransformToVxs(sourceGlyph);
                 if (FlatenCurves)
                 {
                     characterGlyph = new FlattenCurves().MakeVxs(characterGlyph);

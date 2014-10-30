@@ -9,7 +9,7 @@ namespace MatterHackers.Agg
     public struct VertexSnapIter
     {
         int currentIterIndex;
-        VertexStorage vxs;
+        VertexStore vxs;
         internal VertexSnapIter(VertexStoreSnap vsnap)
         { 
             
@@ -28,20 +28,20 @@ namespace MatterHackers.Agg
     public struct VertexStoreSnap
     {
         int startAt;
-        VertexStorage vxs;
+        VertexStore vxs;
       
-        public VertexStoreSnap(VertexStorage vxs)
+        public VertexStoreSnap(VertexStore vxs)
         {
             this.vxs = vxs;
             this.startAt = 0; 
         }
-        public VertexStoreSnap(VertexStorage vxs, int startAt)
+        public VertexStoreSnap(VertexStore vxs, int startAt)
         {
             this.vxs = vxs;
             this.startAt = startAt; 
         }
 
-        public VertexStorage GetInternalVxs()
+        internal VertexStore GetInternalVxs()
         {
             return this.vxs;
         }

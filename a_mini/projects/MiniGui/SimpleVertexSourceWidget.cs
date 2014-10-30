@@ -108,7 +108,7 @@ namespace MatterHackers.Agg.UI
         }
 
 
-        public abstract VertexStorage MakeVxs();
+        public abstract VertexStore MakeVxs();
         public VertexStoreSnap MakeVertexSnap()
         {
             return new VertexStoreSnap(this.MakeVxs());

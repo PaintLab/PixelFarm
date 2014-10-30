@@ -406,7 +406,7 @@ namespace MatterHackers.Agg.Font
             }
         }
 
-        internal VertexStorage GetGlyphForCharacter(char character)
+        internal VertexStore GetGlyphForCharacter(char character)
         {
             // TODO: check for multi character glyphs (we don't currently support them in the reader).
             Glyph glyph;

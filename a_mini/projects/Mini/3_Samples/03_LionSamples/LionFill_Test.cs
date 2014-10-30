@@ -74,7 +74,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
     //--------------------------------------------------
     public class LionFill : SimpleSprite
     {
-        VertexStorage vxStorage;
+        VertexStore vxStorage;
         LionShape lionShape;
         bool needUpdate;
         byte alpha;

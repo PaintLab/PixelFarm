@@ -39,13 +39,13 @@ namespace MatterHackers.Agg.VertexSource
 
     public sealed class PathStorage  
     {
-        VertexStorage myvxs;       
+        VertexStore myvxs;       
         public PathStorage()
         {
-            myvxs = new VertexStorage();
+            myvxs = new VertexStore();
         }
 
-        internal VertexStorage Vsx
+        internal VertexStore Vsx
         {
             get
             {
@@ -270,7 +270,7 @@ namespace MatterHackers.Agg.VertexSource
             myvxs.AddVertexCurve4(dx_to, dy_to);
 
         }
-        public VertexStorage Vxs
+        public VertexStore Vxs
         {
             get { return this.myvxs; }
         }
@@ -713,7 +713,7 @@ namespace MatterHackers.Agg.VertexSource
             ShapePath.FlagsAndCommand[] m_CommandAndFlags)
         {
 
-            VertexStorage.UnsafeDirectSetData(
+            VertexStore.UnsafeDirectSetData(
                 pathStore.myvxs,
                 m_allocated_vertices,
                 m_num_vertices,
@@ -727,7 +727,7 @@ namespace MatterHackers.Agg.VertexSource
             out double[] m_coord_xy,
             out ShapePath.FlagsAndCommand[] m_CommandAndFlags)
         {
-            VertexStorage.UnsafeDirectGetData(
+            VertexStore.UnsafeDirectGetData(
                 pathStore.myvxs,
                 out m_allocated_vertices,
                 out m_num_vertices,

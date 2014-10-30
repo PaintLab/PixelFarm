@@ -60,12 +60,11 @@ namespace MatterHackers.Agg
         {
             //reset rasterizer before render each vertextSnap
             rasterizer.Reset();
-
             Affine transform = GetTransform();
             if (!transform.IsIdentity())
             {
 
-                rasterizer.AddPath(new VertexStoreSnap(transform.Tranform(vertextSnap)));
+                rasterizer.AddPath(transform.Tranform(vertextSnap));
             }
             else
             {
@@ -137,7 +136,7 @@ namespace MatterHackers.Agg
         void DrawImage(IImage sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
         {
             double ox, oy;
-            destImageByte.GetOriginOffset(out ox, out oy); 
+            destImageByte.GetOriginOffset(out ox, out oy);
             if (ox != 0 || oy != 0)
             {
                 destRectTransform *= Affine.NewTranslation(-ox, -oy);
@@ -208,7 +207,7 @@ namespace MatterHackers.Agg
 
             //bool IsMipped = false;
             double ox, oy;
-            source.GetOriginOffset(out ox, out oy);             
+            source.GetOriginOffset(out ox, out oy);
 
             bool canUseMipMaps = isScale;
             if (scaleX > 0.5 || scaleY > 0.5)
@@ -355,7 +354,7 @@ namespace MatterHackers.Agg
             //bool IsMipped = false;
             double ox, oy;
             source.GetOriginOffset(out ox, out oy);
-             
+
             bool canUseMipMaps = isScale;
             if (scaleX > 0.5 || scaleY > 0.5)
             {

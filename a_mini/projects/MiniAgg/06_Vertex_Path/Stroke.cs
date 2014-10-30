@@ -33,7 +33,7 @@ namespace MatterHackers.Agg.VertexSource
             this.strokeGen = new StrokeGenerator();
             this.Width = inWidth;
         }
-       
+
         public LineCap LineCap
         {
             get { return strokeGen.LineCap; }
@@ -79,11 +79,11 @@ namespace MatterHackers.Agg.VertexSource
             get { return strokeGen.Shorten; }
             set { strokeGen.Shorten = value; }
         }
-        public VertexStorage MakeVxs(VertexStorage sourceVxs)
+        public VertexStore MakeVxs(VertexStore sourceVxs)
         {
-             
+
             StrokeGenerator stgen = strokeGen;
-            VertexStorage vxs = new VertexStorage();
+            VertexStore vxs = new VertexStore();
 
             int j = sourceVxs.Count;
             double x, y;
@@ -138,7 +138,7 @@ namespace MatterHackers.Agg.VertexSource
             stgen.RemoveAll();
 
             vxs.HasMoreThanOnePart = hasMoreThanOnePart;
-            return vxs;             
+            return vxs;
 
         }
 
@@ -146,15 +146,11 @@ namespace MatterHackers.Agg.VertexSource
     }
     public static class StrokeHelp
     {
-        public static VertexStorage MakeVxs2(VertexStorage vxs, double w)
+        public static VertexStore MakeVxs(VertexStore vxs, double w)
         {
             Stroke stroke = new Stroke(w);
             return stroke.MakeVxs(vxs);
         }
-        public static VertexStorage CreateStrokeVxs(VertexStoreSnap p, double w)
-        {
-            Stroke stroke = new Stroke(w);
-            return stroke.MakeVxs(p.GetInternalVxs());
-        }
+
     }
 }

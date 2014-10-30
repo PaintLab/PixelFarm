@@ -134,9 +134,9 @@ namespace MatterHackers.Agg.VertexSource
         {
             return new VertexStoreSnap(MakeVxs());
         }
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
-            return new VertexStorage(this.GetVertexIter());             
+            return new VertexStore(this.GetVertexIter());             
         }
         //-------------------------------------------------------
     }

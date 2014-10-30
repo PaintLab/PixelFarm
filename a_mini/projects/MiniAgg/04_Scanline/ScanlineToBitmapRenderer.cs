@@ -74,7 +74,7 @@ namespace MatterHackers.Agg
         public void RenderSolidAllPaths(IImage destImage,
             ScanlineRasterizer ras,
             Scanline scline,
-            VertexStorage vx,
+            VertexStore vx,
             ColorRGBA[] color_storage,
             int[] path_id,
             int num_paths)

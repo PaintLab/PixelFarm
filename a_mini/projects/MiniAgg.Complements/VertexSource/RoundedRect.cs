@@ -195,9 +195,9 @@ namespace MatterHackers.Agg.VertexSource
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {   
-            return new VertexStorage(this.GetVertexIter());             
+            return new VertexStore(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {

@@ -98,12 +98,13 @@ namespace MatterHackers.Agg.Sample_Perspective
                 }
                 image = new ChildImage(backBuffer, new BlenderBGR());
             }
+
             ClipProxyImage dest = new ClipProxyImage(image);
             dest.Clear(ColorRGBA.White);
-
             g_rasterizer.SetVectorClipBox(0, 0, Width, Height);
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {
 
@@ -131,14 +132,17 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //--------------------------
                     // Render transformed ellipse
                     //
-                    Ellipse ell = new Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
-                                     (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
+                    RectangleDouble lionBound = lionShape.Bounds;
+
+                    Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
+                                     (lionBound.Bottom + lionBound.Top) * 0.5,
+                                     (lionBound.Right - lionBound.Left) * 0.5,
+                                     (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
 
-                    VertexStoreSnap s1 = ell.MakeVertexSnap();
-
-                    var trans_ell = txBilinear.TransformToVertexSnap(ell.MakeVxs());
-                    var trans_ell_stroke = txBilinear.TransformToVertexSnap(new Stroke(3).MakeVxs(s1.GetInternalVxs()));
+                    VertexStore vxs = ell.MakeVxs();
+                    VertexStoreSnap trans_ell = txBilinear.TransformToVertexSnap(vxs);
+                    VertexStoreSnap trans_ell_stroke = txBilinear.TransformToVertexSnap(new Stroke(3).MakeVxs(vxs));
 
                     g_rasterizer.AddPath(trans_ell);
                     sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
@@ -168,8 +172,11 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //--------------------------------------------------------------------------------------
                     //filled Ellipse
                     //1. create original fill ellipse
-                    var filledEllipse = new MatterHackers.Agg.VertexSource.Ellipse((lionShape.Bounds.Left + lionShape.Bounds.Right) * 0.5, (lionShape.Bounds.Bottom + lionShape.Bounds.Top) * 0.5,
-                                      (lionShape.Bounds.Right - lionShape.Bounds.Left) * 0.5, (lionShape.Bounds.Top - lionShape.Bounds.Bottom) * 0.5,
+                    RectangleDouble lionBound = lionShape.Bounds;
+                    var filledEllipse = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
+                                      (lionBound.Bottom + lionBound.Top) * 0.5,
+                                      (lionBound.Right - lionBound.Left) * 0.5,
+                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
 
                     var ellipseVertext = txPerspective.TransformToVxs(filledEllipse.MakeVxs());

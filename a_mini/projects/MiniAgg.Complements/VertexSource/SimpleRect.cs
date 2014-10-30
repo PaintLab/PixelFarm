@@ -57,7 +57,7 @@ namespace MatterHackers.Agg.VertexSource
             if (bottom > top) { bounds.Bottom = top; bounds.Top = bottom; }
         }
           
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
             PathStorage m_LinesToDraw = new PathStorage();
             m_LinesToDraw.Clear();             

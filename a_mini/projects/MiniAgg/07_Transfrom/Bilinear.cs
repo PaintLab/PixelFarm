@@ -160,18 +160,18 @@ namespace MatterHackers.Agg.Transform
         }
         //-------------------------------------------------------------------------
         
-        public VertexStoreSnap TransformToVertexSnap(VertexStorage src)
+        public VertexStoreSnap TransformToVertexSnap(VertexStore src)
         {
             return new VertexStoreSnap(TransformToVxs(src));
         }
-        public VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
+        public VertexStore TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             return TransformToVxs(src.Vsx);
         }
-        public VertexStorage TransformToVxs(VertexStorage src)
+        public VertexStore TransformToVxs(VertexStore src)
         {
             int count = src.Count;
-            var vxs = new VertexStorage();
+            var vxs = new VertexStore();
             ShapePath.FlagsAndCommand cmd;
             double x, y;
             for (int i = 0; i < count; ++i)

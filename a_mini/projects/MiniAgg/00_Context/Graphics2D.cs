@@ -77,14 +77,14 @@ namespace MatterHackers.Agg
 
 
 
-        public void Render(VertexStorage vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
+        public void Render(VertexStore vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)
             {
                 Render(new VertexStoreSnap(vxStorage, pathIdArray[i]), colorArray[i]);
             }
         }
-        public void Render(VertexStorage vxStorage, ColorRGBA c)
+        public void Render(VertexStore vxStorage, ColorRGBA c)
         {
             Render(new VertexStoreSnap(vxStorage, 0), c);
         }

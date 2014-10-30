@@ -111,10 +111,10 @@ namespace MatterHackers.Agg.VertexSource
                 m_cmd[6] = ShapePath.FlagsAndCommand.CommandStop;
             }
         }
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
 
-            VertexStorage vxs = new VertexStorage();
+            VertexStore vxs = new VertexStore();
 
             foreach (VertexData v in this.GetVertexIter())
             {

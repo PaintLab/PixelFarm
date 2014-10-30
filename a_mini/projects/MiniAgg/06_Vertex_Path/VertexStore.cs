@@ -24,7 +24,7 @@ using MatterHackers.VectorMath;
 namespace MatterHackers.Agg
 {
 
-    public class VertexStorage
+    public class VertexStore
     {
         int m_num_vertices;
         int m_allocated_vertices; 
@@ -39,15 +39,15 @@ namespace MatterHackers.Agg
             return dbugTotal++;
         }
 #endif
-        public VertexStorage()
+        public VertexStore()
         {
             AllocIfRequired(2);
         }
-        public VertexStorage(int initsize)
+        public VertexStore(int initsize)
         {
             AllocIfRequired(initsize);
         }
-        public VertexStorage(IEnumerable<VertexData> vertEnumerable)
+        public VertexStore(IEnumerable<VertexData> vertEnumerable)
         {
             //init
             AllocIfRequired(2);
@@ -237,7 +237,7 @@ namespace MatterHackers.Agg
 
         //internal use only!
         internal static void UnsafeDirectSetData(
-            VertexStorage vstore,
+            VertexStore vstore,
             int m_allocated_vertices,
             int m_num_vertices,
             double[] m_coord_xy,
@@ -249,7 +249,7 @@ namespace MatterHackers.Agg
             vstore.m_CommandAndFlags = m_CommandAndFlags;
         }
         internal static void UnsafeDirectGetData(
-            VertexStorage vstore,
+            VertexStore vstore,
             out int m_allocated_vertices,
             out int m_num_vertices,
             out double[] m_coord_xy,

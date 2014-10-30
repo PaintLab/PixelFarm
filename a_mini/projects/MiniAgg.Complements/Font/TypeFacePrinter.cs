@@ -269,9 +269,9 @@ namespace MatterHackers.Agg.Font
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
 
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
-            return new VertexStorage(this.GetVertexIter());             
+            return new VertexStore(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {
@@ -341,9 +341,9 @@ namespace MatterHackers.Agg.Font
 
             return command;
         }
-        public VertexStorage CreateVxs()
+        public VertexStore CreateVxs()
         {
-            return new VertexStorage(this.GetVertexIter());
+            return new VertexStore(this.GetVertexIter());
 
             //return new VertexSnap(new VertexStorage(list));
         }

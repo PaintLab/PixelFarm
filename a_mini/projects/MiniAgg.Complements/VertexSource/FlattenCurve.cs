@@ -106,9 +106,9 @@ namespace MatterHackers.Agg.VertexSource
         }
 
 
-        public VertexStorage MakeVxs(VertexStoreSnap vsnap)
+        public VertexStore MakeVxs(VertexStoreSnap vsnap)
         {
-            VertexStorage vxs = new VertexStorage();
+            VertexStore vxs = new VertexStore();
             VertexData lastVertextData = new VertexData();
             m_curve3.Reset();
             m_curve4.Reset();
@@ -195,7 +195,7 @@ namespace MatterHackers.Agg.VertexSource
             return vxs;
 
         }
-        public VertexStorage MakeVxs(VertexStorage srcVxs)
+        public VertexStore MakeVxs(VertexStore srcVxs)
         {
             return MakeVxs(new VertexStoreSnap(srcVxs));            
              

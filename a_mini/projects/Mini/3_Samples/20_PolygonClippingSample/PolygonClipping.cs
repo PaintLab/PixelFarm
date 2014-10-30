@@ -365,13 +365,13 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                                 AffinePlan.Scale(2));
 
 
-                        var s1 = mtx.TransformToVertexSnap(gb_poly);
+                        VertexStore s1 = mtx.TransformToVxs(gb_poly);
                         graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
-                        graphics2D.Render(new Stroke(0.1).MakeVxs(s1.GetInternalVxs()), ColorRGBA.Black);
+                        graphics2D.Render(new Stroke(0.1).MakeVxs(s1), ColorRGBA.Black);
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs());
                         graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
 
-                        CreateAndRenderCombined(graphics2D, s1, new VertexStoreSnap(stroke_vxs));
+                        CreateAndRenderCombined(graphics2D, new VertexStoreSnap( s1), new VertexStoreSnap(stroke_vxs));
                     }
                     break;
 
@@ -598,9 +598,9 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
             }
 
         } 
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
-            return new VertexStorage(this.GetVertexIter());             
+            return new VertexStore(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {

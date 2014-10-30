@@ -73,7 +73,7 @@ namespace MatterHackers.Agg.Sample_LionFill
     {
 
         LionShape lionShape;
-        VertexStorage vxStorage;
+        VertexStore vxStorage;
 
     
         byte alpha;
