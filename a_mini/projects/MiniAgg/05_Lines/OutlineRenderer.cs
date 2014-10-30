@@ -1870,7 +1870,7 @@ namespace MatterHackers.Agg.Lines
             if (lp.len > LineAABasics.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.divide(out lp1, out lp2);
+                lp.Divide(out lp1, out lp2);
                 line0_no_clip(lp1);
                 line0_no_clip(lp2);
                 return;
@@ -1924,7 +1924,7 @@ namespace MatterHackers.Agg.Lines
             if (lp.len > LineAABasics.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.divide(out lp1, out lp2);
+                lp.Divide(out lp1, out lp2);
                 line1_no_clip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1);
                 line1_no_clip(lp2, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
                 return;
@@ -1989,7 +1989,7 @@ namespace MatterHackers.Agg.Lines
             if (lp.len > LineAABasics.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.divide(out lp1, out lp2);
+                lp.Divide(out lp1, out lp2);
                 line2_no_clip(lp1, lp1.x2 + (lp1.y2 - lp1.y1), lp1.y2 - (lp1.x2 - lp1.x1));
                 line2_no_clip(lp2, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
                 return;
@@ -2055,7 +2055,7 @@ namespace MatterHackers.Agg.Lines
             if (lp.len > LineAABasics.MAX_LENGTH)
             {
                 LineParameters lp1, lp2;
-                lp.divide(out lp1, out lp2);
+                lp.Divide(out lp1, out lp2);
                 int mx = lp1.x2 + (lp1.y2 - lp1.y1);
                 int my = lp1.y2 - (lp1.x2 - lp1.x1);
                 line3_no_clip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1, mx, my);

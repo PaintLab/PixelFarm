@@ -17,6 +17,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using MatterHackers.Agg.Image;
+using MatterHackers.Agg.Lines;
 
 namespace MatterHackers.Agg
 {

@@ -50,7 +50,6 @@ namespace MatterHackers.Agg
                     int x2 = (x - (int)span.len - 1);
                     destImage.BlendHL(x, y, x2, color, covers[span.cover_index]);
                 }
-
             }
         }
 

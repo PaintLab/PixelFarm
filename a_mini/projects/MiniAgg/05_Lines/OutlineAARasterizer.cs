@@ -234,8 +234,8 @@ namespace MatterHackers.Agg.Lines
 
                     case OutlineJoin.Mitter:
                         dv.flags >>= 1;
-                        dv.flags |= (curr.diagonal_quadrant() ==
-                            next.diagonal_quadrant() ? 1 : 0);
+                        dv.flags |= (curr.DiagonalQuadrant ==
+                            next.DiagonalQuadrant ? 1 : 0);
                         if ((dv.flags & 2) == 0)
                         {
                             LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
@@ -244,8 +244,8 @@ namespace MatterHackers.Agg.Lines
 
                     case OutlineJoin.Round:
                         dv.flags >>= 1;
-                        dv.flags |= (((curr.diagonal_quadrant() ==
-                            next.diagonal_quadrant()) ? 1 : 0) << 1);
+                        dv.flags |= (((curr.DiagonalQuadrant ==
+                            next.DiagonalQuadrant) ? 1 : 0) << 1);
                         break;
 
                     case OutlineJoin.AccurateJoin:
@@ -365,8 +365,8 @@ namespace MatterHackers.Agg.Lines
                         case OutlineJoin.Mitter:
                         case OutlineJoin.Round:
                             dv.flags =
-                                (prev.diagonal_quadrant() == curr.diagonal_quadrant() ? 1 : 0) |
-                                    ((curr.diagonal_quadrant() == next.diagonal_quadrant() ? 1 : 0) << 1);
+                                (prev.DiagonalQuadrant == curr.DiagonalQuadrant ? 1 : 0) |
+                                    ((curr.DiagonalQuadrant == next.DiagonalQuadrant ? 1 : 0) << 1);
                             break;
 
                         case OutlineJoin.AccurateJoin:
@@ -510,8 +510,8 @@ namespace MatterHackers.Agg.Lines
                                 case OutlineJoin.Mitter:
                                 case OutlineJoin.Round:
                                     dv.flags =
-                                        (prev.diagonal_quadrant() == curr.diagonal_quadrant() ? 1 : 0) |
-                                            ((curr.diagonal_quadrant() == next.diagonal_quadrant() ? 1 : 0) << 1);
+                                        (prev.DiagonalQuadrant == curr.DiagonalQuadrant ? 1 : 0) |
+                                            ((curr.DiagonalQuadrant == next.DiagonalQuadrant ? 1 : 0) << 1);
                                     break;
 
                                 case OutlineJoin.AccurateJoin:
