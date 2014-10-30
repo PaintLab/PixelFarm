@@ -9,9 +9,8 @@ namespace MatterHackers.Agg
 {
     /// <summary>
     /// to bitmap
-    /// </summary>
-
-    public class ScanlineToBitmapRenderer
+    /// </summary>  
+    public class ScanlineRasToDestBitmapRenderer
     {
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
 

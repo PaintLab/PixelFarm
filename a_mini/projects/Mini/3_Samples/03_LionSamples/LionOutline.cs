@@ -156,10 +156,10 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
                 var vxs = affTx.TransformToVxs(lionShape.Path);
                 
-                ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
                 // var vxs = trans.DoTransformToNewVxStorage();
-                scanlineRenderer.RenderSolidAllPaths(
+                sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
                     scanlineCache,

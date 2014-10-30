@@ -32,12 +32,12 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             ras.LineTo(x * m_size + m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
-            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
-            scanlineRenderer.RenderScanlineSolidAA(destImage, ras, sl, color);
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.RenderScanlineSolidAA(destImage, ras, sl, color);
         }
     }
 
-    class renderer_enlarged_test2 : ScanlineToBitmapRenderer
+    class CustomScanlineRasToBmp_EnlargedV2 : ScanlineRasToDestBitmapRenderer
     {
         double m_size;
         square m_square;
@@ -45,7 +45,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
 
 
-        public renderer_enlarged_test2(double size)
+        public CustomScanlineRasToBmp_EnlargedV2(double size)
         {
             m_size = size;
             m_square = new square(size);
@@ -182,7 +182,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
             int size_mul = (int)this.PixelSize;
 
-            renderer_enlarged_test2 ren_en = new renderer_enlarged_test2(size_mul);
+            CustomScanlineRasToBmp_EnlargedV2 ren_en = new CustomScanlineRasToBmp_EnlargedV2(size_mul);
 
             rasterizer.Reset();
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
@@ -190,8 +190,8 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
             ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
-            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //-----------------------------------------------------------------------------------------------------------
             rasterizer.ResetGamma(new GammaNone());
@@ -204,7 +204,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             ps.LineTo(m_x[0], m_y[0]);
 
             rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs));
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
 
         }

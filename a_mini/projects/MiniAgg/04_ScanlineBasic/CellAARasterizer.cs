@@ -47,9 +47,7 @@ namespace MatterHackers.Agg
         public int cover;
         public int area;
         public int left;
-        public int right;
-
-
+        public int right; 
 
         public static CellAA Create(int x, int y, int cover, int area, int left, int right)
         {

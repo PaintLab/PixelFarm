@@ -29,17 +29,17 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ras.LineTo(x * m_size + m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
-            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
-            scanlineRenderer.RenderScanlineSolidAA(destImage, ras, sl, color);
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.RenderScanlineSolidAA(destImage, ras, sl, color);
         }
     }
 
-    class renderer_enlarged_test1 : ScanlineToBitmapRenderer
+    class CustomScanlineRasToBmp_EnlargedV1 : ScanlineRasToDestBitmapRenderer
     {
         double m_size;
         square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
-        public renderer_enlarged_test1(double size)
+        public CustomScanlineRasToBmp_EnlargedV1(double size)
         {
             m_size = size;
             m_square = new square(size);
@@ -139,7 +139,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
             int size_mul = (int)this.PixelSize;
 
-            renderer_enlarged_test1 ren_en = new renderer_enlarged_test1(size_mul);
+            CustomScanlineRasToBmp_EnlargedV1 ren_en = new CustomScanlineRasToBmp_EnlargedV1(size_mul);
 
             rasterizer.Reset();
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
@@ -148,8 +148,8 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
-            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
 
             //----------------------------------------
@@ -166,7 +166,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             rasterizer.AddPath(StrokeHelp.CreateStrokeVxs(ps.MakeVertexSnap(), 2));
             //----------------------------------------
 
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

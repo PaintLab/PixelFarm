@@ -103,7 +103,7 @@ namespace MatterHackers.Agg.Sample_Perspective
 
             g_rasterizer.SetVectorClipBox(0, 0, Width, Height);
 
-            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {
 
@@ -120,7 +120,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     // Render transformed lion
                     // 
 
-                    scanlineRenderer.RenderSolidAllPaths(dest,
+                    sclineRasToBmp.RenderSolidAllPaths(dest,
                         g_rasterizer,
                         g_scanline,
                         txBilinear.TransformToVxs(lionShape.Path),
@@ -141,10 +141,10 @@ namespace MatterHackers.Agg.Sample_Perspective
                     var trans_ell_stroke = txBilinear.TransformToVertexSnap(new Stroke(3).MakeVxs(s1.GetInternalVxs()));
 
                     g_rasterizer.AddPath(trans_ell);
-                    scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
+                    sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
 
                     g_rasterizer.AddPath(trans_ell_stroke);
-                    scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
+                    sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
                 }
             }
             else
@@ -157,7 +157,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                 {
 
 
-                    scanlineRenderer.RenderSolidAllPaths(dest,
+                    sclineRasToBmp.RenderSolidAllPaths(dest,
                         g_rasterizer,
                         g_scanline,
                         txPerspective.TransformToVxs(lionShape.Path),
@@ -180,7 +180,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     g_rasterizer.AddPath(new VertexStoreSnap(ellipseVertext));
                     //4. render it
 
-                    scanlineRenderer.RenderScanlineSolidAA(dest,
+                    sclineRasToBmp.RenderScanlineSolidAA(dest,
                         g_rasterizer,
                         g_scanline,
                         ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
@@ -194,7 +194,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     //3. add
                     g_rasterizer.AddPath(txOutline);
                     //4. render                      
-                    scanlineRenderer.RenderScanlineSolidAA(dest,
+                    sclineRasToBmp.RenderScanlineSolidAA(dest,
                         g_rasterizer,
                         g_scanline,
                         ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
@@ -206,7 +206,7 @@ namespace MatterHackers.Agg.Sample_Perspective
             var vxs2 = quadPolygonControl.MakeVxs();
             g_rasterizer.AddPath(vxs2);
             //g_rasterizer.AddPath(quadPolygonControl);
-            scanlineRenderer.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
+            sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
 
 
         }

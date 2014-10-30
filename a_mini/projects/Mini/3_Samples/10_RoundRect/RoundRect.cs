@@ -135,12 +135,12 @@ namespace MatterHackers.Agg.Sample_RoundRect
             // Render two "control" circles
             e.Reset(m_x[0], m_y[0], 3, 3, 16);
             ras.AddPath(e.MakeVertexSnap());
-            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
             e.Reset(m_x[1], m_y[1], 3, 3, 16);
             ras.AddPath(e.MakeVertexSnap());
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
 
             double d = this.SubPixelOffset;
@@ -158,7 +158,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             {
                 ras.AddPath(r.MakeVxs());
             }
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
 
 
         }

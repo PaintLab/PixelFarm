@@ -91,7 +91,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
             System.Random randGenerator = new Random(1432);
 
-            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
             int i;
             int num = (int)maskAlphaSliderValue;
             for (i = 0; i < num; i++)
@@ -100,11 +100,11 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                 {
                     ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                    scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
+                    sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
 
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                    scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
+                    sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     // there is not very much reason to set the alpha as you will get the amount of 
                     // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
                     rasterizer.AddPath(ellipseForMask.MakeVxs());
-                    scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack,
+                    sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack,
                        ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
@@ -177,7 +177,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
                     AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.Clear(ColorRGBA.White);
 
-            ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
             // draw a background to show how the mask is working better
             int RectWidth = 30;
             for (int i = 0; i < 40; i++)
@@ -191,7 +191,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
                         // Drawing as an outline
                         rasterizer.AddPath(rect.MakeVxs());
-                        scanlineRenderer.RenderScanlineSolidAA(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9, .9, .9));
+                        sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9, .9, .9));
                     }
                 }
             }
@@ -204,7 +204,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
             //trans.DoTransform(vxlist);
 
 
-            scanlineRenderer.RenderSolidAllPaths(alphaMaskClippingProxy,
+            sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
                    rasterizer,
                    scanlineCache,
                    transform.TransformToVxs(lionShape.Path),

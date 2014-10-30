@@ -32,7 +32,7 @@ namespace MatterHackers.Agg
         Scanline scanline;
         PathStorage drawImageRectPath = new PathStorage();
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
-        ScanlineToBitmapRenderer scanlineRenderer = new ScanlineToBitmapRenderer();
+        ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
         public ImageGraphics2D(IImage destImage,
             ScanlineRasterizer rasterizer,
@@ -72,7 +72,7 @@ namespace MatterHackers.Agg
 
             if (destImageByte != null)
             {
-                scanlineRenderer.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);
+                sclineRasToBmp.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);
                 destImageByte.MarkImageChanged();
             }
             else
@@ -142,7 +142,7 @@ namespace MatterHackers.Agg
             var sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
             Rasterizer.AddPath(sp1);
             {  
-                scanlineRenderer.GenerateAndRender(
+                sclineRasToBmp.GenerateAndRender(
                     new ChildImage(destImageByte, destImageByte.GetRecieveBlender()),
                     Rasterizer,
                     drawImageScanlineCache,
