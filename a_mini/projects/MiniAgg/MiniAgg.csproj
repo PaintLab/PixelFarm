@@ -47,7 +47,7 @@
     <Compile Include="03_PixelBuffer\ImageHelper.cs" />
     <Compile Include="04_Scanline\ISpanGenerator.cs" />
     <Compile Include="04_Scanline\0_ScanlineSpan.cs" />
-    <Compile Include="04_Scanline\LineParameters.cs" />
+    <Compile Include="05_Lines\LineParameters.cs" />
     <Compile Include="05_Lines\ClipLiangBarsky.cs" />
     <Compile Include="02_Color\ColorGray.cs" />
     <Compile Include="02_Color\ColorRGBA.cs" />

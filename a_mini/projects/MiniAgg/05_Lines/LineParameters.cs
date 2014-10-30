@@ -16,7 +16,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-namespace MatterHackers.Agg
+namespace MatterHackers.Agg.Lines
 {
     //==========================================================line_parameters
     public class LineParameters
