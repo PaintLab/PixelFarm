@@ -114,7 +114,8 @@ namespace MatterHackers.Agg.VertexSource
         {
 
             VertexStorage vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
+
+            foreach (VertexData v in this.GetVertexIter())
             {
                 vxs.AddVertex(v);
                 if (v.command == ShapePath.FlagsAndCommand.CommandStop)

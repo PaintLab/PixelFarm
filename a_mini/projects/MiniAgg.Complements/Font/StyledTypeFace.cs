@@ -43,12 +43,7 @@ namespace MatterHackers.Agg.Font
 
         public VertexStorage MakeVxs()
         {
-            VertexStorage vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
-            {
-                vxs.AddVertex(v);
-            }
-            return vxs;
+            return new VertexStorage(this.GetVertexIter());             
         }
 
         public IEnumerable<VertexData> GetVertexIter()

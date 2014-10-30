@@ -67,8 +67,7 @@ namespace MatterHackers.Agg.VertexSource
 
         public void Clear()
         {
-            myvxs.Clear();
-          
+            myvxs.Clear();          
         }
          
 
@@ -386,7 +385,8 @@ namespace MatterHackers.Agg.VertexSource
                     // Invert polygon, set orientation flag, and skip all end_poly
                     InvertPolygon(start, end);
                     ShapePath.FlagsAndCommand flags;
-                    while (end < myvxs.Count &&
+                    int myvxs_count = myvxs.Count;
+                    while (end < myvxs_count &&
                           ShapePath.IsEndPoly(flags = myvxs.GetCommand(end)))
                     {
                         myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));

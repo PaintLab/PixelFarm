@@ -135,12 +135,7 @@ namespace MatterHackers.Agg.VertexSource
         }
         public VertexStorage MakeVxs()
         {
-            VertexStorage vxs = new VertexStorage();
-            foreach (VertexData vx in this.GetVertexIter())
-            {
-                vxs.AddVertex(vx);
-            }
-            return vxs;
+            return new VertexStorage(this.GetVertexIter());             
         }
         //-------------------------------------------------------
     }

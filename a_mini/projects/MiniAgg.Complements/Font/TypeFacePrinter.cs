@@ -34,7 +34,7 @@ namespace MatterHackers.Agg.Font
 
 
 
-    public class TypeFacePrinter 
+    public class TypeFacePrinter
     {
         StyledTypeFace typeFaceStyle;
         String text = "";
@@ -264,19 +264,13 @@ namespace MatterHackers.Agg.Font
                 }
             }
 
-             
+
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
 
         public VertexStorage MakeVxs()
         {
-             
-            VertexStorage vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
-            {
-                vxs.AddVertex(v); 
-            }
-            return vxs;
+            return new VertexStorage(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {
@@ -348,13 +342,8 @@ namespace MatterHackers.Agg.Font
         }
         public VertexStorage CreateVxs()
         {
-             
-            VertexStorage vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
-            {
-                vxs.AddVertex(v);
-            }
-            return vxs;
+            return new VertexStorage(this.GetVertexIter());
+
             //return new VertexSnap(new VertexStorage(list));
         }
 #else

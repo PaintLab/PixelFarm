@@ -195,14 +195,8 @@ namespace MatterHackers.Agg.VertexSource
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
         public VertexStorage MakeVxs()
-        {
-
-            VertexStorage vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
-            {
-                vxs.AddVertex(v);
-            }
-            return vxs;
+        {   
+            return new VertexStorage(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {

@@ -91,14 +91,7 @@ namespace LayoutFarm.Agg.Font
         }
         public VertexStorage MakeVxs()
         {
-            var vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
-            {
-                vxs.AddVertex(v);
-                 
-            }
-            return vxs;
-             
+            return new VertexStorage(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {
