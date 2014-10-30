@@ -215,6 +215,7 @@ namespace MatterHackers.Agg
             m_vectorClipper.MoveTo(
                 m_start_x = upscale(x),
                 m_start_y = upscale(y));
+
             m_status = Status.MoveTo;
         }
 
@@ -224,6 +225,7 @@ namespace MatterHackers.Agg
             m_vectorClipper.LineTo(m_outline,
                               upscale(x),
                               upscale(y));
+
             m_status = Status.LineTo;
         }
 
@@ -287,42 +289,38 @@ namespace MatterHackers.Agg
         {
             this.AddPath(new VertexStoreSnap(vxs));
         }
-        public void AddPath(VertexStoreSnap spath)
+        public void AddPath(VertexStoreSnap snap)
         {
 
             double x = 0;
             double y = 0;
 
+            if (m_outline.Sorted) { Reset(); }
 
-            if (m_outline.Sorted)
+            if (snap.VxsHasMoreThanOnePart)
             {
-                Reset();
-            }
-
-            if (spath.VxsHasMoreThanOnePart)
-            {
-                var vxs = spath.GetInternalVxs();
+                var vxs = snap.GetInternalVxs();
                 int j = vxs.Count;
 
                 for (int i = 0; i < j; ++i)
                 {
-                    var cmd2 = vxs.GetVertex(i, out x, out y);
-                    if (cmd2 != ShapePath.FlagsAndCommand.CommandStop)
+                    var cmd = vxs.GetVertex(i, out x, out y);
+                    if (cmd != ShapePath.FlagsAndCommand.CommandStop)
                     {
-                        AddVertex(cmd2, x, y);
+                        AddVertex(cmd, x, y);
                     }
                 }
             }
             else
             {
-                var snapIter = spath.GetVertexSnapIter();
+                var snapIter = snap.GetVertexSnapIter();
                 ShapePath.FlagsAndCommand cmd;
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
                 {
                     AddVertex(cmd, x, y);
                 }
             }
-             
+
         }
 
         public int MinX { get { return m_outline.MinX; } }

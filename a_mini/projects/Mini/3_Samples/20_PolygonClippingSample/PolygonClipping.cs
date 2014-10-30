@@ -301,7 +301,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));
 
 
-                        var vxs = ps2.MakeVxs();
+                        var vxs = ps2.Vxs;
                         graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0, 0.6, 0, 0.1));
                         CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), new VertexStoreSnap(vxs));
                     }
@@ -438,11 +438,12 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                             AffinePlan.Translate(220, 200));
 
                         var t_glyph = mtx.TransformToVertexSnap(glyph);
-                        FlattenCurves curve = new FlattenCurves(t_glyph);
+
+                        FlattenCurves curve = new FlattenCurves(); 
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
 
-                        var curveVxs = curve.MakeVxs();
+                        var curveVxs = curve.MakeVxs(t_glyph);
                         CreateAndRenderCombined(graphics2D, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
 
                         graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));

@@ -59,9 +59,7 @@ namespace MatterHackers.Agg
             rasterizer.Reset();
             Affine transform = GetTransform();
             if (!transform.IsIdentity())
-            {
-                List<VertexData> vxData = new List<VertexData>();
-                //then transform
+            {   
                 var s1 = new VertexStoreSnap(transform.Tranform(vertextSnap));
                 rasterizer.AddPath(s1);
             }

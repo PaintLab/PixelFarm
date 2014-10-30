@@ -42,7 +42,7 @@ namespace MatterHackers.Agg
         protected ScanlineRasterizer rasterizer;
 
         Stack<Affine> affineTransformStack = new Stack<Affine>();
-       
+
 
 
         public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
@@ -169,7 +169,7 @@ namespace MatterHackers.Agg
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);
 
-            Render(new Stroke(1).MakeVxs(m_LinesToDraw.MakeVxs()), color);
+            Render(new Stroke(1).MakeVxs(m_LinesToDraw.Vxs), color);
         }
 #endif
 

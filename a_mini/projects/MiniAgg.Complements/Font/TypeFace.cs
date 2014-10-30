@@ -414,7 +414,7 @@ namespace MatterHackers.Agg.Font
                 //PathStorage writeableGlyph = new PathStorage(glyph.glyphData);
                 //writeableGlyph.ShareVertexData(glyph.glyphData);
                 //return writeableGlyph;
-                return glyph.glyphData.MakeVxs();
+                return glyph.glyphData.Vxs;
                 //return new PathStorage(glyph.glyphData);
             }
 

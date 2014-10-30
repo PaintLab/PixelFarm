@@ -164,7 +164,7 @@ namespace MatterHackers.Agg.Transform
 
         // Custom matrix. Usually used in derived classes
         private Affine(double v0_sx, double v1_shy, double v2_shx,
-                     double v3_sy, double v4_tx, double v5_ty)
+                       double v3_sy, double v4_tx, double v5_ty)
         {
             sx = v0_sx;
             shy = v1_shy;
@@ -286,15 +286,21 @@ namespace MatterHackers.Agg.Transform
                     } break;
             }
         }
-        private Affine(Affine copyFrom, AffinePlan[] creationPlans)
+
+        private Affine(AffinePlan[] creationPlans)
         {
+
             //-----------------------
-            sx = copyFrom.sx;
-            shy = copyFrom.shy;
-            shx = copyFrom.shx;
-            sy = copyFrom.sy;
-            tx = copyFrom.tx;
-            ty = copyFrom.ty;
+            //start with identity matrix
+
+            sx = 1;
+            shy = 0;
+            shx = 0;
+
+            sy = 1;
+            tx = 0;
+            ty = 0;
+             
             //-----------------------
             int j = creationPlans.Length;
             for (int i = 0; i < j; ++i)
@@ -377,11 +383,6 @@ namespace MatterHackers.Agg.Transform
                 }
             }
 
-        }
-
-        private Affine(AffinePlan[] creationPlans)
-            : this(IdentityMatrix, creationPlans)
-        {
         }
 
 
@@ -893,15 +894,15 @@ namespace MatterHackers.Agg.Transform
 
 
         //----------------------------------------------------------------------------------------------
-        public Agg.VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
+        public VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
         {
             return new VertexStoreSnap(TransformToVxs(src));
         }
-        public Agg.VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
+        public VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             return TransformToVxs(src.Vsx);
         }
-        public Agg.VertexStoreSnap TransformToVertexSnap(VertexStorage src)
+        public VertexStoreSnap TransformToVertexSnap(VertexStorage src)
         {
             return new VertexStoreSnap(this.TransformToVxs(src));
         }
@@ -920,7 +921,7 @@ namespace MatterHackers.Agg.Transform
             }
             return vxs;
         }
-        public VertexStorage Tranform(Agg.VertexStoreSnap src)
+        public VertexStorage Tranform(VertexStoreSnap src)
         {
             var vxs = new VertexStorage();
             var snapIter = src.GetVertexSnapIter();
@@ -933,20 +934,7 @@ namespace MatterHackers.Agg.Transform
                 this.Transform(ref x, ref y);
                 vxs.AddVertex(x, y, cmd);
             }
-
             return vxs;
-
-            //--------------------
-            //src.RewindZero();
-            //ShapePath.FlagsAndCommand cmd;
-            //double x, y;
-            //while ((cmd = src.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-            //{
-            //    this.Transform(ref x, ref y);
-            //    data.Add(new VertexData(cmd, new VectorMath.Vector2(x, y)));
-            //}
-
-            //return new Agg.VertexStorage(data);
         }
         // Check to see if two matrices are equal
         //public bool is_equal(Affine m, double epsilon)

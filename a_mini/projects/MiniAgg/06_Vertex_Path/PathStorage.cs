@@ -70,12 +70,7 @@ namespace MatterHackers.Agg.VertexSource
             myvxs.Clear();
           
         }
-
-        public void ClearAll()
-        {
-            myvxs.FreeAll();
-          
-        }
+         
 
         // Make path functions
         //--------------------------------------------------------------------
@@ -272,9 +267,9 @@ namespace MatterHackers.Agg.VertexSource
             myvxs.AddVertex(dx_ctrl2, dy_ctrl2, ShapePath.FlagsAndCommand.CommandCurve4);
             myvxs.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve4);
         }
-        public VertexStorage MakeVxs()
+        public VertexStorage Vxs
         {
-            return this.myvxs;
+            get { return this.myvxs; }
         }
         public VertexStoreSnap MakeVertexSnap()
         {

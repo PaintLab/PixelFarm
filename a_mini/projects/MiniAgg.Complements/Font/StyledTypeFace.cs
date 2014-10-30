@@ -41,8 +41,6 @@ namespace MatterHackers.Agg.Font
             this.glyph = new VertexStoreSnap(glyph);
         }
 
-
-        public VertexStoreSnap MakeVertexSnap() { return new VertexStoreSnap(this.MakeVxs()); }
         public VertexStorage MakeVxs()
         {
             VertexStorage vxs = new VertexStorage();
@@ -74,7 +72,7 @@ namespace MatterHackers.Agg.Font
                 }
 
             } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-             
+
 
             snapIter = underline.GetVertexSnapIter();
             do
@@ -82,9 +80,9 @@ namespace MatterHackers.Agg.Font
                 cmd = snapIter.GetNextVertex(out x, out y);
                 yield return new VertexData(cmd, x, y);
 
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop); 
-        } 
-       
+            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+        }
+
     }
 
     public class StyledTypeFaceImageCache
@@ -323,13 +321,14 @@ namespace MatterHackers.Agg.Font
                         typeFace.Underline_position,
                         typeFace.Underline_thickness).MakeVxs();
                 }
+
+
                 Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
-                var characterGlyph = glyphTransform.TransformToVxs(sourceGlyph);
+                VertexStorage characterGlyph = glyphTransform.TransformToVxs(sourceGlyph);
                 if (FlatenCurves)
                 {
-                    characterGlyph = new FlattenCurves(characterGlyph).MakeVxs();
+                    characterGlyph = new FlattenCurves().MakeVxs(characterGlyph);
                 }
-
                 return characterGlyph;
             }
 

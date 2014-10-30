@@ -63,6 +63,10 @@ namespace MatterHackers.Agg.Transform
         }
 
         // Rectangle to quadrilateral
+        public Perspective(RectangleDouble r, double[] quad)
+            : this(r.Left, r.Bottom, r.Right, r.Top, quad)
+        {
+        }
         public Perspective(double x1, double y1, double x2, double y2, double[] quad)
         {
             unsafe
@@ -363,6 +367,7 @@ namespace MatterHackers.Agg.Transform
         //------------------------------------------------------------------------
         Perspective premultiply(Affine b)
         {
+            //copy this to a
             Perspective a = new Perspective(this);
 
             sx = a.sx * b.sx + a.shx * b.shy;
@@ -626,6 +631,12 @@ namespace MatterHackers.Agg.Transform
         public VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             return TransformToVxs(src.Vsx);
+        }
+        public VertexStorage TransformToVxs(VertexStoreSnap snap)
+        {
+            //TODO: use SnapIter
+
+            return TransformToVxs(snap.GetInternalVxs());
         }
         public VertexStorage TransformToVxs(VertexStorage src)
         {

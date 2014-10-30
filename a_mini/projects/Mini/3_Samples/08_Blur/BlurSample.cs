@@ -33,8 +33,13 @@ namespace MatterHackers.Agg.Sample_Blur
         //CheckBox m_channel_g;
         //CheckBox m_channel_b;
         //CheckBox m_FlattenCurves;
+               
+
 
         VertexStoreSnap m_path;
+        VertexStoreSnap m_path_2;
+
+
         FlattenCurves m_shape;
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
@@ -63,15 +68,12 @@ namespace MatterHackers.Agg.Sample_Blur
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
             m_path = new VertexStoreSnap(typeFaceForLargeA.GetGlyphForCharacter('a'));
 
-            Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
-            //shape_mtx *= Affine.NewTranslation(150, 100);
-
-            //m_path = new VertexSourceApplyTransform(m_path, shape_mtx).DoTransformToNewVertexSnap();
-            m_path = shape_mtx.TransformToVertexSnap(m_path.GetInternalVxs());
-            m_shape = new FlattenCurves(m_path);
-
-            BoundingRect.GetBoundingRectSingle(new VertexStoreSnap(m_shape.MakeVxs()), ref m_shape_bounds);
-
+            Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));     
+            m_path = shape_mtx.TransformToVertexSnap(m_path.GetInternalVxs());  
+            m_shape = new FlattenCurves();
+            m_path_2 = new VertexStoreSnap(m_shape.MakeVxs(m_path));
+            BoundingRect.GetBoundingRectSingle(m_path_2, ref m_shape_bounds);
+            
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
             m_shadow_ctrl.SetXN(1, m_shape_bounds.Right);
@@ -81,6 +83,7 @@ namespace MatterHackers.Agg.Sample_Blur
             m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
             m_shadow_ctrl.line_color(ColorRGBAf.MakeColorRGBA(0, 0.3, 0.5, 0.3));
+
         }
 
         [DemoConfig]
@@ -152,28 +155,25 @@ namespace MatterHackers.Agg.Sample_Blur
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             clippingProxy.Clear(ColorRGBA.White);
-            m_ras.SetVectorClipBox(0, 0, Width, Height);
-
-
+            m_ras.SetVectorClipBox(0, 0, Width, Height); 
 
             Perspective shadow_persp = new Perspective(
-                            m_shape_bounds.Left, m_shape_bounds.Bottom,
-                            m_shape_bounds.Right, m_shape_bounds.Top,
+                            m_shape_bounds,
                             m_shadow_ctrl.polygon());
 
 
             VertexStoreSnap spath;
             if (FlattenCurveCheck)
             {
-                var s2 = shadow_persp.TransformToVxs(m_shape.MakeVxs());
+                var s2 = shadow_persp.TransformToVxs(m_path_2);
                 spath = new VertexStoreSnap(s2);
-                //shadow_trans = new VertexSourceApplyTransform(m_shape, shadow_persp);
+                 
             }
             else
             {
-                var s2 = shadow_persp.TransformToVxs(m_path.GetInternalVxs());
-                //shadow_trans = new VertexSourceApplyTransform(m_path, shadow_persp);
+                var s2 = shadow_persp.TransformToVxs(m_path.GetInternalVxs());                 
                 spath = new VertexStoreSnap(s2);
+
             }
             // Render shadow 
             //spath = shadow_trans.DoTransformToNewVertexSnap();
@@ -320,7 +320,7 @@ namespace MatterHackers.Agg.Sample_Blur
             //------------------
             if (FlattenCurveCheck)
             {
-                m_ras.AddPath(m_shape.MakeVxs());
+                m_ras.AddPath(m_path_2);
             }
             else
             {

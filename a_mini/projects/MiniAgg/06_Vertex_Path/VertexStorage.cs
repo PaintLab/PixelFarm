@@ -22,6 +22,7 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg
 {
+
     public class VertexStorage
     {
         int m_num_vertices;
@@ -45,14 +46,9 @@ namespace MatterHackers.Agg
         {
             AllocIfRequired(initsize);
         }
-         
+
         public bool HasMoreThanOnePart { get; set; }
-        public void FreeAll()
-        {
-            m_coord_xy = null;
-            m_CommandAndFlags = null;
-            m_num_vertices = 0;
-        }
+
         public int Count
         {
             get { return m_num_vertices; }
@@ -78,6 +74,8 @@ namespace MatterHackers.Agg
 
             m_num_vertices++;
         }
+
+        //--------------------------------------------------
         public void ReplaceVertex(int index, double x, double y)
         {
             m_coord_xy[index << 1] = x;
@@ -94,6 +92,7 @@ namespace MatterHackers.Agg
         {
             m_CommandAndFlags[index] = CommandAndFlags;
         }
+        //--------------------------------------------------
         public void SwapVertices(int v1, int v2)
         {
 
@@ -166,14 +165,14 @@ namespace MatterHackers.Agg
         }
         public ShapePath.FlagsAndCommand GetVertex(int index, out double x, out double y)
         {
-            var i = index << 1;
+            int i = index << 1;
             x = m_coord_xy[i];
             y = m_coord_xy[i + 1];
             return m_CommandAndFlags[index];
         }
         public void GetVertexXY(int index, out double x, out double y)
         {
-            var i = index << 1;
+            int i = index << 1;
             x = m_coord_xy[i];
             y = m_coord_xy[i + 1];
         }

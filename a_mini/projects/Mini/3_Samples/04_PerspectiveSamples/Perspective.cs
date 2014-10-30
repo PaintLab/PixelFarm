@@ -149,7 +149,10 @@ namespace MatterHackers.Agg.Sample_Perspective
             }
             else
             {
-                var txPerspective = new Perspective(lionShape.Bounds.Left, lionShape.Bounds.Bottom, lionShape.Bounds.Right, lionShape.Bounds.Top, quadPolygonControl.polygon());
+                var txPerspective = new Perspective(
+                    lionShape.Bounds,
+                    quadPolygonControl.polygon());
+
                 if (txPerspective.is_valid())
                 {
 
