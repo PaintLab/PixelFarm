@@ -60,68 +60,79 @@ namespace MatterHackers.Agg.Lines
         }
     }
 
-    class LineAAVertexSequence : ArrayList<LineAAVertex>
+    class LineAAVertexSequence
     {
-        public override void AddVertex(LineAAVertex val)
+        ArrayList<LineAAVertex> list = new ArrayList<LineAAVertex>();
+        public void AddVertex(LineAAVertex val)
         {
-            int count = base.Count;
+            int count = list.Count;
             if (count > 1)
             {
-                var innerArray = this.Array;
+                var innerArray = list.Array;
                 if (!innerArray[count - 2].IsDiff(innerArray[count - 1]))
                 {
-                    base.RemoveLast();
+                    list.RemoveLast();
                 }
             }
-            base.AddVertex(val);
+            list.AddVertex(val);
         }
-
+        public LineAAVertex this[int index]
+        {
+            get
+            {
+                return this.list[index];
+            }
+        }
+        public void Clear() { this.list.Clear(); }
+        public int Count
+        {
+            get { return this.list.Count; }
+        }
         public void ModifyLast(LineAAVertex val)
         {
-            base.RemoveLast();
+            list.RemoveLast();
             AddVertex(val);
         }
 
         public void Close(bool closed)
         {
-            while (base.Count > 1)
+            //----------------------
+            //iter backward
+            int count = list.Count;
+            var innerArray = list.Array;
+            while (count > 1)
             {
-                if (Array[base.Count - 2].IsDiff(Array[base.Count - 1]))
+                if (innerArray[count - 2].IsDiff(innerArray[count - 1]))
                 {
                     break;
                 }
-                LineAAVertex t = this[base.Count - 1];
-                base.RemoveLast();
-                ModifyLast(t);
+                else
+                {
+                    LineAAVertex t = list[count - 1];
+                    list.RemoveLast();
+                    ModifyLast(t);
+                    count--;
+                }
             }
+
 
             if (closed)
             {
-                while (base.Count > 1)
+                //if close figure
+                count = list.Count;
+                var first = innerArray[0];
+                while (count > 1)
                 {
-                    if (Array[base.Count - 1].IsDiff(Array[0]))
+                    if (innerArray[count - 1].IsDiff(first))
                     {
                         break;
                     }
-                    base.RemoveLast();
+                    count--;
+                    list.RemoveLast();
                 }
             }
         }
 
-        //internal line_aa_vertex prev(int idx)
-        //{
-        //    return this[(idx + Count - 1) % Count];
-        //}
-
-        //internal line_aa_vertex curr(int idx)
-        //{
-        //    return this[idx];
-        //}
-
-        //internal line_aa_vertex next(int idx)
-        //{
-        //    return this[(idx + 1) % Count];
-        //}
     }
 
     //=======================================================rasterizer_outline_aa
