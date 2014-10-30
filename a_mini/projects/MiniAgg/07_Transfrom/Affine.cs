@@ -928,8 +928,7 @@ namespace MatterHackers.Agg.Transform
             var snapIter = src.GetVertexSnapIter();
 
             ShapePath.FlagsAndCommand cmd;
-            double x, y;
-
+            double x, y; 
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 this.Transform(ref x, ref y);

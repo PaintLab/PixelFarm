@@ -634,9 +634,20 @@ namespace MatterHackers.Agg.Transform
             return TransformToVxs(src.Vsx);
         }
         public VertexStorage TransformToVxs(VertexStoreSnap snap)
-        {
-            //TODO: use SnapIter 
-            return TransformToVxs(snap.GetInternalVxs());
+        {   
+
+            var vxs = new VertexStorage();
+            var vsnapIter = snap.GetVertexSnapIter();
+            double x, y;
+            ShapePath.FlagsAndCommand cmd; 
+            do
+            {
+                cmd = vsnapIter.GetNextVertex(out x, out y);
+                this.Transform(ref x, ref y);
+                vxs.AddVertex(x, y, cmd);
+            } while (!ShapePath.IsStop(cmd));
+
+            return vxs;
         }
         public VertexStorage TransformToVxs(VertexStorage src)
         {
