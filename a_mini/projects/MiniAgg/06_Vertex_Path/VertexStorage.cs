@@ -26,8 +26,7 @@ namespace MatterHackers.Agg
     public class VertexStorage
     {
         int m_num_vertices;
-        int m_allocated_vertices;
-
+        int m_allocated_vertices; 
         double[] m_coord_xy;
         ShapePath.FlagsAndCommand[] m_CommandAndFlags;
 
@@ -128,11 +127,9 @@ namespace MatterHackers.Agg
         {
             return m_CommandAndFlags[index];
         }
-
-
-
+         
         //--------------------------------------------------
-        //mutable property
+        //mutable properties
         public void Clear()
         {
             m_num_vertices = 0;
@@ -199,9 +196,7 @@ namespace MatterHackers.Agg
             m_CommandAndFlags[v2] = cmd;
         }
          
-        //--------------------------------------------------
-
-
+        
         void AllocIfRequired(int indexToAdd)
         {
             if (indexToAdd < m_allocated_vertices)
@@ -239,7 +234,7 @@ namespace MatterHackers.Agg
         }
         //----------------------------------------------------------
 
-
+        //internal use only!
         internal static void UnsafeDirectSetData(
             VertexStorage vstore,
             int m_allocated_vertices,

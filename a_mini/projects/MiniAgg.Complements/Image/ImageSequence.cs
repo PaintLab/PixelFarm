@@ -76,8 +76,8 @@ namespace MatterHackers.Agg.Image
         public void CenterOriginOffset()
         {
             foreach (ImageBase image in imageList)
-            {
-                image.OriginOffset = new Vector2(image.Width / 2, image.Height / 2);
+            {                 
+                image.SetOriginOffset(image.Width / 2, image.Height / 2);
             }
         }
 

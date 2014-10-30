@@ -61,21 +61,20 @@ namespace MatterHackers.Agg
 
 
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
-        //------------------------------------------------------------------------
+
         public abstract void Render(IImage imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
+        public abstract void Render(IImage imageSource, double x, double y);
 
         public void Render(IImage imageSource, int x, int y)
         {
-            Render(imageSource, x, y, 0, 1, 1);
+            this.Render(imageSource, (double)x, (double)y);
         }
 
-        public void Render(IImage imageSource, double x, double y)
-        {
-            Render(imageSource, x, y, 0, 1, 1);
-        }
+
+
 
 
         public void Render(VertexStorage vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
@@ -91,16 +90,8 @@ namespace MatterHackers.Agg
         }
         public void Render(VertexStoreSnap vertexSource, double x, double y, ColorRGBA color)
         {
-            
             var inputVxs = vertexSource.GetInternalVxs();
             var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
-            Render(vxs, color);
-        }
-
-        public void Render(VertexStoreSnap vertexSource, Vector2 position, ColorRGBA color)
-        {
-            var inputVxs = vertexSource.GetInternalVxs();
-            var vxs = Affine.NewTranslation(position.x, position.y).TransformToVertexSnap(inputVxs);
             Render(vxs, color);
         }
 

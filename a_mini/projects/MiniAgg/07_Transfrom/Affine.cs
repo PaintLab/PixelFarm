@@ -898,14 +898,14 @@ namespace MatterHackers.Agg.Transform
         {
             return new VertexStoreSnap(TransformToVxs(src));
         }
-        public VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
-        {
-            return TransformToVxs(src.Vsx);
-        }
         public VertexStoreSnap TransformToVertexSnap(VertexStorage src)
         {
             return new VertexStoreSnap(this.TransformToVxs(src));
         }
+        public VertexStorage TransformToVxs(Agg.VertexSource.PathStorage src)
+        {
+            return TransformToVxs(src.Vsx);
+        }        
         public VertexStorage TransformToVxs(VertexStorage src)
         {
 

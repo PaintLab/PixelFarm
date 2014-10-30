@@ -24,7 +24,7 @@ using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
 
 using MatterHackers.Agg.Image;
-namespace MatterHackers.Agg 
+namespace MatterHackers.Agg
 {
 
 
@@ -220,14 +220,16 @@ namespace MatterHackers.Agg
             }
         }
 
-        public Vector2 OriginOffset
+        
+        public void GetOriginOffset(out double x, out double y)
         {
-            get { return new Vector2(this.originX, this.originY); }
-            set
-            {
-                this.originX = value.x;
-                this.originY = value.y;
-            }
+            x = this.originX;
+            y = this.originY;
+        }
+        public void SetOriginOffset(double x, double y)
+        {
+            this.originX = x;
+            this.originY = y;
         }
 
         public int Width
@@ -706,7 +708,10 @@ namespace MatterHackers.Agg
         public RectangleInt GetBoundingRect()
         {
             RectangleInt boundingRect = new RectangleInt(0, 0, Width, Height);
-            boundingRect.Offset((int)OriginOffset.x, (int)OriginOffset.y);
+            double ox, oy;
+            this.GetOriginOffset(out ox, out oy);
+            boundingRect.Offset((int)ox, (int)oy);
+
             return boundingRect;
         }
 
@@ -752,7 +757,7 @@ namespace MatterHackers.Agg
     {
 
 
-        public static void BasedOnAlpha( IRecieveBlenderByte recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor)
+        public static void BasedOnAlpha(IRecieveBlenderByte recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
             //if (sourceColor.m_A != 0)
             {
