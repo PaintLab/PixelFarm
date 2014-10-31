@@ -495,7 +495,9 @@ namespace MatterHackers.Agg
                 {
                     do
                     {
-                        recieveBlender.BlendPixel(buffer, bufferOffset, ColorRGBA.Make(sourceColor.red, sourceColor.green, sourceColor.blue, alpha));
+                        recieveBlender.BlendPixel(buffer, bufferOffset,
+                            new ColorRGBA(sourceColor, alpha));
+
                         bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
                     }
                     while (--len != 0);

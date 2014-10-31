@@ -138,7 +138,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
                 var colorBuffer = lionShape.Colors;
                 for (int i = lionShape.NumPaths - 1; i >= 0; --i)
                 {
-                    colorBuffer[i].Alpha0To255 = alpha;
+                    colorBuffer[i].alpha = alpha;
                 }
             }
         }

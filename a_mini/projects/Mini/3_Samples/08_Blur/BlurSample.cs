@@ -185,7 +185,7 @@ namespace MatterHackers.Agg.Sample_Blur
 
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2, 0.3, 0).ToColorRGBA());
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
 
             // Calculate the bounding box and extend it by the blur radius
             RectangleDouble bbox = new RectangleDouble();

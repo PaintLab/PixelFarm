@@ -52,28 +52,28 @@ namespace MatterHackers.Agg
 
         public int Red0To255
         {
-            get { return (int)AggBasics.uround(red * (float)BASE_MASK); }
+            get { return AggBasics.uround_f(red * (float)BASE_MASK); }
 
         }
         public int Green0To255
         {
-            get { return (int)AggBasics.uround(green * (float)BASE_MASK); }
+            get { return AggBasics.uround_f(green * (float)BASE_MASK); }
 
         }
         public int Blue0To255
         {
-            get { return (int)AggBasics.uround(blue * (float)BASE_MASK); }
+            get { return AggBasics.uround_f(blue * (float)BASE_MASK); }
 
         }
         public int Alpha0To255
         {
-            get { return (int)AggBasics.uround(alpha * (float)BASE_MASK); }
+            get { return AggBasics.uround_f(alpha * (float)BASE_MASK); }
         }
 
-        public float Red0To1 { get { return red; } set { red = value; } }
-        public float Green0To1 { get { return green; } set { green = value; } }
-        public float Blue0To1 { get { return blue; } set { blue = value; } }
-        public float Alpha0To1 { get { return alpha; } set { alpha = value; } }
+        public float Red0To1 { get { return red; } }
+        public float Green0To1 { get { return green; } }
+        public float Blue0To1 { get { return blue; } }
+        public float Alpha0To1 { get { return alpha; } }
 
         #region Defined Colors
         public static readonly ColorRGBAf White = new ColorRGBAf(1, 1, 1, 1);
@@ -88,8 +88,11 @@ namespace MatterHackers.Agg
 
         #region Constructors
         public ColorRGBAf(double r_, double g_, double b_)
-            : this(r_, g_, b_, 1.0)
         {
+            red = (float)r_;
+            green = (float)g_;
+            blue = (float)b_;
+            alpha = 1;
         }
 
         private ColorRGBAf(double r_, double g_, double b_, double a_)
@@ -99,12 +102,13 @@ namespace MatterHackers.Agg
             blue = (float)b_;
             alpha = (float)a_;
         }
-
-        private ColorRGBAf(float r_, float g_, float b_)
-            : this(r_, g_, b_, 1.0f)
+        public ColorRGBAf(float r_, float g_, float b_)
         {
+            red = r_;
+            green = g_;
+            blue = b_;
+            alpha = 1;
         }
-
         public ColorRGBAf(float r_, float g_, float b_, float a_)
         {
             red = r_;
@@ -112,12 +116,11 @@ namespace MatterHackers.Agg
             blue = b_;
             alpha = a_;
         }
-
         public ColorRGBAf(ColorRGBAf c)
             : this(c, c.alpha)
         {
-        }
 
+        }
         public ColorRGBAf(ColorRGBAf c, float a_)
         {
             red = c.red;
@@ -125,25 +128,15 @@ namespace MatterHackers.Agg
             blue = c.blue;
             alpha = a_;
         }
-
         public ColorRGBAf(float wavelen)
             : this(wavelen, 1.0f)
         {
-
         }
-
         public ColorRGBAf(float wavelen, float gamma)
         {
             this = FromWaveLength(wavelen, gamma);
         }
 
-        //public ColorRGBAf(ColorRGBA color)
-        //{
-        //    red = color.Red0To1;
-        //    green = color.Green0To1;
-        //    blue = color.Blue0To1;
-        //    alpha = color.Alpha0To1;
-        //}
         #endregion Constructors
 
         #region HSL
@@ -587,7 +580,7 @@ namespace MatterHackers.Agg
             return new ColorRGBAf(c, a).premultiply();
         }
 
-        public static ColorRGBAf GetTweenColor(ColorRGBAf c1, ColorRGBAf c2, double ratioOf2)
+        public static ColorRGBAf GetTweenColor(ColorRGBAf c1, ColorRGBAf c2, float ratioOf2)
         {
             if (ratioOf2 <= 0)
             {
@@ -600,11 +593,11 @@ namespace MatterHackers.Agg
             }
 
             // figure out how much of each color we should be.
-            double RatioOf1 = 1.0 - ratioOf2;
+            double ratioOf1 = 1.0 - ratioOf2;
             return new ColorRGBAf(
-                c1.red * RatioOf1 + c2.red * ratioOf2,
-                c1.green * RatioOf1 + c2.green * ratioOf2,
-                c1.blue * RatioOf1 + c2.blue * ratioOf2);
+                c1.red * ratioOf1 + c2.red * ratioOf2,
+                c1.green * ratioOf1 + c2.green * ratioOf2,
+                c1.blue * ratioOf1 + c2.blue * ratioOf2);
         }
 
         public ColorRGBAf Blend(ColorRGBAf other, double weight)
@@ -687,50 +680,30 @@ namespace MatterHackers.Agg
         public static readonly ColorRGBA Yellow = new ColorRGBA(255, 255, 0, 255);
         public static readonly ColorRGBA YellowGreen = new ColorRGBA(154, 205, 50, 255);
 
-        public int Red0To255
+        public byte Red0To255
         {
             get { return red; }
-            set { red = (byte)value; }
+
         }
-        public int Green0To255
+        public byte Green0To255
         {
             get { return green; }
-            set { green = (byte)value; }
+
         }
-        public int Blue0To255
+        public byte Blue0To255
         {
             get { return blue; }
-            set { blue = (byte)value; }
         }
-        public int Alpha0To255
+        public byte Alpha0To255
         {
             get { return alpha; }
-            set { alpha = (byte)value; }
         }
-
-        public float Red0To1
-        {
-            get { return red / 255.0f; }
-        }
-        public float Green0To1
-        {
-            get { return green / 255.0f; }
-        }
-        public float Blue0To1
-        {
-            get { return blue / 255.0f; }
-        }
-        public float Alpha0To1
-        {
-            get { return alpha / 255.0f; }
-        }
-
         public ColorRGBA(byte r_, byte g_, byte b_)
         {
             red = r_;
             green = g_;
             blue = b_;
-            alpha = (byte)Math.Min(Math.Max(BASE_MASK, 0), 255);
+            alpha = 255;// (byte)Math.Min(Math.Max(BASE_MASK, 0), 255);
         }
         public ColorRGBA(byte r_, byte g_, byte b_, byte a_)
         {
@@ -773,7 +746,7 @@ namespace MatterHackers.Agg
                ((byte)AggBasics.uround_f(r_ * (float)BASE_MASK)),
                ((byte)AggBasics.uround_f(g_ * (float)BASE_MASK)),
                ((byte)AggBasics.uround_f(b_ * (float)BASE_MASK)),
-               ((byte)AggBasics.uround_f(a_ * (float)BASE_MASK))); 
+               ((byte)AggBasics.uround_f(a_ * (float)BASE_MASK)));
         }
         //------------------------------------------
         public static ColorRGBA Make(int r_, int g_, int b_, int a_)
@@ -784,8 +757,8 @@ namespace MatterHackers.Agg
                (byte)Math.Min(Math.Max(b_, 0), 255),
                (byte)Math.Min(Math.Max(a_, 0), 255));
         }
-        
-        public ColorRGBA(ColorRGBA c) 
+
+        public ColorRGBA(ColorRGBA c)
         {
             red = (byte)c.red;
             green = (byte)c.green;
@@ -801,13 +774,13 @@ namespace MatterHackers.Agg
             alpha = (byte)a_;
         }
 
-        public ColorRGBA(uint fourByteColor)
-        {
-            red = (byte)((fourByteColor >> 16) & 0xFF);
-            green = (byte)((fourByteColor >> 8) & 0xFF);
-            blue = (byte)((fourByteColor >> 0) & 0xFF);
-            alpha = (byte)((fourByteColor >> 24) & 0xFF);
-        }
+        //public ColorRGBA(uint fourByteColor)
+        //{
+        //    red = (byte)((fourByteColor >> 16) & 0xFF);
+        //    green = (byte)((fourByteColor >> 8) & 0xFF);
+        //    blue = (byte)((fourByteColor >> 0) & 0xFF);
+        //    alpha = (byte)((fourByteColor >> 24) & 0xFF);
+        //}
 
         public ColorRGBA(ColorRGBAf c)
         {
@@ -866,44 +839,46 @@ namespace MatterHackers.Agg
                 (float)alpha / (float)BASE_MASK);
         }
 
-        public ColorRGBA GetAsRGBA_Bytes()
-        {
-            return this;
-        }
+        //public ColorRGBA GetAsRGBA_Bytes()
+        //{
+        //    return this;
+        //}
 
-        public ColorRGBA CreateGradient(ColorRGBA c, double k)
-        {
-            ColorRGBA ret = new ColorRGBA();
-            int ik = AggBasics.uround(k * BASE_SCALE);
-            ret.Red0To255 = (byte)((int)(Red0To255) + ((((int)(c.Red0To255) - Red0To255) * ik) >> BASE_SHIFT));
-            ret.Green0To255 = (byte)((int)(Green0To255) + ((((int)(c.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
-            ret.Blue0To255 = (byte)((int)(Blue0To255) + ((((int)(c.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));
-            ret.Alpha0To255 = (byte)((int)(Alpha0To255) + ((((int)(c.Alpha0To255) - Alpha0To255) * ik) >> BASE_SHIFT));
-            return ret;
-        }
+        //public ColorRGBA CreateGradient(ColorRGBA c, double k)
+        //{
+
+        //    int ik = AggBasics.uround(k * BASE_SCALE);
+
+        //    byte r = (byte)((int)(Red0To255) + ((((int)(c.Red0To255) - Red0To255) * ik) >> BASE_SHIFT));
+        //    byte g = (byte)((int)(Green0To255) + ((((int)(c.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
+        //    byte b = (byte)((int)(Blue0To255) + ((((int)(c.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));
+        //    byte a = (byte)((int)(Alpha0To255) + ((((int)(c.Alpha0To255) - Alpha0To255) * ik) >> BASE_SHIFT));
+
+        //    return new ColorRGBA(r, g, b, a);
+        //}
 
         static public ColorRGBA operator +(ColorRGBA A, ColorRGBA B)
         {
-            ColorRGBA temp = new ColorRGBA();
-            temp.red = (byte)((A.red + B.red) > 255 ? 255 : (A.red + B.red));
-            temp.green = (byte)((A.green + B.green) > 255 ? 255 : (A.green + B.green));
-            temp.blue = (byte)((A.blue + B.blue) > 255 ? 255 : (A.blue + B.blue));
-            temp.alpha = (byte)((A.alpha + B.alpha) > 255 ? 255 : (A.alpha + B.alpha));
 
-            return temp;
+            byte r = (byte)((A.red + B.red) > 255 ? 255 : (A.red + B.red));
+            byte g = (byte)((A.green + B.green) > 255 ? 255 : (A.green + B.green));
+            byte b = (byte)((A.blue + B.blue) > 255 ? 255 : (A.blue + B.blue));
+            byte a = (byte)((A.alpha + B.alpha) > 255 ? 255 : (A.alpha + B.alpha));
+            return new ColorRGBA(r, g, b, a);
+
         }
 
         static public ColorRGBA operator -(ColorRGBA A, ColorRGBA B)
         {
-            ColorRGBA temp = new ColorRGBA();
-            temp.red = (byte)((A.red - B.red) < 0 ? 0 : (A.red - B.red));
-            temp.green = (byte)((A.green - B.green) < 0 ? 0 : (A.green - B.green));
-            temp.blue = (byte)((A.blue - B.blue) < 0 ? 0 : (A.blue - B.blue));
-            temp.alpha = 255;// (byte)((A.m_A - B.m_A) < 0 ? 0 : (A.m_A - B.m_A));
-            return temp;
+            
+            byte red = (byte)((A.red - B.red) < 0 ? 0 : (A.red - B.red));
+            byte green = (byte)((A.green - B.green) < 0 ? 0 : (A.green - B.green));
+            byte blue = (byte)((A.blue - B.blue) < 0 ? 0 : (A.blue - B.blue));
+            byte alpha = (byte)((A.alpha - B.alpha) < 0 ? 0 : (A.alpha - B.alpha));
+            return new ColorRGBA(red, green, blue, alpha);
         }
 
-        static public ColorRGBA operator *(ColorRGBA A, double doubleB)
+        static public ColorRGBA operator *(ColorRGBA A, float doubleB)
         {
             float B = (float)doubleB;
             ColorRGBAf temp = new ColorRGBAf();
@@ -914,42 +889,42 @@ namespace MatterHackers.Agg
             return new ColorRGBA(temp);
         }
 
-        public void AddColor(ColorRGBA c, int cover)
-        {
-            int cr, cg, cb, ca;
-            if (cover == COVER_MASK)
-            {
-                if (c.Alpha0To255 == BASE_MASK)
-                {
-                    this = c;
-                }
-                else
-                {
-                    cr = Red0To255 + c.Red0To255; Red0To255 = (cr > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cr;
-                    cg = Green0To255 + c.Green0To255; Green0To255 = (cg > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cg;
-                    cb = Blue0To255 + c.Blue0To255; Blue0To255 = (cb > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cb;
-                    ca = Alpha0To255 + c.Alpha0To255; Alpha0To255 = (ca > (int)(BASE_MASK)) ? (int)(BASE_MASK) : ca;
-                }
-            }
-            else
-            {
-                cr = Red0To255 + ((c.Red0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
-                cg = Green0To255 + ((c.Green0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
-                cb = Blue0To255 + ((c.Blue0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
-                ca = Alpha0To255 + ((c.Alpha0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
-                Red0To255 = (cr > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cr;
-                Green0To255 = (cg > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cg;
-                Blue0To255 = (cb > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cb;
-                Alpha0To255 = (ca > (int)(BASE_MASK)) ? (int)(BASE_MASK) : ca;
-            }
-        }
+        //public void AddColor(ColorRGBA c, int cover)
+        //{
+        //    int cr, cg, cb, ca;
+        //    if (cover == COVER_MASK)
+        //    {
+        //        if (c.Alpha0To255 == BASE_MASK)
+        //        {
+        //            this = c;
+        //        }
+        //        else
+        //        {
+        //            cr = Red0To255 + c.Red0To255; Red0To255 = (cr > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cr;
+        //            cg = Green0To255 + c.Green0To255; Green0To255 = (cg > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cg;
+        //            cb = Blue0To255 + c.Blue0To255; Blue0To255 = (cb > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cb;
+        //            ca = Alpha0To255 + c.Alpha0To255; Alpha0To255 = (ca > (int)(BASE_MASK)) ? (int)(BASE_MASK) : ca;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        cr = Red0To255 + ((c.Red0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
+        //        cg = Green0To255 + ((c.Green0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
+        //        cb = Blue0To255 + ((c.Blue0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
+        //        ca = Alpha0To255 + ((c.Alpha0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
+        //        Red0To255 = (cr > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cr;
+        //        Green0To255 = (cg > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cg;
+        //        Blue0To255 = (cb > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cb;
+        //        Alpha0To255 = (ca > (int)(BASE_MASK)) ? (int)(BASE_MASK) : ca;
+        //    }
+        //}
 
-        public void ApplyGammaDir(GammaLookUpTable gamma)
-        {
-            Red0To255 = gamma.dir((byte)Red0To255);
-            Green0To255 = gamma.dir((byte)Green0To255);
-            Blue0To255 = gamma.dir((byte)Blue0To255);
-        }
+        //public void ApplyGammaDir(GammaLookUpTable gamma)
+        //{
+        //    Red0To255 = gamma.dir((byte)Red0To255);
+        //    Green0To255 = gamma.dir((byte)Green0To255);
+        //    Blue0To255 = gamma.dir((byte)Blue0To255);
+        //}
 
         //-------------------------------------------------------------rgb8_packed
         static public ColorRGBA CreatRGB8Packed(int v)
@@ -957,7 +932,7 @@ namespace MatterHackers.Agg
             return new ColorRGBA((byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
         }
 
-        public ColorRGBA Blend(ColorRGBA other, double weight)
+        public ColorRGBA Blend(ColorRGBA other, float weight)
         {
             ColorRGBA result = new ColorRGBA(this);
             result = this * (1 - weight) + other * weight;
