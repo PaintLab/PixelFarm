@@ -41,9 +41,7 @@ namespace MatterHackers.Agg
         protected IImage destImageByte;
         protected ScanlineRasterizer rasterizer;
 
-        Stack<Affine> affineTransformStack = new Stack<Affine>();
-
-
+        Stack<Affine> affineTransformStack = new Stack<Affine>(); 
 
         public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
         {

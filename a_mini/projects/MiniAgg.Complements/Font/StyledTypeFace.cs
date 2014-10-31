@@ -240,10 +240,15 @@ namespace MatterHackers.Agg.Font
                 {
                     bounds.ExpandToInclude(x, y);
                 }
-            }
+            } 
+
+            
+            ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1),
+                Math.Max((int)(bounds.Height + .5), 1), 
+                32, 
+                new PixelBlenderBGRA());
 
 
-            ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new PixelBlenderBGRA());
             var gfx = Graphics2D.CreateFromImage(charImage);
             gfx.Render(new VertexStoreSnap(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
             characterImageCache[character] = charImage;

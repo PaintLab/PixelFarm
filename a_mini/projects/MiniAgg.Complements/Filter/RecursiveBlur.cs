@@ -461,9 +461,8 @@ namespace MatterHackers.Agg.Image
             m_sum2 = new ArrayList<RecursizeBlurCalculator>();
             m_buf = new ArrayList<ColorRGBA>();
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
-        }
-
-        public void blur_x(IImage img, double radius)
+        } 
+        public void BlurX(IImage img, double radius)
         {
             if (radius < 0.62) return;
             if (img.Width < 3) return;
@@ -549,16 +548,16 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void blur_y(IImage img, double radius)
+        public void BlurY(IImage img, double radius)
         {
             FormatTransposer img2 = new FormatTransposer(img);
-            blur_x(img2, radius);
+            BlurX(img2, radius);
         }
 
-        public void blur(IImage img, double radius)
+        public void Blur(IImage img, double radius)
         {
-            blur_x(img, radius);
-            blur_y(img, radius);
+            BlurX(img, radius);
+            BlurY(img, radius);
         }
     }
 

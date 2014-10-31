@@ -36,11 +36,7 @@ namespace MatterHackers.Agg.Image
         {
             return linkedImage.GetPixel(y, x);
         }
-
-        //public override void CopyPixel(int x, int y, byte[] c, int byteOffset)
-        //{
-        //    linkedImage.CopyPixel(y, x, c, byteOffset);
-        //}
+         
 
         public override void CopyHL(int x, int y, int len, ColorRGBA c)
         {

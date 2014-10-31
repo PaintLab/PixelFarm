@@ -253,7 +253,7 @@ namespace MatterHackers.Agg.Sample_Blur
                                 // but still constant time of radius. Very sensitive
                                 // to precision, doubles are must here.
                                 //------------------
-                                m_recursive_blur.blur(image2, m_radius);
+                                m_recursive_blur.Blur(image2, m_radius);
                             } break;
                     }
 

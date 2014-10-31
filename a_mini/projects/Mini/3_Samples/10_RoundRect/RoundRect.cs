@@ -119,6 +119,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             
             var normalBlender = new PixelBlenderBGRA();
             var gammaBlender = new PixelBlenderGammaBGRA(this.Gamma);
+
             var rasterNormal = new ChildImage(backBuffer, normalBlender);
             var rasterGamma = new ChildImage(backBuffer, gammaBlender);
 

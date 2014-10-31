@@ -26,13 +26,18 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.Agg.Image
 {
+    public enum ImageFormat
+    {
+        Rgba32,
+        Rgba24,
+        GrayScale8,
+    }
     public class ActualImage : ImageBase
     {
         public ActualImage(int width, int height,
               int bitsPerPixel, IPixelBlender recieveBlender)
             : base(width, height, bitsPerPixel, recieveBlender)
         {
-
         }
     }
 
