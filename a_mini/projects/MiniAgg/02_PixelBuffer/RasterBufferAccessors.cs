@@ -17,15 +17,15 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using System.Runtime.InteropServices; 
+using System.Runtime.InteropServices;
 
 namespace PixelFarm.Agg.Image
 {
     public interface IImageBufferAccessor
     {
-        byte[] span(int x, int y, int len, out int bufferIndex);
-        byte[] next_x(out int bufferByteOffset);
-        byte[] next_y(out int bufferByteOffset);
+        byte[] GetSpan(int x, int y, int len, out int bufferIndex);
+        byte[] NextX(out int bufferByteOffset);
+        byte[] NextY(out int bufferByteOffset);
 
         IImage SourceImage
         {
@@ -62,7 +62,7 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        private byte[] pixel(out int bufferByteOffset)
+        byte[] GetPixels(out int bufferByteOffset)
         {
             int x = m_x;
             int y = m_y;
@@ -97,7 +97,7 @@ namespace PixelFarm.Agg.Image
             return m_SourceImage.GetBuffer();
         }
 
-        public byte[] span(int x, int y, int len, out int bufferOffset)
+        public byte[] GetSpan(int x, int y, int len, out int bufferOffset)
         {
             m_x = m_x0 = x;
             m_y = y;
@@ -114,10 +114,10 @@ namespace PixelFarm.Agg.Image
             }
 
             m_CurrentBufferOffset = -1;
-            return pixel(out bufferOffset);
+            return GetPixels(out bufferOffset);
         }
 
-        public byte[] next_x(out int bufferOffset)
+        public byte[] NextX(out int bufferOffset)
         {
             // this is the code (managed) that the original agg used.  
             // It looks like it doesn't check x but, It should be a bit faster and is valid 
@@ -129,10 +129,10 @@ namespace PixelFarm.Agg.Image
                 return m_Buffer;
             }
             ++m_x;
-            return pixel(out bufferOffset);
+            return GetPixels(out bufferOffset);
         }
 
-        public byte[] next_y(out int bufferOffset)
+        public byte[] NextY(out int bufferOffset)
         {
             ++m_y;
             m_x = m_x0;
@@ -146,7 +146,7 @@ namespace PixelFarm.Agg.Image
             }
 
             m_CurrentBufferOffset = -1;
-            return pixel(out bufferOffset);
+            return GetPixels(out bufferOffset);
         }
     }
 

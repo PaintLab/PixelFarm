@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Image
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)ImgBuffAccessor.SourceImage;
             if (SourceRenderingBuffer.BitDepth != 24)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -102,7 +102,7 @@ namespace PixelFarm.Agg.Image
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)ImgBuffAccessor.SourceImage;
             if (SourceRenderingBuffer.BitDepth != 24)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -154,7 +154,7 @@ namespace PixelFarm.Agg.Image
         {
             base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
 
-            ImageBase srcImg = (ImageBase)base.GetImageBufferAccessor().SourceImage;
+            ImageBase srcImg = (ImageBase)base.ImgBuffAccessor.SourceImage;
             ISpanInterpolator spanInterpolator = base.Interpolator;
             int bufferIndex = 0;
             byte[] fg_ptr = srcImg.GetBuffer();
@@ -293,7 +293,7 @@ namespace PixelFarm.Agg.Image
             int bufferIndex;
             byte[] fg_ptr;
 
-            ImageBase SourceRenderingBuffer = (ImageBase)base.GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)base.ImgBuffAccessor.SourceImage;
             int maxx = (int)SourceRenderingBuffer.Width - 1;
             int maxy = (int)SourceRenderingBuffer.Height - 1;
             ISpanInterpolator spanInterpolator = base.Interpolator;
@@ -493,7 +493,7 @@ namespace PixelFarm.Agg.Image
                 y_hr = (int)img_subpix_const.MASK - (y_hr & (int)img_subpix_const.MASK);
 
                 int bufferIndex;
-                fg_ptr = GetImageBufferAccessor().span(x_lr + start, y_lr + start, diameter, out bufferIndex);
+                fg_ptr = ImgBuffAccessor.GetSpan(x_lr + start, y_lr + start, diameter, out bufferIndex);
                 for (; ; )
                 {
                     x_count = (int)diameter;
@@ -511,12 +511,12 @@ namespace PixelFarm.Agg.Image
 
                         if (--x_count == 0) break;
                         x_hr += (int)img_subpix_const.SCALE;
-                        GetImageBufferAccessor().next_x(out bufferIndex);
+                        ImgBuffAccessor.NextX(out bufferIndex);
                     }
 
                     if (--y_count == 0) break;
                     y_hr += (int)img_subpix_const.SCALE;
-                    fg_ptr = GetImageBufferAccessor().next_y(out bufferIndex);
+                    fg_ptr = ImgBuffAccessor.NextY(out bufferIndex);
                 }
 
                 f_b >>= (int)img_filter_const.SHIFT;

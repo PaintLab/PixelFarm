@@ -38,16 +38,10 @@ namespace PixelFarm.Agg
         int m_dx_int;
         int m_dy_int;
 
-        public ImgSpanGen() { }
-        public ImgSpanGen(IImageBufferAccessor src,
-            ISpanInterpolator interpolator)
-            : this(src, interpolator, null)
-        {
-
-        }
 
         public ImgSpanGen(IImageBufferAccessor src,
-            ISpanInterpolator interpolator, ImageFilterLookUpTable filter)
+            ISpanInterpolator interpolator,
+            ImageFilterLookUpTable filter)
         {
             imageBufferAccessor = src;
             m_interpolator = interpolator;
@@ -60,7 +54,7 @@ namespace PixelFarm.Agg
 
         public abstract void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len);
 
-        public IImageBufferAccessor GetImageBufferAccessor() { return imageBufferAccessor; }
+        public IImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
         public ImageFilterLookUpTable FilterLookup
         {
             get { return filterLookup; }
@@ -74,7 +68,7 @@ namespace PixelFarm.Agg
         }
 
 
-     
+
         public double Dx { get { return m_dx_dbl; } }
         public double Dy { get { return m_dy_dbl; } }
         public int DxInt { get { return m_dx_int; } }

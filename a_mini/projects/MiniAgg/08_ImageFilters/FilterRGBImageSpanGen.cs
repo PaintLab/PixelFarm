@@ -99,7 +99,7 @@ namespace PixelFarm.Agg.Image
                                rx_inv) >> (int)(int)img_subpix_const.SHIFT;
                 int x_hr2 = x_hr;
                 int sourceIndex;
-                fg_ptr = base.GetImageBufferAccessor().span(x_lr, y_lr, len_x_lr, out sourceIndex);
+                fg_ptr = base.ImgBuffAccessor.GetSpan(x_lr, y_lr, len_x_lr, out sourceIndex);
 
                 for (; ; )
                 {
@@ -116,7 +116,7 @@ namespace PixelFarm.Agg.Image
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;
-                        fg_ptr = base.GetImageBufferAccessor().next_x(out sourceIndex);
+                        fg_ptr = base.ImgBuffAccessor.NextX(out sourceIndex);
                     }
                     y_hr += ry_inv;
                     if (y_hr >= filter_scale)
@@ -124,7 +124,7 @@ namespace PixelFarm.Agg.Image
                         break;
                     }
 
-                    fg_ptr = base.GetImageBufferAccessor().next_y(out sourceIndex);
+                    fg_ptr = base.ImgBuffAccessor.NextY(out sourceIndex);
                 }
 
                 fg[0] /= total_weight;

@@ -35,7 +35,7 @@ namespace PixelFarm.Agg.Image
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
+            ImageBase SourceRenderingBuffer = (ImageBase)ImgBuffAccessor.SourceImage;
             int bytesBetweenPixelsInclusive = SourceRenderingBuffer.BytesBetweenPixelsInclusive;
             if (SourceRenderingBuffer.BitDepth != 8)
             {
