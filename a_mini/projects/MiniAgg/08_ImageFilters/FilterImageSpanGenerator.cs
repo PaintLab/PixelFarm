@@ -51,14 +51,14 @@ namespace PixelFarm.Agg.Image
         //    set;
         //}
         ////--------------------------------------------------------------------
-        //double blur_x() { return (double)(m_blur_x) / (double)((int)image_subpixel_scale_e.image_subpixel_scale); }
-        //double blur_y() { return (double)(m_blur_y) / (double)((int)image_subpixel_scale_e.image_subpixel_scale); }
-        //void blur_x(double v) { m_blur_x = (int)AggBasics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale)); }
-        //void blur_y(double v) { m_blur_y = (int)AggBasics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale)); }
+        //double blur_x() { return (double)(m_blur_x) / (double)((int)img_subpix_const.image_subpixel_scale); }
+        //double blur_y() { return (double)(m_blur_y) / (double)((int)img_subpix_const.image_subpixel_scale); }
+        //void blur_x(double v) { m_blur_x = (int)AggBasics.uround(v * (double)((int)img_subpix_const.image_subpixel_scale)); }
+        //void blur_y(double v) { m_blur_y = (int)AggBasics.uround(v * (double)((int)img_subpix_const.image_subpixel_scale)); }
         
         //public void blur(double v)
         //{
-        //    m_blur_x = m_blur_y = (int)AggBasics.uround(v * (double)((int)image_subpixel_scale_e.image_subpixel_scale));
+        //    m_blur_x = m_blur_y = (int)AggBasics.uround(v * (double)((int)img_subpix_const.image_subpixel_scale));
         //}
 
 

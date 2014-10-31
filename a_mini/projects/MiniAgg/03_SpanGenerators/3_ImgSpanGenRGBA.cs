@@ -58,8 +58,8 @@ namespace PixelFarm.Agg.Image
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
-            ISpanInterpolator spanInterpolator = interpolator();
-            spanInterpolator.Begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
+            ISpanInterpolator spanInterpolator = Interpolator;
+            spanInterpolator.Begin(x + Dx, y + Dy, len);
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
@@ -115,8 +115,8 @@ namespace PixelFarm.Agg.Image
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
-            ISpanInterpolator spanInterpolator = interpolator();
-            spanInterpolator.Begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
+            ISpanInterpolator spanInterpolator = Interpolator;
+            spanInterpolator.Begin(x + Dx, y + Dy, len);
             byte[] fg_ptr = SourceRenderingBuffer.GetBuffer();
             do
             {
@@ -153,7 +153,7 @@ namespace PixelFarm.Agg.Image
 #if false
             public void generate(out RGBA_Bytes destPixel, int x, int y)
             {
-                base.interpolator().begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), 1);
+                base.interpolator.begin(x + base.filter_dx_dbl, y + base.filter_dy_dbl, 1);
 
                 int* fg = stackalloc int[4];
 
@@ -162,7 +162,7 @@ namespace PixelFarm.Agg.Image
                 IImage imageSource = base.source().DestImage;
                 int maxx = (int)imageSource.Width() - 1;
                 int maxy = (int)imageSource.Height() - 1;
-                ISpanInterpolator spanInterpolator = base.interpolator();
+                ISpanInterpolator spanInterpolator = base.interpolator;
 
                 unchecked
                 {
@@ -171,29 +171,29 @@ namespace PixelFarm.Agg.Image
 
                     spanInterpolator.coordinates(out x_hr, out y_hr);
 
-                    x_hr -= base.filter_dx_int();
-                    y_hr -= base.filter_dy_int();
+                    x_hr -= base.filter_dx_int;
+                    y_hr -= base.filter_dy_int;
 
-                    int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
-                    int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
+                    int x_lr = x_hr >> (int)img_subpix_const.image_subpixel_shift;
+                    int y_lr = y_hr >> (int)img_subpix_const.image_subpixel_shift;
 
                     int weight;
 
-                    fg[0] = fg[1] = fg[2] = fg[3] = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / 2;
+                    fg[0] = fg[1] = fg[2] = fg[3] = (int)img_subpix_const.image_subpixel_scale * (int)img_subpix_const.image_subpixel_scale / 2;
 
-                    x_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
-                    y_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
+                    x_hr &= (int)img_subpix_const.image_subpixel_mask;
+                    y_hr &= (int)img_subpix_const.image_subpixel_mask;
 
                     fg_ptr = imageSource.GetPixelPointerY(y_lr) + (x_lr * 4);
 
-                    weight = (int)(((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) *
-                             ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
+                    weight = (int)(((int)img_subpix_const.image_subpixel_scale - x_hr) *
+                             ((int)img_subpix_const.image_subpixel_scale - y_hr));
                     fg[0] += weight * fg_ptr[0];
                     fg[1] += weight * fg_ptr[1];
                     fg[2] += weight * fg_ptr[2];
                     fg[3] += weight * fg_ptr[3];
 
-                    weight = (int)(x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
+                    weight = (int)(x_hr * ((int)img_subpix_const.image_subpixel_scale - y_hr));
                     fg[0] += weight * fg_ptr[4];
                     fg[1] += weight * fg_ptr[5];
                     fg[2] += weight * fg_ptr[6];
@@ -202,7 +202,7 @@ namespace PixelFarm.Agg.Image
                     ++y_lr;
                     fg_ptr = imageSource.GetPixelPointerY(y_lr) + (x_lr * 4);
 
-                    weight = (int)(((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
+                    weight = (int)(((int)img_subpix_const.image_subpixel_scale - x_hr) * y_hr);
                     fg[0] += weight * fg_ptr[0];
                     fg[1] += weight * fg_ptr[1];
                     fg[2] += weight * fg_ptr[2];
@@ -214,10 +214,10 @@ namespace PixelFarm.Agg.Image
                     fg[2] += weight * fg_ptr[6];
                     fg[3] += weight * fg_ptr[7];
 
-                    fg[0] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                    fg[1] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                    fg[2] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                    fg[3] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
+                    fg[0] >>= (int)img_subpix_const.image_subpixel_shift * 2;
+                    fg[1] >>= (int)img_subpix_const.image_subpixel_shift * 2;
+                    fg[2] >>= (int)img_subpix_const.image_subpixel_shift * 2;
+                    fg[3] >>= (int)img_subpix_const.image_subpixel_shift * 2;
 
                     destPixel.m_R = (byte)fg[OrderR];
                     destPixel.m_G = (byte)fg[OrderG];
@@ -229,10 +229,10 @@ namespace PixelFarm.Agg.Image
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            base.interpolator().Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+            base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
 
             ImageBase srcImg = (ImageBase)base.GetImageBufferAccessor().SourceImage;
-            ISpanInterpolator spanInterpolator = base.interpolator();
+            ISpanInterpolator spanInterpolator = base.Interpolator;
             int bufferIndex = 0;
             byte[] fg_ptr = srcImg.GetBuffer();
 
@@ -250,8 +250,8 @@ namespace PixelFarm.Agg.Image
 
                     spanInterpolator.GetCoord(out x_hr, out y_hr);
 
-                    x_hr -= base.filter_dx_int();
-                    y_hr -= base.filter_dy_int();
+                    x_hr -= base.DxInt;
+                    y_hr -= base.DyInt;
 
                     int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
                     int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
@@ -376,7 +376,7 @@ namespace PixelFarm.Agg.Image
                 return;
             }
 
-            base.interpolator().Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+            base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
 
             int[] accumulatedColor = new int[4];
 
@@ -388,7 +388,7 @@ namespace PixelFarm.Agg.Image
             int distanceBetweenPixelsInclusive = base.GetImageBufferAccessor().SourceImage.BytesBetweenPixelsInclusive;
             int maxx = (int)SourceRenderingBuffer.Width - 1;
             int maxy = (int)SourceRenderingBuffer.Height - 1;
-            ISpanInterpolator spanInterpolator = base.interpolator();
+            ISpanInterpolator spanInterpolator = base.Interpolator;
 
             unchecked
             {
@@ -399,8 +399,8 @@ namespace PixelFarm.Agg.Image
 
                     spanInterpolator.GetCoord(out x_hr, out y_hr);
 
-                    x_hr -= base.filter_dx_int();
-                    y_hr -= base.filter_dy_int();
+                    x_hr -= base.DxInt;
+                    y_hr -= base.DyInt;
 
                     int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
                     int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
@@ -574,28 +574,28 @@ namespace PixelFarm.Agg.Image
 
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            base.interpolator().Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+            base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
 
             int f_r, f_g, f_b, f_a;
 
             byte[] fg_ptr;
 
-            int diameter = m_filter.Diameter;
-            int start = m_filter.Start;
-            int[] weight_array = m_filter.WeightArray;
+            int diameter = filterLookup.Diameter;
+            int start = filterLookup.Start;
+            int[] weight_array = filterLookup.WeightArray;
 
             int x_count;
             int weight_y;
 
-            ISpanInterpolator spanInterpolator = base.interpolator();
+            ISpanInterpolator spanInterpolator = base.Interpolator;
             IImageBufferAccessor sourceAccessor = GetImageBufferAccessor();
 
             do
             {
                 spanInterpolator.GetCoord(out x, out y);
 
-                x -= base.filter_dx_int();
-                y -= base.filter_dy_int();
+                x -= base.DxInt;
+                y -= base.DyInt;
 
                 int x_hr = x;
                 int y_hr = y;

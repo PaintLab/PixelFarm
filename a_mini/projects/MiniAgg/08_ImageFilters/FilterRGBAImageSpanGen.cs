@@ -61,14 +61,14 @@ namespace PixelFarm.Agg.Image
         //--------------------------------------------------------------------
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
-            ISpanInterpolator spanInterpolator = base.interpolator();
-            spanInterpolator.Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
+            ISpanInterpolator spanInterpolator = base.Interpolator;
+            spanInterpolator.Begin(x + base.Dx, y + base.Dy, len);
 
             int[] fg = new int[4];
 
             byte[] fg_ptr;
-            int[] weightArray = filter().WeightArray;
-            int diameter = (int)base.filter().Diameter;
+            int[] weightArray = FilterLookup.WeightArray;
+            int diameter = (int)base.FilterLookup.Diameter;
             int filter_scale = diameter << (int)img_subpix_const.SHIFT;
 
             int[] weight_array = weightArray;
@@ -92,8 +92,8 @@ namespace PixelFarm.Agg.Image
                     (diameter * rx + (int)img_subpix_const.MASK) >>
                         (int)(int)img_subpix_const.SHIFT;
 
-                x += base.filter_dx_int() - radius_x;
-                y += base.filter_dy_int() - radius_y;
+                x += base.DxInt - radius_x;
+                y += base.DyInt - radius_y;
 
                 fg[0] = fg[1] = fg[2] = fg[3] = (int)img_filter_const.SCALE / 2;
 
@@ -156,7 +156,7 @@ namespace PixelFarm.Agg.Image
                 span[spanIndex].alpha = (byte)fg[3];
 
                 spanIndex++;
-                interpolator().Next();
+                Interpolator.Next();
             } while (--len != 0);
         }
         /*
@@ -169,7 +169,7 @@ namespace PixelFarm.Agg.Image
                     fixed (int* pWeightArray = filter().weight_array())
                     {
                         int diameter = (int)base.filter().diameter();
-                        int filter_scale = diameter << (int)image_subpixel_scale_e.image_subpixel_shift;
+                        int filter_scale = diameter << (int)img_subpix_const.image_subpixel_shift;
 
                         int* weight_array = pWeightArray;
 
@@ -177,35 +177,35 @@ namespace PixelFarm.Agg.Image
                         {
                             int rx;
                             int ry;
-                            int rx_inv = (int)image_subpixel_scale_e.image_subpixel_scale;
-                            int ry_inv = (int)image_subpixel_scale_e.image_subpixel_scale;
+                            int rx_inv = (int)img_subpix_const.image_subpixel_scale;
+                            int ry_inv = (int)img_subpix_const.image_subpixel_scale;
                             spanInterpolator.coordinates(out x, out y);
                             spanInterpolator.local_scale(out rx, out ry);
                             base.adjust_scale(ref rx, ref ry);
 
-                            rx_inv = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / rx;
-                            ry_inv = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / ry;
+                            rx_inv = (int)img_subpix_const.image_subpixel_scale * (int)img_subpix_const.image_subpixel_scale / rx;
+                            ry_inv = (int)img_subpix_const.image_subpixel_scale * (int)img_subpix_const.image_subpixel_scale / ry;
 
                             int radius_x = (diameter * rx) >> 1;
                             int radius_y = (diameter * ry) >> 1;
                             int len_x_lr =
-                                (diameter * rx + (int)image_subpixel_scale_e.image_subpixel_mask) >>
-                                    (int)(int)image_subpixel_scale_e.image_subpixel_shift;
+                                (diameter * rx + (int)img_subpix_const.image_subpixel_mask) >>
+                                    (int)(int)img_subpix_const.image_subpixel_shift;
 
                             x += base.filter_dx_int() - radius_x;
                             y += base.filter_dy_int() - radius_y;
 
                             fg[0] = fg[1] = fg[2] = fg[3] = (int)image_filter_scale_e.image_filter_scale / 2;
 
-                            int y_lr = y >> (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                            int y_hr = (((int)image_subpixel_scale_e.image_subpixel_mask - (y & (int)image_subpixel_scale_e.image_subpixel_mask)) * 
+                            int y_lr = y >> (int)(int)img_subpix_const.image_subpixel_shift;
+                            int y_hr = (((int)img_subpix_const.image_subpixel_mask - (y & (int)img_subpix_const.image_subpixel_mask)) * 
                                            ry_inv) >>
-                                               (int)(int)image_subpixel_scale_e.image_subpixel_shift;
+                                               (int)(int)img_subpix_const.image_subpixel_shift;
                             int total_weight = 0;
-                            int x_lr = x >> (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                            int x_hr = (((int)image_subpixel_scale_e.image_subpixel_mask - (x & (int)image_subpixel_scale_e.image_subpixel_mask)) * 
+                            int x_lr = x >> (int)(int)img_subpix_const.image_subpixel_shift;
+                            int x_hr = (((int)img_subpix_const.image_subpixel_mask - (x & (int)img_subpix_const.image_subpixel_mask)) * 
                                            rx_inv) >>
-                                               (int)(int)image_subpixel_scale_e.image_subpixel_shift;
+                                               (int)(int)img_subpix_const.image_subpixel_shift;
                             int x_hr2 = x_hr;
                             fg_ptr = base.source().span(x_lr, y_lr, (int)len_x_lr);
 

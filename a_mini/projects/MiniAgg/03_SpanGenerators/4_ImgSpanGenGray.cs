@@ -41,8 +41,8 @@ namespace PixelFarm.Agg.Image
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
-            ISpanInterpolator spanInterpolator = interpolator();
-            spanInterpolator.Begin(x + filter_dx_dbl(), y + filter_dy_dbl(), len);
+            ISpanInterpolator spanInterpolator = Interpolator;
+            spanInterpolator.Begin(x + Dx, y + Dy, len);
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);

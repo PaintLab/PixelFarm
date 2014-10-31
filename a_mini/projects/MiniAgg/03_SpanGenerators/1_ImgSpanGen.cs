@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 using System;
-using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
+using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
 using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
@@ -31,7 +31,8 @@ namespace PixelFarm.Agg
     {
         IImageBufferAccessor imageBufferAccessor;
         protected ISpanInterpolator m_interpolator;
-        protected ImageFilterLookUpTable m_filter;
+        protected ImageFilterLookUpTable filterLookup;
+
         double m_dx_dbl;
         double m_dy_dbl;
         int m_dx_int;
@@ -50,35 +51,47 @@ namespace PixelFarm.Agg
         {
             imageBufferAccessor = src;
             m_interpolator = interpolator;
-            m_filter = (filter);
+            filterLookup = (filter);
             m_dx_dbl = (0.5);
             m_dy_dbl = (0.5);
-            m_dx_int = ((int)image_subpixel_scale_e.SCALE / 2);
-            m_dy_int = ((int)image_subpixel_scale_e.SCALE / 2);
+            m_dx_int = ((int)img_subpix_const.SCALE / 2);
+            m_dy_int = ((int)img_subpix_const.SCALE / 2);
         }
-        public void attach(IImageBufferAccessor v) { imageBufferAccessor = v; }
 
         public abstract void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len);
 
         public IImageBufferAccessor GetImageBufferAccessor() { return imageBufferAccessor; }
-        public ImageFilterLookUpTable filter() { return m_filter; }
-        public int filter_dx_int() { return (int)m_dx_int; }
-        public int filter_dy_int() { return (int)m_dy_int; }
-        public double filter_dx_dbl() { return m_dx_dbl; }
-        public double filter_dy_dbl() { return m_dy_dbl; }
+        public ImageFilterLookUpTable FilterLookup
+        {
+            get { return filterLookup; }
+            set { this.filterLookup = value; }
+        }
 
-        public void interpolator(ISpanInterpolator v) { m_interpolator = v; }
-        public void filter(ImageFilterLookUpTable v) { m_filter = v; }
-        public void filter_offset(double dx, double dy)
+        public ISpanInterpolator Interpolator
+        {
+            get { return m_interpolator; }
+            set { this.m_interpolator = value; }
+        }
+
+
+     
+        public double Dx { get { return m_dx_dbl; } }
+        public double Dy { get { return m_dy_dbl; } }
+        public int DxInt { get { return m_dx_int; } }
+        public int DyInt { get { return m_dy_int; } }
+
+
+        public void SetFilterOffset(double dx, double dy)
         {
             m_dx_dbl = dx;
             m_dy_dbl = dy;
-            m_dx_int = (int)AggBasics.iround(dx * (int)image_subpixel_scale_e.SCALE);
-            m_dy_int = (int)AggBasics.iround(dy * (int)image_subpixel_scale_e.SCALE);
+            m_dx_int = (int)AggBasics.iround(dx * (int)img_subpix_const.SCALE);
+            m_dy_int = (int)AggBasics.iround(dy * (int)img_subpix_const.SCALE);
         }
-        public void filter_offset(double d) { filter_offset(d, d); }
 
-        public ISpanInterpolator interpolator() { return m_interpolator; }
+        public void SetFilterOffset(double d) { SetFilterOffset(d, d); }
+
+
 
         public void Prepare() { }
     }
