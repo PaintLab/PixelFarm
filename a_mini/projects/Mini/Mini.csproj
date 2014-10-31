@@ -130,10 +130,6 @@
       <Project>{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}</Project>
       <Name>MiniGui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiniVectorMath\MiniVectorMath.csproj">
-      <Project>{16026D20-5321-4FFB-AEF7-4A1C9AEC32B2}</Project>
-      <Name>MiniVectorMath</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

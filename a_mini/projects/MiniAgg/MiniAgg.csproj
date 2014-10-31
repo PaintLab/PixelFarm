@@ -48,6 +48,17 @@
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
     <Compile Include="08_ImageFilters\FilterRGBAImageSpanGen.cs" />
     <Compile Include="08_ImageFilters\FilterRGBImageSpanGen.cs" />
+    <Compile Include="09_VectorMath\AxisAlignedBoundingBox.cs" />
+    <Compile Include="09_VectorMath\MathHelper.cs" />
+    <Compile Include="09_VectorMath\Matrix4x4.cs" />
+    <Compile Include="09_VectorMath\Quaternion.cs" />
+    <Compile Include="09_VectorMath\Ray.cs" />
+    <Compile Include="09_VectorMath\TrackBallController.cs" />
+    <Compile Include="09_VectorMath\UnitTests.cs" />
+    <Compile Include="09_VectorMath\Vector2.cs" />
+    <Compile Include="09_VectorMath\Vector3.cs" />
+    <Compile Include="09_VectorMath\Vector3Float.cs" />
+    <Compile Include="09_VectorMath\Vector4.cs" />
     <Compile Include="x_notused\x_PixelBlenderFloat.cs" />
     <Compile Include="03_SpanGenerators\0_ISpanGenerator.cs" />
     <Compile Include="04_Scanline\0_ScanlineSpan.cs" />
@@ -106,12 +117,6 @@
     <Compile Include="05_Vertex_Path\Stroke.cs" />
     <Compile Include="05_Vertex_Path\StrokeGenerator.cs" />
     <Compile Include="05_Vertex_Path\StrokeMath.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MiniVectorMath\MiniVectorMath.csproj">
-      <Project>{16026D20-5321-4FFB-AEF7-4A1C9AEC32B2}</Project>
-      <Name>MiniVectorMath</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
