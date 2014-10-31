@@ -24,20 +24,20 @@ namespace PixelFarm.Agg.Transform
 
     //============================================span_interpolator_persp_lerp
 
-    public sealed class InterpolatorPerspectiveLerp : ISpanInterpolator
+    public sealed class SpanInterpolatorPerspectiveLerp : ISpanInterpolator
     {
-        Transform.Perspective m_trans_dir;
-        Transform.Perspective m_trans_inv;
-        LinearInterpolatorDDA2 m_coord_x;
-        LinearInterpolatorDDA2 m_coord_y;
-        LinearInterpolatorDDA2 m_scale_x;
-        LinearInterpolatorDDA2 m_scale_y;
+        Perspective m_trans_dir;
+        Perspective m_trans_inv;
+        LineInterpolatorDDA2 m_coord_x;
+        LineInterpolatorDDA2 m_coord_y;
+        LineInterpolatorDDA2 m_scale_x;
+        LineInterpolatorDDA2 m_scale_y;
 
         const int SUBPIXEL_SHIFT = 8;
         const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
 
         //--------------------------------------------------------------------
-        public InterpolatorPerspectiveLerp()
+        public SpanInterpolatorPerspectiveLerp()
         {
             m_trans_dir = new Transform.Perspective();
             m_trans_inv = new Transform.Perspective();
@@ -45,7 +45,7 @@ namespace PixelFarm.Agg.Transform
 
         //--------------------------------------------------------------------
         // Arbitrary quadrangle transformations
-        public InterpolatorPerspectiveLerp(double[] src, double[] dst)
+        public SpanInterpolatorPerspectiveLerp(double[] src, double[] dst)
             : this()
         {
             quad_to_quad(src, dst);
@@ -53,7 +53,7 @@ namespace PixelFarm.Agg.Transform
 
         //--------------------------------------------------------------------
         // Direct transformations 
-        public InterpolatorPerspectiveLerp(double x1, double y1,
+        public SpanInterpolatorPerspectiveLerp(double x1, double y1,
                                      double x2, double y2,
                                      double[] quad)
             : this()
@@ -63,7 +63,7 @@ namespace PixelFarm.Agg.Transform
 
         //--------------------------------------------------------------------
         // Reverse transformations 
-        public InterpolatorPerspectiveLerp(double[] quad,
+        public SpanInterpolatorPerspectiveLerp(double[] quad,
                                      double x1, double y1,
                                      double x2, double y2)
             : this()
@@ -164,10 +164,10 @@ namespace PixelFarm.Agg.Transform
             int sy2 = (int)AggBasics.uround(SUBPIXEL_SCALE / Math.Sqrt(dx * dx + dy * dy)) >> SUBPIXEL_SHIFT;
 
             // Initialize the interpolators
-            m_coord_x = new LinearInterpolatorDDA2(x1, x2, (int)len);
-            m_coord_y = new LinearInterpolatorDDA2(y1, y2, (int)len);
-            m_scale_x = new LinearInterpolatorDDA2(sx1, sx2, (int)len);
-            m_scale_y = new LinearInterpolatorDDA2(sy1, sy2, (int)len);
+            m_coord_x = new LineInterpolatorDDA2(x1, x2, (int)len);
+            m_coord_y = new LineInterpolatorDDA2(y1, y2, (int)len);
+            m_scale_x = new LineInterpolatorDDA2(sx1, sx2, (int)len);
+            m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
         }
 
 
@@ -208,10 +208,10 @@ namespace PixelFarm.Agg.Transform
             int sy2 = (int)AggBasics.uround(SUBPIXEL_SCALE / Math.Sqrt(dx * dx + dy * dy)) >> SUBPIXEL_SHIFT;
 
             // Initialize the interpolators
-            m_coord_x = new LinearInterpolatorDDA2(x1, x2, (int)len);
-            m_coord_y = new LinearInterpolatorDDA2(y1, y2, (int)len);
-            m_scale_x = new LinearInterpolatorDDA2(sx1, sx2, (int)len);
-            m_scale_y = new LinearInterpolatorDDA2(sy1, sy2, (int)len);
+            m_coord_x = new LineInterpolatorDDA2(x1, x2, (int)len);
+            m_coord_y = new LineInterpolatorDDA2(y1, y2, (int)len);
+            m_scale_x = new LineInterpolatorDDA2(sx1, sx2, (int)len);
+            m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
         }
 
         public Transform.ITransform GetTransformer()
@@ -252,5 +252,5 @@ namespace PixelFarm.Agg.Transform
         {
             m_trans_dir.Transform(ref x, ref y);
         }
-    } 
+    }
 }

@@ -45,6 +45,7 @@
     <Compile Include="02_PixelBuffer\ChildImage.cs" />
     <Compile Include="02_PixelBuffer\ImageHelper.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
+    <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
     <Compile Include="08_ImageFilters\FilterRGBAImageSpanGen.cs" />
     <Compile Include="08_ImageFilters\FilterRGBImageSpanGen.cs" />
     <Compile Include="x_notused\x_PixelBlenderFloat.cs" />
@@ -54,10 +55,10 @@
     <Compile Include="07_Lines\LineParameters.cs" />
     <Compile Include="07_Lines\ClipLiangBarsky.cs" />
     <Compile Include="01_Base\ColorRGBA.cs" />
-    <Compile Include="06_Transfrom\LinearInterpolators.cs" />
+    <Compile Include="06_Transfrom\LineInterpolators.cs" />
     <Compile Include="04_Scanline\4.4_FillingRule.cs" />
     <Compile Include="03_SpanGenerators\IGammaFunction.cs" />
-    <Compile Include="06_Transfrom\SimulEqGeneral.cs" />
+    <Compile Include="06_Transfrom\4_SimulEqGeneral.cs" />
     <Compile Include="05_Vertex_Path\BoundingRect.cs" />
     <Compile Include="05_Vertex_Path\LineCapAndJoin.cs" />
     <Compile Include="07_Lines\LinesAA.cs" />
@@ -71,8 +72,8 @@
     <Compile Include="03_SpanGenerators\4_ImgSpanGenGray.cs" />
     <Compile Include="03_SpanGenerators\2_ImgSpanGenRGB.cs" />
     <Compile Include="03_SpanGenerators\3_ImgSpanGenRGBA.cs" />
-    <Compile Include="06_Transfrom\InterpolatorLinear.cs" />
-    <Compile Include="06_Transfrom\InterpolatorPerspectiveLerp.cs" />
+    <Compile Include="06_Transfrom\SpanInterpolatorLinear.cs" />
+    <Compile Include="06_Transfrom\SpanInterpolatorPerspectiveLerp.cs" />
     <Compile Include="08_ImageFilters\ImageFilterLookupTable.cs" />
     <Compile Include="02_PixelBuffer\RasterBufferAccessors.cs" />
     <Compile Include="05_Vertex_Path\VertexSequence.cs" />
@@ -94,10 +95,10 @@
     <Compile Include="04_Scanline\4.1_ScanlineRasterizer.cs" />
     <Compile Include="04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="05_Vertex_Path\ShapePath.cs" />
-    <Compile Include="06_Transfrom\Affine.cs" />
-    <Compile Include="06_Transfrom\Bilinear.cs" />
-    <Compile Include="06_Transfrom\ITransform.cs" />
-    <Compile Include="06_Transfrom\Perspective.cs" />
+    <Compile Include="06_Transfrom\1_Affine.cs" />
+    <Compile Include="06_Transfrom\2_Bilinear.cs" />
+    <Compile Include="06_Transfrom\0_ITransform.cs" />
+    <Compile Include="06_Transfrom\3_Perspective.cs" />
     <Compile Include="06_Transfrom\Viewport.cs" />
     <Compile Include="04_Scanline\4.3_VectorClipper.cs" />
     <Compile Include="05_Vertex_Path\VertexData.cs" />

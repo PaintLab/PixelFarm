@@ -342,9 +342,9 @@ namespace PixelFarm.Agg.Image
             int bufferIndex;
             byte[] fg_ptr;
 
-            if (base.m_interpolator.GetType() == typeof(PixelFarm.Agg.Transform.InterpolatorLinear)
-                && ((PixelFarm.Agg.Transform.InterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(PixelFarm.Agg.Transform.Affine)
-            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.InterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
+            if (base.m_interpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
+                && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(PixelFarm.Agg.Transform.Affine)
+            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe

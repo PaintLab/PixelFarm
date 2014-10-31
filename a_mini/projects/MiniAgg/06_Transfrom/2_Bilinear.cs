@@ -20,11 +20,7 @@
 using System;
 
 namespace PixelFarm.Agg.Transform
-{
-
-
-
-
+{   
     //==========================================================trans_bilinear
     public sealed partial class Bilinear : ITransform
     {
