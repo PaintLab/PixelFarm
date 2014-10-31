@@ -442,8 +442,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         FlattenCurves curve = new FlattenCurves(); 
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
-
                         var curveVxs = curve.MakeVxs(t_glyph);
+
                         CreateAndRenderCombined(graphics2D, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
 
                         graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));

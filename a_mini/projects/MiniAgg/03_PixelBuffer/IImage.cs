@@ -27,9 +27,7 @@ namespace MatterHackers.Agg
 
     public interface IImage
     {
-        
-        void SetOriginOffset(double x, double y);
-        void GetOriginOffset(out double x, out double y);
+      
         int BitDepth { get; }
         int Width { get; }
         int Height { get; }
@@ -48,14 +46,12 @@ namespace MatterHackers.Agg
         byte[] GetBuffer();
 
         ColorRGBA GetPixel(int x, int y);
-        //void CopyPixel(int x, int y, byte[] c, int byteOffset);
-
+     
         void CopyFrom(IImage sourceImage);
         void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
 
         void SetPixel(int x, int y, ColorRGBA color);
-        //void BlendPixel(int x, int y, ColorRGBA sourceColor, byte cover);
-
+         
         // line stuff
         void CopyHL(int x, int y, int len, ColorRGBA sourceColor);
         void CopyVL(int x, int y, int len, ColorRGBA sourceColor);

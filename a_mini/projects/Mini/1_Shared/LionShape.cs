@@ -219,9 +219,7 @@ namespace MatterHackers.Agg
         PathStorage path = new PathStorage();
         ColorRGBA[] colors = new ColorRGBA[100];
         int[] pathIndexList = new int[100];
-
         int numPaths = 0;
-
         RectangleDouble boundingRect;
         Vector2 center;
         public LionShape()

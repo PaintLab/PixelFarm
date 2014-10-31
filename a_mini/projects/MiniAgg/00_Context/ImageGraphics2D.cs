@@ -36,13 +36,15 @@ namespace MatterHackers.Agg
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
+        double ox; //origin x
+        double oy; //origin y
         public ImageGraphics2D(IImage destImage,
             ScanlineRasterizer rasterizer,
             ScanlinePacked8 scanline)
             : base(destImage, rasterizer)
         {
             this.scanline = scanline;
-        } 
+        }
         public override void SetClippingRect(RectangleDouble clippingRect)
         {
             Rasterizer.SetVectorClipBox(clippingRect);
@@ -60,6 +62,11 @@ namespace MatterHackers.Agg
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
             //reset rasterizer before render each vertextSnap
+            if (destImageByte == null)
+            {
+                return;
+            }
+            //-----------------------------
             rasterizer.Reset();
             Affine transform = GetTransform();
             if (!transform.IsIdentity())
@@ -69,21 +76,11 @@ namespace MatterHackers.Agg
             else
             {
                 rasterizer.AddPath(vertextSnap);
-            }
-
-            if (destImageByte != null)
-            {
-                sclineRasToBmp.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);
-                destImageByte.MarkImageChanged();
-            }
-            else
-            {
-                //scanlineRenderer.RenderSolid(destImageFloat, rasterizer, m_ScanlineCache, colorBytes.GetAsRGBA_Floats());
-                //destImageFloat.MarkImageChanged();
-            }
+            } 
+            sclineRasToBmp.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);            
+            destImageByte.MarkImageChanged();
+            //-----------------------------
         }
-
-
         void DrawImageGetDestBounds(IImage sourceImage,
             double destX, double destY,
             double hotspotOffsetX, double hotSpotOffsetY,
@@ -135,16 +132,15 @@ namespace MatterHackers.Agg
 
         void DrawImage(IImage sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
         {
-            double ox, oy;
-            destImageByte.GetOriginOffset(out ox, out oy);
-            if (ox != 0 || oy != 0)
-            {
-                destRectTransform *= Affine.NewTranslation(-ox, -oy);
-            }
-
-
+            //double ox, oy;
+            //destImageByte.GetOriginOffset(out ox, out oy);
+            //if (ox != 0 || oy != 0)
+            //{
+            //    destRectTransform *= Affine.NewTranslation(-ox, -oy);
+            //}
+             
             VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
-            Rasterizer.AddPath(sp1); 
+            Rasterizer.AddPath(sp1);
             sclineRasToBmp.GenerateAndRender(
                 new ChildImage(destImageByte, destImageByte.GetRecieveBlender()),
                 Rasterizer,
@@ -205,8 +201,8 @@ namespace MatterHackers.Agg
             }
 
             //bool IsMipped = false;
-            double ox, oy;
-            source.GetOriginOffset(out ox, out oy);
+            //double ox, oy;
+            //source.GetOriginOffset(out ox, out oy);
 
             bool canUseMipMaps = isScale;
             if (scaleX > 0.5 || scaleY > 0.5)
@@ -351,8 +347,8 @@ namespace MatterHackers.Agg
             }
 
             //bool IsMipped = false;
-            double ox, oy;
-            source.GetOriginOffset(out ox, out oy);
+            //double ox, oy;
+            //source.GetOriginOffset(out ox, out oy);
 
             bool canUseMipMaps = isScale;
             if (scaleX > 0.5 || scaleY > 0.5)
@@ -447,7 +443,7 @@ namespace MatterHackers.Agg
         }
         public override void Clear(ColorRGBA color)
         {
-             
+
             RectangleInt clippingRectInt = GetClippingRectInt();
             IImage destImage = this.DestImage;
             if (destImage != null)

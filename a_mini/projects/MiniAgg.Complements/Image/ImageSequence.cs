@@ -74,13 +74,13 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public void CenterOriginOffset()
-        {
-            foreach (ImageBase image in imageList)
-            {                 
-                image.SetOriginOffset(image.Width / 2, image.Height / 2);
-            }
-        }
+        //public void CenterOriginOffset()
+        //{
+        //    foreach (ImageBase image in imageList)
+        //    {                 
+        //        image.SetOriginOffset(image.Width / 2, image.Height / 2);
+        //    }
+        //}
 
         public void CropToVisible()
         {

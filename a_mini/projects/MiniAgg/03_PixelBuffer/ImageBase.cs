@@ -222,16 +222,16 @@ namespace MatterHackers.Agg
         }
 
 
-        public void GetOriginOffset(out double x, out double y)
-        {
-            x = this.originX;
-            y = this.originY;
-        }
-        public void SetOriginOffset(double x, double y)
-        {
-            this.originX = x;
-            this.originY = y;
-        }
+        //public void GetOriginOffset(out double x, out double y)
+        //{
+        //    x = this.originX;
+        //    y = this.originY;
+        //}
+        //public void SetOriginOffset(double x, double y)
+        //{
+        //    this.originX = x;
+        //    this.originY = y;
+        //}
 
         public int Width
         {
@@ -707,12 +707,7 @@ namespace MatterHackers.Agg
 
         public RectangleInt GetBoundingRect()
         {
-            RectangleInt boundingRect = new RectangleInt(0, 0, Width, Height);
-            double ox, oy;
-            this.GetOriginOffset(out ox, out oy);
-            boundingRect.Offset((int)ox, (int)oy);
-
-            return boundingRect;
+            return new RectangleInt(0, 0, Width, Height); 
         }
 
         //internal void Initialize(BufferImage sourceImage)

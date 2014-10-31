@@ -76,7 +76,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
     {
         VertexStore vxStorage;
         LionShape lionShape;
-        bool needUpdate;
+         
         byte alpha;
         public LionFill()
         {
@@ -146,7 +146,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-            this.needUpdate = true;
+            vxStorage = null;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
@@ -173,8 +173,18 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
                 //vxStorage = new VertexStorage(list);
             }
 
-            //graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
-            graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+            //-----------------------------------------------------------------------------------
+            {
+                int j = lionShape.NumPaths;
+                int[] pathList = lionShape.PathIndexList;
+                ColorRGBA[] colors = lionShape.Colors;
+                for (int i = 0; i < j; ++i)
+                {
+                    graphics2D.Render(new VertexStoreSnap(vxStorage, pathList[i]), colors[i]);
+                }
+            }
+            //-----------------------------------------------------------------------------------
+
 
             base.OnDraw(graphics2D);
             if (!IsFreezed)

@@ -31,15 +31,7 @@ namespace MatterHackers.Agg.Image
         {
             this.linkedImage = linkedImage;
         }
-         
-        public void SetOriginOffset(double x, double y)
-        {
-            linkedImage.SetOriginOffset(x, y);
-        }
-        public void GetOriginOffset(out double x, out double y)
-        {
-            linkedImage.GetOriginOffset(out x, out y);
-        }
+          
         public virtual int Width
         {
             get
@@ -81,11 +73,7 @@ namespace MatterHackers.Agg.Image
         {
             return linkedImage.GetPixel(x, y);
         }
-
-        //public virtual void CopyPixel(int x, int y, byte[] c, int byteOffset)
-        //{
-        //    linkedImage.CopyPixel(x, y, c, byteOffset);
-        //}
+         
 
         public virtual void CopyFrom(IImage sourceRaster)
         {
