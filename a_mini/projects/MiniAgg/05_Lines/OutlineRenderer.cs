@@ -14,9 +14,9 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg.Image;
 
-namespace MatterHackers.Agg.Lines
+namespace PixelFarm.Agg.Lines
 {
     //-----------------------------------------------------------line_coord_sat
     public static class LineCoordSat
@@ -651,7 +651,7 @@ namespace MatterHackers.Agg.Lines
         public int dx_end() { return m_dx_end; }
         public int dy_end() { return m_dy_end; }
         public int len() { return m_len; }
-    } 
+    }
 
     //================================================line_interpolator_aa_base
     public class LineInterpolatorAABase
@@ -835,7 +835,7 @@ namespace MatterHackers.Agg.Lines
                 m_covers[--Offset0] = (byte)base.m_ren.cover(dist);
                 ++dy;
             }
-            base.m_ren.blend_solid_vspan(base.m_x,
+            base.m_ren.BlendSolidVSpan(base.m_x,
                                                base.m_y - dy + 1,
                                                Offset1 - Offset0,
                                                m_covers, Offset0);
@@ -866,7 +866,7 @@ namespace MatterHackers.Agg.Lines
                 m_covers[--Offset0] = (byte)base.m_ren.cover(dist);
                 ++dx;
             }
-            base.m_ren.blend_solid_hspan(base.m_x - dx + 1,
+            base.m_ren.BlendSolidHSpan(base.m_x - dx + 1,
                                                base.m_y,
                                                Offset1 - Offset0,
                                                m_covers, Offset0);
@@ -877,7 +877,7 @@ namespace MatterHackers.Agg.Lines
     //====================================================line_interpolator_aa1
     public class LineInterpolatorAA1 : LineInterpolatorAABase
     {
-        DistanceInterpolator2 m_di; 
+        DistanceInterpolator2 m_di;
 
         //---------------------------------------------------------------------
         public LineInterpolatorAA1(OutlineRenderer ren, LineParameters lp,
@@ -1006,7 +1006,7 @@ namespace MatterHackers.Agg.Lines
             }
 
             int len = Offset1 - Offset0;
-            base.m_ren.blend_solid_vspan(base.m_x,
+            base.m_ren.BlendSolidVSpan(base.m_x,
                                                base.m_y - dy + 1,
                                                len, m_covers,
                                                Offset0);
@@ -1057,7 +1057,7 @@ namespace MatterHackers.Agg.Lines
                 }
                 ++dx;
             }
-            base.m_ren.blend_solid_hspan(base.m_x - dx + 1,
+            base.m_ren.BlendSolidHSpan(base.m_x - dx + 1,
                                                base.m_y,
                                                Offset1 - Offset0, m_covers,
                                                Offset0);
@@ -1070,7 +1070,7 @@ namespace MatterHackers.Agg.Lines
     public class LineInterpolatorAA2 : LineInterpolatorAABase
     {
         DistanceInterpolator2 m_di;
-         
+
         //---------------------------------------------------------------------
         public LineInterpolatorAA2(OutlineRenderer ren, LineParameters lp,
                               int ex, int ey)
@@ -1132,7 +1132,7 @@ namespace MatterHackers.Agg.Lines
                 }
                 ++dy;
             }
-            base.m_ren.blend_solid_vspan(base.m_x,
+            base.m_ren.BlendSolidVSpan(base.m_x,
                                                base.m_y - dy + 1,
                                                Offset1 - Offset0, m_covers,
                                                Offset0);
@@ -1187,7 +1187,7 @@ namespace MatterHackers.Agg.Lines
                 }
                 ++dx;
             }
-            base.m_ren.blend_solid_hspan(base.m_x - dx + 1,
+            base.m_ren.BlendSolidHSpan(base.m_x - dx + 1,
                                                base.m_y,
                                                Offset1 - Offset0, m_covers,
                                                Offset0);
@@ -1199,7 +1199,7 @@ namespace MatterHackers.Agg.Lines
     public class LineInterpolatorAA3 : LineInterpolatorAABase
     {
         DistanceInterpolator3 m_di;
-       
+
         //---------------------------------------------------------------------
         public LineInterpolatorAA3(OutlineRenderer ren, LineParameters lp,
                               int sx, int sy, int ex, int ey)
@@ -1334,7 +1334,7 @@ namespace MatterHackers.Agg.Lines
                 }
                 ++dy;
             }
-            base.m_ren.blend_solid_vspan(base.m_x,
+            base.m_ren.BlendSolidVSpan(base.m_x,
                                                base.m_y - dy + 1,
                                                Offset1 - Offset0, m_covers,
                                                Offset0);
@@ -1397,7 +1397,7 @@ namespace MatterHackers.Agg.Lines
                 }
                 ++dx;
             }
-            base.m_ren.blend_solid_hspan(base.m_x - dx + 1,
+            base.m_ren.BlendSolidHSpan(base.m_x - dx + 1,
                                                base.m_y,
                                                Offset1 - Offset0, m_covers,
                                                Offset0);
@@ -1670,11 +1670,12 @@ namespace MatterHackers.Agg.Lines
     //======================================================renderer_outline_aa
     public class OutlineRenderer : LineRenderer
     {
-        private IImage destImageSurface;
+        IImage destImageSurface;
         LineProfileAnitAlias lineProfile;
         RectangleInt clippingRectangle;
         bool doClipping;
         protected const int max_half_width = 64;
+        IPixelBlender destPixelBlender;
 
 #if false
         public int min_x() { throw new System.NotImplementedException(); }
@@ -1687,19 +1688,15 @@ namespace MatterHackers.Agg.Lines
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(IImage destImage, LineProfileAnitAlias profile)
+        public OutlineRenderer(IImage destImage, IPixelBlender destPixelBlender, LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;
             clippingRectangle = new RectangleInt(0, 0, 0, 0);
             doClipping = false;
+            this.destPixelBlender = destPixelBlender;
         }
 
-        public void attach(IImage ren) { destImageSurface = ren; }
-
-        //---------------------------------------------------------------------
-        public void profile(LineProfileAnitAlias prof) { lineProfile = prof; }
-        public LineProfileAnitAlias profile() { return lineProfile; }
 
         //---------------------------------------------------------------------
         public int subpixel_width() { return lineProfile.subpixel_width(); }
@@ -1721,12 +1718,12 @@ namespace MatterHackers.Agg.Lines
             return lineProfile.value(d);
         }
 
-        public void blend_solid_hspan(int x, int y, int len, byte[] covers, int coversOffset)
+        public void BlendSolidHSpan(int x, int y, int len, byte[] covers, int coversOffset)
         {
             destImageSurface.BlendSolidHSpan(x, y, len, color(), covers, coversOffset);
         }
 
-        public void blend_solid_vspan(int x, int y, int len, byte[] covers, int coversOffset)
+        public void BlendSolidVSpan(int x, int y, int len, byte[] covers, int coversOffset)
         {
             destImageSurface.BlendSolidVSpan(x, y, len, color(), covers, coversOffset);
         }

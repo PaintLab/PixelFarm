@@ -16,7 +16,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-namespace MatterHackers.Agg.Lines
+namespace PixelFarm.Agg.Lines
 {
     //==========================================================line_parameters
     public class LineParameters

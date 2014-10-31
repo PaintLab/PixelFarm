@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 using System.Text;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     class ContourGenerator
     {

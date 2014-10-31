@@ -19,9 +19,9 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     //---------------------------------------------------------------path_base
     // A container to store vertices with their flags. 

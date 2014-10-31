@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 using System.Collections.Generic;
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     public sealed class Stroke
     {

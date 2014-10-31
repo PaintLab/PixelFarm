@@ -21,7 +21,7 @@
 // conv_stroke
 //
 //----------------------------------------------------------------------------
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     public sealed class Contour  
     {

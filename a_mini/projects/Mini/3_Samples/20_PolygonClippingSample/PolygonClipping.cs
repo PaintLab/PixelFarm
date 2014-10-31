@@ -4,16 +4,16 @@
 using System;
 using System.Collections.Generic;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Transform;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Transform;
 
 using Mini;
 using ClipperLib;
 
-namespace MatterHackers.Agg.Sample_PolygonClipping
+namespace PixelFarm.Agg.Sample_PolygonClipping
 {
 
     public enum OperationOption
@@ -315,7 +315,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         //
                         PathStorage gb_poly = new PathStorage();
                         PathStorage arrows = new PathStorage();
-                        MatterHackers.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
+                        PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
                         make_arrows(arrows);
 
@@ -358,7 +358,7 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
 
 
                         PathStorage gb_poly = new PathStorage();
-                        MatterHackers.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
+                        PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
                         Affine mtx = Affine.NewMatix(
                                 AffinePlan.Translate(-1150, -1150),
@@ -442,8 +442,8 @@ namespace MatterHackers.Agg.Sample_PolygonClipping
                         FlattenCurves curve = new FlattenCurves(); 
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
-
                         var curveVxs = curve.MakeVxs(t_glyph);
+
                         CreateAndRenderCombined(graphics2D, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
 
                         graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));

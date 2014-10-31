@@ -14,9 +14,9 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg;
+using PixelFarm.Agg;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     //==================================================pixfmt_amask_adaptor
     public sealed class AlphaMaskAdaptor : ProxyImage

@@ -24,7 +24,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg.ImageFilter
+namespace PixelFarm.Agg.ImageFilter
 {
 
     //-----------------------------------------------image_filter_bilinear

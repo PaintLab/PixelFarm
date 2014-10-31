@@ -17,10 +17,10 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Lines;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Lines;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
 
@@ -58,7 +58,7 @@ namespace MatterHackers.Agg
             b += weight * ptr[sourceOffset + ImageBase.OrderB];
             a += weight * ptr[sourceOffset + ImageBase.OrderA];
 
-            sourceOffset += sourceImage.GetBytesBetweenPixelsInclusive();
+            sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
 
             weight = x * (LineAABasics.SUBPIXEL_SCALE - y);
             r += weight * ptr[sourceOffset + ImageBase.OrderR];
@@ -74,7 +74,7 @@ namespace MatterHackers.Agg
             b += weight * ptr[sourceOffset + ImageBase.OrderB];
             a += weight * ptr[sourceOffset + ImageBase.OrderA];
 
-            sourceOffset += sourceImage.GetBytesBetweenPixelsInclusive();
+            sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
 
             weight = x * y;
             r += weight * ptr[sourceOffset + ImageBase.OrderR];

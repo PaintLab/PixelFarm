@@ -30,9 +30,9 @@ either expressed or implied, of the FreeBSD Project.
 using System;
 //using System.Linq;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.VectorMath
+namespace PixelFarm.VectorMath
 {
     public class TrackBallController
     {

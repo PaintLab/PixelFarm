@@ -4,13 +4,13 @@
 using System;
 using System.Diagnostics;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.VertexSource;
 
 
 using Mini;
-namespace MatterHackers.Agg.Sample_Gouraud
+namespace PixelFarm.Agg.Sample_Gouraud
 {
     [Info(OrderCode = "07")]
     [Info("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"
@@ -74,7 +74,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            var image = new ChildImage(backBuffer, new BlenderBGRA());
+            var image = new ChildImage(backBuffer, new PixelBlenderBGRA());
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(image);
 
@@ -165,7 +165,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            var pf = new ChildImage(backBuffer, new BlenderBGRA());
+            var pf = new ChildImage(backBuffer, new PixelBlenderBGRA());
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(pf);
             ren_base.Clear(new ColorRGBAf(1.0f, 1.0f, 1.0f).ToColorRGBA());

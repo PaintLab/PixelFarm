@@ -21,7 +21,7 @@
 // Liang-Barsky clipping 
 //
 //----------------------------------------------------------------------------
-namespace MatterHackers.Agg.Lines
+namespace PixelFarm.Agg.Lines
 {
     public static class ClipLiangBarsky
     {

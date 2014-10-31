@@ -29,15 +29,15 @@
 
 using System;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Lines;
+using PixelFarm.Agg.Image;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Lines;
 
-using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
-using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filter_scale_e;
+using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
+using image_filter_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_filter_scale_e;
 
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
     class SpanImageFilterRGBA_NN_StepXBy1 : SpanImageFilter
@@ -343,9 +343,9 @@ namespace MatterHackers.Agg
             int bufferIndex;
             byte[] fg_ptr;
 
-            if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.Lines.InterpolatorLinear)
-                && ((MatterHackers.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
-            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
+            if (base.m_interpolator.GetType() == typeof(PixelFarm.Agg.Lines.InterpolatorLinear)
+                && ((PixelFarm.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(PixelFarm.Agg.Transform.Affine)
+            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe
@@ -387,7 +387,7 @@ namespace MatterHackers.Agg
             int back_b = m_OutsideSourceColor.blue;
             int back_a = m_OutsideSourceColor.alpha;
 
-            int distanceBetweenPixelsInclusive = base.GetImageBufferAccessor().SourceImage.GetBytesBetweenPixelsInclusive();
+            int distanceBetweenPixelsInclusive = base.GetImageBufferAccessor().SourceImage.BytesBetweenPixelsInclusive;
             int maxx = (int)SourceRenderingBuffer.Width - 1;
             int maxy = (int)SourceRenderingBuffer.Height - 1;
             ISpanInterpolator spanInterpolator = base.interpolator();
@@ -568,7 +568,7 @@ namespace MatterHackers.Agg
         public SpanImageFilterRGBA(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
             : base(src, inter, filter)
         {
-            if (src.SourceImage.GetBytesBetweenPixelsInclusive() != 4)
+            if (src.SourceImage.BytesBetweenPixelsInclusive != 4)
             {
                 throw new System.NotSupportedException("span_image_filter_rgba must have a 32 bit DestImage");
             }

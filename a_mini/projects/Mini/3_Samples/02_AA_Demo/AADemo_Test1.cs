@@ -3,14 +3,14 @@
 
 using System;
 
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg.Sample_AADemoTest1
+namespace PixelFarm.Agg.Sample_AADemoTest1
 {
     public class square
     {
@@ -124,8 +124,8 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
-            IRecieveBlenderByte NormalBlender = new BlenderBGRA();
-            IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
+            IPixelBlender NormalBlender = new PixelBlenderBGRA();
+            IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(gamma);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
 
 

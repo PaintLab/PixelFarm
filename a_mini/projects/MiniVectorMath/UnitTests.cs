@@ -31,7 +31,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace MatterHackers.VectorMath.Tests
+namespace PixelFarm.VectorMath.Tests
 {
     [TestFixture]
     public class Vector3Tests

@@ -22,11 +22,11 @@
 
 //#include "agg_clip_liang_barsky.h"
 
-using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
-using MatterHackers.Agg.Lines;
+using poly_subpixel_scale_e = PixelFarm.Agg.AggBasics.PolySubPixelScale;
+using PixelFarm.Agg.Lines;
 
 
-namespace MatterHackers.Agg.JustForScanlineRasterizer
+namespace PixelFarm.Agg.JustForScanlineRasterizer
 {
 
 

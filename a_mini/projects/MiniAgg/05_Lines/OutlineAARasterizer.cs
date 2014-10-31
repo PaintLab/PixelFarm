@@ -15,9 +15,9 @@
 //----------------------------------------------------------------------------
 using System;
 
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.VertexSource;
 
-namespace MatterHackers.Agg.Lines
+namespace PixelFarm.Agg.Lines
 {
     //-----------------------------------------------------------line_aa_vertex
     // Vertex (x, y) with the distance to the next one. The last vertex has 

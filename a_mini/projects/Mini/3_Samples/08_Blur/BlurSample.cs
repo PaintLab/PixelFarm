@@ -5,17 +5,17 @@
 using System;
 using System.Diagnostics;
 
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.Agg.Font;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Font;
+using PixelFarm.VectorMath;
 
 
 using Mini;
-namespace MatterHackers.Agg.Sample_Blur
+namespace PixelFarm.Agg.Sample_Blur
 {
 
 
@@ -231,7 +231,7 @@ namespace MatterHackers.Agg.Sample_Blur
                 if (boundsRect.clip(new RectangleInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
                 {
                     //check if intersect 
-                    ChildImage image2 = new ChildImage(widgetsSubImage, new BlenderBGRA(), x1, y2, x2, y1);
+                    ChildImage image2 = new ChildImage(widgetsSubImage, new PixelBlenderBGRA(), x1, y2, x2, y1);
                     // Blur it
                     switch (BlurMethod)
                     {
@@ -253,7 +253,7 @@ namespace MatterHackers.Agg.Sample_Blur
                                 // but still constant time of radius. Very sensitive
                                 // to precision, doubles are must here.
                                 //------------------
-                                m_recursive_blur.blur(image2, m_radius);
+                                m_recursive_blur.Blur(image2, m_radius);
                             } break;
                     }
 

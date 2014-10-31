@@ -3,14 +3,14 @@
 
 
 using System;
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg.Sample_RoundRect
+namespace PixelFarm.Agg.Sample_RoundRect
 {
     [Info(OrderCode = "10")]
     [Info("Yet another example dedicated to Gamma Correction. If you have a CRT monitor: The rectangle looks bad - "
@@ -116,13 +116,16 @@ namespace MatterHackers.Agg.Sample_RoundRect
 
             IImage backBuffer = widgetsSubImage;
 
+            
+            var normalBlender = new PixelBlenderBGRA();
+            var gammaBlender = new PixelBlenderGammaBGRA(this.Gamma);
 
-            var normalBlender = new BlenderBGRA();
-            var gammaBlender = new BlenderGammaBGRA(this.Gamma);
             var rasterNormal = new ChildImage(backBuffer, normalBlender);
             var rasterGamma = new ChildImage(backBuffer, gammaBlender);
+
             var clippingProxyNormal = new ClipProxyImage(rasterNormal);
             var clippingProxyGamma = new ClipProxyImage(rasterGamma);
+            
 
             clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
 

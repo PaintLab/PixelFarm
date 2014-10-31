@@ -20,7 +20,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-namespace MatterHackers.Agg.Lines
+namespace PixelFarm.Agg.Lines
 {
      
     public interface IPatternFilter

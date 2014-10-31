@@ -18,9 +18,9 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System.Runtime.InteropServices;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg.Image;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public interface IImageBufferAccessor
     {
@@ -52,7 +52,7 @@ namespace MatterHackers.Agg
             m_SourceImage = pixf;
             m_Buffer = m_SourceImage.GetBuffer();
             m_Width = m_SourceImage.Width;
-            m_DistanceBetweenPixelsInclusive = m_SourceImage.GetBytesBetweenPixelsInclusive();
+            m_DistanceBetweenPixelsInclusive = m_SourceImage.BytesBetweenPixelsInclusive;
         }
 
         public IImage SourceImage

@@ -18,9 +18,9 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System.Collections.Generic;
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public struct VertexData
     {

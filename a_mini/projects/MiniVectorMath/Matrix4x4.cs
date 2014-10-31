@@ -54,7 +54,7 @@ either expressed or implied, of the FreeBSD Project.
 using System;
 using System.Runtime.InteropServices;
 
-namespace MatterHackers.VectorMath
+namespace PixelFarm.VectorMath
 {
 #if true
     /// <summary>

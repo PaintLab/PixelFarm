@@ -17,19 +17,17 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using MatterHackers.Agg;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.VectorMath;
 
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg.Image;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     public interface IImage
     {
-        
-        void SetOriginOffset(double x, double y);
-        void GetOriginOffset(out double x, out double y);
+      
         int BitDepth { get; }
         int Width { get; }
         int Height { get; }
@@ -38,40 +36,43 @@ namespace MatterHackers.Agg
         int GetBufferOffsetXY(int x, int y);
         void MarkImageChanged();
 
-        int StrideInBytes();
-        int GetBytesBetweenPixelsInclusive();
+        int Stride { get; }
+        int BytesBetweenPixelsInclusive { get; }
 
-        IRecieveBlenderByte GetRecieveBlender();
-        void SetRecieveBlender(IRecieveBlenderByte value);
+        IPixelBlender GetRecieveBlender();
+        void SetRecieveBlender(IPixelBlender value);
 
-
-        byte[] GetBuffer();
-
+        byte[] GetBuffer(); 
         ColorRGBA GetPixel(int x, int y);
-        //void CopyPixel(int x, int y, byte[] c, int byteOffset);
+        void SetPixel(int x, int y, ColorRGBA color);        
 
-        void CopyFrom(IImage sourceImage);
-        void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
-
-        void SetPixel(int x, int y, ColorRGBA color);
-        //void BlendPixel(int x, int y, ColorRGBA sourceColor, byte cover);
-
-        // line stuff
-        void CopyHL(int x, int y, int len, ColorRGBA sourceColor);
-        void CopyVL(int x, int y, int len, ColorRGBA sourceColor);
-
-        void BlendHL(int x, int y, int x2, ColorRGBA sourceColor, byte cover);
+        //-------------------------------------------------------------------------------------------
+        void BlendHL(int x, int y, int x2, ColorRGBA sourceColor, byte cover); //**
         void BlendVL(int x, int y1, int y2, ColorRGBA sourceColor, byte cover);
+        //-------------------------------------------------------------------------------------------
+       
+        
+        void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset); //not used
+         
+        // line stuff
+        void CopyHL(int x, int y, int len, ColorRGBA sourceColor);//not used
+        void CopyVL(int x, int y, int len, ColorRGBA sourceColor);//not used
+
 
         // color stuff
-        void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorIndex);
-        void CopyColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorIndex);
+        void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorIndex); //**
+        void CopyColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorIndex); // 
 
-        void BlendSolidHSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex);
-        void BlendSolidVSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex);
 
-        void BlendColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
-        void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);
+        void BlendSolidHSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex);// 
+        void BlendSolidVSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex);// 
+
+        void BlendColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);// 
+        void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll); //not used
+        
+       
+        
+
     }
 
 }

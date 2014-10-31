@@ -25,7 +25,7 @@ SOFTWARE.
 using System;
 using System.Runtime.InteropServices;
 
-namespace MatterHackers.VectorMath
+namespace PixelFarm.VectorMath
 {
     /// <summary>
     /// Represents a 3D vector using three float-precision floating-point numbers.

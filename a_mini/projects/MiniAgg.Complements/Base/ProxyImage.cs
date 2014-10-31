@@ -19,10 +19,10 @@
 //----------------------------------------------------------------------------
 using System;
 
-using MatterHackers.Agg;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public abstract class ProxyImage : IImage
     {
@@ -31,15 +31,7 @@ namespace MatterHackers.Agg.Image
         {
             this.linkedImage = linkedImage;
         }
-         
-        public void SetOriginOffset(double x, double y)
-        {
-            linkedImage.SetOriginOffset(x, y);
-        }
-        public void GetOriginOffset(out double x, out double y)
-        {
-            linkedImage.GetOriginOffset(out x, out y);
-        }
+          
         public virtual int Width
         {
             get
@@ -56,9 +48,9 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public virtual int StrideInBytes()
+        public virtual int Stride 
         {
-            return linkedImage.StrideInBytes();
+            get { return linkedImage.Stride; }
         }
 
 
@@ -67,12 +59,12 @@ namespace MatterHackers.Agg.Image
             return linkedImage.GetBounds();
         }
 
-        public IRecieveBlenderByte GetRecieveBlender()
+        public IPixelBlender GetRecieveBlender()
         {
             return linkedImage.GetRecieveBlender();
         }
 
-        public void SetRecieveBlender(IRecieveBlenderByte value)
+        public void SetRecieveBlender(IPixelBlender value)
         {
             linkedImage.SetRecieveBlender(value);
         }
@@ -81,17 +73,7 @@ namespace MatterHackers.Agg.Image
         {
             return linkedImage.GetPixel(x, y);
         }
-
-        //public virtual void CopyPixel(int x, int y, byte[] c, int byteOffset)
-        //{
-        //    linkedImage.CopyPixel(x, y, c, byteOffset);
-        //}
-
-        public virtual void CopyFrom(IImage sourceRaster)
-        {
-            linkedImage.CopyFrom(sourceRaster);
-        }
-
+          
         public virtual void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
         {
             linkedImage.CopyFrom(sourceImage, sourceImageRect, destXOffset, destYOffset);
@@ -169,9 +151,9 @@ namespace MatterHackers.Agg.Image
 
 
 
-        public virtual int GetBytesBetweenPixelsInclusive()
+        public virtual int BytesBetweenPixelsInclusive 
         {
-            return linkedImage.GetBytesBetweenPixelsInclusive();
+            get { return linkedImage.BytesBetweenPixelsInclusive; }
         }
 
         public virtual int BitDepth

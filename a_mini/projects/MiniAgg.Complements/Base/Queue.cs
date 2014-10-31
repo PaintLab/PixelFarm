@@ -1,6 +1,6 @@
 ﻿//2014 BSD,WinterDev   
 using System;
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public class Queue<T>
     {

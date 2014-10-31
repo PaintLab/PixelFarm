@@ -5,15 +5,15 @@
 
 using System;
 
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
 using Mini;
 
-namespace MatterHackers.Agg.Sample_LionAlphaMask2
+namespace PixelFarm.Agg.Sample_LionAlphaMask2
 {
     [Info(OrderCode = "05")]
     [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
@@ -23,7 +23,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         int maskAlphaSliderValue = 100;
         ActualImage alphaBitmap;
         LionShape lionShape;
-        MatterHackers.Agg.ScanlineRasterizer rasterizer = new ScanlineRasterizer();
+        PixelFarm.Agg.ScanlineRasterizer rasterizer = new ScanlineRasterizer();
         ScanlinePacked8 scanlineCache = new ScanlinePacked8();
         double angle = 0;
         double lionScale = 1.0;
@@ -87,7 +87,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
             clippingProxy.Clear(ColorRGBA.Black);
 
-            VertexSource.Ellipse ellipseForMask = new MatterHackers.Agg.VertexSource.Ellipse();
+            VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
 
             System.Random randGenerator = new Random(1432);
 
@@ -159,7 +159,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
             //alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
 
-            MatterHackers.Agg.Image.AlphaMaskAdaptor imageAlphaMaskAdaptor = new MatterHackers.Agg.Image.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
+            PixelFarm.Agg.Image.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Image.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
             ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
 

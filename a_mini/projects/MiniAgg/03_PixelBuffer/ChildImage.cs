@@ -20,64 +20,64 @@
 using System;
 using System.Runtime;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public class ChildImage : ImageBase
     {
         int bufferOffset; // the beggining of the image in this buffer 
-        public ChildImage(IImage image, 
-            int bufferOffsetToFirstPixel, 
-            int width, 
+        public ChildImage(IImage image,
+            int bufferOffsetToFirstPixel,
+            int width,
             int height)
-        { 
+        {
             AttachBuffer(image.GetBuffer(),
                bufferOffsetToFirstPixel,
                 width,
                 height,
-                image.StrideInBytes(),
+                image.Stride,
                 image.BitDepth,
-                image.GetBytesBetweenPixelsInclusive());
+                image.BytesBetweenPixelsInclusive);
             SetRecieveBlender(image.GetRecieveBlender());
         }
         public ChildImage(byte[] buffer,
             int bufferOffsetToFirstPixel,
-            int width, 
-            int height, 
+            int width,
+            int height,
             int strideInBytes,
-            int bitDepth, 
+            int bitDepth,
             int distanceInBytesBetweenPixelsInclusive)
-        {   
+        {
             AttachBuffer(buffer,
                 bufferOffsetToFirstPixel,
-                width, 
-                height, 
-                strideInBytes, bitDepth, 
-                distanceInBytesBetweenPixelsInclusive); 
+                width,
+                height,
+                strideInBytes, bitDepth,
+                distanceInBytesBetweenPixelsInclusive);
         }
         public ChildImage(IImage image,
-            IRecieveBlenderByte blender,
+            IPixelBlender blender,
             int distanceBetweenPixelsInclusive,
-            int bufferOffset, 
+            int bufferOffset,
             int bitsPerPixel)
         {
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, bufferOffset, bitsPerPixel);
-        } 
-        public ChildImage(IImage image, IRecieveBlenderByte blender)
-        {   
-            Attach(image, blender, image.GetBytesBetweenPixelsInclusive(), 0, image.BitDepth);
         }
-        public ChildImage(IImage image, IRecieveBlenderByte blender, int x1, int y1, int x2, int y2)
+        public ChildImage(IImage image, IPixelBlender blender)
+        {
+            Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
+        }
+        public ChildImage(IImage image, IPixelBlender blender, int x1, int y1, int x2, int y2)
         {
             SetRecieveBlender(blender);
             Attach(image, x1, y1, x2, y2);
-        }  
-        
-        
+        }
+
+
         void AttachBuffer(byte[] buffer,
           int bufferOffset,
           int width,
@@ -93,12 +93,12 @@ namespace MatterHackers.Agg.Image
         }
 
         void Attach(IImage sourceImage,
-          IRecieveBlenderByte recieveBlender,
+          IPixelBlender recieveBlender,
           int distanceBetweenPixelsInclusive,
           int bufferOffset,
           int bitsPerPixel)
         {
-            SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.StrideInBytes(), bitsPerPixel, distanceBetweenPixelsInclusive);
+            SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.Stride, bitsPerPixel, distanceBetweenPixelsInclusive);
             int offset = sourceImage.GetBufferOffsetXY(0, 0);
             byte[] buffer = sourceImage.GetBuffer();
             SetBuffer(buffer, offset + bufferOffset);
@@ -116,7 +116,7 @@ namespace MatterHackers.Agg.Image
             RectangleInt boundsRect = new RectangleInt(x1, y1, x2, y2);
             if (boundsRect.clip(new RectangleInt(0, 0, (int)sourceImage.Width - 1, (int)sourceImage.Height - 1)))
             {
-                SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.StrideInBytes(), sourceImage.BitDepth, sourceImage.GetBytesBetweenPixelsInclusive());
+                SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride , sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
                 int bufferOffset = sourceImage.GetBufferOffsetXY(boundsRect.Left, boundsRect.Bottom);
                 byte[] buffer = sourceImage.GetBuffer();
                 SetBuffer(buffer, bufferOffset);
@@ -129,13 +129,13 @@ namespace MatterHackers.Agg.Image
         void SetBuffer(byte[] byteBuffer, int bufferOffset)
         {
             int height = this.Height;
-            int strideInBytes = this.StrideInBytes();
+            int strideInBytes = this.Stride;
 
             if (byteBuffer.Length < height * strideInBytes)
             {
                 throw new Exception("Your buffer does not have enough room it it for your height and strideInBytes.");
             }
-            this.m_ByteBuffer = byteBuffer; 
+            this.m_ByteBuffer = byteBuffer;
             this.bufferOffset = bufferFirstPixel = bufferOffset;
             if (strideInBytes < 0)
             {

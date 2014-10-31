@@ -20,7 +20,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public interface ISpanGenerator
     {

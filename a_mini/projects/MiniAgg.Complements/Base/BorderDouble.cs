@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// BorderDouble is used to represent the border around (Margin) on inside (Padding) of a rectangular area.

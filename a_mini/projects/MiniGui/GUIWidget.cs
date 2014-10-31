@@ -21,11 +21,11 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Transform;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Transform;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.UI
+namespace PixelFarm.Agg.UI
 {
     [Flags]
     public enum SizeLimitsToSet
@@ -557,7 +557,8 @@ namespace MatterHackers.Agg.UI
             int intHeight = Math.Max((int)(Math.Ceiling(localBounds.Top) - Math.Floor(localBounds.Bottom)) + 1, 1);
             if (backBuffer == null || backBuffer.Width != intWidth || backBuffer.Height != intHeight)
             {
-                backBuffer = new ActualImage(intWidth, intHeight, 32, new BlenderPreMultBGRA());
+                backBuffer = new ActualImage(intWidth, intHeight, 32, 
+                    new PixelBlenderPreMultBGRA());
             }
         }
 

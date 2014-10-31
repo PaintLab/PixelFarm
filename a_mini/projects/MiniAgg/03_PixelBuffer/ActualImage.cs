@@ -20,19 +20,24 @@
 using System;
 using System.Runtime;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
+    public enum ImageFormat
+    {
+        Rgba32,
+        Rgba24,
+        GrayScale8,
+    }
     public class ActualImage : ImageBase
     {
         public ActualImage(int width, int height,
-              int bitsPerPixel, IRecieveBlenderByte recieveBlender)
+              int bitsPerPixel, IPixelBlender recieveBlender)
             : base(width, height, bitsPerPixel, recieveBlender)
         {
-
         }
     }
 

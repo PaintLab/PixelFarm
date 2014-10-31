@@ -22,9 +22,9 @@
 // Contact: castor.vulgaris@gmail.com
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.VertexSource;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public static class AggMath
     {

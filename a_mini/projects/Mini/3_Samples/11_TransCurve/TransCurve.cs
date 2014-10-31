@@ -2,13 +2,13 @@
 //MatterHackers
 
 using System; 
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
 
 using Mini;
-namespace MatterHackers.Agg.Sample_TransCurve
+namespace PixelFarm.Agg.Sample_TransCurve
 {
     [Info(OrderCode = "11")]
     [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]

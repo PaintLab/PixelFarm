@@ -26,7 +26,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
-namespace MatterHackers.VectorMath
+namespace PixelFarm.VectorMath
 {
     /// <summary>
     /// Represents a double-precision Quaternion.

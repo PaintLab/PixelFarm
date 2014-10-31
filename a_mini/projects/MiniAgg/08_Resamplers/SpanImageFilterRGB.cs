@@ -26,12 +26,12 @@
 // 
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg.Image;
 
-using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
-using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filter_scale_e;
+using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
+using image_filter_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_filter_scale_e;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
     class SpanImageFilterRBG_NNStepXby1 : SpanImageFilter
@@ -145,7 +145,7 @@ namespace MatterHackers.Agg
                                             ISpanInterpolator inter)
             : base(src, inter, null)
         {
-            if (src.SourceImage.GetBytesBetweenPixelsInclusive() != 3)
+            if (src.SourceImage.BytesBetweenPixelsInclusive  != 3)
             {
                 throw new System.NotSupportedException("span_image_filter_rgb must have a 24 bit DestImage");
             }
@@ -450,7 +450,7 @@ namespace MatterHackers.Agg
         public SpanImageFilterRGB(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
             : base(src, inter, filter)
         {
-            if (src.SourceImage.GetBytesBetweenPixelsInclusive() != 3)
+            if (src.SourceImage.BytesBetweenPixelsInclusive != 3)
             {
                 throw new System.NotSupportedException("span_image_filter_rgb must have a 24 bit DestImage");
             }

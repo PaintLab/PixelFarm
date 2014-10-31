@@ -19,10 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// to bitmap
@@ -31,11 +31,16 @@ namespace MatterHackers.Agg
     {
 
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
+        IPixelBlender pixelBlender;
         public ScanlineRasToDestBitmapRenderer()
         {
 
-        }       
-    
+        }
+        internal IPixelBlender PixelBlender
+        {
+            get { return this.pixelBlender; }
+            set { this.pixelBlender = value; }
+        }
         public void RenderScanlineSolidAA(IImage destImage,
             ScanlineRasterizer rasterizer,
             Scanline scline,
@@ -82,6 +87,7 @@ namespace MatterHackers.Agg
                 int x = span.x;
                 if (span.len > 0)
                 {
+                    
                     destImage.BlendSolidHSpan(x, y, span.len, color, covers, span.cover_index);
                 }
                 else

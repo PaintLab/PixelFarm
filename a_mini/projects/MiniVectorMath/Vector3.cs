@@ -26,7 +26,7 @@ using System;
 using System.Runtime.InteropServices;
  
 
-namespace MatterHackers.VectorMath
+namespace PixelFarm.VectorMath
 {
 
     public class JsonIgnoreAttribute : Attribute

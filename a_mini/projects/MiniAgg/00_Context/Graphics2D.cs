@@ -19,10 +19,10 @@
 using System;
 using System.Collections.Generic;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg.Transform;
+using PixelFarm.VectorMath;
 
 namespace System.Runtime.CompilerServices
 {
@@ -31,7 +31,7 @@ namespace System.Runtime.CompilerServices
     }
 }
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     public abstract class Graphics2D
@@ -41,9 +41,7 @@ namespace MatterHackers.Agg
         protected IImage destImageByte;
         protected ScanlineRasterizer rasterizer;
 
-        Stack<Affine> affineTransformStack = new Stack<Affine>();
-
-
+        Stack<Affine> affineTransformStack = new Stack<Affine>(); 
 
         public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
         {
@@ -72,14 +70,7 @@ namespace MatterHackers.Agg
         {
             this.Render(imageSource, (double)x, (double)y);
         }
-
-        public void Render(VertexStore vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
-        {
-            for (int i = 0; i < numPaths; i++)
-            {
-                Render(new VertexStoreSnap(vxStorage, pathIdArray[i]), colorArray[i]);
-            }
-        }
+         
         public void Render(VertexStore vxStorage, ColorRGBA c)
         {
             Render(new VertexStoreSnap(vxStorage), c);

@@ -15,12 +15,12 @@
 
 using System;
 
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg.Image;
 
-using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
-using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filter_scale_e;
+using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
+using image_filter_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_filter_scale_e;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
     class SpanImageFilterGray_NNStepXby1 : SpanImageFilter
@@ -37,7 +37,7 @@ namespace MatterHackers.Agg
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
-            int bytesBetweenPixelsInclusive = SourceRenderingBuffer.GetBytesBetweenPixelsInclusive();
+            int bytesBetweenPixelsInclusive = SourceRenderingBuffer.BytesBetweenPixelsInclusive;
             if (SourceRenderingBuffer.BitDepth != 8)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");

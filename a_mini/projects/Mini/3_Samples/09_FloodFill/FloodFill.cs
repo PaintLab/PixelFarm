@@ -5,14 +5,14 @@
 
 using System;
 
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg.Sample_FloodFill
+namespace PixelFarm.Agg.Sample_FloodFill
 {
     [Info(OrderCode = "09")]
     [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
@@ -24,7 +24,7 @@ namespace MatterHackers.Agg.Sample_FloodFill
         public FloodFillDemo()
         {
             BackgroundColor = ColorRGBA.White;
-            imageToFillOn = new ActualImage(400, 300, 32, new BlenderBGRA());
+            imageToFillOn = new ActualImage(400, 300, 32, new PixelBlenderBGRA());
             var imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
             imageToFillGraphics.Clear(ColorRGBA.White);
             imageToFillGraphics.DrawString("Click to fill", 20, 30);

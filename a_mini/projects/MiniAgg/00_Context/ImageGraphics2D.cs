@@ -21,12 +21,12 @@
 using System;
 using System.Collections.Generic;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg.Transform;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     class ImageGraphics2D : Graphics2D
     {
@@ -35,14 +35,19 @@ namespace MatterHackers.Agg
         PathStorage drawImageRectPath = new PathStorage();
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-
+        IPixelBlender pixBlenderRGBA32;
+        double ox; //origin x
+        double oy; //origin y
         public ImageGraphics2D(IImage destImage,
             ScanlineRasterizer rasterizer,
             ScanlinePacked8 scanline)
             : base(destImage, rasterizer)
         {
             this.scanline = scanline;
-        } 
+            this.pixBlenderRGBA32 = new PixelBlenderBGRA();
+            this.sclineRasToBmp.PixelBlender = pixBlenderRGBA32;
+
+        }
         public override void SetClippingRect(RectangleDouble clippingRect)
         {
             Rasterizer.SetVectorClipBox(clippingRect);
@@ -60,6 +65,11 @@ namespace MatterHackers.Agg
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
             //reset rasterizer before render each vertextSnap
+            if (destImageByte == null)
+            {
+                return;
+            }
+            //-----------------------------
             rasterizer.Reset();
             Affine transform = GetTransform();
             if (!transform.IsIdentity())
@@ -69,21 +79,11 @@ namespace MatterHackers.Agg
             else
             {
                 rasterizer.AddPath(vertextSnap);
-            }
-
-            if (destImageByte != null)
-            {
-                sclineRasToBmp.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);
-                destImageByte.MarkImageChanged();
-            }
-            else
-            {
-                //scanlineRenderer.RenderSolid(destImageFloat, rasterizer, m_ScanlineCache, colorBytes.GetAsRGBA_Floats());
-                //destImageFloat.MarkImageChanged();
-            }
+            } 
+            sclineRasToBmp.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);            
+            destImageByte.MarkImageChanged();
+            //-----------------------------
         }
-
-
         void DrawImageGetDestBounds(IImage sourceImage,
             double destX, double destY,
             double hotspotOffsetX, double hotSpotOffsetY,
@@ -135,16 +135,15 @@ namespace MatterHackers.Agg
 
         void DrawImage(IImage sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
         {
-            double ox, oy;
-            destImageByte.GetOriginOffset(out ox, out oy);
-            if (ox != 0 || oy != 0)
-            {
-                destRectTransform *= Affine.NewTranslation(-ox, -oy);
-            }
-
-
+            //double ox, oy;
+            //destImageByte.GetOriginOffset(out ox, out oy);
+            //if (ox != 0 || oy != 0)
+            //{
+            //    destRectTransform *= Affine.NewTranslation(-ox, -oy);
+            //}
+             
             VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
-            Rasterizer.AddPath(sp1); 
+            Rasterizer.AddPath(sp1);
             sclineRasToBmp.GenerateAndRender(
                 new ChildImage(destImageByte, destImageByte.GetRecieveBlender()),
                 Rasterizer,
@@ -205,8 +204,8 @@ namespace MatterHackers.Agg
             }
 
             //bool IsMipped = false;
-            double ox, oy;
-            source.GetOriginOffset(out ox, out oy);
+            //double ox, oy;
+            //source.GetOriginOffset(out ox, out oy);
 
             bool canUseMipMaps = isScale;
             if (scaleX > 0.5 || scaleY > 0.5)
@@ -246,7 +245,7 @@ namespace MatterHackers.Agg
 
 
                 SpanImageFilter spanImageFilter;
-                var interpolator = new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 spanImageFilter = new SpanImageFilterRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
@@ -268,7 +267,7 @@ namespace MatterHackers.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                var interpolator = new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 SpanImageFilter spanImageFilter = null;
@@ -351,8 +350,8 @@ namespace MatterHackers.Agg
             }
 
             //bool IsMipped = false;
-            double ox, oy;
-            source.GetOriginOffset(out ox, out oy);
+            //double ox, oy;
+            //source.GetOriginOffset(out ox, out oy);
 
             bool canUseMipMaps = isScale;
             if (scaleX > 0.5 || scaleY > 0.5)
@@ -397,7 +396,7 @@ namespace MatterHackers.Agg
                 var spanImageFilter = new SpanImageFilterRGBA_BilinearClip(
                     new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA()),
                     ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(),
-                    new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform));
+                    new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform));
 
                 DrawImage(source, spanImageFilter, destRectTransform);
 #if false // this is some debug you can enable to visualize the dest bounding box
@@ -418,7 +417,7 @@ namespace MatterHackers.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                var interpolator = new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 SpanImageFilter spanImageFilter = null;
@@ -447,7 +446,7 @@ namespace MatterHackers.Agg
         }
         public override void Clear(ColorRGBA color)
         {
-             
+
             RectangleInt clippingRectInt = GetClippingRectInt();
             IImage destImage = this.DestImage;
             if (destImage != null)
@@ -460,7 +459,7 @@ namespace MatterHackers.Agg
                 {
                     case 8:
                         {
-                            int bytesBetweenPixels = destImage.GetBytesBetweenPixelsInclusive();
+                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
                             byte byteColor = (byte)color.Red0To255;
                             int clipRectLeft = clippingRectInt.Left;
                             for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
@@ -477,7 +476,7 @@ namespace MatterHackers.Agg
 
                     case 24:
                         {
-                            int bytesBetweenPixels = destImage.GetBytesBetweenPixelsInclusive();
+                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
                             int clipRectLeft = clippingRectInt.Left;
                             for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
                             {
@@ -495,7 +494,7 @@ namespace MatterHackers.Agg
                     case 32:
                         {
 
-                            int bytesBetweenPixels = destImage.GetBytesBetweenPixelsInclusive();
+                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
                             int clipRectLeft = clippingRectInt.Left;
                             for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
                             {

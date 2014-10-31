@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public static class ImageTgaIO
     {
@@ -802,7 +802,7 @@ namespace MatterHackers.Agg.Image
 
             TargaHeader.BinaryWrite(writerToSaveTo);
 
-            byte[] pLineBuffer = new byte[Math.Abs(image.StrideInBytes()) * 2];
+            byte[] pLineBuffer = new byte[Math.Abs(image.Stride) * 2];
 
             //int BytesToSave;
             switch (SourceDepth)

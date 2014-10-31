@@ -20,15 +20,15 @@
 using System;
 using System.Runtime;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public static class ImageHelper
     {
-          
+
         /// <summary>
         /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
         /// It will modify the original main image when you draw to it.
@@ -46,8 +46,8 @@ namespace MatterHackers.Agg.Image
             }
             int left = Math.Max(0, childImageBounds.Left);
             int bottom = Math.Max(0, childImageBounds.Bottom);
-            int width = Math.Min(parentImage.Width - left, (int)childImageBounds.Width);
-            int height = Math.Min(parentImage.Height - bottom, (int)childImageBounds.Height);
+            int width = Math.Min(parentImage.Width - left, childImageBounds.Width);
+            int height = Math.Min(parentImage.Height - bottom, childImageBounds.Height);
             int bufferOffsetToFirstPixel = parentImage.GetBufferOffsetXY(left, bottom);
             return new ChildImage(parentImage, bufferOffsetToFirstPixel, width, height);
 

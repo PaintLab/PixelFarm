@@ -17,7 +17,7 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-namespace MatterHackers.Agg.Transform
+namespace PixelFarm.Agg.Transform
 {
 
     public interface ITransform

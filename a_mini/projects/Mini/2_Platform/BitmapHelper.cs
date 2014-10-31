@@ -3,8 +3,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Image;
 
 namespace Mini
 {
@@ -27,7 +27,7 @@ namespace Mini
             byte[] buffer = backingImageBufferByte.GetBuffer();
 
             BitmapHelper.CopyToWindowsBitmap(buffer,offset,
-                backingImageBufferByte.StrideInBytes(), backingImageBufferByte.Height,
+                backingImageBufferByte.Stride, backingImageBufferByte.Height,
                 backingImageBufferByte.BitDepth,
                 windowsBitmap, rect);
 

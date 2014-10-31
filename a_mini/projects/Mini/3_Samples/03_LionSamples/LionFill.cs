@@ -28,13 +28,13 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg.Sample_LionFill
+namespace PixelFarm.Agg.Sample_LionFill
 {
     [Info(OrderCode = "03")]
     [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
@@ -73,9 +73,9 @@ namespace MatterHackers.Agg.Sample_LionFill
     {
 
         LionShape lionShape;
-        VertexStore myvxs; 
-    
+        VertexStore myvxs;     
         byte alpha;
+        
         public LionFill()
         {
             lionShape = new LionShape();
@@ -114,7 +114,6 @@ namespace MatterHackers.Agg.Sample_LionFill
 
             if (myvxs == null)
             {
-
                 var transform = Affine.NewMatix(
                         AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                         AffinePlan.Scale(spriteScale, spriteScale),
@@ -122,13 +121,22 @@ namespace MatterHackers.Agg.Sample_LionFill
                         AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                         AffinePlan.Translate(Width / 2, Height / 2)
                 ); 
-                //convert 
+                //create vertextStore again from origiinal path
                 myvxs = transform.TransformToVxs(lionShape.Path);
             }
-
-            graphics2D.Render(myvxs, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
-
-            base.OnDraw(graphics2D);
+            //---------------------------------------------------------------------------------------------
+            {
+                int j = lionShape.NumPaths;
+                int[] pathList = lionShape.PathIndexList;
+                ColorRGBA[] colors = lionShape.Colors;
+                for (int i = 0; i < j; ++i)
+                {
+                    graphics2D.Render(new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                }
+            }
+            //---------------------------------------------------------------------------------------------
+           
+             
         }
 
 

@@ -3,17 +3,17 @@
 
 using System;
 
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
 using Mini;
 
 
 
-namespace MatterHackers.Agg.Sample_AADemoTest2
+namespace PixelFarm.Agg.Sample_AADemoTest2
 {
     public class square
     {
@@ -168,7 +168,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             var childImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
-            var rasterGamma = new ChildImage(childImage, new BlenderGammaBGRA(this.GammaValue));
+            var rasterGamma = new ChildImage(childImage, new PixelBlenderGammaBGRA(this.GammaValue));
 
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(childImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);

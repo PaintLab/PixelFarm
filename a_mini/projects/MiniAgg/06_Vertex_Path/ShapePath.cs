@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using System.Text;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     public static class ShapePath

@@ -19,10 +19,10 @@
 using System;
 using System.Collections.Generic;
 
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.UI
+namespace PixelFarm.Agg.UI
 {
     class SimplePolygonVertexSource
     {
@@ -129,7 +129,7 @@ namespace MatterHackers.Agg.UI
         public PolygonControlImpl(int np, double point_radius)
             : base(new Vector2())
         {
-            m_ellipse = new MatterHackers.Agg.VertexSource.Ellipse();
+            m_ellipse = new PixelFarm.Agg.VertexSource.Ellipse();
             m_polygon = new double[np * 2];
             m_num_points = (np);
             m_node = (-1);

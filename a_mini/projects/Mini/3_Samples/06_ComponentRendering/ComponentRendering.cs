@@ -4,14 +4,14 @@
 using System;
 using System.IO;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.UI;
 
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     [Info(OrderCode = "06")]
@@ -47,7 +47,7 @@ namespace MatterHackers.Agg
 
                 IImage backBuffer = widgetsSubImage;
 
-                int distBetween = backBuffer.GetBytesBetweenPixelsInclusive();
+                int distBetween = backBuffer.BytesBetweenPixelsInclusive;
 
                 var redImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 2, 8);
                 var greenImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 1, 8);
@@ -71,15 +71,15 @@ namespace MatterHackers.Agg
                     new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
-                VertexSource.Ellipse er = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+                VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 ras.AddPath(er.MakeVertexSnap());                
                 sclineRasToBmp.RenderScanlineSolidAA(clippingProxyRed, ras, sl, FillColor);
 
-                VertexSource.Ellipse eg = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+                VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 ras.AddPath(eg.MakeVertexSnap());
                 sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGreen, ras, sl, FillColor);
 
-                VertexSource.Ellipse eb = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
+                VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
                 ras.AddPath(eb.MakeVertexSnap());
                 sclineRasToBmp.RenderScanlineSolidAA(clippingProxyBlue, ras, sl, FillColor);
             }
