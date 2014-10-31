@@ -25,11 +25,11 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg.UI
 {
-    abstract public class SimpleVertexSourceWidget : GuiWidget
+    abstract public class SimpleVertexSourceWidget : IncompleteWidget
     {
 
         bool localBoundsComeFromPoints = true;
-
+        Vector2 originRelativeParent;
         public SimpleVertexSourceWidget()
         {
             throw new Exception("this is depricated");
@@ -38,7 +38,7 @@ namespace PixelFarm.Agg.UI
         public SimpleVertexSourceWidget(Vector2 originRelativeParent, bool localBoundsComeFromPoints = true)
         {
             this.localBoundsComeFromPoints = localBoundsComeFromPoints;
-            OriginRelativeParent = originRelativeParent;
+            this.originRelativeParent = originRelativeParent;
         }
 
         public override RectangleDouble LocalBounds
@@ -74,18 +74,18 @@ namespace PixelFarm.Agg.UI
                 }
             }
 
-            set
-            {
-                if (localBoundsComeFromPoints)
-                {
-                    //throw new NotImplementedException();
-                    base.LocalBounds = value;
-                }
-                else
-                {
-                    base.LocalBounds = value;
-                }
-            }
+            //set
+            //{
+            //    if (localBoundsComeFromPoints)
+            //    {
+            //        //throw new NotImplementedException();
+            //        base.LocalBounds = value;
+            //    }
+            //    else
+            //    {
+            //        base.LocalBounds = value;
+            //    }
+            //}
         }
 
         public abstract int num_paths();

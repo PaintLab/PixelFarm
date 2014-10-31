@@ -35,13 +35,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoubleRectHelper.cs" />
-    <Compile Include="GUIWidget.cs" />
-    <Compile Include="InvalidateEventArgs.cs" />
-    <Compile Include="KeyEventArgs.cs" />
-    <Compile Include="KeyPressEventArgs.cs" />
-    <Compile Include="Keys.cs" />
-    <Compile Include="LayoutEventArgs.cs" />
+    <Compile Include="IncompleteWidget.cs" />
     <Compile Include="MouseButtons.cs" />
     <Compile Include="MouseEventArgs.cs" />
     <Compile Include="PolygonWidget.cs" />

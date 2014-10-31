@@ -144,17 +144,8 @@ namespace PixelFarm.Agg.UI
 
             m_stroke.Width = 1;
         }
-
-        public override void OnParentChanged(EventArgs e)
-        {
-            if (needToRecalculateBounds)
-            {
-                RecalculateBounds();
-            }
-            base.OnParentChanged(e);
-        }
-
-        public int num_points() { return m_num_points; }
+ 
+        
         public double GetXN(int n) { return m_polygon[n << 1]; }
         public double GetYN(int n) { return m_polygon[(n << 1) + 1]; }
 
@@ -509,10 +500,7 @@ namespace PixelFarm.Agg.UI
             base.OnMouseMove(mouseEvent);
         }
 
-        public override void OnKeyDown(KeyEventArgs keyEvent)
-        {
-            base.OnKeyDown(keyEvent);
-        }
+         
 
         private bool check_edge(int i, double x, double y)
         {
