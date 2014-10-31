@@ -151,14 +151,12 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
                 Stroke stroke = new Stroke(strokeWidth); 
-                stroke.LineJoin = LineJoin.Round;
-
-
+                stroke.LineJoin = LineJoin.Round; 
                 var vxs = affTx.TransformToVxs(lionShape.Path);
                 
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
-                // var vxs = trans.DoTransformToNewVxStorage();
+                
                 sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,

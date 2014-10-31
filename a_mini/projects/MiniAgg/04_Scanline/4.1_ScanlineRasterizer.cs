@@ -192,6 +192,7 @@ namespace MatterHackers.Agg
         {
             if (m_outline.Sorted) { Reset(); }
             if (m_auto_close) { ClosePolygon(); }
+
             m_vectorClipper.MoveTo(
                     m_start_x = downscale(x),
                     m_start_y = downscale(y));

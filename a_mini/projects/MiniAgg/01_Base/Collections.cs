@@ -77,6 +77,7 @@ namespace MatterHackers.Agg
         {
             currentSize = 0;
         }
+      
         // Set new capacity. All data is lost, size is set to zero.
         public void Clear(int newCapacity)
         {

@@ -73,8 +73,7 @@ namespace MatterHackers.Agg.Sample_LionFill
     {
 
         LionShape lionShape;
-        VertexStore vxStorage;
-
+        VertexStore myvxs; 
     
         byte alpha;
         public LionFill()
@@ -106,27 +105,28 @@ namespace MatterHackers.Agg.Sample_LionFill
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-            vxStorage = null;
+            
+            myvxs = null;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
 
-            if (vxStorage == null)
+            if (myvxs == null)
             {
+
                 var transform = Affine.NewMatix(
                         AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                         AffinePlan.Scale(spriteScale, spriteScale),
                         AffinePlan.Rotate(angle + Math.PI),
                         AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                         AffinePlan.Translate(Width / 2, Height / 2)
-                );
-
-                //convert
-
-                vxStorage = transform.TransformToVxs(lionShape.Path);
+                ); 
+                //convert 
+                myvxs = transform.TransformToVxs(lionShape.Path);
             }
-            graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+
+            graphics2D.Render(myvxs, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
 
             base.OnDraw(graphics2D);
         }

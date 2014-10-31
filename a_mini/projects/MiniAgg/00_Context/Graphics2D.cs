@@ -58,8 +58,7 @@ namespace MatterHackers.Agg
         public abstract void SetClippingRect(RectangleDouble rect_d);
         public abstract RectangleDouble GetClippingRect();
         //------------------------------------------------------------------------
-
-
+         
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
 
         public abstract void Render(IImage imageSource,

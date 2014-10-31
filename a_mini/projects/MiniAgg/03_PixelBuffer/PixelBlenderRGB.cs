@@ -172,7 +172,15 @@ namespace MatterHackers.Agg.Image
             }
             while (--count != 0);
         }
+        public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
+        {
 
+            buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+            buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+            buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+
+
+        }
         public void BlendPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
             unchecked
@@ -263,11 +271,21 @@ namespace MatterHackers.Agg.Image
 
         public void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count)
         {
+            do
+            {
+                buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv(sourceColor.red);
+                buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv(sourceColor.green);
+                buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv(sourceColor.blue);
+                bufferOffset += 3;
+            } while (count-- > 0);
+        }
+
+        public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
+        {
             buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv(sourceColor.red);
             buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv(sourceColor.green);
             buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv(sourceColor.blue);
         }
-
         public void BlendPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
             unchecked
@@ -323,7 +341,14 @@ namespace MatterHackers.Agg.Image
             }
             while (--count != 0);
         }
+        public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
+        {
 
+            buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+            buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+            buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+
+        }
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
             if (sourceColor.alpha == 255)

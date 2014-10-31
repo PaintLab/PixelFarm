@@ -29,6 +29,7 @@ namespace MatterHackers.Agg
     /// </summary>  
     public class ScanlineRasToDestBitmapRenderer
     {
+
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
 
         public void RenderScanlineSolidAA(IImage destImage,
@@ -46,10 +47,27 @@ namespace MatterHackers.Agg
             }
         }
 
+        public void GenerateAndRender(IImage destImage,
+             ScanlineRasterizer rasterizer,
+             Scanline scline,
+             ISpanGenerator spanGenerator)
+        {
+            if (rasterizer.RewindScanlines())
+            {
+                scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
+                spanGenerator.Prepare();
+                while (rasterizer.SweepScanline(scline))
+                {
+                    GenerateAndRenderSingleScanline(destImage, scline, spanGenerator);
+                }
+            }
+        }
+
+
         protected virtual void RenderSolidSingleScanLine(IImage destImage,
             Scanline scline,
             ColorRGBA color)
-        {            
+        {
 
             int y = scline.Y;
             int num_spans = scline.SpanCount;
@@ -89,47 +107,36 @@ namespace MatterHackers.Agg
 
         void GenerateAndRenderSingleScanline(IImage destImage, Scanline scline, ISpanGenerator span_gen)
         {
+
             int y = scline.Y;
             int num_spans = scline.SpanCount;
             byte[] covers = scline.GetCovers();
+
             for (int i = 1; i <= num_spans; ++i)
             {
                 ScanlineSpan span = scline.GetSpan(i);
                 int x = span.x;
-                int len = span.len;
-                if (len < 0) len = -len;
+                int len = span.len; 
 
-                if (tempSpanColors.AllocatedSize < len)
+                if (len < 0) { len = -len; } //make absolute value
+
+                if (len > tempSpanColors.AllocatedSize)
                 {
+                    //if not enough -> alloc more
                     tempSpanColors.Clear(len);
                 }
 
-                span_gen.Generate(tempSpanColors.Array, 0, x, y, len);
+                var colorArray = tempSpanColors.Array;
+                span_gen.Generate(colorArray, 0, x, y, len);
 
                 bool useFirstCoverForAll = span.len < 0;
 
                 destImage.BlendColorHSpan(x, y, len,
-                    tempSpanColors.Array, 0,
+                    colorArray, 0,
                     covers, span.cover_index, useFirstCoverForAll);
             }
         }
 
-
-        public void GenerateAndRender(IImage destImage,
-             ScanlineRasterizer rasterizer,
-             Scanline scline,
-             ISpanGenerator spanGenerator)
-        {
-            if (rasterizer.RewindScanlines())
-            {
-                scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
-                spanGenerator.Prepare();
-                while (rasterizer.SweepScanline(scline))
-                {
-                    GenerateAndRenderSingleScanline(destImage, scline, spanGenerator);
-                }
-            }
-        } 
 
 
     }

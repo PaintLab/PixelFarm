@@ -37,9 +37,9 @@ namespace MatterHackers.Agg.VertexSource
     //------------------------------------------------------------------------
 
 
-    public sealed class PathStorage  
+    public sealed class PathStorage
     {
-        VertexStore myvxs;       
+        VertexStore myvxs;
         public PathStorage()
         {
             myvxs = new VertexStore();
@@ -68,9 +68,9 @@ namespace MatterHackers.Agg.VertexSource
 
         public void Clear()
         {
-            myvxs.Clear();          
+            myvxs.Clear();
         }
-         
+
 
         // Make path functions
         //--------------------------------------------------------------------
@@ -84,7 +84,7 @@ namespace MatterHackers.Agg.VertexSource
         }
 
 
-        public void RelToAbs(ref double x, ref double y)
+        void RelToAbs(ref double x, ref double y)
         {
             if (myvxs.Count != 0)
             {
@@ -100,23 +100,23 @@ namespace MatterHackers.Agg.VertexSource
 
         public void MoveTo(double x, double y)
         {
-             
+
             myvxs.AddMoveTo(x, y);
         }
 
         public void LineTo(double x, double y)
         {
-            myvxs.LineTo(x, y);             
+            myvxs.LineTo(x, y);
         }
 
         public void HorizontalLineTo(double x)
         {
-            myvxs.LineTo(x, GetLastY());             
+            myvxs.LineTo(x, GetLastY());
         }
 
         public void VerticalLineTo(double y)
         {
-            myvxs.LineTo(GetLastX(), y);             
+            myvxs.LineTo(GetLastX(), y);
         }
 
         /*
@@ -343,7 +343,7 @@ namespace MatterHackers.Agg.VertexSource
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, 0, 0);
         }
-         
+
         //----------------------------------------------------------------
 
         // Arrange the orientation of a polygon, all polygons in a path, 

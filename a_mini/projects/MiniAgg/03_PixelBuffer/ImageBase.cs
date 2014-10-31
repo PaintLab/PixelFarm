@@ -221,7 +221,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        
+
         public void GetOriginOffset(out double x, out double y)
         {
             x = this.originX;
@@ -452,14 +452,13 @@ namespace MatterHackers.Agg
         {
             x -= (int)this.originX;
             y -= (int)this.originY;
-            recieveBlender.CopyPixels(GetBuffer(), GetBufferOffsetXY(x, y), color, 1);
+            recieveBlender.CopyPixel(GetBuffer(), GetBufferOffsetXY(x, y), color);
         }
 
         public void CopyHL(int x, int y, int len, ColorRGBA sourceColor)
         {
             int bufferOffset;
-            byte[] buffer = GetPixelPointerXY(x, y, out bufferOffset);
-
+            byte[] buffer = GetPixelPointerXY(x, y, out bufferOffset); 
             recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
         }
 
@@ -570,11 +569,11 @@ namespace MatterHackers.Agg
                         int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
                         if (alpha == BASE_MASK)
                         {
-                            recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, 1);
+                            recieveBlender.CopyPixel(buffer, bufferOffset, sourceColor);
                         }
                         else
                         {
-                            recieveBlender.BlendPixel(buffer, bufferOffset, ColorRGBA.Make(sourceColor.red, sourceColor.green, sourceColor.blue, alpha));
+                            recieveBlender.BlendPixel(buffer, bufferOffset, new ColorRGBA(sourceColor, alpha));
                         }
                         bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
                         coversIndex++;
@@ -598,7 +597,7 @@ namespace MatterHackers.Agg
                         sourceColor.alpha = (byte)(((int)(sourceColor.alpha) * ((int)(covers[coversIndex++]) + 1)) >> 8);
                         if (sourceColor.alpha == BASE_MASK)
                         {
-                            recieveBlender.CopyPixels(m_ByteBuffer, bufferOffset, sourceColor, 1);
+                            recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, sourceColor);
                         }
                         else
                         {
@@ -618,7 +617,7 @@ namespace MatterHackers.Agg
 
             do
             {
-                recieveBlender.CopyPixels(m_ByteBuffer, bufferOffset, colors[colorsIndex], 1);
+                recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]);
 
                 ++colorsIndex;
                 bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
@@ -632,8 +631,7 @@ namespace MatterHackers.Agg
 
             do
             {
-                recieveBlender.CopyPixels(m_ByteBuffer, bufferOffset, colors[colorsIndex], 1);
-
+                recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]);
                 ++colorsIndex;
                 bufferOffset += strideInBytes;
             }

@@ -765,7 +765,7 @@ namespace MatterHackers.Agg
                (byte)Math.Min(Math.Max(b_, 0), 255),
                (byte)Math.Min(Math.Max(a_, 0), 255));
         }
-
+        
         public ColorRGBA(ColorRGBA c)
             : this(c, c.alpha)
         {
