@@ -403,8 +403,7 @@ namespace MatterHackers.Agg
                 int xbufferOffset = buff.GetBufferOffsetXY(0, y);
                 for (int x = mx; x < w; ++x)
                 {
-                    //rgba
-
+                    //rgba 
                     byte r = mBuffer[xbufferOffset + 2];
                     byte g = mBuffer[xbufferOffset + 1];
                     byte b = mBuffer[xbufferOffset];

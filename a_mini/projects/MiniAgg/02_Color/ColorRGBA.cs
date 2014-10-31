@@ -740,6 +740,7 @@ namespace MatterHackers.Agg
             blue = b_;
             alpha = a_;
         }
+        //------------------------------------------
         public static ColorRGBA Make(double r_, double g_, double b_, double a_)
         {
             return new ColorRGBA(
@@ -757,6 +758,24 @@ namespace MatterHackers.Agg
                ((byte)AggBasics.uround(b_ * (double)BASE_MASK)),
                ((byte)AggBasics.uround(BASE_MASK)));
         }
+        //------------------------------------------
+        public static ColorRGBA Make(float r_, float g_, float b_)
+        {
+            return new ColorRGBA(
+               ((byte)AggBasics.uround_f(r_ * (float)BASE_MASK)),
+               ((byte)AggBasics.uround_f(g_ * (float)BASE_MASK)),
+               ((byte)AggBasics.uround_f(b_ * (float)BASE_MASK)),
+               ((byte)AggBasics.uround_f(BASE_MASK)));
+        }
+        public static ColorRGBA Make(float r_, float g_, float b_, float a_)
+        {
+            return new ColorRGBA(
+               ((byte)AggBasics.uround_f(r_ * (float)BASE_MASK)),
+               ((byte)AggBasics.uround_f(g_ * (float)BASE_MASK)),
+               ((byte)AggBasics.uround_f(b_ * (float)BASE_MASK)),
+               ((byte)AggBasics.uround_f(a_ * (float)BASE_MASK))); 
+        }
+        //------------------------------------------
         public static ColorRGBA Make(int r_, int g_, int b_, int a_)
         {
             return new ColorRGBA(
@@ -766,9 +785,12 @@ namespace MatterHackers.Agg
                (byte)Math.Min(Math.Max(a_, 0), 255));
         }
         
-        public ColorRGBA(ColorRGBA c)
-            : this(c, c.alpha)
+        public ColorRGBA(ColorRGBA c) 
         {
+            red = (byte)c.red;
+            green = (byte)c.green;
+            blue = (byte)c.blue;
+            alpha = (byte)c.alpha;
         }
 
         public ColorRGBA(ColorRGBA c, int a_)

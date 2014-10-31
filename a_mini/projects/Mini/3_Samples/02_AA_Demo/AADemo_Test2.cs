@@ -73,10 +73,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                             gfx.Rasterizer, m_sl, destImage,
-                            ColorRGBA.Make(
-                                color.Red0To255,
-                                color.Green0To255,
-                                color.Blue0To255, a),
+                             new ColorRGBA(color, a),
                             x, y);
                     ++x;
                 }
@@ -198,7 +195,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
             //-----------------------------------------------------------------------------------------------------------
             rasterizer.ResetGamma(new GammaNone());
 
-            PathStorage ps = new PathStorage(); 
+            PathStorage ps = new PathStorage();
             ps.Clear();
             ps.MoveTo(m_x[0], m_y[0]);
             ps.LineTo(m_x[1], m_y[1]);

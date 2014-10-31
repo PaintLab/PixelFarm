@@ -56,8 +56,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
             for (int i = 1; i <= num_spans; ++i)
             {
-                ScanlineSpan span = scanline.GetSpan(i);
-
+                ScanlineSpan span = scanline.GetSpan(i); 
                 int x = span.x;
                 int num_pix = span.len;
                 int coverIndex = span.cover_index;
@@ -66,13 +65,12 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                            gfx.Rasterizer, m_sl, destImage,
-                            ColorRGBA.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
+                            new ColorRGBA(color, a),
                             x, y);
                     ++x;
                 }
                 while (--num_pix > 0);
-            }
-
+            } 
         }
     }
 

@@ -179,19 +179,19 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
             // draw a background to show how the mask is working better
-            int RectWidth = 30;
+            int rect_w = 30;
             for (int i = 0; i < 40; i++)
             {
                 for (int j = 0; j < 40; j++)
                 {
                     if ((i + j) % 2 != 0)
                     {
-                        VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * RectWidth, j * RectWidth, (i + 1) * RectWidth, (j + 1) * RectWidth, 0);
+                        VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
                         rect.NormalizeRadius();
 
                         // Drawing as an outline
                         rasterizer.AddPath(rect.MakeVxs());
-                        sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9, .9, .9));
+                        sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9f, .9f, .9f));
                     }
                 }
             }

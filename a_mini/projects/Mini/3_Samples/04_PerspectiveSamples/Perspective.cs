@@ -145,10 +145,10 @@ namespace MatterHackers.Agg.Sample_Perspective
                     VertexStoreSnap trans_ell_stroke = txBilinear.TransformToVertexSnap(new Stroke(3).MakeVxs(vxs));
 
                     g_rasterizer.AddPath(trans_ell);
-                    sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
+                    sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f));
 
                     g_rasterizer.AddPath(trans_ell_stroke);
-                    sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
+                    sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f));
                 }
             }
             else
@@ -190,7 +190,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     sclineRasToBmp.RenderScanlineSolidAA(dest,
                         g_rasterizer,
                         g_scanline,
-                        ColorRGBA.Make(0.5, 0.3, 0.0, 0.3));
+                        ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f));
 
                     //--------------------------------------------------------
                     //outline Ellipse
@@ -204,7 +204,7 @@ namespace MatterHackers.Agg.Sample_Perspective
                     sclineRasToBmp.RenderScanlineSolidAA(dest,
                         g_rasterizer,
                         g_scanline,
-                        ColorRGBA.Make(0.0, 0.3, 0.2, 1.0));
+                        ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f));
                 }
             }
 
@@ -213,7 +213,7 @@ namespace MatterHackers.Agg.Sample_Perspective
             var vxs2 = quadPolygonControl.MakeVxs();
             g_rasterizer.AddPath(vxs2);
             //g_rasterizer.AddPath(quadPolygonControl);
-            sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0, 0.3, 0.5, 0.6));
+            sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0f, 0.3f, 0.5f, 0.6f));
 
 
         }

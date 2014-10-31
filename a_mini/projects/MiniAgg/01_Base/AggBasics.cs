@@ -117,7 +117,10 @@ namespace MatterHackers.Agg
         {
             return (int)(uint)(v + 0.5);
         }
-
+        public static int uround_f(float v)
+        {
+            return (int)(uint)(v + 0.5);
+        }
         public static int ufloor(double v)
         {
             return (int)(uint)(v);
