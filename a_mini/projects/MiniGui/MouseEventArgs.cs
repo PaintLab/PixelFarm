@@ -6,6 +6,16 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg.UI
 {
+    public enum MouseButtons
+    {
+        None = 0,
+        Left = 1048576,
+        Right = 2097152,
+        Middle = 4194304,
+        XButton1 = 8388608,
+        XButton2 = 16777216,
+    }
+
     public class MouseEventArgs : EventArgs
     {
         private MouseButtons mouseButtons;
@@ -14,8 +24,7 @@ namespace PixelFarm.Agg.UI
         private double y;
         private int wheelDelta;
 
-        //public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int wheelDelta)
-            //: this
+        
 
         public MouseEventArgs(MouseEventArgs original, double newX, double newY)
             : this(original.Button, original.Clicks, newX, newY, original.WheelDelta)
