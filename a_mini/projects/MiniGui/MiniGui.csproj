@@ -35,20 +35,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoubleRectHelper.cs" />
-    <Compile Include="GUIWidget.cs" />
-    <Compile Include="InvalidateEventArgs.cs" />
-    <Compile Include="KeyEventArgs.cs" />
-    <Compile Include="KeyPressEventArgs.cs" />
-    <Compile Include="Keys.cs" />
-    <Compile Include="LayoutEventArgs.cs" />
-    <Compile Include="MouseButtons.cs" />
+    <Compile Include="IncompleteWidget.cs" />
     <Compile Include="MouseEventArgs.cs" />
     <Compile Include="PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleVertexSourceWidget.cs" />
-    <Compile Include="TimedLock.cs" />
-    <Compile Include="UiThread.cs" />
+    <Compile Include="MySimpleVertexSourceWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">

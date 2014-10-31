@@ -25,20 +25,20 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg.UI
 {
-    abstract public class SimpleVertexSourceWidget : GuiWidget
+    abstract public class MySimpleVertexSourceWidget : IncompleteWidget
     {
 
         bool localBoundsComeFromPoints = true;
-
-        public SimpleVertexSourceWidget()
+        Vector2 originRelativeParent;
+        public MySimpleVertexSourceWidget()
         {
             throw new Exception("this is depricated");
         }
 
-        public SimpleVertexSourceWidget(Vector2 originRelativeParent, bool localBoundsComeFromPoints = true)
+        public MySimpleVertexSourceWidget(Vector2 originRelativeParent, bool localBoundsComeFromPoints = true)
         {
             this.localBoundsComeFromPoints = localBoundsComeFromPoints;
-            OriginRelativeParent = originRelativeParent;
+            this.originRelativeParent = originRelativeParent;
         }
 
         public override RectangleDouble LocalBounds
@@ -47,58 +47,24 @@ namespace PixelFarm.Agg.UI
             {
                 if (localBoundsComeFromPoints)
                 {
-                    RectangleDouble localBounds = this.CalculateLocalBounds();
-                    //new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
-
-                    //this.RewindZero();
-                    //double x;
-                    //double y;
-                    //ShapePath.FlagsAndCommand cmd;
-                    //int numPoint = 0;
-                    //while (!ShapePath.IsStop(cmd = GetNextVertex(out x, out y)))
-                    //{
-                    //    numPoint++;
-                    //    localBounds.ExpandToInclude(x, y);
-                    //}
-
-                    //if (numPoint == 0)
-                    //{
-                    //    localBounds = new RectangleDouble();
-                    //}
-
+                    RectangleDouble localBounds = this.CalculateLocalBounds(); 
                     return localBounds;
                 }
                 else
                 {
                     return base.LocalBounds;
                 }
-            }
-
-            set
-            {
-                if (localBoundsComeFromPoints)
-                {
-                    //throw new NotImplementedException();
-                    base.LocalBounds = value;
-                }
-                else
-                {
-                    base.LocalBounds = value;
-                }
-            }
+            } 
         }
 
-        public abstract int num_paths();
-        public abstract IEnumerable<VertexData> GetVertexIter();
-
-        public abstract void RewindZero();
-        public abstract ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y);
+    
+        public abstract void RewindZero(); 
         protected abstract RectangleDouble CalculateLocalBounds();
 
-        public virtual ColorRGBA color(int i) { return new ColorRGBAf().ToColorRGBA(); }
+        public virtual ColorRGBA WidgetColor() { return new ColorRGBAf().ToColorRGBA(); }
         public override void OnDraw(Graphics2D graphics2D)
         { 
-            graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), color(0));
+            graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), WidgetColor(0=));
 
             base.OnDraw(graphics2D);
         } 

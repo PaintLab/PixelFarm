@@ -106,17 +106,17 @@ namespace PixelFarm.Agg.Sample_TransCurve
 
         void m_animate_CheckedStateChanged(object sender, EventArgs e)
         {
-            if (this.Animate)
-            {
-                on_init();
-                int i;
-                for (i = 0; i < 6; i++)
-                {
-                    m_dx[i] = ((rand.Next() % 1000) - 500) * 0.01;
-                    m_dy[i] = ((rand.Next() % 1000) - 500) * 0.01;
-                }
-                UiThread.RunOnIdle(guiSurface_Idle);
-            }
+            //if (this.Animate)
+            //{
+            //    on_init();
+            //    int i;
+            //    for (i = 0; i < 6; i++)
+            //    {
+            //        m_dx[i] = ((rand.Next() % 1000) - 500) * 0.01;
+            //        m_dy[i] = ((rand.Next() % 1000) - 500) * 0.01;
+            //    }
+            //    UiThread.RunOnIdle(guiSurface_Idle);
+            //}
         }
 
         void NeedsRedraw(object sender, EventArgs e)
@@ -182,10 +182,10 @@ namespace PixelFarm.Agg.Sample_TransCurve
             }
 
 
-            if (this.Animate)
-            {
-                UiThread.RunOnIdle(guiSurface_Idle);
-            }
+            //if (this.Animate)
+            //{
+            //    UiThread.RunOnIdle(guiSurface_Idle);
+            //}
         }
 
 

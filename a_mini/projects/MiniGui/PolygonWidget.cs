@@ -105,7 +105,7 @@ namespace PixelFarm.Agg.UI
         }
     }
 
-    public class PolygonControlImpl : UI.SimpleVertexSourceWidget
+    public class PolygonControlImpl : MySimpleVertexSourceWidget
     {
         double[] m_polygon;
         int m_num_points;
@@ -145,16 +145,7 @@ namespace PixelFarm.Agg.UI
             m_stroke.Width = 1;
         }
 
-        public override void OnParentChanged(EventArgs e)
-        {
-            if (needToRecalculateBounds)
-            {
-                RecalculateBounds();
-            }
-            base.OnParentChanged(e);
-        }
 
-        public int num_points() { return m_num_points; }
         public double GetXN(int n) { return m_polygon[n << 1]; }
         public double GetYN(int n) { return m_polygon[(n << 1) + 1]; }
 
@@ -173,36 +164,7 @@ namespace PixelFarm.Agg.UI
             get { return this.m_stroke.Width; }
             set { this.m_stroke.Width = value; }
         }
-
-        public void point_radius(double r) { m_point_radius = r; }
-        public double point_radius() { return m_point_radius; }
-
-        public void in_polygon_check(bool f) { m_in_polygon_check = f; }
-        public bool in_polygon_check() { return m_in_polygon_check; }
-
-        public void close(bool f) { m_vs.Close(f); }
-        public bool close() { return m_vs.Close(); }
-
-        // Vertex source interface
-        public override IEnumerable<VertexData> GetVertexIter()
-        {
-            this.RewindZero();
-            ShapePath.FlagsAndCommand cmd;
-            double x, y;
-            for (; ; )
-            {
-                cmd = this.GetNextVertex(out x, out y);
-                yield return new VertexData(cmd, x, y);
-                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
-                {
-                    yield break;
-                }
-            }
-
-        }
-
-        public override int num_paths() { return 1; }
-
+ 
         public override void RewindZero()
         {
             if (needToRecalculateBounds)
@@ -298,95 +260,10 @@ namespace PixelFarm.Agg.UI
                 double x, y;
                 vxs.GetVertexXY(i, out x, out y);
                 localBounds.ExpandToInclude(x, y);
-            }
-            //double x;
-            //double y;
-            //ShapePath.FlagsAndCommand cmd;
-            //int numPoint = 0;
-            //while (!ShapePath.IsStop(cmd = GetNextVertex2(this.m_stroke, out x, out y)))
-            //{
-            //    numPoint++;
-            //    localBounds.ExpandToInclude(x, y);
-            //}
-
-            //if (numPoint == 0)
-            //{
-            //    localBounds = new RectangleDouble();
-            //}
-
+            } 
             return localBounds; throw new NotImplementedException();
         }
-        //ShapePath.FlagsAndCommand GetNextVertex2(Stroke m_stroke, out double x, out double y)
-        //{
-        //    ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
-        //    double r = m_point_radius;
-        //    //1. stroke
-
-        //    if (m_status == 0)
-        //    {
-        //        cmd = m_stroke.GetNextVertex3(out x, out y);
-        //        if (cmd != ShapePath.FlagsAndCommand.CommandStop)
-        //        {
-        //            ParentToChildTransform.Transform(ref x, ref y);
-        //            return cmd;
-        //        }
-        //        if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-        //        m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
-        //        ++m_status;
-        //    }
-        //    //2. ellipse
-        //    cmd = m_ellipse.GetNextVertex(out x, out y);
-        //    if (!ShapePath.IsStop(cmd))
-        //    {
-        //        ParentToChildTransform.Transform(ref x, ref y);
-        //        return cmd;
-        //    }
-        //    if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
-        //    if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-        //    m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
-        //    ++m_status;
-        //    cmd = m_ellipse.GetNextVertex(out x, out y);
-        //    if (!ShapePath.IsStop(cmd))
-        //    {
-        //        ParentToChildTransform.Transform(ref x, ref y);
-        //    }
-        //    return cmd;
-        //}
-        public override ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        {
-            throw new NotSupportedException();
-
-            //ShapePath.FlagsAndCommand cmd = ShapePath.FlagsAndCommand.CommandStop;
-            //double r = m_point_radius;
-            //if (m_status == 0)
-            //{
-            //    cmd = m_stroke.GetNextVertex3(out x, out y);
-            //    if (cmd != ShapePath.FlagsAndCommand.CommandStop)
-            //    {
-            //        ParentToChildTransform.Transform(ref x, ref y);
-            //        return cmd;
-            //    }
-            //    if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-            //    m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
-            //    ++m_status;
-            //}
-            //cmd = m_ellipse.GetNextVertex(out x, out y);
-            //if (!ShapePath.IsStop(cmd))
-            //{
-            //    ParentToChildTransform.Transform(ref x, ref y);
-            //    return cmd;
-            //}
-            //if (m_status >= m_num_points) return ShapePath.FlagsAndCommand.CommandStop;
-            //if (m_node >= 0 && m_node == (int)(m_status)) r *= 1.2;
-            //m_ellipse.Reset(GetXN(m_status), GetYN(m_status), r, r, 32);
-            //++m_status;
-            //cmd = m_ellipse.GetNextVertex(out x, out y);
-            //if (!ShapePath.IsStop(cmd))
-            //{
-            //    ParentToChildTransform.Transform(ref x, ref y);
-            //}
-            //return cmd;
-        }
+       
 
         public override void OnMouseDown(MouseEventArgs mouseEvent)
         {
@@ -509,10 +386,7 @@ namespace PixelFarm.Agg.UI
             base.OnMouseMove(mouseEvent);
         }
 
-        public override void OnKeyDown(KeyEventArgs keyEvent)
-        {
-            base.OnKeyDown(keyEvent);
-        }
+
 
         private bool check_edge(int i, double x, double y)
         {
@@ -659,7 +533,7 @@ namespace PixelFarm.Agg.UI
         }
 
         public void line_color(ColorRGBA c) { m_color = c; }
-        public override ColorRGBA color(int i) { return m_color; }
+        public override ColorRGBA WidgetColor() { return m_color; }
 
     }
 }
