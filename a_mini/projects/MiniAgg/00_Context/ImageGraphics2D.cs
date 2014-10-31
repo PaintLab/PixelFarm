@@ -245,7 +245,7 @@ namespace PixelFarm.Agg
 
 
                 ImgSpanGen spanImageFilter;
-                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 spanImageFilter = new ImgSpanGenRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
@@ -267,7 +267,7 @@ namespace PixelFarm.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 ImgSpanGen spanImageFilter = null;
@@ -396,7 +396,7 @@ namespace PixelFarm.Agg
                 var spanImageFilter = new ImgSpanGenRGBA_BilinearClip(
                     new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA()),
                     ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(),
-                    new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform));
+                    new InterpolatorLinear(sourceRectTransform));
 
                 DrawImage(source, spanImageFilter, destRectTransform);
 #if false // this is some debug you can enable to visualize the dest bounding box
@@ -417,7 +417,7 @@ namespace PixelFarm.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 ImgSpanGen spanImageFilter = null;

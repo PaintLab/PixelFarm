@@ -46,7 +46,8 @@ namespace PixelFarm.Agg.Image
         const int BASE_SCALE = (int)(1 << BASE_SHITF);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public ImgSpanGenRGBA_NN_StepXBy1(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
+        public ImgSpanGenRGBA_NN_StepXBy1(IImageBufferAccessor sourceAccessor, 
+             ISpanInterpolator spanInterpolator)
             : base(sourceAccessor, spanInterpolator, null)
         {
         }
@@ -341,9 +342,9 @@ namespace PixelFarm.Agg.Image
             int bufferIndex;
             byte[] fg_ptr;
 
-            if (base.m_interpolator.GetType() == typeof(PixelFarm.Agg.Lines.InterpolatorLinear)
-                && ((PixelFarm.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(PixelFarm.Agg.Transform.Affine)
-            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
+            if (base.m_interpolator.GetType() == typeof(PixelFarm.Agg.Transform.InterpolatorLinear)
+                && ((PixelFarm.Agg.Transform.InterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(PixelFarm.Agg.Transform.Affine)
+            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.InterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe

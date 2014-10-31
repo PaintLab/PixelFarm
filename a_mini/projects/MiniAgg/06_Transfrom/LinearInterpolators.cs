@@ -23,10 +23,10 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.Agg.Transform
 {
     //===================================================dda_line_interpolator
-    public sealed class LineInterpolatorDDA
+    public sealed class LinearInterpolatorDDA
     {
         int m_y;
         int m_inc;
@@ -35,13 +35,13 @@ namespace PixelFarm.Agg.Lines
         int m_fractionShift;
 
         //--------------------------------------------------------------------
-        public LineInterpolatorDDA(int fractionShift)
+        public LinearInterpolatorDDA(int fractionShift)
         {
             m_fractionShift = fractionShift;
         }
 
         //--------------------------------------------------------------------
-        public LineInterpolatorDDA(int y1, int y2, int count, int fractionShift)
+        public LinearInterpolatorDDA(int y1, int y2, int count, int fractionShift)
         {
             m_fractionShift = fractionShift;
             m_y = (y1);
@@ -84,15 +84,15 @@ namespace PixelFarm.Agg.Lines
     }
 
     //=================================================dda2_line_interpolator
-    public sealed class LineInterpolatorDDA2
+    public sealed class LinearInterpolatorDDA2
     {
 
 
         //--------------------------------------------------------------------
-        public LineInterpolatorDDA2() { }
+        public LinearInterpolatorDDA2() { }
 
         //-------------------------------------------- Forward-adjusted line
-        public LineInterpolatorDDA2(int y1, int y2, int count)
+        public LinearInterpolatorDDA2(int y1, int y2, int count)
         {
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
@@ -110,7 +110,7 @@ namespace PixelFarm.Agg.Lines
         }
 
         //-------------------------------------------- Backward-adjusted line
-        public LineInterpolatorDDA2(int y1, int y2, int count, int unused)
+        public LinearInterpolatorDDA2(int y1, int y2, int count, int unused)
         {
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y2 - y1) / m_cnt);
@@ -127,7 +127,7 @@ namespace PixelFarm.Agg.Lines
         }
 
         //-------------------------------------------- Backward-adjusted line
-        public LineInterpolatorDDA2(int y, int count)
+        public LinearInterpolatorDDA2(int y, int count)
         {
             m_cnt = (count <= 0 ? 1 : count);
             m_lft = ((y) / m_cnt);
@@ -214,7 +214,7 @@ namespace PixelFarm.Agg.Lines
 
 
     //---------------------------------------------line_bresenham_interpolator
-    sealed class LineInterpolatorBresenham
+    sealed class LinearInterpolatorBresenham
     {
         int m_x1_lr;
         int m_y1_lr;
@@ -223,7 +223,7 @@ namespace PixelFarm.Agg.Lines
         bool m_ver;
         int m_len;
         int m_inc;
-        LineInterpolatorDDA2 m_interpolator;
+        LinearInterpolatorDDA2 m_interpolator;
 
 
         const int SUBPIXEL_SHIFT = 8;
@@ -235,7 +235,7 @@ namespace PixelFarm.Agg.Lines
         public static int line_lr(int v) { return v >> (int)SUBPIXEL_SHIFT; }
 
         //--------------------------------------------------------------------
-        public LineInterpolatorBresenham(int x1, int y1, int x2, int y2)
+        public LinearInterpolatorBresenham(int x1, int y1, int x2, int y2)
         {
             m_x1_lr = (line_lr(x1));
             m_y1_lr = (line_lr(y1));
@@ -252,7 +252,7 @@ namespace PixelFarm.Agg.Lines
             }
 
             m_inc = (m_ver ? ((y2 > y1) ? 1 : -1) : ((x2 > x1) ? 1 : -1));
-            m_interpolator = new LineInterpolatorDDA2(m_ver ? x1 : y1,
+            m_interpolator = new LinearInterpolatorDDA2(m_ver ? x1 : y1,
                            m_ver ? x2 : y2,
                            (int)m_len);
         }

@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.Agg.Transform
 {
 
     //============================================span_interpolator_persp_lerp
@@ -28,10 +28,10 @@ namespace PixelFarm.Agg.Lines
     {
         Transform.Perspective m_trans_dir;
         Transform.Perspective m_trans_inv;
-        LineInterpolatorDDA2 m_coord_x;
-        LineInterpolatorDDA2 m_coord_y;
-        LineInterpolatorDDA2 m_scale_x;
-        LineInterpolatorDDA2 m_scale_y;
+        LinearInterpolatorDDA2 m_coord_x;
+        LinearInterpolatorDDA2 m_coord_y;
+        LinearInterpolatorDDA2 m_scale_x;
+        LinearInterpolatorDDA2 m_scale_y;
 
         const int SUBPIXEL_SHIFT = 8;
         const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
@@ -164,10 +164,10 @@ namespace PixelFarm.Agg.Lines
             int sy2 = (int)AggBasics.uround(SUBPIXEL_SCALE / Math.Sqrt(dx * dx + dy * dy)) >> SUBPIXEL_SHIFT;
 
             // Initialize the interpolators
-            m_coord_x = new LineInterpolatorDDA2(x1, x2, (int)len);
-            m_coord_y = new LineInterpolatorDDA2(y1, y2, (int)len);
-            m_scale_x = new LineInterpolatorDDA2(sx1, sx2, (int)len);
-            m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
+            m_coord_x = new LinearInterpolatorDDA2(x1, x2, (int)len);
+            m_coord_y = new LinearInterpolatorDDA2(y1, y2, (int)len);
+            m_scale_x = new LinearInterpolatorDDA2(sx1, sx2, (int)len);
+            m_scale_y = new LinearInterpolatorDDA2(sy1, sy2, (int)len);
         }
 
 
@@ -208,10 +208,10 @@ namespace PixelFarm.Agg.Lines
             int sy2 = (int)AggBasics.uround(SUBPIXEL_SCALE / Math.Sqrt(dx * dx + dy * dy)) >> SUBPIXEL_SHIFT;
 
             // Initialize the interpolators
-            m_coord_x = new LineInterpolatorDDA2(x1, x2, (int)len);
-            m_coord_y = new LineInterpolatorDDA2(y1, y2, (int)len);
-            m_scale_x = new LineInterpolatorDDA2(sx1, sx2, (int)len);
-            m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
+            m_coord_x = new LinearInterpolatorDDA2(x1, x2, (int)len);
+            m_coord_y = new LinearInterpolatorDDA2(y1, y2, (int)len);
+            m_scale_x = new LinearInterpolatorDDA2(sx1, sx2, (int)len);
+            m_scale_y = new LinearInterpolatorDDA2(sy1, sy2, (int)len);
         }
 
         public Transform.ITransform GetTransformer()

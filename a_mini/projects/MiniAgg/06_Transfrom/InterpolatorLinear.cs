@@ -36,7 +36,7 @@ namespace PixelFarm.Agg
 }
 
 
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.Agg.Transform
 {
 
 
@@ -45,8 +45,8 @@ namespace PixelFarm.Agg.Lines
     public sealed class InterpolatorLinear : ISpanInterpolator
     {
         Transform.ITransform m_trans;
-        LineInterpolatorDDA2 m_li_x;
-        LineInterpolatorDDA2 m_li_y;
+        LinearInterpolatorDDA2 m_li_x;
+        LinearInterpolatorDDA2 m_li_y;
 
 
         const int SUB_PIXEL_SHIFT = 8;
@@ -93,16 +93,16 @@ namespace PixelFarm.Agg.Lines
             int x2 = AggBasics.iround(tx * (double)SUB_PIXEL_SCALE);
             int y2 = AggBasics.iround(ty * (double)SUB_PIXEL_SCALE);
 
-            m_li_x = new LineInterpolatorDDA2(x1, x2, (int)len);
-            m_li_y = new LineInterpolatorDDA2(y1, y2, (int)len);
+            m_li_x = new LinearInterpolatorDDA2(x1, x2, (int)len);
+            m_li_y = new LinearInterpolatorDDA2(y1, y2, (int)len);
         }
 
         //----------------------------------------------------------------
         public void Resync(double xe, double ye, int len)
         {
             m_trans.Transform(ref xe, ref ye);
-            m_li_x = new LineInterpolatorDDA2(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
-            m_li_y = new LineInterpolatorDDA2(m_li_y.y(), AggBasics.iround(ye * (double)SUB_PIXEL_SCALE), (int)len);
+            m_li_x = new LinearInterpolatorDDA2(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
+            m_li_y = new LinearInterpolatorDDA2(m_li_y.y(), AggBasics.iround(ye * (double)SUB_PIXEL_SCALE), (int)len);
         }
 
         
