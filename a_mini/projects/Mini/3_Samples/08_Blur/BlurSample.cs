@@ -231,7 +231,7 @@ namespace MatterHackers.Agg.Sample_Blur
                 if (boundsRect.clip(new RectangleInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
                 {
                     //check if intersect 
-                    ChildImage image2 = new ChildImage(widgetsSubImage, new BlenderBGRA(), x1, y2, x2, y1);
+                    ChildImage image2 = new ChildImage(widgetsSubImage, new PixelBlenderBGRA(), x1, y2, x2, y1);
                     // Blur it
                     switch (BlurMethod)
                     {

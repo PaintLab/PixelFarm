@@ -456,7 +456,7 @@ namespace MatterHackers.Agg
                 {
                     case 8:
                         {
-                            int bytesBetweenPixels = destImage.GetBytesBetweenPixelsInclusive();
+                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
                             byte byteColor = (byte)color.Red0To255;
                             int clipRectLeft = clippingRectInt.Left;
                             for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
@@ -473,7 +473,7 @@ namespace MatterHackers.Agg
 
                     case 24:
                         {
-                            int bytesBetweenPixels = destImage.GetBytesBetweenPixelsInclusive();
+                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
                             int clipRectLeft = clippingRectInt.Left;
                             for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
                             {
@@ -491,7 +491,7 @@ namespace MatterHackers.Agg
                     case 32:
                         {
 
-                            int bytesBetweenPixels = destImage.GetBytesBetweenPixelsInclusive();
+                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
                             int clipRectLeft = clippingRectInt.Left;
                             for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
                             {

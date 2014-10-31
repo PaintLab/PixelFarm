@@ -387,7 +387,7 @@ namespace MatterHackers.Agg
             int back_b = m_OutsideSourceColor.blue;
             int back_a = m_OutsideSourceColor.alpha;
 
-            int distanceBetweenPixelsInclusive = base.GetImageBufferAccessor().SourceImage.GetBytesBetweenPixelsInclusive();
+            int distanceBetweenPixelsInclusive = base.GetImageBufferAccessor().SourceImage.BytesBetweenPixelsInclusive;
             int maxx = (int)SourceRenderingBuffer.Width - 1;
             int maxy = (int)SourceRenderingBuffer.Height - 1;
             ISpanInterpolator spanInterpolator = base.interpolator();
@@ -568,7 +568,7 @@ namespace MatterHackers.Agg
         public SpanImageFilterRGBA(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
             : base(src, inter, filter)
         {
-            if (src.SourceImage.GetBytesBetweenPixelsInclusive() != 4)
+            if (src.SourceImage.BytesBetweenPixelsInclusive != 4)
             {
                 throw new System.NotSupportedException("span_image_filter_rgba must have a 32 bit DestImage");
             }

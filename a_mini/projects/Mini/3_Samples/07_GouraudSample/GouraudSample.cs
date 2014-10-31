@@ -74,7 +74,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            var image = new ChildImage(backBuffer, new BlenderBGRA());
+            var image = new ChildImage(backBuffer, new PixelBlenderBGRA());
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(image);
 
@@ -165,7 +165,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
-            var pf = new ChildImage(backBuffer, new BlenderBGRA());
+            var pf = new ChildImage(backBuffer, new PixelBlenderBGRA());
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(pf);
             ren_base.Clear(new ColorRGBAf(1.0f, 1.0f, 1.0f).ToColorRGBA());

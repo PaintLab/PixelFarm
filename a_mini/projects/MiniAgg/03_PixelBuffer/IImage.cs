@@ -36,21 +36,18 @@ namespace MatterHackers.Agg
         int GetBufferOffsetXY(int x, int y);
         void MarkImageChanged();
 
-        int StrideInBytes();
-        int GetBytesBetweenPixelsInclusive();
+        int Stride { get; }
+        int BytesBetweenPixelsInclusive { get; }
 
-        IRecieveBlenderByte GetRecieveBlender();
-        void SetRecieveBlender(IRecieveBlenderByte value);
+        IPixelBlender GetRecieveBlender();
+        void SetRecieveBlender(IPixelBlender value);
 
-
-        byte[] GetBuffer();
-
+        byte[] GetBuffer(); 
         ColorRGBA GetPixel(int x, int y);
-     
-        void CopyFrom(IImage sourceImage);
-        void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
-
         void SetPixel(int x, int y, ColorRGBA color);
+         
+        
+        void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset);
          
         // line stuff
         void CopyHL(int x, int y, int len, ColorRGBA sourceColor);

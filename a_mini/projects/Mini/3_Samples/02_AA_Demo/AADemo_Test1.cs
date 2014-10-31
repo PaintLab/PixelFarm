@@ -124,8 +124,8 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
-            IRecieveBlenderByte NormalBlender = new BlenderBGRA();
-            IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
+            IPixelBlender NormalBlender = new PixelBlenderBGRA();
+            IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(gamma);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
 
 

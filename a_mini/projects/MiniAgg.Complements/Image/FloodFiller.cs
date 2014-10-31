@@ -124,7 +124,7 @@ namespace MatterHackers.Agg
             }
 
             destImage = bufferToFillOn;
-            imageStride = destImage.StrideInBytes();
+            imageStride = destImage.Stride;
             destBuffer = destImage.GetBuffer();
             int imageWidth = destImage.Width;
             int imageHeight = destImage.Height;
@@ -178,7 +178,7 @@ namespace MatterHackers.Agg
 
         void LinearFill(int x, int y)
         {
-            int bytesPerPixel = destImage.GetBytesBetweenPixelsInclusive();
+            int bytesPerPixel = destImage.BytesBetweenPixelsInclusive;
             int imageWidth = destImage.Width;
 
             int leftFillX = x;

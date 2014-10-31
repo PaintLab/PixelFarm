@@ -47,7 +47,7 @@ namespace MatterHackers.Agg
 
                 IImage backBuffer = widgetsSubImage;
 
-                int distBetween = backBuffer.GetBytesBetweenPixelsInclusive();
+                int distBetween = backBuffer.BytesBetweenPixelsInclusive;
 
                 var redImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 2, 8);
                 var greenImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 1, 8);

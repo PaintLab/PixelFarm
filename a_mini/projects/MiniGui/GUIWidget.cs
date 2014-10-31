@@ -557,7 +557,8 @@ namespace MatterHackers.Agg.UI
             int intHeight = Math.Max((int)(Math.Ceiling(localBounds.Top) - Math.Floor(localBounds.Bottom)) + 1, 1);
             if (backBuffer == null || backBuffer.Width != intWidth || backBuffer.Height != intHeight)
             {
-                backBuffer = new ActualImage(intWidth, intHeight, 32, new BlenderPreMultBGRA());
+                backBuffer = new ActualImage(intWidth, intHeight, 32, 
+                    new PixelBlenderPreMultBGRA());
             }
         }
 

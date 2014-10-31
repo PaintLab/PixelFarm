@@ -150,7 +150,7 @@ namespace MatterHackers.Agg.Image
         public const byte BASE_MASK = 255;
     }
 
-    public sealed class BlenderBGR : BlenderBaseBGR, IRecieveBlenderByte
+    public sealed class BlenderBGR : BlenderBaseBGR, IPixelBlender
     {
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
@@ -245,7 +245,7 @@ namespace MatterHackers.Agg.Image
         }
     };
 
-    public sealed class BlenderGammaBGR : BlenderBaseBGR, IRecieveBlenderByte
+    public sealed class BlenderGammaBGR : BlenderBaseBGR, IPixelBlender
     {
         GammaLookUpTable m_gamma;
 
@@ -307,7 +307,7 @@ namespace MatterHackers.Agg.Image
         }
     };
 
-    public sealed class BlenderPreMultBGR : BlenderBaseBGR, IRecieveBlenderByte
+    public sealed class BlenderPreMultBGR : BlenderBaseBGR, IPixelBlender
     {
         static int[] m_Saturate9BitToByte = new int[1 << 9];
 

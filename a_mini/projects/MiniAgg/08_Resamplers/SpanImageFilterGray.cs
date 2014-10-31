@@ -37,7 +37,7 @@ namespace MatterHackers.Agg
         public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageBase SourceRenderingBuffer = (ImageBase)GetImageBufferAccessor().SourceImage;
-            int bytesBetweenPixelsInclusive = SourceRenderingBuffer.GetBytesBetweenPixelsInclusive();
+            int bytesBetweenPixelsInclusive = SourceRenderingBuffer.BytesBetweenPixelsInclusive;
             if (SourceRenderingBuffer.BitDepth != 8)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");

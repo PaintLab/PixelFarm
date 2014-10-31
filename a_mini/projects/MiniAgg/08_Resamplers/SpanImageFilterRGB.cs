@@ -145,7 +145,7 @@ namespace MatterHackers.Agg
                                             ISpanInterpolator inter)
             : base(src, inter, null)
         {
-            if (src.SourceImage.GetBytesBetweenPixelsInclusive() != 3)
+            if (src.SourceImage.BytesBetweenPixelsInclusive  != 3)
             {
                 throw new System.NotSupportedException("span_image_filter_rgb must have a 24 bit DestImage");
             }
@@ -450,7 +450,7 @@ namespace MatterHackers.Agg
         public SpanImageFilterRGB(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
             : base(src, inter, filter)
         {
-            if (src.SourceImage.GetBytesBetweenPixelsInclusive() != 3)
+            if (src.SourceImage.BytesBetweenPixelsInclusive != 3)
             {
                 throw new System.NotSupportedException("span_image_filter_rgb must have a 24 bit DestImage");
             }

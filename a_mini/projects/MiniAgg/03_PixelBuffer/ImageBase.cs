@@ -23,7 +23,6 @@ using System.Runtime;
 using MatterHackers.Agg;
 using MatterHackers.Agg.VertexSource;
 using MatterHackers.VectorMath;
-
 using MatterHackers.Agg.Image;
 namespace MatterHackers.Agg
 {
@@ -57,17 +56,17 @@ namespace MatterHackers.Agg
         int bitDepth;
 
         double originX;
-        double originY;
+        double originY; 
 
-
-        IRecieveBlenderByte recieveBlender;
+        IPixelBlender recieveBlender;
 
         int changedCount = 0;
 
         public ImageBase()
         {
+
         }
-        public ImageBase(int width, int height, int bitsPerPixel, IRecieveBlenderByte recieveBlender)
+        public ImageBase(int width, int height, int bitsPerPixel, IPixelBlender recieveBlender)
         {
 
             int scanWidthInBytes = width * (bitsPerPixel / 8);
@@ -123,22 +122,22 @@ namespace MatterHackers.Agg
 
 
 
-        public void CopyFrom(IImage sourceImage)
-        {
-            CopyFrom(sourceImage, sourceImage.GetBounds(), 0, 0);
-        }
+        //public void CopyFrom(IImage sourceImage)
+        //{
+        //    CopyFrom(sourceImage, sourceImage.GetBounds(), 0, 0);
+        //}
 
         void CopyFromNoClipping(IImage sourceImage, RectangleInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
-            if (GetBytesBetweenPixelsInclusive() != BitDepth / 8
-                || sourceImage.GetBytesBetweenPixelsInclusive() != sourceImage.BitDepth / 8)
+            if (BytesBetweenPixelsInclusive != BitDepth / 8
+                || sourceImage.BytesBetweenPixelsInclusive != sourceImage.BitDepth / 8)
             {
                 throw new Exception("WIP we only support packed pixel formats at this time.");
             }
 
             if (BitDepth == sourceImage.BitDepth)
             {
-                int lengthInBytes = clippedSourceImageRect.Width * GetBytesBetweenPixelsInclusive();
+                int lengthInBytes = clippedSourceImageRect.Width * BytesBetweenPixelsInclusive;
 
                 int sourceOffset = sourceImage.GetBufferOffsetXY(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom);
                 byte[] sourceBuffer = sourceImage.GetBuffer();
@@ -148,8 +147,8 @@ namespace MatterHackers.Agg
                 for (int i = 0; i < clippedSourceImageRect.Height; i++)
                 {
                     AggBasics.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
-                    sourceOffset += sourceImage.StrideInBytes();
-                    destOffset += StrideInBytes();
+                    sourceOffset += sourceImage.Stride;
+                    destOffset += Stride;
                 }
             }
             else
@@ -249,11 +248,11 @@ namespace MatterHackers.Agg
             }
         }
 
-        public int StrideInBytes() { return strideInBytes; }
+        public int Stride { get { return strideInBytes; } }
 
-        public int GetBytesBetweenPixelsInclusive()
+        public int BytesBetweenPixelsInclusive 
         {
-            return m_DistanceInBytesBetweenPixelsInclusive;
+            get { return m_DistanceInBytesBetweenPixelsInclusive; }
         }
         public int BitDepth
         {
@@ -269,12 +268,12 @@ namespace MatterHackers.Agg
                     Height - (int)this.originY);
         }
 
-        public IRecieveBlenderByte GetRecieveBlender()
+        public IPixelBlender GetRecieveBlender()
         {
             return recieveBlender;
         }
 
-        public void SetRecieveBlender(IRecieveBlenderByte value)
+        public void SetRecieveBlender(IPixelBlender value)
         {
             if (BitDepth != 0 && value != null && value.NumPixelBits != BitDepth)
             {
@@ -457,7 +456,7 @@ namespace MatterHackers.Agg
         public void CopyHL(int x, int y, int len, ColorRGBA sourceColor)
         {
             int bufferOffset;
-            byte[] buffer = GetPixelPointerXY(x, y, out bufferOffset); 
+            byte[] buffer = GetPixelPointerXY(x, y, out bufferOffset);
             recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
         }
 
@@ -588,7 +587,7 @@ namespace MatterHackers.Agg
         {
             if (sourceColor.alpha != 0)
             {
-                int scanWidthBytes = StrideInBytes();
+                int scanWidthBytes = Stride;
                 unchecked
                 {
                     int bufferOffset = GetBufferOffsetXY(x, y);
@@ -614,12 +613,10 @@ namespace MatterHackers.Agg
 
         public void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
         {
-            int bufferOffset = GetBufferOffsetXY(x, y);
-
+            int bufferOffset = GetBufferOffsetXY(x, y); 
             do
             {
-                recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]);
-
+                recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]); 
                 ++colorsIndex;
                 bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
             }
@@ -649,7 +646,7 @@ namespace MatterHackers.Agg
         {
             int bufferOffset = GetBufferOffsetXY(x, y);
 
-            int scanWidthBytes = System.Math.Abs(StrideInBytes());
+            int scanWidthBytes = System.Math.Abs(Stride);
             if (!firstCoverForAll)
             {
                 do
@@ -707,7 +704,7 @@ namespace MatterHackers.Agg
 
         public RectangleInt GetBoundingRect()
         {
-            return new RectangleInt(0, 0, Width, Height); 
+            return new RectangleInt(0, 0, Width, Height);
         }
 
         //internal void Initialize(BufferImage sourceImage)
@@ -752,7 +749,7 @@ namespace MatterHackers.Agg
     {
 
 
-        public static void BasedOnAlpha(IRecieveBlenderByte recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor)
+        public static void BasedOnAlpha(IPixelBlender recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
             //if (sourceColor.m_A != 0)
             {
@@ -769,7 +766,7 @@ namespace MatterHackers.Agg
             }
         }
 
-        public static void BasedOnAlphaAndCover(IRecieveBlenderByte recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor, int cover)
+        public static void BasedOnAlphaAndCover(IPixelBlender recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor, int cover)
         {
             if (cover == 255)
             {

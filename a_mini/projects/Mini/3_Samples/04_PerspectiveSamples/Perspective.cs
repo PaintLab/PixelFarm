@@ -76,19 +76,20 @@ namespace MatterHackers.Agg.Sample_Perspective
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
-
-            IImage backBuffer = widgetsSubImage;
+             
+            IImage backBuffer = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             if (!didInit)
             {
                 didInit = true;
                 OnInitialize();
             }
+
             ChildImage image;
+
             if (backBuffer.BitDepth == 32)
             {
-                image = new ChildImage(backBuffer, new BlenderBGRA());
+                image = new ChildImage(backBuffer, new PixelBlenderBGRA());
             }
             else
             {

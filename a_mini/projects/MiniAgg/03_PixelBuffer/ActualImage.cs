@@ -29,7 +29,7 @@ namespace MatterHackers.Agg.Image
     public class ActualImage : ImageBase
     {
         public ActualImage(int width, int height,
-              int bitsPerPixel, IRecieveBlenderByte recieveBlender)
+              int bitsPerPixel, IPixelBlender recieveBlender)
             : base(width, height, bitsPerPixel, recieveBlender)
         {
 

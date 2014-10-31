@@ -48,9 +48,9 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public virtual int StrideInBytes()
+        public virtual int Stride 
         {
-            return linkedImage.StrideInBytes();
+            get { return linkedImage.Stride; }
         }
 
 
@@ -59,12 +59,12 @@ namespace MatterHackers.Agg.Image
             return linkedImage.GetBounds();
         }
 
-        public IRecieveBlenderByte GetRecieveBlender()
+        public IPixelBlender GetRecieveBlender()
         {
             return linkedImage.GetRecieveBlender();
         }
 
-        public void SetRecieveBlender(IRecieveBlenderByte value)
+        public void SetRecieveBlender(IPixelBlender value)
         {
             linkedImage.SetRecieveBlender(value);
         }
@@ -73,13 +73,7 @@ namespace MatterHackers.Agg.Image
         {
             return linkedImage.GetPixel(x, y);
         }
-         
-
-        public virtual void CopyFrom(IImage sourceRaster)
-        {
-            linkedImage.CopyFrom(sourceRaster);
-        }
-
+          
         public virtual void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
         {
             linkedImage.CopyFrom(sourceImage, sourceImageRect, destXOffset, destYOffset);
@@ -157,9 +151,9 @@ namespace MatterHackers.Agg.Image
 
 
 
-        public virtual int GetBytesBetweenPixelsInclusive()
+        public virtual int BytesBetweenPixelsInclusive 
         {
-            return linkedImage.GetBytesBetweenPixelsInclusive();
+            get { return linkedImage.BytesBetweenPixelsInclusive; }
         }
 
         public virtual int BitDepth

@@ -129,7 +129,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
 
             int strokeWidth = 1;
 
-            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA());
+            var clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(ColorRGBA.White);
 

@@ -802,7 +802,7 @@ namespace MatterHackers.Agg.Image
 
             TargaHeader.BinaryWrite(writerToSaveTo);
 
-            byte[] pLineBuffer = new byte[Math.Abs(image.StrideInBytes()) * 2];
+            byte[] pLineBuffer = new byte[Math.Abs(image.Stride) * 2];
 
             //int BytesToSave;
             switch (SourceDepth)

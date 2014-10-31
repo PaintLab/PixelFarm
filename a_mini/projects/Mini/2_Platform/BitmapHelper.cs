@@ -27,7 +27,7 @@ namespace Mini
             byte[] buffer = backingImageBufferByte.GetBuffer();
 
             BitmapHelper.CopyToWindowsBitmap(buffer,offset,
-                backingImageBufferByte.StrideInBytes(), backingImageBufferByte.Height,
+                backingImageBufferByte.Stride, backingImageBufferByte.Height,
                 backingImageBufferByte.BitDepth,
                 windowsBitmap, rect);
 

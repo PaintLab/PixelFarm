@@ -24,7 +24,7 @@ namespace MatterHackers.Agg.Sample_FloodFill
         public FloodFillDemo()
         {
             BackgroundColor = ColorRGBA.White;
-            imageToFillOn = new ActualImage(400, 300, 32, new BlenderBGRA());
+            imageToFillOn = new ActualImage(400, 300, 32, new PixelBlenderBGRA());
             var imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
             imageToFillGraphics.Clear(ColorRGBA.White);
             imageToFillGraphics.DrawString("Click to fill", 20, 30);

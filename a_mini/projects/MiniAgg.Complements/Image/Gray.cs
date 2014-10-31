@@ -30,7 +30,7 @@ using MatterHackers.Agg;
 
 namespace MatterHackers.Agg.Image
 {
-    public class BlenderGray : IRecieveBlenderByte
+    public class BlenderGray : IPixelBlender
     {
         public int NumPixelBits { get { return 8; } }
 
@@ -143,7 +143,7 @@ namespace MatterHackers.Agg.Image
         }
     }
 
-    public class BlenderGrayFromRed : IRecieveBlenderByte
+    public class BlenderGrayFromRed : IPixelBlender
     {
 
 
@@ -250,7 +250,7 @@ namespace MatterHackers.Agg.Image
         }
     }
 
-    public class BlenderGrayClampedMax : IRecieveBlenderByte
+    public class BlenderGrayClampedMax : IPixelBlender
     {
 
 
