@@ -47,11 +47,12 @@
     <Compile Include="03_PixelBuffer\ImageHelper.cs" />
     <Compile Include="04_Scanline\ISpanGenerator.cs" />
     <Compile Include="04_Scanline\0_ScanlineSpan.cs" />
+    <Compile Include="05_Lines\IPatternFilter.cs" />
     <Compile Include="05_Lines\LineParameters.cs" />
     <Compile Include="05_Lines\ClipLiangBarsky.cs" />
     <Compile Include="01_Base\ColorRGBA.cs" />
     <Compile Include="05_Lines\LineInterpolators.cs" />
-    <Compile Include="04_Scanline\FillingRule.cs" />
+    <Compile Include="04_Scanline\4.4_FillingRule.cs" />
     <Compile Include="04_Scanline\IGammaFunction.cs" />
     <Compile Include="07_Transfrom\SimulEqGeneral.cs" />
     <Compile Include="06_Vertex_Path\BoundingRect.cs" />

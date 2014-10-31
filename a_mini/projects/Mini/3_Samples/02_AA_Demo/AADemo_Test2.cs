@@ -165,7 +165,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest2
 
 
 
-            var childImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var childImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
             var rasterGamma = new ChildImage(childImage, new BlenderGammaBGRA(this.GammaValue));

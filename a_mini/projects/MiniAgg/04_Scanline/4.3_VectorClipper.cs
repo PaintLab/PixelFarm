@@ -54,7 +54,14 @@ namespace MatterHackers.Agg.JustForScanlineRasterizer
                 downscale(clipBox.Right),
                 downscale(clipBox.Top));
         }
-
+        public RectangleInt GetVectorClipBoxInt()
+        {
+            return new RectangleInt(
+                downscale(clipBox.Left),
+                downscale(clipBox.Bottom),
+                downscale(clipBox.Right),
+                downscale(clipBox.Top));
+        }
 
         public void ResetClipping()
         {

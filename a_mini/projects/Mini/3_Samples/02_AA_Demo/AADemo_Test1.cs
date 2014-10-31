@@ -29,6 +29,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ras.LineTo(x * m_size + m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
+
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
             sclineRasToBmp.RenderScanlineSolidAA(destImage, ras, sl, color);
         }
@@ -120,7 +121,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
             IRecieveBlenderByte NormalBlender = new BlenderBGRA();

@@ -42,20 +42,21 @@ namespace MatterHackers.Agg
             : base(destImage, rasterizer)
         {
             this.scanline = scanline;
-        }
-
-
-
+        } 
         public override void SetClippingRect(RectangleDouble clippingRect)
         {
             Rasterizer.SetVectorClipBox(clippingRect);
         }
-
+        //--------------------------
         public override RectangleDouble GetClippingRect()
         {
             return Rasterizer.GetVectorClipBox();
         }
-
+        public override RectangleInt GetClippingRectInt()
+        {
+            return Rasterizer.GetVectorClipBoxInt();
+        }
+        //--------------------------
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
             //reset rasterizer before render each vertextSnap
@@ -143,14 +144,13 @@ namespace MatterHackers.Agg
 
 
             VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
-            Rasterizer.AddPath(sp1);
-            {
-                sclineRasToBmp.GenerateAndRender(
-                    new ChildImage(destImageByte, destImageByte.GetRecieveBlender()),
-                    Rasterizer,
-                    drawImageScanlineCache,
-                    spanImageFilter);
-            }
+            Rasterizer.AddPath(sp1); 
+            sclineRasToBmp.GenerateAndRender(
+                new ChildImage(destImageByte, destImageByte.GetRecieveBlender()),
+                Rasterizer,
+                drawImageScanlineCache,
+                spanImageFilter);
+
         }
 
         public override void Render(IImage source,
@@ -311,10 +311,10 @@ namespace MatterHackers.Agg
 
                 if (!RectangleInt.DoIntersect(sourceBounds, destBounds))
                 {
-                    if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
-                    {
-                        throw new NotImplementedException();
-                    }
+                    //if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
+                    //{
+                    //    throw new NotImplementedException();
+                    //}
                     return;
                 }
             }
@@ -447,11 +447,9 @@ namespace MatterHackers.Agg
         }
         public override void Clear(ColorRGBA color)
         {
-            RectangleDouble clippingRect = GetClippingRect();
-            RectangleInt clippingRectInt = new RectangleInt((int)clippingRect.Left, (int)clippingRect.Bottom, (int)clippingRect.Right, (int)clippingRect.Top);
-
+             
+            RectangleInt clippingRectInt = GetClippingRectInt();
             IImage destImage = this.DestImage;
-
             if (destImage != null)
             {
 

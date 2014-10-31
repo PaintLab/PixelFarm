@@ -1,6 +1,4 @@
 ﻿//2014 BSD,WinterDev   
-
-//MatterHackers
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -20,13 +18,12 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-namespace MatterHackers.Agg
+
+namespace MatterHackers.Agg.JustForScanlineRasterizer
 {
-    public interface ISpanGenerator
+    public enum FillingRule
     {
-        void Prepare();
-        void Generate(ColorRGBA[] span,
-            int spanIndex,
-            int x, int y, int len);
-    } 
+        NonZero,
+        EvenOdd
+    }
 }

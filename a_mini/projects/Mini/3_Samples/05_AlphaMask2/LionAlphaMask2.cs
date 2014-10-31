@@ -140,7 +140,7 @@ namespace MatterHackers.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(Graphics2D g)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(g.DestImage, g.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(g.DestImage, g.GetClippingRectInt());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;

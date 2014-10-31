@@ -57,8 +57,9 @@ namespace MatterHackers.Agg
         public abstract void Clear(ColorRGBA color);
         public abstract void SetClippingRect(RectangleDouble rect_d);
         public abstract RectangleDouble GetClippingRect();
+        public abstract RectangleInt GetClippingRectInt();
         //------------------------------------------------------------------------
-         
+
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
 
         public abstract void Render(IImage imageSource,
@@ -71,7 +72,7 @@ namespace MatterHackers.Agg
         {
             this.Render(imageSource, (double)x, (double)y);
         }
-         
+
         public void Render(VertexStore vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)

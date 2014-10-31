@@ -33,8 +33,7 @@
 //----------------------------------------------------------------------------
 using System;
 using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
-using filling_rule_e = MatterHackers.Agg.FillingRule;
+using MatterHackers.VectorMath; 
 using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
 
 
@@ -141,13 +140,28 @@ namespace MatterHackers.Agg
         {
             return m_vectorClipper.GetVectorClipBox();
         }
-
+        public RectangleInt GetVectorClipBoxInt()
+        {
+            return m_vectorClipper.GetVectorClipBoxInt();
+        }
+        //--------------------------
         public void SetVectorClipBox(RectangleDouble clippingRect)
         {
             SetVectorClipBox(clippingRect.Left, clippingRect.Bottom, clippingRect.Right, clippingRect.Top);
         }
-
-        public void SetVectorClipBox(double x1, double y1, double x2, double y2)
+        void SetVectorClipBox(double x1, double y1, double x2, double y2)
+        {
+            Reset();
+            m_vectorClipper.ClipBox(
+                                upscale(x1), upscale(y1),
+                                upscale(x2), upscale(y2));
+        }
+        //--------------------------
+        public void SetVectorClipBox(RectangleInt clippingRect)
+        {
+            SetVectorClipBox(clippingRect.Left, clippingRect.Bottom, clippingRect.Right, clippingRect.Top);
+        }
+        public void SetVectorClipBox(int x1, int y1, int x2, int y2)
         {
             Reset();
             m_vectorClipper.ClipBox(
@@ -160,6 +174,11 @@ namespace MatterHackers.Agg
         {
             //m_VectorClipper.upscale
             return AggBasics.iround(v * (int)poly_subpixel_scale_e.SCALE);
+        }
+        static int upscale(int v)
+        {
+            //m_VectorClipper.upscale
+            return v * poly_subpixel_scale_e.SCALE;
         }
         //from vector clipper
         static int downscale(int v)
