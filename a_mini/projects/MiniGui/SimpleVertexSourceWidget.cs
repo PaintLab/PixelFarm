@@ -98,7 +98,7 @@ namespace MatterHackers.Agg.UI
         public virtual ColorRGBA color(int i) { return new ColorRGBAf().ToColorRGBA(); }
         public override void OnDraw(Graphics2D graphics2D)
         { 
-            graphics2D.Render(new VertexStoreSnap(this.MakeVxs(), 0), color(0));
+            graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), color(0));
 
             base.OnDraw(graphics2D);
         } 

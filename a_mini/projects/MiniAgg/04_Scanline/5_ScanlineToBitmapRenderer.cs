@@ -31,7 +31,11 @@ namespace MatterHackers.Agg
     {
 
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
+        public ScanlineRasToDestBitmapRenderer()
+        {
 
+        }       
+    
         public void RenderScanlineSolidAA(IImage destImage,
             ScanlineRasterizer rasterizer,
             Scanline scline,

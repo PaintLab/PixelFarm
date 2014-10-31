@@ -27,7 +27,7 @@ namespace MatterHackers.Agg
     public class VertexStore
     {
         int m_num_vertices;
-        int m_allocated_vertices; 
+        int m_allocated_vertices;
         double[] m_coord_xy;
         ShapePath.FlagsAndCommand[] m_CommandAndFlags;
 
@@ -128,7 +128,7 @@ namespace MatterHackers.Agg
         {
             return m_CommandAndFlags[index];
         }
-         
+
         //--------------------------------------------------
         //mutable properties
         public void Clear()
@@ -145,40 +145,41 @@ namespace MatterHackers.Agg
             {
                 AllocIfRequired(m_num_vertices);
             }
-            
+
             m_coord_xy[m_num_vertices << 1] = x;
             m_coord_xy[(m_num_vertices << 1) + 1] = y;
             m_CommandAndFlags[m_num_vertices] = CommandAndFlags;
             m_num_vertices++;
         }
-        public void AddVertexCurve3(double x, double y)
+        internal void AddVertexCurve3(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve3); 
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve3);
         }
-        public void AddVertexCurve4(double x, double y)
+        internal void AddVertexCurve4(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve4);  
-        } 
-        public void AddMoveTo(double x, double y)
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve4);
+        }
+        internal void AddMoveTo(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);  
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);
         }
 
-        public void LineTo(double x, double y)
+        internal void LineTo(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);  
-          
-        } 
-        public void ReplaceVertex(int index, double x, double y)
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+
+        }
+        internal void ReplaceVertex(int index, double x, double y)
         {
             m_coord_xy[index << 1] = x;
             m_coord_xy[(index << 1) + 1] = y;
         }
-        public void ReplaceCommand(int index, ShapePath.FlagsAndCommand CommandAndFlags)
+        internal void ReplaceCommand(int index, ShapePath.FlagsAndCommand CommandAndFlags)
         {
             m_CommandAndFlags[index] = CommandAndFlags;
         }
-        public void SwapVertices(int v1, int v2)
+
+        internal void SwapVertices(int v1, int v2)
         {
 
             double x_tmp, y_tmp;
@@ -196,8 +197,8 @@ namespace MatterHackers.Agg
             m_CommandAndFlags[v1] = m_CommandAndFlags[v2];
             m_CommandAndFlags[v2] = cmd;
         }
-         
-        
+
+
         void AllocIfRequired(int indexToAdd)
         {
             if (indexToAdd < m_allocated_vertices)

@@ -71,11 +71,7 @@ namespace MatterHackers.Agg
         {
             this.Render(imageSource, (double)x, (double)y);
         }
-
-
-
-
-
+         
         public void Render(VertexStore vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)
@@ -85,7 +81,7 @@ namespace MatterHackers.Agg
         }
         public void Render(VertexStore vxStorage, ColorRGBA c)
         {
-            Render(new VertexStoreSnap(vxStorage, 0), c);
+            Render(new VertexStoreSnap(vxStorage), c);
         }
         public void Render(VertexStoreSnap vertexSource, double x, double y, ColorRGBA color)
         {

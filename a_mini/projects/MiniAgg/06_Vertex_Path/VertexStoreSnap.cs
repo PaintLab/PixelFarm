@@ -15,9 +15,7 @@ namespace MatterHackers.Agg
             
             this.vxs = vsnap.GetInternalVxs();
             this.currentIterIndex = vsnap.StartAt;
-            if (vxs == null)
-            {
-            }
+            
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
@@ -39,8 +37,7 @@ namespace MatterHackers.Agg
         {
             this.vxs = vxs;
             this.startAt = startAt; 
-        }
-
+        } 
         internal VertexStore GetInternalVxs()
         {
             return this.vxs;

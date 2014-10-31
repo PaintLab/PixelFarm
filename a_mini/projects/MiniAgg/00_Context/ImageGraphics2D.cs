@@ -63,7 +63,6 @@ namespace MatterHackers.Agg
             Affine transform = GetTransform();
             if (!transform.IsIdentity())
             {
-
                 rasterizer.AddPath(transform.Tranform(vertextSnap));
             }
             else

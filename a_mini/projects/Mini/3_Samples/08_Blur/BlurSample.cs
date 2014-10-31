@@ -70,7 +70,7 @@ namespace MatterHackers.Agg.Sample_Blur
             m_sl = new ScanlinePacked8();
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
 
-            m_pathVxs = typeFaceForLargeA.GetGlyphForCharacter('a'); 
+            m_pathVxs = typeFaceForLargeA.GetGlyphForCharacter('a');
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
@@ -171,7 +171,6 @@ namespace MatterHackers.Agg.Sample_Blur
             {
                 var s2 = shadow_persp.TransformToVxs(m_path_2);
                 spath = new VertexStoreSnap(s2);
-
             }
             else
             {
@@ -179,8 +178,6 @@ namespace MatterHackers.Agg.Sample_Blur
                 spath = new VertexStoreSnap(s2);
 
             }
-            // Render shadow 
-            //spath = shadow_trans.DoTransformToNewVertexSnap();
             m_ras.AddPath(spath);
 
 

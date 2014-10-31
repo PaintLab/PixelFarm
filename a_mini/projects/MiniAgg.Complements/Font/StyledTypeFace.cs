@@ -27,59 +27,7 @@ using MatterHackers.Agg.Image;
 
 namespace MatterHackers.Agg.Font
 {
-    public class GlyphWithUnderline
-    {
-
-        VertexStoreSnap underline;
-        VertexStoreSnap glyph;
-
-        public GlyphWithUnderline(VertexStore glyph, int advanceForCharacter, int Underline_position, int Underline_thickness)
-        {
-            underline = new VertexStoreSnap(
-                new RoundedRect(new RectangleDouble(0,
-                    Underline_position, advanceForCharacter,
-                    Underline_position + Underline_thickness), 0).MakeVxs());
-            this.glyph = new VertexStoreSnap(glyph);
-        }
-
-        public VertexStore MakeVxs()
-        {
-            return new VertexStore(this.GetVertexIter());             
-        }
-
-        public IEnumerable<VertexData> GetVertexIter()
-        {
-            ShapePath.FlagsAndCommand cmd;
-            double x, y;
-
-            // return all the data for the glyph
-            var snapIter = glyph.GetVertexSnapIter();
-            do
-            {
-                cmd = snapIter.GetNextVertex(out x, out y);
-                if (ShapePath.IsStop(cmd))
-                {
-                    yield return new VertexData(cmd, x, y);
-                    break;
-                }
-                else
-                {
-                    yield return new VertexData(cmd, x, y);
-                }
-
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-
-
-            snapIter = underline.GetVertexSnapIter();
-            do
-            {
-                cmd = snapIter.GetNextVertex(out x, out y);
-                yield return new VertexData(cmd, x, y);
-
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-        }
-
-    }
+  
 
     public class StyledTypeFaceImageCache
     {
@@ -312,10 +260,10 @@ namespace MatterHackers.Agg.Font
             {
                 if (DoUnderline)
                 {
-                    sourceGlyph = new GlyphWithUnderline(sourceGlyph,
-                        typeFace.GetAdvanceForCharacter(character),
-                        typeFace.Underline_position,
-                        typeFace.Underline_thickness).MakeVxs();
+                    //sourceGlyph = new GlyphWithUnderline(sourceGlyph,
+                    //    typeFace.GetAdvanceForCharacter(character),
+                    //    typeFace.Underline_position,
+                    //    typeFace.Underline_thickness).MakeVxs();
                 }
 
 
