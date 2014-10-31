@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.Agg.Transform
 {
     //===================================================dda_line_interpolator
     public sealed class LineInterpolatorDDA

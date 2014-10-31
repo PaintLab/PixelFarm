@@ -19,15 +19,15 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.Agg.Transform
 {
 
     //============================================span_interpolator_persp_lerp
 
-    public sealed class InterpolatorPerspectiveLerp : ISpanInterpolator
+    public sealed class SpanInterpolatorPerspectiveLerp : ISpanInterpolator
     {
-        Transform.Perspective m_trans_dir;
-        Transform.Perspective m_trans_inv;
+        Perspective m_trans_dir;
+        Perspective m_trans_inv;
         LineInterpolatorDDA2 m_coord_x;
         LineInterpolatorDDA2 m_coord_y;
         LineInterpolatorDDA2 m_scale_x;
@@ -37,7 +37,7 @@ namespace PixelFarm.Agg.Lines
         const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
 
         //--------------------------------------------------------------------
-        public InterpolatorPerspectiveLerp()
+        public SpanInterpolatorPerspectiveLerp()
         {
             m_trans_dir = new Transform.Perspective();
             m_trans_inv = new Transform.Perspective();
@@ -45,7 +45,7 @@ namespace PixelFarm.Agg.Lines
 
         //--------------------------------------------------------------------
         // Arbitrary quadrangle transformations
-        public InterpolatorPerspectiveLerp(double[] src, double[] dst)
+        public SpanInterpolatorPerspectiveLerp(double[] src, double[] dst)
             : this()
         {
             quad_to_quad(src, dst);
@@ -53,7 +53,7 @@ namespace PixelFarm.Agg.Lines
 
         //--------------------------------------------------------------------
         // Direct transformations 
-        public InterpolatorPerspectiveLerp(double x1, double y1,
+        public SpanInterpolatorPerspectiveLerp(double x1, double y1,
                                      double x2, double y2,
                                      double[] quad)
             : this()
@@ -63,7 +63,7 @@ namespace PixelFarm.Agg.Lines
 
         //--------------------------------------------------------------------
         // Reverse transformations 
-        public InterpolatorPerspectiveLerp(double[] quad,
+        public SpanInterpolatorPerspectiveLerp(double[] quad,
                                      double x1, double y1,
                                      double x2, double y2)
             : this()
@@ -252,5 +252,5 @@ namespace PixelFarm.Agg.Lines
         {
             m_trans_dir.Transform(ref x, ref y);
         }
-    } 
+    }
 }

@@ -17,32 +17,11 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using System;
-namespace PixelFarm.Agg
-{
-    public interface ISpanInterpolator
-    {
-        //------------------------------------------------
-        void Begin(double x, double y, int len);
-        void GetCoord(out int x, out int y);
-        void Next();
-        //------------------------------------------------
-        Transform.ITransform GetTransformer();
-        void SetTransformer(Transform.ITransform trans);
-        //------------------------------------------------
-        void Resync(double xe, double ye, int len);
-        void GetLocalScale(out int x, out int y);
-    }
-}
-
-
-namespace PixelFarm.Agg.Lines
-{
-
-
-
+using System; 
+namespace PixelFarm.Agg.Transform
+{  
     //================================================span_interpolator_linear
-    public sealed class InterpolatorLinear : ISpanInterpolator
+    public sealed class SpanInterpolatorLinear : ISpanInterpolator
     {
         Transform.ITransform m_trans;
         LineInterpolatorDDA2 m_li_x;
@@ -54,13 +33,13 @@ namespace PixelFarm.Agg.Lines
 
 
         //--------------------------------------------------------------------
-        public InterpolatorLinear() { }
-        public InterpolatorLinear(Transform.ITransform trans)
+        public SpanInterpolatorLinear() { }
+        public SpanInterpolatorLinear(Transform.ITransform trans)
         {
             m_trans = trans;
         }
 
-        public InterpolatorLinear(Transform.ITransform trans, double x, double y, int len)
+        public SpanInterpolatorLinear(Transform.ITransform trans, double x, double y, int len)
         {
             m_trans = trans;
             Begin(x, y, len);

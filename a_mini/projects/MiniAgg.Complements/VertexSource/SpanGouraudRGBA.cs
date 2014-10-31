@@ -163,10 +163,10 @@ namespace PixelFarm.Agg.VertexSource
             int nlen = Math.Abs(pc2.m_x - pc1.m_x);
             if (nlen <= 0) nlen = 1;
 
-            var r = new PixelFarm.Agg.Lines.LineInterpolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
-            var g = new PixelFarm.Agg.Lines.LineInterpolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
-            var b = new PixelFarm.Agg.Lines.LineInterpolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
-            var a = new PixelFarm.Agg.Lines.LineInterpolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
+            var r = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
+            var g = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
+            var b = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
+            var a = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
 
             // Calculate the starting point of the gradient with subpixel 
             // accuracy and correct (roll back) the interpolators.

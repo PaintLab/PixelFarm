@@ -21,8 +21,7 @@ using System;
 
 namespace PixelFarm.Agg.Transform
 {
-
-
+     
 
     //============================================================matrix_pivot
     //template<uint Rows, uint Cols> 

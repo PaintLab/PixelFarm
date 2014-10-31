@@ -98,7 +98,12 @@ namespace PixelFarm.Agg.Image
           int bufferOffset,
           int bitsPerPixel)
         {
-            SetDimmensionAndFormat(sourceImage.Width, sourceImage.Height, sourceImage.Stride, bitsPerPixel, distanceBetweenPixelsInclusive);
+            SetDimmensionAndFormat(sourceImage.Width, 
+                sourceImage.Height,
+                sourceImage.Stride, 
+                bitsPerPixel, 
+                distanceBetweenPixelsInclusive);
+
             int offset = sourceImage.GetBufferOffsetXY(0, 0);
             byte[] buffer = sourceImage.GetBuffer();
             SetBuffer(buffer, offset + bufferOffset);

@@ -111,12 +111,12 @@ namespace PixelFarm.Agg.Lines
             m_half_height_hr = 0;
             m_offset_y_hr = (0);
 
-            create(src.MyBuffer);
+            Create(src.MyBuffer);
         }
 
         // Create
         //--------------------------------------------------------------------
-        public void create(IImage src)
+        public void Create(IImage src)
         {
 
             // we are going to create a dialated image for filtering

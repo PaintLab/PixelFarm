@@ -15,6 +15,7 @@
 //----------------------------------------------------------------------------
 using System;
 using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Agg.Lines
 {
@@ -657,7 +658,7 @@ namespace PixelFarm.Agg.Lines
     public class LineInterpolatorAABase
     {
         protected LineParameters m_lp;
-        protected LineInterpolatorDDA2 m_li;
+        protected Transform.LineInterpolatorDDA2 m_li;
         protected OutlineRenderer m_ren;
         int m_len;
         protected int m_x;
