@@ -44,6 +44,7 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\CanvasPainter.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
+    <Compile Include="Base\ColorGray.cs" />
     <Compile Include="Base\PixelBlenderRGB.cs" />
     <Compile Include="Base\Queue.cs" />
     <Compile Include="BorderDouble.cs" />
