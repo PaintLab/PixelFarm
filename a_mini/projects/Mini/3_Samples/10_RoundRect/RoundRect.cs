@@ -1,5 +1,8 @@
-﻿using System;
+﻿//2014 BSD,WinterDev
+//MatterHackers
 
+
+using System;
 using MatterHackers.Agg.UI;
 using MatterHackers.Agg.Image;
 using MatterHackers.Agg.VertexSource;
@@ -109,7 +112,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             IImage backBuffer = widgetsSubImage;
 
@@ -126,21 +129,21 @@ namespace MatterHackers.Agg.Sample_RoundRect
             var ras = new ScanlineRasterizer();
             var sl = new ScanlinePacked8();
 
-            Ellipse e = new Ellipse();
+            Ellipse ellipse = new Ellipse();
 
             // TODO: If you drag the control circles below the bottom of the window we get an exception.  This does not happen in AGG.
             // It needs to be debugged.  Turning on clipping fixes it.  But standard agg works without clipping.  Could be a bigger problem than this.
             //ras.clip_box(0, 0, width(), height());
 
             // Render two "control" circles
-            e.Reset(m_x[0], m_y[0], 3, 3, 16);
-            ras.AddPath(e.MakeVertexSnap());
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+            ellipse.Reset(m_x[0], m_y[0], 3, 3, 16);
+            ras.AddPath(ellipse.MakeVxs());
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
-            e.Reset(m_x[1], m_y[1], 3, 3, 16);
-            ras.AddPath(e.MakeVertexSnap());
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
+            ellipse.Reset(m_x[1], m_y[1], 3, 3, 16);
+            ras.AddPath(ellipse.MakeVertexSnap());
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
 
             double d = this.SubPixelOffset;
@@ -158,7 +161,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
             {
                 ras.AddPath(r.MakeVxs());
             }
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
 
 
         }

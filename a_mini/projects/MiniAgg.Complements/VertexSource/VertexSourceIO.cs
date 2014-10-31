@@ -1,4 +1,5 @@
-﻿using System;
+﻿//MIT 2014,WinterDev 
+using System;
 using System.Collections.Generic;
 
 using System.Text;

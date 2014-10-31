@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -159,6 +160,7 @@ namespace MatterHackers.Agg.Image
         ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset);
 
         void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count);
+        void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor);
 
         void BlendPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor);
         void BlendPixels(byte[] buffer, int bufferOffset, ColorRGBA[] sourceColors, int sourceColorsOffset, byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count);
@@ -215,6 +217,16 @@ namespace MatterHackers.Agg.Image
             while (--count != 0);
         }
 
+        public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
+        {
+
+            buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+            buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+            buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+            buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
+            bufferOffset += 4;
+
+        }
         public void BlendPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
             //unsafe
@@ -381,6 +393,14 @@ namespace MatterHackers.Agg.Image
             while (--count != 0);
         }
 
+        public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
+        {
+
+            buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv(sourceColor.red);
+            buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv(sourceColor.green);
+            buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv(sourceColor.blue);
+            buffer[bufferOffset + ImageBase.OrderA] = m_gamma.inv(sourceColor.alpha);
+        }
         public void BlendPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
             unchecked
@@ -434,6 +454,14 @@ namespace MatterHackers.Agg.Image
                 buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
+        }
+        public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
+        {
+            buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+            buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+            buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+            buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
+
         }
 
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
@@ -626,6 +654,13 @@ namespace MatterHackers.Agg.Image
                 buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
+        }
+        public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
+        {
+            buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
+            buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
+            buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
+            buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
         }
 
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)

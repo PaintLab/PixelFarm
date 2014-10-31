@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -37,9 +38,8 @@ namespace MatterHackers.Agg.VertexSource
     class StrokeGenerator
     {
         StrokeMath m_stroker;
-
         VertexSequence m_src_vertices;
-        VertexStorage m_out_vertices;
+        VertexStore m_out_vertices;
 
 
         double m_shorten;
@@ -54,7 +54,7 @@ namespace MatterHackers.Agg.VertexSource
         {
             m_stroker = new StrokeMath();
             m_src_vertices = new VertexSequence();
-            m_out_vertices = new VertexStorage();
+            m_out_vertices = new VertexStore();
             m_status = StrokeMath.Status.Init;
         }
 
@@ -142,7 +142,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void WriteTo(VertexStorage outputVxs)
+        public void WriteTo(VertexStore outputVxs)
         {
             this.Rewind();
             double x = 0, y = 0;

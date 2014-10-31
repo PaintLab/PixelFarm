@@ -1,4 +1,6 @@
-﻿/*
+﻿//2014 BSD,WinterDev 
+
+/*
 Copyright (c) 2014, Lars Brubaker
 All rights reserved.
 

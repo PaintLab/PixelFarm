@@ -1,5 +1,4 @@
-﻿//MIT 2014,WinterDev
-
+﻿//MIT 2014,WinterDev 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -58,7 +57,7 @@ namespace MatterHackers.Agg.VertexSource
             if (bottom > top) { bounds.Bottom = top; bounds.Top = bottom; }
         }
           
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
             PathStorage m_LinesToDraw = new PathStorage();
             m_LinesToDraw.Clear();             
@@ -66,8 +65,8 @@ namespace MatterHackers.Agg.VertexSource
             m_LinesToDraw.LineTo(bounds.Right, bounds.Bottom);
             m_LinesToDraw.LineTo(bounds.Right, bounds.Top);
             m_LinesToDraw.LineTo(bounds.Left, bounds.Top);
-            m_LinesToDraw.ClosePolygon(); 
-            return m_LinesToDraw.MakeVxs();  
+            m_LinesToDraw.ClosePolygon();
+            return m_LinesToDraw.Vxs;
         }
         public VertexStoreSnap MakeVertexSnap()
         {

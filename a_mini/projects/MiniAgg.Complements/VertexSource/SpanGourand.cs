@@ -1,3 +1,4 @@
+//MIT 2014,WinterDev 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -110,11 +111,12 @@ namespace MatterHackers.Agg.VertexSource
                 m_cmd[6] = ShapePath.FlagsAndCommand.CommandStop;
             }
         }
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
 
-            VertexStorage vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
+            VertexStore vxs = new VertexStore();
+
+            foreach (VertexData v in this.GetVertexIter())
             {
                 vxs.AddVertex(v);
                 if (v.command == ShapePath.FlagsAndCommand.CommandStop)

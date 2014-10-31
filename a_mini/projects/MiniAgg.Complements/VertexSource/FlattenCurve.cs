@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -54,43 +55,31 @@ namespace MatterHackers.Agg.VertexSource
 
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
-        readonly VertexStoreSnap vsnap;
 
-        public FlattenCurves(VertexStoreSnap spath)
-        {
-            this.vsnap = spath;
-        }
-        public FlattenCurves(VertexStorage vxs)
-        {
-            this.vsnap = new VertexStoreSnap(vxs);
-        }
         public double ApproximationScale
         {
             get
             {
                 return m_curve4.ApproximationScale;
-            } 
+            }
             set
             {
                 m_curve3.ApproximationScale = value;
                 m_curve4.ApproximationScale = value;
             }
         }
-
-
         public Curves.CurveApproximationMethod ApproximationMethod
         {
             get
-            { 
+            {
                 return m_curve4.ApproximationMethod;
             }
             set
             {
                 m_curve3.ApproximationMethod = value;
                 m_curve4.ApproximationMethod = value;
-            } 
+            }
         }
-
         public double AngleTolerance
         {
             get
@@ -101,9 +90,8 @@ namespace MatterHackers.Agg.VertexSource
             {
                 m_curve3.AngleTolerance = value;
                 m_curve4.AngleTolerance = value;
-            } 
+            }
         }
-
         public double CuspLimit
         {
             get
@@ -114,22 +102,19 @@ namespace MatterHackers.Agg.VertexSource
             {
                 m_curve3.CuspLimit = value;
                 m_curve4.CuspLimit = value;
-            } 
+            }
         }
 
-        public VertexStorage MakeVxs()
+
+        public VertexStore MakeVxs(VertexStoreSnap vsnap)
         {
-
-            VertexStorage vxs = new VertexStorage();                       
-
+            VertexStore vxs = new VertexStore();
             VertexData lastVertextData = new VertexData();
             m_curve3.Reset();
             m_curve4.Reset();
-
             var snapIter = vsnap.GetVertexSnapIter();
-                         
             double x, y;
-            ShapePath.FlagsAndCommand cmd; 
+            ShapePath.FlagsAndCommand cmd;
             do
             {
                 cmd = snapIter.GetNextVertex(out x, out y);
@@ -155,13 +140,13 @@ namespace MatterHackers.Agg.VertexSource
                                 if (ShapePath.IsStop(currentVertextData.command))
                                 {
                                     break;
-                                } 
-                                
+                                }
+
                                 vertexData = new VertexData(
                                    ShapePath.FlagsAndCommand.CommandLineTo,
                                    currentVertextData.position);
 
-                                vxs.AddVertex(vertexData); 
+                                vxs.AddVertex(vertexData);
 
                                 lastVertextData = vertexData;
 
@@ -192,21 +177,28 @@ namespace MatterHackers.Agg.VertexSource
                                 }
 
 
-                                var position = curveIterator.Current.position; 
-                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position); 
+                                var position = curveIterator.Current.position;
+
+                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position);
                                 vxs.AddVertex(vertexData);
                                 lastVertextData = vertexData;
                             }
                         }
                         break;
                     default:
-                      
+
                         vxs.AddVertex(vertexData);
                         lastVertextData = vertexData;
                         break;
                 }
             } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-            return vxs; 
+            return vxs;
+
+        }
+        public VertexStore MakeVxs(VertexStore srcVxs)
+        {
+            return MakeVxs(new VertexStoreSnap(srcVxs));            
+             
         }
     }
 }

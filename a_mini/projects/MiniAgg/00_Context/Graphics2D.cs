@@ -42,7 +42,7 @@ namespace MatterHackers.Agg
         protected ScanlineRasterizer rasterizer;
 
         Stack<Affine> affineTransformStack = new Stack<Affine>();
-       
+
 
 
         public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
@@ -57,46 +57,37 @@ namespace MatterHackers.Agg
         public abstract void Clear(ColorRGBA color);
         public abstract void SetClippingRect(RectangleDouble rect_d);
         public abstract RectangleDouble GetClippingRect();
-        public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
+        public abstract RectangleInt GetClippingRectInt();
         //------------------------------------------------------------------------
+
+        public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
+
         public abstract void Render(IImage imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
+        public abstract void Render(IImage imageSource, double x, double y);
 
         public void Render(IImage imageSource, int x, int y)
         {
-            Render(imageSource, x, y, 0, 1, 1);
+            this.Render(imageSource, (double)x, (double)y);
         }
 
-        public void Render(IImage imageSource, double x, double y)
-        {
-            Render(imageSource, x, y, 0, 1, 1);
-        }
-
-
-        public void Render(VertexStorage vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
+        public void Render(VertexStore vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
         {
             for (int i = 0; i < numPaths; i++)
             {
                 Render(new VertexStoreSnap(vxStorage, pathIdArray[i]), colorArray[i]);
             }
         }
-        public void Render(VertexStorage vxStorage, ColorRGBA c)
+        public void Render(VertexStore vxStorage, ColorRGBA c)
         {
-            Render(new VertexStoreSnap(vxStorage, 0), c);
+            Render(new VertexStoreSnap(vxStorage), c);
         }
         public void Render(VertexStoreSnap vertexSource, double x, double y, ColorRGBA color)
         {
             var inputVxs = vertexSource.GetInternalVxs();
             var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
-            Render(vxs, color);
-        }
-
-        public void Render(VertexStoreSnap vertexSource, Vector2 position, ColorRGBA color)
-        {
-            var inputVxs = vertexSource.GetInternalVxs();
-            var vxs = Affine.NewTranslation(position.x, position.y).TransformToVertexSnap(inputVxs);
             Render(vxs, color);
         }
 
@@ -169,7 +160,7 @@ namespace MatterHackers.Agg
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);
 
-            Render(new Stroke(1).MakeVxs(m_LinesToDraw.MakeVxs()), color);
+            Render(new Stroke(1).MakeVxs(m_LinesToDraw.Vxs), color);
         }
 #endif
 

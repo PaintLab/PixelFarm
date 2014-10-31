@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -133,14 +134,9 @@ namespace MatterHackers.Agg.VertexSource
         {
             return new VertexStoreSnap(MakeVxs());
         }
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
-            VertexStorage vxs = new VertexStorage();
-            foreach (VertexData vx in this.GetVertexIter())
-            {
-                vxs.AddVertex(vx);
-            }
-            return vxs;
+            return new VertexStore(this.GetVertexIter());             
         }
         //-------------------------------------------------------
     }

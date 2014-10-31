@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -26,11 +27,9 @@ namespace MatterHackers.Agg
 
     public interface IImage
     {
-        Vector2 OriginOffset
-        {
-            get;
-            set;
-        }
+        
+        void SetOriginOffset(double x, double y);
+        void GetOriginOffset(out double x, out double y);
         int BitDepth { get; }
         int Width { get; }
         int Height { get; }

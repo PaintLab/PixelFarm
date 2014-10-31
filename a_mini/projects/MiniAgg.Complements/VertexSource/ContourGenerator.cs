@@ -1,4 +1,5 @@
-﻿using System;
+﻿//2014 BSD,WinterDev   
+using System;
 using System.Collections.Generic;
 
 using System.Text;
@@ -12,7 +13,7 @@ namespace MatterHackers.Agg.VertexSource
         StrokeMath m_stroker;
         double m_width;
         VertexSequence m_src_vertices;
-        VertexStorage m_out_vertices;
+        VertexStore m_out_vertices;
         StrokeMath.Status m_status;
         int m_src_vertex;
         int m_out_vertex;
@@ -26,7 +27,7 @@ namespace MatterHackers.Agg.VertexSource
             m_stroker = new StrokeMath();
             m_width = 1;
             m_src_vertices = new VertexSequence();
-            m_out_vertices = new VertexStorage();
+            m_out_vertices = new VertexStore();
             m_status = StrokeMath.Status.Init;
             m_src_vertex = 0;
             m_closed = false;

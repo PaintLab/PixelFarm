@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -36,15 +37,15 @@ namespace MatterHackers.Agg.VertexSource
     //------------------------------------------------------------------------
 
 
-    public sealed class PathStorage  
+    public sealed class PathStorage
     {
-        VertexStorage myvxs;       
+        VertexStore myvxs;
         public PathStorage()
         {
-            myvxs = new VertexStorage();
+            myvxs = new VertexStore();
         }
 
-        internal VertexStorage Vsx
+        internal VertexStore Vsx
         {
             get
             {
@@ -68,14 +69,8 @@ namespace MatterHackers.Agg.VertexSource
         public void Clear()
         {
             myvxs.Clear();
-          
         }
 
-        public void ClearAll()
-        {
-            myvxs.FreeAll();
-          
-        }
 
         // Make path functions
         //--------------------------------------------------------------------
@@ -89,7 +84,7 @@ namespace MatterHackers.Agg.VertexSource
         }
 
 
-        public void RelToAbs(ref double x, ref double y)
+        void RelToAbs(ref double x, ref double y)
         {
             if (myvxs.Count != 0)
             {
@@ -105,22 +100,23 @@ namespace MatterHackers.Agg.VertexSource
 
         public void MoveTo(double x, double y)
         {
-            myvxs.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);
+
+            myvxs.AddMoveTo(x, y);
         }
 
         public void LineTo(double x, double y)
         {
-            myvxs.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+            myvxs.LineTo(x, y);
         }
 
         public void HorizontalLineTo(double x)
         {
-            myvxs.AddVertex(x, GetLastY(), ShapePath.FlagsAndCommand.CommandLineTo);
+            myvxs.LineTo(x, GetLastY());
         }
 
         public void VerticalLineTo(double y)
         {
-            myvxs.AddVertex(GetLastX(), y, ShapePath.FlagsAndCommand.CommandLineTo);
+            myvxs.LineTo(GetLastX(), y);
         }
 
         /*
@@ -190,8 +186,8 @@ namespace MatterHackers.Agg.VertexSource
         /// <param name="y"></param>
         public void Curve3(double xControl, double yControl, double x, double y)
         {
-            myvxs.AddVertex(xControl, yControl, ShapePath.FlagsAndCommand.CommandCurve3);
-            myvxs.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve3);
+            myvxs.AddVertexCurve3(xControl, yControl);
+            myvxs.AddVertexCurve3(x, y);
         }
 
         /// <summary>
@@ -205,8 +201,8 @@ namespace MatterHackers.Agg.VertexSource
         {
             RelToAbs(ref dx_ctrl, ref dy_ctrl);
             RelToAbs(ref dx_to, ref dy_to);
-            myvxs.AddVertex(dx_ctrl, dy_ctrl, ShapePath.FlagsAndCommand.CommandCurve3);
-            myvxs.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve3);
+            myvxs.AddVertexCurve3(dx_ctrl, dy_ctrl);
+            myvxs.AddVertexCurve3(dx_to, dy_to);
         }
 
         /// <summary>
@@ -256,9 +252,9 @@ namespace MatterHackers.Agg.VertexSource
                                    double x_ctrl2, double y_ctrl2,
                                    double x_to, double y_to)
         {
-            myvxs.AddVertex(x_ctrl1, y_ctrl1, ShapePath.FlagsAndCommand.CommandCurve4);
-            myvxs.AddVertex(x_ctrl2, y_ctrl2, ShapePath.FlagsAndCommand.CommandCurve4);
-            myvxs.AddVertex(x_to, y_to, ShapePath.FlagsAndCommand.CommandCurve4);
+            myvxs.AddVertexCurve4(x_ctrl1, y_ctrl1);
+            myvxs.AddVertexCurve4(x_ctrl2, y_ctrl2);
+            myvxs.AddVertexCurve4(x_to, y_to);
         }
 
         public void Curve4Rel(double dx_ctrl1, double dy_ctrl1,
@@ -268,13 +264,15 @@ namespace MatterHackers.Agg.VertexSource
             RelToAbs(ref dx_ctrl1, ref dy_ctrl1);
             RelToAbs(ref dx_ctrl2, ref dy_ctrl2);
             RelToAbs(ref dx_to, ref dy_to);
-            myvxs.AddVertex(dx_ctrl1, dy_ctrl1, ShapePath.FlagsAndCommand.CommandCurve4);
-            myvxs.AddVertex(dx_ctrl2, dy_ctrl2, ShapePath.FlagsAndCommand.CommandCurve4);
-            myvxs.AddVertex(dx_to, dy_to, ShapePath.FlagsAndCommand.CommandCurve4);
+
+            myvxs.AddVertexCurve4(dx_ctrl1, dy_ctrl1);
+            myvxs.AddVertexCurve4(dx_ctrl2, dy_ctrl2);
+            myvxs.AddVertexCurve4(dx_to, dy_to);
+
         }
-        public VertexStorage MakeVxs()
+        public VertexStore Vxs
         {
-            return this.myvxs;
+            get { return this.myvxs; }
         }
         public VertexStoreSnap MakeVertexSnap()
         {
@@ -345,7 +343,7 @@ namespace MatterHackers.Agg.VertexSource
             }
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, 0, 0);
         }
-         
+
         //----------------------------------------------------------------
 
         // Arrange the orientation of a polygon, all polygons in a path, 
@@ -391,7 +389,8 @@ namespace MatterHackers.Agg.VertexSource
                     // Invert polygon, set orientation flag, and skip all end_poly
                     InvertPolygon(start, end);
                     ShapePath.FlagsAndCommand flags;
-                    while (end < myvxs.Count &&
+                    int myvxs_count = myvxs.Count;
+                    while (end < myvxs_count &&
                           ShapePath.IsEndPoly(flags = myvxs.GetCommand(end)))
                     {
                         myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
@@ -714,7 +713,7 @@ namespace MatterHackers.Agg.VertexSource
             ShapePath.FlagsAndCommand[] m_CommandAndFlags)
         {
 
-            VertexStorage.UnsafeDirectSetData(
+            VertexStore.UnsafeDirectSetData(
                 pathStore.myvxs,
                 m_allocated_vertices,
                 m_num_vertices,
@@ -728,7 +727,7 @@ namespace MatterHackers.Agg.VertexSource
             out double[] m_coord_xy,
             out ShapePath.FlagsAndCommand[] m_CommandAndFlags)
         {
-            VertexStorage.UnsafeDirectGetData(
+            VertexStore.UnsafeDirectGetData(
                 pathStore.myvxs,
                 out m_allocated_vertices,
                 out m_num_vertices,

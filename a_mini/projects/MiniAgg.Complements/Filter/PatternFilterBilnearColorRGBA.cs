@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -17,6 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using MatterHackers.Agg.Image;
+using MatterHackers.Agg.Lines;
 
 namespace MatterHackers.Agg
 {

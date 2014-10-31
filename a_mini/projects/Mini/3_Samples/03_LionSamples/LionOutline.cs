@@ -122,7 +122,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
@@ -151,15 +151,13 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
                 Stroke stroke = new Stroke(strokeWidth); 
-                stroke.LineJoin = LineJoin.Round;
-
-
+                stroke.LineJoin = LineJoin.Round; 
                 var vxs = affTx.TransformToVxs(lionShape.Path);
                 
-                ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
-                // var vxs = trans.DoTransformToNewVxStorage();
-                scanlineRenderer.RenderSolidAllPaths(
+                
+                sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
                     scanlineCache,

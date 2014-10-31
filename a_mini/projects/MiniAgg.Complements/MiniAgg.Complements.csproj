@@ -44,6 +44,8 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\CanvasPainter.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
+    <Compile Include="Base\ColorGray.cs" />
+    <Compile Include="Base\PixelBlenderRGB.cs" />
     <Compile Include="Base\Queue.cs" />
     <Compile Include="BorderDouble.cs" />
     <Compile Include="Base\GammaFuntions.cs" />
@@ -51,6 +53,7 @@
     <Compile Include="Base\ProxyImage.cs" />
     <Compile Include="Filter\ImageFilters.cs" />
     <Compile Include="Filter\PatternFilterBilnearColorRGBA.cs" />
+    <Compile Include="Font\x_GlyphWithUnderline.cs" />
     <Compile Include="Image\AlphaMask.cs" />
     <Compile Include="VertexSource\SimpleRect.cs" />
     <Compile Include="VertexSource\SpanGradient.cs" />

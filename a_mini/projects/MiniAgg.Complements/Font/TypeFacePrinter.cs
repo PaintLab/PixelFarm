@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿//2014 BSD,WinterDev   
+//----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 //
 // C# Port port by: Lars Brubaker
@@ -34,7 +35,7 @@ namespace MatterHackers.Agg.Font
 
 
 
-    public class TypeFacePrinter 
+    public class TypeFacePrinter
     {
         StyledTypeFace typeFaceStyle;
         String text = "";
@@ -264,19 +265,13 @@ namespace MatterHackers.Agg.Font
                 }
             }
 
-             
+
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
 
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
-             
-            VertexStorage vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
-            {
-                vxs.AddVertex(v); 
-            }
-            return vxs;
+            return new VertexStore(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {
@@ -346,15 +341,10 @@ namespace MatterHackers.Agg.Font
 
             return command;
         }
-        public VertexStorage CreateVxs()
+        public VertexStore CreateVxs()
         {
-             
-            VertexStorage vxs = new VertexStorage();
-            foreach (var v in this.GetVertexIter())
-            {
-                vxs.AddVertex(v);
-            }
-            return vxs;
+            return new VertexStore(this.GetVertexIter());
+
             //return new VertexSnap(new VertexStorage(list));
         }
 #else

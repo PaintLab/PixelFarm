@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿//2014 BSD,WinterDev   
+//----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
@@ -27,6 +28,7 @@ namespace MatterHackers.Agg.Image
 {
     public static class ImageHelper
     {
+          
         /// <summary>
         /// This will create a new ImageBuffer that references the same memory as the image that you took the sub image from.
         /// It will modify the original main image when you draw to it.
@@ -34,7 +36,7 @@ namespace MatterHackers.Agg.Image
         /// <param name="parentImage"></param>
         /// <param name="childImageBounds"></param>
         /// <returns></returns>
-        public static IImage CreateChildImage(this IImage parentImage, RectangleDouble childImageBounds)
+        public static IImage CreateChildImage(this IImage parentImage, RectangleInt childImageBounds)
         {
 
             if (childImageBounds.Left < 0 || childImageBounds.Bottom < 0 || childImageBounds.Right > parentImage.Width || childImageBounds.Top > parentImage.Height
@@ -42,8 +44,8 @@ namespace MatterHackers.Agg.Image
             {
                 throw new ArgumentException("The subImageBounds must be on the image and valid.");
             }
-            int left = Math.Max(0, (int)Math.Floor(childImageBounds.Left));
-            int bottom = Math.Max(0, (int)Math.Floor(childImageBounds.Bottom));
+            int left = Math.Max(0, childImageBounds.Left);
+            int bottom = Math.Max(0, childImageBounds.Bottom);
             int width = Math.Min(parentImage.Width - left, (int)childImageBounds.Width);
             int height = Math.Min(parentImage.Height - bottom, (int)childImageBounds.Height);
             int bufferOffsetToFirstPixel = parentImage.GetBufferOffsetXY(left, bottom);

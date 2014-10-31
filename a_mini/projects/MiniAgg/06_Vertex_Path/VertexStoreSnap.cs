@@ -1,4 +1,5 @@
-﻿//BSD 2014, WinterDev
+﻿
+//BSD 2014, WinterDev
 using System.Collections.Generic;
 using MatterHackers.VectorMath;
 
@@ -8,15 +9,13 @@ namespace MatterHackers.Agg
     public struct VertexSnapIter
     {
         int currentIterIndex;
-        VertexStorage vxs;
+        VertexStore vxs;
         internal VertexSnapIter(VertexStoreSnap vsnap)
         { 
             
             this.vxs = vsnap.GetInternalVxs();
             this.currentIterIndex = vsnap.StartAt;
-            if (vxs == null)
-            {
-            }
+            
         }
         public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
         {
@@ -27,20 +26,19 @@ namespace MatterHackers.Agg
     public struct VertexStoreSnap
     {
         int startAt;
-        VertexStorage vxs;
+        VertexStore vxs;
       
-        public VertexStoreSnap(VertexStorage vxs)
+        public VertexStoreSnap(VertexStore vxs)
         {
             this.vxs = vxs;
             this.startAt = 0; 
         }
-        public VertexStoreSnap(VertexStorage vxs, int startAt)
+        public VertexStoreSnap(VertexStore vxs, int startAt)
         {
             this.vxs = vxs;
             this.startAt = startAt; 
-        }
-
-        public VertexStorage GetInternalVxs()
+        } 
+        internal VertexStore GetInternalVxs()
         {
             return this.vxs;
         }

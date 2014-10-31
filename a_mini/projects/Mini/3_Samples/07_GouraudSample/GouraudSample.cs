@@ -65,7 +65,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void render_gouraud(IImage backBuffer, IScanline sl, ScanlineRasterizer ras)
+        public void render_gouraud(IImage backBuffer, Scanline sl, ScanlineRasterizer ras)
         {
             double alpha = this.AlphaValue;
             double brc = 1;
@@ -106,8 +106,8 @@ namespace MatterHackers.Agg.Sample_Gouraud
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
             ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
 
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
@@ -115,16 +115,16 @@ namespace MatterHackers.Agg.Sample_Gouraud
                              ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
 
             span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
-            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
+            ras.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 0, 1, alpha),
                             ColorRGBAf.MakeColorRGBA(1, 0, 0, alpha),
                             ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
-            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
+            ras.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             brc = 1 - brc;
@@ -132,8 +132,8 @@ namespace MatterHackers.Agg.Sample_Gouraud
                             ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
                            ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
-            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
+            ras.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
@@ -141,8 +141,8 @@ namespace MatterHackers.Agg.Sample_Gouraud
                            ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
 
-            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
+            ras.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 0, 1, alpha),
@@ -150,8 +150,8 @@ namespace MatterHackers.Agg.Sample_Gouraud
                             ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
 
-            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
-            scanlineRenderer.GenerateAndRender(ren_base, ras, sl, span_gen);
+            ras.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
         }
         public override void Draw(Graphics2D g)
         {
@@ -159,7 +159,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             IImage backBuffer = widgetsSubImage;
 #if SourceDepth24
@@ -168,7 +168,7 @@ namespace MatterHackers.Agg.Sample_Gouraud
             var pf = new ChildImage(backBuffer, new BlenderBGRA());
 #endif
             ClipProxyImage ren_base = new ClipProxyImage(pf);
-            ren_base.Clear(new ColorRGBAf(1.0, 1.0, 1.0).ToColorRGBA());
+            ren_base.Clear(new ColorRGBAf(1.0f, 1.0f, 1.0f).ToColorRGBA());
 
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
             ScanlineRasterizer ras = new ScanlineRasterizer();

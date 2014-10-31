@@ -78,6 +78,7 @@ namespace MatterHackers.Agg.Sample_Draw
             // draw a circle
 
             Ellipse ellipsePro = new Ellipse(0, 0, 100, 50);
+
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
 
@@ -85,14 +86,12 @@ namespace MatterHackers.Agg.Sample_Draw
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
 
-
-
-                var sp1 = mat.TransformToVertexSnap(ellipsePro.MakeVxs());
+                VertexStore sp1 = mat.TransformToVxs(ellipsePro.MakeVxs());
 
                 g.Render(sp1, ColorRGBA.Yellow);
 
                 //Stroke ellipseOutline = new Stroke(sp1, 3);
-                g.Render(StrokeHelp.CreateStrokeVxs(sp1, 3), ColorRGBA.Blue);
+                g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
             }
 
             // and a little polygon
@@ -106,16 +105,14 @@ namespace MatterHackers.Agg.Sample_Draw
 
             // draw some text
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
-            VertexStorage vxs = textPrinter.CreateVxs();
+            VertexStore vxs = textPrinter.CreateVxs();
 
-            var affTx = Affine.NewTranslation(new Vector2(width / 2, height / 4 * 3));
-            VertexStoreSnap s1 = affTx.TransformToVertexSnap(vxs);
+            var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
+            VertexStore s1 = affTx.TransformToVxs(vxs);
 
             g.Render(s1, ColorRGBA.Red);
 
-            g.Render(
-                StrokeHelp.CreateStrokeVxs(s1, 1),
-                ColorRGBA.Black);
+            g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Black);
 
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),

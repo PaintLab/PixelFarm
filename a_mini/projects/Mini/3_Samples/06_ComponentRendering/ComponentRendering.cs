@@ -1,4 +1,7 @@
-﻿using System;
+﻿//2014 BSD,WinterDev
+//MatterHackers
+
+using System;
 using System.IO;
 
 using MatterHackers.Agg.Image;
@@ -40,7 +43,7 @@ namespace MatterHackers.Agg
         {
             if (graphics2D.DestImage != null)
             {
-                var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+                var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
                 IImage backBuffer = widgetsSubImage;
 
@@ -66,20 +69,19 @@ namespace MatterHackers.Agg
                 ColorRGBA FillColor = this.UseBlackBlackground ?
                     new ColorRGBA(255, 255, 255, (byte)(this.AlphaValue)) :
                     new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
                 VertexSource.Ellipse er = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.AddPath(er.MakeVertexSnap());
-
-                ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-                scanlineRenderer.RenderScanlineSolidAA(clippingProxyRed, ras, sl, FillColor);
+                ras.AddPath(er.MakeVertexSnap());                
+                sclineRasToBmp.RenderScanlineSolidAA(clippingProxyRed, ras, sl, FillColor);
 
                 VertexSource.Ellipse eg = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 ras.AddPath(eg.MakeVertexSnap());
-                scanlineRenderer.RenderScanlineSolidAA(clippingProxyGreen, ras, sl, FillColor);
+                sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGreen, ras, sl, FillColor);
 
                 VertexSource.Ellipse eb = new MatterHackers.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
                 ras.AddPath(eb.MakeVertexSnap());
-                scanlineRenderer.RenderScanlineSolidAA(clippingProxyBlue, ras, sl, FillColor);
+                sclineRasToBmp.RenderScanlineSolidAA(clippingProxyBlue, ras, sl, FillColor);
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

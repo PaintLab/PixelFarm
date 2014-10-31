@@ -1,3 +1,5 @@
+//2014 BSD,WinterDev   
+
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -133,7 +135,7 @@ namespace MatterHackers.Agg.VertexSource
             set { this.m_approx_scale = value; }
         }
 
-        public void CreateCap(VertexStorage output, VertexDistance v0, VertexDistance v1, double len)
+        public void CreateCap(VertexStore output, VertexDistance v0, VertexDistance v1, double len)
         {
             output.Clear();
 
@@ -190,7 +192,7 @@ namespace MatterHackers.Agg.VertexSource
             }
         }
 
-        public void CreateJoin(VertexStorage output,
+        public void CreateJoin(VertexStore output,
                                VertexDistance v0,
                                VertexDistance v1,
                                VertexDistance v2,
@@ -324,20 +326,19 @@ namespace MatterHackers.Agg.VertexSource
                         CreateArc(output, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
                         break;
 
-                    default: // Bevel join
+                    default: // Bevel join 
                         AddVertex(output, v1.x + dx1, v1.y - dy1);
                         AddVertex(output, v1.x + dx2, v1.y - dy2);
                         break;
                 }
             }
-        }
-
-        static void AddVertex(VertexStorage output, double x, double y)
+        } 
+        static void AddVertex(VertexStore output, double x, double y)
         {
             output.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
         }
 
-        void CreateArc(VertexStorage output,
+        void CreateArc(VertexStore output,
                       double x, double y,
                       double dx1, double dy1,
                       double dx2, double dy2)
@@ -377,7 +378,7 @@ namespace MatterHackers.Agg.VertexSource
             AddVertex(output, x + dx2, y + dy2);
         }
 
-        void CreateMiter(VertexStorage output,
+        void CreateMiter(VertexStore output,
                         VertexDistance v0,
                         VertexDistance v1,
                         VertexDistance v2,

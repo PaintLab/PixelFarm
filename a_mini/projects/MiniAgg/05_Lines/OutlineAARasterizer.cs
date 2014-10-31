@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -21,10 +22,12 @@ namespace MatterHackers.Agg.Lines
     //-----------------------------------------------------------line_aa_vertex
     // Vertex (x, y) with the distance to the next one. The last vertex has 
     // the distance between the last and the first points
-    public struct LineAAVertex
+    struct LineAAVertex
     {
-        public int x;
-        public int y;
+        public readonly int x;
+        public readonly int y;
+
+        const int SIGDIFF = LineAABasics.SUBPIXEL_SCALE + (LineAABasics.SUBPIXEL_SCALE / 2);
         public int len;
 
         public LineAAVertex(int x, int y)
@@ -34,69 +37,103 @@ namespace MatterHackers.Agg.Lines
             len = 0;
         }
 
-        public bool Compare(LineAAVertex val)
+        public bool IsDiff(LineAAVertex val)
         {
-            double dx = val.x - x;
-            double dy = val.y - y;
-            return (len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy))) >
-                   (LineAABasics.SUBPIXEL_SCALE + LineAABasics.SUBPIXEL_SCALE / 2);
+            int dx = val.x - x;
+            int dy = val.y - y;
+
+            if ((dx + dy) == 0)
+            {
+                return false;
+            }
+
+            return (len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy))) > SIGDIFF;
+            //len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy));
+            //if (len > SIGDIFF)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
+
         }
     }
 
-    public class LineAAVertexSequence : ArrayList<LineAAVertex>
+    class LineAAVertexSequence
     {
-        public override void AddVertex(LineAAVertex val)
+        ArrayList<LineAAVertex> list = new ArrayList<LineAAVertex>();
+        public void AddVertex(LineAAVertex val)
         {
-            if (base.Count > 1)
+            int count = list.Count;
+            if (count > 1)
             {
-                if (!Array[base.Count - 2].Compare(Array[base.Count - 1]))
+                var innerArray = list.Array;
+                if (!innerArray[count - 2].IsDiff(innerArray[count - 1]))
                 {
-                    base.RemoveLast();
+                    list.RemoveLast();
                 }
             }
-            base.AddVertex(val);
+            list.AddVertex(val);
         }
-
-        public void modify_last(LineAAVertex val)
+        public LineAAVertex this[int index]
         {
-            base.RemoveLast();
+            get
+            {
+                return this.list[index];
+            }
+        }
+        public void Clear() { this.list.Clear(); }
+        public int Count
+        {
+            get { return this.list.Count; }
+        }
+        public void ModifyLast(LineAAVertex val)
+        {
+            list.RemoveLast();
             AddVertex(val);
         }
 
-        public void close(bool closed)
+        public void Close(bool closed)
         {
-            while (base.Count > 1)
+            //----------------------
+            //iter backward
+            int count = list.Count;
+            var innerArray = list.Array;
+            while (count > 1)
             {
-                if (Array[base.Count - 2].Compare(Array[base.Count - 1])) break;
-                LineAAVertex t = this[base.Count - 1];
-                base.RemoveLast();
-                modify_last(t);
+                if (innerArray[count - 2].IsDiff(innerArray[count - 1]))
+                {
+                    break;
+                }
+                else
+                {
+                    LineAAVertex t = list[count - 1];
+                    list.RemoveLast();
+                    ModifyLast(t);
+                    count--;
+                }
             }
+
 
             if (closed)
             {
-                while (base.Count > 1)
+                //if close figure
+                count = list.Count;
+                var first = innerArray[0];
+                while (count > 1)
                 {
-                    if (Array[base.Count - 1].Compare(Array[0])) break;
-                    base.RemoveLast();
+                    if (innerArray[count - 1].IsDiff(first))
+                    {
+                        break;
+                    }
+                    count--;
+                    list.RemoveLast();
                 }
             }
         }
 
-        //internal line_aa_vertex prev(int idx)
-        //{
-        //    return this[(idx + Count - 1) % Count];
-        //}
-
-        //internal line_aa_vertex curr(int idx)
-        //{
-        //    return this[idx];
-        //}
-
-        //internal line_aa_vertex next(int idx)
-        //{
-        //    return this[(idx + 1) % Count];
-        //}
     }
 
     //=======================================================rasterizer_outline_aa
@@ -198,8 +235,8 @@ namespace MatterHackers.Agg.Lines
 
                     case OutlineJoin.Mitter:
                         dv.flags >>= 1;
-                        dv.flags |= (curr.diagonal_quadrant() ==
-                            next.diagonal_quadrant() ? 1 : 0);
+                        dv.flags |= (curr.DiagonalQuadrant ==
+                            next.DiagonalQuadrant ? 1 : 0);
                         if ((dv.flags & 2) == 0)
                         {
                             LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
@@ -208,8 +245,8 @@ namespace MatterHackers.Agg.Lines
 
                     case OutlineJoin.Round:
                         dv.flags >>= 1;
-                        dv.flags |= (((curr.diagonal_quadrant() ==
-                            next.diagonal_quadrant()) ? 1 : 0) << 1);
+                        dv.flags |= (((curr.DiagonalQuadrant ==
+                            next.DiagonalQuadrant) ? 1 : 0) << 1);
                         break;
 
                     case OutlineJoin.AccurateJoin:
@@ -252,7 +289,7 @@ namespace MatterHackers.Agg.Lines
         }
         public void MoveTo(int x, int y)
         {
-            m_src_vertices.modify_last(new LineAAVertex(m_start_x = x, m_start_y = y));
+            m_src_vertices.ModifyLast(new LineAAVertex(m_start_x = x, m_start_y = y));
         }
 
         public void LineTo(int x, int y)
@@ -272,7 +309,7 @@ namespace MatterHackers.Agg.Lines
 
         public void Render(bool close_polygon)
         {
-            m_src_vertices.close(close_polygon);
+            m_src_vertices.Close(close_polygon);
             DrawVarsPart0 dv = new DrawVarsPart0();
             DrawVarsPart1 dv1 = new DrawVarsPart1();
             DrawVarsPart2 dv2 = new DrawVarsPart2();
@@ -329,8 +366,8 @@ namespace MatterHackers.Agg.Lines
                         case OutlineJoin.Mitter:
                         case OutlineJoin.Round:
                             dv.flags =
-                                (prev.diagonal_quadrant() == curr.diagonal_quadrant() ? 1 : 0) |
-                                    ((curr.diagonal_quadrant() == next.diagonal_quadrant() ? 1 : 0) << 1);
+                                (prev.DiagonalQuadrant == curr.DiagonalQuadrant ? 1 : 0) |
+                                    ((curr.DiagonalQuadrant == next.DiagonalQuadrant ? 1 : 0) << 1);
                             break;
 
                         case OutlineJoin.AccurateJoin:
@@ -474,8 +511,8 @@ namespace MatterHackers.Agg.Lines
                                 case OutlineJoin.Mitter:
                                 case OutlineJoin.Round:
                                     dv.flags =
-                                        (prev.diagonal_quadrant() == curr.diagonal_quadrant() ? 1 : 0) |
-                                            ((curr.diagonal_quadrant() == next.diagonal_quadrant() ? 1 : 0) << 1);
+                                        (prev.DiagonalQuadrant == curr.DiagonalQuadrant ? 1 : 0) |
+                                            ((curr.DiagonalQuadrant == next.DiagonalQuadrant ? 1 : 0) << 1);
                                     break;
 
                                 case OutlineJoin.AccurateJoin:
@@ -577,20 +614,20 @@ namespace MatterHackers.Agg.Lines
                     LineTo(x, y);
                     break;
             }
-        } 
-       
+        }
+
         void AddPath(VertexStoreSnap s)
         {
             double x;
-            double y; 
+            double y;
             ShapePath.FlagsAndCommand cmd;
 
-            var snapIter = s.GetVertexSnapIter(); 
+            var snapIter = s.GetVertexSnapIter();
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
-            { 
+            {
                 AddVertex(x, y, cmd);
             }
-             
+
 
 
             Render(false);

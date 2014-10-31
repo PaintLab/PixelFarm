@@ -77,7 +77,7 @@ namespace MatterHackers.Agg
             m_LinesToDraw.Clear();
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);
-            gx.Render(stroke.MakeVxs(m_LinesToDraw.MakeVxs()), color);
+            gx.Render(stroke.MakeVxs(m_LinesToDraw.Vxs), color);
         }
         public double StrokeWidth
         {

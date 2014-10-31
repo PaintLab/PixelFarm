@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -30,10 +31,14 @@ namespace MatterHackers.Agg.Image
         {
             this.linkedImage = linkedImage;
         }
-        public Vector2 OriginOffset
+         
+        public void SetOriginOffset(double x, double y)
         {
-            get { return linkedImage.OriginOffset; }
-            set { linkedImage.OriginOffset = value; }
+            linkedImage.SetOriginOffset(x, y);
+        }
+        public void GetOriginOffset(out double x, out double y)
+        {
+            linkedImage.GetOriginOffset(out x, out y);
         }
         public virtual int Width
         {
