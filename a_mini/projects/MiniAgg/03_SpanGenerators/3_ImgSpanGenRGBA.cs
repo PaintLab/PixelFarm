@@ -29,24 +29,24 @@
 
 using System;
 
-using PixelFarm.Agg.Image;
+
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Lines;
 
-using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
-using image_filter_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_filter_scale_e;
+using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
+using img_filter_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgFilterConst;
 
 
-namespace PixelFarm.Agg
+namespace PixelFarm.Agg.Image
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    class SpanImageFilterRGBA_NN_StepXBy1 : SpanImageFilter
+    class ImgSpanGenRGBA_NN_StepXBy1 : ImgSpanGen
     {
         const int BASE_SHITF = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHITF);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public SpanImageFilterRGBA_NN_StepXBy1(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
+        public ImgSpanGenRGBA_NN_StepXBy1(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
             : base(sourceAccessor, spanInterpolator, null)
         {
         }
@@ -63,8 +63,8 @@ namespace PixelFarm.Agg
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
-            int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
-            int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
+            int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
+            int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
             int bufferIndex;
             bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
 
@@ -97,13 +97,13 @@ namespace PixelFarm.Agg
 
 
     //==============================================span_image_filter_rgba_nn
-    class SpanImageFilterRGBA_NN : SpanImageFilter
+    class ImgSpanGenRGBA_NN : ImgSpanGen
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public SpanImageFilterRGBA_NN(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
+        public ImgSpanGenRGBA_NN(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
             : base(sourceAccessor, spanInterpolator, null)
         {
         }
@@ -123,8 +123,8 @@ namespace PixelFarm.Agg
                 int x_hr;
                 int y_hr;
                 spanInterpolator.GetCoord(out x_hr, out y_hr);
-                int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
-                int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
+                int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
+                int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
                 int bufferIndex;
                 bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
                 ColorRGBA color;
@@ -137,15 +137,15 @@ namespace PixelFarm.Agg
                 spanInterpolator.Next();
             } while (--len != 0);
         }
-    };
+    }
 
-    class SpanImageFilterRGBA_Bilinear : SpanImageFilter
+    class ImgSpanGenRGBA_Bilinear : ImgSpanGen
     {
         const int base_shift = 8;
         const int base_scale = (int)(1 << base_shift);
         const int base_mask = base_scale - 1;
 
-        public SpanImageFilterRGBA_Bilinear(IImageBufferAccessor src, ISpanInterpolator inter)
+        public ImgSpanGenRGBA_Bilinear(IImageBufferAccessor src, ISpanInterpolator inter)
             : base(src, inter, null)
         {
         }
@@ -253,29 +253,29 @@ namespace PixelFarm.Agg
                     x_hr -= base.filter_dx_int();
                     y_hr -= base.filter_dy_int();
 
-                    int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
-                    int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
+                    int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
+                    int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
                     int weight;
 
                     tempR =
                     tempG =
                     tempB =
-                    tempA = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / 2;
+                    tempA = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
 
-                    x_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
-                    y_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
+                    x_hr &= (int)img_subpix_const.MASK;
+                    y_hr &= (int)img_subpix_const.MASK;
 
                     bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
 
-                    weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) *
-                             ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
+                    weight = (((int)img_subpix_const.SCALE - x_hr) *
+                             ((int)img_subpix_const.SCALE - y_hr));
                     tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
                     tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
                     tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
                     tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                     bufferIndex += 4;
 
-                    weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
+                    weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                     tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
                     tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
                     tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
@@ -284,7 +284,7 @@ namespace PixelFarm.Agg
                     y_lr++;
                     bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
 
-                    weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
+                    weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
                     tempR += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
                     tempG += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
                     tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
@@ -297,10 +297,10 @@ namespace PixelFarm.Agg
                     tempB += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
                     tempA += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
 
-                    tempR >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                    tempG >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                    tempB >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                    tempA >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
+                    tempR >>= (int)img_subpix_const.SHIFT * 2;
+                    tempG >>= (int)img_subpix_const.SHIFT * 2;
+                    tempB >>= (int)img_subpix_const.SHIFT * 2;
+                    tempA >>= (int)img_subpix_const.SHIFT * 2;
 
                     ColorRGBA color;
                     color.red = (byte)tempR;
@@ -317,17 +317,15 @@ namespace PixelFarm.Agg
     }
 
 
-
-
-    public class SpanImageFilterRGBA_BilinearClip : SpanImageFilter
+    public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
     {
-        private ColorRGBA m_OutsideSourceColor;
+        ColorRGBA m_OutsideSourceColor;
 
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public SpanImageFilterRGBA_BilinearClip(IImageBufferAccessor src,
+        public ImgSpanGenRGBA_BilinearClip(IImageBufferAccessor src,
             ColorRGBA back_color, ISpanInterpolator inter)
             : base(src, inter, null)
         {
@@ -404,8 +402,8 @@ namespace PixelFarm.Agg
                     x_hr -= base.filter_dx_int();
                     y_hr -= base.filter_dy_int();
 
-                    int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
-                    int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
+                    int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
+                    int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
                     int weight;
 
                     if (x_lr >= 0 && y_lr >= 0 &&
@@ -414,15 +412,15 @@ namespace PixelFarm.Agg
                         accumulatedColor[0] =
                         accumulatedColor[1] =
                         accumulatedColor[2] =
-                        accumulatedColor[3] = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / 2;
+                        accumulatedColor[3] = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
 
-                        x_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
-                        y_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
+                        x_hr &= (int)img_subpix_const.MASK;
+                        y_hr &= (int)img_subpix_const.MASK;
 
                         fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
 
-                        weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) *
-                                 ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
+                        weight = (((int)img_subpix_const.SCALE - x_hr) *
+                                 ((int)img_subpix_const.SCALE - y_hr));
                         if (weight > BASE_MASK)
                         {
                             accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
@@ -431,7 +429,7 @@ namespace PixelFarm.Agg
                             accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
 
-                        weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
+                        weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                         if (weight > BASE_MASK)
                         {
                             bufferIndex += distanceBetweenPixelsInclusive;
@@ -441,7 +439,7 @@ namespace PixelFarm.Agg
                             accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
 
-                        weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
+                        weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
                         if (weight > BASE_MASK)
                         {
                             ++y_lr;
@@ -460,10 +458,10 @@ namespace PixelFarm.Agg
                             accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageBase.OrderB];
                             accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
                         }
-                        accumulatedColor[0] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                        accumulatedColor[1] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                        accumulatedColor[2] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                        accumulatedColor[3] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
+                        accumulatedColor[0] >>= (int)img_subpix_const.SHIFT * 2;
+                        accumulatedColor[1] >>= (int)img_subpix_const.SHIFT * 2;
+                        accumulatedColor[2] >>= (int)img_subpix_const.SHIFT * 2;
+                        accumulatedColor[3] >>= (int)img_subpix_const.SHIFT * 2;
                     }
                     else
                     {
@@ -480,13 +478,13 @@ namespace PixelFarm.Agg
                             accumulatedColor[0] =
                             accumulatedColor[1] =
                             accumulatedColor[2] =
-                            accumulatedColor[3] = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / 2;
+                            accumulatedColor[3] = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
 
-                            x_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
-                            y_hr &= (int)image_subpixel_scale_e.image_subpixel_mask;
+                            x_hr &= (int)img_subpix_const.MASK;
+                            y_hr &= (int)img_subpix_const.MASK;
 
-                            weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) *
-                                     ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
+                            weight = (((int)img_subpix_const.SCALE - x_hr) *
+                                     ((int)img_subpix_const.SCALE - y_hr));
                             if (weight > BASE_MASK)
                             {
                                 BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
@@ -494,7 +492,7 @@ namespace PixelFarm.Agg
 
                             x_lr++;
 
-                            weight = (x_hr * ((int)image_subpixel_scale_e.image_subpixel_scale - y_hr));
+                            weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                             if (weight > BASE_MASK)
                             {
                                 BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
@@ -503,7 +501,7 @@ namespace PixelFarm.Agg
                             x_lr--;
                             y_lr++;
 
-                            weight = (((int)image_subpixel_scale_e.image_subpixel_scale - x_hr) * y_hr);
+                            weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
                             if (weight > BASE_MASK)
                             {
                                 BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
@@ -517,10 +515,10 @@ namespace PixelFarm.Agg
                                 BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
                             }
 
-                            accumulatedColor[0] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                            accumulatedColor[1] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                            accumulatedColor[2] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
-                            accumulatedColor[3] >>= (int)image_subpixel_scale_e.image_subpixel_shift * 2;
+                            accumulatedColor[0] >>= (int)img_subpix_const.SHIFT * 2;
+                            accumulatedColor[1] >>= (int)img_subpix_const.SHIFT * 2;
+                            accumulatedColor[2] >>= (int)img_subpix_const.SHIFT * 2;
+                            accumulatedColor[3] >>= (int)img_subpix_const.SHIFT * 2;
                         }
                     }
 
@@ -561,11 +559,11 @@ namespace PixelFarm.Agg
     }
 
 
-    public class SpanImageFilterRGBA : SpanImageFilter
+    public class ImgSpanGenRGBA : ImgSpanGen
     {
         const int BASE_MASK = 255;
         //--------------------------------------------------------------------
-        public SpanImageFilterRGBA(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
+        public ImgSpanGenRGBA(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
             : base(src, inter, filter)
         {
             if (src.SourceImage.BytesBetweenPixelsInclusive != 4)
@@ -582,9 +580,9 @@ namespace PixelFarm.Agg
 
             byte[] fg_ptr;
 
-            int diameter = m_filter.diameter();
-            int start = m_filter.start();
-            int[] weight_array = m_filter.weight_array();
+            int diameter = m_filter.Diameter;
+            int start = m_filter.Start;
+            int[] weight_array = m_filter.WeightArray;
 
             int x_count;
             int weight_y;
@@ -602,15 +600,15 @@ namespace PixelFarm.Agg
                 int x_hr = x;
                 int y_hr = y;
 
-                int x_lr = x_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
-                int y_lr = y_hr >> (int)image_subpixel_scale_e.image_subpixel_shift;
+                int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
+                int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
 
-                f_b = f_g = f_r = f_a = (int)image_filter_scale_e.image_filter_scale / 2;
+                f_b = f_g = f_r = f_a = (int)img_filter_const.SCALE / 2;
 
-                int x_fract = x_hr & (int)image_subpixel_scale_e.image_subpixel_mask;
+                int x_fract = x_hr & (int)img_subpix_const.MASK;
                 int y_count = diameter;
 
-                y_hr = (int)image_subpixel_scale_e.image_subpixel_mask - (y_hr & (int)image_subpixel_scale_e.image_subpixel_mask);
+                y_hr = (int)img_subpix_const.MASK - (y_hr & (int)img_subpix_const.MASK);
 
                 int bufferIndex;
                 fg_ptr = sourceAccessor.span(x_lr + start, y_lr + start, diameter, out bufferIndex);
@@ -618,12 +616,12 @@ namespace PixelFarm.Agg
                 {
                     x_count = (int)diameter;
                     weight_y = weight_array[y_hr];
-                    x_hr = (int)image_subpixel_scale_e.image_subpixel_mask - x_fract;
+                    x_hr = (int)img_subpix_const.MASK - x_fract;
                     for (; ; )
                     {
                         int weight = (weight_y * weight_array[x_hr] +
-                                     (int)image_filter_scale_e.image_filter_scale / 2) >>
-                                     (int)image_filter_scale_e.image_filter_shift;
+                                     (int)img_filter_const.SCALE / 2) >>
+                                     (int)img_filter_const.SHIFT;
 
                         f_b += weight * fg_ptr[bufferIndex + ImageBase.OrderR];
                         f_g += weight * fg_ptr[bufferIndex + ImageBase.OrderG];
@@ -631,19 +629,19 @@ namespace PixelFarm.Agg
                         f_a += weight * fg_ptr[bufferIndex + ImageBase.OrderA];
 
                         if (--x_count == 0) break;
-                        x_hr += (int)image_subpixel_scale_e.image_subpixel_scale;
+                        x_hr += (int)img_subpix_const.SCALE;
                         sourceAccessor.next_x(out bufferIndex);
                     }
 
                     if (--y_count == 0) break;
-                    y_hr += (int)image_subpixel_scale_e.image_subpixel_scale;
+                    y_hr += (int)img_subpix_const.SCALE;
                     fg_ptr = sourceAccessor.next_y(out bufferIndex);
                 }
 
-                f_b >>= (int)image_filter_scale_e.image_filter_shift;
-                f_g >>= (int)image_filter_scale_e.image_filter_shift;
-                f_r >>= (int)image_filter_scale_e.image_filter_shift;
-                f_a >>= (int)image_filter_scale_e.image_filter_shift;
+                f_b >>= (int)img_filter_const.SHIFT;
+                f_g >>= (int)img_filter_const.SHIFT;
+                f_r >>= (int)img_filter_const.SHIFT;
+                f_a >>= (int)img_filter_const.SHIFT;
 
                 unchecked
                 {
@@ -682,233 +680,10 @@ namespace PixelFarm.Agg
 
             } while (--len != 0);
         }
-    };
+    }
 
 
-    //==============================================span_image_resample_rgba
-    public class SpanImageResampleRGBA
-        : SpanImageResample
-    {
 
-        private const int base_mask = 255;
-        private const int downscale_shift = (int)ImageFilterLookUpTable.image_filter_scale_e.image_filter_shift;
-
-        //--------------------------------------------------------------------
-        public SpanImageResampleRGBA(IImageBufferAccessor src,
-                            ISpanInterpolator inter,
-                            ImageFilterLookUpTable filter) :
-            base(src, inter, filter)
-        {
-            if (src.SourceImage.GetRecieveBlender().NumPixelBits != 32)
-            {
-                throw new System.FormatException("You have to use a rgba blender with span_image_resample_rgba");
-            }
-        }
-
-        //--------------------------------------------------------------------
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
-        {
-            ISpanInterpolator spanInterpolator = base.interpolator();
-            spanInterpolator.Begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
-
-            int[] fg = new int[4];
-
-            byte[] fg_ptr;
-            int[] weightArray = filter().weight_array();
-            int diameter = (int)base.filter().diameter();
-            int filter_scale = diameter << (int)image_subpixel_scale_e.image_subpixel_shift;
-
-            int[] weight_array = weightArray;
-
-            do
-            {
-                int rx;
-                int ry;
-                int rx_inv = (int)image_subpixel_scale_e.image_subpixel_scale;
-                int ry_inv = (int)image_subpixel_scale_e.image_subpixel_scale;
-                spanInterpolator.GetCoord(out x, out y);
-                spanInterpolator.GetLocalScale(out rx, out ry);
-                base.adjust_scale(ref rx, ref ry);
-
-                rx_inv = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / rx;
-                ry_inv = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / ry;
-
-                int radius_x = (diameter * rx) >> 1;
-                int radius_y = (diameter * ry) >> 1;
-                int len_x_lr =
-                    (diameter * rx + (int)image_subpixel_scale_e.image_subpixel_mask) >>
-                        (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-
-                x += base.filter_dx_int() - radius_x;
-                y += base.filter_dy_int() - radius_y;
-
-                fg[0] = fg[1] = fg[2] = fg[3] = (int)image_filter_scale_e.image_filter_scale / 2;
-
-                int y_lr = y >> (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                int y_hr = (((int)image_subpixel_scale_e.image_subpixel_mask - (y & (int)image_subpixel_scale_e.image_subpixel_mask)) *
-                               ry_inv) >> (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                int total_weight = 0;
-                int x_lr = x >> (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                int x_hr = (((int)image_subpixel_scale_e.image_subpixel_mask - (x & (int)image_subpixel_scale_e.image_subpixel_mask)) *
-                               rx_inv) >> (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                int x_hr2 = x_hr;
-                int sourceIndex;
-                fg_ptr = base.GetImageBufferAccessor().span(x_lr, y_lr, len_x_lr, out sourceIndex);
-
-                for (; ; )
-                {
-                    int weight_y = weight_array[y_hr];
-                    x_hr = x_hr2;
-                    for (; ; )
-                    {
-                        int weight = (weight_y * weight_array[x_hr] +
-                                     (int)image_filter_scale_e.image_filter_scale / 2) >>
-                                     downscale_shift;
-                        fg[0] += fg_ptr[sourceIndex + ImageBase.OrderR] * weight;
-                        fg[1] += fg_ptr[sourceIndex + ImageBase.OrderG] * weight;
-                        fg[2] += fg_ptr[sourceIndex + ImageBase.OrderB] * weight;
-                        fg[3] += fg_ptr[sourceIndex + ImageBase.OrderA] * weight;
-                        total_weight += weight;
-                        x_hr += rx_inv;
-                        if (x_hr >= filter_scale) break;
-                        fg_ptr = base.GetImageBufferAccessor().next_x(out sourceIndex);
-                    }
-                    y_hr += ry_inv;
-                    if (y_hr >= filter_scale)
-                    {
-                        break;
-                    }
-
-                    fg_ptr = base.GetImageBufferAccessor().next_y(out sourceIndex);
-                }
-
-                fg[0] /= total_weight;
-                fg[1] /= total_weight;
-                fg[2] /= total_weight;
-                fg[3] /= total_weight;
-
-                if (fg[0] < 0) fg[0] = 0;
-                if (fg[1] < 0) fg[1] = 0;
-                if (fg[2] < 0) fg[2] = 0;
-                if (fg[3] < 0) fg[3] = 0;
-
-                if (fg[0] > base_mask) fg[0] = base_mask;
-                if (fg[1] > base_mask) fg[1] = base_mask;
-                if (fg[2] > base_mask) fg[2] = base_mask;
-                if (fg[3] > base_mask) fg[3] = base_mask;
-
-                span[spanIndex].red = (byte)fg[0];
-                span[spanIndex].green = (byte)fg[1];
-                span[spanIndex].blue = (byte)fg[2];
-                span[spanIndex].alpha = (byte)fg[3];
-
-                spanIndex++;
-                interpolator().Next();
-            } while (--len != 0);
-        }
-        /*
-                    ISpanInterpolator spanInterpolator = base.interpolator();
-                    spanInterpolator.begin(x + base.filter_dx_dbl(), y + base.filter_dy_dbl(), len);
-
-                    int* fg = stackalloc int[4];
-
-                    byte* fg_ptr;
-                    fixed (int* pWeightArray = filter().weight_array())
-                    {
-                        int diameter = (int)base.filter().diameter();
-                        int filter_scale = diameter << (int)image_subpixel_scale_e.image_subpixel_shift;
-
-                        int* weight_array = pWeightArray;
-
-                        do
-                        {
-                            int rx;
-                            int ry;
-                            int rx_inv = (int)image_subpixel_scale_e.image_subpixel_scale;
-                            int ry_inv = (int)image_subpixel_scale_e.image_subpixel_scale;
-                            spanInterpolator.coordinates(out x, out y);
-                            spanInterpolator.local_scale(out rx, out ry);
-                            base.adjust_scale(ref rx, ref ry);
-
-                            rx_inv = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / rx;
-                            ry_inv = (int)image_subpixel_scale_e.image_subpixel_scale * (int)image_subpixel_scale_e.image_subpixel_scale / ry;
-
-                            int radius_x = (diameter * rx) >> 1;
-                            int radius_y = (diameter * ry) >> 1;
-                            int len_x_lr =
-                                (diameter * rx + (int)image_subpixel_scale_e.image_subpixel_mask) >>
-                                    (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-
-                            x += base.filter_dx_int() - radius_x;
-                            y += base.filter_dy_int() - radius_y;
-
-                            fg[0] = fg[1] = fg[2] = fg[3] = (int)image_filter_scale_e.image_filter_scale / 2;
-
-                            int y_lr = y >> (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                            int y_hr = (((int)image_subpixel_scale_e.image_subpixel_mask - (y & (int)image_subpixel_scale_e.image_subpixel_mask)) * 
-                                           ry_inv) >>
-                                               (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                            int total_weight = 0;
-                            int x_lr = x >> (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                            int x_hr = (((int)image_subpixel_scale_e.image_subpixel_mask - (x & (int)image_subpixel_scale_e.image_subpixel_mask)) * 
-                                           rx_inv) >>
-                                               (int)(int)image_subpixel_scale_e.image_subpixel_shift;
-                            int x_hr2 = x_hr;
-                            fg_ptr = base.source().span(x_lr, y_lr, (int)len_x_lr);
-
-                            for(;;)
-                            {
-                                int weight_y = weight_array[y_hr];
-                                x_hr = x_hr2;
-                                for(;;)
-                                {
-                                    int weight = (weight_y * weight_array[x_hr] +
-                                                 (int)image_filter_scale_e.image_filter_scale / 2) >> 
-                                                 downscale_shift;
-                                    fg[0] += *fg_ptr++ * weight;
-                                    fg[1] += *fg_ptr++ * weight;
-                                    fg[2] += *fg_ptr++ * weight;
-                                    fg[3] += *fg_ptr++ * weight;
-                                    total_weight += weight;
-                                    x_hr  += rx_inv;
-                                    if(x_hr >= filter_scale) break;
-                                    fg_ptr = base.source().next_x();
-                                }
-                                y_hr += ry_inv;
-                                if (y_hr >= filter_scale)
-                                {
-                                    break;
-                                }
-
-                                fg_ptr = base.source().next_y();
-                            }
-
-                            fg[0] /= total_weight;
-                            fg[1] /= total_weight;
-                            fg[2] /= total_weight;
-                            fg[3] /= total_weight;
-
-                            if(fg[0] < 0) fg[0] = 0;
-                            if(fg[1] < 0) fg[1] = 0;
-                            if(fg[2] < 0) fg[2] = 0;
-                            if(fg[3] < 0) fg[3] = 0;
-
-                            if(fg[0] > fg[0]) fg[0] = fg[0];
-                            if(fg[1] > fg[1]) fg[1] = fg[1];
-                            if(fg[2] > fg[2]) fg[2] = fg[2];
-                            if (fg[3] > base_mask) fg[3] = base_mask;
-
-                            span->R_Byte = (byte)fg[ImageBuffer.OrderR];
-                            span->G_Byte = (byte)fg[ImageBuffer.OrderG];
-                            span->B_Byte = (byte)fg[ImageBuffer.OrderB];
-                            span->A_Byte = (byte)fg[ImageBuffer.OrderA];
-
-                            ++span;
-                            interpolator().Next();
-                        } while(--len != 0);
-                    }
-                                                              */
-    };
 }
 
 

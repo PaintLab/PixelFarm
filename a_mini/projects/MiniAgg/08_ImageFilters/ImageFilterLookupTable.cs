@@ -28,12 +28,10 @@
 #define USE_UNSAFE_CODE
 
 using System;
-
-using PixelFarm.Agg.Image;
 using PixelFarm.VectorMath;
 
-using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
-using image_filter_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_filter_scale_e;
+using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
+using img_filter_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgFilterConst;
 
 
 namespace PixelFarm.Agg
@@ -47,43 +45,43 @@ namespace PixelFarm.Agg
         int m_start;
         int[] m_weight_array;
 
-        public enum image_filter_scale_e
+        public static class ImgFilterConst
         {
-            image_filter_shift = 14,                      //----image_filter_shift
-            image_filter_scale = 1 << image_filter_shift, //----image_filter_scale 
-            image_filter_mask = image_filter_scale - 1   //----image_filter_mask 
+            public const int SHIFT = 14;                     //----image_filter_shift
+            public const int SCALE = 1 << SHIFT; //----image_filter_scale 
+            public const int MASK = SCALE - 1;  //----image_filter_mask 
         }
 
-        public enum image_subpixel_scale_e
+        public static class ImgSubPixConst
         {
-            image_subpixel_shift = 8,                         //----image_subpixel_shift
-            image_subpixel_scale = 1 << image_subpixel_shift, //----image_subpixel_scale 
-            image_subpixel_mask = image_subpixel_scale - 1   //----image_subpixel_mask 
+            public const int SHIFT = 8;                        //----image_subpixel_shift
+            public const int SCALE = 1 << SHIFT; //----image_subpixel_scale 
+            public const int MASK = SCALE - 1;   //----image_subpixel_mask 
         }
 
-        void calculate(IImageFilter filter)
+        void Calculate(Image.IImageFilter filter)
         {
-            calculate(filter, true);
+            Calculate(filter, true);
         }
 
-        void calculate(IImageFilter filter, bool normalization)
+        void Calculate(Image.IImageFilter filter, bool normalization)
         {
             double r = filter.GetRadius();
             ReallocLut(r);
             int i;
-            int pivot = diameter() << ((int)image_subpixel_scale_e.image_subpixel_shift - 1);
+            int pivot = Diameter << ((int)ImgSubPixConst.SHIFT - 1);
             for (i = 0; i < pivot; i++)
             {
-                double x = (double)i / (double)image_subpixel_scale_e.image_subpixel_scale;
+                double x = (double)i / (double)ImgSubPixConst.SCALE;
                 double y = filter.CalculateWeight(x);
                 m_weight_array[pivot + i] =
-                m_weight_array[pivot - i] = AggBasics.iround(y * (int)image_filter_scale_e.image_filter_scale);
+                m_weight_array[pivot - i] = AggBasics.iround(y * (int)ImgFilterConst.SCALE);
             }
-            int end = (diameter() << (int)image_subpixel_scale_e.image_subpixel_shift) - 1;
+            int end = (Diameter << (int)ImgSubPixConst.SHIFT) - 1;
             m_weight_array[0] = m_weight_array[end];
             if (normalization)
             {
-                normalize();
+                Normalize();
             }
         }
 
@@ -93,22 +91,22 @@ namespace PixelFarm.Agg
             m_radius = m_diameter = m_start = 0;
         }
 
-        public ImageFilterLookUpTable(IImageFilter filter)
+        public ImageFilterLookUpTable(Image.IImageFilter filter)
             : this(filter, true)
         {
 
         }
-        public ImageFilterLookUpTable(IImageFilter filter, bool normalization)
+        public ImageFilterLookUpTable(Image.IImageFilter filter, bool normalization)
         {
             m_weight_array = new int[256];
-            calculate(filter, normalization);
+            Calculate(filter, normalization);
         }
-         
 
-        public double radius() { return m_radius; }
-        public int diameter() { return m_diameter; }
-        public int start() { return m_start; }
-        public int[] weight_array() { return m_weight_array; }
+
+        public double Radius { get { return m_radius; } }
+        public int Diameter { get { return m_diameter; } }
+        public int Start { get { return m_start; } }
+        public int[] WeightArray { get { return m_weight_array; } }
 
         //--------------------------------------------------------------------
         // This function normalizes integer values and corrects the rounding 
@@ -117,12 +115,12 @@ namespace PixelFarm.Agg
         // of 1.0 which means that any sum of pixel weights must be equal to 1.0.
         // So, the filter function must produce a graph of the proper shape.
         //--------------------------------------------------------------------
-        public void normalize()
+        public void Normalize()
         {
             int i;
             int flip = 1;
 
-            for (i = 0; i < (int)image_subpixel_scale_e.image_subpixel_scale; i++)
+            for (i = 0; i < (int)ImgSubPixConst.SCALE; i++)
             {
                 for (; ; )
                 {
@@ -130,43 +128,43 @@ namespace PixelFarm.Agg
                     int j;
                     for (j = 0; j < m_diameter; j++)
                     {
-                        sum += m_weight_array[j * (int)image_subpixel_scale_e.image_subpixel_scale + i];
+                        sum += m_weight_array[j * (int)ImgSubPixConst.SCALE + i];
                     }
 
-                    if (sum == (int)image_filter_scale_e.image_filter_scale) break;
+                    if (sum == (int)ImgFilterConst.SCALE) break;
 
-                    double k = (double)((int)image_filter_scale_e.image_filter_scale) / (double)(sum);
+                    double k = (double)((int)ImgFilterConst.SCALE) / (double)(sum);
                     sum = 0;
                     for (j = 0; j < m_diameter; j++)
                     {
-                        sum += m_weight_array[j * (int)image_subpixel_scale_e.image_subpixel_scale + i] =
-                            (int)AggBasics.iround(m_weight_array[j * (int)image_subpixel_scale_e.image_subpixel_scale + i] * k);
+                        sum += m_weight_array[j * (int)ImgSubPixConst.SCALE + i] =
+                            (int)AggBasics.iround(m_weight_array[j * (int)ImgSubPixConst.SCALE + i] * k);
                     }
 
-                    sum -= (int)image_filter_scale_e.image_filter_scale;
+                    sum -= (int)ImgFilterConst.SCALE;
                     int inc = (sum > 0) ? -1 : 1;
 
                     for (j = 0; j < m_diameter && sum != 0; j++)
                     {
                         flip ^= 1;
                         int idx = flip != 0 ? m_diameter / 2 + j / 2 : m_diameter / 2 - j / 2;
-                        int v = m_weight_array[idx * (int)image_subpixel_scale_e.image_subpixel_scale + i];
-                        if (v < (int)image_filter_scale_e.image_filter_scale)
+                        int v = m_weight_array[idx * (int)ImgSubPixConst.SCALE + i];
+                        if (v < (int)ImgFilterConst.SCALE)
                         {
-                            m_weight_array[idx * (int)image_subpixel_scale_e.image_subpixel_scale + i] += (int)inc;
+                            m_weight_array[idx * (int)ImgSubPixConst.SCALE + i] += (int)inc;
                             sum += inc;
                         }
                     }
                 }
             }
 
-            int pivot = m_diameter << ((int)image_subpixel_scale_e.image_subpixel_shift - 1);
+            int pivot = m_diameter << ((int)ImgSubPixConst.SHIFT - 1);
 
             for (i = 0; i < pivot; i++)
             {
                 m_weight_array[pivot + i] = m_weight_array[pivot - i];
             }
-            int end = (diameter() << (int)image_subpixel_scale_e.image_subpixel_shift) - 1;
+            int end = (Diameter << (int)ImgSubPixConst.SHIFT) - 1;
             m_weight_array[0] = m_weight_array[end];
         }
 
@@ -175,7 +173,7 @@ namespace PixelFarm.Agg
             m_radius = radius;
             m_diameter = AggBasics.uceil(radius) * 2;
             m_start = -(int)(m_diameter / 2 - 1);
-            int size = (int)m_diameter << (int)image_subpixel_scale_e.image_subpixel_shift;
+            int size = (int)m_diameter << (int)ImgSubPixConst.SHIFT;
             if (size > m_weight_array.Length)
             {
                 m_weight_array = new int[size];

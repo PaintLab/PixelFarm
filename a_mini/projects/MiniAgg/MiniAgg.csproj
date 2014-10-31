@@ -37,16 +37,18 @@
       <HintPath>..\..\..\AggTests\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="01_Base\Collections.cs" />
     <Compile Include="01_Base\AggBasics.cs" />
-    <Compile Include="03_PixelBuffer\ActualImage.cs" />
-    <Compile Include="03_PixelBuffer\ChildImage.cs" />
-    <Compile Include="03_PixelBuffer\ImageHelper.cs" />
+    <Compile Include="02_PixelBuffer\ActualImage.cs" />
+    <Compile Include="02_PixelBuffer\ChildImage.cs" />
+    <Compile Include="02_PixelBuffer\ImageHelper.cs" />
+    <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
+    <Compile Include="08_ImageFilters\FilterRGBAImageSpanGen.cs" />
+    <Compile Include="08_ImageFilters\FilterRGBImageSpanGen.cs" />
     <Compile Include="x_notused\x_PixelBlenderFloat.cs" />
-    <Compile Include="04_Scanline\ISpanGenerator.cs" />
+    <Compile Include="03_SpanGenerators\0_ISpanGenerator.cs" />
     <Compile Include="04_Scanline\0_ScanlineSpan.cs" />
     <Compile Include="05_Lines\IPatternFilter.cs" />
     <Compile Include="05_Lines\LineParameters.cs" />
@@ -54,7 +56,7 @@
     <Compile Include="01_Base\ColorRGBA.cs" />
     <Compile Include="05_Lines\LineInterpolators.cs" />
     <Compile Include="04_Scanline\4.4_FillingRule.cs" />
-    <Compile Include="04_Scanline\IGammaFunction.cs" />
+    <Compile Include="03_SpanGenerators\IGammaFunction.cs" />
     <Compile Include="07_Transfrom\SimulEqGeneral.cs" />
     <Compile Include="06_Vertex_Path\BoundingRect.cs" />
     <Compile Include="06_Vertex_Path\LineCapAndJoin.cs" />
@@ -63,25 +65,25 @@
     <Compile Include="06_Vertex_Path\VertexStore.cs" />
     <Compile Include="01_Base\AggMath.cs" />
     <Compile Include="04_Scanline\4.2_CellAARasterizer.cs" />
-    <Compile Include="08_Resamplers\IImageFilter.cs" />
+    <Compile Include="08_ImageFilters\IImageFilter.cs" />
     <Compile Include="05_Lines\OutlineAARasterizer.cs" />
-    <Compile Include="08_Resamplers\SpanImageResample.cs" />
-    <Compile Include="08_Resamplers\SpanImageFilterGray.cs" />
-    <Compile Include="08_Resamplers\SpanImageFilterRGB.cs" />
-    <Compile Include="08_Resamplers\SpanImageFilterRGBA.cs" />
+    <Compile Include="08_ImageFilters\FilterImageSpanGenerator.cs" />
+    <Compile Include="03_SpanGenerators\4_ImgSpanGenGray.cs" />
+    <Compile Include="03_SpanGenerators\2_ImgSpanGenRGB.cs" />
+    <Compile Include="03_SpanGenerators\3_ImgSpanGenRGBA.cs" />
     <Compile Include="07_Transfrom\InterpolatorLinear.cs" />
     <Compile Include="07_Transfrom\InterpolatorPerspectiveLerp.cs" />
-    <Compile Include="08_Resamplers\ImageFilterLookupTable.cs" />
-    <Compile Include="08_Resamplers\RasterBufferAccessors.cs" />
+    <Compile Include="08_ImageFilters\ImageFilterLookupTable.cs" />
+    <Compile Include="02_PixelBuffer\RasterBufferAccessors.cs" />
     <Compile Include="06_Vertex_Path\VertexSequence.cs" />
     <Compile Include="01_Base\NativeBufferMan.cs" />
-    <Compile Include="03_PixelBuffer\GammaLookUpTable.cs" />
+    <Compile Include="02_PixelBuffer\GammaLookUpTable.cs" />
     <Compile Include="00_Context\Graphics2D.cs" />
     <Compile Include="05_Lines\ImageLineRenderer.cs" />
-    <Compile Include="03_PixelBuffer\IImage.cs" />
-    <Compile Include="03_PixelBuffer\ImageBase.cs" />
+    <Compile Include="02_PixelBuffer\IImage.cs" />
+    <Compile Include="02_PixelBuffer\ImageBase.cs" />
     <Compile Include="00_Context\ImageGraphics2D.cs" />
-    <Compile Include="03_PixelBuffer\PixelBlenderRGBA.cs" />
+    <Compile Include="02_PixelBuffer\PixelBlenderRGBA.cs" />
     <Compile Include="04_Scanline\1_Scanline.cs" />
     <Compile Include="05_Lines\OutlineRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,7 +92,7 @@
     <Compile Include="01_Base\RectangleDouble.cs" />
     <Compile Include="01_Base\RectangleInt.cs" />
     <Compile Include="04_Scanline\4.1_ScanlineRasterizer.cs" />
-    <Compile Include="04_Scanline\5_ScanlineToBitmapRenderer.cs" />
+    <Compile Include="04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="06_Vertex_Path\ShapePath.cs" />
     <Compile Include="07_Transfrom\Affine.cs" />
     <Compile Include="07_Transfrom\Bilinear.cs" />

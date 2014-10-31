@@ -32,7 +32,7 @@ using PixelFarm.Agg.Image;
 using PixelFarm.VectorMath;
 
 
-namespace PixelFarm.Agg
+namespace PixelFarm.Agg.Image
 {
     public interface IImageFilter
     {
