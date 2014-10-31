@@ -28,13 +28,13 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg.Sample_LionFill
+namespace PixelFarm.Agg.Sample_LionFill
 {
     [Info(OrderCode = "03")]
     [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"

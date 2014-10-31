@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public static class ImageTgaIO
     {

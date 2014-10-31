@@ -22,15 +22,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Font;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Font;
 //using LayoutFarm.Agg.Font;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public static class Canvas2dExtension
     {
@@ -74,7 +74,7 @@ namespace MatterHackers.Agg
         {
 
             //1. parse text  
-            var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
+            var stringPrinter = new PixelFarm.Agg.Font.TypeFacePrinter2(
                 text,
                 pointSize,
                 new Vector2(x, y), justification, baseline);

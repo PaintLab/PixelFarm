@@ -21,11 +21,11 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Transform;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Transform;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.UI
+namespace PixelFarm.Agg.UI
 {
     [Flags]
     public enum SizeLimitsToSet

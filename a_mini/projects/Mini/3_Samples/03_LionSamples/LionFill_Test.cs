@@ -28,14 +28,14 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
 using Mini;
 using LayoutFarm.MiniCinema;
-namespace MatterHackers.Agg.Sample_LionFill_Test
+namespace PixelFarm.Agg.Sample_LionFill_Test
 {
     [Info(OrderCode = "03")]
     [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
@@ -94,22 +94,22 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
             using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
             {
                 var reader = new System.IO.BinaryReader(fs);
-                var lionShape2 = new MatterHackers.Agg.LionShape();
+                var lionShape2 = new PixelFarm.Agg.LionShape();
 
-                MatterHackers.Agg.VertexSource.PathStorage path;
-                MatterHackers.Agg.ColorRGBA[] colors;
+                PixelFarm.Agg.VertexSource.PathStorage path;
+                PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
                 //1. path and command
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
                   reader, out path
                   );
                 //2. colors
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
                   reader, out colors
                   );
                 //3. path indice
                 int npaths;
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
                   reader, out npaths, out pathIndexList
                  );
 

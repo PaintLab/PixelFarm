@@ -18,7 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public interface ISpanInterpolator
     {
@@ -36,7 +36,7 @@ namespace MatterHackers.Agg
 }
 
 
-namespace MatterHackers.Agg.Lines
+namespace PixelFarm.Agg.Lines
 {
 
 

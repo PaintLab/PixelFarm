@@ -26,9 +26,9 @@
 // 
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg;
+using PixelFarm.Agg;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     /*
         //=========================================================multiplier_rgba

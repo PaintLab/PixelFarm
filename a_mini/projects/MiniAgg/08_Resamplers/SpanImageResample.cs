@@ -22,9 +22,9 @@
 //
 //----------------------------------------------------------------------------
 using System;
-using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
+using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
      
     public abstract class SpanImageFilter : ISpanGenerator

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using System.Text;
 
-namespace MatterHackers.Agg.UI
+namespace PixelFarm.Agg.UI
 {
     public class InvalidateEventArgs : EventArgs
     {

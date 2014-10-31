@@ -28,11 +28,11 @@
 
 
 using System; 
-using MatterHackers.Agg.Image;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.VectorMath;
 
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public interface IImageFilter
     {

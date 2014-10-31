@@ -32,15 +32,15 @@
 // 
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath; 
-using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath; 
+using poly_subpixel_scale_e = PixelFarm.Agg.AggBasics.PolySubPixelScale;
 
 
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
-    using MatterHackers.Agg.JustForScanlineRasterizer;
+    using PixelFarm.Agg.JustForScanlineRasterizer;
 
     //==================================================rasterizer_scanline_aa
     // Polygon rasterizer that is used to render filled polygons with 

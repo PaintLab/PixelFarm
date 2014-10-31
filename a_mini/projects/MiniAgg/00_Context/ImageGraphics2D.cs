@@ -21,12 +21,12 @@
 using System;
 using System.Collections.Generic;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg.Transform;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     class ImageGraphics2D : Graphics2D
     {
@@ -35,7 +35,7 @@ namespace MatterHackers.Agg
         PathStorage drawImageRectPath = new PathStorage();
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-
+        IPixelBlender pixBlenderRGBA32;
         double ox; //origin x
         double oy; //origin y
         public ImageGraphics2D(IImage destImage,
@@ -44,6 +44,9 @@ namespace MatterHackers.Agg
             : base(destImage, rasterizer)
         {
             this.scanline = scanline;
+            this.pixBlenderRGBA32 = new PixelBlenderBGRA();
+            this.sclineRasToBmp.PixelBlender = pixBlenderRGBA32;
+
         }
         public override void SetClippingRect(RectangleDouble clippingRect)
         {
@@ -242,7 +245,7 @@ namespace MatterHackers.Agg
 
 
                 SpanImageFilter spanImageFilter;
-                var interpolator = new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 spanImageFilter = new SpanImageFilterRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
@@ -264,7 +267,7 @@ namespace MatterHackers.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                var interpolator = new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 SpanImageFilter spanImageFilter = null;
@@ -393,7 +396,7 @@ namespace MatterHackers.Agg
                 var spanImageFilter = new SpanImageFilterRGBA_BilinearClip(
                     new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA()),
                     ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(),
-                    new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform));
+                    new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform));
 
                 DrawImage(source, spanImageFilter, destRectTransform);
 #if false // this is some debug you can enable to visualize the dest bounding box
@@ -414,7 +417,7 @@ namespace MatterHackers.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                var interpolator = new MatterHackers.Agg.Lines.InterpolatorLinear(sourceRectTransform);
+                var interpolator = new PixelFarm.Agg.Lines.InterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
 
                 SpanImageFilter spanImageFilter = null;

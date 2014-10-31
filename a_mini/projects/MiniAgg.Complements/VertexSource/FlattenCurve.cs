@@ -24,7 +24,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     //---------------------------------------------------------------conv_curve
     // Curve converter class. Any path storage can have Bezier curves defined 

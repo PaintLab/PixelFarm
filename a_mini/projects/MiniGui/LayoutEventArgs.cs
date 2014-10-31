@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
- 
+using System.Collections.Generic; 
 using System.Text;
 
-namespace MatterHackers.Agg.UI
+namespace PixelFarm.Agg.UI
 {
     public delegate void LayoutEventHandler(Object sender, LayoutEventArgs e);
     public enum PropertyCausingLayout { PerformLayout, LocalBounds, ChildLocalBounds, Position, AddChild, RemoveChild, Padding, Margin, HAnchor, VAnchor, Visible };

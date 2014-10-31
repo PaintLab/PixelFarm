@@ -20,12 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg.Image;
 
-namespace MatterHackers.Agg.Font
+namespace PixelFarm.Agg.Font
 {
   
 

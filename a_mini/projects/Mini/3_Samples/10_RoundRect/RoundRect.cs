@@ -3,14 +3,14 @@
 
 
 using System;
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg.Sample_RoundRect
+namespace PixelFarm.Agg.Sample_RoundRect
 {
     [Info(OrderCode = "10")]
     [Info("Yet another example dedicated to Gamma Correction. If you have a CRT monitor: The rectangle looks bad - "
@@ -125,6 +125,7 @@ namespace MatterHackers.Agg.Sample_RoundRect
 
             var clippingProxyNormal = new ClipProxyImage(rasterNormal);
             var clippingProxyGamma = new ClipProxyImage(rasterGamma);
+            
 
             clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
 

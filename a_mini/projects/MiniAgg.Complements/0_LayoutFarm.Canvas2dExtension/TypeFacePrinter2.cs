@@ -23,15 +23,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Font;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Font; 
 
-
-namespace LayoutFarm.Agg.Font
+namespace PixelFarm.Agg.Font
 {
 
     public class TypeFacePrinter2
@@ -124,7 +123,7 @@ namespace LayoutFarm.Agg.Font
 
                 switch (Baseline)
                 {
-                    case MatterHackers.Agg.Font.Baseline.BoundsCenter:
+                    case PixelFarm.Agg.Font.Baseline.BoundsCenter:
                         bounds.Offset(0, -typeFaceStyle.AscentInPixels / 2);
                         break;
 

@@ -41,7 +41,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MatterHackers.VectorMath
+namespace PixelFarm.VectorMath
 {
     /// <summary>
     /// Contains common mathematical functions and constants.

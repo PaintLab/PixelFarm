@@ -19,9 +19,9 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     public class VertexStore

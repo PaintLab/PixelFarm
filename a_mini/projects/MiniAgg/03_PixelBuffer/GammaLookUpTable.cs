@@ -20,7 +20,7 @@
  
 using System;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public class GammaLookUpTable
     {

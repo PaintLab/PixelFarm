@@ -19,10 +19,10 @@
 using System;
 using System.Collections.Generic;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg.Transform;
+using PixelFarm.VectorMath;
 
 namespace System.Runtime.CompilerServices
 {
@@ -31,7 +31,7 @@ namespace System.Runtime.CompilerServices
     }
 }
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     public abstract class Graphics2D

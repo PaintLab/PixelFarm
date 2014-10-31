@@ -23,12 +23,12 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using MatterHackers.Agg;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.VectorMath;
 
-using FlagsAndCommand = MatterHackers.Agg.ShapePath.FlagsAndCommand;
+using FlagsAndCommand = PixelFarm.Agg.ShapePath.FlagsAndCommand;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     //=====================================================================arc
     //

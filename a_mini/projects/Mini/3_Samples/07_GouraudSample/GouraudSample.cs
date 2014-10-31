@@ -4,13 +4,13 @@
 using System;
 using System.Diagnostics;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.VertexSource;
 
 
 using Mini;
-namespace MatterHackers.Agg.Sample_Gouraud
+namespace PixelFarm.Agg.Sample_Gouraud
 {
     [Info(OrderCode = "07")]
     [Info("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"

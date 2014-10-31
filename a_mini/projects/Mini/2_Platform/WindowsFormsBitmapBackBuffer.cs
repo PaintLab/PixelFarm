@@ -35,8 +35,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Image;
 
 
 namespace Mini

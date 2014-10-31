@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg.Lines
+namespace PixelFarm.Agg.Lines
 {
     //===================================================dda_line_interpolator
     public sealed class LineInterpolatorDDA

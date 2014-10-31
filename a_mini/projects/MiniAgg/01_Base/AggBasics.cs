@@ -23,12 +23,11 @@
 
 using System;
 using System.IO;
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
-
-
+     
     static public class AggBasics
     {
         //----------------------------------------------------------filling_rule_e

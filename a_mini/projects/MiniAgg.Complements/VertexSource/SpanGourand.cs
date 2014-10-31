@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     //============================================================span_gouraud
     public class SpanGourand

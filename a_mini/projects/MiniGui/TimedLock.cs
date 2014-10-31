@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 #if DEBUG
     public class TimedLock : IDisposable

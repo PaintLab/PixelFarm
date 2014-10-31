@@ -22,11 +22,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Font
+namespace PixelFarm.Agg.Font
 {
     public class TypeFace
     {

@@ -29,15 +29,15 @@
 
 using System;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Lines;
+using PixelFarm.Agg.Image;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Lines;
 
-using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
-using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filter_scale_e;
+using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
+using image_filter_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_filter_scale_e;
 
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
     class SpanImageFilterRGBA_NN_StepXBy1 : SpanImageFilter
@@ -343,9 +343,9 @@ namespace MatterHackers.Agg
             int bufferIndex;
             byte[] fg_ptr;
 
-            if (base.m_interpolator.GetType() == typeof(MatterHackers.Agg.Lines.InterpolatorLinear)
-                && ((MatterHackers.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(MatterHackers.Agg.Transform.Affine)
-            && ((MatterHackers.Agg.Transform.Affine)((MatterHackers.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
+            if (base.m_interpolator.GetType() == typeof(PixelFarm.Agg.Lines.InterpolatorLinear)
+                && ((PixelFarm.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(PixelFarm.Agg.Transform.Affine)
+            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Lines.InterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe

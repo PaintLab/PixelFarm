@@ -40,7 +40,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MatterHackers.VectorMath
+namespace PixelFarm.VectorMath
 {
     [Flags]
     public enum IntersectionType { None = 0, FrontFace = 1, BackFace = 2, Both = FrontFace | BackFace };

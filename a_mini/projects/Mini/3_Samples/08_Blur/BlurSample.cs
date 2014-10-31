@@ -5,17 +5,17 @@
 using System;
 using System.Diagnostics;
 
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.Agg.Font;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Font;
+using PixelFarm.VectorMath;
 
 
 using Mini;
-namespace MatterHackers.Agg.Sample_Blur
+namespace PixelFarm.Agg.Sample_Blur
 {
 
 

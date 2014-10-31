@@ -4,11 +4,11 @@ using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Image;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public class ImageSequence
     {

@@ -29,15 +29,15 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Lines;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Lines;
 using Mini;
 
-namespace MatterHackers.Agg.Sample_LionOutline
+namespace PixelFarm.Agg.Sample_LionOutline
 {
     [Info(OrderCode = "03")]
     [Info("The example demonstrates Maxim's algorithm of drawing Anti-Aliased lines. " +
@@ -150,18 +150,18 @@ namespace MatterHackers.Agg.Sample_LionOutline
             {
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
-                Stroke stroke = new Stroke(strokeWidth); 
-                stroke.LineJoin = LineJoin.Round; 
+                Stroke stroke = new Stroke(strokeWidth);
+                stroke.LineJoin = LineJoin.Round;
                 var vxs = affTx.TransformToVxs(lionShape.Path);
-                
+
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
-                
+
                 sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
                     scanlineCache,
-                    vxs ,
+                    vxs,
                     lionShape.Colors,
                     lionShape.PathIndexList,
                     lionShape.NumPaths);
@@ -171,7 +171,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 double w = strokeWidth * affTx.GetScale();
 
                 LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new GammaNone());
-                OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
+                OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
 
                 rasterizer.LineJoin = (RenderAccurateJoins ?

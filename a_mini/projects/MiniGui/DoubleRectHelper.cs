@@ -1,7 +1,7 @@
 ﻿
 //BSD 2014, WinterDev
 
-namespace MatterHackers.Agg.UI
+namespace PixelFarm.Agg.UI
 {
     public static class DoubleRectHelper
     {

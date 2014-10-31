@@ -30,10 +30,10 @@
 
 using System;
 
-using MatterHackers.Agg;
+using PixelFarm.Agg;
 //using Mono.Simd;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
 
     public interface IPixelBlender
@@ -169,7 +169,7 @@ namespace MatterHackers.Agg.Image
         }
     }
 
-  
+
     public sealed class PixelBlenderGammaBGRA : PixelBlenderBGRABase, IPixelBlender
     {
         private GammaLookUpTable m_gamma;
@@ -236,7 +236,7 @@ namespace MatterHackers.Agg.Image
         {
             throw new NotImplementedException();
         }
-    };
+    }
 
     public sealed class PixelBlenderPreMultBGRA : PixelBlenderBGRABase, IPixelBlender
     {
@@ -598,7 +598,7 @@ namespace MatterHackers.Agg.Image
 #endif
             }
         }
-    };
+    }
 
 }
 

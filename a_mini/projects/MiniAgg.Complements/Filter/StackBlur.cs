@@ -3,7 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
 
    

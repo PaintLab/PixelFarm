@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     //=================================================span_subdiv_adaptor

@@ -19,9 +19,9 @@
 //----------------------------------------------------------------------------
 #if true
 using System;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg.Image;
 
-namespace MatterHackers.Agg.Lines
+namespace PixelFarm.Agg.Lines
 {
     /*
     //========================================================line_image_scale

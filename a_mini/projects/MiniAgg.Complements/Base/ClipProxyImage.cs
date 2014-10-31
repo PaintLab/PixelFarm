@@ -23,9 +23,9 @@
 //----------------------------------------------------------------------------
 using System;
 using System.IO;
-using MatterHackers.Agg;
+using PixelFarm.Agg;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public sealed class ClipProxyImage : ProxyImage
     {
@@ -58,18 +58,52 @@ namespace MatterHackers.Agg.Image
             return x >= m_ClippingRect.Left && y >= m_ClippingRect.Bottom &&
                    x <= m_ClippingRect.Right && y <= m_ClippingRect.Top;
         }
+        public RectangleInt GetClipArea(ref RectangleInt destRect, ref RectangleInt sourceRect, int sourceWidth, int sourceHeight)
+        {
+            RectangleInt rc = new RectangleInt(0, 0, 0, 0);
+            RectangleInt cb = ClipBox;
+            ++cb.Right;
+            ++cb.Top;
 
-        public RectangleInt ClipBox { get { return m_ClippingRect; } }
-        int XMin { get { return m_ClippingRect.Left; } }
-        int YMin { get { return m_ClippingRect.Bottom; } }
-        int XMax { get { return m_ClippingRect.Right; } }
-        int YMax { get { return m_ClippingRect.Top; } }
+            if (sourceRect.Left < 0)
+            {
+                destRect.Left -= sourceRect.Left;
+                sourceRect.Left = 0;
+            }
+            if (sourceRect.Bottom < 0)
+            {
+                destRect.Bottom -= sourceRect.Bottom;
+                sourceRect.Bottom = 0;
+            }
 
+            if (sourceRect.Right > sourceWidth) sourceRect.Right = sourceWidth;
+            if (sourceRect.Top > sourceHeight) sourceRect.Top = sourceHeight;
 
-        public void Clear(ColorRGBA in_c)
+            if (destRect.Left < cb.Left)
+            {
+                sourceRect.Left += cb.Left - destRect.Left;
+                destRect.Left = cb.Left;
+            }
+            if (destRect.Bottom < cb.Bottom)
+            {
+                sourceRect.Bottom += cb.Bottom - destRect.Bottom;
+                destRect.Bottom = cb.Bottom;
+            }
+
+            if (destRect.Right > cb.Right) destRect.Right = cb.Right;
+            if (destRect.Top > cb.Top) destRect.Top = cb.Top;
+
+            rc.Right = destRect.Right - destRect.Left;
+            rc.Top = destRect.Top - destRect.Bottom;
+
+            if (rc.Right > sourceRect.Right - sourceRect.Left) rc.Right = sourceRect.Right - sourceRect.Left;
+            if (rc.Top > sourceRect.Top - sourceRect.Bottom) rc.Top = sourceRect.Top - sourceRect.Bottom;
+            return rc;
+        }
+        public void Clear(ColorRGBA color)
         {
 
-            ColorRGBA c = in_c;
+            ColorRGBA c = color;
             int w = this.Width;
             if (w != 0)
             {
@@ -78,10 +112,16 @@ namespace MatterHackers.Agg.Image
                     base.CopyHL(0, y, w, c);
                 }
             }
-        }
+        } 
+
+        public RectangleInt ClipBox { get { return m_ClippingRect; } }
+        int XMin { get { return m_ClippingRect.Left; } }
+        int YMin { get { return m_ClippingRect.Bottom; } }
+        int XMax { get { return m_ClippingRect.Right; } }
+        int YMax { get { return m_ClippingRect.Top; } }
 
 
-
+       
         public override ColorRGBA GetPixel(int x, int y)
         {
             return InClipArea(x, y) ? base.GetPixel(x, y) : new ColorRGBA();
@@ -308,48 +348,7 @@ namespace MatterHackers.Agg.Image
             }
         }
 
-        public RectangleInt clip_rect_area(ref RectangleInt destRect, ref RectangleInt sourceRect, int sourceWidth, int sourceHeight)
-        {
-            RectangleInt rc = new RectangleInt(0, 0, 0, 0);
-            RectangleInt cb = ClipBox;
-            ++cb.Right;
-            ++cb.Top;
-
-            if (sourceRect.Left < 0)
-            {
-                destRect.Left -= sourceRect.Left;
-                sourceRect.Left = 0;
-            }
-            if (sourceRect.Bottom < 0)
-            {
-                destRect.Bottom -= sourceRect.Bottom;
-                sourceRect.Bottom = 0;
-            }
-
-            if (sourceRect.Right > sourceWidth) sourceRect.Right = sourceWidth;
-            if (sourceRect.Top > sourceHeight) sourceRect.Top = sourceHeight;
-
-            if (destRect.Left < cb.Left)
-            {
-                sourceRect.Left += cb.Left - destRect.Left;
-                destRect.Left = cb.Left;
-            }
-            if (destRect.Bottom < cb.Bottom)
-            {
-                sourceRect.Bottom += cb.Bottom - destRect.Bottom;
-                destRect.Bottom = cb.Bottom;
-            }
-
-            if (destRect.Right > cb.Right) destRect.Right = cb.Right;
-            if (destRect.Top > cb.Top) destRect.Top = cb.Top;
-
-            rc.Right = destRect.Right - destRect.Left;
-            rc.Top = destRect.Top - destRect.Bottom;
-
-            if (rc.Right > sourceRect.Right - sourceRect.Left) rc.Right = sourceRect.Right - sourceRect.Left;
-            if (rc.Top > sourceRect.Top - sourceRect.Bottom) rc.Top = sourceRect.Top - sourceRect.Bottom;
-            return rc;
-        } 
+        
         public override void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
             if (x > XMax) return;

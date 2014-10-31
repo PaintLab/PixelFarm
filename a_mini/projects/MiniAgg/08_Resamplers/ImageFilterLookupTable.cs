@@ -29,14 +29,14 @@
 
 using System;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.VectorMath;
 
-using image_subpixel_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
-using image_filter_scale_e = MatterHackers.Agg.ImageFilterLookUpTable.image_filter_scale_e;
+using image_subpixel_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_subpixel_scale_e;
+using image_filter_scale_e = PixelFarm.Agg.ImageFilterLookUpTable.image_filter_scale_e;
 
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     //-----------------------------------------------------ImageFilterLookUpTable

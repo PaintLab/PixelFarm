@@ -29,9 +29,9 @@
 //
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg.Image;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
 #if true
 

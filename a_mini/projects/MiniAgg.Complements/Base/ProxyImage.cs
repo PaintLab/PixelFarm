@@ -19,10 +19,10 @@
 //----------------------------------------------------------------------------
 using System;
 
-using MatterHackers.Agg;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public abstract class ProxyImage : IImage
     {

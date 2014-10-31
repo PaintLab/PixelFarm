@@ -22,8 +22,8 @@
 //
 //----------------------------------------------------------------------------
 
-using MatterHackers.Agg.VertexSource;
-namespace MatterHackers.Agg
+using PixelFarm.Agg.VertexSource;
+namespace PixelFarm.Agg
 {
 
     //----------------------------------------------------------vertex_sequence

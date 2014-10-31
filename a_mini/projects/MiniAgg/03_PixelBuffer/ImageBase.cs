@@ -20,11 +20,11 @@
 using System;
 using System.Runtime;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Image;
-namespace MatterHackers.Agg
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Image;
+namespace PixelFarm.Agg
 {
 
 
@@ -100,8 +100,8 @@ namespace MatterHackers.Agg
             //--------------------------
             SetRecieveBlender(recieveBlender);
         }
-        public int ChangedCount { get { return changedCount; } }
-
+        
+     
         public void MarkImageChanged()
         {
             // mark this unchecked as we don't want to throw an exception if this rolls over.

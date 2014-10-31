@@ -23,11 +23,11 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using FlagsAndCommand = MatterHackers.Agg.ShapePath.FlagsAndCommand;
+using FlagsAndCommand = PixelFarm.Agg.ShapePath.FlagsAndCommand;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     public class Ellipse
     {

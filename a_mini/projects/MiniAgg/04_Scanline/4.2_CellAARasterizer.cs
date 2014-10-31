@@ -33,9 +33,9 @@
 //----------------------------------------------------------------------------
 
 using System;
-using poly_subpixel_scale_e = MatterHackers.Agg.AggBasics.PolySubPixelScale;
+using poly_subpixel_scale_e = PixelFarm.Agg.AggBasics.PolySubPixelScale;
 
-namespace MatterHackers.Agg.JustForScanlineRasterizer
+namespace PixelFarm.Agg.JustForScanlineRasterizer
 {
     //-----------------------------------------------------------------cell_aa
     // A pixel cell. There're no constructors defined and it was done ***

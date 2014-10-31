@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     //----------------------------------------------------------------bspline
     // A very simple class of Bi-cubic Spline interpolation.

@@ -24,9 +24,9 @@
 //----------------------------------------------------------------------------
 using System;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
 
     public class StrokeMath

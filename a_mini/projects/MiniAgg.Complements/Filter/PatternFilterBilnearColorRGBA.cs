@@ -17,10 +17,10 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Lines;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Lines;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
 

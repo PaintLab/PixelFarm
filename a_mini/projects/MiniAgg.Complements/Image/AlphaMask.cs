@@ -23,9 +23,9 @@
 //----------------------------------------------------------------------------
 using System;
 
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg.Image;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public interface IAlphaMask
     {

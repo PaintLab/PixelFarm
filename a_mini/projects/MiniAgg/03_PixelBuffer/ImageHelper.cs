@@ -20,11 +20,11 @@
 using System;
 using System.Runtime;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     public static class ImageHelper
     {

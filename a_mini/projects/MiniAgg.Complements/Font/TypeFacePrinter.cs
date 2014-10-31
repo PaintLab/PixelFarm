@@ -22,13 +22,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Font
+namespace PixelFarm.Agg.Font
 {
     public enum Justification { Left, Center, Right };
     public enum Baseline { BoundsTop, BoundsCenter, TextCenter, Text, BoundsBottom };

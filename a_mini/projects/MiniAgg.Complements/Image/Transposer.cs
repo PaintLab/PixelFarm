@@ -17,9 +17,9 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using MatterHackers.Agg;
+using PixelFarm.Agg;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     //=======================================================pixfmt_transposer
     public sealed class FormatTransposer : ProxyImage
@@ -36,7 +36,7 @@ namespace MatterHackers.Agg.Image
         {
             return linkedImage.GetPixel(y, x);
         }
-         
+
 
         public override void CopyHL(int x, int y, int len, ColorRGBA c)
         {
@@ -51,7 +51,7 @@ namespace MatterHackers.Agg.Image
             linkedImage.CopyHL(y, x, len, c);
         }
 
-        public override void BlendHL(int x1, int y,int x2, ColorRGBA c, byte cover)
+        public override void BlendHL(int x1, int y, int x2, ColorRGBA c, byte cover)
         {
             linkedImage.BlendVL(y, x1, x2, c, cover);
         }
@@ -90,5 +90,5 @@ namespace MatterHackers.Agg.Image
         {
             linkedImage.BlendColorHSpan(y, x, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
-    };
+    }
 }
