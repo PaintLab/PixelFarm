@@ -1,3 +1,5 @@
+//BSD 2014, WinterDev
+
 /*
 Copyright (c) 2014, Lars Brubaker
 All rights reserved.
@@ -44,7 +46,6 @@ namespace Mini
     internal class WindowsFormsBitmapBackBuffer
     {
         internal ActualImage backingImageBufferByte;
-        //internal ImageBufferFloat backingImageBufferFloat;
         internal Bitmap windowsBitmap;
 
 

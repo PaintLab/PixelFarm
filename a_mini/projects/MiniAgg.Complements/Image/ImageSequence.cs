@@ -66,13 +66,13 @@ namespace PixelFarm.Agg.Image
         {
         }
 
-        public void SetAlpha(byte value)
-        {
-            foreach (ImageBase image in imageList)
-            {
-                image.SetAlpha(value);
-            }
-        }
+        //public void SetAlpha(byte value)
+        //{
+        //    foreach (ImageBase image in imageList)
+        //    {
+        //        image.SetAlpha(value);
+        //    }
+        //}
 
         //public void CenterOriginOffset()
         //{

@@ -8,6 +8,20 @@ namespace MatterHackers.Agg.WindowsFileDialogs
 {
     public class FileDialogPlugin : FileDialogCreator
     {
+        public override bool OpenFileDialog(OpenFileDialogParams openParams, OpenFileDialogDelegate callback)
+        {
+            Stream stream = OpenFileDialog(ref openParams);
+            if (stream != null)
+            {
+                stream.Close();
+            }
+            UiThread.RunOnIdle((object state) =>
+            {
+                callback(openParams);
+            });
+            return true;
+        }
+
         public override Stream OpenFileDialog(ref OpenFileDialogParams openParams)
         {
             WidgetForWindowsFormsAbstract.MainWindowsFormsWindow.ShowingSystemDialog = true;
@@ -38,12 +52,23 @@ namespace MatterHackers.Agg.WindowsFileDialogs
                 }
                 catch (Exception ex)
                 {
+                    // TODO: Should use StyledMessageBox but can't take dependency against the MatterControl assembly
                     System.Windows.Forms.MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
 
             WidgetForWindowsFormsAbstract.MainWindowsFormsWindow.ShowingSystemDialog = false;
             return null;
+        }
+
+        public override bool SelectFolderDialog(SelectFolderDialogParams folderParams, SelectFolderDialogDelegate callback)
+        {
+            SelectFolderDialog(ref folderParams);
+            UiThread.RunOnIdle((object state) =>
+            {
+                callback(folderParams);
+            });
+            return true;
         }
 
         public override string SelectFolderDialog(ref SelectFolderDialogParams folderParams)
@@ -67,6 +92,22 @@ namespace MatterHackers.Agg.WindowsFileDialogs
 
             WidgetForWindowsFormsAbstract.MainWindowsFormsWindow.ShowingSystemDialog = false;
             return folderBrowserDialog.SelectedPath;
+        }
+
+        public override bool SaveFileDialog(SaveFileDialogParams saveParams, SaveFileDialogDelegate callback)
+        {
+            Stream stream = SaveFileDialog(ref saveParams);
+            if (stream != null)
+            {
+                stream.Close();
+            }
+
+            UiThread.RunOnIdle((object state) =>
+            {
+                callback(saveParams);
+            });
+
+            return true;
         }
 
         public override Stream SaveFileDialog(ref SaveFileDialogParams saveParams)
@@ -105,6 +146,7 @@ namespace MatterHackers.Agg.WindowsFileDialogs
                 }
                 catch (Exception ex)
                 {
+                    // TODO: Should use StyledMessageBox but can't take dependency against the MatterControl assembly
                     System.Windows.Forms.MessageBox.Show("Error: Could not create file for saving. Original error: " + ex.Message);
                 }
             }

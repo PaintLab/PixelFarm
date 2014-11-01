@@ -41,8 +41,22 @@ namespace MatterHackers.GCodeVisualizer
 {
     public abstract class RenderFeatureBase
     {
+<<<<<<< HEAD
         public abstract void Render(Graphics2D graphics2D, Affine transform, double layerScale, RenderType renderType);
         public abstract void CreateRender3DData(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, Affine transform, double layerScale, RenderType renderType);
+=======
+        protected int extruderIndex;
+
+        protected readonly RGBA_Bytes MultipleExtruderColor = RGBA_Bytes.Indigo;
+
+        public abstract void Render(Graphics2D graphics2D, GCodeRenderInfo renderInfo);
+        public abstract void CreateRender3DData(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, GCodeRenderInfo renderInfo);
+
+        public RenderFeatureBase(int extruderIndex)
+        {
+            this.extruderIndex = extruderIndex;
+        }
+>>>>>>> FETCH_HEAD
 
         static public void CreateCylinder(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, Vector3 startPos, Vector3 endPos, double radius, int steps, RGBA_Bytes color, double layerHeight)
         {

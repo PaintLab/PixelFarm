@@ -114,7 +114,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                     bound.Bottom,
                     bound.Right,
                     bound.Top,
-                    quadPolygonControl.polygon());
+                    quadPolygonControl.GetPolygon());
 
                 if (txBilinear.IsValid)
                 {
@@ -156,7 +156,7 @@ namespace PixelFarm.Agg.Sample_Perspective
             {
                 var txPerspective = new Perspective(
                     lionShape.Bounds,
-                    quadPolygonControl.polygon());
+                    quadPolygonControl.GetPolygon());
 
                 if (txPerspective.is_valid())
                 {

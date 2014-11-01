@@ -40,10 +40,11 @@ using MatterHackers.VectorMath;
 
 namespace MatterHackers.RenderOpenGl
 {
-    public struct TriangleVertexData
+    public struct VertexTextureData
     {
         public float textureU;
         public float textureV;
+<<<<<<< HEAD
 
         public float normalsX;
         public float normalsY;
@@ -54,12 +55,37 @@ namespace MatterHackers.RenderOpenGl
         public float positionsZ;
 
         public static readonly int Stride = Marshal.SizeOf(default(TriangleVertexData));
+=======
+        public static readonly int Stride = Marshal.SizeOf(default(VertexTextureData));
+    }
+
+    public struct VertexNormalData
+    {
+        public float normalX;
+        public float normalY;
+        public float normalZ;
+        public static readonly int Stride = Marshal.SizeOf(default(VertexNormalData));
+    }
+
+    public struct VertexPositionData
+    {
+        public float positionX;
+        public float positionY;
+        public float positionZ;
+        public static readonly int Stride = Marshal.SizeOf(default(VertexPositionData));
+>>>>>>> FETCH_HEAD
     }
 
     public class SubTriangleMesh
     {
         public ImageBuffer texture = null;
+<<<<<<< HEAD
         public VectorPOD<TriangleVertexData> vertexDatas = new VectorPOD<TriangleVertexData>();
+=======
+        public VectorPOD<VertexTextureData> textrueData = new VectorPOD<VertexTextureData>();
+        public VectorPOD<VertexNormalData> normalData = new VectorPOD<VertexNormalData>();
+        public VectorPOD<VertexPositionData> positionData = new VectorPOD<VertexPositionData>();
+>>>>>>> FETCH_HEAD
     }
 
     public class GLMeshTrianglePlugin
@@ -116,7 +142,9 @@ namespace MatterHackers.RenderOpenGl
         {
             subMeshs = new List<SubTriangleMesh>();
             SubTriangleMesh currentSubMesh = null;
-            VectorPOD<TriangleVertexData> vertexDatas = new VectorPOD<TriangleVertexData>();
+            VectorPOD<VertexTextureData> textureData = new VectorPOD<VertexTextureData>();
+            VectorPOD<VertexNormalData> normalData = new VectorPOD<VertexNormalData>();
+            VectorPOD<VertexPositionData> positionData = new VectorPOD<VertexPositionData>();
             // first make sure all the textures are created
             foreach (Face face in meshToBuildListFor.Faces)
             {
@@ -134,7 +162,13 @@ namespace MatterHackers.RenderOpenGl
                     subMeshs.Add(newSubMesh);
 
                     currentSubMesh = subMeshs[subMeshs.Count - 1];
+<<<<<<< HEAD
                     vertexDatas = currentSubMesh.vertexDatas;
+=======
+                    textureData = currentSubMesh.textrueData;
+                    normalData = currentSubMesh.normalData;
+                    positionData = currentSubMesh.positionData;
+>>>>>>> FETCH_HEAD
                 }
 
                 Vector2[] textureUV = new Vector2[2];
@@ -149,23 +183,31 @@ namespace MatterHackers.RenderOpenGl
                     }
                     else
                     {
-                        TriangleVertexData tempVertex;
-                        tempVertex.textureU = (float)textureUV[0].x; tempVertex.textureV = (float)textureUV[0].y;
-                        tempVertex.positionsX = (float)position[0].x; tempVertex.positionsY = (float)position[0].y; tempVertex.positionsZ = (float)position[0].z;
-                        tempVertex.normalsX = (float)face.normal.x; tempVertex.normalsY = (float)face.normal.y; tempVertex.normalsZ = (float)face.normal.z;
-                        vertexDatas.Add(tempVertex);
+                        VertexTextureData tempTexture;
+                        VertexNormalData tempNormal;
+                        VertexPositionData tempPosition;
+                        tempTexture.textureU = (float)textureUV[0].x; tempTexture.textureV = (float)textureUV[0].y;
+                        tempNormal.normalX = (float)face.normal.x; tempNormal.normalY = (float)face.normal.y; tempNormal.normalZ = (float)face.normal.z;
+                        tempPosition.positionX = (float)position[0].x; tempPosition.positionY = (float)position[0].y; tempPosition.positionZ = (float)position[0].z;
+                        textureData.Add(tempTexture);
+                        normalData.Add(tempNormal);
+                        positionData.Add(tempPosition);
 
-                        tempVertex.textureU = (float)textureUV[1].x; tempVertex.textureV = (float)textureUV[1].y;
-                        tempVertex.positionsX = (float)position[1].x; tempVertex.positionsY = (float)position[1].y; tempVertex.positionsZ = (float)position[1].z;
-                        tempVertex.normalsX = (float)face.normal.x; tempVertex.normalsY = (float)face.normal.y; tempVertex.normalsZ = (float)face.normal.z;
-                        vertexDatas.Add(tempVertex);
+                        tempTexture.textureU = (float)textureUV[1].x; tempTexture.textureV = (float)textureUV[1].y;
+                        tempNormal.normalX = (float)face.normal.x; tempNormal.normalY = (float)face.normal.y; tempNormal.normalZ = (float)face.normal.z;
+                        tempPosition.positionX = (float)position[1].x; tempPosition.positionY = (float)position[1].y; tempPosition.positionZ = (float)position[1].z;
+                        textureData.Add(tempTexture);
+                        normalData.Add(tempNormal);
+                        positionData.Add(tempPosition);
 
                         Vector2 textureUV2 = faceEdge.GetUVs(0);
                         Vector3 position2 = faceEdge.firstVertex.Position;
-                        tempVertex.textureU = (float)textureUV2.x; tempVertex.textureV = (float)textureUV2.y;
-                        tempVertex.positionsX = (float)position2.x; tempVertex.positionsY = (float)position2.y; tempVertex.positionsZ = (float)position2.z;
-                        tempVertex.normalsX = (float)face.normal.x; tempVertex.normalsY = (float)face.normal.y; tempVertex.normalsZ = (float)face.normal.z;
-                        vertexDatas.Add(tempVertex);
+                        tempTexture.textureU = (float)textureUV2.x; tempTexture.textureV = (float)textureUV2.y;
+                        tempNormal.normalX = (float)face.normal.x; tempNormal.normalY = (float)face.normal.y; tempNormal.normalZ = (float)face.normal.z;
+                        tempPosition.positionX = (float)position2.x; tempPosition.positionY = (float)position2.y; tempPosition.positionZ = (float)position2.z;
+                        textureData.Add(tempTexture);
+                        normalData.Add(tempNormal);
+                        positionData.Add(tempPosition);
 
                         textureUV[1] = faceEdge.GetUVs(0);
                         position[1] = faceEdge.firstVertex.Position;

@@ -46,6 +46,7 @@ namespace MatterHackers.PolygonMesh.Processors
 {
     public static class StlProcessing
     {
+<<<<<<< HEAD
         public enum OutputType { Ascii, Binary };
 
         public static void Save(Mesh meshToSave, string fileName, OutputType outputType = OutputType.Binary)
@@ -61,6 +62,25 @@ namespace MatterHackers.PolygonMesh.Processors
             switch (outputType)
             {
                 case OutputType.Ascii:
+=======
+        public static bool Save(Mesh meshToSave, string fileName, MeshOutputSettings outputInfo = null)
+        {
+            using (FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+            {
+                if (outputInfo == null)
+                {
+                    outputInfo = new MeshOutputSettings();
+                }
+                return Save(meshToSave, file, outputInfo);
+            }
+        }
+
+        public static bool Save(Mesh meshToSave, Stream stream, MeshOutputSettings outputInfo)
+        {
+            switch (outputInfo.OutputTypeSetting)
+            {
+                case MeshOutputSettings.OutputType.Ascii:
+>>>>>>> FETCH_HEAD
                     {
                         StreamWriter streamWriter = new StreamWriter(stream);
 
@@ -98,7 +118,11 @@ namespace MatterHackers.PolygonMesh.Processors
                     }
                     break;
 
+<<<<<<< HEAD
                 case OutputType.Binary:
+=======
+                case MeshOutputSettings.OutputType.Binary:
+>>>>>>> FETCH_HEAD
                     using (BinaryWriter bw = new BinaryWriter(stream))
                     {
                         // 80 bytes of nothing
@@ -142,9 +166,16 @@ namespace MatterHackers.PolygonMesh.Processors
                     }
                     break;
             }
+<<<<<<< HEAD
         }
 
         public static Mesh Load(string fileName, ReportProgress reportProgress = null)
+=======
+            return true;
+        }
+
+        public static List<MeshGroup> Load(string fileName, ReportProgressRatio reportProgress = null)
+>>>>>>> FETCH_HEAD
         {
             Mesh loadedMesh = null;
             if (Path.GetExtension(fileName).ToUpper() == ".STL")
@@ -171,10 +202,21 @@ namespace MatterHackers.PolygonMesh.Processors
 #endif
             }
 
-            return loadedMesh;
+            List<MeshGroup> meshGroups = new List<MeshGroup>();
+            meshGroups.Add(new MeshGroup());
+            if (loadedMesh != null)
+            {
+                meshGroups[0].Meshes.Add(loadedMesh);
+                return meshGroups;
+            }
+            return null;
         }
 
+<<<<<<< HEAD
         public static Mesh Load(Stream fileStream, ReportProgress reportProgress = null)
+=======
+        public static Mesh Load(Stream fileStream, ReportProgressRatio reportProgress = null)
+>>>>>>> FETCH_HEAD
         {
             Mesh loadedMesh = null;
             try
@@ -196,7 +238,11 @@ namespace MatterHackers.PolygonMesh.Processors
             return loadedMesh;
         }
 
+<<<<<<< HEAD
         public static Mesh ParseFileContents(Stream stlStream, ReportProgress reportProgress)
+=======
+        public static Mesh ParseFileContents(Stream stlStream, ReportProgressRatio reportProgress)
+>>>>>>> FETCH_HEAD
         {
             Stopwatch time = new Stopwatch();
             time.Start();
@@ -216,7 +262,6 @@ namespace MatterHackers.PolygonMesh.Processors
             maxProgressReport.Start();
             Mesh meshFromStlFile = new Mesh();
             //meshFromStlFile.MaxDistanceToConsiderVertexAsSame = .0000005;
-            meshFromStlFile.MaxDistanceToConsiderVertexAsSame = 0; // only vertices that are the exact same point will be merged.
             long bytesInFile = stlStream.Length;
             if (bytesInFile <= 80)
             {
@@ -280,7 +325,13 @@ namespace MatterHackers.PolygonMesh.Processors
 
                     if (reportProgress != null && maxProgressReport.ElapsedMilliseconds > 200)
                     {
+<<<<<<< HEAD
                         if (!reportProgress(stlStream.Position / (double)bytesInFile * parsingFileRatio, "Loading Polygons"))
+=======
+                        bool continueProcessing;
+                        reportProgress(stlStream.Position / (double)bytesInFile * parsingFileRatio, "Loading Polygons", out continueProcessing);
+                        if (!continueProcessing)
+>>>>>>> FETCH_HEAD
                         {
                             stlStream.Close();
                             return null;
@@ -326,7 +377,13 @@ namespace MatterHackers.PolygonMesh.Processors
 
                     if (reportProgress != null && maxProgressReport.ElapsedMilliseconds > 200)
                     {
+<<<<<<< HEAD
                         if (!reportProgress(i / (double)numTriangles * parsingFileRatio, "Loading Polygons"))
+=======
+                        bool continueProcessing;
+                        reportProgress(i / (double)numTriangles * parsingFileRatio, "Loading Polygons", out continueProcessing);
+                        if (!continueProcessing)
+>>>>>>> FETCH_HEAD
                         {
                             stlStream.Close();
                             return null;
@@ -346,6 +403,7 @@ namespace MatterHackers.PolygonMesh.Processors
             }
 
             // merge all the vetexes that are in the same place together
+<<<<<<< HEAD
             meshFromStlFile.CleanAndMergMesh(
                 (double progress0To1, string processingState) => 
                 {
@@ -356,6 +414,31 @@ namespace MatterHackers.PolygonMesh.Processors
                     return true;
                 }
             );
+=======
+            bool finishedCleanAndMerge = true;
+            meshFromStlFile.CleanAndMergMesh(
+                (double progress0To1, string processingState, out bool continueProcessing) => 
+                {
+                    if (reportProgress != null)
+                    {
+                        reportProgress(parsingFileRatio + progress0To1 * (1 - parsingFileRatio), processingState, out continueProcessing);
+                        if (!continueProcessing)
+                        {
+                            finishedCleanAndMerge = false;
+                        }
+                    }
+                    else
+                    {
+                        continueProcessing = true;
+                    }
+                }
+            );
+
+            if (!finishedCleanAndMerge)
+            {
+                return null;
+            }
+>>>>>>> FETCH_HEAD
 
             time.Stop();
             Debug.WriteLine(string.Format("STL Load in {0:0.00}s", time.Elapsed.TotalSeconds));

@@ -216,8 +216,6 @@ namespace MatterHackers.Agg.UI
 
             internalTextWidget.TextChanged += new EventHandler(internalTextWidget_TextChanged);
             internalTextWidget.BoundsChanged += new EventHandler(internalTextWidget_BoundsChanged);
-
-            UiThread.RunOnIdle(OnIdle);
         }
 
         void UpdateLocalBounds()
@@ -254,36 +252,34 @@ namespace MatterHackers.Agg.UI
             }
         }
 
-        Stopwatch barFlasher = new Stopwatch();
+        Stopwatch timeSinceTurnOn = new Stopwatch();
         double barOnTime = .6;
         double barOffTime = .6;
-        bool barFlashIsOn = true;
+
+        bool BarIsShowing { get { return timeSinceTurnOn.ElapsedMilliseconds < barOnTime * 1000; }  }
+
         public void OnIdle(object state)
         {
-            if (this.Focused && barFlasher.ElapsedMilliseconds > barOnTime * 1000)
+            if (this.Focused 
+                && timeSinceTurnOn.ElapsedMilliseconds >= barOnTime * 1000
+                && !WidgetHasBeenClosed)
             {
-                if (barFlashIsOn)
-                {
-                    barFlashIsOn = false;
-                    Invalidate();
-                }
-                if (barFlasher.ElapsedMilliseconds > (barOnTime + barOffTime) * 1000)
+                if (timeSinceTurnOn.ElapsedMilliseconds > (barOnTime + barOffTime) * 1000)
                 {
                     RestartBarFlash();
                 }
-            }
-
-            // Put this function back in so it will get called each update
-            if (!WidgetHasBeenClosed)
-            {
-                UiThread.RunOnIdle(OnIdle);
+                else
+                {
+                    UiThread.RunOnIdle(OnIdle, barOffTime);
+                    Invalidate();
+                }
             }
         }
 
         void RestartBarFlash()
         {
-            barFlashIsOn = true;
-            barFlasher.Restart();
+            timeSinceTurnOn.Restart();
+            UiThread.RunOnIdle(OnIdle, barOnTime);
             Invalidate();
         }
 
@@ -292,12 +288,8 @@ namespace MatterHackers.Agg.UI
         {
             RestartBarFlash();
             textWhenGotFocus = Text;
+            timeSinceTurnOn.Restart();
             base.OnFocus(e);
-        }
-
-        public bool TextHasChanged()
-        {
-            return textWhenGotFocus != Text;
         }
 
         public override void OnLostFocus(EventArgs e)
@@ -309,6 +301,11 @@ namespace MatterHackers.Agg.UI
                 OnEditComplete();
             }
             base.OnLostFocus(e);
+        }
+
+        public bool TextHasChanged()
+        {
+            return textWhenGotFocus != Text;
         }
 
         public RGBA_Bytes cursorColor = RGBA_Bytes.DarkGray;
@@ -424,7 +421,7 @@ namespace MatterHackers.Agg.UI
                 }
             }
 
-            if (this.Focused && barFlashIsOn)
+            if (this.Focused && BarIsShowing)
             {
                 double xFraction = graphics2D.GetTransform().tx;
                 xFraction = xFraction - (int)xFraction;
@@ -482,6 +479,7 @@ namespace MatterHackers.Agg.UI
         {
             if (mouseIsDown)
             {
+                StartSelectionIfRequired(null);
                 CharIndexToInsertBefore = internalTextWidget.Printer.GetCharacterIndexToStartBefore(new Vector2(mouseEvent.X, mouseEvent.Y));
                 if (CharIndexToInsertBefore < 0)
                 {
@@ -563,29 +561,40 @@ namespace MatterHackers.Agg.UI
             }
         }
 
+        void StartSelectionIfRequired(KeyEventArgs keyEvent)
+        {
+            if (!Selecting && ShiftKeyIsDown(keyEvent))
+            {
+                Selecting = true;
+                SelectionIndexToStartBefore = CharIndexToInsertBefore;
+            }
+        }
+
+        bool ShiftKeyIsDown(KeyEventArgs keyEvent)
+        {
+            return Keyboard.IsKeyDown(Keys.Shift)
+                || (keyEvent != null && keyEvent.Shift);
+        }
+
         public override void OnKeyDown(KeyEventArgs keyEvent)
         {
             RestartBarFlash();
 
             bool SetDesiredBarPosition = true;
             bool turnOffSelection = false;
-            if (keyEvent.Shift)
+            
+            if (!ShiftKeyIsDown(keyEvent))
             {
-                if (!Selecting)
+                if (keyEvent.Control)
                 {
-                    Selecting = true;
-                    SelectionIndexToStartBefore = CharIndexToInsertBefore;
+                    // don't let control keys get into the stream
+                    keyEvent.SuppressKeyPress = true;
+                    keyEvent.Handled = true;
                 }
-            }
-            else if (keyEvent.Control)
-            {
-                // don't let control keys get into the stream
-                keyEvent.SuppressKeyPress = true;
-                keyEvent.Handled = true;
-            } 
-            else if (Selecting)
-            {
-                turnOffSelection = true;
+                else if (Selecting)
+                {
+                    turnOffSelection = true;
+                }
             }
 
             switch (keyEvent.KeyCode)
@@ -600,6 +609,7 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case Keys.Left:
+                    StartSelectionIfRequired(keyEvent);
                     if (keyEvent.Control)
                     {
                         GotoBeginingOfPreviousToken();
@@ -620,6 +630,7 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case Keys.Right:
+                    StartSelectionIfRequired(keyEvent);
                     if (keyEvent.Control)
                     {
                         GotoBeginingOfNextToken();
@@ -640,6 +651,7 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case Keys.Up:
+                    StartSelectionIfRequired(keyEvent);
                     if (turnOffSelection)
                     {
                         CharIndexToInsertBefore = Math.Min(CharIndexToInsertBefore, SelectionIndexToStartBefore);
@@ -651,6 +663,7 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case Keys.Down:
+                    StartSelectionIfRequired(keyEvent);
                     if (turnOffSelection)
                     {
                         CharIndexToInsertBefore = Math.Max(CharIndexToInsertBefore, SelectionIndexToStartBefore);
@@ -666,6 +679,7 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case Keys.End:
+                    StartSelectionIfRequired(keyEvent);
                     if (keyEvent.Control)
                     {
                         CharIndexToInsertBefore = internalTextWidget.Text.Length;
@@ -680,6 +694,7 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case Keys.Home:
+                    StartSelectionIfRequired(keyEvent);
                     if (keyEvent.Control)
                     {
                         CharIndexToInsertBefore = 0;
@@ -708,7 +723,7 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case Keys.Delete:
-                    if (keyEvent.Shift)
+                    if (ShiftKeyIsDown(keyEvent))
                     {
                         CopySelection();
                         DeleteSelection();
@@ -752,7 +767,7 @@ namespace MatterHackers.Agg.UI
                     break;
 
                 case Keys.Insert:
-                    if (keyEvent.Shift)
+                    if (ShiftKeyIsDown(keyEvent))
                     {
                         turnOffSelection = true;
                         PasteFromClipboard();

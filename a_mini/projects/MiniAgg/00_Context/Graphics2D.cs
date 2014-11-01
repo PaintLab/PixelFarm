@@ -24,21 +24,13 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
-
-namespace System.Runtime.CompilerServices
-{
-    public class ExtensionAttribute : Attribute
-    {
-    }
-}
-
+ 
 namespace PixelFarm.Agg
 {
 
     public abstract class Graphics2D
     {
-        const int COVER_FULL = 255;
-
+        
         protected IImage destImageByte;
         protected ScanlineRasterizer rasterizer;
 
@@ -82,12 +74,7 @@ namespace PixelFarm.Agg
             var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
             Render(vxs, color);
         }
-
-        public int TransformStackCount
-        {
-            get { return affineTransformStack.Count; }
-        }
-
+ 
         public Affine PopTransform()
         {
             if (affineTransformStack.Count == 1)
@@ -136,10 +123,11 @@ namespace PixelFarm.Agg
         public static Graphics2D CreateFromImage(IImage img)
         {
 
-            var imgProxy = new ChildImage(img, img.GetRecieveBlender());
+            var childImage = new ChildImage(img, img.GetRecieveBlender());
             var scanlineRaster = new ScanlineRasterizer();
             var scanlineCachedPacked8 = new ScanlinePacked8();
-            ImageGraphics2D imageRenderer = new ImageGraphics2D(imgProxy, scanlineRaster, scanlineCachedPacked8);
+
+            ImageGraphics2D imageRenderer = new ImageGraphics2D(childImage, scanlineRaster, scanlineCachedPacked8);
             imageRenderer.Rasterizer.SetVectorClipBox(0, 0, img.Width, img.Height);
             return imageRenderer;
         }
