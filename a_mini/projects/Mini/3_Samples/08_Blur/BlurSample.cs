@@ -47,8 +47,7 @@ namespace PixelFarm.Agg.Sample_Blur
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
         ScanlinePacked8 m_sl;
-        //ReferenceImage m_rbuf2;
-
+        //ReferenceImage m_rbuf2; 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
         RecursiveBlur m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
 
@@ -156,10 +155,12 @@ namespace PixelFarm.Agg.Sample_Blur
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             clippingProxy.Clear(ColorRGBA.White);
-            m_ras.SetVectorClipBox(0, 0, Width, Height);
+            m_ras.SetClipBox(0, 0, Width, Height);
 
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,

@@ -8,7 +8,7 @@ namespace PixelFarm.Agg
 {
     public struct RectangleInt
     {
-        public int Left, Bottom, Right, Top; 
+        public int Left, Bottom, Right, Top;
         public RectangleInt(int left, int bottom, int right, int top)
         {
             Left = left;
@@ -36,12 +36,11 @@ namespace PixelFarm.Agg
             }
         }
 
-        public RectangleInt Normalize()
+        public void Normalize()
         {
             int t;
             if (Left > Right) { t = Left; Left = Right; Right = t; }
-            if (Bottom > Top) { t = Bottom; Bottom = Top; Top = t; }
-            return this;
+            if (Bottom > Top) { t = Bottom; Bottom = Top; Top = t; }             
         }
 
         public void ExpandToInclude(RectangleInt rectToInclude)

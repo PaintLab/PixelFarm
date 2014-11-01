@@ -123,7 +123,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
 
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
             IPixelBlender NormalBlender = new PixelBlenderBGRA();

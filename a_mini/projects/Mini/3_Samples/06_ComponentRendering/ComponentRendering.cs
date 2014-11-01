@@ -43,7 +43,7 @@ namespace PixelFarm.Agg
         {
             if (graphics2D.DestImage != null)
             {
-                var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+                var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
                 IImageReaderWriter backBuffer = widgetsSubImage;
 

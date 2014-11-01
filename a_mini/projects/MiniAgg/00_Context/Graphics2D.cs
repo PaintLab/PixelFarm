@@ -41,9 +41,8 @@ namespace PixelFarm.Agg
         }
         //------------------------------------------------------------------------
         public abstract void Clear(ColorRGBA color);
-        public abstract void SetClippingRect(RectangleDouble rect_d);
-         
-        public abstract RectangleInt GetClippingRectInt();
+        public abstract void SetClippingRect(RectangleInt rect); 
+        public abstract RectangleInt GetClippingRect();
         //------------------------------------------------------------------------
 
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);

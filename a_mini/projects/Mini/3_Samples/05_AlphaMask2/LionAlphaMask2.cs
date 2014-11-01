@@ -143,7 +143,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(Graphics2D g)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(g.DestImage, g.GetClippingRectInt());
+            var widgetsSubImage = ImageHelper.CreateChildImage(g.DestImage, g.GetClippingRect());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
@@ -157,7 +157,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
             }
 
-            rasterizer.SetVectorClipBox(0, 0, width, height);
+            rasterizer.SetClipBox(0, 0, width, height);
 
 
             //alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);

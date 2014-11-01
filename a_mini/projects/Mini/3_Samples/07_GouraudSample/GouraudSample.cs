@@ -159,7 +159,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             IImageReaderWriter backBuffer = widgetsSubImage;
 

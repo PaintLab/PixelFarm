@@ -24,208 +24,204 @@
 
 using poly_subpix = PixelFarm.Agg.AggBasics.PolySubPix;
 
-namespace PixelFarm.Agg.JustForScanlineRasterizer
+namespace PixelFarm.Agg
 {
 
-
-    class VectorClipper
+    partial class ScanlineRasterizer
     {
-        RectangleInt clipBox;
-        int m_x1;
-        int m_y1;
-        int m_f1;
-        bool m_clipping;
-        public VectorClipper()
+        class VectorClipper
         {
-            clipBox = new RectangleInt(0, 0, 0, 0);
-            m_x1 = m_y1 = m_f1 = 0;
-            m_clipping = false;
-        }
+            RectangleInt clipBox;
+            int m_x1;
+            int m_y1;
+            int m_f1;
+            bool m_clipping;
 
-        public RectangleInt GetVectorClipBoxInt()
-        {
-            return new RectangleInt(
-                DownScale(clipBox.Left),
-                DownScale(clipBox.Bottom),
-                DownScale(clipBox.Right),
-                DownScale(clipBox.Top));
-        }
-        public void ResetClipping()
-        {
-            m_clipping = false;
-        }
-
-        public void SetClipBox(int x1, int y1, int x2, int y2)
-        {
-            clipBox = new RectangleInt(x1, y1, x2, y2);
-            clipBox.Normalize();
-            m_clipping = true;
-        }
-        public void MoveTo(int x1, int y1)
-        {
-            m_x1 = x1;
-            m_y1 = y1;
-            if (m_clipping)
+            public VectorClipper()
             {
-                m_f1 = ClipLiangBarsky.Flags(x1, y1, clipBox);
+                clipBox = new RectangleInt(0, 0, 0, 0);
+                m_x1 = m_y1 = m_f1 = 0;
+                m_clipping = false;
             }
-        }
-
-        //------------------------------------------------------------------------
-        void LineClipY(CellAARasterizer ras,
-                                  int x1, int y1,
-                                  int x2, int y2,
-                                  int f1, int f2)
-        {
-            f1 &= 10;
-            f2 &= 10;
-            if ((f1 | f2) == 0)
+            public RectangleInt GetVectorClipBox()
             {
-                // Fully visible
-                ras.DrawLine(x1, y1, x2, y2);
+                return clipBox;
             }
-            else
+            public void SetClipBox(int x1, int y1, int x2, int y2)
             {
-                if (f1 == f2)
-                {
-                    // Invisible by Y
-                    return;
-                }
-
-                int tx1 = x1;
-                int ty1 = y1;
-                int tx2 = x2;
-                int ty2 = y2;
-
-                if ((f1 & 8) != 0) // y1 < clip.y1
-                {
-                    tx1 = x1 + MulDiv(clipBox.Bottom - y1, x2 - x1, y2 - y1);
-                    ty1 = clipBox.Bottom;
-                }
-
-                if ((f1 & 2) != 0) // y1 > clip.y2
-                {
-                    tx1 = x1 + MulDiv(clipBox.Top - y1, x2 - x1, y2 - y1);
-                    ty1 = clipBox.Top;
-                }
-
-                if ((f2 & 8) != 0) // y2 < clip.y1
-                {
-                    tx2 = x1 + MulDiv(clipBox.Bottom - y1, x2 - x1, y2 - y1);
-                    ty2 = clipBox.Bottom;
-                }
-
-                if ((f2 & 2) != 0) // y2 > clip.y2
-                {
-                    tx2 = x1 + MulDiv(clipBox.Top - y1, x2 - x1, y2 - y1);
-                    ty2 = clipBox.Top;
-                }
-
-                ras.DrawLine(tx1, ty1, tx2, ty2);
+                clipBox = new RectangleInt(x1, y1, x2, y2);
+                clipBox.Normalize();
+                m_clipping = true;
             }
-        }
-
-        //--------------------------------------------------------------------
-        internal void LineTo(CellAARasterizer ras, int x2, int y2)
-        {
-            if (m_clipping)
+            public void ResetClipping()
             {
-                int f2 = ClipLiangBarsky.Flags(x2, y2, clipBox);
+                m_clipping = false;
+            }
 
-                if ((m_f1 & 10) == (f2 & 10) && (m_f1 & 10) != 0)
+            public void MoveTo(int x1, int y1)
+            {
+                m_x1 = x1;
+                m_y1 = y1;
+                if (m_clipping)
                 {
-                    // Invisible by Y
-                    m_x1 = x2;
-                    m_y1 = y2;
+                    m_f1 = ClipLiangBarsky.Flags(x1, y1, clipBox);
+                }
+            }
+
+            //------------------------------------------------------------------------
+            void LineClipY(CellAARasterizer ras,
+                                      int x1, int y1,
+                                      int x2, int y2,
+                                      int f1, int f2)
+            {
+                f1 &= 10;
+                f2 &= 10;
+                if ((f1 | f2) == 0)
+                {
+                    // Fully visible
+                    ras.DrawLine(x1, y1, x2, y2);
+                }
+                else
+                {
+                    if (f1 == f2)
+                    {
+                        // Invisible by Y
+                        return;
+                    }
+
+                    int tx1 = x1;
+                    int ty1 = y1;
+                    int tx2 = x2;
+                    int ty2 = y2;
+
+                    if ((f1 & 8) != 0) // y1 < clip.y1
+                    {
+                        tx1 = x1 + MulDiv(clipBox.Bottom - y1, x2 - x1, y2 - y1);
+                        ty1 = clipBox.Bottom;
+                    }
+
+                    if ((f1 & 2) != 0) // y1 > clip.y2
+                    {
+                        tx1 = x1 + MulDiv(clipBox.Top - y1, x2 - x1, y2 - y1);
+                        ty1 = clipBox.Top;
+                    }
+
+                    if ((f2 & 8) != 0) // y2 < clip.y1
+                    {
+                        tx2 = x1 + MulDiv(clipBox.Bottom - y1, x2 - x1, y2 - y1);
+                        ty2 = clipBox.Bottom;
+                    }
+
+                    if ((f2 & 2) != 0) // y2 > clip.y2
+                    {
+                        tx2 = x1 + MulDiv(clipBox.Top - y1, x2 - x1, y2 - y1);
+                        ty2 = clipBox.Top;
+                    }
+
+                    ras.DrawLine(tx1, ty1, tx2, ty2);
+                }
+            }
+
+            //--------------------------------------------------------------------
+            internal void LineTo(CellAARasterizer ras, int x2, int y2)
+            {
+                if (m_clipping)
+                {
+                    int f2 = ClipLiangBarsky.Flags(x2, y2, clipBox);
+
+                    if ((m_f1 & 10) == (f2 & 10) && (m_f1 & 10) != 0)
+                    {
+                        // Invisible by Y
+                        m_x1 = x2;
+                        m_y1 = y2;
+                        m_f1 = f2;
+                        return;
+                    }
+
+                    int x1 = m_x1;
+                    int y1 = m_y1;
+                    int f1 = m_f1;
+                    int y3, y4;
+                    int f3, f4;
+
+                    switch (((f1 & 5) << 1) | (f2 & 5))
+                    {
+                        case 0: // Visible by X
+                            LineClipY(ras, x1, y1, x2, y2, f1, f2);
+                            break;
+
+                        case 1: // x2 > clip.x2
+                            y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
+                            f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
+                            LineClipY(ras, x1, y1, clipBox.Right, y3, f1, f3);
+                            LineClipY(ras, clipBox.Right, y3, clipBox.Right, y2, f3, f2);
+                            break;
+
+                        case 2: // x1 > clip.x2
+                            y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
+                            f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
+                            LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
+                            LineClipY(ras, clipBox.Right, y3, x2, y2, f3, f2);
+                            break;
+
+                        case 3: // x1 > clip.x2 && x2 > clip.x2
+                            LineClipY(ras, clipBox.Right, y1, clipBox.Right, y2, f1, f2);
+                            break;
+
+                        case 4: // x2 < clip.x1
+                            y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
+                            f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
+                            LineClipY(ras, x1, y1, clipBox.Left, y3, f1, f3);
+                            LineClipY(ras, clipBox.Left, y3, clipBox.Left, y2, f3, f2);
+                            break;
+
+                        case 6: // x1 > clip.x2 && x2 < clip.x1
+                            y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
+                            y4 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
+                            f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
+                            f4 = ClipLiangBarsky.GetFlagsY(y4, clipBox);
+                            LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
+                            LineClipY(ras, clipBox.Right, y3, clipBox.Left, y4, f3, f4);
+                            LineClipY(ras, clipBox.Left, y4, clipBox.Left, y2, f4, f2);
+                            break;
+
+                        case 8: // x1 < clip.x1
+                            y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
+                            f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
+                            LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
+                            LineClipY(ras, clipBox.Left, y3, x2, y2, f3, f2);
+                            break;
+
+                        case 9:  // x1 < clip.x1 && x2 > clip.x2
+                            y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
+                            y4 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
+                            f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
+                            f4 = ClipLiangBarsky.GetFlagsY(y4, clipBox);
+                            LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
+                            LineClipY(ras, clipBox.Left, y3, clipBox.Right, y4, f3, f4);
+                            LineClipY(ras, clipBox.Right, y4, clipBox.Right, y2, f4, f2);
+                            break;
+
+                        case 12: // x1 < clip.x1 && x2 < clip.x1
+                            LineClipY(ras, clipBox.Left, y1, clipBox.Left, y2, f1, f2);
+                            break;
+                    }
                     m_f1 = f2;
-                    return;
                 }
-
-                int x1 = m_x1;
-                int y1 = m_y1;
-                int f1 = m_f1;
-                int y3, y4;
-                int f3, f4;
-
-                switch (((f1 & 5) << 1) | (f2 & 5))
+                else
                 {
-                    case 0: // Visible by X
-                        LineClipY(ras, x1, y1, x2, y2, f1, f2);
-                        break;
-
-                    case 1: // x2 > clip.x2
-                        y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                        LineClipY(ras, x1, y1, clipBox.Right, y3, f1, f3);
-                        LineClipY(ras, clipBox.Right, y3, clipBox.Right, y2, f3, f2);
-                        break;
-
-                    case 2: // x1 > clip.x2
-                        y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                        LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
-                        LineClipY(ras, clipBox.Right, y3, x2, y2, f3, f2);
-                        break;
-
-                    case 3: // x1 > clip.x2 && x2 > clip.x2
-                        LineClipY(ras, clipBox.Right, y1, clipBox.Right, y2, f1, f2);
-                        break;
-
-                    case 4: // x2 < clip.x1
-                        y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                        LineClipY(ras, x1, y1, clipBox.Left, y3, f1, f3);
-                        LineClipY(ras, clipBox.Left, y3, clipBox.Left, y2, f3, f2);
-                        break;
-
-                    case 6: // x1 > clip.x2 && x2 < clip.x1
-                        y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
-                        y4 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                        f4 = ClipLiangBarsky.GetFlagsY(y4, clipBox);
-                        LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
-                        LineClipY(ras, clipBox.Right, y3, clipBox.Left, y4, f3, f4);
-                        LineClipY(ras, clipBox.Left, y4, clipBox.Left, y2, f4, f2);
-                        break;
-
-                    case 8: // x1 < clip.x1
-                        y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                        LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
-                        LineClipY(ras, clipBox.Left, y3, x2, y2, f3, f2);
-                        break;
-
-                    case 9:  // x1 < clip.x1 && x2 > clip.x2
-                        y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
-                        y4 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                        f4 = ClipLiangBarsky.GetFlagsY(y4, clipBox);
-                        LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
-                        LineClipY(ras, clipBox.Left, y3, clipBox.Right, y4, f3, f4);
-                        LineClipY(ras, clipBox.Right, y4, clipBox.Right, y2, f4, f2);
-                        break;
-
-                    case 12: // x1 < clip.x1 && x2 < clip.x1
-                        LineClipY(ras, clipBox.Left, y1, clipBox.Left, y2, f1, f2);
-                        break;
+                    ras.DrawLine(m_x1, m_y1,
+                             x2, y2);
                 }
-                m_f1 = f2;
+                m_x1 = x2;
+                m_y1 = y2;
             }
-            else
+
+
+            static int MulDiv(int a, int b, int c)
             {
-                ras.DrawLine(m_x1, m_y1,
-                         x2, y2);
+                return AggBasics.iround_f((float)a * (float)b / (float)c);
             }
-            m_x1 = x2;
-            m_y1 = y2;
-        }
-
-        //public static int Upscale(double v) { return AggBasics.iround(v * (int)poly_subpix.SCALE); }
-
-        static int DownScale(int v) { return v / (int)poly_subpix.SCALE; }
-        static int MulDiv(int a, int b, int c)
-        {
-            return AggBasics.iround_f((float)a * (float)b / (float)c);
         }
     }
 }

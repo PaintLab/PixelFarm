@@ -49,10 +49,10 @@ namespace PixelFarm.Agg.Sample_LionOutline
             "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")]
     public class LionFillOutlineExample : DemoBase
     {
-        lion_outline lionFill;
+        lionOutlineSprite lionFill;
         public override void Init()
         {
-            lionFill = new lion_outline();
+            lionFill = new lionOutlineSprite();
         }
         public override void Draw(Graphics2D g)
         {
@@ -91,14 +91,14 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
     }
     //--------------------------------------------------
-    public class lion_outline : BasicSprite
+    public class lionOutlineSprite : BasicSprite
     {
         private LionShape lionShape;
         ScanlineRasterizer rasterizer = new ScanlineRasterizer();
         ScanlinePacked8 scanlineCache = new ScanlinePacked8();
 
         //special option 
-        public lion_outline()
+        public lionOutlineSprite()
         {
             lionShape = new LionShape();
             lionShape.ParseLion();
@@ -122,7 +122,9 @@ namespace PixelFarm.Agg.Sample_LionOutline
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            //render 
+
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
@@ -148,7 +150,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
             if (RenderAsScanline)
             {
-                rasterizer.SetVectorClipBox(0, 0, width, height);
+                rasterizer.SetClipBox(0, 0, width, height);
 
                 Stroke stroke = new Stroke(strokeWidth);
                 stroke.LineJoin = LineJoin.Round;

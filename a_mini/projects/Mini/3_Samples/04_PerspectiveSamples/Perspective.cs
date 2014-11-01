@@ -77,7 +77,7 @@ namespace PixelFarm.Agg.Sample_Perspective
         public void OnDraw(Graphics2D graphics2D)
         {
              
-            IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
             if (!didInit)
             {
@@ -102,7 +102,7 @@ namespace PixelFarm.Agg.Sample_Perspective
 
             ClipProxyImage dest = new ClipProxyImage(image);
             dest.Clear(ColorRGBA.White);
-            g_rasterizer.SetVectorClipBox(0, 0, Width, Height);
+            g_rasterizer.SetClipBox(0, 0, Width, Height);
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
 
