@@ -26,7 +26,7 @@ namespace PixelFarm.Agg.Lines
     public interface IPatternFilter
     {
         int Dilation { get; }
-        void SetPixelHighRes(ImageBase sourceImage,
+        void SetPixelHighRes(ImageReaderWriterBase sourceImage,
             ColorRGBA[] destBuffer,
             int destBufferOffset,
             int x, int y);

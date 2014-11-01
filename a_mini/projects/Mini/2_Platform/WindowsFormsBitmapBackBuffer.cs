@@ -47,8 +47,6 @@ namespace Mini
     {
         internal ActualImage backingImageBufferByte;
         internal Bitmap windowsBitmap;
-
-
         public WindowsFormsBitmapBackBuffer()
         {
 
@@ -62,7 +60,6 @@ namespace Mini
             numInFunction++;
             if (backingImageBufferByte != null)
             {
-
                 BitmapHelper.CopyToWindowsBitmap(
                     this.backingImageBufferByte,
                     this.windowsBitmap,
@@ -128,7 +125,7 @@ namespace Mini
                 {
                     case 24:
                         windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                        backingImageBufferByte = new ActualImage(width, height, 24, new BlenderBGR());
+                        backingImageBufferByte = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgb24);
                         break;
 
                     case 32:
@@ -136,16 +133,16 @@ namespace Mini
                         //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                        //32bppPArgb 
+                        //32bppPArgb                         
+                        backingImageBufferByte = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgba32);
 
-                        backingImageBufferByte = new ActualImage(width, height, 32, new PixelBlenderBGRA());
                         break;
 
                     case 128:
-                        //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                        //backingImageBufferByte = null;
-                        //backingImageBufferFloat = new ImageBufferFloat(width, height, 128, new BlenderBGRAFloat());
-                        //break;
+                    //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                    //backingImageBufferByte = null;
+                    //backingImageBufferFloat = new ImageBufferFloat(width, height, 128, new BlenderBGRAFloat());
+                    //break;
 
                     default:
                         throw new NotImplementedException("Don't support this bit depth yet.");

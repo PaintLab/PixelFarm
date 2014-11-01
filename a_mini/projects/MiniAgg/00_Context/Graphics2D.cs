@@ -24,25 +24,24 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
- 
+
 namespace PixelFarm.Agg
 {
 
     public abstract class Graphics2D
     {
-        
-        protected IImage destImageByte;
+
+        protected IImageReaderWriter destImageByte;
         protected ScanlineRasterizer rasterizer;
 
-        Stack<Affine> affineTransformStack = new Stack<Affine>(); 
 
-        public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
+        Affine currentTxMatrix;
+        public Graphics2D(IImageReaderWriter destImage, ScanlineRasterizer rasterizer)
         {
-            affineTransformStack.Push(Affine.IdentityMatrix);
+            currentTxMatrix = Affine.IdentityMatrix;
             destImageByte = destImage;
             this.rasterizer = rasterizer;
         }
-
 
         //------------------------------------------------------------------------
         public abstract void Clear(ColorRGBA color);
@@ -52,18 +51,21 @@ namespace PixelFarm.Agg
         //------------------------------------------------------------------------
 
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
-
-        public abstract void Render(IImage imageSource,
+        //------------------------------------------------------------------------
+        public abstract void Render(IImageReaderWriter imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
-        public abstract void Render(IImage imageSource, double x, double y);
-
-        public void Render(IImage imageSource, int x, int y)
+        public abstract void Render(IImageReaderWriter imageSource, double x, double y);
+        public void Render(IImageReaderWriter imageSource, int x, int y)
         {
             this.Render(imageSource, (double)x, (double)y);
         }
-         
+        public abstract void Render(ActualImage actualImage, int x, int y);
+
+        //------------------------------------------------------------------------
+
+
         public void Render(VertexStore vxStorage, ColorRGBA c)
         {
             Render(new VertexStoreSnap(vxStorage), c);
@@ -74,45 +76,26 @@ namespace PixelFarm.Agg
             var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
             Render(vxs, color);
         }
+
+
+
+        public Affine CurrentTransformMatrix
+        {
+            get { return this.currentTxMatrix; }
+            set
+            {
+
+                this.currentTxMatrix = value;
+            }
+        }
  
-        public Affine PopTransform()
-        {
-            if (affineTransformStack.Count == 1)
-            {
-                throw new System.Exception("You cannot remove the last transform from the stack.");
-            }
-
-            return affineTransformStack.Pop();
-        }
-
-        public void PushTransform()
-        {
-            if (affineTransformStack.Count > 1000)
-            {
-                throw new System.Exception("You seem to be leaking transforms.  You should be poping some of them at some point.");
-            }
-
-            affineTransformStack.Push(affineTransformStack.Peek());
-        }
-
-        public Affine GetTransform()
-        {
-            return affineTransformStack.Peek();
-        }
-
-        public void SetTransform(Affine value)
-        {
-            affineTransformStack.Pop();
-            affineTransformStack.Push(value);
-        }
-
         public ScanlineRasterizer Rasterizer
         {
             get { return rasterizer; }
         }
 
 
-        public IImage DestImage
+        public IImageReaderWriter DestImage
         {
             get
             {
@@ -120,7 +103,18 @@ namespace PixelFarm.Agg
             }
         }
         //================
-        public static Graphics2D CreateFromImage(IImage img)
+        public static Graphics2D CreateFromImage(ActualImage actualImage)
+        {
+            var img = new MyImageReaderWriter(actualImage);
+            var childImage = new ChildImage(img, img.GetRecieveBlender());
+            var scanlineRaster = new ScanlineRasterizer();
+            var scanlineCachedPacked8 = new ScanlinePacked8();
+
+            ImageGraphics2D imageRenderer = new ImageGraphics2D(childImage, scanlineRaster, scanlineCachedPacked8);
+            imageRenderer.Rasterizer.SetVectorClipBox(0, 0, img.Width, img.Height);
+            return imageRenderer;
+        }
+        public static Graphics2D CreateFromImage(IImageReaderWriter img)
         {
 
             var childImage = new ChildImage(img, img.GetRecieveBlender());

@@ -41,7 +41,7 @@ namespace PixelFarm.Agg
             get { return this.pixelBlender; }
             set { this.pixelBlender = value; }
         }
-        public void RenderScanlineSolidAA(IImage destImage,
+        public void RenderScanlineSolidAA(IImageReaderWriter destImage,
             ScanlineRasterizer rasterizer,
             Scanline scline,
             ColorRGBA color)
@@ -56,7 +56,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public void GenerateAndRender(IImage destImage,
+        public void GenerateAndRender(IImageReaderWriter destImage,
              ScanlineRasterizer rasterizer,
              Scanline scline,
              ISpanGenerator spanGenerator)
@@ -73,11 +73,10 @@ namespace PixelFarm.Agg
         }
 
 
-        protected virtual void RenderSolidSingleScanLine(IImage destImage,
+        protected virtual void RenderSolidSingleScanLine(IImageReaderWriter destImage,
             Scanline scline,
             ColorRGBA color)
         {
-
             int y = scline.Y;
             int num_spans = scline.SpanCount;
             byte[] covers = scline.GetCovers();
@@ -86,8 +85,7 @@ namespace PixelFarm.Agg
                 ScanlineSpan span = scline.GetSpan(i);
                 int x = span.x;
                 if (span.len > 0)
-                {
-                    
+                {  
                     destImage.BlendSolidHSpan(x, y, span.len, color, covers, span.cover_index);
                 }
                 else
@@ -99,7 +97,7 @@ namespace PixelFarm.Agg
         }
 
 
-        public void RenderSolidAllPaths(IImage destImage,
+        public void RenderSolidAllPaths(IImageReaderWriter destImage,
             ScanlineRasterizer ras,
             Scanline scline,
             VertexStore vx,
@@ -115,7 +113,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        void GenerateAndRenderSingleScanline(IImage destImage, Scanline scline, ISpanGenerator span_gen)
+        void GenerateAndRenderSingleScanline(IImageReaderWriter destImage, Scanline scline, ISpanGenerator span_gen)
         {
 
             int y = scline.Y;

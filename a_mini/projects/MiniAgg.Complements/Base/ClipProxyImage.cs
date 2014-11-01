@@ -30,7 +30,7 @@ namespace PixelFarm.Agg.Image
     public sealed class ClipProxyImage : ProxyImage
     {
         RectangleInt m_ClippingRect;
-        public ClipProxyImage(IImage refImage)
+        public ClipProxyImage(IImageReaderWriter refImage)
             : base(refImage)
         {
             m_ClippingRect = new RectangleInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
@@ -331,7 +331,7 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        public override void CopyFrom(IImage sourceImage,
+        public override void CopyFrom(IImageReaderWriter sourceImage,
                        RectangleInt sourceImageRect,
                        int destXOffset,
                        int destYOffset)

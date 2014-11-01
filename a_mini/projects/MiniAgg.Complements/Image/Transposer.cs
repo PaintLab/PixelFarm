@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Image
     //=======================================================pixfmt_transposer
     public sealed class FormatTransposer : ProxyImage
     {
-        public FormatTransposer(IImage pixelFormat)
+        public FormatTransposer(IImageReaderWriter pixelFormat)
             : base(pixelFormat)
         {
         }

@@ -26,19 +26,70 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg.Image
 {
-    public enum ImageFormat
+    
+    public enum PixelFormat
     {
         Rgba32,
-        Rgba24,
+        Rgb24,
         GrayScale8,
     }
-    public class ActualImage : ImageBase
+    public class ActualImage
     {
-        public ActualImage(int width, int height,
-              int bitsPerPixel, IPixelBlender recieveBlender)
-            : base(width, height, bitsPerPixel, recieveBlender)
+        int width;
+        int height;
+        int stride;
+        int bitDepth;
+
+        PixelFormat pixelFormat;
+        byte[] pixelBuffer;
+
+        public ActualImage(int width, int height, PixelFormat format)
         {
+            //width and height must >0
+
+            this.width = width;
+            this.height = height;
+
+            switch (this.pixelFormat = format)
+            {
+                case PixelFormat.Rgba32:
+                    {
+                        this.bitDepth = 32;
+                        this.stride = width * (32 / 8);
+                        this.pixelBuffer = new byte[stride * height];
+                    } break;
+                default:
+                    throw new NotSupportedException();
+                //case ImageFormat.GrayScale8:
+                //    {
+
+                //    } break;
+                //case ImageFormat.Rgb24:
+                //    {
+
+                //    } break;
+            }
+
+
         }
+        public int Width
+        {
+            get { return this.width; }
+        }
+        public int Height
+        {
+            get { return this.height; }
+        }
+        public RectangleInt Bounds
+        {
+            get { return new RectangleInt(0, 0, this.width, this.height); }
+        }
+
+        public PixelFormat PixelFormat { get { return this.pixelFormat; } }
+        public int Stride { get { return this.stride; } }
+        public int BitDepth { get { return this.bitDepth; } }
+        public byte[] GetBuffer() { return this.pixelBuffer; }
     }
+
 
 }

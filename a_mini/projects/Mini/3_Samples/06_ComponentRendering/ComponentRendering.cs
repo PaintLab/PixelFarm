@@ -45,13 +45,13 @@ namespace PixelFarm.Agg
             {
                 var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
-                IImage backBuffer = widgetsSubImage;
+                IImageReaderWriter backBuffer = widgetsSubImage;
 
                 int distBetween = backBuffer.BytesBetweenPixelsInclusive;
 
-                var redImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 2, 8);
-                var greenImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 1, 8);
-                var blueImageBuffer = new ChildImage(backBuffer, new BlenderGray(distBetween), distBetween, 0, 8);
+                var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, 2, 8);
+                var greenImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, 1, 8);
+                var blueImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, 0, 8);
 
 
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);

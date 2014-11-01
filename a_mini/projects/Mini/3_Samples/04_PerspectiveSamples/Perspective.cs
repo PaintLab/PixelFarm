@@ -77,7 +77,7 @@ namespace PixelFarm.Agg.Sample_Perspective
         public void OnDraw(Graphics2D graphics2D)
         {
              
-            IImage backBuffer = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             if (!didInit)
             {
@@ -97,7 +97,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                 {
                     throw new System.NotSupportedException();
                 }
-                image = new ChildImage(backBuffer, new BlenderBGR());
+                image = new ChildImage(backBuffer, new PixelBlenderBGR());
             }
 
             ClipProxyImage dest = new ClipProxyImage(image);

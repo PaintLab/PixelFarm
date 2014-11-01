@@ -27,38 +27,38 @@ using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg.Font
 {
-  
+
 
     public class StyledTypeFaceImageCache
     {
         static StyledTypeFaceImageCache instance;
 
-        Dictionary<TypeFace, Dictionary<double, Dictionary<char, ImageBase>>> typeFaceImageCache = new Dictionary<TypeFace, Dictionary<double, Dictionary<char, ImageBase>>>();
+        Dictionary<TypeFace, Dictionary<double, Dictionary<char, ImageReaderWriterBase>>> typeFaceImageCache = new Dictionary<TypeFace, Dictionary<double, Dictionary<char, ImageReaderWriterBase>>>();
 
         // private so you can't use it by accident (it is a singlton)
         StyledTypeFaceImageCache()
         {
         }
 
-        public static Dictionary<char, ImageBase> GetCorrectCache(TypeFace typeFace, double emSizeInPoints)
+        public static Dictionary<char, ImageReaderWriterBase> GetCorrectCache(TypeFace typeFace, double emSizeInPoints)
         {
             // check if the cache is getting too big and if so prune it (or just delete it and start over).
 
-            Dictionary<double, Dictionary<char, ImageBase>> foundTypeFaceSizes;
+            Dictionary<double, Dictionary<char, ImageReaderWriterBase>> foundTypeFaceSizes;
             Instance.typeFaceImageCache.TryGetValue(typeFace, out foundTypeFaceSizes);
             if (foundTypeFaceSizes == null)
             {
                 // add in the type face
-                foundTypeFaceSizes = new Dictionary<double, Dictionary<char, ImageBase>>();
+                foundTypeFaceSizes = new Dictionary<double, Dictionary<char, ImageReaderWriterBase>>();
                 Instance.typeFaceImageCache.Add(typeFace, foundTypeFaceSizes);
             }
 
-            Dictionary<char, ImageBase> foundTypeFaceSize;
+            Dictionary<char, ImageReaderWriterBase> foundTypeFaceSize;
             foundTypeFaceSizes.TryGetValue(emSizeInPoints, out foundTypeFaceSize);
             if (foundTypeFaceSize == null)
             {
                 // add in the point size
-                foundTypeFaceSize = new Dictionary<char, ImageBase>();
+                foundTypeFaceSize = new Dictionary<char, ImageReaderWriterBase>();
                 foundTypeFaceSizes.Add(emSizeInPoints, foundTypeFaceSize);
             }
 
@@ -199,7 +199,7 @@ namespace PixelFarm.Agg.Font
             }
         }
 
-        public ImageBase GetImageForCharacter(char character, double xFraction, double yFraction)
+        public ImageReaderWriterBase GetImageForCharacter(char character, double xFraction, double yFraction)
         {
 
             if (xFraction > 1 || xFraction < 0 || yFraction > 1 || yFraction < 0)
@@ -207,8 +207,8 @@ namespace PixelFarm.Agg.Font
                 throw new ArgumentException("The x and y fractions must both be between 0 and 1.");
             }
 
-            ImageBase imageForCharacter;
-            Dictionary<char, ImageBase> characterImageCache = StyledTypeFaceImageCache.GetCorrectCache(this.typeFace, this.emSizeInPixels);
+            ImageReaderWriterBase imageForCharacter;
+            Dictionary<char, ImageReaderWriterBase> characterImageCache = StyledTypeFaceImageCache.GetCorrectCache(this.typeFace, this.emSizeInPixels);
             characterImageCache.TryGetValue(character, out imageForCharacter);
             if (imageForCharacter != null)
             {
@@ -240,16 +240,16 @@ namespace PixelFarm.Agg.Font
                 {
                     bounds.ExpandToInclude(x, y);
                 }
-            } 
+            }
 
-            
-            ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1),
+            ActualImage myCharImage = new ActualImage(
+                Math.Max((int)(bounds.Width + .5), 1),
                 Math.Max((int)(bounds.Height + .5), 1), 
-                32, 
-                new PixelBlenderBGRA());
+                PixelFormat.Rgba32);
 
+            MyImageReaderWriter charImage = new MyImageReaderWriter(myCharImage);
 
-            var gfx = Graphics2D.CreateFromImage(charImage);
+            var gfx = Graphics2D.CreateFromImage(myCharImage);
             gfx.Render(new VertexStoreSnap(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
             characterImageCache[character] = charImage;
 

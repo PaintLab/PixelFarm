@@ -171,7 +171,7 @@ namespace PixelFarm.Agg.Lines
     {
         const int MAX_HALF_WIDTH = 64;
 
-        IImage destImageSurface;
+        IImageReaderWriter destImageSurface;
         LineProfileAnitAlias lineProfile;
         RectangleInt clippingRectangle;
         bool doClipping;
@@ -190,7 +190,7 @@ namespace PixelFarm.Agg.Lines
 #endif
 
         //---------------------------------------------------------------------
-        public OutlineRenderer(IImage destImage, IPixelBlender destPixelBlender, LineProfileAnitAlias profile)
+        public OutlineRenderer(IImageReaderWriter destImage, IPixelBlender destPixelBlender, LineProfileAnitAlias profile)
         {
             destImageSurface = destImage;
             lineProfile = profile;

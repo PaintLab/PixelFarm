@@ -25,7 +25,7 @@ using PixelFarm.Agg.Image;
 namespace PixelFarm.Agg
 {
 
-    public interface IImage
+    public interface IImageReaderWriter
     {
       
         int BitDepth { get; }
@@ -52,7 +52,7 @@ namespace PixelFarm.Agg
         //-------------------------------------------------------------------------------------------
        
         
-        void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset); //not used
+        void CopyFrom(IImageReaderWriter sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset); //not used
          
         // line stuff
         void CopyHL(int x, int y, int len, ColorRGBA sourceColor);//not used

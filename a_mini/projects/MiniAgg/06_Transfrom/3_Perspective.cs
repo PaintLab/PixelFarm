@@ -366,23 +366,23 @@ namespace PixelFarm.Agg.Transform
         }
 
         //------------------------------------------------------------------------
-        Perspective premultiply(Affine b)
-        {
-            //copy this to a
-            Perspective a = new Perspective(this);
+        //Perspective premultiply(Affine b)
+        //{
+        //    //copy this to a
+        //    Perspective a = new Perspective(this);
 
-            sx = a.sx * b.sx + a.shx * b.shy;
-            shx = a.sx * b.shx + a.shx * b.sy;
-            tx = a.sx * b.tx + a.shx * b.ty + a.tx;
-            shy = a.shy * b.sx + a.sy * b.shy;
-            sy = a.shy * b.shx + a.sy * b.sy;
-            ty = a.shy * b.tx + a.sy * b.ty + a.ty;
-            w0 = a.w0 * b.sx + a.w1 * b.shy;
-            w1 = a.w0 * b.shx + a.w1 * b.sy;
-            w2 = a.w0 * b.tx + a.w1 * b.ty + a.w2;
+        //    sx = a.sx * b.sx + a.shx * b.shy;
+        //    shx = a.sx * b.shx + a.shx * b.sy;
+        //    tx = a.sx * b.tx + a.shx * b.ty + a.tx;
+        //    shy = a.shy * b.sx + a.sy * b.shy;
+        //    sy = a.shy * b.shx + a.sy * b.sy;
+        //    ty = a.shy * b.tx + a.sy * b.ty + a.ty;
+        //    w0 = a.w0 * b.sx + a.w1 * b.shy;
+        //    w1 = a.w0 * b.shx + a.w1 * b.sy;
+        //    w2 = a.w0 * b.tx + a.w1 * b.ty + a.w2;
 
-            return this;
-        }
+        //    return this;
+        //}
 
         //------------------------------------------------------------------------
         Perspective multiply_inv(Perspective m)

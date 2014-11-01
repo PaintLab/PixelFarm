@@ -181,7 +181,7 @@ namespace PixelFarm.Agg.Font
 
                     for (int currentChar = 0; currentChar < line.Length; currentChar++)
                     {
-                        ImageBase currentGlyphImage = typeFaceStyle.GetImageForCharacter(line[currentChar], 0, 0);
+                        ImageReaderWriterBase currentGlyphImage = typeFaceStyle.GetImageForCharacter(line[currentChar], 0, 0);
 
                         if (currentGlyphImage != null)
                         {

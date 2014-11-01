@@ -68,9 +68,12 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         void generate_alpha_mask(int width, int height)
         {
-            alphaBitmap = new ActualImage(width, height, 8, new BlenderGray(1));
+            //
+            alphaBitmap = new ActualImage(width, height, PixelFormat.GrayScale8);
 
-            alphaMaskImageBuffer = new ChildImage(alphaBitmap, new BlenderGray(1));
+            var bmpReaderWrtier = new MyImageReaderWriter(alphaBitmap);
+
+            alphaMaskImageBuffer = new ChildImage(bmpReaderWrtier, new PixelBlenderGray(1));
 
             alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
 
@@ -80,7 +83,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             alphaMaskImageBuffer.attach(alphaByteArray, (int)cx, (int)cy, cx, 1);
 #endif
 
-            var image = new ChildImage(alphaMaskImageBuffer, new BlenderGray(1), 1, 0, 8);
+            var image = new ChildImage(alphaMaskImageBuffer, new PixelBlenderGray(1), 1, 0, 8);
 
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
             ScanlinePacked8 sclnPack = new ScanlinePacked8();

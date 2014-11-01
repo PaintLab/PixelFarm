@@ -48,7 +48,7 @@ namespace Mini
                 throw new NotSupportedException();
                 //graphics2D = bitmapBackBuffer.backingImageBufferFloat.NewGraphics2D();
             }
-            graphics2D.PushTransform();
+            
             return graphics2D;
         }
         void OnInitialize(int width, int height)
@@ -91,7 +91,8 @@ namespace Mini
             }
             int width = 800;
             int height = 600;
-            var graphics =Graphics2D.CreateFromImage( bitmapBackBuffer.backingImageBufferByte);
+
+            var graphics = Graphics2D.CreateFromImage(bitmapBackBuffer.backingImageBufferByte);
 
             //--------------------------------
             exampleBase.Draw(graphics);

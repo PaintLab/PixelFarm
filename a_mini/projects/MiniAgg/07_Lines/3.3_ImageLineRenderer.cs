@@ -82,7 +82,7 @@ namespace PixelFarm.Agg.Lines
             m_half_height_hr = (0);
             m_offset_y_hr = (0);
         }
-        public ImageBase MyBuffer
+        public ImageReaderWriterBase MyBuffer
         {
             get
             {
@@ -116,7 +116,7 @@ namespace PixelFarm.Agg.Lines
 
         // Create
         //--------------------------------------------------------------------
-        public void Create(IImage src)
+        public void Create(IImageReaderWriter src)
         {
 
             // we are going to create a dialated image for filtering
@@ -587,7 +587,7 @@ namespace PixelFarm.Agg.Lines
     //template<class BaseRenderer, class ImagePattern> 
     public class ImageLineRenderer : LineRenderer
     {
-        IImage m_ren;
+        IImageReaderWriter m_ren;
         LineImagePattern m_pattern;
         int m_start;
         double m_scale_x;
@@ -598,7 +598,7 @@ namespace PixelFarm.Agg.Lines
         //typedef renderer_outline_image<BaseRenderer, ImagePattern> self_type;
 
         //---------------------------------------------------------------------
-        public ImageLineRenderer(IImage ren, LineImagePattern patt)
+        public ImageLineRenderer(IImageReaderWriter ren, LineImagePattern patt)
         {
             m_ren = ren;
             m_pattern = patt;
@@ -608,7 +608,7 @@ namespace PixelFarm.Agg.Lines
             m_clipping = (false);
         }
 
-        public void Attach(IImage ren) { m_ren = ren; }
+        public void Attach(IImageReaderWriter ren) { m_ren = ren; }
 
         //---------------------------------------------------------------------
         public LineImagePattern Pattern

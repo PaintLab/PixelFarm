@@ -21,7 +21,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             m_size = size;
         }
 
-        public void draw(ScanlineRasterizer ras, Scanline sl, IImage destImage, ColorRGBA color,
+        public void draw(ScanlineRasterizer ras, Scanline sl, IImageReaderWriter destImage, ColorRGBA color,
                   double x, double y)
         {
             ras.Reset();
@@ -47,7 +47,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
         }
 
 
-        protected override void RenderSolidSingleScanLine(IImage destImage, Scanline scanline, ColorRGBA color)
+        protected override void RenderSolidSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;

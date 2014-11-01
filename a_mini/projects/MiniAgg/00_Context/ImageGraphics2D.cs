@@ -36,9 +36,12 @@ namespace PixelFarm.Agg
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
         ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
         IPixelBlender pixBlenderRGBA32;
-        double ox; //origin x
-        double oy; //origin y
-        public ImageGraphics2D(IImage destImage,
+
+        double ox; //canvas origin x
+        double oy; //canvas origin y
+
+
+        public ImageGraphics2D(IImageReaderWriter destImage,
             ScanlineRasterizer rasterizer,
             ScanlinePacked8 scanline)
             : base(destImage, rasterizer)
@@ -62,6 +65,10 @@ namespace PixelFarm.Agg
             return Rasterizer.GetVectorClipBoxInt();
         }
         //--------------------------
+        public override void Render(ActualImage actualImage, int x, int y)
+        {
+
+        }
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
             //reset rasterizer before render each vertextSnap
@@ -71,7 +78,7 @@ namespace PixelFarm.Agg
             }
             //-----------------------------
             rasterizer.Reset();
-            Affine transform = GetTransform();
+            Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
                 rasterizer.AddPath(transform.Tranform(vertextSnap));
@@ -84,7 +91,7 @@ namespace PixelFarm.Agg
             destImageByte.MarkImageChanged();
             //-----------------------------
         }
-        void DrawImageGetDestBounds(IImage sourceImage,
+        void DrawImageGetDestBounds(IImageReaderWriter sourceImage,
             double destX, double destY,
             double hotspotOffsetX, double hotSpotOffsetY,
             double scaleX, double scaleY,
@@ -133,14 +140,9 @@ namespace PixelFarm.Agg
             drawImageRectPath.ClosePolygon();
         }
 
-        void DrawImage(IImage sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
+        void DrawImage(IImageReaderWriter sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
         {
-            //double ox, oy;
-            //destImageByte.GetOriginOffset(out ox, out oy);
-            //if (ox != 0 || oy != 0)
-            //{
-            //    destRectTransform *= Affine.NewTranslation(-ox, -oy);
-            //}
+
 
             VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
             Rasterizer.AddPath(sp1);
@@ -152,7 +154,7 @@ namespace PixelFarm.Agg
 
         }
 
-        public override void Render(IImage source,
+        public override void Render(IImageReaderWriter source,
             double destX, double destY,
             double angleRadians,
             double inScaleX, double inScaleY)
@@ -176,7 +178,7 @@ namespace PixelFarm.Agg
             double scaleX = inScaleX;
             double scaleY = inScaleY;
 
-            Affine graphicsTransform = GetTransform();
+            Affine graphicsTransform = this.CurrentTransformMatrix;
             if (!graphicsTransform.IsIdentity())
             {
                 if (scaleX != 1 || scaleY != 1 || angleRadians != 0)
@@ -296,7 +298,7 @@ namespace PixelFarm.Agg
         }
 
 
-        public override void Render(IImage source, double destX, double destY)
+        public override void Render(IImageReaderWriter source, double destX, double destY)
         {
             int inScaleX = 1;
             int inScaleY = 1;
@@ -321,7 +323,7 @@ namespace PixelFarm.Agg
             double scaleX = inScaleX;
             double scaleY = inScaleY;
 
-            Affine graphicsTransform = GetTransform();
+            Affine graphicsTransform = this.CurrentTransformMatrix;
             if (!graphicsTransform.IsIdentity())
             {
                 if (scaleX != 1 || scaleY != 1 || angleRadians != 0)
@@ -444,11 +446,12 @@ namespace PixelFarm.Agg
                 DestImage.MarkImageChanged();
             }
         }
+
         public override void Clear(ColorRGBA color)
         {
 
             RectangleInt clippingRectInt = GetClippingRectInt();
-            IImage destImage = this.DestImage;
+            IImageReaderWriter destImage = this.DestImage;
             if (destImage != null)
             {
 

@@ -117,10 +117,10 @@ namespace PixelFarm.Agg.Image
                         int weight = (weight_y * weight_array[x_hr] +
                                      (int)img_filter_const.SCALE / 2) >>
                                      DOWN_SCALE_SHIFT;
-                        fg[0] += fg_ptr[sourceIndex + ImageBase.OrderR] * weight;
-                        fg[1] += fg_ptr[sourceIndex + ImageBase.OrderG] * weight;
-                        fg[2] += fg_ptr[sourceIndex + ImageBase.OrderB] * weight;
-                        fg[3] += fg_ptr[sourceIndex + ImageBase.OrderA] * weight;
+                        fg[0] += fg_ptr[sourceIndex + ImageReaderWriterBase.OrderR] * weight;
+                        fg[1] += fg_ptr[sourceIndex + ImageReaderWriterBase.OrderG] * weight;
+                        fg[2] += fg_ptr[sourceIndex + ImageReaderWriterBase.OrderB] * weight;
+                        fg[3] += fg_ptr[sourceIndex + ImageReaderWriterBase.OrderA] * weight;
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;

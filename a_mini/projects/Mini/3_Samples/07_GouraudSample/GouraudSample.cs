@@ -65,7 +65,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void render_gouraud(IImage backBuffer, Scanline sl, ScanlineRasterizer ras)
+        public void render_gouraud(IImageReaderWriter backBuffer, Scanline sl, ScanlineRasterizer ras)
         {
             double alpha = this.AlphaValue;
             double brc = 1;
@@ -161,7 +161,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
-            IImage backBuffer = widgetsSubImage;
+            IImageReaderWriter backBuffer = widgetsSubImage;
 
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
