@@ -37,10 +37,7 @@ using MatterHackers.Agg;
 using MatterHackers.Agg.Image;
 
 using MatterHackers.RenderOpenGl.OpenGl;
-<<<<<<< HEAD
-=======
 using MatterHackers.VectorMath;
->>>>>>> FETCH_HEAD
 
 namespace MatterHackers.RenderOpenGl
 {
@@ -72,9 +69,7 @@ namespace MatterHackers.RenderOpenGl
                 for (int i = glDataNeedingToBeDeleted.Count - 1; i >= 0; i--)
                 {
                     int textureToDelete = glDataNeedingToBeDeleted[i].glTextureHandle;
-					#if USE_OPENGL
-					GL.DeleteTextures(1, ref textureToDelete);
-					#endif
+                    GL.DeleteTextures(1, ref textureToDelete);
                     glDataNeedingToBeDeleted.RemoveAt(i);
                 }
             }
@@ -83,9 +78,7 @@ namespace MatterHackers.RenderOpenGl
             if (plugin != null && imageToGetDisplayListFor.ChangedCount != plugin.imageUpdateCount)
             {
                 int textureToDelete = plugin.GLTextureHandle;
-			#if USE_OPENGL
-				GL.DeleteTextures(1, ref textureToDelete);
-			#endif
+                GL.DeleteTextures(1, ref textureToDelete);
                 plugin.glData.glTextureHandle = 0;
                 imagesWithCacheData.Remove(imageToGetDisplayListFor.GetBuffer());
                 plugin = null;
@@ -207,29 +200,20 @@ namespace MatterHackers.RenderOpenGl
             if (!checkedForHwSupportsOnlyPowerOfTwoTextures)
             {
                 {
-					#if USE_OPENGL
-					// Compatible context (GL 1.0-2.1)
+                    // Compatible context (GL 1.0-2.1)
                     string extensions = GL.GetString(StringName.Extensions);
                     if (extensions.Contains("ARB_texture_non_power_of_two"))
                     {
                         hwSupportsOnlyPowerOfTwoTextures = false;
                     }
-					#endif
                 }
 
                 checkedForHwSupportsOnlyPowerOfTwoTextures = true;
             }
 
             if (hwSupportsOnlyPowerOfTwoTextures)
-<<<<<<< HEAD
-=======
             {
                 return MathHelper.FirstPowerTowGreaterThanOrEqualTo(size);
-            }
-            else
->>>>>>> FETCH_HEAD
-            {
-                return size;
             }
             else
             {
@@ -282,12 +266,7 @@ namespace MatterHackers.RenderOpenGl
                 }
             }
 
-<<<<<<< HEAD
-            // Create the texture handle and display list handle
-			#if USE_OPENGL
-=======
             // Create the texture handle
->>>>>>> FETCH_HEAD
             GL.GenTextures(1, out glData.glTextureHandle);
 
             // Set up some texture parameters for openGL
@@ -351,11 +330,7 @@ namespace MatterHackers.RenderOpenGl
                             while (sourceImage.Width > 1 && sourceImage.Height > 1)
                             {
                                 GL.TexImage2D(TextureTarget.Texture2D, mipLevel++, PixelInternalFormat.Rgba, tempImage.Width, tempImage.Height,
-<<<<<<< HEAD
-                                    0, PixelFormat.Bgra, PixelType.UnsignedByte, tempImage.GetBuffer());
-=======
 									0, PixelFormat.Bgra, PixelType.UnsignedByte, tempImage.GetBuffer());
->>>>>>> FETCH_HEAD
                                 sourceImage = new ImageBuffer(tempImage);
                                 tempImage = new ImageBuffer(Math.Max(1, sourceImage.Width / 2), Math.Max(1, sourceImage.Height / 2), 32, new BlenderBGRA());
                                 tempImage.NewGraphics2D().Render(sourceImage, 0, 0,
@@ -370,7 +345,6 @@ namespace MatterHackers.RenderOpenGl
                         throw new NotImplementedException();
                 }
             }
-			#endif
 
             float texCoordX = imageWidth / (float)hardwareWidth;
             float texCoordY = imageHeight / (float)hardwareHeight;
@@ -389,10 +363,6 @@ namespace MatterHackers.RenderOpenGl
 
         public void DrawToGL()
         {
-<<<<<<< HEAD
-			#if USE_OPENGL
-=======
->>>>>>> FETCH_HEAD
             GL.BindTexture(TextureTarget.Texture2D, GLTextureHandle);
 #if true
             GL.Begin(BeginMode.TriangleFan);
@@ -415,7 +385,6 @@ namespace MatterHackers.RenderOpenGl
             GL.DisableClientState(ArrayCap.TextureCoordArray);
             GL.DisableClientState(ArrayCap.VertexArray);
 #endif
-			#endif
         }
     }
 }

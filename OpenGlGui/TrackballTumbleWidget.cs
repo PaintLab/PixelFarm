@@ -256,13 +256,7 @@ namespace MatterHackers.Agg.OpenGlGui
 
         void SetGlContext()
         {
-<<<<<<< HEAD
-			#if USE_OPENGL
 			GL.ClearDepth(1.0);
-            //GL.ClearColor(1, 1, 1, 1);
-=======
-			GL.ClearDepth(1.0);
->>>>>>> FETCH_HEAD
             GL.Clear(ClearBufferMask.DepthBufferBit);	// Clear the Depth Buffer
 
             GL.PushAttrib(AttribMask.ViewportBit);
@@ -286,16 +280,6 @@ namespace MatterHackers.Agg.OpenGlGui
             GL.Light(LightName.Light1, LightParameter.Diffuse, diffuseLight1);
             GL.Light(LightName.Light1, LightParameter.Specular, specularLight1);
 
-<<<<<<< HEAD
-            GL.ShadeModel(ShadingModel.Smooth);
-
-            GL.FrontFace(FrontFaceDirection.Ccw);
-            GL.CullFace(CullFaceMode.Back);
-
-            GL.DepthFunc(DepthFunction.Lequal);
-
-=======
->>>>>>> FETCH_HEAD
             GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.AmbientAndDiffuse);
 
             GL.Enable(EnableCap.Light0);
@@ -324,26 +308,10 @@ namespace MatterHackers.Agg.OpenGlGui
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PushMatrix();
             GL.LoadMatrix(GetModelviewMatrix().GetAsDoubleArray());
-<<<<<<< HEAD
-
-            Vector3 lightDirectionVector = new Vector3(lightDirection0[0], lightDirection0[1], lightDirection0[2]);
-            lightDirectionVector.Normalize();
-            lightDirection0[0] = (float)lightDirectionVector.x;
-            lightDirection0[1] = (float)lightDirectionVector.y;
-            lightDirection0[2] = (float)lightDirectionVector.z;
-            GL.Light(LightName.Light0, LightParameter.Position, lightDirection0);
-            GL.Light(LightName.Light1, LightParameter.Position, lightDirection1);
-			#endif
-=======
->>>>>>> FETCH_HEAD
         }
 
         void UnsetGlContext()
         {
-<<<<<<< HEAD
-			#if USE_OPENGL
-=======
->>>>>>> FETCH_HEAD
 			GL.MatrixMode(MatrixMode.Projection);
             GL.PopMatrix();
 
@@ -361,7 +329,6 @@ namespace MatterHackers.Agg.OpenGlGui
             GL.Disable(EnableCap.DepthTest);
 
             GL.PopAttrib();
-			#endif
         }
 
         public Matrix4X4 GetProjectionMatrix()

@@ -27,11 +27,6 @@ of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 
-<<<<<<< HEAD
-//#define AA_TIPS
-
-=======
->>>>>>> FETCH_HEAD
 using MatterHackers.VectorMath;
 using MatterHackers.RenderOpenGl.OpenGl;
 
@@ -45,17 +40,9 @@ namespace MatterHackers.RenderOpenGl
 
         protected void DrawNonAATriangle(Vector2 p0, Vector2 p1, Vector2 p2)
         {
-<<<<<<< HEAD
-			GL.Begin(BeginMode.Triangles);
-            {
-                // P1
-                GL.TexCoord2(.2, .25);
-                GL.Vertex2(p0.x, p0.y);
-=======
             // P1
             GL.TexCoord2(.2, .25);
             GL.Vertex2(p0.x, p0.y);
->>>>>>> FETCH_HEAD
 
             // P2
             GL.TexCoord2(.2, .75);
@@ -90,28 +77,12 @@ namespace MatterHackers.RenderOpenGl
 
             Vector2 edgeP0Offset = p0 + Normal;
             Vector2 edgeP1Offset = p1 + Normal;
-<<<<<<< HEAD
-            GL.Begin(BeginMode.TriangleFan);
-            {
-                GL.TexCoord2(1 / 1023.0, .25);
-                GL.Vertex2(p0.x, p0.y);
-
-#if AA_TIPS
-                // the new point
-                GL.TexCoord2(0, 1);
-                GL.Vertex2(p0.x + edgeP2P0Normal.x, p0.y + edgeP2P0Normal.y);
-#endif
-
-                GL.TexCoord2(0, .25);
-                GL.Vertex2(edgeP0Offset.x, edgeP0Offset.y);
-=======
 
             Vector2 texP0 = new Vector2(1 / 1023.0, .25);
             Vector2 texP1 = new Vector2(1 / 1023.0, .75);
             Vector2 texP2 = new Vector2((1 + edgeDotP3) / 1023.0, .25);
             Vector2 texEdgeP0Offset = new Vector2(0, .25);
             Vector2 texEdgeP1Offset = new Vector2(0, .75); 
->>>>>>> FETCH_HEAD
 
             FanStart(texP0, p0, texEdgeP0Offset, edgeP0Offset);
             FanDo(texEdgeP1Offset, edgeP1Offset);
@@ -142,18 +113,8 @@ namespace MatterHackers.RenderOpenGl
             GL.TexCoord2(fanTEnd.x, fanTEnd.y);
             GL.Vertex2(fanPEnd.x, fanPEnd.y);
 
-<<<<<<< HEAD
-                // the new point
-                GL.TexCoord2(0, 1);
-                GL.Vertex2(p0.x + edgeP2P1Normal.x, p0.y + edgeP2P1Normal.y);
-            }
-            GL.End();
-
-#endif
-=======
 			fanTNext = fanTEnd;
             fanPNext = fanPEnd;
->>>>>>> FETCH_HEAD
         }
 
         protected void Draw2EdgeTriangle(Vector2 p0, Vector2 p1, Vector2 p2)

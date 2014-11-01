@@ -47,31 +47,6 @@ namespace MatterHackers.GCodeVisualizer
         {
             if (speed > 0)
             {
-<<<<<<< HEAD
-                double startColor = 223.0 / 360.0;
-                double endColor = 5.0 / 360.0;
-                double delta = startColor - endColor;
-
-                if (!speedColorLookup.ContainsKey(speed))
-                {
-                    RGBA_Bytes color = RGBA_Floats.FromHSL(startColor, .99, .49).GetAsRGBA_Bytes();
-                    speedColorLookup.Add(speed, color);
-
-                    if (speedColorLookup.Count > 1)
-                    {
-                        double step = delta / (speedColorLookup.Count - 1);
-                        for (int index = 0; index < speedColorLookup.Count; index++)
-                        {
-                            double offset = step * index;
-                            double fixedColor = startColor - offset;
-                            KeyValuePair<float, RGBA_Bytes> keyValue = speedColorLookup.ElementAt(index);
-                            speedColorLookup[keyValue.Key] = RGBA_Floats.FromHSL(fixedColor, .99, .49).GetAsRGBA_Bytes();
-                        }
-                    }
-                }
-
-                return speedColorLookup[speed];
-=======
                 using (TimedLock.Lock(speedColorLookup, "Updating GCode Colors"))
                 {
                     double startColor = 223.0 / 360.0;
@@ -98,7 +73,6 @@ namespace MatterHackers.GCodeVisualizer
 
                     return speedColorLookup[speed];
                 }
->>>>>>> FETCH_HEAD
             }
 
             return RGBA_Bytes.Black;

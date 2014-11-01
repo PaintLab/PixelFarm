@@ -50,11 +50,7 @@ namespace MatterHackers.Agg.UI
                 return functionsToCallOnIdle.Count;
             }
         }
-<<<<<<< HEAD
-
-=======
         
->>>>>>> FETCH_HEAD
         public static void DoRunAllPending()
         {
             List<CallBackAndState> holdFunctionsToCallOnIdle = new List<CallBackAndState>();

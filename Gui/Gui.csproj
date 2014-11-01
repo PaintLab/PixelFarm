@@ -64,8 +64,6 @@
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <WarningLevel>4</WarningLevel>
-<<<<<<< HEAD
-=======
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug64|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -135,7 +133,6 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
->>>>>>> FETCH_HEAD
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
