@@ -105,7 +105,7 @@ namespace PixelFarm.Agg.UI
         }
     }
 
-    public class PolygonControlImpl : SimpleVertexSourceWidget
+    public class PolygonControl : SimpleVertexSourceWidget
     {
         double[] m_polygon;
         int m_num_points;
@@ -124,9 +124,9 @@ namespace PixelFarm.Agg.UI
         public delegate void ChangedHandler(object sender, EventArgs e);
         public event ChangedHandler Changed;
 
-        public PolygonControlImpl(int np) : this(np, 5) { }
+        public PolygonControl(int np) : this(np, 5) { }
 
-        public PolygonControlImpl(int np, double point_radius)
+        public PolygonControl(int np, double point_radius)
             : base(new Vector2())
         {
             m_ellipse = new PixelFarm.Agg.VertexSource.Ellipse();
@@ -156,7 +156,7 @@ namespace PixelFarm.Agg.UI
         public void SetYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] = newYN; }
         public void AddYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] += newYN; }
 
-        public double[] polygon() { return m_polygon; }
+        public double[] GetPolygon() { return m_polygon; }
 
 
         public double LineWidth
@@ -289,7 +289,7 @@ namespace PixelFarm.Agg.UI
             {
                 for (int i = 0; i < m_num_points; i++)
                 {
-                    if (check_edge(i, x, y))
+                    if (CheckEdge(i, x, y))
                     {
                         m_dx = x;
                         m_dy = y;
@@ -302,7 +302,7 @@ namespace PixelFarm.Agg.UI
 
             if (!ret)
             {
-                if (point_in_polygon(x, y))
+                if (IsPointInPolygon(x, y))
                 {
                     m_dx = x;
                     m_dy = y;
@@ -388,7 +388,7 @@ namespace PixelFarm.Agg.UI
 
 
 
-        private bool check_edge(int i, double x, double y)
+        bool CheckEdge(int i, double x, double y)
         {
             bool ret = false;
 
@@ -457,7 +457,7 @@ namespace PixelFarm.Agg.UI
         //
         // Input 2D polygon _pgon_ with _numverts_ number of vertices and test point
         // _point_, returns 1 if inside, 0 if outside.
-        private bool point_in_polygon(double tx, double ty)
+        bool IsPointInPolygon(double tx, double ty)
         {
             if (m_num_points < 3) return false;
             if (!m_in_polygon_check) return false;
@@ -519,7 +519,7 @@ namespace PixelFarm.Agg.UI
 
     //----------------------------------------------------------polygon_ctrl
     //template<class ColorT> 
-    public class PolygonEditWidget : PolygonControlImpl
+    public class PolygonEditWidget : PolygonControl
     {
         ColorRGBA m_color;
 
@@ -530,12 +530,12 @@ namespace PixelFarm.Agg.UI
         {
             //m_color = new ColorRGBAf(0.0, 0.0, 0.0);
             m_color = ColorRGBA.Black;
-        } 
+        }
         public ColorRGBA LineColor
         {
             get { return m_color; }
             set { this.m_color = value; }
-        } 
+        }
         public override void OnDraw(Graphics2D graphics2D)
         {
             graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), LineColor);
