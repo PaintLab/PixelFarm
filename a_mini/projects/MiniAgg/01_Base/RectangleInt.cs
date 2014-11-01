@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//2014 BSD,WinterDev   
 
+using System;
+using System.Collections.Generic;
 using System.Text;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public struct RectangleInt
     {

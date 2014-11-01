@@ -3,14 +3,14 @@
 
 using System;
 
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg.Sample_AADemoTest1
+namespace PixelFarm.Agg.Sample_AADemoTest1
 {
     public class square
     {
@@ -21,7 +21,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             m_size = size;
         }
 
-        public void draw(ScanlineRasterizer ras, IScanline sl, IImage destImage, ColorRGBA color,
+        public void draw(ScanlineRasterizer ras, Scanline sl, IImage destImage, ColorRGBA color,
                   double x, double y)
         {
             ras.Reset();
@@ -29,24 +29,25 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ras.LineTo(x * m_size + m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.RenderScanlineSolidAA(destImage, ras, sl, color);
+
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.RenderScanlineSolidAA(destImage, ras, sl, color);
         }
     }
 
-    class renderer_enlarged_test1 : ScanlineRenderer
+    class CustomScanlineRasToBmp_EnlargedV1 : ScanlineRasToDestBitmapRenderer
     {
         double m_size;
         square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
-        public renderer_enlarged_test1(double size)
+        public CustomScanlineRasToBmp_EnlargedV1(double size)
         {
             m_size = size;
             m_square = new square(size);
         }
 
 
-        protected override void RenderSolidSingleScanLine(IImage destImage, IScanline scanline, ColorRGBA color)
+        protected override void RenderSolidSingleScanLine(IImage destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -56,8 +57,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
             for (int i = 1; i <= num_spans; ++i)
             {
-                ScanlineSpan span = scanline.GetSpan(i);
-
+                ScanlineSpan span = scanline.GetSpan(i); 
                 int x = span.x;
                 int num_pix = span.len;
                 int coverIndex = span.cover_index;
@@ -66,13 +66,12 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
                            gfx.Rasterizer, m_sl, destImage,
-                            ColorRGBA.Make(color.Red0To255, color.Green0To255, color.Blue0To255, a),
+                            new ColorRGBA(color, a),
                             x, y);
                     ++x;
                 }
                 while (--num_pix > 0);
-            }
-
+            } 
         }
     }
 
@@ -122,11 +121,11 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
-            IRecieveBlenderByte NormalBlender = new BlenderBGRA();
-            IRecieveBlenderByte GammaBlender = new BlenderGammaBGRA(gamma);
+            IPixelBlender NormalBlender = new PixelBlenderBGRA();
+            IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(gamma);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
 
 
@@ -139,7 +138,7 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
 
             int size_mul = (int)this.PixelSize;
 
-            renderer_enlarged_test1 ren_en = new renderer_enlarged_test1(size_mul);
+            CustomScanlineRasToBmp_EnlargedV1 ren_en = new CustomScanlineRasToBmp_EnlargedV1(size_mul);
 
             rasterizer.Reset();
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
@@ -148,8 +147,8 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
-            ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
 
             //----------------------------------------
@@ -163,10 +162,10 @@ namespace MatterHackers.Agg.Sample_AADemoTest1
             //Stroke stroke = new Stroke(ps);
             //stroke.Width = 2;
             //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
-            rasterizer.AddPath(StrokeHelp.CreateStrokeVxs(ps.MakeVertexSnap(), 2));
+            rasterizer.AddPath(StrokeHelp.MakeVxs(ps.Vxs, 2));
             //----------------------------------------
 
-            scanlineRenderer.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

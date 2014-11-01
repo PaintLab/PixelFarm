@@ -42,16 +42,20 @@
   <ItemGroup>
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\CanvasPainter.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
-    <Compile Include="BoundingRect.cs" />
+    <Compile Include="Base\ColorGray.cs" />
+    <Compile Include="Base\PixelBlenderRGB.cs" />
     <Compile Include="Base\Queue.cs" />
-    <Compile Include="BorderDouble.cs" />
+    <Compile Include="Base\BorderDouble.cs" />
     <Compile Include="Base\GammaFuntions.cs" />
     <Compile Include="Base\ClipProxyImage.cs" />
     <Compile Include="Base\ProxyImage.cs" />
     <Compile Include="Filter\ImageFilters.cs" />
     <Compile Include="Filter\PatternFilterBilnearColorRGBA.cs" />
+    <Compile Include="Font\x_GlyphWithUnderline.cs" />
     <Compile Include="Image\AlphaMask.cs" />
+    <Compile Include="VertexSource\SimpleRect.cs" />
     <Compile Include="VertexSource\SpanGradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
@@ -61,7 +65,8 @@
     <Compile Include="Filter\RecursiveBlur.cs" />
     <Compile Include="Filter\StackBlur.cs" />
     <Compile Include="Image\Transposer.cs" />
-    <Compile Include="UnitTests2.cs" />
+    <Compile Include="x_notused\ImageClipProxyFloat.cs" />
+    <Compile Include="x_notused\UnitTests2.cs" />
     <Compile Include="VertexSource\BSpline.cs" />
     <Compile Include="VertexSource\Curves.cs" />
     <Compile Include="VertexSource\SpanGourand.cs" />
@@ -80,17 +85,13 @@
     <Compile Include="Font\TypeFacePrinter.cs" />
     <Compile Include="Font\UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTests.cs" />
+    <Compile Include="x_notused\UnitTests.cs" />
     <Compile Include="VertexSource\VertexSourceIO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MiniVectorMath\MiniVectorMath.csproj">
-      <Project>{16026D20-5321-4FFB-AEF7-4A1C9AEC32B2}</Project>
-      <Name>MiniVectorMath</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

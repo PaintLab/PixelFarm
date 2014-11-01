@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -22,12 +23,12 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using MatterHackers.Agg;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.VectorMath;
 
-using FlagsAndCommand = MatterHackers.Agg.ShapePath.FlagsAndCommand;
+using FlagsAndCommand = PixelFarm.Agg.ShapePath.FlagsAndCommand;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     //=====================================================================arc
     //
@@ -82,17 +83,17 @@ namespace MatterHackers.Agg.VertexSource
             radiusX = RadiusX;
             radiusY = RadiusY;
             m_Scale = 1.0;
-            normalize(Angle1, Angle2, Direction);
+            Normalize(Angle1, Angle2, Direction);
         }
 
-        public void init(double OriginX, double OriginY,
+        public void Init(double OriginX, double OriginY,
                   double RadiusX, double RadiusY,
                   double Angle1, double Angle2)
         {
-            init(OriginX, OriginY, RadiusX, RadiusY, Angle1, Angle2, EDirection.CounterClockWise);
+            Init(OriginX, OriginY, RadiusX, RadiusY, Angle1, Angle2, EDirection.CounterClockWise);
         }
 
-        public void init(double OriginX, double OriginY,
+        public void Init(double OriginX, double OriginY,
                    double RadiusX, double RadiusY,
                    double Angle1, double Angle2,
                    EDirection Direction)
@@ -101,20 +102,22 @@ namespace MatterHackers.Agg.VertexSource
             originY = OriginY;
             radiusX = RadiusX;
             radiusY = RadiusY;
-            normalize(Angle1, Angle2, Direction);
+            Normalize(Angle1, Angle2, Direction);
         }
 
-        public void approximation_scale(double s)
+        public double ApproximateScale 
         {
-            m_Scale = s;
-            if (m_IsInitialized)
+            get{ return this.m_Scale;}
+            set
             {
-                normalize(startAngle, endAngle, m_Direction);
+                m_Scale = value;
+                if (m_IsInitialized)
+                {
+                    Normalize(startAngle, endAngle, m_Direction);
+                }
             }
         }
-
-        public double approximation_scale() { return m_Scale; }
-
+         
         public IEnumerable<VertexData> GetVertexIter()
         {
             // go to the start
@@ -143,42 +146,42 @@ namespace MatterHackers.Agg.VertexSource
             yield return vertexData;
         }
 
-        public void RewindZero()
-        {
-            m_NextPathCommand = ShapePath.FlagsAndCommand.CommandMoveTo;
-            m_CurrentFlatenAngle = startAngle;
-        }
+        //public void RewindZero()
+        //{
+        //    m_NextPathCommand = ShapePath.FlagsAndCommand.CommandMoveTo;
+        //    m_CurrentFlatenAngle = startAngle;
+        //}
 
-        public ShapePath.FlagsAndCommand vertex(out double x, out double y)
-        {
-            x = 0;
-            y = 0;
+        //public ShapePath.FlagsAndCommand vertex(out double x, out double y)
+        //{
+        //    x = 0;
+        //    y = 0;
 
-            if (ShapePath.IsStop(m_NextPathCommand))
-            {
-                return ShapePath.FlagsAndCommand.CommandStop;
-            }
+        //    if (ShapePath.IsStop(m_NextPathCommand))
+        //    {
+        //        return ShapePath.FlagsAndCommand.CommandStop;
+        //    }
 
-            if ((m_CurrentFlatenAngle < endAngle - flatenDeltaAngle / 4) != ((int)EDirection.CounterClockWise == 1))
-            {
-                x = originX + Math.Cos(endAngle) * radiusX;
-                y = originY + Math.Sin(endAngle) * radiusY;
-                m_NextPathCommand = ShapePath.FlagsAndCommand.CommandStop;
+        //    if ((m_CurrentFlatenAngle < endAngle - flatenDeltaAngle / 4) != ((int)EDirection.CounterClockWise == 1))
+        //    {
+        //        x = originX + Math.Cos(endAngle) * radiusX;
+        //        y = originY + Math.Sin(endAngle) * radiusY;
+        //        m_NextPathCommand = ShapePath.FlagsAndCommand.CommandStop;
 
-                return ShapePath.FlagsAndCommand.CommandLineTo;
-            }
+        //        return ShapePath.FlagsAndCommand.CommandLineTo;
+        //    }
 
-            x = originX + Math.Cos(m_CurrentFlatenAngle) * radiusX;
-            y = originY + Math.Sin(m_CurrentFlatenAngle) * radiusY;
+        //    x = originX + Math.Cos(m_CurrentFlatenAngle) * radiusX;
+        //    y = originY + Math.Sin(m_CurrentFlatenAngle) * radiusY;
 
-            m_CurrentFlatenAngle += flatenDeltaAngle;
+        //    m_CurrentFlatenAngle += flatenDeltaAngle;
 
-            ShapePath.FlagsAndCommand CurrentPathCommand = m_NextPathCommand;
-            m_NextPathCommand = ShapePath.FlagsAndCommand.CommandLineTo;
-            return CurrentPathCommand;
-        }
+        //    ShapePath.FlagsAndCommand CurrentPathCommand = m_NextPathCommand;
+        //    m_NextPathCommand = ShapePath.FlagsAndCommand.CommandLineTo;
+        //    return CurrentPathCommand;
+        //}
 
-        private void normalize(double Angle1, double Angle2, EDirection Direction)
+        private void Normalize(double Angle1, double Angle2, EDirection Direction)
         {
             double ra = (Math.Abs(radiusX) + Math.Abs(radiusY)) / 2;
             flatenDeltaAngle = Math.Acos(ra / (ra + 0.125 / m_Scale)) * 2;

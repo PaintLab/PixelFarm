@@ -1,4 +1,6 @@
-﻿/*
+﻿//2014 BSD,WinterDev 
+
+/*
 Copyright (c) 2014, Lars Brubaker
 All rights reserved.
 
@@ -31,9 +33,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg;
+using PixelFarm.Agg;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public struct Point2D
     {

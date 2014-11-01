@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿//2014 BSD,WinterDev   
+//----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
@@ -20,13 +21,13 @@
 // conv_stroke
 //
 //----------------------------------------------------------------------------
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     public sealed class Contour  
     {
         ContourGenerator generator;
-        VertexSnap vertexSource;
-        public Contour(VertexSnap vertexSource)  
+        VertexStoreSnap vertexSource;
+        public Contour(VertexStoreSnap vertexSource)  
         {
             this.generator = new ContourGenerator();
             this.vertexSource = vertexSource;

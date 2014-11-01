@@ -28,13 +28,13 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
 using Mini;
-namespace MatterHackers.Agg.Sample_LionFill
+namespace PixelFarm.Agg.Sample_LionFill
 {
     [Info(OrderCode = "03")]
     [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
@@ -73,10 +73,9 @@ namespace MatterHackers.Agg.Sample_LionFill
     {
 
         LionShape lionShape;
-        VertexStorage vxStorage;
-
-    
+        VertexStore myvxs;     
         byte alpha;
+        
         public LionFill()
         {
             lionShape = new LionShape();
@@ -98,7 +97,7 @@ namespace MatterHackers.Agg.Sample_LionFill
                 var colorBuffer = lionShape.Colors;
                 for (int i = lionShape.NumPaths - 1; i >= 0; --i)
                 {
-                    colorBuffer[i].Alpha0To255 = alpha;
+                    colorBuffer[i].alpha = alpha;
                 }
             }
         }
@@ -106,13 +105,14 @@ namespace MatterHackers.Agg.Sample_LionFill
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-            vxStorage = null;
+            
+            myvxs = null;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
 
-            if (vxStorage == null)
+            if (myvxs == null)
             {
                 var transform = Affine.NewMatix(
                         AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
@@ -120,15 +120,23 @@ namespace MatterHackers.Agg.Sample_LionFill
                         AffinePlan.Rotate(angle + Math.PI),
                         AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                         AffinePlan.Translate(Width / 2, Height / 2)
-                );
-
-                //convert
-
-                vxStorage = transform.TransformToVxs(lionShape.Path);
+                ); 
+                //create vertextStore again from origiinal path
+                myvxs = transform.TransformToVxs(lionShape.Path);
             }
-            graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
-
-            base.OnDraw(graphics2D);
+            //---------------------------------------------------------------------------------------------
+            {
+                int j = lionShape.NumPaths;
+                int[] pathList = lionShape.PathIndexList;
+                ColorRGBA[] colors = lionShape.Colors;
+                for (int i = 0; i < j; ++i)
+                {
+                    graphics2D.Render(new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                }
+            }
+            //---------------------------------------------------------------------------------------------
+           
+             
         }
 
 

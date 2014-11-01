@@ -29,15 +29,15 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Lines;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Lines;
 using Mini;
 
-namespace MatterHackers.Agg.Sample_LionOutline
+namespace PixelFarm.Agg.Sample_LionOutline
 {
     [Info(OrderCode = "03")]
     [Info("The example demonstrates Maxim's algorithm of drawing Anti-Aliased lines. " +
@@ -122,14 +122,14 @@ namespace MatterHackers.Agg.Sample_LionOutline
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
 
             int strokeWidth = 1;
 
-            var clippedSubImage = new ChildImage(widgetsSubImage, new BlenderBGRA());
+            var clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(ColorRGBA.White);
 
@@ -150,20 +150,18 @@ namespace MatterHackers.Agg.Sample_LionOutline
             {
                 rasterizer.SetVectorClipBox(0, 0, width, height);
 
-                Stroke stroke = new Stroke(strokeWidth); 
+                Stroke stroke = new Stroke(strokeWidth);
                 stroke.LineJoin = LineJoin.Round;
-
-
                 var vxs = affTx.TransformToVxs(lionShape.Path);
-                
-                ScanlineRenderer scanlineRenderer = new ScanlineRenderer();
 
-                // var vxs = trans.DoTransformToNewVxStorage();
-                scanlineRenderer.RenderSolidAllPaths(
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+
+
+                sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
                     scanlineCache,
-                    vxs ,
+                    vxs,
                     lionShape.Colors,
                     lionShape.PathIndexList,
                     lionShape.NumPaths);
@@ -173,7 +171,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 double w = strokeWidth * affTx.GetScale();
 
                 LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new GammaNone());
-                OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, lineProfile);
+                OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
 
                 rasterizer.LineJoin = (RenderAccurateJoins ?
@@ -188,7 +186,7 @@ namespace MatterHackers.Agg.Sample_LionOutline
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderVertexSnap(
-                        new VertexSnap(vxs,
+                        new VertexStoreSnap(vxs,
                             lionShape.PathIndexList[i]),
                             lionShape.Colors[i]);
                 }

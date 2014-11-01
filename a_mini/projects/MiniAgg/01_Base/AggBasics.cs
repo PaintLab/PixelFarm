@@ -1,3 +1,6 @@
+//2014 BSD,WinterDev  
+
+
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -20,12 +23,11 @@
 
 using System;
 using System.IO;
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
-
-
+     
     static public class AggBasics
     {
         //----------------------------------------------------------filling_rule_e
@@ -114,7 +116,10 @@ namespace MatterHackers.Agg
         {
             return (int)(uint)(v + 0.5);
         }
-
+        public static int uround_f(float v)
+        {
+            return (int)(uint)(v + 0.5);
+        }
         public static int ufloor(double v)
         {
             return (int)(uint)(v);

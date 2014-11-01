@@ -1,8 +1,9 @@
-﻿
+﻿//2014 BSD,WinterDev   
 //ref:  adapt from snippetsfor.net/CSharp/StackBlur
+
 using System;
 using System.Runtime.InteropServices;
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
 
    

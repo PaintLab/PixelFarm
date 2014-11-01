@@ -2,13 +2,13 @@
 //MatterHackers
 
 using System; 
-using MatterHackers.Agg.UI;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.UI;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 
 
 using Mini;
-namespace MatterHackers.Agg.Sample_TransCurve
+namespace PixelFarm.Agg.Sample_TransCurve
 {
     [Info(OrderCode = "11")]
     [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
@@ -106,17 +106,17 @@ namespace MatterHackers.Agg.Sample_TransCurve
 
         void m_animate_CheckedStateChanged(object sender, EventArgs e)
         {
-            if (this.Animate)
-            {
-                on_init();
-                int i;
-                for (i = 0; i < 6; i++)
-                {
-                    m_dx[i] = ((rand.Next() % 1000) - 500) * 0.01;
-                    m_dy[i] = ((rand.Next() % 1000) - 500) * 0.01;
-                }
-                UiThread.RunOnIdle(guiSurface_Idle);
-            }
+            //if (this.Animate)
+            //{
+            //    on_init();
+            //    int i;
+            //    for (i = 0; i < 6; i++)
+            //    {
+            //        m_dx[i] = ((rand.Next() % 1000) - 500) * 0.01;
+            //        m_dy[i] = ((rand.Next() % 1000) - 500) * 0.01;
+            //    }
+            //    UiThread.RunOnIdle(guiSurface_Idle);
+            //}
         }
 
         void NeedsRedraw(object sender, EventArgs e)
@@ -182,10 +182,10 @@ namespace MatterHackers.Agg.Sample_TransCurve
             }
 
 
-            if (this.Animate)
-            {
-                UiThread.RunOnIdle(guiSurface_Idle);
-            }
+            //if (this.Animate)
+            //{
+            //    UiThread.RunOnIdle(guiSurface_Idle);
+            //}
         }
 
 

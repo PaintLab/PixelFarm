@@ -1,12 +1,12 @@
 using System;
 using System.Globalization;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     class LionParser
     {
@@ -219,9 +219,7 @@ namespace MatterHackers.Agg
         PathStorage path = new PathStorage();
         ColorRGBA[] colors = new ColorRGBA[100];
         int[] pathIndexList = new int[100];
-
         int numPaths = 0;
-
         RectangleDouble boundingRect;
         Vector2 center;
         public LionShape()
@@ -284,8 +282,8 @@ namespace MatterHackers.Agg
         public void ParseLion()
         {
 
-            numPaths = MatterHackers.Agg.LionParser.parse_lion(path, colors, pathIndexList);
-            MatterHackers.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
+            numPaths = PixelFarm.Agg.LionParser.parse_lion(path, colors, pathIndexList);
+            PixelFarm.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
@@ -303,7 +301,7 @@ namespace MatterHackers.Agg
         }
         void UpdateBoundingRect()
         {
-            MatterHackers.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
+            PixelFarm.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }

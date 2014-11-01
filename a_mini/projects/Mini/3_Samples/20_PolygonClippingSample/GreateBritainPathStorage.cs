@@ -6,9 +6,9 @@ using System.Collections.Generic;
  
 using System.Text;
 
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.VertexSource;
 
-namespace MatterHackers.Agg.Sample_PolygonClipping
+namespace PixelFarm.Agg.Sample_PolygonClipping
 {
     public static class GreatBritanPathStorage
     {

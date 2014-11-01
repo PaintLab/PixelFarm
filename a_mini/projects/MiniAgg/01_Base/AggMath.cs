@@ -1,3 +1,5 @@
+//2014 BSD,WinterDev   
+
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -20,9 +22,9 @@
 // Contact: castor.vulgaris@gmail.com
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg.VertexSource;
+using PixelFarm.Agg.VertexSource;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public static class AggMath
     {

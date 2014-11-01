@@ -28,14 +28,14 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
 using Mini;
 using LayoutFarm.MiniCinema;
-namespace MatterHackers.Agg.Sample_LionFill_Test
+namespace PixelFarm.Agg.Sample_LionFill_Test
 {
     [Info(OrderCode = "03")]
     [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
@@ -74,9 +74,9 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
     //--------------------------------------------------
     public class LionFill : SimpleSprite
     {
-        VertexStorage vxStorage;
+        VertexStore vxStorage;
         LionShape lionShape;
-        bool needUpdate;
+         
         byte alpha;
         public LionFill()
         {
@@ -94,22 +94,22 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
             using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
             {
                 var reader = new System.IO.BinaryReader(fs);
-                var lionShape2 = new MatterHackers.Agg.LionShape();
+                var lionShape2 = new PixelFarm.Agg.LionShape();
 
-                MatterHackers.Agg.VertexSource.PathStorage path;
-                MatterHackers.Agg.ColorRGBA[] colors;
+                PixelFarm.Agg.VertexSource.PathStorage path;
+                PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
                 //1. path and command
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
                   reader, out path
                   );
                 //2. colors
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
                   reader, out colors
                   );
                 //3. path indice
                 int npaths;
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
                   reader, out npaths, out pathIndexList
                  );
 
@@ -138,7 +138,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
                 var colorBuffer = lionShape.Colors;
                 for (int i = lionShape.NumPaths - 1; i >= 0; --i)
                 {
-                    colorBuffer[i].Alpha0To255 = alpha;
+                    colorBuffer[i].alpha = alpha;
                 }
             }
         }
@@ -146,7 +146,7 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-            this.needUpdate = true;
+            vxStorage = null;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
@@ -173,8 +173,18 @@ namespace MatterHackers.Agg.Sample_LionFill_Test
                 //vxStorage = new VertexStorage(list);
             }
 
-            //graphics2D.Render(transformedPathStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
-            graphics2D.Render(vxStorage, lionShape.Colors, lionShape.PathIndexList, lionShape.NumPaths);
+            //-----------------------------------------------------------------------------------
+            {
+                int j = lionShape.NumPaths;
+                int[] pathList = lionShape.PathIndexList;
+                ColorRGBA[] colors = lionShape.Colors;
+                for (int i = 0; i < j; ++i)
+                {
+                    graphics2D.Render(new VertexStoreSnap(vxStorage, pathList[i]), colors[i]);
+                }
+            }
+            //-----------------------------------------------------------------------------------
+
 
             base.OnDraw(graphics2D);
             if (!IsFreezed)
