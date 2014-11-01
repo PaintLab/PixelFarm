@@ -30,13 +30,10 @@ namespace MatterHackers.Agg.UI
         private GuiWidget switchPressedToNormal;
         private GuiWidget disabled;
 
-        public CheckBoxViewStates(GuiWidget normal, GuiWidget switchNormalToPressed, GuiWidget pressed, GuiWidget switchPressedToNormal)
-            : this(normal, normal, switchNormalToPressed, pressed, pressed, switchPressedToNormal, normal)
-        {
-        }
-
-        public CheckBoxViewStates(GuiWidget normal, GuiWidget normalHover, GuiWidget switchNormalToPressed, 
-            GuiWidget pressed, GuiWidget pressedHover, GuiWidget switchPressedToNormal, 
+        public CheckBoxViewStates(GuiWidget normal, GuiWidget normalHover, 
+            GuiWidget switchNormalToPressed, 
+            GuiWidget pressed, GuiWidget pressedHover, 
+            GuiWidget switchPressedToNormal, 
             GuiWidget disabled)
         {
             this.normal = normal;
@@ -71,6 +68,7 @@ namespace MatterHackers.Agg.UI
 
         CheckBox widgetWithHooksToUs;
         void RemoveLinks()
+<<<<<<< HEAD
         {
             if (widgetWithHooksToUs != null)
             {
@@ -84,6 +82,21 @@ namespace MatterHackers.Agg.UI
         
         void CreateLinks(CheckBox parent)
         {
+=======
+        {
+            if (widgetWithHooksToUs != null)
+            {
+                widgetWithHooksToUs.MouseEnter -= SetCorrectVisibilityStates;
+                widgetWithHooksToUs.MouseDown -= SetCorrectVisibilityStates;
+                widgetWithHooksToUs.MouseUp -= SetCorrectVisibilityStates;
+                widgetWithHooksToUs.MouseLeave -= SetCorrectVisibilityStates;
+                widgetWithHooksToUs.CheckedStateChanged -= SetCorrectVisibilityStates;
+            }
+        }
+        
+        void CreateLinks(CheckBox parent)
+        {
+>>>>>>> FETCH_HEAD
             RemoveLinks();
             
             widgetWithHooksToUs = parent;

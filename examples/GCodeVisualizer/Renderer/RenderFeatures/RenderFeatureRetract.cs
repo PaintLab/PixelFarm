@@ -46,7 +46,12 @@ namespace MatterHackers.GCodeVisualizer
         float extrusionAmount;
         float mmPerSecond;
         Vector3Float position;
+<<<<<<< HEAD
         public RenderFeatureRetract(Vector3 position, double extrusionAmount, double mmPerSecond)
+=======
+        public RenderFeatureRetract(Vector3 position, double extrusionAmount, int extruderIndex, double mmPerSecond)
+            : base(extruderIndex)
+>>>>>>> FETCH_HEAD
         {
             this.extrusionAmount = (float)extrusionAmount;
             this.mmPerSecond = (float)mmPerSecond;
@@ -62,6 +67,7 @@ namespace MatterHackers.GCodeVisualizer
             return radius;
         }
 
+<<<<<<< HEAD
         public override void CreateRender3DData(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, Affine transform, double layerScale, RenderType renderType)
         {
             if ((renderType & RenderType.Retractions) == RenderType.Retractions)
@@ -71,15 +77,43 @@ namespace MatterHackers.GCodeVisualizer
                 {
                     // unretraction
                     CreatePointer(colorVertexData, indexData, position + new Vector3(0, 0, 1.3), position + new Vector3(0, 0, .3), Radius(1), 5, RGBA_Bytes.Blue);
+=======
+        public override void CreateRender3DData(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, GCodeRenderInfo renderInfo)
+        {
+            if ((renderInfo.CurrentRenderType & RenderType.Retractions) == RenderType.Retractions)
+            {
+                Vector3 position = new Vector3(this.position);
+                RGBA_Bytes color = MultipleExtruderColor;
+                if (extruderIndex == 0)
+                {
+                    if (extrusionAmount > 0)
+                    {
+                        color = RGBA_Bytes.Blue;
+                    }
+                    else
+                    {
+                        color = RGBA_Bytes.Red;
+                    }
+                }
+                if (extrusionAmount > 0)
+                {
+                    // unretraction
+                    CreatePointer(colorVertexData, indexData, position + new Vector3(0, 0, 1.3), position + new Vector3(0, 0, .3), Radius(1), 5, color);
+>>>>>>> FETCH_HEAD
                 }
                 else
                 {
                     // retraction
+<<<<<<< HEAD
                     CreatePointer(colorVertexData, indexData, position + new Vector3(0, 0, .3), position + new Vector3(0, 0, 1.3), Radius(1), 5, RGBA_Bytes.Red);
+=======
+                    CreatePointer(colorVertexData, indexData, position + new Vector3(0, 0, .3), position + new Vector3(0, 0, 1.3), Radius(1), 5, color);
+>>>>>>> FETCH_HEAD
                 }
             }
         }
 
+<<<<<<< HEAD
         public override void Render(Graphics2D graphics2D, Affine transform, double layerScale, RenderType renderType)
         {
             if ((renderType & RenderType.Retractions) == RenderType.Retractions)
@@ -87,6 +121,15 @@ namespace MatterHackers.GCodeVisualizer
                 Vector2 position = new Vector2(this.position.x, this.position.y);
                 transform.transform(ref position);
                 double radius = Radius(layerScale);
+=======
+        public override void Render(Graphics2D graphics2D, GCodeRenderInfo renderInfo)
+        {
+            if ((renderInfo.CurrentRenderType & RenderType.Retractions) == RenderType.Retractions)
+            {
+                Vector2 position = new Vector2(this.position.x, this.position.y);
+                renderInfo.Transform.transform(ref position);
+                double radius = Radius(renderInfo.LayerScale);
+>>>>>>> FETCH_HEAD
                 Ellipse extrusion = new Ellipse(position, radius);
 
                 if (extrusionAmount > 0)

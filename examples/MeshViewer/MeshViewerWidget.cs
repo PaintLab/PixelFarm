@@ -47,15 +47,52 @@ namespace MatterHackers.MeshVisualizer
     {
         BackgroundWorker backgroundWorker = null;
 
-        public RGBA_Bytes PartColor { get; set; }
-        public RGBA_Bytes SelectedPartColor { get; set; }
+        static Dictionary<int, RGBA_Bytes> materialColors = new Dictionary<int, RGBA_Bytes>();
+        public static RGBA_Bytes GetMaterialColor(int materialIndexBase1)
+        {
+            if (materialColors.ContainsKey(materialIndexBase1))
+            {
+                return materialColors[materialIndexBase1];
+            }
+
+            // we currently expect at most 4 extruders
+            return RGBA_Floats.FromHSL((materialIndexBase1 % 4) / 4.0, .5, .5).GetAsRGBA_Bytes();
+        }
+
+        public static RGBA_Bytes GetSelectedMaterialColor(int materialIndexBase1)
+        {
+            double hue0To1;
+            double saturation0To1;
+            double lightness0To1;
+            GetMaterialColor(materialIndexBase1).GetAsRGBA_Floats().GetHSL(out hue0To1, out saturation0To1, out lightness0To1);
+
+            // now make it a bit lighter and less saturated
+            saturation0To1 = Math.Min(1, saturation0To1 * 2);
+            lightness0To1 = Math.Min(1, lightness0To1 * 1.2);
+
+            // we sort of expect at most 4 extruders
+            return RGBA_Floats.FromHSL(hue0To1, saturation0To1, lightness0To1).GetAsRGBA_Bytes();
+        }
+
+        public static void SetMaterialColor(int materialIndexBase1, RGBA_Bytes color)
+        {
+            if (!materialColors.ContainsKey(materialIndexBase1))
+            {
+                materialColors.Add(materialIndexBase1, color);
+            }
+            else
+            {
+                materialColors[materialIndexBase1] = color;
+            }
+        }
+
         public RGBA_Bytes BedColor { get; set; }
         public RGBA_Bytes BuildVolumeColor { get; set; }
 
         Vector3 displayVolume;
         public Vector3 DisplayVolume { get { return displayVolume; } }
 
-        public bool AlwaysRenderBed { get; set; }
+        public bool AllowBedRenderingWhenEmpty { get; set; }
         public bool RenderBed { get; set; }
         public bool RenderBuildVolume { get; set; }
 
@@ -68,9 +105,12 @@ namespace MatterHackers.MeshVisualizer
                 if (renderType != value)
                 {
                     renderType = value;
-                    foreach (Mesh mesh in Meshes)
+                    foreach (MeshGroup meshGroup in MeshGroups)
                     {
-                        mesh.MarkAsChanged();
+                        foreach (Mesh mesh in meshGroup.Meshes)
+                        {
+                            mesh.MarkAsChanged();
+                        }
                     }
                 }
             }
@@ -131,33 +171,37 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-        int selectedMeshIndex = 0;
-        public int SelectedMeshIndex
+        int selectedMeshGroupIndex = 0;
+        public int SelectedMeshGroupIndex
         {
-            get { return selectedMeshIndex; }
-            set { selectedMeshIndex = value; }
+            get { return selectedMeshGroupIndex; }
+            set { selectedMeshGroupIndex = value; }
         }
 
-        public Mesh SelectedMesh
+        public MeshGroup SelectedMeshGroup
         {
             get 
             {
-                if (Meshes.Count > 0)
+                if (MeshGroups.Count > 0)
                 {
-                    return Meshes[selectedMeshIndex];
+                    return MeshGroups[SelectedMeshGroupIndex];
                 }
 
                 return null;
             }
         }
 
+<<<<<<< HEAD
         public ScaleRotateTranslate SelectedMeshTransform 
+=======
+        public ScaleRotateTranslate SelectedMeshGroupTransform 
+>>>>>>> FETCH_HEAD
         {
             get 
             {
-                if (MeshTransforms.Count > 0)
+                if (MeshGroupTransforms.Count > 0)
                 {
-                    return MeshTransforms[selectedMeshIndex];
+                    return MeshGroupTransforms[selectedMeshGroupIndex];
                 }
 
                 return ScaleRotateTranslate.Identity();
@@ -165,15 +209,19 @@ namespace MatterHackers.MeshVisualizer
 
             set
             {
-                MeshTransforms[selectedMeshIndex] = value;
+                MeshGroupTransforms[selectedMeshGroupIndex] = value;
             }
         }
 
         List<ScaleRotateTranslate> meshTransforms = new List<ScaleRotateTranslate>();
+<<<<<<< HEAD
         public List<ScaleRotateTranslate> MeshTransforms { get { return meshTransforms; } }
+=======
+        public List<ScaleRotateTranslate> MeshGroupTransforms { get { return meshTransforms; } }
+>>>>>>> FETCH_HEAD
 
-        List<Mesh> meshesToRender = new List<Mesh>();
-        public List<Mesh> Meshes { get { return meshesToRender; } }
+        List<MeshGroup> meshesToRender = new List<MeshGroup>();
+        public List<MeshGroup> MeshGroups { get { return meshesToRender; } }
 
         public event EventHandler LoadDone;
 
@@ -190,9 +238,8 @@ namespace MatterHackers.MeshVisualizer
             RenderType = RenderTypes.Shaded;
             RenderBed = true;
             RenderBuildVolume = false;
-            PartColor = RGBA_Bytes.White;
-            SelectedPartColor = RGBA_Bytes.White;
-            BedColor = new RGBA_Floats(.8, .8, .8, .5).GetAsRGBA_Bytes();
+            //SetMaterialColor(1, RGBA_Bytes.LightGray, RGBA_Bytes.White);
+            BedColor = new RGBA_Floats(.8, .8, .8, .7).GetAsRGBA_Bytes();
             BuildVolumeColor = new RGBA_Floats(.2, .8, .3, .2).GetAsRGBA_Bytes();
 
             trackballTumbleWidget = new TrackballTumbleWidget();
@@ -242,7 +289,7 @@ namespace MatterHackers.MeshVisualizer
                         }
                     }
                     CreateRectangularBedGridImage((int)(displayVolume.x / 10), (int)(displayVolume.y / 10));
-                    printerBed = PlatonicSolids.CreateCube(displayVolume.x, displayVolume.y, 2);
+                    printerBed = PlatonicSolids.CreateCube(displayVolume.x, displayVolume.y, 4);
                     {
                         Face face = printerBed.Faces[0];
                         {
@@ -258,7 +305,7 @@ namespace MatterHackers.MeshVisualizer
                     }
                     foreach (Vertex vertex in printerBed.Vertices)
                     {
-                        vertex.Position = vertex.Position - new Vector3(0, 0, 1.2);
+                        vertex.Position = vertex.Position - new Vector3(0, 0, 2.2);
                     }
                     break;
 
@@ -316,23 +363,34 @@ namespace MatterHackers.MeshVisualizer
 
         void trackballTumbleWidget_DrawGlContent(object sender, EventArgs e)
         {
-            for (int i = 0; i < Meshes.Count; i++)
+            for (int i = 0; i < MeshGroups.Count; i++)
             {
-                Mesh meshToRender = Meshes[i];
-                RGBA_Bytes drawColor = PartColor;
-                if (meshToRender == SelectedMesh)
-                {
-                    drawColor = SelectedPartColor;
-                }
+                MeshGroup meshGroupToRender = MeshGroups[i];
 
+                int part = 0;
+                foreach (Mesh meshToRender in meshGroupToRender.Meshes)
+                {
+                    MeshMaterialData meshData = MeshMaterialData.Get(meshToRender);
+                    RGBA_Bytes drawColor = GetMaterialColor(meshData.MaterialIndex);
+                    if (meshGroupToRender == SelectedMeshGroup)
+                    {
+                        drawColor = GetSelectedMaterialColor(meshData.MaterialIndex);
+                    }
+
+<<<<<<< HEAD
                 RenderMeshToGl.Render(meshToRender, drawColor, MeshTransforms[i].TotalTransform, RenderType);
+=======
+                    RenderMeshToGl.Render(meshToRender, drawColor, MeshGroupTransforms[i].TotalTransform, RenderType);
+                    part++;
+                }
+>>>>>>> FETCH_HEAD
             }
 
             // we don't want to render the bed or bulid volume before we load a model.
-            if (Meshes.Count > 0 || AlwaysRenderBed)
+            if (MeshGroups.Count > 0 || AllowBedRenderingWhenEmpty)
             {
                 if (RenderBed)
-                {                    
+                {
                     RenderMeshToGl.Render(printerBed, this.BedColor);
                 }
 
@@ -343,7 +401,21 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-        public void LoadMesh(string meshPathAndFileName)
+        public void CreateGlDataForMeshes(List<MeshGroup> meshGroupsToPrepare)
+        {
+            for (int i = 0; i < meshGroupsToPrepare.Count; i++)
+            {
+                MeshGroup meshGroupToPrepare = meshGroupsToPrepare[i];
+
+                foreach (Mesh meshToPrepare in meshGroupToPrepare.Meshes)
+                {
+                    GLMeshTrianglePlugin glMeshPlugin = GLMeshTrianglePlugin.Get(meshToPrepare);
+                }
+            }
+        }
+
+        public enum CenterPartAfterLoad { DO, DONT }
+        public void LoadMesh(string meshPathAndFileName, CenterPartAfterLoad centerPart)
         {
             if (File.Exists(meshPathAndFileName))
             {
@@ -355,9 +427,9 @@ namespace MatterHackers.MeshVisualizer
 
                 backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
 
-                bool loadingMeshFile = false;
-                switch (Path.GetExtension(meshPathAndFileName).ToUpper())
+                backgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
                 {
+<<<<<<< HEAD
                     case ".STL":
                         {
                             backgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
@@ -394,6 +466,14 @@ namespace MatterHackers.MeshVisualizer
                 {
                     partProcessingInfo.centeredInfoText.Text = string.Format("Sorry! No 3D view available\nfor this file type '{0}'.", Path.GetExtension(meshPathAndFileName).ToUpper());
                 }
+=======
+                    List<MeshGroup> loadedMeshGroups = MeshFileIo.Load(meshPathAndFileName, reportProgress0to100);
+                    SetMeshAfterLoad(loadedMeshGroups, centerPart);
+                    e.Result = loadedMeshGroups;
+                };
+                backgroundWorker.RunWorkerAsync();
+                partProcessingInfo.centeredInfoText.Text = "Loading Mesh...";
+>>>>>>> FETCH_HEAD
             }
             else
             {
@@ -401,16 +481,17 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-        public void SetMeshAfterLoad(Mesh loadedMesh)
+        public void SetMeshAfterLoad(List<MeshGroup> loadedMeshGroups, CenterPartAfterLoad centerPart)
         {
-            Meshes.Clear();
+            MeshGroups.Clear();
 
-            if (loadedMesh == null)
+            if (loadedMeshGroups == null)
             {
                 partProcessingInfo.centeredInfoText.Text = string.Format("Sorry! No 3D view available\nfor this file.");
             }
             else
             {
+<<<<<<< HEAD
                 meshTransforms.Add(ScaleRotateTranslate.Identity());
 
                 int index = meshTransforms.Count - 1;
@@ -419,10 +500,28 @@ namespace MatterHackers.MeshVisualizer
                     AxisAlignedBoundingBox bounds = loadedMesh.GetAxisAlignedBoundingBox(meshTransforms[index].TotalTransform);
                     Vector3 boundsCenter = (bounds.maxXYZ + bounds.minXYZ) / 2;
                     loadedMesh.Translate(-boundsCenter);
+=======
+                CreateGlDataForMeshes(loadedMeshGroups);
+
+                AxisAlignedBoundingBox bounds = new AxisAlignedBoundingBox(Vector3.Zero, Vector3.Zero);
+                bool first = true;
+                foreach (MeshGroup meshGroup in loadedMeshGroups)
+                {
+                    if (first)
+                    {
+                        bounds = meshGroup.GetAxisAlignedBoundingBox();
+                        first = false;
+                    }
+                    else
+                    {
+                        bounds = AxisAlignedBoundingBox.Union(bounds, meshGroup.GetAxisAlignedBoundingBox());
+                    }
+>>>>>>> FETCH_HEAD
                 }
 
-                // make sure the mesh is centered and on the bed
+                foreach (MeshGroup meshGroup in loadedMeshGroups)
                 {
+<<<<<<< HEAD
                     AxisAlignedBoundingBox bounds = loadedMesh.GetAxisAlignedBoundingBox(meshTransforms[index].TotalTransform);
                     Vector3 boundsCenter = (bounds.maxXYZ + bounds.minXYZ) / 2;
                     ScaleRotateTranslate moved = meshTransforms[index];
@@ -432,6 +531,27 @@ namespace MatterHackers.MeshVisualizer
 
                 Meshes.Add(loadedMesh);
 
+=======
+                    // make sure the mesh is centered about the origin so rotations will come from a reasonable place
+                    ScaleRotateTranslate centering = ScaleRotateTranslate.Identity();
+                    centering.SetCenteringForMeshGroup(meshGroup);
+                    meshTransforms.Add(centering);
+                    MeshGroups.Add(meshGroup);
+                }
+
+                if (centerPart == CenterPartAfterLoad.DO)
+                {
+                    // make sure the entile load is centered and on the bed
+                    Vector3 boundsCenter = (bounds.maxXYZ + bounds.minXYZ) / 2;
+                    for (int i = 0; i < MeshGroups.Count; i++)
+                    {
+                        ScaleRotateTranslate moved = meshTransforms[i];
+                        moved.translation *= Matrix4X4.CreateTranslation(-boundsCenter + new Vector3(0, 0, bounds.ZSize / 2));
+                        meshTransforms[i] = moved;
+                    }
+                }
+
+>>>>>>> FETCH_HEAD
                 trackballTumbleWidget.TrackBallController = new TrackBallController();
                 trackballTumbleWidget.OnBoundsChanged(null);
                 trackballTumbleWidget.TrackBallController.Scale = .03;
@@ -450,16 +570,36 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
+<<<<<<< HEAD
         bool backgroundWorker_ProgressChanged(double progress0To1, string processingState)
         {
             UiThread.RunOnIdle((object state) =>
             {
                 int percentComplete = (int)(progress0To1 * 100 + .5);
+=======
+        void reportProgress0to100(double progress0To1, string processingState, out bool continueProcessing)
+        {
+            if (this.WidgetHasBeenClosed)
+            {
+                continueProcessing = false;
+            }
+            else
+            {
+                continueProcessing = true;
+            }
+
+            UiThread.RunOnIdle((object state) =>
+            {
+                int percentComplete = (int)(progress0To1 * 100);
+>>>>>>> FETCH_HEAD
                 partProcessingInfo.centeredInfoText.Text = "Loading Mesh {0}%...".FormatWith(percentComplete);
                 partProcessingInfo.progressControl.PercentComplete = percentComplete;
                 partProcessingInfo.centeredInfoDescription.Text = processingState;
             });
+<<<<<<< HEAD
             return true;
+=======
+>>>>>>> FETCH_HEAD
         }
 
         public override void OnMouseDown(MouseEventArgs mouseEvent)
@@ -483,70 +623,74 @@ namespace MatterHackers.MeshVisualizer
             base.OnMouseUp(mouseEvent);
         }
 
+        RGBA_Bytes bedMarkingsColor = RGBA_Bytes.Black;
+        RGBA_Bytes bedBaseColor = RGBA_Bytes.White;
         void CreateRectangularBedGridImage(int linesInX, int linesInY)
         {
             Vector2 bedImageCentimeters = new Vector2(linesInX, linesInY);
+            
             BedImage = new ImageBuffer(1024, 1024, 32, new BlenderBGRA());
             Graphics2D graphics2D = BedImage.NewGraphics2D();
-            graphics2D.Clear(RGBA_Bytes.White);
+            graphics2D.Clear(bedBaseColor);
             {
                 double lineDist = BedImage.Width / (double)linesInX;
 
                 int count = 1;
                 int pointSize = 20;
-                graphics2D.DrawString(count.ToString(), 0, 0, pointSize);
+                graphics2D.DrawString(count.ToString(), 4, 4, pointSize, color: bedMarkingsColor);
                 for (double linePos = lineDist; linePos < BedImage.Width; linePos += lineDist)
                 {
                     count++;
                     int linePosInt = (int)linePos;
-                    graphics2D.Line(linePosInt, 0, linePosInt, BedImage.Height, RGBA_Bytes.Black);
-                    graphics2D.DrawString(count.ToString(), linePos, 0, pointSize);
+                    graphics2D.Line(linePosInt, 0, linePosInt, BedImage.Height, bedMarkingsColor);
+                    graphics2D.DrawString(count.ToString(), linePos + 4, 4, pointSize, color: bedMarkingsColor);
                 }
             }
             {
                 double lineDist = BedImage.Height / (double)linesInY;
 
                 int count = 1;
-                int pointSize = 20;
+                int pointSize = 16;
                 for (double linePos = lineDist; linePos < BedImage.Height; linePos += lineDist)
                 {
                     count++;
                     int linePosInt = (int)linePos;
-                    graphics2D.Line(0, linePosInt, BedImage.Height, linePosInt, RGBA_Bytes.Black);
-                    graphics2D.DrawString(count.ToString(), 0, linePos, pointSize);
+                    graphics2D.Line(0, linePosInt, BedImage.Height, linePosInt, bedMarkingsColor);
+                    graphics2D.DrawString(count.ToString(), 4, linePos + 4, pointSize, color: bedMarkingsColor);
                 }
             }
         }
 
         void CreateCircularBedGridImage(int linesInX, int linesInY)
         {
+            
             Vector2 bedImageCentimeters = new Vector2(linesInX, linesInY);
             BedImage = new ImageBuffer(1024, 1024, 32, new BlenderBGRA());
             Graphics2D graphics2D = BedImage.NewGraphics2D();
-            graphics2D.Clear(RGBA_Bytes.White);
+            graphics2D.Clear(bedBaseColor);
 #if true
             {
                 double lineDist = BedImage.Width / (double)linesInX;
 
                 int count = 1;
-                int pointSize = 20;
-                graphics2D.DrawString(count.ToString(), 0, 0, pointSize);
+                int pointSize = 16;
+                graphics2D.DrawString(count.ToString(), 4, 4, pointSize, color: bedMarkingsColor);
                 double currentRadius = lineDist;
                 Vector2 bedCenter = new Vector2(BedImage.Width / 2, BedImage.Height / 2);
                 for (double linePos = lineDist + BedImage.Width / 2; linePos < BedImage.Width; linePos += lineDist)
                 {
                     int linePosInt = (int)linePos;
-                    graphics2D.DrawString(count.ToString(), linePos + 2, BedImage.Height / 2, pointSize);
+                    graphics2D.DrawString(count.ToString(), linePos + 2, BedImage.Height / 2, pointSize, color: bedMarkingsColor);
 
                     Ellipse circle = new Ellipse(bedCenter, currentRadius);
                     Stroke outline = new Stroke(circle);
-                    graphics2D.Render(outline, RGBA_Bytes.Black);
+                    graphics2D.Render(outline, bedMarkingsColor);
                     currentRadius += lineDist;
                     count++;
                 }
 
-                graphics2D.Line(0, BedImage.Height / 2, BedImage.Width, BedImage.Height / 2, RGBA_Bytes.Black);
-                graphics2D.Line(BedImage.Width / 2, 0, BedImage.Width/2, BedImage.Height, RGBA_Bytes.Black);
+                graphics2D.Line(0, BedImage.Height / 2, BedImage.Width, BedImage.Height / 2, bedMarkingsColor);
+                graphics2D.Line(BedImage.Width / 2, 0, BedImage.Width / 2, BedImage.Height, bedMarkingsColor);
             }
 #else
             {
