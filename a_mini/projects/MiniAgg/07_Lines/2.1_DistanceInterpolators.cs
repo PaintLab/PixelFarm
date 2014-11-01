@@ -285,10 +285,7 @@ namespace PixelFarm.Agg.Lines
         //public void dec_y() { m_dist += m_dx; m_dist_start += m_dx_start; }
 
     }
-
-
-
-
+     
 
     //===================================================distance_interpolator3
     public class DistanceInterpolator3

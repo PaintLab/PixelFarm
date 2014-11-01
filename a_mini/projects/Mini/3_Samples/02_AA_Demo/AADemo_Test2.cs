@@ -161,10 +161,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
 
         public void OnDraw(Graphics2D graphics2D)
         {
-
-
-
-
+             
             var childImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 

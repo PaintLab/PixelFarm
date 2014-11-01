@@ -186,7 +186,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             //-----------------------------------------------------------------------------------
 
 
-            base.OnDraw(graphics2D);
+            
             if (!IsFreezed)
             {
                 //var destImage = graphics2D.DestImage;

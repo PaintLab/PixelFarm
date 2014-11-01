@@ -124,8 +124,7 @@ namespace PixelFarm.Agg.UI
         public delegate void ChangedHandler(object sender, EventArgs e);
         public event ChangedHandler Changed;
 
-        public PolygonControl(int np) : this(np, 5) { }
-
+       
         public PolygonControl(int np, double point_radius)
             : base(new Vector2())
         {
