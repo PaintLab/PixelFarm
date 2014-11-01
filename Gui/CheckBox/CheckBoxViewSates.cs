@@ -68,7 +68,6 @@ namespace MatterHackers.Agg.UI
 
         CheckBox widgetWithHooksToUs;
         void RemoveLinks()
-<<<<<<< HEAD
         {
             if (widgetWithHooksToUs != null)
             {
@@ -82,21 +81,6 @@ namespace MatterHackers.Agg.UI
         
         void CreateLinks(CheckBox parent)
         {
-=======
-        {
-            if (widgetWithHooksToUs != null)
-            {
-                widgetWithHooksToUs.MouseEnter -= SetCorrectVisibilityStates;
-                widgetWithHooksToUs.MouseDown -= SetCorrectVisibilityStates;
-                widgetWithHooksToUs.MouseUp -= SetCorrectVisibilityStates;
-                widgetWithHooksToUs.MouseLeave -= SetCorrectVisibilityStates;
-                widgetWithHooksToUs.CheckedStateChanged -= SetCorrectVisibilityStates;
-            }
-        }
-        
-        void CreateLinks(CheckBox parent)
-        {
->>>>>>> FETCH_HEAD
             RemoveLinks();
             
             widgetWithHooksToUs = parent;

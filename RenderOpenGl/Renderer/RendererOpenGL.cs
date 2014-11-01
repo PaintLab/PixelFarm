@@ -82,11 +82,7 @@ namespace MatterHackers.RenderOpenGl
 
         public void PushOrthoProjection()
         {
-<<<<<<< HEAD
-			GL.PushAttrib(AttribMask.TransformBit | AttribMask.EnableBit);
-=======
 			GL.Disable(EnableCap.CullFace);
->>>>>>> FETCH_HEAD
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.PushMatrix();
@@ -122,7 +118,6 @@ namespace MatterHackers.RenderOpenGl
                 {
                     if (ShapePath.is_close(PathAndFlags)
                         || (haveBegunContour && ShapePath.is_move_to(PathAndFlags)))
-<<<<<<< HEAD
                     {
                         tesselator.EndContour();
                         haveBegunContour = false;
@@ -137,29 +132,9 @@ namespace MatterHackers.RenderOpenGl
                         }
 
                         tesselator.AddVertex(x, y);
-=======
-                    {
-                        tesselator.EndContour();
-                        haveBegunContour = false;
->>>>>>> FETCH_HEAD
                     }
                 }
 
-<<<<<<< HEAD
-=======
-                    if (!ShapePath.is_close(PathAndFlags))
-                    {
-                        if (!haveBegunContour)
-                        {
-                            tesselator.BeginContour();
-                            haveBegunContour = true;
-                        }
-
-                        tesselator.AddVertex(x, y);
-                    }
-                }
-
->>>>>>> FETCH_HEAD
                 if (haveBegunContour)
                 {
                     tesselator.EndContour();

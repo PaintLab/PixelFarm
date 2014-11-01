@@ -45,10 +45,6 @@ namespace MatterHackers.GCodeVisualizer
         protected Vector3Float end;
         protected float travelSpeed;
 
-<<<<<<< HEAD
-        public RenderFeatureTravel(Vector3 start, Vector3 end, double travelSpeed)
-        {
-=======
         protected Vector3Float GetStart(GCodeRenderInfo renderInfo)
         {
             if ((renderInfo.CurrentRenderType & RenderType.HideExtruderOffsets) == RenderType.HideExtruderOffsets)
@@ -81,18 +77,11 @@ namespace MatterHackers.GCodeVisualizer
             : base(extruderIndex)
         {
             this.extruderIndex = extruderIndex;
->>>>>>> FETCH_HEAD
             this.start = new Vector3Float(start);
             this.end = new Vector3Float(end);
             this.travelSpeed = (float)travelSpeed;
         }
 
-<<<<<<< HEAD
-        public override void CreateRender3DData(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, Affine transform, double layerScale, RenderType renderType)
-        {
-            if ((renderType & RenderType.Moves) == RenderType.Moves)
-            {
-=======
 
         public override void CreateRender3DData(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, GCodeRenderInfo renderInfo)
         {
@@ -100,22 +89,10 @@ namespace MatterHackers.GCodeVisualizer
             {
                 Vector3Float start = this.GetStart(renderInfo);
                 Vector3Float end = this.GetEnd(renderInfo);
->>>>>>> FETCH_HEAD
                 CreateCylinder(colorVertexData, indexData, new Vector3(start), new Vector3(end), .1, 6, GCodeRenderer.TravelColor, .2);
             }
         }
 
-<<<<<<< HEAD
-        public override void Render(Graphics2D graphics2D, Affine transform, double layerScale, RenderType renderType)
-        {
-            if ((renderType & RenderType.Moves) == RenderType.Moves)
-            {
-                double movementLineWidth = 0.35 * layerScale;
-                RGBA_Bytes movementColor = new RGBA_Bytes(10, 190, 15);
-
-                PathStorage pathStorage = new PathStorage();
-                VertexSourceApplyTransform transformedPathStorage = new VertexSourceApplyTransform(pathStorage, transform);
-=======
         public override void Render(Graphics2D graphics2D, GCodeRenderInfo renderInfo)
         {
             if ((renderInfo.CurrentRenderType & RenderType.Moves) == RenderType.Moves)
@@ -125,18 +102,14 @@ namespace MatterHackers.GCodeVisualizer
 
                 PathStorage pathStorage = new PathStorage();
                 VertexSourceApplyTransform transformedPathStorage = new VertexSourceApplyTransform(pathStorage, renderInfo.Transform);
->>>>>>> FETCH_HEAD
                 Stroke stroke = new Stroke(transformedPathStorage, movementLineWidth);
 
                 stroke.line_cap(LineCap.Round);
                 stroke.line_join(LineJoin.Round);
 
-<<<<<<< HEAD
-=======
                 Vector3Float start = this.GetStart(renderInfo);
                 Vector3Float end = this.GetEnd(renderInfo);
 
->>>>>>> FETCH_HEAD
                 pathStorage.Add(start.x, start.y, ShapePath.FlagsAndCommand.CommandMoveTo);
                 if (end.x != start.x || end.y != start.y)
                 {

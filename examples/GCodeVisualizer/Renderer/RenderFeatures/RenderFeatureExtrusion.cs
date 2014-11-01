@@ -45,13 +45,8 @@ namespace MatterHackers.GCodeVisualizer
         float layerHeight;
         RGBA_Bytes color;
 
-<<<<<<< HEAD
-        public RenderFeatureExtrusion(Vector3 start, Vector3 end, double travelSpeed, double totalExtrusionMm, double filamentDiameterMm, double layerHeight, RGBA_Bytes color)
-            : base(start, end, travelSpeed)
-=======
         public RenderFeatureExtrusion(Vector3 start, Vector3 end, int extruderIndex, double travelSpeed, double totalExtrusionMm, double filamentDiameterMm, double layerHeight, RGBA_Bytes color)
             : base(start, end, extruderIndex, travelSpeed)
->>>>>>> FETCH_HEAD
         {
             this.color = color;
             double fillamentRadius = filamentDiameterMm / 2;
@@ -73,14 +68,6 @@ namespace MatterHackers.GCodeVisualizer
             return radius;
         }
 
-<<<<<<< HEAD
-        public override void CreateRender3DData(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, Affine transform, double layerScale, RenderType renderType)
-        {
-            if ((renderType & RenderType.Extrusions) == RenderType.Extrusions)
-            {
-                double radius = GetRadius(renderType);
-                if ((renderType & RenderType.SpeedColors) == RenderType.SpeedColors)
-=======
         public override void CreateRender3DData(VectorPOD<ColorVertexData> colorVertexData, VectorPOD<int> indexData, GCodeRenderInfo renderInfo)
         {
             if ((renderInfo.CurrentRenderType & RenderType.Extrusions) == RenderType.Extrusions)
@@ -89,15 +76,11 @@ namespace MatterHackers.GCodeVisualizer
                 Vector3Float end = this.GetEnd(renderInfo);
                 double radius = GetRadius(renderInfo.CurrentRenderType);
                 if ((renderInfo.CurrentRenderType & RenderType.SpeedColors) == RenderType.SpeedColors)
->>>>>>> FETCH_HEAD
                 {
                     CreateCylinder(colorVertexData, indexData, new Vector3(start), new Vector3(end), radius, 6, color, layerHeight);
                 }
                 else
                 {
-<<<<<<< HEAD
-                    CreateCylinder(colorVertexData, indexData, new Vector3(start), new Vector3(end), radius, 6, GCodeRenderer.ExtrusionColor, layerHeight);
-=======
                     if (extruderIndex == 0)
                     {
                         CreateCylinder(colorVertexData, indexData, new Vector3(start), new Vector3(end), radius, 6, GCodeRenderer.ExtrusionColor, layerHeight);
@@ -106,20 +89,10 @@ namespace MatterHackers.GCodeVisualizer
                     {
                         CreateCylinder(colorVertexData, indexData, new Vector3(start), new Vector3(end), radius, 6, MultipleExtruderColor, layerHeight);
                     }
->>>>>>> FETCH_HEAD
                 }
             }
         }
 
-<<<<<<< HEAD
-        public override void Render(Graphics2D graphics2D, Affine transform, double layerScale, RenderType renderType)
-        {
-            if ((renderType & RenderType.Extrusions) == RenderType.Extrusions)
-            {
-                double extrusionLineWidths = GetRadius(renderType) * 2 * layerScale;
-                RGBA_Bytes extrusionColor = RGBA_Bytes.Black;
-                if ((renderType & RenderType.SpeedColors) == RenderType.SpeedColors)
-=======
         public override void Render(Graphics2D graphics2D, GCodeRenderInfo renderInfo)
         {
             if ((renderInfo.CurrentRenderType & RenderType.Extrusions) == RenderType.Extrusions)
@@ -132,28 +105,20 @@ namespace MatterHackers.GCodeVisualizer
                     extrusionColor = MultipleExtruderColor;
                 }
                 if ((renderInfo.CurrentRenderType & RenderType.SpeedColors) == RenderType.SpeedColors)
->>>>>>> FETCH_HEAD
                 {
                     extrusionColor = color;
                 }
 
                 PathStorage pathStorage = new PathStorage();
-<<<<<<< HEAD
-                VertexSourceApplyTransform transformedPathStorage = new VertexSourceApplyTransform(pathStorage, transform);
-=======
                 VertexSourceApplyTransform transformedPathStorage = new VertexSourceApplyTransform(pathStorage, renderInfo.Transform);
->>>>>>> FETCH_HEAD
                 Stroke stroke = new Stroke(transformedPathStorage, extrusionLineWidths);
 
                 stroke.line_cap(LineCap.Round);
                 stroke.line_join(LineJoin.Round);
 
-<<<<<<< HEAD
-=======
                 Vector3Float start = this.GetStart(renderInfo);
                 Vector3Float end = this.GetEnd(renderInfo);
 
->>>>>>> FETCH_HEAD
                 pathStorage.Add(start.x, start.y, ShapePath.FlagsAndCommand.CommandMoveTo);
                 pathStorage.Add(end.x, end.y, ShapePath.FlagsAndCommand.CommandLineTo);
 

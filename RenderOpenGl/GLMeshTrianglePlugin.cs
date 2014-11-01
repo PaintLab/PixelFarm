@@ -44,18 +44,6 @@ namespace MatterHackers.RenderOpenGl
     {
         public float textureU;
         public float textureV;
-<<<<<<< HEAD
-
-        public float normalsX;
-        public float normalsY;
-        public float normalsZ;
-
-        public float positionsX;
-        public float positionsY;
-        public float positionsZ;
-
-        public static readonly int Stride = Marshal.SizeOf(default(TriangleVertexData));
-=======
         public static readonly int Stride = Marshal.SizeOf(default(VertexTextureData));
     }
 
@@ -73,19 +61,14 @@ namespace MatterHackers.RenderOpenGl
         public float positionY;
         public float positionZ;
         public static readonly int Stride = Marshal.SizeOf(default(VertexPositionData));
->>>>>>> FETCH_HEAD
     }
 
     public class SubTriangleMesh
     {
         public ImageBuffer texture = null;
-<<<<<<< HEAD
-        public VectorPOD<TriangleVertexData> vertexDatas = new VectorPOD<TriangleVertexData>();
-=======
         public VectorPOD<VertexTextureData> textrueData = new VectorPOD<VertexTextureData>();
         public VectorPOD<VertexNormalData> normalData = new VectorPOD<VertexNormalData>();
         public VectorPOD<VertexPositionData> positionData = new VectorPOD<VertexPositionData>();
->>>>>>> FETCH_HEAD
     }
 
     public class GLMeshTrianglePlugin
@@ -162,13 +145,9 @@ namespace MatterHackers.RenderOpenGl
                     subMeshs.Add(newSubMesh);
 
                     currentSubMesh = subMeshs[subMeshs.Count - 1];
-<<<<<<< HEAD
-                    vertexDatas = currentSubMesh.vertexDatas;
-=======
                     textureData = currentSubMesh.textrueData;
                     normalData = currentSubMesh.normalData;
                     positionData = currentSubMesh.positionData;
->>>>>>> FETCH_HEAD
                 }
 
                 Vector2[] textureUV = new Vector2[2];

@@ -191,11 +191,7 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-<<<<<<< HEAD
-        public ScaleRotateTranslate SelectedMeshTransform 
-=======
         public ScaleRotateTranslate SelectedMeshGroupTransform 
->>>>>>> FETCH_HEAD
         {
             get 
             {
@@ -214,11 +210,7 @@ namespace MatterHackers.MeshVisualizer
         }
 
         List<ScaleRotateTranslate> meshTransforms = new List<ScaleRotateTranslate>();
-<<<<<<< HEAD
-        public List<ScaleRotateTranslate> MeshTransforms { get { return meshTransforms; } }
-=======
         public List<ScaleRotateTranslate> MeshGroupTransforms { get { return meshTransforms; } }
->>>>>>> FETCH_HEAD
 
         List<MeshGroup> meshesToRender = new List<MeshGroup>();
         public List<MeshGroup> MeshGroups { get { return meshesToRender; } }
@@ -377,13 +369,9 @@ namespace MatterHackers.MeshVisualizer
                         drawColor = GetSelectedMaterialColor(meshData.MaterialIndex);
                     }
 
-<<<<<<< HEAD
-                RenderMeshToGl.Render(meshToRender, drawColor, MeshTransforms[i].TotalTransform, RenderType);
-=======
                     RenderMeshToGl.Render(meshToRender, drawColor, MeshGroupTransforms[i].TotalTransform, RenderType);
                     part++;
                 }
->>>>>>> FETCH_HEAD
             }
 
             // we don't want to render the bed or bulid volume before we load a model.
@@ -429,51 +417,12 @@ namespace MatterHackers.MeshVisualizer
 
                 backgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
                 {
-<<<<<<< HEAD
-                    case ".STL":
-                        {
-                            backgroundWorker.DoWork += (object sender, DoWorkEventArgs e) =>
-                            {
-                                Mesh loadedMesh = StlProcessing.Load(meshPathAndFileName, backgroundWorker_ProgressChanged);
-
-                                SetMeshAfterLoad(loadedMesh);
-
-                                e.Result = loadedMesh;
-                            };
-                            backgroundWorker.RunWorkerAsync();
-                            loadingMeshFile = true;
-                        }
-                        break;
-
-                    case ".AMF":
-                        {
-                            AmfProcessing amfLoader = new AmfProcessing();
-                            amfLoader.LoadInBackground(backgroundWorker, meshPathAndFileName);
-                            loadingMeshFile = true;
-                        }
-                        break;
-
-                    default:
-                        loadingMeshFile = false;
-                        break;
-                }
-
-                if (loadingMeshFile)
-                {
-                    partProcessingInfo.centeredInfoText.Text = "Loading Mesh...";
-                }
-                else
-                {
-                    partProcessingInfo.centeredInfoText.Text = string.Format("Sorry! No 3D view available\nfor this file type '{0}'.", Path.GetExtension(meshPathAndFileName).ToUpper());
-                }
-=======
                     List<MeshGroup> loadedMeshGroups = MeshFileIo.Load(meshPathAndFileName, reportProgress0to100);
                     SetMeshAfterLoad(loadedMeshGroups, centerPart);
                     e.Result = loadedMeshGroups;
                 };
                 backgroundWorker.RunWorkerAsync();
                 partProcessingInfo.centeredInfoText.Text = "Loading Mesh...";
->>>>>>> FETCH_HEAD
             }
             else
             {
@@ -491,16 +440,6 @@ namespace MatterHackers.MeshVisualizer
             }
             else
             {
-<<<<<<< HEAD
-                meshTransforms.Add(ScaleRotateTranslate.Identity());
-
-                int index = meshTransforms.Count - 1;
-                // get the ScaleRotateTranslate matrices set up
-                {
-                    AxisAlignedBoundingBox bounds = loadedMesh.GetAxisAlignedBoundingBox(meshTransforms[index].TotalTransform);
-                    Vector3 boundsCenter = (bounds.maxXYZ + bounds.minXYZ) / 2;
-                    loadedMesh.Translate(-boundsCenter);
-=======
                 CreateGlDataForMeshes(loadedMeshGroups);
 
                 AxisAlignedBoundingBox bounds = new AxisAlignedBoundingBox(Vector3.Zero, Vector3.Zero);
@@ -516,22 +455,10 @@ namespace MatterHackers.MeshVisualizer
                     {
                         bounds = AxisAlignedBoundingBox.Union(bounds, meshGroup.GetAxisAlignedBoundingBox());
                     }
->>>>>>> FETCH_HEAD
                 }
 
                 foreach (MeshGroup meshGroup in loadedMeshGroups)
                 {
-<<<<<<< HEAD
-                    AxisAlignedBoundingBox bounds = loadedMesh.GetAxisAlignedBoundingBox(meshTransforms[index].TotalTransform);
-                    Vector3 boundsCenter = (bounds.maxXYZ + bounds.minXYZ) / 2;
-                    ScaleRotateTranslate moved = meshTransforms[index];
-                    moved.translation *= Matrix4X4.CreateTranslation(-boundsCenter + new Vector3(0, 0, bounds.ZSize / 2));
-                    meshTransforms[index] = moved;
-                }
-
-                Meshes.Add(loadedMesh);
-
-=======
                     // make sure the mesh is centered about the origin so rotations will come from a reasonable place
                     ScaleRotateTranslate centering = ScaleRotateTranslate.Identity();
                     centering.SetCenteringForMeshGroup(meshGroup);
@@ -551,7 +478,6 @@ namespace MatterHackers.MeshVisualizer
                     }
                 }
 
->>>>>>> FETCH_HEAD
                 trackballTumbleWidget.TrackBallController = new TrackBallController();
                 trackballTumbleWidget.OnBoundsChanged(null);
                 trackballTumbleWidget.TrackBallController.Scale = .03;
@@ -570,13 +496,6 @@ namespace MatterHackers.MeshVisualizer
             }
         }
 
-<<<<<<< HEAD
-        bool backgroundWorker_ProgressChanged(double progress0To1, string processingState)
-        {
-            UiThread.RunOnIdle((object state) =>
-            {
-                int percentComplete = (int)(progress0To1 * 100 + .5);
-=======
         void reportProgress0to100(double progress0To1, string processingState, out bool continueProcessing)
         {
             if (this.WidgetHasBeenClosed)
@@ -591,15 +510,10 @@ namespace MatterHackers.MeshVisualizer
             UiThread.RunOnIdle((object state) =>
             {
                 int percentComplete = (int)(progress0To1 * 100);
->>>>>>> FETCH_HEAD
                 partProcessingInfo.centeredInfoText.Text = "Loading Mesh {0}%...".FormatWith(percentComplete);
                 partProcessingInfo.progressControl.PercentComplete = percentComplete;
                 partProcessingInfo.centeredInfoDescription.Text = processingState;
             });
-<<<<<<< HEAD
-            return true;
-=======
->>>>>>> FETCH_HEAD
         }
 
         public override void OnMouseDown(MouseEventArgs mouseEvent)

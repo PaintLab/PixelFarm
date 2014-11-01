@@ -117,11 +117,8 @@ namespace MatterHackers.Agg.UI
         }
     }
 		
-<<<<<<< HEAD
-=======
 
 
->>>>>>> FETCH_HEAD
     public class ScrollBar : GuiWidget
     {
         ScrollableWidget ParentScrollWidget;

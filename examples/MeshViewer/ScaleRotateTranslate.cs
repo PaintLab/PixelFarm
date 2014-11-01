@@ -45,21 +45,14 @@ namespace MatterHackers.MeshVisualizer
 {
     public struct ScaleRotateTranslate
     {
-<<<<<<< HEAD
-=======
         public Matrix4X4 centering;
->>>>>>> FETCH_HEAD
         public Matrix4X4 scale;
         public Matrix4X4 rotation;
         public Matrix4X4 translation;
 
         public ScaleRotateTranslate(Matrix4X4 scale, Matrix4X4 rotation, Matrix4X4 translation)
         {
-<<<<<<< HEAD
-            // TODO: Complete member initialization
-=======
             centering = Matrix4X4.Identity;
->>>>>>> FETCH_HEAD
             this.scale = scale;
             this.rotation = rotation;
             this.translation = translation;
@@ -69,22 +62,14 @@ namespace MatterHackers.MeshVisualizer
         {
             get
             {
-<<<<<<< HEAD
-                return scale * rotation * translation;
-=======
                 return centering * scale * rotation * translation;
->>>>>>> FETCH_HEAD
             }
         }
 
         public static ScaleRotateTranslate Identity()
         {
-<<<<<<< HEAD
-            ScaleRotateTranslate identity;
-=======
             ScaleRotateTranslate identity = new ScaleRotateTranslate();
             identity.centering = Matrix4X4.Identity;
->>>>>>> FETCH_HEAD
             identity.scale = Matrix4X4.Identity;
             identity.rotation = Matrix4X4.Identity;
             identity.translation = Matrix4X4.Identity;
@@ -97,8 +82,6 @@ namespace MatterHackers.MeshVisualizer
             translation.translation = Matrix4X4.CreateTranslation(x, y, z);
             return translation;
         }
-<<<<<<< HEAD
-=======
 
         public void SetCenteringForMeshGroup(MeshGroup meshGroup)
         {
@@ -108,7 +91,6 @@ namespace MatterHackers.MeshVisualizer
             // and move the translation back so the part does not move
             translation *= Matrix4X4.CreateTranslation(boundsCenter);
         }
->>>>>>> FETCH_HEAD
     }
 }
 

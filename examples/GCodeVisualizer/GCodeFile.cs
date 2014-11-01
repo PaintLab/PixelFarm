@@ -644,12 +644,9 @@ namespace MatterHackers.GCodeVisualizer
                 case "210": // Set homing rate
                     break;
 
-<<<<<<< HEAD
-=======
                 case "226": // user request pause
                     break;
 
->>>>>>> FETCH_HEAD
                 case "227": // Enable Automatic Reverse and Prime
                     break;
 

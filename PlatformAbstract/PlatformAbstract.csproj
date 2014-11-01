@@ -67,8 +67,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release64|AnyCPU'">
     <OutputPath>bin\Release64\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-<<<<<<< HEAD
-=======
     <DebugType>None</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisLogFile>bin\Release\agg_platform_win32.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
@@ -118,7 +116,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <FileAlignment>4096</FileAlignment>
->>>>>>> FETCH_HEAD
     <DebugType>None</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisLogFile>bin\Release\agg_platform_win32.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
@@ -129,7 +126,6 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
-    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug64|x64'">
     <DebugSymbols>true</DebugSymbols>
