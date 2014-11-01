@@ -163,7 +163,7 @@ namespace PixelFarm.Agg.Sample_Blur
 
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,
-                            m_shadow_ctrl.polygon());
+                            m_shadow_ctrl.GetPolygon());
 
 
             VertexStoreSnap spath;

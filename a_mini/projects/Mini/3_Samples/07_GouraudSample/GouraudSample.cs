@@ -162,6 +162,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
 
             IImage backBuffer = widgetsSubImage;
+
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
