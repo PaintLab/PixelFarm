@@ -40,19 +40,19 @@ namespace PixelFarm.Agg
             int y)
         {
             int r, g, b, a;
-            r = g = b = a = LineAABasics.SUBPIXEL_SCALE * LineAABasics.SUBPIXEL_SCALE / 2;
+            r = g = b = a = LineAA.SUBPIXEL_SCALE * LineAA.SUBPIXEL_SCALE / 2;
 
             int weight;
-            int x_lr = x >> LineAABasics.SUBPIXEL_SHIFT;
-            int y_lr = y >> LineAABasics.SUBPIXEL_SHIFT;
+            int x_lr = x >> LineAA.SUBPIXEL_SHIFT;
+            int y_lr = y >> LineAA.SUBPIXEL_SHIFT;
 
-            x &= LineAABasics.SUBPIXEL_MARK;
-            y &= LineAABasics.SUBPIXEL_MARK;
+            x &= LineAA.SUBPIXEL_MARK;
+            y &= LineAA.SUBPIXEL_MARK;
             int sourceOffset;
             byte[] ptr = sourceImage.GetPixelPointerXY(x_lr, y_lr, out sourceOffset);
 
-            weight = (LineAABasics.SUBPIXEL_SCALE - x) *
-                     (LineAABasics.SUBPIXEL_SCALE - y);
+            weight = (LineAA.SUBPIXEL_SCALE - x) *
+                     (LineAA.SUBPIXEL_SCALE - y);
             r += weight * ptr[sourceOffset + ImageBase.OrderR];
             g += weight * ptr[sourceOffset + ImageBase.OrderG];
             b += weight * ptr[sourceOffset + ImageBase.OrderB];
@@ -60,7 +60,7 @@ namespace PixelFarm.Agg
 
             sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
 
-            weight = x * (LineAABasics.SUBPIXEL_SCALE - y);
+            weight = x * (LineAA.SUBPIXEL_SCALE - y);
             r += weight * ptr[sourceOffset + ImageBase.OrderR];
             g += weight * ptr[sourceOffset + ImageBase.OrderG];
             b += weight * ptr[sourceOffset + ImageBase.OrderB];
@@ -68,7 +68,7 @@ namespace PixelFarm.Agg
 
             ptr = sourceImage.GetPixelPointerXY(x_lr, y_lr + 1, out sourceOffset);
 
-            weight = (LineAABasics.SUBPIXEL_SCALE - x) * y;
+            weight = (LineAA.SUBPIXEL_SCALE - x) * y;
             r += weight * ptr[sourceOffset + ImageBase.OrderR];
             g += weight * ptr[sourceOffset + ImageBase.OrderG];
             b += weight * ptr[sourceOffset + ImageBase.OrderB];
@@ -82,10 +82,10 @@ namespace PixelFarm.Agg
             b += weight * ptr[sourceOffset + ImageBase.OrderB];
             a += weight * ptr[sourceOffset + ImageBase.OrderA];
 
-            destBuffer[destBufferOffset].red = (byte)(r >> LineAABasics.SUBPIXEL_SHIFT * 2);
-            destBuffer[destBufferOffset].green = (byte)(g >> LineAABasics.SUBPIXEL_SHIFT * 2);
-            destBuffer[destBufferOffset].blue = (byte)(b >> LineAABasics.SUBPIXEL_SHIFT * 2);
-            destBuffer[destBufferOffset].alpha = (byte)(a >> LineAABasics.SUBPIXEL_SHIFT * 2);
+            destBuffer[destBufferOffset].red = (byte)(r >> LineAA.SUBPIXEL_SHIFT * 2);
+            destBuffer[destBufferOffset].green = (byte)(g >> LineAA.SUBPIXEL_SHIFT * 2);
+            destBuffer[destBufferOffset].blue = (byte)(b >> LineAA.SUBPIXEL_SHIFT * 2);
+            destBuffer[destBufferOffset].alpha = (byte)(a >> LineAA.SUBPIXEL_SHIFT * 2);
         }
     } 
 }
