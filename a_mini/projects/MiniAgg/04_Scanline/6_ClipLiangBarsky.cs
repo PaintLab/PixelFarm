@@ -21,9 +21,9 @@
 // Liang-Barsky clipping 
 //
 //----------------------------------------------------------------------------
-namespace PixelFarm.Agg.Lines
+namespace PixelFarm.Agg
 {
-    public static class ClipLiangBarsky
+    static class ClipLiangBarsky
     {
         //------------------------------------------------------------------------
         enum ClippingFlags
