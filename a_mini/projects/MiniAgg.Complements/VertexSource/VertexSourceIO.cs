@@ -1,10 +1,11 @@
-﻿using System;
+﻿//MIT 2014,WinterDev 
+using System;
 using System.Collections.Generic;
 
 using System.Text;
 using System.IO;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     public class VertexSourceIO
     {
@@ -96,14 +97,14 @@ namespace MatterHackers.Agg.VertexSource
             writer.Flush();
             //------------------------------------
         }
-        public static void WriteColorsToStream(BinaryWriter writer, MatterHackers.Agg.ColorRGBA[] colors)
+        public static void WriteColorsToStream(BinaryWriter writer, PixelFarm.Agg.ColorRGBA[] colors)
         {
             int len = colors.Length;
             //1.
             writer.Write(len);
             for (int i = 0; i < len; ++i)
             {
-                MatterHackers.Agg.ColorRGBA color = colors[i];
+                PixelFarm.Agg.ColorRGBA color = colors[i];
                 writer.Write(color.red);
                 writer.Write(color.green);
                 writer.Write(color.blue);
@@ -163,7 +164,7 @@ namespace MatterHackers.Agg.VertexSource
 
         }
 
-        public static void ReadColorDataFromStream(BinaryReader reader, out MatterHackers.Agg.ColorRGBA[] colors)
+        public static void ReadColorDataFromStream(BinaryReader reader, out PixelFarm.Agg.ColorRGBA[] colors)
         {
             int len = reader.ReadInt32();
             colors = new ColorRGBA[len];

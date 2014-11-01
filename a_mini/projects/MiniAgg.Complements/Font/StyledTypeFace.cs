@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿//2014 BSD,WinterDev   
+//----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 //
 // C# Port port by: Lars Brubaker
@@ -19,73 +20,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Image;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg.Image;
 
-namespace MatterHackers.Agg.Font
+namespace PixelFarm.Agg.Font
 {
-    public class GlyphWithUnderline
-    {
-
-        VertexSnap underline;
-        VertexSnap glyph;
-
-        public GlyphWithUnderline(VertexStorage glyph, int advanceForCharacter, int Underline_position, int Underline_thickness)
-        {
-            underline = new VertexSnap(
-                new RoundedRect(new RectangleDouble(0,
-                    Underline_position, advanceForCharacter,
-                    Underline_position + Underline_thickness), 0).MakeVxs());
-            this.glyph = new VertexSnap(glyph);
-        }
-
-
-        public VertexSnap MakeVertexSnap() { return new VertexSnap(this.MakeVxs()); }
-        public VertexStorage MakeVxs()
-        {
-            var list = new List<VertexData>();
-            foreach (var v in this.GetVertexIter())
-            {
-                list.Add(v);
-            }
-            return new VertexStorage(list);
-        }
-
-        public IEnumerable<VertexData> GetVertexIter()
-        {
-            ShapePath.FlagsAndCommand cmd;
-            double x, y;
-
-            // return all the data for the glyph
-            var snapIter = glyph.GetVertexSnapIter();
-            do
-            {
-                cmd = snapIter.GetNextVertex(out x, out y);
-                if (ShapePath.IsStop(cmd))
-                {
-                    yield return new VertexData(cmd, x, y);
-                    break;
-                }
-                else
-                {
-                    yield return new VertexData(cmd, x, y);
-                }
-
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-             
-
-            snapIter = underline.GetVertexSnapIter();
-            do
-            {
-                cmd = snapIter.GetNextVertex(out x, out y);
-                yield return new VertexData(cmd, x, y);
-
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop); 
-        } 
-       
-    }
+  
 
     public class StyledTypeFaceImageCache
     {
@@ -298,38 +240,44 @@ namespace MatterHackers.Agg.Font
                 {
                     bounds.ExpandToInclude(x, y);
                 }
-            }
+            } 
+
+            
+            ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1),
+                Math.Max((int)(bounds.Height + .5), 1), 
+                32, 
+                new PixelBlenderBGRA());
 
 
-            ActualImage charImage = new ActualImage(Math.Max((int)(bounds.Width + .5), 1), Math.Max((int)(bounds.Height + .5), 1), 32, new BlenderBGRA());
             var gfx = Graphics2D.CreateFromImage(charImage);
-            gfx.Render(new VertexSnap(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
+            gfx.Render(new VertexStoreSnap(glyphVxs), xFraction, yFraction, ColorRGBA.Black);
             characterImageCache[character] = charImage;
 
             return charImage;
         }
 
-        public VertexStorage GetGlyphForCharacter(char character)
+        public VertexStore GetGlyphForCharacter(char character)
         {
             // scale it to the correct size.
 
-            VertexStorage sourceGlyph = typeFace.GetGlyphForCharacter(character);
+            VertexStore sourceGlyph = typeFace.GetGlyphForCharacter(character);
             if (sourceGlyph != null)
             {
                 if (DoUnderline)
                 {
-                    sourceGlyph = new GlyphWithUnderline(sourceGlyph,
-                        typeFace.GetAdvanceForCharacter(character),
-                        typeFace.Underline_position,
-                        typeFace.Underline_thickness).MakeVxs();
-                }
-                Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
-                var characterGlyph = glyphTransform.TransformToVxs(sourceGlyph);
-                if (FlatenCurves)
-                {
-                    characterGlyph = new FlattenCurves(characterGlyph).MakeVxs();
+                    //sourceGlyph = new GlyphWithUnderline(sourceGlyph,
+                    //    typeFace.GetAdvanceForCharacter(character),
+                    //    typeFace.Underline_position,
+                    //    typeFace.Underline_thickness).MakeVxs();
                 }
 
+
+                Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
+                VertexStore characterGlyph = glyphTransform.TransformToVxs(sourceGlyph);
+                if (FlatenCurves)
+                {
+                    characterGlyph = new FlattenCurves().MakeVxs(characterGlyph);
+                }
                 return characterGlyph;
             }
 

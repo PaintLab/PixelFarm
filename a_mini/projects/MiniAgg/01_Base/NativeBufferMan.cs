@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     public class NativeBuffer

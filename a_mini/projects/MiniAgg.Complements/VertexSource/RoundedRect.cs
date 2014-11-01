@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -22,9 +23,9 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using MatterHackers.VectorMath;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     //------------------------------------------------------------rounded_rect
     //
@@ -194,19 +195,13 @@ namespace MatterHackers.Agg.VertexSource
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
-        public VertexStorage MakeVxs()
-        {
-
-            List<VertexData> vlist = new List<VertexData>();
-            foreach (var v in this.GetVertexIter())
-            {
-                vlist.Add(v);
-            }
-            return new VertexStorage(vlist);
+        public VertexStore MakeVxs()
+        {   
+            return new VertexStore(this.GetVertexIter());             
         }
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs());
         }
 
     }

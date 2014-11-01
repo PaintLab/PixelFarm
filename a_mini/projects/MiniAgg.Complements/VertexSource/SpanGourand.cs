@@ -1,3 +1,4 @@
+//MIT 2014,WinterDev 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -19,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     //============================================================span_gouraud
     public class SpanGourand
@@ -110,24 +111,25 @@ namespace MatterHackers.Agg.VertexSource
                 m_cmd[6] = ShapePath.FlagsAndCommand.CommandStop;
             }
         }
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
 
-            List<VertexData> list = new List<VertexData>();
-            foreach (var v in this.GetVertexIter())
+            VertexStore vxs = new VertexStore();
+
+            foreach (VertexData v in this.GetVertexIter())
             {
-                list.Add(v);
+                vxs.AddVertex(v);
                 if (v.command == ShapePath.FlagsAndCommand.CommandStop)
                 {
                     break;
                 }
 
             }
-            return new VertexStorage(list);
+            return vxs;
         }
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs());
         }
         public IEnumerable<VertexData> GetVertexIter()
         {

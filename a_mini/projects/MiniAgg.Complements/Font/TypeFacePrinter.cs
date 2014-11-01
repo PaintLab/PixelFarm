@@ -1,4 +1,5 @@
-﻿//----------------------------------------------------------------------------
+﻿//2014 BSD,WinterDev   
+//----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 //
 // C# Port port by: Lars Brubaker
@@ -21,20 +22,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
 
-namespace MatterHackers.Agg.Font
+namespace PixelFarm.Agg.Font
 {
     public enum Justification { Left, Center, Right };
     public enum Baseline { BoundsTop, BoundsCenter, TextCenter, Text, BoundsBottom };
 
 
 
-    public class TypeFacePrinter 
+    public class TypeFacePrinter
     {
         StyledTypeFace typeFaceStyle;
         String text = "";
@@ -157,7 +158,7 @@ namespace MatterHackers.Agg.Font
             }
             else
             {
-                graphics2D.Render(new VertexSnap(this.MakeVxs()), color);
+                graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), color);
             }
         }
 
@@ -264,22 +265,17 @@ namespace MatterHackers.Agg.Font
                 }
             }
 
-             
+
             yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
         }
 
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs()
         {
-            List<VertexData> vlist = new List<VertexData>();
-            foreach (var v in this.GetVertexIter())
-            {
-                vlist.Add(v);
-            }
-            return new VertexStorage(vlist);
+            return new VertexStore(this.GetVertexIter());             
         }
-        public VertexSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap()
         {
-            return new VertexSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs());
         }
         private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)
         {
@@ -345,14 +341,10 @@ namespace MatterHackers.Agg.Font
 
             return command;
         }
-        public VertexStorage CreateVxs()
+        public VertexStore CreateVxs()
         {
-            List<VertexData> list = new List<VertexData>();
-            foreach (var v in this.GetVertexIter())
-            {
-                list.Add(v);
-            }
-            return new VertexStorage(list);
+            return new VertexStore(this.GetVertexIter());
+
             //return new VertexSnap(new VertexStorage(list));
         }
 #else

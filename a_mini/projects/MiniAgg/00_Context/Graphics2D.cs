@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev  
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -19,10 +20,10 @@
 using System;
 using System.Collections.Generic;
 
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.Agg.Transform;
-using MatterHackers.VectorMath;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg.Transform;
+using PixelFarm.VectorMath;
 
 namespace System.Runtime.CompilerServices
 {
@@ -31,7 +32,7 @@ namespace System.Runtime.CompilerServices
     }
 }
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
 
     public abstract class Graphics2D
@@ -41,9 +42,7 @@ namespace MatterHackers.Agg
         protected IImage destImageByte;
         protected ScanlineRasterizer rasterizer;
 
-        Stack<Affine> affineTransformStack = new Stack<Affine>();
-       
-
+        Stack<Affine> affineTransformStack = new Stack<Affine>(); 
 
         public Graphics2D(IImage destImage, ScanlineRasterizer rasterizer)
         {
@@ -57,46 +56,30 @@ namespace MatterHackers.Agg
         public abstract void Clear(ColorRGBA color);
         public abstract void SetClippingRect(RectangleDouble rect_d);
         public abstract RectangleDouble GetClippingRect();
-        public abstract void Render(VertexSnap vertexSource, ColorRGBA colorBytes);
+        public abstract RectangleInt GetClippingRectInt();
         //------------------------------------------------------------------------
+
+        public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
+
         public abstract void Render(IImage imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
+        public abstract void Render(IImage imageSource, double x, double y);
 
         public void Render(IImage imageSource, int x, int y)
         {
-            Render(imageSource, x, y, 0, 1, 1);
+            this.Render(imageSource, (double)x, (double)y);
         }
-
-        public void Render(IImage imageSource, double x, double y)
+         
+        public void Render(VertexStore vxStorage, ColorRGBA c)
         {
-            Render(imageSource, x, y, 0, 1, 1);
+            Render(new VertexStoreSnap(vxStorage), c);
         }
-
-
-        public void Render(VertexStorage vxStorage, ColorRGBA[] colorArray, int[] pathIdArray, int numPaths)
-        {
-            for (int i = 0; i < numPaths; i++)
-            {
-                Render(new VertexSnap(vxStorage, pathIdArray[i]), colorArray[i]);
-            }
-        }
-        public void Render(VertexStorage vxStorage, ColorRGBA c)
-        {
-            Render(new VertexSnap(vxStorage, 0), c);
-        }
-        public void Render(VertexSnap vertexSource, double x, double y, ColorRGBA color)
+        public void Render(VertexStoreSnap vertexSource, double x, double y, ColorRGBA color)
         {
             var inputVxs = vertexSource.GetInternalVxs();
             var vxs = Affine.NewTranslation(x, y).TransformToVertexSnap(inputVxs);
-            Render(vxs, color);
-        }
-
-        public void Render(VertexSnap vertexSource, Vector2 position, ColorRGBA color)
-        {
-            var inputVxs = vertexSource.GetInternalVxs();
-            var vxs = Affine.NewTranslation(position.x, position.y).TransformToVertexSnap(inputVxs);
             Render(vxs, color);
         }
 
@@ -169,7 +152,7 @@ namespace MatterHackers.Agg
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);
 
-            Render(new Stroke(1).MakeVxs(m_LinesToDraw.MakeVxs()), color);
+            Render(new Stroke(1).MakeVxs(m_LinesToDraw.Vxs), color);
         }
 #endif
 

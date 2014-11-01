@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -15,10 +16,10 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using MatterHackers.VectorMath;
-using FlagsAndCommand = MatterHackers.Agg.ShapePath.FlagsAndCommand;
+using PixelFarm.VectorMath;
+using FlagsAndCommand = PixelFarm.Agg.ShapePath.FlagsAndCommand;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     public static class Curves
     {

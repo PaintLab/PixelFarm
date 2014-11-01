@@ -71,7 +71,7 @@ namespace Mini
 
 
             //test01
-            var lionShape = new MatterHackers.Agg.LionShape();
+            var lionShape = new PixelFarm.Agg.LionShape();
             lionShape.ParseLion();
 
             //test path serialize to binary stream
@@ -83,18 +83,18 @@ namespace Mini
 
 
                 //1. all coords and commands
-                MatterHackers.Agg.VertexSource.VertexSourceIO.WriteToStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.WriteToStream(
                     writer,
                     lionShape.Path);
 
                 //2. colors
-                MatterHackers.Agg.VertexSource.VertexSourceIO.WriteColorsToStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.WriteColorsToStream(
                    writer, lionShape.Colors
                    );
                 //---------------------------------------
                 //3. num paths, & path index 
                 int npath = lionShape.NumPaths;
-                MatterHackers.Agg.VertexSource.VertexSourceIO.WritePathIndexListToStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.WritePathIndexListToStream(
                   writer, lionShape.PathIndexList,
                   npath
                   );
@@ -107,27 +107,27 @@ namespace Mini
             using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
             {
                 var reader = new System.IO.BinaryReader(fs);
-                var lionShape2 = new MatterHackers.Agg.LionShape();
+                var lionShape2 = new PixelFarm.Agg.LionShape();
 
-                MatterHackers.Agg.VertexSource.PathStorage path;
-                MatterHackers.Agg.ColorRGBA[] colors;
+                PixelFarm.Agg.VertexSource.PathStorage path;
+                PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
 
                 //1. path and command
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
                   reader, out path
                   );
                 //2. colors
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
                   reader, out colors
                   );
                 //3. path indice
                 int npaths;
-                MatterHackers.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
+                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
                   reader, out npaths, out pathIndexList
                  );
 
-                MatterHackers.Agg.LionShape.UnsafeDirectSetData(
+                PixelFarm.Agg.LionShape.UnsafeDirectSetData(
                      lionShape2,
                      npaths,
                      path, colors, pathIndexList);
@@ -158,7 +158,7 @@ namespace Mini
             var source = new int[width * height];
             var dest = new int[width * height];
             Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
-            MatterHackers.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
+            PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
             Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
 
             bmp.UnlockBits(bitmapData);

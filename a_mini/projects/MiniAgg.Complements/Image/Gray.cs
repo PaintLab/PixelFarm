@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -25,11 +26,11 @@
 // 
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg;
+using PixelFarm.Agg;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
-    public class BlenderGray : IRecieveBlenderByte
+    public class BlenderGray : IPixelBlender
     {
         public int NumPixelBits { get { return 8; } }
 
@@ -70,7 +71,15 @@ namespace MatterHackers.Agg.Image
             }
             while (--count != 0);
         }
+        public void CopyPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
+        {
 
+            int y = (sourceColor.red * 77) + (sourceColor.green * 151) + (sourceColor.blue * 28);
+            int gray = (y >> 8);
+            pDestBuffer[bufferOffset] = (byte)gray;
+
+
+        }
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
             int OneOverAlpha = BASE_MASK - sourceColor.alpha;
@@ -134,7 +143,7 @@ namespace MatterHackers.Agg.Image
         }
     }
 
-    public class BlenderGrayFromRed : IRecieveBlenderByte
+    public class BlenderGrayFromRed : IPixelBlender
     {
 
 
@@ -173,7 +182,13 @@ namespace MatterHackers.Agg.Image
             }
             while (--count != 0);
         }
+        public void CopyPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
+        {
 
+            pDestBuffer[bufferOffset] = sourceColor.red;
+            bufferOffset += bytesBetweenPixelsInclusive;
+
+        }
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
             int OneOverAlpha = BASE_MASK - sourceColor.alpha;
@@ -235,7 +250,7 @@ namespace MatterHackers.Agg.Image
         }
     }
 
-    public class BlenderGrayClampedMax : IRecieveBlenderByte
+    public class BlenderGrayClampedMax : IPixelBlender
     {
 
 
@@ -275,7 +290,13 @@ namespace MatterHackers.Agg.Image
             }
             while (--count != 0);
         }
+        public void CopyPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
+        {
 
+            byte clampedMax = Math.Min(Math.Max(sourceColor.red, Math.Max(sourceColor.green, sourceColor.blue)), (byte)255);
+            pDestBuffer[bufferOffset] = clampedMax;
+
+        }
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
         {
             int OneOverAlpha = BASE_MASK - sourceColor.alpha;

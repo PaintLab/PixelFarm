@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -13,9 +14,9 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-using MatterHackers.Agg;
+using PixelFarm.Agg;
 
-namespace MatterHackers.Agg.Image
+namespace PixelFarm.Agg.Image
 {
     //==================================================pixfmt_amask_adaptor
     public sealed class AlphaMaskAdaptor : ProxyImage

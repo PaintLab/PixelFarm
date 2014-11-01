@@ -1,3 +1,4 @@
+//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -23,7 +24,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MatterHackers.Agg.VertexSource
+namespace PixelFarm.Agg.VertexSource
 {
     //---------------------------------------------------------------conv_curve
     // Curve converter class. Any path storage can have Bezier curves defined 
@@ -54,92 +55,66 @@ namespace MatterHackers.Agg.VertexSource
 
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
-        readonly VertexSnap vertextSource;
 
-        public FlattenCurves(VertexSnap spath)
-        {
-            this.vertextSource = spath;
-        }
-        public FlattenCurves(VertexStorage vxs)
-        {
-            this.vertextSource = new VertexSnap(vxs);
-        }
         public double ApproximationScale
         {
             get
             {
                 return m_curve4.ApproximationScale;
             }
-
             set
             {
                 m_curve3.ApproximationScale = value;
                 m_curve4.ApproximationScale = value;
             }
         }
-
-
         public Curves.CurveApproximationMethod ApproximationMethod
         {
+            get
+            {
+                return m_curve4.ApproximationMethod;
+            }
             set
             {
                 m_curve3.ApproximationMethod = value;
                 m_curve4.ApproximationMethod = value;
             }
-
-            get
-            {
-
-                return m_curve4.ApproximationMethod;
-            }
         }
-
         public double AngleTolerance
         {
+            get
+            {
+                return m_curve4.AngleTolerance;
+            }
             set
             {
                 m_curve3.AngleTolerance = value;
                 m_curve4.AngleTolerance = value;
             }
-
-            get
-            {
-                return m_curve4.AngleTolerance;
-            }
         }
-
         public double CuspLimit
         {
+            get
+            {
+                return m_curve4.CuspLimit;
+            }
             set
             {
                 m_curve3.CuspLimit = value;
                 m_curve4.CuspLimit = value;
             }
-
-            get
-            {
-                return m_curve4.CuspLimit;
-
-            }
         }
 
 
-        public VertexStorage MakeVxs()
+        public VertexStore MakeVxs(VertexStoreSnap vsnap)
         {
-            List<VertexData> list = new List<VertexData>();
-
-             
-            var snapIter = vertextSource.GetVertexSnapIter();
+            VertexStore vxs = new VertexStore();
+            VertexData lastVertextData = new VertexData();
             m_curve3.Reset();
             m_curve4.Reset();
-
-            VertexData lastPosition = new VertexData();
-
-
+            var snapIter = vsnap.GetVertexSnapIter();
             double x, y;
             ShapePath.FlagsAndCommand cmd;
-
-
             do
             {
                 cmd = snapIter.GetNextVertex(out x, out y);
@@ -151,23 +126,30 @@ namespace MatterHackers.Agg.VertexSource
                         {
                             double tmp_vx, tmp_vy;
                             cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-                            VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
 
-                            m_curve3.Init(lastPosition.x, lastPosition.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
+                            VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
+                            m_curve3.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
 
                             IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
+
                             do
                             {
                                 curveIterator.MoveNext();
-                                if (ShapePath.IsStop(curveIterator.Current.command))
+                                VertexData currentVertextData = curveIterator.Current;
+                                if (ShapePath.IsStop(currentVertextData.command))
                                 {
                                     break;
                                 }
-                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
 
-                                list.Add(vertexData);
-                                lastPosition = vertexData;
+                                vertexData = new VertexData(
+                                   ShapePath.FlagsAndCommand.CommandLineTo,
+                                   currentVertextData.position);
+
+                                vxs.AddVertex(vertexData);
+
+                                lastVertextData = vertexData;
+
                             } while (!ShapePath.IsStop(curveIterator.Current.command));
                         }
                         break;
@@ -181,7 +163,7 @@ namespace MatterHackers.Agg.VertexSource
                             cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
                             VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
 
-                            m_curve4.Init(lastPosition.x, lastPosition.y, x, y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
+                            m_curve4.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
 
@@ -193,20 +175,30 @@ namespace MatterHackers.Agg.VertexSource
                                 {
                                     break;
                                 }
-                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, curveIterator.Current.position);
-                                list.Add(vertexData);
-                                lastPosition = vertexData;
+
+
+                                var position = curveIterator.Current.position;
+
+                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position);
+                                vxs.AddVertex(vertexData);
+                                lastVertextData = vertexData;
                             }
                         }
                         break;
-
                     default:
-                        list.Add(vertexData);
-                        lastPosition = vertexData;
+
+                        vxs.AddVertex(vertexData);
+                        lastVertextData = vertexData;
                         break;
                 }
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);  
-            return new VertexStorage(list); 
-        } 
+            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+            return vxs;
+
+        }
+        public VertexStore MakeVxs(VertexStore srcVxs)
+        {
+            return MakeVxs(new VertexStoreSnap(srcVxs));            
+             
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿//BSD 2014, WinterDev
-
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 //
@@ -23,15 +22,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-using MatterHackers.Agg;
-using MatterHackers.Agg.Image;
-using MatterHackers.Agg.Transform;
-using MatterHackers.Agg.VertexSource;
-using MatterHackers.VectorMath;
-using MatterHackers.Agg.Font;
+using PixelFarm.Agg;
+using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Transform;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Font;
 //using LayoutFarm.Agg.Font;
 
-namespace MatterHackers.Agg
+namespace PixelFarm.Agg
 {
     public static class Canvas2dExtension
     {
@@ -75,7 +74,7 @@ namespace MatterHackers.Agg
         {
 
             //1. parse text  
-            var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
+            var stringPrinter = new PixelFarm.Agg.Font.TypeFacePrinter2(
                 text,
                 pointSize,
                 new Vector2(x, y), justification, baseline);
@@ -125,9 +124,7 @@ namespace MatterHackers.Agg
         //}
         public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
         {
-            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
-
-
+            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0); 
             gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
         }
 
@@ -167,13 +164,13 @@ namespace MatterHackers.Agg
             RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
             gx.Render(rect.MakeVertexSnap(), fillColor);
         }
-        public static void Circle(this Agg.Graphics2D g, double x, double y, double radius, ColorRGBA color)
+        public static void Circle(this Graphics2D g, double x, double y, double radius, ColorRGBA color)
         {
             Ellipse elipse = new Ellipse(x, y, radius, radius);
             g.Render(elipse.MakeVxs(), color);
 
         }
-        public static void Circle(this Agg.Graphics2D g, Vector2 origin, double radius, ColorRGBA color)
+        public static void Circle(this Graphics2D g, Vector2 origin, double radius, ColorRGBA color)
         {
             Circle(g, origin.x, origin.y, radius, color);
         }

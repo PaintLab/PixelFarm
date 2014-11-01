@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿//2014 BSD,WinterDev   
+using System;
+using System.Collections.Generic; 
 using System.Text;
 
-namespace MatterHackers.Agg.Font
+namespace PixelFarm.Agg.Font
 {
     abstract public class TextWrapping
     {
