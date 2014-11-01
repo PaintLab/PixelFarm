@@ -25,17 +25,17 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg.UI
 {
-    abstract public class MySimpleVertexSourceWidget : IncompleteWidget
+    abstract public class SimpleVertexSourceWidget : IncompleteWidget
     {
 
         bool localBoundsComeFromPoints = true;
         Vector2 originRelativeParent;
-        public MySimpleVertexSourceWidget()
+        public SimpleVertexSourceWidget()
         {
             throw new Exception("this is depricated");
         }
 
-        public MySimpleVertexSourceWidget(Vector2 originRelativeParent, bool localBoundsComeFromPoints = true)
+        public SimpleVertexSourceWidget(Vector2 originRelativeParent, bool localBoundsComeFromPoints = true)
         {
             this.localBoundsComeFromPoints = localBoundsComeFromPoints;
             this.originRelativeParent = originRelativeParent;
@@ -61,10 +61,10 @@ namespace PixelFarm.Agg.UI
         public abstract void RewindZero(); 
         protected abstract RectangleDouble CalculateLocalBounds();
 
-        public virtual ColorRGBA WidgetColor() { return new ColorRGBAf().ToColorRGBA(); }
+        public virtual ColorRGBA WidgetColor(int i) { return new ColorRGBAf().ToColorRGBA(); }
         public override void OnDraw(Graphics2D graphics2D)
         { 
-            graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), WidgetColor(0=));
+            graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), WidgetColor(0));
 
             base.OnDraw(graphics2D);
         } 

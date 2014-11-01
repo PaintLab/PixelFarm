@@ -131,10 +131,12 @@ namespace Mini
                         break;
 
                     case 32:
-                        windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                        //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //32bppPArgb 
+
                         backingImageBufferByte = new ActualImage(width, height, 32, new PixelBlenderBGRA());
                         break;
 

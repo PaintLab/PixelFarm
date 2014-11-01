@@ -105,7 +105,7 @@ namespace PixelFarm.Agg.UI
         }
     }
 
-    public class PolygonControlImpl : MySimpleVertexSourceWidget
+    public class PolygonControlImpl : SimpleVertexSourceWidget
     {
         double[] m_polygon;
         int m_num_points;
@@ -533,7 +533,7 @@ namespace PixelFarm.Agg.UI
         }
 
         public void line_color(ColorRGBA c) { m_color = c; }
-        public override ColorRGBA WidgetColor() { return m_color; }
+        public override ColorRGBA WidgetColor(int i) { return m_color; }
 
     }
 }
