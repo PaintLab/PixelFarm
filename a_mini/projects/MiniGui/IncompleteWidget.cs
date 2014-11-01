@@ -82,9 +82,7 @@ namespace PixelFarm.Agg.UI
                 rectToInvalidate.Offset(OriginRelativeParent);
                 Parent.Invalidate(rectToInvalidate);
             }
-        }
-
-
+        } 
         public virtual void OnDraw(Graphics2D graphics2D)
         {
 

@@ -17,7 +17,7 @@ using System;
 namespace PixelFarm.Agg.Lines
 {
 
-    public static class LineAABasics
+    public static class LineAA
     {
         public const int SUBPIXEL_SHIFT = 8;                          //----line_subpixel_shift
         public const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;  //----line_subpixel_scale
@@ -28,24 +28,36 @@ namespace PixelFarm.Agg.Lines
         public const int MR_SUBPIXEL_SHIFT = 4;                           //----line_mr_subpixel_shift
         public const int MR_SUBPIXEL_SCALE = 1 << MR_SUBPIXEL_SHIFT; //----line_mr_subpixel_scale 
         public const int MR_SUBPIXEL_MASK = MR_SUBPIXEL_SCALE - 1;   //----line_mr_subpixel_mask 
-
-        public static int line_mr(int x)
+        /// <summary>
+        /// line_mr
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static int Mr(int x)
         {
             return x >> (SUBPIXEL_SHIFT - MR_SUBPIXEL_SHIFT);
         }
-
-        public static int line_hr(int x)
+        /// <summary>
+        /// line_hr
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static int Hr(int x)
         {
             return x << (SUBPIXEL_SHIFT - MR_SUBPIXEL_SHIFT);
         }
-
-        public static int line_dbl_hr(int x)
+        /// <summary>
+        /// line_dbl_hr
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static int DblHr(int x)
         {
             return x << SUBPIXEL_SHIFT;
         }
 
 
-        public static void bisectrix(LineParameters l1,
+        public static void Bisectrix(LineParameters l1,
                    LineParameters l2,
                    out int x, out int y)
         {
@@ -76,8 +88,13 @@ namespace PixelFarm.Agg.Lines
             x = AggBasics.iround(tx);
             y = AggBasics.iround(ty);
         }
-
-        public static void fix_degenerate_bisectrix_start(LineParameters lp,
+        /// <summary>
+        /// fix_degeneration_bisectrix_start
+        /// </summary>
+        /// <param name="lp"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public static void FixDegenBisectrixStart(LineParameters lp,
                                                ref int x, ref int y)
         {
             int d = AggBasics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
@@ -88,8 +105,13 @@ namespace PixelFarm.Agg.Lines
                 y = lp.y1 - (lp.x2 - lp.x1);
             }
         }
-
-        public static void fix_degenerate_bisectrix_end(LineParameters lp,
+        /// <summary>
+        /// fix_degeneration_bisectrix_end
+        /// </summary>
+        /// <param name="lp"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public static void FixDegenBisectrixEnd(LineParameters lp,
                                              ref int x, ref int y)
         {
             int d = AggBasics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -

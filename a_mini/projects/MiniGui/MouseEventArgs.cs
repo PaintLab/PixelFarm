@@ -22,10 +22,7 @@ namespace PixelFarm.Agg.UI
         private int numClicks;
         private double x;
         private double y;
-        private int wheelDelta;
-
-        
-
+        private int wheelDelta; 
         public MouseEventArgs(MouseEventArgs original, double newX, double newY)
             : this(original.Button, original.Clicks, newX, newY, original.WheelDelta)
         {
@@ -43,7 +40,7 @@ namespace PixelFarm.Agg.UI
         public MouseButtons Button { get { return mouseButtons; } }
         public int Clicks { get { return numClicks; } }
         public int WheelDelta { get { return wheelDelta; } set { wheelDelta = value; } }
-        //public Point Location { get; }
+       
         public double X { get { return x; } set { x = value; } }
         public double Y { get { return y; } set { y = value; } }
         public Vector2 Position { get { return new Vector2(x, y); } }

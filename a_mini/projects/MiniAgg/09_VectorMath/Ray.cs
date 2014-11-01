@@ -60,7 +60,7 @@ namespace PixelFarm.VectorMath
         public bool isShadowRay;
         public IntersectionType intersectionType;
 
-        public enum Sign { negative = 1, positive = 0 };
+        public enum Sign { Negative = 1, Positive = 0 };
         public Sign[] sign = new Sign[3];
 
         public Ray(Vector3 origin, Vector3 direction, double minDistanceToConsider = 0, double maxDistanceToConsider = double.PositiveInfinity, IntersectionType intersectionType = IntersectionType.FrontFace)
@@ -72,9 +72,9 @@ namespace PixelFarm.VectorMath
             this.intersectionType = intersectionType;
             oneOverDirection = 1 / direction;
 
-            sign[0] = (oneOverDirection.x < 0) ? Sign.negative : Sign.positive;
-            sign[1] = (oneOverDirection.y < 0) ? Sign.negative : Sign.positive;
-            sign[2] = (oneOverDirection.z < 0) ? Sign.negative : Sign.positive;
+            sign[0] = (oneOverDirection.x < 0) ? Sign.Negative : Sign.Positive;
+            sign[1] = (oneOverDirection.y < 0) ? Sign.Negative : Sign.Positive;
+            sign[2] = (oneOverDirection.z < 0) ? Sign.Negative : Sign.Positive;
         }
 
         public Ray(Ray rayToCopy)

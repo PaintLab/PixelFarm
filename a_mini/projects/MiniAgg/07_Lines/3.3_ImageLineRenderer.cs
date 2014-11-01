@@ -75,7 +75,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_filter = filter;
             m_dilation = (filter.Dilation + 1);
-            m_dilation_hr = (m_dilation << LineAABasics.SUBPIXEL_SHIFT);
+            m_dilation_hr = (m_dilation << LineAA.SUBPIXEL_SHIFT);
             m_width = (0);
             m_height = (0);
             m_width_hr = (0);
@@ -104,7 +104,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_filter = (filter);
             m_dilation = (filter.Dilation + 1);
-            m_dilation_hr = (m_dilation << LineAABasics.SUBPIXEL_SHIFT);
+            m_dilation_hr = (m_dilation << LineAA.SUBPIXEL_SHIFT);
             m_width = 0;
             m_height = 0;
             m_width_hr = 0;
@@ -136,10 +136,10 @@ namespace PixelFarm.Agg.Lines
 
             m_height = (int)AggBasics.uceil(src.Height);
             m_width = (int)AggBasics.uceil(src.Width);
-            m_width_hr = (int)AggBasics.uround(src.Width * LineAABasics.SUBPIXEL_SCALE);
-            m_half_height_hr = (int)AggBasics.uround(src.Height * LineAABasics.SUBPIXEL_SCALE / 2);
-            m_offset_y_hr = m_dilation_hr + m_half_height_hr - LineAABasics.SUBPIXEL_SCALE / 2;
-            m_half_height_hr += LineAABasics.SUBPIXEL_SCALE / 2;
+            m_width_hr = (int)AggBasics.uround(src.Width * LineAA.SUBPIXEL_SCALE);
+            m_half_height_hr = (int)AggBasics.uround(src.Height * LineAA.SUBPIXEL_SCALE / 2);
+            m_offset_y_hr = m_dilation_hr + m_half_height_hr - LineAA.SUBPIXEL_SCALE / 2;
+            m_half_height_hr += LineAA.SUBPIXEL_SCALE / 2;
 
             int bufferWidth = m_width + m_dilation * 2;
             int bufferHeight = m_height + m_dilation * 2;
@@ -192,12 +192,12 @@ namespace PixelFarm.Agg.Lines
         }
 
         //--------------------------------------------------------------------
-        public int pattern_width() { return m_width_hr; }
-        public int line_width() { return m_half_height_hr; }
-        public double width() { return m_height; }
+        public int PatternWidth { get { return m_width_hr; } }
+        public int LineWidth { get { return m_half_height_hr; } }
+        public double Width { get { return m_height; } }
 
         //--------------------------------------------------------------------
-        public void pixel(ColorRGBA[] destBuffer, int destBufferOffset, int x, int y)
+        public void Pixel(ColorRGBA[] destBuffer, int destBufferOffset, int x, int y)
         {
             m_filter.SetPixelHighRes(m_buf, destBuffer, destBufferOffset,
                                      x % m_width_hr + m_dilation_hr,
@@ -205,8 +205,9 @@ namespace PixelFarm.Agg.Lines
         }
 
         //--------------------------------------------------------------------
-        public IPatternFilter filter() { return m_filter; }
-    };
+        public IPatternFilter PatternFilter { get { return m_filter; } }
+
+    }
 
     /*
     
@@ -255,7 +256,7 @@ namespace PixelFarm.Agg.Lines
      */
 
     //===================================================distance_interpolator4
-  
+
 
 #if true
 #if false
@@ -607,16 +608,20 @@ namespace PixelFarm.Agg.Lines
             m_clipping = (false);
         }
 
-        public void attach(IImage ren) { m_ren = ren; }
+        public void Attach(IImage ren) { m_ren = ren; }
 
         //---------------------------------------------------------------------
-        public void pattern(LineImagePattern p) { m_pattern = p; }
-        public LineImagePattern pattern() { return m_pattern; }
+        public LineImagePattern Pattern
+        {
+            get { return this.m_pattern; }
+            set { m_pattern = value; }
+        }
+
 
         //---------------------------------------------------------------------
-        public void reset_clipping() { m_clipping = false; }
+        public void ResetClipping() { m_clipping = false; }
 
-        public void clip_box(double x1, double y1, double x2, double y2)
+        public void SetClipBox(double x1, double y1, double x2, double y2)
         {
             m_clip_box.Left = LineCoordSat.Convert(x1);
             m_clip_box.Bottom = LineCoordSat.Convert(y1);
@@ -626,66 +631,72 @@ namespace PixelFarm.Agg.Lines
         }
 
         //---------------------------------------------------------------------
-        public void scale_x(double s) { m_scale_x = s; }
-        public double scale_x() { return m_scale_x; }
+        public double ScaleX
+        {
+            get { return this.m_scale_x; }
+            set { this.m_scale_x = value; }
+        }
+        public double StartX
+        {
+            get { return (double)(m_start) / LineAA.SUBPIXEL_SCALE; }
+            set { m_start = AggBasics.iround(value * LineAA.SUBPIXEL_SCALE); }
+        }
+
 
         //---------------------------------------------------------------------
-        public void start_x(double s) { m_start = AggBasics.iround(s * LineAABasics.SUBPIXEL_SCALE); }
-        public double start_x() { return (double)(m_start) / LineAABasics.SUBPIXEL_SCALE; }
+        public int SubPixelWidth { get { return m_pattern.LineWidth; } }
+        public int PatternWidth { get { return m_pattern.PatternWidth; } }
 
-        //---------------------------------------------------------------------
-        public int subpixel_width() { return m_pattern.line_width(); }
-        public int pattern_width() { return m_pattern.pattern_width(); }
-        public double width() { return (double)(subpixel_width()) / LineAABasics.SUBPIXEL_SCALE; }
+        public double Width { get { return (double)(SubPixelWidth) / LineAA.SUBPIXEL_SCALE; } }
 
-        public void pixel(ColorRGBA[] p, int offset, int x, int y)
+        public void Pixel(ColorRGBA[] p, int offset, int x, int y)
         {
             throw new NotImplementedException();
 
             //m_pattern.pixel(p, x, y);
         }
 
-        public void blend_color_hspan(int x, int y, uint len, ColorRGBA[] colors, int colorsOffset)
+        public void BlendColorHSpan(int x, int y, uint len, ColorRGBA[] colors, int colorsOffset)
         {
             throw new NotImplementedException();
             //            m_ren.blend_color_hspan(x, y, len, colors, null, 0);
         }
 
-        public void blend_color_vspan(int x, int y, uint len, ColorRGBA[] colors, int colorsOffset)
+        public void BlendColorVSpan(int x, int y, uint len, ColorRGBA[] colors, int colorsOffset)
         {
             throw new NotImplementedException();
             //            m_ren.blend_color_vspan(x, y, len, colors, null, 0);
         }
 
-        public static bool accurate_join_only() { return true; }
+        public static bool AccurateJoinOnly { get { return true; } }
 
-        public override void semidot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2)
+        public override void SemiDot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2)
         {
         }
 
-        public override void semidot_hline(CompareFunction cmp,
+        public override void SemiDotHLine(CompareFunction cmp,
                            int xc1, int yc1, int xc2, int yc2,
                            int x1, int y1, int x2)
         {
         }
 
-        public override void pie(int xc, int yc, int x1, int y1, int x2, int y2)
+        public override void Pie(int xc, int yc, int x1, int y1, int x2, int y2)
         {
         }
 
-        public override void line0(LineParameters lp)
+        public override void Line0(LineParameters lp)
         {
         }
 
-        public override void line1(LineParameters lp, int sx, int sy)
+        public override void Line1(LineParameters lp, int sx, int sy)
         {
         }
 
-        public override void line2(LineParameters lp, int ex, int ey)
+        public override void Line2(LineParameters lp, int ex, int ey)
         {
         }
 
-        public void line3_no_clip(LineParameters lp,
+        public void Line3NoClip(LineParameters lp,
                            int sx, int sy, int ex, int ey)
         {
             throw new NotImplementedException();
@@ -719,7 +730,7 @@ namespace PixelFarm.Agg.Lines
              */
         }
 
-        public override void line3(LineParameters lp,
+        public override void Line3(LineParameters lp,
                    int sx, int sy, int ex, int ey)
         {
             throw new NotImplementedException();
@@ -780,7 +791,7 @@ namespace PixelFarm.Agg.Lines
                         }
              */
         }
-    };
+    }
 #endif
 }
 #endif

@@ -86,8 +86,8 @@ namespace PixelFarm.Agg.Sample_Blur
             m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
             m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
-            m_shadow_ctrl.line_color(ColorRGBAf.MakeColorRGBA(0, 0.3, 0.5, 0.3));
-
+             
+            m_shadow_ctrl.LineColor = ColorRGBAf.MakeColorRGBA(0, 0.3, 0.5, 0.3);
         }
 
         [DemoConfig]

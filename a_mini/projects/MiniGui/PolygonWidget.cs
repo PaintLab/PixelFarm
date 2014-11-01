@@ -105,7 +105,7 @@ namespace PixelFarm.Agg.UI
         }
     }
 
-    public class PolygonControlImpl : MySimpleVertexSourceWidget
+    public class PolygonControlImpl : SimpleVertexSourceWidget
     {
         double[] m_polygon;
         int m_num_points;
@@ -164,7 +164,7 @@ namespace PixelFarm.Agg.UI
             get { return this.m_stroke.Width; }
             set { this.m_stroke.Width = value; }
         }
- 
+
         public override void RewindZero()
         {
             if (needToRecalculateBounds)
@@ -260,10 +260,10 @@ namespace PixelFarm.Agg.UI
                 double x, y;
                 vxs.GetVertexXY(i, out x, out y);
                 localBounds.ExpandToInclude(x, y);
-            } 
+            }
             return localBounds; throw new NotImplementedException();
         }
-       
+
 
         public override void OnMouseDown(MouseEventArgs mouseEvent)
         {
@@ -530,10 +530,16 @@ namespace PixelFarm.Agg.UI
         {
             //m_color = new ColorRGBAf(0.0, 0.0, 0.0);
             m_color = ColorRGBA.Black;
+        } 
+        public ColorRGBA LineColor
+        {
+            get { return m_color; }
+            set { this.m_color = value; }
+        } 
+        public override void OnDraw(Graphics2D graphics2D)
+        {
+            graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), LineColor);
+
         }
-
-        public void line_color(ColorRGBA c) { m_color = c; }
-        public override ColorRGBA WidgetColor() { return m_color; }
-
     }
 }

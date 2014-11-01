@@ -27,7 +27,7 @@ namespace PixelFarm.Agg.Lines
         public readonly int x;
         public readonly int y;
 
-        const int SIGDIFF = LineAABasics.SUBPIXEL_SCALE + (LineAABasics.SUBPIXEL_SCALE / 2);
+        const int SIGDIFF = LineAA.SUBPIXEL_SCALE + (LineAA.SUBPIXEL_SCALE / 2);
         public int len;
 
         public LineAAVertex(int x, int y)
@@ -35,8 +35,7 @@ namespace PixelFarm.Agg.Lines
             this.x = x;
             this.y = y;
             len = 0;
-        }
-
+        } 
         public bool IsDiff(LineAAVertex val)
         {
             int dx = val.x - x;
@@ -45,19 +44,9 @@ namespace PixelFarm.Agg.Lines
             if ((dx + dy) == 0)
             {
                 return false;
-            }
-
+            } 
             return (len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy))) > SIGDIFF;
-            //len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy));
-            //if (len > SIGDIFF)
-            //{
-            //    return true;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-
+             
         }
     }
 
@@ -196,15 +185,15 @@ namespace PixelFarm.Agg.Lines
 
                 switch (dv.flags)
                 {
-                    case 0: m_ren.line3(curr, dv2.xb1, dv2.yb1, dv2.xb2, dv2.yb2); break;
-                    case 1: m_ren.line2(curr, dv2.xb2, dv2.yb2); break;
-                    case 2: m_ren.line1(curr, dv2.xb1, dv2.yb1); break;
-                    case 3: m_ren.line0(curr); break;
+                    case 0: m_ren.Line3(curr, dv2.xb1, dv2.yb1, dv2.xb2, dv2.yb2); break;
+                    case 1: m_ren.Line2(curr, dv2.xb2, dv2.yb2); break;
+                    case 2: m_ren.Line1(curr, dv2.xb1, dv2.yb1); break;
+                    case 3: m_ren.Line0(curr); break;
                 }
 
                 if (m_line_join == OutlineJoin.Round && (dv.flags & 2) == 0)
                 {
-                    m_ren.pie(curr.x2, curr.y2,
+                    m_ren.Pie(curr.x2, curr.y2,
                                curr.x2 + (curr.y2 - curr.y1),
                                curr.y2 - (curr.x2 - curr.x1),
                                curr.x2 + (next.y2 - next.y1),
@@ -239,7 +228,7 @@ namespace PixelFarm.Agg.Lines
                             next.DiagonalQuadrant ? 1 : 0);
                         if ((dv.flags & 2) == 0)
                         {
-                            LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
+                            LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                         }
                         break;
 
@@ -251,7 +240,7 @@ namespace PixelFarm.Agg.Lines
 
                     case OutlineJoin.AccurateJoin:
                         dv.flags = 0;
-                        LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
+                        LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                         break;
                 }
             }
@@ -260,7 +249,7 @@ namespace PixelFarm.Agg.Lines
         public OutlineAARasterizer(LineRenderer ren)
         {
             m_ren = ren;
-            m_line_join = (OutlineRenderer.accurate_join_only() ?
+            m_line_join = (OutlineRenderer.AccurateJoinOnly ?
                             OutlineJoin.AccurateJoin :
                             OutlineJoin.Round);
             m_round_cap = (false);
@@ -276,7 +265,7 @@ namespace PixelFarm.Agg.Lines
             get { return this.m_line_join; }
             set
             {
-                m_line_join = OutlineRenderer.accurate_join_only() ?
+                m_line_join = OutlineRenderer.AccurateJoinOnly ?
                 OutlineJoin.AccurateJoin : value;
             }
         }
@@ -377,12 +366,12 @@ namespace PixelFarm.Agg.Lines
 
                     if ((dv.flags & 1) == 0 && m_line_join != OutlineJoin.Round)
                     {
-                        LineAABasics.bisectrix(prev, curr, out dv2.xb1, out dv2.yb1);
+                        LineAA.Bisectrix(prev, curr, out dv2.xb1, out dv2.yb1);
                     }
 
                     if ((dv.flags & 2) == 0 && m_line_join != OutlineJoin.Round)
                     {
-                        LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
+                        LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                     }
                     Draw(ref dv, ref dv1, ref dv2, ref curr, ref next, 0, m_src_vertices.Count);
                 }
@@ -407,16 +396,16 @@ namespace PixelFarm.Agg.Lines
                             LineParameters lp = new LineParameters(x1, y1, x2, y2, lprev);
                             if (m_round_cap)
                             {
-                                m_ren.semidot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
+                                m_ren.SemiDot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                             }
-                            m_ren.line3(lp,
+                            m_ren.Line3(lp,
                                          x1 + (y2 - y1),
                                          y1 - (x2 - x1),
                                          x2 + (y2 - y1),
                                          y2 - (x2 - x1));
                             if (m_round_cap)
                             {
-                                m_ren.semidot(CompareDistEnd, x2, y2, x2 + (y2 - y1), y2 - (x2 - x1));
+                                m_ren.SemiDot(CompareDistEnd, x2, y2, x2 + (y2 - y1), y2 - (x2 - x1));
                             }
                         }
                         break;
@@ -441,32 +430,32 @@ namespace PixelFarm.Agg.Lines
 
                             if (m_round_cap)
                             {
-                                m_ren.semidot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
+                                m_ren.SemiDot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                             }
 
                             if (m_line_join == OutlineJoin.Round)
                             {
-                                m_ren.line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1),
+                                m_ren.Line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1),
                                                   x2 + (y2 - y1), y2 - (x2 - x1));
 
-                                m_ren.pie(x2, y2, x2 + (y2 - y1), y2 - (x2 - x1),
+                                m_ren.Pie(x2, y2, x2 + (y2 - y1), y2 - (x2 - x1),
                                                    x2 + (y3 - y2), y2 - (x3 - x2));
 
-                                m_ren.line3(lp2, x2 + (y3 - y2), y2 - (x3 - x2),
+                                m_ren.Line3(lp2, x2 + (y3 - y2), y2 - (x3 - x2),
                                                   x3 + (y3 - y2), y3 - (x3 - x2));
                             }
                             else
                             {
-                                LineAABasics.bisectrix(lp1, lp2, out dv2.xb1, out dv2.yb1);
-                                m_ren.line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1),
+                                LineAA.Bisectrix(lp1, lp2, out dv2.xb1, out dv2.yb1);
+                                m_ren.Line3(lp1, x1 + (y2 - y1), y1 - (x2 - x1),
                                                   dv2.xb1, dv2.yb1);
 
-                                m_ren.line3(lp2, dv2.xb1, dv2.yb1,
+                                m_ren.Line3(lp2, dv2.xb1, dv2.yb1,
                                                   x3 + (y3 - y2), y3 - (x3 - x2));
                             }
                             if (m_round_cap)
                             {
-                                m_ren.semidot(CompareDistEnd, x3, y3, x3 + (y3 - y2), y3 - (x3 - x2));
+                                m_ren.SemiDot(CompareDistEnd, x3, y3, x3 + (y3 - y2), y3 - (x3 - x2));
                             }
                         }
                         break;
@@ -522,35 +511,35 @@ namespace PixelFarm.Agg.Lines
 
                             if (m_round_cap)
                             {
-                                m_ren.semidot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
+                                m_ren.SemiDot(CompareDistStart, x1, y1, x1 + (y2 - y1), y1 - (x2 - x1));
                             }
                             if ((dv.flags & 1) == 0)
                             {
                                 if (m_line_join == OutlineJoin.Round)
                                 {
-                                    m_ren.line3(prev, x1 + (y2 - y1), y1 - (x2 - x1),
+                                    m_ren.Line3(prev, x1 + (y2 - y1), y1 - (x2 - x1),
                                                        x2 + (y2 - y1), y2 - (x2 - x1));
-                                    m_ren.pie(prev.x2, prev.y2,
+                                    m_ren.Pie(prev.x2, prev.y2,
                                                x2 + (y2 - y1), y2 - (x2 - x1),
                                                 curr.x1 + (curr.y2 - curr.y1),
                                                curr.y1 - (curr.x2 - curr.x1));
                                 }
                                 else
                                 {
-                                    LineAABasics.bisectrix(prev, curr, out dv2.xb1, out dv2.yb1);
-                                    m_ren.line3(prev, x1 + (y2 - y1), y1 - (x2 - x1),
+                                    LineAA.Bisectrix(prev, curr, out dv2.xb1, out dv2.yb1);
+                                    m_ren.Line3(prev, x1 + (y2 - y1), y1 - (x2 - x1),
                                                        dv2.xb1, dv2.yb1);
                                 }
                             }
                             else
                             {
-                                m_ren.line1(prev,
+                                m_ren.Line1(prev,
                                              x1 + (y2 - y1),
                                              y1 - (x2 - x1));
                             }
                             if ((dv.flags & 2) == 0 && m_line_join != OutlineJoin.Round)
                             {
-                                LineAABasics.bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
+                                LineAA.Bisectrix(curr, next, out dv2.xb2, out dv2.yb2);
                             }
 
                             Draw(ref dv, ref dv1, ref dv2, ref curr, ref next, 1, m_src_vertices.Count - 2);
@@ -559,7 +548,7 @@ namespace PixelFarm.Agg.Lines
                             {
                                 if (m_line_join == OutlineJoin.Round)
                                 {
-                                    m_ren.line3(curr,
+                                    m_ren.Line3(curr,
                                                  curr.x1 + (curr.y2 - curr.y1),
                                                  curr.y1 - (curr.x2 - curr.x1),
                                                  curr.x2 + (curr.y2 - curr.y1),
@@ -567,20 +556,20 @@ namespace PixelFarm.Agg.Lines
                                 }
                                 else
                                 {
-                                    m_ren.line3(curr, dv2.xb1, dv2.yb1,
+                                    m_ren.Line3(curr, dv2.xb1, dv2.yb1,
                                                  curr.x2 + (curr.y2 - curr.y1),
                                                  curr.y2 - (curr.x2 - curr.x1));
                                 }
                             }
                             else
                             {
-                                m_ren.line2(curr,
+                                m_ren.Line2(curr,
                                              curr.x2 + (curr.y2 - curr.y1),
                                              curr.y2 - (curr.x2 - curr.x1));
                             }
                             if (m_round_cap)
                             {
-                                m_ren.semidot(CompareDistEnd, curr.x2, curr.y2,
+                                m_ren.SemiDot(CompareDistEnd, curr.x2, curr.y2,
                                                curr.x2 + (curr.y2 - curr.y1),
                                                curr.y2 - (curr.x2 - curr.x1));
                             }
@@ -635,7 +624,7 @@ namespace PixelFarm.Agg.Lines
         }
         public void RenderVertexSnap(VertexStoreSnap s, ColorRGBA c)
         {
-            m_ren.color(c);
+            m_ren.Color = c;
             AddPath(s);
         }
         //public void RenderAllPaths(IVertexSource vs,
