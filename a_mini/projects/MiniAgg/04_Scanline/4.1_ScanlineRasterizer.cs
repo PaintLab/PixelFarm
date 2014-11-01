@@ -34,7 +34,7 @@
 using System;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath; 
-using poly_subpixel_scale_e = PixelFarm.Agg.AggBasics.PolySubPixelScale;
+using poly_subpix = PixelFarm.Agg.AggBasics.PolySubPix;
 
 
 
@@ -128,18 +128,12 @@ namespace PixelFarm.Agg
         {
             m_outline.Reset();
             m_status = Status.Initial;
-        }
-
+        } 
         public void ResetClipping()
         {
             Reset();
             m_vectorClipper.ResetClipping();
-        }
-
-        public RectangleDouble GetVectorClipBox()
-        {
-            return m_vectorClipper.GetVectorClipBox();
-        }
+        } 
         public RectangleInt GetVectorClipBoxInt()
         {
             return m_vectorClipper.GetVectorClipBoxInt();
@@ -152,7 +146,7 @@ namespace PixelFarm.Agg
         void SetVectorClipBox(double x1, double y1, double x2, double y2)
         {
             Reset();
-            m_vectorClipper.ClipBox(
+            m_vectorClipper.SetClipBox(
                                 upscale(x1), upscale(y1),
                                 upscale(x2), upscale(y2));
         }
@@ -164,7 +158,7 @@ namespace PixelFarm.Agg
         public void SetVectorClipBox(int x1, int y1, int x2, int y2)
         {
             Reset();
-            m_vectorClipper.ClipBox(
+            m_vectorClipper.SetClipBox(
                                 upscale(x1), upscale(y1),
                                 upscale(x2), upscale(y2));
         }
@@ -173,18 +167,18 @@ namespace PixelFarm.Agg
         static int upscale(double v)
         {
             //m_VectorClipper.upscale
-            return AggBasics.iround(v * (int)poly_subpixel_scale_e.SCALE);
+            return AggBasics.iround(v * (int)poly_subpix.SCALE);
         }
         static int upscale(int v)
         {
             //m_VectorClipper.upscale
-            return v * poly_subpixel_scale_e.SCALE;
+            return v * poly_subpix.SCALE;
         }
         //from vector clipper
         static int downscale(int v)
         {
             //  m_VectorClipper.downscale
-            return v / (int)poly_subpixel_scale_e.SCALE;
+            return v / (int)poly_subpix.SCALE;
         }
         //---------------------------------
         FillingRule FillingRule
@@ -375,7 +369,7 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         int CalculateAlpha(int area)
         {
-            int cover = area >> (poly_subpixel_scale_e.SHIFT * 2 + 1 - AA_SHIFT);
+            int cover = area >> (poly_subpix.SHIFT * 2 + 1 - AA_SHIFT);
 
             if (cover < 0)
             {
@@ -449,7 +443,7 @@ namespace PixelFarm.Agg
 
                             if (area != 0)
                             {
-                                alpha = CalculateAlpha((cover << (poly_subpixel_scale_e.SHIFT + 1)) - area);
+                                alpha = CalculateAlpha((cover << (poly_subpix.SHIFT + 1)) - area);
                                 if (alpha != 0)
                                 {
                                     scline.AddCell(x, alpha);
@@ -459,7 +453,7 @@ namespace PixelFarm.Agg
 
                             if ((num_cells != 0) && (cur_cell_ptr->x > x))
                             {
-                                alpha = CalculateAlpha(cover << (poly_subpixel_scale_e.SHIFT + 1));
+                                alpha = CalculateAlpha(cover << (poly_subpix.SHIFT + 1));
                                 if (alpha != 0)
                                 {
                                     scline.AddSpan(x, (cur_cell_ptr->x - x), alpha);
@@ -490,7 +484,7 @@ namespace PixelFarm.Agg
 
                         //if (area != 0)
                         //{
-                        //    alpha = CalculateAlpha((cover << (poly_subpixel_scale_e.SHIFT + 1)) - area);
+                        //    alpha = CalculateAlpha((cover << (poly_subpix.SHIFT + 1)) - area);
                         //    if (alpha != 0)
                         //    {
                         //        scline.AddCell(x, alpha);
@@ -500,7 +494,7 @@ namespace PixelFarm.Agg
 
                         //if ((num_cells != 0) && (cur_cell.x > x))
                         //{
-                        //    alpha = CalculateAlpha(cover << (poly_subpixel_scale_e.SHIFT + 1));
+                        //    alpha = CalculateAlpha(cover << (poly_subpix.SHIFT + 1));
                         //    if (alpha != 0)
                         //    {
                         //        scline.AddSpan(x, (cur_cell.x - x), alpha);

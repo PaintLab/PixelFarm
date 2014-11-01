@@ -36,6 +36,11 @@ namespace PixelFarm.Agg
         {
 
         }
+        protected bool UseCustomSolidSingleLineMethod
+        {
+            get;
+            set;
+        }
         internal IPixelBlender PixelBlender
         {
             get { return this.pixelBlender; }
@@ -49,9 +54,21 @@ namespace PixelFarm.Agg
             if (rasterizer.RewindScanlines())
             {
                 scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
-                while (rasterizer.SweepScanline(scline))
+
+                if (this.UseCustomSolidSingleLineMethod)
                 {
-                    RenderSolidSingleScanLine(destImage, scline, color);
+                    while (rasterizer.SweepScanline(scline))
+                    {
+                        CustomRenderSolidSingleScanLine(destImage, scline,  color);
+                    }
+                }
+                else
+                {
+
+                    while (rasterizer.SweepScanline(scline))
+                    {
+                        RenderSolidSingleScanLine(destImage, scline, color);
+                    }
                 }
             }
         }
@@ -73,9 +90,10 @@ namespace PixelFarm.Agg
         }
 
 
-        protected virtual void RenderSolidSingleScanLine(IImageReaderWriter destImage,
-            Scanline scline,
-            ColorRGBA color)
+        static void RenderSolidSingleScanLine(
+             IImageReaderWriter destImage,
+             Scanline scline,
+             ColorRGBA color)
         {
             int y = scline.Y;
             int num_spans = scline.SpanCount;
@@ -83,19 +101,26 @@ namespace PixelFarm.Agg
             for (int i = 1; i <= num_spans; ++i)
             {
                 ScanlineSpan span = scline.GetSpan(i);
-                int x = span.x;
+                
                 if (span.len > 0)
-                {  
-                    destImage.BlendSolidHSpan(x, y, span.len, color, covers, span.cover_index);
+                {
+                    destImage.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
                 }
                 else
                 {
+                    int x = span.x;
                     int x2 = (x - (int)span.len - 1);
                     destImage.BlendHL(x, y, x2, color, covers[span.cover_index]);
                 }
             }
         }
-
+        protected virtual void CustomRenderSolidSingleScanLine(
+            IImageReaderWriter destImage,
+            Scanline scline, 
+            ColorRGBA color)
+        {
+            RenderSolidSingleScanLine(destImage, scline, color);
+        }
 
         public void RenderSolidAllPaths(IImageReaderWriter destImage,
             ScanlineRasterizer ras,
@@ -124,7 +149,7 @@ namespace PixelFarm.Agg
             {
                 ScanlineSpan span = scline.GetSpan(i);
                 int x = span.x;
-                int len = span.len; 
+                int len = span.len;
 
                 if (len < 0) { len = -len; } //make absolute value
 

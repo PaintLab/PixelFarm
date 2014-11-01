@@ -33,7 +33,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using poly_subpixel_scale_e = PixelFarm.Agg.AggBasics.PolySubPixelScale;
+using poly_subpix = PixelFarm.Agg.AggBasics.PolySubPix;
 
 namespace PixelFarm.Agg.JustForScanlineRasterizer
 {
@@ -149,10 +149,10 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
         }
 
 
-        const int DX_LIMIT = (16384 << AggBasics.PolySubPixelScale.SHIFT);
-        const int POLY_SUBPIXEL_SHIFT = AggBasics.PolySubPixelScale.SHIFT;
-        const int POLY_SUBPIXEL_MASK = AggBasics.PolySubPixelScale.MASK;
-        const int POLY_SUBPIXEL_SCALE = AggBasics.PolySubPixelScale.SCALE;
+        const int DX_LIMIT = (16384 << AggBasics.PolySubPix.SHIFT);
+        const int POLY_SUBPIXEL_SHIFT = AggBasics.PolySubPix.SHIFT;
+        const int POLY_SUBPIXEL_MASK = AggBasics.PolySubPix.MASK;
+        const int POLY_SUBPIXEL_SCALE = AggBasics.PolySubPix.SCALE;
 
         public void DrawLine(int x1, int y1, int x2, int y2)
         {
@@ -434,8 +434,8 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
 
         void RenderHLine(int ey, int x1, int y1, int x2, int y2)
         {
-            int ex1 = x1 >> poly_subpixel_scale_e.SHIFT;
-            int ex2 = x2 >> poly_subpixel_scale_e.SHIFT;
+            int ex1 = x1 >> poly_subpix.SHIFT;
+            int ex2 = x2 >> poly_subpix.SHIFT;
 
 
             //trivial case. Happens often
@@ -445,8 +445,8 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
                 return;
             }
 
-            int fx1 = x1 & (int)poly_subpixel_scale_e.MASK;
-            int fx2 = x2 & (int)poly_subpixel_scale_e.MASK;
+            int fx1 = x1 & (int)poly_subpix.MASK;
+            int fx2 = x2 & (int)poly_subpix.MASK;
 
             int delta, p, first, dx;
             int incr, lift, mod, rem;
@@ -462,8 +462,8 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
             }
 
             //ok, we'll have to render a run of adjacent cells on the same hline...
-            p = ((int)poly_subpixel_scale_e.SCALE - fx1) * (y2 - y1);
-            first = (int)poly_subpixel_scale_e.SCALE;
+            p = ((int)poly_subpix.SCALE - fx1) * (y2 - y1);
+            first = (int)poly_subpix.SCALE;
             incr = 1;
 
             dx = x2 - x1;
@@ -494,7 +494,7 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
 
             if (ex1 != ex2)
             {
-                p = (int)poly_subpixel_scale_e.SCALE * (y2 - y1 + delta);
+                p = (int)poly_subpix.SCALE * (y2 - y1 + delta);
                 lift = p / dx;
                 rem = p % dx;
 
@@ -517,7 +517,7 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
                     }
 
                     cCell_cover += delta;
-                    cCell_area += (int)poly_subpixel_scale_e.SCALE * delta;
+                    cCell_area += (int)poly_subpix.SCALE * delta;
                     y1 += delta;
                     ex1 += incr;
                     AddNewCell(ex1, ey);
@@ -525,7 +525,7 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
             }
             delta = y2 - y1;
             cCell_cover += delta;
-            cCell_area += (fx2 + (int)poly_subpixel_scale_e.SCALE - first) * delta;
+            cCell_area += (fx2 + (int)poly_subpix.SCALE - first) * delta;
         } 
 
         //------------

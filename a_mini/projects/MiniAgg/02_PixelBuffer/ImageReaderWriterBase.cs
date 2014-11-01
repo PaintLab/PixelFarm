@@ -53,12 +53,8 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
         IPixelBlender recieveBlender;
-        int changedCount = 0;
-
-        public ImageReaderWriterBase()
-        {
-
-        } 
+        
+         
         protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
         {
             int scanWidthInBytes = width * (bitsPerPixel / 8);
@@ -90,15 +86,7 @@ namespace PixelFarm.Agg
 
         }
     
-        public void MarkImageChanged()
-        {
-            // mark this unchecked as we don't want to throw an exception if this rolls over.
-            unchecked
-            {
-                changedCount++;
-            }
-        }
-
+        
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugGetNewDebugId();
@@ -683,10 +671,7 @@ namespace PixelFarm.Agg
         //}
 
 
-    }
-
-
-
+    } 
 
     static class DoCopyOrBlend
     {
@@ -735,8 +720,7 @@ namespace PixelFarm.Agg
         }
     }
 
-
-
+     
 
     public class MyImageReaderWriter : ImageReaderWriterBase
     {

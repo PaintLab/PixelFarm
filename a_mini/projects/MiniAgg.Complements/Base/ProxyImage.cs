@@ -163,11 +163,7 @@ namespace PixelFarm.Agg.Image
                 return linkedImage.BitDepth;
             }
         }
-
-        public void MarkImageChanged()
-        {
-            linkedImage.MarkImageChanged();
-        }
+         
     }
 
 }

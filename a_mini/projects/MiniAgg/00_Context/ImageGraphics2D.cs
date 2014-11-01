@@ -30,7 +30,7 @@ namespace PixelFarm.Agg
 {
     class ImageGraphics2D : Graphics2D
     {
-
+        IImageReaderWriter destImageByte;
         Scanline scanline;
         PathStorage drawImageRectPath = new PathStorage();
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
@@ -40,26 +40,30 @@ namespace PixelFarm.Agg
         double ox; //canvas origin x
         double oy; //canvas origin y
 
-
-        public ImageGraphics2D(IImageReaderWriter destImage,
-            ScanlineRasterizer rasterizer,
-            ScanlinePacked8 scanline)
-            : base(destImage, rasterizer)
+        public ImageGraphics2D(ActualImage destImage)
         {
-            this.scanline = scanline;
+            //create from actual image
+            this.destActualImage = destImage;
+            this.destImageByte = new MyImageReaderWriter(destImage);
+
+            this.rasterizer = new ScanlineRasterizer();
+            this.rasterizer.SetVectorClipBox(0, 0, destImage.Width, destImage.Height);
+
+            this.scanline = new ScanlinePacked8();
             this.pixBlenderRGBA32 = new PixelBlenderBGRA();
             this.sclineRasToBmp.PixelBlender = pixBlenderRGBA32;
-
         }
+        public override IImageReaderWriter DestImage
+        {
+            get { return this.destImageByte; }
+        }
+            
         public override void SetClippingRect(RectangleDouble clippingRect)
         {
             Rasterizer.SetVectorClipBox(clippingRect);
         }
         //--------------------------
-        public override RectangleDouble GetClippingRect()
-        {
-            return Rasterizer.GetVectorClipBox();
-        }
+        
         public override RectangleInt GetClippingRectInt()
         {
             return Rasterizer.GetVectorClipBoxInt();
@@ -88,7 +92,7 @@ namespace PixelFarm.Agg
                 rasterizer.AddPath(vertextSnap);
             }
             sclineRasToBmp.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);
-            destImageByte.MarkImageChanged();
+            unchecked { destImageChanged++; };
             //-----------------------------
         }
         void DrawImageGetDestBounds(IImageReaderWriter sourceImage,
@@ -290,13 +294,13 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator);
-
+                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator); 
                 DrawImage(source, spanImageFilter, destRectTransform);
-                DestImage.MarkImageChanged();
+
+                unchecked { destImageChanged++; };
             }
         }
-
+        int destImageChanged = 0;
 
         public override void Render(IImageReaderWriter source, double destX, double destY)
         {
@@ -440,17 +444,16 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator);
-
+                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator); 
                 DrawImage(source, spanImageFilter, destRectTransform);
-                DestImage.MarkImageChanged();
+                unchecked { destImageChanged++; };
             }
         }
-
         public override void Clear(ColorRGBA color)
         {
 
             RectangleInt clippingRectInt = GetClippingRectInt();
+
             IImageReaderWriter destImage = this.DestImage;
             if (destImage != null)
             {

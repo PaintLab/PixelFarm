@@ -104,7 +104,13 @@ namespace PixelFarm.Agg
                 return (int)((v < 0.0) ? v - 0.5 : v + 0.5);
             }
         }
-
+        public static int iround_f(float v)
+        {
+            unchecked
+            {
+                return (int)((v < 0.0) ? v - 0.5 : v + 0.5);
+            }
+        }
         public static int iround(double v, int saturationLimit)
         {
             if (v < (double)(-saturationLimit)) return -saturationLimit;
@@ -137,7 +143,7 @@ namespace PixelFarm.Agg
         // sizeof(int) * 8 - poly_subpixel_shift, i.e, for 32-bit integers and
         // 8-bits fractional part the capacity is 24 bits.
 
-        public static class PolySubPixelScale
+        public static class PolySubPix
         {
             public const int SHIFT = 8;                     //----poly_subpixel_shif
             public const int SCALE = 1 << SHIFT; //----poly_subpixel_scale 

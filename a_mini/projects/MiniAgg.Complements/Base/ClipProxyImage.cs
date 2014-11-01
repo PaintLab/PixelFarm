@@ -39,7 +39,7 @@ namespace PixelFarm.Agg.Image
         public bool SetClippingBox(int x1, int y1, int x2, int y2)
         {
             RectangleInt cb = new RectangleInt(x1, y1, x2, y2);
-            cb.normalize();
+            cb.Normalize();
             if (cb.clip(new RectangleInt(0, 0, (int)Width - 1, (int)Height - 1)))
             {
                 m_ClippingRect = cb;

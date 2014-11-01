@@ -40,24 +40,26 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
         double m_size;
         square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
-        public CustomScanlineRasToBmp_EnlargedV1(double size)
+        Graphics2D gfx;
+
+        public CustomScanlineRasToBmp_EnlargedV1(double size, ActualImage destImage)
         {
+            this.UseCustomSolidSingleLineMethod = true;
             m_size = size;
             m_square = new square(size);
+            gfx = Graphics2D.CreateFromImage(destImage);
         }
-
-
-        protected override void RenderSolidSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        protected override void CustomRenderSolidSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
 
             byte[] covers = scanline.GetCovers();
-            var gfx = Graphics2D.CreateFromImage(destImage);
+            ScanlineRasterizer ras = gfx.Rasterizer;
 
             for (int i = 1; i <= num_spans; ++i)
             {
-                ScanlineSpan span = scanline.GetSpan(i); 
+                ScanlineSpan span = scanline.GetSpan(i);
                 int x = span.x;
                 int num_pix = span.len;
                 int coverIndex = span.cover_index;
@@ -65,13 +67,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
                 {
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.draw(
-                           gfx.Rasterizer, m_sl, destImage,
-                            new ColorRGBA(color, a),
-                            x, y);
+                           ras, m_sl, destImage,
+                           new ColorRGBA(color, a),
+                           x, y);
                     ++x;
                 }
                 while (--num_pix > 0);
-            } 
+            }
         }
     }
 
@@ -138,7 +140,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
 
             int size_mul = (int)this.PixelSize;
 
-            CustomScanlineRasToBmp_EnlargedV1 ren_en = new CustomScanlineRasToBmp_EnlargedV1(size_mul);
+            CustomScanlineRasToBmp_EnlargedV1 ren_en = new CustomScanlineRasToBmp_EnlargedV1(size_mul, graphics2D.DestActualImage);
 
             rasterizer.Reset();
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);

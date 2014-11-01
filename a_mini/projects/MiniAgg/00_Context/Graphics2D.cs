@@ -30,23 +30,19 @@ namespace PixelFarm.Agg
 
     public abstract class Graphics2D
     {
+        protected ActualImage destActualImage;
 
-        protected IImageReaderWriter destImageByte;
         protected ScanlineRasterizer rasterizer;
+        Affine currentTxMatrix = Affine.IdentityMatrix;
 
-
-        Affine currentTxMatrix;
-        public Graphics2D(IImageReaderWriter destImage, ScanlineRasterizer rasterizer)
+        public Graphics2D()
         {
-            currentTxMatrix = Affine.IdentityMatrix;
-            destImageByte = destImage;
-            this.rasterizer = rasterizer;
-        }
 
+        }
         //------------------------------------------------------------------------
         public abstract void Clear(ColorRGBA color);
         public abstract void SetClippingRect(RectangleDouble rect_d);
-        public abstract RectangleDouble GetClippingRect();
+         
         public abstract RectangleInt GetClippingRectInt();
         //------------------------------------------------------------------------
 
@@ -88,43 +84,26 @@ namespace PixelFarm.Agg
                 this.currentTxMatrix = value;
             }
         }
- 
+
         public ScanlineRasterizer Rasterizer
         {
             get { return rasterizer; }
         }
 
-
-        public IImageReaderWriter DestImage
+        public ActualImage DestActualImage
         {
-            get
-            {
-                return destImageByte;
-            }
+            get { return this.destActualImage; }
+        }
+        public abstract IImageReaderWriter DestImage
+        {
+            get;
         }
         //================
         public static Graphics2D CreateFromImage(ActualImage actualImage)
         {
-            var img = new MyImageReaderWriter(actualImage);
-            var childImage = new ChildImage(img, img.GetRecieveBlender());
-            var scanlineRaster = new ScanlineRasterizer();
-            var scanlineCachedPacked8 = new ScanlinePacked8();
-
-            ImageGraphics2D imageRenderer = new ImageGraphics2D(childImage, scanlineRaster, scanlineCachedPacked8);
-            imageRenderer.Rasterizer.SetVectorClipBox(0, 0, img.Width, img.Height);
-            return imageRenderer;
+            return new ImageGraphics2D(actualImage);
         }
-        public static Graphics2D CreateFromImage(IImageReaderWriter img)
-        {
 
-            var childImage = new ChildImage(img, img.GetRecieveBlender());
-            var scanlineRaster = new ScanlineRasterizer();
-            var scanlineCachedPacked8 = new ScanlinePacked8();
-
-            ImageGraphics2D imageRenderer = new ImageGraphics2D(childImage, scanlineRaster, scanlineCachedPacked8);
-            imageRenderer.Rasterizer.SetVectorClipBox(0, 0, img.Width, img.Height);
-            return imageRenderer;
-        }
 
 #if DEBUG
         public void dbugLine(double x1, double y1, double x2, double y2, ColorRGBA color)

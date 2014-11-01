@@ -36,7 +36,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public RectangleInt normalize()
+        public RectangleInt Normalize()
         {
             int t;
             if (Left > Right) { t = Left; Left = Right; Right = t; }

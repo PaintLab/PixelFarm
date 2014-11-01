@@ -272,7 +272,7 @@ namespace PixelFarm.Agg.Lines
 
         public override void SemiDot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2)
         {
-            if (doClipping && ClipLiangBarsky.clipping_flags(xc1, yc1, clippingRectangle) != 0) return;
+            if (doClipping && ClipLiangBarsky.Flags(xc1, yc1, clippingRectangle) != 0) return;
 
             int r = ((SubPixelWidth + LineAA.SUBPIXEL_MARK) >> LineAA.SUBPIXEL_SHIFT);
             if (r < 1) r = 1;
@@ -305,7 +305,7 @@ namespace PixelFarm.Agg.Lines
         public void PineHLine(int xc, int yc, int xp1, int yp1, int xp2, int yp2,
                        int xh1, int yh1, int xh2)
         {
-            if (doClipping && ClipLiangBarsky.clipping_flags(xc, yc, clippingRectangle) != 0) return;
+            if (doClipping && ClipLiangBarsky.Flags(xc, yc, clippingRectangle) != 0) return;
 
             byte[] covers = new byte[MAX_HALF_WIDTH * 2 + 4];
             int index0 = 0;
@@ -400,7 +400,7 @@ namespace PixelFarm.Agg.Lines
                 int y1 = lp.y1;
                 int x2 = lp.x2;
                 int y2 = lp.y2;
-                int flags = ClipLiangBarsky.clip_line_segment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
+                int flags = ClipLiangBarsky.ClipLineSegment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
                 if ((flags & 4) == 0)
                 {
                     if (flags != 0)
@@ -452,7 +452,7 @@ namespace PixelFarm.Agg.Lines
                 int y1 = lp.y1;
                 int x2 = lp.x2;
                 int y2 = lp.y2;
-                int flags = ClipLiangBarsky.clip_line_segment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
+                int flags = ClipLiangBarsky.ClipLineSegment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
                 if ((flags & 4) == 0)
                 {
                     if (flags != 0)
@@ -517,7 +517,7 @@ namespace PixelFarm.Agg.Lines
                 int y1 = lp.y1;
                 int x2 = lp.x2;
                 int y2 = lp.y2;
-                int flags = ClipLiangBarsky.clip_line_segment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
+                int flags = ClipLiangBarsky.ClipLineSegment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
                 if ((flags & 4) == 0)
                 {
                     if (flags != 0)
@@ -587,7 +587,7 @@ namespace PixelFarm.Agg.Lines
                 int y1 = lp.y1;
                 int x2 = lp.x2;
                 int y2 = lp.y2;
-                int flags = ClipLiangBarsky.clip_line_segment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
+                int flags = ClipLiangBarsky.ClipLineSegment(ref x1, ref y1, ref x2, ref y2, clippingRectangle);
                 if ((flags & 4) == 0)
                 {
                     if (flags != 0)

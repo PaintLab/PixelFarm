@@ -22,9 +22,7 @@
 
 //#include "agg_clip_liang_barsky.h"
 
-using poly_subpixel_scale_e = PixelFarm.Agg.AggBasics.PolySubPixelScale;
-using PixelFarm.Agg.Lines;
-
+using poly_subpix = PixelFarm.Agg.AggBasics.PolySubPix;
 
 namespace PixelFarm.Agg.JustForScanlineRasterizer
 {
@@ -37,23 +35,13 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
         int m_y1;
         int m_f1;
         bool m_clipping;
-
-        //--------------------------------------------------------------------
         public VectorClipper()
         {
             clipBox = new RectangleInt(0, 0, 0, 0);
             m_x1 = m_y1 = m_f1 = 0;
             m_clipping = false;
         }
-        //--------------------------------------------------------------------
-        public RectangleDouble GetVectorClipBox()
-        {
-            return new RectangleDouble(
-                DownScale(clipBox.Left),
-                DownScale(clipBox.Bottom),
-                DownScale(clipBox.Right),
-                DownScale(clipBox.Top));
-        }
+
         public RectangleInt GetVectorClipBoxInt()
         {
             return new RectangleInt(
@@ -62,27 +50,24 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
                 DownScale(clipBox.Right),
                 DownScale(clipBox.Top));
         }
-
         public void ResetClipping()
         {
             m_clipping = false;
         }
 
-        //--------------------------------------------------------------------
-        public void ClipBox(int x1, int y1, int x2, int y2)
+        public void SetClipBox(int x1, int y1, int x2, int y2)
         {
             clipBox = new RectangleInt(x1, y1, x2, y2);
-            clipBox.normalize();
+            clipBox.Normalize();
             m_clipping = true;
         }
-        //--------------------------------------------------------------------
         public void MoveTo(int x1, int y1)
         {
             m_x1 = x1;
             m_y1 = y1;
             if (m_clipping)
             {
-                m_f1 = ClipLiangBarsky.clipping_flags(x1, y1, clipBox);
+                m_f1 = ClipLiangBarsky.Flags(x1, y1, clipBox);
             }
         }
 
@@ -145,7 +130,7 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
         {
             if (m_clipping)
             {
-                int f2 = ClipLiangBarsky.clipping_flags(x2, y2, clipBox);
+                int f2 = ClipLiangBarsky.Flags(x2, y2, clipBox);
 
                 if ((m_f1 & 10) == (f2 & 10) && (m_f1 & 10) != 0)
                 {
@@ -170,14 +155,14 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
 
                     case 1: // x2 > clip.x2
                         y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
                         LineClipY(ras, x1, y1, clipBox.Right, y3, f1, f3);
                         LineClipY(ras, clipBox.Right, y3, clipBox.Right, y2, f3, f2);
                         break;
 
                     case 2: // x1 > clip.x2
                         y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
                         LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
                         LineClipY(ras, clipBox.Right, y3, x2, y2, f3, f2);
                         break;
@@ -188,7 +173,7 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
 
                     case 4: // x2 < clip.x1
                         y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
                         LineClipY(ras, x1, y1, clipBox.Left, y3, f1, f3);
                         LineClipY(ras, clipBox.Left, y3, clipBox.Left, y2, f3, f2);
                         break;
@@ -196,8 +181,8 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
                     case 6: // x1 > clip.x2 && x2 < clip.x1
                         y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
                         y4 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
-                        f4 = ClipLiangBarsky.clipping_flags_y(y4, clipBox);
+                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
+                        f4 = ClipLiangBarsky.GetFlagsY(y4, clipBox);
                         LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
                         LineClipY(ras, clipBox.Right, y3, clipBox.Left, y4, f3, f4);
                         LineClipY(ras, clipBox.Left, y4, clipBox.Left, y2, f4, f2);
@@ -205,7 +190,7 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
 
                     case 8: // x1 < clip.x1
                         y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
+                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
                         LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
                         LineClipY(ras, clipBox.Left, y3, x2, y2, f3, f2);
                         break;
@@ -213,8 +198,8 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
                     case 9:  // x1 < clip.x1 && x2 > clip.x2
                         y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
                         y4 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
-                        f3 = ClipLiangBarsky.clipping_flags_y(y3, clipBox);
-                        f4 = ClipLiangBarsky.clipping_flags_y(y4, clipBox);
+                        f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
+                        f4 = ClipLiangBarsky.GetFlagsY(y4, clipBox);
                         LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
                         LineClipY(ras, clipBox.Left, y3, clipBox.Right, y4, f3, f4);
                         LineClipY(ras, clipBox.Right, y4, clipBox.Right, y2, f4, f2);
@@ -235,11 +220,12 @@ namespace PixelFarm.Agg.JustForScanlineRasterizer
             m_y1 = y2;
         }
 
-        public static int Upscale(double v) { return AggBasics.iround(v * (int)poly_subpixel_scale_e.SCALE); }
-        public static int DownScale(int v) { return v / (int)poly_subpixel_scale_e.SCALE; }
-        static int MulDiv(double a, double b, double c)
+        //public static int Upscale(double v) { return AggBasics.iround(v * (int)poly_subpix.SCALE); }
+
+        static int DownScale(int v) { return v / (int)poly_subpix.SCALE; }
+        static int MulDiv(int a, int b, int c)
         {
-            return AggBasics.iround(a * b / c);
+            return AggBasics.iround_f((float)a * (float)b / (float)c);
         }
     }
 }

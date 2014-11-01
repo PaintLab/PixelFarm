@@ -34,8 +34,7 @@ namespace PixelFarm.Agg
         RectangleInt GetBounds();
 
         int GetBufferOffsetXY(int x, int y);
-        void MarkImageChanged();
-
+        
         int Stride { get; }
         int BytesBetweenPixelsInclusive { get; }
 
