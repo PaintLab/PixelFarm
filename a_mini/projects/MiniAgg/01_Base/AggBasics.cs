@@ -145,7 +145,7 @@ namespace PixelFarm.Agg
 
         public static class PolySubPix
         {
-            public const int SHIFT = 8;                     //----poly_subpixel_shif
+            public const int SHIFT = 8;          //----poly_subpixel_shif
             public const int SCALE = 1 << SHIFT; //----poly_subpixel_scale 
             public const int MASK = SCALE - 1;  //----poly_subpixel_mask 
         }

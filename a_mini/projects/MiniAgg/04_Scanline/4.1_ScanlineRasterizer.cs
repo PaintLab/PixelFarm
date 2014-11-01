@@ -76,7 +76,7 @@ namespace PixelFarm.Agg
 
     public sealed partial class ScanlineRasterizer
     {
-        CellAARasterizer m_ras;
+        CellAARasterizer m_cellAARas;
         VectorClipper m_vectorClipper;
 
         int[] m_gammaLut = new int[AA_SCALE];
@@ -85,11 +85,11 @@ namespace PixelFarm.Agg
         bool m_auto_close;
 
         /// <summary>
-        /// multiply start x
+        /// multiplied move to start x
         /// </summary>
         int mul_start_x;
         /// <summary>
-        /// multiply start y
+        /// multiplied move to starty
         /// </summary>
         int mul_start_y;
 
@@ -105,6 +105,8 @@ namespace PixelFarm.Agg
         const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
 
+        RectangleInt userModeClipBox;
+
         enum Status
         {
             Initial,
@@ -115,8 +117,9 @@ namespace PixelFarm.Agg
 
         public ScanlineRasterizer()
         {
-            m_ras = new CellAARasterizer();
-            m_vectorClipper = new VectorClipper();
+            m_cellAARas = new CellAARasterizer();
+            m_vectorClipper = new VectorClipper(m_cellAARas);
+
             m_filling_rule = FillingRule.NonZero;
             m_auto_close = true;
             mul_start_x = 0;
@@ -131,28 +134,24 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         public void Reset()
         {
-            m_ras.Reset();
+            m_cellAARas.Reset();
             m_status = Status.Initial;
         }
         public RectangleInt GetVectorClipBox()
         {
-            RectangleInt clipRect = m_vectorClipper.GetVectorClipBox();
-            return new RectangleInt(
-                downscale(clipRect.Left),
-                downscale(clipRect.Bottom),
-                downscale(clipRect.Right),
-                downscale(clipRect.Top));
-
-            //static int DownScale(int v) { return v / (int)poly_subpix.SCALE; }
+            return userModeClipBox;
         }
         //--------------------------
-        public void SetClipBox(RectangleInt clippingRect)
+
+        internal void SetClipBox(RectangleInt clippingRect)
         {
             SetClipBox(clippingRect.Left, clippingRect.Bottom, clippingRect.Right, clippingRect.Top);
         }
         public void SetClipBox(int x1, int y1, int x2, int y2)
         {
-            Reset();
+            userModeClipBox = new RectangleInt(x1, y1, x2, y2);
+            Reset(); 
+
             m_vectorClipper.SetClipBox(
                                 upscale(x1), upscale(y1),
                                 upscale(x2), upscale(y2));
@@ -165,14 +164,14 @@ namespace PixelFarm.Agg
         }
         static int upscale(int v)
         {
-            return v * poly_subpix.SCALE;
+            return v << poly_subpix.SHIFT;
+            //return v * poly_subpix.SCALE; 
         }
-        //from vector clipper
-        static int downscale(int v)
-        {
-            //  m_VectorClipper.downscale
-            return v / (int)poly_subpix.SCALE;
-        }
+        ////from vector clipper
+        //static int downscale(int v)
+        //{
+        //    return v / (int)poly_subpix.SCALE;
+        //}
         //---------------------------------
         FillingRule ScanlineFillingRule
         {
@@ -197,7 +196,7 @@ namespace PixelFarm.Agg
         //------------------------------------------------------------------------
         public void MoveTo(double x, double y)
         {
-            if (m_ras.Sorted) { Reset(); }
+            if (m_cellAARas.Sorted) { Reset(); }
             if (m_auto_close) { ClosePolygon(); }
 
             m_vectorClipper.MoveTo(
@@ -209,10 +208,7 @@ namespace PixelFarm.Agg
         //------------------------------------------------------------------------
         public void LineTo(double x, double y)
         {
-            m_vectorClipper.LineTo(m_ras,
-                              upscale(x),
-                              upscale(y));
-
+            m_vectorClipper.LineTo(upscale(x), upscale(y)); 
             m_status = Status.LineTo;
         }
 
@@ -220,7 +216,7 @@ namespace PixelFarm.Agg
         {
             if (m_status == Status.LineTo)
             {
-                m_vectorClipper.LineTo(m_ras, mul_start_x, mul_start_y);
+                m_vectorClipper.LineTo(mul_start_x, mul_start_y);
                 m_status = Status.Closed;
             }
         }
@@ -247,17 +243,13 @@ namespace PixelFarm.Agg
                         }
                     } break;
             }
-
         }
-
         //------------------------------------------------------------------------
         void Edge(double x1, double y1, double x2, double y2)
         {
-            if (m_ras.Sorted) { Reset(); }
+            if (m_cellAARas.Sorted) { Reset(); }
             m_vectorClipper.MoveTo(upscale(x1), upscale(y1));
-            m_vectorClipper.LineTo(m_ras,
-                              upscale(x2),
-                              upscale(y2));
+            m_vectorClipper.LineTo(upscale(x2), upscale(y2));
             m_status = Status.MoveTo;
         }
 
@@ -272,7 +264,7 @@ namespace PixelFarm.Agg
             double x = 0;
             double y = 0;
 
-            if (m_ras.Sorted) { Reset(); }
+            if (m_cellAARas.Sorted) { Reset(); }
 
             if (snap.VxsHasMoreThanOnePart)
             {
@@ -300,10 +292,10 @@ namespace PixelFarm.Agg
 
         }
 
-        public int MinX { get { return m_ras.MinX; } }
-        public int MinY { get { return m_ras.MinY; } }
-        public int MaxX { get { return m_ras.MaxX; } }
-        public int MaxY { get { return m_ras.MaxY; } }
+        public int MinX { get { return m_cellAARas.MinX; } }
+        public int MinY { get { return m_cellAARas.MinY; } }
+        public int MaxX { get { return m_cellAARas.MaxX; } }
+        public int MaxY { get { return m_cellAARas.MaxY; } }
 
 
         //--------------------------------------------------------------------
@@ -311,7 +303,7 @@ namespace PixelFarm.Agg
         {
             if (m_auto_close) { ClosePolygon(); }
 
-            m_ras.SortCells();
+            m_cellAARas.SortCells();
         }
 
         //------------------------------------------------------------------------
@@ -319,11 +311,11 @@ namespace PixelFarm.Agg
         {
             if (m_auto_close) { ClosePolygon(); }
 
-            m_ras.SortCells();
+            m_cellAARas.SortCells();
 
-            if (m_ras.TotalCells == 0) return false;
+            if (m_cellAARas.TotalCells == 0) return false;
 
-            m_scan_y = m_ras.MinY;
+            m_scan_y = m_cellAARas.MinY;
             return true;
         }
 
@@ -360,7 +352,7 @@ namespace PixelFarm.Agg
         {
             for (; ; )
             {
-                if (m_scan_y > m_ras.MaxY)
+                if (m_scan_y > m_cellAARas.MaxY)
                 {
                     return false;
                 }
@@ -371,7 +363,7 @@ namespace PixelFarm.Agg
                 int offset;
                 int num_cells;
 
-                m_ras.GetCells(m_scan_y, out cells, out offset, out num_cells);
+                m_cellAARas.GetCells(m_scan_y, out cells, out offset, out num_cells);
 
                 int cover = 0;
 

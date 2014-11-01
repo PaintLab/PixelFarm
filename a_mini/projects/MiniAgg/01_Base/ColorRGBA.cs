@@ -633,12 +633,14 @@ namespace PixelFarm.Agg
             Clamp0To1(ref blue);
             Clamp0To1(ref alpha);
         }
+ 
 
-        public static ColorRGBA MakeColorRGBA(double r_, double g_, double b_, double a_)
+
+        public static ColorRGBA MakeColorRGBA(float r_, float g_, float b_, float a_)
         {
             return new ColorRGBAf(r_, g_, b_, a_).ToColorRGBA();
         }
-        public static ColorRGBA MakeColorRGBA(double r_, double g_, double b_)
+        public static ColorRGBA MakeColorRGBA(float r_, float g_, float b_)
         {
             return new ColorRGBAf(r_, g_, b_, 1.0f).ToColorRGBA();
         }

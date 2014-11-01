@@ -37,15 +37,30 @@ namespace PixelFarm.Agg
     {
         Graphics2D gx;
         Stroke stroke;
+        ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+        ColorRGBA fillColor;
+
+        ScanlineRasterizer m_ras;
+        ScanlinePacked8 m_sl;
 
         public CanvasPainter(Graphics2D graphic2d)
         {
             this.gx = graphic2d;
             stroke = new Stroke(1);//default
+            this.m_ras = new ScanlineRasterizer();
+            this.m_sl = new ScanlinePacked8();
         }
         public void Clear(ColorRGBA color)
         {
             gx.Clear(color);
+        }
+        public RectangleInt ClipBox
+        {
+            get { return this.gx.GetClippingRect(); }
+        }
+        public void SetClipBox(int x1, int y1, int x2, int y2)
+        {
+            this.gx.SetClippingRect(new RectangleInt(x1, y1, x2, y2));
         }
         public Graphics2D Graphics
         {
@@ -166,6 +181,30 @@ namespace PixelFarm.Agg
             stringPrinter.DrawFromHintedCache = drawFromHintedCache;
             stringPrinter.Render(gx, color);
         }
-
+        /// <summary>
+        /// fill vertex store
+        /// </summary>
+        /// <param name="vxs"></param>
+        /// <param name="c"></param>
+        public void Fill(VertexStoreSnap snap)
+        {
+            m_ras.AddPath(snap);
+            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, m_ras, m_sl, fillColor);
+        }
+        public void Fill(VertexStore vxs)
+        {
+            m_ras.AddPath(vxs);
+            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, m_ras, m_sl, fillColor);
+        }
+        //public void RenderImage(IImageReaderWriter img)
+        //{
+        //    //sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl,
+        //    //    ColorRGBAf.MakeColorRGBA(0.6, 0.9, 0.7, 0.8));
+        //}
+        public ColorRGBA FillColor
+        {
+            get { return fillColor; }
+            set { this.fillColor = value; }
+        }
     }
 }

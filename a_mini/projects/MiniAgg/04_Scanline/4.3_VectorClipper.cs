@@ -31,14 +31,19 @@ namespace PixelFarm.Agg
     {
         class VectorClipper
         {
+
             RectangleInt clipBox;
             int m_x1;
             int m_y1;
             int m_f1;
             bool m_clipping;
 
-            public VectorClipper()
+            
+            CellAARasterizer ras;
+
+            public VectorClipper(CellAARasterizer ras)
             {
+                this.ras = ras;
                 clipBox = new RectangleInt(0, 0, 0, 0);
                 m_x1 = m_y1 = m_f1 = 0;
                 m_clipping = false;
@@ -69,10 +74,9 @@ namespace PixelFarm.Agg
             }
 
             //------------------------------------------------------------------------
-            void LineClipY(CellAARasterizer ras,
-                                      int x1, int y1,
-                                      int x2, int y2,
-                                      int f1, int f2)
+            void LineClipY(int x1, int y1,
+                           int x2, int y2,
+                           int f1, int f2)
             {
                 f1 &= 10;
                 f2 &= 10;
@@ -123,7 +127,7 @@ namespace PixelFarm.Agg
             }
 
             //--------------------------------------------------------------------
-            internal void LineTo(CellAARasterizer ras, int x2, int y2)
+            public void LineTo(int x2, int y2)
             {
                 if (m_clipping)
                 {
@@ -147,32 +151,32 @@ namespace PixelFarm.Agg
                     switch (((f1 & 5) << 1) | (f2 & 5))
                     {
                         case 0: // Visible by X
-                            LineClipY(ras, x1, y1, x2, y2, f1, f2);
+                            LineClipY(x1, y1, x2, y2, f1, f2);
                             break;
 
                         case 1: // x2 > clip.x2
                             y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
                             f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                            LineClipY(ras, x1, y1, clipBox.Right, y3, f1, f3);
-                            LineClipY(ras, clipBox.Right, y3, clipBox.Right, y2, f3, f2);
+                            LineClipY(x1, y1, clipBox.Right, y3, f1, f3);
+                            LineClipY(clipBox.Right, y3, clipBox.Right, y2, f3, f2);
                             break;
 
                         case 2: // x1 > clip.x2
                             y3 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
                             f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                            LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
-                            LineClipY(ras, clipBox.Right, y3, x2, y2, f3, f2);
+                            LineClipY(clipBox.Right, y1, clipBox.Right, y3, f1, f3);
+                            LineClipY(clipBox.Right, y3, x2, y2, f3, f2);
                             break;
 
                         case 3: // x1 > clip.x2 && x2 > clip.x2
-                            LineClipY(ras, clipBox.Right, y1, clipBox.Right, y2, f1, f2);
+                            LineClipY(clipBox.Right, y1, clipBox.Right, y2, f1, f2);
                             break;
 
                         case 4: // x2 < clip.x1
                             y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
                             f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                            LineClipY(ras, x1, y1, clipBox.Left, y3, f1, f3);
-                            LineClipY(ras, clipBox.Left, y3, clipBox.Left, y2, f3, f2);
+                            LineClipY(x1, y1, clipBox.Left, y3, f1, f3);
+                            LineClipY(clipBox.Left, y3, clipBox.Left, y2, f3, f2);
                             break;
 
                         case 6: // x1 > clip.x2 && x2 < clip.x1
@@ -180,16 +184,16 @@ namespace PixelFarm.Agg
                             y4 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
                             f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
                             f4 = ClipLiangBarsky.GetFlagsY(y4, clipBox);
-                            LineClipY(ras, clipBox.Right, y1, clipBox.Right, y3, f1, f3);
-                            LineClipY(ras, clipBox.Right, y3, clipBox.Left, y4, f3, f4);
-                            LineClipY(ras, clipBox.Left, y4, clipBox.Left, y2, f4, f2);
+                            LineClipY(clipBox.Right, y1, clipBox.Right, y3, f1, f3);
+                            LineClipY(clipBox.Right, y3, clipBox.Left, y4, f3, f4);
+                            LineClipY(clipBox.Left, y4, clipBox.Left, y2, f4, f2);
                             break;
 
                         case 8: // x1 < clip.x1
                             y3 = y1 + MulDiv(clipBox.Left - x1, y2 - y1, x2 - x1);
                             f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
-                            LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
-                            LineClipY(ras, clipBox.Left, y3, x2, y2, f3, f2);
+                            LineClipY(clipBox.Left, y1, clipBox.Left, y3, f1, f3);
+                            LineClipY(clipBox.Left, y3, x2, y2, f3, f2);
                             break;
 
                         case 9:  // x1 < clip.x1 && x2 > clip.x2
@@ -197,13 +201,13 @@ namespace PixelFarm.Agg
                             y4 = y1 + MulDiv(clipBox.Right - x1, y2 - y1, x2 - x1);
                             f3 = ClipLiangBarsky.GetFlagsY(y3, clipBox);
                             f4 = ClipLiangBarsky.GetFlagsY(y4, clipBox);
-                            LineClipY(ras, clipBox.Left, y1, clipBox.Left, y3, f1, f3);
-                            LineClipY(ras, clipBox.Left, y3, clipBox.Right, y4, f3, f4);
-                            LineClipY(ras, clipBox.Right, y4, clipBox.Right, y2, f4, f2);
+                            LineClipY(clipBox.Left, y1, clipBox.Left, y3, f1, f3);
+                            LineClipY(clipBox.Left, y3, clipBox.Right, y4, f3, f4);
+                            LineClipY(clipBox.Right, y4, clipBox.Right, y2, f4, f2);
                             break;
 
                         case 12: // x1 < clip.x1 && x2 < clip.x1
-                            LineClipY(ras, clipBox.Left, y1, clipBox.Left, y2, f1, f2);
+                            LineClipY(clipBox.Left, y1, clipBox.Left, y2, f1, f2);
                             break;
                     }
                     m_f1 = f2;

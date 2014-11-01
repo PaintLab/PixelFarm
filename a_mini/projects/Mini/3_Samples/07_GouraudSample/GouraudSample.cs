@@ -59,7 +59,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             set;
         }
         [DemoConfig(MaxValue = 1)]
-        public double AlphaValue
+        public float AlphaValue
         {
             get;
             set;
@@ -67,8 +67,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
         //template<class Scanline, class Ras> 
         public void render_gouraud(IImageReaderWriter backBuffer, Scanline sl, ScanlineRasterizer ras)
         {
-            double alpha = this.AlphaValue;
-            double brc = 1;
+            float alpha = this.AlphaValue;
+            float  brc = 1;
             Graphics2D graphics2D = NewGraphics2D();
 
 #if SourceDepth24

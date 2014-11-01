@@ -256,8 +256,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
 
-                        graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));
-                        graphics2D.Render(ps2.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0, 0.6, 0, 0.1));
+                        graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
+                        graphics2D.Render(ps2.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
 
                         CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), ps2.MakeVertexSnap());
                     }
@@ -298,11 +298,11 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.ClosePolygon();
 
-                        graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));
+                        graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
 
 
                         var vxs = ps2.Vxs;
-                        graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0, 0.6, 0, 0.1));
+                        graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
                         CreateAndRenderCombined(graphics2D, ps1.MakeVertexSnap(), new VertexStoreSnap(vxs));
                     }
                     break;
@@ -446,9 +446,9 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         CreateAndRenderCombined(graphics2D, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
 
-                        graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0, 0, 0, 0.1));
+                        graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
 
-                        graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0, 0.6, 0, 0.1));
+                        graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
                     }
                     break;
             }
@@ -480,7 +480,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
             if (combined != null)
             {
-                graphics2D.Render(combined.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0.5, 0.0, 0, 0.5));
+                graphics2D.Render(combined.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0.5f, 0.0f, 0f, 0.5f));
             }
         }
         public override void MouseDrag(int x, int y)
