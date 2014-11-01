@@ -59,15 +59,7 @@ namespace PixelFarm.Agg.UI
 
     
         public abstract void RewindZero(); 
-        protected abstract RectangleDouble CalculateLocalBounds();
-
-        public virtual ColorRGBA WidgetColor(int i) { return new ColorRGBAf().ToColorRGBA(); }
-        public override void OnDraw(Graphics2D graphics2D)
-        { 
-            graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), WidgetColor(0));
-
-            base.OnDraw(graphics2D);
-        } 
+        protected abstract RectangleDouble CalculateLocalBounds(); 
         public abstract VertexStore MakeVxs();
         
     }
