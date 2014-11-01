@@ -28,9 +28,7 @@ using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.UI
 {
 
-
-    public enum UnderMouseState { NotUnderMouse, UnderMouseNotFirst, FirstUnderMouse };
-
+ 
     /// <summary>
     /// incomplete widget, for test Agg Core Only
     /// </summary>

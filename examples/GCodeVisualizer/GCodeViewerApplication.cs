@@ -79,7 +79,7 @@ namespace MatterHackers.GCodeVisualizer
             FlowLayoutWidget keepOnTop = new FlowLayoutWidget();
 
             prevLayerButton = new Button("<<", 0, 0);
-            prevLayerButton.Click += new Button.ButtonEventHandler(prevLayer_ButtonClick);
+            prevLayerButton.Click += new EventHandler(prevLayer_ButtonClick);
             keepOnTop.AddChild(prevLayerButton);
 
             currentLayerIndex = new NumberEdit(1, pixelWidth: 40);
@@ -90,7 +90,7 @@ namespace MatterHackers.GCodeVisualizer
             keepOnTop.AddChild(layerCountTextWidget);
 
             nextLayerButton = new Button(">>", 0, 0);
-            nextLayerButton.Click += new Button.ButtonEventHandler(nextLayer_ButtonClick);
+            nextLayerButton.Click += new EventHandler(nextLayer_ButtonClick);
             keepOnTop.AddChild(nextLayerButton);
 
             if (gCodeToLoad != "")
@@ -100,7 +100,7 @@ namespace MatterHackers.GCodeVisualizer
             else
             {
                 openFileButton = new Button("Open GCode", 0, 0);
-                openFileButton.Click += new Button.ButtonEventHandler(openFileButton_ButtonClick);
+                openFileButton.Click += new EventHandler(openFileButton_ButtonClick);
                 keepOnTop.AddChild(openFileButton);
             }
 
@@ -123,33 +123,36 @@ namespace MatterHackers.GCodeVisualizer
             SetActiveLayer((int)currentLayerIndex.Value - 1);
         }
 
-        void nextLayer_ButtonClick(object sender, MouseEventArgs mouseEvent)
+        void nextLayer_ButtonClick(object sender, EventArgs mouseEvent)
         {
             SetActiveLayer(gCodeViewWidget.ActiveLayerIndex + 1);
         }
 
-        void prevLayer_ButtonClick(object sender, MouseEventArgs mouseEvent)
+        void prevLayer_ButtonClick(object sender, EventArgs mouseEvent)
         {
             SetActiveLayer(gCodeViewWidget.ActiveLayerIndex - 1);
         }
 
-        void openFileButton_ButtonClick(object sender, MouseEventArgs mouseEvent)
+        void openFileButton_ButtonClick(object sender, EventArgs mouseEvent)
         {
             UiThread.RunOnIdle((state) =>
                 {
                     OpenFileDialogParams openParams = new OpenFileDialogParams("gcode files|*.gcode");
-                    Stream streamToLoadFrom = FileDialog.OpenFileDialog(ref openParams);
-
-                    if (openParams.FileName != null && openParams.FileName != "")
-                    {
-                        gCodeViewWidget.Load(openParams.FileName);
-                        currentLayerIndex.Value = 0;
-                        currentLayerIndex.MaxValue = gCodeViewWidget.LoadedGCode.NumChangesInZ;
-                    }
-
-                    Invalidate();
+                    FileDialog.OpenFileDialog(openParams, onFileSelected);
                 });
         }
+
+		void onFileSelected(OpenFileDialogParams openParams)
+		{
+			if (openParams.FileName != null && openParams.FileName != "")
+			{
+				gCodeViewWidget.Load(openParams.FileName);
+				currentLayerIndex.Value = 0;
+				currentLayerIndex.MaxValue = gCodeViewWidget.LoadedGCode.NumChangesInZ;
+			}
+
+			Invalidate();
+		}
 
         public override void OnDraw(Graphics2D graphics2D)
         {

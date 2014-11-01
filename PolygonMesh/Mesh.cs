@@ -44,22 +44,6 @@ namespace MatterHackers.PolygonMesh
     [DebuggerDisplay("ID = {Data.ID}")]
     public class Mesh
     {
-        static public readonly double DefaultMaxDistanceToConsiderVertexAsSame = .0000001;
-
-        double maxDistanceToConsiderVertexAsSame = DefaultMaxDistanceToConsiderVertexAsSame;
-        public double MaxDistanceToConsiderVertexAsSame
-        {
-            get
-            {
-                return maxDistanceToConsiderVertexAsSame;
-            }
-
-            set
-            {
-                maxDistanceToConsiderVertexAsSame = value;
-            }
-        }
-
         int changedCount = 0;
         public int ChangedCount { get { return changedCount; } }
 
@@ -96,23 +80,31 @@ namespace MatterHackers.PolygonMesh
         {
         }
 
-        public Mesh(Mesh meshToCopy)
+        public static Mesh Copy(Mesh meshToCopy, ReportProgressRatio progress = null)
         {
+            Mesh newMesh = new Mesh();
             foreach (Face face in meshToCopy.Faces)
             {
                 List<Vertex> faceVertices = new List<Vertex>();
                 foreach (FaceEdge faceEdgeToAdd in face.FaceEdges())
                 {
-                    Vertex newVertex = CreateVertex(faceEdgeToAdd.firstVertex.Position, true, true);
+                    Vertex newVertex = newMesh.CreateVertex(faceEdgeToAdd.firstVertex.Position, true, true);
                     faceVertices.Add(newVertex);
                 }
 
-                CreateFace(faceVertices.ToArray(), true);
+                newMesh.CreateFace(faceVertices.ToArray(), true);
             }
 
-            CleanAndMergMesh();
+            newMesh.CleanAndMergMesh();
+
+            MeshMaterialData materialDataToCopy = MeshMaterialData.Get(meshToCopy);
+            MeshMaterialData newMaterialData = MeshMaterialData.Get(newMesh);
+            newMaterialData.MaterialIndex = materialDataToCopy.MaterialIndex;
+
+            return newMesh;
         }
 
+<<<<<<< HEAD
         public void CleanAndMergMesh(ReportProgress reportProgress = null)
         {
             if (reportProgress != null)
@@ -120,6 +112,34 @@ namespace MatterHackers.PolygonMesh
                 SortVertices((double progress0To1, string processingState) => { return reportProgress(progress0To1 * .41, processingState); });
                 MergeVertices((double progress0To1, string processingState) => { return reportProgress(progress0To1 * .23 + .41, processingState); });
                 MergeMeshEdges((double progress0To1, string processingState) => { return reportProgress(progress0To1 * .36 + .64, processingState); });
+=======
+        public void CleanAndMergMesh(ReportProgressRatio reportProgress = null)
+        {
+            if (reportProgress != null)
+            {
+                bool keepProcessing = true;
+                SortVertices((double progress0To1, string processingState, out bool continueProcessing) => 
+                {
+                    reportProgress(progress0To1 * .41, processingState, out continueProcessing);
+                    keepProcessing = continueProcessing;
+                });
+                if (keepProcessing)
+                {
+                    MergeVertices((double progress0To1, string processingState, out bool continueProcessing) => 
+                    {
+                        reportProgress(progress0To1 * .23 + .41, processingState, out continueProcessing);
+                        keepProcessing = continueProcessing;
+                    });
+                }
+                if (keepProcessing)
+                {
+                    MergeMeshEdges((double progress0To1, string processingState, out bool continueProcessing) => 
+                    {
+                        reportProgress(progress0To1 * .36 + .64, processingState, out continueProcessing);
+                        keepProcessing = continueProcessing;
+                    });
+                }
+>>>>>>> FETCH_HEAD
             }
             else
             {
@@ -355,9 +375,9 @@ namespace MatterHackers.PolygonMesh
             return CreateVertex(new Vector3(x, y, z), allowDuplicate, willSortLater);
         }
 
-        public List<Vertex> FindVertices(Vector3 position)
+        public List<Vertex> FindVertices(Vector3 position, double maxDistanceToConsiderVertexAsSame = 0)
         {
-            return vertices.FindVertices(position, MaxDistanceToConsiderVertexAsSame);
+            return vertices.FindVertices(position, maxDistanceToConsiderVertexAsSame);
         }
 
         public Vertex CreateVertex(Vector3 position, bool allowDuplicate = false, bool willSortLater = false)
@@ -381,6 +401,7 @@ namespace MatterHackers.PolygonMesh
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
         public void SortVertices(ReportProgress reportProgress = null)
         {
             if (reportProgress != null)
@@ -395,6 +416,27 @@ namespace MatterHackers.PolygonMesh
         }
 
         public void MergeVertices(ReportProgress reportProgress = null, double maxDistanceToConsiderVertexAsSame = 0)
+=======
+        Stopwatch timer = new Stopwatch();
+        public void SortVertices(ReportProgressRatio reportProgress = null)
+        {
+            bool continueProcessing;
+            if (reportProgress != null)
+            {
+                reportProgress(0, "Sorting Vertices", out continueProcessing);
+            }
+            timer.Restart();
+            Vertices.Sort();
+            timer.Stop();
+            Debug.WriteLine(timer.ElapsedMilliseconds);
+            if (reportProgress != null)
+            {
+                reportProgress(1, "Sorting Vertices", out continueProcessing);
+            }
+        }
+
+        public void MergeVertices(ReportProgressRatio reportProgress = null, double maxDistanceToConsiderVertexAsSame = 0)
+>>>>>>> FETCH_HEAD
         {
             HashSet<Vertex> markedForDeletion = new HashSet<Vertex>();
             Stopwatch maxProgressReport = new Stopwatch();
@@ -422,7 +464,16 @@ namespace MatterHackers.PolygonMesh
                     {
                         if (maxProgressReport.ElapsedMilliseconds > 200)
                         {
+<<<<<<< HEAD
                             reportProgress(i / (double)Vertices.Count, "Merging Vertices");
+=======
+                            bool continueProcessing;
+                            reportProgress(i / (double)Vertices.Count, "Merging Vertices", out continueProcessing);
+                            if (!continueProcessing)
+                            {
+                                return;
+                            }
+>>>>>>> FETCH_HEAD
                             maxProgressReport.Restart();
                         }
                     }
@@ -431,7 +482,12 @@ namespace MatterHackers.PolygonMesh
 
             if (reportProgress != null)
             {
+<<<<<<< HEAD
                 reportProgress(1, "Deleting Unused Vertices");
+=======
+                bool continueProcessing;
+                reportProgress(1, "Deleting Unused Vertices", out continueProcessing);
+>>>>>>> FETCH_HEAD
             }
             RemoveVerticesMarkedForDeletion(markedForDeletion);
         }
@@ -505,6 +561,13 @@ namespace MatterHackers.PolygonMesh
             {
                 if(meshEdge.IsConnectedTo(vertex2))
                 {
+                    if (meshEdges.Contains(meshEdge))
+                    {
+                        // TODO: this should realy not be happening. We should only ever try to iterate to any mesh edge once.
+                        // We can get an infinite recursion with this and it needs to be debuged.
+                        return meshEdges;
+                    }
+
                     meshEdges.Add(meshEdge);
                 }
             }
@@ -673,7 +736,11 @@ namespace MatterHackers.PolygonMesh
             edgeToDelete.NextMeshEdgeFromEnd[1] = null;
         }
 
+<<<<<<< HEAD
         public void MergeMeshEdges(ReportProgress reportProgress = null)
+=======
+        public void MergeMeshEdges(ReportProgressRatio reportProgress = null)
+>>>>>>> FETCH_HEAD
         {
             HashSet<MeshEdge> markedForDeletion = new HashSet<MeshEdge>();
             Stopwatch maxProgressReport = new Stopwatch();
@@ -710,13 +777,24 @@ namespace MatterHackers.PolygonMesh
                 {
                     if (maxProgressReport.ElapsedMilliseconds > 200)
                     {
+<<<<<<< HEAD
                         reportProgress(i / (double)meshEdges.Count, "Merging Mesh Edges");
                         maxProgressReport.Restart();
+=======
+                        bool continueProcessing;
+                        reportProgress(i / (double)meshEdges.Count, "Merging Mesh Edges", out continueProcessing);
+                        maxProgressReport.Restart();
+                        if (!continueProcessing)
+                        {
+                            return;
+                        }
+>>>>>>> FETCH_HEAD
                     }
                 }
             }
 
             RemoveMeshEdgesMarkedForDeletion(markedForDeletion);
+<<<<<<< HEAD
         }
 
         private void RemoveMeshEdgesMarkedForDeletion(HashSet<MeshEdge> markedForDeletion)
@@ -734,6 +812,25 @@ namespace MatterHackers.PolygonMesh
             meshEdges = NonDeleteMeshEdges;
         }
 
+=======
+        }
+
+        private void RemoveMeshEdgesMarkedForDeletion(HashSet<MeshEdge> markedForDeletion)
+        {
+            List<MeshEdge> NonDeleteMeshEdges = new List<MeshEdge>();
+            for (int i = 0; i < meshEdges.Count; i++)
+            {
+                MeshEdge meshEdgeToCheck = meshEdges[i];
+                if (!markedForDeletion.Contains(meshEdgeToCheck))
+                {
+                    NonDeleteMeshEdges.Add(meshEdgeToCheck);
+                }
+            }
+
+            meshEdges = NonDeleteMeshEdges;
+        }
+
+>>>>>>> FETCH_HEAD
         public void MergeMeshEdges(MeshEdge edgeToKeep, MeshEdge edgeToDelete, bool doActualDeletion = true)
         {
             // make sure they sare vertexes (or they can't be merged)
@@ -907,6 +1004,8 @@ namespace MatterHackers.PolygonMesh
         {
             if (matrix != Matrix4X4.Identity)
             {
+                bool wasSorted = Vertices.IsSorted;
+                Vertices.IsSorted = false;
                 foreach (Vertex vertex in Vertices)
                 {
                     vertex.Position = Vector3.Transform(vertex.Position, matrix);
@@ -914,6 +1013,10 @@ namespace MatterHackers.PolygonMesh
                 foreach(Face face in Faces)
                 {
                     face.CalculateNormal();
+                }
+                if (wasSorted)
+                {
+                    SortVertices();
                 }
                 MarkAsChanged();
             }

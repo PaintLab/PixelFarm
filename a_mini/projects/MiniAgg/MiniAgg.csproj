@@ -39,6 +39,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="01_Base\ExtensionAttribute.cs" />
     <Compile Include="01_Base\Collections.cs" />
     <Compile Include="01_Base\AggBasics.cs" />
     <Compile Include="02_PixelBuffer\ActualImage.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="09_VectorMath\Vector3.cs" />
     <Compile Include="09_VectorMath\Vector3Float.cs" />
     <Compile Include="09_VectorMath\Vector4.cs" />
+    <Compile Include="x_notused\x_ImageHelper2.cs" />
     <Compile Include="x_notused\x_PixelBlenderFloat.cs" />
     <Compile Include="03_SpanGenerators\0_ISpanGenerator.cs" />
     <Compile Include="04_Scanline\0_ScanlineSpan.cs" />

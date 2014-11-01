@@ -372,7 +372,8 @@ namespace MatterHackers.Agg.UI
         private bool containsFocus = false;
 
         private int layoutSuspendCount;
-        public event LayoutEventHandler Layout;
+        public event EventHandler Layout;
+        public event EventHandler Draw;
     
         public event KeyPressEventHandler KeyPressed;
 
@@ -481,39 +482,6 @@ namespace MatterHackers.Agg.UI
             {
                 ThrowExceptionInDebug("The mouse should not be locked when the child list changes.");
             }
-        }
-
-        public virtual bool InvokeRequired
-        {
-            get
-            {
-                if (Parent != null)
-                {
-                    return Parent.InvokeRequired;
-                }
-
-                return false;
-            }
-        }
-
-        public virtual object Invoke(Delegate method)
-        {
-            if (Parent != null)
-            {
-                return Parent.Invoke(method);
-            }
-
-            throw new InvalidOperationException("You can only check for this is your top level window in a form.");
-        }
-
-        public virtual object Invoke(Delegate method, params object[] args)
-        {
-            if (Parent != null)
-            {
-                return Parent.Invoke(method, args);
-            }
-
-            throw new InvalidOperationException("You can only check for this is your top level window in a form.");
         }
 
         public virtual ObservableCollection<GuiWidget> Children
@@ -1056,7 +1024,7 @@ namespace MatterHackers.Agg.UI
             }
         }
 
-        public bool Enabled
+        public virtual bool Enabled
         {
             get
             {
@@ -1742,6 +1710,11 @@ namespace MatterHackers.Agg.UI
                 }
             }
 
+            if (Draw != null)
+            {
+                Draw(this, new DrawEventArgs(graphics2D));
+            }
+
             if (DebugShowBounds)
             {
                 graphics2D.Line(LocalBounds.Left, LocalBounds.Bottom, LocalBounds.Right, LocalBounds.Top, RGBA_Bytes.Green);
@@ -1811,7 +1784,10 @@ namespace MatterHackers.Agg.UI
 
         public void CloseOnIdle()
         {
-            UiThread.RunOnIdle((state) => { Close(); });
+            UiThread.RunOnIdle((state) => 
+            {
+                Close(); 
+            });
         }
 
         /// <summary>
@@ -1984,6 +1960,9 @@ namespace MatterHackers.Agg.UI
                     child.ParentToChildTransform.inverse_transform(ref childX, ref childY);
 
                     MouseEventArgs childMouseEvent = new MouseEventArgs(mouseEvent, childX, childY);
+
+                    // If any previous child has accepted the MouseDown, then we won't continue propogating the event and 
+                    // will attempt to fire MovedOffWidget logic
                     if (childHasAcceptedThisEvent)
                     {
                         // another child already took the down so no one else can.

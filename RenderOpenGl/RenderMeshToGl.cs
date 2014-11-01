@@ -27,6 +27,10 @@ of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 
+<<<<<<< HEAD
+=======
+using System;
+>>>>>>> FETCH_HEAD
 using MatterHackers.Agg;
 using MatterHackers.PolygonMesh;
 using MatterHackers.RenderOpenGl.OpenGl;
@@ -51,12 +55,37 @@ namespace MatterHackers.RenderOpenGl
                     ImageGlPlugin glPlugin = ImageGlPlugin.GetImageGlPlugin(subMesh.texture, true);
                     GL.Enable(EnableCap.Texture2D);
                     GL.BindTexture(TextureTarget.Texture2D, glPlugin.GLTextureHandle);
+                    GL.EnableClientState(ArrayCap.TextureCoordArray);
                 }
                 else
                 {
                     GL.Disable(EnableCap.Texture2D);
+                    GL.DisableClientState(ArrayCap.TextureCoordArray);
                 }
 
+<<<<<<< HEAD
+=======
+                #if true
+                GL.EnableClientState(ArrayCap.NormalArray);
+                GL.EnableClientState(ArrayCap.VertexArray);
+                unsafe
+                {
+                    fixed (VertexTextureData* pTextureData = subMesh.textrueData.Array)
+                    {
+                        fixed (VertexNormalData* pNormalData = subMesh.normalData.Array)
+                        {
+                            fixed (VertexPositionData* pPosition = subMesh.positionData.Array)
+                            {
+                                GL.TexCoordPointer(2, TexCordPointerType.Float, 0, new IntPtr(pTextureData));
+                                GL.NormalPointer(NormalPointerType.Float, 0, new IntPtr(pNormalData));
+                                GL.VertexPointer(3, VertexPointerType.Float, 0, new IntPtr(pPosition));
+                                GL.DrawArrays(BeginMode.Triangles, 0, subMesh.positionData.Count);
+                            }
+                        }
+                    }
+                }
+                #else
+>>>>>>> FETCH_HEAD
                 GL.InterleavedArrays(InterleavedArrayFormat.T2fN3fV3f, 0, subMesh.vertexDatas.Array);
                 if (subMesh.texture != null)
                 {
@@ -67,11 +96,20 @@ namespace MatterHackers.RenderOpenGl
                 {
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
                 }
+<<<<<<< HEAD
 
                 GL.DrawArrays(BeginMode.Triangles, 0, subMesh.vertexDatas.Count);
+=======
+                #endif
+>>>>>>> FETCH_HEAD
 
                 GL.DisableClientState(ArrayCap.NormalArray);
                 GL.DisableClientState(ArrayCap.VertexArray);
+                GL.DisableClientState(ArrayCap.TextureCoordArray);
+
+                GL.TexCoordPointer(2, TexCordPointerType.Float, 0, new IntPtr(0));
+                GL.NormalPointer(NormalPointerType.Float, 0, new IntPtr(0));
+                GL.VertexPointer(3, VertexPointerType.Float, 0, new IntPtr(0));
 
                 if (subMesh.texture != null)
                 {
@@ -107,11 +145,32 @@ namespace MatterHackers.RenderOpenGl
             }
 
             VectorPOD<WireVertexData> edegLines = glWireMeshPlugin.edgeLinesData;
+<<<<<<< HEAD
             GL.InterleavedArrays(InterleavedArrayFormat.V3f, 0, edegLines.Array);
             GL.DrawArrays(BeginMode.Lines, 0, edegLines.Count);
 
             GL.DisableClientState(ArrayCap.NormalArray);
             GL.DisableClientState(ArrayCap.VertexArray);
+=======
+            GL.EnableClientState(ArrayCap.VertexArray);
+
+            #if true
+            unsafe
+            {
+                fixed (WireVertexData* pv = edegLines.Array)
+                {
+                    GL.VertexPointer(3, VertexPointerType.Float, 0, new IntPtr(pv));
+                    GL.DrawArrays(BeginMode.Lines, 0, edegLines.Count);
+                }
+            }
+            #else
+            GL.InterleavedArrays(InterleavedArrayFormat.V3f, 0, edegLines.Array);
+            GL.DrawArrays(BeginMode.Lines, 0, edegLines.Count);
+            #endif
+
+            GL.DisableClientState(ArrayCap.VertexArray);
+            GL.Enable(EnableCap.Lighting);
+>>>>>>> FETCH_HEAD
         }
 
         public static void Render(Mesh meshToRender, IColorType partColor, RenderTypes renderType = RenderTypes.Shaded)

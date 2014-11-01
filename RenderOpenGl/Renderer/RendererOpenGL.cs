@@ -47,18 +47,20 @@ namespace MatterHackers.RenderOpenGl
 
     public class Graphics2DOpenGL : Graphics2D
     {
-        public bool ForceTexturedEdgeAntiAliasing = true;
+        public bool DoEdgeAntiAliasing = true;
         RenderToGLTesselator RenderNowTesselator = new RenderToGLTesselator();
 
         int width;
         int height;
-        public Graphics2DOpenGL(int width, int height)
+		RectangleDouble cachedClipRect;
+
+		public Graphics2DOpenGL(int width, int height)
         {
             this.width = width;
             this.height = height;
+			cachedClipRect = new RectangleDouble(0, 0, width, height);
         }
 
-        RectangleDouble cachedClipRect;
         public override RectangleDouble GetClippingRect()
         {
             return cachedClipRect;
@@ -80,7 +82,11 @@ namespace MatterHackers.RenderOpenGl
 
         public void PushOrthoProjection()
         {
+<<<<<<< HEAD
 			GL.PushAttrib(AttribMask.TransformBit | AttribMask.EnableBit);
+=======
+			GL.Disable(EnableCap.CullFace);
+>>>>>>> FETCH_HEAD
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.PushMatrix();
@@ -98,7 +104,6 @@ namespace MatterHackers.RenderOpenGl
             GL.PopMatrix();
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PopMatrix();
-            GL.PopAttrib();
         }
 
         public static void SendShapeToTesselator(VertexTesselatorAbstract tesselator, IVertexSource vertexSource)
@@ -117,6 +122,7 @@ namespace MatterHackers.RenderOpenGl
                 {
                     if (ShapePath.is_close(PathAndFlags)
                         || (haveBegunContour && ShapePath.is_move_to(PathAndFlags)))
+<<<<<<< HEAD
                     {
                         tesselator.EndContour();
                         haveBegunContour = false;
@@ -131,9 +137,29 @@ namespace MatterHackers.RenderOpenGl
                         }
 
                         tesselator.AddVertex(x, y);
+=======
+                    {
+                        tesselator.EndContour();
+                        haveBegunContour = false;
+>>>>>>> FETCH_HEAD
                     }
                 }
 
+<<<<<<< HEAD
+=======
+                    if (!ShapePath.is_close(PathAndFlags))
+                    {
+                        if (!haveBegunContour)
+                        {
+                            tesselator.BeginContour();
+                            haveBegunContour = true;
+                        }
+
+                        tesselator.AddVertex(x, y);
+                    }
+                }
+
+>>>>>>> FETCH_HEAD
                 if (haveBegunContour)
                 {
                     tesselator.EndContour();
@@ -220,7 +246,7 @@ namespace MatterHackers.RenderOpenGl
                 vertexSource = new VertexSourceApplyTransform(vertexSource, transform);
             }
 
-            if (ForceTexturedEdgeAntiAliasing)
+            if (DoEdgeAntiAliasing)
             {
                 DrawAAShape(vertexSource);
             }

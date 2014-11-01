@@ -37,6 +37,10 @@ using MatterHackers.Agg;
 using MatterHackers.Agg.Image;
 
 using MatterHackers.RenderOpenGl.OpenGl;
+<<<<<<< HEAD
+=======
+using MatterHackers.VectorMath;
+>>>>>>> FETCH_HEAD
 
 namespace MatterHackers.RenderOpenGl
 {
@@ -65,7 +69,7 @@ namespace MatterHackers.RenderOpenGl
             {
                 // We run this in here to ensure that we are on the correct thread and have the correct
                 // glcontext realized.
-                for (int i = glDataNeedingToBeDeleted.Count - 1; i >= 0; i-- )
+                for (int i = glDataNeedingToBeDeleted.Count - 1; i >= 0; i--)
                 {
                     int textureToDelete = glDataNeedingToBeDeleted[i].glTextureHandle;
 					#if USE_OPENGL
@@ -217,13 +221,15 @@ namespace MatterHackers.RenderOpenGl
             }
 
             if (hwSupportsOnlyPowerOfTwoTextures)
+<<<<<<< HEAD
+=======
             {
-                int pow2Size = 1;
-                while (pow2Size < size)
-                {
-                    pow2Size <<= 1;
-                }
-                return pow2Size;
+                return MathHelper.FirstPowerTowGreaterThanOrEqualTo(size);
+            }
+            else
+>>>>>>> FETCH_HEAD
+            {
+                return size;
             }
             else
             {
@@ -233,7 +239,7 @@ namespace MatterHackers.RenderOpenGl
 
         private void CreateGlDataForImage(ImageBuffer bufferedImage, bool TextureMagFilterLinear)
         {
-	    	//Next we expand the image into an openGL texture
+            //Next we expand the image into an openGL texture
             int imageWidth = bufferedImage.Width;
             int imageHeight = bufferedImage.Height;
             int bufferOffset;
@@ -276,8 +282,12 @@ namespace MatterHackers.RenderOpenGl
                 }
             }
 
+<<<<<<< HEAD
             // Create the texture handle and display list handle
 			#if USE_OPENGL
+=======
+            // Create the texture handle
+>>>>>>> FETCH_HEAD
             GL.GenTextures(1, out glData.glTextureHandle);
 
             // Set up some texture parameters for openGL
@@ -300,10 +310,10 @@ namespace MatterHackers.RenderOpenGl
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             }
 
-	    	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
 
-			// Create the texture
+            // Create the texture
             switch (bufferedImage.BitDepth)
             {
 #if false // not implemented in our gl wrapper and never used in our current code
@@ -326,7 +336,7 @@ namespace MatterHackers.RenderOpenGl
                 default:
                     throw new NotImplementedException();
             }
-			hardwareExpandedPixelBuffer=null;
+            hardwareExpandedPixelBuffer = null;
 
             if (createdWithMipMaps)
             {
@@ -341,7 +351,11 @@ namespace MatterHackers.RenderOpenGl
                             while (sourceImage.Width > 1 && sourceImage.Height > 1)
                             {
                                 GL.TexImage2D(TextureTarget.Texture2D, mipLevel++, PixelInternalFormat.Rgba, tempImage.Width, tempImage.Height,
+<<<<<<< HEAD
                                     0, PixelFormat.Bgra, PixelType.UnsignedByte, tempImage.GetBuffer());
+=======
+									0, PixelFormat.Bgra, PixelType.UnsignedByte, tempImage.GetBuffer());
+>>>>>>> FETCH_HEAD
                                 sourceImage = new ImageBuffer(tempImage);
                                 tempImage = new ImageBuffer(Math.Max(1, sourceImage.Width / 2), Math.Max(1, sourceImage.Height / 2), 32, new BlenderBGRA());
                                 tempImage.NewGraphics2D().Render(sourceImage, 0, 0,
@@ -358,7 +372,7 @@ namespace MatterHackers.RenderOpenGl
             }
 			#endif
 
-			float texCoordX = imageWidth / (float)hardwareWidth;
+            float texCoordX = imageWidth / (float)hardwareWidth;
             float texCoordY = imageHeight / (float)hardwareHeight;
 
             float OffsetX = (float)bufferedImage.OriginOffset.x;
@@ -375,7 +389,10 @@ namespace MatterHackers.RenderOpenGl
 
         public void DrawToGL()
         {
+<<<<<<< HEAD
 			#if USE_OPENGL
+=======
+>>>>>>> FETCH_HEAD
             GL.BindTexture(TextureTarget.Texture2D, GLTextureHandle);
 #if true
             GL.Begin(BeginMode.TriangleFan);
