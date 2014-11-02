@@ -155,7 +155,9 @@ namespace PixelFarm.Agg.Sample_Blur
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            Draw2(graphics2D);
+            //Draw2(graphics2D);
+            Draw3(graphics2D);
+
         }
         void Draw3(Graphics2D graphics2D)
         {
@@ -168,7 +170,7 @@ namespace PixelFarm.Agg.Sample_Blur
             //green glyph
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,
-                            m_shadow_ctrl.GetPolygon()); 
+                            m_shadow_ctrl.GetPolygon());
             VertexStoreSnap spath;
             if (FlattenCurveCheck)
             {
@@ -178,23 +180,21 @@ namespace PixelFarm.Agg.Sample_Blur
             else
             {
                 var s2 = shadow_persp.TransformToVxs(m_pathVxs);
-                spath = new VertexStoreSnap(s2); 
-            } 
+                spath = new VertexStoreSnap(s2);
+            }
             painter.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
             painter.Fill(spath);
 
             //---------------------------------------------------------------------------------------------------------
-            //shadow
-
-            
+            //shadow 
             //---------------------------------------------------------------------------------------------------------
             // Calculate the bounding box and extend it by the blur radius
             RectangleInt bbox = new RectangleInt();
             BoundingRectInt.GetBoundingRectSingle(spath, ref bbox);
 
             IImageReaderWriter widgetImg = graphics2D.DestImage;
-            ClipProxyImage clippingProxy = new ClipProxyImage(widgetImg);
-            clippingProxy.Clear(ColorRGBA.White);
+            //ClipProxyImage clippingProxy = new ClipProxyImage(widgetImg);
+            //clippingProxy.Clear(ColorRGBA.White);
 
             int m_radius = this.BlurRadius;
 
@@ -225,7 +225,7 @@ namespace PixelFarm.Agg.Sample_Blur
                 // It returns true if the attachment succeeded. It fails if the rectangle 
                 // (bbox) is fully clipped.
                 //------------------
-                
+
 
                 int x1 = (int)bbox.Left;
                 int y1 = (int)bbox.Top;
@@ -249,8 +249,8 @@ namespace PixelFarm.Agg.Sample_Blur
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
-                                StackBlur test = new StackBlur();
-                                test.Blur(image2, AggBasics.uround(m_radius), AggBasics.uround(m_radius));
+                                StackBlur stackBlur = new StackBlur();
+                                stackBlur.Blur(image2, m_radius, m_radius);
 
                             } break;
                         default:
@@ -260,8 +260,8 @@ namespace PixelFarm.Agg.Sample_Blur
                                 //------------------
                                 m_recursive_blur.Blur(image2, m_radius);
                             } break;
-                    } 
-                } 
+                    }
+                }
             }
 
             double tm = stopwatch.ElapsedMilliseconds;
@@ -280,12 +280,8 @@ namespace PixelFarm.Agg.Sample_Blur
                 painter.Fill(m_pathVxs);
             }
 
-            
-            
-            //painter.RenderImage(clippingProxy);
+            painter.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
 
-
-            graphics2D.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
             //-------------------------------------------------------------
             //control
             m_shadow_ctrl.OnDraw(graphics2D);
@@ -327,8 +323,8 @@ namespace PixelFarm.Agg.Sample_Blur
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
             sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
-            
-            
+
+
             //---------------------------------------------------------------------------------------------------------
             // Calculate the bounding box and extend it by the blur radius
             RectangleInt bbox = new RectangleInt();
@@ -409,7 +405,7 @@ namespace PixelFarm.Agg.Sample_Blur
 
 
             }
-             
+
             double tm = stopwatch.ElapsedMilliseconds;
 
             // Render the shape itself
