@@ -125,7 +125,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             set;
         }
         [DemoConfig(MinValue = 0, MaxValue = 3)]
-        public double GammaValue
+        public float GammaValue
         {
             get;
             set;

@@ -77,7 +77,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
             ////m_DrawAsOutlineCheckBox.inactive_color(new RGBA_Bytes(127, 127, 127));
 
             this.Radius = 25;
-            this.Gamma = 1.8;
+            this.Gamma = 1.8f;
 
         }
         [DemoConfig]
@@ -99,7 +99,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
             set;
         }
         [DemoConfig(MaxValue = 3)]
-        public double Gamma
+        public float Gamma
         {
             get;
             set;
@@ -112,20 +112,19 @@ namespace PixelFarm.Agg.Sample_RoundRect
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-
-            IImageReaderWriter backBuffer = widgetsSubImage;
-
             
+            IImageReaderWriter destImg = graphics2D.DestImage;  
+
             var normalBlender = new PixelBlenderBGRA();
+
             var gammaBlender = new PixelBlenderGammaBGRA(this.Gamma);
 
-            var rasterNormal = new ChildImage(backBuffer, normalBlender);
-            var rasterGamma = new ChildImage(backBuffer, gammaBlender);
+            var rasterNormal = new ChildImage(destImg, normalBlender);
+            var rasterGamma = new ChildImage(destImg, gammaBlender);
 
             var clippingProxyNormal = new ClipProxyImage(rasterNormal);
             var clippingProxyGamma = new ClipProxyImage(rasterGamma);
-            
+
 
             clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
 

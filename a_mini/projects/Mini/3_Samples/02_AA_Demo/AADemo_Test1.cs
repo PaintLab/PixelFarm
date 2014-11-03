@@ -89,7 +89,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             set;
         }
         [DemoConfig(MinValue = 0, MaxValue = 3)]
-        public double GammaValue
+        public float GammaValue
         {
             get;
             set;
@@ -103,9 +103,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
+           
             IPixelBlender NormalBlender = new PixelBlenderBGRA();
-            IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(gamma);
+            IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
 
 

@@ -250,7 +250,7 @@ namespace PixelFarm.Agg.Image
     {
         GammaLookUpTable m_gamma;
 
-        public BlenderGammaBGR(double gamma = 1)
+        public BlenderGammaBGR(float gamma = 1)
         {
             m_gamma = new GammaLookUpTable(gamma);
         }

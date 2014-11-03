@@ -94,7 +94,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
             System.Random randGenerator = new Random(1432);
 
-             
+
             int i;
             int num = (int)maskAlphaSliderValue;
             for (i = 0; i < num; i++)
@@ -141,10 +141,10 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 isMaskSliderValueChanged = true;
             }
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(Graphics2D gx)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(g.DestImage, g.GetClippingRect());
-            var scanlineCache = g.ScanlinePacked8;
+            var widgetsSubImage = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
+            var scanlineCache = gx.ScanlinePacked8;
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
@@ -152,11 +152,11 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //change value ***
             if (isMaskSliderValueChanged)
             {
-                generate_alpha_mask(g.ScanlineRasToDestBitmap,g.ScanlinePacked8, g.ScanlineRasterizer, width, height);
+                generate_alpha_mask(gx.ScanlineRasToDestBitmap, gx.ScanlinePacked8, gx.ScanlineRasterizer, width, height);
 
                 this.isMaskSliderValueChanged = false;
             }
-            var rasterizer = g.ScanlineRasterizer;
+            var rasterizer = gx.ScanlineRasterizer;
             rasterizer.SetClipBox(0, 0, width, height);
 
 
@@ -180,7 +180,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.Clear(ColorRGBA.White);
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = g.ScanlineRasToDestBitmap;
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
             // draw a background to show how the mask is working better
             int rect_w = 30;
             for (int i = 0; i < 40; i++)
@@ -190,8 +190,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     if ((i + j) % 2 != 0)
                     {
                         VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
-                        rect.NormalizeRadius();
-
+                        rect.NormalizeRadius(); 
                         // Drawing as an outline
                         rasterizer.AddPath(rect.MakeVxs());
                         sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9f, .9f, .9f));

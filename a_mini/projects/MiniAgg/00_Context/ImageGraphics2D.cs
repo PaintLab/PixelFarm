@@ -520,7 +520,7 @@ namespace PixelFarm.Agg
                         //TODO: reimplement clipping***
                         //------------------------------
 
-                       
+
                         if (color == ColorRGBA.White)
                         {
                             //fast cleat with white color
@@ -558,8 +558,8 @@ namespace PixelFarm.Agg
                         else
                         {
                             //other color
-                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
-                            int n = buffer.Length / 4;                           
+                             uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                            int n = buffer.Length / 4;
                             unsafe
                             {
                                 fixed (void* head = &buffer[0])
@@ -567,7 +567,7 @@ namespace PixelFarm.Agg
                                     uint* head_i32 = (uint*)head;
                                     for (int i = n - 1; i >= 0; --i)
                                     {
-                                        *head_i32 = colorARGB;  
+                                        *head_i32 = colorARGB;
                                         head_i32++;
                                     }
                                 }

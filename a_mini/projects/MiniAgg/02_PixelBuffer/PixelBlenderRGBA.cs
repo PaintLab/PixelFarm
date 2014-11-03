@@ -26,6 +26,8 @@
 // 
 //----------------------------------------------------------------------------
 #define USE_BLENDER
+using System.Collections.Generic;
+
 //using ColorT = MatterHackers.Agg.order_bgra;
 
 using System;
@@ -173,27 +175,31 @@ namespace PixelFarm.Agg.Image
 
     public sealed class PixelBlenderGammaBGRA : PixelBlenderBGRABase, IPixelBlender
     {
-        private GammaLookUpTable m_gamma;
+        
+        
+        GammaLookUpTable m_gamma;
 
-        public PixelBlenderGammaBGRA(double gammaValue)
+        static Dictionary<float, GammaLookUpTable> gammaTablePool = new Dictionary<float, GammaLookUpTable>();
+        
+        public PixelBlenderGammaBGRA(float gammaValue)
         {
-            m_gamma = new GammaLookUpTable(gammaValue);
-        }
+            GammaLookUpTable found;
+            if (!gammaTablePool.TryGetValue(gammaValue, out found))
+            {
+                found = new GammaLookUpTable(gammaValue);
+                gammaTablePool.Add(gammaValue, found);
+            }
+            
+            this.m_gamma = found; 
 
-        public PixelBlenderGammaBGRA(GammaLookUpTable g)
-        {
-            m_gamma = g;
-        }
-
-        public void SetGammaTable(GammaLookUpTable g)
-        {
-            m_gamma = g;
-        }
-
+        }          
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new ColorRGBA(buffer[bufferOffset + ImageReaderWriterBase.OrderR], buffer[bufferOffset + ImageReaderWriterBase.OrderG], buffer[bufferOffset + ImageReaderWriterBase.OrderB], buffer[bufferOffset + ImageReaderWriterBase.OrderA]);
-        }
+            return new ColorRGBA(buffer[bufferOffset + ImageReaderWriterBase.OrderR],
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG], 
+                buffer[bufferOffset + ImageReaderWriterBase.OrderB],
+                buffer[bufferOffset + ImageReaderWriterBase.OrderA]);
+        } 
 
         public void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count)
         {
