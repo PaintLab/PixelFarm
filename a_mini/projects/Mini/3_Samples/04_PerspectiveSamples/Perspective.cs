@@ -141,7 +141,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                     //outline
                     double prevStrokeWidth = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.FillColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.StrokeColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
                      
@@ -176,7 +176,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                     //-------------------------------------------------------- 
                     var prevStrokeW = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.FillColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.StrokeColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(transformedEll); 
                     painter.StrokeWidth = prevStrokeW; 
                 }

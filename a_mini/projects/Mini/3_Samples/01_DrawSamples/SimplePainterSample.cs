@@ -34,8 +34,9 @@ namespace PixelFarm.Agg.SimplePainter
             p.Clear(ColorRGBA.White);
             // draw a circle  
             p.FillColor = ColorRGBA.Blue;
-            p.FillCircle(50, 50, 30);
-            p.FillColor = new ColorRGBA(20, 200, 200);
+            p.FillCircle(50, 50, 30); 
+
+            p.StrokeColor = new ColorRGBA(20, 200, 200);
             p.Line(10, 100, 520, 50);
 
             // draw a filled box

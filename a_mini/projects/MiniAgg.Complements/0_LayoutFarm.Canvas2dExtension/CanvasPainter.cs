@@ -39,6 +39,8 @@ namespace PixelFarm.Agg
         Stroke stroke;
 
         ColorRGBA fillColor;
+        ColorRGBA strokeColor;
+
         ScanlinePacked8 scline;
         ScanlineRasterizer sclineRas;
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
@@ -137,21 +139,20 @@ namespace PixelFarm.Agg
         /// <param name="y2"></param>
         /// <param name="color"></param>
         public void Line(double x1, double y1, double x2, double y2)
-        {
-
+        {   
             lines.Clear();
             lines.MoveTo(x1, y1);
             lines.LineTo(x2, y2);
-            gx.Render(stroke.MakeVxs(lines.Vxs), this.fillColor);
+            gx.Render(stroke.MakeVxs(lines.Vxs), this.strokeColor);
         }
         public double StrokeWidth
         {
             get { return this.stroke.Width; }
             set { this.stroke.Width = value; }
-        } 
+        }
         public void Draw(VertexStore vxs)
         {
-            gx.Render(stroke.MakeVxs(vxs), this.fillColor);
+            gx.Render(stroke.MakeVxs(vxs), this.strokeColor);
         }
 
         /// <summary>
@@ -299,7 +300,11 @@ namespace PixelFarm.Agg
             get { return fillColor; }
             set { this.fillColor = value; }
         }
-
+        public ColorRGBA StrokeColor
+        {
+            get { return strokeColor; }
+            set { this.strokeColor = value; }
+        }
         public void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath)
         {
             sclineRasToBmp.RenderSolidAllPaths(this.gx.DestImage,

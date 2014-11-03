@@ -113,7 +113,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
         public override void Draw(Graphics2D gx)
         {
             CanvasPainter painter = new CanvasPainter(gx);
-            IImageReaderWriter destImg = gx.DestImage;
+            
             //-----------------------------------------------------------------
             //control
             painter.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
@@ -126,10 +126,11 @@ namespace PixelFarm.Agg.Sample_RoundRect
             var prevBlender = gx.PixelBlender;
             //change gamma blender
             gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
-            painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+          
 
             if (this.FillRoundRect)
             {
+                painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
                 painter.FillRoundRectangle(
                     m_x[0] + d,
                     m_y[0] + d,
@@ -139,6 +140,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
             }
             else
             {
+                painter.StrokeColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
                 painter.DrawRoundRect(
                     m_x[0] + d,
                     m_y[0] + d,
