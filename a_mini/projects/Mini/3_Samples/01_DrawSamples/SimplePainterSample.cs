@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.SimplePainter
 
             
             // draw some text
-            p.FillColor = ColorRGBA.Black;
+            p.FillColor = ColorRGBA.Black;//black font color
 
             p.DrawString("A Simple Example", 300, 400);
 

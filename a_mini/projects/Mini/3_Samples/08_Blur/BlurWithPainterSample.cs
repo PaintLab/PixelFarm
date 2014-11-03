@@ -217,10 +217,8 @@ namespace PixelFarm.Agg.Sample_Blur2
                     {
                         case BlurMethod.StackBlur:
                             {
-                                // More general method, but 30-40% slower.
-                                //------------------
-                                //m_stack_blur.blur(pixf2, agg::uround(m_radius.Value));
-
+                                
+                                //------------------  
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
@@ -257,6 +255,7 @@ namespace PixelFarm.Agg.Sample_Blur2
                 painter.Fill(m_pathVxs);
             }
 
+            painter.FillColor = ColorRGBA.Black;
             painter.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
 
             //-------------------------------------------------------------

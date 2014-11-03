@@ -83,8 +83,8 @@ namespace PixelFarm.Agg.Font
     {
         TypeFace typeFace;
 
-        const int PointsPerInch = 72;
-        const int PixelsPerInch = 96;
+        const int POINTS_PER_INCH = 72;
+        const int PIXEL_PER_INCH = 96;
 
         double emSizeInPixels;
         double currentEmScalling;
@@ -93,7 +93,7 @@ namespace PixelFarm.Agg.Font
         public StyledTypeFace(TypeFace typeFace, double emSizeInPoints, bool underline = false, bool flatenCurves = true)
         {
             this.typeFace = typeFace;
-            emSizeInPixels = emSizeInPoints / PointsPerInch * PixelsPerInch;
+            emSizeInPixels = emSizeInPoints / POINTS_PER_INCH * PIXEL_PER_INCH;
             currentEmScalling = emSizeInPixels / typeFace.UnitsPerEm;
             DoUnderline = underline;
             FlatenCurves = flatenCurves;
@@ -137,7 +137,7 @@ namespace PixelFarm.Agg.Font
         {
             get
             {
-                return emSizeInPixels / PixelsPerInch * PointsPerInch;
+                return emSizeInPixels / PIXEL_PER_INCH * POINTS_PER_INCH;
             }
         }
 

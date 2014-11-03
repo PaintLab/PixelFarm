@@ -35,23 +35,22 @@ namespace PixelFarm.Agg.Font
 
     public class MyTypeFacePrinter
     {
-        StyledTypeFace typeFaceStyle;
-        String text = "";
+        StyledTypeFace typeFaceStyle; 
         Vector2 totalSizeCach;
-        double originX;
-        double originY;
+        string textToPrint;
 
         public MyTypeFacePrinter()
         {
             this.Baseline = Font.Baseline.Text;
             this.Justification = Font.Justification.Left;
-            this.typeFaceStyle = new StyledTypeFace(LiberationSansFont.Instance, 12); 
+            this.typeFaceStyle = new StyledTypeFace(LiberationSansFont.Instance, 12);
         }
 
 
         public Justification Justification { get; set; }
         public Baseline Baseline { get; set; }
         public bool DrawFromHintedCache { get; set; }
+
         public StyledTypeFace TypeFaceStyle
         {
             get
@@ -60,45 +59,20 @@ namespace PixelFarm.Agg.Font
             }
         }
 
-
-
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter());
+            return new VertexStore(this.GetVertexIter(textToPrint));
         }
         public VertexStoreSnap MakeVertexSnap()
         {
             return new VertexStoreSnap(this.MakeVxs());
         }
-
-
-        public ColorRGBA TextColor
+       
+        public void LoadText(string textToPrint)
         {
-            get;
-            set;
+            this.textToPrint = textToPrint;
         }
-
-
-     
-
-        public void Render(Graphics2D graphics2D, double x, double y, string text)
-        {
-
-            this.originX = x;
-            this.originY = y;
-            this.text = text;
-            
-            if (DrawFromHintedCache)
-            { 
-                RenderFromCache(graphics2D, x, y, text);
-            }
-            else
-            {
-                graphics2D.Render(this.MakeVertexSnap(), TextColor);
-            }
-            //clear 
-            this.text = null;
-        }
+       
 
         void RenderFromCache(Graphics2D graphics2D, double x, double y, string text)
         {
@@ -143,7 +117,7 @@ namespace PixelFarm.Agg.Font
             //}
         }
 
-        IEnumerable<VertexData> GetVertexIter()
+        IEnumerable<VertexData> GetVertexIter(string text)
         {
             if (text != null && text.Length > 0)
             {
@@ -170,8 +144,8 @@ namespace PixelFarm.Agg.Font
                                 if (cmd != ShapePath.FlagsAndCommand.CommandStop)
                                 {
                                     yield return new VertexData(cmd,
-                                        (x + currentOffset.x + this.originX),
-                                        (y + currentOffset.y + this.originY));
+                                        (x + currentOffset.x),
+                                        (y + currentOffset.y));
                                 }
                             }
                         }
@@ -242,14 +216,14 @@ namespace PixelFarm.Agg.Font
         }
 
 #if true
-         
+
         public bool IsDynamicVertexGen
         {
             get { return true; }
         }
 
 
-      
+
 
 #else
         public void rewind(int pathId)
@@ -373,14 +347,14 @@ namespace PixelFarm.Agg.Font
         }
 #endif
 
-        public Vector2 GetSize(string text = null)
+        public Vector2 GetSize(string text)
         {
             if (text == null)
             {
-                text = this.text;
+                text = this.textToPrint;
             }
 
-            if (text != this.text)
+            if (text != this.textToPrint)
             {
                 Vector2 calculatedSize;
                 GetSize(0, Math.Max(0, text.Length - 1), out calculatedSize, text);
@@ -397,11 +371,14 @@ namespace PixelFarm.Agg.Font
             return totalSizeCach;
         }
 
-        public void GetSize(int characterToMeasureStartIndexInclusive, int characterToMeasureEndIndexInclusive, out Vector2 offset, string text = null)
+        public void GetSize(int characterToMeasureStartIndexInclusive, 
+            int characterToMeasureEndIndexInclusive, 
+            out Vector2 offset, 
+            string text)
         {
             if (text == null)
             {
-                text = this.text;
+                text = this.textToPrint;
             }
 
             offset.x = 0;
@@ -450,133 +427,6 @@ namespace PixelFarm.Agg.Font
                 }
             }
         }
-
-        //public int NumLines()
-        //{
-        //    int characterToMeasureStartIndexInclusive = 0;
-        //    int characterToMeasureEndIndexInclusive = text.Length - 1;
-        //    return NumLines(characterToMeasureStartIndexInclusive, characterToMeasureEndIndexInclusive);
-        //}
-
-        //public int NumLines(int characterToMeasureStartIndexInclusive, int characterToMeasureEndIndexInclusive)
-        //{
-        //    int numLines = 1;
-
-        //    characterToMeasureStartIndexInclusive = Math.Max(0, Math.Min(characterToMeasureStartIndexInclusive, text.Length - 1));
-        //    characterToMeasureEndIndexInclusive = Math.Max(0, Math.Min(characterToMeasureEndIndexInclusive, text.Length - 1));
-        //    for (int i = characterToMeasureStartIndexInclusive; i < characterToMeasureEndIndexInclusive; i++)
-        //    {
-        //        if (text[i] == '\n')
-        //        {
-        //            if (i + 1 < characterToMeasureEndIndexInclusive && (text[i + 1] == '\n') && text[i] != text[i + 1])
-        //            {
-        //                i++;
-        //            }
-        //            numLines++;
-        //        }
-        //    }
-
-        //    return numLines;
-        //}
-
-        //public void GetOffset(int characterToMeasureStartIndexInclusive, int characterToMeasureEndIndexInclusive, out Vector2 offset)
-        //{
-        //    offset = Vector2.Zero;
-
-        //    characterToMeasureEndIndexInclusive = Math.Min(text.Length - 1, characterToMeasureEndIndexInclusive);
-
-        //    for (int index = characterToMeasureStartIndexInclusive; index <= characterToMeasureEndIndexInclusive; index++)
-        //    {
-        //        if (text[index] == '\n')
-        //        {
-        //            offset.x = 0;
-        //            offset.y -= typeFaceStyle.EmSizeInPixels;
-        //        }
-        //        else
-        //        {
-        //            if (index < text.Length - 1)
-        //            {
-        //                offset.x += typeFaceStyle.GetAdvanceForCharacter(text[index], text[index + 1]);
-        //            }
-        //            else
-        //            {
-        //                offset.x += typeFaceStyle.GetAdvanceForCharacter(text[index]);
-        //            }
-        //        }
-        //    }
-        //}
-
-        // this will return the position to the left of the requested character.
-        //public Vector2 GetOffsetLeftOfCharacterIndex(int characterIndex)
-        //{
-        //    Vector2 offset;
-        //    GetOffset(0, characterIndex - 1, out offset);
-        //    return offset;
-        //}
-
-        //// If the Text is "TEXT" and the position is less than half the distance to the center
-        //// of "T" the return value will be 0 if it is between the center of 'T' and the center of 'E'
-        //// it will be 1 and so on.
-        //public int GetCharacterIndexToStartBefore(Vector2 position)
-        //{
-        //    int clostestIndex = -1;
-        //    double clostestXDistSquared = double.MaxValue;
-        //    double clostestYDistSquared = double.MaxValue;
-        //    Vector2 offset = new Vector2(0, typeFaceStyle.EmSizeInPixels * NumLines());
-        //    int characterToMeasureStartIndexInclusive = 0;
-        //    int characterToMeasureEndIndexInclusive = text.Length - 1;
-        //    if (text.Length > 0)
-        //    {
-        //        characterToMeasureStartIndexInclusive = Math.Max(0, Math.Min(characterToMeasureStartIndexInclusive, text.Length - 1));
-        //        characterToMeasureEndIndexInclusive = Math.Max(0, Math.Min(characterToMeasureEndIndexInclusive, text.Length - 1));
-        //        for (int i = characterToMeasureStartIndexInclusive; i <= characterToMeasureEndIndexInclusive; i++)
-        //        {
-        //            CheckForBetterClickPosition(ref position, ref clostestIndex, ref clostestXDistSquared, ref clostestYDistSquared, ref offset, i);
-
-        //            if (text[i] == '\r')
-        //            {
-        //                throw new Exception("All \\r's should have been converted to \\n's.");
-        //            }
-
-        //            if (text[i] == '\n')
-        //            {
-        //                offset.x = 0;
-        //                offset.y -= typeFaceStyle.EmSizeInPixels;
-        //            }
-        //            else
-        //            {
-        //                Vector2 nextSize;
-        //                GetOffset(i, i, out nextSize);
-
-        //                offset.x += nextSize.x;
-        //            }
-        //        }
-
-        //        CheckForBetterClickPosition(ref position, ref clostestIndex, ref clostestXDistSquared, ref clostestYDistSquared, ref offset, characterToMeasureEndIndexInclusive + 1);
-        //    }
-
-        //    return clostestIndex;
-        //}
-
-        //private static void CheckForBetterClickPosition(ref Vector2 position, ref int clostestIndex, ref double clostestXDistSquared, ref double clostestYDistSquared, ref Vector2 offset, int i)
-        //{
-        //    Vector2 delta = position - offset;
-        //    double deltaYLengthSquared = delta.y * delta.y;
-        //    if (deltaYLengthSquared < clostestYDistSquared)
-        //    {
-        //        clostestYDistSquared = deltaYLengthSquared;
-        //        clostestXDistSquared = delta.x * delta.x;
-        //        clostestIndex = i;
-        //    }
-        //    else if (deltaYLengthSquared == clostestYDistSquared)
-        //    {
-        //        double deltaXLengthSquared = delta.x * delta.x;
-        //        if (deltaXLengthSquared < clostestXDistSquared)
-        //        {
-        //            clostestXDistSquared = deltaXLengthSquared;
-        //            clostestIndex = i;
-        //        }
-        //    }
-        //}
+ 
     }
 }

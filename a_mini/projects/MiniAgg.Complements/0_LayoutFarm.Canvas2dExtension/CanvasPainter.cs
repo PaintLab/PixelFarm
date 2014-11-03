@@ -246,7 +246,7 @@ namespace PixelFarm.Agg
         //    {
         //        gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
         //    }
-             
+
         //    stringPrinter.DrawFromHintedCache = drawFromHintedCache;
         //    stringPrinter.Render(gx, color);
         //}
@@ -256,13 +256,14 @@ namespace PixelFarm.Agg
            double y)
         {
 
-            //1. parse text  
-            
-            stringPrinter.DrawFromHintedCache = false;
-            stringPrinter.TextColor = this.fillColor;
-            stringPrinter.Render(gx, x, y, text);            
+            //1. parse text              
+            stringPrinter.DrawFromHintedCache = false; 
+            stringPrinter.LoadText(text);
+            var vxs = stringPrinter.MakeVxs();
+            vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
+            this.gx.Render(vxs, this.fillColor); 
         }
-       
+
         /// <summary>
         /// fill vertex store
         /// </summary>

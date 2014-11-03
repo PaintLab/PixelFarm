@@ -31,7 +31,12 @@ using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.Font
 {
     public enum Justification { Left, Center, Right };
-    public enum Baseline { BoundsTop, BoundsCenter, TextCenter, Text, BoundsBottom };
+    public enum Baseline { 
+        BoundsTop, 
+        BoundsCenter, 
+        TextCenter,
+        Text, 
+        BoundsBottom };
 
 
 

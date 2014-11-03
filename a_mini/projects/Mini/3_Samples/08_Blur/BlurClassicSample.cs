@@ -412,6 +412,7 @@ namespace PixelFarm.Agg.Sample_Blur
                 m_ras.AddPath(m_pathVxs);
             }
 
+
             sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras,graphics2D.ScanlinePacked8,
                 ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f));
 
