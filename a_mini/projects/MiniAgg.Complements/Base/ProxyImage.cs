@@ -24,10 +24,10 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg.Image
 {
-    public abstract class ProxyImage : IImage
+    public abstract class ProxyImage : IImageReaderWriter
     {
-        protected IImage linkedImage;
-        public ProxyImage(IImage linkedImage)
+        protected IImageReaderWriter linkedImage;
+        public ProxyImage(IImageReaderWriter linkedImage)
         {
             this.linkedImage = linkedImage;
         }
@@ -54,7 +54,7 @@ namespace PixelFarm.Agg.Image
         }
 
 
-        public virtual RectangleInt GetBounds()
+        public virtual RectInt GetBounds()
         {
             return linkedImage.GetBounds();
         }
@@ -74,7 +74,7 @@ namespace PixelFarm.Agg.Image
             return linkedImage.GetPixel(x, y);
         }
           
-        public virtual void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
+        public virtual void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
         {
             linkedImage.CopyFrom(sourceImage, sourceImageRect, destXOffset, destYOffset);
         }
@@ -163,11 +163,7 @@ namespace PixelFarm.Agg.Image
                 return linkedImage.BitDepth;
             }
         }
-
-        public void MarkImageChanged()
-        {
-            linkedImage.MarkImageChanged();
-        }
+         
     }
 
 }

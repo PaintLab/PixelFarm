@@ -12,66 +12,46 @@ using PixelFarm.VectorMath;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest1
 {
-    public class square
+    
+    class CustomScanlineRasToBmp_EnlargedV1 : CustomScanlineRasToDestBitmapRenderer
     {
         double m_size;
-
-        public square(double size)
-        {
-            m_size = size;
-        }
-
-        public void draw(ScanlineRasterizer ras, Scanline sl, IImage destImage, ColorRGBA color,
-                  double x, double y)
-        {
-            ras.Reset();
-            ras.MoveTo(x * m_size, y * m_size);
-            ras.LineTo(x * m_size + m_size, y * m_size);
-            ras.LineTo(x * m_size + m_size, y * m_size + m_size);
-            ras.LineTo(x * m_size, y * m_size + m_size);
-
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-            sclineRasToBmp.RenderScanlineSolidAA(destImage, ras, sl, color);
-        }
-    }
-
-    class CustomScanlineRasToBmp_EnlargedV1 : ScanlineRasToDestBitmapRenderer
-    {
-        double m_size;
-        square m_square;
+        Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
-        public CustomScanlineRasToBmp_EnlargedV1(double size)
+        Graphics2D gfx;
+
+        public CustomScanlineRasToBmp_EnlargedV1(double size, ActualImage destImage)
         {
+            this.UseCustomSolidSingleLineMethod = true;
             m_size = size;
-            m_square = new square(size);
+            m_square = new Square(size);
+            gfx = Graphics2D.CreateFromImage(destImage);
         }
-
-
-        protected override void RenderSolidSingleScanLine(IImage destImage, Scanline scanline, ColorRGBA color)
+        protected override void CustomRenderSolidSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
 
             byte[] covers = scanline.GetCovers();
-            var gfx = Graphics2D.CreateFromImage(destImage);
-
+            ScanlineRasterizer ras = gfx.ScanlineRasterizer;
+            var rasToBmp = gfx.ScanlineRasToDestBitmap;
             for (int i = 1; i <= num_spans; ++i)
             {
-                ScanlineSpan span = scanline.GetSpan(i); 
+                ScanlineSpan span = scanline.GetSpan(i);
                 int x = span.x;
                 int num_pix = span.len;
                 int coverIndex = span.cover_index;
                 do
                 {
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
-                    m_square.draw(
-                           gfx.Rasterizer, m_sl, destImage,
-                            new ColorRGBA(color, a),
-                            x, y);
+                    m_square.Draw(rasToBmp,
+                           ras, m_sl, destImage,
+                           new ColorRGBA(color, a),
+                           x, y);
                     ++x;
                 }
                 while (--num_pix > 0);
-            } 
+            }
         }
     }
 
@@ -109,7 +89,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             set;
         }
         [DemoConfig(MinValue = 0, MaxValue = 3)]
-        public double GammaValue
+        public float GammaValue
         {
             get;
             set;
@@ -121,11 +101,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
 
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            GammaLookUpTable gamma = new GammaLookUpTable(this.GammaValue);
+           
             IPixelBlender NormalBlender = new PixelBlenderBGRA();
-            IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(gamma);
+            IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
 
 
@@ -133,12 +113,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
             clippingProxyNormal.Clear(ColorRGBA.White);
-            ScanlineRasterizer rasterizer = new ScanlineRasterizer();
+            var rasterizer = graphics2D.ScanlineRasterizer;
+
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 
             int size_mul = (int)this.PixelSize;
 
-            CustomScanlineRasToBmp_EnlargedV1 ren_en = new CustomScanlineRasToBmp_EnlargedV1(size_mul);
+            CustomScanlineRasToBmp_EnlargedV1 ren_en = new CustomScanlineRasToBmp_EnlargedV1(size_mul, graphics2D.DestActualImage);
 
             rasterizer.Reset();
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
@@ -147,7 +128,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
             sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
 

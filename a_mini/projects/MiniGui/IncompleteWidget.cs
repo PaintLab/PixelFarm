@@ -48,8 +48,8 @@ namespace PixelFarm.Agg.UI
         }
 
 
-        RectangleDouble localBounds;
-        public virtual RectangleDouble LocalBounds
+        RectD localBounds;
+        public virtual RectD LocalBounds
         {
             get
             {
@@ -72,7 +72,7 @@ namespace PixelFarm.Agg.UI
             Invalidate(LocalBounds);
         }
 
-        public virtual void Invalidate(RectangleDouble rectToInvalidate)
+        public virtual void Invalidate(RectD rectToInvalidate)
         {
 
             if (Parent != null)

@@ -41,10 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\FilterMan.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\CanvasPainter.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />
-    <Compile Include="Base\ColorGray.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\MyTypeFacePrinter.cs" />
     <Compile Include="Base\PixelBlenderRGB.cs" />
     <Compile Include="Base\Queue.cs" />
     <Compile Include="Base\BorderDouble.cs" />
@@ -59,7 +59,6 @@
     <Compile Include="VertexSource\SpanGradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
-    <Compile Include="Image\Gray.cs" />
     <Compile Include="Image\ImageSequence.cs" />
     <Compile Include="Image\ImageTgaIO.cs" />
     <Compile Include="Filter\RecursiveBlur.cs" />

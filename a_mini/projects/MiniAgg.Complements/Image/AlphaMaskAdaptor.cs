@@ -54,7 +54,7 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        public AlphaMaskAdaptor(IImage image, IAlphaMask mask)
+        public AlphaMaskAdaptor(IImageReaderWriter image, IAlphaMask mask)
             : base(image)
         {
             linkedImage = image;
@@ -62,7 +62,7 @@ namespace PixelFarm.Agg.Image
             m_spans = new byte[256];
         }
 
-        public void AttachImage(IImage image)
+        public void AttachImage(IImageReaderWriter image)
         {
             linkedImage = image;
         }

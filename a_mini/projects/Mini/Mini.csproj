@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\DemoBase.cs" />
+    <Compile Include="1_Shared\Square.cs" />
+    <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="2_Platform\BitmapHelper.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
@@ -49,10 +51,11 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
-    <Compile Include="3_Samples\08_Blur\BlurSample.cs" />
+    <Compile Include="3_Samples\08_Blur\BlurWithPainterSample.cs" />
+    <Compile Include="3_Samples\08_Blur\BlurClassicSample.cs" />
     <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
-    <Compile Include="3_Samples\09_FloodFill\Point2D.cs" />
-    <Compile Include="3_Samples\10_RoundRect\RoundRect.cs" />
+    <Compile Include="1_Shared\Point2D.cs" />
+    <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\clipping_lib\cliper.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
@@ -74,7 +77,7 @@
     </Compile>
     <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
-    <Compile Include="1_Shared\LionShape.cs" />
+    <Compile Include="1_Shared\LionDataStore.cs" />
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />

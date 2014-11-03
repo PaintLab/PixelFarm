@@ -23,17 +23,18 @@
 //----------------------------------------------------------------------------
 namespace PixelFarm.Agg
 {
+
     static class ClipLiangBarsky
     {
         //------------------------------------------------------------------------
-        enum ClippingFlags
+        static class ClippingFlags
         {
-            clipping_flags_x1_clipped = 4,
-            clipping_flags_x2_clipped = 1,
-            clipping_flags_y1_clipped = 8,
-            clipping_flags_y2_clipped = 2,
-            clipping_flags_x_clipped = clipping_flags_x1_clipped | clipping_flags_x2_clipped,
-            clipping_flags_y_clipped = clipping_flags_y1_clipped | clipping_flags_y2_clipped
+            public const int cX1 = 4; // x1 clipped
+            public const int cX2 = 1; //x2 clipped
+            public const int cY1 = 8; //y1 clipped
+            public const int cY2 = 2; //y2 clipped
+            public const int cX1X2 = cX1 | cX2;
+            public const int cY1Y2 = cY1 | cY2;
         }
 
         //----------------------------------------------------------clipping_flags
@@ -55,7 +56,7 @@ namespace PixelFarm.Agg
         //
         // 
         //template<class T>
-        public static int clipping_flags(int x, int y, RectangleInt clip_box)
+        public static int Flags(int x, int y, RectInt clip_box)
         {
             return ((x > clip_box.Right) ? 1 : 0)
                 | ((y > clip_box.Top) ? 1 << 1 : 0)
@@ -63,18 +64,18 @@ namespace PixelFarm.Agg
                 | ((y < clip_box.Bottom) ? 1 << 3 : 0);
         }
 
-        public static int clipping_flags_x(int x, RectangleInt clip_box)
+        public static int GetFlagsX(int x, RectInt clip_box)
         {
             return ((x > clip_box.Right ? 1 : 0) | ((x < clip_box.Left ? 1 : 0) << 2));
         }
 
-        public static int clipping_flags_y(int y, RectangleInt clip_box)
+        public static int GetFlagsY(int y, RectInt clip_box)
         {
             return (((y > clip_box.Top ? 1 : 0) << 1) | ((y < clip_box.Bottom ? 1 : 0) << 3));
         }
 
-        public static int clip_liang_barsky(int x1, int y1, int x2, int y2,
-                                          RectangleInt clip_box,
+        public static int DoClipLiangBarsky(int x1, int y1, int x2, int y2,
+                                          RectInt clip_box,
                                           int[] x, int[] y)
         {
             int xIndex = 0;
@@ -223,31 +224,31 @@ namespace PixelFarm.Agg
             return np;
         }
 
-        public static bool clip_move_point(int x1, int y1, int x2, int y2,
-                             RectangleInt clip_box,
+        public static bool ClipMovePoint(int x1, int y1, int x2, int y2,
+                             RectInt clip_box,
                              ref int x, ref int y, int flags)
         {
             int bound;
 
-            if ((flags & (int)ClippingFlags.clipping_flags_x_clipped) != 0)
+            if ((flags & ClippingFlags.cX1X2) != 0)
             {
                 if (x1 == x2)
                 {
                     return false;
                 }
-                bound = ((flags & (int)ClippingFlags.clipping_flags_x1_clipped) != 0) ? clip_box.Left : clip_box.Right;
+                bound = ((flags & ClippingFlags.cX1) != 0) ? clip_box.Left : clip_box.Right;
                 y = (int)((double)(bound - x1) * (y2 - y1) / (x2 - x1) + y1);
                 x = bound;
             }
 
-            flags = clipping_flags_y(y, clip_box);
-            if ((flags & (int)ClippingFlags.clipping_flags_y_clipped) != 0)
+            flags = GetFlagsY(y, clip_box);
+            if ((flags & ClippingFlags.cY1Y2) != 0)
             {
                 if (y1 == y2)
                 {
                     return false;
                 }
-                bound = ((flags & (int)ClippingFlags.clipping_flags_x1_clipped) != 0) ? clip_box.Bottom : clip_box.Top;
+                bound = ((flags & ClippingFlags.cX1) != 0) ? clip_box.Bottom : clip_box.Top;
                 x = (int)((double)(bound - y1) * (x2 - x1) / (y2 - y1) + x1);
                 y = bound;
             }
@@ -260,11 +261,11 @@ namespace PixelFarm.Agg
         //          (ret & 2) != 0  - Second point has been moved
         //
         //template<class T>
-        public static int clip_line_segment(ref int x1, ref int y1, ref int x2, ref int y2,
-                                   RectangleInt clip_box)
+        public static int ClipLineSegment(ref int x1, ref int y1, ref int x2, ref int y2,
+                                   RectInt clip_box)
         {
-            int f1 = clipping_flags(x1, y1, clip_box);
-            int f2 = clipping_flags(x2, y2, clip_box);
+            int f1 = Flags(x1, y1, clip_box);
+            int f2 = Flags(x2, y2, clip_box);
             int ret = 0;
 
             if ((f2 | f1) == 0)
@@ -273,15 +274,15 @@ namespace PixelFarm.Agg
                 return 0;
             }
 
-            if ((f1 & (int)ClippingFlags.clipping_flags_x_clipped) != 0 &&
-               (f1 & (int)ClippingFlags.clipping_flags_x_clipped) == (f2 & (int)ClippingFlags.clipping_flags_x_clipped))
+            if ((f1 & ClippingFlags.cX1X2) != 0 &&
+               (f1 & ClippingFlags.cX1X2) == (f2 & ClippingFlags.cX1X2))
             {
                 // Fully clipped
                 return 4;
             }
 
-            if ((f1 & (int)ClippingFlags.clipping_flags_y_clipped) != 0 &&
-               (f1 & (int)ClippingFlags.clipping_flags_y_clipped) == (f2 & (int)ClippingFlags.clipping_flags_y_clipped))
+            if ((f1 & ClippingFlags.cY1Y2) != 0 &&
+               (f1 & ClippingFlags.cY1Y2) == (f2 & ClippingFlags.cY1Y2))
             {
                 // Fully clipped
                 return 4;
@@ -293,7 +294,7 @@ namespace PixelFarm.Agg
             int ty2 = y2;
             if (f1 != 0)
             {
-                if (!clip_move_point(tx1, ty1, tx2, ty2, clip_box, ref x1, ref y1, f1))
+                if (!ClipMovePoint(tx1, ty1, tx2, ty2, clip_box, ref x1, ref y1, f1))
                 {
                     return 4;
                 }
@@ -305,7 +306,7 @@ namespace PixelFarm.Agg
             }
             if (f2 != 0)
             {
-                if (!clip_move_point(tx1, ty1, tx2, ty2, clip_box, ref x2, ref y2, f2))
+                if (!ClipMovePoint(tx1, ty1, tx2, ty2, clip_box, ref x2, ref y2, f2))
                 {
                     return 4;
                 }

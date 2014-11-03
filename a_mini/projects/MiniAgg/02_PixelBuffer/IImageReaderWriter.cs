@@ -25,17 +25,16 @@ using PixelFarm.Agg.Image;
 namespace PixelFarm.Agg
 {
 
-    public interface IImage
+    public interface IImageReaderWriter
     {
       
         int BitDepth { get; }
         int Width { get; }
         int Height { get; }
-        RectangleInt GetBounds();
+        RectInt GetBounds();
 
         int GetBufferOffsetXY(int x, int y);
-        void MarkImageChanged();
-
+        
         int Stride { get; }
         int BytesBetweenPixelsInclusive { get; }
 
@@ -52,7 +51,7 @@ namespace PixelFarm.Agg
         //-------------------------------------------------------------------------------------------
        
         
-        void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset); //not used
+        void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset); //not used
          
         // line stuff
         void CopyHL(int x, int y, int len, ColorRGBA sourceColor);//not used

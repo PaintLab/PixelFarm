@@ -301,7 +301,7 @@ namespace PixelFarm.Agg.Transform
             sy = 1;
             tx = 0;
             ty = 0;
-             
+
             //-----------------------
             int j = creationPlans.Length;
             for (int i = 0; i < j; ++i)
@@ -874,7 +874,7 @@ namespace PixelFarm.Agg.Transform
         public bool IsIdentity()
         {
             if (!isIdenHint)
-            {
+            {   
                 return is_equal_eps(sx, 1.0) &&
                    is_equal_eps(shy, 0.0) &&
                    is_equal_eps(shx, 0.0) &&
@@ -906,7 +906,7 @@ namespace PixelFarm.Agg.Transform
         public VertexStore TransformToVxs(Agg.VertexSource.PathStorage src)
         {
             return TransformToVxs(src.Vsx);
-        }        
+        }
         public VertexStore TransformToVxs(VertexStore src)
         {
 
@@ -928,7 +928,7 @@ namespace PixelFarm.Agg.Transform
             var snapIter = src.GetVertexSnapIter();
 
             ShapePath.FlagsAndCommand cmd;
-            double x, y; 
+            double x, y;
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
             {
                 this.Transform(ref x, ref y);

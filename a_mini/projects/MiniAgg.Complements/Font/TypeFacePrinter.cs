@@ -31,7 +31,12 @@ using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.Font
 {
     public enum Justification { Left, Center, Right };
-    public enum Baseline { BoundsTop, BoundsCenter, TextCenter, Text, BoundsBottom };
+    public enum Baseline { 
+        BoundsTop, 
+        BoundsCenter, 
+        TextCenter,
+        Text, 
+        BoundsBottom };
 
 
 
@@ -92,25 +97,25 @@ namespace PixelFarm.Agg.Font
 
 
 
-        public RectangleDouble LocalBounds
+        public RectD LocalBounds
         {
             get
             {
                 Vector2 size = GetSize();
-                RectangleDouble bounds;
+                RectD bounds;
 
                 switch (Justification)
                 {
                     case Justification.Left:
-                        bounds = new RectangleDouble(0, typeFaceStyle.DescentInPixels, size.x, size.y + typeFaceStyle.DescentInPixels);
+                        bounds = new RectD(0, typeFaceStyle.DescentInPixels, size.x, size.y + typeFaceStyle.DescentInPixels);
                         break;
 
                     case Justification.Center:
-                        bounds = new RectangleDouble(-size.x / 2, typeFaceStyle.DescentInPixels, size.x / 2, size.y + typeFaceStyle.DescentInPixels);
+                        bounds = new RectD(-size.x / 2, typeFaceStyle.DescentInPixels, size.x / 2, size.y + typeFaceStyle.DescentInPixels);
                         break;
 
                     case Justification.Right:
-                        bounds = new RectangleDouble(-size.x, typeFaceStyle.DescentInPixels, 0, size.y + typeFaceStyle.DescentInPixels);
+                        bounds = new RectD(-size.x, typeFaceStyle.DescentInPixels, 0, size.y + typeFaceStyle.DescentInPixels);
                         break;
 
                     default:
@@ -179,7 +184,7 @@ namespace PixelFarm.Agg.Font
 
                     for (int currentChar = 0; currentChar < line.Length; currentChar++)
                     {
-                        ImageBase currentGlyphImage = typeFaceStyle.GetImageForCharacter(line[currentChar], 0, 0);
+                        ImageReaderWriterBase currentGlyphImage = typeFaceStyle.GetImageForCharacter(line[currentChar], 0, 0);
 
                         if (currentGlyphImage != null)
                         {

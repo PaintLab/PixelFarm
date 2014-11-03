@@ -30,61 +30,93 @@ namespace PixelFarm.Agg
 {
     class ImageGraphics2D : Graphics2D
     {
-
-        Scanline scanline;
+        ImageReaderWriterBase destImageReaderWriter;
+        ScanlinePacked8 sclinePack8;
         PathStorage drawImageRectPath = new PathStorage();
-        ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
-        ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-        IPixelBlender pixBlenderRGBA32;
-        double ox; //origin x
-        double oy; //origin y
-        public ImageGraphics2D(IImage destImage,
-            ScanlineRasterizer rasterizer,
-            ScanlinePacked8 scanline)
-            : base(destImage, rasterizer)
+
+        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
+        PixelBlenderBGRA pixBlenderRGBA32;
+        IPixelBlender currentBlender;
+
+        double ox; //canvas origin x
+        double oy; //canvas origin y
+        int destWidth;
+        int destHeight;
+        RectInt clipBox;
+
+        public ImageGraphics2D(ActualImage destImage)
         {
-            this.scanline = scanline;
-            this.pixBlenderRGBA32 = new PixelBlenderBGRA();
-            this.sclineRasToBmp.PixelBlender = pixBlenderRGBA32;
+            //create from actual image
+            this.destActualImage = destImage;
+            this.destImageReaderWriter = new MyImageReaderWriter(destImage);
+            this.sclineRas = new ScanlineRasterizer();
+            this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            this.destWidth = destImage.Width;
+            this.destHeight = destImage.Height;
+
+            this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
+            this.sclineRas.SetClipBox(this.clipBox);
+
+            this.sclinePack8 = new ScanlinePacked8();
+            this.currentBlender = this.pixBlenderRGBA32 = new PixelBlenderBGRA();
 
         }
-        public override void SetClippingRect(RectangleDouble clippingRect)
+        public override ScanlinePacked8 ScanlinePacked8
         {
-            Rasterizer.SetVectorClipBox(clippingRect);
+            get { return this.sclinePack8; }
+        }
+        public override IPixelBlender PixelBlender
+        {
+            get
+            {
+                return this.currentBlender;
+            }
+            set
+            {
+                this.currentBlender = value;
+            }
+        }
+        public override ImageReaderWriterBase DestImage
+        {
+            get { return this.destImageReaderWriter; }
+        }
+        public override ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
+        {
+            get { return this.sclineRasToBmp; }
+        }
+        public override void SetClippingRect(RectInt rect)
+        {
+            ScanlineRasterizer.SetClipBox(rect);
+        }
+        public override RectInt GetClippingRect()
+        {
+            return ScanlineRasterizer.GetVectorClipBox();
         }
         //--------------------------
-        public override RectangleDouble GetClippingRect()
+        public override void Render(ActualImage actualImage, int x, int y)
         {
-            return Rasterizer.GetVectorClipBox();
+
         }
-        public override RectangleInt GetClippingRectInt()
-        {
-            return Rasterizer.GetVectorClipBoxInt();
-        }
-        //--------------------------
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
             //reset rasterizer before render each vertextSnap
-            if (destImageByte == null)
-            {
-                return;
-            }
+
             //-----------------------------
-            rasterizer.Reset();
-            Affine transform = GetTransform();
+            sclineRas.Reset();
+            Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
-                rasterizer.AddPath(transform.Tranform(vertextSnap));
+                sclineRas.AddPath(transform.Tranform(vertextSnap));
             }
             else
             {
-                rasterizer.AddPath(vertextSnap);
+                sclineRas.AddPath(vertextSnap);
             }
-            sclineRasToBmp.RenderScanlineSolidAA(destImageByte, rasterizer, scanline, color);
-            destImageByte.MarkImageChanged();
+            sclineRasToBmp.RenderScanlineSolidAA(destImageReaderWriter, sclineRas, sclinePack8, color);
+            unchecked { destImageChanged++; };
             //-----------------------------
         }
-        void DrawImageGetDestBounds(IImage sourceImage,
+        void DrawImageGetDestBounds(IImageReaderWriter sourceImage,
             double destX, double destY,
             double hotspotOffsetX, double hotSpotOffsetY,
             double scaleX, double scaleY,
@@ -133,37 +165,30 @@ namespace PixelFarm.Agg
             drawImageRectPath.ClosePolygon();
         }
 
-        void DrawImage(IImage sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
-        {
-            //double ox, oy;
-            //destImageByte.GetOriginOffset(out ox, out oy);
-            //if (ox != 0 || oy != 0)
-            //{
-            //    destRectTransform *= Affine.NewTranslation(-ox, -oy);
-            //}
-
+        void DrawImage(IImageReaderWriter sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
+        {  
             VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
-            Rasterizer.AddPath(sp1);
+            ScanlineRasterizer.AddPath(sp1);
             sclineRasToBmp.GenerateAndRender(
-                new ChildImage(destImageByte, destImageByte.GetRecieveBlender()),
-                Rasterizer,
-                drawImageScanlineCache,
+                new ChildImage(destImageReaderWriter, destImageReaderWriter.GetRecieveBlender()),
+                ScanlineRasterizer,
+                sclinePack8,
                 spanImageFilter);
 
         }
 
-        public override void Render(IImage source,
+        public override void Render(IImageReaderWriter source,
             double destX, double destY,
             double angleRadians,
             double inScaleX, double inScaleY)
         {
             {   // exit early if the dest and source bounds don't touch.
                 // TODO: <BUG> make this do rotation and scalling
-                RectangleInt sourceBounds = source.GetBounds();
-                RectangleInt destBounds = this.destImageByte.GetBounds();
+                RectInt sourceBounds = source.GetBounds();
+                RectInt destBounds = this.destImageReaderWriter.GetBounds();
                 sourceBounds.Offset((int)destX, (int)destY);
 
-                if (!RectangleInt.DoIntersect(sourceBounds, destBounds))
+                if (!RectInt.DoIntersect(sourceBounds, destBounds))
                 {
                     if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
                     {
@@ -176,7 +201,7 @@ namespace PixelFarm.Agg
             double scaleX = inScaleX;
             double scaleY = inScaleY;
 
-            Affine graphicsTransform = GetTransform();
+            Affine graphicsTransform = this.CurrentTransformMatrix;
             if (!graphicsTransform.IsIdentity())
             {
                 if (scaleX != 1 || scaleY != 1 || angleRadians != 0)
@@ -288,15 +313,15 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator);
-
+                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator); 
                 DrawImage(source, spanImageFilter, destRectTransform);
-                DestImage.MarkImageChanged();
+
+                unchecked { destImageChanged++; };
             }
         }
+        int destImageChanged = 0;
 
-
-        public override void Render(IImage source, double destX, double destY)
+        public override void Render(IImageReaderWriter source, double destX, double destY)
         {
             int inScaleX = 1;
             int inScaleY = 1;
@@ -304,11 +329,11 @@ namespace PixelFarm.Agg
 
             {   // exit early if the dest and source bounds don't touch.
                 // TODO: <BUG> make this do rotation and scalling
-                RectangleInt sourceBounds = source.GetBounds();
-                RectangleInt destBounds = this.destImageByte.GetBounds();
+                RectInt sourceBounds = source.GetBounds();
+                RectInt destBounds = this.destImageReaderWriter.GetBounds();
                 sourceBounds.Offset((int)destX, (int)destY);
 
-                if (!RectangleInt.DoIntersect(sourceBounds, destBounds))
+                if (!RectInt.DoIntersect(sourceBounds, destBounds))
                 {
                     //if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
                     //{
@@ -321,7 +346,7 @@ namespace PixelFarm.Agg
             double scaleX = inScaleX;
             double scaleY = inScaleY;
 
-            Affine graphicsTransform = GetTransform();
+            Affine graphicsTransform = this.CurrentTransformMatrix;
             if (!graphicsTransform.IsIdentity())
             {
                 if (scaleX != 1 || scaleY != 1 || angleRadians != 0)
@@ -438,85 +463,143 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator);
-
+                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator); 
                 DrawImage(source, spanImageFilter, destRectTransform);
-                DestImage.MarkImageChanged();
+                unchecked { destImageChanged++; };
             }
         }
         public override void Clear(ColorRGBA color)
         {
 
-            RectangleInt clippingRectInt = GetClippingRectInt();
-            IImage destImage = this.DestImage;
-            if (destImage != null)
+            RectInt clippingRectInt = GetClippingRect();
+
+            var destImage = this.DestImage;
+            int width = destImage.Width;
+            int height = destImage.Height;
+            byte[] buffer = destImage.GetBuffer();
+
+            switch (destImage.BitDepth)
             {
+                case 8:
+                    {
+                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
+                        //byte byteColor = color.Red0To255;
+                        //int clipRectLeft = clippingRectInt.Left;
 
-                int width = destImage.Width;
-                int height = destImage.Height;
-                byte[] buffer = destImage.GetBuffer();
+                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+                        //{
+                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
+                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
+                        //    {
+                        //        buffer[bufferOffset] = color.blue;
+                        //        bufferOffset += bytesBetweenPixels;
+                        //    }
+                        //}
+                        throw new NotSupportedException("temp");
+                    }
+                case 24:
+                    {
+                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
+                        //int clipRectLeft = clippingRectInt.Left;
+                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
+                        //{
+                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
+                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
+                        //    {
+                        //        buffer[bufferOffset + 0] = color.blue;
+                        //        buffer[bufferOffset + 1] = color.green;
+                        //        buffer[bufferOffset + 2] = color.red;
+                        //        bufferOffset += bytesBetweenPixels;
+                        //    }
+                        //}
+                        throw new NotSupportedException("temp");
+                    }
+                    break;
+                case 32:
+                    {
 
-                switch (destImage.BitDepth)
-                {
-                    case 8:
+                        //------------------------------
+                        //fast clear buffer
+                        //skip clipping ****
+                        //TODO: reimplement clipping***
+                        //------------------------------
+
+
+                        if (color == ColorRGBA.White)
                         {
-                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-                            byte byteColor = color.Red0To255;
-                            int clipRectLeft = clippingRectInt.Left;
-
-                            for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+                            //fast cleat with white color
+                            int n = buffer.Length / 4;
+                            unsafe
                             {
-                                int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                                for (int x = 0; x < clippingRectInt.Width; ++x)
+                                fixed (void* head = &buffer[0])
                                 {
-                                    buffer[bufferOffset] = color.blue;
-                                    bufferOffset += bytesBetweenPixels;
+                                    uint* head_i32 = (uint*)head;
+                                    for (int i = n - 1; i >= 0; --i)
+                                    {
+                                        *head_i32 = 0xffffffff; //white (ARGB)
+                                        head_i32++;
+                                    }
                                 }
                             }
                         }
-                        break;
-
-                    case 24:
+                        else if (color == ColorRGBA.Black)
                         {
-                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-                            int clipRectLeft = clippingRectInt.Left;
-                            for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
+                            //fast cleat with black color
+                            int n = buffer.Length / 4;
+                            unsafe
                             {
-                                int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                                for (int x = 0; x < clippingRectInt.Width; ++x)
+                                fixed (void* head = &buffer[0])
                                 {
-                                    buffer[bufferOffset + 0] = color.blue;
-                                    buffer[bufferOffset + 1] = color.green;
-                                    buffer[bufferOffset + 2] = color.red;
-                                    bufferOffset += bytesBetweenPixels;
+                                    uint* head_i32 = (uint*)head;
+                                    for (int i = n - 1; i >= 0; --i)
+                                    {
+                                        *head_i32 = 0xff000000; //black (ARGB)
+                                        head_i32++;
+                                    }
                                 }
                             }
                         }
-                        break;
-                    case 32:
+                        else
                         {
-
-                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-                            int clipRectLeft = clippingRectInt.Left;
-                            for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+                            //other color
+                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                            int n = buffer.Length / 4;
+                            unsafe
                             {
-                                int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                                for (int x = 0; x < clippingRectInt.Width; ++x)
+                                fixed (void* head = &buffer[0])
                                 {
-                                    buffer[bufferOffset + 0] = color.blue;
-                                    buffer[bufferOffset + 1] = color.green;
-                                    buffer[bufferOffset + 2] = color.red;
-                                    buffer[bufferOffset + 3] = color.alpha;
-                                    bufferOffset += bytesBetweenPixels;
+                                    uint* head_i32 = (uint*)head;
+                                    for (int i = n - 1; i >= 0; --i)
+                                    {
+                                        *head_i32 = colorARGB;
+                                        head_i32++;
+                                    }
                                 }
                             }
-                        }
-                        break;
 
-                    default:
-                        throw new NotImplementedException();
-                }
+                            //int bytesBetweenPixels = 4;
+                            //int clipRectLeft = clippingRectInt.Left;
+                            //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+                            //{
+                            //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
+                            //    for (int x = 0; x < clippingRectInt.Width; ++x)
+                            //    {
+                            //        //b g, r, a
+                            //        buffer[bufferOffset + 0] = color.blue;
+                            //        buffer[bufferOffset + 1] = color.green;
+                            //        buffer[bufferOffset + 2] = color.red;
+                            //        buffer[bufferOffset + 3] = color.alpha;
+                            //        bufferOffset += bytesBetweenPixels;
+                            //    }
+                            //}
+                        }
+                    }
+                    break;
+
+                default:
+                    throw new NotImplementedException();
             }
+
 
         }
     }

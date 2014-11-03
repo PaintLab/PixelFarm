@@ -1,7 +1,7 @@
 ﻿//2014 BSD,WinterDev
 //MatterHackers
 
- 
+
 
 using System;
 
@@ -24,21 +24,20 @@ namespace PixelFarm.Agg.Sample_FloodFill
         public FloodFillDemo()
         {
             BackgroundColor = ColorRGBA.White;
-            imageToFillOn = new ActualImage(400, 300, 32, new PixelBlenderBGRA());
+            imageToFillOn = new ActualImage(400, 300, PixelFormat.Rgba32);
+
             var imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
             imageToFillGraphics.Clear(ColorRGBA.White);
             imageToFillGraphics.DrawString("Click to fill", 20, 30);
             imageToFillGraphics.Circle(new Vector2(200, 150), 35, ColorRGBA.Black);
             imageToFillGraphics.Circle(new Vector2(200, 150), 30, ColorRGBA.Green);
             imageToFillGraphics.Rectangle(20, 50, 210, 280, ColorRGBA.Black);
-            imageToFillGraphics.Rectangle(imageToFillOn.GetBounds(), ColorRGBA.Blue);
+            imageToFillGraphics.Rectangle(imageToFillOn.Bounds, ColorRGBA.Blue);
 
             Random rand = new Random();
             for (int i = 0; i < 20; i++)
             {
                 Ellipse elipse = new Ellipse(rand.Next(imageToFillOn.Width), rand.Next(imageToFillOn.Height), rand.Next(10, 60), rand.Next(10, 60));
-             
-
                 imageToFillGraphics.Render(new Stroke(1).MakeVxs(elipse.MakeVxs()), ColorRGBA.Black);
             }
 
@@ -56,18 +55,15 @@ namespace PixelFarm.Agg.Sample_FloodFill
         {
             get;
             set;
-        }
-
+        } 
         public ColorRGBA BackgroundColor
         {
             get;
             set;
-        }
-
+        } 
         public override void Draw(Graphics2D graphics2D)
         {
             graphics2D.Render(imageToFillOn, imageOffset.x, imageOffset.y);
-
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)

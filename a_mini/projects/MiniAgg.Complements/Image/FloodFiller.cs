@@ -82,7 +82,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        ImageBase destImage;
+        ImageReaderWriterBase destImage;
         protected int imageStride = 0;
         protected byte[] destBuffer = null;
 
@@ -112,8 +112,11 @@ namespace PixelFarm.Agg
         {
             this.fillRule = fillRule;
         }
-
-        public void Fill(ImageBase bufferToFillOn, int x, int y)
+        public void Fill(ActualImage img, int x, int y)
+        {
+            throw new NotSupportedException();
+        }
+        public void Fill(ImageReaderWriterBase bufferToFillOn, int x, int y)
         {
             unchecked // this way we can overflow the uint on negative and get a big number
             {
@@ -133,7 +136,7 @@ namespace PixelFarm.Agg
 
             int startColorBufferOffset = destImage.GetBufferOffsetXY(x, y);
 
-            fillRule.SetStartColor(new ColorRGBA(destImage.GetBuffer()[startColorBufferOffset+2], destImage.GetBuffer()[startColorBufferOffset + 1], destImage.GetBuffer()[startColorBufferOffset]));
+            fillRule.SetStartColor(new ColorRGBA(destImage.GetBuffer()[startColorBufferOffset + 2], destImage.GetBuffer()[startColorBufferOffset + 1], destImage.GetBuffer()[startColorBufferOffset]));
 
             LinearFill(x, y);
 

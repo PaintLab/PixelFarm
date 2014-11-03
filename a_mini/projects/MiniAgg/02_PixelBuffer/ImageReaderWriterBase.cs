@@ -28,22 +28,20 @@ namespace PixelFarm.Agg
 {
 
 
-    public abstract class ImageBase : IImage
+    public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
         public const int OrderB = 0;
         public const int OrderG = 1;
         public const int OrderR = 2;
         public const int OrderA = 3;
+
         const int BASE_MASK = 255;
 
-#if DEBUG
-        static int dbugTotalId;
-        public readonly int dbugId = dbugGetNewDebugId();
-#endif
-
         //--------------------------------------------
+        //look up table
         int[] yTableArray;
         int[] xTableArray;
+        //--------------------------------------------
         protected byte[] m_ByteBuffer;
         //--------------------------------------------
         // Pointer to first pixel depending on strideInBytes and image position
@@ -54,27 +52,17 @@ namespace PixelFarm.Agg
         int strideInBytes; // Number of bytes per row. Can be < 0
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
-
-        double originX;
-        double originY; 
-
         IPixelBlender recieveBlender;
-
-        int changedCount = 0;
-
-        public ImageBase()
+        
+         
+        protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
         {
-
-        }
-        public ImageBase(int width, int height, int bitsPerPixel, IPixelBlender recieveBlender)
-        {
-
             int scanWidthInBytes = width * (bitsPerPixel / 8);
-            if (width < 1 || height < 1)
+
+            if (width <= 0 || height <= 0)
             {
                 throw new ArgumentOutOfRangeException("You must have a width and height > than 0.");
-            }
-
+            } 
             if (bitsPerPixel != 32 && bitsPerPixel != 24 && bitsPerPixel != 8)
             {
                 throw new Exception("Unsupported bits per pixel.");
@@ -83,14 +71,10 @@ namespace PixelFarm.Agg
             {
                 throw new Exception("Your scan width is not big enough to hold your width and height.");
             }
-
+            //-------------------------------------------------------------------------------------------
             SetDimmensionAndFormat(width, height, scanWidthInBytes, bitsPerPixel, bitsPerPixel / 8);
-
-            if (m_ByteBuffer == null || m_ByteBuffer.Length != strideInBytes * height)
-            {
-                m_ByteBuffer = new byte[strideInBytes * height];
-                SetUpLookupTables();
-            }
+            this.m_ByteBuffer = imgbuffer;
+            SetUpLookupTables(); 
 
             if (yTableArray.Length != height
                 || xTableArray.Length != width)
@@ -99,19 +83,13 @@ namespace PixelFarm.Agg
             }
             //--------------------------
             SetRecieveBlender(recieveBlender);
-        }
-        
-     
-        public void MarkImageChanged()
-        {
-            // mark this unchecked as we don't want to throw an exception if this rolls over.
-            unchecked
-            {
-                changedCount++;
-            }
-        }
 
+        }
+    
+        
 #if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugGetNewDebugId();
         static int dbugGetNewDebugId()
         {
 
@@ -120,14 +98,7 @@ namespace PixelFarm.Agg
 #endif
 
 
-
-
-        //public void CopyFrom(IImage sourceImage)
-        //{
-        //    CopyFrom(sourceImage, sourceImage.GetBounds(), 0, 0);
-        //}
-
-        void CopyFromNoClipping(IImage sourceImage, RectangleInt clippedSourceImageRect, int destXOffset, int destYOffset)
+        void CopyFromNoClipping(IImageReaderWriter sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
             if (BytesBetweenPixelsInclusive != BitDepth / 8
                 || sourceImage.BytesBetweenPixelsInclusive != sourceImage.BitDepth / 8)
@@ -200,16 +171,16 @@ namespace PixelFarm.Agg
             }
         }
 
-        public void CopyFrom(IImage sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
+        public void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
         {
-            RectangleInt sourceImageBounds = sourceImage.GetBounds();
-            RectangleInt clippedSourceImageRect = new RectangleInt();
+            RectInt sourceImageBounds = sourceImage.GetBounds();
+            RectInt clippedSourceImageRect = new RectInt();
             if (clippedSourceImageRect.IntersectRectangles(sourceImageRect, sourceImageBounds))
             {
-                RectangleInt destImageRect = clippedSourceImageRect;
+                RectInt destImageRect = clippedSourceImageRect;
                 destImageRect.Offset(destXOffset, destYOffset);
-                RectangleInt destImageBounds = GetBounds();
-                RectangleInt clippedDestImageRect = new RectangleInt();
+                RectInt destImageBounds = GetBounds();
+                RectInt clippedDestImageRect = new RectInt();
                 if (clippedDestImageRect.IntersectRectangles(destImageRect, destImageBounds))
                 {
                     // we need to make sure the source is also clipped to the dest. So, we'll copy this back to source and offset it.
@@ -219,18 +190,6 @@ namespace PixelFarm.Agg
                 }
             }
         }
-
-
-        //public void GetOriginOffset(out double x, out double y)
-        //{
-        //    x = this.originX;
-        //    y = this.originY;
-        //}
-        //public void SetOriginOffset(double x, double y)
-        //{
-        //    this.originX = x;
-        //    this.originY = y;
-        //}
 
         public int Width
         {
@@ -250,7 +209,7 @@ namespace PixelFarm.Agg
 
         public int Stride { get { return strideInBytes; } }
 
-        public int BytesBetweenPixelsInclusive 
+        public int BytesBetweenPixelsInclusive
         {
             get { return m_DistanceInBytesBetweenPixelsInclusive; }
         }
@@ -259,13 +218,9 @@ namespace PixelFarm.Agg
             get { return bitDepth; }
         }
 
-        public RectangleInt GetBounds()
+        public RectInt GetBounds()
         {
-            return new RectangleInt(
-                    -(int)this.originX,
-                    -(int)this.originY,
-                    Width - (int)this.originX,
-                    Height - (int)this.originY);
+            return new RectInt(0, 0, this.width, this.height);
         }
 
         public IPixelBlender GetRecieveBlender()
@@ -347,14 +302,11 @@ namespace PixelFarm.Agg
         //    }
         //}
 
-        protected void SetDimmensionAndFormat(int width, int height, int strideInBytes,
+        protected void SetDimmensionAndFormat(int width, int height,
+            int strideInBytes,
             int bitDepth,
             int distanceInBytesBetweenPixelsInclusive)
         {
-            //if (doDeallocateOrClearBuffer)
-            //{
-            //    DeallocateOrClearBuffer(width, height, strideInBytes, bitDepth, distanceInBytesBetweenPixelsInclusive);
-            //}
 
             this.width = width;
             this.height = height;
@@ -391,7 +343,7 @@ namespace PixelFarm.Agg
             return m_ByteBuffer;
         }
 
-        public static void CopySubBufferToInt32Array(ImageBase buff, int mx, int my, int w, int h, int[] buffer)
+        public static void CopySubBufferToInt32Array(ImageReaderWriterBase buff, int mx, int my, int w, int h, int[] buffer)
         {
             int i = 0;
             byte[] mBuffer = buff.m_ByteBuffer;
@@ -425,31 +377,10 @@ namespace PixelFarm.Agg
             return bufferFirstPixel + yTableArray[y] + xTableArray[x];
         }
 
-        //public void CopyPixel(int x, int y, byte[] c, int ByteOffset)
-        //{
-        //    throw new System.NotImplementedException();
-        //    //byte* p = GetPixelPointerXY(x, y);
-        //    //((int*)p)[0] = ((int*)c)[0];
-        //    //p[OrderR] = c.r;
-        //    //p[OrderG] = c.g;
-        //    //p[OrderB] = c.b;
-        //    //p[OrderA] = c.a;
-        //}
-
-        //public void BlendPixel(int x, int y, ColorRGBA c, byte cover)
-        //{
-        //    throw new System.NotImplementedException();
-        //    /*
-        //    cob_type::copy_or_blend_pix(
-        //        (value_type*)m_rbuf->row_ptr(x, y, 1)  + x + x + x, 
-        //        c.r, c.g, c.b, c.a, 
-        //        cover);*/
-        //}
 
         public void SetPixel(int x, int y, ColorRGBA color)
         {
-            x -= (int)this.originX;
-            y -= (int)this.originY;
+
             recieveBlender.CopyPixel(GetBuffer(), GetBufferOffsetXY(x, y), color);
         }
 
@@ -613,10 +544,10 @@ namespace PixelFarm.Agg
 
         public void CopyColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex)
         {
-            int bufferOffset = GetBufferOffsetXY(x, y); 
+            int bufferOffset = GetBufferOffsetXY(x, y);
             do
             {
-                recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]); 
+                recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, colors[colorsIndex]);
                 ++colorsIndex;
                 bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
             }
@@ -702,9 +633,9 @@ namespace PixelFarm.Agg
         //    return m_ByteBuffer.GetHashCode() ^ bufferOffset.GetHashCode() ^ bufferFirstPixel.GetHashCode();
         //}
 
-        public RectangleInt GetBoundingRect()
+        public RectInt GetBoundingRect()
         {
-            return new RectangleInt(0, 0, Width, Height);
+            return new RectInt(0, 0, Width, Height);
         }
 
         //internal void Initialize(BufferImage sourceImage)
@@ -740,10 +671,7 @@ namespace PixelFarm.Agg
         //}
 
 
-    }
-
-
-
+    } 
 
     static class DoCopyOrBlend
     {
@@ -788,6 +716,43 @@ namespace PixelFarm.Agg
                         recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
                     }
                 }
+            }
+        }
+    }
+
+     
+
+    public class MyImageReaderWriter : ImageReaderWriterBase
+    {
+        ActualImage actualImage;
+        public MyImageReaderWriter(ActualImage actualImage)
+        {
+            this.actualImage = actualImage;
+            //calculate image stride
+            switch (actualImage.PixelFormat)
+            {
+                case PixelFormat.Rgba32:
+                    {
+                        Attach(actualImage.Width,
+                            actualImage.Height,
+                            actualImage.BitDepth,
+                            actualImage.GetBuffer(),
+                            new PixelBlenderBGRA());
+                    } break;
+                case PixelFormat.GrayScale8:
+                    {
+                        Attach(actualImage.Width,
+                            actualImage.Height,
+                            actualImage.BitDepth,
+                            actualImage.GetBuffer(),
+                            new PixelFarm.Agg.Image.PixelBlenderGray(1));
+
+                    } break;
+                case PixelFormat.Rgb24:
+                default:
+                    {
+                        throw new NotSupportedException();
+                    }
             }
         }
     }

@@ -27,7 +27,7 @@ namespace PixelFarm.Agg.Image
         byte[] NextX(out int bufferByteOffset);
         byte[] NextY(out int bufferByteOffset);
 
-        IImage SourceImage
+        IImageReaderWriter SourceImage
         {
             get;
         }
@@ -35,18 +35,18 @@ namespace PixelFarm.Agg.Image
 
     public abstract class ImageBufferAccessor : IImageBufferAccessor
     {
-        protected IImage m_SourceImage;
+        protected IImageReaderWriter m_SourceImage;
         protected int m_x, m_x0, m_y, m_DistanceBetweenPixelsInclusive;
         protected byte[] m_Buffer;
         protected int m_CurrentBufferOffset = -1;
         int m_Width;
 
-        public ImageBufferAccessor(IImage img)
+        public ImageBufferAccessor(IImageReaderWriter img)
         {
             Attach(img);
         }
 
-        void Attach(IImage pixf)
+        void Attach(IImageReaderWriter pixf)
         {
             m_SourceImage = pixf;
             m_Buffer = m_SourceImage.GetBuffer();
@@ -54,7 +54,7 @@ namespace PixelFarm.Agg.Image
             m_DistanceBetweenPixelsInclusive = m_SourceImage.BytesBetweenPixelsInclusive;
         }
 
-        public IImage SourceImage
+        public IImageReaderWriter SourceImage
         {
             get
             {
@@ -154,7 +154,7 @@ namespace PixelFarm.Agg.Image
     {
         byte[] m_OutsideBufferColor;
 
-        public ImageBufferAccessorClip(IImage sourceImage, ColorRGBA bk)
+        public ImageBufferAccessorClip(IImageReaderWriter sourceImage, ColorRGBA bk)
             : base(sourceImage)
         {
             m_OutsideBufferColor = new byte[4];

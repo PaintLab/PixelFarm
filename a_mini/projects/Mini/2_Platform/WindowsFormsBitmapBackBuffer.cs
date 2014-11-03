@@ -43,114 +43,161 @@ using PixelFarm.Agg.Image;
 
 namespace Mini
 {
-    internal class WindowsFormsBitmapBackBuffer
+    class WindowsFormsBitmapBackBuffer
     {
-        internal ActualImage backingImageBufferByte;
-        internal Bitmap windowsBitmap;
-
+        ActualImage actualImage;
+        Bitmap bufferBmp;
+        Graphics bufferGfx;
+        int width;
+        int height;
 
         public WindowsFormsBitmapBackBuffer()
         {
 
         }
 
-
-        int numInFunction = 0;
-        internal void UpdateHardwareSurface(RectangleInt rect)
+        const int SRCCOPY = 0xcc0020;
+        /// <summary>
+        /// update actual image data to windowsBitmap
+        /// </summary>
+        /// <param name="rect"></param>
+        public void UpdateToHardwareSurface(Graphics dest, RectInt rect)
         {
+            //----------------------------------------------- 
+            //copy from actual img buffer (src)
+            BitmapHelper.CopyToWindowsBitmap(
+                this.actualImage, //src from actual img buffer
+                this.bufferBmp, //dest to buffer bmp
+                rect);
+            //-----------------------------------------------
+            //prepare buffer dc ****
+            IntPtr bufferDc = bufferGfx.GetHdc();
+            IntPtr hBitmap = bufferBmp.GetHbitmap();
+            IntPtr hOldObject = SelectObject(bufferDc, hBitmap);
 
-            numInFunction++;
-            if (backingImageBufferByte != null)
-            {
+            //------------------------------------------------
+            //target dc
+            IntPtr displayHdc = dest.GetHdc();
+            //copy from buffer dc to target display dc 
+            int result = BitBlt(displayHdc, 0, 0,
+                 bufferBmp.Width,
+                 bufferBmp.Height,
+                bufferDc, 0, 0, SRCCOPY);
 
-                BitmapHelper.CopyToWindowsBitmap(
-                    this.backingImageBufferByte,
-                    this.windowsBitmap,
-                    rect);
-            }
-            else
-            {
-                throw new NotImplementedException();
-                //                switch (backingImageBufferFloat.BitDepth)
-                //                {
-                //                    case 128:
-                //                        {
-                //                            BitmapData bitmapData1 = windowsBitmap.LockBits(new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
-                //                            int index = 0;
-                //                            unsafe
-                //                            {
-                //                                unchecked
-                //                                {
-                //                                    int offset;
-                //                                    float[] buffer = backingImageBufferFloat.GetBuffer(out offset);
-                //                                    fixed (float* pSource = &buffer[offset])
-                //                                    {
-                //                                        for (int y = 0; y < backingImageBufferFloat.Height; y++)
-                //                                        {
-                //                                            byte* pDestBuffer = (byte*)bitmapData1.Scan0 + (bitmapData1.Stride * (backingImageBufferFloat.Height - 1 - y));
-                //                                            for (int x = 0; x < backingImageBufferFloat.Width; x++)
-                //                                            {
-                //#if true
-                //                                                pDestBuffer[x * 4 + 0] = (byte)(pSource[index * 4 + 0] * 255);
-                //                                                pDestBuffer[x * 4 + 1] = (byte)(pSource[index * 4 + 1] * 255);
-                //                                                pDestBuffer[x * 4 + 2] = (byte)(pSource[index * 4 + 2] * 255);
-                //                                                pDestBuffer[x * 4 + 3] = (byte)(pSource[index * 4 + 3] * 255);
-                //                                                index++;
-                //#else
-                //                                                pDestBuffer[x * 4 + 0] = (byte)255;
-                //                                                pDestBuffer[x * 4 + 1] = (byte)0;
-                //                                                pDestBuffer[x * 4 + 2] = (byte)128;
-                //                                                pDestBuffer[x * 4 + 3] = (byte)255;
-                //#endif
-                //                                            }
-                //                                        }
-                //                                    }
-                //                                }
-                //                            }
-
-                //                            windowsBitmap.UnlockBits(bitmapData1);
-                //                        }
-                //                        break;
-
-                //                    default:
-                //                        throw new NotImplementedException();
-                //                }
-            }
-
-            numInFunction--;
+            SelectObject(bufferDc, hOldObject);
+            //DeleteObject(hBitmap); 
+            bufferGfx.ReleaseHdc(bufferDc);
+            dest.ReleaseHdc(displayHdc);
         }
 
-        internal void Initialize(int width, int height, int bitDepth)
+
+        /// <summary>
+        /// copy buffer to 
+        /// </summary>
+        /// <param name="dest"></param>
+        public void UpdateToHardwareSurface(Graphics dest)
         {
+
+            //-----------------------------------------------
+            //copy from actual img buffer (src) 
+            BitmapHelper.CopyToWindowsBitmapSameSize(
+                this.actualImage, //src from actual img buffer
+                this.bufferBmp);//dest to buffer bmp                 
+            //-----------------------------------------------
+            //prepare buffer dc ****
+            IntPtr bufferDc = bufferGfx.GetHdc();
+            IntPtr hBitmap = bufferBmp.GetHbitmap();
+            IntPtr hOldObject = SelectObject(bufferDc, hBitmap);
+            //------------------------------------------------
+            //target dc
+            IntPtr displayHdc = dest.GetHdc();
+            //copy from buffer dc to target display dc 
+            int result = BitBlt(displayHdc, 0, 0,
+                 bufferBmp.Width,
+                 bufferBmp.Height,
+                 bufferDc, 0, 0, SRCCOPY);
+
+            SelectObject(bufferDc, hOldObject);
+            //DeleteObject(hBitmap); 
+            bufferGfx.ReleaseHdc(bufferDc);
+            dest.ReleaseHdc(displayHdc);
+        }
+        public Graphics2D Initialize(int width, int height, int bitDepth)
+        {
+
             if (width > 0 && height > 0)
             {
+                this.width = width;
+                this.height = height;
                 switch (bitDepth)
                 {
                     case 24:
-                        windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                        backingImageBufferByte = new ActualImage(width, height, 24, new BlenderBGR());
-                        break;
+                        bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                        actualImage = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgb24);
+                        bufferGfx = Graphics.FromImage(bufferBmp);
+                        return Graphics2D.CreateFromImage(actualImage);
 
                     case 32:
-                        windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+
+                        bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+
                         //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                        //32bppPArgb 
+                        //32bppPArgb                         
+                        actualImage = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgba32);
+                        bufferGfx = Graphics.FromImage(bufferBmp);
 
-                        backingImageBufferByte = new ActualImage(width, height, 32, new PixelBlenderBGRA());
-                        break;
-
+                        return Graphics2D.CreateFromImage(actualImage);
                     case 128:
-                        //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                        //backingImageBufferByte = null;
-                        //backingImageBufferFloat = new ImageBufferFloat(width, height, 128, new BlenderBGRAFloat());
-                        //break;
+                    //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                    //backingImageBufferByte = null;
+                    //backingImageBufferFloat = new ImageBufferFloat(width, height, 128, new BlenderBGRAFloat());
+                    //break;
 
                     default:
                         throw new NotImplementedException("Don't support this bit depth yet.");
                 }
             }
+            throw new NotSupportedException();
         }
+
+        public Graphics2D CreateNewGraphic2D()
+        {
+
+            Graphics2D graphics2D;
+            if (actualImage != null)
+            {
+                graphics2D = Graphics2D.CreateFromImage(actualImage);
+            }
+            else
+            {
+                throw new NotSupportedException();
+                //graphics2D = bitmapBackBuffer.backingImageBufferFloat.NewGraphics2D();
+            }
+
+            return graphics2D;
+        }
+        //-------------
+
+        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
+        public static extern bool DeleteObject(IntPtr hObject);
+
+        [System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
+        public static extern System.IntPtr SelectObject(System.IntPtr hdc, System.IntPtr h);
+
+        [System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
+        private static extern int BitBlt(
+            IntPtr hdcDest,     // handle to destination DC (device context)
+            int nXDest,         // x-coord of destination upper-left corner
+            int nYDest,         // y-coord of destination upper-left corner
+            int nWidth,         // width of destination rectangle
+            int nHeight,        // height of destination rectangle
+            IntPtr hdcSrc,      // handle to source DC
+            int nXSrc,          // x-coordinate of source upper-left corner
+            int nYSrc,          // y-coordinate of source upper-left corner
+            System.Int32 dwRop  // raster operation code
+            );
+
     }
 }

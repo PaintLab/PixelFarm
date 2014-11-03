@@ -30,7 +30,7 @@ using PixelFarm.Agg;
 
 namespace PixelFarm.Agg.Image
 {
-    public class BlenderGray : IPixelBlender
+    public class PixelBlenderGray : IPixelBlender
     {
         public int NumPixelBits { get { return 8; } }
 
@@ -41,7 +41,7 @@ namespace PixelFarm.Agg.Image
 
         int bytesBetweenPixelsInclusive;
 
-        public BlenderGray(int bytesBetweenPixelsInclusive)
+        public PixelBlenderGray(int bytesBetweenPixelsInclusive)
         {
             this.bytesBetweenPixelsInclusive = bytesBetweenPixelsInclusive;
 

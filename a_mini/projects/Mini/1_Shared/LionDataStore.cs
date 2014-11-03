@@ -1,3 +1,8 @@
+//BSD 2014, WinterDev
+//MattersHackers
+//AGG 2.4
+
+
 using System;
 using System.Globalization;
 using PixelFarm.Agg.Transform;
@@ -8,7 +13,7 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg
 {
-    class LionParser
+    class LionDataStore
     {
         static string g_lion =
         "f2cc99\n" +
@@ -156,7 +161,7 @@ namespace PixelFarm.Agg
         "M 157,342 L 156,349 L 150,356 L 157,353 L 163,346 L 162,342 L 157,342 L 157,342 L 157,342\n" +
         "M 99,265 L 96,284 L 92,299 L 73,339 L 73,333 L 87,300 L 99,265 L 99,265 L 99,265\n";
 
-        static public int parse_lion(PathStorage path, ColorRGBA[] colors, int[] path_idx)
+        static public int LoadLionData(PathStorage path, ColorRGBA[] colors, int[] path_idx)
         {
             // Parse the lion and then detect its bounding
             // box and arrange polygons orientations (make all polygons
@@ -214,97 +219,5 @@ namespace PixelFarm.Agg
         }
     }
 
-    public class LionShape
-    {
-        PathStorage path = new PathStorage();
-        ColorRGBA[] colors = new ColorRGBA[100];
-        int[] pathIndexList = new int[100];
-        int numPaths = 0;
-        RectangleDouble boundingRect;
-        Vector2 center;
-        public LionShape()
-        {
-
-        }
-
-        public PathStorage Path
-        {
-            get
-            {
-                return path;
-            }
-
-
-        }
-
-        public int NumPaths
-        {
-            get
-            {
-                return numPaths;
-            }
-        }
-
-        public RectangleDouble Bounds
-        {
-            get
-            {
-                return boundingRect;
-            }
-        }
-
-        public ColorRGBA[] Colors
-        {
-            get
-            {
-                return colors;
-            }
-
-        }
-
-        public int[] PathIndexList
-        {
-            get
-            {
-                return pathIndexList;
-            }
-
-        }
-
-        public Vector2 Center
-        {
-            get
-            {
-                return center;
-            }
-        }
-
-        public void ParseLion()
-        {
-
-            numPaths = PixelFarm.Agg.LionParser.parse_lion(path, colors, pathIndexList);
-            PixelFarm.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
-            center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
-            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
-        }
-        public static void UnsafeDirectSetData(LionShape lion,
-            int numPaths,
-            PathStorage pathStore,
-            ColorRGBA[] colors,
-            int[] pathIndice)
-        {
-            lion.path = pathStore;
-            lion.colors = colors;
-            lion.pathIndexList = pathIndice;
-            lion.numPaths = numPaths;
-            lion.UpdateBoundingRect();
-        }
-        void UpdateBoundingRect()
-        {
-            PixelFarm.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
-            center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
-            center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
-        }
-
-    }
+    
 }

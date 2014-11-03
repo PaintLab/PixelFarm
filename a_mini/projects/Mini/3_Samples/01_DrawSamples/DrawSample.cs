@@ -48,7 +48,7 @@ namespace PixelFarm.Agg.Sample_Draw
             // draw some text
             g.DrawString("A Simple Example", 300, 400, 20);
 
-            g.DrawString2("A Simple Example2", 300, 350, 20, drawFromHintedCache: true);
+            g.DrawString2("A Simple Example2 : hintCached", 300, 350, 20);
 
             g.DrawString2("A Simple Example3", 300, 300, 20);
 

@@ -105,7 +105,41 @@ namespace Mini
                                 };
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
                             } break;
-                        case DemoConfigPresentaionHint.SlideBarContinuous:
+                        case DemoConfigPresentaionHint.SlideBarContinuous_R4:
+                            {
+                                Label descLabel = new Label();
+                                descLabel.Width = 400;
+
+                                this.flowLayoutPanel1.Controls.Add(descLabel);
+
+                                var originalConfig = config.OriginalConfigAttribute;
+                                HScrollBar hscrollBar = new HScrollBar();
+
+                                //100 => for scale factor 
+
+                                hscrollBar.Width = flowLayoutPanel1.Width;
+                                hscrollBar.Minimum = originalConfig.MinValue * 100;
+                                hscrollBar.Maximum = (originalConfig.MaxValue * 100) + 10;
+                                hscrollBar.SmallChange = 1;
+
+                                //current value
+
+                                float doubleValue = ((float)config.InvokeGet(exampleBase) * 100);
+                                hscrollBar.Value = (int)doubleValue;
+
+                                //-------------
+                                descLabel.Text = config.Name + ":" + ((float)hscrollBar.Value / 100d).ToString();
+                                hscrollBar.ValueChanged += (s, e) =>
+                                {
+                                    float value = (float)(hscrollBar.Value / 100f);
+                                    config.InvokeSet(exampleBase, value);
+                                    descLabel.Text = config.Name + ":" + value.ToString();
+                                    InvalidateSampleViewPort();
+                                };
+                                this.flowLayoutPanel1.Controls.Add(hscrollBar);
+
+                            } break;
+                        case DemoConfigPresentaionHint.SlideBarContinuous_R8:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
@@ -139,6 +173,7 @@ namespace Mini
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
 
                             } break;
+
                         case DemoConfigPresentaionHint.OptionBoxes:
                             {
 

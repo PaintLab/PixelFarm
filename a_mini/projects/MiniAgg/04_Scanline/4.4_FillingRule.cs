@@ -21,9 +21,5 @@
 
 namespace PixelFarm.Agg.JustForScanlineRasterizer
 {
-    public enum FillingRule
-    {
-        NonZero,
-        EvenOdd
-    }
+    
 }

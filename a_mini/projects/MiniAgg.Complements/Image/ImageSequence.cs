@@ -34,8 +34,8 @@ namespace PixelFarm.Agg.Image
         {
             get
             {
-                RectangleInt bounds = new RectangleInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
-                foreach (ImageBase frame in imageList)
+                RectInt bounds = new RectInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
+                foreach (ImageReaderWriterBase frame in imageList)
                 {
                     bounds.ExpandToInclude(frame.GetBoundingRect());
                 }
@@ -48,8 +48,8 @@ namespace PixelFarm.Agg.Image
         {
             get
             {
-                RectangleInt bounds = new RectangleInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
-                foreach (ImageBase frame in imageList)
+                RectInt bounds = new RectInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
+                foreach (ImageReaderWriterBase frame in imageList)
                 {
                     bounds.ExpandToInclude(frame.GetBoundingRect());
                 }
@@ -60,7 +60,7 @@ namespace PixelFarm.Agg.Image
 
         bool looping = false;
 
-        List<ImageBase> imageList = new List<ImageBase>();
+        List<ImageReaderWriterBase> imageList = new List<ImageReaderWriterBase>();
 
         public ImageSequence()
         {
@@ -115,7 +115,7 @@ namespace PixelFarm.Agg.Image
             //return sequenceLoaded;
         }
 
-        public void AddImage(ImageBase imageBuffer)
+        public void AddImage(ImageReaderWriterBase imageBuffer)
         {
             imageList.Add(imageBuffer);
         }
@@ -125,23 +125,23 @@ namespace PixelFarm.Agg.Image
             return (int)((fractionOfTotalLength * (NumFrames - 1)) + .5);
         }
 
-        public ImageBase GetImageByTime(double NumSeconds)
+        public ImageReaderWriterBase GetImageByTime(double NumSeconds)
         {
             double TotalSeconds = NumFrames / FramePerSecond;
             return GetImageByRatio(NumSeconds / TotalSeconds);
         }
 
-        public ImageBase GetImageByRatio(double fractionOfTotalLength)
+        public ImageReaderWriterBase GetImageByRatio(double fractionOfTotalLength)
         {
             return GetImageByIndex(fractionOfTotalLength * (NumFrames - 1));
         }
 
-        public ImageBase GetImageByIndex(double ImageIndex)
+        public ImageReaderWriterBase GetImageByIndex(double ImageIndex)
         {
             return GetImageByIndex((int)(ImageIndex + .5));
         }
 
-        public ImageBase GetImageByIndex(int ImageIndex)
+        public ImageReaderWriterBase GetImageByIndex(int ImageIndex)
         {
             if (looping)
             {
