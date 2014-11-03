@@ -63,7 +63,7 @@ namespace ClipperLib
 {
 
 #if use_int32
-  using cInt = Int32;
+   using cInt = Int32;
 #else
     using cInt = Int64;
 #endif
@@ -88,7 +88,7 @@ namespace ClipperLib
         {
             this.X = ip.X; this.Y = ip.Y;
         }
-    };
+    }
 
 
     //------------------------------------------------------------------------------

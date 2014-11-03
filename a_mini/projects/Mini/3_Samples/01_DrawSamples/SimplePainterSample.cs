@@ -34,7 +34,7 @@ namespace PixelFarm.Agg.SimplePainter
             p.Clear(ColorRGBA.White);
             // draw a circle  
             p.FillColor = ColorRGBA.Blue;
-            p.FillCircle(50, 50, 30); 
+            p.FillCircle(50, 50, 30);
 
             p.StrokeColor = new ColorRGBA(20, 200, 200);
             p.Line(10, 100, 520, 50);
@@ -44,15 +44,17 @@ namespace PixelFarm.Agg.SimplePainter
             // and an outline around it
             p.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
 
-
+            
             // draw some text
-            p.DrawString("A Simple Example", 300, 400, 20);
+            p.FillColor = ColorRGBA.Black;
 
-            p.DrawString2("A Simple Example2", 300, 350, 20, drawFromHintedCache: true);
+            p.DrawString("A Simple Example", 300, 400);
 
-            p.DrawString2("A Simple Example3", 300, 300, 20);
+            p.DrawString("A Simple Example2", 300, 350);
 
-            p.DrawString2("A Simple Example4", 300, 250, 20);
+            p.DrawString("A Simple Example3", 300, 300);
+
+            p.DrawString("A Simple Example4", 300, 250);
             //---------------------------------------------------
 
 

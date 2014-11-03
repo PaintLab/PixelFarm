@@ -54,6 +54,8 @@ namespace PixelFarm.Agg
         Ellipse ellipse = new Ellipse();
         PathStorage lines = new PathStorage();
         RoundedRect roundRect = null;
+        MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+
         //-------------
         public CanvasPainter(Graphics2D graphic2d)
         {
@@ -139,7 +141,7 @@ namespace PixelFarm.Agg
         /// <param name="y2"></param>
         /// <param name="color"></param>
         public void Line(double x1, double y1, double x2, double y2)
-        {   
+        {
             lines.Clear();
             lines.MoveTo(x1, y1);
             lines.LineTo(x2, y2);
@@ -222,63 +224,45 @@ namespace PixelFarm.Agg
             }
             this.Draw(roundRect.MakeVxs());
         }
+        //public void DrawString(
+        //    string text,
+        //    double x,
+        //    double y,
+        //    double pointSize = 12,
+        //    Justification justification = Justification.Left,
+        //    Baseline baseline = Baseline.Text,
+        //    ColorRGBA color = new ColorRGBA(),
+        //    bool drawFromHintedCache = false,
+        //    ColorRGBA backgroundColor = new ColorRGBA())
+        //{
+
+        //    TypeFacePrinter stringPrinter = new TypeFacePrinter(text, pointSize, new Vector2(x, y), justification, baseline);
+        //    if (color.Alpha0To255 == 0)
+        //    {
+        //        color = ColorRGBA.Black;
+        //    }
+
+        //    if (backgroundColor.Alpha0To255 != 0)
+        //    {
+        //        gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
+        //    }
+             
+        //    stringPrinter.DrawFromHintedCache = drawFromHintedCache;
+        //    stringPrinter.Render(gx, color);
+        //}
         public void DrawString(
-            string text,
-            double x,
-            double y,
-            double pointSize = 12,
-            Justification justification = Justification.Left,
-            Baseline baseline = Baseline.Text,
-            ColorRGBA color = new ColorRGBA(),
-            bool drawFromHintedCache = false,
-            ColorRGBA backgroundColor = new ColorRGBA())
-        {
-
-            TypeFacePrinter stringPrinter = new TypeFacePrinter(text, pointSize, new Vector2(x, y), justification, baseline);
-            if (color.Alpha0To255 == 0)
-            {
-                color = ColorRGBA.Black;
-            }
-
-            if (backgroundColor.Alpha0To255 != 0)
-            {
-                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-            }
-
-            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-            stringPrinter.Render(gx, color);
-        }
-        public void DrawString2(
            string text,
            double x,
-           double y,
-           double pointSize = 12,
-           Justification justification = Justification.Left,
-           Baseline baseline = Baseline.Text,
-           ColorRGBA color = new ColorRGBA(),
-           bool drawFromHintedCache = false,
-           ColorRGBA backgroundColor = new ColorRGBA())
+           double y)
         {
 
             //1. parse text  
-            var stringPrinter = new PixelFarm.Agg.Font.TypeFacePrinter2(
-                text,
-                pointSize,
-                new Vector2(x, y), justification, baseline);
-
-            if (color.Alpha0To255 == 0)
-            {
-                color = ColorRGBA.Black;
-            }
-
-            if (backgroundColor.Alpha0To255 != 0)
-            {
-                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-            }
-
-            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-            stringPrinter.Render(gx, color);
+            
+            stringPrinter.DrawFromHintedCache = false;
+            stringPrinter.TextColor = this.fillColor;
+            stringPrinter.Render(gx, x, y, text);            
         }
+       
         /// <summary>
         /// fill vertex store
         /// </summary>

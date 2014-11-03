@@ -65,32 +65,14 @@ namespace PixelFarm.Agg
            string text,
            double x,
            double y,
-           double pointSize = 12,
-           Justification justification = Justification.Left,
-           Baseline baseline = Baseline.Text,
-           ColorRGBA color = new ColorRGBA(),
-           bool drawFromHintedCache = false,
-           ColorRGBA backgroundColor = new ColorRGBA())
+           double pointSize)
         {
 
             //1. parse text  
-            var stringPrinter = new PixelFarm.Agg.Font.TypeFacePrinter2(
-                text,
-                pointSize,
-                new Vector2(x, y), justification, baseline);
-
-            if (color.Alpha0To255 == 0)
-            {
-                color = ColorRGBA.Black;
-            }
-
-            if (backgroundColor.Alpha0To255 != 0)
-            {
-                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-            }
-
-            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-            stringPrinter.Render(gx, color);
+            var stringPrinter = new PixelFarm.Agg.Font.MyTypeFacePrinter();
+            stringPrinter.TextColor = ColorRGBA.Black;
+            stringPrinter.DrawFromHintedCache = false;
+            stringPrinter.Render(gx, x, y, text);
         }
 
         //public static void DrawString3(this Graphics2D gx, string Text,
@@ -124,7 +106,7 @@ namespace PixelFarm.Agg
         //}
         public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
         {
-            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0); 
+            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
             gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
         }
 
