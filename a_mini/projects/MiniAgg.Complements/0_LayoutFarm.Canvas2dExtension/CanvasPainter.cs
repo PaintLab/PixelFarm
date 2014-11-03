@@ -37,10 +37,11 @@ namespace PixelFarm.Agg
     {
         Graphics2D gx;
         Stroke stroke;
-        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
+        
         ColorRGBA fillColor;
-        ScanlineRasterizer m_ras;       
-        ScanlinePacked8 m_sl;
+        ScanlinePacked8 scline;
+        ScanlineRasterizer sclineRas;
+        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
 
         FilterMan filterMan = new FilterMan();
         IPixelBlender pixBlender;
@@ -48,10 +49,10 @@ namespace PixelFarm.Agg
         public CanvasPainter(Graphics2D graphic2d)
         {
             this.gx = graphic2d;
-            this.m_ras = gx.ScanlineRasterizer;
+            this.sclineRas = gx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
 
-            this.m_sl = graphic2d.ScanlinePacked8;
+            this.scline = graphic2d.ScanlinePacked8;
             this.pixBlender = graphic2d.PixelBlender;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
 
@@ -195,13 +196,13 @@ namespace PixelFarm.Agg
         /// <param name="c"></param>
         public void Fill(VertexStoreSnap snap)
         {   
-            m_ras.AddPath(snap);
-            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, m_ras, m_sl, fillColor);
+            sclineRas.AddPath(snap);
+            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, sclineRas, scline, fillColor);
         }
         public void Fill(VertexStore vxs)
         {
-            m_ras.AddPath(vxs);
-            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, m_ras, m_sl, fillColor);
+            sclineRas.AddPath(vxs);
+            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, sclineRas, scline, fillColor);
         }
         //public void RenderImage(IImageReaderWriter img)
         //{

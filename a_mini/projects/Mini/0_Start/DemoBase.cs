@@ -96,7 +96,8 @@ namespace Mini
         CheckBox,
         OptionBoxes,
         SlideBarDiscrete,
-        SlideBarContinuous
+        SlideBarContinuous_R4,
+        SlideBarContinuous_R8,
     }
 
 
@@ -167,7 +168,11 @@ namespace Mini
             }
             else if (propType == typeof(double))
             {
-                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous;
+                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous_R8;
+            }
+            else if (propType == typeof(float))
+            {
+                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous_R4;
             }
             else
             {

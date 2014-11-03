@@ -112,8 +112,9 @@ namespace PixelFarm.Agg.Sample_RoundRect
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            
-            IImageReaderWriter destImg = graphics2D.DestImage;  
+            CanvasPainter painter = new CanvasPainter(graphics2D);
+
+            IImageReaderWriter destImg = graphics2D.DestImage;
 
             var normalBlender = new PixelBlenderBGRA();
 
@@ -125,8 +126,8 @@ namespace PixelFarm.Agg.Sample_RoundRect
             var clippingProxyNormal = new ClipProxyImage(rasterNormal);
             var clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
-
-            clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
+            painter.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
+            //clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
 
             var ras = graphics2D.ScanlineRasterizer;
             var sl = graphics2D.ScanlinePacked8;
@@ -140,11 +141,21 @@ namespace PixelFarm.Agg.Sample_RoundRect
             // Render two "control" circles
             ellipse.Reset(m_x[0], m_y[0], 3, 3, 16);
             ras.AddPath(ellipse.MakeVxs());
+
+            painter.FillColor = new ColorRGBA(127, 127, 127);
+            
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
             sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
+
+
+
+            
+            painter.FillColor = new ColorRGBA(127, 127, 127);
+            
             ellipse.Reset(m_x[1], m_y[1], 3, 3, 16);
             ras.AddPath(ellipse.MakeVertexSnap());
+
             sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
 
