@@ -32,7 +32,7 @@ namespace PixelFarm.Agg
     {
         protected ActualImage destActualImage;
 
-        protected ScanlineRasterizer rasterizer;
+        protected ScanlineRasterizer sclineRas;
         Affine currentTxMatrix = Affine.IdentityMatrix;
 
         public Graphics2D()
@@ -84,11 +84,18 @@ namespace PixelFarm.Agg
             }
         }
 
-        public ScanlineRasterizer Rasterizer
+        public ScanlineRasterizer ScanlineRasterizer
         {
-            get { return rasterizer; }
+            get { return sclineRas; }
         }
-
+        public abstract ScanlinePacked8 ScanlinePacked8
+        {
+            get;
+        }
+        public abstract ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
+        {
+            get;
+        }
         public ActualImage DestActualImage
         {
             get { return this.destActualImage; }

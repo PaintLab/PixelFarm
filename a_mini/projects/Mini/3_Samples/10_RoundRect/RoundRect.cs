@@ -129,8 +129,8 @@ namespace PixelFarm.Agg.Sample_RoundRect
 
             clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
 
-            var ras = new ScanlineRasterizer();
-            var sl = new ScanlinePacked8();
+            var ras = graphics2D.ScanlineRasterizer;
+            var sl = graphics2D.ScanlinePacked8;
 
             Ellipse ellipse = new Ellipse();
 
@@ -141,7 +141,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
             // Render two "control" circles
             ellipse.Reset(m_x[0], m_y[0], 3, 3, 16);
             ras.AddPath(ellipse.MakeVxs());
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
             sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
 
             ellipse.Reset(m_x[1], m_y[1], 3, 3, 16);

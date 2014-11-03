@@ -12,33 +12,11 @@ using PixelFarm.VectorMath;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest1
 {
-    public class square
+    
+    class CustomScanlineRasToBmp_EnlargedV1 : CustomScanlineRasToDestBitmapRenderer
     {
         double m_size;
-
-        public square(double size)
-        {
-            m_size = size;
-        }
-
-        public void draw(ScanlineRasterizer ras, Scanline sl, IImageReaderWriter destImage, ColorRGBA color,
-                  double x, double y)
-        {
-            ras.Reset();
-            ras.MoveTo(x * m_size, y * m_size);
-            ras.LineTo(x * m_size + m_size, y * m_size);
-            ras.LineTo(x * m_size + m_size, y * m_size + m_size);
-            ras.LineTo(x * m_size, y * m_size + m_size);
-
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-            sclineRasToBmp.RenderScanlineSolidAA(destImage, ras, sl, color);
-        }
-    }
-
-    class CustomScanlineRasToBmp_EnlargedV1 : ScanlineRasToDestBitmapRenderer
-    {
-        double m_size;
-        square m_square;
+        Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         Graphics2D gfx;
 
@@ -46,7 +24,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
         {
             this.UseCustomSolidSingleLineMethod = true;
             m_size = size;
-            m_square = new square(size);
+            m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
         }
         protected override void CustomRenderSolidSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
@@ -55,8 +33,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             int num_spans = scanline.SpanCount;
 
             byte[] covers = scanline.GetCovers();
-            ScanlineRasterizer ras = gfx.Rasterizer;
-
+            ScanlineRasterizer ras = gfx.ScanlineRasterizer;
+            var rasToBmp = gfx.ScanlineRasToDestBitmap;
             for (int i = 1; i <= num_spans; ++i)
             {
                 ScanlineSpan span = scanline.GetSpan(i);
@@ -66,7 +44,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
                 do
                 {
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
-                    m_square.draw(
+                    m_square.Draw(rasToBmp,
                            ras, m_sl, destImage,
                            new ColorRGBA(color, a),
                            x, y);
@@ -135,7 +113,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
 
             clippingProxyNormal.Clear(ColorRGBA.White);
-            ScanlineRasterizer rasterizer = new ScanlineRasterizer();
+            var rasterizer = graphics2D.ScanlineRasterizer;
+
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 
             int size_mul = (int)this.PixelSize;
@@ -149,7 +128,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
             sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
 

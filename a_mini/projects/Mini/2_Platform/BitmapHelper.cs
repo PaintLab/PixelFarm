@@ -128,8 +128,9 @@ namespace Mini
 
             windowsBitmap.UnlockBits(bitmapData1);
         }
-        internal static void CopyToWindowsBitmapSameSize(ActualImage actualImage,
-          Bitmap windowsBitmap)
+        internal static void CopyToWindowsBitmapSameSize(
+            ActualImage actualImage,
+            Bitmap windowsBitmap)
         {
 
             int h = windowsBitmap.Height;
@@ -144,13 +145,7 @@ namespace Mini
                           windowsBitmap.PixelFormat);
 
             IntPtr scan0 = bitmapData1.Scan0;
-            int stride = bitmapData1.Stride;
-
-            //copy line by line
-            //System.Runtime.InteropServices.Marshal.Copy(
-            //    buffer, 0,
-            //    bitmapData1.Scan0,
-            //    buffer.Length);
+            int stride = bitmapData1.Stride; 
 
             unsafe
             {

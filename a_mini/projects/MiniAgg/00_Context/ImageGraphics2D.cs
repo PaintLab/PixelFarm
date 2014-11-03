@@ -31,10 +31,10 @@ namespace PixelFarm.Agg
     class ImageGraphics2D : Graphics2D
     {
         ImageReaderWriterBase destImageReaderWriter;
-        Scanline scanline;
+        ScanlinePacked8 sclinePack8;
         PathStorage drawImageRectPath = new PathStorage();
-        ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
-        ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+
+        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
         IPixelBlender pixBlenderRGBA32;
 
         double ox; //canvas origin x
@@ -47,14 +47,20 @@ namespace PixelFarm.Agg
             //create from actual image
             this.destActualImage = destImage;
             this.destImageReaderWriter = new MyImageReaderWriter(destImage);
-
-            this.rasterizer = new ScanlineRasterizer();
+            this.sclineRas = new ScanlineRasterizer();
+            this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
-            this.rasterizer.SetClipBox(this.clipBox);
+            this.sclineRas.SetClipBox(this.clipBox);
 
-            this.scanline = new ScanlinePacked8();
+            this.sclinePack8 = new ScanlinePacked8();
+
             this.pixBlenderRGBA32 = new PixelBlenderBGRA();
-            this.sclineRasToBmp.PixelBlender = pixBlenderRGBA32;
+
+            
+        }
+        public override ScanlinePacked8 ScanlinePacked8
+        {
+            get { return this.sclinePack8; }
         }
         public override IPixelBlender PixelBlender
         {
@@ -64,14 +70,17 @@ namespace PixelFarm.Agg
         {
             get { return this.destImageReaderWriter; }
         }
-
+        public override ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
+        {
+            get { return this.sclineRasToBmp; }
+        }
         public override void SetClippingRect(RectInt rect)
         {
-            Rasterizer.SetClipBox(rect);
+            ScanlineRasterizer.SetClipBox(rect);
         }
         public override RectInt GetClippingRect()
         {
-            return Rasterizer.GetVectorClipBox();
+            return ScanlineRasterizer.GetVectorClipBox();
         }
         //--------------------------
         public override void Render(ActualImage actualImage, int x, int y)
@@ -81,22 +90,19 @@ namespace PixelFarm.Agg
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
             //reset rasterizer before render each vertextSnap
-            if (destImageReaderWriter == null)
-            {
-                return;
-            }
+
             //-----------------------------
-            rasterizer.Reset();
+            sclineRas.Reset();
             Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
-                rasterizer.AddPath(transform.Tranform(vertextSnap));
+                sclineRas.AddPath(transform.Tranform(vertextSnap));
             }
             else
             {
-                rasterizer.AddPath(vertextSnap);
+                sclineRas.AddPath(vertextSnap);
             }
-            sclineRasToBmp.RenderScanlineSolidAA(destImageReaderWriter, rasterizer, scanline, color);
+            sclineRasToBmp.RenderScanlineSolidAA(destImageReaderWriter, sclineRas, sclinePack8, color);
             unchecked { destImageChanged++; };
             //-----------------------------
         }
@@ -154,11 +160,11 @@ namespace PixelFarm.Agg
 
 
             VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
-            Rasterizer.AddPath(sp1);
+            ScanlineRasterizer.AddPath(sp1);
             sclineRasToBmp.GenerateAndRender(
                 new ChildImage(destImageReaderWriter, destImageReaderWriter.GetRecieveBlender()),
-                Rasterizer,
-                drawImageScanlineCache,
+                ScanlineRasterizer,
+                sclinePack8,
                 spanImageFilter);
 
         }
@@ -458,8 +464,8 @@ namespace PixelFarm.Agg
         {
 
             RectInt clippingRectInt = GetClippingRect();
-
             IImageReaderWriter destImage = this.DestImage;
+
             if (destImage != null)
             {
 
@@ -486,7 +492,6 @@ namespace PixelFarm.Agg
                             }
                         }
                         break;
-
                     case 24:
                         {
                             int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;

@@ -75,6 +75,7 @@ namespace PixelFarm.Agg.Image
                 buffer[bufferOffset + ImageReaderWriterBase.OrderG] = sourceColor.green;
                 buffer[bufferOffset + ImageReaderWriterBase.OrderB] = sourceColor.blue;
                 buffer[bufferOffset + ImageReaderWriterBase.OrderA] = sourceColor.alpha;
+
                 bufferOffset += 4;
             }
             while (--count != 0);

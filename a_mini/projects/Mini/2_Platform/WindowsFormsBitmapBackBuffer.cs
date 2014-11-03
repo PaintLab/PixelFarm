@@ -45,7 +45,7 @@ namespace Mini
 {
     class WindowsFormsBitmapBackBuffer
     {
-        ActualImage actualImgBuffer;
+        ActualImage actualImage;
         Bitmap bufferBmp;
         Graphics bufferGfx;
         int width;
@@ -66,7 +66,7 @@ namespace Mini
             //----------------------------------------------- 
             //copy from actual img buffer (src)
             BitmapHelper.CopyToWindowsBitmap(
-                this.actualImgBuffer, //src from actual img buffer
+                this.actualImage, //src from actual img buffer
                 this.bufferBmp, //dest to buffer bmp
                 rect);
             //-----------------------------------------------
@@ -89,23 +89,25 @@ namespace Mini
             bufferGfx.ReleaseHdc(bufferDc);
             dest.ReleaseHdc(displayHdc);
         }
+
+
+        /// <summary>
+        /// copy buffer to 
+        /// </summary>
+        /// <param name="dest"></param>
         public void UpdateToHardwareSurface(Graphics dest)
         {
+
             //-----------------------------------------------
-            //copy from actual img buffer (src)
-            //BitmapHelper.CopyToWindowsBitmap(
-            //    this.actualImgBuffer, //src from actual img buffer
-            //    this.bufferBmp, //dest to buffer bmp
-            //    new RectInt(0, 0, width, height));
+            //copy from actual img buffer (src) 
             BitmapHelper.CopyToWindowsBitmapSameSize(
-                this.actualImgBuffer, //src from actual img buffer
+                this.actualImage, //src from actual img buffer
                 this.bufferBmp);//dest to buffer bmp                 
             //-----------------------------------------------
             //prepare buffer dc ****
-            IntPtr bufferDc = bufferGfx.GetHdc();   
+            IntPtr bufferDc = bufferGfx.GetHdc();
             IntPtr hBitmap = bufferBmp.GetHbitmap();
             IntPtr hOldObject = SelectObject(bufferDc, hBitmap);
-
             //------------------------------------------------
             //target dc
             IntPtr displayHdc = dest.GetHdc();
@@ -113,7 +115,7 @@ namespace Mini
             int result = BitBlt(displayHdc, 0, 0,
                  bufferBmp.Width,
                  bufferBmp.Height,
-                bufferDc, 0, 0, SRCCOPY);
+                 bufferDc, 0, 0, SRCCOPY);
 
             SelectObject(bufferDc, hOldObject);
             //DeleteObject(hBitmap); 
@@ -131,19 +133,22 @@ namespace Mini
                 {
                     case 24:
                         bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                        actualImgBuffer = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgb24);
+                        actualImage = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgb24);
                         bufferGfx = Graphics.FromImage(bufferBmp);
-                        return Graphics2D.CreateFromImage(actualImgBuffer);
+                        return Graphics2D.CreateFromImage(actualImage);
 
                     case 32:
+
                         bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+
                         //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //32bppPArgb                         
-                        actualImgBuffer = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgba32);
+                        actualImage = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgba32);
                         bufferGfx = Graphics.FromImage(bufferBmp);
-                        return Graphics2D.CreateFromImage(actualImgBuffer);
+
+                        return Graphics2D.CreateFromImage(actualImage);
                     case 128:
                     //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                     //backingImageBufferByte = null;
@@ -161,9 +166,9 @@ namespace Mini
         {
 
             Graphics2D graphics2D;
-            if (actualImgBuffer != null)
+            if (actualImage != null)
             {
-                graphics2D = Graphics2D.CreateFromImage(actualImgBuffer);
+                graphics2D = Graphics2D.CreateFromImage(actualImage);
             }
             else
             {

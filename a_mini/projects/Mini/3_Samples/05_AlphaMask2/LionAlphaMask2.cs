@@ -23,8 +23,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         int maskAlphaSliderValue = 100;
         ActualImage alphaBitmap;
         SpriteShape lionShape;
-        PixelFarm.Agg.ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-        ScanlinePacked8 scanlineCache = new ScanlinePacked8();
+
+
         double angle = 0;
         double lionScale = 1.0;
         double skewX = 0;
@@ -66,9 +66,9 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
 
         }
-        void generate_alpha_mask(int width, int height)
+        void generate_alpha_mask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
-            //
+
             alphaBitmap = new ActualImage(width, height, PixelFormat.GrayScale8);
 
             var bmpReaderWrtier = new MyImageReaderWriter(alphaBitmap);
@@ -86,7 +86,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             var image = new ChildImage(alphaMaskImageBuffer, new PixelBlenderGray(1), 1, 0, 8);
 
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
-            ScanlinePacked8 sclnPack = new ScanlinePacked8();
+
 
             clippingProxy.Clear(ColorRGBA.Black);
 
@@ -94,7 +94,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
             System.Random randGenerator = new Random(1432);
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+             
             int i;
             int num = (int)maskAlphaSliderValue;
             for (i = 0; i < num; i++)
@@ -144,6 +144,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         public override void Draw(Graphics2D g)
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(g.DestImage, g.GetClippingRect());
+            var scanlineCache = g.ScanlinePacked8;
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
@@ -151,12 +152,11 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //change value ***
             if (isMaskSliderValueChanged)
             {
-                generate_alpha_mask(width, height);
+                generate_alpha_mask(g.ScanlineRasToDestBitmap,g.ScanlinePacked8, g.ScanlineRasterizer, width, height);
 
                 this.isMaskSliderValueChanged = false;
-
             }
-
+            var rasterizer = g.ScanlineRasterizer;
             rasterizer.SetClipBox(0, 0, width, height);
 
 
@@ -180,7 +180,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.Clear(ColorRGBA.White);
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = g.ScanlineRasToDestBitmap;
             // draw a background to show how the mask is working better
             int rect_w = 30;
             for (int i = 0; i < 40; i++)

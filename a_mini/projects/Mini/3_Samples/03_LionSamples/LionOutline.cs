@@ -94,8 +94,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
     public class LionOutlineSprite : BasicSprite
     {
         private SpriteShape lionShape;
-        ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-        ScanlinePacked8 scanlineCache = new ScanlinePacked8();
+
 
         //special option 
         public LionOutlineSprite()
@@ -123,9 +122,10 @@ namespace PixelFarm.Agg.Sample_LionOutline
         public override void OnDraw(Graphics2D graphics2D)
         {
             //render 
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect()); 
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             int width = widgetsSubImage.Width;
             int height = widgetsSubImage.Height;
+
 
             int strokeWidth = 1;
 
@@ -148,19 +148,20 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
             if (RenderAsScanline)
             {
+                var rasterizer = graphics2D.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
 
                 Stroke stroke = new Stroke(strokeWidth);
                 stroke.LineJoin = LineJoin.Round;
                 var vxs = affTx.TransformToVxs(lionShape.Path);
 
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
 
 
                 sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
-                    scanlineCache,
+                    graphics2D.ScanlinePacked8,
                     vxs,
                     lionShape.Colors,
                     lionShape.PathIndexList,

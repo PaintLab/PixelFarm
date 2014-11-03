@@ -115,7 +115,7 @@ namespace PixelFarm.Agg
             Closed
         }
 
-        public ScanlineRasterizer()
+        internal ScanlineRasterizer()
         {
             m_cellAARas = new CellAARasterizer();
             m_vectorClipper = new VectorClipper(m_cellAARas);
@@ -150,7 +150,7 @@ namespace PixelFarm.Agg
         public void SetClipBox(int x1, int y1, int x2, int y2)
         {
             userModeClipBox = new RectInt(x1, y1, x2, y2);
-            Reset(); 
+            Reset();
 
             m_vectorClipper.SetClipBox(
                                 upscale(x1), upscale(y1),
@@ -208,7 +208,7 @@ namespace PixelFarm.Agg
         //------------------------------------------------------------------------
         public void LineTo(double x, double y)
         {
-            m_vectorClipper.LineTo(upscale(x), upscale(y)); 
+            m_vectorClipper.LineTo(upscale(x), upscale(y));
             m_status = Status.LineTo;
         }
 

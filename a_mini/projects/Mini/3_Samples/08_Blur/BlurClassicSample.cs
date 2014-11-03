@@ -43,10 +43,10 @@ namespace PixelFarm.Agg.Sample_Blur
         VertexStoreSnap m_path_2;
 
 
-        
 
-        ScanlineRasterizer m_ras = new ScanlineRasterizer();
-        ScanlinePacked8 m_sl;
+
+
+        
         //ReferenceImage m_rbuf2; 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
         RecursiveBlur m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
@@ -63,10 +63,10 @@ namespace PixelFarm.Agg.Sample_Blur
 
 
             this.FlattenCurveCheck = true;
-            this.BlurMethod =  BlurMethod.RecursiveBlur;
+            this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
 
-            m_sl = new ScanlinePacked8();
+            
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
 
             m_pathVxs = typeFaceForLargeA.GetGlyphForCharacter('a');
@@ -200,7 +200,7 @@ namespace PixelFarm.Agg.Sample_Blur
             boundRect.Right += m_radius;
             boundRect.Top += m_radius;
 
-            if (BlurMethod ==  BlurMethod.RecursiveBlur)
+            if (BlurMethod == BlurMethod.RecursiveBlur)
             {
                 // The recursive blur method represents the true Gaussian Blur,
                 // with theoretically infinite kernel. The restricted window size
@@ -216,7 +216,7 @@ namespace PixelFarm.Agg.Sample_Blur
             stopwatch.Reset();
             stopwatch.Start();
 
-            if (BlurMethod !=  BlurMethod.ChannelBlur)
+            if (BlurMethod != BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
@@ -231,7 +231,7 @@ namespace PixelFarm.Agg.Sample_Blur
                     // Blur it
                     switch (BlurMethod)
                     {
-                        case  BlurMethod.StackBlur:
+                        case BlurMethod.StackBlur:
                             {
                                 // More general method, but 30-40% slower.
                                 //------------------
@@ -240,7 +240,7 @@ namespace PixelFarm.Agg.Sample_Blur
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
-                                painter.DoFilterBlurStack(boundRect, m_radius); 
+                                painter.DoFilterBlurStack(boundRect, m_radius);
 
                             } break;
                         default:
@@ -248,7 +248,7 @@ namespace PixelFarm.Agg.Sample_Blur
                                 // but still constant time of radius. Very sensitive
                                 // to precision, doubles are must here.
                                 //------------------
-                                painter.DoFilterBlurRecursive(boundRect, m_radius);       
+                                painter.DoFilterBlurRecursive(boundRect, m_radius);
 
                             } break;
                     }
@@ -288,6 +288,7 @@ namespace PixelFarm.Agg.Sample_Blur
 
 
             CanvasPainter painter = new CanvasPainter(graphics2D);
+            var m_ras = graphics2D.ScanlineRasterizer;
 
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
@@ -314,8 +315,8 @@ namespace PixelFarm.Agg.Sample_Blur
             }
             m_ras.AddPath(spath);
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, graphics2D.ScanlinePacked8,  new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
 
 
             //---------------------------------------------------------------------------------------------------------
@@ -329,7 +330,7 @@ namespace PixelFarm.Agg.Sample_Blur
             boundRect.Right += m_radius;
             boundRect.Top += m_radius;
 
-            if (BlurMethod ==  BlurMethod.RecursiveBlur)
+            if (BlurMethod == BlurMethod.RecursiveBlur)
             {
                 // The recursive blur method represents the true Gaussian Blur,
                 // with theoretically infinite kernel. The restricted window size
@@ -345,7 +346,7 @@ namespace PixelFarm.Agg.Sample_Blur
             stopwatch.Reset();
             stopwatch.Start();
 
-            if (BlurMethod !=  BlurMethod.ChannelBlur)
+            if (BlurMethod != BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
@@ -369,7 +370,7 @@ namespace PixelFarm.Agg.Sample_Blur
                     // Blur it
                     switch (BlurMethod)
                     {
-                        case  BlurMethod.StackBlur:
+                        case BlurMethod.StackBlur:
                             {
                                 // More general method, but 30-40% slower.
                                 //------------------
@@ -411,7 +412,7 @@ namespace PixelFarm.Agg.Sample_Blur
                 m_ras.AddPath(m_pathVxs);
             }
 
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl,
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras,graphics2D.ScanlinePacked8,
                 ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f));
 
             graphics2D.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
@@ -421,5 +422,5 @@ namespace PixelFarm.Agg.Sample_Blur
 
         }
     }
-   
+
 }

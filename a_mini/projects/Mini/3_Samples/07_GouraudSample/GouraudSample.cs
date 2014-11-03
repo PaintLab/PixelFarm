@@ -65,10 +65,10 @@ namespace PixelFarm.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void render_gouraud(IImageReaderWriter backBuffer, Scanline sl, ScanlineRasterizer ras)
+        public void render_gouraud(IImageReaderWriter backBuffer, Scanline sl, ScanlineRasterizer ras, ScanlineRasToDestBitmapRenderer sclineRasToBmp)
         {
             float alpha = this.AlphaValue;
-            float  brc = 1;
+            float brc = 1;
             Graphics2D graphics2D = NewGraphics2D();
 
 #if SourceDepth24
@@ -106,7 +106,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
             ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+
             sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
 
 
@@ -172,9 +172,9 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ren_base.Clear(new ColorRGBAf(1.0f, 1.0f, 1.0f).ToColorRGBA());
 
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
-            ScanlineRasterizer ras = new ScanlineRasterizer();
+            ScanlineRasterizer ras = graphics2D.ScanlineRasterizer;
 #if true
-            render_gouraud(backBuffer, sl, ras);
+            render_gouraud(backBuffer, sl, ras, graphics2D.ScanlineRasToDestBitmap);
 #else
             agg.span_allocator span_alloc = new span_allocator();
             span_gouraud_rgba span_gen = new span_gouraud_rgba(new rgba8(255, 0, 0, 255), new rgba8(0, 255, 0, 255), new rgba8(0, 0, 255, 255), 320, 220, 100, 100, 200, 100, 0);
@@ -197,8 +197,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
             int i;
             if (isRightButton)
             {
-                ScanlineUnpacked8 sl = new ScanlineUnpacked8();
-                ScanlineRasterizer ras = new ScanlineRasterizer();
+                //ScanlineUnpacked8 sl = new ScanlineUnpacked8();
+                //ScanlineRasterizer ras = new ScanlineRasterizer();
                 //stopwatch.Restart();
                 stopwatch.Stop();
                 stopwatch.Reset();

@@ -21,9 +21,7 @@ namespace PixelFarm.Agg.Sample_Perspective
             + "remain valid with any shape of the destination quadrangle.")]
     public class perspective_application : DemoBase
     {
-        PixelFarm.Agg.ScanlineRasterizer g_rasterizer = new ScanlineRasterizer();
-        ScanlinePacked8 g_scanline = new ScanlinePacked8();
-
+       
         UI.PolygonEditWidget quadPolygonControl;
         private SpriteShape lionShape;
 
@@ -74,10 +72,13 @@ namespace PixelFarm.Agg.Sample_Perspective
         {
             OnDraw(g);
         }
-        public void OnDraw(Graphics2D graphics2D)
+        public void OnDraw(Graphics2D gx)
         {
-             
-            IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+
+            var g_rasterizer = gx.ScanlineRasterizer;
+            var g_scanline = gx.ScanlinePacked8;
+
+            IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
 
             if (!didInit)
             {
@@ -100,11 +101,11 @@ namespace PixelFarm.Agg.Sample_Perspective
                 image = new ChildImage(backBuffer, new PixelBlenderBGR());
             }
 
-            ClipProxyImage dest = new ClipProxyImage(image);
-            dest.Clear(ColorRGBA.White);
-            g_rasterizer.SetClipBox(0, 0, Width, Height);
+            ClipProxyImage dest = new ClipProxyImage(image);             
+            gx.Clear(ColorRGBA.White);
+            gx.SetClippingRect(new RectInt(0, 0, Width, Height));         
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
 
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {

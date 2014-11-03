@@ -31,8 +31,8 @@ namespace PixelFarm.Agg
     {
 
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
-        IPixelBlender pixelBlender;
-        public ScanlineRasToDestBitmapRenderer()
+       
+        internal ScanlineRasToDestBitmapRenderer()
         {
 
         }
@@ -41,11 +41,7 @@ namespace PixelFarm.Agg
             get;
             set;
         }
-        internal IPixelBlender PixelBlender
-        {
-            get { return this.pixelBlender; }
-            set { this.pixelBlender = value; }
-        }
+         
         public void RenderScanlineSolidAA(IImageReaderWriter destImage,
             ScanlineRasterizer rasterizer,
             Scanline scline,
@@ -168,9 +164,13 @@ namespace PixelFarm.Agg
                     colorArray, 0,
                     covers, span.cover_index, useFirstCoverForAll);
             }
-        }
+        } 
+    }
 
 
+    //----------------------------
+    public class CustomScanlineRasToDestBitmapRenderer : ScanlineRasToDestBitmapRenderer
+    {
 
     }
 }
