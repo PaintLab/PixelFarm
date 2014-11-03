@@ -41,7 +41,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             m_x[2] = 143; m_y[2] = 310;
 
             this.DilationValue = 0.175;
-            this.LinearGamma = 0.809;
+            this.LinearGamma = 0.809f;
             this.AlphaValue = 1;
         }
 
@@ -53,7 +53,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
         }
 
         [DemoConfig(MaxValue = 1)]
-        public double LinearGamma
+        public float LinearGamma
         {
             get;
             set;

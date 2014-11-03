@@ -80,6 +80,7 @@ namespace PixelFarm.Agg
         {
             get { return this.gx; }
         }
+
         /// <summary>
         /// draw circle
         /// </summary>
@@ -97,7 +98,20 @@ namespace PixelFarm.Agg
             ellipse.Reset(x, y, radius, radius);
             gx.Render(ellipse.MakeVxs(), this.fillColor);
         }
+        public void FillEllipse(double left, double bottom, double right, double top, int nsteps)
+        {
+            ellipse.Reset((left + right) * 0.5,
+                          (bottom + top) * 0.5,
+                          (right - left) * 0.5,
+                          (top - bottom) * 0.5,
+                           nsteps);
+            gx.Render(ellipse.MakeVxs(), this.fillColor);
+            //VertexStoreSnap trans_ell = txBilinear.TransformToVertexSnap(vxs);
+        }
+        public void DrawEllipse()
+        {
 
+        }
         /// <summary>
         /// draw line
         /// </summary>
@@ -134,12 +148,12 @@ namespace PixelFarm.Agg
         {
             get { return this.stroke.Width; }
             set { this.stroke.Width = value; }
-        }
-
+        } 
         public void Draw(VertexStore vxs)
         {
             gx.Render(stroke.MakeVxs(vxs), this.fillColor);
         }
+
         /// <summary>
         /// draw rectangle
         /// </summary>
@@ -286,6 +300,19 @@ namespace PixelFarm.Agg
             set { this.fillColor = value; }
         }
 
+        public void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath)
+        {
+            sclineRasToBmp.RenderSolidAllPaths(this.gx.DestImage,
+                this.sclineRas,
+                this.scline,
+                vxs,
+                colors,
+                pathIndexs,
+                numPath);
+
+        }
+
+        //----------------------
         /// <summary>
         /// do filter at specific area
         /// </summary>

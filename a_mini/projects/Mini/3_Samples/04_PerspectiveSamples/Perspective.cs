@@ -21,7 +21,7 @@ namespace PixelFarm.Agg.Sample_Perspective
             + "remain valid with any shape of the destination quadrangle.")]
     public class perspective_application : DemoBase
     {
-       
+
         UI.PolygonEditWidget quadPolygonControl;
         private SpriteShape lionShape;
 
@@ -74,9 +74,7 @@ namespace PixelFarm.Agg.Sample_Perspective
         }
         public void OnDraw(Graphics2D gx)
         {
-
-            var g_rasterizer = gx.ScanlineRasterizer;
-            var g_scanline = gx.ScanlinePacked8;
+            CanvasPainter painter = new CanvasPainter(gx); 
 
             IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
 
@@ -101,17 +99,19 @@ namespace PixelFarm.Agg.Sample_Perspective
                 image = new ChildImage(backBuffer, new PixelBlenderBGR());
             }
 
-            ClipProxyImage dest = new ClipProxyImage(image);             
-            gx.Clear(ColorRGBA.White);
-            gx.SetClippingRect(new RectInt(0, 0, Width, Height));         
+            painter.Clear(ColorRGBA.White);
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
+
+            //ClipProxyImage dest = new ClipProxyImage(image);
+            //gx.Clear(ColorRGBA.White);
+            //gx.SetClippingRect(new RectInt(0, 0, Width, Height)); 
+            //ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
 
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {
 
                 var bound = lionShape.Bounds;
-                var txBilinear = Bilinear.RectToQuad(bound.Left,
+                Bilinear txBilinear = Bilinear.RectToQuad(bound.Left,
                     bound.Bottom,
                     bound.Right,
                     bound.Top,
@@ -119,21 +119,12 @@ namespace PixelFarm.Agg.Sample_Perspective
 
                 if (txBilinear.IsValid)
                 {
-                    //--------------------------
-                    // Render transformed lion
-                    // 
-
-                    sclineRasToBmp.RenderSolidAllPaths(dest,
-                        g_rasterizer,
-                        g_scanline,
-                        txBilinear.TransformToVxs(lionShape.Path),
+                     
+                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Path),
                         lionShape.Colors,
                         lionShape.PathIndexList,
-                        lionShape.NumPaths);
+                        lionShape.NumPaths);  
 
-                    //--------------------------
-                    // Render transformed ellipse
-                    //
                     RectD lionBound = lionShape.Bounds;
 
                     Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
@@ -141,16 +132,19 @@ namespace PixelFarm.Agg.Sample_Perspective
                                      (lionBound.Right - lionBound.Left) * 0.5,
                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
+                     
+                    VertexStore trans_ell = txBilinear.TransformToVxs(ell.MakeVxs());
+                    painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);                    
+                    painter.Fill(trans_ell);
 
-                    VertexStore vxs = ell.MakeVxs();
-                    VertexStoreSnap trans_ell = txBilinear.TransformToVertexSnap(vxs);
-                    VertexStoreSnap trans_ell_stroke = txBilinear.TransformToVertexSnap(new Stroke(3).MakeVxs(vxs));
-
-                    g_rasterizer.AddPath(trans_ell);
-                    sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f));
-
-                    g_rasterizer.AddPath(trans_ell_stroke);
-                    sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f));
+                    //-------------------------------------------------------------
+                    //outline
+                    double prevStrokeWidth = painter.StrokeWidth;
+                    painter.StrokeWidth = 3;
+                    painter.FillColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.Draw(trans_ell);
+                    painter.StrokeWidth = prevStrokeWidth;
+                     
                 }
             }
             else
@@ -159,18 +153,13 @@ namespace PixelFarm.Agg.Sample_Perspective
                     lionShape.Bounds,
                     quadPolygonControl.GetPolygon());
 
-                if (txPerspective.is_valid())
+                if (txPerspective.IsValid)
                 {
 
-
-                    sclineRasToBmp.RenderSolidAllPaths(dest,
-                        g_rasterizer,
-                        g_scanline,
-                        txPerspective.TransformToVxs(lionShape.Path),
-                        lionShape.Colors,
-                        lionShape.PathIndexList,
-                        lionShape.NumPaths);
-
+                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Path),
+                      lionShape.Colors,
+                      lionShape.PathIndexList,
+                      lionShape.NumPaths); 
                     //--------------------------------------------------------------------------------------
                     //filled Ellipse
                     //1. create original fill ellipse
@@ -181,42 +170,22 @@ namespace PixelFarm.Agg.Sample_Perspective
                                       (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
 
-                    var ellipseVertext = txPerspective.TransformToVxs(filledEllipse.MakeVxs());
-                    //2. create transform version of fill ellipse
-                    //var txFillEllipse = new VertexSourceApplyTransform(filledEllipse, txPerspective);
-                    //3. add
-                    //g_rasterizer.AddPath(txFillEllipse);
-                    g_rasterizer.AddPath(new VertexStoreSnap(ellipseVertext));
-                    //4. render it
-
-                    sclineRasToBmp.RenderScanlineSolidAA(dest,
-                        g_rasterizer,
-                        g_scanline,
-                        ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f));
-
-                    //--------------------------------------------------------
-                    //outline Ellipse
-                    //1. create original version of stroke ellipse 
-                    var vxs = filledEllipse.MakeVxs();
-                    //2. create transform version of outlin  
-                    var txOutline = txPerspective.TransformToVxs(new Stroke(3).MakeVxs(vxs));// new VertexSourceApplyTransform(strokeEllipse, txPerspective);
-                    //3. add
-                    g_rasterizer.AddPath(txOutline);
-                    //4. render                      
-                    sclineRasToBmp.RenderScanlineSolidAA(dest,
-                        g_rasterizer,
-                        g_scanline,
-                        ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f));
+                    VertexStore transformedEll = txPerspective.TransformToVxs(filledEllipse.MakeVxs()); 
+                    painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                    painter.Fill(transformedEll);  
+                    //-------------------------------------------------------- 
+                    var prevStrokeW = painter.StrokeWidth;
+                    painter.StrokeWidth = 3;
+                    painter.FillColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.Draw(transformedEll); 
+                    painter.StrokeWidth = prevStrokeW; 
                 }
             }
 
             //--------------------------
             // Render the "quad" tool and controls
-            var vxs2 = quadPolygonControl.MakeVxs();
-            g_rasterizer.AddPath(vxs2);
-            //g_rasterizer.AddPath(quadPolygonControl);
-            sclineRasToBmp.RenderScanlineSolidAA(dest, g_rasterizer, g_scanline, ColorRGBA.Make(0f, 0.3f, 0.5f, 0.6f));
-
+            painter.FillColor = ColorRGBA.Make(0f, 0.3f, 0.5f, 0.6f);
+            painter.Fill(quadPolygonControl.MakeVxs());  
 
         }
         public override void MouseDown(int x, int y, bool isRightButton)

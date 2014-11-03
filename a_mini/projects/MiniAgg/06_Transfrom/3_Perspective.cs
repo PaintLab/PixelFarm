@@ -542,12 +542,15 @@ namespace PixelFarm.Agg.Transform
             return 1.0 / determinant();
         }
 
-        public bool is_valid() { return is_valid(EPSILON); }
-        public bool is_valid(double epsilon)
+      
+        public bool IsValid 
         {
-            return Math.Abs(sx) > epsilon &&
-                Math.Abs(sy) > epsilon &&
-                Math.Abs(w2) > epsilon;
+            get
+            {
+                return Math.Abs(sx) > EPSILON &&
+                    Math.Abs(sy) > EPSILON &&
+                    Math.Abs(w2) > EPSILON;
+            }
         }
 
         bool is_identity()
