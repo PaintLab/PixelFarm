@@ -39,7 +39,8 @@ namespace PixelFarm.Agg
 
         double ox; //canvas origin x
         double oy; //canvas origin y
-
+        int destWidth;
+        int destHeight;
         RectInt clipBox;
 
         public ImageGraphics2D(ActualImage destImage)
@@ -49,6 +50,9 @@ namespace PixelFarm.Agg
             this.destImageReaderWriter = new MyImageReaderWriter(destImage);
             this.sclineRas = new ScanlineRasterizer();
             this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            this.destWidth = destImage.Width;
+            this.destHeight = destImage.Height;
+
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
             this.sclineRas.SetClipBox(this.clipBox);
 
@@ -56,7 +60,7 @@ namespace PixelFarm.Agg
 
             this.pixBlenderRGBA32 = new PixelBlenderBGRA();
 
-            
+
         }
         public override ScanlinePacked8 ScanlinePacked8
         {
@@ -464,75 +468,134 @@ namespace PixelFarm.Agg
         {
 
             RectInt clippingRectInt = GetClippingRect();
-            IImageReaderWriter destImage = this.DestImage;
 
-            if (destImage != null)
+            var destImage = this.DestImage;
+            int width = destImage.Width;
+            int height = destImage.Height;
+            byte[] buffer = destImage.GetBuffer();
+
+            switch (destImage.BitDepth)
             {
+                case 8:
+                    {
+                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
+                        //byte byteColor = color.Red0To255;
+                        //int clipRectLeft = clippingRectInt.Left;
 
-                int width = destImage.Width;
-                int height = destImage.Height;
-                byte[] buffer = destImage.GetBuffer();
+                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+                        //{
+                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
+                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
+                        //    {
+                        //        buffer[bufferOffset] = color.blue;
+                        //        bufferOffset += bytesBetweenPixels;
+                        //    }
+                        //}
+                        throw new NotSupportedException("temp");
+                    }
+                case 24:
+                    {
+                        //int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
+                        //int clipRectLeft = clippingRectInt.Left;
+                        //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
+                        //{
+                        //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
+                        //    for (int x = 0; x < clippingRectInt.Width; ++x)
+                        //    {
+                        //        buffer[bufferOffset + 0] = color.blue;
+                        //        buffer[bufferOffset + 1] = color.green;
+                        //        buffer[bufferOffset + 2] = color.red;
+                        //        bufferOffset += bytesBetweenPixels;
+                        //    }
+                        //}
+                        throw new NotSupportedException("temp");
+                    }
+                    break;
+                case 32:
+                    {
 
-                switch (destImage.BitDepth)
-                {
-                    case 8:
+                        //------------------------------
+                        //fast clear buffer
+                        //skip clipping ****
+                        //TODO: reimplement clipping***
+                        //------------------------------
+
+                       
+                        if (color == ColorRGBA.White)
                         {
-                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-                            byte byteColor = color.Red0To255;
-                            int clipRectLeft = clippingRectInt.Left;
-
-                            for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+                            //fast cleat with white color
+                            int n = buffer.Length / 4;
+                            unsafe
                             {
-                                int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                                for (int x = 0; x < clippingRectInt.Width; ++x)
+                                fixed (void* head = &buffer[0])
                                 {
-                                    buffer[bufferOffset] = color.blue;
-                                    bufferOffset += bytesBetweenPixels;
+                                    uint* head_i32 = (uint*)head;
+                                    for (int i = n - 1; i >= 0; --i)
+                                    {
+                                        *head_i32 = 0xffffffff; //white (ARGB)
+                                        head_i32++;
+                                    }
                                 }
                             }
                         }
-                        break;
-                    case 24:
+                        else if (color == ColorRGBA.Black)
                         {
-                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-                            int clipRectLeft = clippingRectInt.Left;
-                            for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; y++)
+                            //fast cleat with black color
+                            int n = buffer.Length / 4;
+                            unsafe
                             {
-                                int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                                for (int x = 0; x < clippingRectInt.Width; ++x)
+                                fixed (void* head = &buffer[0])
                                 {
-                                    buffer[bufferOffset + 0] = color.blue;
-                                    buffer[bufferOffset + 1] = color.green;
-                                    buffer[bufferOffset + 2] = color.red;
-                                    bufferOffset += bytesBetweenPixels;
+                                    uint* head_i32 = (uint*)head;
+                                    for (int i = n - 1; i >= 0; --i)
+                                    {
+                                        *head_i32 = 0xff000000; //black (ARGB)
+                                        head_i32++;
+                                    }
                                 }
                             }
                         }
-                        break;
-                    case 32:
+                        else
                         {
-
-                            int bytesBetweenPixels = destImage.BytesBetweenPixelsInclusive;
-                            int clipRectLeft = clippingRectInt.Left;
-                            for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+                            //other color
+                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                            int n = buffer.Length / 4;                           
+                            unsafe
                             {
-                                int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                                for (int x = 0; x < clippingRectInt.Width; ++x)
+                                fixed (void* head = &buffer[0])
                                 {
-                                    buffer[bufferOffset + 0] = color.blue;
-                                    buffer[bufferOffset + 1] = color.green;
-                                    buffer[bufferOffset + 2] = color.red;
-                                    buffer[bufferOffset + 3] = color.alpha;
-                                    bufferOffset += bytesBetweenPixels;
+                                    uint* head_i32 = (uint*)head;
+                                    for (int i = n - 1; i >= 0; --i)
+                                    {
+                                        *head_i32 = colorARGB;  
+                                        head_i32++;
+                                    }
                                 }
                             }
-                        }
-                        break;
 
-                    default:
-                        throw new NotImplementedException();
-                }
+                            //int bytesBetweenPixels = 4;
+                            //int clipRectLeft = clippingRectInt.Left;
+                            //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
+                            //{
+                            //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
+                            //    for (int x = 0; x < clippingRectInt.Width; ++x)
+                            //    {
+                            //        //b g, r, a
+                            //        buffer[bufferOffset + 0] = color.blue;
+                            //        buffer[bufferOffset + 1] = color.green;
+                            //        buffer[bufferOffset + 2] = color.red;
+                            //        buffer[bufferOffset + 3] = color.alpha;
+                            //        bufferOffset += bytesBetweenPixels;
+                            //    }
+                            //}
+                        }
+                    }
+                    break;
+
+                default:
+                    throw new NotImplementedException();
             }
+
 
         }
     }

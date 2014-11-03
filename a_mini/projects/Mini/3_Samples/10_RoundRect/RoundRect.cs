@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
                 + "value of gamma will be closer to 1.0 in both cases — black on white or white on black. There's no "
                 + "perfection in this world, but at least you can control Gamma in Anti-Grain Geometry :-).")]
 
-    public class rounded_rect_application : DemoBase
+    public class RoundRectApplication : DemoBase
     {
         double[] m_x = new double[2];
         double[] m_y = new double[2];
@@ -38,7 +38,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
         //MatterHackers.Agg.UI.CheckBox m_DrawAsOutlineCheckBox;
 
 
-        public rounded_rect_application()
+        public RoundRectApplication()
         {
             //AnchorAll();
             //m_idx = (-1);
