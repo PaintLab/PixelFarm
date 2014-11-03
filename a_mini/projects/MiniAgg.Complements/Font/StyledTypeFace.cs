@@ -173,11 +173,11 @@ namespace PixelFarm.Agg.Font
             }
         }
 
-        public RectangleDouble BoundingBoxInPixels
+        public RectD BoundingBoxInPixels
         {
             get
             {
-                RectangleDouble pixelBounds = new RectangleDouble(typeFace.BoundingBox);
+                RectD pixelBounds = new RectD(typeFace.BoundingBox);
                 pixelBounds *= currentEmScalling;
                 return pixelBounds;
             }
@@ -228,7 +228,7 @@ namespace PixelFarm.Agg.Font
 
             int j = glyphVxs.Count;
             glyphVxs.GetVertex(0, out x, out y);
-            RectangleDouble bounds = new RectangleDouble(x, y, x, y);
+            RectD bounds = new RectD(x, y, x, y);
             for (int i = 0; i < j; ++i)
             {
                 var cmd = glyphVxs.GetVertex(i, out x, out y);

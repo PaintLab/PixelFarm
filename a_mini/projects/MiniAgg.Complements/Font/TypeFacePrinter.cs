@@ -92,25 +92,25 @@ namespace PixelFarm.Agg.Font
 
 
 
-        public RectangleDouble LocalBounds
+        public RectD LocalBounds
         {
             get
             {
                 Vector2 size = GetSize();
-                RectangleDouble bounds;
+                RectD bounds;
 
                 switch (Justification)
                 {
                     case Justification.Left:
-                        bounds = new RectangleDouble(0, typeFaceStyle.DescentInPixels, size.x, size.y + typeFaceStyle.DescentInPixels);
+                        bounds = new RectD(0, typeFaceStyle.DescentInPixels, size.x, size.y + typeFaceStyle.DescentInPixels);
                         break;
 
                     case Justification.Center:
-                        bounds = new RectangleDouble(-size.x / 2, typeFaceStyle.DescentInPixels, size.x / 2, size.y + typeFaceStyle.DescentInPixels);
+                        bounds = new RectD(-size.x / 2, typeFaceStyle.DescentInPixels, size.x / 2, size.y + typeFaceStyle.DescentInPixels);
                         break;
 
                     case Justification.Right:
-                        bounds = new RectangleDouble(-size.x, typeFaceStyle.DescentInPixels, 0, size.y + typeFaceStyle.DescentInPixels);
+                        bounds = new RectD(-size.x, typeFaceStyle.DescentInPixels, 0, size.y + typeFaceStyle.DescentInPixels);
                         break;
 
                     default:

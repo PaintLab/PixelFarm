@@ -6,10 +6,10 @@ using System.Text;
 
 namespace PixelFarm.Agg
 {
-    public struct RectangleInt
+    public struct RectInt
     {
         public int Left, Bottom, Right, Top;
-        public RectangleInt(int left, int bottom, int right, int top)
+        public RectInt(int left, int bottom, int right, int top)
         {
             Left = left;
             Bottom = bottom;
@@ -43,7 +43,7 @@ namespace PixelFarm.Agg
             if (Bottom > Top) { t = Bottom; Bottom = Top; Top = t; }             
         }
 
-        public void ExpandToInclude(RectangleInt rectToInclude)
+        public void ExpandToInclude(RectInt rectToInclude)
         {
             if (Right < rectToInclude.Right) Right = rectToInclude.Right;
             if (Top < rectToInclude.Top) Top = rectToInclude.Top;
@@ -51,7 +51,7 @@ namespace PixelFarm.Agg
             if (Bottom > rectToInclude.Bottom) Bottom = rectToInclude.Bottom;
         }
 
-        public bool clip(RectangleInt r)
+        public bool Clip(RectInt r)
         {
             if (Right > r.Right) Right = r.Right;
             if (Top > r.Top) Top = r.Top;
@@ -70,7 +70,7 @@ namespace PixelFarm.Agg
             return (x >= Left && x <= Right && y >= Bottom && y <= Top);
         }
 
-        public bool IntersectRectangles(RectangleInt rectToCopy, RectangleInt rectToIntersectWith)
+        public bool IntersectRectangles(RectInt rectToCopy, RectInt rectToIntersectWith)
         {
             Left = rectToCopy.Left;
             Bottom = rectToCopy.Bottom;
@@ -90,7 +90,7 @@ namespace PixelFarm.Agg
             return false;
         }
 
-        public bool IntersectWithRectangle(RectangleInt rectToIntersectWith)
+        public bool IntersectWithRectangle(RectInt rectToIntersectWith)
         {
             if (Left < rectToIntersectWith.Left) Left = rectToIntersectWith.Left;
             if (Bottom < rectToIntersectWith.Bottom) Bottom = rectToIntersectWith.Bottom;
@@ -105,7 +105,7 @@ namespace PixelFarm.Agg
             return false;
         }
 
-        public static bool DoIntersect(RectangleInt rect1, RectangleInt rect2)
+        public static bool DoIntersect(RectInt rect1, RectInt rect2)
         {
             int x1 = rect1.Left;
             int y1 = rect1.Bottom;
@@ -127,7 +127,7 @@ namespace PixelFarm.Agg
 
 
         //---------------------------------------------------------unite_rectangles
-        public void unite_rectangles(RectangleInt r1, RectangleInt r2)
+        public void unite_rectangles(RectInt r1, RectInt r2)
         {
             Left = r1.Left;
             Bottom = r1.Bottom;
@@ -160,7 +160,7 @@ namespace PixelFarm.Agg
             return new { x1 = Left, x2 = Right, y1 = Bottom, y2 = Top }.GetHashCode();
         }
 
-        public static bool ClipRects(RectangleInt pBoundingRect, ref RectangleInt pSourceRect, ref RectangleInt pDestRect)
+        public static bool ClipRects(RectInt pBoundingRect, ref RectInt pSourceRect, ref RectInt pDestRect)
         {
             // clip off the top so we don't write into random memory
             if (pDestRect.Top < pBoundingRect.Top)
@@ -237,7 +237,7 @@ namespace PixelFarm.Agg
 
 
         //***************************************************************************************************************************************************
-        public static bool ClipRect(RectangleInt pBoundingRect, ref RectangleInt pDestRect)
+        public static bool ClipRect(RectInt pBoundingRect, ref RectInt pDestRect)
         {
             // clip off the top so we don't write into random memory
             if (pDestRect.Top < pBoundingRect.Top)

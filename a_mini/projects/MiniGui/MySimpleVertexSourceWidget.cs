@@ -41,13 +41,13 @@ namespace PixelFarm.Agg.UI
             this.originRelativeParent = originRelativeParent;
         }
 
-        public override RectangleDouble LocalBounds
+        public override RectD LocalBounds
         {
             get
             {
                 if (localBoundsComeFromPoints)
                 {
-                    RectangleDouble localBounds = this.CalculateLocalBounds(); 
+                    RectD localBounds = this.CalculateLocalBounds(); 
                     return localBounds;
                 }
                 else
@@ -59,7 +59,7 @@ namespace PixelFarm.Agg.UI
 
     
         public abstract void RewindZero(); 
-        protected abstract RectangleDouble CalculateLocalBounds(); 
+        protected abstract RectD CalculateLocalBounds(); 
         public abstract VertexStore MakeVxs();
         
     }

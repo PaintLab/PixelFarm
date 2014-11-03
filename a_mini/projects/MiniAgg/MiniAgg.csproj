@@ -108,8 +108,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="04_Scanline\2_ScanlinePacked8.cs" />
     <Compile Include="04_Scanline\3_ScanlineUnpacked8.cs" />
-    <Compile Include="01_Base\RectangleDouble.cs" />
-    <Compile Include="01_Base\RectangleInt.cs" />
+    <Compile Include="01_Base\RectD.cs" />
+    <Compile Include="01_Base\RectInt.cs" />
     <Compile Include="04_Scanline\4.1_ScanlineRasterizer.cs" />
     <Compile Include="04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="05_Vertex_Path\ShapePath.cs" />

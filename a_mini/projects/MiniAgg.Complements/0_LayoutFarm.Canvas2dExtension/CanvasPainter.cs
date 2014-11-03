@@ -40,8 +40,12 @@ namespace PixelFarm.Agg
         ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
         ColorRGBA fillColor;
 
+
         ScanlineRasterizer m_ras;
         ScanlinePacked8 m_sl;
+
+        FilterMan filterMan = new FilterMan();
+        IPixelBlender pixBlender;
 
         public CanvasPainter(Graphics2D graphic2d)
         {
@@ -49,18 +53,21 @@ namespace PixelFarm.Agg
             stroke = new Stroke(1);//default
             this.m_ras = new ScanlineRasterizer();
             this.m_sl = new ScanlinePacked8();
+            this.pixBlender = graphic2d.PixelBlender;
+
         }
         public void Clear(ColorRGBA color)
         {
             gx.Clear(color);
         }
-        public RectangleInt ClipBox
+        public RectInt ClipBox
         {
             get { return this.gx.GetClippingRect(); }
+            set { this.gx.SetClippingRect(value); }
         }
         public void SetClipBox(int x1, int y1, int x2, int y2)
         {
-            this.gx.SetClippingRect(new RectangleInt(x1, y1, x2, y2));
+            this.gx.SetClippingRect(new RectInt(x1, y1, x2, y2));
         }
         public Graphics2D Graphics
         {
@@ -206,5 +213,54 @@ namespace PixelFarm.Agg
             get { return fillColor; }
             set { this.fillColor = value; }
         }
+
+        /// <summary>
+        /// do filter at specific area
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="area"></param>
+        public void DoFilterBlurStack(RectInt area, int r)
+        {
+            ChildImage img = new ChildImage(this.gx.DestImage, this.pixBlender,
+                area.Left, area.Bottom, area.Right, area.Top);
+            filterMan.DoStackBlur(img, r);
+        }
+        public void DoFilterBlurRecursive(RectInt area, int r)
+        {   
+            ChildImage img = new ChildImage(this.gx.DestImage, this.pixBlender,
+                area.Left, area.Bottom, area.Right, area.Top);
+            filterMan.DoRecursiveBlur(img, r);
+        }
+
+    }
+    public enum BlurMethod
+    {
+        StackBlur,
+        RecursiveBlur,
+        ChannelBlur
+    }
+
+    class FilterMan
+    {
+        StackBlur stackBlur;
+        RecursiveBlur m_recursive_blur;
+
+        public void DoStackBlur(ImageReaderWriterBase readerWriter, int radius)
+        {
+            if (stackBlur == null)
+            {
+                stackBlur = new StackBlur();
+            }
+            stackBlur.Blur(readerWriter, radius, radius);
+        }
+        public void DoRecursiveBlur(ImageReaderWriterBase readerWriter, int radius)
+        {   
+            if (m_recursive_blur == null)
+            {
+                m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
+            }
+            m_recursive_blur.Blur(readerWriter, radius);
+        }
+
     }
 }

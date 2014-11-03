@@ -54,7 +54,7 @@ namespace PixelFarm.Agg.Image
         }
 
 
-        public virtual RectangleInt GetBounds()
+        public virtual RectInt GetBounds()
         {
             return linkedImage.GetBounds();
         }
@@ -74,7 +74,7 @@ namespace PixelFarm.Agg.Image
             return linkedImage.GetPixel(x, y);
         }
           
-        public virtual void CopyFrom(IImageReaderWriter sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
+        public virtual void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
         {
             linkedImage.CopyFrom(sourceImage, sourceImageRect, destXOffset, destYOffset);
         }

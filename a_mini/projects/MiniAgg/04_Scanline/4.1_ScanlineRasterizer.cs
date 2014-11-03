@@ -105,7 +105,7 @@ namespace PixelFarm.Agg
         const int AA_MASK2 = AA_SCALE2 - 1;
         //---------------------------
 
-        RectangleInt userModeClipBox;
+        RectInt userModeClipBox;
 
         enum Status
         {
@@ -137,19 +137,19 @@ namespace PixelFarm.Agg
             m_cellAARas.Reset();
             m_status = Status.Initial;
         }
-        public RectangleInt GetVectorClipBox()
+        public RectInt GetVectorClipBox()
         {
             return userModeClipBox;
         }
         //--------------------------
 
-        internal void SetClipBox(RectangleInt clippingRect)
+        internal void SetClipBox(RectInt clippingRect)
         {
             SetClipBox(clippingRect.Left, clippingRect.Bottom, clippingRect.Right, clippingRect.Top);
         }
         public void SetClipBox(int x1, int y1, int x2, int y2)
         {
-            userModeClipBox = new RectangleInt(x1, y1, x2, y2);
+            userModeClipBox = new RectInt(x1, y1, x2, y2);
             Reset(); 
 
             m_vectorClipper.SetClipBox(

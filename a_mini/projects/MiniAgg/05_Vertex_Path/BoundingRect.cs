@@ -31,11 +31,11 @@ namespace PixelFarm.Agg
 
         public static bool GetBoundingRect(PathStorage vs, int[] gi,
                            int num,
-                           out RectangleDouble boundingRect)
+                           out RectD boundingRect)
         {
             return GetBoundingRect(vs, gi, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
         }
-        public static bool GetBoundingRectSingle(VertexStoreSnap vs, ref RectangleDouble rect)
+        public static bool GetBoundingRect(VertexStoreSnap vs, ref RectD rect)
         {
             double x1, y1, x2, y2;
             bool rValue = GetBoundingRectSingle(vs, out x1, out y1, out x2, out y2);
@@ -158,21 +158,26 @@ namespace PixelFarm.Agg
 
         public static bool GetBoundingRect(PathStorage vs, int[] gi,
                            int num,
-                           out RectangleInt boundingRect)
+                           out RectInt boundingRect)
         {
             return GetBoundingRect(vs, gi, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
         }
-        public static bool GetBoundingRectSingle(VertexStoreSnap vs, ref RectangleInt rect)
+        public static bool GetBoundingRect(VertexStoreSnap vs, ref RectInt rect)
         {
             int x1, y1, x2, y2;
-            bool rValue = GetBoundingRectSingle(vs, out x1, out y1, out x2, out y2);
+            bool rValue = GetBoundingRect(vs, out x1, out y1, out x2, out y2);
             rect.Left = x1;
             rect.Bottom = y1;
             rect.Right = x2;
             rect.Top = y2;
             return rValue;
         }
-
+        public static RectInt GetBoundingRect(VertexStoreSnap vs)
+        {
+            int x1, y1, x2, y2;
+            bool rValue = GetBoundingRect(vs, out x1, out y1, out x2, out y2);
+            return new RectInt(x1, y1, x2, y2);             
+        }
         static bool GetBoundingRect(PathStorage vs, int[] gi,
                          int num,
                          out int x1,
@@ -238,7 +243,7 @@ namespace PixelFarm.Agg
 
         //-----------------------------------------------------bounding_rect_single
         //template<class VertexSource, class CoordT> 
-        static bool GetBoundingRectSingle(
+        static bool GetBoundingRect(
           VertexStoreSnap vs,
           out int x1, out int y1,
           out int x2, out int y2)

@@ -64,7 +64,7 @@ namespace PixelFarm.Agg.Transform
         }
 
         // Rectangle to quadrilateral
-        public Perspective(RectangleDouble r, double[] quad)
+        public Perspective(RectD r, double[] quad)
             : this(r.Left, r.Bottom, r.Right, r.Top, quad)
         {
         }

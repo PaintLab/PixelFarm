@@ -591,7 +591,7 @@ namespace PixelFarm.Agg.Lines
         LineImagePattern m_pattern;
         int m_start;
         double m_scale_x;
-        RectangleInt m_clip_box;
+        RectInt m_clip_box;
         bool m_clipping;
 
         //---------------------------------------------------------------------
@@ -604,7 +604,7 @@ namespace PixelFarm.Agg.Lines
             m_pattern = patt;
             m_start = (0);
             m_scale_x = (1.0);
-            m_clip_box = new RectangleInt(0, 0, 0, 0);
+            m_clip_box = new RectInt(0, 0, 0, 0);
             m_clipping = (false);
         }
 

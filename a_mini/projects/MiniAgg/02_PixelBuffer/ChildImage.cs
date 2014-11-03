@@ -118,8 +118,8 @@ namespace PixelFarm.Agg.Image
             {
                 throw new Exception("You need to have your x1 and y1 be the lower left corner of your sub image.");
             }
-            RectangleInt boundsRect = new RectangleInt(x1, y1, x2, y2);
-            if (boundsRect.clip(new RectangleInt(0, 0, (int)sourceImage.Width - 1, (int)sourceImage.Height - 1)))
+            RectInt boundsRect = new RectInt(x1, y1, x2, y2);
+            if (boundsRect.Clip(new RectInt(0, 0, (int)sourceImage.Width - 1, (int)sourceImage.Height - 1)))
             {
                 SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride , sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
                 int bufferOffset = sourceImage.GetBufferOffsetXY(boundsRect.Left, boundsRect.Bottom);

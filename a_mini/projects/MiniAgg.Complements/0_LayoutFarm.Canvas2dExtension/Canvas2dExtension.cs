@@ -128,22 +128,22 @@ namespace PixelFarm.Agg
             gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectangleDouble rect, ColorRGBA color, double strokeWidth = 1)
+        public static void Rectangle(this Graphics2D gx, RectD rect, ColorRGBA color, double strokeWidth = 1)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color, strokeWidth);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectangleInt rect, ColorRGBA color)
+        public static void Rectangle(this Graphics2D gx, RectInt rect, ColorRGBA color)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectangleDouble rect, ColorRGBA fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectD rect, ColorRGBA fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectangleInt rect, ColorRGBA fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectInt rect, ColorRGBA fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }

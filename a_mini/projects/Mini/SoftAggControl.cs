@@ -97,7 +97,7 @@ namespace Mini
             //--------------------------------
             exampleBase.Draw(graphics);
             //--------------------------------
-            RectangleInt intRect = new RectangleInt(0, 0, width, height);
+            RectInt intRect = new RectInt(0, 0, width, height);
             Graphics g1 = e.Graphics;
             bitmapBackBuffer.UpdateHardwareSurface(intRect);
 

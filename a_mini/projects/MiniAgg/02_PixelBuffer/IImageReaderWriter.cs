@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
         int BitDepth { get; }
         int Width { get; }
         int Height { get; }
-        RectangleInt GetBounds();
+        RectInt GetBounds();
 
         int GetBufferOffsetXY(int x, int y);
         
@@ -51,7 +51,7 @@ namespace PixelFarm.Agg
         //-------------------------------------------------------------------------------------------
        
         
-        void CopyFrom(IImageReaderWriter sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset); //not used
+        void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset); //not used
          
         // line stuff
         void CopyHL(int x, int y, int len, ColorRGBA sourceColor);//not used

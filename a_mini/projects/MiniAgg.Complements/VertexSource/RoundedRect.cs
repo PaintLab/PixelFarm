@@ -33,7 +33,7 @@ namespace PixelFarm.Agg.VertexSource
     //
     public class RoundedRect
     {
-        RectangleDouble bounds;
+        RectD bounds;
         Vector2 leftBottomRadius;
         Vector2 rightBottomRadius;
         Vector2 rightTopRadius;
@@ -43,7 +43,7 @@ namespace PixelFarm.Agg.VertexSource
 
         public RoundedRect(double left, double bottom, double right, double top, double radius)
         {
-            bounds = new RectangleDouble(left, bottom, right, top);
+            bounds = new RectD(left, bottom, right, top);
             leftBottomRadius.x = radius;
             leftBottomRadius.y = radius;
             rightBottomRadius.x = radius;
@@ -66,19 +66,19 @@ namespace PixelFarm.Agg.VertexSource
             }
         }
 
-        public RoundedRect(RectangleDouble bounds, double r)
+        public RoundedRect(RectD bounds, double r)
             : this(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top, r)
         {
         }
 
-        public RoundedRect(RectangleInt bounds, double r)
+        public RoundedRect(RectInt bounds, double r)
             : this(bounds.Left, bounds.Bottom, bounds.Right, bounds.Top, r)
         {
         }
 
         public void SetRect(double left, double bottom, double right, double top)
         {
-            bounds = new RectangleDouble(left, bottom, right, top);
+            bounds = new RectD(left, bottom, right, top);
             if (left > right) { bounds.Left = right; bounds.Right = left; }
             if (bottom > top) { bounds.Bottom = top; bounds.Top = bottom; }
         }

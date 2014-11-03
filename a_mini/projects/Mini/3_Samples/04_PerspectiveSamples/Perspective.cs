@@ -133,7 +133,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                     //--------------------------
                     // Render transformed ellipse
                     //
-                    RectangleDouble lionBound = lionShape.Bounds;
+                    RectD lionBound = lionShape.Bounds;
 
                     Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
                                      (lionBound.Bottom + lionBound.Top) * 0.5,
@@ -173,7 +173,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                     //--------------------------------------------------------------------------------------
                     //filled Ellipse
                     //1. create original fill ellipse
-                    RectangleDouble lionBound = lionShape.Bounds;
+                    RectD lionBound = lionShape.Bounds;
                     var filledEllipse = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
                                       (lionBound.Bottom + lionBound.Top) * 0.5,
                                       (lionBound.Right - lionBound.Left) * 0.5,

@@ -49,10 +49,10 @@ namespace PixelFarm.Agg.Sample_LionOutline
             "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")]
     public class LionFillOutlineExample : DemoBase
     {
-        lionOutlineSprite lionFill;
+        LionOutlineSprite lionFill;
         public override void Init()
         {
-            lionFill = new lionOutlineSprite();
+            lionFill = new LionOutlineSprite();
         }
         public override void Draw(Graphics2D g)
         {
@@ -91,14 +91,14 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
     }
     //--------------------------------------------------
-    public class lionOutlineSprite : BasicSprite
+    public class LionOutlineSprite : BasicSprite
     {
         private SpriteShape lionShape;
         ScanlineRasterizer rasterizer = new ScanlineRasterizer();
         ScanlinePacked8 scanlineCache = new ScanlinePacked8();
 
         //special option 
-        public lionOutlineSprite()
+        public LionOutlineSprite()
         {
             lionShape = new SpriteShape();
             lionShape.ParseLion();
@@ -123,11 +123,9 @@ namespace PixelFarm.Agg.Sample_LionOutline
         public override void OnDraw(Graphics2D graphics2D)
         {
             //render 
-
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-
-            int width = (int)widgetsSubImage.Width;
-            int height = (int)widgetsSubImage.Height;
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect()); 
+            int width = widgetsSubImage.Width;
+            int height = widgetsSubImage.Height;
 
             int strokeWidth = 1;
 

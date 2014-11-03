@@ -20,7 +20,7 @@ namespace PixelFarm.Agg
         ColorRGBA[] colors = new ColorRGBA[100];
         int[] pathIndexList = new int[100];
         int numPaths = 0;
-        RectangleDouble boundingRect;
+        RectD boundingRect;
         Vector2 center;
         public SpriteShape()
         {
@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public RectangleDouble Bounds
+        public RectD Bounds
         {
             get
             {

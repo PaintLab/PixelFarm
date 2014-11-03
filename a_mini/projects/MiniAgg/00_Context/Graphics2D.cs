@@ -41,8 +41,8 @@ namespace PixelFarm.Agg
         }
         //------------------------------------------------------------------------
         public abstract void Clear(ColorRGBA color);
-        public abstract void SetClippingRect(RectangleInt rect); 
-        public abstract RectangleInt GetClippingRect();
+        public abstract void SetClippingRect(RectInt rect); 
+        public abstract RectInt GetClippingRect();
         //------------------------------------------------------------------------
 
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
@@ -93,7 +93,11 @@ namespace PixelFarm.Agg
         {
             get { return this.destActualImage; }
         }
-        public abstract IImageReaderWriter DestImage
+        public abstract ImageReaderWriterBase DestImage
+        {
+            get;
+        }
+        public abstract IPixelBlender PixelBlender
         {
             get;
         }

@@ -39,11 +39,7 @@ namespace PixelFarm.Agg.Image
 
     //==============================================================stack_blur
     public class StackBlur
-    {
-
-       
-
-
+    {   
         public void Blur(ImageReaderWriterBase img, int rx, int ry)
         {
             switch (img.BitDepth)

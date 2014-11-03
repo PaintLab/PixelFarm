@@ -32,7 +32,7 @@ namespace PixelFarm.Agg
         class VectorClipper
         {
 
-            RectangleInt clipBox;
+            RectInt clipBox;
             int m_x1;
             int m_y1;
             int m_f1;
@@ -44,17 +44,17 @@ namespace PixelFarm.Agg
             public VectorClipper(CellAARasterizer ras)
             {
                 this.ras = ras;
-                clipBox = new RectangleInt(0, 0, 0, 0);
+                clipBox = new RectInt(0, 0, 0, 0);
                 m_x1 = m_y1 = m_f1 = 0;
                 m_clipping = false;
             }
-            public RectangleInt GetVectorClipBox()
+            public RectInt GetVectorClipBox()
             {
                 return clipBox;
             }
             public void SetClipBox(int x1, int y1, int x2, int y2)
             {
-                clipBox = new RectangleInt(x1, y1, x2, y2);
+                clipBox = new RectInt(x1, y1, x2, y2);
                 clipBox.Normalize();
                 m_clipping = true;
             }

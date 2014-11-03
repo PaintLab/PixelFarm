@@ -54,7 +54,7 @@ namespace Mini
 
 
         int numInFunction = 0;
-        internal void UpdateHardwareSurface(RectangleInt rect)
+        internal void UpdateHardwareSurface(RectInt rect)
         {
 
             numInFunction++;

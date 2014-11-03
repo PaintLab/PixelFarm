@@ -28,7 +28,7 @@ namespace PixelFarm.Agg.Sample_Blur
     point arithmetic and works slower. But it is true Gaussian filter, with theoretically 
     infinite impulse response. The radius (actually 2*sigma value) can be fractional 
     and the filter produces quite adequate result.")]
-    public class blur : DemoBase
+    public class Blur_classic : DemoBase
     {
         //RadioButtonGroup m_method;
         //Slider m_radius;
@@ -43,7 +43,7 @@ namespace PixelFarm.Agg.Sample_Blur
         VertexStoreSnap m_path_2;
 
 
-        FlattenCurves m_shape;
+        
 
         ScanlineRasterizer m_ras = new ScanlineRasterizer();
         ScanlinePacked8 m_sl;
@@ -51,19 +51,19 @@ namespace PixelFarm.Agg.Sample_Blur
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
         RecursiveBlur m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
 
-        RectangleDouble m_shape_bounds;
+        RectD m_shape_bounds;
 
         Stopwatch stopwatch = new Stopwatch();
 
-        public blur()
+        public Blur_classic()
         {
             //m_rbuf2 = new ReferenceImage();
-            m_shape_bounds = new RectangleDouble();
+            m_shape_bounds = new RectD();
             m_shadow_ctrl = new PolygonEditWidget(4);
 
 
             this.FlattenCurveCheck = true;
-            this.BlurMethod = Sample_Blur.BlurMethod.RecursiveBlur;
+            this.BlurMethod =  BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
 
             m_sl = new ScanlinePacked8();
@@ -73,9 +73,9 @@ namespace PixelFarm.Agg.Sample_Blur
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            m_shape = new FlattenCurves();
+            var m_shape = new FlattenCurves();
             m_path_2 = new VertexStoreSnap(m_shape.MakeVxs(m_pathVxs));
-            BoundingRect.GetBoundingRectSingle(m_path_2, ref m_shape_bounds);
+            BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
@@ -163,9 +163,9 @@ namespace PixelFarm.Agg.Sample_Blur
         {
             //create painter
             CanvasPainter painter = new CanvasPainter(graphics2D);
+
             painter.SetClipBox(0, 0, Width, Height);
             painter.Clear(ColorRGBA.White);
-
             //-----------------------------------------------------------------------
             //green glyph
             Perspective shadow_persp = new Perspective(
@@ -188,22 +188,19 @@ namespace PixelFarm.Agg.Sample_Blur
             //---------------------------------------------------------------------------------------------------------
             //shadow 
             //---------------------------------------------------------------------------------------------------------
-            // Calculate the bounding box and extend it by the blur radius
-            RectangleInt bbox = new RectangleInt();
-            BoundingRectInt.GetBoundingRectSingle(spath, ref bbox);
+            // Calculate the bounding box and extend it by the blur radius 
 
-            IImageReaderWriter widgetImg = graphics2D.DestImage;
-            //ClipProxyImage clippingProxy = new ClipProxyImage(widgetImg);
-            //clippingProxy.Clear(ColorRGBA.White);
+            RectInt boundRect = BoundingRectInt.GetBoundingRect(spath);
+            var widgetImg = graphics2D.DestImage;
 
             int m_radius = this.BlurRadius;
+            //expand bound rect
+            boundRect.Left -= m_radius;
+            boundRect.Bottom -= m_radius;
+            boundRect.Right += m_radius;
+            boundRect.Top += m_radius;
 
-            bbox.Left -= m_radius;
-            bbox.Bottom -= m_radius;
-            bbox.Right += m_radius;
-            bbox.Top += m_radius;
-
-            if (BlurMethod == Sample_Blur.BlurMethod.RecursiveBlur)
+            if (BlurMethod ==  BlurMethod.RecursiveBlur)
             {
                 // The recursive blur method represents the true Gaussian Blur,
                 // with theoretically infinite kernel. The restricted window size
@@ -211,36 +208,30 @@ namespace PixelFarm.Agg.Sample_Blur
                 // solve correctly, but extending the right and top areas to another
                 // radius value produces fair result.
                 //------------------
-                bbox.Right += m_radius;
-                bbox.Top += m_radius;
+                boundRect.Right += m_radius;
+                boundRect.Top += m_radius;
             }
 
             stopwatch.Stop();
             stopwatch.Reset();
             stopwatch.Start();
 
-            if (BlurMethod != Sample_Blur.BlurMethod.ChannelBlur)
+            if (BlurMethod !=  BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
                 // (bbox) is fully clipped.
-                //------------------
+                //------------------ 
 
-
-                int x1 = (int)bbox.Left;
-                int y1 = (int)bbox.Top;
-                int x2 = (int)bbox.Right;
-                int y2 = (int)bbox.Bottom;
-
-                RectangleInt boundsRect = new RectangleInt(x1, y2, x2, y1);
-                if (boundsRect.clip(new RectangleInt(0, 0, widgetImg.Width - 1, widgetImg.Height - 1)))
+                if (boundRect.Clip(new RectInt(0, 0, widgetImg.Width - 1, widgetImg.Height - 1)))
                 {
-                    //check if intersect 
-                    ChildImage image2 = new ChildImage(widgetImg, new PixelBlenderBGRA(), x1, y2, x2, y1);
+                    //check if intersect  
+                    var prevClip = painter.ClipBox;
+                    painter.ClipBox = boundRect;
                     // Blur it
                     switch (BlurMethod)
                     {
-                        case Sample_Blur.BlurMethod.StackBlur:
+                        case  BlurMethod.StackBlur:
                             {
                                 // More general method, but 30-40% slower.
                                 //------------------
@@ -249,8 +240,7 @@ namespace PixelFarm.Agg.Sample_Blur
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
-                                StackBlur stackBlur = new StackBlur();
-                                stackBlur.Blur(image2, m_radius, m_radius);
+                                painter.DoFilterBlurStack(boundRect, m_radius); 
 
                             } break;
                         default:
@@ -258,9 +248,12 @@ namespace PixelFarm.Agg.Sample_Blur
                                 // but still constant time of radius. Very sensitive
                                 // to precision, doubles are must here.
                                 //------------------
-                                m_recursive_blur.Blur(image2, m_radius);
+                                painter.DoFilterBlurRecursive(boundRect, m_radius);       
+
                             } break;
                     }
+                    //store back
+                    painter.ClipBox = prevClip;
                 }
             }
 
@@ -327,17 +320,16 @@ namespace PixelFarm.Agg.Sample_Blur
 
             //---------------------------------------------------------------------------------------------------------
             // Calculate the bounding box and extend it by the blur radius
-            RectangleInt bbox = new RectangleInt();
-            BoundingRectInt.GetBoundingRectSingle(spath, ref bbox);
+            RectInt boundRect = BoundingRectInt.GetBoundingRect(spath);
 
             int m_radius = this.BlurRadius;
 
-            bbox.Left -= m_radius;
-            bbox.Bottom -= m_radius;
-            bbox.Right += m_radius;
-            bbox.Top += m_radius;
+            boundRect.Left -= m_radius;
+            boundRect.Bottom -= m_radius;
+            boundRect.Right += m_radius;
+            boundRect.Top += m_radius;
 
-            if (BlurMethod == Sample_Blur.BlurMethod.RecursiveBlur)
+            if (BlurMethod ==  BlurMethod.RecursiveBlur)
             {
                 // The recursive blur method represents the true Gaussian Blur,
                 // with theoretically infinite kernel. The restricted window size
@@ -345,15 +337,15 @@ namespace PixelFarm.Agg.Sample_Blur
                 // solve correctly, but extending the right and top areas to another
                 // radius value produces fair result.
                 //------------------
-                bbox.Right += m_radius;
-                bbox.Top += m_radius;
+                boundRect.Right += m_radius;
+                boundRect.Top += m_radius;
             }
 
             stopwatch.Stop();
             stopwatch.Reset();
             stopwatch.Start();
 
-            if (BlurMethod != Sample_Blur.BlurMethod.ChannelBlur)
+            if (BlurMethod !=  BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
@@ -365,19 +357,19 @@ namespace PixelFarm.Agg.Sample_Blur
 
 #endif
 
-                int x1 = (int)bbox.Left;
-                int y1 = (int)bbox.Top;
-                int x2 = (int)bbox.Right;
-                int y2 = (int)bbox.Bottom;
-                RectangleInt boundsRect = new RectangleInt(x1, y2, x2, y1);
-                if (boundsRect.clip(new RectangleInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
+                int x1 = (int)boundRect.Left;
+                int y1 = (int)boundRect.Top;
+                int x2 = (int)boundRect.Right;
+                int y2 = (int)boundRect.Bottom;
+                RectInt boundsRect = new RectInt(x1, y2, x2, y1);
+                if (boundsRect.Clip(new RectInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
                 {
                     //check if intersect 
                     ChildImage image2 = new ChildImage(widgetsSubImage, new PixelBlenderBGRA(), x1, y2, x2, y1);
                     // Blur it
                     switch (BlurMethod)
                     {
-                        case Sample_Blur.BlurMethod.StackBlur:
+                        case  BlurMethod.StackBlur:
                             {
                                 // More general method, but 30-40% slower.
                                 //------------------
@@ -429,10 +421,5 @@ namespace PixelFarm.Agg.Sample_Blur
 
         }
     }
-    public enum BlurMethod
-    {
-        StackBlur,
-        RecursiveBlur,
-        ChannelBlur
-    }
+   
 }

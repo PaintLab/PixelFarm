@@ -173,7 +173,7 @@ namespace PixelFarm.Agg.Lines
 
         IImageReaderWriter destImageSurface;
         LineProfileAnitAlias lineProfile;
-        RectangleInt clippingRectangle;
+        RectInt clippingRectangle;
         bool doClipping;
 
 
@@ -194,7 +194,7 @@ namespace PixelFarm.Agg.Lines
         {
             destImageSurface = destImage;
             lineProfile = profile;
-            clippingRectangle = new RectangleInt(0, 0, 0, 0);
+            clippingRectangle = new RectInt(0, 0, 0, 0);
             doClipping = false;
             this.destPixelBlender = destPixelBlender;
         }

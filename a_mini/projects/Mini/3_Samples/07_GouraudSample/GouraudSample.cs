@@ -112,7 +112,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
                               ColorRGBAf.MakeColorRGBA(0, 0, 1, alpha),
-                             ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
+                              ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
 
             span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
             ras.AddPath(span_gen.MakeVxs());
@@ -129,8 +129,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
 
             brc = 1 - brc;
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(1, 0, 0, alpha),
-                            ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
-                           ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
+                              ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
+                              ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
             ras.AddPath(span_gen.MakeVxs());
             sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);

@@ -36,7 +36,7 @@ namespace PixelFarm.Agg.Image
         /// <param name="parentImage"></param>
         /// <param name="childImageBounds"></param>
         /// <returns></returns>
-        public static ChildImage CreateChildImage(IImageReaderWriter parentImage, RectangleInt childImageBounds)
+        public static ChildImage CreateChildImage(IImageReaderWriter parentImage, RectInt childImageBounds)
         {
 
             if (childImageBounds.Left < 0 || childImageBounds.Bottom < 0 || childImageBounds.Right > parentImage.Width || childImageBounds.Top > parentImage.Height

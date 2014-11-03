@@ -30,7 +30,7 @@ namespace PixelFarm.Agg
 {
     class ImageGraphics2D : Graphics2D
     {
-        IImageReaderWriter destImageReaderWriter;
+        ImageReaderWriterBase destImageReaderWriter;
         Scanline scanline;
         PathStorage drawImageRectPath = new PathStorage();
         ScanlinePacked8 drawImageScanlineCache = new ScanlinePacked8();
@@ -40,7 +40,7 @@ namespace PixelFarm.Agg
         double ox; //canvas origin x
         double oy; //canvas origin y
 
-        RectangleInt clipBox;
+        RectInt clipBox;
 
         public ImageGraphics2D(ActualImage destImage)
         {
@@ -49,23 +49,27 @@ namespace PixelFarm.Agg
             this.destImageReaderWriter = new MyImageReaderWriter(destImage);
 
             this.rasterizer = new ScanlineRasterizer();
-            this.clipBox = new RectangleInt(0, 0, destImage.Width, destImage.Height);
+            this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
             this.rasterizer.SetClipBox(this.clipBox);
 
             this.scanline = new ScanlinePacked8();
             this.pixBlenderRGBA32 = new PixelBlenderBGRA();
             this.sclineRasToBmp.PixelBlender = pixBlenderRGBA32;
         }
-        public override IImageReaderWriter DestImage
+        public override IPixelBlender PixelBlender
+        {
+            get { return this.pixBlenderRGBA32; }
+        }
+        public override ImageReaderWriterBase DestImage
         {
             get { return this.destImageReaderWriter; }
         }
 
-        public override void SetClippingRect(RectangleInt rect)
+        public override void SetClippingRect(RectInt rect)
         {
             Rasterizer.SetClipBox(rect);
         }
-        public override RectangleInt GetClippingRect()
+        public override RectInt GetClippingRect()
         {
             return Rasterizer.GetVectorClipBox();
         }
@@ -166,11 +170,11 @@ namespace PixelFarm.Agg
         {
             {   // exit early if the dest and source bounds don't touch.
                 // TODO: <BUG> make this do rotation and scalling
-                RectangleInt sourceBounds = source.GetBounds();
-                RectangleInt destBounds = this.destImageReaderWriter.GetBounds();
+                RectInt sourceBounds = source.GetBounds();
+                RectInt destBounds = this.destImageReaderWriter.GetBounds();
                 sourceBounds.Offset((int)destX, (int)destY);
 
-                if (!RectangleInt.DoIntersect(sourceBounds, destBounds))
+                if (!RectInt.DoIntersect(sourceBounds, destBounds))
                 {
                     if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
                     {
@@ -311,11 +315,11 @@ namespace PixelFarm.Agg
 
             {   // exit early if the dest and source bounds don't touch.
                 // TODO: <BUG> make this do rotation and scalling
-                RectangleInt sourceBounds = source.GetBounds();
-                RectangleInt destBounds = this.destImageReaderWriter.GetBounds();
+                RectInt sourceBounds = source.GetBounds();
+                RectInt destBounds = this.destImageReaderWriter.GetBounds();
                 sourceBounds.Offset((int)destX, (int)destY);
 
-                if (!RectangleInt.DoIntersect(sourceBounds, destBounds))
+                if (!RectInt.DoIntersect(sourceBounds, destBounds))
                 {
                     //if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
                     //{
@@ -453,7 +457,7 @@ namespace PixelFarm.Agg
         public override void Clear(ColorRGBA color)
         {
 
-            RectangleInt clippingRectInt = GetClippingRect();
+            RectInt clippingRectInt = GetClippingRect();
 
             IImageReaderWriter destImage = this.DestImage;
             if (destImage != null)

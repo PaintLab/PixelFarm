@@ -98,7 +98,7 @@ namespace PixelFarm.Agg
 #endif
 
 
-        void CopyFromNoClipping(IImageReaderWriter sourceImage, RectangleInt clippedSourceImageRect, int destXOffset, int destYOffset)
+        void CopyFromNoClipping(IImageReaderWriter sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
             if (BytesBetweenPixelsInclusive != BitDepth / 8
                 || sourceImage.BytesBetweenPixelsInclusive != sourceImage.BitDepth / 8)
@@ -171,16 +171,16 @@ namespace PixelFarm.Agg
             }
         }
 
-        public void CopyFrom(IImageReaderWriter sourceImage, RectangleInt sourceImageRect, int destXOffset, int destYOffset)
+        public void CopyFrom(IImageReaderWriter sourceImage, RectInt sourceImageRect, int destXOffset, int destYOffset)
         {
-            RectangleInt sourceImageBounds = sourceImage.GetBounds();
-            RectangleInt clippedSourceImageRect = new RectangleInt();
+            RectInt sourceImageBounds = sourceImage.GetBounds();
+            RectInt clippedSourceImageRect = new RectInt();
             if (clippedSourceImageRect.IntersectRectangles(sourceImageRect, sourceImageBounds))
             {
-                RectangleInt destImageRect = clippedSourceImageRect;
+                RectInt destImageRect = clippedSourceImageRect;
                 destImageRect.Offset(destXOffset, destYOffset);
-                RectangleInt destImageBounds = GetBounds();
-                RectangleInt clippedDestImageRect = new RectangleInt();
+                RectInt destImageBounds = GetBounds();
+                RectInt clippedDestImageRect = new RectInt();
                 if (clippedDestImageRect.IntersectRectangles(destImageRect, destImageBounds))
                 {
                     // we need to make sure the source is also clipped to the dest. So, we'll copy this back to source and offset it.
@@ -218,9 +218,9 @@ namespace PixelFarm.Agg
             get { return bitDepth; }
         }
 
-        public RectangleInt GetBounds()
+        public RectInt GetBounds()
         {
-            return new RectangleInt(0, 0, this.width, this.height);
+            return new RectInt(0, 0, this.width, this.height);
         }
 
         public IPixelBlender GetRecieveBlender()
@@ -633,9 +633,9 @@ namespace PixelFarm.Agg
         //    return m_ByteBuffer.GetHashCode() ^ bufferOffset.GetHashCode() ^ bufferFirstPixel.GetHashCode();
         //}
 
-        public RectangleInt GetBoundingRect()
+        public RectInt GetBoundingRect()
         {
-            return new RectangleInt(0, 0, Width, Height);
+            return new RectInt(0, 0, Width, Height);
         }
 
         //internal void Initialize(BufferImage sourceImage)

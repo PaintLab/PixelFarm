@@ -80,9 +80,9 @@ namespace PixelFarm.Agg.Image
         {
             get { return this.height; }
         }
-        public RectangleInt Bounds
+        public RectInt Bounds
         {
-            get { return new RectangleInt(0, 0, this.width, this.height); }
+            get { return new RectInt(0, 0, this.width, this.height); }
         }
 
         public PixelFormat PixelFormat { get { return this.pixelFormat; } }

@@ -211,7 +211,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
         {
             if (BackgroundColor.Alpha0To255 > 0)
             {
-                g.FillRectangle(new RectangleDouble(0, 0, this.Width, Height), BackgroundColor);
+                g.FillRectangle(new RectD(0, 0, this.Width, Height), BackgroundColor);
             }
             render_gpc(g);
         }

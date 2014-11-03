@@ -34,7 +34,7 @@ namespace PixelFarm.Agg.Image
         {
             get
             {
-                RectangleInt bounds = new RectangleInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
+                RectInt bounds = new RectInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
                 foreach (ImageReaderWriterBase frame in imageList)
                 {
                     bounds.ExpandToInclude(frame.GetBoundingRect());
@@ -48,7 +48,7 @@ namespace PixelFarm.Agg.Image
         {
             get
             {
-                RectangleInt bounds = new RectangleInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
+                RectInt bounds = new RectInt(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
                 foreach (ImageReaderWriterBase frame in imageList)
                 {
                     bounds.ExpandToInclude(frame.GetBoundingRect());

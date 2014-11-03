@@ -12,7 +12,7 @@ namespace Mini
     {
         public static void CopyToWindowsBitmap(ImageReaderWriterBase backingImageBufferByte,
             Bitmap windowsBitmap,
-            RectangleInt rect)
+            RectInt rect)
         {
 
             int offset = 0;
@@ -26,7 +26,7 @@ namespace Mini
         }
         public static void CopyToWindowsBitmap(ActualImage backingImageBufferByte,
            Bitmap windowsBitmap,
-           RectangleInt rect)
+           RectInt rect)
         {
 
             int offset = 0;
@@ -42,7 +42,7 @@ namespace Mini
           int sBackBufferStrideInBytes, int sHeight,
           int bitDepth,
           Bitmap windowsBitmap,
-          RectangleInt rect)
+          RectInt rect)
         {
             BitmapData bitmapData1 = windowsBitmap.LockBits(
                       new Rectangle(0, 0, windowsBitmap.Width, windowsBitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, windowsBitmap.PixelFormat);
