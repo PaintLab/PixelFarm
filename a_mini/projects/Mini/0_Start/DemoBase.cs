@@ -47,6 +47,7 @@ namespace Mini
             this.Width = 800;
             this.Height = 600;
         }
+
         public event RequestNewGraphic2DDelegate RequestNewGfx2d;
 
         public abstract void Draw(PixelFarm.Agg.Graphics2D g);
