@@ -33,7 +33,10 @@ namespace PixelFarm.Agg.VertexSource
     //
     public class SimpleRect
     {
-        RectD bounds; 
+        RectD bounds;
+        public SimpleRect()
+        {
+        }
         public SimpleRect(double left, double bottom, double right, double top)
         {
            

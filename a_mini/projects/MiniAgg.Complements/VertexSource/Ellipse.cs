@@ -49,11 +49,10 @@ namespace PixelFarm.Agg.VertexSource
         {
             Init(originX, originY, radiusX, radiusY, num_steps, cw);
         }
-        public void Reset(double originX, double originY, double radiusX, double radiusY, int num_steps)
+        public void Reset(double originX, double originY, double radiusX, double radiusY, int num_steps = 0)
         {
             Init(originX, originY, radiusX, radiusY, num_steps, false);
         }
-
         void Init(double ox, double oy,
                  double rx, double ry,
                  int num_steps, bool cw)
@@ -64,7 +63,7 @@ namespace PixelFarm.Agg.VertexSource
             radiusY = ry;
             m_cw = cw;
 
-            numSteps = num_steps;          
+            numSteps = num_steps;
             if (numSteps == 0)
             {
                 CalculateNumSteps();
@@ -106,10 +105,10 @@ namespace PixelFarm.Agg.VertexSource
             {
                 for (int i = 1; i < numSteps; i++)
                 {
-                    angle += anglePerStep; 
+                    angle += anglePerStep;
                     vertexData.x = originX + Math.Cos(angle) * radiusX;
                     vertexData.y = originY + Math.Sin(angle) * radiusY;
-                    yield return vertexData; 
+                    yield return vertexData;
                 }
             }
 
@@ -136,7 +135,7 @@ namespace PixelFarm.Agg.VertexSource
         }
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter());             
+            return new VertexStore(this.GetVertexIter());
         }
         //-------------------------------------------------------
     }

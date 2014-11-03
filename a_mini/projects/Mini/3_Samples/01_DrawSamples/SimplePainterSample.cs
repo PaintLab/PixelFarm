@@ -32,12 +32,14 @@ namespace PixelFarm.Agg.SimplePainter
             // clear the image to white
             CanvasPainter p = new CanvasPainter(g);
             p.Clear(ColorRGBA.White);
-            // draw a circle            
-            p.Circle(50, 50, 30, ColorRGBA.Blue);
-            p.Line(10, 100, 520, 50, new ColorRGBA(20, 200, 200)); 
+            // draw a circle  
+            p.FillColor = ColorRGBA.Blue;
+            p.FillCircle(50, 50, 30);
+            p.FillColor = new ColorRGBA(20, 200, 200);
+            p.Line(10, 100, 520, 50);
 
             // draw a filled box
-            p.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow); 
+            p.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
             // and an outline around it
             p.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
 

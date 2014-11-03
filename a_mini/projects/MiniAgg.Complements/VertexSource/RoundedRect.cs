@@ -40,7 +40,9 @@ namespace PixelFarm.Agg.VertexSource
         Vector2 leftTopRadius;
 
         Arc currentProcessingArc = new Arc();
-
+        public RoundedRect()
+        {
+        }
         public RoundedRect(double left, double bottom, double right, double top, double radius)
         {
             bounds = new RectD(left, bottom, right, top);

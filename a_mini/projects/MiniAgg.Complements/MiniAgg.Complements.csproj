@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\FilterMan.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\CanvasPainter.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\TypeFacePrinter2.cs" />

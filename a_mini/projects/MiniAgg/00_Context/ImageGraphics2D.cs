@@ -35,7 +35,8 @@ namespace PixelFarm.Agg
         PathStorage drawImageRectPath = new PathStorage();
 
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
-        IPixelBlender pixBlenderRGBA32;
+        PixelBlenderBGRA pixBlenderRGBA32;
+        IPixelBlender currentBlender;
 
         double ox; //canvas origin x
         double oy; //canvas origin y
@@ -57,9 +58,7 @@ namespace PixelFarm.Agg
             this.sclineRas.SetClipBox(this.clipBox);
 
             this.sclinePack8 = new ScanlinePacked8();
-
-            this.pixBlenderRGBA32 = new PixelBlenderBGRA();
-
+            this.currentBlender = this.pixBlenderRGBA32 = new PixelBlenderBGRA();
 
         }
         public override ScanlinePacked8 ScanlinePacked8
@@ -68,7 +67,14 @@ namespace PixelFarm.Agg
         }
         public override IPixelBlender PixelBlender
         {
-            get { return this.pixBlenderRGBA32; }
+            get
+            {
+                return this.currentBlender;
+            }
+            set
+            {
+                this.currentBlender = value;
+            }
         }
         public override ImageReaderWriterBase DestImage
         {
@@ -160,9 +166,7 @@ namespace PixelFarm.Agg
         }
 
         void DrawImage(IImageReaderWriter sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
-        {
-
-
+        {  
             VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
             ScanlineRasterizer.AddPath(sp1);
             sclineRasToBmp.GenerateAndRender(
@@ -558,7 +562,7 @@ namespace PixelFarm.Agg
                         else
                         {
                             //other color
-                             uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
+                            uint colorARGB = (uint)((color.alpha << 24) | ((color.red << 16) | (color.green << 8) | color.blue));
                             int n = buffer.Length / 4;
                             unsafe
                             {

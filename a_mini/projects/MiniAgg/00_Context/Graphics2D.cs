@@ -107,6 +107,7 @@ namespace PixelFarm.Agg
         public abstract IPixelBlender PixelBlender
         {
             get;
+            set;
         }
         //================
         public static Graphics2D CreateFromImage(ActualImage actualImage)

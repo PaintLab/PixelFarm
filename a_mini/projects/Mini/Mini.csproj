@@ -55,7 +55,7 @@
     <Compile Include="3_Samples\08_Blur\BlurClassicSample.cs" />
     <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
     <Compile Include="3_Samples\09_FloodFill\Point2D.cs" />
-    <Compile Include="3_Samples\10_RoundRect\RoundRect.cs" />
+    <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\clipping_lib\cliper.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />

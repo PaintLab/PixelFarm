@@ -110,72 +110,45 @@ namespace PixelFarm.Agg.Sample_RoundRect
             get;
             set;
         }
-        public override void Draw(Graphics2D graphics2D)
+        public override void Draw(Graphics2D gx)
         {
-            CanvasPainter painter = new CanvasPainter(graphics2D);
-
-            IImageReaderWriter destImg = graphics2D.DestImage;
-
-            var normalBlender = new PixelBlenderBGRA();
-
-            var gammaBlender = new PixelBlenderGammaBGRA(this.Gamma);
-
-            var rasterNormal = new ChildImage(destImg, normalBlender);
-            var rasterGamma = new ChildImage(destImg, gammaBlender);
-
-            var clippingProxyNormal = new ClipProxyImage(rasterNormal);
-            var clippingProxyGamma = new ClipProxyImage(rasterGamma);
-
+            CanvasPainter painter = new CanvasPainter(gx);
+            IImageReaderWriter destImg = gx.DestImage;
+            //-----------------------------------------------------------------
+            //control
             painter.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
-            //clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
-
-            var ras = graphics2D.ScanlineRasterizer;
-            var sl = graphics2D.ScanlinePacked8;
-
-            Ellipse ellipse = new Ellipse();
-
-            // TODO: If you drag the control circles below the bottom of the window we get an exception.  This does not happen in AGG.
-            // It needs to be debugged.  Turning on clipping fixes it.  But standard agg works without clipping.  Could be a bigger problem than this.
-            //ras.clip_box(0, 0, width(), height());
-
-            // Render two "control" circles
-            ellipse.Reset(m_x[0], m_y[0], 3, 3, 16);
-            ras.AddPath(ellipse.MakeVxs());
-
             painter.FillColor = new ColorRGBA(127, 127, 127);
-            
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
-
-
-
-
-            
-            painter.FillColor = new ColorRGBA(127, 127, 127);
-            
-            ellipse.Reset(m_x[1], m_y[1], 3, 3, 16);
-            ras.AddPath(ellipse.MakeVertexSnap());
-
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
-
+            painter.FillCircle(m_x[0], m_y[0], 3); //left-bottom control box
+            painter.FillCircle(m_x[1], m_y[1], 3); //right-top control box
+            //-----------------------------------------------------------------
 
             double d = this.SubPixelOffset;
+            var prevBlender = gx.PixelBlender;
+            //change gamma blender
+            gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
+            painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
 
-            // Creating a rounded rectangle
-            VertexSource.RoundedRect r = new VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d,
-                this.Radius);
-            r.NormalizeRadius();
             if (this.FillRoundRect)
             {
-
-                ras.AddPath(new Stroke(1).MakeVxs(r.MakeVxs()));
+                painter.FillRoundRectangle(
+                    m_x[0] + d,
+                    m_y[0] + d,
+                    m_x[1] + d,
+                    m_y[1] + d,
+                    this.Radius);
             }
             else
             {
-                ras.AddPath(r.MakeVxs());
-            }
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
+                painter.DrawRoundRect(
+                    m_x[0] + d,
+                    m_y[0] + d,
+                    m_x[1] + d,
+                    m_y[1] + d,
+                    this.Radius);
 
+            }
+
+            gx.PixelBlender = prevBlender;
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

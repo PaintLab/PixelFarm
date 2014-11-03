@@ -60,6 +60,10 @@ namespace PixelFarm.Agg.Image
 
     public sealed class PixelBlenderBGRA : PixelBlenderBGRABase, IPixelBlender
     {
+        public PixelBlenderBGRA()
+        {
+
+        }
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
             return new ColorRGBA(
@@ -175,12 +179,12 @@ namespace PixelFarm.Agg.Image
 
     public sealed class PixelBlenderGammaBGRA : PixelBlenderBGRABase, IPixelBlender
     {
-        
-        
+
+
         GammaLookUpTable m_gamma;
 
         static Dictionary<float, GammaLookUpTable> gammaTablePool = new Dictionary<float, GammaLookUpTable>();
-        
+
         public PixelBlenderGammaBGRA(float gammaValue)
         {
             GammaLookUpTable found;
@@ -189,17 +193,17 @@ namespace PixelFarm.Agg.Image
                 found = new GammaLookUpTable(gammaValue);
                 gammaTablePool.Add(gammaValue, found);
             }
-            
-            this.m_gamma = found; 
 
-        }          
+            this.m_gamma = found;
+
+        }
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
             return new ColorRGBA(buffer[bufferOffset + ImageReaderWriterBase.OrderR],
-                buffer[bufferOffset + ImageReaderWriterBase.OrderG], 
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG],
                 buffer[bufferOffset + ImageReaderWriterBase.OrderB],
                 buffer[bufferOffset + ImageReaderWriterBase.OrderA]);
-        } 
+        }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count)
         {
