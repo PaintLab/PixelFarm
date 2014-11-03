@@ -93,14 +93,14 @@ namespace PixelFarm.Agg.Sample_LionOutline
     //--------------------------------------------------
     public class lionOutlineSprite : BasicSprite
     {
-        private LionShape lionShape;
+        private SpriteShape lionShape;
         ScanlineRasterizer rasterizer = new ScanlineRasterizer();
         ScanlinePacked8 scanlineCache = new ScanlinePacked8();
 
         //special option 
         public lionOutlineSprite()
         {
-            lionShape = new LionShape();
+            lionShape = new SpriteShape();
             lionShape.ParseLion();
             this.Width = 500;
             this.Height = 500;

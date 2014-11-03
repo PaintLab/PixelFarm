@@ -22,7 +22,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
         int maskAlphaSliderValue = 100;
         ActualImage alphaBitmap;
-        LionShape lionShape;
+        SpriteShape lionShape;
         PixelFarm.Agg.ScanlineRasterizer rasterizer = new ScanlineRasterizer();
         ScanlinePacked8 scanlineCache = new ScanlinePacked8();
         double angle = 0;
@@ -36,7 +36,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
         public alpha_mask2_application()
         {
-            lionShape = new LionShape();
+            lionShape = new SpriteShape();
             lionShape.ParseLion();
 
             this.Width = 800;

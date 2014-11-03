@@ -155,11 +155,11 @@ namespace PixelFarm.Agg.Sample_Blur
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            //Draw2(graphics2D);
-            Draw3(graphics2D);
+            //DrawClassic(graphics2D);
+            DrawWithPainter(graphics2D);
 
         }
-        void Draw3(Graphics2D graphics2D)
+        void DrawWithPainter(Graphics2D graphics2D)
         {
             //create painter
             CanvasPainter painter = new CanvasPainter(graphics2D);
@@ -289,7 +289,7 @@ namespace PixelFarm.Agg.Sample_Blur
         }
 
 
-        void Draw2(Graphics2D graphics2D)
+        void DrawClassic(Graphics2D graphics2D)
         {
             //original ***
 

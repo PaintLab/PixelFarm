@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\DemoBase.cs" />
+    <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="2_Platform\BitmapHelper.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
@@ -74,7 +75,7 @@
     </Compile>
     <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
-    <Compile Include="1_Shared\LionShape.cs" />
+    <Compile Include="1_Shared\LionDataStore.cs" />
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />

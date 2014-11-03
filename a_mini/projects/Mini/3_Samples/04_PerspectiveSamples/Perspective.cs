@@ -25,11 +25,11 @@ namespace PixelFarm.Agg.Sample_Perspective
         ScanlinePacked8 g_scanline = new ScanlinePacked8();
 
         UI.PolygonEditWidget quadPolygonControl;
-        private LionShape lionShape;
+        private SpriteShape lionShape;
 
         public perspective_application()
         {
-            lionShape = new LionShape();
+            lionShape = new SpriteShape();
             lionShape.ParseLion();
 
             quadPolygonControl = new PixelFarm.Agg.UI.PolygonEditWidget(4, 5.0);
