@@ -52,7 +52,7 @@ namespace PixelFarm.Agg.Image
         {
         }
 
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
@@ -109,7 +109,7 @@ namespace PixelFarm.Agg.Image
         {
         }
 
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
@@ -228,7 +228,7 @@ namespace PixelFarm.Agg.Image
             }
 #endif
 
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
 
@@ -336,7 +336,7 @@ namespace PixelFarm.Agg.Image
         public ColorRGBA background_color() { return m_OutsideSourceColor; }
         public void background_color(ColorRGBA v) { m_OutsideSourceColor = v; }
 
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)base.ImgBuffAccessor.SourceImage;
             int bufferIndex;
@@ -573,7 +573,7 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
 

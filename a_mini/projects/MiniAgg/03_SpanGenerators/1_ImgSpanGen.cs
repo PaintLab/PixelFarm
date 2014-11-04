@@ -52,7 +52,7 @@ namespace PixelFarm.Agg
             m_dy_int = ((int)img_subpix_const.SCALE / 2);
         }
 
-        public abstract void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len);
+        public abstract void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len);
 
         public IImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
         public ImageFilterLookUpTable FilterLookup

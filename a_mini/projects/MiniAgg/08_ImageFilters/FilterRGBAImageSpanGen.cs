@@ -59,7 +59,7 @@ namespace PixelFarm.Agg.Image
         }
 
         //--------------------------------------------------------------------
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.Interpolator;
             spanInterpolator.Begin(x + base.Dx, y + base.Dy, len);

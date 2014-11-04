@@ -25,7 +25,7 @@ namespace PixelFarm.Agg
     public interface ISpanGenerator
     {
         void Prepare();
-        void Generate(ColorRGBA[] span,
+        void GenerateColors(ColorRGBA[] span,
             int spanIndex,
             int x, int y, int len);
     } 

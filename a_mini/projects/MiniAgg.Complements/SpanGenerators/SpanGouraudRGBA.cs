@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.Agg 
 {
 
     //=======================================================span_gouraud_rgba
@@ -114,11 +114,11 @@ namespace PixelFarm.Agg.VertexSource
         public void Prepare()
         {
             CoordAndColor[] coord = new CoordAndColor[3];
-            base.arrange_vertices(coord);
+            base.LoadArrangedVertices(coord);
 
             m_y2 = (int)(coord[1].y);
 
-            m_swap = AggMath.cross_product(coord[0].x, coord[0].y,
+            m_swap = AggMath.Cross(coord[0].x, coord[0].y,
                                    coord[2].x, coord[2].y,
                                    coord[1].x, coord[1].y) < 0.0;
 
@@ -127,7 +127,7 @@ namespace PixelFarm.Agg.VertexSource
             m_rgba3.Init(coord[1], coord[2]);
         }
 
-        public void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             m_rgba1.Calculate(y);//(m_rgba1.m_1dy > 2) ? m_rgba1.m_y1 : y);
             RGBA_Calc pc1 = m_rgba1;

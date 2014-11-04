@@ -33,7 +33,7 @@ namespace PixelFarm.Agg.Image
         {
         }
 
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
         {
             ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
             int bytesBetweenPixelsInclusive = SourceRenderingBuffer.BytesBetweenPixelsInclusive;

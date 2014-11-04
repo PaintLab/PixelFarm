@@ -156,13 +156,11 @@ namespace PixelFarm.Agg
                 }
 
                 var colorArray = tempSpanColors.Array;
-                span_gen.Generate(colorArray, 0, x, y, len);
-
-                bool useFirstCoverForAll = span.len < 0;
-
+                span_gen.GenerateColors(colorArray, 0, x, y, len);
+                 
                 destImage.BlendColorHSpan(x, y, len,
                     colorArray, 0,
-                    covers, span.cover_index, useFirstCoverForAll);
+                    covers, span.cover_index, span.len < 0);
             }
         } 
     }
