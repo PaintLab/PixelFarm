@@ -16,12 +16,12 @@ using System;
 
 namespace PixelFarm.Agg
 {
-    public interface IGradientGen
+    public interface IGradientGenFunction
     {
         int Calculate(int x, int y, int d);
     }
 
-    public interface IColorFunction
+    public interface IColorsProvider
     {
         int Size { get; }
         ColorRGBA this[int v] { get; }
@@ -39,8 +39,9 @@ namespace PixelFarm.Agg
         const int DOWN_SCALE_SHIFT = SUBPIX_SHIFT - GR_SUBPIX_SHIFT;
 
         ISpanInterpolator m_interpolator;
-        IGradientGen m_gradient_function;
-        IColorFunction m_color_function;
+        IGradientGenFunction m_gradient_function;
+        IColorsProvider m_colorsProvider;
+
         int m_d1;
         int m_d2;
 
@@ -48,13 +49,13 @@ namespace PixelFarm.Agg
         public SpanGenGradient() { } 
         //--------------------------------------------------------------------
         public SpanGenGradient(ISpanInterpolator inter,
-                      IGradientGen gradient_function,
-                      IColorFunction color_function,
+                      IGradientGenFunction gradient_function,
+                      IColorsProvider color_function,
                       double d1, double d2)
         {
             m_interpolator = inter;
             m_gradient_function = gradient_function;
-            m_color_function = color_function;
+            m_colorsProvider = color_function;
             m_d1 = (AggBasics.iround(d1 * GR_SUBPIX_SCALE));
             m_d2 = (AggBasics.iround(d2 * GR_SUBPIX_SCALE));
 
@@ -66,15 +67,15 @@ namespace PixelFarm.Agg
             get { return this.m_interpolator; }
             set { this.m_interpolator = value; }
         }
-        public IGradientGen GradientGenFunction
+        public IGradientGenFunction GradientGenFunction
         {
             get { return this.m_gradient_function; }
             set { this.m_gradient_function = value; }
         }
-        public IColorFunction ColorFunction
+        public IColorsProvider ColorsProvider
         {
-            get { return this.m_color_function; }
-            set { this.m_color_function = value; }
+            get { return this.m_colorsProvider; }
+            set { this.m_colorsProvider = value; }
         }
         public double d1
         {
@@ -94,20 +95,21 @@ namespace PixelFarm.Agg
         {
             int dd = m_d2 - m_d1;
             if (dd < 1) dd = 1;
+
             m_interpolator.Begin(x + 0.5, y + 0.5, len);
             do
             {
                 m_interpolator.GetCoord(out x, out y);
                 int d = m_gradient_function.Calculate(x >> DOWN_SCALE_SHIFT,
                                                        y >> DOWN_SCALE_SHIFT, m_d2);
-                d = ((d - m_d1) * (int)m_color_function.Size) / dd;
+                d = ((d - m_d1) * (int)m_colorsProvider.Size) / dd;
                 if (d < 0) d = 0;
-                if (d >= (int)m_color_function.Size)
+                if (d >= (int)m_colorsProvider.Size)
                 {
-                    d = m_color_function.Size - 1;
+                    d = m_colorsProvider.Size - 1;
                 }
 
-                span[spanIndex++] = m_color_function[d];
+                span[spanIndex++] = m_colorsProvider[d];
                 m_interpolator.Next();
             }
             while (--len != 0);
@@ -115,17 +117,17 @@ namespace PixelFarm.Agg
     }
 
     //=====================================================gradient_linear_color
-    public struct LinearGradientColorFunction : IColorFunction
+    public class LinearGradientColorsProvider : IColorsProvider
     {
         ColorRGBA m_c1;
         ColorRGBA m_c2;
         int m_size;
 
-        public LinearGradientColorFunction(ColorRGBA c1, ColorRGBA c2)
+        public LinearGradientColorsProvider(ColorRGBA c1, ColorRGBA c2)
             : this(c1, c2, 256)
         {
         }
-        public LinearGradientColorFunction(ColorRGBA c1, ColorRGBA c2, int size)
+        public LinearGradientColorsProvider(ColorRGBA c1, ColorRGBA c2, int size)
         {
             m_c1 = c1;
             m_c2 = c2;
@@ -152,7 +154,7 @@ namespace PixelFarm.Agg
     }
 
     //==========================================================gradient_circle
-    public class GradientGenCircle : IGradientGen
+    public class GradientGenCircle : IGradientGenFunction
     {
         // Actually the same as radial. Just for compatibility
         public int Calculate(int x, int y, int d)
@@ -164,7 +166,7 @@ namespace PixelFarm.Agg
 
 
     //==========================================================gradient_radial
-    public class GradientGenRadial : IGradientGen
+    public class GradientGenRadial : IGradientGenFunction
     {
         public int Calculate(int x, int y, int d)
         {
@@ -173,7 +175,7 @@ namespace PixelFarm.Agg
     }
 
     //========================================================gradient_radial_d
-    public class GradientGenRadialD : IGradientGen
+    public class GradientGenRadialD : IGradientGenFunction
     {
         public int Calculate(int x, int y, int d)
         {
@@ -182,7 +184,7 @@ namespace PixelFarm.Agg
     }
 
     //====================================================gradient_radial_focus
-    public class GradientGenRadialFocus : IGradientGen
+    public class GradientGenRadialFocus : IGradientGenFunction
     {
         int m_r;
         int m_fx;
@@ -270,20 +272,20 @@ namespace PixelFarm.Agg
 
 
     //==============================================================gradient_x
-    public class GradientGenX : IGradientGen
+    public class GradientGenX : IGradientGenFunction
     {
         public int Calculate(int x, int y, int d) { return x; }
     }
 
 
     //==============================================================gradient_y
-    public class GradientGenY : IGradientGen
+    public class GradientGenY : IGradientGenFunction
     {
         public int Calculate(int x, int y, int d) { return y; }
     }
 
     //========================================================gradient_diamond
-    public class GradientGenDiamond : IGradientGen
+    public class GradientGenDiamond : IGradientGenFunction
     {
         public int Calculate(int x, int y, int d)
         {
@@ -294,7 +296,7 @@ namespace PixelFarm.Agg
     }
 
     //=============================================================gradient_xy
-    public class GradientGenXY : IGradientGen
+    public class GradientGenXY : IGradientGenFunction
     {
         public int Calculate(int x, int y, int d)
         {
@@ -303,7 +305,7 @@ namespace PixelFarm.Agg
     }
 
     //========================================================gradient_sqrt_xy
-    public class GradientGenSquareXY : IGradientGen
+    public class GradientGenSquareXY : IGradientGenFunction
     {
         public int Calculate(int x, int y, int d)
         {
@@ -313,7 +315,7 @@ namespace PixelFarm.Agg
     }
 
     //==========================================================gradient_conic
-    public class GradientConic : IGradientGen
+    public class GradientConic : IGradientGenFunction
     {
         public int Calculate(int x, int y, int d)
         {
@@ -322,11 +324,10 @@ namespace PixelFarm.Agg
     }
 
     //=================================================gradient_repeat_adaptor
-    public class GradientRepeatAdaptor : IGradientGen
+    public class GradientRepeatAdaptor : IGradientGenFunction
     {
-        IGradientGen m_gradient;
-
-        public GradientRepeatAdaptor(IGradientGen gradient)
+        IGradientGenFunction m_gradient;
+        public GradientRepeatAdaptor(IGradientGenFunction gradient)
         {
             m_gradient = gradient;
         }
@@ -341,11 +342,11 @@ namespace PixelFarm.Agg
     }
 
     //================================================gradient_reflect_adaptor
-    public class GradientGenReflectAdaptor : IGradientGen
+    public class GradientGenReflectAdaptor : IGradientGenFunction
     {
-        IGradientGen m_gradient;
+        IGradientGenFunction m_gradient;
 
-        public GradientGenReflectAdaptor(IGradientGen gradient)
+        public GradientGenReflectAdaptor(IGradientGenFunction gradient)
         {
             m_gradient = gradient;
         }
@@ -360,11 +361,11 @@ namespace PixelFarm.Agg
         }
     }
 
-    public class GradientGenClampAdapter : IGradientGen
+    public class GradientGenClampAdapter : IGradientGenFunction
     {
-        IGradientGen m_gradient;
+        IGradientGenFunction m_gradient;
 
-        public GradientGenClampAdapter(IGradientGen gradient)
+        public GradientGenClampAdapter(IGradientGenFunction gradient)
         {
             m_gradient = gradient;
         }

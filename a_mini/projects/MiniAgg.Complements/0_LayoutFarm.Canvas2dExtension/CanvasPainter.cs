@@ -114,8 +114,9 @@ namespace PixelFarm.Agg
         }
         public void DrawEllipse()
         {
-
+            throw new NotImplementedException();
         }
+
         /// <summary>
         /// draw line
         /// </summary>
@@ -224,32 +225,7 @@ namespace PixelFarm.Agg
             }
             this.Draw(roundRect.MakeVxs());
         }
-        //public void DrawString(
-        //    string text,
-        //    double x,
-        //    double y,
-        //    double pointSize = 12,
-        //    Justification justification = Justification.Left,
-        //    Baseline baseline = Baseline.Text,
-        //    ColorRGBA color = new ColorRGBA(),
-        //    bool drawFromHintedCache = false,
-        //    ColorRGBA backgroundColor = new ColorRGBA())
-        //{
-
-        //    TypeFacePrinter stringPrinter = new TypeFacePrinter(text, pointSize, new Vector2(x, y), justification, baseline);
-        //    if (color.Alpha0To255 == 0)
-        //    {
-        //        color = ColorRGBA.Black;
-        //    }
-
-        //    if (backgroundColor.Alpha0To255 != 0)
-        //    {
-        //        gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-        //    }
-
-        //    stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-        //    stringPrinter.Render(gx, color);
-        //}
+       
         public void DrawString(
            string text,
            double x,
@@ -299,8 +275,13 @@ namespace PixelFarm.Agg
                 colors,
                 pathIndexs,
                 numPath);
-
         }
+        public void Fill(VertexStore vxs, ISpanGenerator spanGen)
+        {
+            this.sclineRas.AddPath(vxs); 
+            sclineRasToBmp.GenerateAndRender(this.gx.DestImage, sclineRas, scline, spanGen); 
+        }     
+     
 
         //----------------------
         /// <summary>

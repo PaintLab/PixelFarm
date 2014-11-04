@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
     {
 
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
-       
+
         internal ScanlineRasToDestBitmapRenderer()
         {
 
@@ -41,7 +41,7 @@ namespace PixelFarm.Agg
             get;
             set;
         }
-         
+
         public void RenderScanlineSolidAA(IImageReaderWriter destImage,
             ScanlineRasterizer rasterizer,
             Scanline scline,
@@ -55,7 +55,7 @@ namespace PixelFarm.Agg
                 {
                     while (rasterizer.SweepScanline(scline))
                     {
-                        CustomRenderSolidSingleScanLine(destImage, scline,  color);
+                        CustomRenderSolidSingleScanLine(destImage, scline, color);
                     }
                 }
                 else
@@ -97,7 +97,7 @@ namespace PixelFarm.Agg
             for (int i = 1; i <= num_spans; ++i)
             {
                 ScanlineSpan span = scline.GetSpan(i);
-                
+
                 if (span.len > 0)
                 {
                     destImage.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
@@ -112,7 +112,7 @@ namespace PixelFarm.Agg
         }
         protected virtual void CustomRenderSolidSingleScanLine(
             IImageReaderWriter destImage,
-            Scanline scline, 
+            Scanline scline,
             ColorRGBA color)
         {
             RenderSolidSingleScanLine(destImage, scline, color);
@@ -141,28 +141,35 @@ namespace PixelFarm.Agg
             int num_spans = scline.SpanCount;
             byte[] covers = scline.GetCovers();
 
+            if (destImage.Stride > tempSpanColors.AllocatedSize)
+            {
+                //if not enough -> alloc more
+                tempSpanColors.Clear(destImage.Stride);
+            }
+
             for (int i = 1; i <= num_spans; ++i)
             {
                 ScanlineSpan span = scline.GetSpan(i);
                 int x = span.x;
                 int len = span.len;
+                bool firstCoverForAll = false;
 
-                if (len < 0) { len = -len; } //make absolute value
+                if (len < 0) { len = -len; firstCoverForAll = true; } //make absolute value
 
-                if (len > tempSpanColors.AllocatedSize)
-                {
-                    //if not enough -> alloc more
-                    tempSpanColors.Clear(len);
-                }
+                //if (len > tempSpanColors.AllocatedSize)
+                //{
+                //    //if not enough -> alloc more
+                //    tempSpanColors.Clear(len);
+                //}
 
                 var colorArray = tempSpanColors.Array;
                 span_gen.GenerateColors(colorArray, 0, x, y, len);
-                 
+
                 destImage.BlendColorHSpan(x, y, len,
                     colorArray, 0,
-                    covers, span.cover_index, span.len < 0);
+                    covers, span.cover_index, firstCoverForAll);
             }
-        } 
+        }
     }
 
 
