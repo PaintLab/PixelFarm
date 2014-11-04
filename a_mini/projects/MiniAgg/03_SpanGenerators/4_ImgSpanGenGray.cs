@@ -33,7 +33,7 @@ namespace PixelFarm.Agg.Image
         {
         }
 
-        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
             ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
             int bytesBetweenPixelsInclusive = SourceRenderingBuffer.BytesBetweenPixelsInclusive;
@@ -42,7 +42,7 @@ namespace PixelFarm.Agg.Image
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
             ISpanInterpolator spanInterpolator = Interpolator;
-            spanInterpolator.Begin(x + Dx, y + Dy, len);
+            spanInterpolator.Begin(x + dx, y + dy, len);
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
@@ -59,11 +59,11 @@ namespace PixelFarm.Agg.Image
                 {
                     do
                     {
-                        span[spanIndex].red = pSource[bufferIndex];
-                        span[spanIndex].green = pSource[bufferIndex];
-                        span[spanIndex].blue = pSource[bufferIndex];
-                        span[spanIndex].alpha = 255;
-                        spanIndex++;
+                        outputColors[startIndex].red = pSource[bufferIndex];
+                        outputColors[startIndex].green = pSource[bufferIndex];
+                        outputColors[startIndex].blue = pSource[bufferIndex];
+                        outputColors[startIndex].alpha = 255;
+                        startIndex++;
                         bufferIndex += bytesBetweenPixelsInclusive;
                     } while (--len != 0);
                 }

@@ -41,7 +41,7 @@ namespace PixelFarm.Agg.Sample_Gradient
 
             //-------------------------------------------
 
-            GradientGenRadial innerGradient = new GradientGenRadial(); 
+            Agg.Gradients.GvcRadial innerGradient = new Gradients.GvcRadial();
             SpanInterpolatorLinear linerInterpolator = new SpanInterpolatorLinear(Affine.IdentityMatrix);
             LinearGradientColorsProvider linearGradFunc = new LinearGradientColorsProvider(ColorRGBA.Red, ColorRGBA.Yellow);
             SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator, innerGradient, linearGradFunc, 100, 150);

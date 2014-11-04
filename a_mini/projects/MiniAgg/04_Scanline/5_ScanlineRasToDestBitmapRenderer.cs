@@ -155,19 +155,14 @@ namespace PixelFarm.Agg
                 bool firstCoverForAll = false;
 
                 if (len < 0) { len = -len; firstCoverForAll = true; } //make absolute value
-
-                //if (len > tempSpanColors.AllocatedSize)
-                //{
-                //    //if not enough -> alloc more
-                //    tempSpanColors.Clear(len);
-                //}
-
+                 
                 var colorArray = tempSpanColors.Array;
                 span_gen.GenerateColors(colorArray, 0, x, y, len);
 
                 destImage.BlendColorHSpan(x, y, len,
                     colorArray, 0,
-                    covers, span.cover_index, firstCoverForAll);
+                    covers, span.cover_index,
+                    firstCoverForAll);
             }
         }
     }

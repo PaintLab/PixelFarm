@@ -52,7 +52,7 @@ namespace PixelFarm.Agg.Image
         {
         }
 
-        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
             ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
@@ -60,7 +60,7 @@ namespace PixelFarm.Agg.Image
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
             ISpanInterpolator spanInterpolator = Interpolator;
-            spanInterpolator.Begin(x + Dx, y + Dy, len);
+            spanInterpolator.Begin(x + dx, y + dy, len);
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
@@ -77,7 +77,7 @@ namespace PixelFarm.Agg.Image
                 {
                     do
                     {
-                        span[spanIndex++] = *(ColorRGBA*)&(pSource[bufferIndex]);
+                        outputColors[startIndex++] = *(ColorRGBA*)&(pSource[bufferIndex]);
                         bufferIndex += 4;
                     } while (--len != 0);
                 }
@@ -109,7 +109,7 @@ namespace PixelFarm.Agg.Image
         {
         }
 
-        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
             ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
             if (SourceRenderingBuffer.BitDepth != 32)
@@ -117,7 +117,7 @@ namespace PixelFarm.Agg.Image
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
             ISpanInterpolator spanInterpolator = Interpolator;
-            spanInterpolator.Begin(x + Dx, y + Dy, len);
+            spanInterpolator.Begin(x + dx, y + dy, len);
             byte[] fg_ptr = SourceRenderingBuffer.GetBuffer();
             do
             {
@@ -133,8 +133,8 @@ namespace PixelFarm.Agg.Image
                 color.green = fg_ptr[bufferIndex++];
                 color.red = fg_ptr[bufferIndex++];
                 color.alpha = fg_ptr[bufferIndex++];
-                span[spanIndex] = color;
-                spanIndex++;
+                outputColors[startIndex] = color;
+                startIndex++;
                 spanInterpolator.Next();
             } while (--len != 0);
         }
@@ -228,9 +228,9 @@ namespace PixelFarm.Agg.Image
             }
 #endif
 
-        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
-            base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
+            base.Interpolator.Begin(x + base.dx, y + base.dy, len);
 
             ImageReaderWriterBase srcImg = (ImageReaderWriterBase)base.ImgBuffAccessor.SourceImage;
             ISpanInterpolator spanInterpolator = base.Interpolator;
@@ -251,8 +251,8 @@ namespace PixelFarm.Agg.Image
 
                     spanInterpolator.GetCoord(out x_hr, out y_hr);
 
-                    x_hr -= base.DxInt;
-                    y_hr -= base.DyInt;
+                    x_hr -= base.dxInt;
+                    y_hr -= base.dyInt;
 
                     int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
                     int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
@@ -308,8 +308,8 @@ namespace PixelFarm.Agg.Image
                     color.green = (byte)tempG;
                     color.blue = (byte)tempB;
                     color.alpha = (byte)255;// tempA;
-                    span[spanIndex] = color;
-                    spanIndex++;
+                    outputColors[startIndex] = color;
+                    startIndex++;
                     spanInterpolator.Next();
 
                 } while (--len != 0);
@@ -336,7 +336,7 @@ namespace PixelFarm.Agg.Image
         public ColorRGBA background_color() { return m_OutsideSourceColor; }
         public void background_color(ColorRGBA v) { m_OutsideSourceColor = v; }
 
-        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
             ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)base.ImgBuffAccessor.SourceImage;
             int bufferIndex;
@@ -352,11 +352,11 @@ namespace PixelFarm.Agg.Image
 #if true
                     do
                     {
-                        span[spanIndex].blue = (byte)fg_ptr[bufferIndex++];
-                        span[spanIndex].green = (byte)fg_ptr[bufferIndex++];
-                        span[spanIndex].red = (byte)fg_ptr[bufferIndex++];
-                        span[spanIndex].alpha = (byte)fg_ptr[bufferIndex++];
-                        ++spanIndex;
+                        outputColors[startIndex].blue = (byte)fg_ptr[bufferIndex++];
+                        outputColors[startIndex].green = (byte)fg_ptr[bufferIndex++];
+                        outputColors[startIndex].red = (byte)fg_ptr[bufferIndex++];
+                        outputColors[startIndex].alpha = (byte)fg_ptr[bufferIndex++];
+                        ++startIndex;
                     } while (--len != 0);
 #else
                         fixed (byte* pSource = &fg_ptr[bufferIndex])
@@ -377,7 +377,7 @@ namespace PixelFarm.Agg.Image
                 return;
             }
 
-            base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
+            base.Interpolator.Begin(x + base.dx, y + base.dy, len);
 
             int[] accumulatedColor = new int[4];
 
@@ -400,8 +400,8 @@ namespace PixelFarm.Agg.Image
 
                     spanInterpolator.GetCoord(out x_hr, out y_hr);
 
-                    x_hr -= base.DxInt;
-                    y_hr -= base.DyInt;
+                    x_hr -= base.dxInt;
+                    y_hr -= base.dyInt;
 
                     int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
                     int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
@@ -523,11 +523,11 @@ namespace PixelFarm.Agg.Image
                         }
                     }
 
-                    span[spanIndex].red = (byte)accumulatedColor[0];
-                    span[spanIndex].green = (byte)accumulatedColor[1];
-                    span[spanIndex].blue = (byte)accumulatedColor[2];
-                    span[spanIndex].alpha = (byte)accumulatedColor[3];
-                    ++spanIndex;
+                    outputColors[startIndex].red = (byte)accumulatedColor[0];
+                    outputColors[startIndex].green = (byte)accumulatedColor[1];
+                    outputColors[startIndex].blue = (byte)accumulatedColor[2];
+                    outputColors[startIndex].alpha = (byte)accumulatedColor[3];
+                    ++startIndex;
                     spanInterpolator.Next();
                 } while (--len != 0);
             }
@@ -573,9 +573,9 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        public override void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
-            base.Interpolator.Begin(x + base.Dx, y + base.Dy, len);
+            base.Interpolator.Begin(x + base.dx, y + base.dy, len);
 
             int f_r, f_g, f_b, f_a;
 
@@ -595,8 +595,8 @@ namespace PixelFarm.Agg.Image
             {
                 spanInterpolator.GetCoord(out x, out y);
 
-                x -= base.DxInt;
-                y -= base.DyInt;
+                x -= base.dxInt;
+                y -= base.dyInt;
 
                 int x_hr = x;
                 int y_hr = y;
@@ -671,12 +671,12 @@ namespace PixelFarm.Agg.Image
                     }
                 }
 
-                span[spanIndex].red = (byte)f_b;
-                span[spanIndex].green = (byte)f_g;
-                span[spanIndex].blue = (byte)f_r;
-                span[spanIndex].alpha = (byte)f_a;
+                outputColors[startIndex].red = (byte)f_b;
+                outputColors[startIndex].green = (byte)f_g;
+                outputColors[startIndex].blue = (byte)f_r;
+                outputColors[startIndex].alpha = (byte)f_a;
 
-                spanIndex++;
+                startIndex++;
                 spanInterpolator.Next();
 
             } while (--len != 0);

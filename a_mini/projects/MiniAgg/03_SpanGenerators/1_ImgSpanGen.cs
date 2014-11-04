@@ -52,7 +52,7 @@ namespace PixelFarm.Agg
             m_dy_int = ((int)img_subpix_const.SCALE / 2);
         }
 
-        public abstract void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len);
+        public abstract void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len);
 
         public IImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
         public ImageFilterLookUpTable FilterLookup
@@ -69,18 +69,18 @@ namespace PixelFarm.Agg
 
 
 
-        public double Dx { get { return m_dx_dbl; } }
-        public double Dy { get { return m_dy_dbl; } }
-        public int DxInt { get { return m_dx_int; } }
-        public int DyInt { get { return m_dy_int; } }
+        public double dx { get { return m_dx_dbl; } }
+        public double dy { get { return m_dy_dbl; } }
+        public int dxInt { get { return m_dx_int; } }
+        public int dyInt { get { return m_dy_int; } }
 
 
         public void SetFilterOffset(double dx, double dy)
         {
             m_dx_dbl = dx;
             m_dy_dbl = dy;
-            m_dx_int = (int)AggBasics.iround(dx * (int)img_subpix_const.SCALE);
-            m_dy_int = (int)AggBasics.iround(dy * (int)img_subpix_const.SCALE);
+            m_dx_int = (int)AggBasics.iround(dx * img_subpix_const.SCALE);
+            m_dy_int = (int)AggBasics.iround(dy * img_subpix_const.SCALE);
         }
 
         public void SetFilterOffset(double d) { SetFilterOffset(d, d); }

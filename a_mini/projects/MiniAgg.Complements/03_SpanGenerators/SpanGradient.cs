@@ -1,3 +1,4 @@
+//MIT 2014, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -13,20 +14,11 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
+using PixelFarm.Agg.Gradients;
 
 namespace PixelFarm.Agg
-{
-    public interface IGradientGenFunction
-    {
-        int Calculate(int x, int y, int d);
-    }
-
-    public interface IColorsProvider
-    {
-        int Size { get; }
-        ColorRGBA this[int v] { get; }
-    }
-
+{    
+  
     //==========================================================span_gradient
     public class SpanGenGradient : ISpanGenerator
     {
@@ -39,26 +31,22 @@ namespace PixelFarm.Agg
         const int DOWN_SCALE_SHIFT = SUBPIX_SHIFT - GR_SUBPIX_SHIFT;
 
         ISpanInterpolator m_interpolator;
-        IGradientGenFunction m_gradient_function;
+        IGradientValueCalculator m_grValueCalculator;
         IColorsProvider m_colorsProvider;
 
         int m_d1;
         int m_d2;
-
-        //--------------------------------------------------------------------
-        public SpanGenGradient() { } 
         //--------------------------------------------------------------------
         public SpanGenGradient(ISpanInterpolator inter,
-                      IGradientGenFunction gradient_function,
-                      IColorsProvider color_function,
+                      IGradientValueCalculator gradient_function,
+                      IColorsProvider m_colorsProvider,
                       double d1, double d2)
         {
             m_interpolator = inter;
-            m_gradient_function = gradient_function;
-            m_colorsProvider = color_function;
-            m_d1 = (AggBasics.iround(d1 * GR_SUBPIX_SCALE));
-            m_d2 = (AggBasics.iround(d2 * GR_SUBPIX_SCALE));
-
+            this.m_grValueCalculator = gradient_function;
+            this.m_colorsProvider = m_colorsProvider;
+            m_d1 = AggBasics.iround(d1 * GR_SUBPIX_SCALE);
+            m_d2 = AggBasics.iround(d2 * GR_SUBPIX_SCALE);
         }
 
         //--------------------------------------------------------------------
@@ -67,31 +55,32 @@ namespace PixelFarm.Agg
             get { return this.m_interpolator; }
             set { this.m_interpolator = value; }
         }
-        public IGradientGenFunction GradientGenFunction
+        public IGradientValueCalculator GradientGenFunction
         {
-            get { return this.m_gradient_function; }
-            set { this.m_gradient_function = value; }
+            get { return this.m_grValueCalculator; }
+            set { this.m_grValueCalculator = value; }
         }
         public IColorsProvider ColorsProvider
         {
             get { return this.m_colorsProvider; }
             set { this.m_colorsProvider = value; }
         }
-        public double d1
-        {
-            get { return (double)(m_d1) / GR_SUBPIX_SCALE; }
-            set { m_d1 = AggBasics.iround(value * GR_SUBPIX_SCALE); }
-        }
-        public double d2
-        {
-            get { return (double)(m_d2) / GR_SUBPIX_SCALE; }
-            set { m_d2 = AggBasics.iround(value * GR_SUBPIX_SCALE); }
-        }
+
+        //public double d1
+        //{
+        //    get { return (double)(m_d1) / GR_SUBPIX_SCALE; }
+        //    set { m_d1 = AggBasics.iround(value * GR_SUBPIX_SCALE); }
+        //}
+        //public double d2
+        //{
+        //    get { return (double)(m_d2) / GR_SUBPIX_SCALE; }
+        //    set { m_d2 = AggBasics.iround(value * GR_SUBPIX_SCALE); }
+        //}
 
         //--------------------------------------------------------------------
         public void Prepare() { }
         //--------------------------------------------------------------------
-        public void GenerateColors(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
             int dd = m_d2 - m_d1;
             if (dd < 1) dd = 1;
@@ -100,8 +89,11 @@ namespace PixelFarm.Agg
             do
             {
                 m_interpolator.GetCoord(out x, out y);
-                int d = m_gradient_function.Calculate(x >> DOWN_SCALE_SHIFT,
-                                                       y >> DOWN_SCALE_SHIFT, m_d2);
+
+                int d = m_grValueCalculator.Calculate(x >> DOWN_SCALE_SHIFT,
+                                                      y >> DOWN_SCALE_SHIFT,
+                                                      m_d2);
+
                 d = ((d - m_d1) * (int)m_colorsProvider.Size) / dd;
                 if (d < 0) d = 0;
                 if (d >= (int)m_colorsProvider.Size)
@@ -109,7 +101,7 @@ namespace PixelFarm.Agg
                     d = m_colorsProvider.Size - 1;
                 }
 
-                span[spanIndex++] = m_colorsProvider[d];
+                outputColors[startIndex++] = m_colorsProvider[d];
                 m_interpolator.Next();
             }
             while (--len != 0);
@@ -117,7 +109,7 @@ namespace PixelFarm.Agg
     }
 
     //=====================================================gradient_linear_color
-    public class LinearGradientColorsProvider : IColorsProvider
+    public class LinearGradientColorsProvider : Gradients.IColorsProvider
     {
         ColorRGBA m_c1;
         ColorRGBA m_c2;
@@ -153,229 +145,4 @@ namespace PixelFarm.Agg
         }
     }
 
-    //==========================================================gradient_circle
-    public class GradientGenCircle : IGradientGenFunction
-    {
-        // Actually the same as radial. Just for compatibility
-        public int Calculate(int x, int y, int d)
-        {
-
-            return (int)(AggMath.fast_sqrt((int)(x * x + y * y)));
-        }
-    }
-
-
-    //==========================================================gradient_radial
-    public class GradientGenRadial : IGradientGenFunction
-    {
-        public int Calculate(int x, int y, int d)
-        {
-            return (int)(System.Math.Sqrt(x * x + y * y));
-        }
-    }
-
-    //========================================================gradient_radial_d
-    public class GradientGenRadialD : IGradientGenFunction
-    {
-        public int Calculate(int x, int y, int d)
-        {
-            return (int)AggBasics.uround(System.Math.Sqrt((double)(x) * (double)(x) + (double)(y) * (double)(y)));
-        }
-    }
-
-    //====================================================gradient_radial_focus
-    public class GradientGenRadialFocus : IGradientGenFunction
-    {
-        int m_r;
-        int m_fx;
-        int m_fy;
-        double m_r2;
-        double m_fx2;
-        double m_fy2;
-        double m_mul;
-
-        //---------------------------------------------------------------------
-        public GradientGenRadialFocus()
-        {
-            m_r = (100 * SpanGenGradient.GR_SUBPIX_SCALE);
-            m_fx = (0);
-            m_fy = (0);
-            UpdateValues();
-        }
-
-        //---------------------------------------------------------------------
-        public GradientGenRadialFocus(double r, double fx, double fy)
-        {
-            m_r = (AggBasics.iround(r * SpanGenGradient.GR_SUBPIX_SCALE));
-            m_fx = (AggBasics.iround(fx * SpanGenGradient.GR_SUBPIX_SCALE));
-            m_fy = (AggBasics.iround(fy * SpanGenGradient.GR_SUBPIX_SCALE));
-            UpdateValues();
-        }
-
-        //---------------------------------------------------------------------
-        public void Init(double r, double fx, double fy)
-        {
-            m_r = AggBasics.iround(r * SpanGenGradient.GR_SUBPIX_SCALE);
-            m_fx = AggBasics.iround(fx * SpanGenGradient.GR_SUBPIX_SCALE);
-            m_fy = AggBasics.iround(fy * SpanGenGradient.GR_SUBPIX_SCALE);
-            UpdateValues();
-        }
-
-        //---------------------------------------------------------------------
-        public double Radius { get { return (double)(m_r) / SpanGenGradient.GR_SUBPIX_SCALE; } }
-        public double FocusX { get { return (double)(m_fx) / SpanGenGradient.GR_SUBPIX_SCALE; } }
-        public double FocusY { get { return (double)(m_fy) / SpanGenGradient.GR_SUBPIX_SCALE; } }
-
-        //---------------------------------------------------------------------
-        public int Calculate(int x, int y, int d)
-        {
-            double dx = x - m_fx;
-            double dy = y - m_fy;
-            double d2 = dx * m_fy - dy * m_fx;
-            double d3 = m_r2 * (dx * dx + dy * dy) - d2 * d2;
-            return AggBasics.iround((dx * m_fx + dy * m_fy + System.Math.Sqrt(System.Math.Abs(d3))) * m_mul);
-
-        }
-
-        //---------------------------------------------------------------------
-        private void UpdateValues()
-        {
-            // Calculate the invariant values. In case the focal center
-            // lies exactly on the gradient circle the divisor degenerates
-            // into zero. In this case we just move the focal center by
-            // one subpixel unit possibly in the direction to the origin (0,0)
-            // and calculate the values again.
-            //-------------------------
-            m_r2 = (double)(m_r) * (double)(m_r);
-            m_fx2 = (double)(m_fx) * (double)(m_fx);
-            m_fy2 = (double)(m_fy) * (double)(m_fy);
-            double d = (m_r2 - (m_fx2 + m_fy2));
-            if (d == 0)
-            {
-                if (m_fx != 0)
-                {
-                    if (m_fx < 0) ++m_fx; else --m_fx;
-                }
-
-                if (m_fy != 0)
-                {
-                    if (m_fy < 0) ++m_fy; else --m_fy;
-                }
-
-                m_fx2 = (double)(m_fx) * (double)(m_fx);
-                m_fy2 = (double)(m_fy) * (double)(m_fy);
-                d = (m_r2 - (m_fx2 + m_fy2));
-            }
-            m_mul = m_r / d;
-        }
-    }
-
-
-    //==============================================================gradient_x
-    public class GradientGenX : IGradientGenFunction
-    {
-        public int Calculate(int x, int y, int d) { return x; }
-    }
-
-
-    //==============================================================gradient_y
-    public class GradientGenY : IGradientGenFunction
-    {
-        public int Calculate(int x, int y, int d) { return y; }
-    }
-
-    //========================================================gradient_diamond
-    public class GradientGenDiamond : IGradientGenFunction
-    {
-        public int Calculate(int x, int y, int d)
-        {
-            int ax = System.Math.Abs(x);
-            int ay = System.Math.Abs(y);
-            return ax > ay ? ax : ay;
-        }
-    }
-
-    //=============================================================gradient_xy
-    public class GradientGenXY : IGradientGenFunction
-    {
-        public int Calculate(int x, int y, int d)
-        {
-            return System.Math.Abs(x * y) / d;
-        }
-    }
-
-    //========================================================gradient_sqrt_xy
-    public class GradientGenSquareXY : IGradientGenFunction
-    {
-        public int Calculate(int x, int y, int d)
-        {
-            //return (int)System.Math.Sqrt((int)(System.Math.Abs(x) * System.Math.Abs(y)));
-            return (int)AggMath.fast_sqrt((int)(System.Math.Abs(x * y)));
-        }
-    }
-
-    //==========================================================gradient_conic
-    public class GradientConic : IGradientGenFunction
-    {
-        public int Calculate(int x, int y, int d)
-        {
-            return (int)AggBasics.uround(System.Math.Abs(System.Math.Atan2((double)(y), (double)(x))) * (double)(d) / System.Math.PI);
-        }
-    }
-
-    //=================================================gradient_repeat_adaptor
-    public class GradientRepeatAdaptor : IGradientGenFunction
-    {
-        IGradientGenFunction m_gradient;
-        public GradientRepeatAdaptor(IGradientGenFunction gradient)
-        {
-            m_gradient = gradient;
-        }
-
-
-        public int Calculate(int x, int y, int d)
-        {
-            int ret = m_gradient.Calculate(x, y, d) % d;
-            if (ret < 0) ret += d;
-            return ret;
-        }
-    }
-
-    //================================================gradient_reflect_adaptor
-    public class GradientGenReflectAdaptor : IGradientGenFunction
-    {
-        IGradientGenFunction m_gradient;
-
-        public GradientGenReflectAdaptor(IGradientGenFunction gradient)
-        {
-            m_gradient = gradient;
-        }
-
-        public int Calculate(int x, int y, int d)
-        {
-            int d2 = d << 1;
-            int ret = m_gradient.Calculate(x, y, d) % d2;
-            if (ret < 0) ret += d2;
-            if (ret >= d) ret = d2 - ret;
-            return ret;
-        }
-    }
-
-    public class GradientGenClampAdapter : IGradientGenFunction
-    {
-        IGradientGenFunction m_gradient;
-
-        public GradientGenClampAdapter(IGradientGenFunction gradient)
-        {
-            m_gradient = gradient;
-        }
-
-        public int Calculate(int x, int y, int d)
-        {
-            int ret = m_gradient.Calculate(x, y, d);
-            if (ret < 0) ret = 0;
-            if (ret > d) ret = d;
-            return ret;
-        }
-    }
 }
