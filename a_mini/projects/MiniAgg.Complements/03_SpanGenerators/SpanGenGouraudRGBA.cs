@@ -23,25 +23,25 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.Agg 
 {
 
     //=======================================================span_gouraud_rgba
-    public sealed class SpanGouraudRGBA : SpanGourand, ISpanGenerator
+    public sealed class SpanGenGouraudRGBA : SpanGenGourand, ISpanGenerator
     {
         bool m_swap;
         int m_y2;
-        RGBA_Calc m_rgba1;
-        RGBA_Calc m_rgba2;
-        RGBA_Calc m_rgba3;
+        RGBA_Calculator m_rgba1;
+        RGBA_Calculator m_rgba2;
+        RGBA_Calculator m_rgba3;
 
         const int SUBPIXEL_SHIFT = 4;
         const int SUBPIXEL_SCALE = 1 << SUBPIXEL_SHIFT;
 
         //--------------------------------------------------------------------
-        struct RGBA_Calc
+        struct RGBA_Calculator
         {
-            public void Init(SpanGourand.CoordAndColor c1, SpanGourand.CoordAndColor c2)
+            public void Init(SpanGenGourand.CoordAndColor c1, SpanGenGourand.CoordAndColor c2)
             {
                 m_x1 = c1.x - 0.5;
                 m_y1 = c1.y - 0.5;
@@ -90,8 +90,8 @@ namespace PixelFarm.Agg.VertexSource
         }
 
         //--------------------------------------------------------------------
-        public SpanGouraudRGBA() { }
-        public SpanGouraudRGBA(ColorRGBA c1,
+        public SpanGenGouraudRGBA() { }
+        public SpanGenGouraudRGBA(ColorRGBA c1,
                           ColorRGBA c2,
                           ColorRGBA c3,
                           double x1, double y1,
@@ -100,7 +100,7 @@ namespace PixelFarm.Agg.VertexSource
             : this(c1, c2, c3, x1, y1, x2, y2, x3, y3, 0)
         { }
 
-        public SpanGouraudRGBA(ColorRGBA c1,
+        public SpanGenGouraudRGBA(ColorRGBA c1,
                           ColorRGBA c2,
                           ColorRGBA c3,
                           double x1, double y1,
@@ -114,11 +114,11 @@ namespace PixelFarm.Agg.VertexSource
         public void Prepare()
         {
             CoordAndColor[] coord = new CoordAndColor[3];
-            base.arrange_vertices(coord);
+            base.LoadArrangedVertices(coord);
 
             m_y2 = (int)(coord[1].y);
 
-            m_swap = AggMath.cross_product(coord[0].x, coord[0].y,
+            m_swap = AggMath.Cross(coord[0].x, coord[0].y,
                                    coord[2].x, coord[2].y,
                                    coord[1].x, coord[1].y) < 0.0;
 
@@ -127,11 +127,11 @@ namespace PixelFarm.Agg.VertexSource
             m_rgba3.Init(coord[1], coord[2]);
         }
 
-        public void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
             m_rgba1.Calculate(y);//(m_rgba1.m_1dy > 2) ? m_rgba1.m_y1 : y);
-            RGBA_Calc pc1 = m_rgba1;
-            RGBA_Calc pc2 = m_rgba2;
+            RGBA_Calculator pc1 = m_rgba1;
+            RGBA_Calculator pc2 = m_rgba2;
 
             if (y <= m_y2)
             {
@@ -152,7 +152,7 @@ namespace PixelFarm.Agg.VertexSource
                 // It means that the triangle is oriented clockwise, 
                 // so that we need to swap the controlling structures
                 //-------------------------
-                RGBA_Calc t = pc2;
+                RGBA_Calculator t = pc2;
                 pc2 = pc1;
                 pc1 = t;
             }
@@ -199,17 +199,17 @@ namespace PixelFarm.Agg.VertexSource
                 if (vg < 0) vg = 0; if (vg > lim) vg = (int)lim;
                 if (vb < 0) vb = 0; if (vb > lim) vb = (int)lim;
                 if (va < 0) va = 0; if (va > lim) va = (int)lim;
-                span[spanIndex].red = (byte)vr;
-                span[spanIndex].green = (byte)vg;
-                span[spanIndex].blue = (byte)vb;
-                span[spanIndex].alpha = (byte)va;
+                outputColors[startIndex].red = (byte)vr;
+                outputColors[startIndex].green = (byte)vg;
+                outputColors[startIndex].blue = (byte)vb;
+                outputColors[startIndex].alpha = (byte)va;
                 r.Next(SUBPIXEL_SCALE);
                 g.Next(SUBPIXEL_SCALE);
                 b.Next(SUBPIXEL_SCALE);
                 a.Next(SUBPIXEL_SCALE);
                 nlen -= SUBPIXEL_SCALE;
                 start -= SUBPIXEL_SCALE;
-                ++spanIndex;
+                ++startIndex;
                 --len;
             }
 
@@ -220,16 +220,16 @@ namespace PixelFarm.Agg.VertexSource
             //-------------------------
             while (len != 0 && nlen > 0)
             {
-                span[spanIndex].red = ((byte)r.y());
-                span[spanIndex].green = ((byte)g.y());
-                span[spanIndex].blue = ((byte)b.y());
-                span[spanIndex].alpha = ((byte)a.y());
+                outputColors[startIndex].red = ((byte)r.y());
+                outputColors[startIndex].green = ((byte)g.y());
+                outputColors[startIndex].blue = ((byte)b.y());
+                outputColors[startIndex].alpha = ((byte)a.y());
                 r.Next(SUBPIXEL_SCALE);
                 g.Next(SUBPIXEL_SCALE);
                 b.Next(SUBPIXEL_SCALE);
                 a.Next(SUBPIXEL_SCALE);
                 nlen -= SUBPIXEL_SCALE;
-                ++spanIndex;
+                ++startIndex;
                 --len;
             }
 
@@ -246,15 +246,15 @@ namespace PixelFarm.Agg.VertexSource
                 if (vg < 0) vg = 0; if (vg > lim) vg = (int)lim;
                 if (vb < 0) vb = 0; if (vb > lim) vb = (int)lim;
                 if (va < 0) va = 0; if (va > lim) va = (int)lim;
-                span[spanIndex].red = ((byte)vr);
-                span[spanIndex].green = ((byte)vg);
-                span[spanIndex].blue = ((byte)vb);
-                span[spanIndex].alpha = ((byte)va);
+                outputColors[startIndex].red = ((byte)vr);
+                outputColors[startIndex].green = ((byte)vg);
+                outputColors[startIndex].blue = ((byte)vb);
+                outputColors[startIndex].alpha = ((byte)va);
                 r.Next(SUBPIXEL_SCALE);
                 g.Next(SUBPIXEL_SCALE);
                 b.Next(SUBPIXEL_SCALE);
                 a.Next(SUBPIXEL_SCALE);
-                ++spanIndex;
+                ++startIndex;
                 --len;
             }
         }

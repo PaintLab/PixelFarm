@@ -12,7 +12,7 @@ using PixelFarm.Agg.VertexSource;
 using Mini;
 namespace PixelFarm.Agg.Sample_Gouraud
 {
-    [Info(OrderCode = "07")]
+    [Info(OrderCode = "07_2")]
     [Info("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"
                 + ", there're just 6 triangles. You define a triangle and colors in its vertices. When rendering, the "
                 + "colors will be linearly interpolated. But there's a problem that appears when drawing adjacent "
@@ -22,7 +22,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
                 + "the gamma-correction value. But it's tricky, because the values depend on the opacity of the polygons."
                 + " In this example you can change the opacity, the dilation value and gamma. Also you can drag the "
                 + "Red, Green and Blue corners of the “cube”.")]
-    public class gouraud_application : DemoBase
+    public class GouraudApplication : DemoBase
     {
         double[] m_x = new double[3];
         double[] m_y = new double[3];
@@ -32,7 +32,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
 
         Stopwatch stopwatch = new Stopwatch();
 
-        public gouraud_application()
+        public GouraudApplication()
         {
 
             m_idx = (-1);
@@ -79,7 +79,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ClipProxyImage ren_base = new ClipProxyImage(image);
 
             //span_allocator span_alloc = new span_allocator();
-            SpanGouraudRGBA span_gen = new SpanGouraudRGBA();
+            SpanGenGouraudRGBA span_gen = new SpanGenGouraudRGBA();
 
             ras.ResetGamma(new GammaLinear(0.0, this.LinearGamma));
 
@@ -102,12 +102,12 @@ namespace PixelFarm.Agg.Sample_Gouraud
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(1, 0, 0, alpha),
                               ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
                               ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
-
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
-            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
 
-
+            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs())); 
             sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
+
+
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
