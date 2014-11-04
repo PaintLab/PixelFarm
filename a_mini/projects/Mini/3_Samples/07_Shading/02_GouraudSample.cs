@@ -79,7 +79,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ClipProxyImage ren_base = new ClipProxyImage(image);
 
             //span_allocator span_alloc = new span_allocator();
-            SpanGouraudRGBA span_gen = new SpanGouraudRGBA();
+            SpanGenGouraudRGBA span_gen = new SpanGenGouraudRGBA();
 
             ras.ResetGamma(new GammaLinear(0.0, this.LinearGamma));
 

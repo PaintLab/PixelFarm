@@ -24,7 +24,7 @@ namespace PixelFarm.Agg
 {
     //Gourand shading
     //============================================================span_gouraud
-    public abstract class SpanGourand
+    public abstract class SpanGenGourand
     {
          
         CoordAndColor m_coord_0;
@@ -43,12 +43,12 @@ namespace PixelFarm.Agg
             public ColorRGBA color;
         }
 
-        public SpanGourand()
+        public SpanGenGourand()
         {
             m_cmd[0] = ShapePath.FlagsAndCommand.CommandStop;
         }
 
-        public SpanGourand(ColorRGBA c1,
+        public SpanGenGourand(ColorRGBA c1,
                      ColorRGBA c2,
                      ColorRGBA c3,
                      double x1, double y1,

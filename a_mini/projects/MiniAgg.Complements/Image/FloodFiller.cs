@@ -10,7 +10,7 @@ namespace PixelFarm.Agg
 {
     public class FloodFill
     {
-        public abstract class FillingRule
+        abstract class FillingRule
         {
             protected ColorRGBA startColor;
             protected ColorRGBA fillColor;
@@ -35,7 +35,7 @@ namespace PixelFarm.Agg
             public abstract bool CheckPixel(byte[] destBuffer, int bufferOffset);
         }
 
-        public class ExactMatch : FillingRule
+        class ExactMatch : FillingRule
         {
             public ExactMatch(ColorRGBA fillColor)
                 : base(fillColor)
@@ -50,7 +50,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public class ToleranceMatch : FillingRule
+        class ToleranceMatch : FillingRule
         {
             int tolerance0To255;
 
@@ -108,10 +108,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public FloodFill(FillingRule fillRule)
-        {
-            this.fillRule = fillRule;
-        }
+ 
         public void Fill(ActualImage img, int x, int y)
         {
             throw new NotSupportedException();

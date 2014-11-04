@@ -846,18 +846,18 @@ namespace PixelFarm.Agg
         //    return this;
         //}
 
-        //public ColorRGBA CreateGradient(ColorRGBA c, double k)
-        //{
+        public ColorRGBA CreateGradient(ColorRGBA c, double k)
+        {
 
-        //    int ik = AggBasics.uround(k * BASE_SCALE);
+            int ik = AggBasics.uround(k * BASE_SCALE);
 
-        //    byte r = (byte)((int)(Red0To255) + ((((int)(c.Red0To255) - Red0To255) * ik) >> BASE_SHIFT));
-        //    byte g = (byte)((int)(Green0To255) + ((((int)(c.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
-        //    byte b = (byte)((int)(Blue0To255) + ((((int)(c.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));
-        //    byte a = (byte)((int)(Alpha0To255) + ((((int)(c.Alpha0To255) - Alpha0To255) * ik) >> BASE_SHIFT));
+            byte r = (byte)((int)(Red0To255) + ((((int)(c.Red0To255) - Red0To255) * ik) >> BASE_SHIFT));
+            byte g = (byte)((int)(Green0To255) + ((((int)(c.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
+            byte b = (byte)((int)(Blue0To255) + ((((int)(c.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));
+            byte a = (byte)((int)(Alpha0To255) + ((((int)(c.Alpha0To255) - Alpha0To255) * ik) >> BASE_SHIFT));
 
-        //    return new ColorRGBA(r, g, b, a);
-        //}
+            return new ColorRGBA(r, g, b, a);
+        }
 
         static public ColorRGBA operator +(ColorRGBA A, ColorRGBA B)
         {
