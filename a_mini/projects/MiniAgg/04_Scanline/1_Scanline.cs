@@ -43,8 +43,5 @@ namespace PixelFarm.Agg
         public abstract void ResetSpans(int min_x, int max_x);
         public abstract void ResetSpans();
 
-
-    
-        
     }
 }

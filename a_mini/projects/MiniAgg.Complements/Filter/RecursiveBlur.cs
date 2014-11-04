@@ -39,12 +39,8 @@ namespace PixelFarm.Agg.Image
 
     //==============================================================stack_blur
     public class StackBlur
-    {
-
-       
-
-
-        public void Blur(ImageBase img, int rx, int ry)
+    {   
+        public void Blur(ImageReaderWriterBase img, int rx, int ry)
         {
             switch (img.BitDepth)
             {
@@ -61,7 +57,7 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        void StackBlurRGB24(ImageBase img, int rx, int ry)
+        void StackBlurRGB24(ImageReaderWriterBase img, int rx, int ry)
         {
             throw new NotImplementedException();
 #if false
@@ -400,7 +396,7 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        void StackBlurRGBA32(ImageBase img, int radius, int ry)
+        void StackBlurRGBA32(ImageReaderWriterBase img, int radius, int ry)
         {
 
             int width = img.Width;
@@ -408,7 +404,7 @@ namespace PixelFarm.Agg.Image
             int height = img.Height;
             int[] srcBuffer = new int[width * height];
 
-            ImageBase.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
+            ImageReaderWriterBase.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
             StackBlurARGB.FastBlur32ARGB(srcBuffer, srcBuffer, img.Width, img.Height, radius);
             int i = 0;
             for (int y = 0; y < height; ++y)
@@ -462,7 +458,7 @@ namespace PixelFarm.Agg.Image
             m_buf = new ArrayList<ColorRGBA>();
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
         } 
-        public void BlurX(IImage img, double radius)
+        public void BlurX(IImageReaderWriter img, double radius)
         {
             if (radius < 0.62) return;
             if (img.Width < 3) return;
@@ -548,13 +544,13 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        public void BlurY(IImage img, double radius)
+        public void BlurY(IImageReaderWriter img, double radius)
         {
             FormatTransposer img2 = new FormatTransposer(img);
             BlurX(img2, radius);
         }
 
-        public void Blur(IImage img, double radius)
+        public void Blur(IImageReaderWriter img, double radius)
         {
             BlurX(img, radius);
             BlurY(img, radius);

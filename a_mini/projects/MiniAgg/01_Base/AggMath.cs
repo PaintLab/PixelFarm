@@ -37,7 +37,7 @@ namespace PixelFarm.Agg
         public const double INTERSECTION_EPSILON = 1.0e-30;
 
         //------------------------------------------------------------cross_product
-        public static double cross_product(double x1, double y1,
+        public static double Cross(double x1, double y1,
                                         double x2, double y2,
                                         double x, double y)
         {
@@ -51,10 +51,10 @@ namespace PixelFarm.Agg
                                           double x, double y)
         {
             bool tmp1 = false;
-            return ((tmp1 = cross_product(x1, y1, x2, y2, x, y) < 0.0) ==
-           (cross_product(x2, y2, x3, y3, x, y) < 0.0)) &&
+            return ((tmp1 = Cross(x1, y1, x2, y2, x, y) < 0.0) ==
+           (Cross(x2, y2, x3, y3, x, y) < 0.0)) &&
            (tmp1 ==
-           (cross_product(x3, y3, x1, y1, x, y) < 0.0));
+           (Cross(x3, y3, x1, y1, x, y) < 0.0));
 
 
             //bool cp1 = cross_product(x1, y1, x2, y2, x, y) < 0.0;
@@ -145,7 +145,7 @@ namespace PixelFarm.Agg
         }
 
         //-------------------------------------------------------calc_intersection
-        public static bool calc_intersection(double aX1, double aY1, double aX2, double aY2,
+        public static bool CalcIntersect(double aX1, double aY1, double aX2, double aY2,
                                           double bX1, double bY1, double bX2, double bY2,
                                           out double x, out double y)
         {
@@ -204,7 +204,7 @@ namespace PixelFarm.Agg
         }
 
         //--------------------------------------------------------dilate_triangle
-        public static void dilate_triangle(double x1, double y1,
+        public static void DilateTriangle(double x1, double y1,
                                         double x2, double y2,
                                         double x3, double y3,
                                         double[] x, double[] y,
@@ -216,10 +216,10 @@ namespace PixelFarm.Agg
             double dy2 = 0.0;
             double dx3 = 0.0;
             double dy3 = 0.0;
-            double loc = cross_product(x1, y1, x2, y2, x3, y3);
+            double loc = Cross(x1, y1, x2, y2, x3, y3);
             if (Math.Abs(loc) > INTERSECTION_EPSILON)
             {
-                if (cross_product(x1, y1, x2, y2, x3, y3) > 0.0)
+                if (Cross(x1, y1, x2, y2, x3, y3) > 0.0)
                 {
                     d = -d;
                 }

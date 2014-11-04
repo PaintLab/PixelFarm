@@ -29,18 +29,18 @@ namespace PixelFarm.Agg.Image
 {
     public sealed class ClipProxyImage : ProxyImage
     {
-        RectangleInt m_ClippingRect;
-        public ClipProxyImage(IImage refImage)
+        RectInt m_ClippingRect;
+        public ClipProxyImage(IImageReaderWriter refImage)
             : base(refImage)
         {
-            m_ClippingRect = new RectangleInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
+            m_ClippingRect = new RectInt(0, 0, (int)refImage.Width - 1, (int)refImage.Height - 1);
         }
 
         public bool SetClippingBox(int x1, int y1, int x2, int y2)
         {
-            RectangleInt cb = new RectangleInt(x1, y1, x2, y2);
-            cb.normalize();
-            if (cb.clip(new RectangleInt(0, 0, (int)Width - 1, (int)Height - 1)))
+            RectInt cb = new RectInt(x1, y1, x2, y2);
+            cb.Normalize();
+            if (cb.Clip(new RectInt(0, 0, (int)Width - 1, (int)Height - 1)))
             {
                 m_ClippingRect = cb;
                 return true;
@@ -58,10 +58,10 @@ namespace PixelFarm.Agg.Image
             return x >= m_ClippingRect.Left && y >= m_ClippingRect.Bottom &&
                    x <= m_ClippingRect.Right && y <= m_ClippingRect.Top;
         }
-        public RectangleInt GetClipArea(ref RectangleInt destRect, ref RectangleInt sourceRect, int sourceWidth, int sourceHeight)
+        public RectInt GetClipArea(ref RectInt destRect, ref RectInt sourceRect, int sourceWidth, int sourceHeight)
         {
-            RectangleInt rc = new RectangleInt(0, 0, 0, 0);
-            RectangleInt cb = ClipBox;
+            RectInt rc = new RectInt(0, 0, 0, 0);
+            RectInt cb = ClipBox;
             ++cb.Right;
             ++cb.Top;
 
@@ -114,7 +114,7 @@ namespace PixelFarm.Agg.Image
             }
         } 
 
-        public RectangleInt ClipBox { get { return m_ClippingRect; } }
+        public RectInt ClipBox { get { return m_ClippingRect; } }
         int XMin { get { return m_ClippingRect.Left; } }
         int YMin { get { return m_ClippingRect.Bottom; } }
         int XMax { get { return m_ClippingRect.Right; } }
@@ -331,15 +331,15 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        public override void CopyFrom(IImage sourceImage,
-                       RectangleInt sourceImageRect,
+        public override void CopyFrom(IImageReaderWriter sourceImage,
+                       RectInt sourceImageRect,
                        int destXOffset,
                        int destYOffset)
         {
-            RectangleInt destRect = sourceImageRect;
+            RectInt destRect = sourceImageRect;
             destRect.Offset(destXOffset, destYOffset);
 
-            RectangleInt clippedSourceRect = new RectangleInt();
+            RectInt clippedSourceRect = new RectInt();
             if (clippedSourceRect.IntersectRectangles(destRect, m_ClippingRect))
             {
                 // move it back relative to the source

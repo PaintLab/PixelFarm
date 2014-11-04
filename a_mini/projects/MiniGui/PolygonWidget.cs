@@ -248,9 +248,9 @@ namespace PixelFarm.Agg.UI
             vxs.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandStop);
             return vxs;
         }
-        protected override RectangleDouble CalculateLocalBounds()
+        protected override RectD CalculateLocalBounds()
         {
-            RectangleDouble localBounds = new RectangleDouble(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
+            RectD localBounds = new RectD(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
             this.RewindZero();
             var vxs = this.MakeVxs();
             int j = vxs.Count;

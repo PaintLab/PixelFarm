@@ -26,10 +26,10 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg.Image
 {
-    public class ChildImage : ImageBase
+    public class ChildImage : ImageReaderWriterBase
     {
         int bufferOffset; // the beggining of the image in this buffer 
-        public ChildImage(IImage image,
+        public ChildImage(IImageReaderWriter image,
             int bufferOffsetToFirstPixel,
             int width,
             int height)
@@ -58,7 +58,7 @@ namespace PixelFarm.Agg.Image
                 strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
         }
-        public ChildImage(IImage image,
+        public ChildImage(IImageReaderWriter image,
             IPixelBlender blender,
             int distanceBetweenPixelsInclusive,
             int bufferOffset,
@@ -67,11 +67,11 @@ namespace PixelFarm.Agg.Image
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, bufferOffset, bitsPerPixel);
         }
-        public ChildImage(IImage image, IPixelBlender blender)
+        public ChildImage(IImageReaderWriter image, IPixelBlender blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
-        public ChildImage(IImage image, IPixelBlender blender, int x1, int y1, int x2, int y2)
+        public ChildImage(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
         {
             SetRecieveBlender(blender);
             Attach(image, x1, y1, x2, y2);
@@ -92,7 +92,7 @@ namespace PixelFarm.Agg.Image
             SetBuffer(buffer, bufferOffset);
         }
 
-        void Attach(IImage sourceImage,
+        void Attach(IImageReaderWriter sourceImage,
           IPixelBlender recieveBlender,
           int distanceBetweenPixelsInclusive,
           int bufferOffset,
@@ -109,7 +109,7 @@ namespace PixelFarm.Agg.Image
             SetBuffer(buffer, offset + bufferOffset);
             SetRecieveBlender(recieveBlender);
         }
-        bool Attach(IImage sourceImage, int x1, int y1, int x2, int y2)
+        bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
         {
             m_ByteBuffer = null;
 
@@ -118,8 +118,8 @@ namespace PixelFarm.Agg.Image
             {
                 throw new Exception("You need to have your x1 and y1 be the lower left corner of your sub image.");
             }
-            RectangleInt boundsRect = new RectangleInt(x1, y1, x2, y2);
-            if (boundsRect.clip(new RectangleInt(0, 0, (int)sourceImage.Width - 1, (int)sourceImage.Height - 1)))
+            RectInt boundsRect = new RectInt(x1, y1, x2, y2);
+            if (boundsRect.Clip(new RectInt(0, 0, (int)sourceImage.Width - 1, (int)sourceImage.Height - 1)))
             {
                 SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride , sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
                 int bufferOffset = sourceImage.GetBufferOffsetXY(boundsRect.Left, boundsRect.Bottom);

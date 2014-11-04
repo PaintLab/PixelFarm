@@ -26,6 +26,8 @@
 // 
 //----------------------------------------------------------------------------
 #define USE_BLENDER
+using System.Collections.Generic;
+
 //using ColorT = MatterHackers.Agg.order_bgra;
 
 using System;
@@ -58,23 +60,28 @@ namespace PixelFarm.Agg.Image
 
     public sealed class PixelBlenderBGRA : PixelBlenderBGRABase, IPixelBlender
     {
+        public PixelBlenderBGRA()
+        {
+
+        }
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
             return new ColorRGBA(
-                buffer[bufferOffset + ImageBase.OrderR],
-                buffer[bufferOffset + ImageBase.OrderG],
-                buffer[bufferOffset + ImageBase.OrderB],
-                buffer[bufferOffset + ImageBase.OrderA]);
+                buffer[bufferOffset + ImageReaderWriterBase.OrderR],
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG],
+                buffer[bufferOffset + ImageReaderWriterBase.OrderB],
+                buffer[bufferOffset + ImageReaderWriterBase.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count)
         {
             do
             {
-                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderA] = sourceColor.alpha;
+
                 bufferOffset += 4;
             }
             while (--count != 0);
@@ -83,10 +90,10 @@ namespace PixelFarm.Agg.Image
         public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
 
-            buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
-            buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
-            buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
-            buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderR] = sourceColor.red;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderG] = sourceColor.green;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderB] = sourceColor.blue;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderA] = sourceColor.alpha;
             bufferOffset += 4;
 
         }
@@ -98,21 +105,21 @@ namespace PixelFarm.Agg.Image
                 {
                     if (sourceColor.alpha == 255)
                     {
-                        buffer[bufferOffset + ImageBase.OrderR] = (byte)(sourceColor.red);
-                        buffer[bufferOffset + ImageBase.OrderG] = (byte)(sourceColor.green);
-                        buffer[bufferOffset + ImageBase.OrderB] = (byte)(sourceColor.blue);
-                        buffer[bufferOffset + ImageBase.OrderA] = (byte)(sourceColor.alpha);
+                        buffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)(sourceColor.red);
+                        buffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)(sourceColor.green);
+                        buffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)(sourceColor.blue);
+                        buffer[bufferOffset + ImageReaderWriterBase.OrderA] = (byte)(sourceColor.alpha);
                     }
                     else
                     {
-                        int r = buffer[bufferOffset + ImageBase.OrderR];
-                        int g = buffer[bufferOffset + ImageBase.OrderG];
-                        int b = buffer[bufferOffset + ImageBase.OrderB];
-                        int a = buffer[bufferOffset + ImageBase.OrderA];
-                        buffer[bufferOffset + ImageBase.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
-                        buffer[bufferOffset + ImageBase.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
-                        buffer[bufferOffset + ImageBase.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
-                        buffer[bufferOffset + ImageBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorRGBA.BASE_SHIFT));
+                        int r = buffer[bufferOffset + ImageReaderWriterBase.OrderR];
+                        int g = buffer[bufferOffset + ImageReaderWriterBase.OrderG];
+                        int b = buffer[bufferOffset + ImageReaderWriterBase.OrderB];
+                        int a = buffer[bufferOffset + ImageReaderWriterBase.OrderA];
+                        buffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
+                        buffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
+                        buffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT);
+                        buffer[bufferOffset + ImageReaderWriterBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorRGBA.BASE_SHIFT));
                     }
                 }
             }
@@ -172,36 +179,40 @@ namespace PixelFarm.Agg.Image
 
     public sealed class PixelBlenderGammaBGRA : PixelBlenderBGRABase, IPixelBlender
     {
-        private GammaLookUpTable m_gamma;
 
-        public PixelBlenderGammaBGRA(double gammaValue)
+
+        GammaLookUpTable m_gamma;
+
+        static Dictionary<float, GammaLookUpTable> gammaTablePool = new Dictionary<float, GammaLookUpTable>();
+
+        public PixelBlenderGammaBGRA(float gammaValue)
         {
-            m_gamma = new GammaLookUpTable(gammaValue);
-        }
+            GammaLookUpTable found;
+            if (!gammaTablePool.TryGetValue(gammaValue, out found))
+            {
+                found = new GammaLookUpTable(gammaValue);
+                gammaTablePool.Add(gammaValue, found);
+            }
 
-        public PixelBlenderGammaBGRA(GammaLookUpTable g)
-        {
-            m_gamma = g;
-        }
+            this.m_gamma = found;
 
-        public void SetGammaTable(GammaLookUpTable g)
-        {
-            m_gamma = g;
         }
-
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new ColorRGBA(buffer[bufferOffset + ImageBase.OrderR], buffer[bufferOffset + ImageBase.OrderG], buffer[bufferOffset + ImageBase.OrderB], buffer[bufferOffset + ImageBase.OrderA]);
+            return new ColorRGBA(buffer[bufferOffset + ImageReaderWriterBase.OrderR],
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG],
+                buffer[bufferOffset + ImageReaderWriterBase.OrderB],
+                buffer[bufferOffset + ImageReaderWriterBase.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count)
         {
             do
             {
-                buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv(sourceColor.red);
-                buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv(sourceColor.green);
-                buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv(sourceColor.blue);
-                buffer[bufferOffset + ImageBase.OrderA] = m_gamma.inv(sourceColor.alpha);
+                buffer[bufferOffset + ImageReaderWriterBase.OrderR] = m_gamma.inv(sourceColor.red);
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG] = m_gamma.inv(sourceColor.green);
+                buffer[bufferOffset + ImageReaderWriterBase.OrderB] = m_gamma.inv(sourceColor.blue);
+                buffer[bufferOffset + ImageReaderWriterBase.OrderA] = m_gamma.inv(sourceColor.alpha);
                 bufferOffset += 4;
             }
             while (--count != 0);
@@ -210,23 +221,23 @@ namespace PixelFarm.Agg.Image
         public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
 
-            buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv(sourceColor.red);
-            buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv(sourceColor.green);
-            buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv(sourceColor.blue);
-            buffer[bufferOffset + ImageBase.OrderA] = m_gamma.inv(sourceColor.alpha);
+            buffer[bufferOffset + ImageReaderWriterBase.OrderR] = m_gamma.inv(sourceColor.red);
+            buffer[bufferOffset + ImageReaderWriterBase.OrderG] = m_gamma.inv(sourceColor.green);
+            buffer[bufferOffset + ImageReaderWriterBase.OrderB] = m_gamma.inv(sourceColor.blue);
+            buffer[bufferOffset + ImageReaderWriterBase.OrderA] = m_gamma.inv(sourceColor.alpha);
         }
         public void BlendPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
             unchecked
             {
-                int r = buffer[bufferOffset + ImageBase.OrderR];
-                int g = buffer[bufferOffset + ImageBase.OrderG];
-                int b = buffer[bufferOffset + ImageBase.OrderB];
-                int a = buffer[bufferOffset + ImageBase.OrderA];
-                buffer[bufferOffset + ImageBase.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
-                buffer[bufferOffset + ImageBase.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
-                buffer[bufferOffset + ImageBase.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
-                buffer[ImageBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorRGBA.BASE_SHIFT));
+                int r = buffer[bufferOffset + ImageReaderWriterBase.OrderR];
+                int g = buffer[bufferOffset + ImageReaderWriterBase.OrderG];
+                int b = buffer[bufferOffset + ImageReaderWriterBase.OrderB];
+                int a = buffer[bufferOffset + ImageReaderWriterBase.OrderA];
+                buffer[bufferOffset + ImageReaderWriterBase.OrderR] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
+                buffer[bufferOffset + ImageReaderWriterBase.OrderB] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorRGBA.BASE_SHIFT)) >> (int)ColorRGBA.BASE_SHIFT));
+                buffer[ImageReaderWriterBase.OrderA] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorRGBA.BASE_SHIFT));
             }
         }
 
@@ -255,26 +266,26 @@ namespace PixelFarm.Agg.Image
 
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new ColorRGBA(buffer[bufferOffset + ImageBase.OrderR], buffer[bufferOffset + ImageBase.OrderG], buffer[bufferOffset + ImageBase.OrderB], buffer[bufferOffset + ImageBase.OrderA]);
+            return new ColorRGBA(buffer[bufferOffset + ImageReaderWriterBase.OrderR], buffer[bufferOffset + ImageReaderWriterBase.OrderG], buffer[bufferOffset + ImageReaderWriterBase.OrderB], buffer[bufferOffset + ImageReaderWriterBase.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count)
         {
             for (int i = 0; i < count; i++)
             {
-                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
         }
         public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
-            buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
-            buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
-            buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
-            buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderR] = sourceColor.red;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderG] = sourceColor.green;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderB] = sourceColor.blue;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderA] = sourceColor.alpha;
 
         }
 
@@ -305,14 +316,14 @@ namespace PixelFarm.Agg.Image
 					pDestBuffer[bufferOffset + ImageBuffer.OrderA] = 255;
 					            
 #else
-                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * oneOverAlpha + 255) >> 8) + sourceColor.red];
-                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * oneOverAlpha + 255) >> 8) + sourceColor.green];
-                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
-                    int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
-                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
-                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
-                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(oneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] * oneOverAlpha + 255) >> 8) + sourceColor.red];
+                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] * oneOverAlpha + 255) >> 8) + sourceColor.green];
+                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
+                    int a = pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA];
+                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)r;
+                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)g;
+                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)b;
+                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(oneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
 #endif
                 }
             }
@@ -336,24 +347,24 @@ namespace PixelFarm.Agg.Image
                             ColorRGBA sourceColor = sourceColors[sourceColorsOffset];
                             if (sourceColor.alpha == 255)
                             {
-                                pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
-                                pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
-                                pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
-                                pDestBuffer[bufferOffset + ImageBase.OrderA] = 255;
+                                pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)sourceColor.red;
+                                pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)sourceColor.green;
+                                pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)sourceColor.blue;
+                                pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA] = 255;
                             }
                             else
                             {
                                 int OneOverAlpha = BASE_MASK - sourceColor.alpha;
                                 unchecked
                                 {
-                                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                    int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
-                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                    int a = pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA];
+                                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)r;
+                                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)g;
+                                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)b;
+                                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                                 }
                             }
 #endif
@@ -373,24 +384,24 @@ namespace PixelFarm.Agg.Image
                             }
                             else if (alpha == 255)
                             {
-                                pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
-                                pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
-                                pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
-                                pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
+                                pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)sourceColor.red;
+                                pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)sourceColor.green;
+                                pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)sourceColor.blue;
+                                pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA] = (byte)alpha;
                             }
                             else
                             {
                                 int OneOverAlpha = BASE_MASK - alpha;
                                 unchecked
                                 {
-                                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                    int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
-                                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                                    pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                    int a = pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA];
+                                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)r;
+                                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)g;
+                                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)b;
+                                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                                 }
                             }
                             sourceColorsOffset++;
@@ -407,24 +418,24 @@ namespace PixelFarm.Agg.Image
                     int alpha = (sourceColor.alpha * sourceCovers[sourceCoversOffset] + 255) / 256;
                     if (alpha == 255)
                     {
-                        pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)sourceColor.red;
-                        pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)sourceColor.green;
-                        pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)sourceColor.blue;
-                        pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)alpha;
+                        pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)sourceColor.red;
+                        pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)sourceColor.green;
+                        pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)sourceColor.blue;
+                        pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA] = (byte)alpha;
                     }
                     else if (alpha > 0)
                     {
                         int OneOverAlpha = BASE_MASK - alpha;
                         unchecked
                         {
-                            int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                            int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                            int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                            int a = pDestBuffer[bufferOffset + ImageBase.OrderA];
-                            pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)r;
-                            pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)g;
-                            pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)b;
-                            pDestBuffer[bufferOffset + ImageBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                            int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                            int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                            int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                            int a = pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA];
+                            pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)r;
+                            pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)g;
+                            pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)b;
+                            pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderA] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                         }
                     }
                     sourceColorsOffset++;
@@ -455,26 +466,26 @@ namespace PixelFarm.Agg.Image
 
         public ColorRGBA PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new ColorRGBA(buffer[bufferOffset + ImageBase.OrderR], buffer[bufferOffset + ImageBase.OrderG], buffer[bufferOffset + ImageBase.OrderB], buffer[bufferOffset + ImageBase.OrderA]);
+            return new ColorRGBA(buffer[bufferOffset + ImageReaderWriterBase.OrderR], buffer[bufferOffset + ImageReaderWriterBase.OrderG], buffer[bufferOffset + ImageReaderWriterBase.OrderB], buffer[bufferOffset + ImageReaderWriterBase.OrderA]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, ColorRGBA sourceColor, int count)
         {
             for (int i = 0; i < count; i++)
             {
-                buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
-                buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
-                buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
-                buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderR] = sourceColor.red;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderG] = sourceColor.green;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderB] = sourceColor.blue;
+                buffer[bufferOffset + ImageReaderWriterBase.OrderA] = sourceColor.alpha;
                 bufferOffset += 4;
             }
         }
         public void CopyPixel(byte[] buffer, int bufferOffset, ColorRGBA sourceColor)
         {
-            buffer[bufferOffset + ImageBase.OrderR] = sourceColor.red;
-            buffer[bufferOffset + ImageBase.OrderG] = sourceColor.green;
-            buffer[bufferOffset + ImageBase.OrderB] = sourceColor.blue;
-            buffer[bufferOffset + ImageBase.OrderA] = sourceColor.alpha;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderR] = sourceColor.red;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderG] = sourceColor.green;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderB] = sourceColor.blue;
+            buffer[bufferOffset + ImageReaderWriterBase.OrderA] = sourceColor.alpha;
         }
 
         public void BlendPixel(byte[] pDestBuffer, int bufferOffset, ColorRGBA sourceColor)
@@ -489,15 +500,15 @@ namespace PixelFarm.Agg.Image
                     int sourceG = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.green + 255) >> 8]);
                     int sourceB = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.blue + 255) >> 8]);
 
-                    int destR = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderR] * oneOverAlpha + 255) >> 8) + sourceR];
-                    int destG = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderG] * oneOverAlpha + 255) >> 8) + sourceG];
-                    int destB = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageBase.OrderB] * oneOverAlpha + 255) >> 8) + sourceB];
+                    int destR = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] * oneOverAlpha + 255) >> 8) + sourceR];
+                    int destG = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] * oneOverAlpha + 255) >> 8) + sourceG];
+                    int destB = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] * oneOverAlpha + 255) >> 8) + sourceB];
                     // TODO: calculated the correct dest alpha
                     //int destA = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
 
-                    pDestBuffer[bufferOffset + ImageBase.OrderR] = (byte)destR;
-                    pDestBuffer[bufferOffset + ImageBase.OrderG] = (byte)destG;
-                    pDestBuffer[bufferOffset + ImageBase.OrderB] = (byte)destB;
+                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderR] = (byte)destR;
+                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderG] = (byte)destG;
+                    pDestBuffer[bufferOffset + ImageReaderWriterBase.OrderB] = (byte)destB;
                     //pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(oneOverAlpha * (base_mask - a) + 255) >> 8]);
                 }
             }

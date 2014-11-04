@@ -105,8 +105,8 @@ namespace PixelFarm.Agg.Font
         public int X_height { get { return x_height; } }
         int cap_height;
         public int Cap_height { get { return cap_height; } }
-        RectangleInt boundingBox;
-        public RectangleInt BoundingBox { get { return boundingBox; } }
+        RectInt boundingBox;
+        public RectInt BoundingBox { get { return boundingBox; } }
         int underline_thickness;
         public int Underline_thickness { get { return underline_thickness; } }
         int underline_position;
@@ -450,7 +450,7 @@ namespace PixelFarm.Agg.Font
             StyledTypeFace typeFaceNameStyle = new StyledTypeFace(this, 30);
             TypeFacePrinter fontNamePrinter = new TypeFacePrinter(this.fontFamily + " - 30 point", typeFaceNameStyle);
 
-            RectangleDouble bounds = typeFaceNameStyle.BoundingBoxInPixels;
+            RectD bounds = typeFaceNameStyle.BoundingBoxInPixels;
             double origX = 10 - bounds.Left;
             double x = origX;
             double y = 10 - typeFaceNameStyle.DescentInPixels;

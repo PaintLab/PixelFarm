@@ -1,3 +1,5 @@
+//BSD 2014, WinterDev
+
 /*
 Copyright (c) 2013, Lars Brubaker
 All rights reserved.
@@ -43,10 +45,10 @@ namespace PixelFarm.Agg.Sample_LionFill
       + "to draw funny looking “lions”. Change window size to clear the window.")]
     public class LionFillExample : DemoBase
     {
-        LionFill lionFill;
+        LionFillSprite lionFill;
         public override void Init()
         {
-            lionFill = new LionFill();
+            lionFill = new LionFillSprite();
         }
         public override void Draw(Graphics2D g)
         {
@@ -69,16 +71,16 @@ namespace PixelFarm.Agg.Sample_LionFill
     }
 
     //--------------------------------------------------
-    public class LionFill : BasicSprite
+    public class LionFillSprite : BasicSprite
     {
 
-        LionShape lionShape;
+        SpriteShape lionShape;
         VertexStore myvxs;     
         byte alpha;
         
-        public LionFill()
+        public LionFillSprite()
         {
-            lionShape = new LionShape();
+            lionShape = new SpriteShape();
             lionShape.ParseLion();
             this.Width = 500;
             this.Height = 500;

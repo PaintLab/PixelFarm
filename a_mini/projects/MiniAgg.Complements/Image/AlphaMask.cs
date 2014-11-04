@@ -40,7 +40,7 @@ namespace PixelFarm.Agg
 
     public sealed class AlphaMaskByteUnclipped : IAlphaMask
     {
-        IImage m_rbuf;
+        IImageReaderWriter m_rbuf;
         uint m_Step;
         uint m_Offset;
 
@@ -48,14 +48,14 @@ namespace PixelFarm.Agg
         //public static readonly int cover_none = 0;
         //public static readonly int cover_full = 255;
 
-        public AlphaMaskByteUnclipped(IImage rbuf, uint Step, uint Offset)
+        public AlphaMaskByteUnclipped(IImageReaderWriter rbuf, uint Step, uint Offset)
         {
             m_Step = Step;
             m_Offset = Offset;
             m_rbuf = rbuf;
         }
 
-        public void attach(IImage rbuf) { m_rbuf = rbuf; }
+        public void attach(IImageReaderWriter rbuf) { m_rbuf = rbuf; }
 
         //--------------------------------------------------------------------
         public byte pixel(int x, int y)
@@ -146,7 +146,7 @@ namespace PixelFarm.Agg
 
     public sealed class AlphaMaskByteClipped : IAlphaMask
     {
-        IImage m_rbuf;
+        IImageReaderWriter m_rbuf;
         uint m_Step;
         uint m_Offset;
 
@@ -154,14 +154,14 @@ namespace PixelFarm.Agg
         //public static readonly int cover_none = 0;
         //public static readonly int cover_full = 255;
 
-        public AlphaMaskByteClipped(IImage rbuf, uint step, uint offset)
+        public AlphaMaskByteClipped(IImageReaderWriter rbuf, uint step, uint offset)
         {
             m_Step = step;
             m_Offset = offset;
             m_rbuf = rbuf;
         }
 
-        public void attach(IImage rbuf) { m_rbuf = rbuf; }
+        public void attach(IImageReaderWriter rbuf) { m_rbuf = rbuf; }
 
 
         //--------------------------------------------------------------------

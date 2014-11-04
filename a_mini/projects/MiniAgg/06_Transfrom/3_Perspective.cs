@@ -64,7 +64,7 @@ namespace PixelFarm.Agg.Transform
         }
 
         // Rectangle to quadrilateral
-        public Perspective(RectangleDouble r, double[] quad)
+        public Perspective(RectD r, double[] quad)
             : this(r.Left, r.Bottom, r.Right, r.Top, quad)
         {
         }
@@ -366,23 +366,23 @@ namespace PixelFarm.Agg.Transform
         }
 
         //------------------------------------------------------------------------
-        Perspective premultiply(Affine b)
-        {
-            //copy this to a
-            Perspective a = new Perspective(this);
+        //Perspective premultiply(Affine b)
+        //{
+        //    //copy this to a
+        //    Perspective a = new Perspective(this);
 
-            sx = a.sx * b.sx + a.shx * b.shy;
-            shx = a.sx * b.shx + a.shx * b.sy;
-            tx = a.sx * b.tx + a.shx * b.ty + a.tx;
-            shy = a.shy * b.sx + a.sy * b.shy;
-            sy = a.shy * b.shx + a.sy * b.sy;
-            ty = a.shy * b.tx + a.sy * b.ty + a.ty;
-            w0 = a.w0 * b.sx + a.w1 * b.shy;
-            w1 = a.w0 * b.shx + a.w1 * b.sy;
-            w2 = a.w0 * b.tx + a.w1 * b.ty + a.w2;
+        //    sx = a.sx * b.sx + a.shx * b.shy;
+        //    shx = a.sx * b.shx + a.shx * b.sy;
+        //    tx = a.sx * b.tx + a.shx * b.ty + a.tx;
+        //    shy = a.shy * b.sx + a.sy * b.shy;
+        //    sy = a.shy * b.shx + a.sy * b.sy;
+        //    ty = a.shy * b.tx + a.sy * b.ty + a.ty;
+        //    w0 = a.w0 * b.sx + a.w1 * b.shy;
+        //    w1 = a.w0 * b.shx + a.w1 * b.sy;
+        //    w2 = a.w0 * b.tx + a.w1 * b.ty + a.w2;
 
-            return this;
-        }
+        //    return this;
+        //}
 
         //------------------------------------------------------------------------
         Perspective multiply_inv(Perspective m)
@@ -542,12 +542,15 @@ namespace PixelFarm.Agg.Transform
             return 1.0 / determinant();
         }
 
-        public bool is_valid() { return is_valid(EPSILON); }
-        public bool is_valid(double epsilon)
+      
+        public bool IsValid 
         {
-            return Math.Abs(sx) > epsilon &&
-                Math.Abs(sy) > epsilon &&
-                Math.Abs(w2) > epsilon;
+            get
+            {
+                return Math.Abs(sx) > EPSILON &&
+                    Math.Abs(sy) > EPSILON &&
+                    Math.Abs(w2) > EPSILON;
+            }
         }
 
         bool is_identity()

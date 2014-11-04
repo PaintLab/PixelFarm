@@ -47,9 +47,10 @@ namespace Mini
             this.Width = 800;
             this.Height = 600;
         }
+
         public event RequestNewGraphic2DDelegate RequestNewGfx2d;
 
-        public abstract void Draw(PixelFarm.Agg.Graphics2D g);
+        public abstract void Draw(PixelFarm.Agg.Graphics2D gx);
         public virtual void Init() { }
 
         public virtual void MouseDrag(int x, int y) { }
@@ -95,7 +96,8 @@ namespace Mini
         CheckBox,
         OptionBoxes,
         SlideBarDiscrete,
-        SlideBarContinuous
+        SlideBarContinuous_R4,
+        SlideBarContinuous_R8,
     }
 
 
@@ -166,7 +168,11 @@ namespace Mini
             }
             else if (propType == typeof(double))
             {
-                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous;
+                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous_R8;
+            }
+            else if (propType == typeof(float))
+            {
+                this.PresentaionHint = Mini.DemoConfigPresentaionHint.SlideBarContinuous_R4;
             }
             else
             {

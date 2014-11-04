@@ -33,11 +33,14 @@ namespace PixelFarm.Agg.VertexSource
     //
     public class SimpleRect
     {
-        RectangleDouble bounds; 
+        RectD bounds;
+        public SimpleRect()
+        {
+        }
         public SimpleRect(double left, double bottom, double right, double top)
         {
            
-            bounds = new RectangleDouble(left, bottom, right, top); 
+            bounds = new RectD(left, bottom, right, top); 
             if (left > right)
             {
                 bounds.Left = right;
@@ -52,7 +55,7 @@ namespace PixelFarm.Agg.VertexSource
         } 
         public void SetRect(double left, double bottom, double right, double top)
         {
-            bounds = new RectangleDouble(left, bottom, right, top);
+            bounds = new RectD(left, bottom, right, top);
             if (left > right) { bounds.Left = right; bounds.Right = left; }
             if (bottom > top) { bounds.Bottom = top; bounds.Top = bottom; }
         }

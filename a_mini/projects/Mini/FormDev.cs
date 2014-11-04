@@ -71,7 +71,7 @@ namespace Mini
 
 
             //test01
-            var lionShape = new PixelFarm.Agg.LionShape();
+            var lionShape = new PixelFarm.Agg.SpriteShape();
             lionShape.ParseLion();
 
             //test path serialize to binary stream
@@ -107,7 +107,7 @@ namespace Mini
             using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
             {
                 var reader = new System.IO.BinaryReader(fs);
-                var lionShape2 = new PixelFarm.Agg.LionShape();
+                var lionShape2 = new PixelFarm.Agg.SpriteShape();
 
                 PixelFarm.Agg.VertexSource.PathStorage path;
                 PixelFarm.Agg.ColorRGBA[] colors;
@@ -127,7 +127,7 @@ namespace Mini
                   reader, out npaths, out pathIndexList
                  );
 
-                PixelFarm.Agg.LionShape.UnsafeDirectSetData(
+                PixelFarm.Agg.SpriteShape.UnsafeDirectSetData(
                      lionShape2,
                      npaths,
                      path, colors, pathIndexList);

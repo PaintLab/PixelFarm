@@ -65,85 +65,42 @@ namespace PixelFarm.Agg
            string text,
            double x,
            double y,
-           double pointSize = 12,
-           Justification justification = Justification.Left,
-           Baseline baseline = Baseline.Text,
-           ColorRGBA color = new ColorRGBA(),
-           bool drawFromHintedCache = false,
-           ColorRGBA backgroundColor = new ColorRGBA())
+           double pointSize)
         {
 
             //1. parse text  
-            var stringPrinter = new PixelFarm.Agg.Font.TypeFacePrinter2(
-                text,
-                pointSize,
-                new Vector2(x, y), justification, baseline);
+            var stringPrinter = new PixelFarm.Agg.Font.MyTypeFacePrinter(); 
+            stringPrinter.DrawFromHintedCache = false;
+            stringPrinter.LoadText(text);
 
-            if (color.Alpha0To255 == 0)
-            {
-                color = ColorRGBA.Black;
-            }
+            var vxs = stringPrinter.MakeVxs();
+            vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
+            gx.Render(vxs, ColorRGBA.Black);
 
-            if (backgroundColor.Alpha0To255 != 0)
-            {
-                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-            }
-
-            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-            stringPrinter.Render(gx, color);
         }
-
-        //public static void DrawString3(this Graphics2D gx, string Text,
-        //   double x, double y,
-        //   double pointSize = 12,
-        //   Justification justification = Justification.Left,
-        //   Baseline baseline = Baseline.Text,
-        //   ColorRGBA color = new ColorRGBA(),
-        //   bool drawFromHintedCache = false,
-        //   ColorRGBA backgroundColor = new ColorRGBA())
-        //{
-
-        //    var stringPrinter = new LayoutFarm.Agg.Font.TypeFacePrinter2(
-        //        Text,
-        //        pointSize,
-        //        new Vector2(x, y),
-        //        justification, baseline);
-
-        //    if (color.Alpha0To255 == 0)
-        //    {
-        //        color = ColorRGBA.Black;
-        //    }
-
-        //    if (backgroundColor.Alpha0To255 != 0)
-        //    {
-        //        gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-        //    }
-
-        //    stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-        //    stringPrinter.Render(gx, color);
-        //}
+         
         public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
         {
-            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0); 
+            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
             gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectangleDouble rect, ColorRGBA color, double strokeWidth = 1)
+        public static void Rectangle(this Graphics2D gx, RectD rect, ColorRGBA color, double strokeWidth = 1)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color, strokeWidth);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectangleInt rect, ColorRGBA color)
+        public static void Rectangle(this Graphics2D gx, RectInt rect, ColorRGBA color)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectangleDouble rect, ColorRGBA fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectD rect, ColorRGBA fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectangleInt rect, ColorRGBA fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectInt rect, ColorRGBA fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }

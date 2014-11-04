@@ -107,7 +107,7 @@ namespace PixelFarm.Agg.Transform
 
         //--------------------------------------------------------------------
         // Check if the equations were solved successfully
-        public bool is_valid() { return m_trans_dir.is_valid(); }
+        public bool IsValid { get { return m_trans_dir.IsValid; } }
 
         //----------------------------------------------------------------
         public void Begin(double x, double y, int len)

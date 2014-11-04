@@ -75,12 +75,12 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
     public class LionFill : SimpleSprite
     {
         VertexStore vxStorage;
-        LionShape lionShape;
+        SpriteShape lionShape;
          
         byte alpha;
         public LionFill()
         {
-            lionShape = new LionShape();
+            lionShape = new SpriteShape();
             TestLoadLionFromBinaryFile();
             this.Width = 500;
             this.Height = 500;
@@ -94,7 +94,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
             {
                 var reader = new System.IO.BinaryReader(fs);
-                var lionShape2 = new PixelFarm.Agg.LionShape();
+                var lionShape2 = new PixelFarm.Agg.SpriteShape();
 
                 PixelFarm.Agg.VertexSource.PathStorage path;
                 PixelFarm.Agg.ColorRGBA[] colors;
@@ -114,7 +114,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                  );
 
                 //------------------------------ 
-                LionShape.UnsafeDirectSetData(lionShape2,
+                SpriteShape.UnsafeDirectSetData(lionShape2,
                     npaths,
                     path, colors, pathIndexList);
                 //---------------------------------

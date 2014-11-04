@@ -1,4 +1,6 @@
-﻿/*
+﻿//2014 BSD,WinterDev
+
+/*
 Copyright (c) 2013, Lars Brubaker
 All rights reserved.
 
@@ -49,10 +51,10 @@ namespace PixelFarm.Agg.Sample_LionOutline
             "rasterizer (a checkbox at the bottom). The difference in performance is obvious.")]
     public class LionFillOutlineExample : DemoBase
     {
-        lion_outline lionFill;
+        LionOutlineSprite lionFill;
         public override void Init()
         {
-            lionFill = new lion_outline();
+            lionFill = new LionOutlineSprite();
         }
         public override void Draw(Graphics2D g)
         {
@@ -91,16 +93,15 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
     }
     //--------------------------------------------------
-    public class lion_outline : BasicSprite
+    public class LionOutlineSprite : BasicSprite
     {
-        private LionShape lionShape;
-        ScanlineRasterizer rasterizer = new ScanlineRasterizer();
-        ScanlinePacked8 scanlineCache = new ScanlinePacked8();
+        private SpriteShape lionShape;
+
 
         //special option 
-        public lion_outline()
+        public LionOutlineSprite()
         {
-            lionShape = new LionShape();
+            lionShape = new SpriteShape();
             lionShape.ParseLion();
             this.Width = 500;
             this.Height = 500;
@@ -122,10 +123,11 @@ namespace PixelFarm.Agg.Sample_LionOutline
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            //render 
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            int width = widgetsSubImage.Width;
+            int height = widgetsSubImage.Height;
 
-            int width = (int)widgetsSubImage.Width;
-            int height = (int)widgetsSubImage.Height;
 
             int strokeWidth = 1;
 
@@ -148,19 +150,20 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
             if (RenderAsScanline)
             {
-                rasterizer.SetVectorClipBox(0, 0, width, height);
+                var rasterizer = graphics2D.ScanlineRasterizer;
+                rasterizer.SetClipBox(0, 0, width, height);
 
                 Stroke stroke = new Stroke(strokeWidth);
                 stroke.LineJoin = LineJoin.Round;
                 var vxs = affTx.TransformToVxs(lionShape.Path);
 
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
 
 
                 sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
-                    scanlineCache,
+                    graphics2D.ScanlinePacked8,
                     vxs,
                     lionShape.Colors,
                     lionShape.PathIndexList,

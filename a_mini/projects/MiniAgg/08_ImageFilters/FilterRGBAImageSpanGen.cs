@@ -59,10 +59,10 @@ namespace PixelFarm.Agg.Image
         }
 
         //--------------------------------------------------------------------
-        public override void Generate(ColorRGBA[] span, int spanIndex, int x, int y, int len)
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.Interpolator;
-            spanInterpolator.Begin(x + base.Dx, y + base.Dy, len);
+            spanInterpolator.Begin(x + base.dx, y + base.dy, len);
 
             int[] fg = new int[4];
 
@@ -92,8 +92,8 @@ namespace PixelFarm.Agg.Image
                     (diameter * rx + (int)img_subpix_const.MASK) >>
                         (int)(int)img_subpix_const.SHIFT;
 
-                x += base.DxInt - radius_x;
-                y += base.DyInt - radius_y;
+                x += base.dxInt - radius_x;
+                y += base.dyInt - radius_y;
 
                 fg[0] = fg[1] = fg[2] = fg[3] = (int)img_filter_const.SCALE / 2;
 
@@ -117,10 +117,10 @@ namespace PixelFarm.Agg.Image
                         int weight = (weight_y * weight_array[x_hr] +
                                      (int)img_filter_const.SCALE / 2) >>
                                      DOWN_SCALE_SHIFT;
-                        fg[0] += fg_ptr[sourceIndex + ImageBase.OrderR] * weight;
-                        fg[1] += fg_ptr[sourceIndex + ImageBase.OrderG] * weight;
-                        fg[2] += fg_ptr[sourceIndex + ImageBase.OrderB] * weight;
-                        fg[3] += fg_ptr[sourceIndex + ImageBase.OrderA] * weight;
+                        fg[0] += fg_ptr[sourceIndex + ImageReaderWriterBase.OrderR] * weight;
+                        fg[1] += fg_ptr[sourceIndex + ImageReaderWriterBase.OrderG] * weight;
+                        fg[2] += fg_ptr[sourceIndex + ImageReaderWriterBase.OrderB] * weight;
+                        fg[3] += fg_ptr[sourceIndex + ImageReaderWriterBase.OrderA] * weight;
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;
@@ -150,12 +150,12 @@ namespace PixelFarm.Agg.Image
                 if (fg[2] > BASE_MASK) fg[2] = BASE_MASK;
                 if (fg[3] > BASE_MASK) fg[3] = BASE_MASK;
 
-                span[spanIndex].red = (byte)fg[0];
-                span[spanIndex].green = (byte)fg[1];
-                span[spanIndex].blue = (byte)fg[2];
-                span[spanIndex].alpha = (byte)fg[3];
+                outputColors[startIndex].red = (byte)fg[0];
+                outputColors[startIndex].green = (byte)fg[1];
+                outputColors[startIndex].blue = (byte)fg[2];
+                outputColors[startIndex].alpha = (byte)fg[3];
 
-                spanIndex++;
+                startIndex++;
                 Interpolator.Next();
             } while (--len != 0);
         }

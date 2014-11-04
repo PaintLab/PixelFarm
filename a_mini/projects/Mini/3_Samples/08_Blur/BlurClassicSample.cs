@@ -28,7 +28,7 @@ namespace PixelFarm.Agg.Sample_Blur
     point arithmetic and works slower. But it is true Gaussian filter, with theoretically 
     infinite impulse response. The radius (actually 2*sigma value) can be fractional 
     and the filter produces quite adequate result.")]
-    public class blur : DemoBase
+    public class Blur_classic : DemoBase
     {
         //RadioButtonGroup m_method;
         //Slider m_radius;
@@ -43,40 +43,39 @@ namespace PixelFarm.Agg.Sample_Blur
         VertexStoreSnap m_path_2;
 
 
-        FlattenCurves m_shape;
 
-        ScanlineRasterizer m_ras = new ScanlineRasterizer();
-        ScanlinePacked8 m_sl;
-        //ReferenceImage m_rbuf2;
 
+
+        
+        //ReferenceImage m_rbuf2; 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
         RecursiveBlur m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
 
-        RectangleDouble m_shape_bounds;
+        RectD m_shape_bounds;
 
         Stopwatch stopwatch = new Stopwatch();
 
-        public blur()
+        public Blur_classic()
         {
             //m_rbuf2 = new ReferenceImage();
-            m_shape_bounds = new RectangleDouble();
+            m_shape_bounds = new RectD();
             m_shadow_ctrl = new PolygonEditWidget(4);
 
 
             this.FlattenCurveCheck = true;
-            this.BlurMethod = Sample_Blur.BlurMethod.RecursiveBlur;
+            this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
 
-            m_sl = new ScanlinePacked8();
+            
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
 
             m_pathVxs = typeFaceForLargeA.GetGlyphForCharacter('a');
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            m_shape = new FlattenCurves();
+            var m_shape = new FlattenCurves();
             m_path_2 = new VertexStoreSnap(m_shape.MakeVxs(m_pathVxs));
-            BoundingRect.GetBoundingRectSingle(m_path_2, ref m_shape_bounds);
+            BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
@@ -86,8 +85,8 @@ namespace PixelFarm.Agg.Sample_Blur
             m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
             m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
-             
-            m_shadow_ctrl.LineColor = ColorRGBAf.MakeColorRGBA(0, 0.3, 0.5, 0.3);
+
+            m_shadow_ctrl.LineColor = ColorRGBAf.MakeColorRGBA(0f, 0.3f, 0.5f, 0.3f);
         }
 
         [DemoConfig]
@@ -97,7 +96,7 @@ namespace PixelFarm.Agg.Sample_Blur
             set;
         }
         [DemoConfig(MaxValue = 40)]
-        public double BlurRadius
+        public int BlurRadius
         {
             get;
             set;
@@ -156,10 +155,146 @@ namespace PixelFarm.Agg.Sample_Blur
         }
         public override void Draw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            //DrawClassic(graphics2D);
+            DrawWithPainter(graphics2D);
+
+        }
+        void DrawWithPainter(Graphics2D graphics2D)
+        {
+            //create painter
+            CanvasPainter painter = new CanvasPainter(graphics2D);
+
+            painter.SetClipBox(0, 0, Width, Height);
+            painter.Clear(ColorRGBA.White);
+            //-----------------------------------------------------------------------
+            //green glyph
+            Perspective shadow_persp = new Perspective(
+                            m_shape_bounds,
+                            m_shadow_ctrl.GetPolygon());
+            VertexStoreSnap spath;
+            if (FlattenCurveCheck)
+            {
+                var s2 = shadow_persp.TransformToVxs(m_path_2);
+                spath = new VertexStoreSnap(s2);
+            }
+            else
+            {
+                var s2 = shadow_persp.TransformToVxs(m_pathVxs);
+                spath = new VertexStoreSnap(s2);
+            }
+            painter.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
+            painter.Fill(spath);
+
+            //---------------------------------------------------------------------------------------------------------
+            //shadow 
+            //---------------------------------------------------------------------------------------------------------
+            // Calculate the bounding box and extend it by the blur radius 
+
+            RectInt boundRect = BoundingRectInt.GetBoundingRect(spath);
+            var widgetImg = graphics2D.DestImage;
+
+            int m_radius = this.BlurRadius;
+            //expand bound rect
+            boundRect.Left -= m_radius;
+            boundRect.Bottom -= m_radius;
+            boundRect.Right += m_radius;
+            boundRect.Top += m_radius;
+
+            if (BlurMethod == BlurMethod.RecursiveBlur)
+            {
+                // The recursive blur method represents the true Gaussian Blur,
+                // with theoretically infinite kernel. The restricted window size
+                // results in extra influence of edge pixels. It's impossible to
+                // solve correctly, but extending the right and top areas to another
+                // radius value produces fair result.
+                //------------------
+                boundRect.Right += m_radius;
+                boundRect.Top += m_radius;
+            }
+
+            stopwatch.Stop();
+            stopwatch.Reset();
+            stopwatch.Start();
+
+            if (BlurMethod != BlurMethod.ChannelBlur)
+            {
+                // Create a new pixel renderer and attach it to the main one as a child image. 
+                // It returns true if the attachment succeeded. It fails if the rectangle 
+                // (bbox) is fully clipped.
+                //------------------ 
+
+                if (boundRect.Clip(new RectInt(0, 0, widgetImg.Width - 1, widgetImg.Height - 1)))
+                {
+                    //check if intersect  
+                    var prevClip = painter.ClipBox;
+                    painter.ClipBox = boundRect;
+                    // Blur it
+                    switch (BlurMethod)
+                    {
+                        case BlurMethod.StackBlur:
+                            {
+                                // More general method, but 30-40% slower.
+                                //------------------
+                                //m_stack_blur.blur(pixf2, agg::uround(m_radius.Value));
+
+                                // Faster, but bore specific. 
+                                // Works only for 8 bits per channel and only with radii <= 254.
+                                //------------------
+                                painter.DoFilterBlurStack(boundRect, m_radius);
+
+                            } break;
+                        default:
+                            {  // True Gaussian Blur, 3-5 times slower than Stack Blur,
+                                // but still constant time of radius. Very sensitive
+                                // to precision, doubles are must here.
+                                //------------------
+                                painter.DoFilterBlurRecursive(boundRect, m_radius);
+
+                            } break;
+                    }
+                    //store back
+                    painter.ClipBox = prevClip;
+                }
+            }
+
+            double tm = stopwatch.ElapsedMilliseconds;
+            painter.FillColor = ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f);
+
+            // Render the shape itself
+            ////------------------
+            if (FlattenCurveCheck)
+            {
+                //m_ras.AddPath(m_path_2);
+                painter.Fill(m_path_2);
+            }
+            else
+            {
+                //m_ras.AddPath(m_pathVxs);
+                painter.Fill(m_pathVxs);
+            }
+
+            painter.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
+
+            //-------------------------------------------------------------
+            //control
+            m_shadow_ctrl.OnDraw(graphics2D);
+
+        }
+
+
+        void DrawClassic(Graphics2D graphics2D)
+        {
+            //original ***
+
+
+            CanvasPainter painter = new CanvasPainter(graphics2D);
+            var m_ras = graphics2D.ScanlineRasterizer;
+
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             clippingProxy.Clear(ColorRGBA.White);
-            m_ras.SetVectorClipBox(0, 0, Width, Height);
+            m_ras.SetClipBox(0, 0, Width, Height);
 
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,
@@ -180,22 +315,22 @@ namespace PixelFarm.Agg.Sample_Blur
             }
             m_ras.AddPath(spath);
 
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, graphics2D.ScanlinePacked8,  new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl, new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
 
+            //---------------------------------------------------------------------------------------------------------
             // Calculate the bounding box and extend it by the blur radius
-            RectangleDouble bbox = new RectangleDouble();
-            BoundingRect.GetBoundingRectSingle(spath, ref bbox);
+            RectInt boundRect = BoundingRectInt.GetBoundingRect(spath);
 
-            double m_radius = this.BlurRadius;
+            int m_radius = this.BlurRadius;
 
-            bbox.Left -= m_radius;
-            bbox.Bottom -= m_radius;
-            bbox.Right += m_radius;
-            bbox.Top += m_radius;
+            boundRect.Left -= m_radius;
+            boundRect.Bottom -= m_radius;
+            boundRect.Right += m_radius;
+            boundRect.Top += m_radius;
 
-            if (BlurMethod == Sample_Blur.BlurMethod.RecursiveBlur)
+            if (BlurMethod == BlurMethod.RecursiveBlur)
             {
                 // The recursive blur method represents the true Gaussian Blur,
                 // with theoretically infinite kernel. The restricted window size
@@ -203,15 +338,15 @@ namespace PixelFarm.Agg.Sample_Blur
                 // solve correctly, but extending the right and top areas to another
                 // radius value produces fair result.
                 //------------------
-                bbox.Right += m_radius;
-                bbox.Top += m_radius;
+                boundRect.Right += m_radius;
+                boundRect.Top += m_radius;
             }
 
             stopwatch.Stop();
             stopwatch.Reset();
             stopwatch.Start();
 
-            if (BlurMethod != Sample_Blur.BlurMethod.ChannelBlur)
+            if (BlurMethod != BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
@@ -223,19 +358,19 @@ namespace PixelFarm.Agg.Sample_Blur
 
 #endif
 
-                int x1 = (int)bbox.Left;
-                int y1 = (int)bbox.Top;
-                int x2 = (int)bbox.Right;
-                int y2 = (int)bbox.Bottom;
-                RectangleInt boundsRect = new RectangleInt(x1, y2, x2, y1);
-                if (boundsRect.clip(new RectangleInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
+                int x1 = (int)boundRect.Left;
+                int y1 = (int)boundRect.Top;
+                int x2 = (int)boundRect.Right;
+                int y2 = (int)boundRect.Bottom;
+                RectInt boundsRect = new RectInt(x1, y2, x2, y1);
+                if (boundsRect.Clip(new RectInt(0, 0, widgetsSubImage.Width - 1, widgetsSubImage.Height - 1)))
                 {
                     //check if intersect 
                     ChildImage image2 = new ChildImage(widgetsSubImage, new PixelBlenderBGRA(), x1, y2, x2, y1);
                     // Blur it
                     switch (BlurMethod)
                     {
-                        case Sample_Blur.BlurMethod.StackBlur:
+                        case BlurMethod.StackBlur:
                             {
                                 // More general method, but 30-40% slower.
                                 //------------------
@@ -263,57 +398,6 @@ namespace PixelFarm.Agg.Sample_Blur
 
 
             }
-            else
-            {
-                /*
-                // Blur separate channels
-                //------------------
-                if(m_channel_r.Checked)
-                {
-                    typedef agg::pixfmt_alpha_blend_gray<
-                        agg::blender_gray8, 
-                        agg::rendering_buffer,
-                        3, 2> pixfmt_gray8r;
-
-                    pixfmt_gray8r pixf2r(m_rbuf2);
-                    if(pixf2r.attach(pixf, int(bbox.x1), int(bbox.y1), int(bbox.x2), int(bbox.y2)))
-                    {
-                        agg::stack_blur_gray8(pixf2r, agg::uround(m_radius.Value), 
-                                                      agg::uround(m_radius.Value));
-                    }
-                }
-
-                if(m_channel_g.Checked)
-                {
-                    typedef agg::pixfmt_alpha_blend_gray<
-                        agg::blender_gray8, 
-                        agg::rendering_buffer,
-                        3, 1> pixfmt_gray8g;
-
-                    pixfmt_gray8g pixf2g(m_rbuf2);
-                    if(pixf2g.attach(pixf, int(bbox.x1), int(bbox.y1), int(bbox.x2), int(bbox.y2)))
-                    {
-                        agg::stack_blur_gray8(pixf2g, agg::uround(m_radius.Value), 
-                                                      agg::uround(m_radius.Value));
-                    }
-                }
-
-                if(m_channel_b.Checked)
-                {
-                    typedef agg::pixfmt_alpha_blend_gray<
-                        agg::blender_gray8, 
-                        agg::rendering_buffer,
-                        3, 0> pixfmt_gray8b;
-
-                    pixfmt_gray8b pixf2b(m_rbuf2);
-                    if(pixf2b.attach(pixf, int(bbox.x1), int(bbox.y1), int(bbox.x2), int(bbox.y2)))
-                    {
-                        agg::stack_blur_gray8(pixf2b, agg::uround(m_radius.Value), 
-                                                      agg::uround(m_radius.Value));
-                    }
-                }
-                 */
-            }
 
             double tm = stopwatch.ElapsedMilliseconds;
 
@@ -328,19 +412,16 @@ namespace PixelFarm.Agg.Sample_Blur
                 m_ras.AddPath(m_pathVxs);
             }
 
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, m_sl,
-                ColorRGBAf.MakeColorRGBA(0.6, 0.9, 0.7, 0.8));
+
+            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras,graphics2D.ScanlinePacked8,
+                ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f));
 
             graphics2D.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
 
+            //-------------------------------------------------------------
             m_shadow_ctrl.OnDraw(graphics2D);
 
         }
     }
-    public enum BlurMethod
-    {
-        StackBlur,
-        RecursiveBlur,
-        ChannelBlur
-    }
+
 }

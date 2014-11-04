@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
                 + "value of gamma will be closer to 1.0 in both cases — black on white or white on black. There's no "
                 + "perfection in this world, but at least you can control Gamma in Anti-Grain Geometry :-).")]
 
-    public class rounded_rect_application : DemoBase
+    public class RoundRectApplication : DemoBase
     {
         double[] m_x = new double[2];
         double[] m_y = new double[2];
@@ -38,7 +38,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
         //MatterHackers.Agg.UI.CheckBox m_DrawAsOutlineCheckBox;
 
 
-        public rounded_rect_application()
+        public RoundRectApplication()
         {
             //AnchorAll();
             //m_idx = (-1);
@@ -77,7 +77,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
             ////m_DrawAsOutlineCheckBox.inactive_color(new RGBA_Bytes(127, 127, 127));
 
             this.Radius = 25;
-            this.Gamma = 1.8;
+            this.Gamma = 1.8f;
 
         }
         [DemoConfig]
@@ -99,7 +99,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
             set;
         }
         [DemoConfig(MaxValue = 3)]
-        public double Gamma
+        public float Gamma
         {
             get;
             set;
@@ -110,62 +110,47 @@ namespace PixelFarm.Agg.Sample_RoundRect
             get;
             set;
         }
-        public override void Draw(Graphics2D graphics2D)
+        public override void Draw(Graphics2D gx)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
-
-            IImage backBuffer = widgetsSubImage;
-
+            CanvasPainter painter = new CanvasPainter(gx);
             
-            var normalBlender = new PixelBlenderBGRA();
-            var gammaBlender = new PixelBlenderGammaBGRA(this.Gamma);
-
-            var rasterNormal = new ChildImage(backBuffer, normalBlender);
-            var rasterGamma = new ChildImage(backBuffer, gammaBlender);
-
-            var clippingProxyNormal = new ClipProxyImage(rasterNormal);
-            var clippingProxyGamma = new ClipProxyImage(rasterGamma);
-            
-
-            clippingProxyNormal.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
-
-            var ras = new ScanlineRasterizer();
-            var sl = new ScanlinePacked8();
-
-            Ellipse ellipse = new Ellipse();
-
-            // TODO: If you drag the control circles below the bottom of the window we get an exception.  This does not happen in AGG.
-            // It needs to be debugged.  Turning on clipping fixes it.  But standard agg works without clipping.  Could be a bigger problem than this.
-            //ras.clip_box(0, 0, width(), height());
-
-            // Render two "control" circles
-            ellipse.Reset(m_x[0], m_y[0], 3, 3, 16);
-            ras.AddPath(ellipse.MakeVxs());
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
-
-            ellipse.Reset(m_x[1], m_y[1], 3, 3, 16);
-            ras.AddPath(ellipse.MakeVertexSnap());
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, ras, sl, new ColorRGBA(127, 127, 127));
-
+            //-----------------------------------------------------------------
+            //control
+            painter.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
+            painter.FillColor = new ColorRGBA(127, 127, 127);
+            painter.FillCircle(m_x[0], m_y[0], 3); //left-bottom control box
+            painter.FillCircle(m_x[1], m_y[1], 3); //right-top control box
+            //-----------------------------------------------------------------
 
             double d = this.SubPixelOffset;
+            var prevBlender = gx.PixelBlender;
+            //change gamma blender
+            gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
+          
 
-            // Creating a rounded rectangle
-            VertexSource.RoundedRect r = new VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d,
-                this.Radius);
-            r.NormalizeRadius();
             if (this.FillRoundRect)
             {
-
-                ras.AddPath(new Stroke(1).MakeVxs(r.MakeVxs()));
+                painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+                painter.FillRoundRectangle(
+                    m_x[0] + d,
+                    m_y[0] + d,
+                    m_x[1] + d,
+                    m_y[1] + d,
+                    this.Radius);
             }
             else
             {
-                ras.AddPath(r.MakeVxs());
-            }
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, ras, sl, this.WhiteOnBlack ? new ColorRGBA(255, 255, 255) : new ColorRGBA(0, 0, 0));
+                painter.StrokeColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+                painter.DrawRoundRect(
+                    m_x[0] + d,
+                    m_y[0] + d,
+                    m_x[1] + d,
+                    m_y[1] + d,
+                    this.Radius);
 
+            }
+
+            gx.PixelBlender = prevBlender;
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

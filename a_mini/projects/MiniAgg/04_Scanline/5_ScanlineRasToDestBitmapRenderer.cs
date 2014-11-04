@@ -31,17 +31,18 @@ namespace PixelFarm.Agg
     {
 
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
-        IPixelBlender pixelBlender;
-        public ScanlineRasToDestBitmapRenderer()
+
+        internal ScanlineRasToDestBitmapRenderer()
         {
 
         }
-        internal IPixelBlender PixelBlender
+        protected bool UseCustomSolidSingleLineMethod
         {
-            get { return this.pixelBlender; }
-            set { this.pixelBlender = value; }
+            get;
+            set;
         }
-        public void RenderScanlineSolidAA(IImage destImage,
+
+        public void RenderScanlineSolidAA(IImageReaderWriter destImage,
             ScanlineRasterizer rasterizer,
             Scanline scline,
             ColorRGBA color)
@@ -49,14 +50,26 @@ namespace PixelFarm.Agg
             if (rasterizer.RewindScanlines())
             {
                 scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
-                while (rasterizer.SweepScanline(scline))
+
+                if (this.UseCustomSolidSingleLineMethod)
                 {
-                    RenderSolidSingleScanLine(destImage, scline, color);
+                    while (rasterizer.SweepScanline(scline))
+                    {
+                        CustomRenderSolidSingleScanLine(destImage, scline, color);
+                    }
+                }
+                else
+                {
+
+                    while (rasterizer.SweepScanline(scline))
+                    {
+                        RenderSolidSingleScanLine(destImage, scline, color);
+                    }
                 }
             }
         }
 
-        public void GenerateAndRender(IImage destImage,
+        public void GenerateAndRender(IImageReaderWriter destImage,
              ScanlineRasterizer rasterizer,
              Scanline scline,
              ISpanGenerator spanGenerator)
@@ -73,33 +86,39 @@ namespace PixelFarm.Agg
         }
 
 
-        protected virtual void RenderSolidSingleScanLine(IImage destImage,
-            Scanline scline,
-            ColorRGBA color)
+        static void RenderSolidSingleScanLine(
+             IImageReaderWriter destImage,
+             Scanline scline,
+             ColorRGBA color)
         {
-
             int y = scline.Y;
             int num_spans = scline.SpanCount;
             byte[] covers = scline.GetCovers();
             for (int i = 1; i <= num_spans; ++i)
             {
                 ScanlineSpan span = scline.GetSpan(i);
-                int x = span.x;
+
                 if (span.len > 0)
                 {
-                    
-                    destImage.BlendSolidHSpan(x, y, span.len, color, covers, span.cover_index);
+                    destImage.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
                 }
                 else
                 {
+                    int x = span.x;
                     int x2 = (x - (int)span.len - 1);
                     destImage.BlendHL(x, y, x2, color, covers[span.cover_index]);
                 }
             }
         }
+        protected virtual void CustomRenderSolidSingleScanLine(
+            IImageReaderWriter destImage,
+            Scanline scline,
+            ColorRGBA color)
+        {
+            RenderSolidSingleScanLine(destImage, scline, color);
+        }
 
-
-        public void RenderSolidAllPaths(IImage destImage,
+        public void RenderSolidAllPaths(IImageReaderWriter destImage,
             ScanlineRasterizer ras,
             Scanline scline,
             VertexStore vx,
@@ -115,39 +134,43 @@ namespace PixelFarm.Agg
             }
         }
 
-        void GenerateAndRenderSingleScanline(IImage destImage, Scanline scline, ISpanGenerator span_gen)
+        void GenerateAndRenderSingleScanline(IImageReaderWriter destImage, Scanline scline, ISpanGenerator span_gen)
         {
 
             int y = scline.Y;
             int num_spans = scline.SpanCount;
             byte[] covers = scline.GetCovers();
 
+            if (destImage.Stride > tempSpanColors.AllocatedSize)
+            {
+                //if not enough -> alloc more
+                tempSpanColors.Clear(destImage.Stride);
+            }
+
             for (int i = 1; i <= num_spans; ++i)
             {
                 ScanlineSpan span = scline.GetSpan(i);
                 int x = span.x;
-                int len = span.len; 
+                int len = span.len;
+                bool firstCoverForAll = false;
 
-                if (len < 0) { len = -len; } //make absolute value
-
-                if (len > tempSpanColors.AllocatedSize)
-                {
-                    //if not enough -> alloc more
-                    tempSpanColors.Clear(len);
-                }
-
+                if (len < 0) { len = -len; firstCoverForAll = true; } //make absolute value
+                 
                 var colorArray = tempSpanColors.Array;
-                span_gen.Generate(colorArray, 0, x, y, len);
-
-                bool useFirstCoverForAll = span.len < 0;
+                span_gen.GenerateColors(colorArray, 0, x, y, len);
 
                 destImage.BlendColorHSpan(x, y, len,
                     colorArray, 0,
-                    covers, span.cover_index, useFirstCoverForAll);
+                    covers, span.cover_index,
+                    firstCoverForAll);
             }
         }
+    }
 
 
+    //----------------------------
+    public class CustomScanlineRasToDestBitmapRenderer : ScanlineRasToDestBitmapRenderer
+    {
 
     }
 }

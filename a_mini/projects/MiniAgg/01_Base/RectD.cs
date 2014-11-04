@@ -6,13 +6,13 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg
 {
-    public struct RectangleDouble
+    public struct RectD
     {
         public double Left, Bottom, Right, Top;
 
-        public static readonly RectangleDouble ZeroIntersection = new RectangleDouble(double.MaxValue, double.MaxValue, double.MinValue, double.MinValue);
+        public static readonly RectD ZeroIntersection = new RectD(double.MaxValue, double.MaxValue, double.MinValue, double.MinValue);
 
-        public RectangleDouble(double left, double bottom, double right, double top)
+        public RectD(double left, double bottom, double right, double top)
         {
             this.Left = left;
             this.Bottom = bottom;
@@ -20,7 +20,7 @@ namespace PixelFarm.Agg
             this.Top = top;
         }
 
-        public RectangleDouble(RectangleInt intRect)
+        public RectD(RectInt intRect)
         {
             Left = intRect.Left;
             Bottom = intRect.Bottom;
@@ -33,7 +33,7 @@ namespace PixelFarm.Agg
             init(left, bottom, right, top);
         }
 
-        public static bool operator ==(RectangleDouble a, RectangleDouble b)
+        public static bool operator ==(RectD a, RectD b)
         {
             if (a.Left == b.Left && a.Bottom == b.Bottom && a.Right == b.Right && a.Top == b.Top)
             {
@@ -43,7 +43,7 @@ namespace PixelFarm.Agg
             return false;
         }
 
-        public static bool operator !=(RectangleDouble a, RectangleDouble b)
+        public static bool operator !=(RectD a, RectD b)
         {
             if (a.Left != b.Left || a.Bottom != b.Bottom || a.Right != b.Right || a.Top != b.Top)
             {
@@ -60,14 +60,14 @@ namespace PixelFarm.Agg
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() == typeof(RectangleDouble))
+            if (obj.GetType() == typeof(RectD))
             {
-                return this == (RectangleDouble)obj;
+                return this == (RectD)obj;
             }
             return false;
         }
 
-        public bool Equals(RectangleDouble other, double epsilon)
+        public bool Equals(RectD other, double epsilon)
         {
             return Math.Abs(Left - other.Left) <= epsilon
                 && Math.Abs(Bottom - other.Bottom) <= epsilon
@@ -101,7 +101,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public RectangleDouble normalize()
+        public RectD normalize()
         {
             double t;
             if (Left > Right) { t = Left; Left = Right; Right = t; }
@@ -109,7 +109,7 @@ namespace PixelFarm.Agg
             return this;
         }
 
-        public bool clip(RectangleDouble r)
+        public bool clip(RectD r)
         {
             if (Right > r.Right) Right = r.Right;
             if (Top > r.Top) Top = r.Top;
@@ -128,7 +128,7 @@ namespace PixelFarm.Agg
             return (x >= Left && x <= Right && y >= Bottom && y <= Top);
         }
 
-        public bool Contains(RectangleDouble innerRect)
+        public bool Contains(RectD innerRect)
         {
             if (Contains(innerRect.Left, innerRect.Bottom) && Contains(innerRect.Right, innerRect.Top))
             {
@@ -143,7 +143,7 @@ namespace PixelFarm.Agg
             return Contains(position.x, position.y);
         }
 
-        public bool IntersectRectangles(RectangleDouble rectToCopy, RectangleDouble rectToIntersectWith)
+        public bool IntersectRectangles(RectD rectToCopy, RectD rectToIntersectWith)
         {
             Left = rectToCopy.Left;
             Bottom = rectToCopy.Bottom;
@@ -163,7 +163,7 @@ namespace PixelFarm.Agg
             return false;
         }
 
-        public bool IntersectWithRectangle(RectangleDouble rectToIntersectWith)
+        public bool IntersectWithRectangle(RectD rectToIntersectWith)
         {
             if (Left < rectToIntersectWith.Left) Left = rectToIntersectWith.Left;
             if (Bottom < rectToIntersectWith.Bottom) Bottom = rectToIntersectWith.Bottom;
@@ -178,7 +178,7 @@ namespace PixelFarm.Agg
             return false;
         }
 
-        public void unite_rectangles(RectangleDouble r1, RectangleDouble r2)
+        public void unite_rectangles(RectD r1, RectD r2)
         {
             Left = r1.Left;
             Bottom = r1.Bottom;
@@ -190,7 +190,7 @@ namespace PixelFarm.Agg
             if (Bottom > r2.Bottom) Bottom = r2.Bottom;
         }
 
-        public void ExpandToInclude(RectangleDouble rectToInclude)
+        public void ExpandToInclude(RectD rectToInclude)
         {
             if (Right < rectToInclude.Right) Right = rectToInclude.Right;
             if (Top < rectToInclude.Top) Top = rectToInclude.Top;
@@ -227,14 +227,14 @@ namespace PixelFarm.Agg
             Top = Top + y;
         }
 
-        static public RectangleDouble operator *(RectangleDouble a, double b)
+        static public RectD operator *(RectD a, double b)
         {
-            return new RectangleDouble(a.Left * b, a.Bottom * b, a.Right * b, a.Top * b);
+            return new RectD(a.Left * b, a.Bottom * b, a.Right * b, a.Top * b);
         }
 
-        static public RectangleDouble operator *(double b, RectangleDouble a)
+        static public RectD operator *(double b, RectD a)
         {
-            return new RectangleDouble(a.Left * b, a.Bottom * b, a.Right * b, a.Top * b);
+            return new RectD(a.Left * b, a.Bottom * b, a.Right * b, a.Top * b);
         }
 
         public double XCenter

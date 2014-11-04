@@ -38,19 +38,53 @@ namespace PixelFarm.Agg
         Graphics2D gx;
         Stroke stroke;
 
+        ColorRGBA fillColor;
+        ColorRGBA strokeColor;
+
+        ScanlinePacked8 scline;
+        ScanlineRasterizer sclineRas;
+        ScanlineRasToDestBitmapRenderer sclineRasToBmp;
+
+        FilterMan filterMan = new FilterMan();
+
+        //-------------
+        //tools
+        //-------------
+        SimpleRect simpleRect = new SimpleRect();
+        Ellipse ellipse = new Ellipse();
+        PathStorage lines = new PathStorage();
+        RoundedRect roundRect = null;
+        MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+
+        //-------------
         public CanvasPainter(Graphics2D graphic2d)
         {
             this.gx = graphic2d;
-            stroke = new Stroke(1);//default
+            this.sclineRas = gx.ScanlineRasterizer;
+            this.stroke = new Stroke(1);//default
+
+            this.scline = graphic2d.ScanlinePacked8;
+            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
+
         }
         public void Clear(ColorRGBA color)
         {
             gx.Clear(color);
         }
+        public RectInt ClipBox
+        {
+            get { return this.gx.GetClippingRect(); }
+            set { this.gx.SetClippingRect(value); }
+        }
+        public void SetClipBox(int x1, int y1, int x2, int y2)
+        {
+            this.gx.SetClippingRect(new RectInt(x1, y1, x2, y2));
+        }
         public Graphics2D Graphics
         {
             get { return this.gx; }
         }
+
         /// <summary>
         /// draw circle
         /// </summary>
@@ -58,11 +92,31 @@ namespace PixelFarm.Agg
         /// <param name="y"></param>
         /// <param name="radius"></param>
         /// <param name="color"></param>
-        public void Circle(double x, double y, double radius, ColorRGBA color)
+        public void FillCircle(double x, double y, double radius, ColorRGBA color)
         {
-            Ellipse elipse = new Ellipse(x, y, radius, radius);
-            gx.Render(elipse.MakeVxs(), color);
+            ellipse.Reset(x, y, radius, radius);
+            gx.Render(ellipse.MakeVxs(), color);
         }
+        public void FillCircle(double x, double y, double radius)
+        {
+            ellipse.Reset(x, y, radius, radius);
+            gx.Render(ellipse.MakeVxs(), this.fillColor);
+        }
+        public void FillEllipse(double left, double bottom, double right, double top, int nsteps)
+        {
+            ellipse.Reset((left + right) * 0.5,
+                          (bottom + top) * 0.5,
+                          (right - left) * 0.5,
+                          (top - bottom) * 0.5,
+                           nsteps);
+            gx.Render(ellipse.MakeVxs(), this.fillColor);
+            //VertexStoreSnap trans_ell = txBilinear.TransformToVertexSnap(vxs);
+        }
+        public void DrawEllipse()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// draw line
         /// </summary>
@@ -73,17 +127,37 @@ namespace PixelFarm.Agg
         /// <param name="color"></param>
         public void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
-            PathStorage m_LinesToDraw = new PathStorage();
-            m_LinesToDraw.Clear();
-            m_LinesToDraw.MoveTo(x1, y1);
-            m_LinesToDraw.LineTo(x2, y2);
-            gx.Render(stroke.MakeVxs(m_LinesToDraw.Vxs), color);
+
+            lines.Clear();
+            lines.MoveTo(x1, y1);
+            lines.LineTo(x2, y2);
+            gx.Render(stroke.MakeVxs(lines.Vxs), color);
+        }
+        /// <summary>
+        /// draw line
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="color"></param>
+        public void Line(double x1, double y1, double x2, double y2)
+        {
+            lines.Clear();
+            lines.MoveTo(x1, y1);
+            lines.LineTo(x2, y2);
+            gx.Render(stroke.MakeVxs(lines.Vxs), this.strokeColor);
         }
         public double StrokeWidth
         {
             get { return this.stroke.Width; }
             set { this.stroke.Width = value; }
         }
+        public void Draw(VertexStore vxs)
+        {
+            gx.Render(stroke.MakeVxs(vxs), this.strokeColor);
+        }
+
         /// <summary>
         /// draw rectangle
         /// </summary>
@@ -95,77 +169,143 @@ namespace PixelFarm.Agg
         /// <param name="strokeWidth"></param>
         public void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
         {
-            SimpleRect simpleRect = new SimpleRect(left + .5, bottom + .5, right - .5, top - .5);
+            simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
             gx.Render(stroke.MakeVxs(simpleRect.MakeVxs()), color);
         }
-
+        public void Rectangle(double left, double bottom, double right, double top)
+        {
+            simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
+            gx.Render(stroke.MakeVxs(simpleRect.MakeVxs()), this.fillColor);
+        }
         public void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor)
         {
             if (right < left || top < bottom)
             {
                 throw new ArgumentException();
             }
-            SimpleRect rect = new SimpleRect(left, bottom, right, top);
-            gx.Render(rect.MakeVertexSnap(), fillColor);
+            simpleRect.SetRect(left, bottom, right, top);
+            gx.Render(simpleRect.MakeVertexSnap(), fillColor);
         }
-
-        public void DrawString(
-            string text,
-            double x,
-            double y,
-            double pointSize = 12,
-            Justification justification = Justification.Left,
-            Baseline baseline = Baseline.Text,
-            ColorRGBA color = new ColorRGBA(),
-            bool drawFromHintedCache = false,
-            ColorRGBA backgroundColor = new ColorRGBA())
+        public void FillRectangle(double left, double bottom, double right, double top)
         {
-
-            TypeFacePrinter stringPrinter = new TypeFacePrinter(text, pointSize, new Vector2(x, y), justification, baseline);
-            if (color.Alpha0To255 == 0)
+            if (right < left || top < bottom)
             {
-                color = ColorRGBA.Black;
+                throw new ArgumentException();
             }
-
-            if (backgroundColor.Alpha0To255 != 0)
-            {
-                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-            }
-
-            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-            stringPrinter.Render(gx, color);
+            simpleRect.SetRect(left, bottom, right, top);
+            gx.Render(simpleRect.MakeVertexSnap(), this.fillColor);
         }
-        public void DrawString2(
+        public void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
+        {
+            if (roundRect == null)
+            {
+                roundRect = new RoundedRect(left, bottom, right, top, radius);
+                roundRect.NormalizeRadius();
+            }
+            else
+            {
+                roundRect.SetRect(left, bottom, right, top);
+                roundRect.SetRadius(radius);
+                roundRect.NormalizeRadius();
+            }
+            this.Fill(roundRect.MakeVxs());
+        }
+        public void DrawRoundRect(double left, double bottom, double right, double top, double radius)
+        {
+            if (roundRect == null)
+            {
+                roundRect = new RoundedRect(left, bottom, right, top, radius);
+                roundRect.NormalizeRadius();
+            }
+            else
+            {
+                roundRect.SetRect(left, bottom, right, top);
+                roundRect.SetRadius(radius);
+                roundRect.NormalizeRadius();
+            }
+            this.Draw(roundRect.MakeVxs());
+        }
+       
+        public void DrawString(
            string text,
            double x,
-           double y,
-           double pointSize = 12,
-           Justification justification = Justification.Left,
-           Baseline baseline = Baseline.Text,
-           ColorRGBA color = new ColorRGBA(),
-           bool drawFromHintedCache = false,
-           ColorRGBA backgroundColor = new ColorRGBA())
+           double y)
         {
 
-            //1. parse text  
-            var stringPrinter = new PixelFarm.Agg.Font.TypeFacePrinter2(
-                text,
-                pointSize,
-                new Vector2(x, y), justification, baseline);
-
-            if (color.Alpha0To255 == 0)
-            {
-                color = ColorRGBA.Black;
-            }
-
-            if (backgroundColor.Alpha0To255 != 0)
-            {
-                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-            }
-
-            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-            stringPrinter.Render(gx, color);
+            //1. parse text              
+            stringPrinter.DrawFromHintedCache = false; 
+            stringPrinter.LoadText(text);
+            var vxs = stringPrinter.MakeVxs();
+            vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
+            this.gx.Render(vxs, this.fillColor); 
         }
 
+        /// <summary>
+        /// fill vertex store
+        /// </summary>
+        /// <param name="vxs"></param>
+        /// <param name="c"></param>
+        public void Fill(VertexStoreSnap snap)
+        {
+            sclineRas.AddPath(snap);
+            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, sclineRas, scline, fillColor);
+        }
+        public void Fill(VertexStore vxs)
+        {
+            sclineRas.AddPath(vxs);
+            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, sclineRas, scline, fillColor);
+        }
+
+        public ColorRGBA FillColor
+        {
+            get { return fillColor; }
+            set { this.fillColor = value; }
+        }
+        public ColorRGBA StrokeColor
+        {
+            get { return strokeColor; }
+            set { this.strokeColor = value; }
+        }
+        public void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath)
+        {
+            sclineRasToBmp.RenderSolidAllPaths(this.gx.DestImage,
+                this.sclineRas,
+                this.scline,
+                vxs,
+                colors,
+                pathIndexs,
+                numPath);
+        }
+        public void Fill(VertexStore vxs, ISpanGenerator spanGen)
+        {
+            this.sclineRas.AddPath(vxs); 
+            sclineRasToBmp.GenerateAndRender(this.gx.DestImage, sclineRas, scline, spanGen); 
+        }     
+     
+
+        //----------------------
+        /// <summary>
+        /// do filter at specific area
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="area"></param>
+        public void DoFilterBlurStack(RectInt area, int r)
+        {
+            ChildImage img = new ChildImage(this.gx.DestImage, gx.PixelBlender,
+                area.Left, area.Bottom, area.Right, area.Top);
+            filterMan.DoStackBlur(img, r);
+        }
+        public void DoFilterBlurRecursive(RectInt area, int r)
+        {
+            ChildImage img = new ChildImage(this.gx.DestImage, gx.PixelBlender,
+                area.Left, area.Bottom, area.Right, area.Top);
+            filterMan.DoRecursiveBlur(img, r);
+        }
+        //----------------
+
+
+
+
     }
+
 }

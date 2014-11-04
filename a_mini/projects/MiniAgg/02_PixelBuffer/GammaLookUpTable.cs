@@ -29,11 +29,11 @@ namespace PixelFarm.Agg
         const int GAMMA_SIZE = 1 << GAMMA_SHIFT;
         const int GAMMA_MASK = GAMMA_SIZE - 1;
 
-        double m_gamma;
+        float m_gamma;
         byte[] m_dir_gamma;
         byte[] m_inv_gamma; 
 
-        public GammaLookUpTable(double gamma)
+        public GammaLookUpTable(float gamma)
         {
             m_gamma = gamma;
             m_dir_gamma = new byte[GAMMA_SIZE];
@@ -41,14 +41,14 @@ namespace PixelFarm.Agg
             SetGamma(m_gamma);
         }
 
-        void SetGamma(double g)
+        void SetGamma(float g)
         {
             m_gamma = g;
-            double inv_g = 1.0 / g;
+            float inv_g = (float)(1.0 / g);
             for (int i = GAMMA_SIZE - 1; i >= 0; --i)
             {
-                m_dir_gamma[i] = (byte)AggBasics.uround(Math.Pow(i / (double)GAMMA_MASK, m_gamma) * (double)GAMMA_MASK);
-                m_inv_gamma[i] = (byte)AggBasics.uround(Math.Pow(i / (double)GAMMA_MASK, inv_g) * (double)GAMMA_MASK);
+                m_dir_gamma[i] = (byte)AggBasics.uround(Math.Pow(i / (float)GAMMA_MASK, m_gamma) * (float)GAMMA_MASK);
+                m_inv_gamma[i] = (byte)AggBasics.uround(Math.Pow(i / (float)GAMMA_MASK, inv_g) * (float)GAMMA_MASK);
             }
         }
 

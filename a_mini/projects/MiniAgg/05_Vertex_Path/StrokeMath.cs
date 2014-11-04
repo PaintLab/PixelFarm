@@ -206,7 +206,7 @@ namespace PixelFarm.Agg.VertexSource
 
             output.Clear();
 
-            double cp = AggMath.cross_product(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
+            double cp = AggMath.Cross(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
             if (cp != 0 && (cp > 0) == (m_width > 0))
             {
                 // Inner join
@@ -294,7 +294,7 @@ namespace PixelFarm.Agg.VertexSource
                     //-------------------
                     if (m_approx_scale * (m_width_abs - dbevel) < m_width_eps)
                     {
-                        if (AggMath.calc_intersection(v0.x + dx1, v0.y - dy1,
+                        if (AggMath.CalcIntersect(v0.x + dx1, v0.y - dy1,
                                              v1.x + dx1, v1.y - dy1,
                                              v1.x + dx2, v1.y - dy2,
                                              v2.x + dx2, v2.y - dy2,
@@ -395,7 +395,7 @@ namespace PixelFarm.Agg.VertexSource
             bool miter_limit_exceeded = true; // Assume the worst
             bool intersection_failed = true; // Assume the worst
 
-            if (AggMath.calc_intersection(v0.x + dx1, v0.y - dy1,
+            if (AggMath.CalcIntersect(v0.x + dx1, v0.y - dy1,
                                  v1.x + dx1, v1.y - dy1,
                                  v1.x + dx2, v1.y - dy2,
                                  v2.x + dx2, v2.y - dy2,
@@ -425,8 +425,8 @@ namespace PixelFarm.Agg.VertexSource
                 //----------------
                 double x2 = v1.x + dx1;
                 double y2 = v1.y - dy1;
-                if ((AggMath.cross_product(v0.x, v0.y, v1.x, v1.y, x2, y2) < 0.0) ==
-                   (AggMath.cross_product(v1.x, v1.y, v2.x, v2.y, x2, y2) < 0.0))
+                if ((AggMath.Cross(v0.x, v0.y, v1.x, v1.y, x2, y2) < 0.0) ==
+                   (AggMath.Cross(v1.x, v1.y, v2.x, v2.y, x2, y2) < 0.0))
                 {
                     // This case means that the next segment continues 
                     // the previous one (straight line)

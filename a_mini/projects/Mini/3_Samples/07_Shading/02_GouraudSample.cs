@@ -12,7 +12,7 @@ using PixelFarm.Agg.VertexSource;
 using Mini;
 namespace PixelFarm.Agg.Sample_Gouraud
 {
-    [Info(OrderCode = "07")]
+    [Info(OrderCode = "07_2")]
     [Info("Gouraud shading. It's a simple method of interpolating colors in a triangle. There's no 'cube' drawn"
                 + ", there're just 6 triangles. You define a triangle and colors in its vertices. When rendering, the "
                 + "colors will be linearly interpolated. But there's a problem that appears when drawing adjacent "
@@ -22,7 +22,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
                 + "the gamma-correction value. But it's tricky, because the values depend on the opacity of the polygons."
                 + " In this example you can change the opacity, the dilation value and gamma. Also you can drag the "
                 + "Red, Green and Blue corners of the “cube”.")]
-    public class gouraud_application : DemoBase
+    public class GouraudApplication : DemoBase
     {
         double[] m_x = new double[3];
         double[] m_y = new double[3];
@@ -32,7 +32,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
 
         Stopwatch stopwatch = new Stopwatch();
 
-        public gouraud_application()
+        public GouraudApplication()
         {
 
             m_idx = (-1);
@@ -41,7 +41,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             m_x[2] = 143; m_y[2] = 310;
 
             this.DilationValue = 0.175;
-            this.LinearGamma = 0.809;
+            this.LinearGamma = 0.809f;
             this.AlphaValue = 1;
         }
 
@@ -53,22 +53,22 @@ namespace PixelFarm.Agg.Sample_Gouraud
         }
 
         [DemoConfig(MaxValue = 1)]
-        public double LinearGamma
+        public float LinearGamma
         {
             get;
             set;
         }
         [DemoConfig(MaxValue = 1)]
-        public double AlphaValue
+        public float AlphaValue
         {
             get;
             set;
         }
         //template<class Scanline, class Ras> 
-        public void render_gouraud(IImage backBuffer, Scanline sl, ScanlineRasterizer ras)
+        public void render_gouraud(IImageReaderWriter backBuffer, Scanline sl, ScanlineRasterizer ras, ScanlineRasToDestBitmapRenderer sclineRasToBmp)
         {
-            double alpha = this.AlphaValue;
-            double brc = 1;
+            float alpha = this.AlphaValue;
+            float brc = 1;
             Graphics2D graphics2D = NewGraphics2D();
 
 #if SourceDepth24
@@ -79,7 +79,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ClipProxyImage ren_base = new ClipProxyImage(image);
 
             //span_allocator span_alloc = new span_allocator();
-            SpanGouraudRGBA span_gen = new SpanGouraudRGBA();
+            SpanGenGouraudRGBA span_gen = new SpanGenGouraudRGBA();
 
             ras.ResetGamma(new GammaLinear(0.0, this.LinearGamma));
 
@@ -102,17 +102,17 @@ namespace PixelFarm.Agg.Sample_Gouraud
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(1, 0, 0, alpha),
                               ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
                               ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
-
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
-            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs()));
 
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs())); 
             sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
+
+
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
                               ColorRGBAf.MakeColorRGBA(0, 0, 1, alpha),
-                             ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
+                              ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
 
             span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
             ras.AddPath(span_gen.MakeVxs());
@@ -129,8 +129,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
 
             brc = 1 - brc;
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(1, 0, 0, alpha),
-                            ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
-                           ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
+                              ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
+                              ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
             ras.AddPath(span_gen.MakeVxs());
             sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
@@ -159,9 +159,9 @@ namespace PixelFarm.Agg.Sample_Gouraud
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRectInt());
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            IImage backBuffer = widgetsSubImage;
+            IImageReaderWriter backBuffer = widgetsSubImage;
 
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
@@ -172,9 +172,9 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ren_base.Clear(new ColorRGBAf(1.0f, 1.0f, 1.0f).ToColorRGBA());
 
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
-            ScanlineRasterizer ras = new ScanlineRasterizer();
+            ScanlineRasterizer ras = graphics2D.ScanlineRasterizer;
 #if true
-            render_gouraud(backBuffer, sl, ras);
+            render_gouraud(backBuffer, sl, ras, graphics2D.ScanlineRasToDestBitmap);
 #else
             agg.span_allocator span_alloc = new span_allocator();
             span_gouraud_rgba span_gen = new span_gouraud_rgba(new rgba8(255, 0, 0, 255), new rgba8(0, 255, 0, 255), new rgba8(0, 0, 255, 255), 320, 220, 100, 100, 200, 100, 0);
@@ -197,8 +197,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
             int i;
             if (isRightButton)
             {
-                ScanlineUnpacked8 sl = new ScanlineUnpacked8();
-                ScanlineRasterizer ras = new ScanlineRasterizer();
+                //ScanlineUnpacked8 sl = new ScanlineUnpacked8();
+                //ScanlineRasterizer ras = new ScanlineRasterizer();
                 //stopwatch.Restart();
                 stopwatch.Stop();
                 stopwatch.Reset();
