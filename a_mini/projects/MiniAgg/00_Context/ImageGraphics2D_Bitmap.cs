@@ -115,10 +115,10 @@ namespace PixelFarm.Agg
         void DrawImage(IImageReaderWriter sourceImage, ISpanGenerator spanImageFilter, VertexStore vxs)
         {
 
-            ScanlineRasterizer.AddPath(vxs);
+            sclineRas.AddPath(vxs);
             sclineRasToBmp.GenerateAndRender(
-                new ChildImage(destImageReaderWriter, destImageReaderWriter.GetRecieveBlender()),
-                ScanlineRasterizer,
+                destImageReaderWriter,
+                sclineRas,
                 sclinePack8,
                 spanImageFilter);
 

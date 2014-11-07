@@ -621,11 +621,11 @@ namespace PixelFarm.Agg
         //    //for_each_pixel(apply_gamma_inv_rgba<color_type, order_type, GammaLut>(g));
         //}
 
-        public bool IsPixelVisible(int x, int y)
-        {
-            ColorRGBA pixelValue = GetRecieveBlender().PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
-            return (pixelValue.Alpha0To255 != 0 || pixelValue.Red0To255 != 0 || pixelValue.Green0To255 != 0 || pixelValue.Blue0To255 != 0);
-        }
+        //public bool IsPixelVisible(int x, int y)
+        //{
+        //    ColorRGBA pixelValue = GetRecieveBlender().PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
+        //    return (pixelValue.Alpha0To255 != 0 || pixelValue.Red0To255 != 0 || pixelValue.Green0To255 != 0 || pixelValue.Blue0To255 != 0);
+        //}
 
 
         //public override int GetHashCode()

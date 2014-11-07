@@ -70,17 +70,49 @@ namespace PixelFarm.Agg
         }
 
         public void GenerateAndRender(IImageReaderWriter destImage,
-             ScanlineRasterizer rasterizer,
+             ScanlineRasterizer sclineRas,
              Scanline scline,
              ISpanGenerator spanGenerator)
         {
-            if (rasterizer.RewindScanlines())
+            if (sclineRas.RewindScanlines())
             {
-                scline.ResetSpans(rasterizer.MinX, rasterizer.MaxX);
+                scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
                 spanGenerator.Prepare();
-                while (rasterizer.SweepScanline(scline))
+
+                if (destImage.Stride > tempSpanColors.AllocatedSize)
                 {
-                    GenerateAndRenderSingleScanline(destImage, scline, spanGenerator);
+                    //if not enough -> alloc more
+                    tempSpanColors.Clear(destImage.Stride);
+                }
+
+                ColorRGBA[] colorArray = tempSpanColors.Array;
+
+                while (sclineRas.SweepScanline(scline))
+                {   
+
+                    //render single scanline 
+                    int y = scline.Y;
+                    int num_spans = scline.SpanCount;
+                    byte[] covers = scline.GetCovers();
+
+                    for (int i = 1; i <= num_spans; ++i)
+                    {
+                        ScanlineSpan span = scline.GetSpan(i);
+                        int x = span.x;
+                        int span_len = span.len;
+                        bool firstCoverForAll = false;
+
+                        if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
+
+
+                        spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
+
+                        destImage.BlendColorHSpan(x, y, span_len,
+                            colorArray, 0,
+                            covers, span.cover_index,
+                            firstCoverForAll);
+                    } 
+                 
                 }
             }
         }
@@ -134,37 +166,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        void GenerateAndRenderSingleScanline(IImageReaderWriter destImage, Scanline scline, ISpanGenerator span_gen)
-        {
-
-            int y = scline.Y;
-            int num_spans = scline.SpanCount;
-            byte[] covers = scline.GetCovers();
-
-            if (destImage.Stride > tempSpanColors.AllocatedSize)
-            {
-                //if not enough -> alloc more
-                tempSpanColors.Clear(destImage.Stride);
-            }
-
-            for (int i = 1; i <= num_spans; ++i)
-            {
-                ScanlineSpan span = scline.GetSpan(i);
-                int x = span.x;
-                int len = span.len;
-                bool firstCoverForAll = false;
-
-                if (len < 0) { len = -len; firstCoverForAll = true; } //make absolute value
-                 
-                var colorArray = tempSpanColors.Array;
-                span_gen.GenerateColors(colorArray, 0, x, y, len);
-
-                destImage.BlendColorHSpan(x, y, len,
-                    colorArray, 0,
-                    covers, span.cover_index,
-                    firstCoverForAll);
-            }
-        }
+         
     }
 
 
