@@ -50,6 +50,7 @@ namespace PixelFarm.Agg.Image
              ISpanInterpolator spanInterpolator)
             : base(sourceAccessor, spanInterpolator, null)
         {
+
         }
 
         public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
