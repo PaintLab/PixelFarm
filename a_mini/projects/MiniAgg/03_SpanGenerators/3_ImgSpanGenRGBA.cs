@@ -320,21 +320,25 @@ namespace PixelFarm.Agg.Image
 
     public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
     {
-        ColorRGBA m_OutsideSourceColor;
+        ColorRGBA m_outsideSourceColor;
 
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
         public ImgSpanGenRGBA_BilinearClip(IImageBufferAccessor src,
-            ColorRGBA back_color, ISpanInterpolator inter)
+            ColorRGBA back_color, 
+            ISpanInterpolator inter)
             : base(src, inter, null)
         {
-            m_OutsideSourceColor = back_color;
+            m_outsideSourceColor = back_color;
         }
-
-        public ColorRGBA background_color() { return m_OutsideSourceColor; }
-        public void background_color(ColorRGBA v) { m_OutsideSourceColor = v; }
+        public ColorRGBA BackgroundColor
+        {
+            get { return this.m_outsideSourceColor; }
+            set { this.m_outsideSourceColor = value; }
+        }
+         
 
         public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
@@ -343,8 +347,8 @@ namespace PixelFarm.Agg.Image
             byte[] fg_ptr;
 
             if (base.m_interpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
-                && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(PixelFarm.Agg.Transform.Affine)
-            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
+                && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)base.m_interpolator).Transformer.GetType() == typeof(PixelFarm.Agg.Transform.Affine)
+            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)base.m_interpolator).Transformer).IsIdentity())
             {
                 fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
                 //unsafe
@@ -381,10 +385,10 @@ namespace PixelFarm.Agg.Image
 
             int[] accumulatedColor = new int[4];
 
-            int back_r = m_OutsideSourceColor.red;
-            int back_g = m_OutsideSourceColor.green;
-            int back_b = m_OutsideSourceColor.blue;
-            int back_a = m_OutsideSourceColor.alpha;
+            int back_r = m_outsideSourceColor.red;
+            int back_g = m_outsideSourceColor.green;
+            int back_b = m_outsideSourceColor.blue;
+            int back_a = m_outsideSourceColor.alpha;
 
             int distanceBetweenPixelsInclusive = base.ImgBuffAccessor.SourceImage.BytesBetweenPixelsInclusive;
             int maxx = (int)SourceRenderingBuffer.Width - 1;
@@ -488,7 +492,6 @@ namespace PixelFarm.Agg.Image
                                      ((int)img_subpix_const.SCALE - y_hr));
                             if (weight > BASE_MASK)
                             {
-                                BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
                             }
 
                             x_lr++;
@@ -533,7 +536,8 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        private void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, IImageReaderWriter SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
+         void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, 
+             IImageReaderWriter SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
         {
             byte[] fg_ptr;
             unchecked

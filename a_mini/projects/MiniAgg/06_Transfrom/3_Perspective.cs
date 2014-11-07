@@ -22,7 +22,7 @@ using System;
 namespace PixelFarm.Agg.Transform
 {
     //=======================================================trans_perspective
-    public sealed class Perspective : ITransform
+    public sealed class Perspective : ICoordTransformer
     {
         const double EPSILON = 1e-14;
         double sx, shy, w0, shx, sy, w1, tx, ty, w2;

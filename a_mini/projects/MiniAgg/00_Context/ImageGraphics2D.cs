@@ -166,7 +166,7 @@ namespace PixelFarm.Agg
         }
 
         void DrawImage(IImageReaderWriter sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
-        {  
+        {
             VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
             ScanlineRasterizer.AddPath(sp1);
             sclineRasToBmp.GenerateAndRender(
@@ -271,7 +271,7 @@ namespace PixelFarm.Agg
 
                 ImgSpanGen spanImageFilter;
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
+                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source);
 
                 spanImageFilter = new ImgSpanGenRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
 
@@ -293,7 +293,7 @@ namespace PixelFarm.Agg
 
 
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
+                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source);
 
                 ImgSpanGen spanImageFilter = null;
                 switch (source.BitDepth)
@@ -419,8 +419,8 @@ namespace PixelFarm.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
                 var spanImageFilter = new ImgSpanGenRGBA_BilinearClip(
-                    new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA()),
-                    ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(),
+                    new ImageBufferAccessorClip(source),
+                    ColorRGBA.Black,
                     new SpanInterpolatorLinear(sourceRectTransform));
 
                 DrawImage(source, spanImageFilter, destRectTransform);
@@ -443,7 +443,7 @@ namespace PixelFarm.Agg
 
 
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
+                var sourceAccessor = new ImageBufferAccessorClip(source);
 
                 ImgSpanGen spanImageFilter = null;
                 switch (source.BitDepth)

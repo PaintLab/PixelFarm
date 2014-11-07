@@ -17,8 +17,7 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using System.Runtime.InteropServices;
-
+ 
 namespace PixelFarm.Agg.Image
 {
     public interface IImageBufferAccessor
@@ -35,11 +34,11 @@ namespace PixelFarm.Agg.Image
 
     public abstract class ImageBufferAccessor : IImageBufferAccessor
     {
-        protected IImageReaderWriter m_SourceImage;
-        protected int m_x, m_x0, m_y, m_DistanceBetweenPixelsInclusive;
-        protected byte[] m_Buffer;
-        protected int m_CurrentBufferOffset = -1;
-        int m_Width;
+        IImageReaderWriter m_sourceImage;
+        int m_x, m_x0, m_y, m_distanceBetweenPixelsInclusive;
+        byte[] m_buffer;
+        int m_currentBufferOffset = -1;
+        int m_width;
 
         public ImageBufferAccessor(IImageReaderWriter img)
         {
@@ -48,17 +47,17 @@ namespace PixelFarm.Agg.Image
 
         void Attach(IImageReaderWriter pixf)
         {
-            m_SourceImage = pixf;
-            m_Buffer = m_SourceImage.GetBuffer();
-            m_Width = m_SourceImage.Width;
-            m_DistanceBetweenPixelsInclusive = m_SourceImage.BytesBetweenPixelsInclusive;
+            m_sourceImage = pixf;
+            m_buffer = m_sourceImage.GetBuffer();
+            m_width = m_sourceImage.Width;
+            m_distanceBetweenPixelsInclusive = m_sourceImage.BytesBetweenPixelsInclusive;
         }
 
         public IImageReaderWriter SourceImage
         {
             get
             {
-                return m_SourceImage;
+                return m_sourceImage;
             }
         }
 
@@ -68,7 +67,7 @@ namespace PixelFarm.Agg.Image
             int y = m_y;
             unchecked
             {
-                if ((uint)x >= (uint)m_SourceImage.Width)
+                if ((uint)x >= (uint)m_sourceImage.Width)
                 {
                     if (x < 0)
                     {
@@ -76,11 +75,11 @@ namespace PixelFarm.Agg.Image
                     }
                     else
                     {
-                        x = (int)m_SourceImage.Width - 1;
+                        x = (int)m_sourceImage.Width - 1;
                     }
                 }
 
-                if ((uint)y >= (uint)m_SourceImage.Height)
+                if ((uint)y >= (uint)m_sourceImage.Height)
                 {
                     if (y < 0)
                     {
@@ -88,13 +87,13 @@ namespace PixelFarm.Agg.Image
                     }
                     else
                     {
-                        y = (int)m_SourceImage.Height - 1;
+                        y = (int)m_sourceImage.Height - 1;
                     }
                 }
             }
 
-            bufferByteOffset = m_SourceImage.GetBufferOffsetXY(x, y);
-            return m_SourceImage.GetBuffer();
+            bufferByteOffset = m_sourceImage.GetBufferOffsetXY(x, y);
+            return m_sourceImage.GetBuffer();
         }
 
         public byte[] GetSpan(int x, int y, int len, out int bufferOffset)
@@ -103,17 +102,17 @@ namespace PixelFarm.Agg.Image
             m_y = y;
             unchecked
             {
-                if ((uint)y < (uint)m_SourceImage.Height
-                    && x >= 0 && x + len <= (int)m_SourceImage.Width)
+                if ((uint)y < (uint)m_sourceImage.Height
+                    && x >= 0 && x + len <= (int)m_sourceImage.Width)
                 {
-                    bufferOffset = m_SourceImage.GetBufferOffsetXY(x, y);
-                    m_Buffer = m_SourceImage.GetBuffer();
-                    m_CurrentBufferOffset = bufferOffset;
-                    return m_Buffer;
+                    bufferOffset = m_sourceImage.GetBufferOffsetXY(x, y);
+                    m_buffer = m_sourceImage.GetBuffer();
+                    m_currentBufferOffset = bufferOffset;
+                    return m_buffer;
                 }
             }
 
-            m_CurrentBufferOffset = -1;
+            m_currentBufferOffset = -1;
             return GetPixels(out bufferOffset);
         }
 
@@ -122,11 +121,11 @@ namespace PixelFarm.Agg.Image
             // this is the code (managed) that the original agg used.  
             // It looks like it doesn't check x but, It should be a bit faster and is valid 
             // because "span" checked the whole length for good x.
-            if (m_CurrentBufferOffset != -1)
+            if (m_currentBufferOffset != -1)
             {
-                m_CurrentBufferOffset += m_DistanceBetweenPixelsInclusive;
-                bufferOffset = m_CurrentBufferOffset;
-                return m_Buffer;
+                m_currentBufferOffset += m_distanceBetweenPixelsInclusive;
+                bufferOffset = m_currentBufferOffset;
+                return m_buffer;
             }
             ++m_x;
             return GetPixels(out bufferOffset);
@@ -136,48 +135,29 @@ namespace PixelFarm.Agg.Image
         {
             ++m_y;
             m_x = m_x0;
-            if (m_CurrentBufferOffset != -1
-                && (uint)m_y < (uint)m_SourceImage.Height)
+            if (m_currentBufferOffset != -1
+                && (uint)m_y < (uint)m_sourceImage.Height)
             {
-                m_CurrentBufferOffset = m_SourceImage.GetBufferOffsetXY(m_x, m_y);
-                m_SourceImage.GetBuffer();
-                bufferOffset = m_CurrentBufferOffset; ;
-                return m_Buffer;
+                m_currentBufferOffset = m_sourceImage.GetBufferOffsetXY(m_x, m_y);
+                m_sourceImage.GetBuffer();
+                bufferOffset = m_currentBufferOffset; ;
+                return m_buffer;
             }
 
-            m_CurrentBufferOffset = -1;
+            m_currentBufferOffset = -1;
             return GetPixels(out bufferOffset);
         }
     }
 
     public sealed class ImageBufferAccessorClip : ImageBufferAccessor
     {
-        byte[] m_OutsideBufferColor;
 
-        public ImageBufferAccessorClip(IImageReaderWriter sourceImage, ColorRGBA bk)
+        ColorRGBA backColor;
+        public ImageBufferAccessorClip(IImageReaderWriter sourceImage)
             : base(sourceImage)
         {
-            m_OutsideBufferColor = new byte[4];
-            m_OutsideBufferColor[0] = bk.red;
-            m_OutsideBufferColor[1] = bk.green;
-            m_OutsideBufferColor[2] = bk.blue;
-            m_OutsideBufferColor[3] = bk.alpha;
+            backColor = ColorRGBA.Black;
         }
 
-        //private byte[] pixel(out int bufferByteOffset)
-        //{
-        //    unchecked
-        //    {
-        //        if (((uint)m_x < (uint)m_SourceImage.Width)
-        //            && ((uint)m_y < (uint)m_SourceImage.Height))
-        //        {
-        //            bufferByteOffset = m_SourceImage.GetBufferOffsetXY(m_x, m_y);
-        //            return m_SourceImage.GetBuffer();
-        //        }
-        //    }
-
-        //    bufferByteOffset = 0;
-        //    return m_OutsideBufferColor;
-        //}
     }
 }

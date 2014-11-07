@@ -65,17 +65,7 @@ namespace PixelFarm.Agg
             get { return this.m_colorsProvider; }
             set { this.m_colorsProvider = value; }
         }
-
-        //public double d1
-        //{
-        //    get { return (double)(m_d1) / GR_SUBPIX_SCALE; }
-        //    set { m_d1 = AggBasics.iround(value * GR_SUBPIX_SCALE); }
-        //}
-        //public double d2
-        //{
-        //    get { return (double)(m_d2) / GR_SUBPIX_SCALE; }
-        //    set { m_d2 = AggBasics.iround(value * GR_SUBPIX_SCALE); }
-        //}
+         
 
         //--------------------------------------------------------------------
         public void Prepare() { }

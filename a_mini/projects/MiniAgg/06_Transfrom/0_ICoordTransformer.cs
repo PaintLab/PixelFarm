@@ -20,7 +20,7 @@
 namespace PixelFarm.Agg.Transform
 {
 
-    public interface ITransform
+    public interface ICoordTransformer
     {
         void Transform(ref double x, ref double y);
     }

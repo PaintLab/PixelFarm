@@ -28,8 +28,8 @@ namespace PixelFarm.Agg
         void GetCoord(out int x, out int y);
         void Next();
         //------------------------------------------------
-        Transform.ITransform GetTransformer();
-        void SetTransformer(Transform.ITransform trans);
+        Transform.ICoordTransformer Transformer { get; set; }
+         
         //------------------------------------------------
         void Resync(double xe, double ye, int len);
         void GetLocalScale(out int x, out int y);

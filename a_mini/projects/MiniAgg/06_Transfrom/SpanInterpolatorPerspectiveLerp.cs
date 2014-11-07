@@ -213,16 +213,12 @@ namespace PixelFarm.Agg.Transform
             m_scale_x = new LineInterpolatorDDA2(sx1, sx2, (int)len);
             m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
         }
-
-        public Transform.ITransform GetTransformer()
+        public Transform.ICoordTransformer Transformer
         {
-            throw new System.NotImplementedException();
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
         }
-
-        public void SetTransformer(Transform.ITransform trans)
-        {
-            throw new System.NotImplementedException();
-        }
+       
 
         //----------------------------------------------------------------
         public void Next()

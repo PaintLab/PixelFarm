@@ -28,30 +28,14 @@ namespace PixelFarm.Agg.Gradients
         ColorRGBA this[int v] { get; }
     }
 
-    //==========================================================gradient_circle
-    public class GvcCircle : IGradientValueCalculator
-    {
-        // Actually the same as radial. Just for compatibility
-        public int Calculate(int x, int y, int d)
-        {
-            return (int)(AggMath.fast_sqrt((int)(x * x + y * y)));
-        }
-    }
+
     //==========================================================gradient_radial
     public class GvcRadial : IGradientValueCalculator
     {
         public int Calculate(int x, int y, int d)
         {
+            //return (int)(AggMath.fast_sqrt((int)(x * x + y * y)));
             return (int)(System.Math.Sqrt(x * x + y * y));
-        }
-    }
-
-    //========================================================gradient_radial_d
-    public class GvcRadialD : IGradientValueCalculator
-    {
-        public int Calculate(int x, int y, int d)
-        {
-            return (int)AggBasics.uround(System.Math.Sqrt((double)(x) * (double)(x) + (double)(y) * (double)(y)));
         }
     }
 
@@ -70,22 +54,13 @@ namespace PixelFarm.Agg.Gradients
         public GvcRadialFocus()
         {
             m_r = (100 * SpanGenGradient.GR_SUBPIX_SCALE);
-            m_fx = (0);
-            m_fy = (0);
+            m_fx = 0;
+            m_fy = 0;
             UpdateValues();
         }
 
         //---------------------------------------------------------------------
-        public GvcRadialFocus(double r, double fx, double fy)
-        {
-            m_r = (AggBasics.iround(r * SpanGenGradient.GR_SUBPIX_SCALE));
-            m_fx = (AggBasics.iround(fx * SpanGenGradient.GR_SUBPIX_SCALE));
-            m_fy = (AggBasics.iround(fy * SpanGenGradient.GR_SUBPIX_SCALE));
-            UpdateValues();
-        }
-
-        //---------------------------------------------------------------------
-        public void Init(double r, double fx, double fy)
+        public void Setup(double r, double fx, double fy)
         {
             m_r = AggBasics.iround(r * SpanGenGradient.GR_SUBPIX_SCALE);
             m_fx = AggBasics.iround(fx * SpanGenGradient.GR_SUBPIX_SCALE);
@@ -118,9 +93,9 @@ namespace PixelFarm.Agg.Gradients
             // one subpixel unit possibly in the direction to the origin (0,0)
             // and calculate the values again.
             //-------------------------
-            m_r2 = (double)(m_r) * (double)(m_r);
-            m_fx2 = (double)(m_fx) * (double)(m_fx);
-            m_fy2 = (double)(m_fy) * (double)(m_fy);
+            m_r2 = m_r * m_r;
+            m_fx2 = m_fx * m_fx;
+            m_fy2 = m_fy * m_fy;
             double d = (m_r2 - (m_fx2 + m_fy2));
             if (d == 0)
             {
@@ -134,8 +109,8 @@ namespace PixelFarm.Agg.Gradients
                     if (m_fy < 0) ++m_fy; else --m_fy;
                 }
 
-                m_fx2 = (double)(m_fx) * (double)(m_fx);
-                m_fy2 = (double)(m_fy) * (double)(m_fy);
+                m_fx2 = m_fx * m_fx;
+                m_fy2 = m_fy * m_fy;
                 d = (m_r2 - (m_fx2 + m_fy2));
             }
             m_mul = m_r / d;
