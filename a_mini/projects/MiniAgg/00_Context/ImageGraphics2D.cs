@@ -95,8 +95,25 @@ namespace PixelFarm.Agg
         {
             return ScanlineRasterizer.GetVectorClipBox();
         }
-       
-        
+
+        PathStorage GetFreePathStorage()
+        {
+            if (drawImageRectPath != null)
+            {
+                PathStorage tmp = this.drawImageRectPath;
+                this.drawImageRectPath = null;
+                return tmp;
+            }
+            else
+            {
+                return new PathStorage();
+            }
+        }
+        void ReleasePathStorage(PathStorage ps)
+        {
+            this.drawImageRectPath = ps;
+            ps.Clear();
+        }
         public override void Clear(ColorRGBA color)
         {
 
