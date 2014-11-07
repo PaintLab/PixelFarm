@@ -43,16 +43,13 @@ namespace PixelFarm.Agg.Sample_Blur
         VertexStoreSnap m_path_2;
 
 
-
-
-
+         
         
         //ReferenceImage m_rbuf2; 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
         RecursiveBlur m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
 
-        RectD m_shape_bounds;
-
+        RectD m_shape_bounds; 
         Stopwatch stopwatch = new Stopwatch();
 
         public Blur_classic()
@@ -68,13 +65,12 @@ namespace PixelFarm.Agg.Sample_Blur
 
             
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
-
             m_pathVxs = typeFaceForLargeA.GetGlyphForCharacter('a');
-
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
+
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            var m_shape = new FlattenCurves();
-            m_path_2 = new VertexStoreSnap(m_shape.MakeVxs(m_pathVxs));
+            var curveFlater = new FlattenCurves();
+            m_path_2 = new VertexStoreSnap(curveFlater.MakeVxs(m_pathVxs));
             BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
@@ -170,7 +166,8 @@ namespace PixelFarm.Agg.Sample_Blur
             //green glyph
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,
-                            m_shadow_ctrl.GetPolygon());
+                            m_shadow_ctrl.GetInnerCoords());
+
             VertexStoreSnap spath;
             if (FlattenCurveCheck)
             {
@@ -298,7 +295,7 @@ namespace PixelFarm.Agg.Sample_Blur
 
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,
-                            m_shadow_ctrl.GetPolygon());
+                            m_shadow_ctrl.GetInnerCoords());
 
 
             VertexStoreSnap spath;

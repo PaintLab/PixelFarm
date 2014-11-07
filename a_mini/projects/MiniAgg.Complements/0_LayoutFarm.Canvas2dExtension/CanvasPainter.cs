@@ -301,11 +301,7 @@ namespace PixelFarm.Agg
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoRecursiveBlur(img, r);
         }
-        //----------------
-
-
-
-
+        //---------------- 
     }
 
 }

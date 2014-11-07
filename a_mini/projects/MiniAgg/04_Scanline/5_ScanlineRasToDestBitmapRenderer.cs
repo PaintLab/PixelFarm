@@ -36,7 +36,7 @@ namespace PixelFarm.Agg
         {
 
         }
-        protected bool UseCustomSolidSingleLineMethod
+        protected bool UseCustomRenderSingleScanLine
         {
             get;
             set;
@@ -51,7 +51,7 @@ namespace PixelFarm.Agg
             {
                 scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
 
-                if (this.UseCustomSolidSingleLineMethod)
+                if (this.UseCustomRenderSingleScanLine)
                 {
                     while (sclineRas.SweepScanline(scline))
                     {
@@ -146,27 +146,7 @@ namespace PixelFarm.Agg
         } 
     }
 
-    //----------------------------
-    public static class ScanlineRasToDestBitmapRendererExtension
-    {
-        public static void RenderSolidAllPaths(this ScanlineRasToDestBitmapRenderer sclineRasToBmp,
-             IImageReaderWriter destImage,
-              ScanlineRasterizer sclineRas,
-              Scanline scline,
-              VertexStore vxs,
-              ColorRGBA[] colors,
-              int[] path_id,
-              int num_paths)
-        {
-            for (int i = 0; i < num_paths; ++i)
-            {
-                sclineRas.Reset();
-                sclineRas.AddPath(new VertexStoreSnap(vxs, path_id[i]));
-                sclineRasToBmp.RenderWithSolidColor(destImage, sclineRas, scline, colors[i]);
-            }
-        }
-    }
-
+ 
     //----------------------------
     public class CustomScanlineRasToDestBitmapRenderer : ScanlineRasToDestBitmapRenderer
     {

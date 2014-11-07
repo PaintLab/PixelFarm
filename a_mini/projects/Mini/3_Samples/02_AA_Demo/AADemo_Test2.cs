@@ -22,7 +22,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         Graphics2D gfx;
         public CustomScanlineRasToBmp_EnlargedV2(double size, ActualImage destImage)
         {
-            this.UseCustomSolidSingleLineMethod = true;
+            this.UseCustomRenderSingleScanLine = true;
             m_size = size;
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);

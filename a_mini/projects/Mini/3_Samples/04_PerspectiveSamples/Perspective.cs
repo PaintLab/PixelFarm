@@ -115,7 +115,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                     bound.Bottom,
                     bound.Right,
                     bound.Top,
-                    quadPolygonControl.GetPolygon());
+                    quadPolygonControl.GetInnerCoords());
 
                 if (txBilinear.IsValid)
                 {
@@ -151,7 +151,7 @@ namespace PixelFarm.Agg.Sample_Perspective
             {
                 var txPerspective = new Perspective(
                     lionShape.Bounds,
-                    quadPolygonControl.GetPolygon());
+                    quadPolygonControl.GetInnerCoords());
 
                 if (txPerspective.IsValid)
                 {
