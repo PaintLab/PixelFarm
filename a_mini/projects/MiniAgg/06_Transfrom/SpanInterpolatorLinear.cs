@@ -70,7 +70,7 @@ namespace PixelFarm.Agg.Transform
         }
 
         //----------------------------------------------------------------
-        public void Resync(double xe, double ye, int len)
+        public void ReSync(double xe, double ye, int len)
         {
             m_trans.Transform(ref xe, ref ye);
             m_li_x = new LineInterpolatorDDA2(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);

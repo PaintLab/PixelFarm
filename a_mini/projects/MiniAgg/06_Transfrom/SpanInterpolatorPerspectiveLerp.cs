@@ -172,7 +172,7 @@ namespace PixelFarm.Agg.Transform
 
 
         //----------------------------------------------------------------
-        public void Resync(double xe, double ye, int len)
+        public void ReSync(double xe, double ye, int len)
         {
             // Assume x1,y1 are equal to the ones at the previous end point 
             int x1 = m_coord_x.y();

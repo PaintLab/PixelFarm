@@ -22,10 +22,10 @@ namespace PixelFarm.Agg.Gradients
         int Calculate(int x, int y, int d);
     }
 
-    public interface IColorsProvider
+    public interface IGradientColorsProvider
     {
-        int Size { get; }
-        ColorRGBA this[int v] { get; }
+        int GradientSteps { get; }
+        ColorRGBA GetColor(int v);         
     }
 
 

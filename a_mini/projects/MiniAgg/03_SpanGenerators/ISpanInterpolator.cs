@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
         Transform.ICoordTransformer Transformer { get; set; }
          
         //------------------------------------------------
-        void Resync(double xe, double ye, int len);
+        void ReSync(double xe, double ye, int len);
         void GetLocalScale(out int x, out int y);
     }
 

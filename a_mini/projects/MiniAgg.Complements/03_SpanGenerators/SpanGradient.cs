@@ -17,8 +17,8 @@ using System;
 using PixelFarm.Agg.Gradients;
 
 namespace PixelFarm.Agg
-{    
-  
+{
+
     //==========================================================span_gradient
     public class SpanGenGradient : ISpanGenerator
     {
@@ -30,68 +30,60 @@ namespace PixelFarm.Agg
 
         const int DOWN_SCALE_SHIFT = SUBPIX_SHIFT - GR_SUBPIX_SHIFT;
 
-        ISpanInterpolator m_interpolator;
-        IGradientValueCalculator m_grValueCalculator;
-        IColorsProvider m_colorsProvider;
+        readonly ISpanInterpolator m_interpolator;
+        readonly IGradientValueCalculator m_grValueCalculator;
+        readonly IGradientColorsProvider m_colorsProvider;
 
-        int m_d1;
-        int m_d2;
+        readonly int m_d1;
+        readonly int m_d2;
+        readonly int dd;
+        readonly float stepRatio;
         //--------------------------------------------------------------------
         public SpanGenGradient(ISpanInterpolator inter,
-                      IGradientValueCalculator gradient_function,
-                      IColorsProvider m_colorsProvider,
+                      IGradientValueCalculator gvc,
+                      IGradientColorsProvider m_colorsProvider,
                       double d1, double d2)
         {
-            m_interpolator = inter;
-            this.m_grValueCalculator = gradient_function;
+            this.m_interpolator = inter;
+            this.m_grValueCalculator = gvc;
             this.m_colorsProvider = m_colorsProvider;
+
             m_d1 = AggBasics.iround(d1 * GR_SUBPIX_SCALE);
             m_d2 = AggBasics.iround(d2 * GR_SUBPIX_SCALE);
+
+            dd = m_d2 - m_d1;
+            if (dd < 1) dd = 1;
+
+            stepRatio = (float)m_colorsProvider.GradientSteps / (float)dd;
+
         }
 
-        //--------------------------------------------------------------------
-        public ISpanInterpolator Interpolator
-        {
-            get { return this.m_interpolator; }
-            set { this.m_interpolator = value; }
-        }
-        public IGradientValueCalculator GradientGenFunction
-        {
-            get { return this.m_grValueCalculator; }
-            set { this.m_grValueCalculator = value; }
-        }
-        public IColorsProvider ColorsProvider
-        {
-            get { return this.m_colorsProvider; }
-            set { this.m_colorsProvider = value; }
-        }
-         
 
         //--------------------------------------------------------------------
         public void Prepare() { }
         //--------------------------------------------------------------------
         public void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
-            int dd = m_d2 - m_d1;
-            if (dd < 1) dd = 1;
+
 
             m_interpolator.Begin(x + 0.5, y + 0.5, len);
+
             do
             {
                 m_interpolator.GetCoord(out x, out y);
-
-                int d = m_grValueCalculator.Calculate(x >> DOWN_SCALE_SHIFT,
+                float d = m_grValueCalculator.Calculate(x >> DOWN_SCALE_SHIFT,
                                                       y >> DOWN_SCALE_SHIFT,
                                                       m_d2);
 
-                d = ((d - m_d1) * (int)m_colorsProvider.Size) / dd;
+                d = ((d - m_d1) * stepRatio);
+
                 if (d < 0) d = 0;
-                if (d >= (int)m_colorsProvider.Size)
+                if (d >= m_colorsProvider.GradientSteps)
                 {
-                    d = m_colorsProvider.Size - 1;
+                    d = m_colorsProvider.GradientSteps - 1;
                 }
 
-                outputColors[startIndex++] = m_colorsProvider[d];
+                outputColors[startIndex++] = m_colorsProvider.GetColor((int)d);
                 m_interpolator.Next();
             }
             while (--len != 0);
@@ -99,39 +91,37 @@ namespace PixelFarm.Agg
     }
 
     //=====================================================gradient_linear_color
-    public class LinearGradientColorsProvider : Gradients.IColorsProvider
+    public class LinearGradientColorsProvider : Gradients.IGradientColorsProvider
     {
         ColorRGBA m_c1;
         ColorRGBA m_c2;
-        int m_size;
+        int gradientSteps;
 
         public LinearGradientColorsProvider(ColorRGBA c1, ColorRGBA c2)
             : this(c1, c2, 256)
         {
         }
-        public LinearGradientColorsProvider(ColorRGBA c1, ColorRGBA c2, int size)
+        public LinearGradientColorsProvider(ColorRGBA c1, ColorRGBA c2, int gradientSteps)
         {
             m_c1 = c1;
             m_c2 = c2;
-            m_size = size;
+            this.gradientSteps = gradientSteps;
         }
-        public int Size { get { return m_size; } }
-        public ColorRGBA this[int v]
+        public int GradientSteps { get { return gradientSteps; } }
+        public ColorRGBA GetColor(int v)
         {
-            get
-            {
-                return m_c1.CreateGradient(m_c2, (double)(v) / (double)(m_size - 1));
-            }
+            return m_c1.CreateGradient(m_c2, (float)(v) / (float)(gradientSteps - 1));
+
         }
         public void SetColors(ColorRGBA c1, ColorRGBA c2)
         {
             SetColors(c1, c2, 256);
         }
-        public void SetColors(ColorRGBA c1, ColorRGBA c2, int size)
+        public void SetColors(ColorRGBA c1, ColorRGBA c2, int gradientSteps)
         {
             m_c1 = c1;
             m_c2 = c2;
-            m_size = size;
+            this.gradientSteps = gradientSteps;
         }
     }
 
