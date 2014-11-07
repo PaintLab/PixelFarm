@@ -378,6 +378,7 @@ namespace PixelFarm.Agg
                     new SpanInterpolatorLinear(sourceRectTransform));
 
                 DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgPathBounds));
+
                 ReleasePathStorage(imgPathBounds);
 
 #if false // this is some debug you can enable to visualize the dest bounding box

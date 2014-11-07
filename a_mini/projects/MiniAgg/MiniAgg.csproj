@@ -70,6 +70,7 @@
     <Compile Include="09_VectorMath\Vector3Float.cs" />
     <Compile Include="09_VectorMath\Vector4.cs" />
     <Compile Include="x_notused\x_ImageHelper2.cs" />
+    <Compile Include="x_notused\x_ImageSpan.cs" />
     <Compile Include="x_notused\x_PixelBlenderFloat.cs" />
     <Compile Include="03_SpanGenerators\0_ISpanGenerator.cs" />
     <Compile Include="04_Scanline\0_ScanlineSpan.cs" />

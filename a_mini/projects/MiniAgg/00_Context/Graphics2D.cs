@@ -46,6 +46,7 @@ namespace PixelFarm.Agg
         //------------------------------------------------------------------------
 
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
+
         //------------------------------------------------------------------------
         public abstract void Render(IImageReaderWriter imageSource,
             double x, double y,
@@ -56,8 +57,7 @@ namespace PixelFarm.Agg
         {
             this.Render(imageSource, (double)x, (double)y);
         }
-        public abstract void Render(ActualImage actualImage, int x, int y);
-
+        public abstract void Render(ActualImage actualImage, int x, int y); 
         //------------------------------------------------------------------------
 
 
