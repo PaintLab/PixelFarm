@@ -57,7 +57,7 @@ namespace PixelFarm.Agg
             {
                 sclineRas.AddPath(vertextSnap);
             }
-            sclineRasToBmp.RenderScanlineSolidAA(destImageReaderWriter, sclineRas, sclinePack8, color);
+            sclineRasToBmp.RenderWithSolidColor(destImageReaderWriter, sclineRas, sclinePack8, color);
             unchecked { destImageChanged++; };
             //-----------------------------
         }
@@ -116,12 +116,11 @@ namespace PixelFarm.Agg
         {
 
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.GenerateAndRender(
+            sclineRasToBmp.RenderWithSpan(
                 destImageReaderWriter,
                 sclineRas,
                 sclinePack8,
-                spanImageFilter);
-
+                spanImageFilter); 
         }
 
         public override void Render(IImageReaderWriter source,
@@ -212,23 +211,24 @@ namespace PixelFarm.Agg
                 //    HotspotOffsetX *= (inScaleX / scaleX);
                 //    HotspotOffsetY *= (inScaleY / scaleY);
                 //}
-               
-                Affine destRectTransform = GetImageDestBounds(source, imgPathBounds, destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+
+                Affine destRectTransform = GetImageDestBounds(source, imgPathBounds, destX, destY,
+                    ox, oy, scaleX, scaleY, angleRadians);
 
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                ImgSpanGen spanImageFilter;
+
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source);
 
-                spanImageFilter = new ImgSpanGenRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
+                ImgSpanGen spanImageFilter = new ImgSpanGenRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
 
                 DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgPathBounds));
 
 
-               
+
                 // this is some debug you can enable to visualize the dest bounding box
                 //LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
                 //LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -238,8 +238,9 @@ namespace PixelFarm.Agg
             }
             else // TODO: this can be even faster if we do not use an intermediat buffer
             {
-                 
-                Affine destRectTransform = GetImageDestBounds(source, imgPathBounds, destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+
+                Affine destRectTransform = GetImageDestBounds(source, imgPathBounds, destX, destY,
+                    ox, oy, scaleX, scaleY, angleRadians);
 
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
@@ -267,7 +268,7 @@ namespace PixelFarm.Agg
                         throw new NotImplementedException();
                 }
 
-                DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgPathBounds));               
+                DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgPathBounds));
                 unchecked { destImageChanged++; };
 
             }
@@ -339,11 +340,13 @@ namespace PixelFarm.Agg
                 canUseMipMaps = false;
             }
 
-            bool renderRequriesSourceSampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
+            bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
             // this is the fast drawing path
-            if (renderRequriesSourceSampling)
+            if (needSourceResampling)
             {
+
+
 
 #if false // if the scalling is small enough the results can be improved by using mip maps
 	        if(CanUseMipMaps)
@@ -393,8 +396,7 @@ namespace PixelFarm.Agg
 
                 var imgPathBounds = GetFreePathStorage();
                 Affine destRectTransform = GetImageDestBounds(source, imgPathBounds,
-                    destX, destY,
-                    ox, oy, scaleX, scaleY, angleRadians);
+                    destX, destY, ox, oy, scaleX, scaleY, angleRadians);
 
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();

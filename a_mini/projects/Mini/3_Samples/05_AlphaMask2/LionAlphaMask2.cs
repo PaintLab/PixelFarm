@@ -103,11 +103,11 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 {
                     ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                    sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
+                    sclineRasToBmp.RenderWithSolidColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
 
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
-                    sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
+                    sclineRasToBmp.RenderWithSolidColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     // there is not very much reason to set the alpha as you will get the amount of 
                     // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
                     rasterizer.AddPath(ellipseForMask.MakeVxs());
-                    sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, sclnPack,
+                    sclineRasToBmp.RenderWithSolidColor(clippingProxy, rasterizer, sclnPack,
                        ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
@@ -193,7 +193,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                         rect.NormalizeRadius(); 
                         // Drawing as an outline
                         rasterizer.AddPath(rect.MakeVxs());
-                        sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9f, .9f, .9f));
+                        sclineRasToBmp.RenderWithSolidColor(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9f, .9f, .9f));
                     }
                 }
             }

@@ -27,7 +27,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
         }
-        protected override void CustomRenderSolidSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -160,11 +160,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
 
-            sclineToBmpEn2.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            sclineToBmpEn2.RenderWithSolidColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            sclineRasToBmp.RenderWithSolidColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //-----------------------------------------------------------------------------------------------------------
             rasterizer.ResetGamma(new GammaNone());
@@ -177,7 +177,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             ps.LineTo(m_x[0], m_y[0]);
 
             rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs));
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            sclineRasToBmp.RenderWithSolidColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
 
         }

@@ -316,7 +316,7 @@ namespace PixelFarm.Agg.Sample_Blur
             m_ras.AddPath(spath);
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras, graphics2D.ScanlinePacked8,  new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
+            sclineRasToBmp.RenderWithSolidColor(clippingProxy, m_ras, graphics2D.ScanlinePacked8,  new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
 
 
             //---------------------------------------------------------------------------------------------------------
@@ -413,7 +413,7 @@ namespace PixelFarm.Agg.Sample_Blur
             }
 
 
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxy, m_ras,graphics2D.ScanlinePacked8,
+            sclineRasToBmp.RenderWithSolidColor(clippingProxy, m_ras,graphics2D.ScanlinePacked8,
                 ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f));
 
             graphics2D.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
