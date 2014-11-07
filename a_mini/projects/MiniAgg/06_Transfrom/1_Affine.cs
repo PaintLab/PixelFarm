@@ -143,7 +143,7 @@ namespace PixelFarm.Agg.Transform
         }
     }
 
-    public sealed class Affine : ITransform
+    public sealed class Affine : ICoordTransformer
     {
 
         const double EPSILON = 1e-14;

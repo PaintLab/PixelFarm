@@ -172,7 +172,7 @@ namespace PixelFarm.Agg.Transform
 
 
         //----------------------------------------------------------------
-        public void Resync(double xe, double ye, int len)
+        public void ReSync(double xe, double ye, int len)
         {
             // Assume x1,y1 are equal to the ones at the previous end point 
             int x1 = m_coord_x.y();
@@ -213,16 +213,12 @@ namespace PixelFarm.Agg.Transform
             m_scale_x = new LineInterpolatorDDA2(sx1, sx2, (int)len);
             m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
         }
-
-        public Transform.ITransform GetTransformer()
+        public Transform.ICoordTransformer Transformer
         {
-            throw new System.NotImplementedException();
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
         }
-
-        public void SetTransformer(Transform.ITransform trans)
-        {
-            throw new System.NotImplementedException();
-        }
+       
 
         //----------------------------------------------------------------
         public void Next()

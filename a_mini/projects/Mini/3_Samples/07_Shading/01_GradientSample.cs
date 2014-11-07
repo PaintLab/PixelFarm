@@ -36,21 +36,21 @@ namespace PixelFarm.Agg.Sample_Gradient
         {
             CanvasPainter painter = new CanvasPainter(graphics2D);
             painter.FillColor = ColorRGBA.Blue;
-            painter.FillRectangle(10, 10, 50, 50);
+            painter.FillRectangle(0, 70, 150, 120);
 
 
-            //-------------------------------------------
-
-            Agg.Gradients.GvcRadial innerGradient = new Gradients.GvcRadial();
+            //------------------------------------------- 
+            var innerGradient = new Gradients.GvcRadial();
             SpanInterpolatorLinear linerInterpolator = new SpanInterpolatorLinear(Affine.IdentityMatrix);
-            LinearGradientColorsProvider linearGradFunc = new LinearGradientColorsProvider(ColorRGBA.Red, ColorRGBA.Yellow);
-            SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator, innerGradient, linearGradFunc, 100, 150);
-
-            SimpleRect srect = new SimpleRect(100, 10, 150, 50);
-            painter.Fill(srect.MakeVxs(), spanGenGradient);
+            LinearGradientColorsProvider linearColorProvider = new LinearGradientColorsProvider(ColorRGBA.Red, ColorRGBA.Yellow);
+            SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator,
+                innerGradient, 
+                linearColorProvider,
+                0, 150); 
+            SimpleRect srect = new SimpleRect(0, 0, 150, 50);
+            painter.Fill(srect.MakeVxs(), spanGenGradient);   
 
         }
-
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
 

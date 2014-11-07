@@ -71,7 +71,7 @@
     <Compile Include="VertexSource\Curves.cs" />
     <Compile Include="03_SpanGenerators\SpanGenGourand.cs" />
     <Compile Include="03_SpanGenerators\SpanGenGouraudRGBA.cs" />
-    <Compile Include="03_SpanGenerators\SpanSubDivAdapter.cs" />
+    <Compile Include="x_notused\SpanSubDivAdapter.cs" />
     <Compile Include="VertexSource\Arc.cs" />
     <Compile Include="VertexSource\Contour.cs" />
     <Compile Include="VertexSource\ContourGenerator.cs" />

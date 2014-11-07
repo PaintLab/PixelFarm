@@ -93,7 +93,7 @@
     <Compile Include="06_Transfrom\SpanInterpolatorLinear.cs" />
     <Compile Include="06_Transfrom\SpanInterpolatorPerspectiveLerp.cs" />
     <Compile Include="08_ImageFilters\ImageFilterLookupTable.cs" />
-    <Compile Include="02_PixelBuffer\RasterBufferAccessors.cs" />
+    <Compile Include="02_PixelBuffer\ImageBufferAccessor.cs" />
     <Compile Include="05_Vertex_Path\VertexSequence.cs" />
     <Compile Include="01_Base\NativeBufferMan.cs" />
     <Compile Include="02_PixelBuffer\GammaLookUpTable.cs" />
@@ -115,7 +115,7 @@
     <Compile Include="05_Vertex_Path\ShapePath.cs" />
     <Compile Include="06_Transfrom\1_Affine.cs" />
     <Compile Include="06_Transfrom\2_Bilinear.cs" />
-    <Compile Include="06_Transfrom\0_ITransform.cs" />
+    <Compile Include="06_Transfrom\0_ICoordTransformer.cs" />
     <Compile Include="06_Transfrom\3_Perspective.cs" />
     <Compile Include="06_Transfrom\Viewport.cs" />
     <Compile Include="04_Scanline\4.3_VectorClipper.cs" />

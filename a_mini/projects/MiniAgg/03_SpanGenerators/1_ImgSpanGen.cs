@@ -46,28 +46,25 @@ namespace PixelFarm.Agg
             imageBufferAccessor = src;
             m_interpolator = interpolator;
             filterLookup = (filter);
-            m_dx_dbl = (0.5);
-            m_dy_dbl = (0.5);
+            m_dx_dbl = 0.5;
+            m_dy_dbl = 0.5;
             m_dx_int = ((int)img_subpix_const.SCALE / 2);
             m_dy_int = ((int)img_subpix_const.SCALE / 2);
         }
 
         public abstract void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len);
 
-        public IImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
-        public ImageFilterLookUpTable FilterLookup
+        protected IImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
+
+        protected ImageFilterLookUpTable FilterLookup
         {
             get { return filterLookup; }
-            set { this.filterLookup = value; }
         }
 
-        public ISpanInterpolator Interpolator
+        protected ISpanInterpolator Interpolator
         {
             get { return m_interpolator; }
-            set { this.m_interpolator = value; }
         }
-
-
 
         public double dx { get { return m_dx_dbl; } }
         public double dy { get { return m_dy_dbl; } }
