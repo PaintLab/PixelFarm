@@ -51,7 +51,7 @@ namespace PixelFarm.Agg
             {
                 sclineRas.Reset();
                 sclineRas.AddPath(new VertexStoreSnap(vxs, path_id[i]));
-                sclineRasToBmp.RenderWithSolidColor(destImage, sclineRas, scline, colors[i]);
+                sclineRasToBmp.RenderWithColor(destImage, sclineRas, scline, colors[i]);
             }
         }
     }

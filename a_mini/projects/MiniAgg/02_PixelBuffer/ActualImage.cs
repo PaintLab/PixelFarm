@@ -26,7 +26,7 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg.Image
 {
-    
+
     public enum PixelFormat
     {
         Rgba32,
@@ -58,18 +58,27 @@ namespace PixelFarm.Agg.Image
                         this.stride = width * (32 / 8);
                         this.pixelBuffer = new byte[stride * height];
                     } break;
+                case Image.PixelFormat.GrayScale8:
+                    {
+                        this.bitDepth = 8; //bit per pixel
+                        int bytesPerPixel = (bitDepth + 7) / 8;
+                        this.stride = 4 * ((width * bytesPerPixel + 3) / 4);
+                        this.pixelBuffer = new byte[stride * height];
+
+                    } break;
+                case Image.PixelFormat.Rgb24:
+                    {
+
+                        this.bitDepth = 24; //bit per pixel
+                        int bytesPerPixel = (bitDepth + 7) / 8;
+                        this.stride = 4 * ((width * bytesPerPixel + 3) / 4);
+                        this.pixelBuffer = new byte[stride * height];
+
+
+                    }break;
                 default:
-                    throw new NotSupportedException();
-                //case ImageFormat.GrayScale8:
-                //    {
-
-                //    } break;
-                //case ImageFormat.Rgb24:
-                //    {
-
-                //    } break;
+                    throw new NotSupportedException();                 
             }
-
 
         }
         public int Width

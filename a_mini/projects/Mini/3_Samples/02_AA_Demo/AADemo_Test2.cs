@@ -9,16 +9,17 @@ using PixelFarm.Agg.VertexSource;
 
 using PixelFarm.VectorMath;
 
-using Mini; 
+using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest2
 {
-    
+
 
     class CustomScanlineRasToBmp_EnlargedV2 : CustomScanlineRasToDestBitmapRenderer
     {
         double m_size;
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
+
         Graphics2D gfx;
         public CustomScanlineRasToBmp_EnlargedV2(double size, ActualImage destImage)
         {
@@ -43,7 +44,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 var span2 = scanline.GetSpan(i);
                 int x = span2.x;
                 int num_pix = span2.len;
-                int coverIndex = span2.cover_index; 
+                int coverIndex = span2.cover_index;
                 do
                 {
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
@@ -149,7 +150,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             clippingProxyNormal.Clear(ColorRGBA.White);
 
             var rasterizer = graphics2D.ScanlineRasterizer;
-            ScanlineUnpacked8 sl = new ScanlineUnpacked8();
+            var sl = new ScanlineUnpacked8();
+
 
             int size_mul = (int)this.PixelSize;
 
@@ -160,11 +162,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
 
-            sclineToBmpEn2.RenderWithSolidColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            sclineToBmpEn2.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            sclineRasToBmp.RenderWithSolidColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //-----------------------------------------------------------------------------------------------------------
             rasterizer.ResetGamma(new GammaNone());
@@ -177,7 +179,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             ps.LineTo(m_x[0], m_y[0]);
 
             rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs));
-            sclineRasToBmp.RenderWithSolidColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
 
         }

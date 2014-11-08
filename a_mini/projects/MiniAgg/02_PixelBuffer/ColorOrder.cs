@@ -1,4 +1,4 @@
-//2014 BSD,WinterDev   
+﻿//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -18,13 +18,32 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
+using System.Runtime;
+
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
 {
-    public interface IGammaFunction
+    public static class ColorOrder
     {
-        float GetGamma(float x);
+        /// <summary>
+        /// order b
+        /// </summary>
+        public const int B = 0;
+        /// <summary>
+        /// order g
+        /// </summary>
+        public const int G = 1;
+        /// <summary>
+        /// order b
+        /// </summary>
+        public const int R = 2;
+        /// <summary>
+        /// order a
+        /// </summary>
+        public const int A = 3;
     }
-
-    
 }

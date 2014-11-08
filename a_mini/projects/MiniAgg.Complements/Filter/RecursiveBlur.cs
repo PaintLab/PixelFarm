@@ -33,13 +33,10 @@ using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg.Image
 {
-#if true
-
-
 
     //==============================================================stack_blur
     public class StackBlur
-    {   
+    {
         public void Blur(ImageReaderWriterBase img, int rx, int ry)
         {
             switch (img.BitDepth)
@@ -427,7 +424,7 @@ namespace PixelFarm.Agg.Image
     }
 
 
-#endif
+
 
     public abstract class RecursizeBlurCalculator
     {
@@ -457,7 +454,7 @@ namespace PixelFarm.Agg.Image
             m_sum2 = new ArrayList<RecursizeBlurCalculator>();
             m_buf = new ArrayList<ColorRGBA>();
             m_RecursizeBlurCalculatorFactory = recursizeBluerCalculatorFactory;
-        } 
+        }
         public void BlurX(IImageReaderWriter img, double radius)
         {
             if (radius < 0.62) return;

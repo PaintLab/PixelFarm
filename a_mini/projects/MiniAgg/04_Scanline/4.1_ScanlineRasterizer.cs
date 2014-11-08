@@ -189,7 +189,7 @@ namespace PixelFarm.Agg
             for (int i = AA_SCALE - 1; i >= 0; --i)
             {
                 m_gammaLut[i] = (int)AggBasics.uround(
-                    gamma_function.GetGamma((double)(i) / AA_MASK) * AA_MASK);
+                    gamma_function.GetGamma((float)(i) / AA_MASK) * AA_MASK);
             }
         }
 

@@ -107,12 +107,12 @@ namespace PixelFarm.Agg
     // (that can be very large) occurs less frequently.
     //------------------------------------------------------------------------
     public sealed class ScanlineUnpacked8 : Scanline
-    {    
-       
-        int minX;         
+    {
+
+        int minX;
         public ScanlineUnpacked8()
-        { 
-        } 
+        {
+        }
         public override void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 2;
@@ -124,7 +124,7 @@ namespace PixelFarm.Agg
             last_x = 0x7FFFFFF0;
             minX = min_x;
             last_span_index = 0;
-        }  
+        }
         public override void AddCell(int x, int cover)
         {
             x -= minX;
@@ -138,13 +138,13 @@ namespace PixelFarm.Agg
             else
             {
                 last_span_index++;
-
-                m_spans[last_span_index].x = x + minX;
-                m_spans[last_span_index].len = 1;
-                m_spans[last_span_index].cover_index = (int)x;
+                m_spans[last_span_index] = new ScanlineSpan(x + minX, x);
+                //m_spans[last_span_index].x = x + minX;
+                //m_spans[last_span_index].cover_index = (int)x;
+                //m_spans[last_span_index].len = 1;
             }
             last_x = x;
-        } 
+        }
         public override void AddSpan(int x, int len, int cover)
         {
             x -= minX;
@@ -155,22 +155,23 @@ namespace PixelFarm.Agg
 
             if (x == last_x + 1)
             {
-                m_spans[last_span_index].len += (int)len;
+                m_spans[last_span_index].len += (short)len;
             }
             else
             {
 
                 last_span_index++;
-                m_spans[last_span_index].x = x + minX;
-                m_spans[last_span_index].len = (int)len;
-                m_spans[last_span_index].cover_index = (int)x;
+                m_spans[last_span_index] = new ScanlineSpan(x + minX, len, x);
+                //m_spans[last_span_index].x = x + minX;
+                //m_spans[last_span_index].len = (int)len;
+                //m_spans[last_span_index].cover_index = (int)x;
             }
             last_x = x + (int)len - 1;
-        } 
+        }
         public override void ResetSpans()
         {
             last_x = 0x7FFFFFF0;
             last_span_index = 0;
-        } 
+        }
     }
 }

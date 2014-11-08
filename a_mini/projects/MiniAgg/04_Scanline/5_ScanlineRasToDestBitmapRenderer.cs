@@ -42,112 +42,111 @@ namespace PixelFarm.Agg
             set;
         }
 
-        public void RenderWithSolidColor(IImageReaderWriter dest,
-            ScanlineRasterizer sclineRas,
-            Scanline scline,
-            ColorRGBA color)
-        {
-            if (sclineRas.RewindScanlines())
+        public void RenderWithColor(IImageReaderWriter dest,
+                ScanlineRasterizer sclineRas,
+                Scanline scline,
+                ColorRGBA color)
+        {   
+            if (!sclineRas.RewindScanlines()) { return; } //early exit
+            //-----------------------------------------------
+
+            scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
+
+            if (this.UseCustomRenderSingleScanLine)
             {
-                scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
-
-                if (this.UseCustomRenderSingleScanLine)
+                while (sclineRas.SweepScanline(scline))
                 {
-                    while (sclineRas.SweepScanline(scline))
-                    {
-                        CustomRenderSingleScanLine(dest, scline, color);
-                    }
+                    CustomRenderSingleScanLine(dest, scline, color);
                 }
-                else
+            }
+            else
+            {
+
+                while (sclineRas.SweepScanline(scline))
                 {
-
-                    while (sclineRas.SweepScanline(scline))
+                    //render solid single scanline
+                    int y = scline.Y;
+                    int num_spans = scline.SpanCount;
+                    byte[] covers = scline.GetCovers();
+                    for (int i = 1; i <= num_spans; ++i)
                     {
-                        //render solid single scanline
-                        int y = scline.Y;
-                        int num_spans = scline.SpanCount;
-                        byte[] covers = scline.GetCovers();
-                        for (int i = 1; i <= num_spans; ++i)
+                        ScanlineSpan span = scline.GetSpan(i);
+                        if (span.len > 0)
+                        {   
+                            dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                        }
+                        else
                         {
-                            ScanlineSpan span = scline.GetSpan(i);
-
-                            if (span.len > 0)
-                            {
-                                dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
-                            }
-                            else
-                            {
-                                int x = span.x;
-                                int x2 = (x - (int)span.len - 1);
-                                dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
-                            }
+                            int x = span.x;
+                            int x2 = (x - span.len - 1);
+                            dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
                         }
                     }
                 }
+
             }
         }
 
         public void RenderWithSpan(IImageReaderWriter dest,
-             ScanlineRasterizer sclineRas,
-             Scanline scline,
-             ISpanGenerator spanGenerator)
+                ScanlineRasterizer sclineRas,
+                Scanline scline,
+                ISpanGenerator spanGenerator)
         {
-            if (sclineRas.RewindScanlines())
+            if (!sclineRas.RewindScanlines()) { return; } //early exit
+            //-----------------------------------------------
+
+            scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
+
+            spanGenerator.Prepare();
+
+
+            if (dest.Stride / 4 > (tempSpanColors.AllocatedSize))
             {
-                scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
-
-                spanGenerator.Prepare();
-
-                if (dest.Stride > tempSpanColors.AllocatedSize)
-                {
-                    //if not enough -> alloc more
-                    tempSpanColors.Clear(dest.Stride);
-                }
-
-                ColorRGBA[] colorArray = tempSpanColors.Array;
-
-                while (sclineRas.SweepScanline(scline))
-                {
-
-                    //render single scanline 
-                    int y = scline.Y;
-                    int num_spans = scline.SpanCount;
-                    byte[] covers = scline.GetCovers();
-
-                    for (int i = 1; i <= num_spans; ++i)
-                    {
-                        ScanlineSpan span = scline.GetSpan(i);
-                        int x = span.x;
-                        int span_len = span.len;
-                        bool firstCoverForAll = false;
-
-                        if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
-
-                        //1. generate colors -> store in colorArray
-                        spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
-
-                        //2. blend color in colorArray to destination image
-                        dest.BlendColorHSpan(x, y, span_len,
-                            colorArray, 0,
-                            covers, span.cover_index,
-                            firstCoverForAll);
-                    }
-
-                }
+                //if not enough -> alloc more
+                tempSpanColors.Clear(dest.Stride / 4);
             }
-        }
 
- 
+            ColorRGBA[] colorArray = tempSpanColors.Array;
+
+            while (sclineRas.SweepScanline(scline))
+            {
+
+                //render single scanline 
+                int y = scline.Y;
+                int num_spans = scline.SpanCount;
+                byte[] covers = scline.GetCovers();
+
+                for (int i = 1; i <= num_spans; ++i)
+                {
+                    ScanlineSpan span = scline.GetSpan(i);
+                    int x = span.x;
+                    int span_len = span.len;
+                    bool firstCoverForAll = false;
+
+                    if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
+
+                    //1. generate colors -> store in colorArray
+                    spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
+
+                    //2. blend color in colorArray to destination image
+                    dest.BlendColorHSpan(x, y, span_len,
+                        colorArray, 0,
+                        covers, span.cover_index,
+                        firstCoverForAll);
+                }
+
+            } 
+        } 
         protected virtual void CustomRenderSingleScanLine(
             IImageReaderWriter dest,
             Scanline scline,
             ColorRGBA color)
         {
             //implement
-        } 
+        }
     }
 
- 
+
     //----------------------------
     public class CustomScanlineRasToDestBitmapRenderer : ScanlineRasToDestBitmapRenderer
     {

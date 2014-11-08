@@ -21,102 +21,100 @@ using System;
 
 namespace PixelFarm.Agg
 {
-     
+
     public struct GammaNone : IGammaFunction
     {
-        public double GetGamma(double x) { return x; }
+        public float GetGamma(float x) { return x; }
     }
     //==============================================================gamma_power
     public class GammaPower : IGammaFunction
     {
-        public GammaPower() { m_gamma = 1.0; }
-        public GammaPower(double g) { m_gamma = g; }
+        float m_gamma;
+        public GammaPower() { m_gamma = 1.0f; }
+        public GammaPower(float g) { m_gamma = g; }
 
-        public void gamma(double g) { m_gamma = g; }
-        public double gamma() { return m_gamma; }
-        public double GetGamma(double x)
+        public void gamma(float g) { m_gamma = g; }
+        public float gamma() { return m_gamma; }
+
+        public float GetGamma(float x)
         {
-            return Math.Pow(x, m_gamma);
+            return (float)Math.Pow(x, m_gamma);
         }
 
-        double m_gamma;
+      
     }
 
     //==========================================================gamma_threshold
     public class GammaThreshold : IGammaFunction
     {
-        public GammaThreshold() { m_threshold = 0.5; }
-        public GammaThreshold(double t) { m_threshold = t; }
+        float m_threshold;
+        public GammaThreshold() { m_threshold = 0.5f; }
+        public GammaThreshold(float t) { m_threshold = t; }
 
-        public void threshold(double t) { m_threshold = t; }
-        public double threshold() { return m_threshold; }
+        public void threshold(float t) { m_threshold = t; }
+        public float threshold() { return m_threshold; }
 
-        public double GetGamma(double x)
+        public float GetGamma(float x)
         {
-            return (x < m_threshold) ? 0.0 : 1.0;
+            return (x < m_threshold) ? 0.0f : 1.0f;
         }
 
-        double m_threshold;
+        
     }
 
     //============================================================gamma_linear
     public class GammaLinear : IGammaFunction
     {
+
+
+        float m_start;
+        float m_end;
         public GammaLinear()
         {
-            m_start = (0.0);
-            m_end = (1.0);
+            m_start = 0.0f;
+            m_end = 1.0f;
         }
-        public GammaLinear(double s, double e)
+        public GammaLinear(float s, float e)
         {
             m_start = (s);
             m_end = (e);
         }
+        public float Start { get { return this.m_start; } }
+        public float End { get { return this.m_end; } }
+        public void Set(float s, float e) { m_start = s; m_end = e; } 
 
-        public void set(double s, double e) { m_start = s; m_end = e; }
-        public void start(double s) { m_start = s; }
-        public void end(double e) { m_end = e; }
-        public double start() { return m_start; }
-        public double end() { return m_end; }
-
-        public double GetGamma(double x)
+        public float GetGamma(float x)
         {
-            if (x < m_start) return 0.0;
-            if (x > m_end) return 1.0;
+            if (x < m_start) return 0.0f;
+            if (x > m_end) return 1.0f;
             double EndMinusStart = m_end - m_start;
             if (EndMinusStart != 0)
-                return (x - m_start) / EndMinusStart;
+                return (float)((x - m_start) / EndMinusStart);
             else
-                return 0.0;
+                return 0.0f;
         }
-
-
-        double m_start;
-        double m_end;
     }
 
     //==========================================================gamma_multiply
     public class GammaMultiply : IGammaFunction
     {
+        float m_mul;
         public GammaMultiply()
         {
-            m_mul = (1.0);
+            m_mul = (1.0f);
         }
-        public GammaMultiply(double v)
+        public GammaMultiply(float v)
         {
             m_mul = (v);
         }
 
-        public void value(double v) { m_mul = v; }
-        public double value() { return m_mul; }
-
-        public double GetGamma(double x)
+        public float GetGamma(float x)
         {
-            double y = x * m_mul;
-            if (y > 1.0) y = 1.0;
+            float y = x * m_mul;
+            if (y > 1.0) y = 1.0f;
             return y;
         }
 
-        double m_mul;
+        
     }
 }

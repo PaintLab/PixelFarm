@@ -34,7 +34,6 @@ namespace PixelFarm.Agg
         //--------------------------
         void Render(VertexStore vxs, ISpanGenerator spanGen)
         {
-
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(
                 destImageReaderWriter,
@@ -222,7 +221,7 @@ namespace PixelFarm.Agg
 
 
 
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform); 
+                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
 
                 Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
@@ -245,7 +244,7 @@ namespace PixelFarm.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform); 
+                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
 
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)
@@ -393,11 +392,11 @@ namespace PixelFarm.Agg
             {
 
 
-                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY); 
+                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY);
                 //// We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 //Affine sourceRectTransform = destRectTransform.CreateInvert();
                 Affine sourceRectTransform = destRectTransform;
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform); 
+                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
 
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)

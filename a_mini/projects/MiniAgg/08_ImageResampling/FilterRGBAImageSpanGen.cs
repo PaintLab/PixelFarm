@@ -65,9 +65,8 @@ namespace PixelFarm.Agg.Image
             spanInterpolator.Begin(x + base.dx, y + base.dy, len);
 
 
-            int fg0, fg1, fg2, fg3;
+            int c0, c1, c2, c3;
 
-            byte[] fg_ptr;
             int[] weightArray = FilterLookup.WeightArray;
             int diameter = base.FilterLookup.Diameter;
             int filter_scale = diameter << img_subpix_const.SHIFT;
@@ -95,7 +94,7 @@ namespace PixelFarm.Agg.Image
                 x += base.dxInt - radius_x;
                 y += base.dyInt - radius_y;
 
-                fg0 = fg1 = fg2 = fg3 = img_filter_const.SCALE / 2;
+                c0 = c1 = c2 = c3 = img_filter_const.SCALE / 2;
 
                 int y_lr = y >> img_subpix_const.SHIFT;
                 int y_hr = ((img_subpix_const.MASK - (y & img_subpix_const.MASK)) *
@@ -107,7 +106,7 @@ namespace PixelFarm.Agg.Image
 
                 int x_hr2 = x_hr;
                 int sourceIndex;
-                fg_ptr = BaseGetSpan(x_lr, y_lr, len_x_lr, out sourceIndex);
+                byte[] buff = BaseGetSpan(x_lr, y_lr, len_x_lr, out sourceIndex);
 
                 for (; ; )
                 {
@@ -118,14 +117,14 @@ namespace PixelFarm.Agg.Image
                         int weight = (weight_y * weight_array[x_hr] +
                                       img_filter_const.SCALE / 2) >>
                                       DOWN_SCALE_SHIFT;
-                        fg0 += fg_ptr[sourceIndex + ImageReaderWriterBase.R] * weight;
-                        fg1 += fg_ptr[sourceIndex + ImageReaderWriterBase.G] * weight;
-                        fg2 += fg_ptr[sourceIndex + ImageReaderWriterBase.B] * weight;
-                        fg3 += fg_ptr[sourceIndex + ImageReaderWriterBase.A] * weight;
+                        c0 += buff[sourceIndex + ColorOrder.R] * weight;
+                        c1 += buff[sourceIndex + ColorOrder.G] * weight;
+                        c2 += buff[sourceIndex + ColorOrder.B] * weight;
+                        c3 += buff[sourceIndex + ColorOrder.A] * weight;
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;
-                        fg_ptr = BaseNextX(out sourceIndex);
+                        buff = BaseNextX(out sourceIndex);
                     }
                     y_hr += ry_inv;
                     if (y_hr >= filter_scale)
@@ -133,32 +132,32 @@ namespace PixelFarm.Agg.Image
                         break;
                     }
 
-                    fg_ptr = BaseNextY(out sourceIndex);
+                    buff = BaseNextY(out sourceIndex);
                 }
 
-                fg0 /= total_weight;
-                fg1 /= total_weight;
-                fg2 /= total_weight;
-                fg3 /= total_weight;
+                c0 /= total_weight;
+                c1 /= total_weight;
+                c2 /= total_weight;
+                c3 /= total_weight;
 
                 //clamps..
-                if (fg0 < 0) { fg0 = 0; }
-                else if (fg0 > BASE_MASK) { fg0 = BASE_MASK; }
+                if (c0 < 0) { c0 = 0; }
+                else if (c0 > BASE_MASK) { c0 = BASE_MASK; }
 
-                if (fg1 < 0) { fg1 = 0; }
-                else if (fg1 > BASE_MASK) { fg1 = BASE_MASK; }
+                if (c1 < 0) { c1 = 0; }
+                else if (c1 > BASE_MASK) { c1 = BASE_MASK; }
 
-                if (fg2 < 0) { fg2 = 0; }
-                else if (fg2 > BASE_MASK) { fg2 = BASE_MASK; }
+                if (c2 < 0) { c2 = 0; }
+                else if (c2 > BASE_MASK) { c2 = BASE_MASK; }
 
-                if (fg3 < 0) { fg3 = 0; }
-                else if (fg3 > BASE_MASK) { fg3 = BASE_MASK; }
+                if (c3 < 0) { c3 = 0; }
+                else if (c3 > BASE_MASK) { c3 = BASE_MASK; }
 
 
-                outputColors[startIndex].red = (byte)fg0;
-                outputColors[startIndex].green = (byte)fg1;
-                outputColors[startIndex].blue = (byte)fg2;
-                outputColors[startIndex].alpha = (byte)fg3;
+                outputColors[startIndex].red = (byte)c0;
+                outputColors[startIndex].green = (byte)c1;
+                outputColors[startIndex].blue = (byte)c2;
+                outputColors[startIndex].alpha = (byte)c3;
 
                 startIndex++;
                 spanInterpolator.Next();

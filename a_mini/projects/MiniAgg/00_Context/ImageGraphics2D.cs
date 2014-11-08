@@ -273,7 +273,7 @@ namespace PixelFarm.Agg
             {
                 sclineRas.AddPath(vertextSnap);
             }
-            sclineRasToBmp.RenderWithSolidColor(destImageReaderWriter, sclineRas, sclinePack8, color);
+            sclineRasToBmp.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
             unchecked { destImageChanged++; };
             //-----------------------------
         }
