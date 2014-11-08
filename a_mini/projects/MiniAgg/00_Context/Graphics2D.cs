@@ -40,24 +40,26 @@ namespace PixelFarm.Agg
 
         }
         //------------------------------------------------------------------------
-        public abstract void Clear(ColorRGBA color);
+     
         public abstract void SetClippingRect(RectInt rect); 
         public abstract RectInt GetClippingRect();
+        
+        public abstract void Clear(ColorRGBA color);
         //------------------------------------------------------------------------
-
+        //render vertices
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
         //------------------------------------------------------------------------
+        //render images ...
         public abstract void Render(IImageReaderWriter imageSource,
             double x, double y,
             double angleRadians,
             double scaleX, double ScaleY);
-        public abstract void Render(IImageReaderWriter imageSource, double x, double y);
+        public abstract void Render(IImageReaderWriter imageSource, double x, double y);       
+        public abstract void Render(ActualImage actualImage, int x, int y);
         public void Render(IImageReaderWriter imageSource, int x, int y)
         {
             this.Render(imageSource, (double)x, (double)y);
         }
-        public abstract void Render(ActualImage actualImage, int x, int y);
-
         //------------------------------------------------------------------------
 
 

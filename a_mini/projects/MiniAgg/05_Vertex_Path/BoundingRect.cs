@@ -176,7 +176,14 @@ namespace PixelFarm.Agg
         {
             int x1, y1, x2, y2;
             bool rValue = GetBoundingRect(vs, out x1, out y1, out x2, out y2);
-            return new RectInt(x1, y1, x2, y2);             
+            return new RectInt(x1, y1, x2, y2);
+        }
+        public static RectInt GetBoundingRect(VertexStore vxs)
+        {
+
+            int x1, y1, x2, y2;
+            bool rValue = GetBoundingRect(new VertexStoreSnap(vxs), out x1, out y1, out x2, out y2);
+            return new RectInt(x1, y1, x2, y2);
         }
         static bool GetBoundingRect(PathStorage vs, int[] gi,
                          int num,

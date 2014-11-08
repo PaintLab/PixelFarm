@@ -84,7 +84,7 @@
     <Compile Include="Dictionary.cs" />
     <Compile Include="Face.cs" />
     <Compile Include="HalfEdge.cs" />
-    <Compile Include="mesh.cs" />
+    <Compile Include="Mesh.cs" />
     <Compile Include="Tesselator.cs" />
   </ItemGroup>
   <ItemGroup>

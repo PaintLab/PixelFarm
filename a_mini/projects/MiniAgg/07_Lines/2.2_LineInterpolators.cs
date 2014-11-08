@@ -66,7 +66,7 @@ namespace PixelFarm.Agg.Lines
             int stop = m_width + LineAA.SUBPIXEL_SCALE * 2;
             for (i = 0; i < MAX_HALF_WIDTH; ++i)
             {
-                m_dist[i] = li.y();
+                m_dist[i] = li.Y;
                 if (m_dist[i] >= stop) break;
                 li.Next();
             }
@@ -77,7 +77,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_li.Next();
             m_x += m_lp.inc;
-            m_y = (m_lp.y1 + m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+            m_y = (m_lp.y1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.IncX(m_y - m_old_y);
             else di.DecX(m_y - m_old_y);
@@ -91,7 +91,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_li.Next();
             m_x += m_lp.inc;
-            m_y = (m_lp.y1 + m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+            m_y = (m_lp.y1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.IncX(m_y - m_old_y);
             else di.DecX(m_y - m_old_y);
@@ -105,7 +105,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_li.Next();
             m_x += m_lp.inc;
-            m_y = (m_lp.y1 + m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+            m_y = (m_lp.y1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.IncX(m_y - m_old_y);
             else di.DecX(m_y - m_old_y);
@@ -120,7 +120,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_li.Next();
             m_y += m_lp.inc;
-            m_x = (m_lp.x1 + m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+            m_x = (m_lp.x1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.IncY(m_x - m_old_x);
             else di.DecY(m_x - m_old_x);
@@ -134,7 +134,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_li.Next();
             m_y += m_lp.inc;
-            m_x = (m_lp.x1 + m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+            m_x = (m_lp.x1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.IncY(m_x - m_old_x);
             else di.DecY(m_x - m_old_x);
@@ -148,7 +148,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_li.Next();
             m_y += m_lp.inc;
-            m_x = (m_lp.x1 + m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+            m_x = (m_lp.x1 + m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
             if (m_lp.inc > 0) di.IncY(m_x - m_old_x);
             else di.DecY(m_x - m_old_x);
@@ -263,7 +263,7 @@ namespace PixelFarm.Agg.Lines
                 {
                     base.m_li.Prev();
                     base.m_y -= lp.inc;
-                    base.m_x = (base.m_lp.x1 + base.m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+                    base.m_x = (base.m_lp.x1 + base.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
                     if (lp.inc > 0) m_di.DecY(base.m_x - base.m_old_x);
                     else m_di.IncY(base.m_x - base.m_old_x);
@@ -295,7 +295,7 @@ namespace PixelFarm.Agg.Lines
                 {
                     base.m_li.Prev();
                     base.m_x -= lp.inc;
-                    base.m_y = (base.m_lp.y1 + base.m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+                    base.m_y = (base.m_lp.y1 + base.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
                     if (lp.inc > 0) m_di.DecX(base.m_y - base.m_old_y);
                     else m_di.IncX(base.m_y - base.m_old_y);
@@ -579,7 +579,7 @@ namespace PixelFarm.Agg.Lines
                 {
                     base.m_li.Prev();
                     base.m_y -= lp.inc;
-                    base.m_x = (base.m_lp.x1 + base.m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+                    base.m_x = (base.m_lp.x1 + base.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
                     if (lp.inc > 0) m_di.DecY(base.m_x - base.m_old_x);
                     else m_di.IncY(base.m_x - base.m_old_x);
@@ -610,7 +610,7 @@ namespace PixelFarm.Agg.Lines
                 {
                     base.m_li.Prev();
                     base.m_x -= lp.inc;
-                    base.m_y = (base.m_lp.y1 + base.m_li.y()) >> LineAA.SUBPIXEL_SHIFT;
+                    base.m_y = (base.m_lp.y1 + base.m_li.Y) >> LineAA.SUBPIXEL_SHIFT;
 
                     if (lp.inc > 0) m_di.DecX(base.m_y - base.m_old_y);
                     else m_di.IncX(base.m_y - base.m_old_y);

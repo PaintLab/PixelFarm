@@ -31,10 +31,22 @@ namespace PixelFarm.Agg
 
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
-        public const int OrderB = 0;
-        public const int OrderG = 1;
-        public const int OrderR = 2;
-        public const int OrderA = 3;
+        /// <summary>
+        /// order b
+        /// </summary>
+        public const int B = 0;
+        /// <summary>
+        /// order g
+        /// </summary>
+        public const int G = 1;
+        /// <summary>
+        /// order b
+        /// </summary>
+        public const int R = 2;
+        /// <summary>
+        /// order a
+        /// </summary>
+        public const int A = 3;
 
         const int BASE_MASK = 255;
 
@@ -621,11 +633,11 @@ namespace PixelFarm.Agg
         //    //for_each_pixel(apply_gamma_inv_rgba<color_type, order_type, GammaLut>(g));
         //}
 
-        public bool IsPixelVisible(int x, int y)
-        {
-            ColorRGBA pixelValue = GetRecieveBlender().PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
-            return (pixelValue.Alpha0To255 != 0 || pixelValue.Red0To255 != 0 || pixelValue.Green0To255 != 0 || pixelValue.Blue0To255 != 0);
-        }
+        //public bool IsPixelVisible(int x, int y)
+        //{
+        //    ColorRGBA pixelValue = GetRecieveBlender().PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
+        //    return (pixelValue.Alpha0To255 != 0 || pixelValue.Red0To255 != 0 || pixelValue.Green0To255 != 0 || pixelValue.Blue0To255 != 0);
+        //}
 
 
         //public override int GetHashCode()
@@ -726,7 +738,15 @@ namespace PixelFarm.Agg
     public class MyImageReaderWriter : ImageReaderWriterBase
     {
         ActualImage actualImage;
+        public MyImageReaderWriter()
+        {
+
+        }
         public MyImageReaderWriter(ActualImage actualImage)
+        {             
+            ReloadImage(actualImage);
+        }
+        public void ReloadImage(ActualImage actualImage)
         {
             this.actualImage = actualImage;
             //calculate image stride

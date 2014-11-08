@@ -87,7 +87,11 @@ namespace PixelFarm.Agg.Transform
     public sealed class LineInterpolatorDDA2
     {
 
-
+        int m_cnt;
+        int m_lft;
+        int m_rem;
+        int m_mod;
+        int m_y;
         //--------------------------------------------------------------------
         public LineInterpolatorDDA2() { }
 
@@ -203,13 +207,9 @@ namespace PixelFarm.Agg.Transform
         public int lft() { return m_lft; }
 
         //--------------------------------------------------------------------
-        public int y() { return m_y; }
+        public int Y { get { return m_y; } }
 
-        private int m_cnt;
-        private int m_lft;
-        private int m_rem;
-        private int m_mod;
-        private int m_y;
+        
     }
 
 
@@ -279,9 +279,9 @@ namespace PixelFarm.Agg.Transform
         //--------------------------------------------------------------------
         public int x1() { return m_x1_lr; }
         public int y1() { return m_y1_lr; }
-        public int x2() { return line_lr(m_interpolator.y()); }
-        public int y2() { return line_lr(m_interpolator.y()); }
-        public int x2_hr() { return m_interpolator.y(); }
-        public int y2_hr() { return m_interpolator.y(); }
+        public int x2() { return line_lr(m_interpolator.Y); }
+        public int y2() { return line_lr(m_interpolator.Y); }
+        public int x2_hr() { return m_interpolator.Y; }
+        public int y2_hr() { return m_interpolator.Y; }
     }
 }

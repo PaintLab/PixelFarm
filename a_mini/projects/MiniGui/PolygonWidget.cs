@@ -155,7 +155,7 @@ namespace PixelFarm.Agg.UI
         public void SetYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] = newYN; }
         public void AddYN(int n, double newYN) { needToRecalculateBounds = true; m_polygon[n * 2 + 1] += newYN; }
 
-        public double[] GetPolygon() { return m_polygon; }
+        public double[] GetInnerCoords() { return m_polygon; }
 
 
         public double LineWidth

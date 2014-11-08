@@ -145,7 +145,7 @@ namespace Mini
                           windowsBitmap.PixelFormat);
 
             IntPtr scan0 = bitmapData1.Scan0;
-            int stride = bitmapData1.Stride; 
+            int stride = bitmapData1.Stride;
 
             unsafe
             {
@@ -165,6 +165,64 @@ namespace Mini
                 }
             }
 
+            windowsBitmap.UnlockBits(bitmapData1);
+        }
+
+        internal static void CopyFromWindowsBitmapSameSize(
+           Bitmap windowsBitmap,
+           ActualImage actualImage)
+        {
+
+            int h = windowsBitmap.Height;
+            int w = windowsBitmap.Width;
+
+            byte[] buffer = actualImage.GetBuffer();
+            BitmapData bitmapData1 = windowsBitmap.LockBits(
+                      new Rectangle(0, 0,
+                          w,
+                          h),
+                          System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                          windowsBitmap.PixelFormat);
+
+            IntPtr scan0 = bitmapData1.Scan0;
+            int stride = bitmapData1.Stride;
+
+            //unsafe
+            //{
+            //    fixed (byte* bufferH = &buffer[0])
+            //    {
+            //        byte* target = (byte*)scan0;
+            //        for (int y = h; y > 0; --y)
+            //        {
+            //            byte* src = bufferH + ((y - 1) * stride);
+            //            for (int n = stride - 1; n >= 0; --n)
+            //            {
+            //                *target = *src;
+            //                target++;
+            //                src++;
+            //            }
+            //        }
+            //    }
+            //}
+            unsafe
+            {
+                //target
+                fixed (byte* targetH = &buffer[0])
+                {
+                    byte* src = (byte*)scan0; 
+
+                    for (int y = h; y > 0; --y)
+                    {
+                        byte* target = targetH + ((y - 1) * stride);
+                        for (int n = stride - 1; n >= 0; --n)
+                        {
+                            *target = *src;
+                            target++;
+                            src++;
+                        }
+                    }
+                }
+            }
             windowsBitmap.UnlockBits(bitmapData1);
         }
     }

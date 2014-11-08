@@ -248,12 +248,12 @@ namespace PixelFarm.Agg
         public void Fill(VertexStoreSnap snap)
         {
             sclineRas.AddPath(snap);
-            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithSolidColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
         public void Fill(VertexStore vxs)
         {
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithSolidColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
 
         public ColorRGBA FillColor
@@ -279,7 +279,7 @@ namespace PixelFarm.Agg
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
             this.sclineRas.AddPath(vxs); 
-            sclineRasToBmp.GenerateAndRender(this.gx.DestImage, sclineRas, scline, spanGen); 
+            sclineRasToBmp.RenderWithSpan(this.gx.DestImage, sclineRas, scline, spanGen); 
         }     
      
 
@@ -301,11 +301,7 @@ namespace PixelFarm.Agg
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoRecursiveBlur(img, r);
         }
-        //----------------
-
-
-
-
+        //---------------- 
     }
 
 }

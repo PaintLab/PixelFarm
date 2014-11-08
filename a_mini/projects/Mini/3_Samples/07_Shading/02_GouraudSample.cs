@@ -65,7 +65,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void render_gouraud(IImageReaderWriter backBuffer, Scanline sl, ScanlineRasterizer ras, ScanlineRasToDestBitmapRenderer sclineRasToBmp)
+        public void render_gouraud(IImageReaderWriter backBuffer, Scanline scline, ScanlineRasterizer sclineRas, ScanlineRasToDestBitmapRenderer sclineRasToBmp)
         {
             float alpha = this.AlphaValue;
             float brc = 1;
@@ -76,12 +76,12 @@ namespace PixelFarm.Agg.Sample_Gouraud
 #else
             var image = new ChildImage(backBuffer, new PixelBlenderBGRA());
 #endif
-            ClipProxyImage ren_base = new ClipProxyImage(image);
+            ClipProxyImage destImage = new ClipProxyImage(image);
 
             //span_allocator span_alloc = new span_allocator();
             SpanGenGouraudRGBA span_gen = new SpanGenGouraudRGBA();
 
-            ras.ResetGamma(new GammaLinear(0.0, this.LinearGamma));
+            sclineRas.ResetGamma(new GammaLinear(0.0, this.LinearGamma));
 
             double d = this.DilationValue;
 
@@ -104,8 +104,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
                               ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
 
-            ras.AddPath(new VertexStoreSnap(span_gen.MakeVxs())); 
-            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
+            sclineRas.AddPath(new VertexStoreSnap(span_gen.MakeVxs())); 
+            sclineRasToBmp.RenderWithSpan(destImage, sclineRas, scline, span_gen);
 
 
 
@@ -115,16 +115,16 @@ namespace PixelFarm.Agg.Sample_Gouraud
                               ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
 
             span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
-            ras.AddPath(span_gen.MakeVxs());
-            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
+            sclineRas.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.RenderWithSpan(destImage, sclineRas, scline, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 0, 1, alpha),
                             ColorRGBAf.MakeColorRGBA(1, 0, 0, alpha),
                             ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
-            ras.AddPath(span_gen.MakeVxs());
-            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
+            sclineRas.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.RenderWithSpan(destImage, sclineRas, scline, span_gen);
 
 
             brc = 1 - brc;
@@ -132,8 +132,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
                               ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
                               ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
-            ras.AddPath(span_gen.MakeVxs());
-            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
+            sclineRas.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.RenderWithSpan(destImage, sclineRas, scline, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 1, 0, alpha),
@@ -141,8 +141,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
                            ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
 
-            ras.AddPath(span_gen.MakeVxs());
-            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
+            sclineRas.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.RenderWithSpan(destImage, sclineRas, scline, span_gen);
 
 
             span_gen.SetColor(ColorRGBAf.MakeColorRGBA(0, 0, 1, alpha),
@@ -150,8 +150,8 @@ namespace PixelFarm.Agg.Sample_Gouraud
                             ColorRGBAf.MakeColorRGBA(brc, brc, brc, alpha));
             span_gen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
 
-            ras.AddPath(span_gen.MakeVxs());
-            sclineRasToBmp.GenerateAndRender(ren_base, ras, sl, span_gen);
+            sclineRas.AddPath(span_gen.MakeVxs());
+            sclineRasToBmp.RenderWithSpan(destImage, sclineRas, scline, span_gen);
         }
         public override void Draw(Graphics2D g)
         {

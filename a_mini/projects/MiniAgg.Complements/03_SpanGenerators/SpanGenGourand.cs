@@ -20,18 +20,18 @@
 using System;
 using System.Collections.Generic;
 
-namespace PixelFarm.Agg 
+namespace PixelFarm.Agg
 {
     //Gourand shading
     //============================================================span_gouraud
     public abstract class SpanGenGourand
     {
-         
+
         CoordAndColor m_coord_0;
         CoordAndColor m_coord_1;
         CoordAndColor m_coord_2;
 
-         
+
         double[] m_x = new double[8];
         double[] m_y = new double[8];
         ShapePath.FlagsAndCommand[] m_cmd = new ShapePath.FlagsAndCommand[8];
@@ -134,31 +134,31 @@ namespace PixelFarm.Agg
         }
 
         // Vertex Source Interface to feed the coordinates to the rasterizer 
-        protected void LoadArrangedVertices(CoordAndColor[] coord)
+        protected void LoadArrangedVertices(out CoordAndColor c0, out CoordAndColor c1, out CoordAndColor c2)
         {
-            coord[0] = m_coord_0;
-            coord[1] = m_coord_1;
-            coord[2] = m_coord_2;
+            c0 = m_coord_0;
+            c1 = m_coord_1;
+            c2 = m_coord_2;
 
             if (m_coord_0.y > m_coord_2.y)
             {
-                coord[0] = m_coord_2;
-                coord[2] = m_coord_0;
+                c0 = m_coord_2;
+                c2 = m_coord_0;
             }
 
             CoordAndColor tmp;
-            if (coord[0].y > coord[1].y)
+            if (c0.y > c1.y)
             {
-                tmp = coord[1];
-                coord[1] = coord[0];
-                coord[0] = tmp;
+                tmp = c1;
+                c1 = c0;
+                c0 = tmp;
             }
 
-            if (coord[1].y > coord[2].y)
+            if (c1.y > c2.y)
             {
-                tmp = coord[2];
-                coord[2] = coord[1];
-                coord[1] = tmp;
+                tmp = c2;
+                c2 = c1;
+                c1 = tmp;
             }
         }
     }

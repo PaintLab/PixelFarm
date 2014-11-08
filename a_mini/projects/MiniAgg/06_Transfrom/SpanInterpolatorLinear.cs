@@ -73,8 +73,8 @@ namespace PixelFarm.Agg.Transform
         public void ReSync(double xe, double ye, int len)
         {
             m_trans.Transform(ref xe, ref ye);
-            m_li_x = new LineInterpolatorDDA2(m_li_x.y(), AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
-            m_li_y = new LineInterpolatorDDA2(m_li_y.y(), AggBasics.iround(ye * (double)SUB_PIXEL_SCALE), (int)len);
+            m_li_x = new LineInterpolatorDDA2(m_li_x.Y, AggBasics.iround(xe * (double)SUB_PIXEL_SCALE), (int)len);
+            m_li_y = new LineInterpolatorDDA2(m_li_y.Y, AggBasics.iround(ye * (double)SUB_PIXEL_SCALE), (int)len);
         }
 
         
@@ -87,8 +87,8 @@ namespace PixelFarm.Agg.Transform
         //----------------------------------------------------------------
         public void GetCoord(out int x, out int y)
         {
-            x = m_li_x.y();
-            y = m_li_y.y();
+            x = m_li_x.Y;
+            y = m_li_y.Y;
         }
     } 
  
