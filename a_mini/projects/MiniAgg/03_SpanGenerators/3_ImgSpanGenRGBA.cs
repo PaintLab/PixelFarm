@@ -120,21 +120,21 @@ namespace PixelFarm.Agg.Image
         {
             ISpanInterpolator spanInterpolator = base.Interpolator;
             int bufferIndex;
-            byte[] fg_ptr;
+            byte[] srcBuffer = srcRW.GetBuffer();
             if (spanInterpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
                 && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.Agg.Transform.Affine)
             && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity())
             {
-                fg_ptr = srcRW.GetPixelPointerXY(x, y, out bufferIndex);
+                bufferIndex = srcRW.GetBufferOffsetXY(x, y);
                 //unsafe
                 {
 #if true
                     do
                     {
-                        outputColors[startIndex].blue = (byte)fg_ptr[bufferIndex++];
-                        outputColors[startIndex].green = (byte)fg_ptr[bufferIndex++];
-                        outputColors[startIndex].red = (byte)fg_ptr[bufferIndex++];
-                        outputColors[startIndex].alpha = (byte)fg_ptr[bufferIndex++];
+                        outputColors[startIndex].blue = (byte)srcBuffer[bufferIndex++];
+                        outputColors[startIndex].green = (byte)srcBuffer[bufferIndex++];
+                        outputColors[startIndex].red = (byte)srcBuffer[bufferIndex++];
+                        outputColors[startIndex].alpha = (byte)srcBuffer[bufferIndex++];
                         ++startIndex;
                     } while (--len != 0);
 #else
@@ -169,6 +169,7 @@ namespace PixelFarm.Agg.Image
             int maxx = srcRW.Width - 1;
             int maxy = srcRW.Height - 1;
 
+            srcBuffer = srcRW.GetBuffer();
 
             unchecked
             {
@@ -197,46 +198,47 @@ namespace PixelFarm.Agg.Image
                         x_hr &= (int)img_subpix_const.MASK;
                         y_hr &= (int)img_subpix_const.MASK;
 
-                        fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
+                        bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
 
                         weight = (((int)img_subpix_const.SCALE - x_hr) *
                                  ((int)img_subpix_const.SCALE - y_hr));
                         if (weight > BASE_MASK)
                         {
-                            accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
-                            accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
-                            accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
-                            accColor3 += weight * fg_ptr[bufferIndex + ColorOrder.A];
+                            accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                            accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                            accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
+                            accColor3 += weight * srcBuffer[bufferIndex + ColorOrder.A];
                         }
 
                         weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                         if (weight > BASE_MASK)
                         {
                             bufferIndex += bytesBetweenPixelInclusive;
-                            accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
-                            accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
-                            accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
-                            accColor3 += weight * fg_ptr[bufferIndex + ColorOrder.A];
+                            accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                            accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                            accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
+                            accColor3 += weight * srcBuffer[bufferIndex + ColorOrder.A];
                         }
 
                         weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
                         if (weight > BASE_MASK)
                         {
                             ++y_lr;
-                            fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
-                            accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
-                            accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
-                            accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
-                            accColor3 += weight * fg_ptr[bufferIndex + ColorOrder.A];
+
+                            bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+                            accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                            accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                            accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
+                            accColor3 += weight * srcBuffer[bufferIndex + ColorOrder.A];
                         }
                         weight = (x_hr * y_hr);
                         if (weight > BASE_MASK)
                         {
                             bufferIndex += bytesBetweenPixelInclusive;
-                            accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
-                            accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
-                            accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
-                            accColor3 += weight * fg_ptr[bufferIndex + ColorOrder.A];
+                            accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                            accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                            accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
+                            accColor3 += weight * srcBuffer[bufferIndex + ColorOrder.A];
                         }
                         accColor0 >>= img_subpix_const.SHIFT * 2;
                         accColor1 >>= img_subpix_const.SHIFT * 2;

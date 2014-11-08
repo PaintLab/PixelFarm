@@ -33,10 +33,10 @@ namespace PixelFarm.Agg
             p[offset] = buf[y][x];
         }
 
-        public void SetPixelHighRes(ImageReaderWriterBase sourceImage, 
+        public void SetPixelHighRes(ImageReaderWriterBase sourceImage,
             ColorRGBA[] destBuffer,
-            int destBufferOffset, 
-            int x, 
+            int destBufferOffset,
+            int x,
             int y)
         {
             int r, g, b, a;
@@ -49,7 +49,8 @@ namespace PixelFarm.Agg
             x &= LineAA.SUBPIXEL_MARK;
             y &= LineAA.SUBPIXEL_MARK;
             int sourceOffset;
-            byte[] ptr = sourceImage.GetPixelPointerXY(x_lr, y_lr, out sourceOffset);
+            byte[] ptr = sourceImage.GetBuffer();
+            sourceOffset = sourceImage.GetBufferOffsetXY(x_lr, y_lr);
 
             weight = (LineAA.SUBPIXEL_SCALE - x) *
                      (LineAA.SUBPIXEL_SCALE - y);
@@ -66,7 +67,7 @@ namespace PixelFarm.Agg
             b += weight * ptr[sourceOffset + ColorOrder.B];
             a += weight * ptr[sourceOffset + ColorOrder.A];
 
-            ptr = sourceImage.GetPixelPointerXY(x_lr, y_lr + 1, out sourceOffset);
+            sourceOffset = sourceImage.GetBufferOffsetXY(x_lr, y_lr + 1);
 
             weight = (LineAA.SUBPIXEL_SCALE - x) * y;
             r += weight * ptr[sourceOffset + ColorOrder.R];
@@ -87,5 +88,5 @@ namespace PixelFarm.Agg
             destBuffer[destBufferOffset].blue = (byte)(b >> LineAA.SUBPIXEL_SHIFT * 2);
             destBuffer[destBufferOffset].alpha = (byte)(a >> LineAA.SUBPIXEL_SHIFT * 2);
         }
-    } 
+    }
 }

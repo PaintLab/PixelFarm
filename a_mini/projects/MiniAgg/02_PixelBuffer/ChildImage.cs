@@ -34,6 +34,7 @@ namespace PixelFarm.Agg.Image
             int width,
             int height)
         {
+            SetRecieveBlender(image.GetRecieveBlender());
             AttachBuffer(image.GetBuffer(),
                bufferOffsetToFirstPixel,
                 width,
@@ -41,7 +42,7 @@ namespace PixelFarm.Agg.Image
                 image.Stride,
                 image.BitDepth,
                 image.BytesBetweenPixelsInclusive);
-            SetRecieveBlender(image.GetRecieveBlender());
+          
         }
         public ChildImage(byte[] buffer,
             int bufferOffsetToFirstPixel,
@@ -149,10 +150,6 @@ namespace PixelFarm.Agg.Image
             }
             SetUpLookupTables();
         }
-        public byte[] GetBuffer(out int bufferOffset)
-        {
-            bufferOffset = this.bufferOffset;
-            return m_ByteBuffer;
-        }
+        
     }
 }

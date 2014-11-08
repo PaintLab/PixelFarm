@@ -155,7 +155,7 @@ namespace PixelFarm.Agg.Lines
             m_buf = new ChildImage(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
 
             byte[] destBuffer = m_buf.GetBuffer();
-            byte[] sourceBuffer = src.GetBuffer();
+            byte[] srcBuffer = src.GetBuffer();
 
             // copy the image into the middle of the dest
             for (int y = 0; y < m_height; y++)
@@ -166,7 +166,7 @@ namespace PixelFarm.Agg.Lines
                     int destOffset = m_buf.GetBufferOffsetXY(m_dilation, y + m_dilation);
                     for (int channel = 0; channel < bytesPerPixel; channel++)
                     {
-                        destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
+                        destBuffer[destOffset++] = srcBuffer[sourceOffset++];
                     }
                 }
             }
@@ -184,8 +184,8 @@ namespace PixelFarm.Agg.Lines
                 {
                     for (int channel = 0; channel < bytesPerPixel; channel++)
                     {
-                        destBuffer[d1Offset++] = sourceBuffer[s1Offset++];
-                        destBuffer[d2Offset++] = sourceBuffer[s2Offset++];
+                        destBuffer[d1Offset++] = srcBuffer[s1Offset++];
+                        destBuffer[d2Offset++] = srcBuffer[s2Offset++];
                     }
                 }
             }

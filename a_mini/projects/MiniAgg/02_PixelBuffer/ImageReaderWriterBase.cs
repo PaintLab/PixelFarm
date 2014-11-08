@@ -99,8 +99,11 @@ namespace PixelFarm.Agg
 
                 int sourceOffset = sourceImage.GetBufferOffsetXY(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom);
                 byte[] sourceBuffer = sourceImage.GetBuffer();
-                int destOffset;
-                byte[] destBuffer = GetPixelPointerXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset, out destOffset);
+
+
+                byte[] destBuffer = GetBuffer();
+                int destOffset = GetBufferOffsetXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
+
 
                 for (int i = 0; i < clippedSourceImageRect.Height; i++)
                 {
@@ -126,12 +129,11 @@ namespace PixelFarm.Agg
 
                                         byte[] sourceBuffer = sourceImage.GetBuffer();
 
-                                        int destOffset;
 
-                                        byte[] destBuffer = GetPixelPointerXY(
-                                            clippedSourceImageRect.Left + destXOffset,
-                                            clippedSourceImageRect.Bottom + i + destYOffset,
-                                            out destOffset);
+
+                                        byte[] destBuffer = GetBuffer();
+                                        int destOffset = GetBufferOffsetXY(clippedSourceImageRect.Left + destXOffset,
+                                            clippedSourceImageRect.Bottom + i + destYOffset);
 
                                         for (int x = 0; x < numPixelsToCopy; x++)
                                         {
@@ -298,11 +300,6 @@ namespace PixelFarm.Agg
         }
 
 
-        public byte[] GetPixelPointerXY(int x, int y, out int bufferOffset)
-        {
-            bufferOffset = GetBufferOffsetXY(x, y);
-            return m_ByteBuffer;
-        }
 
         public static void CopySubBufferToInt32Array(ImageReaderWriterBase buff, int mx, int my, int w, int h, int[] buffer)
         {
@@ -334,7 +331,6 @@ namespace PixelFarm.Agg
         {
             return bufferFirstPixel + yTableArray[y] + xTableArray[x];
         }
-
         public void SetPixel(int x, int y, ColorRGBA color)
         {
             recieveBlender.CopyPixel(GetBuffer(), GetBufferOffsetXY(x, y), color);
@@ -342,9 +338,8 @@ namespace PixelFarm.Agg
 
         public void CopyHL(int x, int y, int len, ColorRGBA sourceColor)
         {
-            int bufferOffset;
-            byte[] buffer = GetPixelPointerXY(x, y, out bufferOffset);
-            recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
+            int bufferOffset = GetBufferOffsetXY(x, y);
+            recieveBlender.CopyPixels(this.m_ByteBuffer, bufferOffset, sourceColor, len);
         }
 
         public void CopyVL(int x, int y, int len, ColorRGBA sourceColor)
@@ -369,8 +364,9 @@ namespace PixelFarm.Agg
             {
                 int len = x2 - x1 + 1;
 
-                int bufferOffset;
-                byte[] buffer = GetPixelPointerXY(x1, y, out bufferOffset);
+
+                byte[] buffer = GetBuffer();
+                int bufferOffset = GetBufferOffsetXY(x1, y);
 
                 int alpha = (((int)(sourceColor.alpha) * (cover + 1)) >> 8);
                 if (alpha == BASE_MASK)
@@ -448,8 +444,8 @@ namespace PixelFarm.Agg
             {
                 unchecked
                 {
-                    int bufferOffset;
-                    byte[] buffer = GetPixelPointerXY(x, y, out bufferOffset);
+                    byte[] buffer = GetBuffer();
+                    int bufferOffset = GetBufferOffsetXY(x, y);
 
                     do
                     {

@@ -117,13 +117,12 @@ namespace PixelFarm.Agg.Image
             int back_b = m_bgcolor.blue;
             int back_a = m_bgcolor.alpha;
 
-            int bufferIndex;
-            byte[] fg_ptr;
-
+            int bufferIndex; 
 
             int maxx = (int)srcRW.Width - 1;
             int maxy = (int)srcRW.Height - 1;
 
+            byte[] srcBuffer = srcRW.GetBuffer();
 
             unchecked
             {
@@ -151,33 +150,33 @@ namespace PixelFarm.Agg.Image
                         x_hr &= img_subpix_const.MASK;
                         y_hr &= img_subpix_const.MASK;
 
-                        fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
+                        bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
 
                         weight = ((img_subpix_const.SCALE - x_hr) *
                                  (img_subpix_const.SCALE - y_hr));
-                        accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
-                        accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
-                        accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
+                        accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                        accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                        accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
 
                         bufferIndex += 3;
                         weight = (x_hr * (img_subpix_const.SCALE - y_hr));
-                        accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
-                        accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
-                        accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
+                        accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                        accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                        accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
 
                         y_lr++;
-                        fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
+                        bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
 
                         weight = ((img_subpix_const.SCALE - x_hr) * y_hr);
-                        accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
-                        accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
-                        accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
+                        accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                        accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                        accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
 
                         bufferIndex += 3;
                         weight = (x_hr * y_hr);
-                        accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
-                        accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
-                        accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
+                        accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                        accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                        accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
 
                         accColor0 >>= img_subpix_const.SHIFT * 2;
                         accColor1 >>= img_subpix_const.SHIFT * 2;
@@ -249,9 +248,9 @@ namespace PixelFarm.Agg.Image
                             if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                             {
                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
-                                srcRW.GetBuffer(),
-                                srcRW.GetBufferOffsetXY(x_lr, y_lr),
-                                weight);
+                                    srcRW.GetBuffer(),
+                                    srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                    weight);
                             }
                             else
                             {
