@@ -211,7 +211,9 @@ namespace PixelFarm.Agg.Image
                             if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                             {
                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
-                                    back_r, back_g, back_b, back_a, srcRW, x_lr, y_lr, weight);
+                                   srcRW.GetBuffer(),
+                                   srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                   weight);
                             }
                             else
                             {
@@ -225,9 +227,12 @@ namespace PixelFarm.Agg.Image
                             weight = (x_hr * (img_subpix_const.SCALE - y_hr));
 
                             if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
-                            {
+                            { 
+
                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
-                                    back_r, back_g, back_b, back_a, srcRW, x_lr, y_lr, weight);
+                                   srcRW.GetBuffer(),
+                                   srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                   weight);
                             }
                             else
                             {
@@ -244,7 +249,9 @@ namespace PixelFarm.Agg.Image
                             if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                             {
                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
-                                    back_r, back_g, back_b, back_a, srcRW, x_lr, y_lr, weight);
+                                srcRW.GetBuffer(),
+                                srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                weight);
                             }
                             else
                             {
@@ -260,7 +267,9 @@ namespace PixelFarm.Agg.Image
                             if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                             {
                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
-                                    back_r, back_g, back_b, back_a, srcRW, x_lr, y_lr, weight);
+                                 srcRW.GetBuffer(),
+                                 srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                 weight);
                             }
                             else
                             {
@@ -287,18 +296,14 @@ namespace PixelFarm.Agg.Image
         }
 
         static void BlendInFilterPixel(ref int accColor0, ref int accColor1, ref int accColor2, ref int sourceAlpha,
-            int back_r, int back_g, int back_b, int back_a,
-            ImageReaderWriterBase srcRW, int x_lr, int y_lr, int weight)
+             byte[] srcBuffer, int bufferIndex, int weight)
         {
-            byte[] fg_ptr;
+
             unchecked
             {
-
-                int bufferIndex;
-                fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
-                accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
+                accColor0 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.R];
+                accColor1 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.G];
+                accColor2 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.B];
                 sourceAlpha += weight * BASE_MASK;
             }
         }

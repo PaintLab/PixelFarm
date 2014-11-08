@@ -65,8 +65,10 @@ namespace PixelFarm.Agg.Image
                         outputColors[startIndex].green = pSource[bufferIndex];
                         outputColors[startIndex].blue = pSource[bufferIndex];
                         outputColors[startIndex].alpha = 255;
+
                         startIndex++;
                         bufferIndex += bytesBetweenPixelsInclusive;
+
                     } while (--len != 0);
                 }
             }

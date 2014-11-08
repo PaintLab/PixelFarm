@@ -123,9 +123,10 @@ namespace PixelFarm.Agg
 
                         if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
 
-
+                        //1. generate colors -> store in colorArray
                         spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
 
+                        //2. blend color in colorArray to destination image
                         dest.BlendColorHSpan(x, y, span_len,
                             colorArray, 0,
                             covers, span.cover_index,
