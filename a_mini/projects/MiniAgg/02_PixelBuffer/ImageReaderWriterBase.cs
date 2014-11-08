@@ -31,10 +31,22 @@ namespace PixelFarm.Agg
 
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
-        public const int OrderB = 0;
-        public const int OrderG = 1;
-        public const int OrderR = 2;
-        public const int OrderA = 3;
+        /// <summary>
+        /// order b
+        /// </summary>
+        public const int B = 0;
+        /// <summary>
+        /// order g
+        /// </summary>
+        public const int G = 1;
+        /// <summary>
+        /// order b
+        /// </summary>
+        public const int R = 2;
+        /// <summary>
+        /// order a
+        /// </summary>
+        public const int A = 3;
 
         const int BASE_MASK = 255;
 

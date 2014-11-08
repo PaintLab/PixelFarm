@@ -59,32 +59,19 @@ namespace PixelFarm.Agg.Image
             spanInterpolator.GetCoord(out x_hr, out y_hr);
             int x_lr = x_hr >> img_subpix_const.SHIFT;
             int y_lr = y_hr >> img_subpix_const.SHIFT;
-            int bufferIndex;
-            bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+            int bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+            byte[] srcBuff = srcRW.GetBuffer();
 
-            byte[] fg_ptr = srcRW.GetBuffer();
-#if USE_UNSAFE_CODE
-            unsafe
-            {
-                fixed (byte* pSource = fg_ptr)
-                {
-                    do
-                    {
-                        span[spanIndex++] = *(RGBA_Bytes*)&(pSource[bufferIndex]);
-                        bufferIndex += 4;
-                    } while (--len != 0);
-                }
-            }
-#else
             ColorRGBA color = ColorRGBA.White;
             do
             {
-                color.blue = fg_ptr[bufferIndex++];
-                color.green = fg_ptr[bufferIndex++];
-                color.red = fg_ptr[bufferIndex++];
+                color.blue = srcBuff[bufferIndex++];
+                color.green = srcBuff[bufferIndex++];
+                color.red = srcBuff[bufferIndex++];
+
                 outputColors[startIndex++] = color;
             } while (--len != 0);
-#endif
+
         }
     }
 
@@ -166,29 +153,29 @@ namespace PixelFarm.Agg.Image
 
                         weight = ((img_subpix_const.SCALE - x_hr) *
                                  (img_subpix_const.SCALE - y_hr));
-                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
 
                         bufferIndex += 3;
                         weight = (x_hr * (img_subpix_const.SCALE - y_hr));
-                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
 
                         y_lr++;
                         fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
 
                         weight = ((img_subpix_const.SCALE - x_hr) * y_hr);
-                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
 
                         bufferIndex += 3;
                         weight = (x_hr * y_hr);
-                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
 
                         accumulatedColor[0] >>= img_subpix_const.SHIFT * 2;
                         accumulatedColor[1] >>= img_subpix_const.SHIFT * 2;
@@ -263,9 +250,9 @@ namespace PixelFarm.Agg.Image
                     int bufferIndex;
                     fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
 
-                    accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                    accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                    accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
+                    accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                    accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                    accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
                     sourceAlpha += weight * BASE_MASK;
                 }
                 else

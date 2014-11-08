@@ -27,7 +27,8 @@ namespace PixelFarm.Agg.Image
         int m_x, m_x0, m_y, m_distanceBetweenPixelsInclusive;
         byte[] m_buffer;
         int m_currentBufferOffset = -1;
-        int m_width;
+        int m_src_width;
+        int m_src_height;
 
         public ImageBufferAccessor(IImageReaderWriter imgReaderWriter)
         {
@@ -38,7 +39,8 @@ namespace PixelFarm.Agg.Image
         {
             m_sourceImage = pixf;
             m_buffer = m_sourceImage.GetBuffer();
-            m_width = m_sourceImage.Width;
+            m_src_width = m_sourceImage.Width;
+            m_src_height = m_sourceImage.Height;
             m_distanceBetweenPixelsInclusive = m_sourceImage.BytesBetweenPixelsInclusive;
         }
 
@@ -56,7 +58,7 @@ namespace PixelFarm.Agg.Image
             int y = m_y;
             unchecked
             {
-                if ((uint)x >= (uint)m_sourceImage.Width)
+                if ((uint)x >= (uint)m_src_width)
                 {
                     if (x < 0)
                     {
@@ -64,11 +66,11 @@ namespace PixelFarm.Agg.Image
                     }
                     else
                     {
-                        x = (int)m_sourceImage.Width - 1;
+                        x = (int)m_src_width - 1;
                     }
                 }
 
-                if ((uint)y >= (uint)m_sourceImage.Height)
+                if ((uint)y >= (uint)m_src_height)
                 {
                     if (y < 0)
                     {
@@ -76,7 +78,7 @@ namespace PixelFarm.Agg.Image
                     }
                     else
                     {
-                        y = (int)m_sourceImage.Height - 1;
+                        y = (int)m_src_height - 1;
                     }
                 }
             }
@@ -91,8 +93,8 @@ namespace PixelFarm.Agg.Image
             m_y = y;
             unchecked
             {
-                if ((uint)y < (uint)m_sourceImage.Height
-                    && x >= 0 && x + len <= (int)m_sourceImage.Width)
+                if ((uint)y < (uint)m_src_height
+                    && x >= 0 && x + len <= (int)m_src_width)
                 {
                     bufferOffset = m_sourceImage.GetBufferOffsetXY(x, y);
                     m_buffer = m_sourceImage.GetBuffer();
