@@ -27,11 +27,11 @@ using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
 {
-     
+
 
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
-         
+
         const int BASE_MASK = 255;
         //--------------------------------------------
         //look up table
@@ -83,7 +83,7 @@ namespace PixelFarm.Agg
 
         }
 
-         
+
 
         void CopyFromNoClipping(IImageReaderWriter sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
@@ -123,11 +123,11 @@ namespace PixelFarm.Agg
                                     for (int i = clippedSourceImageRect.Bottom; i < clippedSourceImageRect.Top; i++)
                                     {
                                         int sourceOffset = sourceImage.GetBufferOffsetXY(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom + i);
-                                        
+
                                         byte[] sourceBuffer = sourceImage.GetBuffer();
-                                        
+
                                         int destOffset;
-                                        
+
                                         byte[] destBuffer = GetPixelPointerXY(
                                             clippedSourceImageRect.Left + destXOffset,
                                             clippedSourceImageRect.Bottom + i + destYOffset,
@@ -266,7 +266,7 @@ namespace PixelFarm.Agg
         }
 
 
- 
+
         protected void SetDimmensionAndFormat(int width, int height,
             int strideInBytes,
             int bitDepth,
@@ -296,7 +296,7 @@ namespace PixelFarm.Agg
         {
             return m_ByteBuffer;
         }
-       
+
 
         public byte[] GetPixelPointerXY(int x, int y, out int bufferOffset)
         {
@@ -325,18 +325,18 @@ namespace PixelFarm.Agg
                     i++;
                 }
             }
-        } 
+        }
         public ColorRGBA GetPixel(int x, int y)
         {
             return recieveBlender.PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
-        } 
+        }
         public int GetBufferOffsetXY(int x, int y)
         {
             return bufferFirstPixel + yTableArray[y] + xTableArray[x];
-        } 
+        }
 
         public void SetPixel(int x, int y, ColorRGBA color)
-        {  
+        {
             recieveBlender.CopyPixel(GetBuffer(), GetBufferOffsetXY(x, y), color);
         }
 
@@ -538,7 +538,7 @@ namespace PixelFarm.Agg
             {
                 do
                 {
-                    DoCopyOrBlend.BasedOnAlphaAndCover(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex], covers[coversIndex++]);
+                    CopyOrBlend_BasedOnAlphaAndCover(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex], covers[coversIndex++]);
                     bufferOffset += scanWidthBytes;
                     ++colorsIndex;
                 }
@@ -550,7 +550,7 @@ namespace PixelFarm.Agg
                 {
                     do
                     {
-                        DoCopyOrBlend.BasedOnAlpha(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex]);
+                        CopyOrBlend_BasedOnAlpha(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex]);
                         bufferOffset += scanWidthBytes;
                         ++colorsIndex;
                     }
@@ -561,7 +561,7 @@ namespace PixelFarm.Agg
                     do
                     {
 
-                        DoCopyOrBlend.BasedOnAlphaAndCover(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex], covers[coversIndex]);
+                        CopyOrBlend_BasedOnAlphaAndCover(recieveBlender, m_ByteBuffer, bufferOffset, colors[colorsIndex], covers[coversIndex]);
                         bufferOffset += scanWidthBytes;
                         ++colorsIndex;
                     }
@@ -585,6 +585,47 @@ namespace PixelFarm.Agg
 #endif
 
 
+        static void CopyOrBlend_BasedOnAlpha(IPixelBlender recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor)
+        {
+            //if (sourceColor.m_A != 0)
+            {
+#if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
+                if (sourceColor.m_A == base_mask)
+                {
+                    Blender.CopyPixel(pDestBuffer, sourceColor);
+                }
+                else
+#endif
+                {
+                    recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
+                }
+            }
+        }
+
+        static void CopyOrBlend_BasedOnAlphaAndCover(IPixelBlender recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor, int cover)
+        {
+            if (cover == 255)
+            {
+                CopyOrBlend_BasedOnAlpha(recieveBlender, destBuffer, bufferOffset, sourceColor);
+            }
+            else
+            {
+                //if (sourceColor.m_A != 0)
+                {
+                    sourceColor.alpha = (byte)((sourceColor.alpha * (cover + 1)) >> 8);
+#if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
+                    if (sourceColor.m_A == base_mask)
+                    {
+                        Blender.CopyPixel(pDestBuffer, sourceColor);
+                    }
+                    else
+#endif
+                    {
+                        recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
+                    }
+                }
+            }
+        }
         //public void apply_gamma_inv(GammaLookUpTable g)
         //{
         //    throw new System.NotImplementedException();
@@ -608,59 +649,9 @@ namespace PixelFarm.Agg
         //    bufferOffset = bufferFirstPixel + yTableArray[y];
         //    return m_ByteBuffer;
         //}
-      
-    }
-
-    static class DoCopyOrBlend
-    {
-
-
-        public static void BasedOnAlpha(IPixelBlender recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor)
-        {
-            //if (sourceColor.m_A != 0)
-            {
-#if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
-                if (sourceColor.m_A == base_mask)
-                {
-                    Blender.CopyPixel(pDestBuffer, sourceColor);
-                }
-                else
-#endif
-                {
-                    recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
-                }
-            }
-        }
-
-        public static void BasedOnAlphaAndCover(IPixelBlender recieveBlender, byte[] destBuffer, int bufferOffset, ColorRGBA sourceColor, int cover)
-        {
-            if (cover == 255)
-            {
-                BasedOnAlpha(recieveBlender, destBuffer, bufferOffset, sourceColor);
-            }
-            else
-            {
-                //if (sourceColor.m_A != 0)
-                {
-                    sourceColor.alpha = (byte)((sourceColor.alpha * (cover + 1)) >> 8);
-#if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
-                    if (sourceColor.m_A == base_mask)
-                    {
-                        Blender.CopyPixel(pDestBuffer, sourceColor);
-                    }
-                    else
-#endif
-                    {
-                        recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
-                    }
-                }
-            }
-        }
-
-
-
 
     }
+
 
 
 
