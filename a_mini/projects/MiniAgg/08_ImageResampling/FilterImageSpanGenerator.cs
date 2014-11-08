@@ -33,17 +33,21 @@ namespace PixelFarm.Agg.Image
         int m_scale_limit;
         const int m_blur_x = img_subpix_scale.SCALE;
         const int m_blur_y = img_subpix_scale.SCALE;
-
+        ImageBufferAccessor imageBufferAccessor;
         public FilterImageSpanGenerator(IImageReaderWriter src,
                             ISpanInterpolator inter,
                             ImageFilterLookUpTable filterLookup)
-            : base(src, inter)
+            : base(inter)
         {
+            this.imageBufferAccessor = new ImageBufferAccessor(src);
             m_scale_limit = 20;
             //m_blur_x = ((int)img_subpix_scale.SCALE);
             //m_blur_y = ((int)img_subpix_scale.SCALE);
             this.filterLookup = filterLookup;
         }
+
+        internal ImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
+
         protected ImageFilterLookUpTable FilterLookup
         {
             get { return filterLookup; }

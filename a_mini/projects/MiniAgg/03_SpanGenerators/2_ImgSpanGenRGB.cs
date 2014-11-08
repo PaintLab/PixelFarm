@@ -41,9 +41,9 @@ namespace PixelFarm.Agg.Image
 
         ImageReaderWriterBase srcRW;
         public ImgSpanGenRGB_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
-            : base(src, spanInterpolator)
+            : base(spanInterpolator)
         {
-            this.srcRW = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
+            this.srcRW = (ImageReaderWriterBase)src;
             if (srcRW.BitDepth != 24)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -92,10 +92,10 @@ namespace PixelFarm.Agg.Image
         public ImgSpanGenRGB_BilinearClip(IImageReaderWriter src,
                                           ColorRGBA back_color,
                                           ISpanInterpolator inter)
-            : base(src, inter)
+            : base(inter)
         {
             m_bgcolor = back_color;
-            srcRW = (ImageReaderWriterBase)base.ImgBuffAccessor.SourceImage;
+            srcRW = (ImageReaderWriterBase)src;
         }
 
         public ColorRGBA BackgroundColor
@@ -227,7 +227,7 @@ namespace PixelFarm.Agg.Image
                             weight = (x_hr * (img_subpix_const.SCALE - y_hr));
 
                             if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
-                            { 
+                            {
 
                                 BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
                                    srcRW.GetBuffer(),
@@ -291,6 +291,7 @@ namespace PixelFarm.Agg.Image
                     outputColors[startIndex].alpha = (byte)sourceAlpha;
                     startIndex++;
                     spanInterpolator.Next();
+
                 } while (--len != 0);
             }
         }

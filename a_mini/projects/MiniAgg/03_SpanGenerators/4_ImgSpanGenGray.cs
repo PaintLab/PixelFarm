@@ -30,9 +30,9 @@ namespace PixelFarm.Agg.Image
 
         ImageReaderWriterBase srcRW;
         public ImgSpanGenGray_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
-            : base(src, spanInterpolator)
+            : base(spanInterpolator)
         {
-            srcRW = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
+            srcRW = (ImageReaderWriterBase)src;
             if (srcRW.BitDepth != 8)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");

@@ -49,9 +49,9 @@ namespace PixelFarm.Agg.Image
         ImageReaderWriterBase srcRW;
         public ImgSpanGenRGBA_NN_StepXBy1(IImageReaderWriter src,
              ISpanInterpolator spanInterpolator)
-            : base(src, spanInterpolator)
+            : base(spanInterpolator)
         {
-            srcRW = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
+            srcRW = (ImageReaderWriterBase)src;
             if (srcRW.BitDepth != 32)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
@@ -71,11 +71,11 @@ namespace PixelFarm.Agg.Image
 
             int bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
 
-            byte[] fg_ptr = srcRW.GetBuffer();
+            byte[] srcBuffer = srcRW.GetBuffer();
 
             unsafe
             {
-                fixed (byte* pSource = fg_ptr)
+                fixed (byte* pSource = srcBuffer)
                 {
                     do
                     {
@@ -104,10 +104,10 @@ namespace PixelFarm.Agg.Image
         public ImgSpanGenRGBA_BilinearClip(IImageReaderWriter src,
             ColorRGBA back_color,
             ISpanInterpolator inter)
-            : base(src, inter)
+            : base(inter)
         {
             m_bgcolor = back_color;
-            srcRW = (ImageReaderWriterBase)base.ImgBuffAccessor.SourceImage;
+            srcRW = (ImageReaderWriterBase)src;
             bytesBetweenPixelInclusive = srcRW.BytesBetweenPixelsInclusive;
 
         }
@@ -277,10 +277,10 @@ namespace PixelFarm.Agg.Image
                             {
                                 if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                 {
-                                     
+
 
                                     BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                        srcRW.GetBuffer(), 
+                                        srcRW.GetBuffer(),
                                         srcRW.GetBufferOffsetXY(x_lr, y_lr),
                                         weight);
 
@@ -362,22 +362,14 @@ namespace PixelFarm.Agg.Image
         {
             unchecked
             {
-
-              
-
                 accColor0 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.R];
                 accColor1 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.G];
                 accColor2 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.B];
                 accColor3 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.A];
-
             }
         }
 
     }
-
-
-
-
 
 }
 

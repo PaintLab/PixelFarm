@@ -23,34 +23,27 @@ namespace PixelFarm.Agg.Image
 
     sealed class ImageBufferAccessor
     {
-        IImageReaderWriter m_sourceImage;
+        IImageReaderWriter imgRW;
         int m_x, m_x0, m_y, m_distanceBetweenPixelsInclusive;
         byte[] m_buffer;
         int m_currentBufferOffset = -1;
         int m_src_width;
         int m_src_height;
 
-        public ImageBufferAccessor(IImageReaderWriter imgReaderWriter)
+        public ImageBufferAccessor(IImageReaderWriter imgRW)
         {
-            Attach(imgReaderWriter);
+            Attach(imgRW);
         }
 
-        void Attach(IImageReaderWriter pixf)
+        void Attach(IImageReaderWriter imgRW)
         {
-            m_sourceImage = pixf;
-            m_buffer = m_sourceImage.GetBuffer();
-            m_src_width = m_sourceImage.Width;
-            m_src_height = m_sourceImage.Height;
-            m_distanceBetweenPixelsInclusive = m_sourceImage.BytesBetweenPixelsInclusive;
+            this.imgRW = imgRW;
+            m_buffer = imgRW.GetBuffer();
+            m_src_width = imgRW.Width;
+            m_src_height = imgRW.Height;
+            m_distanceBetweenPixelsInclusive = imgRW.BytesBetweenPixelsInclusive;
         }
-
-        public IImageReaderWriter SourceImage
-        {
-            get
-            {
-                return m_sourceImage;
-            }
-        }
+         
 
         byte[] GetPixels(out int bufferByteOffset)
         {
@@ -83,8 +76,8 @@ namespace PixelFarm.Agg.Image
                 }
             }
 
-            bufferByteOffset = m_sourceImage.GetBufferOffsetXY(x, y);
-            return m_sourceImage.GetBuffer();
+            bufferByteOffset = imgRW.GetBufferOffsetXY(x, y);
+            return imgRW.GetBuffer();
         }
 
         public byte[] GetSpan(int x, int y, int len, out int bufferOffset)
@@ -96,8 +89,8 @@ namespace PixelFarm.Agg.Image
                 if ((uint)y < (uint)m_src_height
                     && x >= 0 && x + len <= (int)m_src_width)
                 {
-                    bufferOffset = m_sourceImage.GetBufferOffsetXY(x, y);
-                    m_buffer = m_sourceImage.GetBuffer();
+                    bufferOffset = imgRW.GetBufferOffsetXY(x, y);
+                    m_buffer = imgRW.GetBuffer();
                     m_currentBufferOffset = bufferOffset;
                     return m_buffer;
                 }
@@ -127,10 +120,10 @@ namespace PixelFarm.Agg.Image
             ++m_y;
             m_x = m_x0;
             if (m_currentBufferOffset != -1
-                && (uint)m_y < (uint)m_sourceImage.Height)
+                && (uint)m_y < (uint)imgRW.Height)
             {
-                m_currentBufferOffset = m_sourceImage.GetBufferOffsetXY(m_x, m_y);
-                m_sourceImage.GetBuffer();
+                m_currentBufferOffset = imgRW.GetBufferOffsetXY(m_x, m_y);
+                imgRW.GetBuffer();
                 bufferOffset = m_currentBufferOffset; ;
                 return m_buffer;
             }
