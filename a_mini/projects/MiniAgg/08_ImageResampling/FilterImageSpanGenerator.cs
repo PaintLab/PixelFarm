@@ -29,16 +29,21 @@ namespace PixelFarm.Agg.Image
     //=====================================================span_image_resample
     public abstract class FilterImageSpanGenerator : ImgSpanGen
     {
+        ImageFilterLookUpTable filterLookup;
         public FilterImageSpanGenerator(IImageReaderWriter src,
                             ISpanInterpolator inter,
-                            ImageFilterLookUpTable filter)
-            : base(src, inter, filter)
+                            ImageFilterLookUpTable filterLookup)
+            : base(src, inter)
         {
             m_scale_limit = 20;
             m_blur_x = ((int)img_subpix_scale.SCALE);
             m_blur_y = ((int)img_subpix_scale.SCALE);
+            this.filterLookup = filterLookup;
         }
-
+        protected ImageFilterLookUpTable FilterLookup
+        {
+            get { return filterLookup; }
+        }
         //public abstract void prepare();
         //public abstract unsafe void generate(rgba8* span, int x, int y, int len);
 
@@ -55,7 +60,7 @@ namespace PixelFarm.Agg.Image
         //double blur_y() { return (double)(m_blur_y) / (double)((int)img_subpix_const.image_subpixel_scale); }
         //void blur_x(double v) { m_blur_x = (int)AggBasics.uround(v * (double)((int)img_subpix_const.image_subpixel_scale)); }
         //void blur_y(double v) { m_blur_y = (int)AggBasics.uround(v * (double)((int)img_subpix_const.image_subpixel_scale)); }
-        
+
         //public void blur(double v)
         //{
         //    m_blur_x = m_blur_y = (int)AggBasics.uround(v * (double)((int)img_subpix_const.image_subpixel_scale));
@@ -65,20 +70,20 @@ namespace PixelFarm.Agg.Image
 
         protected void AdjustScale(ref int rx, ref int ry)
         {
-            if (rx < (int)img_subpix_scale.SCALE) rx = (int)img_subpix_scale.SCALE;
-            if (ry < (int)img_subpix_scale.SCALE) ry = (int)img_subpix_scale.SCALE;
-            if (rx > (int)img_subpix_scale.SCALE * m_scale_limit)
+            if (rx <  img_subpix_scale.SCALE) rx =  img_subpix_scale.SCALE;
+            if (ry <  img_subpix_scale.SCALE) ry =  img_subpix_scale.SCALE;
+            if (rx >  img_subpix_scale.SCALE * m_scale_limit)
             {
-                rx = (int)img_subpix_scale.SCALE * m_scale_limit;
+                rx =  img_subpix_scale.SCALE * m_scale_limit;
             }
-            if (ry > (int)img_subpix_scale.SCALE * m_scale_limit)
+            if (ry >  img_subpix_scale.SCALE * m_scale_limit)
             {
-                ry = (int)img_subpix_scale.SCALE * m_scale_limit;
+                ry =  img_subpix_scale.SCALE * m_scale_limit;
             }
-            rx = (rx * m_blur_x) >> (int)img_subpix_scale.SHIFT;
-            ry = (ry * m_blur_y) >> (int)img_subpix_scale.SHIFT;
-            if (rx < (int)img_subpix_scale.SCALE) rx = (int)img_subpix_scale.SCALE;
-            if (ry < (int)img_subpix_scale.SCALE) ry = (int)img_subpix_scale.SCALE;
+            rx = (rx * m_blur_x) >>  img_subpix_scale.SHIFT;
+            ry = (ry * m_blur_y) >> img_subpix_scale.SHIFT;
+            if (rx <  img_subpix_scale.SCALE) rx =  img_subpix_scale.SCALE;
+            if (ry <  img_subpix_scale.SCALE) ry =  img_subpix_scale.SCALE;
         }
 
         int m_scale_limit;

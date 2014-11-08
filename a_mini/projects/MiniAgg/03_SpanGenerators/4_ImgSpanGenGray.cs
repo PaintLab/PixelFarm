@@ -28,30 +28,32 @@ namespace PixelFarm.Agg.Image
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
+        ImageReaderWriterBase srcRW;
         public ImgSpanGenGray_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
-            : base(src, spanInterpolator, null)
+            : base(src, spanInterpolator)
         {
-        }
-
-        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
-        {
-            ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
-            int bytesBetweenPixelsInclusive = SourceRenderingBuffer.BytesBetweenPixelsInclusive;
-            if (SourceRenderingBuffer.BitDepth != 8)
+            srcRW = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
+            if (srcRW.BitDepth != 8)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
+        }
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
+        {
+
+            int bytesBetweenPixelsInclusive = srcRW.BytesBetweenPixelsInclusive;
+
             ISpanInterpolator spanInterpolator = Interpolator;
             spanInterpolator.Begin(x + dx, y + dy, len);
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
-            int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-            int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
+            int x_lr = x_hr >> img_subpix_const.SHIFT;
+            int y_lr = y_hr >>  img_subpix_const.SHIFT;
             int bufferIndex;
-            bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+            bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
 
-            byte[] fg_ptr = SourceRenderingBuffer.GetBuffer();
+            byte[] fg_ptr = srcRW.GetBuffer();
 #if USE_UNSAFE_CODE
             unsafe
             {
@@ -82,5 +84,5 @@ namespace PixelFarm.Agg.Image
         }
     }
 
-    
+
 }
