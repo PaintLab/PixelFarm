@@ -43,13 +43,13 @@ namespace PixelFarm.Agg.Sample_Blur
         VertexStoreSnap m_path_2;
 
 
-         
-        
+
+
         //ReferenceImage m_rbuf2; 
         //agg::stack_blur    <agg::rgba8, agg::stack_blur_calc_rgb<> >     m_stack_blur;
         RecursiveBlur m_recursive_blur = new RecursiveBlur(new RecursiveBlurCalcRGB());
 
-        RectD m_shape_bounds; 
+        RectD m_shape_bounds;
         Stopwatch stopwatch = new Stopwatch();
 
         public Blur_classic()
@@ -63,7 +63,7 @@ namespace PixelFarm.Agg.Sample_Blur
             this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
 
-            
+
             StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
             m_pathVxs = typeFaceForLargeA.GetGlyphForCharacter('a');
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
@@ -168,26 +168,26 @@ namespace PixelFarm.Agg.Sample_Blur
                             m_shape_bounds,
                             m_shadow_ctrl.GetInnerCoords());
 
-            VertexStoreSnap spath;
+            VertexStore s2;
             if (FlattenCurveCheck)
             {
-                var s2 = shadow_persp.TransformToVxs(m_path_2);
-                spath = new VertexStoreSnap(s2);
+                s2 = shadow_persp.TransformToVxs(m_path_2);
+
             }
             else
             {
-                var s2 = shadow_persp.TransformToVxs(m_pathVxs);
-                spath = new VertexStoreSnap(s2);
+                s2 = shadow_persp.TransformToVxs(m_pathVxs);
+
             }
             painter.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
-            painter.Fill(spath);
+            painter.Fill(s2);
 
             //---------------------------------------------------------------------------------------------------------
             //shadow 
             //---------------------------------------------------------------------------------------------------------
             // Calculate the bounding box and extend it by the blur radius 
 
-            RectInt boundRect = BoundingRectInt.GetBoundingRect(spath);
+            RectInt boundRect = BoundingRectInt.GetBoundingRect(s2);
             var widgetImg = graphics2D.DestImage;
 
             int m_radius = this.BlurRadius;
@@ -313,7 +313,7 @@ namespace PixelFarm.Agg.Sample_Blur
             m_ras.AddPath(spath);
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            sclineRasToBmp.RenderWithSolidColor(clippingProxy, m_ras, graphics2D.ScanlinePacked8,  new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
+            sclineRasToBmp.RenderWithSolidColor(clippingProxy, m_ras, graphics2D.ScanlinePacked8, new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA());
 
 
             //---------------------------------------------------------------------------------------------------------
@@ -410,7 +410,7 @@ namespace PixelFarm.Agg.Sample_Blur
             }
 
 
-            sclineRasToBmp.RenderWithSolidColor(clippingProxy, m_ras,graphics2D.ScanlinePacked8,
+            sclineRasToBmp.RenderWithSolidColor(clippingProxy, m_ras, graphics2D.ScanlinePacked8,
                 ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f));
 
             graphics2D.DrawString(string.Format("{0:F2} ms", tm), 140, 30);

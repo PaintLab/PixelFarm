@@ -39,7 +39,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="00_Context\ImageGraphics2D_Bitmap.cs" />
+    <Compile Include="00_Context\ImageGraphics2D_RenderImages.cs" />
     <Compile Include="01_Base\ExtensionAttribute.cs" />
     <Compile Include="01_Base\Collections.cs" />
     <Compile Include="01_Base\AggBasics.cs" />

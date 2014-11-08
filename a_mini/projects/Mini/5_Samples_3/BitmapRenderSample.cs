@@ -45,12 +45,11 @@ namespace PixelFarm.Agg.Sample_Images
         ActualImage actualImage;
         public override void Init()
         {
-
-            this.actualImage = LoadImage("../../../SampleImages/plain01.png"); // new ActualImage(bmp.Width, bmp.Height, pixFormat);
-
+            this.actualImage = LoadImage("../../../SampleImages/plain01.png");
 
         }
-        ActualImage LoadImage(string filename)
+
+        static ActualImage LoadImage(string filename)
         {
 
             //read sample image
@@ -62,7 +61,6 @@ namespace PixelFarm.Agg.Sample_Images
                 PixelFormat pixFormat = PixelFormat.Rgba32;
                 ActualImage actualImage = new ActualImage(bmpW, bmpH, pixFormat);
                 Mini.BitmapHelper.CopyFromWindowsBitmapSameSize(bmp, actualImage);
-
                 return actualImage;
             }
         }

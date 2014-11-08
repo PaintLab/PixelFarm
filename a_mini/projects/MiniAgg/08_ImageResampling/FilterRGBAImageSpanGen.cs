@@ -47,7 +47,7 @@ namespace PixelFarm.Agg.Image
         const int DOWN_SCALE_SHIFT = (int)ImageFilterLookUpTable.ImgFilterConst.SHIFT;
 
         //--------------------------------------------------------------------
-        public FilterRGBAImageSpanGen(IImageBufferAccessor src,
+        public FilterRGBAImageSpanGen(ImageBufferAccessor src,
                             ISpanInterpolator inter,
                             ImageFilterLookUpTable filter) :
             base(src, inter, filter)

@@ -39,7 +39,7 @@ namespace PixelFarm.Agg.Image
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public ImgSpanGenRGB_NNStepXby1(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
+        public ImgSpanGenRGB_NNStepXby1(ImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
             : base(sourceAccessor, spanInterpolator, null)
         {
         }
@@ -100,7 +100,7 @@ namespace PixelFarm.Agg.Image
         const int BASE_MASK = BASE_SCALE - 1;
 
         //--------------------------------------------------------------------
-        public ImgSpanGenRGB_BilinearClip(IImageBufferAccessor src,
+        public ImgSpanGenRGB_BilinearClip(ImageBufferAccessor src,
                                             ColorRGBA back_color,
                                             ISpanInterpolator inter)
             : base(src, inter, null)

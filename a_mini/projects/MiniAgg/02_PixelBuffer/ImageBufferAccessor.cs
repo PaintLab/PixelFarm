@@ -17,22 +17,11 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
- 
+
 namespace PixelFarm.Agg.Image
-{
-    public interface IImageBufferAccessor
-    {
-        byte[] GetSpan(int x, int y, int len, out int bufferIndex);
-        byte[] NextX(out int bufferByteOffset);
-        byte[] NextY(out int bufferByteOffset);
+{       
 
-        IImageReaderWriter SourceImage
-        {
-            get;
-        }
-    }
-
-    public abstract class ImageBufferAccessor : IImageBufferAccessor
+    public sealed class ImageBufferAccessor
     {
         IImageReaderWriter m_sourceImage;
         int m_x, m_x0, m_y, m_distanceBetweenPixelsInclusive;
@@ -40,9 +29,9 @@ namespace PixelFarm.Agg.Image
         int m_currentBufferOffset = -1;
         int m_width;
 
-        public ImageBufferAccessor(IImageReaderWriter img)
+        public ImageBufferAccessor(IImageReaderWriter imgReaderWriter)
         {
-            Attach(img);
+            Attach(imgReaderWriter);
         }
 
         void Attach(IImageReaderWriter pixf)
@@ -149,15 +138,5 @@ namespace PixelFarm.Agg.Image
         }
     }
 
-    public sealed class ImageBufferAccessorClip : ImageBufferAccessor
-    {
-
-        ColorRGBA backColor;
-        public ImageBufferAccessorClip(IImageReaderWriter sourceImage)
-            : base(sourceImage)
-        {
-            backColor = ColorRGBA.Black;
-        }
-
-    }
+    
 }

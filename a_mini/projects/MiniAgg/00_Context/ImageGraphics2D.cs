@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
         RectInt clipBox;
 
         ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
-
+        MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
         public ImageGraphics2D(ActualImage destImage)
         {
@@ -87,6 +87,7 @@ namespace PixelFarm.Agg
         {
             get { return this.sclineRasToBmp; }
         }
+
         public override void SetClippingRect(RectInt rect)
         {
             ScanlineRasterizer.SetClipBox(rect);
@@ -94,8 +95,13 @@ namespace PixelFarm.Agg
         public override RectInt GetClippingRect()
         {
             return ScanlineRasterizer.GetVectorClipBox();
+        } 
+        public ImageInterpolationQuality ImageInterpolationQuality
+        {
+            get { return this.ImageInterpolationQuality; }
+            set { this.imgInterpolationQuality = value; }
         }
-
+        //-------------------------------------------------------------
         PathStorage GetFreePathStorage()
         {
             if (drawImageRectPath != null)
@@ -114,6 +120,9 @@ namespace PixelFarm.Agg
             this.drawImageRectPath = ps;
             ps.Clear();
         }
+
+
+        //-------------------------------------------------------------
         public override void Clear(ColorRGBA color)
         {
 
@@ -247,6 +256,26 @@ namespace PixelFarm.Agg
             }
 
 
+        }
+
+
+        public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
+        {
+            //reset rasterizer before render each vertextSnap 
+            //-----------------------------
+            sclineRas.Reset();
+            Affine transform = this.CurrentTransformMatrix;
+            if (!transform.IsIdentity())
+            {
+                sclineRas.AddPath(transform.Tranform(vertextSnap));
+            }
+            else
+            {
+                sclineRas.AddPath(vertextSnap);
+            }
+            sclineRasToBmp.RenderWithSolidColor(destImageReaderWriter, sclineRas, sclinePack8, color);
+            unchecked { destImageChanged++; };
+            //-----------------------------
         }
     }
 }

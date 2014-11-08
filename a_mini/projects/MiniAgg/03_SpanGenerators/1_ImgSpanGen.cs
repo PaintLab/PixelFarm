@@ -29,7 +29,7 @@ namespace PixelFarm.Agg
 {
     public abstract class ImgSpanGen : ISpanGenerator
     {
-        IImageBufferAccessor imageBufferAccessor;
+        ImageBufferAccessor imageBufferAccessor;
         protected ISpanInterpolator m_interpolator;
         protected ImageFilterLookUpTable filterLookup;
 
@@ -39,7 +39,7 @@ namespace PixelFarm.Agg
         int m_dy_int;
 
 
-        public ImgSpanGen(IImageBufferAccessor src,
+        public ImgSpanGen(ImageBufferAccessor src,
             ISpanInterpolator interpolator,
             ImageFilterLookUpTable filter)
         {
@@ -54,7 +54,7 @@ namespace PixelFarm.Agg
 
         public abstract void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len);
 
-        protected IImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
+        protected ImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
 
         protected ImageFilterLookUpTable FilterLookup
         {

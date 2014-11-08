@@ -726,7 +726,15 @@ namespace PixelFarm.Agg
     public class MyImageReaderWriter : ImageReaderWriterBase
     {
         ActualImage actualImage;
+        public MyImageReaderWriter()
+        {
+
+        }
         public MyImageReaderWriter(ActualImage actualImage)
+        {             
+            ReloadImage(actualImage);
+        }
+        public void ReloadImage(ActualImage actualImage)
         {
             this.actualImage = actualImage;
             //calculate image stride
