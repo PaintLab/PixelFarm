@@ -27,7 +27,7 @@ using img_subpix_scale = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
 namespace PixelFarm.Agg.Image
 {
     //=====================================================span_image_resample
-    public abstract class FilterImageSpanGenerator : ImgSpanGen
+    public abstract partial class FilterImageSpanGenerator : ImgSpanGen
     {
         ImageFilterLookUpTable filterLookup;
         int m_scale_limit;
@@ -46,7 +46,20 @@ namespace PixelFarm.Agg.Image
             this.filterLookup = filterLookup;
         }
 
-        internal ImageBufferAccessor ImgBuffAccessor { get { return imageBufferAccessor; } }
+        protected byte[] BaseGetSpan(int x, int y, int len, out int bufferOffset)
+        {
+            return this.imageBufferAccessor.GetSpan(x, y, len, out bufferOffset);
+        }
+        protected byte[] BaseNextX(out int bufferOffset)
+        {
+            return this.imageBufferAccessor.NextX(out bufferOffset);
+        }
+        protected byte[] BaseNextY(out int bufferOffset)
+        {
+            return this.imageBufferAccessor.NextY(out bufferOffset);
+        }
+
+
 
         protected ImageFilterLookUpTable FilterLookup
         {

@@ -60,9 +60,9 @@ namespace PixelFarm.Agg.Image
 
             int fg0, fg1, fg2;
 
-            byte[] fg_ptr; 
+            byte[] fg_ptr;
             int diameter = base.FilterLookup.Diameter;
-            int filter_scale = diameter << img_subpix_const.SHIFT; 
+            int filter_scale = diameter << img_subpix_const.SHIFT;
             int[] weight_array = FilterLookup.WeightArray;
 
 
@@ -104,7 +104,7 @@ namespace PixelFarm.Agg.Image
                                rx_inv) >> img_subpix_const.SHIFT;
                 int x_hr2 = x_hr;
                 int sourceIndex;
-                fg_ptr = base.ImgBuffAccessor.GetSpan(x_lr, y_lr, len_x_lr, out sourceIndex);
+                fg_ptr = BaseGetSpan(x_lr, y_lr, len_x_lr, out sourceIndex);
 
                 for (; ; )
                 {
@@ -121,7 +121,7 @@ namespace PixelFarm.Agg.Image
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;
-                        fg_ptr = base.ImgBuffAccessor.NextX(out sourceIndex);
+                        fg_ptr = BaseNextX(out sourceIndex);
                     }
                     y_hr += ry_inv;
                     if (y_hr >= filter_scale)
@@ -129,7 +129,7 @@ namespace PixelFarm.Agg.Image
                         break;
                     }
 
-                    fg_ptr = base.ImgBuffAccessor.NextY(out sourceIndex);
+                    fg_ptr = BaseNextY(out sourceIndex);
                 }
 
                 fg0 /= total_weight;
@@ -144,7 +144,7 @@ namespace PixelFarm.Agg.Image
                 else if (fg1 > BASE_MASK) { fg1 = BASE_MASK; }
 
                 if (fg2 < 0) { fg2 = 0; }
-                else if (fg2 > BASE_MASK) { fg2 = BASE_MASK; } 
+                else if (fg2 > BASE_MASK) { fg2 = BASE_MASK; }
 
 
                 outputColors[startIndex].alpha = BASE_MASK;
