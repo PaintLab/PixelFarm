@@ -49,6 +49,7 @@ namespace PixelFarm.Agg
 
                 int distBetween = backBuffer.BytesBetweenPixelsInclusive;
 
+                //use different pixel blender 
                 var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, 2, 8);
                 var greenImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, 1, 8);
                 var blueImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, 0, 8);

@@ -33,7 +33,6 @@ namespace PixelFarm.Agg
     {
          
         const int BASE_MASK = 255;
-
         //--------------------------------------------
         //look up table
         int[] yTableArray;
@@ -50,6 +49,7 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
         IPixelBlender recieveBlender;
+        //--------------------------------------------
 
 
         protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
@@ -83,17 +83,7 @@ namespace PixelFarm.Agg
 
         }
 
-
-#if DEBUG
-        static int dbugTotalId;
-        public readonly int dbugId = dbugGetNewDebugId();
-        static int dbugGetNewDebugId()
-        {
-
-            return dbugTotalId++;
-        }
-#endif
-
+         
 
         void CopyFromNoClipping(IImageReaderWriter sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
@@ -133,12 +123,16 @@ namespace PixelFarm.Agg
                                     for (int i = clippedSourceImageRect.Bottom; i < clippedSourceImageRect.Top; i++)
                                     {
                                         int sourceOffset = sourceImage.GetBufferOffsetXY(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom + i);
+                                        
                                         byte[] sourceBuffer = sourceImage.GetBuffer();
+                                        
                                         int destOffset;
+                                        
                                         byte[] destBuffer = GetPixelPointerXY(
                                             clippedSourceImageRect.Left + destXOffset,
                                             clippedSourceImageRect.Bottom + i + destYOffset,
                                             out destOffset);
+
                                         for (int x = 0; x < numPixelsToCopy; x++)
                                         {
                                             destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
@@ -272,33 +266,7 @@ namespace PixelFarm.Agg
         }
 
 
-
-        //void DeallocateOrClearBuffer(int width, int height, int strideInBytes, int bitDepth, int distanceInBytesBetweenPixelsInclusive)
-        //{
-        //    if (this.width == width
-        //        && this.height == height
-        //        && this.strideInBytes == strideInBytes
-        //        && this.bitDepth == bitDepth
-        //        && m_DistanceInBytesBetweenPixelsInclusive == distanceInBytesBetweenPixelsInclusive
-        //        && m_ByteBuffer != null)
-        //    {
-        //        for (int i = m_ByteBuffer.Length - 1; i >= 0; --i)
-        //        {
-        //            m_ByteBuffer[i] = 0;
-        //        }
-
-        //        return;
-        //    }
-        //    else
-        //    {
-        //        if (m_ByteBuffer != null)
-        //        {
-        //            m_ByteBuffer = null;
-        //            SetDimmensionAndFormat(0, 0, 0, 32, 4, true);
-        //        }
-        //    }
-        //}
-
+ 
         protected void SetDimmensionAndFormat(int width, int height,
             int strideInBytes,
             int bitDepth,
@@ -328,11 +296,7 @@ namespace PixelFarm.Agg
         {
             return m_ByteBuffer;
         }
-        public byte[] GetPixelPointerY(int y, out int bufferOffset)
-        {
-            bufferOffset = bufferFirstPixel + yTableArray[y];
-            return m_ByteBuffer;
-        }
+       
 
         public byte[] GetPixelPointerXY(int x, int y, out int bufferOffset)
         {
@@ -361,23 +325,18 @@ namespace PixelFarm.Agg
                     i++;
                 }
             }
-        }
-
+        } 
         public ColorRGBA GetPixel(int x, int y)
         {
             return recieveBlender.PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
-        }
-
-
+        } 
         public int GetBufferOffsetXY(int x, int y)
         {
             return bufferFirstPixel + yTableArray[y] + xTableArray[x];
-        }
-
+        } 
 
         public void SetPixel(int x, int y, ColorRGBA color)
-        {
-
+        {  
             recieveBlender.CopyPixel(GetBuffer(), GetBufferOffsetXY(x, y), color);
         }
 
@@ -610,6 +569,21 @@ namespace PixelFarm.Agg
                 }
             }
         }
+        public RectInt GetBoundingRect()
+        {
+            return new RectInt(0, 0, Width, Height);
+        }
+
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugGetNewDebugId();
+        static int dbugGetNewDebugId()
+        {
+
+            return dbugTotalId++;
+        }
+#endif
+
 
         //public void apply_gamma_inv(GammaLookUpTable g)
         //{
@@ -629,45 +603,12 @@ namespace PixelFarm.Agg
         //    // This might be hard to make fast and usefull.
         //    return m_ByteBuffer.GetHashCode() ^ bufferOffset.GetHashCode() ^ bufferFirstPixel.GetHashCode();
         //}
-
-        public RectInt GetBoundingRect()
-        {
-            return new RectInt(0, 0, Width, Height);
-        }
-
-        //internal void Initialize(BufferImage sourceImage)
+        //public byte[] GetPixelPointerY(int y, out int bufferOffset)
         //{
-        //    RectangleInt sourceBoundingRect = sourceImage.GetBoundingRect();
-
-        //    Initialize(sourceImage, sourceBoundingRect);
-        //    OriginOffset = sourceImage.OriginOffset;
+        //    bufferOffset = bufferFirstPixel + yTableArray[y];
+        //    return m_ByteBuffer;
         //}
-        //internal void Initialize(BufferImage sourceImage, RectangleInt boundsToCopyFrom)
-        //{
-        //    if (sourceImage == this)
-        //    {
-        //        throw new Exception("We do not create a temp buffer for this to work.  You must have a source distinct from the dest.");
-        //    }
-        //    Deallocate();
-        //    Allocate(boundsToCopyFrom.Width, boundsToCopyFrom.Height, boundsToCopyFrom.Width * sourceImage.BitDepth / 8, sourceImage.BitDepth);
-        //    SetRecieveBlender(sourceImage.GetRecieveBlender());
-
-        //    if (width != 0 && height != 0)
-        //    {
-        //        RectangleInt DestRect = new RectangleInt(0, 0, boundsToCopyFrom.Width, boundsToCopyFrom.Height);
-        //        RectangleInt AbsoluteSourceRect = boundsToCopyFrom;
-        //        // The first thing we need to do is make sure the frame is cleared. LBB [3/15/2004]
-        //        var graphics2D = MatterHackers.Agg.Graphics2D.CreateFromImage(this);
-        //        graphics2D.Clear(new RGBA_Bytes(0, 0, 0, 0));
-
-        //        int x = -boundsToCopyFrom.Left - (int)sourceImage.OriginOffset.x;
-        //        int y = -boundsToCopyFrom.Bottom - (int)sourceImage.OriginOffset.y;
-
-        //        graphics2D.Render(sourceImage, x, y, 0, 1, 1);
-        //    }
-        //}
-
-
+      
     }
 
     static class DoCopyOrBlend
@@ -715,6 +656,10 @@ namespace PixelFarm.Agg
                 }
             }
         }
+
+
+
+
     }
 
 
@@ -760,5 +705,9 @@ namespace PixelFarm.Agg
                     }
             }
         }
+
+
+
+
     }
 }
