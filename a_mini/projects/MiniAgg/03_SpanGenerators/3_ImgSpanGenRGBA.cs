@@ -203,20 +203,20 @@ namespace PixelFarm.Agg.Image
                                  ((int)img_subpix_const.SCALE - y_hr));
                         if (weight > BASE_MASK)
                         {
-                            accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                            accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                            accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
-                            accColor3 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.A];
+                            accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
+                            accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
+                            accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
+                            accColor3 += weight * fg_ptr[bufferIndex + ColorOrder.A];
                         }
 
                         weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                         if (weight > BASE_MASK)
                         {
                             bufferIndex += bytesBetweenPixelInclusive;
-                            accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                            accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                            accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
-                            accColor3 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.A];
+                            accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
+                            accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
+                            accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
+                            accColor3 += weight * fg_ptr[bufferIndex + ColorOrder.A];
                         }
 
                         weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
@@ -224,19 +224,19 @@ namespace PixelFarm.Agg.Image
                         {
                             ++y_lr;
                             fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
-                            accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                            accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                            accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
-                            accColor3 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.A];
+                            accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
+                            accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
+                            accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
+                            accColor3 += weight * fg_ptr[bufferIndex + ColorOrder.A];
                         }
                         weight = (x_hr * y_hr);
                         if (weight > BASE_MASK)
                         {
                             bufferIndex += bytesBetweenPixelInclusive;
-                            accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                            accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                            accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
-                            accColor3 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.A];
+                            accColor0 += weight * fg_ptr[bufferIndex + ColorOrder.R];
+                            accColor1 += weight * fg_ptr[bufferIndex + ColorOrder.G];
+                            accColor2 += weight * fg_ptr[bufferIndex + ColorOrder.B];
+                            accColor3 += weight * fg_ptr[bufferIndex + ColorOrder.A];
                         }
                         accColor0 >>= img_subpix_const.SHIFT * 2;
                         accColor1 >>= img_subpix_const.SHIFT * 2;
@@ -361,10 +361,10 @@ namespace PixelFarm.Agg.Image
         {
             unchecked
             {
-                accColor0 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.R];
-                accColor1 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.G];
-                accColor2 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.B];
-                accColor3 += weight * srcBuffer[bufferIndex + ImageReaderWriterBase.A];
+                accColor0 += weight * srcBuffer[bufferIndex + ColorOrder.R];
+                accColor1 += weight * srcBuffer[bufferIndex + ColorOrder.G];
+                accColor2 += weight * srcBuffer[bufferIndex + ColorOrder.B];
+                accColor3 += weight * srcBuffer[bufferIndex + ColorOrder.A];
             }
         }
 

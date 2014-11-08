@@ -27,27 +27,11 @@ using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
 {
-
+     
 
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
-        /// <summary>
-        /// order b
-        /// </summary>
-        public const int B = 0;
-        /// <summary>
-        /// order g
-        /// </summary>
-        public const int G = 1;
-        /// <summary>
-        /// order b
-        /// </summary>
-        public const int R = 2;
-        /// <summary>
-        /// order a
-        /// </summary>
-        public const int A = 3;
-
+         
         const int BASE_MASK = 255;
 
         //--------------------------------------------
@@ -66,8 +50,8 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
         IPixelBlender recieveBlender;
-        
-         
+
+
         protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
         {
             int scanWidthInBytes = width * (bitsPerPixel / 8);
@@ -75,7 +59,7 @@ namespace PixelFarm.Agg
             if (width <= 0 || height <= 0)
             {
                 throw new ArgumentOutOfRangeException("You must have a width and height > than 0.");
-            } 
+            }
             if (bitsPerPixel != 32 && bitsPerPixel != 24 && bitsPerPixel != 8)
             {
                 throw new Exception("Unsupported bits per pixel.");
@@ -87,7 +71,7 @@ namespace PixelFarm.Agg
             //-------------------------------------------------------------------------------------------
             SetDimmensionAndFormat(width, height, scanWidthInBytes, bitsPerPixel, bitsPerPixel / 8);
             this.m_ByteBuffer = imgbuffer;
-            SetUpLookupTables(); 
+            SetUpLookupTables();
 
             if (yTableArray.Length != height
                 || xTableArray.Length != width)
@@ -98,8 +82,8 @@ namespace PixelFarm.Agg
             SetRecieveBlender(recieveBlender);
 
         }
-    
-        
+
+
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugGetNewDebugId();
@@ -684,7 +668,7 @@ namespace PixelFarm.Agg
         //}
 
 
-    } 
+    }
 
     static class DoCopyOrBlend
     {
@@ -733,7 +717,7 @@ namespace PixelFarm.Agg
         }
     }
 
-     
+
 
     public class MyImageReaderWriter : ImageReaderWriterBase
     {
@@ -743,7 +727,7 @@ namespace PixelFarm.Agg
 
         }
         public MyImageReaderWriter(ActualImage actualImage)
-        {             
+        {
             ReloadImage(actualImage);
         }
         public void ReloadImage(ActualImage actualImage)
