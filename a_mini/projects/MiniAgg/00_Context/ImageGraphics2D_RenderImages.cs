@@ -222,10 +222,8 @@ namespace PixelFarm.Agg
 
 
 
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessor sourceAccessor = new ImageBufferAccessor(source);
-
-                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
+                var interpolator = new SpanInterpolatorLinear(sourceRectTransform); 
+                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
 
                 Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
 
@@ -247,22 +245,21 @@ namespace PixelFarm.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
 
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessor sourceAccessor = new ImageBufferAccessor(source);
+                var interpolator = new SpanInterpolatorLinear(sourceRectTransform); 
 
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)
                 {
                     case 32:
-                        imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(sourceAccessor, interpolator);
+                        imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
                         break;
 
                     case 24:
-                        imgSpanGen = new ImgSpanGenRGB_NNStepXby1(sourceAccessor, interpolator);
+                        imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
                         break;
 
                     case 8:
-                        imgSpanGen = new ImgSpanGenGray_NNStepXby1(sourceAccessor, interpolator);
+                        imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
                         break;
 
                     default:
@@ -377,7 +374,7 @@ namespace PixelFarm.Agg
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
-                    new ImageBufferAccessor(source),
+                    source,
                     ColorRGBA.Black,
                     new SpanInterpolatorLinear(sourceRectTransform));
 
@@ -400,22 +397,21 @@ namespace PixelFarm.Agg
                 //// We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 //Affine sourceRectTransform = destRectTransform.CreateInvert();
                 Affine sourceRectTransform = destRectTransform;
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                var sourceAccessor = new ImageBufferAccessor(source);
+                var interpolator = new SpanInterpolatorLinear(sourceRectTransform); 
 
                 ImgSpanGen imgSpanGen = null;
                 switch (source.BitDepth)
                 {
                     case 32:
-                        imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(sourceAccessor, interpolator);
+                        imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
                         break;
 
                     case 24:
-                        imgSpanGen = new ImgSpanGenRGB_NNStepXby1(sourceAccessor, interpolator);
+                        imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
                         break;
 
                     case 8:
-                        imgSpanGen = new ImgSpanGenGray_NNStepXby1(sourceAccessor, interpolator);
+                        imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
                         break;
 
                     default:

@@ -29,7 +29,7 @@ namespace PixelFarm.Agg.Image
     //=====================================================span_image_resample
     public abstract class FilterImageSpanGenerator : ImgSpanGen
     {
-        public FilterImageSpanGenerator(ImageBufferAccessor src,
+        public FilterImageSpanGenerator(IImageReaderWriter src,
                             ISpanInterpolator inter,
                             ImageFilterLookUpTable filter)
             : base(src, inter, filter)

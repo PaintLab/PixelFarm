@@ -25,7 +25,7 @@
 // PostScript and PDF technology for software developers.
 // 
 //----------------------------------------------------------------------------
-using System; 
+using System;
 
 using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
 using img_filter_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgFilterConst;
@@ -39,8 +39,8 @@ namespace PixelFarm.Agg.Image
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public ImgSpanGenRGB_NNStepXby1(ImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
-            : base(sourceAccessor, spanInterpolator, null)
+        public ImgSpanGenRGB_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+            : base(src, spanInterpolator, null)
         {
         }
 
@@ -87,7 +87,7 @@ namespace PixelFarm.Agg.Image
         }
     }
 
-   
+
 
 
     //=====================================span_image_filter_rgb_bilinear_clip
@@ -100,7 +100,7 @@ namespace PixelFarm.Agg.Image
         const int BASE_MASK = BASE_SCALE - 1;
 
         //--------------------------------------------------------------------
-        public ImgSpanGenRGB_BilinearClip(ImageBufferAccessor src,
+        public ImgSpanGenRGB_BilinearClip(IImageReaderWriter src,
                                             ColorRGBA back_color,
                                             ISpanInterpolator inter)
             : base(src, inter, null)
@@ -273,7 +273,7 @@ namespace PixelFarm.Agg.Image
         }
     };
 
-   
 
-   
+
+
 }

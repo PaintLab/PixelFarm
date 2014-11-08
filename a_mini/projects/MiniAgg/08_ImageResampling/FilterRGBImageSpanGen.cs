@@ -41,12 +41,12 @@ namespace PixelFarm.Agg.Image
         const int DOWNSCALE_SHIFT = (int)ImageFilterLookUpTable.ImgFilterConst.SHIFT;
 
         //--------------------------------------------------------------------
-        public FilterRGBImageSpanGen(ImageBufferAccessor src,
+        public FilterRGBImageSpanGen(IImageReaderWriter src,
                             ISpanInterpolator inter,
                             ImageFilterLookUpTable filter) :
             base(src, inter, filter)
         {
-            if (src.SourceImage.GetRecieveBlender().NumPixelBits != 24)
+            if (src.GetRecieveBlender().NumPixelBits != 24)
             {
                 throw new System.FormatException("You have to use a rgb blender with span_image_resample_rgb");
             }
@@ -85,7 +85,7 @@ namespace PixelFarm.Agg.Image
                     (diameter * rx + (int)img_subpix_const.MASK) >>
                         (int)(int)img_subpix_const.SHIFT;
 
-                x += base.dxInt- radius_x;
+                x += base.dxInt - radius_x;
                 y += base.dyInt - radius_y;
 
                 fg[0] = fg[1] = fg[2] = (int)img_filter_const.SCALE / 2;

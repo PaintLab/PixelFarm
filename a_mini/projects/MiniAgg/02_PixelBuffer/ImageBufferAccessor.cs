@@ -19,9 +19,9 @@
 //----------------------------------------------------------------------------
 
 namespace PixelFarm.Agg.Image
-{       
+{
 
-    public sealed class ImageBufferAccessor
+    sealed class ImageBufferAccessor
     {
         IImageReaderWriter m_sourceImage;
         int m_x, m_x0, m_y, m_distanceBetweenPixelsInclusive;
@@ -138,5 +138,5 @@ namespace PixelFarm.Agg.Image
         }
     }
 
-    
+
 }

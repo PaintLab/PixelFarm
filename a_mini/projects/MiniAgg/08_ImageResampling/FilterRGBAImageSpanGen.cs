@@ -47,12 +47,12 @@ namespace PixelFarm.Agg.Image
         const int DOWN_SCALE_SHIFT = (int)ImageFilterLookUpTable.ImgFilterConst.SHIFT;
 
         //--------------------------------------------------------------------
-        public FilterRGBAImageSpanGen(ImageBufferAccessor src,
+        public FilterRGBAImageSpanGen(IImageReaderWriter src,
                             ISpanInterpolator inter,
                             ImageFilterLookUpTable filter) :
             base(src, inter, filter)
         {
-            if (src.SourceImage.GetRecieveBlender().NumPixelBits != 32)
+            if (src.GetRecieveBlender().NumPixelBits != 32)
             {
                 throw new System.FormatException("You have to use a rgba blender with span_image_resample_rgba");
             }

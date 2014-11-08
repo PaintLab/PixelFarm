@@ -28,8 +28,8 @@ namespace PixelFarm.Agg.Image
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public ImgSpanGenGray_NNStepXby1(ImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
-            : base(sourceAccessor, spanInterpolator, null)
+        public ImgSpanGenGray_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+            : base(src, spanInterpolator, null)
         {
         }
 
