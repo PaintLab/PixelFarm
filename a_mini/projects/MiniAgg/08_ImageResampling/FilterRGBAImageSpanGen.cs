@@ -64,7 +64,7 @@ namespace PixelFarm.Agg.Image
             ISpanInterpolator spanInterpolator = base.Interpolator;
             spanInterpolator.Begin(x + base.dx, y + base.dy, len);
 
-             
+
             int fg0, fg1, fg2, fg3;
 
             byte[] fg_ptr;
@@ -78,14 +78,13 @@ namespace PixelFarm.Agg.Image
             {
                 int rx;
                 int ry;
-                int rx_inv = img_subpix_const.SCALE;
-                int ry_inv = img_subpix_const.SCALE;
+
                 spanInterpolator.GetCoord(out x, out y);
                 spanInterpolator.GetLocalScale(out rx, out ry);
-                base.AdjustScale(ref rx, ref ry);
+                AdjustScale(ref rx, ref ry);
 
-                rx_inv = img_subpix_const.SCALE * img_subpix_const.SCALE / rx;
-                ry_inv = img_subpix_const.SCALE * img_subpix_const.SCALE / ry;
+                int rx_inv = img_subpix_const.SCALE * img_subpix_const.SCALE / rx;
+                int ry_inv = img_subpix_const.SCALE * img_subpix_const.SCALE / ry;
 
                 int radius_x = (diameter * rx) >> 1;
                 int radius_y = (diameter * ry) >> 1;
@@ -118,7 +117,7 @@ namespace PixelFarm.Agg.Image
                     {
                         int weight = (weight_y * weight_array[x_hr] +
                                       img_filter_const.SCALE / 2) >>
-                                     DOWN_SCALE_SHIFT;
+                                      DOWN_SCALE_SHIFT;
                         fg0 += fg_ptr[sourceIndex + ImageReaderWriterBase.R] * weight;
                         fg1 += fg_ptr[sourceIndex + ImageReaderWriterBase.G] * weight;
                         fg2 += fg_ptr[sourceIndex + ImageReaderWriterBase.B] * weight;

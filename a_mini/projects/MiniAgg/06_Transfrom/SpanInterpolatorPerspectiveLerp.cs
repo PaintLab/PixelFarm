@@ -175,10 +175,10 @@ namespace PixelFarm.Agg.Transform
         public void ReSync(double xe, double ye, int len)
         {
             // Assume x1,y1 are equal to the ones at the previous end point 
-            int x1 = m_coord_x.y();
-            int y1 = m_coord_y.y();
-            int sx1 = m_scale_x.y();
-            int sy1 = m_scale_y.y();
+            int x1 = m_coord_x.Y;
+            int y1 = m_coord_y.Y;
+            int sx1 = m_scale_x.Y;
+            int sy1 = m_scale_y.Y;
 
             // Calculate transformed coordinates at x2,y2 
             double xt = xe;
@@ -232,15 +232,15 @@ namespace PixelFarm.Agg.Transform
         //----------------------------------------------------------------
         public void GetCoord(out int x, out int y)
         {
-            x = m_coord_x.y();
-            y = m_coord_y.y();
+            x = m_coord_x.Y;
+            y = m_coord_y.Y;
         }
 
         //----------------------------------------------------------------
         public void GetLocalScale(out int x, out int y)
         {
-            x = m_scale_x.y();
-            y = m_scale_y.y();
+            x = m_scale_x.Y;
+            y = m_scale_y.Y;
         }
 
         //----------------------------------------------------------------
