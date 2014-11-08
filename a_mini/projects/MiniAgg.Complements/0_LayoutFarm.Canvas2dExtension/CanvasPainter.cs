@@ -225,7 +225,7 @@ namespace PixelFarm.Agg
             }
             this.Draw(roundRect.MakeVxs());
         }
-       
+
         public void DrawString(
            string text,
            double x,
@@ -233,11 +233,11 @@ namespace PixelFarm.Agg
         {
 
             //1. parse text              
-            stringPrinter.DrawFromHintedCache = false; 
+            stringPrinter.DrawFromHintedCache = false;
             stringPrinter.LoadText(text);
             var vxs = stringPrinter.MakeVxs();
             vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
-            this.gx.Render(vxs, this.fillColor); 
+            this.gx.Render(vxs, this.fillColor);
         }
 
         /// <summary>
@@ -278,10 +278,11 @@ namespace PixelFarm.Agg
         }
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
-            this.sclineRas.AddPath(vxs); 
-            sclineRasToBmp.RenderWithSpan(this.gx.DestImage, sclineRas, scline, spanGen); 
-        }     
-     
+
+            this.sclineRas.AddPath(vxs);
+            sclineRasToBmp.RenderWithSpan(this.gx.DestImage, sclineRas, scline, spanGen);
+        }
+
 
         //----------------------
         /// <summary>

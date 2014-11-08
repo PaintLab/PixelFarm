@@ -143,8 +143,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(Graphics2D gx)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
-            var scanlineCache = gx.ScanlinePacked8;
+            var widgetsSubImage = gx.DestImage;
+            var scline = gx.ScanlinePacked8;
 
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
@@ -193,7 +193,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                         rect.NormalizeRadius(); 
                         // Drawing as an outline
                         rasterizer.AddPath(rect.MakeVxs());
-                        sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scanlineCache, ColorRGBA.Make(.9f, .9f, .9f));
+                        sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scline, ColorRGBA.Make(.9f, .9f, .9f));
                     }
                 }
             }
@@ -208,7 +208,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
             sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
                    rasterizer,
-                   scanlineCache,
+                   scline,
                    transform.TransformToVxs(lionShape.Path),
                    lionShape.Colors,
                    lionShape.PathIndexList,
