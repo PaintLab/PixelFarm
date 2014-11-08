@@ -29,26 +29,27 @@ namespace PixelFarm.Agg
 {
     public abstract class ImgSpanGen : ISpanGenerator
     {
-         
+
         ISpanInterpolator m_interpolator;
         double m_dx_dbl;
         double m_dy_dbl;
         int m_dx_int;
         int m_dy_int;
+
         public ImgSpanGen(ISpanInterpolator interpolator)
         {
-             
+
             m_interpolator = interpolator;
             m_dx_dbl = 0.5;
             m_dy_dbl = 0.5;
 
-            m_dx_int = ((int)img_subpix_const.SCALE / 2);
-            m_dy_int = ((int)img_subpix_const.SCALE / 2);
+            m_dx_int = (img_subpix_const.SCALE / 2);
+            m_dy_int = (img_subpix_const.SCALE / 2);
         }
 
         public abstract void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len);
 
-      
+
         protected ISpanInterpolator Interpolator
         {
             get { return m_interpolator; }
@@ -64,10 +65,10 @@ namespace PixelFarm.Agg
         {
             m_dx_dbl = dx;
             m_dy_dbl = dy;
-            m_dx_int = (int)AggBasics.iround(dx * img_subpix_const.SCALE);
-            m_dy_int = (int)AggBasics.iround(dy * img_subpix_const.SCALE);
-        } 
-        public void SetFilterOffset(double d) { SetFilterOffset(d, d); } 
+            m_dx_int = AggBasics.iround(dx * img_subpix_const.SCALE);
+            m_dy_int = AggBasics.iround(dy * img_subpix_const.SCALE);
+        }
+        public void SetFilterOffset(double d) { SetFilterOffset(d, d); }
         public void Prepare() { }
     }
 

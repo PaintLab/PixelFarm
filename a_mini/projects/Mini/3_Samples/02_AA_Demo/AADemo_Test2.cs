@@ -9,10 +9,10 @@ using PixelFarm.Agg.VertexSource;
 
 using PixelFarm.VectorMath;
 
-using Mini; 
+using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest2
 {
-    
+
 
     class CustomScanlineRasToBmp_EnlargedV2 : CustomScanlineRasToDestBitmapRenderer
     {
@@ -43,7 +43,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 var span2 = scanline.GetSpan(i);
                 int x = span2.x;
                 int num_pix = span2.len;
-                int coverIndex = span2.cover_index; 
+                int coverIndex = span2.cover_index;
                 do
                 {
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
@@ -149,7 +149,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             clippingProxyNormal.Clear(ColorRGBA.White);
 
             var rasterizer = graphics2D.ScanlineRasterizer;
-            ScanlineUnpacked8 sl = new ScanlineUnpacked8();
+            var sl = new ScanlineUnpacked8();
+
 
             int size_mul = (int)this.PixelSize;
 

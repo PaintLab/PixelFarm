@@ -171,10 +171,11 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ClipProxyImage ren_base = new ClipProxyImage(pf);
             ren_base.Clear(new ColorRGBAf(1.0f, 1.0f, 1.0f).ToColorRGBA());
 
-            ScanlineUnpacked8 sl = new ScanlineUnpacked8();
-            ScanlineRasterizer ras = graphics2D.ScanlineRasterizer;
+            //ScanlineUnpacked8 scline = new ScanlineUnpacked8();
+            ScanlinePacked8 scline = graphics2D.ScanlinePacked8;
+            ScanlineRasterizer sclineRas = graphics2D.ScanlineRasterizer;
 #if true
-            render_gouraud(backBuffer, sl, ras, graphics2D.ScanlineRasToDestBitmap);
+            render_gouraud(backBuffer, scline, sclineRas, graphics2D.ScanlineRasToDestBitmap);
 #else
             agg.span_allocator span_alloc = new span_allocator();
             span_gouraud_rgba span_gen = new span_gouraud_rgba(new rgba8(255, 0, 0, 255), new rgba8(0, 255, 0, 255), new rgba8(0, 0, 255, 255), 320, 220, 100, 100, 200, 100, 0);
@@ -185,7 +186,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
 #endif
 
 
-            ras.ResetGamma(new GammaNone());
+            sclineRas.ResetGamma(new GammaNone());
             //m_dilation.Render(ras, sl, ren_base);
             //m_gamma.Render(ras, sl, ren_base);
             //m_alpha.Render(ras, sl, ren_base);

@@ -59,8 +59,8 @@ namespace PixelFarm.Agg
                 ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);
                 ClipProxyImage clippingProxyBlue = new ClipProxyImage(blueImageBuffer);
 
-                ScanlineRasterizer ras = graphics2D.ScanlineRasterizer;
-                ScanlinePacked8 sl = graphics2D.ScanlinePacked8;
+                ScanlineRasterizer sclineRas = graphics2D.ScanlineRasterizer;
+                ScanlinePacked8 scline = graphics2D.ScanlinePacked8;
 
                 ColorRGBA clearColor = this.UseBlackBlackground ? new ColorRGBA(0, 0, 0) : new ColorRGBA(255, 255, 255);
                 clippingProxy.Clear(clearColor);
@@ -72,16 +72,16 @@ namespace PixelFarm.Agg
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
 
                 VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.AddPath(er.MakeVertexSnap());                
-                sclineRasToBmp.RenderWithSolidColor(clippingProxyRed, ras, sl, FillColor);
+                sclineRas.AddPath(er.MakeVertexSnap());                
+                sclineRasToBmp.RenderWithSolidColor(clippingProxyRed, sclineRas, scline, FillColor);
 
                 VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                ras.AddPath(eg.MakeVertexSnap());
-                sclineRasToBmp.RenderWithSolidColor(clippingProxyGreen, ras, sl, FillColor);
+                sclineRas.AddPath(eg.MakeVertexSnap());
+                sclineRasToBmp.RenderWithSolidColor(clippingProxyGreen, sclineRas, scline, FillColor);
 
                 VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
-                ras.AddPath(eb.MakeVertexSnap());
-                sclineRasToBmp.RenderWithSolidColor(clippingProxyBlue, ras, sl, FillColor);
+                sclineRas.AddPath(eb.MakeVertexSnap());
+                sclineRasToBmp.RenderWithSolidColor(clippingProxyBlue, sclineRas, scline, FillColor);
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

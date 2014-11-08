@@ -12,7 +12,7 @@ using PixelFarm.VectorMath;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest1
 {
-    
+
     class CustomScanlineRasToBmp_EnlargedV1 : CustomScanlineRasToDestBitmapRenderer
     {
         double m_size;
@@ -103,7 +103,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-           
+
             IPixelBlender NormalBlender = new PixelBlenderBGRA();
             IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);

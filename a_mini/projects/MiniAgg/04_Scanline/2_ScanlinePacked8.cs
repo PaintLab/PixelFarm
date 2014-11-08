@@ -71,10 +71,10 @@ namespace PixelFarm.Agg
             else
             {
                 last_span_index++;
-
-                m_spans[last_span_index].cover_index = m_cover_index;
-                m_spans[last_span_index].x = (short)x;
-                m_spans[last_span_index].len = 1;
+                m_spans[last_span_index] = new ScanlineSpan((short)x, m_cover_index);
+                //m_spans[last_span_index].cover_index = m_cover_index;
+                //m_spans[last_span_index].x = (short)x;
+                //m_spans[last_span_index].len = 1;
             }
             last_x = x;
             m_cover_index++;
@@ -91,11 +91,12 @@ namespace PixelFarm.Agg
             else
             {
                 m_covers[m_cover_index] = (byte)cover;
-                last_span_index++; 
+                last_span_index++;
+                m_spans[last_span_index] = new ScanlineSpan((short)x, (short)(-len), m_cover_index++);
 
-                m_spans[last_span_index].cover_index = m_cover_index++;
-                m_spans[last_span_index].x = (short)x;
-                m_spans[last_span_index].len = (short)(-len);
+                //m_spans[last_span_index].cover_index = m_cover_index++;
+                //m_spans[last_span_index].x = (short)x;
+                //m_spans[last_span_index].len = (short)(-len);
             }
             last_x = x + len - 1;
         }
