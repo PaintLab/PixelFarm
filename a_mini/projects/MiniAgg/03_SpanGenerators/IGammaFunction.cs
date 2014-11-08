@@ -23,7 +23,7 @@ namespace PixelFarm.Agg
 {
     public interface IGammaFunction
     {
-        double GetGamma(double x);
+        float GetGamma(float x);
     }
 
     

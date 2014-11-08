@@ -248,12 +248,12 @@ namespace PixelFarm.Agg
         public void Fill(VertexStoreSnap snap)
         {
             sclineRas.AddPath(snap);
-            sclineRasToBmp.RenderWithSolidColor(this.gx.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
         public void Fill(VertexStore vxs)
         {
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithSolidColor(this.gx.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
 
         public ColorRGBA FillColor

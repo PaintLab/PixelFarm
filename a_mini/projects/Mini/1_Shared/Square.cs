@@ -34,7 +34,7 @@ namespace PixelFarm.Agg
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
 
-            sclineRasToBmp.RenderWithSolidColor(destImage, ras, sl, color);
+            sclineRasToBmp.RenderWithColor(destImage, ras, sl, color);
         }
     }
 }

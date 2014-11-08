@@ -125,11 +125,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
             rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
-            ren_en.RenderWithSolidColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            sclineRasToBmp.RenderWithSolidColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
 
             //----------------------------------------
@@ -146,7 +146,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             rasterizer.AddPath(StrokeHelp.MakeVxs(ps.Vxs, 2));
             //----------------------------------------
 
-            sclineRasToBmp.RenderWithSolidColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

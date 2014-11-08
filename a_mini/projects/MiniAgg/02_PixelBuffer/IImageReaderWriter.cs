@@ -69,9 +69,6 @@ namespace PixelFarm.Agg
         void BlendColorHSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll);// 
         void BlendColorVSpan(int x, int y, int len, ColorRGBA[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll); //not used
         
-       
-        
-
     }
 
 }

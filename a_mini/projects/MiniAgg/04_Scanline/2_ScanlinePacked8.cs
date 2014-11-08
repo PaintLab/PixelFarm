@@ -108,7 +108,5 @@ namespace PixelFarm.Agg
             m_cover_index = 0;
             m_spans[last_span_index].len = 0;
         }
-
-
     }
 }

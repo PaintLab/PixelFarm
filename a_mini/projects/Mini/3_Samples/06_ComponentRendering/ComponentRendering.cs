@@ -73,15 +73,15 @@ namespace PixelFarm.Agg
 
                 VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 sclineRas.AddPath(er.MakeVertexSnap());                
-                sclineRasToBmp.RenderWithSolidColor(clippingProxyRed, sclineRas, scline, FillColor);
+                sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, FillColor);
 
                 VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 sclineRas.AddPath(eg.MakeVertexSnap());
-                sclineRasToBmp.RenderWithSolidColor(clippingProxyGreen, sclineRas, scline, FillColor);
+                sclineRasToBmp.RenderWithColor(clippingProxyGreen, sclineRas, scline, FillColor);
 
                 VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
                 sclineRas.AddPath(eb.MakeVertexSnap());
-                sclineRasToBmp.RenderWithSolidColor(clippingProxyBlue, sclineRas, scline, FillColor);
+                sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, FillColor);
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

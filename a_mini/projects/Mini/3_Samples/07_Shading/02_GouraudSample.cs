@@ -69,8 +69,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
         {
             float alpha = this.AlphaValue;
             float brc = 1;
-            Graphics2D graphics2D = NewGraphics2D();
-
+            
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
@@ -81,7 +80,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             //span_allocator span_alloc = new span_allocator();
             SpanGenGouraudRGBA span_gen = new SpanGenGouraudRGBA();
 
-            sclineRas.ResetGamma(new GammaLinear(0.0, this.LinearGamma));
+            sclineRas.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
 
             double d = this.DilationValue;
 
@@ -171,7 +170,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ClipProxyImage ren_base = new ClipProxyImage(pf);
             ren_base.Clear(new ColorRGBAf(1.0f, 1.0f, 1.0f).ToColorRGBA());
 
-            //ScanlineUnpacked8 scline = new ScanlineUnpacked8();
+            
             ScanlinePacked8 scline = graphics2D.ScanlinePacked8;
             ScanlineRasterizer sclineRas = graphics2D.ScanlineRasterizer;
 #if true
