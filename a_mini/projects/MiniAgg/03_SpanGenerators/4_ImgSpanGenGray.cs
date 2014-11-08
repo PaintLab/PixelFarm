@@ -11,7 +11,7 @@
 // is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
-#define USE_UNSAFE_CODE
+
 
 using System;
 
@@ -49,15 +49,15 @@ namespace PixelFarm.Agg.Image
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
             int x_lr = x_hr >> img_subpix_const.SHIFT;
-            int y_lr = y_hr >>  img_subpix_const.SHIFT;
+            int y_lr = y_hr >> img_subpix_const.SHIFT;
             int bufferIndex;
             bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
 
-            byte[] fg_ptr = srcRW.GetBuffer();
-#if USE_UNSAFE_CODE
+            byte[] srcBuff = srcRW.GetBuffer();
+
             unsafe
             {
-                fixed (byte* pSource = fg_ptr)
+                fixed (byte* pSource = srcBuff)
                 {
                     do
                     {
@@ -70,17 +70,6 @@ namespace PixelFarm.Agg.Image
                     } while (--len != 0);
                 }
             }
-#else
-            do
-            {
-                throw new Exception("this code is for 32 bit");
-                color.m_B = fg_ptr[bufferIndex++];
-                color.m_G = fg_ptr[bufferIndex++];
-                color.m_R = fg_ptr[bufferIndex++];
-                color.m_A = fg_ptr[bufferIndex++];
-                span[spanIndex++] = color;
-            } while (--len != 0);
-#endif
         }
     }
 

@@ -141,15 +141,19 @@ namespace PixelFarm.Agg.Image
                 fg2 /= total_weight;
                 fg3 /= total_weight;
 
-                if (fg0 < 0) fg0 = 0;
-                if (fg1 < 0) fg1 = 0;
-                if (fg2 < 0) fg2 = 0;
-                if (fg3 < 0) fg3 = 0;
+                //clamps..
+                if (fg0 < 0) { fg0 = 0; }
+                else if (fg0 > BASE_MASK) { fg0 = BASE_MASK; }
 
-                if (fg0 > BASE_MASK) fg0 = BASE_MASK;
-                if (fg1 > BASE_MASK) fg1 = BASE_MASK;
-                if (fg2 > BASE_MASK) fg2 = BASE_MASK;
-                if (fg3 > BASE_MASK) fg3 = BASE_MASK;
+                if (fg1 < 0) { fg1 = 0; }
+                else if (fg1 > BASE_MASK) { fg1 = BASE_MASK; }
+
+                if (fg2 < 0) { fg2 = 0; }
+                else if (fg2 > BASE_MASK) { fg2 = BASE_MASK; }
+
+                if (fg3 < 0) { fg3 = 0; }
+                else if (fg3 > BASE_MASK) { fg3 = BASE_MASK; }
+
 
                 outputColors[startIndex].red = (byte)fg0;
                 outputColors[startIndex].green = (byte)fg1;

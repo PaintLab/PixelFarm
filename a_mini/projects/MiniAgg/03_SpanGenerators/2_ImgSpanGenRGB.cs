@@ -108,7 +108,9 @@ namespace PixelFarm.Agg.Image
             ISpanInterpolator spanInterpolator = base.Interpolator;
             spanInterpolator.Begin(x + base.dx, y + base.dy, len);
 
-            int[] accumulatedColor = new int[3];
+
+            int accColor0, accColor1, accColor2;
+
             int sourceAlpha;
             int back_r = m_bgcolor.red;
             int back_g = m_bgcolor.green;
@@ -142,9 +144,9 @@ namespace PixelFarm.Agg.Image
                     if (x_lr >= 0 && y_lr >= 0 &&
                        x_lr < maxx && y_lr < maxy)
                     {
-                        accumulatedColor[0] =
-                        accumulatedColor[1] =
-                        accumulatedColor[2] = img_subpix_const.SCALE * img_subpix_const.SCALE / 2;
+                        accColor0 =
+                        accColor1 =
+                        accColor2 = img_subpix_const.SCALE * img_subpix_const.SCALE / 2;
 
                         x_hr &= img_subpix_const.MASK;
                         y_hr &= img_subpix_const.MASK;
@@ -153,33 +155,33 @@ namespace PixelFarm.Agg.Image
 
                         weight = ((img_subpix_const.SCALE - x_hr) *
                                  (img_subpix_const.SCALE - y_hr));
-                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
+                        accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                        accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                        accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
 
                         bufferIndex += 3;
                         weight = (x_hr * (img_subpix_const.SCALE - y_hr));
-                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
+                        accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                        accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                        accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
 
                         y_lr++;
                         fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
 
                         weight = ((img_subpix_const.SCALE - x_hr) * y_hr);
-                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
+                        accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                        accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                        accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
 
                         bufferIndex += 3;
                         weight = (x_hr * y_hr);
-                        accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                        accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                        accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
+                        accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                        accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                        accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
 
-                        accumulatedColor[0] >>= img_subpix_const.SHIFT * 2;
-                        accumulatedColor[1] >>= img_subpix_const.SHIFT * 2;
-                        accumulatedColor[2] >>= img_subpix_const.SHIFT * 2;
+                        accColor0 >>= img_subpix_const.SHIFT * 2;
+                        accColor1 >>= img_subpix_const.SHIFT * 2;
+                        accColor2 >>= img_subpix_const.SHIFT * 2;
 
                         sourceAlpha = BASE_MASK;
                     }
@@ -188,51 +190,95 @@ namespace PixelFarm.Agg.Image
                         if (x_lr < -1 || y_lr < -1 ||
                            x_lr > maxx || y_lr > maxy)
                         {
-                            accumulatedColor[0] = back_r;
-                            accumulatedColor[1] = back_g;
-                            accumulatedColor[2] = back_b;
+                            accColor0 = back_r;
+                            accColor1 = back_g;
+                            accColor2 = back_b;
                             sourceAlpha = back_a;
                         }
                         else
                         {
-                            accumulatedColor[0] =
-                            accumulatedColor[1] =
-                            accumulatedColor[2] = img_subpix_const.SCALE * img_subpix_const.SCALE / 2;
+                            accColor0 =
+                            accColor1 =
+                            accColor2 = img_subpix_const.SCALE * img_subpix_const.SCALE / 2;
                             sourceAlpha = img_subpix_const.SCALE * img_subpix_const.SCALE / 2;
 
                             x_hr &= img_subpix_const.MASK;
                             y_hr &= img_subpix_const.MASK;
 
-                            weight = ((img_subpix_const.SCALE - x_hr) *
-                                     (img_subpix_const.SCALE - y_hr));
-                            BlendInFilterPixel(accumulatedColor, ref sourceAlpha, back_r, back_g, back_b, back_a, srcRW, maxx, maxy, x_lr, y_lr, weight);
+                            weight = ((img_subpix_const.SCALE - x_hr) * (img_subpix_const.SCALE - y_hr));
 
+
+                            if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                            {
+                                BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
+                                    back_r, back_g, back_b, back_a, srcRW, x_lr, y_lr, weight);
+                            }
+                            else
+                            {
+                                accColor0 += back_r * weight;
+                                accColor1 += back_g * weight;
+                                accColor2 += back_b * weight;
+                                sourceAlpha += back_a * weight;
+                            }
                             x_lr++;
 
                             weight = (x_hr * (img_subpix_const.SCALE - y_hr));
-                            BlendInFilterPixel(accumulatedColor, ref sourceAlpha, back_r, back_g, back_b, back_a, srcRW, maxx, maxy, x_lr, y_lr, weight);
+
+                            if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                            {
+                                BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
+                                    back_r, back_g, back_b, back_a, srcRW, x_lr, y_lr, weight);
+                            }
+                            else
+                            {
+                                accColor0 += back_r * weight;
+                                accColor1 += back_g * weight;
+                                accColor2 += back_b * weight;
+                                sourceAlpha += back_a * weight;
+                            }
 
                             x_lr--;
                             y_lr++;
 
                             weight = ((img_subpix_const.SCALE - x_hr) * y_hr);
-                            BlendInFilterPixel(accumulatedColor, ref sourceAlpha, back_r, back_g, back_b, back_a, srcRW, maxx, maxy, x_lr, y_lr, weight);
+                            if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                            {
+                                BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
+                                    back_r, back_g, back_b, back_a, srcRW, x_lr, y_lr, weight);
+                            }
+                            else
+                            {
+                                accColor0 += back_r * weight;
+                                accColor1 += back_g * weight;
+                                accColor2 += back_b * weight;
+                                sourceAlpha += back_a * weight;
+                            }
 
                             x_lr++;
 
                             weight = (x_hr * y_hr);
-                            BlendInFilterPixel(accumulatedColor, ref sourceAlpha, back_r, back_g, back_b, back_a, srcRW, maxx, maxy, x_lr, y_lr, weight);
-
-                            accumulatedColor[0] >>= img_subpix_const.SHIFT * 2;
-                            accumulatedColor[1] >>= img_subpix_const.SHIFT * 2;
-                            accumulatedColor[2] >>= img_subpix_const.SHIFT * 2;
+                            if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                            {
+                                BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref sourceAlpha,
+                                    back_r, back_g, back_b, back_a, srcRW, x_lr, y_lr, weight);
+                            }
+                            else
+                            {
+                                accColor0 += back_r * weight;
+                                accColor1 += back_g * weight;
+                                accColor2 += back_b * weight;
+                                sourceAlpha += back_a * weight;
+                            }
+                            accColor0 >>= img_subpix_const.SHIFT * 2;
+                            accColor1 >>= img_subpix_const.SHIFT * 2;
+                            accColor2 >>= img_subpix_const.SHIFT * 2;
                             sourceAlpha >>= img_subpix_const.SHIFT * 2;
                         }
                     }
 
-                    outputColors[startIndex].red = (byte)accumulatedColor[0];
-                    outputColors[startIndex].green = (byte)accumulatedColor[1];
-                    outputColors[startIndex].blue = (byte)accumulatedColor[2];
+                    outputColors[startIndex].red = (byte)accColor0;
+                    outputColors[startIndex].green = (byte)accColor1;
+                    outputColors[startIndex].blue = (byte)accColor2;
                     outputColors[startIndex].alpha = (byte)sourceAlpha;
                     startIndex++;
                     spanInterpolator.Next();
@@ -240,31 +286,24 @@ namespace PixelFarm.Agg.Image
             }
         }
 
-        private void BlendInFilterPixel(int[] accumulatedColor, ref int sourceAlpha, int back_r, int back_g, int back_b, int back_a, ImageReaderWriterBase SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
+        static void BlendInFilterPixel(ref int accColor0, ref int accColor1, ref int accColor2, ref int sourceAlpha,
+            int back_r, int back_g, int back_b, int back_a,
+            ImageReaderWriterBase srcRW, int x_lr, int y_lr, int weight)
         {
             byte[] fg_ptr;
             unchecked
             {
-                if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
-                {
-                    int bufferIndex;
-                    fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
 
-                    accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
-                    accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
-                    accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
-                    sourceAlpha += weight * BASE_MASK;
-                }
-                else
-                {
-                    accumulatedColor[0] += back_r * weight;
-                    accumulatedColor[1] += back_g * weight;
-                    accumulatedColor[2] += back_b * weight;
-                    sourceAlpha += back_a * weight;
-                }
+                int bufferIndex;
+                fg_ptr = srcRW.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
+                accColor0 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.R];
+                accColor1 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.G];
+                accColor2 += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.B];
+                sourceAlpha += weight * BASE_MASK;
             }
         }
-    };
+
+    }
 
 
 

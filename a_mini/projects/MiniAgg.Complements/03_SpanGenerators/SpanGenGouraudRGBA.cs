@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-namespace PixelFarm.Agg 
+namespace PixelFarm.Agg
 {
 
     //=======================================================span_gouraud_rgba
@@ -113,18 +113,18 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         public void Prepare()
         {
-            CoordAndColor[] coord = new CoordAndColor[3];
-            base.LoadArrangedVertices(coord);
+            CoordAndColor c0, c1, c2;
+            base.LoadArrangedVertices(out c0, out c1, out c2);
 
-            m_y2 = (int)(coord[1].y);
+            m_y2 = (int)c1.y;
 
-            m_swap = AggMath.Cross(coord[0].x, coord[0].y,
-                                   coord[2].x, coord[2].y,
-                                   coord[1].x, coord[1].y) < 0.0;
+            m_swap = AggMath.Cross(c0.x, c0.y,
+                                   c2.x, c2.y,
+                                   c1.x, c1.y) < 0.0;
 
-            m_rgba1.Init(coord[0], coord[2]);
-            m_rgba2.Init(coord[0], coord[1]);
-            m_rgba3.Init(coord[1], coord[2]);
+            m_rgba1.Init(c0, c2);
+            m_rgba2.Init(c0, c1);
+            m_rgba3.Init(c1, c2);
         }
 
         public void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
@@ -163,10 +163,10 @@ namespace PixelFarm.Agg
             int nlen = Math.Abs(pc2.m_x - pc1.m_x);
             if (nlen <= 0) nlen = 1;
 
-            var r = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
-            var g = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
-            var b = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
-            var a = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
+            var line_r = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_r, pc2.m_r, nlen, 14);
+            var line_g = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_g, pc2.m_g, nlen, 14);
+            var line_b = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_b, pc2.m_b, nlen, 14);
+            var line_a = new PixelFarm.Agg.Transform.LineInterpolatorDDA(pc1.m_a, pc2.m_a, nlen, 14);
 
             // Calculate the starting point of the gradient with subpixel 
             // accuracy and correct (roll back) the interpolators.
@@ -174,10 +174,10 @@ namespace PixelFarm.Agg
             // if necessary.
             //-------------------------
             int start = pc1.m_x - (x << (int)SUBPIXEL_SHIFT);
-            r.Prev(start);
-            g.Prev(start);
-            b.Prev(start);
-            a.Prev(start);
+            line_r.Prev(start);
+            line_g.Prev(start);
+            line_b.Prev(start);
+            line_a.Prev(start);
             nlen += start;
 
             int vr, vg, vb, va;
@@ -191,22 +191,24 @@ namespace PixelFarm.Agg
             //-------------------------
             while (len != 0 && start > 0)
             {
-                vr = r.y();
-                vg = g.y();
-                vb = b.y();
-                va = a.y();
-                if (vr < 0) vr = 0; if (vr > lim) vr = (int)lim;
-                if (vg < 0) vg = 0; if (vg > lim) vg = (int)lim;
-                if (vb < 0) vb = 0; if (vb > lim) vb = (int)lim;
-                if (va < 0) va = 0; if (va > lim) va = (int)lim;
+                vr = line_r.y();
+                vg = line_g.y();
+                vb = line_b.y();
+                va = line_a.y();
+                if (vr < 0) { vr = 0; } else if (vr > lim) { vr = (int)lim; }
+                if (vg < 0) { vg = 0; } else if (vg > lim) { vg = (int)lim; }
+                if (vb < 0) { vb = 0; } else if (vb > lim) { vb = (int)lim; }
+                if (va < 0) { va = 0; } else if (va > lim) { va = (int)lim; }
+
                 outputColors[startIndex].red = (byte)vr;
                 outputColors[startIndex].green = (byte)vg;
                 outputColors[startIndex].blue = (byte)vb;
                 outputColors[startIndex].alpha = (byte)va;
-                r.Next(SUBPIXEL_SCALE);
-                g.Next(SUBPIXEL_SCALE);
-                b.Next(SUBPIXEL_SCALE);
-                a.Next(SUBPIXEL_SCALE);
+
+                line_r.Next(SUBPIXEL_SCALE);
+                line_g.Next(SUBPIXEL_SCALE);
+                line_b.Next(SUBPIXEL_SCALE);
+                line_a.Next(SUBPIXEL_SCALE);
                 nlen -= SUBPIXEL_SCALE;
                 start -= SUBPIXEL_SCALE;
                 ++startIndex;
@@ -220,14 +222,15 @@ namespace PixelFarm.Agg
             //-------------------------
             while (len != 0 && nlen > 0)
             {
-                outputColors[startIndex].red = ((byte)r.y());
-                outputColors[startIndex].green = ((byte)g.y());
-                outputColors[startIndex].blue = ((byte)b.y());
-                outputColors[startIndex].alpha = ((byte)a.y());
-                r.Next(SUBPIXEL_SCALE);
-                g.Next(SUBPIXEL_SCALE);
-                b.Next(SUBPIXEL_SCALE);
-                a.Next(SUBPIXEL_SCALE);
+                outputColors[startIndex].red = ((byte)line_r.y());
+                outputColors[startIndex].green = ((byte)line_g.y());
+                outputColors[startIndex].blue = ((byte)line_b.y());
+                outputColors[startIndex].alpha = ((byte)line_a.y());
+
+                line_r.Next(SUBPIXEL_SCALE);
+                line_g.Next(SUBPIXEL_SCALE);
+                line_b.Next(SUBPIXEL_SCALE);
+                line_a.Next(SUBPIXEL_SCALE);
                 nlen -= SUBPIXEL_SCALE;
                 ++startIndex;
                 --len;
@@ -238,22 +241,24 @@ namespace PixelFarm.Agg
             //-------------------------
             while (len != 0)
             {
-                vr = r.y();
-                vg = g.y();
-                vb = b.y();
-                va = a.y();
-                if (vr < 0) vr = 0; if (vr > lim) vr = (int)lim;
-                if (vg < 0) vg = 0; if (vg > lim) vg = (int)lim;
-                if (vb < 0) vb = 0; if (vb > lim) vb = (int)lim;
-                if (va < 0) va = 0; if (va > lim) va = (int)lim;
+                vr = line_r.y();
+                vg = line_g.y();
+                vb = line_b.y();
+                va = line_a.y();
+
+                if (vr < 0) { vr = 0; } else if (vr > lim) { vr = (int)lim; }
+                if (vg < 0) { vg = 0; } else if (vg > lim) { vg = (int)lim; }
+                if (vb < 0) { vb = 0; } else if (vb > lim) { vb = (int)lim; }
+                if (va < 0) { va = 0; } else if (va > lim) { va = (int)lim; }
+
                 outputColors[startIndex].red = ((byte)vr);
                 outputColors[startIndex].green = ((byte)vg);
                 outputColors[startIndex].blue = ((byte)vb);
                 outputColors[startIndex].alpha = ((byte)va);
-                r.Next(SUBPIXEL_SCALE);
-                g.Next(SUBPIXEL_SCALE);
-                b.Next(SUBPIXEL_SCALE);
-                a.Next(SUBPIXEL_SCALE);
+                line_r.Next(SUBPIXEL_SCALE);
+                line_g.Next(SUBPIXEL_SCALE);
+                line_b.Next(SUBPIXEL_SCALE);
+                line_a.Next(SUBPIXEL_SCALE);
                 ++startIndex;
                 --len;
             }
