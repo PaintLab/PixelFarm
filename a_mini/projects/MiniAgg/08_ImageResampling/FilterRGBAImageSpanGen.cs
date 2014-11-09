@@ -117,10 +117,10 @@ namespace PixelFarm.Agg.Image
                         int weight = (weight_y * weight_array[x_hr] +
                                       img_filter_const.SCALE / 2) >>
                                       DOWN_SCALE_SHIFT;
-                        c0 += buff[sourceIndex + ColorOrder.R] * weight;
-                        c1 += buff[sourceIndex + ColorOrder.G] * weight;
-                        c2 += buff[sourceIndex + ColorOrder.B] * weight;
-                        c3 += buff[sourceIndex + ColorOrder.A] * weight;
+                        c0 += buff[sourceIndex + CO.R] * weight;
+                        c1 += buff[sourceIndex + CO.G] * weight;
+                        c2 += buff[sourceIndex + CO.B] * weight;
+                        c3 += buff[sourceIndex + CO.A] * weight;
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;

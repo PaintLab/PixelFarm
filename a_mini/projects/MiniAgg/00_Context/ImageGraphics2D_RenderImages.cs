@@ -87,8 +87,6 @@ namespace PixelFarm.Agg
         {
 
             AffinePlan plan = new AffinePlan();
-
-
             if (destX != 0 || destY != 0)
             {
                 plan = AffinePlan.Translate(destX, destY);
@@ -105,6 +103,24 @@ namespace PixelFarm.Agg
             drawImageRectPath.ClosePolygon();
 
             return Affine.NewMatix(plan);
+
+        }
+        Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
+           PathStorage drawImageRectPath, AffinePlan[] affPlans)
+        {
+
+            
+            int srcW = sourceImage.Width;
+            int srcH = sourceImage.Height;
+
+            drawImageRectPath.Clear();
+            drawImageRectPath.MoveTo(0, 0);
+            drawImageRectPath.LineTo(srcW, 0);
+            drawImageRectPath.LineTo(srcW, srcH);
+            drawImageRectPath.LineTo(0, srcH);
+            drawImageRectPath.ClosePolygon();
+
+            return Affine.NewMatix(affPlans);
 
         }
         void Render(VertexStore vxs, ISpanGenerator spanGen)
@@ -209,10 +225,10 @@ namespace PixelFarm.Agg
 
                 Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath,
                     destX, destY, ox, oy, scaleX, scaleY, angleRadians);
-                
+
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
-               
+
 
 
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
@@ -234,7 +250,7 @@ namespace PixelFarm.Agg
             {
 
                 Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY);
-                 
+
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
 
@@ -268,6 +284,26 @@ namespace PixelFarm.Agg
 
         int destImageChanged = 0;
 
+        public override void Render(IImageReaderWriter source, AffinePlan[] affinePlans)
+        {
+
+
+            var imgBoundsPath = GetFreePathStorage();
+            Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, affinePlans);
+
+
+            // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+            Affine sourceRectTransform = destRectTransform.CreateInvert();
+
+            var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
+                source,
+                ColorRGBA.Black,
+                new SpanInterpolatorLinear(sourceRectTransform));
+
+            Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+            ReleasePathStorage(imgBoundsPath);
+
+        }
         public override void Render(IImageReaderWriter source, double destX, double destY)
         {
             int inScaleX = 1;
@@ -366,7 +402,7 @@ namespace PixelFarm.Agg
 
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
-                
+
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                     source,
                     ColorRGBA.Black,
@@ -389,7 +425,6 @@ namespace PixelFarm.Agg
 
                 Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath,
                     destX, destY);
-
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
 
@@ -415,8 +450,6 @@ namespace PixelFarm.Agg
                 }
 
                 Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
-
-
 
                 unchecked { destImageChanged++; };
             }

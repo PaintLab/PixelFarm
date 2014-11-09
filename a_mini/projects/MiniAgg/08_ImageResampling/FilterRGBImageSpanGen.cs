@@ -63,9 +63,7 @@ namespace PixelFarm.Agg.Image
 
             int diameter = base.FilterLookup.Diameter;
             int filter_scale = diameter << img_subpix_const.SHIFT;
-            int[] weight_array = FilterLookup.WeightArray;
-
-
+            int[] weight_array = FilterLookup.WeightArray; 
 
 
             do
@@ -115,9 +113,9 @@ namespace PixelFarm.Agg.Image
                         int weight = (weight_y * weight_array[x_hr] +
                                      (int)img_filter_const.SCALE / 2) >>
                                      DOWNSCALE_SHIFT;
-                        c0 += buff[sourceIndex + ColorOrder.R] * weight;
-                        c1 += buff[sourceIndex + ColorOrder.G] * weight;
-                        c2 += buff[sourceIndex + ColorOrder.B] * weight;
+                        c0 += buff[sourceIndex + CO.R] * weight;
+                        c1 += buff[sourceIndex + CO.G] * weight;
+                        c2 += buff[sourceIndex + CO.B] * weight;
                         total_weight += weight;
                         x_hr += rx_inv;
                         if (x_hr >= filter_scale) break;

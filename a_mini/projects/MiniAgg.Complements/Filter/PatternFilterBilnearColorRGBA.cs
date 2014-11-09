@@ -54,34 +54,34 @@ namespace PixelFarm.Agg
 
             weight = (LineAA.SUBPIXEL_SCALE - x) *
                      (LineAA.SUBPIXEL_SCALE - y);
-            r += weight * ptr[sourceOffset + ColorOrder.R];
-            g += weight * ptr[sourceOffset + ColorOrder.G];
-            b += weight * ptr[sourceOffset + ColorOrder.B];
-            a += weight * ptr[sourceOffset + ColorOrder.A];
+            r += weight * ptr[sourceOffset + CO.R];
+            g += weight * ptr[sourceOffset + CO.G];
+            b += weight * ptr[sourceOffset + CO.B];
+            a += weight * ptr[sourceOffset + CO.A];
 
             sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
 
             weight = x * (LineAA.SUBPIXEL_SCALE - y);
-            r += weight * ptr[sourceOffset + ColorOrder.R];
-            g += weight * ptr[sourceOffset + ColorOrder.G];
-            b += weight * ptr[sourceOffset + ColorOrder.B];
-            a += weight * ptr[sourceOffset + ColorOrder.A];
+            r += weight * ptr[sourceOffset + CO.R];
+            g += weight * ptr[sourceOffset + CO.G];
+            b += weight * ptr[sourceOffset + CO.B];
+            a += weight * ptr[sourceOffset + CO.A];
 
             sourceOffset = sourceImage.GetBufferOffsetXY(x_lr, y_lr + 1);
 
             weight = (LineAA.SUBPIXEL_SCALE - x) * y;
-            r += weight * ptr[sourceOffset + ColorOrder.R];
-            g += weight * ptr[sourceOffset + ColorOrder.G];
-            b += weight * ptr[sourceOffset + ColorOrder.B];
-            a += weight * ptr[sourceOffset + ColorOrder.A];
+            r += weight * ptr[sourceOffset + CO.R];
+            g += weight * ptr[sourceOffset + CO.G];
+            b += weight * ptr[sourceOffset + CO.B];
+            a += weight * ptr[sourceOffset + CO.A];
 
             sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
 
             weight = x * y;
-            r += weight * ptr[sourceOffset + ColorOrder.R];
-            g += weight * ptr[sourceOffset + ColorOrder.G];
-            b += weight * ptr[sourceOffset + ColorOrder.B];
-            a += weight * ptr[sourceOffset + ColorOrder.A];
+            r += weight * ptr[sourceOffset + CO.R];
+            g += weight * ptr[sourceOffset + CO.G];
+            b += weight * ptr[sourceOffset + CO.B];
+            a += weight * ptr[sourceOffset + CO.A];
 
             destBuffer[destBufferOffset].red = (byte)(r >> LineAA.SUBPIXEL_SHIFT * 2);
             destBuffer[destBufferOffset].green = (byte)(g >> LineAA.SUBPIXEL_SHIFT * 2);

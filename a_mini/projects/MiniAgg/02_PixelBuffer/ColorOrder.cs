@@ -27,7 +27,7 @@ using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
 {
-    public static class ColorOrder
+    public static class CO
     {
         /// <summary>
         /// order b

@@ -225,22 +225,7 @@ namespace PixelFarm.Agg
                                     }
                                 }
                             }
-
-                            //int bytesBetweenPixels = 4;
-                            //int clipRectLeft = clippingRectInt.Left;
-                            //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
-                            //{
-                            //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                            //    for (int x = 0; x < clippingRectInt.Width; ++x)
-                            //    {
-                            //        //b g, r, a
-                            //        buffer[bufferOffset + 0] = color.blue;
-                            //        buffer[bufferOffset + 1] = color.green;
-                            //        buffer[bufferOffset + 2] = color.red;
-                            //        buffer[bufferOffset + 3] = color.alpha;
-                            //        bufferOffset += bytesBetweenPixels;
-                            //    }
-                            //}
+                             
                         }
                     }
                     break;
@@ -252,17 +237,16 @@ namespace PixelFarm.Agg
 
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
-            //reset rasterizer before render each vertextSnap
-
+            //reset rasterizer before render each vertextSnap 
             //-----------------------------
             sclineRas.Reset();
             Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
-                sclineRas.AddPath(transform.Tranform(vertextSnap));
+                sclineRas.AddPath(transform.TransformToVxs(vertextSnap));
             }
             else
-            {
+            {   
                 sclineRas.AddPath(vertextSnap);
             }
             sclineRasToBmp.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
