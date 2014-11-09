@@ -45,10 +45,6 @@ namespace PixelFarm.Agg
         RectInt clipBox;
 
         ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
-<<<<<<< HEAD
-
-=======
->>>>>>> 459_retro
 
         public ImageGraphics2D(ActualImage destImage)
         {
@@ -97,17 +93,12 @@ namespace PixelFarm.Agg
         public override RectInt GetClippingRect()
         {
             return ScanlineRasterizer.GetVectorClipBox();
-<<<<<<< HEAD
-        }
-
-=======
         }
         public ImageInterpolationQuality ImageInterpolationQuality
         {
             get { return this.ImageInterpolationQuality; }
             set { this.imgInterpolationQuality = value; }
         }
->>>>>>> 459_retro
         PathStorage GetFreePathStorage()
         {
             if (drawImageRectPath != null)
@@ -258,8 +249,6 @@ namespace PixelFarm.Agg
                     throw new NotImplementedException();
             }
         }
-<<<<<<< HEAD
-=======
 
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
@@ -280,6 +269,5 @@ namespace PixelFarm.Agg
             unchecked { destImageChanged++; };
             //-----------------------------
         }
->>>>>>> 459_retro
     }
 }

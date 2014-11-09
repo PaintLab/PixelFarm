@@ -113,11 +113,6 @@ namespace PixelFarm.Agg
 
                 //render single scanline 
                 int y = scline.Y;
-                //if (y >= 239)
-                //{
-                //    break;
-                //}
-
                 int num_spans = scline.SpanCount;
                 byte[] covers = scline.GetCovers();
 

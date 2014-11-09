@@ -68,11 +68,7 @@ namespace PixelFarm.Agg.Sample_Images
         {
             CanvasPainter painter = new CanvasPainter(g);
             painter.DrawImage(actualImage, 0, 0);
-<<<<<<< HEAD
-             
-=======
            
->>>>>>> 459_retro
         }
         public override void MouseDrag(int x, int y)
         {

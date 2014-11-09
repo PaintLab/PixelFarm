@@ -20,7 +20,6 @@
 
 namespace PixelFarm.Agg.Image
 {
-
     partial class FilterImageSpanGenerator
     {
         sealed class ImageBufferAccessor
@@ -134,9 +133,5 @@ namespace PixelFarm.Agg.Image
                 return GetPixels(out bufferOffset);
             }
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> 459_retro
     }
 }
