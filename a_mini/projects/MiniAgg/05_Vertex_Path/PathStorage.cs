@@ -64,14 +64,12 @@ namespace PixelFarm.Agg.VertexSource
         public int Count
         {
             get { return myvxs.Count; }
-        }
-
+        } 
         public void Clear()
         {
             myvxs.Clear();
         }
-
-
+         
         // Make path functions
         //--------------------------------------------------------------------
         public int StartNewPath()

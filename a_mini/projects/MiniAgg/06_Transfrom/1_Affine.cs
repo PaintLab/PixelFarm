@@ -143,7 +143,9 @@ namespace PixelFarm.Agg.Transform
         }
     }
 
-    public sealed class Affine : ITransform
+
+
+    public sealed class Affine : ICoordTransformer
     {
 
         const double EPSILON = 1e-14;
@@ -874,7 +876,7 @@ namespace PixelFarm.Agg.Transform
         public bool IsIdentity()
         {
             if (!isIdenHint)
-            {   
+            {
                 return is_equal_eps(sx, 1.0) &&
                    is_equal_eps(shy, 0.0) &&
                    is_equal_eps(shx, 0.0) &&
@@ -909,11 +911,10 @@ namespace PixelFarm.Agg.Transform
         }
         public VertexStore TransformToVxs(VertexStore src)
         {
-
-            VertexStore vxs = new VertexStore();
-            ShapePath.FlagsAndCommand cmd;
-            double x, y;
             int count = src.Count;
+            VertexStore vxs = new VertexStore(count);
+            ShapePath.FlagsAndCommand cmd;
+            double x, y; 
             for (int i = 0; i < count; ++i)
             {
                 cmd = src.GetVertex(i, out x, out y);
@@ -922,11 +923,10 @@ namespace PixelFarm.Agg.Transform
             }
             return vxs;
         }
-        public VertexStore Tranform(VertexStoreSnap src)
+        public VertexStore TransformToVxs(VertexStoreSnap src)
         {
             var vxs = new VertexStore();
             var snapIter = src.GetVertexSnapIter();
-
             ShapePath.FlagsAndCommand cmd;
             double x, y;
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
@@ -936,6 +936,40 @@ namespace PixelFarm.Agg.Transform
             }
             return vxs;
         }
+        //----------------------------------------------------------------------------------------------
+        public static VertexStore TranslateToVxs(VertexStore src, double dx, double dy)
+        {
+            int count = src.Count;
+            VertexStore vxs = new VertexStore(count);
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+           
+            for (int i = 0; i < count; ++i)
+            {
+                cmd = src.GetVertex(i, out x, out y);
+                x += dx;
+                y += dy;
+                vxs.AddVertex(x, y, cmd);
+            }
+            return vxs;
+        }
+        public static VertexStore TranslateTransformToVxs(VertexStoreSnap src, double dx, double dy)
+        {
+            var vxs = new VertexStore();
+            var snapIter = src.GetVertexSnapIter();
+
+            ShapePath.FlagsAndCommand cmd;
+            double x, y;
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            {
+                x += dx;
+                y += dy;
+                vxs.AddVertex(x, y, cmd);
+            }
+            return vxs;
+        }
+
+
         // Check to see if two matrices are equal
         //public bool is_equal(Affine m, double epsilon)
         //{

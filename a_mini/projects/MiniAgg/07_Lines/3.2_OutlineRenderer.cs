@@ -74,7 +74,7 @@ namespace PixelFarm.Agg.Lines
             int i;
             for (i = 0; i < AA_SCALE; i++)
             {
-                m_gamma[i] = (byte)(AggBasics.uround(gamma_function.GetGamma((double)(i) / AA_MASK) * AA_MASK));
+                m_gamma[i] = (byte)(AggBasics.uround(gamma_function.GetGamma((float)(i) / AA_MASK) * AA_MASK));
             }
         }
 

@@ -33,10 +33,10 @@ namespace PixelFarm.Agg
             p[offset] = buf[y][x];
         }
 
-        public void SetPixelHighRes(ImageReaderWriterBase sourceImage, 
+        public void SetPixelHighRes(ImageReaderWriterBase sourceImage,
             ColorRGBA[] destBuffer,
-            int destBufferOffset, 
-            int x, 
+            int destBufferOffset,
+            int x,
             int y)
         {
             int r, g, b, a;
@@ -49,43 +49,44 @@ namespace PixelFarm.Agg
             x &= LineAA.SUBPIXEL_MARK;
             y &= LineAA.SUBPIXEL_MARK;
             int sourceOffset;
-            byte[] ptr = sourceImage.GetPixelPointerXY(x_lr, y_lr, out sourceOffset);
+            byte[] ptr = sourceImage.GetBuffer();
+            sourceOffset = sourceImage.GetBufferOffsetXY(x_lr, y_lr);
 
             weight = (LineAA.SUBPIXEL_SCALE - x) *
                      (LineAA.SUBPIXEL_SCALE - y);
-            r += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderR];
-            g += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderG];
-            b += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderB];
-            a += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderA];
+            r += weight * ptr[sourceOffset + CO.R];
+            g += weight * ptr[sourceOffset + CO.G];
+            b += weight * ptr[sourceOffset + CO.B];
+            a += weight * ptr[sourceOffset + CO.A];
 
             sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
 
             weight = x * (LineAA.SUBPIXEL_SCALE - y);
-            r += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderR];
-            g += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderG];
-            b += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderB];
-            a += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderA];
+            r += weight * ptr[sourceOffset + CO.R];
+            g += weight * ptr[sourceOffset + CO.G];
+            b += weight * ptr[sourceOffset + CO.B];
+            a += weight * ptr[sourceOffset + CO.A];
 
-            ptr = sourceImage.GetPixelPointerXY(x_lr, y_lr + 1, out sourceOffset);
+            sourceOffset = sourceImage.GetBufferOffsetXY(x_lr, y_lr + 1);
 
             weight = (LineAA.SUBPIXEL_SCALE - x) * y;
-            r += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderR];
-            g += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderG];
-            b += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderB];
-            a += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderA];
+            r += weight * ptr[sourceOffset + CO.R];
+            g += weight * ptr[sourceOffset + CO.G];
+            b += weight * ptr[sourceOffset + CO.B];
+            a += weight * ptr[sourceOffset + CO.A];
 
             sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
 
             weight = x * y;
-            r += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderR];
-            g += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderG];
-            b += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderB];
-            a += weight * ptr[sourceOffset + ImageReaderWriterBase.OrderA];
+            r += weight * ptr[sourceOffset + CO.R];
+            g += weight * ptr[sourceOffset + CO.G];
+            b += weight * ptr[sourceOffset + CO.B];
+            a += weight * ptr[sourceOffset + CO.A];
 
             destBuffer[destBufferOffset].red = (byte)(r >> LineAA.SUBPIXEL_SHIFT * 2);
             destBuffer[destBufferOffset].green = (byte)(g >> LineAA.SUBPIXEL_SHIFT * 2);
             destBuffer[destBufferOffset].blue = (byte)(b >> LineAA.SUBPIXEL_SHIFT * 2);
             destBuffer[destBufferOffset].alpha = (byte)(a >> LineAA.SUBPIXEL_SHIFT * 2);
         }
-    } 
+    }
 }

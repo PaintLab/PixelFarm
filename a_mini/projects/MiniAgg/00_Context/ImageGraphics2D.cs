@@ -1,4 +1,4 @@
-//2014 BSD,WinterDev  
+//2014 MIT,WinterDev  
 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
@@ -28,7 +28,7 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg
 {
-    class ImageGraphics2D : Graphics2D
+    partial class ImageGraphics2D : Graphics2D
     {
         ImageReaderWriterBase destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
@@ -43,6 +43,8 @@ namespace PixelFarm.Agg
         int destWidth;
         int destHeight;
         RectInt clipBox;
+
+        ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
 
         public ImageGraphics2D(ActualImage destImage)
         {
@@ -92,381 +94,28 @@ namespace PixelFarm.Agg
         {
             return ScanlineRasterizer.GetVectorClipBox();
         }
-        //--------------------------
-        public override void Render(ActualImage actualImage, int x, int y)
+        public ImageInterpolationQuality ImageInterpolationQuality
         {
-
+            get { return this.ImageInterpolationQuality; }
+            set { this.imgInterpolationQuality = value; }
         }
-        public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
+        PathStorage GetFreePathStorage()
         {
-            //reset rasterizer before render each vertextSnap
-
-            //-----------------------------
-            sclineRas.Reset();
-            Affine transform = this.CurrentTransformMatrix;
-            if (!transform.IsIdentity())
+            if (drawImageRectPath != null)
             {
-                sclineRas.AddPath(transform.Tranform(vertextSnap));
+                PathStorage tmp = this.drawImageRectPath;
+                this.drawImageRectPath = null;
+                return tmp;
             }
             else
             {
-                sclineRas.AddPath(vertextSnap);
+                return new PathStorage();
             }
-            sclineRasToBmp.RenderScanlineSolidAA(destImageReaderWriter, sclineRas, sclinePack8, color);
-            unchecked { destImageChanged++; };
-            //-----------------------------
         }
-        void DrawImageGetDestBounds(IImageReaderWriter sourceImage,
-            double destX, double destY,
-            double hotspotOffsetX, double hotSpotOffsetY,
-            double scaleX, double scaleY,
-            double angleRad, out Affine destRectTransform)
+        void ReleasePathStorage(PathStorage ps)
         {
-
-            AffinePlan[] plan = new AffinePlan[4];
-            int i = 0;
-            if (hotspotOffsetX != 0.0f || hotSpotOffsetY != 0.0f)
-            {
-                plan[i] = AffinePlan.Translate(-hotspotOffsetX, -hotSpotOffsetY);
-                i++;
-            }
-
-            if (scaleX != 1 || scaleY != 1)
-            {
-
-                plan[i] = AffinePlan.Scale(scaleX, scaleY);
-                i++;
-            }
-
-            if (angleRad != 0)
-            {
-
-                plan[i] = AffinePlan.Rotate(angleRad);
-                i++;
-            }
-
-            if (destX != 0 || destY != 0)
-            {
-                plan[i] = AffinePlan.Translate(destX, destY);
-                i++;
-            }
-
-            destRectTransform = Affine.NewMatix(plan);
-
-            int srcBuffWidth = sourceImage.Width;
-            int srcBuffHeight = sourceImage.Height;
-
-            drawImageRectPath.Clear();
-
-            drawImageRectPath.MoveTo(0, 0);
-            drawImageRectPath.LineTo(srcBuffWidth, 0);
-            drawImageRectPath.LineTo(srcBuffWidth, srcBuffHeight);
-            drawImageRectPath.LineTo(0, srcBuffHeight);
-            drawImageRectPath.ClosePolygon();
-        }
-
-        void DrawImage(IImageReaderWriter sourceImage, ISpanGenerator spanImageFilter, Affine destRectTransform)
-        {  
-            VertexStoreSnap sp1 = destRectTransform.TransformToVertexSnap(drawImageRectPath);
-            ScanlineRasterizer.AddPath(sp1);
-            sclineRasToBmp.GenerateAndRender(
-                new ChildImage(destImageReaderWriter, destImageReaderWriter.GetRecieveBlender()),
-                ScanlineRasterizer,
-                sclinePack8,
-                spanImageFilter);
-
-        }
-
-        public override void Render(IImageReaderWriter source,
-            double destX, double destY,
-            double angleRadians,
-            double inScaleX, double inScaleY)
-        {
-            {   // exit early if the dest and source bounds don't touch.
-                // TODO: <BUG> make this do rotation and scalling
-                RectInt sourceBounds = source.GetBounds();
-                RectInt destBounds = this.destImageReaderWriter.GetBounds();
-                sourceBounds.Offset((int)destX, (int)destY);
-
-                if (!RectInt.DoIntersect(sourceBounds, destBounds))
-                {
-                    if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
-                    {
-                        throw new NotImplementedException();
-                    }
-                    return;
-                }
-            }
-
-            double scaleX = inScaleX;
-            double scaleY = inScaleY;
-
-            Affine graphicsTransform = this.CurrentTransformMatrix;
-            if (!graphicsTransform.IsIdentity())
-            {
-                if (scaleX != 1 || scaleY != 1 || angleRadians != 0)
-                {
-                    throw new NotImplementedException();
-                }
-                graphicsTransform.Transform(ref destX, ref destY);
-            }
-
-#if false // this is an optomization that eliminates the drawing of images that have their alpha set to all 0 (happens with generated images like explosions).
-	        MaxAlphaFrameProperty maxAlphaFrameProperty = MaxAlphaFrameProperty::GetMaxAlphaFrameProperty(source);
-
-	        if((maxAlphaFrameProperty.GetMaxAlpha() * color.A_Byte) / 256 <= ALPHA_CHANNEL_BITS_DIVISOR)
-	        {
-		        m_OutFinalBlitBounds.SetRect(0,0,0,0);
-	        }
-#endif
-            bool isScale = (scaleX != 1 || scaleY != 1);
-
-            bool isRotated = true;
-            if (Math.Abs(angleRadians) < (0.1 * MathHelper.Tau / 360))
-            {
-                isRotated = false;
-                angleRadians = 0;
-            }
-
-            //bool IsMipped = false;
-            //double ox, oy;
-            //source.GetOriginOffset(out ox, out oy);
-
-            bool canUseMipMaps = isScale;
-            if (scaleX > 0.5 || scaleY > 0.5)
-            {
-                canUseMipMaps = false;
-            }
-
-            bool renderRequriesSourceSampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
-
-            // this is the fast drawing path
-            if (renderRequriesSourceSampling)
-            {
-#if false // if the scalling is small enough the results can be improved by using mip maps
-	        if(CanUseMipMaps)
-	        {
-		        CMipMapFrameProperty* pMipMapFrameProperty = CMipMapFrameProperty::GetMipMapFrameProperty(source);
-		        double OldScaleX = scaleX;
-		        double OldScaleY = scaleY;
-		        const CFrameInterface* pMippedFrame = pMipMapFrameProperty.GetMipMapFrame(ref scaleX, ref scaleY);
-		        if(pMippedFrame != source)
-		        {
-			        IsMipped = true;
-			        source = pMippedFrame;
-			        sourceOriginOffsetX *= (OldScaleX / scaleX);
-			        sourceOriginOffsetY *= (OldScaleY / scaleY);
-		        }
-
-			    HotspotOffsetX *= (inScaleX / scaleX);
-			    HotspotOffsetY *= (inScaleY / scaleY);
-	        }
-#endif
-                Affine destRectTransform;
-                DrawImageGetDestBounds(source, destX, destY, ox, oy, scaleX, scaleY, angleRadians, out destRectTransform);
-
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-
-
-                ImgSpanGen spanImageFilter;
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
-
-                spanImageFilter = new ImgSpanGenRGBA_BilinearClip(sourceAccessor, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
-
-                DrawImage(source, spanImageFilter, destRectTransform);
-#if false // this is some debug you can enable to visualize the dest bounding box
-		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
-		        LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
-		        LineFloat(BoundingRect.right, BoundingRect.bottom, BoundingRect.left, BoundingRect.bottom, WHITE);
-		        LineFloat(BoundingRect.left, BoundingRect.bottom, BoundingRect.left, BoundingRect.top, WHITE);
-#endif
-            }
-            else // TODO: this can be even faster if we do not use an intermediat buffer
-            {
-                Affine destRectTransform;
-                DrawImageGetDestBounds(source, destX, destY, ox, oy, scaleX, scaleY, angleRadians, out destRectTransform);
-
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-
-
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
-
-                ImgSpanGen spanImageFilter = null;
-                switch (source.BitDepth)
-                {
-                    case 32:
-                        spanImageFilter = new ImgSpanGenRGBA_NN_StepXBy1(sourceAccessor, interpolator);
-                        break;
-
-                    case 24:
-                        spanImageFilter = new ImgSpanGenRGB_NNStepXby1(sourceAccessor, interpolator);
-                        break;
-
-                    case 8:
-                        spanImageFilter = new ImgSpanGenGray_NNStepXby1(sourceAccessor, interpolator);
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator); 
-                DrawImage(source, spanImageFilter, destRectTransform);
-
-                unchecked { destImageChanged++; };
-            }
-        }
-        int destImageChanged = 0;
-
-        public override void Render(IImageReaderWriter source, double destX, double destY)
-        {
-            int inScaleX = 1;
-            int inScaleY = 1;
-            int angleRadians = 0;
-
-            {   // exit early if the dest and source bounds don't touch.
-                // TODO: <BUG> make this do rotation and scalling
-                RectInt sourceBounds = source.GetBounds();
-                RectInt destBounds = this.destImageReaderWriter.GetBounds();
-                sourceBounds.Offset((int)destX, (int)destY);
-
-                if (!RectInt.DoIntersect(sourceBounds, destBounds))
-                {
-                    //if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
-                    //{
-                    //    throw new NotImplementedException();
-                    //}
-                    return;
-                }
-            }
-
-            double scaleX = inScaleX;
-            double scaleY = inScaleY;
-
-            Affine graphicsTransform = this.CurrentTransformMatrix;
-            if (!graphicsTransform.IsIdentity())
-            {
-                if (scaleX != 1 || scaleY != 1 || angleRadians != 0)
-                {
-                    throw new NotImplementedException();
-                }
-                graphicsTransform.Transform(ref destX, ref destY);
-            }
-
-
-#if false // this is an optomization that eliminates the drawing of images that have their alpha set to all 0 (happens with generated images like explosions).
-	        MaxAlphaFrameProperty maxAlphaFrameProperty = MaxAlphaFrameProperty::GetMaxAlphaFrameProperty(source);
-
-	        if((maxAlphaFrameProperty.GetMaxAlpha() * color.A_Byte) / 256 <= ALPHA_CHANNEL_BITS_DIVISOR)
-	        {
-		        m_OutFinalBlitBounds.SetRect(0,0,0,0);
-	        }
-#endif
-            bool isScale = (scaleX != 1 || scaleY != 1);
-
-            bool isRotated = true;
-            if (Math.Abs(angleRadians) < (0.1 * MathHelper.Tau / 360))
-            {
-                isRotated = false;
-                angleRadians = 0;
-            }
-
-            //bool IsMipped = false;
-            //double ox, oy;
-            //source.GetOriginOffset(out ox, out oy);
-
-            bool canUseMipMaps = isScale;
-            if (scaleX > 0.5 || scaleY > 0.5)
-            {
-                canUseMipMaps = false;
-            }
-
-            bool renderRequriesSourceSampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
-
-            // this is the fast drawing path
-            if (renderRequriesSourceSampling)
-            {
-
-#if false // if the scalling is small enough the results can be improved by using mip maps
-	        if(CanUseMipMaps)
-	        {
-		        CMipMapFrameProperty* pMipMapFrameProperty = CMipMapFrameProperty::GetMipMapFrameProperty(source);
-		        double OldScaleX = scaleX;
-		        double OldScaleY = scaleY;
-		        const CFrameInterface* pMippedFrame = pMipMapFrameProperty.GetMipMapFrame(ref scaleX, ref scaleY);
-		        if(pMippedFrame != source)
-		        {
-			        IsMipped = true;
-			        source = pMippedFrame;
-			        sourceOriginOffsetX *= (OldScaleX / scaleX);
-			        sourceOriginOffsetY *= (OldScaleY / scaleY);
-		        }
-
-			    HotspotOffsetX *= (inScaleX / scaleX);
-			    HotspotOffsetY *= (inScaleY / scaleY);
-	        }
-#endif
-                Affine destRectTransform;
-                DrawImageGetDestBounds(source, destX, destY,
-                    ox, oy,
-                    scaleX, scaleY, angleRadians,
-                    out destRectTransform);
-
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-
-                var spanImageFilter = new ImgSpanGenRGBA_BilinearClip(
-                    new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA()),
-                    ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(),
-                    new SpanInterpolatorLinear(sourceRectTransform));
-
-                DrawImage(source, spanImageFilter, destRectTransform);
-#if false // this is some debug you can enable to visualize the dest bounding box
-		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
-		        LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
-		        LineFloat(BoundingRect.right, BoundingRect.bottom, BoundingRect.left, BoundingRect.bottom, WHITE);
-		        LineFloat(BoundingRect.left, BoundingRect.bottom, BoundingRect.left, BoundingRect.top, WHITE);
-#endif
-            }
-            else // TODO: this can be even faster if we do not use an intermediat buffer
-            {
-                Affine destRectTransform;
-                DrawImageGetDestBounds(source, destX, destY,
-                    ox, oy,
-                    scaleX, scaleY, angleRadians, out destRectTransform);
-
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
-                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-
-
-                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                ImageBufferAccessorClip sourceAccessor = new ImageBufferAccessorClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA());
-
-                ImgSpanGen spanImageFilter = null;
-                switch (source.BitDepth)
-                {
-                    case 32:
-                        spanImageFilter = new ImgSpanGenRGBA_NN_StepXBy1(sourceAccessor, interpolator);
-                        break;
-
-                    case 24:
-                        spanImageFilter = new ImgSpanGenRGB_NNStepXby1(sourceAccessor, interpolator);
-                        break;
-
-                    case 8:
-                        spanImageFilter = new ImgSpanGenGray_NNStepXby1(sourceAccessor, interpolator);
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-                //spanImageFilter = new span_image_filter_rgba_nn(sourceAccessor, interpolator); 
-                DrawImage(source, spanImageFilter, destRectTransform);
-                unchecked { destImageChanged++; };
-            }
+            this.drawImageRectPath = ps;
+            ps.Clear();
         }
         public override void Clear(ColorRGBA color)
         {
@@ -576,22 +225,7 @@ namespace PixelFarm.Agg
                                     }
                                 }
                             }
-
-                            //int bytesBetweenPixels = 4;
-                            //int clipRectLeft = clippingRectInt.Left;
-                            //for (int y = clippingRectInt.Bottom; y < clippingRectInt.Top; ++y)
-                            //{
-                            //    int bufferOffset = destImage.GetBufferOffsetXY(clipRectLeft, y);
-                            //    for (int x = 0; x < clippingRectInt.Width; ++x)
-                            //    {
-                            //        //b g, r, a
-                            //        buffer[bufferOffset + 0] = color.blue;
-                            //        buffer[bufferOffset + 1] = color.green;
-                            //        buffer[bufferOffset + 2] = color.red;
-                            //        buffer[bufferOffset + 3] = color.alpha;
-                            //        bufferOffset += bytesBetweenPixels;
-                            //    }
-                            //}
+                             
                         }
                     }
                     break;
@@ -599,8 +233,25 @@ namespace PixelFarm.Agg
                 default:
                     throw new NotImplementedException();
             }
+        }
 
-
+        public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
+        {
+            //reset rasterizer before render each vertextSnap 
+            //-----------------------------
+            sclineRas.Reset();
+            Affine transform = this.CurrentTransformMatrix;
+            if (!transform.IsIdentity())
+            {
+                sclineRas.AddPath(transform.TransformToVxs(vertextSnap));
+            }
+            else
+            {   
+                sclineRas.AddPath(vertextSnap);
+            }
+            sclineRasToBmp.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
+            unchecked { destImageChanged++; };
+            //-----------------------------
         }
     }
 }

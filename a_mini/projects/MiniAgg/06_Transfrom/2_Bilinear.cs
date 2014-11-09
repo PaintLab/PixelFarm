@@ -22,7 +22,7 @@ using System;
 namespace PixelFarm.Agg.Transform
 {   
     //==========================================================trans_bilinear
-    public sealed partial class Bilinear : ITransform
+    public sealed partial class Bilinear : ICoordTransformer
     {
         //readonly double[,] m_mtx = new double[4, 2];//row x column
         //4 row, 2 columns

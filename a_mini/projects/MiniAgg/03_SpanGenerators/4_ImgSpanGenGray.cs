@@ -11,7 +11,7 @@
 // is granted provided this copyright notice appears in all copies. 
 // This software is provided "as is" without express or implied
 // warranty, and with no claim as to its suitability for any purpose.
-#define USE_UNSAFE_CODE
+
 
 using System;
 
@@ -28,34 +28,36 @@ namespace PixelFarm.Agg.Image
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public ImgSpanGenGray_NNStepXby1(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
-            : base(sourceAccessor, spanInterpolator, null)
+        ImageReaderWriterBase srcRW;
+        public ImgSpanGenGray_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+            : base(spanInterpolator)
         {
-        }
-
-        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
-        {
-            ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
-            int bytesBetweenPixelsInclusive = SourceRenderingBuffer.BytesBetweenPixelsInclusive;
-            if (SourceRenderingBuffer.BitDepth != 8)
+            srcRW = (ImageReaderWriterBase)src;
+            if (srcRW.BitDepth != 8)
             {
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
+        }
+        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
+        {
+
+            int bytesBetweenPixelsInclusive = srcRW.BytesBetweenPixelsInclusive;
+
             ISpanInterpolator spanInterpolator = Interpolator;
             spanInterpolator.Begin(x + dx, y + dy, len);
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
-            int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-            int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
+            int x_lr = x_hr >> img_subpix_const.SHIFT;
+            int y_lr = y_hr >> img_subpix_const.SHIFT;
             int bufferIndex;
-            bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+            bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
 
-            byte[] fg_ptr = SourceRenderingBuffer.GetBuffer();
-#if USE_UNSAFE_CODE
+            byte[] srcBuff = srcRW.GetBuffer();
+
             unsafe
             {
-                fixed (byte* pSource = fg_ptr)
+                fixed (byte* pSource = srcBuff)
                 {
                     do
                     {
@@ -63,24 +65,15 @@ namespace PixelFarm.Agg.Image
                         outputColors[startIndex].green = pSource[bufferIndex];
                         outputColors[startIndex].blue = pSource[bufferIndex];
                         outputColors[startIndex].alpha = 255;
+
                         startIndex++;
                         bufferIndex += bytesBetweenPixelsInclusive;
+
                     } while (--len != 0);
                 }
             }
-#else
-            do
-            {
-                throw new Exception("this code is for 32 bit");
-                color.m_B = fg_ptr[bufferIndex++];
-                color.m_G = fg_ptr[bufferIndex++];
-                color.m_R = fg_ptr[bufferIndex++];
-                color.m_A = fg_ptr[bufferIndex++];
-                span[spanIndex++] = color;
-            } while (--len != 0);
-#endif
         }
     }
 
-    
+
 }

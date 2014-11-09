@@ -172,13 +172,13 @@ namespace PixelFarm.Agg.Transform
 
 
         //----------------------------------------------------------------
-        public void Resync(double xe, double ye, int len)
+        public void ReSync(double xe, double ye, int len)
         {
             // Assume x1,y1 are equal to the ones at the previous end point 
-            int x1 = m_coord_x.y();
-            int y1 = m_coord_y.y();
-            int sx1 = m_scale_x.y();
-            int sy1 = m_scale_y.y();
+            int x1 = m_coord_x.Y;
+            int y1 = m_coord_y.Y;
+            int sx1 = m_scale_x.Y;
+            int sy1 = m_scale_y.Y;
 
             // Calculate transformed coordinates at x2,y2 
             double xt = xe;
@@ -213,16 +213,12 @@ namespace PixelFarm.Agg.Transform
             m_scale_x = new LineInterpolatorDDA2(sx1, sx2, (int)len);
             m_scale_y = new LineInterpolatorDDA2(sy1, sy2, (int)len);
         }
-
-        public Transform.ITransform GetTransformer()
+        public Transform.ICoordTransformer Transformer
         {
-            throw new System.NotImplementedException();
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
         }
-
-        public void SetTransformer(Transform.ITransform trans)
-        {
-            throw new System.NotImplementedException();
-        }
+       
 
         //----------------------------------------------------------------
         public void Next()
@@ -236,15 +232,15 @@ namespace PixelFarm.Agg.Transform
         //----------------------------------------------------------------
         public void GetCoord(out int x, out int y)
         {
-            x = m_coord_x.y();
-            y = m_coord_y.y();
+            x = m_coord_x.Y;
+            y = m_coord_y.Y;
         }
 
         //----------------------------------------------------------------
         public void GetLocalScale(out int x, out int y)
         {
-            x = m_scale_x.y();
-            y = m_scale_y.y();
+            x = m_scale_x.Y;
+            y = m_scale_y.Y;
         }
 
         //----------------------------------------------------------------

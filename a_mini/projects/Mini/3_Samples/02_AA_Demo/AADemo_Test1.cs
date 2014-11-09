@@ -12,7 +12,7 @@ using PixelFarm.VectorMath;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest1
 {
-    
+
     class CustomScanlineRasToBmp_EnlargedV1 : CustomScanlineRasToDestBitmapRenderer
     {
         double m_size;
@@ -22,12 +22,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
 
         public CustomScanlineRasToBmp_EnlargedV1(double size, ActualImage destImage)
         {
-            this.UseCustomSolidSingleLineMethod = true;
+            this.UseCustomRenderSingleScanLine = true;
             m_size = size;
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
         }
-        protected override void CustomRenderSolidSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -103,7 +103,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-           
+
             IPixelBlender NormalBlender = new PixelBlenderBGRA();
             IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
@@ -125,11 +125,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
             rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
-            ren_en.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //----------------------------------------
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+            sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
 
             //----------------------------------------
@@ -146,7 +146,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             rasterizer.AddPath(StrokeHelp.MakeVxs(ps.Vxs, 2));
             //----------------------------------------
 
-            sclineRasToBmp.RenderScanlineSolidAA(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+            sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }
         public override void MouseDown(int mx, int my, bool isRightButton)

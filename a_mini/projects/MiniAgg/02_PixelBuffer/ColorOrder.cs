@@ -1,4 +1,4 @@
-//2014 BSD,WinterDev   
+﻿//2014 BSD,WinterDev   
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -17,11 +17,33 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-namespace PixelFarm.Agg.Transform
-{
+using System;
+using System.Runtime;
 
-    public interface ITransform
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Image;
+
+namespace PixelFarm.Agg
+{
+    public static class CO
     {
-        void Transform(ref double x, ref double y);
+        /// <summary>
+        /// order b
+        /// </summary>
+        public const int B = 0;
+        /// <summary>
+        /// order g
+        /// </summary>
+        public const int G = 1;
+        /// <summary>
+        /// order b
+        /// </summary>
+        public const int R = 2;
+        /// <summary>
+        /// order a
+        /// </summary>
+        public const int A = 3;
     }
 }

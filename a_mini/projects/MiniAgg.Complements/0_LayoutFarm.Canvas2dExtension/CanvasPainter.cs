@@ -55,6 +55,7 @@ namespace PixelFarm.Agg
         PathStorage lines = new PathStorage();
         RoundedRect roundRect = null;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+        MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
         //-------------
         public CanvasPainter(Graphics2D graphic2d)
@@ -225,7 +226,7 @@ namespace PixelFarm.Agg
             }
             this.Draw(roundRect.MakeVxs());
         }
-       
+
         public void DrawString(
            string text,
            double x,
@@ -233,11 +234,11 @@ namespace PixelFarm.Agg
         {
 
             //1. parse text              
-            stringPrinter.DrawFromHintedCache = false; 
+            stringPrinter.DrawFromHintedCache = false;
             stringPrinter.LoadText(text);
             var vxs = stringPrinter.MakeVxs();
             vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
-            this.gx.Render(vxs, this.fillColor); 
+            this.gx.Render(vxs, this.fillColor);
         }
 
         /// <summary>
@@ -248,12 +249,12 @@ namespace PixelFarm.Agg
         public void Fill(VertexStoreSnap snap)
         {
             sclineRas.AddPath(snap);
-            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
         public void Fill(VertexStore vxs)
         {
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderScanlineSolidAA(this.gx.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
 
         public ColorRGBA FillColor
@@ -278,10 +279,20 @@ namespace PixelFarm.Agg
         }
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
-            this.sclineRas.AddPath(vxs); 
-            sclineRasToBmp.GenerateAndRender(this.gx.DestImage, sclineRas, scline, spanGen); 
-        }     
-     
+
+            this.sclineRas.AddPath(vxs);
+            sclineRasToBmp.RenderWithSpan(this.gx.DestImage, sclineRas, scline, spanGen);
+        }
+        public void DrawImage(ActualImage actualImage, double x, double y)
+        {
+            this.sharedImageWriterReader.ReloadImage(actualImage);
+            this.gx.Render(this.sharedImageWriterReader, x, y);
+        }
+        public void DrawImage(ActualImage actualImage, params Transform.AffinePlan[] affinePlans)
+        {
+            this.sharedImageWriterReader.ReloadImage(actualImage);
+            this.gx.Render(sharedImageWriterReader, affinePlans);
+        }
 
         //----------------------
         /// <summary>
@@ -301,11 +312,7 @@ namespace PixelFarm.Agg
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoRecursiveBlur(img, r);
         }
-        //----------------
-
-
-
-
+        //---------------- 
     }
 
 }

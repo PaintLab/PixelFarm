@@ -17,14 +17,11 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using System;
-
-namespace PixelFarm.Agg
+namespace PixelFarm.Agg.Transform
 {
-    public interface IGammaFunction
-    {
-        float GetGamma(float x);
-    }
 
-    
+    public interface ICoordTransformer
+    {
+        void Transform(ref double x, ref double y);
+    }
 }

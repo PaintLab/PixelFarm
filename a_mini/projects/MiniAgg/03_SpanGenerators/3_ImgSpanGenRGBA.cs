@@ -46,34 +46,35 @@ namespace PixelFarm.Agg.Image
         const int BASE_SCALE = (int)(1 << BASE_SHITF);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public ImgSpanGenRGBA_NN_StepXBy1(IImageBufferAccessor sourceAccessor, 
-             ISpanInterpolator spanInterpolator)
-            : base(sourceAccessor, spanInterpolator, null)
+        ImageReaderWriterBase srcRW;
+        public ImgSpanGenRGBA_NN_StepXBy1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+            : base(spanInterpolator)
         {
+            srcRW = (ImageReaderWriterBase)src;
+            if (srcRW.BitDepth != 32)
+            {
+                throw new NotSupportedException("The source is expected to be 32 bit.");
+            }
         }
 
         public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
-            ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
-            if (SourceRenderingBuffer.BitDepth != 32)
-            {
-                throw new NotSupportedException("The source is expected to be 32 bit.");
-            }
+
             ISpanInterpolator spanInterpolator = Interpolator;
             spanInterpolator.Begin(x + dx, y + dy, len);
             int x_hr;
             int y_hr;
             spanInterpolator.GetCoord(out x_hr, out y_hr);
-            int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-            int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
-            int bufferIndex;
-            bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
+            int x_lr = x_hr >> img_subpix_const.SHIFT;
+            int y_lr = y_hr >> img_subpix_const.SHIFT;
 
-            byte[] fg_ptr = SourceRenderingBuffer.GetBuffer();
-#if USE_UNSAFE_CODE
+            int bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+
+            byte[] srcBuffer = srcRW.GetBuffer();
+
             unsafe
             {
-                fixed (byte* pSource = fg_ptr)
+                fixed (byte* pSource = srcBuffer)
                 {
                     do
                     {
@@ -82,280 +83,58 @@ namespace PixelFarm.Agg.Image
                     } while (--len != 0);
                 }
             }
-#else
-            RGBA_Bytes color = new RGBA_Bytes();
-            do
-            {
-                color.blue = fg_ptr[bufferIndex++];
-                color.green = fg_ptr[bufferIndex++];
-                color.red = fg_ptr[bufferIndex++];
-                color.alpha = fg_ptr[bufferIndex++];
-                span[spanIndex++] = color;
-            } while (--len != 0);
-#endif
+
         }
     }
 
-
-    //==============================================span_image_filter_rgba_nn
-    class ImgSpanGenRGBA_NN : ImgSpanGen
-    {
-        const int BASE_SHIFT = 8;
-        const int BASE_SCALE = (int)(1 << BASE_SHIFT);
-        const int BASE_MASK = BASE_SCALE - 1;
-
-        public ImgSpanGenRGBA_NN(IImageBufferAccessor sourceAccessor, ISpanInterpolator spanInterpolator)
-            : base(sourceAccessor, spanInterpolator, null)
-        {
-        }
-
-        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
-        {
-            ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)ImgBuffAccessor.SourceImage;
-            if (SourceRenderingBuffer.BitDepth != 32)
-            {
-                throw new NotSupportedException("The source is expected to be 32 bit.");
-            }
-            ISpanInterpolator spanInterpolator = Interpolator;
-            spanInterpolator.Begin(x + dx, y + dy, len);
-            byte[] fg_ptr = SourceRenderingBuffer.GetBuffer();
-            do
-            {
-                int x_hr;
-                int y_hr;
-                spanInterpolator.GetCoord(out x_hr, out y_hr);
-                int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-                int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
-                int bufferIndex;
-                bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
-                ColorRGBA color;
-                color.blue = fg_ptr[bufferIndex++];
-                color.green = fg_ptr[bufferIndex++];
-                color.red = fg_ptr[bufferIndex++];
-                color.alpha = fg_ptr[bufferIndex++];
-                outputColors[startIndex] = color;
-                startIndex++;
-                spanInterpolator.Next();
-            } while (--len != 0);
-        }
-    }
-
-    class ImgSpanGenRGBA_Bilinear : ImgSpanGen
-    {
-        const int base_shift = 8;
-        const int base_scale = (int)(1 << base_shift);
-        const int base_mask = base_scale - 1;
-
-        public ImgSpanGenRGBA_Bilinear(IImageBufferAccessor src, ISpanInterpolator inter)
-            : base(src, inter, null)
-        {
-        }
-
-#if false
-            public void generate(out RGBA_Bytes destPixel, int x, int y)
-            {
-                base.interpolator.begin(x + base.filter_dx_dbl, y + base.filter_dy_dbl, 1);
-
-                int* fg = stackalloc int[4];
-
-                byte* fg_ptr;
-
-                IImage imageSource = base.source().DestImage;
-                int maxx = (int)imageSource.Width() - 1;
-                int maxy = (int)imageSource.Height() - 1;
-                ISpanInterpolator spanInterpolator = base.interpolator;
-
-                unchecked
-                {
-                    int x_hr;
-                    int y_hr;
-
-                    spanInterpolator.coordinates(out x_hr, out y_hr);
-
-                    x_hr -= base.filter_dx_int;
-                    y_hr -= base.filter_dy_int;
-
-                    int x_lr = x_hr >> (int)img_subpix_const.image_subpixel_shift;
-                    int y_lr = y_hr >> (int)img_subpix_const.image_subpixel_shift;
-
-                    int weight;
-
-                    fg[0] = fg[1] = fg[2] = fg[3] = (int)img_subpix_const.image_subpixel_scale * (int)img_subpix_const.image_subpixel_scale / 2;
-
-                    x_hr &= (int)img_subpix_const.image_subpixel_mask;
-                    y_hr &= (int)img_subpix_const.image_subpixel_mask;
-
-                    fg_ptr = imageSource.GetPixelPointerY(y_lr) + (x_lr * 4);
-
-                    weight = (int)(((int)img_subpix_const.image_subpixel_scale - x_hr) *
-                             ((int)img_subpix_const.image_subpixel_scale - y_hr));
-                    fg[0] += weight * fg_ptr[0];
-                    fg[1] += weight * fg_ptr[1];
-                    fg[2] += weight * fg_ptr[2];
-                    fg[3] += weight * fg_ptr[3];
-
-                    weight = (int)(x_hr * ((int)img_subpix_const.image_subpixel_scale - y_hr));
-                    fg[0] += weight * fg_ptr[4];
-                    fg[1] += weight * fg_ptr[5];
-                    fg[2] += weight * fg_ptr[6];
-                    fg[3] += weight * fg_ptr[7];
-
-                    ++y_lr;
-                    fg_ptr = imageSource.GetPixelPointerY(y_lr) + (x_lr * 4);
-
-                    weight = (int)(((int)img_subpix_const.image_subpixel_scale - x_hr) * y_hr);
-                    fg[0] += weight * fg_ptr[0];
-                    fg[1] += weight * fg_ptr[1];
-                    fg[2] += weight * fg_ptr[2];
-                    fg[3] += weight * fg_ptr[3];
-
-                    weight = (int)(x_hr * y_hr);
-                    fg[0] += weight * fg_ptr[4];
-                    fg[1] += weight * fg_ptr[5];
-                    fg[2] += weight * fg_ptr[6];
-                    fg[3] += weight * fg_ptr[7];
-
-                    fg[0] >>= (int)img_subpix_const.image_subpixel_shift * 2;
-                    fg[1] >>= (int)img_subpix_const.image_subpixel_shift * 2;
-                    fg[2] >>= (int)img_subpix_const.image_subpixel_shift * 2;
-                    fg[3] >>= (int)img_subpix_const.image_subpixel_shift * 2;
-
-                    destPixel.m_R = (byte)fg[OrderR];
-                    destPixel.m_G = (byte)fg[OrderG];
-                    destPixel.m_B = (byte)fg[ImageBuffer.OrderB];
-                    destPixel.m_A = (byte)fg[OrderA];
-                }
-            }
-#endif
-
-        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
-        {
-            base.Interpolator.Begin(x + base.dx, y + base.dy, len);
-
-            ImageReaderWriterBase srcImg = (ImageReaderWriterBase)base.ImgBuffAccessor.SourceImage;
-            ISpanInterpolator spanInterpolator = base.Interpolator;
-            int bufferIndex = 0;
-            byte[] fg_ptr = srcImg.GetBuffer();
-
-            unchecked
-            {
-                do
-                {
-                    int tempR;
-                    int tempG;
-                    int tempB;
-                    int tempA;
-
-                    int x_hr;
-                    int y_hr;
-
-                    spanInterpolator.GetCoord(out x_hr, out y_hr);
-
-                    x_hr -= base.dxInt;
-                    y_hr -= base.dyInt;
-
-                    int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-                    int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
-                    int weight;
-
-                    tempR =
-                    tempG =
-                    tempB =
-                    tempA = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
-
-                    x_hr &= (int)img_subpix_const.MASK;
-                    y_hr &= (int)img_subpix_const.MASK;
-
-                    bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
-
-                    weight = (((int)img_subpix_const.SCALE - x_hr) *
-                             ((int)img_subpix_const.SCALE - y_hr));
-                    tempR += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
-                    bufferIndex += 4;
-
-                    weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
-                    tempR += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
-
-                    y_lr++;
-                    bufferIndex = srcImg.GetBufferOffsetXY(x_lr, y_lr);
-
-                    weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
-                    tempR += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
-                    bufferIndex += 4;
-
-                    weight = (x_hr * y_hr);
-                    tempR += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                    tempG += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                    tempB += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                    tempA += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
-
-                    tempR >>= (int)img_subpix_const.SHIFT * 2;
-                    tempG >>= (int)img_subpix_const.SHIFT * 2;
-                    tempB >>= (int)img_subpix_const.SHIFT * 2;
-                    tempA >>= (int)img_subpix_const.SHIFT * 2;
-
-                    ColorRGBA color;
-                    color.red = (byte)tempR;
-                    color.green = (byte)tempG;
-                    color.blue = (byte)tempB;
-                    color.alpha = (byte)255;// tempA;
-                    outputColors[startIndex] = color;
-                    startIndex++;
-                    spanInterpolator.Next();
-
-                } while (--len != 0);
-            }
-        }
-    }
 
 
     public class ImgSpanGenRGBA_BilinearClip : ImgSpanGen
     {
-        ColorRGBA m_OutsideSourceColor;
+
 
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
 
-        public ImgSpanGenRGBA_BilinearClip(IImageBufferAccessor src,
-            ColorRGBA back_color, ISpanInterpolator inter)
-            : base(src, inter, null)
+        ImageReaderWriterBase srcRW;
+        ColorRGBA m_bgcolor;
+        int bytesBetweenPixelInclusive;
+        public ImgSpanGenRGBA_BilinearClip(IImageReaderWriter src,
+            ColorRGBA back_color,
+            ISpanInterpolator inter)
+            : base(inter)
         {
-            m_OutsideSourceColor = back_color;
-        }
+            m_bgcolor = back_color;
+            srcRW = (ImageReaderWriterBase)src;
+            bytesBetweenPixelInclusive = srcRW.BytesBetweenPixelsInclusive;
 
-        public ColorRGBA background_color() { return m_OutsideSourceColor; }
-        public void background_color(ColorRGBA v) { m_OutsideSourceColor = v; }
+        }
+        public ColorRGBA BackgroundColor
+        {
+            get { return this.m_bgcolor; }
+            set { this.m_bgcolor = value; }
+        }
 
         public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
         {
-            ImageReaderWriterBase SourceRenderingBuffer = (ImageReaderWriterBase)base.ImgBuffAccessor.SourceImage;
+            ISpanInterpolator spanInterpolator = base.Interpolator;
             int bufferIndex;
-            byte[] fg_ptr;
-
-            if (base.m_interpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
-                && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)base.m_interpolator).GetTransformer().GetType() == typeof(PixelFarm.Agg.Transform.Affine)
-            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)base.m_interpolator).GetTransformer()).IsIdentity())
+            byte[] srcBuffer = srcRW.GetBuffer();
+            if (spanInterpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
+                && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.Agg.Transform.Affine)
+            && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity())
             {
-                fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x, y, out bufferIndex);
+                bufferIndex = srcRW.GetBufferOffsetXY(x, y);
                 //unsafe
                 {
 #if true
                     do
                     {
-                        outputColors[startIndex].blue = (byte)fg_ptr[bufferIndex++];
-                        outputColors[startIndex].green = (byte)fg_ptr[bufferIndex++];
-                        outputColors[startIndex].red = (byte)fg_ptr[bufferIndex++];
-                        outputColors[startIndex].alpha = (byte)fg_ptr[bufferIndex++];
+                        outputColors[startIndex].blue = (byte)srcBuffer[bufferIndex++];
+                        outputColors[startIndex].green = (byte)srcBuffer[bufferIndex++];
+                        outputColors[startIndex].red = (byte)srcBuffer[bufferIndex++];
+                        outputColors[startIndex].alpha = (byte)srcBuffer[bufferIndex++];
                         ++startIndex;
                     } while (--len != 0);
 #else
@@ -377,19 +156,20 @@ namespace PixelFarm.Agg.Image
                 return;
             }
 
-            base.Interpolator.Begin(x + base.dx, y + base.dy, len);
+            spanInterpolator.Begin(x + base.dx, y + base.dy, len);
 
-            int[] accumulatedColor = new int[4];
 
-            int back_r = m_OutsideSourceColor.red;
-            int back_g = m_OutsideSourceColor.green;
-            int back_b = m_OutsideSourceColor.blue;
-            int back_a = m_OutsideSourceColor.alpha;
+            int accColor0, accColor1, accColor2, accColor3;
 
-            int distanceBetweenPixelsInclusive = base.ImgBuffAccessor.SourceImage.BytesBetweenPixelsInclusive;
-            int maxx = (int)SourceRenderingBuffer.Width - 1;
-            int maxy = (int)SourceRenderingBuffer.Height - 1;
-            ISpanInterpolator spanInterpolator = base.Interpolator;
+            int back_r = m_bgcolor.red;
+            int back_g = m_bgcolor.green;
+            int back_b = m_bgcolor.blue;
+            int back_a = m_bgcolor.alpha;
+
+            int maxx = srcRW.Width - 1;
+            int maxy = srcRW.Height - 1;
+
+            srcBuffer = srcRW.GetBuffer();
 
             unchecked
             {
@@ -403,83 +183,84 @@ namespace PixelFarm.Agg.Image
                     x_hr -= base.dxInt;
                     y_hr -= base.dyInt;
 
-                    int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-                    int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
+                    int x_lr = x_hr >> img_subpix_const.SHIFT;
+                    int y_lr = y_hr >> img_subpix_const.SHIFT;
                     int weight;
 
                     if (x_lr >= 0 && y_lr >= 0 &&
                        x_lr < maxx && y_lr < maxy)
                     {
-                        accumulatedColor[0] =
-                        accumulatedColor[1] =
-                        accumulatedColor[2] =
-                        accumulatedColor[3] = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
+                        accColor0 =
+                        accColor1 =
+                        accColor2 =
+                        accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
 
                         x_hr &= (int)img_subpix_const.MASK;
                         y_hr &= (int)img_subpix_const.MASK;
 
-                        fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
+                        bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
 
                         weight = (((int)img_subpix_const.SCALE - x_hr) *
                                  ((int)img_subpix_const.SCALE - y_hr));
                         if (weight > BASE_MASK)
                         {
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
+                            accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                            accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                            accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                            accColor3 += weight * srcBuffer[bufferIndex + CO.A];
                         }
 
                         weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                         if (weight > BASE_MASK)
                         {
-                            bufferIndex += distanceBetweenPixelsInclusive;
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
+                            bufferIndex += bytesBetweenPixelInclusive;
+                            accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                            accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                            accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                            accColor3 += weight * srcBuffer[bufferIndex + CO.A];
                         }
 
                         weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
                         if (weight > BASE_MASK)
                         {
                             ++y_lr;
-                            fg_ptr = SourceRenderingBuffer.GetPixelPointerXY(x_lr, y_lr, out bufferIndex);
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
+
+                            bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+                            accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                            accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                            accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                            accColor3 += weight * srcBuffer[bufferIndex + CO.A];
                         }
                         weight = (x_hr * y_hr);
                         if (weight > BASE_MASK)
                         {
-                            bufferIndex += distanceBetweenPixelsInclusive;
-                            accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                            accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                            accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                            accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
+                            bufferIndex += bytesBetweenPixelInclusive;
+                            accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                            accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                            accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                            accColor3 += weight * srcBuffer[bufferIndex + CO.A];
                         }
-                        accumulatedColor[0] >>= (int)img_subpix_const.SHIFT * 2;
-                        accumulatedColor[1] >>= (int)img_subpix_const.SHIFT * 2;
-                        accumulatedColor[2] >>= (int)img_subpix_const.SHIFT * 2;
-                        accumulatedColor[3] >>= (int)img_subpix_const.SHIFT * 2;
+                        accColor0 >>= img_subpix_const.SHIFT * 2;
+                        accColor1 >>= img_subpix_const.SHIFT * 2;
+                        accColor2 >>= img_subpix_const.SHIFT * 2;
+                        accColor3 >>= img_subpix_const.SHIFT * 2;
                     }
                     else
                     {
                         if (x_lr < -1 || y_lr < -1 ||
                            x_lr > maxx || y_lr > maxy)
                         {
-                            accumulatedColor[0] = back_r;
-                            accumulatedColor[1] = back_g;
-                            accumulatedColor[2] = back_b;
-                            accumulatedColor[3] = back_a;
+                            accColor0 = back_r;
+                            accColor1 = back_g;
+                            accColor2 = back_b;
+                            accColor3 = back_a;
                         }
                         else
                         {
-                            accumulatedColor[0] =
-                            accumulatedColor[1] =
-                            accumulatedColor[2] =
-                            accumulatedColor[3] = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
+                            accColor0 =
+                            accColor1 =
+                            accColor2 =
+                            accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
 
                             x_hr &= (int)img_subpix_const.MASK;
                             y_hr &= (int)img_subpix_const.MASK;
@@ -488,7 +269,6 @@ namespace PixelFarm.Agg.Image
                                      ((int)img_subpix_const.SCALE - y_hr));
                             if (weight > BASE_MASK)
                             {
-                                BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
                             }
 
                             x_lr++;
@@ -496,7 +276,24 @@ namespace PixelFarm.Agg.Image
                             weight = (x_hr * ((int)img_subpix_const.SCALE - y_hr));
                             if (weight > BASE_MASK)
                             {
-                                BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
+                                if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                                {
+
+
+                                    BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
+                                        srcRW.GetBuffer(),
+                                        srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                        weight);
+
+                                }
+                                else
+                                {
+                                    accColor0 += back_r * weight;
+                                    accColor1 += back_g * weight;
+                                    accColor2 += back_b * weight;
+                                    accColor3 += back_a * weight;
+                                }
+
                             }
 
                             x_lr--;
@@ -505,7 +302,21 @@ namespace PixelFarm.Agg.Image
                             weight = (((int)img_subpix_const.SCALE - x_hr) * y_hr);
                             if (weight > BASE_MASK)
                             {
-                                BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
+                                if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                                {
+                                    BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
+                                        srcRW.GetBuffer(),
+                                        srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                        weight);
+                                }
+                                else
+                                {
+                                    accColor0 += back_r * weight;
+                                    accColor1 += back_g * weight;
+                                    accColor2 += back_b * weight;
+                                    accColor3 += back_a * weight;
+                                }
+
                             }
 
                             x_lr++;
@@ -513,177 +324,53 @@ namespace PixelFarm.Agg.Image
                             weight = (x_hr * y_hr);
                             if (weight > BASE_MASK)
                             {
-                                BlendInFilterPixel(accumulatedColor, back_r, back_g, back_b, back_a, SourceRenderingBuffer, maxx, maxy, x_lr, y_lr, weight);
+                                if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
+                                {
+                                    BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
+                                       srcRW.GetBuffer(),
+                                       srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                       weight);
+                                }
+                                else
+                                {
+                                    accColor0 += back_r * weight;
+                                    accColor1 += back_g * weight;
+                                    accColor2 += back_b * weight;
+                                    accColor3 += back_a * weight;
+                                }
+
                             }
 
-                            accumulatedColor[0] >>= (int)img_subpix_const.SHIFT * 2;
-                            accumulatedColor[1] >>= (int)img_subpix_const.SHIFT * 2;
-                            accumulatedColor[2] >>= (int)img_subpix_const.SHIFT * 2;
-                            accumulatedColor[3] >>= (int)img_subpix_const.SHIFT * 2;
+                            accColor0 >>= img_subpix_const.SHIFT * 2;
+                            accColor1 >>= img_subpix_const.SHIFT * 2;
+                            accColor2 >>= img_subpix_const.SHIFT * 2;
+                            accColor3 >>= img_subpix_const.SHIFT * 2;
                         }
                     }
 
-                    outputColors[startIndex].red = (byte)accumulatedColor[0];
-                    outputColors[startIndex].green = (byte)accumulatedColor[1];
-                    outputColors[startIndex].blue = (byte)accumulatedColor[2];
-                    outputColors[startIndex].alpha = (byte)accumulatedColor[3];
+                    outputColors[startIndex].red = (byte)accColor0;
+                    outputColors[startIndex].green = (byte)accColor1;
+                    outputColors[startIndex].blue = (byte)accColor2;
+                    outputColors[startIndex].alpha = (byte)accColor3;
                     ++startIndex;
                     spanInterpolator.Next();
                 } while (--len != 0);
             }
         }
 
-        private void BlendInFilterPixel(int[] accumulatedColor, int back_r, int back_g, int back_b, int back_a, IImageReaderWriter SourceRenderingBuffer, int maxx, int maxy, int x_lr, int y_lr, int weight)
+        static void BlendInFilterPixel(ref int accColor0, ref int accColor1, ref int accColor2, ref int accColor3,
+            byte[] srcBuffer, int bufferIndex, int weight)
         {
-            byte[] fg_ptr;
             unchecked
             {
-                if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
-                {
-                    int bufferIndex = SourceRenderingBuffer.GetBufferOffsetXY(x_lr, y_lr);
-                    fg_ptr = SourceRenderingBuffer.GetBuffer();
-
-                    accumulatedColor[0] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                    accumulatedColor[1] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                    accumulatedColor[2] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                    accumulatedColor[3] += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
-                }
-                else
-                {
-                    accumulatedColor[0] += back_r * weight;
-                    accumulatedColor[1] += back_g * weight;
-                    accumulatedColor[2] += back_b * weight;
-                    accumulatedColor[3] += back_a * weight;
-                }
-            }
-        }
-    }
-
-
-    public class ImgSpanGenRGBA : ImgSpanGen
-    {
-        const int BASE_MASK = 255;
-        //--------------------------------------------------------------------
-        public ImgSpanGenRGBA(IImageBufferAccessor src, ISpanInterpolator inter, ImageFilterLookUpTable filter)
-            : base(src, inter, filter)
-        {
-            if (src.SourceImage.BytesBetweenPixelsInclusive != 4)
-            {
-                throw new System.NotSupportedException("span_image_filter_rgba must have a 32 bit DestImage");
+                accColor0 += weight * srcBuffer[bufferIndex + CO.R];
+                accColor1 += weight * srcBuffer[bufferIndex + CO.G];
+                accColor2 += weight * srcBuffer[bufferIndex + CO.B];
+                accColor3 += weight * srcBuffer[bufferIndex + CO.A];
             }
         }
 
-        public override void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len)
-        {
-            base.Interpolator.Begin(x + base.dx, y + base.dy, len);
-
-            int f_r, f_g, f_b, f_a;
-
-            byte[] fg_ptr;
-
-            int diameter = filterLookup.Diameter;
-            int start = filterLookup.Start;
-            int[] weight_array = filterLookup.WeightArray;
-
-            int x_count;
-            int weight_y;
-
-            ISpanInterpolator spanInterpolator = base.Interpolator;
-            IImageBufferAccessor sourceAccessor = ImgBuffAccessor;
-
-            do
-            {
-                spanInterpolator.GetCoord(out x, out y);
-
-                x -= base.dxInt;
-                y -= base.dyInt;
-
-                int x_hr = x;
-                int y_hr = y;
-
-                int x_lr = x_hr >> (int)img_subpix_const.SHIFT;
-                int y_lr = y_hr >> (int)img_subpix_const.SHIFT;
-
-                f_b = f_g = f_r = f_a = (int)img_filter_const.SCALE / 2;
-
-                int x_fract = x_hr & (int)img_subpix_const.MASK;
-                int y_count = diameter;
-
-                y_hr = (int)img_subpix_const.MASK - (y_hr & (int)img_subpix_const.MASK);
-
-                int bufferIndex;
-                fg_ptr = sourceAccessor.GetSpan(x_lr + start, y_lr + start, diameter, out bufferIndex);
-                for (; ; )
-                {
-                    x_count = (int)diameter;
-                    weight_y = weight_array[y_hr];
-                    x_hr = (int)img_subpix_const.MASK - x_fract;
-                    for (; ; )
-                    {
-                        int weight = (weight_y * weight_array[x_hr] +
-                                     (int)img_filter_const.SCALE / 2) >>
-                                     (int)img_filter_const.SHIFT;
-
-                        f_b += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderR];
-                        f_g += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderG];
-                        f_r += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderB];
-                        f_a += weight * fg_ptr[bufferIndex + ImageReaderWriterBase.OrderA];
-
-                        if (--x_count == 0) break;
-                        x_hr += (int)img_subpix_const.SCALE;
-                        sourceAccessor.NextX(out bufferIndex);
-                    }
-
-                    if (--y_count == 0) break;
-                    y_hr += (int)img_subpix_const.SCALE;
-                    fg_ptr = sourceAccessor.NextY(out bufferIndex);
-                }
-
-                f_b >>= (int)img_filter_const.SHIFT;
-                f_g >>= (int)img_filter_const.SHIFT;
-                f_r >>= (int)img_filter_const.SHIFT;
-                f_a >>= (int)img_filter_const.SHIFT;
-
-                unchecked
-                {
-                    if ((uint)f_b > BASE_MASK)
-                    {
-                        if (f_b < 0) f_b = 0;
-                        if (f_b > BASE_MASK) f_b = (int)BASE_MASK;
-                    }
-
-                    if ((uint)f_g > BASE_MASK)
-                    {
-                        if (f_g < 0) f_g = 0;
-                        if (f_g > BASE_MASK) f_g = (int)BASE_MASK;
-                    }
-
-                    if ((uint)f_r > BASE_MASK)
-                    {
-                        if (f_r < 0) f_r = 0;
-                        if (f_r > BASE_MASK) f_r = (int)BASE_MASK;
-                    }
-
-                    if ((uint)f_a > BASE_MASK)
-                    {
-                        if (f_a < 0) f_a = 0;
-                        if (f_a > BASE_MASK) f_a = (int)BASE_MASK;
-                    }
-                }
-
-                outputColors[startIndex].red = (byte)f_b;
-                outputColors[startIndex].green = (byte)f_g;
-                outputColors[startIndex].blue = (byte)f_r;
-                outputColors[startIndex].alpha = (byte)f_a;
-
-                startIndex++;
-                spanInterpolator.Next();
-
-            } while (--len != 0);
-        }
     }
-
-
 
 }
 

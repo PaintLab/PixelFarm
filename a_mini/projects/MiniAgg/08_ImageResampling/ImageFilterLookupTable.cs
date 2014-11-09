@@ -69,15 +69,15 @@ namespace PixelFarm.Agg
             double r = filter.GetRadius();
             ReallocLut(r);
             int i;
-            int pivot = Diameter << ((int)ImgSubPixConst.SHIFT - 1);
+            int pivot = Diameter << (ImgSubPixConst.SHIFT - 1);
             for (i = 0; i < pivot; i++)
             {
                 double x = (double)i / (double)ImgSubPixConst.SCALE;
                 double y = filter.CalculateWeight(x);
                 m_weight_array[pivot + i] =
-                m_weight_array[pivot - i] = AggBasics.iround(y * (int)ImgFilterConst.SCALE);
+                m_weight_array[pivot - i] = AggBasics.iround(y * ImgFilterConst.SCALE);
             }
-            int end = (Diameter << (int)ImgSubPixConst.SHIFT) - 1;
+            int end = (Diameter << ImgSubPixConst.SHIFT) - 1;
             m_weight_array[0] = m_weight_array[end];
             if (normalization)
             {
@@ -158,13 +158,13 @@ namespace PixelFarm.Agg
                 }
             }
 
-            int pivot = m_diameter << ((int)ImgSubPixConst.SHIFT - 1);
+            int pivot = m_diameter << (ImgSubPixConst.SHIFT - 1);
 
             for (i = 0; i < pivot; i++)
             {
                 m_weight_array[pivot + i] = m_weight_array[pivot - i];
             }
-            int end = (Diameter << (int)ImgSubPixConst.SHIFT) - 1;
+            int end = (Diameter << ImgSubPixConst.SHIFT) - 1;
             m_weight_array[0] = m_weight_array[end];
         }
 
@@ -172,8 +172,8 @@ namespace PixelFarm.Agg
         {
             m_radius = radius;
             m_diameter = AggBasics.uceil(radius) * 2;
-            m_start = -(int)(m_diameter / 2 - 1);
-            int size = (int)m_diameter << (int)ImgSubPixConst.SHIFT;
+            m_start = -(m_diameter / 2 - 1);
+            int size = m_diameter << ImgSubPixConst.SHIFT;
             if (size > m_weight_array.Length)
             {
                 m_weight_array = new int[size];

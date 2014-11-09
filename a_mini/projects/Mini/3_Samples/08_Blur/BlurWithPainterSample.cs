@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             m_shadow_ctrl = new PolygonEditWidget(4);
 
 
-            this.FlattenCurveCheck = true;
+            this.FlattenCurveChecked = true;
             this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
 
@@ -74,7 +74,7 @@ namespace PixelFarm.Agg.Sample_Blur2
         }
 
         [DemoConfig]
-        public bool FlattenCurveCheck
+        public bool FlattenCurveChecked
         {
             get;
             set;
@@ -154,27 +154,28 @@ namespace PixelFarm.Agg.Sample_Blur2
             //green glyph
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,
-                            m_shadow_ctrl.GetPolygon());
-            VertexStoreSnap spath;
-            if (FlattenCurveCheck)
+                            m_shadow_ctrl.GetInnerCoords());
+
+            VertexStore s2;
+            if (FlattenCurveChecked)
             {
-                var s2 = shadow_persp.TransformToVxs(m_path_2);
-                spath = new VertexStoreSnap(s2);
+                s2 = shadow_persp.TransformToVxs(m_path_2);
+
             }
             else
             {
-                var s2 = shadow_persp.TransformToVxs(m_pathVxs);
-                spath = new VertexStoreSnap(s2);
+                s2 = shadow_persp.TransformToVxs(m_pathVxs);
+
             }
             painter.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
-            painter.Fill(spath);
+            painter.Fill(s2);
 
             //---------------------------------------------------------------------------------------------------------
             //shadow 
             //---------------------------------------------------------------------------------------------------------
             // Calculate the bounding box and extend it by the blur radius 
 
-            RectInt boundRect = BoundingRectInt.GetBoundingRect(spath);
+            RectInt boundRect = BoundingRectInt.GetBoundingRect(s2);
             var widgetImg = graphics2D.DestImage;
 
             int m_radius = this.BlurRadius;
@@ -217,7 +218,7 @@ namespace PixelFarm.Agg.Sample_Blur2
                     {
                         case BlurMethod.StackBlur:
                             {
-                                
+
                                 //------------------  
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
@@ -244,7 +245,7 @@ namespace PixelFarm.Agg.Sample_Blur2
 
             // Render the shape itself
             ////------------------
-            if (FlattenCurveCheck)
+            if (FlattenCurveChecked)
             {
                 //m_ras.AddPath(m_path_2);
                 painter.Fill(m_path_2);

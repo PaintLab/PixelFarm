@@ -43,6 +43,7 @@
     <Compile Include="03_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\FilterMan.cs" />
+    <Compile Include="0_LayoutFarm.Canvas2dExtension\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="x_notused\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\CanvasPainter.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\MyTypeFacePrinter.cs" />
@@ -54,14 +55,14 @@
     <Compile Include="01_Base\ProxyImage.cs" />
     <Compile Include="Filter\ImageFilters.cs" />
     <Compile Include="Filter\PatternFilterBilnearColorRGBA.cs" />
-    <Compile Include="Font\x_GlyphWithUnderline.cs" />
+    <Compile Include="x_notused\x_GlyphWithUnderline.cs" />
     <Compile Include="Image\AlphaMask.cs" />
     <Compile Include="VertexSource\SimpleRect.cs" />
     <Compile Include="03_SpanGenerators\SpanGradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
     <Compile Include="Image\ImageSequence.cs" />
-    <Compile Include="Image\ImageTgaIO.cs" />
+    <Compile Include="x_notused\x_ImageTgaIO.cs" />
     <Compile Include="Filter\RecursiveBlur.cs" />
     <Compile Include="Filter\StackBlur.cs" />
     <Compile Include="Image\Transposer.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="VertexSource\Curves.cs" />
     <Compile Include="03_SpanGenerators\SpanGenGourand.cs" />
     <Compile Include="03_SpanGenerators\SpanGenGouraudRGBA.cs" />
-    <Compile Include="03_SpanGenerators\SpanSubDivAdapter.cs" />
+    <Compile Include="x_notused\SpanSubDivAdapter.cs" />
     <Compile Include="VertexSource\Arc.cs" />
     <Compile Include="VertexSource\Contour.cs" />
     <Compile Include="VertexSource\ContourGenerator.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="Font\TextWrapping.cs" />
     <Compile Include="Font\TypeFace.cs" />
     <Compile Include="Font\TypeFacePrinter.cs" />
-    <Compile Include="Font\x_UnitTests.cs" />
+    <Compile Include="x_notused\x_UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="x_notused\UnitTests.cs" />
     <Compile Include="VertexSource\VertexSourceIO.cs" />

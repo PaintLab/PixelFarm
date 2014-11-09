@@ -55,15 +55,17 @@ namespace PixelFarm.Agg.Sample_FloodFill
         {
             get;
             set;
-        } 
+        }
         public ColorRGBA BackgroundColor
         {
             get;
             set;
-        } 
+        }
         public override void Draw(Graphics2D graphics2D)
         {
-            graphics2D.Render(imageToFillOn, imageOffset.x, imageOffset.y);
+            CanvasPainter painter = new CanvasPainter(graphics2D);
+            painter.DrawImage(imageToFillOn, imageOffset.x, imageOffset.y);
+
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)
