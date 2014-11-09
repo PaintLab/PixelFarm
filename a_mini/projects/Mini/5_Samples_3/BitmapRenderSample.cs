@@ -66,7 +66,9 @@ namespace PixelFarm.Agg.Sample_Images
         }
         public override void Draw(Graphics2D g)
         {
-            g.Render(actualImage, 0, 0);
+            CanvasPainter painter = new CanvasPainter(g);
+            painter.DrawImage(actualImage, 0, 0);
+           
         }
         public override void MouseDrag(int x, int y)
         {

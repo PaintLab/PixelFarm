@@ -107,11 +107,9 @@ namespace PixelFarm.Agg
                 fillRule = new ExactMatch(fillColor);
             }
         }
-
- 
         public void Fill(ActualImage img, int x, int y)
         {
-            throw new NotSupportedException();
+            Fill(new MyImageReaderWriter(img), x, y);
         }
         public void Fill(ImageReaderWriterBase bufferToFillOn, int x, int y)
         {

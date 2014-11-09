@@ -134,5 +134,4 @@ namespace PixelFarm.Agg.Image
             }
         }
     }
-
 }
