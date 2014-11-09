@@ -143,45 +143,45 @@ namespace OpenTK
         }
 
         /// <summary>
-        /// Converts an OpenTK.Point instance to a System.Drawing.Point.
+        /// Converts an OpenTK.Point instance to a LayoutFarm.Drawing.Point.
         /// </summary>
         /// <param name="point">
         /// The <see cref="Point"/> instance to convert.
         /// </param>
         /// <returns>
-        /// A <see cref="System.Drawing.Point"/> instance equivalent to point.
+        /// A <see cref="LayoutFarm.Drawing.Point"/> instance equivalent to point.
         /// </returns>
-        public static implicit operator System.Drawing.Point(Point point)
+        public static implicit operator LayoutFarm.Drawing.Point(Point point)
         {
-            return new System.Drawing.Point(point.X, point.Y);
+            return new LayoutFarm.Drawing.Point(point.X, point.Y);
         }
 
         /// <summary>
-        /// Converts a System.Drawing.Point instance to an OpenTK.Point.
+        /// Converts a LayoutFarm.Drawing.Point instance to an OpenTK.Point.
         /// </summary>
         /// <param name="point">
-        /// The <see cref="System.Drawing.Point"/> instance to convert.
+        /// The <see cref="LayoutFarm.Drawing.Point"/> instance to convert.
         /// </param>
         /// <returns>
         /// A <see cref="Point"/> instance equivalent to point.
         /// </returns>
-        public static implicit operator Point(System.Drawing.Point point)
+        public static implicit operator Point(LayoutFarm.Drawing.Point point)
         {
             return new Point(point.X, point.Y);
         }
 
         /// <summary>
-        /// Converts an OpenTK.Point instance to a System.Drawing.PointF.
+        /// Converts an OpenTK.Point instance to a LayoutFarm.Drawing.PointF.
         /// </summary>
         /// <param name="point">
         /// The <see cref="Point"/> instance to convert.
         /// </param>
         /// <returns>
-        /// A <see cref="System.Drawing.PointF"/> instance equivalent to point.
+        /// A <see cref="LayoutFarm.Drawing.PointF"/> instance equivalent to point.
         /// </returns>
-        public static implicit operator System.Drawing.PointF(Point point)
+        public static implicit operator LayoutFarm.Drawing.PointF(Point point)
         {
-            return new System.Drawing.PointF(point.X, point.Y);
+            return new LayoutFarm.Drawing.PointF(point.X, point.Y);
         }
 
         /// <summary>

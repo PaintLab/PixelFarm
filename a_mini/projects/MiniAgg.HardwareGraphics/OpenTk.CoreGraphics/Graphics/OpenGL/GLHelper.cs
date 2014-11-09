@@ -103,12 +103,12 @@ namespace OpenTK.Graphics.OpenGL
 
         #region public static void Color[34]() overloads
 
-        public static void Color3(System.Drawing.Color color)
+        public static void Color3(LayoutFarm.Drawing.Color color)
         {
             GL.Color3(color.R, color.G, color.B);
         }
 
-        public static void Color4(System.Drawing.Color color)
+        public static void Color4(LayoutFarm.Drawing.Color color)
         {
             GL.Color4(color.R, color.G, color.B, color.A);
         }
@@ -132,7 +132,7 @@ namespace OpenTK.Graphics.OpenGL
 
         #region public static void ClearColor() overloads
 
-        public static void ClearColor(System.Drawing.Color color)
+        public static void ClearColor(LayoutFarm.Drawing.Color color)
         {
             GL.ClearColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
         }
@@ -146,7 +146,7 @@ namespace OpenTK.Graphics.OpenGL
 
         #region public static void BlendColor() overloads
 
-        public static void BlendColor(System.Drawing.Color color)
+        public static void BlendColor(LayoutFarm.Drawing.Color color)
         {
             GL.BlendColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
         }
@@ -720,24 +720,24 @@ namespace OpenTK.Graphics.OpenGL
 
         #region Rect
 
-        public static void Rect(System.Drawing.RectangleF rect)
+        public static void Rect(LayoutFarm.Drawing.RectangleF rect)
         {
             GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
 
-        public static void Rect(System.Drawing.Rectangle rect)
-        {
-            GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
-        }
-
-        [CLSCompliant(false)]
-        public static void Rect(ref System.Drawing.RectangleF rect)
+        public static void Rect(LayoutFarm.Drawing.Rectangle rect)
         {
             GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
 
         [CLSCompliant(false)]
-        public static void Rect(ref System.Drawing.Rectangle rect)
+        public static void Rect(ref LayoutFarm.Drawing.RectangleF rect)
+        {
+            GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
+        }
+
+        [CLSCompliant(false)]
+        public static void Rect(ref LayoutFarm.Drawing.Rectangle rect)
         {
             GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
@@ -901,17 +901,17 @@ namespace OpenTK.Graphics.OpenGL
 
         #region Viewport
 
-        public static void Viewport(System.Drawing.Size size)
+        public static void Viewport(LayoutFarm.Drawing.Size size)
         {
             GL.Viewport(0, 0, size.Width, size.Height);
         }
 
-        public static void Viewport(System.Drawing.Point location, System.Drawing.Size size)
+        public static void Viewport(LayoutFarm.Drawing.Point location, LayoutFarm.Drawing.Size size)
         {
             GL.Viewport(location.X, location.Y, size.Width, size.Height);
         }
 
-        public static void Viewport(System.Drawing.Rectangle rectangle)
+        public static void Viewport(LayoutFarm.Drawing.Rectangle rectangle)
         {
             GL.Viewport(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
@@ -930,7 +930,7 @@ namespace OpenTK.Graphics.OpenGL
 
         #region TexEnv
 
-        public static void TexEnv(TextureEnvTarget target, TextureEnvParameter pname, System.Drawing.Color color)
+        public static void TexEnv(TextureEnvTarget target, TextureEnvParameter pname, LayoutFarm.Drawing.Color color)
         {
             Color4 c = new Color4(color);
             unsafe
