@@ -54,22 +54,24 @@ namespace PixelFarm.Agg
 
         protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
         {
-            int scanWidthInBytes = width * (bitsPerPixel / 8);
 
             if (width <= 0 || height <= 0)
             {
                 throw new ArgumentOutOfRangeException("You must have a width and height > than 0.");
             }
+            
+            
+
             if (bitsPerPixel != 32 && bitsPerPixel != 24 && bitsPerPixel != 8)
             {
                 throw new Exception("Unsupported bits per pixel.");
             }
-            if (scanWidthInBytes < width * (bitsPerPixel / 8))
-            {
-                throw new Exception("Your scan width is not big enough to hold your width and height.");
-            }
+
+            this.bitDepth = bitsPerPixel;
+            int bytesPerPixel = (bitDepth + 7) / 8;
+            int stride = 4 * ((width * bytesPerPixel + 3) / 4);
             //-------------------------------------------------------------------------------------------
-            SetDimmensionAndFormat(width, height, scanWidthInBytes, bitsPerPixel, bitsPerPixel / 8);
+            SetDimmensionAndFormat(width, height, stride, bitsPerPixel, bitsPerPixel / 8);
             this.m_ByteBuffer = imgbuffer;
             SetUpLookupTables();
 
@@ -279,6 +281,7 @@ namespace PixelFarm.Agg
             this.height = height;
             this.strideInBytes = strideInBytes;
             this.bitDepth = bitDepth;
+
             if (distanceInBytesBetweenPixelsInclusive > 4)
             {
                 throw new System.Exception("It looks like you are passing bits per pixel rather than distance in bytes.");

@@ -1,4 +1,4 @@
-//2014 BSD,WinterDev   
+﻿//2014 BSD,WinterDev   
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -107,11 +107,9 @@ namespace PixelFarm.Agg
                 fillRule = new ExactMatch(fillColor);
             }
         }
-
- 
         public void Fill(ActualImage img, int x, int y)
         {
-            throw new NotSupportedException();
+            this.Fill(new MyImageReaderWriter(img), x, y);
         }
         public void Fill(ImageReaderWriterBase bufferToFillOn, int x, int y)
         {

@@ -30,26 +30,37 @@ namespace PixelFarm.Agg
 {
     partial class ImageGraphics2D
     {
-
-        //--------------------------
-        void Render(VertexStore vxs, ISpanGenerator spanGen)
+        MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
+        public ImageInterpolationQuality ImageInterpolationQuality
         {
-            sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithSpan(
-                destImageReaderWriter,
-                sclineRas,
-                sclinePack8,
-                spanGen);
+            get { return this.ImageInterpolationQuality; }
+            set { this.imgInterpolationQuality = value; }
         }
-
-
+        //--------------------------
         public override void Render(ActualImage actualImage, int x, int y)
         {
             sharedImageWriterReader.ReloadImage(actualImage);
             Render(sharedImageWriterReader, (double)x, (double)y);
-
         }
+        public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
+        {
+            //reset rasterizer before render each vertextSnap
 
+            //-----------------------------
+            sclineRas.Reset();
+            Affine transform = this.CurrentTransformMatrix;
+            if (!transform.IsIdentity())
+            {
+                sclineRas.AddPath(transform.Tranform(vertextSnap));
+            }
+            else
+            {
+                sclineRas.AddPath(vertextSnap);
+            }
+            sclineRasToBmp.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
+            unchecked { destImageChanged++; };
+            //-----------------------------
+        }
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
             PathStorage drawImageRectPath,
             double destX, double destY,
@@ -86,6 +97,7 @@ namespace PixelFarm.Agg
                 i++;
             }
 
+
             int srcW = sourceImage.Width;
             int srcH = sourceImage.Height;
 
@@ -97,20 +109,21 @@ namespace PixelFarm.Agg
             drawImageRectPath.ClosePolygon();
 
             return Affine.NewMatix(plan);
-
         }
-
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
            PathStorage drawImageRectPath,
            double destX, double destY)
         {
 
-            AffinePlan plan = new AffinePlan();
+            AffinePlan[] plan = new AffinePlan[1];
+            int i = 0;
 
             if (destX != 0 || destY != 0)
             {
-                plan = AffinePlan.Translate(destX, destY);
+                plan[i] = AffinePlan.Translate(destX, destY);
+                i++;
             }
+
 
             int srcW = sourceImage.Width;
             int srcH = sourceImage.Height;
@@ -123,7 +136,19 @@ namespace PixelFarm.Agg
             drawImageRectPath.ClosePolygon();
 
             return Affine.NewMatix(plan);
+
         }
+        void DrawImage(IImageReaderWriter sourceImage, ISpanGenerator spanImageFilter, VertexStore vxs)
+        {
+
+            sclineRas.AddPath(vxs);
+            sclineRasToBmp.RenderWithSpan(
+                destImageReaderWriter,
+                sclineRas,
+                sclinePack8,
+                spanImageFilter);
+        }
+
         public override void Render(IImageReaderWriter source,
             double destX, double destY,
             double angleRadians,
@@ -213,8 +238,8 @@ namespace PixelFarm.Agg
                 //    HotspotOffsetY *= (inScaleY / scaleY);
                 //}
 
-                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath,
-                    destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY,
+                    ox, oy, scaleX, scaleY, angleRadians);
 
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
@@ -222,9 +247,10 @@ namespace PixelFarm.Agg
 
 
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
+                
+                ImgSpanGen spanImageFilter = new ImgSpanGenRGBA_BilinearClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
 
-                Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+                DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgBoundsPath));
 
 
 
@@ -245,27 +271,27 @@ namespace PixelFarm.Agg
 
 
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-
-                ImgSpanGen imgSpanGen = null;
+                 
+                ImgSpanGen spanImageFilter = null;
                 switch (source.BitDepth)
                 {
                     case 32:
-                        imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
+                        spanImageFilter = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
                         break;
 
                     case 24:
-                        imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
+                        spanImageFilter = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
                         break;
 
                     case 8:
-                        imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
+                        spanImageFilter = new ImgSpanGenGray_NNStepXby1(source, interpolator);
                         break;
 
                     default:
                         throw new NotImplementedException();
                 }
 
-                Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+                DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgBoundsPath));
                 unchecked { destImageChanged++; };
 
             }
@@ -276,20 +302,18 @@ namespace PixelFarm.Agg
 
         public override void Render(IImageReaderWriter source, double destX, double destY)
         {
-
             int inScaleX = 1;
             int inScaleY = 1;
             int angleRadians = 0;
 
-
+            // exit early if the dest and source bounds don't touch.
+            // TODO: <BUG> make this do rotation and scalling
             RectInt sourceBounds = source.GetBounds();
             RectInt destBounds = this.destImageReaderWriter.GetBounds();
             sourceBounds.Offset((int)destX, (int)destY);
 
             if (!RectInt.DoIntersect(sourceBounds, destBounds))
             {
-                // exit early if the dest and source bounds don't touch.
-                // TODO: <BUG> make this do rotation and scalling
                 //if (inScaleX != 1 || inScaleY != 1 || angleRadians != 0)
                 //{
                 //    throw new NotImplementedException();
@@ -321,8 +345,8 @@ namespace PixelFarm.Agg
 	        }
 #endif
             bool isScale = (scaleX != 1 || scaleY != 1);
-            bool isRotated = true;
 
+            bool isRotated = true;
             if (Math.Abs(angleRadians) < (0.1 * MathHelper.Tau / 360))
             {
                 isRotated = false;
@@ -340,10 +364,12 @@ namespace PixelFarm.Agg
             }
 
             bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
-            var imgBoundsPath = GetFreePathStorage();
+
             // this is the fast drawing path
             if (needSourceResampling)
             {
+
+
 
 #if false // if the scalling is small enough the results can be improved by using mip maps
 	        if(CanUseMipMaps)
@@ -365,21 +391,20 @@ namespace PixelFarm.Agg
 	        }
 #endif
 
-
-                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath,
-                    destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+                var imgBoundsPath = GetFreePathStorage();
+                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY);
 
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
 
-                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
+                var spanImageFilter = new ImgSpanGenRGBA_BilinearClip(
                     source,
                     ColorRGBA.Black,
                     new SpanInterpolatorLinear(sourceRectTransform));
 
-                Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+                DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgBoundsPath));
 
-
+                ReleasePathStorage(imgBoundsPath);
 
 #if false // this is some debug you can enable to visualize the dest bounding box
 		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
@@ -391,38 +416,40 @@ namespace PixelFarm.Agg
             else // TODO: this can be even faster if we do not use an intermediat buffer
             {
 
+                var imgBoundsPath = GetFreePathStorage();
+                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath,
+                    destX, destY);
 
-                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY);
-                //// We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-                //Affine sourceRectTransform = destRectTransform.CreateInvert();
-                Affine sourceRectTransform = destRectTransform;
+                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                Affine sourceRectTransform = destRectTransform.CreateInvert();
+
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
-
-                ImgSpanGen imgSpanGen = null;
+                
+                ImgSpanGen spanImageFilter = null;
                 switch (source.BitDepth)
                 {
                     case 32:
-                        imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
+                        spanImageFilter = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
                         break;
 
                     case 24:
-                        imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
+                        spanImageFilter = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
                         break;
 
                     case 8:
-                        imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
+                        spanImageFilter = new ImgSpanGenGray_NNStepXby1(source, interpolator);
                         break;
 
                     default:
                         throw new NotImplementedException();
                 }
 
-                Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+                DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgBoundsPath));
+
+                ReleasePathStorage(imgBoundsPath);
 
                 unchecked { destImageChanged++; };
             }
-
-            ReleasePathStorage(imgBoundsPath);
         }
 
 
