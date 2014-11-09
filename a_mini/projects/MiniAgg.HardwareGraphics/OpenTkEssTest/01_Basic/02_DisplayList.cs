@@ -66,7 +66,8 @@ namespace OpenTkEssTest
 
         protected override void OnLoad(EventArgs e)
         {
-            GL.ClearColor(Color.MidnightBlue);
+             
+            GLClearColor(Color.MidnightBlue);
             GL.Enable(EnableCap.DepthTest);
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -118,7 +119,7 @@ namespace OpenTkEssTest
 
         protected override void OnResize(EventArgs e)
         {
-            GL.Viewport(ClientRectangle);
+            GL.Viewport(LayoutFarm.Drawing.Conv.ToRect(ClientRectangle));
 
             float aspect = this.ClientSize.Width / (float)this.ClientSize.Height;
 

@@ -31,7 +31,7 @@ namespace OpenTK.Platform.X11
         static List<IntPtr> lastConfigUpdate = new List<IntPtr>();
 
         static bool xinerama_supported, xrandr_supported, xf86_supported;
-        
+
         #region --- Constructors ---
 
         static X11DisplayDevice()
@@ -103,7 +103,7 @@ namespace OpenTK.Platform.X11
                 foreach (XineramaScreenInfo screen in screens)
                 {
                     DisplayDevice dev = new DisplayDevice();
-                    dev.Bounds = new Rectangle(screen.X, screen.Y, screen.Width, screen.Height);
+                    dev.Bounds = new LayoutFarm.Drawing.Rectangle(screen.X, screen.Y, screen.Width, screen.Height);  //new Rectangle(screen.X, screen.Y, screen.Width, screen.Height);
                     if (first)
                     {
                         // We consider the first device returned by Xinerama as the primary one.
@@ -184,8 +184,8 @@ namespace OpenTK.Platform.X11
                 ushort current_rotation;  // Not needed.
                 int current_resolution_index = Functions.XRRConfigCurrentConfiguration(screen_config, out current_rotation);
 
-                if (dev.Bounds == Rectangle.Empty)
-                    dev.Bounds = new Rectangle(0, 0, available_res[current_resolution_index].Width, available_res[current_resolution_index].Height);
+                if (dev.Bounds == LayoutFarm.Drawing.Rectangle.Empty)
+                    dev.Bounds = new LayoutFarm.Drawing.Rectangle(0, 0, available_res[current_resolution_index].Width, available_res[current_resolution_index].Height);
                 dev.BitsPerPixel = current_depth;
                 dev.RefreshRate = current_refresh_rate;
                 dev.AvailableResolutions = available_res;
@@ -317,7 +317,7 @@ namespace OpenTK.Platform.X11
             public static extern bool XineramaQueryExtension(IntPtr dpy, out int event_basep, out int error_basep);
 
             [DllImport(Xinerama)]
-            public static extern int XineramaQueryVersion (IntPtr dpy, out int major_versionp, out int minor_versionp);
+            public static extern int XineramaQueryVersion(IntPtr dpy, out int major_versionp, out int minor_versionp);
 
             [DllImport(Xinerama)]
             public static extern bool XineramaIsActive(IntPtr dpy);

@@ -175,7 +175,7 @@ namespace Examples.Tutorial
             update_watch.Start();
             render_watch.Start();
 
-            GL.ClearColor(Color.MidnightBlue);
+            GLClearColor(Color.MidnightBlue);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.PointSmooth);
             GL.PointSize(16);

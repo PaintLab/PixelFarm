@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using System.Drawing;
+using LayoutFarm.Drawing;
 
 namespace OpenTK
 {
@@ -82,7 +82,7 @@ namespace OpenTK
         #region Bounds
 
         /// <summary>
-        /// Gets a System.Drawing.Rectangle that contains the bounds of this display device.
+        /// Gets a LayoutFarm.Drawing.Rectangle that contains the bounds of this display device.
         /// </summary>
         [Obsolete("This property will return invalid results if a monitor changes resolution. Use DisplayDevice.Bounds instead.")]
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]

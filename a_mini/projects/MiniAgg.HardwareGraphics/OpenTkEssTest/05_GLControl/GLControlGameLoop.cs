@@ -9,7 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
- 
+
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -21,6 +21,7 @@ using OpenTK.Platform;
 using OpenTK;
 
 #endregion
+
 
 namespace OpenTkEssTest
 {
@@ -39,7 +40,10 @@ namespace OpenTkEssTest
         #endregion
 
         #region OnLoad
-
+        protected void GLClearColor(System.Drawing.Color c)
+        {
+            OpenTK.Graphics.OpenGL.GL.ClearColor(LayoutFarm.Drawing.Conv.ToColor(c));
+        }
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -54,7 +58,7 @@ namespace OpenTkEssTest
                 GL.GetString(StringName.Renderer) + " " +
                 GL.GetString(StringName.Version);
 
-            GL.ClearColor(Color.MidnightBlue);
+            GL.ClearColor(LayoutFarm.Drawing.Conv.ToColor(Color.MidnightBlue));
             GL.Enable(EnableCap.DepthTest);
 
             Application.Idle += Application_Idle;
@@ -162,38 +166,38 @@ namespace OpenTkEssTest
         {
             GL.Begin(BeginMode.Quads);
 
-            GL.Color3(Color.Silver);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.Silver));
             GL.Vertex3(-1.0f, -1.0f, -1.0f);
             GL.Vertex3(-1.0f, 1.0f, -1.0f);
             GL.Vertex3(1.0f, 1.0f, -1.0f);
             GL.Vertex3(1.0f, -1.0f, -1.0f);
 
-            GL.Color3(Color.Honeydew);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.Honeydew));
             GL.Vertex3(-1.0f, -1.0f, -1.0f);
             GL.Vertex3(1.0f, -1.0f, -1.0f);
             GL.Vertex3(1.0f, -1.0f, 1.0f);
             GL.Vertex3(-1.0f, -1.0f, 1.0f);
 
-            GL.Color3(Color.Moccasin);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.Moccasin));
 
             GL.Vertex3(-1.0f, -1.0f, -1.0f);
             GL.Vertex3(-1.0f, -1.0f, 1.0f);
             GL.Vertex3(-1.0f, 1.0f, 1.0f);
             GL.Vertex3(-1.0f, 1.0f, -1.0f);
 
-            GL.Color3(Color.IndianRed);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.IndianRed));
             GL.Vertex3(-1.0f, -1.0f, 1.0f);
             GL.Vertex3(1.0f, -1.0f, 1.0f);
             GL.Vertex3(1.0f, 1.0f, 1.0f);
             GL.Vertex3(-1.0f, 1.0f, 1.0f);
 
-            GL.Color3(Color.PaleVioletRed);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.PaleVioletRed));
             GL.Vertex3(-1.0f, 1.0f, -1.0f);
             GL.Vertex3(-1.0f, 1.0f, 1.0f);
             GL.Vertex3(1.0f, 1.0f, 1.0f);
             GL.Vertex3(1.0f, 1.0f, -1.0f);
 
-            GL.Color3(Color.ForestGreen);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.ForestGreen));
             GL.Vertex3(1.0f, -1.0f, -1.0f);
             GL.Vertex3(1.0f, 1.0f, -1.0f);
             GL.Vertex3(1.0f, 1.0f, 1.0f);

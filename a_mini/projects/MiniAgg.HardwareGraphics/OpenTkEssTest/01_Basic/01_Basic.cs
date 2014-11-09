@@ -100,7 +100,7 @@ namespace OpenTkEssTest
 
         protected override void OnResize(EventArgs e)
         {
-            GL.Viewport(ClientRectangle);
+            GL.Viewport(LayoutFarm.Drawing.Conv.ToRect(ClientRectangle));
 
             float aspect = this.ClientSize.Width / (float)this.ClientSize.Height;
 

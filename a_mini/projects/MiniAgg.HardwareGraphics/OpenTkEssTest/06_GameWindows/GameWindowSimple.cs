@@ -50,7 +50,7 @@ namespace Examples.Tutorial
         /// <param name="e">Not used.</param>
         protected override void OnLoad(EventArgs e)
         {
-            GL.ClearColor(Color.MidnightBlue);
+            GLClearColor(Color.MidnightBlue);
         }
 
         #endregion
@@ -100,11 +100,11 @@ namespace Examples.Tutorial
 
             GL.Begin(BeginMode.Triangles);
 
-            GL.Color3(Color.MidnightBlue);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.MidnightBlue));
             GL.Vertex2(-1.0f, 1.0f);
-            GL.Color3(Color.SpringGreen);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.SpringGreen));
             GL.Vertex2(0.0f, -1.0f);
-            GL.Color3(Color.Ivory);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.Ivory));
             GL.Vertex2(1.0f, 1.0f);
 
             GL.End();
@@ -114,7 +114,7 @@ namespace Examples.Tutorial
 
         #endregion
 
-         
-       
+
+
     }
 }

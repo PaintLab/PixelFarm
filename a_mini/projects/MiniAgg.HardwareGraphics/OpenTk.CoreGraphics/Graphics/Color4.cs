@@ -95,11 +95,11 @@ namespace OpenTK.Graphics
         }
 
         /// <summary>
-        /// Constructs a new Color4 structure from the specified System.Drawing.Color.
+        /// Constructs a new Color4 structure from the specified LayoutFarm.Drawing.Color.
         /// </summary>
-        /// <param name="color">The System.Drawing.Color containing the component values.</param>
+        /// <param name="color">The LayoutFarm.Drawing.Color containing the component values.</param>
         [Obsolete("Use new Color4(r, g, b, a) instead.")]
-        public Color4(System.Drawing.Color color)
+        public Color4(LayoutFarm.Drawing.Color color)
             : this(color.R, color.G, color.B, color.A)
         { }
 
@@ -111,7 +111,7 @@ namespace OpenTK.Graphics
         /// Converts this color to an integer representation with 8 bits per channel.
         /// </summary>
         /// <returns>A <see cref="System.Int32"/> that represents this instance.</returns>
-        /// <remarks>This method is intended only for compatibility with System.Drawing. It compresses the color into 8 bits per channel, which means color information is lost.</remarks>
+        /// <remarks>This method is intended only for compatibility with LayoutFarm.Drawing. It compresses the color into 8 bits per channel, which means color information is lost.</remarks>
         public int ToArgb()
         {
             uint value =
@@ -146,23 +146,23 @@ namespace OpenTK.Graphics
         }
 
         /// <summary>
-        /// Converts the specified System.Drawing.Color to a Color4 structure.
+        /// Converts the specified LayoutFarm.Drawing.Color to a Color4 structure.
         /// </summary>
-        /// <param name="color">The System.Drawing.Color to convert.</param>
+        /// <param name="color">The LayoutFarm.Drawing.Color to convert.</param>
         /// <returns>A new Color4 structure containing the converted components.</returns>
-        public static implicit operator Color4(System.Drawing.Color color)
+        public static implicit operator Color4(LayoutFarm.Drawing.Color color)
         {
             return new Color4(color.R, color.G, color.B, color.A);
         }
 
         /// <summary>
-        /// Converts the specified Color4 to a System.Drawing.Color structure.
+        /// Converts the specified Color4 to a LayoutFarm.Drawing.Color structure.
         /// </summary>
         /// <param name="color">The Color4 to convert.</param>
-        /// <returns>A new System.Drawing.Color structure containing the converted components.</returns>
-        public static explicit operator System.Drawing.Color(Color4 color)
+        /// <returns>A new LayoutFarm.Drawing.Color structure containing the converted components.</returns>
+        public static explicit operator LayoutFarm.Drawing.Color(Color4 color)
         {
-            return System.Drawing.Color.FromArgb(
+            return LayoutFarm.Drawing.Color.FromArgb(
                 (int)(color.A * Byte.MaxValue),
                 (int)(color.R * Byte.MaxValue),
                 (int)(color.G * Byte.MaxValue),
