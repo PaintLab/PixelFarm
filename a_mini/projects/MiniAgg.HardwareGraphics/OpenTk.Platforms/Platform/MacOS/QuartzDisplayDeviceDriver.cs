@@ -11,7 +11,7 @@ namespace OpenTK.Platform.MacOS
     {
         static object display_lock = new object();
 
-        static Dictionary<DisplayDevice, IntPtr> displayMap = 
+        static Dictionary<DisplayDevice, IntPtr> displayMap =
             new Dictionary<DisplayDevice, IntPtr>();
 
         static IntPtr mainDisplay;
@@ -33,7 +33,7 @@ namespace OpenTK.Platform.MacOS
 
                 unsafe
                 {
-                    fixed(IntPtr* displayPtr = displays)
+                    fixed (IntPtr* displayPtr = displays)
                     {
                         CG.GetActiveDisplayList(maxDisplayCount, displayPtr, out displayCount);
                     }
@@ -58,7 +58,7 @@ namespace OpenTK.Platform.MacOS
                     int currentHeight = CG.DisplayPixelsHigh(currentDisplay);
                     Debug.Print("Display {0} is at  {1}x{2}", i, currentWidth, currentHeight);
 
-                    IntPtr displayModesPtr = CG.DisplayAvailableModes(currentDisplay);                
+                    IntPtr displayModesPtr = CG.DisplayAvailableModes(currentDisplay);
                     CFArray displayModes = new CFArray(displayModesPtr);
                     Debug.Print("Supports {0} display modes.", displayModes.Count);
 
@@ -70,10 +70,10 @@ namespace OpenTK.Platform.MacOS
                     for (int j = 0; j < displayModes.Count; j++)
                     {
                         CFDictionary dict = new CFDictionary(displayModes[j]);
-                        
-                        int width = (int) dict.GetNumberValue("Width");
-                        int height = (int) dict.GetNumberValue("Height");
-                        int bpp = (int) dict.GetNumberValue("BitsPerPixel");
+
+                        int width = (int)dict.GetNumberValue("Width");
+                        int height = (int)dict.GetNumberValue("Height");
+                        int bpp = (int)dict.GetNumberValue("BitsPerPixel");
                         double freq = dict.GetNumberValue("RefreshRate");
                         bool current = currentMode.Ref == dict.Ref;
 
@@ -90,14 +90,15 @@ namespace OpenTK.Platform.MacOS
 
                     }
 
-					HIRect bounds = CG.DisplayBounds(currentDisplay);
-					Rectangle newRect = new Rectangle(
-						(int)bounds.Origin.X, (int)bounds.Origin.Y, (int)bounds.Size.Width, (int)bounds.Size.Height);
+                    HIRect bounds = CG.DisplayBounds(currentDisplay);
+                    Rectangle newRect = new Rectangle(
+                        (int)bounds.Origin.X, (int)bounds.Origin.Y, (int)bounds.Size.Width, (int)bounds.Size.Height);
 
-					Debug.Print("Display {0} bounds: {1}", i, newRect);
+                    Debug.Print("Display {0} bounds: {1}", i, newRect);
 
                     DisplayDevice opentk_dev =
-                        new DisplayDevice(opentk_dev_current_res, primary, opentk_dev_available_res, newRect);
+                        new DisplayDevice(opentk_dev_current_res,
+                            primary, opentk_dev_available_res, LayoutFarm.Drawing.Conv.ToRect(newRect));
 
                     displayMap.Add(opentk_dev, currentDisplay);
                 }
@@ -107,19 +108,19 @@ namespace OpenTK.Platform.MacOS
         }
 
 
-		internal static IntPtr HandleTo(DisplayDevice displayDevice)
-		{
-			if (displayMap.ContainsKey(displayDevice))
-				return displayMap[displayDevice];
-			else
-				return IntPtr.Zero;
-		}
+        internal static IntPtr HandleTo(DisplayDevice displayDevice)
+        {
+            if (displayMap.ContainsKey(displayDevice))
+                return displayMap[displayDevice];
+            else
+                return IntPtr.Zero;
+        }
 
         #region IDisplayDeviceDriver Members
 
         Dictionary<IntPtr, IntPtr> storedModes = new Dictionary<IntPtr, IntPtr>();
         List<IntPtr> displaysCaptured = new List<IntPtr>();
-                    
+
         public bool TryChangeResolution(DisplayDevice device, DisplayResolution resolution)
         {
             IntPtr display = displayMap[device];
@@ -127,7 +128,7 @@ namespace OpenTK.Platform.MacOS
 
             if (storedModes.ContainsKey(display) == false)
             {
-                storedModes.Add(display, currentModePtr);        
+                storedModes.Add(display, currentModePtr);
             }
 
             IntPtr displayModesPtr = CG.DisplayAvailableModes(display);
@@ -183,5 +184,5 @@ namespace OpenTK.Platform.MacOS
 
         #endregion
 
-	}
+    }
 }
