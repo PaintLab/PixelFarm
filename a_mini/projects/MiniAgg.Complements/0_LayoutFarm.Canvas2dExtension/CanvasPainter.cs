@@ -55,6 +55,7 @@ namespace PixelFarm.Agg
         PathStorage lines = new PathStorage();
         RoundedRect roundRect = null;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+        MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
         //-------------
         public CanvasPainter(Graphics2D graphic2d)
@@ -281,6 +282,11 @@ namespace PixelFarm.Agg
 
             this.sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(this.gx.DestImage, sclineRas, scline, spanGen);
+        }
+        public void DrawImage(ActualImage actualImage, double x, double y)
+        {
+            this.sharedImageWriterReader.ReloadImage(actualImage);
+            this.gx.Render(this.sharedImageWriterReader, x, y);
         }
 
 
