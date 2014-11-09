@@ -51,9 +51,9 @@ namespace PixelFarm.Agg
 
 
                 //use different pixel blender 
-                var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, ColorOrder.R, 8);
-                var greenImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, ColorOrder.G, 8);
-                var blueImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, ColorOrder.B, 8);
+                var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.R, 8);
+                var greenImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.G, 8);
+                var blueImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.B, 8);
 
 
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);

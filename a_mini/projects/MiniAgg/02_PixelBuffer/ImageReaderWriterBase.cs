@@ -667,6 +667,10 @@ namespace PixelFarm.Agg
         }
         public void ReloadImage(ActualImage actualImage)
         {
+            if (this.actualImage == actualImage)
+            {
+                return;
+            }
             this.actualImage = actualImage;
             //calculate image stride
             switch (actualImage.PixelFormat)

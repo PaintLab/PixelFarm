@@ -288,7 +288,11 @@ namespace PixelFarm.Agg
             this.sharedImageWriterReader.ReloadImage(actualImage);
             this.gx.Render(this.sharedImageWriterReader, x, y);
         }
-
+        public void DrawImage(ActualImage actualImage, params Transform.AffinePlan[] affinePlans)
+        {
+            this.sharedImageWriterReader.ReloadImage(actualImage);
+            this.gx.Render(sharedImageWriterReader, affinePlans);
+        }
 
         //----------------------
         /// <summary>

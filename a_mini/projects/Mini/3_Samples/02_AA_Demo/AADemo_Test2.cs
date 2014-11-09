@@ -120,7 +120,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         }
 
         [DemoConfig(MinValue = 8, MaxValue = 100)]
-        public double PixelSize
+        public int PixelSize
         {
             get;
             set;
@@ -153,7 +153,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             var sl = new ScanlineUnpacked8();
 
 
-            int size_mul = (int)this.PixelSize;
+            int size_mul = this.PixelSize;
 
             CustomScanlineRasToBmp_EnlargedV2 sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, graphics2D.DestActualImage);
 

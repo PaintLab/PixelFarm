@@ -107,6 +107,12 @@ namespace PixelFarm.Agg
 
         RectInt userModeClipBox;
 
+        //---------------
+        //offset x offset y
+        double addVertextOffsetX = 0;
+        double addVertextOffsetY = 0;
+
+
         enum Status
         {
             Initial,
@@ -221,6 +227,16 @@ namespace PixelFarm.Agg
             }
         }
 
+        public double AddVertexOffsetX
+        {
+            get { return this.addVertextOffsetX; }
+            set { this.addVertextOffsetX = value; }
+        }
+        public double AddVertexOffsetY
+        {
+            get { return this.addVertextOffsetY; }
+            set { this.addVertextOffsetY = value; }
+        }
         void AddVertex(ShapePath.FlagsAndCommand cmd, double x, double y)
         {
             switch (cmd)
@@ -252,8 +268,8 @@ namespace PixelFarm.Agg
             m_vectorClipper.LineTo(upscale(x2), upscale(y2));
             m_status = Status.MoveTo;
         }
-
         //-------------------------------------------------------------------
+
         public void AddPath(VertexStore vxs)
         {
             this.AddPath(new VertexStoreSnap(vxs));
