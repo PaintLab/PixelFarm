@@ -30,6 +30,7 @@ namespace PixelFarm.Agg
 {
     partial class ImageGraphics2D
     {
+<<<<<<< HEAD
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         public ImageInterpolationQuality ImageInterpolationQuality
         {
@@ -45,6 +46,9 @@ namespace PixelFarm.Agg
         public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
         {
             //reset rasterizer before render each vertextSnap
+=======
+
+>>>>>>> 459_retro
 
             //-----------------------------
             sclineRas.Reset();
@@ -118,6 +122,7 @@ namespace PixelFarm.Agg
             AffinePlan[] plan = new AffinePlan[1];
             int i = 0;
 
+
             if (destX != 0 || destY != 0)
             {
                 plan[i] = AffinePlan.Translate(destX, destY);
@@ -138,7 +143,11 @@ namespace PixelFarm.Agg
             return Affine.NewMatix(plan);
 
         }
+<<<<<<< HEAD
         void DrawImage(IImageReaderWriter sourceImage, ISpanGenerator spanImageFilter, VertexStore vxs)
+=======
+        void Render(VertexStore vxs, ISpanGenerator spanGen)
+>>>>>>> 459_retro
         {
 
             sclineRas.AddPath(vxs);
@@ -146,7 +155,11 @@ namespace PixelFarm.Agg
                 destImageReaderWriter,
                 sclineRas,
                 sclinePack8,
+<<<<<<< HEAD
                 spanImageFilter);
+=======
+                spanGen);
+>>>>>>> 459_retro
         }
 
         public override void Render(IImageReaderWriter source,
@@ -238,17 +251,29 @@ namespace PixelFarm.Agg
                 //    HotspotOffsetY *= (inScaleY / scaleY);
                 //}
 
+<<<<<<< HEAD
                 Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY,
                     ox, oy, scaleX, scaleY, angleRadians);
 
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
+=======
+                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath,
+                    destX, destY, ox, oy, scaleX, scaleY, angleRadians);
+                
+>>>>>>> 459_retro
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-
+                Affine sourceRectTransform = destRectTransform.CreateInvert();
+               
 
 
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
+<<<<<<< HEAD
                 
                 ImgSpanGen spanImageFilter = new ImgSpanGenRGBA_BilinearClip(source, ColorRGBAf.rgba_pre(0, 0, 0, 0).ToColorRGBA(), interpolator);
+=======
+
+                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, ColorRGBA.Black, interpolator);
+>>>>>>> 459_retro
 
                 DrawImage(source, spanImageFilter, destRectTransform.TransformToVxs(imgBoundsPath));
 
@@ -265,10 +290,9 @@ namespace PixelFarm.Agg
             {
 
                 Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY);
-
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
+                 
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
-
+                Affine sourceRectTransform = destRectTransform.CreateInvert();
 
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                  
@@ -365,6 +389,10 @@ namespace PixelFarm.Agg
 
             bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
+<<<<<<< HEAD
+=======
+            var imgBoundsPath = GetFreePathStorage();
+>>>>>>> 459_retro
             // this is the fast drawing path
             if (needSourceResampling)
             {
@@ -394,10 +422,15 @@ namespace PixelFarm.Agg
                 var imgBoundsPath = GetFreePathStorage();
                 Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, destX, destY);
 
-                Affine sourceRectTransform = destRectTransform.CreateInvert();
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+<<<<<<< HEAD
 
                 var spanImageFilter = new ImgSpanGenRGBA_BilinearClip(
+=======
+                Affine sourceRectTransform = destRectTransform.CreateInvert();
+                
+                var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
+>>>>>>> 459_retro
                     source,
                     ColorRGBA.Black,
                     new SpanInterpolatorLinear(sourceRectTransform));
@@ -420,8 +453,18 @@ namespace PixelFarm.Agg
                 Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath,
                     destX, destY);
 
+<<<<<<< HEAD
                 // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
+=======
+                Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath,
+                    destX, destY);
+
+                // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+                Affine sourceRectTransform = destRectTransform.CreateInvert();
+
+                var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
+>>>>>>> 459_retro
 
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 
@@ -448,8 +491,14 @@ namespace PixelFarm.Agg
 
                 ReleasePathStorage(imgBoundsPath);
 
+
+
                 unchecked { destImageChanged++; };
             }
+<<<<<<< HEAD
+=======
+            ReleasePathStorage(imgBoundsPath);
+>>>>>>> 459_retro
         }
 
 

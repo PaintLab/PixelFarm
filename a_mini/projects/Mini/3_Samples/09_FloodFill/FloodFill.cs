@@ -64,7 +64,12 @@ namespace PixelFarm.Agg.Sample_FloodFill
         public override void Draw(Graphics2D graphics2D)
         {
             CanvasPainter painter = new CanvasPainter(graphics2D);
+<<<<<<< HEAD
             painter.DrawImage(imageToFillOn, imageOffset.x, imageOffset.y); 
+=======
+            painter.DrawImage(imageToFillOn, imageOffset.x, imageOffset.y);
+
+>>>>>>> 459_retro
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)

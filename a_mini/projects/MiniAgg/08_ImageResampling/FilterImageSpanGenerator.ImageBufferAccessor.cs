@@ -134,6 +134,9 @@ namespace PixelFarm.Agg.Image
                 return GetPixels(out bufferOffset);
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 459_retro
     }
 }

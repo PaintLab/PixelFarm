@@ -62,7 +62,10 @@ namespace PixelFarm.Agg
         }
         //------------------------------------------------------------------------
 
+<<<<<<< HEAD
         public abstract void Render(ActualImage actualImage, int x, int y);
+=======
+>>>>>>> 459_retro
         
         
         public void Render(VertexStore vxStorage, ColorRGBA c)

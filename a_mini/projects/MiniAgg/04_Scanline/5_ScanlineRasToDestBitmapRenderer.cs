@@ -46,7 +46,7 @@ namespace PixelFarm.Agg
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
                 ColorRGBA color)
-        {   
+        {
             if (!sclineRas.RewindScanlines()) { return; } //early exit
             //-----------------------------------------------
 
@@ -72,7 +72,7 @@ namespace PixelFarm.Agg
                     {
                         ScanlineSpan span = scline.GetSpan(i);
                         if (span.len > 0)
-                        {   
+                        {
                             dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
                         }
                         else
@@ -140,8 +140,8 @@ namespace PixelFarm.Agg
                         firstCoverForAll);
                 }
 
-            } 
-        } 
+            }
+        }
         protected virtual void CustomRenderSingleScanLine(
             IImageReaderWriter dest,
             Scanline scline,
