@@ -70,7 +70,7 @@ namespace OpenTkEssTest
                 this.Exit();
             }
 
-            GL.ClearColor(System.Drawing.Color.MidnightBlue);
+            GLClearColor(System.Drawing.Color.MidnightBlue);
             GL.Enable(EnableCap.DepthTest);
 
             vbo[0] = LoadVBO(CubeVertices, CubeElements);

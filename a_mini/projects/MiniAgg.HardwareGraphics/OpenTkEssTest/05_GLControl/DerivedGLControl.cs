@@ -13,14 +13,14 @@ namespace OpenTkEssTest
 {
     public partial class DerivedGLControl : GLControl
     {
-        Color clearColor;
+        LayoutFarm.Drawing.Color clearColor;
         
         public DerivedGLControl()
         {
             this.InitializeComponent();
         }
 
-        public Color ClearColor
+        public LayoutFarm.Drawing.Color ClearColor
         {
             get { return clearColor; }
             set

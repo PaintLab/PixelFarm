@@ -76,7 +76,7 @@ namespace OpenTkEssTest
 
         protected override void OnResize(EventArgs e)
         {
-            GL.Viewport(this.ClientRectangle);
+            GL.Viewport(LayoutFarm.Drawing.Conv.ToRect(this.ClientRectangle));
 
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width / (float)Height, 1.0f, 50.0f);
             GL.MatrixMode(MatrixMode.Projection);
@@ -145,6 +145,6 @@ namespace OpenTkEssTest
 
             return texture;
         }
-        
+
     }
 }

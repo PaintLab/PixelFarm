@@ -22,7 +22,7 @@ namespace OpenTkEssTest
     /// <summary>
     /// Demonstrates simple OpenGL Texturing.
     /// </summary>
-   // [Example("Texture mapping", ExampleCategory.OpenGL, "1.x", 5, Documentation = "Textures")]
+    // [Example("Texture mapping", ExampleCategory.OpenGL, "1.x", 5, Documentation = "Textures")]
     public class Textures : GameWindow
     {
         Bitmap bitmap = new Bitmap("Data/Textures/logo.jpg");
@@ -41,7 +41,7 @@ namespace OpenTkEssTest
         /// <param name="e">Not used.</param>
         protected override void OnLoad(EventArgs e)
         {
-            GL.ClearColor(Color.MidnightBlue);
+            GLClearColor(Color.MidnightBlue);
             GL.Enable(EnableCap.Texture2D);
 
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);

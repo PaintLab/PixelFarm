@@ -92,7 +92,7 @@ namespace OpenTK
 
         #endregion
 
-        
+
         #region --- Contructors ---
 
         #region public GameWindow()
@@ -1060,9 +1060,19 @@ namespace OpenTK
             OnWindowInfoChanged(e);
         }
 
+
+
+
+
         #endregion
 
         #endregion
+
+        protected void GLClearColor(System.Drawing.Color c)
+        {
+            OpenTK.Graphics.OpenGL.GL.ClearColor(LayoutFarm.Drawing.Conv.ToColor(c));
+        }
+
     }
 
     #region public enum VSyncMode

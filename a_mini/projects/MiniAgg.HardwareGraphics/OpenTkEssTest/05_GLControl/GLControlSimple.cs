@@ -9,7 +9,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace OpenTkEssTest
 {
-   // [Example("GLControl Simple", ExampleCategory.OpenTK, "GLControl", 1, Documentation="GLControlSimple")]
+    // [Example("GLControl Simple", ExampleCategory.OpenTK, "GLControl", 1, Documentation="GLControlSimple")]
     public partial class SimpleForm : Form
     {
         public SimpleForm()
@@ -18,30 +18,33 @@ namespace OpenTkEssTest
         }
 
         #region Events
-
+        protected void GLClearColor(System.Drawing.Color c)
+        {
+            OpenTK.Graphics.OpenGL.GL.ClearColor(LayoutFarm.Drawing.Conv.ToColor(c));
+        }
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
             glControl1_Resize(this, EventArgs.Empty);   // Ensure the Viewport is set up correctly
-            GL.ClearColor(Color.Crimson);
+            GL.ClearColor(LayoutFarm.Drawing.Color.LightGray);
         }
 
         private void redButton_Click(object sender, EventArgs e)
         {
-            GL.ClearColor(Color.Crimson);
+            GL.ClearColor(LayoutFarm.Drawing.Color.Red);
             glControl1.Invalidate();
         }
 
         private void greenButton_Click(object sender, EventArgs e)
         {
-            GL.ClearColor(Color.ForestGreen);
+            GL.ClearColor(LayoutFarm.Drawing.Color.Green);
             glControl1.Invalidate();
         }
 
         private void blueButton_Click(object sender, EventArgs e)
         {
-            GL.ClearColor(Color.RoyalBlue);
+            GLClearColor(Color.RoyalBlue);
             glControl1.Invalidate();
         }
 

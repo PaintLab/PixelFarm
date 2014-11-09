@@ -65,7 +65,10 @@ namespace LayoutFarm.Drawing
         {
             return new LayoutFarm.Drawing.Rectangle(rect.X, rect.Y, rect.Width, rect.Height);
         }
-
-
+        //------------------------------------------------
+        public static LayoutFarm.Drawing.Color ToColor(this System.Drawing.Color c)
+        {
+            return new LayoutFarm.Drawing.Color(c.A, c.R, c.G, c.B);
+        }
     }
 }

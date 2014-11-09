@@ -49,7 +49,7 @@ namespace Examples
         protected override void OnLoad(EventArgs e)
         {
 
-            GL.ClearColor(Color.White);
+            GL.ClearColor(LayoutFarm.Drawing.Color.White);
             //GL.Enable(EnableCap.PolygonSmooth);
             //GL.Enable(EnableCap.Blend);
             //GL.BlendFunc(BlendingFactorSrc.SrcAlphaSaturate, BlendingFactorDest.One);
@@ -125,11 +125,12 @@ namespace Examples
 
             GL.Begin(BeginMode.Triangles);
 
-            GL.Color3(Color.MidnightBlue);
+
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.MidnightBlue));
             GL.Vertex2(-1.0f, 1.0f);
-            GL.Color3(Color.SpringGreen);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.SpringGreen));
             GL.Vertex2(0.0f, -1.0f);
-            GL.Color3(Color.Ivory);
+            GL.Color3(LayoutFarm.Drawing.Conv.ToColor(Color.Ivory));
             GL.Vertex2(1.0f, 1.0f);
 
             GL.End();
