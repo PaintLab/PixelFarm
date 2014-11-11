@@ -20,7 +20,7 @@ namespace Examples.Shapes
     // Can use a Display List to prevent repeated immediate mode draws.
     //
 
-    public abstract class DrawableShape: IDisposable
+    public abstract class DrawableShape : IDisposable
     {
         protected BeginMode PrimitiveMode;
         protected VertexT2dN3dV3d[] VertexArray;
@@ -30,18 +30,19 @@ namespace Examples.Shapes
         {
             get
             {
-                switch ( PrimitiveMode )
-                { 
-                case BeginMode.Triangles:
-                    if ( IndexArray != null )
-                    {
-                        return IndexArray.Length / 3;
-                    } else
-                    {
-                        return VertexArray.Length / 3;
-                    }
-                  //  break;
-                default: throw new NotImplementedException("Unknown primitive type.");
+                switch (PrimitiveMode)
+                {
+                    case BeginMode.Triangles:
+                        if (IndexArray != null)
+                        {
+                            return IndexArray.Length / 3;
+                        }
+                        else
+                        {
+                            return VertexArray.Length / 3;
+                        }
+                    //  break;
+                    default: throw new NotImplementedException("Unknown primitive type.");
                 }
             }
         }
@@ -53,7 +54,7 @@ namespace Examples.Shapes
 
         #endregion Display List
 
-        public DrawableShape( bool useDisplayList )
+        public DrawableShape(bool useDisplayList)
         {
             UseDisplayList = useDisplayList;
             PrimitiveMode = BeginMode.Triangles;
@@ -112,22 +113,23 @@ namespace Examples.Shapes
 
         private void DrawImmediateMode()
         {
-            GL.Begin( PrimitiveMode );
+            GL.Begin(PrimitiveMode);
             {
-                if ( IndexArray == null )
-                    foreach ( VertexT2dN3dV3d v in VertexArray )
+                if (IndexArray == null)
+                    foreach (VertexT2dN3dV3d v in VertexArray)
                     {
-                        GL.TexCoord2( v.TexCoord.X, v.TexCoord.Y );
-                        GL.Normal3( v.Normal.X, v.Normal.Y, v.Normal.Z );
-                        GL.Vertex3( v.Position.X, v.Position.Y, v.Position.Z );
-                    } else
+                        GL.TexCoord2(v.TexCoord.X, v.TexCoord.Y);
+                        GL.Normal3(v.Normal.X, v.Normal.Y, v.Normal.Z);
+                        GL.Vertex3(v.Position.X, v.Position.Y, v.Position.Z);
+                    }
+                else
                 {
-                    for ( uint i = 0; i < IndexArray.Length; i++ )
+                    for (uint i = 0; i < IndexArray.Length; i++)
                     {
                         uint index = IndexArray[i];
-                        GL.TexCoord2( VertexArray[index].TexCoord.X, VertexArray[index].TexCoord.Y );
-                        GL.Normal3( VertexArray[index].Normal.X, VertexArray[index].Normal.Y, VertexArray[index].Normal.Z );
-                        GL.Vertex3( VertexArray[index].Position.X, VertexArray[index].Position.Y, VertexArray[index].Position.Z );
+                        GL.TexCoord2(VertexArray[index].TexCoord.X, VertexArray[index].TexCoord.Y);
+                        GL.Normal3(VertexArray[index].Normal.X, VertexArray[index].Normal.Y, VertexArray[index].Normal.Z);
+                        GL.Vertex3(VertexArray[index].Position.X, VertexArray[index].Position.Y, VertexArray[index].Position.Z);
                     }
                 }
             }
@@ -140,19 +142,20 @@ namespace Examples.Shapes
         /// </summary>
         public void Draw()
         {
-            if ( !UseDisplayList )
+            if (!UseDisplayList)
                 DrawImmediateMode();
             else
-                if ( DisplayListHandle == 0 )
+                if (DisplayListHandle == 0)
                 {
-                    if ( VertexArray == null )
+                    if (VertexArray == null)
                         throw new Exception("Cannot draw null Vertex Array.");
-                    DisplayListHandle = GL.GenLists( 1 );
-                    GL.NewList( DisplayListHandle, ListMode.CompileAndExecute );
+                    DisplayListHandle = GL.GenLists(1);
+                    GL.NewList(DisplayListHandle, ListMode.CompileAndExecute);
                     DrawImmediateMode();
                     GL.EndList();
-                } else
-                    GL.CallList( DisplayListHandle );
+                }
+                else
+                    GL.CallList(DisplayListHandle);
         }
 
         #region IDisposable Members
@@ -164,13 +167,13 @@ namespace Examples.Shapes
         /// </summary>
         public void Dispose()
         {
-            if ( VertexArray != null )
+            if (VertexArray != null)
                 VertexArray = null;
-            if ( IndexArray != null )
+            if (IndexArray != null)
                 IndexArray = null;
-            if ( DisplayListHandle != 0 )
+            if (DisplayListHandle != 0)
             {
-                GL.DeleteLists( DisplayListHandle, 1 );
+                GL.DeleteLists(DisplayListHandle, 1);
                 DisplayListHandle = 0;
             }
         }

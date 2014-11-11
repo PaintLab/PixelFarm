@@ -1096,13 +1096,23 @@ namespace OpenTK.Platform.Windows
         {
             while (!IsIdle)
             {
-                ret = Functions.GetMessage(ref msg, window.WindowHandle, 0, 0);
-                if (ret == -1)
+                if (!Functions.PeekMessage(ref msg, window.WindowHandle, 0, 0, Functions.PeekMessageOption.PM_REMOVE))
                 {
                     throw new PlatformException(String.Format(
-                        "An error happened while processing the message queue. Windows error: {0}",
-                        Marshal.GetLastWin32Error()));
+                           "An error happened while processing the message queue. Windows error: {0}",
+                           Marshal.GetLastWin32Error()));
                 }
+
+
+
+                //Functions.GetMessage(ref msg, window.WindowHandle, 0, 0);
+
+                //if (ret == -1)
+                //{
+                //    throw new PlatformException(String.Format(
+                //        "An error happened while processing the message queue. Windows error: {0}",
+                //        Marshal.GetLastWin32Error()));
+                //}
 
                 Functions.TranslateMessage(ref msg);
                 Functions.DispatchMessage(ref msg);

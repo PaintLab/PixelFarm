@@ -12,9 +12,9 @@ using OpenTK.Graphics.OpenGL;
 namespace OpenTkEssTest
 {
     //[Example("Multiple GLControls", ExampleCategory.OpenTK, "GLControl", 3, Documentation="MultipleGLControls")]
-    public partial class MultipleGLControlsForm : Form
+    public partial class FormMultipleGLControlsForm : Form
     {
-        public MultipleGLControlsForm()
+        public FormMultipleGLControlsForm()
         {
             InitializeComponent();
         }

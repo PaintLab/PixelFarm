@@ -56,6 +56,13 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="00_DemoBase\DemoBase.cs" />
+    <Compile Include="00_DemoBase\FormDev.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="00_DemoBase\FormDev.Designer.cs">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </Compile>
     <Compile Include="01_Basic\01_Basic.cs" />
     <Compile Include="01_Basic\02_DisplayList.cs" />
     <Compile Include="02_VertextBuffer\VBODynamic.cs" />
@@ -74,24 +81,19 @@
     <Compile Include="05_GLControl\FormTestWinGLControl.Designer.cs">
       <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="05_GLControl\GLControlGameLoop.cs">
+    <Compile Include="05_GLControl\FormGLControlSimple.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="05_GLControl\GLControlGameLoop.Designer.cs">
-      <DependentUpon>GLControlGameLoop.cs</DependentUpon>
+    <Compile Include="05_GLControl\FormGLControlSimple.Designer.cs">
+      <DependentUpon>FormGLControlSimple.cs</DependentUpon>
     </Compile>
-    <Compile Include="05_GLControl\GLControlSimple.cs">
+    <Compile Include="05_GLControl\FormMultipleGLControls.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="05_GLControl\GLControlSimple.Designer.cs">
-      <DependentUpon>GLControlSimple.cs</DependentUpon>
+    <Compile Include="05_GLControl\FormMultipleGLControls.Designer.cs">
+      <DependentUpon>FormMultipleGLControls.cs</DependentUpon>
     </Compile>
-    <Compile Include="05_GLControl\MultipleGLControls.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="05_GLControl\MultipleGLControls.Designer.cs">
-      <DependentUpon>MultipleGLControls.cs</DependentUpon>
-    </Compile>
+    <Compile Include="05_GLControl\WinFormDemoList.cs" />
     <Compile Include="06_GameWindows\GameWindowMsaa.cs" />
     <Compile Include="06_GameWindows\GameWindowSimple.cs" />
     <Compile Include="06_GameWindows\GameWindowThreaded.cs" />
@@ -120,20 +122,20 @@
     <Compile Include="Utilities\LoaderGDI.cs" />
     <Compile Include="Utilities\LoaderStatics.cs" />
     <Compile Include="Utilities\Utils.cs" />
+    <EmbeddedResource Include="00_DemoBase\FormDev.resx">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="05_GLControl\DerivedGLControl.resx">
       <DependentUpon>DerivedGLControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="05_GLControl\FormTestWinGLControl.resx">
       <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="05_GLControl\GLControlGameLoop.resx">
-      <DependentUpon>GLControlGameLoop.cs</DependentUpon>
+    <EmbeddedResource Include="05_GLControl\FormGLControlSimple.resx">
+      <DependentUpon>FormGLControlSimple.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="05_GLControl\GLControlSimple.resx">
-      <DependentUpon>GLControlSimple.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="05_GLControl\MultipleGLControls.resx">
-      <DependentUpon>MultipleGLControls.cs</DependentUpon>
+    <EmbeddedResource Include="05_GLControl\FormMultipleGLControls.resx">
+      <DependentUpon>FormMultipleGLControls.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

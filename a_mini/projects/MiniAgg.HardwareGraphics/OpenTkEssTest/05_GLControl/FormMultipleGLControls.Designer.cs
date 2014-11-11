@@ -1,6 +1,6 @@
 ﻿namespace OpenTkEssTest
 {
-    partial class MultipleGLControlsForm
+    partial class FormMultipleGLControlsForm
     {
         /// <summary>
         /// Required designer variable.

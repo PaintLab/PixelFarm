@@ -1,6 +1,6 @@
 ﻿namespace OpenTkEssTest
 {
-    partial class SimpleForm
+    partial class FormGLControlSimple
     {
         /// <summary>
         /// Required designer variable.

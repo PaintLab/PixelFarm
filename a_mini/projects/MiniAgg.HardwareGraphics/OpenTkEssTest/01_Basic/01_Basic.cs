@@ -41,8 +41,22 @@ using OpenTK.Graphics.OpenGL;
 
 #endregion --- Using Directives ---
 
+using Mini;
 namespace OpenTkEssTest
 {
+    [Info(OrderCode = "01")]
+    [Info("OpenTk T01_Basic")]
+    public class T01BasicSample : DemoBase
+    {
+        public override void Init()
+        {   
+            using (var example = new T01_Basic())
+            {   
+                example.Run(30.0, 0.0);
+            }   
+        } 
+    }
+
     //[Example("Display Lists", ExampleCategory.OpenGL, "1.x", 2, Documentation = "DisplayLists")]
     public class T01_Basic : GameWindow
     {

@@ -7,9 +7,11 @@ using System.Text;
 using System.Windows.Forms;
 
 using OpenTK.Graphics.OpenGL;
+using Mini;
 
 namespace OpenTkEssTest
 {
+     
     public partial class FormTestWinGLControl : Form
     {
         public FormTestWinGLControl()

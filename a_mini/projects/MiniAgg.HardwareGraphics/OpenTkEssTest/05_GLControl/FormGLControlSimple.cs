@@ -10,9 +10,9 @@ using OpenTK.Graphics.OpenGL;
 namespace OpenTkEssTest
 {
     // [Example("GLControl Simple", ExampleCategory.OpenTK, "GLControl", 1, Documentation="GLControlSimple")]
-    public partial class SimpleForm : Form
+    public partial class FormGLControlSimple : Form
     {
-        public SimpleForm()
+        public FormGLControlSimple()
         {
             InitializeComponent();
         }

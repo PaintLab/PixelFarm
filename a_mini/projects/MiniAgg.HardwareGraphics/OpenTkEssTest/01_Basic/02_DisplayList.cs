@@ -41,8 +41,22 @@ using OpenTK.Graphics.OpenGL;
 
 #endregion --- Using Directives ---
 
+using Mini;
+
 namespace OpenTkEssTest
 {
+    [Info(OrderCode = "01")]
+    [Info("T07_Display_Lists_FlowerDemo")]
+    public class T07_Display_Lists_FlowerDemo : DemoBase
+    {
+        public override void Init()
+        {
+            using (var example = new T07_Display_Lists_Flower())
+            { 
+                example.Run(30.0, 0.0); 
+            }
+        }
+    }
     //[Example("Display Lists", ExampleCategory.OpenGL, "1.x", 2, Documentation = "DisplayLists")]
     public class T07_Display_Lists_Flower : GameWindow
     {
@@ -66,7 +80,7 @@ namespace OpenTkEssTest
 
         protected override void OnLoad(EventArgs e)
         {
-             
+
             GLClearColor(Color.MidnightBlue);
             GL.Enable(EnableCap.DepthTest);
 

@@ -9,9 +9,22 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 using Examples.Shapes;
+using Mini;
 
 namespace OpenTkEssTest
 {
+    [Info(OrderCode = "02")]
+    [Info("StencilCSGDemo")]
+    public class StencilCSGDemo : DemoBase
+    {
+        public override void Init()
+        {
+            using (var example = new StencilCSG())
+            {
+                example.Run(30.0, 0.0);
+            }
+        }
+    }
 
     //[Example("Stencil CSG", ExampleCategory.OpenGL, "1.x", Documentation = "StencilCSG")]
     partial class StencilCSG : GameWindow
