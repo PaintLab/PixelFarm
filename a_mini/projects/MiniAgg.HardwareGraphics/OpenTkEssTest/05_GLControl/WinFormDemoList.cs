@@ -64,22 +64,15 @@ namespace OpenTkEssTest
                 canvas.FillColor = LayoutFarm.Drawing.Color.Green;
 
                 //rect polygon
-                canvas.DrawPolygon(
-                    new float[]{
+                var polygonCoords = new float[]{
                         3,3,
                         4,3,
-                        4.5f,4,
-                        3.5f,4});
+                        4.2f,4,
+                        3.2f,4};
 
+                canvas.DrawPolygon(polygonCoords); 
                 //fill polygon test
-                canvas.FillPolygon(
-                  new float[]{
-                        3,3,
-                        4,3,
-                        4.5f,4,
-                        3.5f,4});
-
-
+                canvas.FillPolygon(polygonCoords); 
                 canvas.DrawLine(1, 1, 1.5f, 3);
 
 
@@ -102,6 +95,6 @@ namespace OpenTkEssTest
         }
     }
 
-  
+
 
 }

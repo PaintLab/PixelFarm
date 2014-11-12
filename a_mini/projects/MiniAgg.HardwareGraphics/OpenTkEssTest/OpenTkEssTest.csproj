@@ -189,6 +189,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
+      <Name>MiniAgg.Complements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MiniAgg\MiniAgg.csproj">
+      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MiniTesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>

@@ -112,6 +112,13 @@ namespace OpenTkEssTest
             //Tesselate
             //2d coods lis
             //n point 
+            var vertextList = TessealatePolygon(vertex2dCoords);
+            //-----------------------------
+            FillTriangularStrip(vertextList);
+            //-----------------------------
+        }
+        static List<Vertex> TessealatePolygon(float[] vertex2dCoords)
+        {
             TessListener t01 = new TessListener();
             Tesselator tess = new Tesselator();
             int ncoords = vertex2dCoords.Length / 2;
@@ -132,9 +139,7 @@ namespace OpenTkEssTest
             }
             tess.EndContour();
             tess.EndPolygon();
-            //-----------------------------
-            FillTriangularStrip(t01.resultVertexList);
-            //-----------------------------
+            return t01.resultVertexList;
         }
         static void FillTriangularStrip(List<Vertex> m_VertexList)
         {
