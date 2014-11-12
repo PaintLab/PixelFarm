@@ -13,95 +13,6 @@ using Tesselate;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "21")]
-    [Info("T21_TestWinGLControl")]
-    public class T21_TestWinGLControl : DemoBase
-    {
-        public override void Init()
-        {
-            FormTestWinGLControl form = new FormTestWinGLControl();
-            form.Show();
-
-        }
-    }
-    [Info(OrderCode = "22")]
-    [Info("T22_DemoWinGLControl")]
-    public class T22_FormTestWinGLControlDemo2 : DemoBase
-    {
-        public override void Init()
-        {
-            FormGLControlSimple form = new FormGLControlSimple();
-            form.Show();
-        }
-    }
-
-    [Info(OrderCode = "23")]
-    [Info("T23_FormMultipleGLControlsFormDemo")]
-    public class T23_FormMultipleGLControlsFormDemo : DemoBase
-    {
-        public override void Init()
-        {
-            FormMultipleGLControlsForm form = new FormMultipleGLControlsForm();
-            form.Show();
-        }
-    }
-    [Info(OrderCode = "24")]
-    [Info("T24_FormMultipleGLControlsFormDemo2")]
-    public class T24_FormMultipleGLControlsFormDemo2 : DemoBase
-    {
-        public override void Init()
-        {
-            FormTestWinGLControl2 form = new FormTestWinGLControl2();
-            CanvasGL2d canvas = new CanvasGL2d();
-
-            form.SetGLPaintHandler((o, s) =>
-            {
-                canvas.Clear(LayoutFarm.Drawing.Color.White);
-
-                canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
-                canvas.FillRect(1, 1, 1f, 1f);
-
-                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
-
-                //rect polygon
-                canvas.DrawPolygon(
-                    new float[]{
-                        3,3,
-                        4,3,
-                        4.5f,4,
-                        3.5f,4});
-
-                //fill polygon test
-                canvas.FillPolygon(
-                  new float[]{
-                        3,3,
-                        4,3,
-                        4.5f,4,
-                        3.5f,4});
-
-
-                canvas.DrawLine(1, 1, 1.5f, 3);
-
-
-                //GL.Begin(BeginMode.Triangles);
-                //GL.Vertex2(0, 1f);
-                //GL.Vertex2(-1f, -1f);
-                //GL.Vertex2(1f, -1f); 
-                ////GL.Color3(LayoutFarm.Drawing.Color.Red); GL.Vertex2(0, 1f);  // GL.Vertex3(0.0f, 1.0f, 0.0f);
-                ////GL.Color3(LayoutFarm.Drawing.Color.Green); GL.Vertex2(-1f, -1f); //GL.Vertex3(-1f, -1f, 0.0f);
-                ////GL.Color3(LayoutFarm.Drawing.Color.Blue); GL.Vertex2(1f, -1f);  // GL.Vertex3(1f, -1f, 0.0f);
-                ////GL.Color3(LayoutFarm.Drawing.Color.Blue); GL.Vertex2(1f, -1f); 
-
-                //////GL.Vertex2(0, 1f); ;// GL.Vertex3(0.0f, 1.0f, 0.0f);
-                //////GL.Vertex2(-1f, -1f); //GL.Vertex3(-1f, -1f, 0.0f);
-                //////GL.Vertex2(1f, -1f); ;// GL.Vertex3(1f, -1f, 0.0f);
-
-                //GL.End();
-            });
-            form.Show();
-        }
-    }
-
     public class CanvasGL2d
     {
         LayoutFarm.Drawing.Color fillColor = LayoutFarm.Drawing.Color.Black;
@@ -111,30 +22,8 @@ namespace OpenTkEssTest
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.ClearColor(c);
         }
-       
-        void FillVertexList(List<Vertex> m_VertexList)
-        {
-            int a = m_VertexList.Count;
-            int j = m_VertexList.Count;
-            int lim = j - 2;
-            for (int i = 0; i < lim; )
-            {
-                var v0 = m_VertexList[i];
-                var v1 = m_VertexList[i + 1];
-                var v2 = m_VertexList[i + 2];
 
-                //wire frame
-                DrawLine((float)v0.m_X, (float)v0.m_Y,
-                        (float)v1.m_X, (float)v1.m_Y);
-                DrawLine((float)v1.m_X, (float)v1.m_Y,
-                      (float)v2.m_X, (float)v2.m_Y);
-                DrawLine((float)v2.m_X, (float)v2.m_Y,
-                     (float)v0.m_X, (float)v0.m_Y);
 
-                i += 3;
-            }
-
-        }
         public void FillRect(float x, float y, float w, float h)
         {
 
@@ -247,7 +136,7 @@ namespace OpenTkEssTest
             FillTriangularStrip(t01.resultVertexList);
             //-----------------------------
         }
-       static  void FillTriangularStrip(List<Vertex> m_VertexList)
+        static void FillTriangularStrip(List<Vertex> m_VertexList)
         {
             //convert vertex to float array
             {
@@ -327,7 +216,6 @@ namespace OpenTkEssTest
             }
         }
     }
-
 
 
 

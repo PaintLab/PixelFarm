@@ -70,6 +70,7 @@
     <Compile Include="02_VertextBuffer\VBOStatic.cs" />
     <Compile Include="03_TextureMapping\TextureMatrix.cs" />
     <Compile Include="04_StencilCSG\StencilCSG.cs" />
+    <Compile Include="05_GLControl\CanvasGL2d.cs" />
     <Compile Include="05_GLControl\FormTestWinGLControl2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,7 +105,7 @@
     <Compile Include="06_GameWindows\GameWindowMsaa.cs" />
     <Compile Include="06_GameWindows\GameWindowSimple.cs" />
     <Compile Include="06_GameWindows\GameWindowThreaded.cs" />
-    <Compile Include="06_GameWindows\TessListener.cs" />
+    <Compile Include="05_GLControl\TessListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
