@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 using System.Drawing;
-using System.Text; 
-using OpenTK.Graphics.OpenGL; 
+using System.Text;
+using OpenTK.Graphics.OpenGL;
 using Tesselate;
 
 
@@ -13,6 +13,10 @@ namespace OpenTkEssTest
     public class CanvasGL2d
     {
         LayoutFarm.Drawing.Color fillColor = LayoutFarm.Drawing.Color.Black;
+
+        public CanvasGL2d()
+        {
+        }
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.AccumBufferBit | ClearBufferMask.StencilBufferBit);
@@ -45,7 +49,7 @@ namespace OpenTkEssTest
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
                 GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
                 GL.DisableClientState(ArrayCap.VertexArray);
-            } 
+            }
         }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
@@ -87,16 +91,42 @@ namespace OpenTkEssTest
                     indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
-
                     //------------------------------------------ 
                     //fill rect with texture
-                    FillRect(x, y, 2, 2);
-
+                    FillRect(x, y, bmp.Width, bmp.Height);
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
 
                 } GL.Disable(EnableCap.Texture2D);
             }
+        }
+        public void DrawImage(GLBitmapTexture bmp, float x, float y, float w, float h)
+        {
+            unsafe
+            {
 
+                GL.Enable(EnableCap.Texture2D);
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                    GL.EnableClientState(ArrayCap.TextureCoordArray); //***
+
+                    float* arr = stackalloc float[8];
+                    arr[0] = 0; arr[1] = 1;
+                    arr[2] = 1; arr[3] = 1;
+                    arr[4] = 1; arr[5] = 0;
+                    arr[6] = 0; arr[7] = 0;
+
+                    byte* indices = stackalloc byte[6];
+                    indices[0] = 0; indices[1] = 1; indices[2] = 2;
+                    indices[3] = 2; indices[4] = 3; indices[5] = 0;
+
+                    GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
+                    //------------------------------------------ 
+                    //fill rect with texture
+                    FillRect(x, y, w, h);
+                    GL.DisableClientState(ArrayCap.TextureCoordArray);
+
+                } GL.Disable(EnableCap.Texture2D);
+            }
         }
         public void DrawPolygon(float[] polygon2dVertices)
         {
@@ -230,7 +260,7 @@ namespace OpenTkEssTest
             //        i += 3;
             //    }
             //}
-        } 
+        }
         public LayoutFarm.Drawing.Color FillColor
         {
             get
@@ -245,6 +275,6 @@ namespace OpenTkEssTest
         }
     }
 
-  
+
 
 }

@@ -68,27 +68,27 @@ namespace OpenTkEssTest
                     {
                         hwBmp = new GLBitmapTexture(bitmap);
                     }
-                } 
+                }
 
-                canvas.DrawImage(hwBmp, 1, 1);
-                canvas.DrawImage(hwBmp, 3, 3);
+                canvas.DrawImage(hwBmp, 10, 10);
+                canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.Red;
                 //rect polygon
                 var polygonCoords = new float[]{
-                        3,3,
-                        4,3,
-                        4.2f,4,
-                        3.2f,4};
+                        5,300,
+                        40,300,
+                        50,340,
+                        10f,340};
 
                 canvas.DrawPolygon(polygonCoords);
                 //fill polygon test
                 canvas.FillPolygon(polygonCoords);
 
-                canvas.DrawLine(1, 1, 1.5f, 5);
+                canvas.DrawLine(1, 1, 100f, 500);
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
-                
+
 
                 //GL.Begin(BeginMode.Triangles);
                 //GL.Vertex2(0, 1f);

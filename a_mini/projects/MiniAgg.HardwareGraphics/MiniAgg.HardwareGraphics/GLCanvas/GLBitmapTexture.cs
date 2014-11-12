@@ -4,8 +4,8 @@ using System;
 
 using OpenTK.Graphics.OpenGL; 
 using Tesselate;
-
 using System.Drawing;
+
 
 namespace OpenTkEssTest
 {
