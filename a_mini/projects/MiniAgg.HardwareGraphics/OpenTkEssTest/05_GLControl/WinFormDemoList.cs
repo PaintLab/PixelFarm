@@ -84,26 +84,17 @@ namespace OpenTkEssTest
                 canvas.DrawPolygon(polygonCoords);
                 //fill polygon test
                 canvas.FillPolygon(polygonCoords);
-
+                //draw line test
                 canvas.DrawLine(1, 1, 100f, 500);
+                //---------------------------------------------
+                //draw ellipse and circle
+                canvas.DrawCircle(400, 500, 50);
+
+                canvas.FillCircle(450, 550, 25);
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
+                //--------------------------------------------- 
 
-
-                //GL.Begin(BeginMode.Triangles);
-                //GL.Vertex2(0, 1f);
-                //GL.Vertex2(-1f, -1f);
-                //GL.Vertex2(1f, -1f); 
-                ////GL.Color3(LayoutFarm.Drawing.Color.Red); GL.Vertex2(0, 1f);  // GL.Vertex3(0.0f, 1.0f, 0.0f);
-                ////GL.Color3(LayoutFarm.Drawing.Color.Green); GL.Vertex2(-1f, -1f); //GL.Vertex3(-1f, -1f, 0.0f);
-                ////GL.Color3(LayoutFarm.Drawing.Color.Blue); GL.Vertex2(1f, -1f);  // GL.Vertex3(1f, -1f, 0.0f);
-                ////GL.Color3(LayoutFarm.Drawing.Color.Blue); GL.Vertex2(1f, -1f); 
-
-                //////GL.Vertex2(0, 1f); ;// GL.Vertex3(0.0f, 1.0f, 0.0f);
-                //////GL.Vertex2(-1f, -1f); //GL.Vertex3(-1f, -1f, 0.0f);
-                //////GL.Vertex2(1f, -1f); ;// GL.Vertex3(1f, -1f, 0.0f);
-
-                //GL.End();
             });
             form.Show();
         }

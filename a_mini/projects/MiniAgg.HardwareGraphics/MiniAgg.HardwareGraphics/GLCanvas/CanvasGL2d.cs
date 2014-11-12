@@ -7,12 +7,17 @@ using System.Text;
 using OpenTK.Graphics.OpenGL;
 using Tesselate;
 
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
 
 namespace OpenTkEssTest
 {
     public class CanvasGL2d
     {
         LayoutFarm.Drawing.Color fillColor = LayoutFarm.Drawing.Color.Black;
+        //tools
+        Ellipse ellipse = new Ellipse();
+
 
         public CanvasGL2d()
         {
@@ -130,12 +135,16 @@ namespace OpenTkEssTest
         }
         public void DrawPolygon(float[] polygon2dVertices)
         {
+            DrawPolygon(polygon2dVertices, polygon2dVertices.Length / 2);
+        }
+        public void DrawPolygon(float[] polygon2dVertices, int npoints)
+        {
             //closed polyline
             //draw polyline
             unsafe
             {
 
-                int npoints = polygon2dVertices.Length / 2;
+
                 //crete indices
                 int* indices = stackalloc int[npoints * 2];
                 int nn = 0;
@@ -155,11 +164,12 @@ namespace OpenTkEssTest
                     GL.EnableClientState(ArrayCap.VertexArray); //***
                     //vertex 2d
                     GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                    GL.DrawElements(BeginMode.Lines, npoints * 2, DrawElementsType.UnsignedInt, (IntPtr)indices);
+                    GL.DrawElements(BeginMode.LineLoop, npoints * 2, DrawElementsType.UnsignedInt, (IntPtr)indices);
                     GL.DisableClientState(ArrayCap.VertexArray);
                 }
             }
         }
+
         public void FillPolygon(float[] vertex2dCoords)
         {
             //-------------
@@ -171,6 +181,8 @@ namespace OpenTkEssTest
             FillTriangularStrip(vertextList);
             //-----------------------------
         }
+
+
         static List<Vertex> TessealatePolygon(float[] vertex2dCoords)
         {
             TessListener t01 = new TessListener();
@@ -195,7 +207,9 @@ namespace OpenTkEssTest
             tess.EndPolygon();
             return t01.resultVertexList;
         }
-        static void FillTriangularStrip(List<Vertex> m_VertexList)
+
+
+        void FillTriangularStrip(List<Vertex> m_VertexList)
         {
             //convert vertex to float array
             {
@@ -237,30 +251,32 @@ namespace OpenTkEssTest
 
                 }
             }
+            {
 
-            //wire frame
-            //{
+                //var currentColor = this.fillColor;
+                //this.FillColor = LayoutFarm.Drawing.Color.Black;
 
-            //    int j = m_VertexList.Count;
-            //    int lim = j - 2;
-            //    for (int i = 0; i < lim; )
-            //    {
-            //        var v0 = m_VertexList[i];
-            //        var v1 = m_VertexList[i + 1];
-            //        var v2 = m_VertexList[i + 2];
+                //int j = m_VertexList.Count;
+                //int lim = j - 2;
+                //for (int i = 0; i < lim; )
+                //{
+                //    var v0 = m_VertexList[i];
+                //    var v1 = m_VertexList[i + 1];
+                //    var v2 = m_VertexList[i + 2]; 
 
+                //    DrawLine((float)v0.m_X, (float)v0.m_Y,
+                //            (float)v1.m_X, (float)v1.m_Y);
+                //    DrawLine((float)v1.m_X, (float)v1.m_Y,
+                //          (float)v2.m_X, (float)v2.m_Y);
+                //    DrawLine((float)v2.m_X, (float)v2.m_Y,
+                //         (float)v0.m_X, (float)v0.m_Y);
 
-            //        DrawLine((float)v0.m_X, (float)v0.m_Y,
-            //                (float)v1.m_X, (float)v1.m_Y);
-            //        DrawLine((float)v1.m_X, (float)v1.m_Y,
-            //              (float)v2.m_X, (float)v2.m_Y);
-            //        DrawLine((float)v2.m_X, (float)v2.m_Y,
-            //             (float)v0.m_X, (float)v0.m_Y);
-
-            //        i += 3;
-            //    }
-            //}
+                //    i += 3;
+                //}
+                //this.FillColor = currentColor;
+            }
         }
+     
         public LayoutFarm.Drawing.Color FillColor
         {
             get
@@ -272,6 +288,128 @@ namespace OpenTkEssTest
                 this.fillColor = value;
                 GL.Color3(value);
             }
+        }
+
+
+        public void DrawEllipse(float x, float y, double rx, double ry)
+        {
+
+            ellipse.Reset(x, y, rx, ry);
+            VertexStore vxs = ellipse.MakeVxs();
+            int n = vxs.Count;
+            //iterate
+            float[] coords = new float[n * 2];
+            int i = 0;
+            int nn = 0;
+            double vx, vy;
+            var cmd = vxs.GetVertex(i, out vx, out vy);
+            while (i < n)
+            {
+                switch (cmd)
+                {
+                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        {
+                            coords[nn++] = (float)vx;
+                            coords[nn++] = (float)vy;
+                        } break;
+                    case ShapePath.FlagsAndCommand.CommandLineTo:
+                        {
+                            coords[nn++] = (float)vx;
+                            coords[nn++] = (float)vy;
+                        } break;
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        {
+                        } break;
+                    default:
+                        {
+
+                        } break;
+                }
+                i++;
+                cmd = vxs.GetVertex(i, out vx, out vy);
+            }
+            DrawPolygon(coords, nn / 2);
+        }
+        public void DrawCircle(float x, float y, double radius)
+        {
+
+            DrawEllipse(x, y, radius, radius);
+        }
+
+        public void FillEllipse(float x, float y, double rx, double ry)
+        {
+            ellipse.Reset(x, y, rx, ry);
+            VertexStore vxs = ellipse.MakeVxs();
+            int n = vxs.Count;
+            //make triangular fan***
+            unsafe
+            {
+                float* coords = stackalloc float[(n * 2) + 4];
+
+                int i = 0;
+                int nn = 0;
+                int npoints = 0;
+                double vx, vy;
+                //center
+                coords[nn++] = (float)x;
+                coords[nn++] = (float)y;
+                npoints++;
+                var cmd = vxs.GetVertex(i, out vx, out vy);
+
+                while (i < n)
+                {
+                    switch (cmd)
+                    {
+                        case ShapePath.FlagsAndCommand.CommandMoveTo:
+                            {
+                                coords[nn++] = (float)vx;
+                                coords[nn++] = (float)vy;
+                                npoints++;
+                            } break;
+                        case ShapePath.FlagsAndCommand.CommandLineTo:
+                            {
+                                coords[nn++] = (float)vx;
+                                coords[nn++] = (float)vy;
+                                npoints++;
+                            } break;
+                        case ShapePath.FlagsAndCommand.CommandStop:
+                            {
+                            } break;
+                        default:
+                            {
+
+                            } break;
+                    }
+                    i++;
+                    cmd = vxs.GetVertex(i, out vx, out vy);
+                }
+
+                //close circle
+                coords[nn++] = coords[2];
+                coords[nn++] = coords[3];
+                npoints++;
+
+                int* indx = stackalloc int[npoints];
+                for (i = 0; i < npoints; ++i)
+                {
+                    indx[i] = i;
+                }
+
+
+
+                //fill triangular fan
+                GL.EnableClientState(ArrayCap.VertexArray); //***
+                //vertex 2d
+                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
+                GL.DrawElements(BeginMode.TriangleFan, npoints, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                GL.DisableClientState(ArrayCap.VertexArray);
+            }
+
+        }
+
+        public void FillCircle(float x, float y, double radius)
+        {
+            FillEllipse(x, y, radius, radius);
         }
     }
 
