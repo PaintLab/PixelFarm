@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2B1F2C53-2F8D-4E0E-94EB-79171C91337B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MiniAgg.HardwareGraphics</RootNamespace>
+    <AssemblyName>MiniAgg.HardwareGraphics</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GLCanvas\CanvasGL2d.cs" />
+    <Compile Include="GLCanvas\GLBitmapTexture.cs" />
+    <Compile Include="GLCanvas\TessListener.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
+      <Name>MiniAgg.Complements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MiniAgg\MiniAgg.csproj">
+      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MiniTesselate\Tesselate.csproj">
+      <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
+      <Name>Tesselate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
+      <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
+      <Name>OpenTk.CoreGraphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenTk.Platforms\OpenTk.Platforms.csproj">
+      <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>
+      <Name>OpenTk.Platforms</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

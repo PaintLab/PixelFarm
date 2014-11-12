@@ -6,12 +6,24 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using Mini;
 
 namespace OpenTkEssTest
 {
 
     //[Example("Texture Matrix Wormhole", ExampleCategory.OpenGL, "1.x", Documentation = "TextureMatrix")]
-
+    [Info(OrderCode = "02")]
+    [Info("Texture Matrix Wormhole")]
+    public class T05_TextureMatrix : DemoBase
+    {
+        public override void Init()
+        {
+            using (var example = new TextureMatrix())
+            {
+                example.Run(30.0, 0.0);
+            }
+        }
+    }
     class TextureMatrix : GameWindow
     {
 
@@ -29,8 +41,8 @@ namespace OpenTkEssTest
             GL.ClearColor(0f, 0f, 0f, 0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
-
-            Texture = LoadTexture("Data/Textures/logo-dark.jpg");
+      
+            Texture = LoadTexture("../../Data/Textures/logo-dark.jpg");
 
             GL.Enable(EnableCap.Texture2D);
 

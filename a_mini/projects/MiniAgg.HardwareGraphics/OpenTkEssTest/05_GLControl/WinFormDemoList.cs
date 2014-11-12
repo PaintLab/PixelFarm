@@ -53,16 +53,27 @@ namespace OpenTkEssTest
         {
             FormTestWinGLControl2 form = new FormTestWinGLControl2();
             CanvasGL2d canvas = new CanvasGL2d();
+            GLBitmapTexture hwBmp = null;
 
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
-                canvas.FillRect(1, 1, 1f, 1f);
+                //canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
+                //canvas.FillRect(1, 1, 1f, 1f);
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
+                if (hwBmp == null)
+                {
+                    using (Bitmap bitmap = new Bitmap("../../Data/Textures/logo-dark.jpg"))
+                    {
+                        hwBmp = new GLBitmapTexture(bitmap);
+                    }
+                } 
 
+                canvas.DrawImage(hwBmp, 1, 1);
+                canvas.DrawImage(hwBmp, 3, 3);
+
+                canvas.FillColor = LayoutFarm.Drawing.Color.Red;
                 //rect polygon
                 var polygonCoords = new float[]{
                         3,3,
@@ -70,11 +81,14 @@ namespace OpenTkEssTest
                         4.2f,4,
                         3.2f,4};
 
-                canvas.DrawPolygon(polygonCoords); 
+                canvas.DrawPolygon(polygonCoords);
                 //fill polygon test
-                canvas.FillPolygon(polygonCoords); 
-                canvas.DrawLine(1, 1, 1.5f, 3);
+                canvas.FillPolygon(polygonCoords);
 
+                canvas.DrawLine(1, 1, 1.5f, 5);
+
+                canvas.FillColor = LayoutFarm.Drawing.Color.White;
+                
 
                 //GL.Begin(BeginMode.Triangles);
                 //GL.Vertex2(0, 1f);

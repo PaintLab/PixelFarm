@@ -70,7 +70,6 @@
     <Compile Include="02_VertextBuffer\VBOStatic.cs" />
     <Compile Include="03_TextureMapping\TextureMatrix.cs" />
     <Compile Include="04_StencilCSG\StencilCSG.cs" />
-    <Compile Include="05_GLControl\CanvasGL2d.cs" />
     <Compile Include="05_GLControl\FormTestWinGLControl2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,7 +104,6 @@
     <Compile Include="06_GameWindows\GameWindowMsaa.cs" />
     <Compile Include="06_GameWindows\GameWindowSimple.cs" />
     <Compile Include="06_GameWindows\GameWindowThreaded.cs" />
-    <Compile Include="05_GLControl\TessListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
@@ -200,6 +198,10 @@
     <ProjectReference Include="..\..\MiniTesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics.csproj">
+      <Project>{2B1F2C53-2F8D-4E0E-94EB-79171C91337B}</Project>
+      <Name>MiniAgg.HardwareGraphics</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
       <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
