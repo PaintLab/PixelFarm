@@ -154,6 +154,7 @@ namespace TessTest
                 new Vertex(1 ,3),
                 new Vertex(0 ,2),               
             };
+
             t01.Connect(vertexts, tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
 
 

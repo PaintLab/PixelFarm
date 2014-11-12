@@ -8,6 +8,8 @@ using System.Windows.Forms;
 
 using OpenTK.Graphics.OpenGL;
 using Mini;
+using Tesselate;
+
 
 namespace OpenTkEssTest
 {
@@ -66,8 +68,16 @@ namespace OpenTkEssTest
                     new float[]{
                         3,3,
                         4,3,
-                        4,4,
-                        3,4});
+                        4.5f,4,
+                        3.5f,4});
+
+                //fill polygon test
+                canvas.FillPolygon(
+                  new float[]{
+                        3,3,
+                        4,3,
+                        4.5f,4,
+                        3.5f,4});
 
 
                 canvas.DrawLine(1, 1, 1.5f, 3);
@@ -101,12 +111,28 @@ namespace OpenTkEssTest
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.ClearColor(c);
         }
-        public void FillPolygon(float[] vertex2dCoords)
+       
+        void FillVertexList(List<Vertex> m_VertexList)
         {
+            int a = m_VertexList.Count;
+            int j = m_VertexList.Count;
+            int lim = j - 2;
+            for (int i = 0; i < lim; )
+            {
+                var v0 = m_VertexList[i];
+                var v1 = m_VertexList[i + 1];
+                var v2 = m_VertexList[i + 2];
 
-            //2d coods lis
-            //n point 
+                //wire frame
+                DrawLine((float)v0.m_X, (float)v0.m_Y,
+                        (float)v1.m_X, (float)v1.m_Y);
+                DrawLine((float)v1.m_X, (float)v1.m_Y,
+                      (float)v2.m_X, (float)v2.m_Y);
+                DrawLine((float)v2.m_X, (float)v2.m_Y,
+                     (float)v0.m_X, (float)v0.m_Y);
 
+                i += 3;
+            }
 
         }
         public void FillRect(float x, float y, float w, float h)
@@ -168,16 +194,17 @@ namespace OpenTkEssTest
 
                 int npoints = polygon2dVertices.Length / 2;
                 //crete indices
-                int* indices = stackalloc int[npoints * 2]; 
+                int* indices = stackalloc int[npoints * 2];
                 int nn = 0;
                 for (int i = 1; i < npoints; ++i)
                 {
                     indices[nn++] = i - 1;
-                    indices[nn++] = i; 
+                    indices[nn++] = i;
                 }
                 //------------------
+                //close polygon
                 indices[nn++] = npoints - 1;
-                indices[nn++] = 0; 
+                indices[nn++] = 0;
 
                 fixed (float* arr = &polygon2dVertices[0])
                 {
@@ -190,8 +217,103 @@ namespace OpenTkEssTest
                 }
             }
         }
-        
-        
+        public void FillPolygon(float[] vertex2dCoords)
+        {
+            //-------------
+            //Tesselate
+            //2d coods lis
+            //n point 
+            TessListener t01 = new TessListener();
+            Tesselator tess = new Tesselator();
+            int ncoords = vertex2dCoords.Length / 2;
+            List<Vertex> vertexts = new List<Vertex>(ncoords);
+            int nn = 0;
+            for (int i = 0; i < ncoords; ++i)
+            {
+                vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
+            }
+            t01.Connect(vertexts, tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
+            tess.BeginPolygon();
+            tess.BeginContour();
+            int j = vertexts.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                Vertex v = vertexts[i];
+                tess.AddVertex(v.m_X, v.m_Y, 0, i);
+            }
+            tess.EndContour();
+            tess.EndPolygon();
+            //-----------------------------
+            FillTriangularStrip(t01.resultVertexList);
+            //-----------------------------
+        }
+       static  void FillTriangularStrip(List<Vertex> m_VertexList)
+        {
+            //convert vertex to float array
+            {
+                unsafe
+                {
+                    int j = m_VertexList.Count;
+                    int j2 = j * 2;
+                    float* vertices = stackalloc float[j2];
+                    int nn = 0;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        var v = m_VertexList[i];
+                        vertices[nn++] = (float)v.m_X;
+                        vertices[nn++] = (float)v.m_Y;
+                    }
+                    //--------------------------------------
+                    int num_indices = j - 2;
+
+                    //int[] indx2 = new int[j ];
+                    int* indx = stackalloc int[j];
+
+                    nn = 0;//reset
+                    for (int i = 0; i < num_indices; )
+                    {
+                        //indx2[nn++] = i;
+                        //indx2[nn++] = i + 1;
+                        //indx2[nn++] = i + 2;
+                        indx[nn++] = i;
+                        indx[nn++] = i + 1;
+                        indx[nn++] = i + 2;
+                        i += 3;
+                    }
+                    //--------------------------------------
+                    GL.EnableClientState(ArrayCap.VertexArray); //***
+                    //vertex 2d
+                    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)vertices);
+                    GL.DrawElements(BeginMode.TriangleStrip, j, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                    GL.DisableClientState(ArrayCap.VertexArray);
+
+                }
+            }
+
+            //wire frame
+            //{
+
+            //    int j = m_VertexList.Count;
+            //    int lim = j - 2;
+            //    for (int i = 0; i < lim; )
+            //    {
+            //        var v0 = m_VertexList[i];
+            //        var v1 = m_VertexList[i + 1];
+            //        var v2 = m_VertexList[i + 2];
+
+
+            //        DrawLine((float)v0.m_X, (float)v0.m_Y,
+            //                (float)v1.m_X, (float)v1.m_Y);
+            //        DrawLine((float)v1.m_X, (float)v1.m_Y,
+            //              (float)v2.m_X, (float)v2.m_Y);
+            //        DrawLine((float)v2.m_X, (float)v2.m_Y,
+            //             (float)v0.m_X, (float)v0.m_Y);
+
+            //        i += 3;
+            //    }
+            //}
+        }
+
         public LayoutFarm.Drawing.Color FillColor
         {
             get
@@ -205,6 +327,8 @@ namespace OpenTkEssTest
             }
         }
     }
+
+
 
 
 }

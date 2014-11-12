@@ -10,10 +10,9 @@
  */
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
-using Tesselate;
 
-namespace TessTest
+using Tesselate;
+namespace OpenTkEssTest
 {
     public struct Vertex
     {
@@ -32,13 +31,12 @@ namespace TessTest
 #endif
 
     }
-
     public class TessListener
     {
 
         List<Vertex> inputVertextList;
         List<Vertex> tempVertextList = new List<Vertex>();
-        public List<Vertex> resultVertexList = new List<Vertex>(); 
+        public List<Vertex> resultVertexList = new List<Vertex>();
         public TessListener()
         {
             //empty not use
@@ -48,7 +46,7 @@ namespace TessTest
         public void BeginCallBack(Tesselator.TriangleListType type)
         {
 
-            Console.WriteLine("begin: " + type.ToString());
+            //Console.WriteLine("begin: " + type.ToString());
             //Assert.IsTrue(GetNextOutputAsString() == "B");
             //switch (type)
             //{
@@ -72,7 +70,7 @@ namespace TessTest
         public void EndCallBack()
         {
             //Assert.IsTrue(GetNextOutputAsString() == "E");
-            Console.WriteLine("end");
+            //Console.WriteLine("end");
         }
 
         public void VertexCallBack(int index)
@@ -83,12 +81,12 @@ namespace TessTest
             {
                 //use data from temp store
                 resultVertexList.Add(this.tempVertextList[-index]);
-                Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
+                //Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
             }
             else
             {
                 resultVertexList.Add(this.inputVertextList[index]);
-                Console.WriteLine("v_cb:" + index + ":(" + inputVertextList[index] + ")");
+                // Console.WriteLine("v_cb:" + index + ":(" + inputVertextList[index] + ")");
             }
 
 
@@ -96,7 +94,7 @@ namespace TessTest
 
         public void EdgeFlagCallBack(bool IsEdge)
         {
-            Console.WriteLine("edge: " + IsEdge);
+            //Console.WriteLine("edge: " + IsEdge);
             //Assert.IsTrue(GetNextOutputAsString() == "F");
             //Assert.AreEqual(GetNextOutputAsBool(), IsEdge);
         }

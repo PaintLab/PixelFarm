@@ -104,6 +104,7 @@
     <Compile Include="06_GameWindows\GameWindowMsaa.cs" />
     <Compile Include="06_GameWindows\GameWindowSimple.cs" />
     <Compile Include="06_GameWindows\GameWindowThreaded.cs" />
+    <Compile Include="06_GameWindows\TessListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
@@ -187,6 +188,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MiniTesselate\Tesselate.csproj">
+      <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
+      <Name>Tesselate</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
       <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
       <Name>OpenTk.CoreGraphics</Name>
