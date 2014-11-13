@@ -18,7 +18,7 @@ namespace OpenTkEssTest
         //tools
         Ellipse ellipse = new Ellipse();
         PathStorage ps = new PathStorage();
-        Stroke stroke1 = new Stroke(2);
+        Stroke stroke1 = new Stroke(1);
         GLScanlineRasterizer sclineRas;
         GLScanlineRasToDestBitmapRenderer sclineRasToBmp;
         GLScanlinePacked8 sclinePack8;
@@ -35,7 +35,11 @@ namespace OpenTkEssTest
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.AccumBufferBit | ClearBufferMask.StencilBufferBit);
             GL.ClearColor(c);
         }
-
+        public double StrokeWidth
+        {
+            get { return this.stroke1.Width; }
+            set { this.stroke1.Width = value; }
+        }
         static unsafe void CreateRectCoords(float* arr, byte* indices,
                 float x, float y, float w, float h)
         {
@@ -152,8 +156,7 @@ namespace OpenTkEssTest
             //closed polyline
             //draw polyline
             unsafe
-            { 
-
+            {   
                 //crete indices
                 int* indices = stackalloc int[npoints * 2];
                 int nn = 0;
@@ -168,8 +171,7 @@ namespace OpenTkEssTest
                 indices[nn++] = 0;
 
                 fixed (float* arr = &polygon2dVertices[0])
-                {
-
+                {   
                     GL.EnableClientState(ArrayCap.VertexArray); //***
                     //vertex 2d
                     GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
@@ -500,10 +502,8 @@ namespace OpenTkEssTest
             ps.LineTo(x2, y2);
             VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
             sclineRas.Reset();
-            sclineRas.AddPath(vxs);
-
-       
-            sclineRasToBmp.RenderWithColor2(sclineRas, sclinePack8, this.fillColor);
+            sclineRas.AddPath(vxs);       
+            sclineRasToBmp.RenderWithColor(sclineRas, sclinePack8, this.fillColor);
             //--------------------------------------
         }
     }

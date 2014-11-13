@@ -94,9 +94,25 @@ namespace OpenTkEssTest
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.Green;
                 //draw line test
-                canvas.DrawLine(1, 1, 100f, 500);
 
-                canvas.DrawLineAggAA(20, 20, 120f, 525);
+                canvas.DrawLine(20, 20, 600, 200);
+                int strkW = 10;
+
+                for (int i = 1; i < 90; i += 10)
+                {
+                    canvas.StrokeWidth = strkW;
+                    double angle = OpenTK.MathHelper.DegreesToRadians(i);
+                    canvas.DrawLineAggAA(20, 20, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
+
+
+                    strkW--;
+                    if (strkW < 1)
+                    {
+                        strkW = 1;
+                    }
+
+                }
+
                 canvas.FillColor = LayoutFarm.Drawing.Color.Red;
 
                 ////---------------------------------------------
