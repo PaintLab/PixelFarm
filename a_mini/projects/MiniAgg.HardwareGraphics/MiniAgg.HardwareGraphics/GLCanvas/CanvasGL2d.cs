@@ -17,10 +17,16 @@ namespace OpenTkEssTest
         LayoutFarm.Drawing.Color fillColor = LayoutFarm.Drawing.Color.Black;
         //tools
         Ellipse ellipse = new Ellipse();
-
+        PathStorage ps = new PathStorage();
+        Stroke stroke1 = new Stroke(5);
+        protected GLScanlineRasterizer sclineRas;
+        GLScanlineRasToDestBitmapRenderer sclineRasToBmp;
 
         public CanvasGL2d()
         {
+            sclineRas = new GLScanlineRasterizer();
+            sclineRasToBmp = new GLScanlineRasToDestBitmapRenderer();
+
         }
         public void Clear(LayoutFarm.Drawing.Color c)
         {
@@ -75,6 +81,8 @@ namespace OpenTkEssTest
                 GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
+
+
         public void DrawImage(GLBitmapTexture bmp, float x, float y)
         {
             unsafe
@@ -228,15 +236,13 @@ namespace OpenTkEssTest
                     //--------------------------------------
                     int num_indices = j - 2;
 
-                    //int[] indx2 = new int[j ];
+
                     int* indx = stackalloc int[j];
 
                     nn = 0;//reset
                     for (int i = 0; i < num_indices; )
                     {
-                        //indx2[nn++] = i;
-                        //indx2[nn++] = i + 1;
-                        //indx2[nn++] = i + 2;
+
                         indx[nn++] = i;
                         indx[nn++] = i + 1;
                         indx[nn++] = i + 2;
@@ -276,7 +282,7 @@ namespace OpenTkEssTest
                 //this.FillColor = currentColor;
             }
         }
-     
+
         public LayoutFarm.Drawing.Color FillColor
         {
             get
@@ -411,8 +417,87 @@ namespace OpenTkEssTest
         {
             FillEllipse(x, y, radius, radius);
         }
+
+
+
+        //---test only ----
+        public void DrawLineAgg(float x1, float y1, float x2, float y2)
+        {
+
+            ps.Clear();
+            ps.MoveTo(x1, y1);
+            ps.LineTo(x2, y2);
+            VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+            int n = vxs.Count;
+
+            unsafe
+            {
+                float* coords = stackalloc float[(n * 2)];
+                int i = 0;
+                int nn = 0;
+                int npoints = 0;
+                double vx, vy;
+
+                var cmd = vxs.GetVertex(i, out vx, out vy);
+                while (i < n)
+                {
+                    switch (cmd)
+                    {
+                        case ShapePath.FlagsAndCommand.CommandMoveTo:
+                            {
+                                coords[nn] = (float)vx;
+                                coords[nn + 1] = (float)vy;
+                                nn += 2;
+                                npoints++;
+                            } break;
+                        case ShapePath.FlagsAndCommand.CommandLineTo:
+                            {
+                                coords[nn] = (float)vx;
+                                coords[nn + 1] = (float)vy;
+                                nn += 2;
+                                npoints++;
+
+                            } break;
+                        case ShapePath.FlagsAndCommand.CommandStop:
+                            {
+                            } break;
+                        default:
+                            {
+
+                            } break;
+                    }
+                    i++;
+                    cmd = vxs.GetVertex(i, out vx, out vy);
+                }
+
+                int num_indices = npoints;
+                int* indx = stackalloc int[num_indices];
+                nn = 0;//reset
+                for (i = 0; i < num_indices; ++i)
+                {
+                    indx[nn++] = i;
+                }
+
+                //--------------------------------------
+                GL.EnableClientState(ArrayCap.VertexArray); //***
+                //vertex 2d
+                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
+                GL.DrawElements(BeginMode.LineLoop, num_indices, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                GL.DisableClientState(ArrayCap.VertexArray);
+                //--------------------------------------
+            }
+        }
+        public void DrawLineAgg2(float x1, float y1, float x2, float y2)
+        {
+
+            ps.Clear();
+            ps.MoveTo(x1, y1);
+            ps.LineTo(x2, y2);
+            VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+            sclineRas.Reset();
+            sclineRas.AddPath(vxs);
+
+             sclineRasToBmp.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
+        }
     }
-
-
-
 }

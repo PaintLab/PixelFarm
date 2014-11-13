@@ -74,7 +74,7 @@ namespace PixelFarm.Agg
     // filling_rule() and gamma() can be called anytime before "sweeping".
     //------------------------------------------------------------------------
 
-    public sealed partial class ScanlineRasterizer
+    public sealed partial class GLScanlineRasterizer
     {
         CellAARasterizer m_cellAARas;
         VectorClipper m_vectorClipper;
@@ -121,7 +121,7 @@ namespace PixelFarm.Agg
             Closed
         }
 
-        public ScanlineRasterizer()
+        public GLScanlineRasterizer()
         {
             m_cellAARas = new CellAARasterizer();
             m_vectorClipper = new VectorClipper(m_cellAARas);
@@ -364,7 +364,7 @@ namespace PixelFarm.Agg
         }
 
         //--------------------------------------------------------------------
-        internal bool SweepScanline(Scanline scline)
+        internal bool SweepScanline(GLScanline scline)
         {
             for (; ; )
             {

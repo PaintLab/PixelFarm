@@ -33,6 +33,7 @@ namespace PixelFarm.Agg
         protected ActualImage destActualImage;
 
         protected ScanlineRasterizer sclineRas;
+
         Affine currentTxMatrix = Affine.IdentityMatrix;
 
         public Graphics2D()

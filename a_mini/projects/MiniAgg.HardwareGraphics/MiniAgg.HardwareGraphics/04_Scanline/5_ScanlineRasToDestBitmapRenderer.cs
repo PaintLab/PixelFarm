@@ -27,12 +27,12 @@ namespace PixelFarm.Agg
     /// <summary>
     /// to bitmap
     /// </summary>  
-    public class ScanlineRasToDestBitmapRenderer
+    public class GLScanlineRasToDestBitmapRenderer
     {
 
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
 
-        public ScanlineRasToDestBitmapRenderer()
+        public GLScanlineRasToDestBitmapRenderer()
         {
 
         }
@@ -43,8 +43,8 @@ namespace PixelFarm.Agg
         }
 
         public void RenderWithColor(IImageReaderWriter dest,
-                ScanlineRasterizer sclineRas,
-                Scanline scline,
+                GLScanlineRasterizer sclineRas,
+                GLScanline scline,
                 ColorRGBA color)
         {
             if (!sclineRas.RewindScanlines()) { return; } //early exit
@@ -88,8 +88,8 @@ namespace PixelFarm.Agg
         }
 
         public void RenderWithSpan(IImageReaderWriter dest,
-                ScanlineRasterizer sclineRas,
-                Scanline scline,
+                 GLScanlineRasterizer sclineRas,
+                 GLScanline scline,
                 ISpanGenerator spanGenerator)
         {
             if (!sclineRas.RewindScanlines()) { return; } //early exit
@@ -139,7 +139,7 @@ namespace PixelFarm.Agg
         }
         protected virtual void CustomRenderSingleScanLine(
             IImageReaderWriter dest,
-            Scanline scline,
+            GLScanline scline,
             ColorRGBA color)
         {
             //implement

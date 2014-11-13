@@ -86,6 +86,11 @@ namespace OpenTkEssTest
                 canvas.FillPolygon(polygonCoords);
                 //draw line test
                 canvas.DrawLine(1, 1, 100f, 500);
+                //
+                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
+                canvas.DrawLineAgg2(20, 20, 120f, 525);                             
+                canvas.FillColor = LayoutFarm.Drawing.Color.Red;
+
                 //---------------------------------------------
                 //draw ellipse and circle
                 canvas.DrawCircle(400, 500, 50);

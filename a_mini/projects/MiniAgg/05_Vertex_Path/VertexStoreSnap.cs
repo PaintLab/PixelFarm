@@ -38,7 +38,7 @@ namespace PixelFarm.Agg
             this.vxs = vxs;
             this.startAt = startAt; 
         } 
-        internal VertexStore GetInternalVxs()
+        public VertexStore GetInternalVxs()
         {
             return this.vxs;
         }
