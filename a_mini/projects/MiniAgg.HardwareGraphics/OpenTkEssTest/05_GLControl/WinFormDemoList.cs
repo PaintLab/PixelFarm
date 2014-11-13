@@ -96,7 +96,7 @@ namespace OpenTkEssTest
                 //draw line test
                 canvas.DrawLine(1, 1, 100f, 500);
 
-                canvas.DrawLineAgg2(20, 20, 120f, 525);
+                canvas.DrawLineAggAA(20, 20, 120f, 525);
                 canvas.FillColor = LayoutFarm.Drawing.Color.Red;
 
                 ////---------------------------------------------

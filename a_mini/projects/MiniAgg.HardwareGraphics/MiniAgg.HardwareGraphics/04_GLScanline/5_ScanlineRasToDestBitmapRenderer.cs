@@ -88,7 +88,7 @@ namespace PixelFarm.Agg
         }
         public void RenderWithColor2(GLScanlineRasterizer sclineRas,
                 GLScanline scline,
-                ColorRGBA color)
+                LayoutFarm.Drawing.Color color)
         {
             if (!sclineRas.RewindScanlines()) { return; } //early exit
             //-----------------------------------------------
@@ -130,7 +130,23 @@ namespace PixelFarm.Agg
 
             }
         }
+        static void DrawPoint(float x1, float y1)
+        {
+            unsafe
+            {
+                float* arr = stackalloc float[2];
+                arr[0] = x1; arr[1] = y1;
 
+                byte* indices = stackalloc byte[1];
+                indices[0] = 0;
+
+                GL.EnableClientState(ArrayCap.VertexArray); //***
+                //vertex
+                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+                GL.DrawElements(BeginMode.Points, 1, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                GL.DisableClientState(ArrayCap.VertexArray);
+            }
+        }
         static void DrawLine(float x1, float y1, float x2, float y2)
         {
             unsafe
@@ -142,7 +158,6 @@ namespace PixelFarm.Agg
                 byte* indices = stackalloc byte[2];
                 indices[0] = 0; indices[1] = 1;
 
-
                 GL.EnableClientState(ArrayCap.VertexArray); //***
                 //vertex
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
@@ -151,83 +166,62 @@ namespace PixelFarm.Agg
             }
         }
         const int BASE_MASK = 255;
-        void GLBlendHL(int x1, int y, int x2, ColorRGBA sourceColor, byte cover)
+        void GLBlendHL(int x1, int y, int x2, LayoutFarm.Drawing.Color color, byte cover)
         {
-            if (sourceColor.alpha != 0)
-            {
-                int len = x2 - x1 + 1;
-                int alpha = (((int)(sourceColor.alpha) * (cover + 1)) >> 8);
-                if (alpha == BASE_MASK)
-                {
-                    GL.Color4(new LayoutFarm.Drawing.Color(sourceColor.alpha,
-                        sourceColor.red,
-                        sourceColor.green,
-                        sourceColor.blue));
-                    //copy color to specific pixel
-                    //render GL line mode 
-                    //int bufferOffset = GetBufferOffsetXY(x1, y);
-                    //recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
-                    DrawLine(x1, y, x2 + 1, y);
+            if (color.A == 0) { return; }
 
-                }
-                else
-                {
-                    int xpos = x1;
-                    do
-                    {
-                        ColorRGBA c = new ColorRGBA(sourceColor, alpha);
-                        GL.Color4(new LayoutFarm.Drawing.Color(c.alpha,
-                           c.red,
-                           c.green,
-                           c.blue));
-                        DrawLine(xpos, y, xpos + 1, y);
-                        xpos++;
-                    }
-                    while (--len != 0);
-                }
+            int len = x2 - x1 + 1;
+            int alpha = (((int)(color.A) * (cover + 1)) >> 8);
+            if (alpha == BASE_MASK)
+            {
+                GL.Color4(color); 
+                DrawLine(x1, y, x2 + 1, y);
+
             }
+            else
+            {
+                int xpos = x1;
+                do
+                {
+                    GL.Color4(LayoutFarm.Drawing.Color.FromArgb(alpha, color));  
+                    DrawPoint(xpos, y);
+                    xpos++;
+                }
+                while (--len != 0);
+            }
+
         }
 
-        void GLBlendSolidHSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex)
+        void GLBlendSolidHSpan(int x, int y, int len, LayoutFarm.Drawing.Color sourceColor, byte[] covers, int coversIndex)
         {
-            int colorAlpha = sourceColor.alpha;
-            if (colorAlpha != 0)
+            int colorAlpha = sourceColor.A;
+            if (colorAlpha == 0) { return; }
+
+            unchecked
             {
-                unchecked
+
+                int xpos = x;
+                do
                 {
-
-                    int xpos = x;
-                    do
+                    //foreach single pixel
+                    int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
+                    if (alpha == BASE_MASK)
                     {
-                        //foreach single pixel
-                        int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
-                        if (alpha == BASE_MASK)
-                        {
-                            GL.Color4(new LayoutFarm.Drawing.Color(sourceColor.alpha,
-                            sourceColor.red,
-                            sourceColor.green,
-                            sourceColor.blue));
-
-                            DrawLine(xpos, y, xpos + 1, y);
-                            xpos++;
-                        }
-                        else
-                        {
-                            ColorRGBA c = new ColorRGBA(sourceColor, alpha);
-                            GL.Color4(new LayoutFarm.Drawing.Color(c.alpha,
-                               c.red,
-                               c.green,
-                               c.blue));
-                            DrawLine(xpos, y, xpos + 1, y);
-                            //recieveBlender.BlendPixel(buffer, bufferOffset, new ColorRGBA(sourceColor, alpha));
-                            xpos++;
-                        }
-                        //bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
-                        coversIndex++;
+                        GL.Color4(sourceColor); 
+                        DrawPoint(xpos, y);
+                        xpos++;
                     }
-                    while (--len != 0);
+                    else
+                    {
+                        GL.Color4(LayoutFarm.Drawing.Color.FromArgb(alpha, sourceColor)); 
+                        DrawPoint(xpos, y);
+                        xpos++;
+                    }
+                    coversIndex++;
                 }
+                while (--len != 0);
             }
+
         }
         public void RenderWithSpan(IImageReaderWriter dest,
                  GLScanlineRasterizer sclineRas,

@@ -152,8 +152,7 @@ namespace OpenTkEssTest
             //closed polyline
             //draw polyline
             unsafe
-            {
-
+            { 
 
                 //crete indices
                 int* indices = stackalloc int[npoints * 2];
@@ -493,7 +492,7 @@ namespace OpenTkEssTest
                 //--------------------------------------
             }
         }
-        public void DrawLineAgg2(float x1, float y1, float x2, float y2)
+        public void DrawLineAggAA(float x1, float y1, float x2, float y2)
         {
             //--------------------------------------
             ps.Clear();
@@ -503,8 +502,8 @@ namespace OpenTkEssTest
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
 
-            ColorRGBA color = new ColorRGBA(this.fillColor.R, this.fillColor.G, this.fillColor.B, this.fillColor.A);
-            sclineRasToBmp.RenderWithColor2(sclineRas, sclinePack8, color);
+       
+            sclineRasToBmp.RenderWithColor2(sclineRas, sclinePack8, this.fillColor);
             //--------------------------------------
         }
     }
