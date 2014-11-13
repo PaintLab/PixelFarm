@@ -39,6 +39,10 @@ namespace OpenTkEssTest
 
                 GL.MatrixMode(MatrixMode.Modelview);
                 GL.LoadIdentity();
+
+                GL.Enable(EnableCap.Blend);
+                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
             }
 
         }

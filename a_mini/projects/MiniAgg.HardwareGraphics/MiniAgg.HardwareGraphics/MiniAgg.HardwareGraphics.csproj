@@ -36,16 +36,16 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="04_Scanline\0_ScanlineSpan.cs" />
-    <Compile Include="04_Scanline\1_Scanline.cs" />
-    <Compile Include="04_Scanline\2_ScanlinePacked8.cs" />
-    <Compile Include="04_Scanline\3_ScanlineUnpacked8.cs" />
-    <Compile Include="04_Scanline\4.1_ScanlineRasterizer.cs" />
-    <Compile Include="04_Scanline\4.2_CellAARasterizer.cs" />
-    <Compile Include="04_Scanline\4.3_VectorClipper.cs" />
-    <Compile Include="04_Scanline\4.4_FillingRule.cs" />
-    <Compile Include="04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
-    <Compile Include="04_Scanline\6_ClipLiangBarsky.cs" />
+    <Compile Include="04_GLScanline\0_ScanlineSpan.cs" />
+    <Compile Include="04_GLScanline\1_Scanline.cs" />
+    <Compile Include="04_GLScanline\2_ScanlinePacked8.cs" />
+    <Compile Include="04_GLScanline\3_ScanlineUnpacked8.cs" />
+    <Compile Include="04_GLScanline\4.1_ScanlineRasterizer.cs" />
+    <Compile Include="04_GLScanline\4.2_CellAARasterizer.cs" />
+    <Compile Include="04_GLScanline\4.3_VectorClipper.cs" />
+    <Compile Include="04_GLScanline\4.4_FillingRule.cs" />
+    <Compile Include="04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
+    <Compile Include="04_GLScanline\6_ClipLiangBarsky.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\GLBitmapTexture.cs" />
     <Compile Include="GLCanvas\TessListener.cs" />

@@ -58,10 +58,8 @@ namespace OpenTkEssTest
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
-
                 //canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
-                //canvas.FillRect(1, 1, 1f, 1f);
-
+                //canvas.FillRect(1, 1, 1f, 1f); 
                 if (hwBmp == null)
                 {
                     using (Bitmap bitmap = new Bitmap("../../Data/Textures/logo-dark.jpg"))
@@ -73,26 +71,36 @@ namespace OpenTkEssTest
                 canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.Red;
+                canvas.FillColor = new LayoutFarm.Drawing.Color(50, 255, 0, 0);  //  LayoutFarm.Drawing.Color.Red;
                 //rect polygon
                 var polygonCoords = new float[]{
                         5,300,
                         40,300,
                         50,340,
                         10f,340};
+                //canvas.DrawPolygon(polygonCoords);
 
-                canvas.DrawPolygon(polygonCoords);
+
                 //fill polygon test
                 canvas.FillPolygon(polygonCoords);
+
+                var polygonCoords2 = new float[]{
+                        5+10,300,
+                        40+10,300,
+                        50+10,340,
+                        10f +10,340};
+                canvas.FillColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
+                canvas.FillPolygon(polygonCoords2);
+
+                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
                 //draw line test
                 canvas.DrawLine(1, 1, 100f, 500);
-                //
-                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
-                canvas.DrawLineAgg2(20, 20, 120f, 525);                             
+
+                canvas.DrawLineAgg2(20, 20, 120f, 525);
                 canvas.FillColor = LayoutFarm.Drawing.Color.Red;
 
-                //---------------------------------------------
-                //draw ellipse and circle
+                ////---------------------------------------------
+                ////draw ellipse and circle
                 canvas.DrawCircle(400, 500, 50);
 
                 canvas.FillCircle(450, 550, 25);

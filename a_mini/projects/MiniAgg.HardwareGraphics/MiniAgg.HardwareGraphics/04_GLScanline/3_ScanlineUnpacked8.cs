@@ -106,7 +106,7 @@ namespace PixelFarm.Agg
     // are better, because switching between two different areas of memory 
     // (that can be very large) occurs less frequently.
     //------------------------------------------------------------------------
-    public sealed class GLScanlineUnpacked8 : Scanline
+    public sealed class GLScanlineUnpacked8 : GLScanline
     {
 
         int minX;

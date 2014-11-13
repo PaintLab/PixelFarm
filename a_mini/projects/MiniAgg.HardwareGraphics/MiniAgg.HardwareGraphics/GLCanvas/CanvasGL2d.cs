@@ -18,14 +18,16 @@ namespace OpenTkEssTest
         //tools
         Ellipse ellipse = new Ellipse();
         PathStorage ps = new PathStorage();
-        Stroke stroke1 = new Stroke(5);
-        protected GLScanlineRasterizer sclineRas;
+        Stroke stroke1 = new Stroke(2);
+        GLScanlineRasterizer sclineRas;
         GLScanlineRasToDestBitmapRenderer sclineRasToBmp;
+        GLScanlinePacked8 sclinePack8;
 
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
             sclineRasToBmp = new GLScanlineRasToDestBitmapRenderer();
+            sclinePack8 = new GLScanlinePacked8();
 
         }
         public void Clear(LayoutFarm.Drawing.Color c)
@@ -186,7 +188,7 @@ namespace OpenTkEssTest
             //n point 
             var vertextList = TessealatePolygon(vertex2dCoords);
             //-----------------------------
-            FillTriangularStrip(vertextList);
+            FillTriangles(vertextList);
             //-----------------------------
         }
 
@@ -217,7 +219,7 @@ namespace OpenTkEssTest
         }
 
 
-        void FillTriangularStrip(List<Vertex> m_VertexList)
+        void FillTriangles(List<Vertex> m_VertexList)
         {
             //convert vertex to float array
             {
@@ -226,33 +228,37 @@ namespace OpenTkEssTest
                     int j = m_VertexList.Count;
                     int j2 = j * 2;
                     float* vertices = stackalloc float[j2];
+                    //float[] vx2 = new float[j2];
                     int nn = 0;
                     for (int i = 0; i < j; ++i)
                     {
                         var v = m_VertexList[i];
-                        vertices[nn++] = (float)v.m_X;
-                        vertices[nn++] = (float)v.m_Y;
+                        vertices[nn] = (float)v.m_X;
+                        vertices[nn + 1] = (float)v.m_Y;
+
+                        //vx2[nn] = (float)v.m_X;
+                        //vx2[nn + 1] = (float)v.m_Y;
+
+
+                        nn += 2;
                     }
                     //--------------------------------------
                     int num_indices = j - 2;
-
-
                     int* indx = stackalloc int[j];
-
                     nn = 0;//reset
                     for (int i = 0; i < num_indices; )
-                    {
-
-                        indx[nn++] = i;
-                        indx[nn++] = i + 1;
-                        indx[nn++] = i + 2;
+                    {  
+                        indx[nn] = i;
+                        indx[nn + 1] = i + 1;
+                        indx[nn + 2] = i + 2;
+                        nn += 3;
                         i += 3;
                     }
                     //--------------------------------------
                     GL.EnableClientState(ArrayCap.VertexArray); //***
                     //vertex 2d
                     GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)vertices);
-                    GL.DrawElements(BeginMode.TriangleStrip, j, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                    GL.DrawElements(BeginMode.Triangles, j, DrawElementsType.UnsignedInt, (IntPtr)indx);
                     GL.DisableClientState(ArrayCap.VertexArray);
 
                 }
@@ -292,7 +298,7 @@ namespace OpenTkEssTest
             set
             {
                 this.fillColor = value;
-                GL.Color3(value);
+                GL.Color4(value);
             }
         }
 
@@ -489,7 +495,7 @@ namespace OpenTkEssTest
         }
         public void DrawLineAgg2(float x1, float y1, float x2, float y2)
         {
-
+            //--------------------------------------
             ps.Clear();
             ps.MoveTo(x1, y1);
             ps.LineTo(x2, y2);
@@ -497,7 +503,9 @@ namespace OpenTkEssTest
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
 
-             sclineRasToBmp.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
+            ColorRGBA color = new ColorRGBA(this.fillColor.R, this.fillColor.G, this.fillColor.B, this.fillColor.A);
+            sclineRasToBmp.RenderWithColor2(sclineRas, sclinePack8, color);
+            //--------------------------------------
         }
     }
 }

@@ -42,7 +42,7 @@ namespace PixelFarm.Agg
     //------------------------------------------------------------------------
 
 
-    public sealed class GLScanlinePacked8 : Scanline
+    public sealed class GLScanlinePacked8 : GLScanline
     {
         internal GLScanlinePacked8()
         {
