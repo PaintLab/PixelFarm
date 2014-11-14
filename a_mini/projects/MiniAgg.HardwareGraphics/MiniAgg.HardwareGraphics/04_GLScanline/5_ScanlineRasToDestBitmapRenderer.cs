@@ -32,19 +32,15 @@ namespace PixelFarm.Agg
     public class GLScanlineRasToDestBitmapRenderer
     {
 
-        ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
-
-        ArrayList<int> xyPointBuffer = new ArrayList<int>();
-        ArrayList<uint> pointColorBuffer = new ArrayList<uint>();
-        ArrayList<VertexC4ubV3f> pointAndColorsBuffers = new ArrayList<VertexC4ubV3f>();
-
+        ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>(); 
+        ArrayList<VertexC4XYZ3I> mySinglePixelBuffer = new ArrayList<VertexC4XYZ3I>();
+        ArrayList<VertexC4XYZ3I> myLineBuffer = new ArrayList<VertexC4XYZ3I>();
+        
         public GLScanlineRasToDestBitmapRenderer()
         {
 
         }
-
-
-        public void RenderWithColor2(GLScanlineRasterizer sclineRas,
+        public void RenderWithColor(GLScanlineRasterizer sclineRas,
                 GLScanline scline,
                 LayoutFarm.Drawing.Color color)
         {
@@ -52,12 +48,20 @@ namespace PixelFarm.Agg
             //----------------------------------------------- 
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------  
+            if (color.A == 0)
+            {
+                return;
+            }
+
             GL.EnableClientState(ArrayCap.ColorArray);
             GL.EnableClientState(ArrayCap.VertexArray);
+
+             
+            this.mySinglePixelBuffer.Clear();
+            this.myLineBuffer.Clear();
+            
             while (sclineRas.SweepScanline(scline))
             {
-                this.pointAndColorsBuffers.Clear();
-
                 int y = scline.Y;
                 int num_spans = scline.SpanCount;
                 byte[] covers = scline.GetCovers();
@@ -77,8 +81,28 @@ namespace PixelFarm.Agg
                         GLBlendHL(x, y, x2, color, covers[span.cover_index]);
                     }
                 }
-                DrawPointsWithVertexBuffer(pointAndColorsBuffers);
             }
+
+            //---------------------------------------------
+            //points
+            int nelements = mySinglePixelBuffer.Count;
+            if (nelements > 0)
+            {
+                Vbo vbo = GenerateVBOForColor4Point2I();
+                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
+                vbo.Dispose();
+            }
+            //---------------------------------------------
+            //lines
+            nelements = myLineBuffer.Count;
+            if (nelements > 0)
+            {
+                Vbo vbo = GenerateVBOForColor4Point2I();
+                DrawLinesWithVertexBuffer(myLineBuffer, nelements);
+                vbo.Dispose();
+            }
+            //---------------------------------------------
+
             GL.DisableClientState(ArrayCap.ColorArray);
             GL.DisableClientState(ArrayCap.VertexArray);
             //------------------------ 
@@ -134,21 +158,20 @@ namespace PixelFarm.Agg
             }
         }
 
-        static Vbo LoadVBO2d(VertexC4ubV3f[] vertices)
+        static Vbo GenerateVBOForColor4Point2I()
         {
             Vbo vboHandle = new Vbo();
-            GL.EnableClientState(ArrayCap.ColorArray);
-            GL.EnableClientState(ArrayCap.VertexArray);
+            //must open these ... before call this func
+            //GL.EnableClientState(ArrayCap.ColorArray);
+            //GL.EnableClientState(ArrayCap.VertexArray);
 
-            GL.GenBuffers(1, out vboHandle.VboID); 
+            GL.GenBuffers(1, out vboHandle.VboID);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboHandle.VboID);
-            GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4ubV3f.SizeInBytes, (IntPtr)0);
-            GL.VertexPointer(2, VertexPointerType.Int, VertexC4ubV3f.SizeInBytes, (IntPtr)(4 * sizeof(byte)));
+            GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4XYZ3I.SizeInBytes, (IntPtr)0);
+            GL.VertexPointer(2, VertexPointerType.Int, VertexC4XYZ3I.SizeInBytes, VertexC4XYZ3I.CoordOffset);
 
             return vboHandle;
         }
-
-
 
         static void DrawLine(float x1, float y1, float x2, float y2)
         {
@@ -172,30 +195,45 @@ namespace PixelFarm.Agg
 
 
         //======================================================================================
-        static void DrawPointsWithVertexBuffer(ArrayList<VertexC4ubV3f> pointAndColors)
+        static void DrawPointsWithVertexBuffer(ArrayList<VertexC4XYZ3I> singlePxBuffer, int nelements)
         {
             unsafe
             {
-                int nelements = pointAndColors.Count;
-                VertexC4ubV3f[] vpoints = pointAndColors.Array;
-                var vbo = LoadVBO2d(vpoints);
-                IntPtr stride_size = new IntPtr(VertexC4ubV3f.SizeInBytes * nelements);
 
-                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
+                //--------------------------------------------- 
+                VertexC4XYZ3I[] vpoints = singlePxBuffer.Array;
+
+                IntPtr stride_size = new IntPtr(VertexC4XYZ3I.SizeInBytes * nelements);
+                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
                 // Fill newly allocated buffer
                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
                 // Only draw particles that are alive
                 GL.DrawArrays(BeginMode.Points, 0, nelements);
+                //--------------------------------------------- 
+            }
+        }
+        static void DrawLinesWithVertexBuffer(ArrayList<VertexC4XYZ3I> linesBuffer, int nelements)
+        {
+            unsafe
+            {  
+                VertexC4XYZ3I[] vpoints = linesBuffer.Array; 
+                IntPtr stride_size = new IntPtr(VertexC4XYZ3I.SizeInBytes * nelements);
+                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
+                // Fill newly allocated buffer
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                // Only draw particles that are alive
+                GL.DrawArrays(BeginMode.Lines, 0, nelements);
             }
         }
         void GLBlendHL(int x1, int y, int x2, LayoutFarm.Drawing.Color color, byte cover)
         {
-            if (color.A == 0) { return; }
+            //if (color.A == 0) { return; }
 
             int len = x2 - x1 + 1;
             int alpha = (((int)(color.A) * (cover + 1)) >> 8);
+            var singlePxBuff = this.mySinglePixelBuffer;
+            var lineBuffer = this.myLineBuffer;
 
-            var pointAndColors = this.pointAndColorsBuffers;
             if (alpha == BASE_MASK)
             {
 
@@ -206,31 +244,26 @@ namespace PixelFarm.Agg
                         } break;
                     case 1:
                         {
-                            //colors.AddVertex(LayoutFarm.Drawing.Color.FromArgb(alpha, color)); 
-                            //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-                            pointAndColors.AddVertex(new VertexC4ubV3f(
+                            singlePxBuff.AddVertex(new VertexC4XYZ3I(
                                 LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
                                 x1, y));
-                            //colors.AddVertex(c.ToARGB());
-                            //points.AddVertex(x1);
-                            //points.AddVertex(y);
+
                         } break;
                     default:
                         {
-                            for (int i = 0; i < len; ++i)
-                            {
-                                //colors.AddVertex(LayoutFarm.Drawing.Color.FromArgb(alpha, color)); 
-                                var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-                                //colors.AddVertex(c.ToARGB());
-                                //points.AddVertex(x1 + i);
-                                //points.AddVertex(y); 
-                                pointAndColors.AddVertex(new VertexC4ubV3f(
-                                    LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
-                                    x1 + i, y));
+                            var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
+                            lineBuffer.AddVertex(new VertexC4XYZ3I(c, x1, y));
+                            lineBuffer.AddVertex(new VertexC4XYZ3I(c, x2 + 1, y));
 
-                                //LayoutFarm.Drawing.Color.FromArgb(alpha, color)
-                            }
-                            //DrawLine(x1, y, x2 + 1, y);
+                            //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
+
+                            //for (int i = 0; i < len; ++i)
+                            //{
+                            //    //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
+                            //    singlePxBuff.AddVertex(new VertexC4XYZ3I(
+                            //        c, x1 + i, y));
+                            //}
+
                         } break;
                 }
             }
@@ -239,16 +272,9 @@ namespace PixelFarm.Agg
                 int xpos = x1;
                 do
                 {
-
-                    //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-                    pointAndColors.AddVertex(new VertexC4ubV3f(
+                    singlePxBuff.AddVertex(new VertexC4XYZ3I(
                         LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
                         xpos, y));
-
-                    //colors.AddVertex(c.ToARGB());
-                    //points.AddVertex(xpos);
-                    //points.AddVertex(y);
-
                     xpos++;
                 }
                 while (--len != 0);
@@ -258,28 +284,28 @@ namespace PixelFarm.Agg
             LayoutFarm.Drawing.Color sourceColor,
             byte[] covers, int coversIndex)
         {
-            int colorAlpha = sourceColor.A;
-            if (colorAlpha == 0) { return; }
+            //int colorAlpha = sourceColor.A;
+            //if (colorAlpha == 0) { return; }
 
             unchecked
             {
 
                 int xpos = x;
-                var pointAndColors = this.pointAndColorsBuffers;
+                var pointAndColors = this.mySinglePixelBuffer;
 
                 do
                 {
                     //foreach single pixel
-                    int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
+                    int alpha = ((sourceColor.A) * ((covers[coversIndex]) + 1)) >> 8;
                     if (alpha == BASE_MASK)
                     {
                         pointAndColors.AddVertex(
-                            new VertexC4ubV3f(sourceColor.ToARGB(), xpos, y));
+                            new VertexC4XYZ3I(sourceColor.ToARGB(), xpos, y));
                     }
                     else
                     {
                         pointAndColors.AddVertex(
-                            new VertexC4ubV3f(LayoutFarm.Drawing.Color.FromArgb(alpha, sourceColor).ToARGB(),
+                            new VertexC4XYZ3I(LayoutFarm.Drawing.Color.FromArgb(alpha, sourceColor).ToARGB(),
                             xpos, y));
                     }
                     xpos++;
@@ -348,6 +374,8 @@ namespace PixelFarm.Agg
         //======================================================================================
 
         //following methods for render with vertext array
+        //ArrayList<int> xyPointBuffer = new ArrayList<int>();
+        //ArrayList<uint> pointColorBuffer = new ArrayList<uint>();
         //public void RenderWithColor(GLScanlineRasterizer sclineRas,
         //    GLScanline scline,
         //    LayoutFarm.Drawing.Color color)

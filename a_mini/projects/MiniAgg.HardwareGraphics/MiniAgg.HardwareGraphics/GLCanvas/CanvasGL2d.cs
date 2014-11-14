@@ -517,7 +517,7 @@ namespace OpenTkEssTest
             VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor2(sclineRas, sclinePack8, this.fillColor);
+            sclineRasToBmp.RenderWithColor(sclineRas, sclinePack8, this.fillColor);
             //--------------------------------------
         }
     }

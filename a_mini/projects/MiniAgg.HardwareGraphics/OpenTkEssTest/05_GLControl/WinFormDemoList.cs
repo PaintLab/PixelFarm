@@ -95,13 +95,15 @@ namespace OpenTkEssTest
                 canvas.FillPolygon(polygonCoords2);
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.Magenta;
+                
                 //draw line test
-
+                
                 canvas.DrawLine(20, 20, 600, 200);
-                 
+
+                canvas.SmoothMode = CanvasSmoothMode.AggSmooth; 
                 int strkW = 10;
                 canvas.FillColor = LayoutFarm.Drawing.Color.Red;
-                canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
+              
 
                 for (int i = 1; i < 90; i += 10)
                 {
@@ -115,17 +117,18 @@ namespace OpenTkEssTest
                         strkW = 1;
                     }
                 }
+
                 canvas.SmoothMode = CanvasSmoothMode.No;
-                //canvas.FillColor = LayoutFarm.Drawing.Color.Green;
+                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
 
-                //////---------------------------------------------
-                //////draw ellipse and circle
-                //canvas.DrawCircle(400, 500, 50);
+                ////---------------------------------------------
+                ////draw ellipse and circle
+                canvas.DrawCircle(400, 500, 50);
 
-                //canvas.FillCircle(450, 550, 25);
+                canvas.FillCircle(450, 550, 25);
 
-                //canvas.FillColor = LayoutFarm.Drawing.Color.White;
-                ////--------------------------------------------- 
+                canvas.FillColor = LayoutFarm.Drawing.Color.White;
+                //--------------------------------------------- 
 
 
             });

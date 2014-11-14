@@ -60,8 +60,7 @@ namespace OpenTkEssTest
             GL.EnableClientState(ArrayCap.ColorArray);
             GL.EnableClientState(ArrayCap.VertexArray);
 
-            GL.GenBuffers(1, out VBOHandle);
-
+            GL.GenBuffers(1, out VBOHandle); 
             // Since there's only 1 VBO in the app, might aswell setup here.
             GL.BindBuffer(BufferTarget.ArrayBuffer, VBOHandle);
             GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4ubV3f.SizeInBytes, (IntPtr)0);

@@ -32,27 +32,39 @@ using OpenTK;
 namespace PixelFarm.Agg
 {
     [StructLayout(LayoutKind.Sequential)]
-    struct VertexC4ubV3f
+    struct VertexC4XYZ3I
     {
-
         public uint color;
         public int x;
         public int y;
         int z;
-        public VertexC4ubV3f(uint color, int x, int y)
+        public VertexC4XYZ3I(uint color, int x, int y)
         {
-            //this.Position = new Vector3(x, y, 0);
+            this.color = color;
             this.x = x;
             this.y = y;
             z = 0;
-            this.color = color;
+
         }
+        //--------------------------------------------
         public const int SizeInBytes = 16;
+        public const int CoordOffset = sizeof(uint);
+        public override string ToString()
+        {
+            return x + "," + y;
+        }
     }
     /// <summary>
     /// vertex buffer object
     /// </summary>
-    public struct Vbo { public int VboID, EboID, NumElements; }
+    public struct Vbo
+    {
+        public int VboID;
+        public void Dispose()
+        {
+            OpenTK.Graphics.OpenGL.GL.DeleteBuffers(1, ref this.VboID);
+        }
+    }
 
 
 }
