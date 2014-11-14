@@ -37,7 +37,7 @@ namespace OpenTkEssTest
                 GL.Enable(EnableCap.Blend);
                 GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
                 //----------------
-
+                GL.PointSize(1f);
 
                 GL.Viewport(0, 0, max, max);
                 GL.MatrixMode(MatrixMode.Projection);

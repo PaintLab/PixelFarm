@@ -98,15 +98,16 @@ namespace OpenTkEssTest
                 //draw line test
 
                 canvas.DrawLine(20, 20, 600, 200);
+                 
                 int strkW = 10;
-
-                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.FillColor = LayoutFarm.Drawing.Color.Red;
                 canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
+
                 for (int i = 1; i < 90; i += 10)
                 {
                     canvas.StrokeWidth = strkW;
                     double angle = OpenTK.MathHelper.DegreesToRadians(i);
-                    canvas.DrawLine(20, 20, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
+                    canvas.DrawLine(20, 400, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
 
                     strkW--;
                     if (strkW < 1)
@@ -115,16 +116,16 @@ namespace OpenTkEssTest
                     }
                 }
                 canvas.SmoothMode = CanvasSmoothMode.No;
-                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
+                //canvas.FillColor = LayoutFarm.Drawing.Color.Green;
 
-                ////---------------------------------------------
-                ////draw ellipse and circle
-                canvas.DrawCircle(400, 500, 50);
+                //////---------------------------------------------
+                //////draw ellipse and circle
+                //canvas.DrawCircle(400, 500, 50);
 
-                canvas.FillCircle(450, 550, 25);
+                //canvas.FillCircle(450, 550, 25);
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.White;
-                //--------------------------------------------- 
+                //canvas.FillColor = LayoutFarm.Drawing.Color.White;
+                ////--------------------------------------------- 
 
 
             });

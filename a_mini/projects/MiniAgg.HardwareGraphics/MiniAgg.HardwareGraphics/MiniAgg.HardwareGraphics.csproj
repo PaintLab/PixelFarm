@@ -50,6 +50,7 @@
     <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="GLCanvas\GLBitmapTexture.cs" />
     <Compile Include="GLCanvas\TessListener.cs" />
+    <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
