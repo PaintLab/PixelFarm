@@ -129,22 +129,27 @@ namespace OpenTkEssTest
             //----------------------------------------
             tempVertextList.Add(new Vertex(v0, v1));
             //----------------------------------------
-
         }
-        public void Connect(List<Vertex> vertextList, Tesselate.Tesselator tesselator, Tesselator.WindingRuleType windingRule, bool setEdgeFlag)
+        public void Connect(Tesselate.Tesselator tesselator, Tesselator.WindingRuleType windingRule, bool setEdgeFlag)
         {
-            this.inputVertextList = vertextList;
 
-            tesselator.callBegin += new Tesselate.Tesselator.CallBeginDelegate(BeginCallBack);
-            tesselator.callEnd += new Tesselate.Tesselator.CallEndDelegate(EndCallBack);
-            tesselator.callVertex += new Tesselate.Tesselator.CallVertexDelegate(VertexCallBack);
-            tesselator.callCombine += new Tesselate.Tesselator.CallCombineDelegate(CombineCallBack);
+
+            tesselator.callBegin = new Tesselate.Tesselator.CallBeginDelegate(BeginCallBack);
+            tesselator.callEnd = new Tesselate.Tesselator.CallEndDelegate(EndCallBack);
+            tesselator.callVertex = new Tesselate.Tesselator.CallVertexDelegate(VertexCallBack);
+            tesselator.callCombine = new Tesselate.Tesselator.CallCombineDelegate(CombineCallBack);
             tesselator.windingRule = windingRule;
 
             if (setEdgeFlag)
             {
                 tesselator.callEdgeFlag += new Tesselate.Tesselator.CallEdgeFlagDelegate(EdgeFlagCallBack);
             }
+        }
+        public void Reset(List<Vertex> vertextList)
+        {
+            this.tempVertextList.Clear();
+            this.resultVertexList.Clear();
+            this.inputVertextList = vertextList;
         }
 
     }

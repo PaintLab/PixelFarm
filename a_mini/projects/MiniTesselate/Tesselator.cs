@@ -104,7 +104,7 @@ namespace Tesselate
             double c1, double c2, double c3, int[] data4,
             double[] weight4, out int outData);
 
-        public event CallCombineDelegate callCombine;
+        public CallCombineDelegate callCombine;
 
         /*** state needed for rendering callbacks (see render.c) ***/
 
@@ -113,19 +113,19 @@ namespace Tesselate
         /* list of triangles which could not be rendered as strips or fans */
 
         public delegate void CallBeginDelegate(TriangleListType type);
-        public event CallBeginDelegate callBegin;
+        public CallBeginDelegate callBegin;
 
         public delegate void CallEdgeFlagDelegate(bool boundaryEdge);
-        public event CallEdgeFlagDelegate callEdgeFlag;
+        public CallEdgeFlagDelegate callEdgeFlag;
 
         public delegate void CallVertexDelegate(int data);
-        public event CallVertexDelegate callVertex;
+        public CallVertexDelegate callVertex;
 
         public delegate void CallEndDelegate();
-        public event CallEndDelegate callEnd;
+        public CallEndDelegate callEnd;
 
         public delegate void CallMeshDelegate(Mesh mesh);
-        public event CallMeshDelegate callMesh;
+        public CallMeshDelegate callMesh;
 
 
         /*** state needed to cache single-contour polygons for renderCache() */
@@ -383,7 +383,7 @@ namespace Tesselate
         }
         public void AddVertex(double x, double y, double z, int data)
         {
-        
+
             double tmp;
             double[] clamped = new double[3];
             RequireState(ProcessingState.InContour);

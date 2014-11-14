@@ -17,7 +17,10 @@ namespace OpenTkEssTest
     public class CanvasGL2d
     {
         LayoutFarm.Drawing.Color fillColor = LayoutFarm.Drawing.Color.Black;
-        //tools
+
+        Tesselator tess = new Tesselator();
+        TessListener tessListener = new TessListener();
+        //tools---------------------------------
         Ellipse ellipse = new Ellipse();
         PathStorage ps = new PathStorage();
         Stroke stroke1 = new Stroke(1);
@@ -25,12 +28,13 @@ namespace OpenTkEssTest
         GLScanlineRasToDestBitmapRenderer sclineRasToBmp;
         GLScanlinePacked8 sclinePack8;
 
+
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
             sclineRasToBmp = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
-
+            tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
         }
 
         public CanvasSmoothMode SmoothMode
@@ -165,38 +169,53 @@ namespace OpenTkEssTest
                 } GL.Disable(EnableCap.Texture2D);
             }
         }
-        public void DrawPolygon(float[] polygon2dVertices)
-        {
-            DrawPolygon(polygon2dVertices, polygon2dVertices.Length / 2);
-        }
+        //public void DrawPolygon(float[] polygon2dVertices)
+        //{
+        //    DrawPolygon(polygon2dVertices, polygon2dVertices.Length / 2);
+        //}
+
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
-        {
-            //closed polyline
+        {   //closed polyline
             //draw polyline
             unsafe
             {
-                //crete indices
-                int* indices = stackalloc int[npoints * 2];
-                int nn = 0;
-                for (int i = 1; i < npoints; ++i)
-                {
-                    indices[nn++] = i - 1;
-                    indices[nn++] = i;
-                }
-                //------------------
-                //close polygon
-                indices[nn++] = npoints - 1;
-                indices[nn++] = 0;
 
                 fixed (float* arr = &polygon2dVertices[0])
                 {
                     GL.EnableClientState(ArrayCap.VertexArray); //***
-                    //vertex 2d
+                    //vertex 2d 
                     GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                    GL.DrawElements(BeginMode.LineLoop, npoints * 2, DrawElementsType.UnsignedInt, (IntPtr)indices);
+                    GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
                     GL.DisableClientState(ArrayCap.VertexArray);
                 }
             }
+            ////closed polyline
+            ////draw polyline
+            //unsafe
+            //{
+            //    //crete indices
+            //    //int* indices = stackalloc int[npoints * 2];
+            //    //int nn = 0;
+            //    //for (int i = 1; i < npoints; ++i)
+            //    //{
+            //    //    indices[nn++] = i - 1;
+            //    //    indices[nn++] = i;
+            //    //}
+            //    ////------------------
+            //    ////close polygon
+            //    //indices[nn++] = npoints - 1;
+            //    //indices[nn++] = 0;
+            //    fixed (float* arr = &polygon2dVertices[0])
+            //    {
+            //        GL.EnableClientState(ArrayCap.VertexArray); //***
+            //        //vertex 2d
+
+            //        GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+            //        GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
+            //        //GL.DrawElements(BeginMode.LineLoop, npoints * 2, DrawElementsType.UnsignedInt, (IntPtr)indices);
+            //        GL.DisableClientState(ArrayCap.VertexArray);
+            //    }
+            //}
         }
 
         public void FillPolygon(float[] vertex2dCoords)
@@ -205,17 +224,15 @@ namespace OpenTkEssTest
             //Tesselate
             //2d coods lis
             //n point 
-            var vertextList = TessealatePolygon(vertex2dCoords);
+            var vertextList = TessPolygon(vertex2dCoords);
             //-----------------------------
             FillTriangles(vertextList);
             //-----------------------------
         }
 
 
-        static List<Vertex> TessealatePolygon(float[] vertex2dCoords)
+        List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
-            TessListener t01 = new TessListener();
-            Tesselator tess = new Tesselator();
             int ncoords = vertex2dCoords.Length / 2;
             List<Vertex> vertexts = new List<Vertex>(ncoords);
             int nn = 0;
@@ -223,7 +240,9 @@ namespace OpenTkEssTest
             {
                 vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
             }
-            t01.Connect(vertexts, tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
+            //-----------------------
+            tessListener.Reset(vertexts);
+            //-----------------------
             tess.BeginPolygon();
             tess.BeginContour();
             int j = vertexts.Count;
@@ -234,10 +253,8 @@ namespace OpenTkEssTest
             }
             tess.EndContour();
             tess.EndPolygon();
-            return t01.resultVertexList;
+            return tessListener.resultVertexList;
         }
-
-
         void FillTriangles(List<Vertex> m_VertexList)
         {
             //convert vertex to float array
@@ -255,29 +272,26 @@ namespace OpenTkEssTest
                         vertices[nn] = (float)v.m_X;
                         vertices[nn + 1] = (float)v.m_Y;
 
-                        //vx2[nn] = (float)v.m_X;
-                        //vx2[nn + 1] = (float)v.m_Y;
-
-
                         nn += 2;
                     }
                     //--------------------------------------
-                    int num_indices = j - 2;
-                    int* indx = stackalloc int[j];
-                    nn = 0;//reset
-                    for (int i = 0; i < num_indices; )
-                    {
-                        indx[nn] = i;
-                        indx[nn + 1] = i + 1;
-                        indx[nn + 2] = i + 2;
-                        nn += 3;
-                        i += 3;
-                    }
+                    //int num_indices = j - 2;
+                    //int* indx = stackalloc int[j];
+                    //nn = 0;//reset
+                    //for (int i = 0; i < num_indices; )
+                    //{
+                    //    indx[nn] = i;
+                    //    indx[nn + 1] = i + 1;
+                    //    indx[nn + 2] = i + 2;
+                    //    nn += 3;
+                    //    i += 3;
+                    //}
                     //--------------------------------------
                     GL.EnableClientState(ArrayCap.VertexArray); //***
                     //vertex 2d
                     GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)vertices);
-                    GL.DrawElements(BeginMode.Triangles, j, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                    //GL.DrawElements(BeginMode.Triangles, j, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                    GL.DrawArrays(BeginMode.Triangles, 0, nn);
                     GL.DisableClientState(ArrayCap.VertexArray);
 
                 }
