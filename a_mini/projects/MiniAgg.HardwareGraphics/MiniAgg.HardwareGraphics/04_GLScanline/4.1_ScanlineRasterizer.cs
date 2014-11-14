@@ -137,11 +137,13 @@ namespace PixelFarm.Agg
                 m_gammaLut[i] = i;
             }
         }
+        
         //--------------------------------------------------------------------
         public void Reset()
         {
             m_cellAARas.Reset();
             m_status = Status.Initial;
+            
         }
         public RectInt GetVectorClipBox()
         {
@@ -430,48 +432,7 @@ namespace PixelFarm.Agg
                                 }
                             }
                         }
-
-                        //CellAA cur_cell = cells[offset];
-                        //int x = cur_cell.x;
-                        //int area = cur_cell.area;
-                        //int alpha;
-
-                        //cover += cur_cell.cover;
-
-                        ////accumulate all cells with the same X
-                        //while (--num_cells != 0)
-                        //{
-                        //    offset++;
-                        //    cur_cell = cells[offset];
-                        //    if (cur_cell.x != x)
-                        //    {
-                        //        break;
-                        //    }
-
-                        //    area += cur_cell.area;
-                        //    cover += cur_cell.cover;
-                        //}
-
-                        //if (area != 0)
-                        //{
-                        //    alpha = CalculateAlpha((cover << (poly_subpix.SHIFT + 1)) - area);
-                        //    if (alpha != 0)
-                        //    {
-                        //        scline.AddCell(x, alpha);
-                        //    }
-                        //    x++;
-                        //}
-
-                        //if ((num_cells != 0) && (cur_cell.x > x))
-                        //{
-                        //    alpha = CalculateAlpha(cover << (poly_subpix.SHIFT + 1));
-                        //    if (alpha != 0)
-                        //    {
-                        //        scline.AddSpan(x, (cur_cell.x - x), alpha);
-                        //    }
-                        //} 
                     }
-
                 }
 
                 if (scline.SpanCount != 0) { break; }

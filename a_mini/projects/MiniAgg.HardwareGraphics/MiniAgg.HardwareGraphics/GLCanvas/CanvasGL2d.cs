@@ -435,15 +435,11 @@ namespace OpenTkEssTest
                 GL.DrawElements(BeginMode.TriangleFan, npoints, DrawElementsType.UnsignedInt, (IntPtr)indx);
                 GL.DisableClientState(ArrayCap.VertexArray);
             }
-
         }
-
         public void FillCircle(float x, float y, double radius)
         {
             FillEllipse(x, y, radius, radius);
         }
-
-
 
         //---test only ----
         void DrawLineAgg(float x1, float y1, float x2, float y2)
@@ -521,7 +517,7 @@ namespace OpenTkEssTest
             VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor(sclineRas, sclinePack8, this.fillColor);
+            sclineRasToBmp.RenderWithColor2(sclineRas, sclinePack8, this.fillColor);
             //--------------------------------------
         }
     }

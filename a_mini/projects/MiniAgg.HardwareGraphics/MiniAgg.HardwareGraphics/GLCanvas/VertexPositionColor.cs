@@ -34,41 +34,25 @@ namespace PixelFarm.Agg
     [StructLayout(LayoutKind.Sequential)]
     struct VertexC4ubV3f
     {
-       
-        public uint color; 
-        public Vector3 Position;
 
-        public static int SizeInBytes = 16;
-        
+        public uint color;
+        public int x;
+        public int y;
+        int z;
         public VertexC4ubV3f(uint color, int x, int y)
         {
-            this.Position = new Vector3(x, y, 0);
-            //this.R = 0;
-            //this.G = 0;
-            //this.B = 0;
-            //this.A = 0;
+            //this.Position = new Vector3(x, y, 0);
+            this.x = x;
+            this.y = y;
+            z = 0;
             this.color = color;
         }
+        public const int SizeInBytes = 16;
     }
-   
     /// <summary>
     /// vertex buffer object
     /// </summary>
     public struct Vbo { public int VboID, EboID, NumElements; }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct Vertex3dPositionColor
-    {
-        public Vector3 Position;
-        public uint Color;
-        public Vertex3dPositionColor(float x, float y, float z, Color color)
-        {
-            Position = new Vector3(x, y, z);
-            Color = ToRgba(color);
-        }
-        static uint ToRgba(Color color)
-        {
-            return (uint)color.A << 24 | (uint)color.B << 16 | (uint)color.G << 8 | (uint)color.R;
-        }
-    }
+
 }

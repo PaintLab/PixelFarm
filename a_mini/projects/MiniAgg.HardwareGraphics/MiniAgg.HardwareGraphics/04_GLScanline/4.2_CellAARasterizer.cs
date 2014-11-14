@@ -385,9 +385,7 @@ namespace PixelFarm.Agg
             public int TotalCells
             {
                 get { return this.m_num_used_cells; }
-            }
-
-
+            } 
             public void GetCells(int y, out CellAA[] cellData, out int offset, out int num)
             {
                 cellData = m_sorted_cells.Array;

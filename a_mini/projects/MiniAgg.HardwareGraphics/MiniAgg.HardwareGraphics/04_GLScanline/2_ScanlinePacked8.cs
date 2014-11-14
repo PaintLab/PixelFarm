@@ -71,15 +71,11 @@ namespace PixelFarm.Agg
             else
             {
                 last_span_index++;
-                m_spans[last_span_index] = new ScanlineSpan((short)x, m_cover_index);
-                //m_spans[last_span_index].cover_index = m_cover_index;
-                //m_spans[last_span_index].x = (short)x;
-                //m_spans[last_span_index].len = 1;
+                m_spans[last_span_index] = new ScanlineSpan((short)x, m_cover_index);                
             }
             last_x = x;
             m_cover_index++;
         }
-
         public override void AddSpan(int x, int len, int cover)
         {
             if (x == last_x + 1
@@ -92,11 +88,8 @@ namespace PixelFarm.Agg
             {
                 m_covers[m_cover_index] = (byte)cover;
                 last_span_index++;
-                m_spans[last_span_index] = new ScanlineSpan((short)x, (short)(-len), m_cover_index++);
 
-                //m_spans[last_span_index].cover_index = m_cover_index++;
-                //m_spans[last_span_index].x = (short)x;
-                //m_spans[last_span_index].len = (short)(-len);
+                m_spans[last_span_index] = new ScanlineSpan((short)x, (short)(-len), m_cover_index++); 
             }
             last_x = x + len - 1;
         }
@@ -107,6 +100,9 @@ namespace PixelFarm.Agg
 
             m_cover_index = 0;
             m_spans[last_span_index].len = 0;
+            this.MixSpanType = false;
         }
+       
+    
     }
 }
