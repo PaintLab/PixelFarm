@@ -47,6 +47,7 @@
     <Compile Include="04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="04_GLScanline\6_ClipLiangBarsky.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
+    <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="GLCanvas\GLBitmapTexture.cs" />
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

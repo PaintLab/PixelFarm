@@ -32,16 +32,20 @@ namespace OpenTkEssTest
                 //for 2d 
                 var screenBound = Screen.PrimaryScreen.Bounds;
                 int max = Math.Max(screenBound.Width, screenBound.Height);
+
+                //init
+                GL.Enable(EnableCap.Blend);
+                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+                //----------------
+
+
                 GL.Viewport(0, 0, max, max);
                 GL.MatrixMode(MatrixMode.Projection);
                 GL.LoadIdentity();
                 GL.Ortho(0, max, 0, max, 0.0, 100.0);
 
                 GL.MatrixMode(MatrixMode.Modelview);
-                GL.LoadIdentity();
-
-                GL.Enable(EnableCap.Blend);
-                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+                GL.LoadIdentity(); 
 
             }
 

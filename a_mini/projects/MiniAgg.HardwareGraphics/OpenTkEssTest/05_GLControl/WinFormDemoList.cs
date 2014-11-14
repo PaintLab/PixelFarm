@@ -58,6 +58,8 @@ namespace OpenTkEssTest
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
+
+
                 //canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
                 //canvas.FillRect(1, 1, 1f, 1f); 
                 if (hwBmp == null)
@@ -92,28 +94,28 @@ namespace OpenTkEssTest
                 canvas.FillColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
                 canvas.FillPolygon(polygonCoords2);
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
+                canvas.FillColor = LayoutFarm.Drawing.Color.Magenta;
                 //draw line test
 
                 canvas.DrawLine(20, 20, 600, 200);
                 int strkW = 10;
 
+                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
                 for (int i = 1; i < 90; i += 10)
                 {
                     canvas.StrokeWidth = strkW;
                     double angle = OpenTK.MathHelper.DegreesToRadians(i);
-                    canvas.DrawLineAggAA(20, 20, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
-
+                    canvas.DrawLine(20, 20, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
 
                     strkW--;
                     if (strkW < 1)
                     {
                         strkW = 1;
                     }
-
                 }
-
-                canvas.FillColor = LayoutFarm.Drawing.Color.Red;
+                canvas.SmoothMode = CanvasSmoothMode.No;
+                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
 
                 ////---------------------------------------------
                 ////draw ellipse and circle
@@ -123,6 +125,7 @@ namespace OpenTkEssTest
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 //--------------------------------------------- 
+
 
             });
             form.Show();

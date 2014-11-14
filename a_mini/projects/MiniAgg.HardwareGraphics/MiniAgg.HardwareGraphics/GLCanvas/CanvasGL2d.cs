@@ -1,4 +1,5 @@
-﻿using System;
+﻿//MIT 2014, WinterDev
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -12,6 +13,7 @@ using PixelFarm.Agg.VertexSource;
 
 namespace OpenTkEssTest
 {
+
     public class CanvasGL2d
     {
         LayoutFarm.Drawing.Color fillColor = LayoutFarm.Drawing.Color.Black;
@@ -30,6 +32,13 @@ namespace OpenTkEssTest
             sclinePack8 = new GLScanlinePacked8();
 
         }
+
+        public CanvasSmoothMode SmoothMode
+        {
+            get;
+            set;
+        }
+
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.AccumBufferBit | ClearBufferMask.StencilBufferBit);
@@ -72,19 +81,28 @@ namespace OpenTkEssTest
         {
             unsafe
             {
-                float* arr = stackalloc float[4];
-                arr[0] = x1; arr[1] = y1;
-                arr[2] = x2; arr[3] = y2;
+                switch (this.SmoothMode)
+                {
+                    case CanvasSmoothMode.AggSmooth:
+                        {
+                            DrawLineAggAA(x1, y1, x2, y2);
+                        } break;
+                    default:
+                        {
+                            float* arr = stackalloc float[4];
+                            arr[0] = x1; arr[1] = y1;
+                            arr[2] = x2; arr[3] = y2;
+                            byte* indices = stackalloc byte[2];
+                            indices[0] = 0; indices[1] = 1;
 
-                byte* indices = stackalloc byte[2];
-                indices[0] = 0; indices[1] = 1;
+                            GL.EnableClientState(ArrayCap.VertexArray); //***
+                            //vertex
+                            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+                            GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                            GL.DisableClientState(ArrayCap.VertexArray);
+                        } break;
+                }
 
-
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
 
@@ -156,7 +174,7 @@ namespace OpenTkEssTest
             //closed polyline
             //draw polyline
             unsafe
-            {   
+            {
                 //crete indices
                 int* indices = stackalloc int[npoints * 2];
                 int nn = 0;
@@ -171,7 +189,7 @@ namespace OpenTkEssTest
                 indices[nn++] = 0;
 
                 fixed (float* arr = &polygon2dVertices[0])
-                {   
+                {
                     GL.EnableClientState(ArrayCap.VertexArray); //***
                     //vertex 2d
                     GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
@@ -248,7 +266,7 @@ namespace OpenTkEssTest
                     int* indx = stackalloc int[j];
                     nn = 0;//reset
                     for (int i = 0; i < num_indices; )
-                    {  
+                    {
                         indx[nn] = i;
                         indx[nn + 1] = i + 1;
                         indx[nn + 2] = i + 2;
@@ -428,7 +446,7 @@ namespace OpenTkEssTest
 
 
         //---test only ----
-        public void DrawLineAgg(float x1, float y1, float x2, float y2)
+        void DrawLineAgg(float x1, float y1, float x2, float y2)
         {
 
             ps.Clear();
@@ -494,7 +512,7 @@ namespace OpenTkEssTest
                 //--------------------------------------
             }
         }
-        public void DrawLineAggAA(float x1, float y1, float x2, float y2)
+        void DrawLineAggAA(float x1, float y1, float x2, float y2)
         {
             //--------------------------------------
             ps.Clear();
@@ -502,7 +520,7 @@ namespace OpenTkEssTest
             ps.LineTo(x2, y2);
             VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
             sclineRas.Reset();
-            sclineRas.AddPath(vxs);       
+            sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(sclineRas, sclinePack8, this.fillColor);
             //--------------------------------------
         }

@@ -116,7 +116,7 @@ namespace PixelFarm.Agg
                 int[] points = pointsList.Array;
                 uint[] cbuff = colorsList.Array;
 
-                fixed (uint* chead = &cbuff[0])
+                fixed (uint* cbuff0 = &cbuff[0])
                 fixed (int* arr = &points[0])
                 {
 
@@ -126,7 +126,7 @@ namespace PixelFarm.Agg
                         indices[i] = i;
                     }
                     GL.EnableClientState(ArrayCap.ColorArray);
-                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)chead);
+                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0);
 
 
                     GL.EnableClientState(ArrayCap.VertexArray); //***
@@ -180,30 +180,19 @@ namespace PixelFarm.Agg
                         } break;
                     case 1:
                         {
-                            //colors.AddVertex(LayoutFarm.Drawing.Color.FromArgb(alpha, color));
-
-                            var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-
-                            colors.AddVertex(c.ToARGB());
-                            //colors.AddVertex(c.B);
-                            //colors.AddVertex(c.G);
-                            //colors.AddVertex(c.R);
-                            //colors.AddVertex(c.A);
-
-
+                            //colors.AddVertex(LayoutFarm.Drawing.Color.FromArgb(alpha, color)); 
+                            var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color); 
+                            colors.AddVertex(c.ToARGB()); 
                             points.AddVertex(x1);
                             points.AddVertex(y);
                         } break;
                     default:
                         {
                             for (int i = 0; i < len; ++i)
-                            {
-
-                                //colors.AddVertex(LayoutFarm.Drawing.Color.FromArgb(alpha, color));
-
+                            {   
+                                //colors.AddVertex(LayoutFarm.Drawing.Color.FromArgb(alpha, color)); 
                                 var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-                                colors.AddVertex(c.ToARGB());
-
+                                colors.AddVertex(c.ToARGB()); 
                                 points.AddVertex(x1 + i);
                                 points.AddVertex(y);
 
