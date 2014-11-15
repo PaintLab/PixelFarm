@@ -133,7 +133,13 @@ namespace OpenTkEssTest
 
                 canvas.StrokeWidth = 3;
                 canvas.DrawRoundRect(50,450, 100, 100, 10, 10);
-                canvas.StrokeWidth = 1;
+
+
+                canvas.StrokeWidth = 3;
+                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Blue);
+
+                canvas.DrawBezierCurve(0, 0, 500, 500, 0, 250, 500, 250);
+
 
                 canvas.SmoothMode = CanvasSmoothMode.No;
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;

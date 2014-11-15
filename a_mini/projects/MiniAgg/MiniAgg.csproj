@@ -60,6 +60,9 @@
     <Compile Include="08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="08_ImageResampling\ImageTransform.cs" />
     <Compile Include="09_VectorMath\AxisAlignedBoundingBox.cs" />
+    <Compile Include="09_VectorMath\BezierCurve.cs" />
+    <Compile Include="09_VectorMath\BezierCurveCubic.cs" />
+    <Compile Include="09_VectorMath\BezierCurveQuadric.cs" />
     <Compile Include="09_VectorMath\MathHelper.cs" />
     <Compile Include="09_VectorMath\Matrix4x4.cs" />
     <Compile Include="09_VectorMath\Quaternion.cs" />
