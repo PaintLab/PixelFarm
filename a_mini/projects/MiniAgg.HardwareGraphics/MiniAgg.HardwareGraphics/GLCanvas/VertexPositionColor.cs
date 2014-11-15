@@ -25,10 +25,11 @@
 //
 #endregion
 
+using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using OpenTK;
-
+using OpenTK.Graphics.OpenGL;
 
 namespace PixelFarm.Agg
 {
@@ -98,6 +99,16 @@ namespace PixelFarm.Agg
         public void Dispose()
         {
             OpenTK.Graphics.OpenGL.GL.DeleteBuffers(1, ref this.VboID);
+        }
+        public void BindBuffer()
+        {   
+            GL.BindBuffer(BufferTarget.ArrayBuffer,  VboID);
+            GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V2S.SIZE_IN_BYTES, (IntPtr)0);
+            GL.VertexPointer(VertexC4V2S.N_COORDS, VertexC4V2S.VX_PTR_TYPE, VertexC4V2S.SIZE_IN_BYTES, VertexC4V2S.VX_OFFSET); 
+        }
+        public void UnbindBuffer()
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
     }
 

@@ -86,23 +86,25 @@ namespace PixelFarm.Agg
             //---------------------------------------------
             //points
             int nelements = mySinglePixelBuffer.Count;
+            Vbo vbo = GenerateVBOForC4V2I();
             if (nelements > 0)
             {
-                Vbo vbo = GenerateVBOForC4V2I();
+                vbo.BindBuffer();
                 DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
-                vbo.Dispose();
+                vbo.UnbindBuffer();
             }
             //---------------------------------------------
             //lines
             nelements = myLineBuffer.Count;
             if (nelements > 0)
             {
-                Vbo vbo = GenerateVBOForC4V2I();
+                vbo.BindBuffer();
                 DrawLinesWithVertexBuffer(myLineBuffer, nelements);
-                vbo.Dispose();
+                vbo.UnbindBuffer();
             }
             //---------------------------------------------
 
+            vbo.Dispose();
             GL.DisableClientState(ArrayCap.ColorArray);
             GL.DisableClientState(ArrayCap.VertexArray);
             //------------------------ 
@@ -166,10 +168,7 @@ namespace PixelFarm.Agg
             //GL.EnableClientState(ArrayCap.VertexArray);
 
             GL.GenBuffers(1, out vboHandle.VboID);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vboHandle.VboID);
-            GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V2S.SIZE_IN_BYTES, (IntPtr)0);
-            GL.VertexPointer(VertexC4V2S.N_COORDS, VertexC4V2S.VX_PTR_TYPE, VertexC4V2S.SIZE_IN_BYTES, VertexC4V2S.VX_OFFSET);
-
+          
             return vboHandle;
         }
 
@@ -209,6 +208,7 @@ namespace PixelFarm.Agg
                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
                 // Only draw particles that are alive
                 GL.DrawArrays(BeginMode.Points, 0, nelements);
+               
                 //--------------------------------------------- 
             }
         }
