@@ -92,8 +92,8 @@ namespace OpenTkEssTest
                 //canvas.DrawPolygon(polygonCoords);
                 //fill polygon test                
                 canvas.FillPolygon(polygonCoords);
-                            
-                              
+
+
 
                 var polygonCoords2 = new float[]{
                         5+10,300,
@@ -122,17 +122,20 @@ namespace OpenTkEssTest
                 }
 
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
+                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
 
                 ////---------------------------------------------
                 ////draw ellipse and circle
 
                 canvas.StrokeWidth = 0.75f;
-                canvas.DrawCircle(400, 500, 50); 
-                canvas.FillCircle(450, 550, 25); 
-                canvas.SmoothMode = CanvasSmoothMode.No;
-               
+                canvas.DrawCircle(400, 500, 50);
+                canvas.FillCircle(450, 550, 25);
 
+                canvas.StrokeWidth = 3;
+                canvas.DrawRoundRect(50,450, 100, 100, 10, 10);
+                canvas.StrokeWidth = 1;
+
+                canvas.SmoothMode = CanvasSmoothMode.No;
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 //---------------------------------------------  
 

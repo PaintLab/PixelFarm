@@ -137,69 +137,94 @@ namespace PixelFarm.Agg.VertexSource
         }
 
 
-        public IEnumerable<VertexData> GetVertexIter()
+        void InternalBuildVxs(VertexStore vxs)
         {
 
-            currentProcessingArc.Init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.5);
-            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
-            {
-                if (ShapePath.IsStop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
-            currentProcessingArc.Init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
-            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
-            {
-                if (ShapePath.IsMoveTo(vertexData.command))
-                {
-                    // skip the initial moveto
-                    continue;
-                }
-                if (ShapePath.IsStop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
 
-            currentProcessingArc.Init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y, 0.0, Math.PI * 0.5);
-            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
-            {
-                if (ShapePath.IsMoveTo(vertexData.command))
-                {
-                    // skip the initial moveto
-                    continue;
-                }
-                if (ShapePath.IsStop(vertexData.command))
-                {
-                    break;
-                }
-                yield return vertexData;
-            }
-
-            currentProcessingArc.Init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y, Math.PI * 0.5, Math.PI);
+            bool stopLoop = false;
+            currentProcessingArc.Init(bounds.Left + leftBottomRadius.x, bounds.Bottom + leftBottomRadius.y, leftBottomRadius.x, leftBottomRadius.y, Math.PI, Math.PI + Math.PI * 0.7);
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
                 switch (vertexData.command)
                 {
                     case ShapePath.FlagsAndCommand.CommandMoveTo:
-                        continue;
+                        continue; // skip the initial moveto
                     case ShapePath.FlagsAndCommand.CommandStop:
+                        stopLoop = true;
                         break;
                     default:
-                        yield return vertexData;
+                        vxs.AddVertex(vertexData);
+                        //yield return vertexData;
                         break;
-                }
+                } 
             }
 
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
+            //---------------------------------------------------------
+            //stopLoop = false;
+            //currentProcessingArc.Init(bounds.Right - rightBottomRadius.x, bounds.Bottom + rightBottomRadius.y, rightBottomRadius.x, rightBottomRadius.y, Math.PI + Math.PI * 0.5, 0.0);
+            //foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
+            //{
+            //    switch (vertexData.command)
+            //    {
+            //        case ShapePath.FlagsAndCommand.CommandMoveTo:
+            //            continue; // skip the initial moveto
+            //        case ShapePath.FlagsAndCommand.CommandStop:
+            //            stopLoop = true;
+            //            break;
+            //        default:
+            //            vxs.AddVertex(vertexData);
+            //            break;
+            //    }
+            //    if (stopLoop) { break; }
+            //}
+
+
+            //---------------------------------------------------------
+            stopLoop = false;
+            currentProcessingArc.Init(bounds.Right - rightTopRadius.x, bounds.Top - rightTopRadius.y, rightTopRadius.x, rightTopRadius.y, 0.0, Math.PI * 0.3);
+            foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
+            {
+                switch (vertexData.command)
+                {
+                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        continue; // skip the initial moveto
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        stopLoop = true;
+                        break;
+                    default:
+                        vxs.AddVertex(vertexData);
+                        break;
+                }
+                if (stopLoop) { break; }
+            }
+
+            ////---------------------------------------------------------
+            //stopLoop = false;
+            //currentProcessingArc.Init(bounds.Left + leftTopRadius.x, bounds.Top - leftTopRadius.y, leftTopRadius.x, leftTopRadius.y, Math.PI * 0.5, Math.PI);
+            //foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
+            //{
+            //    switch (vertexData.command)
+            //    {
+            //        case ShapePath.FlagsAndCommand.CommandMoveTo:
+            //            continue; // skip the initial moveto
+            //        case ShapePath.FlagsAndCommand.CommandStop:
+            //            stopLoop = true;
+            //            break;
+            //        default:
+            //            vxs.AddVertex(vertexData);
+            //            break;
+            //    }
+            //    if (stopLoop) { break; }
+            //}
+
+            vxs.AddVertex(new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW));
+            vxs.AddVertex(new VertexData(ShapePath.FlagsAndCommand.CommandStop));
         }
         public VertexStore MakeVxs()
-        {   
-            return new VertexStore(this.GetVertexIter());             
+        {
+            VertexStore vxs = new VertexStore(4);
+            this.InternalBuildVxs(vxs);
+            return vxs;
         }
         public VertexStoreSnap MakeVertexSnap()
         {

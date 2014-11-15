@@ -21,6 +21,7 @@ namespace OpenTkEssTest
         Tesselator tess = new Tesselator();
         TessListener2 tessListener = new TessListener2();
         //tools---------------------------------
+        RoundedRect roundRect = new RoundedRect();
         Ellipse ellipse = new Ellipse();
         PathStorage ps = new PathStorage();
         Stroke stroke1 = new Stroke(1);
@@ -272,6 +273,64 @@ namespace OpenTkEssTest
             DrawEllipse(x, y, radius, radius);
         }
 
+        public void DrawRect(float x, float y, float w, float h)
+        {
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {
+                        unsafe
+                        {
+                            float* arr = stackalloc float[8];
+                            byte* indices = stackalloc byte[6];
+                            CreateRectCoords(arr, indices, x, y, w, h);
+                            GL.EnableClientState(ArrayCap.VertexArray); //***
+                            //vertex
+                            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+                            GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                            GL.DisableClientState(ArrayCap.VertexArray);
+                        }
+                    } break;
+                default:
+                    {
+                        unsafe
+                        {
+                            float* arr = stackalloc float[8];
+                            byte* indices = stackalloc byte[6];
+                            CreateRectCoords(arr, indices, x, y, w, h);
+                            GL.EnableClientState(ArrayCap.VertexArray); //***
+                            //vertex
+                            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+                            GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                            GL.DisableClientState(ArrayCap.VertexArray);
+                        }
+                    } break;
+            }
+        }
+        public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
+        {
+            roundRect.SetRect(x, y, x + w, y + h);
+            roundRect.SetRadius(rx, ry);
+            var vxs = this.stroke1.MakeVxs(roundRect.MakeVxs());
+
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor); 
+                    } break;
+                default:
+                    {
+
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor); 
+                    } break;
+            }
+
+        }
         //==================================================================================
         public LayoutFarm.Drawing.Color FillColor
         {
@@ -300,6 +359,33 @@ namespace OpenTkEssTest
                 GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
+        public void FillRoundRect(float x, float y, float w, float h, float rx, float ry)
+        {   
+            roundRect.SetRect(x, y, x + w, y + h);
+            roundRect.SetRadius(rx, ry);
+            var vxs = roundRect.MakeVxs();
+
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {
+
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, this.fillColor);
+
+                    } break;
+                default:
+                    {
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor); 
+
+
+                    } break;
+            }
+
+        }
         public void FillEllipse(float x, float y, double rx, double ry)
         {
             ellipse.Reset(x, y, rx, ry);
@@ -307,7 +393,7 @@ namespace OpenTkEssTest
             switch (this.SmoothMode)
             {
                 case CanvasSmoothMode.AggSmooth:
-                    {   
+                    {
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.FillWithColor(sclineRas, sclinePack8, this.fillColor);
