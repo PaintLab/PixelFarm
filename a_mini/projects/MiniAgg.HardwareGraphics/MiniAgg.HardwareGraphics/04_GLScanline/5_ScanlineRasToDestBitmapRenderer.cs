@@ -118,13 +118,14 @@ namespace PixelFarm.Agg
                 float* arr = stackalloc float[2];
                 arr[0] = x1; arr[1] = y1;
 
-                byte* indices = stackalloc byte[1];
-                indices[0] = 0;
+                //byte* indices = stackalloc byte[1];
+                //indices[0] = 0;
 
                 GL.EnableClientState(ArrayCap.VertexArray); //***
                 //vertex
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                GL.DrawElements(BeginMode.Points, 1, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                //GL.DrawElements(BeginMode.Points, 1, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                GL.DrawArrays(BeginMode.Points, 0, 1);
                 GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
@@ -141,11 +142,11 @@ namespace PixelFarm.Agg
                 fixed (int* arr = &points[0])
                 {
 
-                    int* indices = stackalloc int[n];
-                    for (int i = n - 1; i >= 0; --i)
-                    {
-                        indices[i] = i;
-                    }
+                    //int* indices = stackalloc int[n];
+                    //for (int i = n - 1; i >= 0; --i)
+                    //{
+                    //    indices[i] = i;
+                    //}
                     GL.EnableClientState(ArrayCap.ColorArray);
                     GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0);
 
@@ -153,7 +154,8 @@ namespace PixelFarm.Agg
                     GL.EnableClientState(ArrayCap.VertexArray); //***
                     //vertex
                     GL.VertexPointer(2, VertexPointerType.Int, 0, (IntPtr)arr);
-                    GL.DrawElements(BeginMode.Points, n, DrawElementsType.UnsignedInt, (IntPtr)indices);
+                    //GL.DrawElements(BeginMode.Points, n, DrawElementsType.UnsignedInt, (IntPtr)indices);
+                    GL.DrawArrays(BeginMode.Points, 0, n);
                     GL.DisableClientState(ArrayCap.VertexArray);
                     GL.DisableClientState(ArrayCap.ColorArray);
                 }
@@ -168,7 +170,7 @@ namespace PixelFarm.Agg
             //GL.EnableClientState(ArrayCap.VertexArray);
 
             GL.GenBuffers(1, out vboHandle.VboID);
-          
+
             return vboHandle;
         }
 
@@ -180,13 +182,14 @@ namespace PixelFarm.Agg
                 arr[0] = x1; arr[1] = y1;
                 arr[2] = x2; arr[3] = y2;
 
-                byte* indices = stackalloc byte[2];
-                indices[0] = 0; indices[1] = 1;
+                //byte* indices = stackalloc byte[2];
+                //indices[0] = 0; indices[1] = 1;
 
                 GL.EnableClientState(ArrayCap.VertexArray); //***
                 //vertex
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                GL.DrawArrays(BeginMode.Lines, 0, 2);
                 GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
@@ -208,7 +211,7 @@ namespace PixelFarm.Agg
                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
                 // Only draw particles that are alive
                 GL.DrawArrays(BeginMode.Points, 0, nelements);
-               
+
                 //--------------------------------------------- 
             }
         }

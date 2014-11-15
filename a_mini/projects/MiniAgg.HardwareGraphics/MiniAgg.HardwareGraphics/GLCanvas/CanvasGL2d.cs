@@ -53,7 +53,7 @@ namespace OpenTkEssTest
             get { return this.stroke1.Width; }
             set { this.stroke1.Width = value; }
         }
-       
+
         public void FillRect(float x, float y, float w, float h)
         {
 
@@ -63,7 +63,6 @@ namespace OpenTkEssTest
                 float* arr = stackalloc float[8];
                 byte* indices = stackalloc byte[6];
                 CreateRectCoords(arr, indices, x, y, w, h);
-
                 GL.EnableClientState(ArrayCap.VertexArray); //***
                 //vertex
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
@@ -86,13 +85,14 @@ namespace OpenTkEssTest
                             float* arr = stackalloc float[4];
                             arr[0] = x1; arr[1] = y1;
                             arr[2] = x2; arr[3] = y2;
-                            byte* indices = stackalloc byte[2];
-                            indices[0] = 0; indices[1] = 1;
+                            //byte* indices = stackalloc byte[2];
+                            //indices[0] = 0; indices[1] = 1;
 
                             GL.EnableClientState(ArrayCap.VertexArray); //***
                             //vertex
                             GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                            GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                            //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                            GL.DrawArrays(BeginMode.Lines, 0, 2);
                             GL.DisableClientState(ArrayCap.VertexArray);
                         } break;
                 }
@@ -163,20 +163,23 @@ namespace OpenTkEssTest
         //{
         //    DrawPolygon(polygon2dVertices, polygon2dVertices.Length / 2);
         //}
-
+        unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
+        {
+            GL.EnableClientState(ArrayCap.VertexArray); //***
+            //vertex 2d 
+            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
+            GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
+            GL.DisableClientState(ArrayCap.VertexArray);
+        }
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
-        {   //closed polyline
+        {
+            //closed polyline
             //draw polyline
             unsafe
             {
-
                 fixed (float* arr = &polygon2dVertices[0])
                 {
-                    GL.EnableClientState(ArrayCap.VertexArray); //***
-                    //vertex 2d 
-                    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                    GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
-                    GL.DisableClientState(ArrayCap.VertexArray);
+                    DrawPolygonUnsafe(arr, npoints);
                 }
             }
             ////closed polyline
@@ -219,7 +222,7 @@ namespace OpenTkEssTest
             FillTriangles(vertextList);
             //-----------------------------
         }
-       
+
         public LayoutFarm.Drawing.Color FillColor
         {
             get
@@ -241,37 +244,41 @@ namespace OpenTkEssTest
             VertexStore vxs = ellipse.MakeVxs();
             int n = vxs.Count;
             //iterate
-            float[] coords = new float[n * 2];
-            int i = 0;
-            int nn = 0;
-            double vx, vy;
-            var cmd = vxs.GetVertex(i, out vx, out vy);
-            while (i < n)
+            unsafe
             {
-                switch (cmd)
+                float* coords = stackalloc float[n * 2];
+                int i = 0;
+                int nn = 0;
+                double vx, vy;
+                var cmd = vxs.GetVertex(i, out vx, out vy);
+                while (i < n)
                 {
-                    case ShapePath.FlagsAndCommand.CommandMoveTo:
-                        {
-                            coords[nn++] = (float)vx;
-                            coords[nn++] = (float)vy;
-                        } break;
-                    case ShapePath.FlagsAndCommand.CommandLineTo:
-                        {
-                            coords[nn++] = (float)vx;
-                            coords[nn++] = (float)vy;
-                        } break;
-                    case ShapePath.FlagsAndCommand.CommandStop:
-                        {
-                        } break;
-                    default:
-                        {
+                    switch (cmd)
+                    {
+                        case ShapePath.FlagsAndCommand.CommandMoveTo:
+                            {
+                                coords[nn++] = (float)vx;
+                                coords[nn++] = (float)vy;
+                            } break;
+                        case ShapePath.FlagsAndCommand.CommandLineTo:
+                            {
+                                coords[nn++] = (float)vx;
+                                coords[nn++] = (float)vy;
+                            } break;
+                        case ShapePath.FlagsAndCommand.CommandStop:
+                            {
+                            } break;
+                        default:
+                            {
 
-                        } break;
+                            } break;
+                    }
+                    i++;
+                    cmd = vxs.GetVertex(i, out vx, out vy);
                 }
-                i++;
-                cmd = vxs.GetVertex(i, out vx, out vy);
+                //--------------------------------------
+                DrawPolygonUnsafe(coords, nn / 2);
             }
-            DrawPolygon(coords, nn / 2);
         }
         public void DrawCircle(float x, float y, double radius)
         {
@@ -332,19 +339,18 @@ namespace OpenTkEssTest
                 coords[nn++] = coords[3];
                 npoints++;
 
-                int* indx = stackalloc int[npoints];
-                for (i = 0; i < npoints; ++i)
-                {
-                    indx[i] = i;
-                }
-
-
+                //int* indx = stackalloc int[npoints];
+                //for (i = 0; i < npoints; ++i)
+                //{
+                //    indx[i] = i;
+                //}
 
                 //fill triangular fan
                 GL.EnableClientState(ArrayCap.VertexArray); //***
                 //vertex 2d
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
-                GL.DrawElements(BeginMode.TriangleFan, npoints, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                //GL.DrawElements(BeginMode.TriangleFan, npoints, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                GL.DrawArrays(BeginMode.TriangleFan, 0, npoints);
                 GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
@@ -353,6 +359,6 @@ namespace OpenTkEssTest
             FillEllipse(x, y, radius, radius);
         }
 
-        
+
     }
 }

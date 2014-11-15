@@ -168,19 +168,20 @@ namespace OpenTkEssTest
                     cmd = vxs.GetVertex(i, out vx, out vy);
                 }
 
-                int num_indices = npoints;
-                int* indx = stackalloc int[num_indices];
-                nn = 0;//reset
-                for (i = 0; i < num_indices; ++i)
-                {
-                    indx[nn++] = i;
-                }
+                //int num_indices = npoints;
+                //int* indx = stackalloc int[num_indices];
+                //nn = 0;//reset
+                //for (i = 0; i < num_indices; ++i)
+                //{
+                //    indx[nn++] = i;
+                //}
 
                 //--------------------------------------
                 GL.EnableClientState(ArrayCap.VertexArray); //***
                 //vertex 2d
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
-                GL.DrawElements(BeginMode.LineLoop, num_indices, DrawElementsType.UnsignedInt, (IntPtr)indx);
+                GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
+                //GL.DrawElements(BeginMode.LineLoop, num_indices, DrawElementsType.UnsignedInt, (IntPtr)indx);
                 GL.DisableClientState(ArrayCap.VertexArray);
                 //--------------------------------------
             }
