@@ -19,7 +19,7 @@ namespace OpenTkEssTest
         LayoutFarm.Drawing.Color fillColor = LayoutFarm.Drawing.Color.Black;
 
         Tesselator tess = new Tesselator();
-        TessListener tessListener = new TessListener();
+        TessListener2 tessListener = new TessListener2();
         //tools---------------------------------
         Ellipse ellipse = new Ellipse();
         PathStorage ps = new PathStorage();
@@ -228,9 +228,7 @@ namespace OpenTkEssTest
             //-----------------------------
             FillTriangles(vertextList);
             //-----------------------------
-        }
-
-
+        } 
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
             int ncoords = vertex2dCoords.Length / 2;
@@ -245,6 +243,7 @@ namespace OpenTkEssTest
             //-----------------------
             tess.BeginPolygon();
             tess.BeginContour();
+
             int j = vertexts.Count;
             for (int i = 0; i < j; ++i)
             {
