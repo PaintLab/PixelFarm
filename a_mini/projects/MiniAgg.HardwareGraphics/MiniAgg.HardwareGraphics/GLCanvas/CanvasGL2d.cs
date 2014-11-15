@@ -25,14 +25,14 @@ namespace OpenTkEssTest
         PathStorage ps = new PathStorage();
         Stroke stroke1 = new Stroke(1);
         GLScanlineRasterizer sclineRas;
-        GLScanlineRasToDestBitmapRenderer sclineRasToBmp;
+        GLScanlineRasToDestBitmapRenderer sclineRasToGL;
         GLScanlinePacked8 sclinePack8;
 
 
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
-            sclineRasToBmp = new GLScanlineRasToDestBitmapRenderer();
+            sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
         }
@@ -54,33 +54,27 @@ namespace OpenTkEssTest
             set { this.stroke1.Width = value; }
         }
 
-        public void FillRect(float x, float y, float w, float h)
-        {
 
-            //2d
-            unsafe
-            {
-                float* arr = stackalloc float[8];
-                byte* indices = stackalloc byte[6];
-                CreateRectCoords(arr, indices, x, y, w, h);
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                GL.DisableClientState(ArrayCap.VertexArray);
-            }
-        }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
-            unsafe
+
+            switch (this.SmoothMode)
             {
-                switch (this.SmoothMode)
-                {
-                    case CanvasSmoothMode.AggSmooth:
-                        {
-                            DrawLineAggAA(x1, y1, x2, y2);
-                        } break;
-                    default:
+                case CanvasSmoothMode.AggSmooth:
+                    {
+                        //--------------------------------------
+                        ps.Clear();
+                        ps.MoveTo(x1, y1);
+                        ps.LineTo(x2, y2);
+                        VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+                        //--------------------------------------
+                    } break;
+                default:
+                    {
+                        unsafe
                         {
                             float* arr = stackalloc float[4];
                             arr[0] = x1; arr[1] = y1;
@@ -94,8 +88,8 @@ namespace OpenTkEssTest
                             //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
                             GL.DrawArrays(BeginMode.Lines, 0, 2);
                             GL.DisableClientState(ArrayCap.VertexArray);
-                        } break;
-                }
+                        }
+                    } break;
 
             }
         }
@@ -159,70 +153,126 @@ namespace OpenTkEssTest
                 } GL.Disable(EnableCap.Texture2D);
             }
         }
-        //public void DrawPolygon(float[] polygon2dVertices)
-        //{
-        //    DrawPolygon(polygon2dVertices, polygon2dVertices.Length / 2);
-        //}
-        unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
-        {
-            GL.EnableClientState(ArrayCap.VertexArray); //***
-            //vertex 2d 
-            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
-            GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
-            GL.DisableClientState(ArrayCap.VertexArray);
-        }
+
+
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
         {
             //closed polyline
             //draw polyline
-            unsafe
+            switch (this.SmoothMode)
             {
-                fixed (float* arr = &polygon2dVertices[0])
-                {
-                    DrawPolygonUnsafe(arr, npoints);
-                }
+                case CanvasSmoothMode.AggSmooth:
+                    {
+                        //draw polyon
+
+                        ps.Clear();
+                        //closed polygon
+                        int j = npoints / 2;
+                        //first point
+                        if (j < 2)
+                        {
+                            return;
+                        }
+                        ps.MoveTo(polygon2dVertices[0], polygon2dVertices[1]);
+                        int nn = 2;
+                        for (int i = 1; i < j; ++i)
+                        {
+                            ps.LineTo(polygon2dVertices[nn++],
+                                polygon2dVertices[nn++]);
+                        }
+                        //close
+                        ps.ClosePolygon();
+
+                        VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+                        //--------------------------------------
+
+
+                    } break;
+                default:
+                    {
+                        unsafe
+                        {
+                            fixed (float* arr = &polygon2dVertices[0])
+                            {
+                                DrawPolygonUnsafe(arr, npoints);
+                            }
+                        }
+                    } break;
+
             }
-            ////closed polyline
-            ////draw polyline
-            //unsafe
-            //{
-            //    //crete indices
-            //    //int* indices = stackalloc int[npoints * 2];
-            //    //int nn = 0;
-            //    //for (int i = 1; i < npoints; ++i)
-            //    //{
-            //    //    indices[nn++] = i - 1;
-            //    //    indices[nn++] = i;
-            //    //}
-            //    ////------------------
-            //    ////close polygon
-            //    //indices[nn++] = npoints - 1;
-            //    //indices[nn++] = 0;
-            //    fixed (float* arr = &polygon2dVertices[0])
-            //    {
-            //        GL.EnableClientState(ArrayCap.VertexArray); //***
-            //        //vertex 2d
 
-            //        GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-            //        GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
-            //        //GL.DrawElements(BeginMode.LineLoop, npoints * 2, DrawElementsType.UnsignedInt, (IntPtr)indices);
-            //        GL.DisableClientState(ArrayCap.VertexArray);
-            //    }
-            //}
         }
 
-        public void FillPolygon(float[] vertex2dCoords)
+        public void DrawEllipse(float x, float y, double rx, double ry)
         {
-            //-------------
-            //Tesselate
-            //2d coods lis
-            //n point 
-            var vertextList = TessPolygon(vertex2dCoords);
-            //-----------------------------
-            FillTriangles(vertextList);
-            //-----------------------------
+
+            ellipse.Reset(x, y, rx, ry);
+
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {
+
+                        VertexStore vxs = stroke1.MakeVxs(ellipse.MakeVxs());
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+
+                    } break;
+                default:
+                    {
+                        VertexStore vxs = ellipse.MakeVxs();
+                        int n = vxs.Count;
+                        unsafe
+                        {
+                            float* coords = stackalloc float[n * 2];
+                            int i = 0;
+                            int nn = 0;
+                            double vx, vy;
+                            var cmd = vxs.GetVertex(i, out vx, out vy);
+                            while (i < n)
+                            {
+                                switch (cmd)
+                                {
+                                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                                        {
+                                            coords[nn++] = (float)vx;
+                                            coords[nn++] = (float)vy;
+                                        } break;
+                                    case ShapePath.FlagsAndCommand.CommandLineTo:
+                                        {
+                                            coords[nn++] = (float)vx;
+                                            coords[nn++] = (float)vy;
+                                        } break;
+                                    case ShapePath.FlagsAndCommand.CommandStop:
+                                        {
+                                        } break;
+                                    default:
+                                        {
+
+                                        } break;
+                                }
+                                i++;
+                                cmd = vxs.GetVertex(i, out vx, out vy);
+                            }
+                            //-------------------------------------- 
+                            DrawPolygonUnsafe(coords, nn / 2);
+
+                        }
+                    } break;
+            }
+
+        }
+        public void DrawCircle(float x, float y, double radius)
+        {
+
+            DrawEllipse(x, y, radius, radius);
         }
 
+        //==================================================================================
         public LayoutFarm.Drawing.Color FillColor
         {
             get
@@ -235,63 +285,38 @@ namespace OpenTkEssTest
                 GL.Color4(value);
             }
         }
-
-
-        public void DrawEllipse(float x, float y, double rx, double ry)
+        public void FillRect(float x, float y, float w, float h)
         {
-
-            ellipse.Reset(x, y, rx, ry);
-            VertexStore vxs = ellipse.MakeVxs();
-            int n = vxs.Count;
-            //iterate
+            //2d
             unsafe
             {
-                float* coords = stackalloc float[n * 2];
-                int i = 0;
-                int nn = 0;
-                double vx, vy;
-                var cmd = vxs.GetVertex(i, out vx, out vy);
-                while (i < n)
-                {
-                    switch (cmd)
-                    {
-                        case ShapePath.FlagsAndCommand.CommandMoveTo:
-                            {
-                                coords[nn++] = (float)vx;
-                                coords[nn++] = (float)vy;
-                            } break;
-                        case ShapePath.FlagsAndCommand.CommandLineTo:
-                            {
-                                coords[nn++] = (float)vx;
-                                coords[nn++] = (float)vy;
-                            } break;
-                        case ShapePath.FlagsAndCommand.CommandStop:
-                            {
-                            } break;
-                        default:
-                            {
-
-                            } break;
-                    }
-                    i++;
-                    cmd = vxs.GetVertex(i, out vx, out vy);
-                }
-                //--------------------------------------
-                DrawPolygonUnsafe(coords, nn / 2);
+                float* arr = stackalloc float[8];
+                byte* indices = stackalloc byte[6];
+                CreateRectCoords(arr, indices, x, y, w, h);
+                GL.EnableClientState(ArrayCap.VertexArray); //***
+                //vertex
+                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+                GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
-        public void DrawCircle(float x, float y, double radius)
-        {
-
-            DrawEllipse(x, y, radius, radius);
-        }
-
         public void FillEllipse(float x, float y, double rx, double ry)
         {
             ellipse.Reset(x, y, rx, ry);
             VertexStore vxs = ellipse.MakeVxs();
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {   
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, this.fillColor);
+                        return;
+                    }
+            }
+
             int n = vxs.Count;
-            //make triangular fan***
+            //make triangular fan*** 
             unsafe
             {
                 float* coords = stackalloc float[(n * 2) + 4];
@@ -359,6 +384,55 @@ namespace OpenTkEssTest
             FillEllipse(x, y, radius, radius);
         }
 
+        public void FillPolygon(float[] vertex2dCoords)
+        {
+            FillPolygon(vertex2dCoords, vertex2dCoords.Length);
+        }
+        public void FillPolygon(float[] vertex2dCoords, int npoints)
+        {
+            //-------------
+            //Tesselate
+            //2d coods lis
+            //n point 
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {
+                        //closed polygon
+
+                        //closed polygon
+                        int j = npoints / 2;
+                        //first point
+                        if (j < 2)
+                        {
+                            return;
+                        }
+                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
+                        int nn = 2;
+                        for (int i = 1; i < j; ++i)
+                        {
+                            ps.LineTo(vertex2dCoords[nn++],
+                                vertex2dCoords[nn++]);
+                        }
+                        //close
+                        ps.ClosePolygon();
+                        VertexStore vxs = ps.Vxs;
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, this.fillColor);
+                        //-------------------------------------- 
+
+                    } break;
+                default:
+                    {
+                        var vertextList = TessPolygon(vertex2dCoords);
+                        //-----------------------------
+                        FillTriangles(vertextList);
+                        //-----------------------------
+                    } break;
+            }
+
+        }
 
     }
 }

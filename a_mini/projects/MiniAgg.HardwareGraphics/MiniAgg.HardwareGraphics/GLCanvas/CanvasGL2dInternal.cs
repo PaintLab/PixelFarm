@@ -186,17 +186,15 @@ namespace OpenTkEssTest
                 //--------------------------------------
             }
         }
-        void DrawLineAggAA(float x1, float y1, float x2, float y2)
+        
+        unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
         {
-            //--------------------------------------
-            ps.Clear();
-            ps.MoveTo(x1, y1);
-            ps.LineTo(x2, y2);
-            VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
-            sclineRas.Reset();
-            sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor(sclineRas, sclinePack8, this.fillColor);
-            //--------------------------------------
+
+            GL.EnableClientState(ArrayCap.VertexArray); //***
+            //vertex 2d 
+            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
+            GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
+            GL.DisableClientState(ArrayCap.VertexArray);
         }
     }
 }

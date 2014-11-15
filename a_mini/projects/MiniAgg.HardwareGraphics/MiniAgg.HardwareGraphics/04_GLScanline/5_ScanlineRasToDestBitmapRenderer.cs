@@ -26,7 +26,8 @@ using OpenTK.Graphics.OpenGL;
 
 namespace PixelFarm.Agg
 {
-    /// <summary>
+
+    /// <summary
     /// to bitmap
     /// </summary>  
     public class GLScanlineRasToDestBitmapRenderer
@@ -40,18 +41,27 @@ namespace PixelFarm.Agg
         {
 
         }
-        public void RenderWithColor(GLScanlineRasterizer sclineRas,
+
+        /// <summary>
+        /// for fill shape
+        /// </summary>
+        /// <param name="sclineRas"></param>
+        /// <param name="scline"></param>
+        /// <param name="color"></param>
+        /// <param name="shapeHint"></param>
+        public void FillWithColor(GLScanlineRasterizer sclineRas,
                 GLScanline scline,
                 LayoutFarm.Drawing.Color color)
         {
-            if (!sclineRas.RewindScanlines()) { return; } //early exit
+
+            //early exit
+            if (color.A == 0) { return; }
+            if (!sclineRas.RewindScanlines()) { return; }
             //----------------------------------------------- 
+
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------  
-            if (color.A == 0)
-            {
-                return;
-            }
+
 
             GL.EnableClientState(ArrayCap.ColorArray);
             GL.EnableClientState(ArrayCap.VertexArray);
@@ -109,7 +119,83 @@ namespace PixelFarm.Agg
             GL.DisableClientState(ArrayCap.VertexArray);
             //------------------------ 
         }
+        /// <summary>
+        /// for lines
+        /// </summary>
+        /// <param name="sclineRas"></param>
+        /// <param name="scline"></param>
+        /// <param name="color"></param>
+        /// <param name="shapeHint"></param>
+        public void DrawWithColor(GLScanlineRasterizer sclineRas,
+                GLScanline scline,
+                LayoutFarm.Drawing.Color color)
+        {
 
+            //early exit
+            if (color.A == 0) { return; }
+            if (!sclineRas.RewindScanlines()) { return; }
+            //----------------------------------------------- 
+
+            scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
+            //-----------------------------------------------  
+
+
+            GL.EnableClientState(ArrayCap.ColorArray);
+            GL.EnableClientState(ArrayCap.VertexArray);
+
+
+            this.mySinglePixelBuffer.Clear();
+            this.myLineBuffer.Clear();
+
+            while (sclineRas.SweepScanline(scline))
+            {
+                int y = scline.Y;
+                int num_spans = scline.SpanCount;
+                byte[] covers = scline.GetCovers();
+                for (int i = 1; i <= num_spans; ++i)
+                {
+                    ScanlineSpan span = scline.GetSpan(i);
+                    if (span.len > 0)
+                    {
+                        //outline
+                        GLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                    }
+                    else
+                    {
+                        //fill
+                        int x = span.x;
+                        int x2 = (x - span.len - 1);
+                        GLBlendHL(x, y, x2, color, covers[span.cover_index]);
+                    }
+                }
+            }
+
+            //---------------------------------------------
+            //points
+            int nelements = mySinglePixelBuffer.Count;
+            Vbo vbo = GenerateVBOForC4V2I();
+            if (nelements > 0)
+            {
+                vbo.BindBuffer();
+                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
+                vbo.UnbindBuffer();
+            }
+            //---------------------------------------------
+            //lines
+            nelements = myLineBuffer.Count;
+            if (nelements > 0)
+            {
+                vbo.BindBuffer();
+                DrawLinesWithVertexBuffer(myLineBuffer, nelements);
+                vbo.UnbindBuffer();
+            }
+            //---------------------------------------------
+
+            vbo.Dispose();
+            GL.DisableClientState(ArrayCap.ColorArray);
+            GL.DisableClientState(ArrayCap.VertexArray);
+            //------------------------ 
+        }
 
         static void DrawPoint(float x1, float y1)
         {
