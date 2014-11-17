@@ -70,7 +70,7 @@ namespace OpenTkEssTest
                     }
                 }
 
-                canvas.DrawImage(hwBmp, 10, 10);
+                //canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
 
 
@@ -132,16 +132,27 @@ namespace OpenTkEssTest
                 canvas.FillCircle(450, 550, 25);
 
                 canvas.StrokeWidth = 3;
-                canvas.DrawRoundRect(50,450, 100, 100, 10, 10);
+                canvas.DrawRoundRect(500, 450, 100, 100, 10, 10);
 
 
                 canvas.StrokeWidth = 3;
                 canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Blue);
 
-                canvas.DrawBezierCurve(0, 0, 500, 500, 0, 250, 500, 250);
-
-
+                //canvas.DrawBezierCurve(0, 0, 500, 500, 0, 250, 500, 250);
+                canvas.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
                 canvas.SmoothMode = CanvasSmoothMode.No;
+
+                //canvas.DrawArc(150, 200, 300, 50, 0, 150, 150, SvgArcSize.Large, SvgArcSweep.Negative);
+                canvas.DrawArc(100, 200, 300, 200, 0, 100, 50, SvgArcSize.Large, SvgArcSweep.Negative);
+
+                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+                // canvas.DrawArc(100, 200, 300, 200, 0, 100, 100, SvgArcSize.Large, SvgArcSweep.Negative);
+
+                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
+                canvas.DrawLine(100, 200, 300, 200);
+
+
+
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 //---------------------------------------------  
 

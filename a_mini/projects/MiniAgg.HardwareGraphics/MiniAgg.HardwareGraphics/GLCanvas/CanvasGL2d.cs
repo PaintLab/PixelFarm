@@ -28,7 +28,7 @@ namespace OpenTkEssTest
         GLScanlineRasterizer sclineRas;
         GLScanlineRasToDestBitmapRenderer sclineRasToGL;
         GLScanlinePacked8 sclinePack8;
-
+        Arc arcTool = new Arc();
 
         public CanvasGL2d()
         {
@@ -330,6 +330,509 @@ namespace OpenTkEssTest
                     } break;
             }
         }
+
+
+
+        static double DegToRad(double degree)
+        {
+            return degree * (Math.PI / 180d);
+        }
+        static double RadToDeg(double degree)
+        {
+            return degree * (180d / Math.PI);
+        }
+
+        public void DrawArc(float fromX, float fromY, float endX, float endY,
+            float xaxisRotationAngleDec, float rx, float ry,
+            SvgArcSize arcSize, SvgArcSweep arcSweep)
+        {
+            //------------------
+            //SVG Elliptical arc ...
+            //from Apache Batik
+            //-----------------
+
+            CenterFormArc centerFormArc = new CenterFormArc();
+            ComputeArc2(fromX, fromY, rx, ry,
+                 DegToRad(xaxisRotationAngleDec),
+                 arcSize == SvgArcSize.Large,
+                 arcSweep == SvgArcSweep.Negative,
+                 endX, endY, ref centerFormArc);
+
+
+            arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
+                centerFormArc.radStartAngle,
+                (centerFormArc.radStartAngle + centerFormArc.radSweepDiff));
+
+            VertexStore vxs = new VertexStore();
+            bool stopLoop = false;
+            foreach (VertexData vertexData in arcTool.GetVertexIter())
+            {
+                switch (vertexData.command)
+                {
+
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        stopLoop = true;
+                        break;
+                    default:
+                        vxs.AddVertex(vertexData);
+                        //yield return vertexData;
+                        break;
+                }
+                //------------------------------
+                if (stopLoop) { break; }
+            }
+
+            //var transform = PixelFarm.Agg.Transform.Affine.NewMatix(
+            //            PixelFarm.Agg.Transform.AffinePlan.Translate(-centerFormArc.cx, -centerFormArc.cy),
+            //            PixelFarm.Agg.Transform.AffinePlan.Rotate(DegToRad(xaxisRotationAngleDec)),
+            //            PixelFarm.Agg.Transform.AffinePlan.Translate(centerFormArc.cx, centerFormArc.cy)
+            //    );
+            //vxs = transform.TransformToVxs(vxs);
+            //------------------------------
+
+            if (xaxisRotationAngleDec != 0)
+            {
+                //var invertMat = PixelFarm.Agg.Transform.Affine.NewMatix(new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Invert, 0, 0));
+                //vxs = invertMat.TransformToVxs(vxs);
+                if (centerFormArc.scaleUp)
+                {
+                    //add scale matrix
+                    //find distance between first and endpoint
+                    int vxs_count = vxs.Count;
+                    double px0, py0, px_last, py_last;
+
+                    vxs.GetVertex(0, out px0, out py0);
+                    vxs.GetVertex(vxs_count - 1, out px_last, out py_last);
+
+                    double distance1 = Math.Sqrt((px_last - px0) * (px_last - px0) + (py_last - py0) * (py_last - py0));
+                    double distance2 = Math.Sqrt((endX - fromX) * (endX - fromX) + (endY - fromY) * (endY - fromY));
+
+                    if (distance1 < distance2)
+                    {
+                        double ratio = distance2 / distance1;
+                        //scale up
+                        var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, ratio, ratio),
+                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                        vxs = mat.TransformToVxs(vxs);
+                    }
+                    else
+                    {
+                        var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                        vxs = mat.TransformToVxs(vxs);
+                    }
+
+
+
+
+                }
+                else
+                {
+                    var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+                         new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                         new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                         new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    vxs = mat.TransformToVxs(vxs);
+                }
+
+            }
+            //check if need scale up
+
+            vxs = stroke1.MakeVxs(vxs);
+
+            sclineRas.Reset();
+            sclineRas.AddPath(vxs);
+            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+        }
+
+        struct CenterFormArc
+        {
+            public double cx;
+            public double cy;
+            public double radStartAngle;
+            public double radSweepDiff;
+            public bool scaleUp;
+
+        }
+
+        static void ComputeArc2(double x0, double y0,
+                             double rx, double ry,
+                             double xAngleRad,
+                             bool largeArcFlag,
+                             bool sweepFlag,
+                             double x, double y, ref CenterFormArc result)
+        {
+
+            //from  SVG1.1 spec
+            //----------------------------------
+            //step1: Compute (x1dash,y1dash)
+            //----------------------------------
+
+            double dx2 = (x0 - x) / 2.0;
+            double dy2 = (y0 - y) / 2.0;
+            double cosAngle = Math.Cos(xAngleRad);
+            double sinAngle = Math.Sin(xAngleRad);
+
+            double x1 = (cosAngle * dx2 + sinAngle * dy2);
+            double y1 = (-sinAngle * dx2 + cosAngle * dy2);
+            // Ensure radii are large enough
+            rx = Math.Abs(rx);
+            ry = Math.Abs(ry);
+
+            double prx = rx * rx;
+            double pry = ry * ry;
+            double px1 = x1 * x1;
+            double py1 = y1 * y1;
+            // check that radii are large enough
+
+
+            double radiiCheck = px1 / prx + py1 / pry;
+            if (radiiCheck > 1)
+            {
+                rx = Math.Sqrt(radiiCheck) * rx;
+                ry = Math.Sqrt(radiiCheck) * ry;
+
+                prx = rx * rx;
+                pry = ry * ry;
+                result.scaleUp = true;
+            }
+
+            //----------------------------------
+            //step2: Compute (cx1,cy1)
+            //----------------------------------
+            double sign = (largeArcFlag == sweepFlag) ? -1 : 1;
+            double sq = ((prx * pry) - (prx * py1) - (pry * px1)) / ((prx * py1) + (pry * px1));
+            sq = (sq < 0) ? 0 : sq;
+            double coef = (sign * Math.Sqrt(sq));
+            double cx1 = coef * ((rx * y1) / ry);
+            double cy1 = coef * -((ry * x1) / rx);
+
+
+            //----------------------------------
+            //step3:  Compute (cx, cy) from (cx1, cy1)
+            //----------------------------------
+            double sx2 = (x0 + x) / 2.0;
+            double sy2 = (y0 + y) / 2.0;
+            double cx = sx2 + (cosAngle * cx1 - sinAngle * cy1);
+            double cy = sy2 + (sinAngle * cx1 + cosAngle * cy1);
+
+            //----------------------------------
+            //step4: Compute theta and anfkediff
+            double ux = (x1 - cx1) / rx;
+            double uy = (y1 - cy1) / ry;
+            double vx = (-x1 - cx1) / rx;
+            double vy = (-y1 - cy1) / ry;
+            double p, n;
+            // Compute the angle start
+            n = Math.Sqrt((ux * ux) + (uy * uy));
+            p = ux; // (1 * ux) + (0 * uy)
+            sign = (uy < 0) ? -1d : 1d;
+            double angleStart = (sign * Math.Acos(p / n));  // Math.toDegrees(sign * Math.Acos(p / n));
+
+            // Compute the angle extent
+            n = Math.Sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
+            p = ux * vx + uy * vy;
+            sign = (ux * vy - uy * vx < 0) ? -1d : 1d;
+            double angleExtent = (sign * Math.Acos(p / n));// Math.toDegrees(sign * Math.Acos(p / n));
+
+
+            //if (!sweepFlag && angleExtent > 0)
+            //{
+            //    angleExtent -= 360f;
+            //}
+            //else if (sweepFlag && angleExtent < 0)
+            //{
+            //    angleExtent += 360f;
+            //}
+
+            result.cx = cx;
+            result.cy = cy;
+            result.radStartAngle = angleStart;
+            result.radSweepDiff = angleExtent;
+
+        }
+        static Arc ComputeArc(double x0, double y0,
+                              double rx, double ry,
+                              double angle,
+                              bool largeArcFlag,
+                              bool sweepFlag,
+                               double x, double y)
+        {
+
+            /** 
+         * This constructs an unrotated Arc2D from the SVG specification of an 
+         * Elliptical arc.  To get the final arc you need to apply a rotation
+         * transform such as:
+         * 
+         * AffineTransform.getRotateInstance
+         *     (angle, arc.getX()+arc.getWidth()/2, arc.getY()+arc.getHeight()/2);
+         */
+            //
+            // Elliptical arc implementation based on the SVG specification notes
+            //
+
+            // Compute the half distance between the current and the final point
+            double dx2 = (x0 - x) / 2.0;
+            double dy2 = (y0 - y) / 2.0;
+            // Convert angle from degrees to radians
+            angle = ((angle % 360.0) * Math.PI / 180f);
+            double cosAngle = Math.Cos(angle);
+            double sinAngle = Math.Sin(angle);
+
+            //
+            // Step 1 : Compute (x1, y1)
+            //
+            double x1 = (cosAngle * dx2 + sinAngle * dy2);
+            double y1 = (-sinAngle * dx2 + cosAngle * dy2);
+            // Ensure radii are large enough
+            rx = Math.Abs(rx);
+            ry = Math.Abs(ry);
+            double Prx = rx * rx;
+            double Pry = ry * ry;
+            double Px1 = x1 * x1;
+            double Py1 = y1 * y1;
+            // check that radii are large enough
+            double radiiCheck = Px1 / Prx + Py1 / Pry;
+            if (radiiCheck > 1)
+            {
+                rx = Math.Sqrt(radiiCheck) * rx;
+                ry = Math.Sqrt(radiiCheck) * ry;
+                Prx = rx * rx;
+                Pry = ry * ry;
+            }
+
+            //
+            // Step 2 : Compute (cx1, cy1)
+            //
+            double sign = (largeArcFlag == sweepFlag) ? -1 : 1;
+            double sq = ((Prx * Pry) - (Prx * Py1) - (Pry * Px1)) / ((Prx * Py1) + (Pry * Px1));
+            sq = (sq < 0) ? 0 : sq;
+            double coef = (sign * Math.Sqrt(sq));
+            double cx1 = coef * ((rx * y1) / ry);
+            double cy1 = coef * -((ry * x1) / rx);
+
+            //
+            // Step 3 : Compute (cx, cy) from (cx1, cy1)
+            //
+            double sx2 = (x0 + x) / 2.0;
+            double sy2 = (y0 + y) / 2.0;
+            double cx = sx2 + (cosAngle * cx1 - sinAngle * cy1);
+            double cy = sy2 + (sinAngle * cx1 + cosAngle * cy1);
+
+            //
+            // Step 4 : Compute the angleStart (angle1) and the angleExtent (dangle)
+            //
+            double ux = (x1 - cx1) / rx;
+            double uy = (y1 - cy1) / ry;
+            double vx = (-x1 - cx1) / rx;
+            double vy = (-y1 - cy1) / ry;
+            double p, n;
+            // Compute the angle start
+            n = Math.Sqrt((ux * ux) + (uy * uy));
+            p = ux; // (1 * ux) + (0 * uy)
+            sign = (uy < 0) ? -1d : 1d;
+            double angleStart = (sign * Math.Acos(p / n));  // Math.toDegrees(sign * Math.Acos(p / n));
+
+            // Compute the angle extent
+            n = Math.Sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
+            p = ux * vx + uy * vy;
+            sign = (ux * vy - uy * vx < 0) ? -1d : 1d;
+            double angleExtent = (sign * Math.Acos(p / n));// Math.toDegrees(sign * Math.Acos(p / n));
+            if (!sweepFlag && angleExtent > 0)
+            {
+                angleExtent -= 360f;
+            }
+            else if (sweepFlag && angleExtent < 0)
+            {
+                angleExtent += 360f;
+            }
+            //angleExtent %= 360f;
+            //angleStart %= 360f;
+
+            //
+            // We can now build the resulting Arc2D in double precision
+            //
+            //Arc2D.Double arc = new Arc2D.Double();
+            //arc.x = cx - rx;
+            //arc.y = cy - ry;
+            //arc.width = rx * 2.0;
+            //arc.height = ry * 2.0;
+            //arc.start = -angleStart;
+            //arc.extent = -angleExtent;
+            Arc arc = new Arc();
+            arc.Init(x, y, rx, ry, -(angleStart), -(angleExtent));
+            return arc;
+        }
+
+
+        public void x3DrawArc(float fromX, float fromY, float endX, float endY,
+            float xaxisRotationAngle, float rx, float ry,
+            SvgArcSize arcSize, SvgArcSweep arcSweep)
+        {
+
+
+            if (xaxisRotationAngle != 0)
+            {
+                throw new NotSupportedException();
+            }
+            //-------------------------------------------------------------
+
+            if (fromX == endX && fromY == endY)
+            {
+                return;
+            }
+            if (rx == 0 && ry == 0)
+            {
+                DrawLine(fromX, fromY, endX, endY);
+            }
+
+            //1. find ox and oy
+            float ox = endX - fromX;
+            float oy = fromY;
+            float ydiff = endY - fromY;
+            float angle1 = 0;
+            float angle2 = 180;
+
+            arcTool.Init(ox, oy, rx, ry, angle1 * (Math.PI / 180f), angle2 * (Math.PI / 180f), Arc.ArcDirection.CounterClockWise);
+
+            VertexStore vxs = new VertexStore();
+            bool stopLoop = false;
+            foreach (VertexData vertexData in arcTool.GetVertexIter())
+            {
+                switch (vertexData.command)
+                {
+
+                    case ShapePath.FlagsAndCommand.CommandStop:
+                        stopLoop = true;
+                        break;
+                    default:
+                        vxs.AddVertex(vertexData);
+                        //yield return vertexData;
+                        break;
+                }
+                //------------------------------
+                if (stopLoop) { break; }
+            }
+            //------------------------------
+            if (ydiff != 0)
+            {
+                //create another section
+
+
+
+            }
+
+            //------------------------------
+            vxs = stroke1.MakeVxs(vxs);
+            sclineRas.Reset();
+            sclineRas.AddPath(vxs);
+            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+        }
+        public void xDrawArc(float fromX, float fromY, float endX, float endY,
+         float xaxisRotationAngle, float rx, float ry,
+         SvgArcSize arcSize, SvgArcSweep arcSweep)
+        {
+
+
+            //-------------------------------------------------------------
+
+            if (fromX == endX && fromY == endY)
+            {
+                return;
+            }
+            if (rx == 0 && ry == 0)
+            {
+                DrawLine(fromX, fromY, endX, endY);
+            }
+
+            float angle = xaxisRotationAngle;
+
+
+            double sinPhi = Math.Sin(angle * SvgPathSegArcInfo.RAD_PER_DEG);
+            double cosPhi = Math.Cos(angle * SvgPathSegArcInfo.RAD_PER_DEG);
+
+            double x1dash = cosPhi * (fromX - endX) / 2.0 + sinPhi * (fromY - endY) / 2.0;
+            double y1dash = -sinPhi * (fromX - endX) / 2.0 + cosPhi * (fromY - endY) / 2.0;
+
+            double root;
+            double numerator = (rx * rx * ry * ry) - (rx * rx * y1dash * y1dash) - (ry * ry * x1dash * x1dash);
+
+            if (numerator < 0.0)
+            {
+                float s = (float)Math.Sqrt(1.0 - numerator / (rx * rx * ry * ry));
+                rx *= s;
+                ry *= s;
+                root = 0.0;
+            }
+            else
+            {
+                root = ((arcSize == SvgArcSize.Large && arcSweep == SvgArcSweep.Positive)
+                    || (arcSize == SvgArcSize.Small && arcSweep == SvgArcSweep.Negative) ? -1.0 : 1.0) * Math.Sqrt(numerator / (rx * rx * y1dash * y1dash + ry * ry * x1dash * x1dash));
+            }
+
+
+            double cxdash = root * rx * y1dash / ry;
+            double cydash = -root * ry * x1dash / rx;
+
+            double cx = cosPhi * cxdash - sinPhi * cydash + (fromX + endX) / 2.0;
+            double cy = sinPhi * cxdash + cosPhi * cydash + (fromY + endY) / 2.0;
+
+            double theta1 = SvgPathSegArcInfo.CalculateVectorAngle(1.0, 0.0, (x1dash - cxdash) / rx, (y1dash - cydash) / ry);
+            double dtheta = SvgPathSegArcInfo.CalculateVectorAngle((x1dash - cxdash) / rx, (y1dash - cydash) / ry, (-x1dash - cxdash) / rx, (-y1dash - cydash) / ry);
+
+            if (arcSweep == SvgArcSweep.Negative && dtheta > 0)
+            {
+                dtheta -= 2.0 * Math.PI;
+            }
+            else if (arcSweep == SvgArcSweep.Positive && dtheta < 0)
+            {
+                dtheta += 2.0 * Math.PI;
+            }
+
+            int nsegments = (int)Math.Ceiling((double)Math.Abs(dtheta / (Math.PI / 2.0)));
+
+            double delta = dtheta / nsegments;
+            double t = 8.0 / 3.0 * Math.Sin(delta / 4.0) * Math.Sin(delta / 4.0) / Math.Sin(delta / 2.0);
+
+            double startX = fromX;
+            double startY = fromY;
+
+            for (int n = 0; n < nsegments; ++n)
+            {
+                double cosTheta1 = Math.Cos(theta1);
+                double sinTheta1 = Math.Sin(theta1);
+                double theta2 = theta1 + delta;
+                double cosTheta2 = Math.Cos(theta2);
+                double sinTheta2 = Math.Sin(theta2);
+
+                double endpointX = cosPhi * rx * cosTheta2 - sinPhi * ry * sinTheta2 + cx;
+                double endpointY = sinPhi * rx * cosTheta2 + cosPhi * ry * sinTheta2 + cy;
+
+                double dx1 = t * (-cosPhi * rx * sinTheta1 - sinPhi * ry * cosTheta1);
+                double dy1 = t * (-sinPhi * rx * sinTheta1 + cosPhi * ry * cosTheta1);
+
+                double dxe = t * (cosPhi * rx * sinTheta2 + sinPhi * ry * cosTheta2);
+                double dye = t * (sinPhi * rx * sinTheta2 - cosPhi * ry * cosTheta2);
+
+                DrawBezierCurve(
+                    (float)startX, (float)startY,
+                    (float)endpointX, (float)endpointY,
+                    (float)(startX + dx1), (float)(startY + dy1),
+                    (float)(endpointX + dxe), (float)(endpointY + dye));
+
+
+
+                theta1 = theta2;
+                startX = (float)endpointX;
+                startY = (float)endpointY;
+            }
+
+        }
         public void DrawBezierCurve(float startX, float startY, float endX, float endY,
             float controlX1, float controlY1,
             float controlX2, float controlY2)
@@ -340,11 +843,12 @@ namespace OpenTkEssTest
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
                 new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
+
             vxs = this.stroke1.MakeVxs(vxs);
 
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
-            sclineRasToGL.FillWithColor(sclineRas, sclinePack8, this.fillColor);
+            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
 
         }
         //==================================================================================
