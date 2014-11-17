@@ -143,7 +143,7 @@ namespace OpenTkEssTest
                 canvas.SmoothMode = CanvasSmoothMode.No;
 
                 //canvas.DrawArc(150, 200, 300, 50, 0, 150, 150, SvgArcSize.Large, SvgArcSweep.Negative);
-                canvas.DrawArc(100, 200, 300, 200, 0, 100, 50, SvgArcSize.Large, SvgArcSweep.Negative);
+                canvas.DrawArc(100, 200, 300, 200, 30, 30, 50, SvgArcSize.Large, SvgArcSweep.Negative);
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
                 // canvas.DrawArc(100, 200, 300, 200, 0, 100, 100, SvgArcSize.Large, SvgArcSweep.Negative);

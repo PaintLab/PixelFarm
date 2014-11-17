@@ -381,58 +381,66 @@ namespace OpenTkEssTest
                 //------------------------------
                 if (stopLoop) { break; }
             }
-             
+
+
+            double scaleRatio = 1;
+            if (centerFormArc.scaleUp)
+            {
+                int vxs_count = vxs.Count;
+                double px0, py0, px_last, py_last;
+
+                vxs.GetVertex(0, out px0, out py0);
+                vxs.GetVertex(vxs_count - 1, out px_last, out py_last);
+
+                double distance1 = Math.Sqrt((px_last - px0) * (px_last - px0) + (py_last - py0) * (py_last - py0));
+                double distance2 = Math.Sqrt((endX - fromX) * (endX - fromX) + (endY - fromY) * (endY - fromY));
+
+                if (distance1 < distance2)
+                {
+                    scaleRatio = distance2 / distance1;
+                }
+                else
+                { 
+
+                }
+            }
 
             if (xaxisRotationAngleDec != 0)
             {
-                // 
+                //also  rotate 
                 if (centerFormArc.scaleUp)
                 {
-                    //add scale matrix
-                    //find distance between first and endpoint
-                    int vxs_count = vxs.Count;
-                    double px0, py0, px_last, py_last;
-
-                    vxs.GetVertex(0, out px0, out py0);
-                    vxs.GetVertex(vxs_count - 1, out px_last, out py_last);
-
-                    double distance1 = Math.Sqrt((px_last - px0) * (px_last - px0) + (py_last - py0) * (py_last - py0));
-                    double distance2 = Math.Sqrt((endX - fromX) * (endX - fromX) + (endY - fromY) * (endY - fromY));
-
-                    if (distance1 < distance2)
-                    {
-                        double ratio = distance2 / distance1;
-                        //scale up
-                        var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, ratio, ratio),
-                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                        vxs = mat.TransformToVxs(vxs);
-                    }
-                    else
-                    {   
-                        //?
-                        var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                        vxs = mat.TransformToVxs(vxs);
-                    }
-                      
+                    var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    vxs = mat.TransformToVxs(vxs);
                 }
                 else
                 {
+                    //not scalue
                     var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                         new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                         new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
-                         new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                     vxs = mat.TransformToVxs(vxs);
                 }
-
             }
-              
-            vxs = stroke1.MakeVxs(vxs); 
+            else
+            {
+                //no rotate
+                if (centerFormArc.scaleUp)
+                {
+                    var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),                             
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
+                    vxs = mat.TransformToVxs(vxs);
+                }
+            }
+
+            vxs = stroke1.MakeVxs(vxs);
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
