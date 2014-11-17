@@ -381,19 +381,11 @@ namespace OpenTkEssTest
                 //------------------------------
                 if (stopLoop) { break; }
             }
-
-            //var transform = PixelFarm.Agg.Transform.Affine.NewMatix(
-            //            PixelFarm.Agg.Transform.AffinePlan.Translate(-centerFormArc.cx, -centerFormArc.cy),
-            //            PixelFarm.Agg.Transform.AffinePlan.Rotate(DegToRad(xaxisRotationAngleDec)),
-            //            PixelFarm.Agg.Transform.AffinePlan.Translate(centerFormArc.cx, centerFormArc.cy)
-            //    );
-            //vxs = transform.TransformToVxs(vxs);
-            //------------------------------
+             
 
             if (xaxisRotationAngleDec != 0)
             {
-                //var invertMat = PixelFarm.Agg.Transform.Affine.NewMatix(new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Invert, 0, 0));
-                //vxs = invertMat.TransformToVxs(vxs);
+                // 
                 if (centerFormArc.scaleUp)
                 {
                     //add scale matrix
@@ -419,17 +411,15 @@ namespace OpenTkEssTest
                         vxs = mat.TransformToVxs(vxs);
                     }
                     else
-                    {
+                    {   
+                        //?
                         var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                              new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
                              new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
                              new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                         vxs = mat.TransformToVxs(vxs);
                     }
-
-
-
-
+                      
                 }
                 else
                 {
@@ -441,10 +431,8 @@ namespace OpenTkEssTest
                 }
 
             }
-            //check if need scale up
-
-            vxs = stroke1.MakeVxs(vxs);
-
+              
+            vxs = stroke1.MakeVxs(vxs); 
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -670,169 +658,6 @@ namespace OpenTkEssTest
         }
 
 
-        public void x3DrawArc(float fromX, float fromY, float endX, float endY,
-            float xaxisRotationAngle, float rx, float ry,
-            SvgArcSize arcSize, SvgArcSweep arcSweep)
-        {
-
-
-            if (xaxisRotationAngle != 0)
-            {
-                throw new NotSupportedException();
-            }
-            //-------------------------------------------------------------
-
-            if (fromX == endX && fromY == endY)
-            {
-                return;
-            }
-            if (rx == 0 && ry == 0)
-            {
-                DrawLine(fromX, fromY, endX, endY);
-            }
-
-            //1. find ox and oy
-            float ox = endX - fromX;
-            float oy = fromY;
-            float ydiff = endY - fromY;
-            float angle1 = 0;
-            float angle2 = 180;
-
-            arcTool.Init(ox, oy, rx, ry, angle1 * (Math.PI / 180f), angle2 * (Math.PI / 180f), Arc.ArcDirection.CounterClockWise);
-
-            VertexStore vxs = new VertexStore();
-            bool stopLoop = false;
-            foreach (VertexData vertexData in arcTool.GetVertexIter())
-            {
-                switch (vertexData.command)
-                {
-
-                    case ShapePath.FlagsAndCommand.CommandStop:
-                        stopLoop = true;
-                        break;
-                    default:
-                        vxs.AddVertex(vertexData);
-                        //yield return vertexData;
-                        break;
-                }
-                //------------------------------
-                if (stopLoop) { break; }
-            }
-            //------------------------------
-            if (ydiff != 0)
-            {
-                //create another section
-
-
-
-            }
-
-            //------------------------------
-            vxs = stroke1.MakeVxs(vxs);
-            sclineRas.Reset();
-            sclineRas.AddPath(vxs);
-            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
-        }
-        public void xDrawArc(float fromX, float fromY, float endX, float endY,
-         float xaxisRotationAngle, float rx, float ry,
-         SvgArcSize arcSize, SvgArcSweep arcSweep)
-        {
-
-
-            //-------------------------------------------------------------
-
-            if (fromX == endX && fromY == endY)
-            {
-                return;
-            }
-            if (rx == 0 && ry == 0)
-            {
-                DrawLine(fromX, fromY, endX, endY);
-            }
-
-            float angle = xaxisRotationAngle;
-
-
-            double sinPhi = Math.Sin(angle * SvgPathSegArcInfo.RAD_PER_DEG);
-            double cosPhi = Math.Cos(angle * SvgPathSegArcInfo.RAD_PER_DEG);
-
-            double x1dash = cosPhi * (fromX - endX) / 2.0 + sinPhi * (fromY - endY) / 2.0;
-            double y1dash = -sinPhi * (fromX - endX) / 2.0 + cosPhi * (fromY - endY) / 2.0;
-
-            double root;
-            double numerator = (rx * rx * ry * ry) - (rx * rx * y1dash * y1dash) - (ry * ry * x1dash * x1dash);
-
-            if (numerator < 0.0)
-            {
-                float s = (float)Math.Sqrt(1.0 - numerator / (rx * rx * ry * ry));
-                rx *= s;
-                ry *= s;
-                root = 0.0;
-            }
-            else
-            {
-                root = ((arcSize == SvgArcSize.Large && arcSweep == SvgArcSweep.Positive)
-                    || (arcSize == SvgArcSize.Small && arcSweep == SvgArcSweep.Negative) ? -1.0 : 1.0) * Math.Sqrt(numerator / (rx * rx * y1dash * y1dash + ry * ry * x1dash * x1dash));
-            }
-
-
-            double cxdash = root * rx * y1dash / ry;
-            double cydash = -root * ry * x1dash / rx;
-
-            double cx = cosPhi * cxdash - sinPhi * cydash + (fromX + endX) / 2.0;
-            double cy = sinPhi * cxdash + cosPhi * cydash + (fromY + endY) / 2.0;
-
-            double theta1 = SvgPathSegArcInfo.CalculateVectorAngle(1.0, 0.0, (x1dash - cxdash) / rx, (y1dash - cydash) / ry);
-            double dtheta = SvgPathSegArcInfo.CalculateVectorAngle((x1dash - cxdash) / rx, (y1dash - cydash) / ry, (-x1dash - cxdash) / rx, (-y1dash - cydash) / ry);
-
-            if (arcSweep == SvgArcSweep.Negative && dtheta > 0)
-            {
-                dtheta -= 2.0 * Math.PI;
-            }
-            else if (arcSweep == SvgArcSweep.Positive && dtheta < 0)
-            {
-                dtheta += 2.0 * Math.PI;
-            }
-
-            int nsegments = (int)Math.Ceiling((double)Math.Abs(dtheta / (Math.PI / 2.0)));
-
-            double delta = dtheta / nsegments;
-            double t = 8.0 / 3.0 * Math.Sin(delta / 4.0) * Math.Sin(delta / 4.0) / Math.Sin(delta / 2.0);
-
-            double startX = fromX;
-            double startY = fromY;
-
-            for (int n = 0; n < nsegments; ++n)
-            {
-                double cosTheta1 = Math.Cos(theta1);
-                double sinTheta1 = Math.Sin(theta1);
-                double theta2 = theta1 + delta;
-                double cosTheta2 = Math.Cos(theta2);
-                double sinTheta2 = Math.Sin(theta2);
-
-                double endpointX = cosPhi * rx * cosTheta2 - sinPhi * ry * sinTheta2 + cx;
-                double endpointY = sinPhi * rx * cosTheta2 + cosPhi * ry * sinTheta2 + cy;
-
-                double dx1 = t * (-cosPhi * rx * sinTheta1 - sinPhi * ry * cosTheta1);
-                double dy1 = t * (-sinPhi * rx * sinTheta1 + cosPhi * ry * cosTheta1);
-
-                double dxe = t * (cosPhi * rx * sinTheta2 + sinPhi * ry * cosTheta2);
-                double dye = t * (sinPhi * rx * sinTheta2 - cosPhi * ry * cosTheta2);
-
-                DrawBezierCurve(
-                    (float)startX, (float)startY,
-                    (float)endpointX, (float)endpointY,
-                    (float)(startX + dx1), (float)(startY + dy1),
-                    (float)(endpointX + dxe), (float)(endpointY + dye));
-
-
-
-                theta1 = theta2;
-                startX = (float)endpointX;
-                startY = (float)endpointY;
-            }
-
-        }
         public void DrawBezierCurve(float startX, float startY, float endX, float endY,
             float controlX1, float controlY1,
             float controlX2, float controlY2)
