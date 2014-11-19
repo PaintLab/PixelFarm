@@ -29,15 +29,16 @@ namespace OpenTkEssTest
         GLScanlineRasToDestBitmapRenderer sclineRasToGL;
         GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
-
+        
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
             sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
-        }
 
+            SetupFonts();
+        }
         public CanvasSmoothMode SmoothMode
         {
             get;
@@ -400,7 +401,7 @@ namespace OpenTkEssTest
                     scaleRatio = distance2 / distance1;
                 }
                 else
-                { 
+                {
 
                 }
             }
@@ -434,7 +435,7 @@ namespace OpenTkEssTest
                 {
                     var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),                             
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                     vxs = mat.TransformToVxs(vxs);
                 }
@@ -872,6 +873,7 @@ namespace OpenTkEssTest
             }
 
         }
-
+        //-----------------------------------------------------
+       
     }
 }

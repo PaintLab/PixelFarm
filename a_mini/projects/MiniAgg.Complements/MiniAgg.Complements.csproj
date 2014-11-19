@@ -44,6 +44,8 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\FilterMan.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\ScanlineRasToDestBitmapRendererExtension.cs" />
+    <Compile Include="Font2\MyFonts.cs" />
+    <Compile Include="Font2\NativeMyFonts.cs" />
     <Compile Include="VertexSource\BezireCurve.cs" />
     <Compile Include="x_notused\KDTree.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\CanvasPainter.cs" />

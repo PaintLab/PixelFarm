@@ -151,7 +151,7 @@ namespace OpenTkEssTest
                 canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
                 canvas.DrawLine(100, 200, 300, 200);
 
-
+                canvas.DrawString("ฟ", 50, 50);
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 //---------------------------------------------  
