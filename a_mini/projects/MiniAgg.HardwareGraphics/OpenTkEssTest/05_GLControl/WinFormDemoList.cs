@@ -154,7 +154,7 @@ namespace OpenTkEssTest
 
                 //load font data
                 var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 48);
-                var fontGlyph = font.GetGlyph('า');
+                var fontGlyph = font.GetGlyph('ด');
                 //PixelFarm.Font2.MyFonts.SetShapingEngine();
                 //PixelFarm.Font2.MyFonts.ShapeText("ดุ");
 

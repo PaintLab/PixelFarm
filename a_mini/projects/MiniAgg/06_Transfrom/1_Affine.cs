@@ -907,7 +907,7 @@ namespace PixelFarm.Agg.Transform
         }
         public VertexStore TransformToVxs(Agg.VertexSource.PathStore src)
         {
-            return TransformToVxs(src.Vsx);
+            return TransformToVxs(src.Vxs);
         }
         public VertexStore TransformToVxs(VertexStore src)
         {

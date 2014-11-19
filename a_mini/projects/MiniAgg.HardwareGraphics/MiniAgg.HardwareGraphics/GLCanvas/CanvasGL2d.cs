@@ -29,7 +29,7 @@ namespace OpenTkEssTest
         GLScanlineRasToDestBitmapRenderer sclineRasToGL;
         GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
-        
+
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
@@ -160,6 +160,13 @@ namespace OpenTkEssTest
         {
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
+            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+        }
+        public void DrawVxs(VertexStore vxs)
+        {
+          
+            sclineRas.Reset();
+            sclineRas.AddPath(stroke1.MakeVxs(vxs));
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
         }
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
@@ -879,6 +886,6 @@ namespace OpenTkEssTest
 
         }
         //-----------------------------------------------------
-       
+
     }
 }

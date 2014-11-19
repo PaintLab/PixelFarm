@@ -213,8 +213,8 @@ namespace PixelFarm.Agg
             }
 
             //path.ArrangeOrientationsAll(ShapePath.FlagsAndCommand.FlagCW);
-            path.ArrangeOrientationsAll(true);
-
+             
+            ShapePath.ArrangeOrientationsAll(path.Vxs, true);
             return npaths;
         }
     }

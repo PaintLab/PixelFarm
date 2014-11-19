@@ -15,10 +15,10 @@ namespace PixelFarm.Agg
             //first lower 4 bits compact flags
             CommandStop = 0x00,
 
-            CommandMoveTo = 0x01,  
-            CommandLineTo = 0x02,  
-            CommandCurve3 = 0x03,  
-            CommandCurve4 = 0x04, 
+            CommandMoveTo = 0x01,
+            CommandLineTo = 0x02,
+            CommandCurve3 = 0x03,
+            CommandCurve4 = 0x04,
 
             CommandEndPoly = 0x0F,
             CommandsMask = 0x0F,
@@ -128,7 +128,7 @@ namespace PixelFarm.Agg
         //    shorten_path(vs, s, 0);
         //}
 
-        static public void ShortenPath(VertexSequence vs, double s, int closed)
+        public static void ShortenPath(VertexSequence vs, double s, int closed)
         {
             if (s > 0.0 && vs.Count > 1)
             {
@@ -164,5 +164,150 @@ namespace PixelFarm.Agg
                 }
             }
         }
+
+
+
+        public static void ArrangeOrientationsAll(VertexStore myvxs, bool closewise)
+        {
+            int start = 0;
+            while (start < myvxs.Count)
+            {
+                start = ArrangeOrientations(myvxs, start, closewise);
+            }
+        }
+
+        //----------------------------------------------------------------
+
+        // Arrange the orientation of a polygon, all polygons in a path, 
+        // or in all paths. After calling arrange_orientations() or 
+        // arrange_orientations_all_paths(), all the polygons will have 
+        // the same orientation, i.e. path_flags_cw or path_flags_ccw
+        //--------------------------------------------------------------------
+        static int ArrangePolygonOrientation(VertexStore myvxs, int start, bool closewise)
+        {
+            //if (orientation == ShapePath.FlagsAndCommand.FlagNone) return start;
+
+            // Skip all non-vertices at the beginning
+            ShapePath.FlagsAndCommand orientFlags = closewise ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
+
+            int vcount = myvxs.Count;
+            while (start < vcount &&
+                  !ShapePath.IsVertextCommand(myvxs.GetCommand(start)))
+            {
+                ++start;
+            }
+
+            // Skip all insignificant move_to
+            while (start + 1 < vcount &&
+                  ShapePath.IsMoveTo(myvxs.GetCommand(start)) &&
+                  ShapePath.IsMoveTo(myvxs.GetCommand(start + 1)))
+            {
+                ++start;
+            }
+
+            // Find the last vertex
+            int end = start + 1;
+            while (end < vcount &&
+                  !ShapePath.IsNextPoly(myvxs.GetCommand(end)))
+            {
+                ++end;
+            }
+
+
+            if (end - start > 2)
+            {
+                if (PerceivePolygonOrientation(myvxs, start, end) != orientFlags)
+                {
+                    // Invert polygon, set orientation flag, and skip all end_poly
+                    InvertPolygon(myvxs,start, end);
+                    ShapePath.FlagsAndCommand flags;
+                    int myvxs_count = myvxs.Count;
+                    while (end < myvxs_count &&
+                          ShapePath.IsEndPoly(flags = myvxs.GetCommand(end)))
+                    {
+                        myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
+                    }
+                }
+            }
+            return end;
+        }
+
+        static int ArrangeOrientations(VertexStore myvxs, int start, bool closewise)
+        {
+
+            while (start < myvxs.Count)
+            {
+                start = ArrangePolygonOrientation(myvxs, start, closewise);
+                if (ShapePath.IsStop(myvxs.GetCommand(start)))
+                {
+                    ++start;
+                    break;
+                }
+            }
+
+            return start;
+        }
+        static ShapePath.FlagsAndCommand PerceivePolygonOrientation(VertexStore myvxs, int start, int end)
+        {
+            // Calculate signed area (double area to be exact)
+            //---------------------
+            int np = end - start;
+            double area = 0.0;
+            int i;
+            for (i = 0; i < np; i++)
+            {
+                double x1, y1, x2, y2;
+                myvxs.GetVertexXY(start + i, out x1, out y1);
+                myvxs.GetVertexXY(start + (i + 1) % np, out x2, out y2);
+                area += x1 * y2 - y1 * x2;
+            }
+            return (area < 0.0) ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
+        }
+
+        static public void InvertPolygon(VertexStore myvxs, int start)
+        {
+            // Skip all non-vertices at the beginning
+            while (start < myvxs.Count &&
+                  !ShapePath.IsVertextCommand(myvxs.GetCommand(start))) ++start;
+
+            // Skip all insignificant move_to
+            while (start + 1 < myvxs.Count &&
+                  ShapePath.IsMoveTo(myvxs.GetCommand(start)) &&
+                  ShapePath.IsMoveTo(myvxs.GetCommand(start + 1))) ++start;
+
+            // Find the last vertex
+            int end = start + 1;
+            while (end < myvxs.Count &&
+                  !ShapePath.IsNextPoly(myvxs.GetCommand(end))) ++end;
+
+            InvertPolygon(myvxs, start, end);
+        }
+
+
+
+        static void InvertPolygon(VertexStore myvxs, int start, int end)
+        {
+            int i;
+            ShapePath.FlagsAndCommand tmp_PathAndFlags = myvxs.GetCommand(start);
+
+            --end; // Make "end" inclusive
+
+            // Shift all commands to one position
+            for (i = start; i < end; i++)
+            {
+                myvxs.ReplaceCommand(i, myvxs.GetCommand(i + 1));
+            }
+
+            // Assign starting command to the ending command
+            myvxs.ReplaceCommand(end, tmp_PathAndFlags);
+
+            // Reverse the polygon
+            while (end > start)
+            {
+                myvxs.SwapVertices(start++, end--);
+            }
+        }
+
+
     }
 }

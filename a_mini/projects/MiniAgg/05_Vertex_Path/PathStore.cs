@@ -41,16 +41,8 @@ namespace PixelFarm.Agg.VertexSource
         public PathStore()
         {
             myvxs = new VertexStore();
-        }
-
-        internal VertexStore Vsx
-        {
-            get
-            {
-                return this.myvxs;
-            }
-        }
-
+        } 
+         
         public int Count
         {
             get { return myvxs.Count; }
@@ -74,6 +66,8 @@ namespace PixelFarm.Agg.VertexSource
         {
             myvxs.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandStop);
         }
+        //--------------------------------------------------------------------
+
 
         void RelToAbs(ref double x, ref double y)
         {
@@ -111,7 +105,7 @@ namespace PixelFarm.Agg.VertexSource
 
         //--------------------------------------------------------------------
         /// <summary>
-        /// Draws a quadratic Bézier curve from the current point to (x,y) using (xControl,yControl) as the control point.
+        /// Draws a quadratic Bezier curve from the current point to (x,y) using (xControl,yControl) as the control point.
         /// </summary>
         /// <param name="xControl"></param>
         /// <param name="yControl"></param>
@@ -124,7 +118,7 @@ namespace PixelFarm.Agg.VertexSource
         }
 
         /// <summary>
-        /// Draws a quadratic Bézier curve from the current point to (x,y) using (xControl,yControl) as the control point.
+        /// Draws a quadratic Bezier curve from the current point to (x,y) using (xControl,yControl) as the control point.
         /// </summary>
         /// <param name="xControl"></param>
         /// <param name="yControl"></param>
@@ -139,7 +133,7 @@ namespace PixelFarm.Agg.VertexSource
         }
 
         /// <summary>
-        /// <para>Draws a quadratic Bézier curve from the current point to (x,y).</para>
+        /// <para>Draws a quadratic Bezier curve from the current point to (x,y).</para>
         /// <para>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.</para>
         /// <para>(If there is no previous command or if the previous command was not a curve, assume the control point is coincident with the current point.)</para>
         /// </summary>
@@ -169,7 +163,7 @@ namespace PixelFarm.Agg.VertexSource
         }
 
         /// <summary>
-        /// <para>Draws a quadratic Bézier curve from the current point to (x,y).</para>
+        /// <para>Draws a quadratic Bezier curve from the current point to (x,y).</para>
         /// <para>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.</para>
         /// <para>(If there is no previous command or if the previous command was not a curve, assume the control point is coincident with the current point.)</para>
         /// </summary>
@@ -236,6 +230,7 @@ namespace PixelFarm.Agg.VertexSource
             RelToAbs(ref dx_to, ref dy_to);
             Curve4(dx_ctrl2, dy_ctrl2, dx_to, dy_to);
         }
+
         //=======================================================================
         //TODO: implement arc to ***
         /*
@@ -326,89 +321,7 @@ namespace PixelFarm.Agg.VertexSource
         {
             return myvxs.GetLastY();
         }
-
-        
-
-        //----------------------------------------------------------------
-
-        // Arrange the orientation of a polygon, all polygons in a path, 
-        // or in all paths. After calling arrange_orientations() or 
-        // arrange_orientations_all_paths(), all the polygons will have 
-        // the same orientation, i.e. path_flags_cw or path_flags_ccw
-        //--------------------------------------------------------------------
-        int ArrangePolygonOrientation(int start, bool closewise)
-        {
-            //if (orientation == ShapePath.FlagsAndCommand.FlagNone) return start;
-
-            // Skip all non-vertices at the beginning
-            ShapePath.FlagsAndCommand orientFlags = closewise ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
-
-            int vcount = myvxs.Count;
-            while (start < vcount &&
-                  !ShapePath.IsVertextCommand(myvxs.GetCommand(start)))
-            {
-                ++start;
-            }
-
-            // Skip all insignificant move_to
-            while (start + 1 < vcount &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start)) &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start + 1)))
-            {
-                ++start;
-            }
-
-            // Find the last vertex
-            int end = start + 1;
-            while (end < vcount &&
-                  !ShapePath.IsNextPoly(myvxs.GetCommand(end)))
-            {
-                ++end;
-            }
-
-
-            if (end - start > 2)
-            {
-                if (PerceivePolygonOrientation(start, end) != orientFlags)
-                {
-                    // Invert polygon, set orientation flag, and skip all end_poly
-                    InvertPolygon(start, end);
-                    ShapePath.FlagsAndCommand flags;
-                    int myvxs_count = myvxs.Count;
-                    while (end < myvxs_count &&
-                          ShapePath.IsEndPoly(flags = myvxs.GetCommand(end)))
-                    {
-                        myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
-                    }
-                }
-            }
-            return end;
-        }
-
-        int ArrangeOrientations(int start, bool closewise)
-        {
-
-            while (start < myvxs.Count)
-            {
-                start = ArrangePolygonOrientation(start, closewise);
-                if (ShapePath.IsStop(myvxs.GetCommand(start)))
-                {
-                    ++start;
-                    break;
-                }
-            }
-
-            return start;
-        }
-
-        public void ArrangeOrientationsAll(bool closewise)
-        {
-            int start = 0;
-            while (start < myvxs.Count)
-            {
-                start = ArrangeOrientations(start, closewise);
-            }
-        }
+         
 
         // Flip all vertices horizontally or vertically, 
         // between x1 and x2, or between y1 and y2 respectively
@@ -527,43 +440,7 @@ namespace PixelFarm.Agg.VertexSource
             }
 
         }
-
-        /*
-        // Concatenate polygon/polyline. 
-        //--------------------------------------------------------------------
-        void concat_poly(T* data, int num_points, bool closed)
-        {
-            poly_plain_adaptor<T> poly(data, num_points, closed);
-            concat_path(poly);
-        }
-
-        // Join polygon/polyline continuously.
-        //--------------------------------------------------------------------
-        void join_poly(T* data, int num_points, bool closed)
-        {
-            poly_plain_adaptor<T> poly(data, num_points, closed);
-            join_path(poly);
-        }
-         */
-        //--------------------------------------------------------------------
-
-
-        //public void Translate(double dx, double dy, int path_id)
-        //{
-        //    int num_ver = vertices.Count;
-        //    for (; path_id < num_ver; path_id++)
-        //    {
-        //        double x, y;
-        //        ShapePath.FlagsAndCommand flags = this.vertices.GetVertex(path_id, out x, out y);
-        //        if (ShapePath.IsStop(flags)) break;
-        //        if (ShapePath.IsVertextCommand(flags))
-        //        {
-        //            x += dx;
-        //            y += dy;
-        //            vertices.ReplaceVertex(path_id, x, y);
-        //        }
-        //    }
-        //}
+            
 
         public void TranslateAll(double dx, double dy)
         {
@@ -579,29 +456,7 @@ namespace PixelFarm.Agg.VertexSource
                     myvxs.ReplaceVertex(index, x, y);
                 }
             }
-        }
-
-        //--------------------------------------------------------------------
-
-
-        //public void Transform(Transform.Affine trans, int path_id)
-        //{
-        //    int num_ver = vertices.Count;
-        //    for (; path_id < num_ver; path_id++)
-        //    {
-        //        double x, y;
-        //        ShapePath.FlagsAndCommand cmd = vertices.GetVertex(path_id, out x, out y);
-        //        if (cmd == ShapePath.FlagsAndCommand.CommandStop)
-        //        {
-        //            break;
-        //        }
-        //        if (ShapePath.IsVertextCommand(cmd))
-        //        {
-        //            trans.Transform(ref x, ref y);
-        //            vertices.ReplaceVertex(path_id, x, y);
-        //        }
-        //    }
-        //}
+        } 
 
         //--------------------------------------------------------------------
         public void TransformAll(Transform.Affine trans)
@@ -619,66 +474,7 @@ namespace PixelFarm.Agg.VertexSource
             }
         }
 
-        public void InvertPolygon(int start)
-        {
-            // Skip all non-vertices at the beginning
-            while (start < myvxs.Count &&
-                  !ShapePath.IsVertextCommand(myvxs.GetCommand(start))) ++start;
-
-            // Skip all insignificant move_to
-            while (start + 1 < myvxs.Count &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start)) &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start + 1))) ++start;
-
-            // Find the last vertex
-            int end = start + 1;
-            while (end < myvxs.Count &&
-                  !ShapePath.IsNextPoly(myvxs.GetCommand(end))) ++end;
-
-            InvertPolygon(start, end);
-        }
-
-        ShapePath.FlagsAndCommand PerceivePolygonOrientation(int start, int end)
-        {
-            // Calculate signed area (double area to be exact)
-            //---------------------
-            int np = end - start;
-            double area = 0.0;
-            int i;
-            for (i = 0; i < np; i++)
-            {
-                double x1, y1, x2, y2;
-                myvxs.GetVertexXY(start + i, out x1, out y1);
-                myvxs.GetVertexXY(start + (i + 1) % np, out x2, out y2);
-                area += x1 * y2 - y1 * x2;
-            }
-            return (area < 0.0) ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
-        }
-
-        void InvertPolygon(int start, int end)
-        {
-            int i;
-            ShapePath.FlagsAndCommand tmp_PathAndFlags = myvxs.GetCommand(start);
-
-            --end; // Make "end" inclusive
-
-            // Shift all commands to one position
-            for (i = start; i < end; i++)
-            {
-                myvxs.ReplaceCommand(i, myvxs.GetCommand(i + 1));
-            }
-
-            // Assign starting command to the ending command
-            myvxs.ReplaceCommand(end, tmp_PathAndFlags);
-
-            // Reverse the polygon
-            while (end > start)
-            {
-                myvxs.SwapVertices(start++, end--);
-            }
-        }
-
-
+      
         //----------------------------------------------------------
 
         public static void UnsafeDirectSetData(
