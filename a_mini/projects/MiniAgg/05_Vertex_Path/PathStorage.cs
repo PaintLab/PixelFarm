@@ -34,13 +34,11 @@ namespace PixelFarm.Agg.VertexSource
     // to navigate to the path afterwards.
     //
     // See also: vertex_source concept
-    //------------------------------------------------------------------------
-
-
-    public sealed class PathStorage
+    //------------------------------------------------------------------------ 
+    public sealed class PathStore
     {
         VertexStore myvxs;
-        public PathStorage()
+        public PathStore()
         {
             myvxs = new VertexStore();
         }
@@ -52,24 +50,16 @@ namespace PixelFarm.Agg.VertexSource
                 return this.myvxs;
             }
         }
-        public void AddVertex(double x, double y)
-        {
-            throw new System.NotImplementedException();
-        }
-        public void AddVertex(double x, double y, ShapePath.FlagsAndCommand flagsAndCommand)
-        {
-            myvxs.AddVertex(x, y, flagsAndCommand);
-        }
 
         public int Count
         {
             get { return myvxs.Count; }
-        } 
+        }
         public void Clear()
         {
             myvxs.Clear();
         }
-         
+
         // Make path functions
         //--------------------------------------------------------------------
         public int StartNewPath()
@@ -80,7 +70,10 @@ namespace PixelFarm.Agg.VertexSource
             }
             return myvxs.Count;
         }
-
+        public void Stop()
+        {
+            myvxs.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandStop);
+        }
 
         void RelToAbs(ref double x, ref double y)
         {
@@ -98,7 +91,6 @@ namespace PixelFarm.Agg.VertexSource
 
         public void MoveTo(double x, double y)
         {
-
             myvxs.AddMoveTo(x, y);
         }
 
@@ -117,64 +109,7 @@ namespace PixelFarm.Agg.VertexSource
             myvxs.LineTo(GetLastX(), y);
         }
 
-        /*
-        public void arc_to(double rx, double ry,
-                                   double angle,
-                                   bool large_arc_flag,
-                                   bool sweep_flag,
-                                   double x, double y)
-        {
-            if(m_vertices.total_vertices() && is_vertex(m_vertices.last_command()))
-            {
-                double epsilon = 1e-30;
-                double x0 = 0.0;
-                double y0 = 0.0;
-                m_vertices.last_vertex(&x0, &y0);
-
-                rx = fabs(rx);
-                ry = fabs(ry);
-
-                // Ensure radii are valid
-                //-------------------------
-                if(rx < epsilon || ry < epsilon) 
-                {
-                    line_to(x, y);
-                    return;
-                }
-
-                if(calc_distance(x0, y0, x, y) < epsilon)
-                {
-                    // If the endpoints (x, y) and (x0, y0) are identical, then this
-                    // is equivalent to omitting the elliptical arc segment entirely.
-                    return;
-                }
-                bezier_arc_svg a(x0, y0, rx, ry, angle, large_arc_flag, sweep_flag, x, y);
-                if(a.radii_ok())
-                {
-                    join_path(a);
-                }
-                else
-                {
-                    line_to(x, y);
-                }
-            }
-            else
-            {
-                move_to(x, y);
-            }
-        }
-
-        public void arc_rel(double rx, double ry,
-                                    double angle,
-                                    bool large_arc_flag,
-                                    bool sweep_flag,
-                                    double dx, double dy)
-        {
-            rel_to_abs(&dx, &dy);
-            arc_to(rx, ry, angle, large_arc_flag, sweep_flag, dx, dy);
-        }
-         */
-
+        //--------------------------------------------------------------------
         /// <summary>
         /// Draws a quadratic Bézier curve from the current point to (x,y) using (xControl,yControl) as the control point.
         /// </summary>
@@ -184,9 +119,6 @@ namespace PixelFarm.Agg.VertexSource
         /// <param name="y"></param>
         public void Curve3(double xControl, double yControl, double x, double y)
         {
-
-
-
             myvxs.AddVertexCurve3(xControl, yControl);
             myvxs.AddVertexCurve3(x, y);
         }
@@ -271,14 +203,8 @@ namespace PixelFarm.Agg.VertexSource
             myvxs.AddVertexCurve4(dx_to, dy_to);
 
         }
-        public VertexStore Vxs
-        {
-            get { return this.myvxs; }
-        }
-        public VertexStoreSnap MakeVertexSnap()
-        {
-            return new VertexStoreSnap(this.myvxs);
-        }
+      
+        //--------------------------------------------------------------------
         public void Curve4(double x_ctrl2, double y_ctrl2,
                        double x_to, double y_to)
         {
@@ -310,6 +236,76 @@ namespace PixelFarm.Agg.VertexSource
             RelToAbs(ref dx_to, ref dy_to);
             Curve4(dx_ctrl2, dy_ctrl2, dx_to, dy_to);
         }
+        //=======================================================================
+        //TODO: implement arc to ***
+        /*
+        public void arc_to(double rx, double ry,
+                               double angle,
+                               bool large_arc_flag,
+                               bool sweep_flag,
+                               double x, double y)
+    {
+        if(m_vertices.total_vertices() && is_vertex(m_vertices.last_command()))
+        {
+            double epsilon = 1e-30;
+            double x0 = 0.0;
+            double y0 = 0.0;
+            m_vertices.last_vertex(&x0, &y0);
+
+            rx = fabs(rx);
+            ry = fabs(ry);
+
+            // Ensure radii are valid
+            //-------------------------
+            if(rx < epsilon || ry < epsilon) 
+            {
+                line_to(x, y);
+                return;
+            }
+
+            if(calc_distance(x0, y0, x, y) < epsilon)
+            {
+                // If the endpoints (x, y) and (x0, y0) are identical, then this
+                // is equivalent to omitting the elliptical arc segment entirely.
+                return;
+            }
+            bezier_arc_svg a(x0, y0, rx, ry, angle, large_arc_flag, sweep_flag, x, y);
+            if(a.radii_ok())
+            {
+                join_path(a);
+            }
+            else
+            {
+                line_to(x, y);
+            }
+        }
+        else
+        {
+            move_to(x, y);
+        }
+    }
+
+    public void arc_rel(double rx, double ry,
+                                double angle,
+                                bool large_arc_flag,
+                                bool sweep_flag,
+                                double dx, double dy)
+    {
+        rel_to_abs(&dx, &dy);
+        arc_to(rx, ry, angle, large_arc_flag, sweep_flag, dx, dy);
+    }
+     */
+        //=======================================================================
+
+        //--------------------------------------------------------------------
+        public VertexStore Vxs
+        {
+            get { return this.myvxs; }
+        }
+        public VertexStoreSnap MakeVertexSnap()
+        {
+            return new VertexStoreSnap(this.myvxs);
+        }
 
         ShapePath.FlagsAndCommand GetLastVertex(out double x, out double y)
         {
@@ -331,19 +327,7 @@ namespace PixelFarm.Agg.VertexSource
             return myvxs.GetLastY();
         }
 
-
-        public IEnumerable<VertexData> GetVertexIter()
-        {
-            int count = myvxs.Count;
-            for (int i = 0; i < count; i++)
-            {
-                double x = 0;
-                double y = 0;
-                ShapePath.FlagsAndCommand command = myvxs.GetVertex(i, out x, out y);
-                yield return new VertexData(command, x, y);
-            }
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, 0, 0);
-        }
+        
 
         //----------------------------------------------------------------
 
@@ -425,15 +409,6 @@ namespace PixelFarm.Agg.VertexSource
                 start = ArrangeOrientations(start, closewise);
             }
         }
-
-
-        //public void ArrangeOrientationsAll(ShapePath.FlagsAndCommand orientation)
-        //{
-        //    if (orientation != ShapePath.FlagsAndCommand.FlagNone)
-        //    {
-
-        //    }
-        //}
 
         // Flip all vertices horizontally or vertically, 
         // between x1 and x2, or between y1 and y2 respectively
@@ -707,7 +682,7 @@ namespace PixelFarm.Agg.VertexSource
         //----------------------------------------------------------
 
         public static void UnsafeDirectSetData(
-            PathStorage pathStore,
+            PathStore pathStore,
             int m_allocated_vertices,
             int m_num_vertices,
             double[] m_coord_xy,
@@ -722,7 +697,7 @@ namespace PixelFarm.Agg.VertexSource
                 m_CommandAndFlags);
         }
         public static void UnsafeDirectGetData(
-            PathStorage pathStore,
+            PathStore pathStore,
             out int m_allocated_vertices,
             out int m_num_vertices,
             out double[] m_coord_xy,

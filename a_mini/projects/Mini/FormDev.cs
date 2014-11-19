@@ -109,7 +109,7 @@ namespace Mini
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new PixelFarm.Agg.SpriteShape();
 
-                PixelFarm.Agg.VertexSource.PathStorage path;
+                PixelFarm.Agg.VertexSource.PathStore path;
                 PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
 

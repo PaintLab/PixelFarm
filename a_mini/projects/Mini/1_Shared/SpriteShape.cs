@@ -16,7 +16,7 @@ namespace PixelFarm.Agg
 {
     public class SpriteShape
     {
-        PathStorage path = new PathStorage();
+        PathStore path = new PathStore();
         ColorRGBA[] colors = new ColorRGBA[100];
         int[] pathIndexList = new int[100];
         int numPaths = 0;
@@ -27,7 +27,7 @@ namespace PixelFarm.Agg
 
         }
 
-        public PathStorage Path
+        public PathStore Path
         {
             get
             {
@@ -89,7 +89,7 @@ namespace PixelFarm.Agg
         }
         public static void UnsafeDirectSetData(SpriteShape lion,
             int numPaths,
-            PathStorage pathStore,
+            PathStore pathStore,
             ColorRGBA[] colors,
             int[] pathIndice)
         {

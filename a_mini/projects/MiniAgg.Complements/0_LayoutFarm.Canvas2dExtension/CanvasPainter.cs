@@ -52,7 +52,7 @@ namespace PixelFarm.Agg
         //-------------
         SimpleRect simpleRect = new SimpleRect();
         Ellipse ellipse = new Ellipse();
-        PathStorage lines = new PathStorage();
+        PathStore lines = new PathStore();
         RoundedRect roundRect = null;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();

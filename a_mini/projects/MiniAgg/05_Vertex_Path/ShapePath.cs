@@ -15,10 +15,10 @@ namespace PixelFarm.Agg
             //first lower 4 bits compact flags
             CommandStop = 0x00,
 
-            CommandMoveTo = 0x01, //vertext cmd
-            CommandLineTo = 0x02, //vertext cmd
-            CommandCurve3 = 0x03, //vertext cmd
-            CommandCurve4 = 0x04, //vertext cmd
+            CommandMoveTo = 0x01,  
+            CommandLineTo = 0x02,  
+            CommandCurve3 = 0x03,  
+            CommandCurve4 = 0x04, 
 
             CommandEndPoly = 0x0F,
             CommandsMask = 0x0F,

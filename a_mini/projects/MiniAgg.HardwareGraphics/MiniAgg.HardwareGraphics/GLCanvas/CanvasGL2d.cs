@@ -23,7 +23,7 @@ namespace OpenTkEssTest
         //tools---------------------------------
         RoundedRect roundRect = new RoundedRect();
         Ellipse ellipse = new Ellipse();
-        PathStorage ps = new PathStorage();
+        PathStore ps = new PathStore();
         Stroke stroke1 = new Stroke(1);
         GLScanlineRasterizer sclineRas;
         GLScanlineRasToDestBitmapRenderer sclineRasToGL;

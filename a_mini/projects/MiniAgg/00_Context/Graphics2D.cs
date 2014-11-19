@@ -131,7 +131,7 @@ namespace PixelFarm.Agg
 #if DEBUG
         public void dbugLine(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
-            PathStorage m_LinesToDraw = new PathStorage();
+            PathStore m_LinesToDraw = new PathStore();
             m_LinesToDraw.Clear();
             m_LinesToDraw.MoveTo(x1, y1);
             m_LinesToDraw.LineTo(x2, y2);

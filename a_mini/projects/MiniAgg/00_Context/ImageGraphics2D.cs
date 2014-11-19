@@ -32,7 +32,7 @@ namespace PixelFarm.Agg
     {
         ImageReaderWriterBase destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
-        PathStorage drawImageRectPath = new PathStorage();
+        PathStore drawImageRectPath = new PathStore();
 
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
         PixelBlenderBGRA pixBlenderRGBA32;
@@ -99,20 +99,20 @@ namespace PixelFarm.Agg
             get { return this.ImageInterpolationQuality; }
             set { this.imgInterpolationQuality = value; }
         }
-        PathStorage GetFreePathStorage()
+        PathStore GetFreePathStorage()
         {
             if (drawImageRectPath != null)
             {
-                PathStorage tmp = this.drawImageRectPath;
+                PathStore tmp = this.drawImageRectPath;
                 this.drawImageRectPath = null;
                 return tmp;
             }
             else
             {
-                return new PathStorage();
+                return new PathStore();
             }
         }
-        void ReleasePathStorage(PathStorage ps)
+        void ReleasePathStorage(PathStore ps)
         {
             this.drawImageRectPath = ps;
             ps.Clear();

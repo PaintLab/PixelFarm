@@ -35,7 +35,7 @@ namespace PixelFarm.Agg.Font
             public int horiz_adv_x;
             public int unicode;
             public string glyphName;
-            public PathStorage glyphData = new PathStorage();
+            public PathStore glyphData = new PathStore();
         }
 
         class Panos_1

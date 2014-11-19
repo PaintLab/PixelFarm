@@ -897,7 +897,7 @@ namespace PixelFarm.Agg.Transform
 
 
         //----------------------------------------------------------------------------------------------
-        public VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
+        public VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStore src)
         {
             return new VertexStoreSnap(TransformToVxs(src));
         }
@@ -905,7 +905,7 @@ namespace PixelFarm.Agg.Transform
         {
             return new VertexStoreSnap(this.TransformToVxs(src));
         }
-        public VertexStore TransformToVxs(Agg.VertexSource.PathStorage src)
+        public VertexStore TransformToVxs(Agg.VertexSource.PathStore src)
         {
             return TransformToVxs(src.Vsx);
         }

@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        PathStorage CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
+        PathStore CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
         {
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
@@ -59,7 +59,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
             clipper.Execute(clipType, intersectedPolys);
 
-            PathStorage output = new PathStorage();
+            PathStore output = new PathStore();
 
             foreach (List<IntPoint> polygon in intersectedPolys)
             {
@@ -71,9 +71,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                     //first one
                     IntPoint point = polygon[0];
 
-                    output.AddVertex(point.X / 1000.0,
-                        point.Y / 1000.0,
-                        ShapePath.FlagsAndCommand.CommandMoveTo);
+                    output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
 
                     //next ...
                     if (j > 1)
@@ -81,9 +79,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         for (int i = 1; i < j; ++i)
                         {
                             point = polygon[i];
-                            output.AddVertex(point.X / 1000.0,
-                                point.Y / 1000.0,
-                                ShapePath.FlagsAndCommand.CommandLineTo);
+                            output.LineTo(point.X / 1000.0, point.Y / 1000.0);
                         }
                     }
                 }
@@ -103,8 +99,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 output.ClosePolygon();
             }
 
-            output.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandStop);
-
+             
+            output.Stop();
             return output;
         }
 
@@ -226,8 +222,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Two simple paths
                         //
-                        PathStorage ps1 = new PathStorage();
-                        PathStorage ps2 = new PathStorage();
+                        PathStore ps1 = new PathStore();
+                        PathStore ps2 = new PathStore();
 
                         double x = m_x - Width / 2 + 100;
                         double y = m_y - Height / 2 + 100;
@@ -268,8 +264,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Closed stroke
                         //
-                        PathStorage ps1 = new PathStorage();
-                        PathStorage ps2 = new PathStorage();
+                        PathStore ps1 = new PathStore();
+                        PathStore ps2 = new PathStore();
                         Stroke stroke = new Stroke(1);
 
                         stroke.Width = 10;
@@ -313,8 +309,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Great Britain and Arrows
                         //
-                        PathStorage gb_poly = new PathStorage();
-                        PathStorage arrows = new PathStorage();
+                        PathStore gb_poly = new PathStore();
+                        PathStore arrows = new PathStore();
                         PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
                         make_arrows(arrows);
@@ -357,7 +353,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
 
 
-                        PathStorage gb_poly = new PathStorage();
+                        PathStore gb_poly = new PathStore();
                         PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
                         Affine mtx = Affine.NewMatix(
@@ -371,7 +367,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs());
                         graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
 
-                        CreateAndRenderCombined(graphics2D, new VertexStoreSnap( s1), new VertexStoreSnap(stroke_vxs));
+                        CreateAndRenderCombined(graphics2D, new VertexStoreSnap(s1), new VertexStoreSnap(stroke_vxs));
                     }
                     break;
 
@@ -384,7 +380,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         Stroke stroke = new Stroke(15);
 
 
-                        PathStorage glyph = new PathStorage();
+                        PathStore glyph = new PathStore();
                         glyph.MoveTo(28.47, 6.45);
                         glyph.Curve3(21.58, 1.12, 19.82, 0.29);
                         glyph.Curve3(17.19, -0.93, 14.21, -0.93);
@@ -439,7 +435,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         var t_glyph = mtx.TransformToVertexSnap(glyph);
 
-                        FlattenCurves curve = new FlattenCurves(); 
+                        FlattenCurves curve = new FlattenCurves();
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
                         var curveVxs = curve.MakeVxs(t_glyph);
@@ -457,7 +453,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
         void CreateAndRenderCombined(Graphics2D graphics2D, VertexStoreSnap ps1, VertexStoreSnap ps2)
         {
-            PathStorage combined = null;
+            PathStore combined = null;
 
             switch (this.OpOption)
             {
@@ -498,7 +494,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             m_x = x;
             m_y = y;
         }
-        void make_arrows(PathStorage ps)
+        void make_arrows(PathStore ps)
         {
             ps.Clear();
             ps.MoveTo(1330.599999999999909, 1282.399999999999864);
@@ -597,10 +593,10 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 }
             }
 
-        } 
+        }
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter());             
+            return new VertexStore(this.GetVertexIter());
         }
         public VertexStoreSnap MakeVertexSnap()
         {

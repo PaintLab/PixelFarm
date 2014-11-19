@@ -33,7 +33,7 @@ namespace PixelFarm.Agg
 
 
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
-            PathStorage drawImageRectPath,
+            PathStore drawImageRectPath,
             double destX, double destY,
             double hotspotOffsetX, double hotSpotOffsetY,
             double scaleX, double scaleY,
@@ -82,7 +82,7 @@ namespace PixelFarm.Agg
             return Affine.NewMatix(plan);
         }
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
-           PathStorage drawImageRectPath,
+           PathStore drawImageRectPath,
            double destX, double destY)
         {
 
@@ -106,7 +106,7 @@ namespace PixelFarm.Agg
 
         }
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
-           PathStorage drawImageRectPath, AffinePlan[] affPlans)
+           PathStore drawImageRectPath, AffinePlan[] affPlans)
         {
 
             
@@ -197,7 +197,7 @@ namespace PixelFarm.Agg
 
             bool renderRequriesSourceSampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
-            PathStorage imgBoundsPath = GetFreePathStorage();
+            PathStore imgBoundsPath = GetFreePathStorage();
             // this is the fast drawing path
             if (renderRequriesSourceSampling)
             {

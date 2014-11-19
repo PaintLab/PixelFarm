@@ -29,7 +29,7 @@ namespace PixelFarm.Agg
     {
 
 
-        public static bool GetBoundingRect(PathStorage vs, int[] gi,
+        public static bool GetBoundingRect(PathStore vs, int[] gi,
                            int num,
                            out RectD boundingRect)
         {
@@ -47,7 +47,7 @@ namespace PixelFarm.Agg
         }
 
         //----------------------------------
-        static bool GetBoundingRect(PathStorage vs, int[] gi,
+        static bool GetBoundingRect(PathStore vs, int[] gi,
                          int num,
                          out double x1,
                          out double y1,
@@ -156,7 +156,7 @@ namespace PixelFarm.Agg
     {
 
 
-        public static bool GetBoundingRect(PathStorage vs, int[] gi,
+        public static bool GetBoundingRect(PathStore vs, int[] gi,
                            int num,
                            out RectInt boundingRect)
         {
@@ -185,7 +185,7 @@ namespace PixelFarm.Agg
             bool rValue = GetBoundingRect(new VertexStoreSnap(vxs), out x1, out y1, out x2, out y2);
             return new RectInt(x1, y1, x2, y2);
         }
-        static bool GetBoundingRect(PathStorage vs, int[] gi,
+        static bool GetBoundingRect(PathStore vs, int[] gi,
                          int num,
                          out int x1,
                          out int y1,
