@@ -156,7 +156,12 @@ namespace OpenTkEssTest
             }
         }
 
-
+        public void FillVxs(VertexStore vxs)
+        {
+            sclineRas.Reset();
+            sclineRas.AddPath(vxs);
+            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+        }
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
         {
             //closed polyline

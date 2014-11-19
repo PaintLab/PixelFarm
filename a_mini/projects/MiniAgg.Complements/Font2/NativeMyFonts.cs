@@ -27,17 +27,19 @@ namespace PixelFarm.Font2
         public short n_points;        /* number of points in the glyph      */
 
         public FT_Vector* points;          /* the outline's points               */
-        public char* tags;            /* the points flags                   */
+        public byte* tags;            /* the points flags                   */
         public short* contours;        /* the contour end points             */
 
         public int flags;           /* outline masks                      */
     }
 
 
-
+    
 
     static class NativeMyFonts
     {
+        
+
         const string myfontLib = @"D:\zzshare\zz2\freetype-2.5.3\builds\Debug\myft.dll";
 
         [DllImport(myfontLib)]

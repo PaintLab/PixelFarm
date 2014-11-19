@@ -184,6 +184,9 @@ namespace PixelFarm.Agg.VertexSource
         /// <param name="y"></param>
         public void Curve3(double xControl, double yControl, double x, double y)
         {
+
+
+
             myvxs.AddVertexCurve3(xControl, yControl);
             myvxs.AddVertexCurve3(x, y);
         }

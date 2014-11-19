@@ -151,7 +151,15 @@ namespace OpenTkEssTest
                 canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
                 canvas.DrawLine(100, 200, 300, 200);
 
-                canvas.DrawString("ฟ", 50, 50);
+
+                //load font data
+                var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 48);
+                var fontGlyph = font.GetGlyph('า');
+                //PixelFarm.Font2.MyFonts.SetShapingEngine();
+                //PixelFarm.Font2.MyFonts.ShapeText("ดุ");
+
+                canvas.FillVxs(fontGlyph.vxs);
+                //canvas.DrawString("ฟ", 50, 50);
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 //---------------------------------------------  

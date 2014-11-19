@@ -127,8 +127,7 @@ namespace PixelFarm.Agg
         public ShapePath.FlagsAndCommand GetCommand(int index)
         {
             return m_CommandAndFlags[index];
-        }
-
+        } 
         //--------------------------------------------------
         //mutable properties
         public void Clear()

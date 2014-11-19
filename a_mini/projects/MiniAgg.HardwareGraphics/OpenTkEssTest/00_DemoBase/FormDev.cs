@@ -22,16 +22,10 @@ namespace Mini
             this.Text = "DevForm: Double Click The Example!";
 
 
-            //--------------------------------------------------
-
+            //-------------------------------------------------- 
             int code = PixelFarm.Font2.MyFonts.InitLib();
             //-------------------------------------------------- 
-            //load font data
-            PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf",48);
-            PixelFarm.Font2.MyFonts.GetGlyph('ด');
-            PixelFarm.Font2.MyFonts.SetShapingEngine();
-            PixelFarm.Font2.MyFonts.ShapeText("ดุ");
-
+           
             //----------
         }
         void listBox1_DoubleClick(object sender, EventArgs e)
