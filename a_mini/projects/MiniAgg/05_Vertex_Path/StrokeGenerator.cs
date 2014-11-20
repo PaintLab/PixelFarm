@@ -38,7 +38,7 @@ namespace PixelFarm.Agg.VertexSource
     class StrokeGenerator
     {
         StrokeMath m_stroker;
-        VertexDistanceList vseq;
+        VertexDistanceList vertexDistanceList;
         VertexStore m_out_vertices;
 
 
@@ -53,7 +53,7 @@ namespace PixelFarm.Agg.VertexSource
         public StrokeGenerator()
         {
             m_stroker = new StrokeMath();
-            vseq = new VertexDistanceList();
+            vertexDistanceList = new VertexDistanceList();
             m_out_vertices = new VertexStore();
             m_status = StrokeMath.Status.Init;
         }
@@ -117,7 +117,7 @@ namespace PixelFarm.Agg.VertexSource
         // Vertex Generator Interface
         public void RemoveAll()
         {
-            vseq.Clear();
+            vertexDistanceList.Clear();
             m_closed = false;
             m_status = StrokeMath.Status.Init;
         }
@@ -127,13 +127,13 @@ namespace PixelFarm.Agg.VertexSource
             m_status = StrokeMath.Status.Init;
             if (ShapePath.IsMoveTo(cmd))
             {
-                vseq.ReplaceLast(new VertexDistance(x, y));
+                vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
             }
             else
             {
                 if (ShapePath.IsVertextCommand(cmd))
                 {
-                    vseq.AddVertex(new VertexDistance(x, y));
+                    vertexDistanceList.AddVertex(new VertexDistance(x, y));
                 }
                 else
                 {
@@ -163,9 +163,9 @@ namespace PixelFarm.Agg.VertexSource
         {
             if (m_status == StrokeMath.Status.Init)
             {
-                vseq.Close(m_closed);
-                ShapePath.ShortenPath(vseq, m_shorten, m_closed);
-                if (vseq.Count < 3) { m_closed = false; }
+                vertexDistanceList.Close(m_closed);
+                ShapePath.ShortenPath(vertexDistanceList, m_shorten, m_closed);
+                if (vertexDistanceList.Count < 3) { m_closed = false; }
             }
             m_status = StrokeMath.Status.Ready;
             m_src_vertex = 0;
@@ -185,7 +185,7 @@ namespace PixelFarm.Agg.VertexSource
 
                     case StrokeMath.Status.Ready:
 
-                        if (vseq.Count < 2 + (m_closed ? 1 : 0))
+                        if (vertexDistanceList.Count < 2 + (m_closed ? 1 : 0))
                         {
                             cmd = ShapePath.CmdAndFlags.Empty;
                             break;
@@ -199,9 +199,9 @@ namespace PixelFarm.Agg.VertexSource
                     case StrokeMath.Status.Cap1:
                         m_stroker.CreateCap(
                             m_out_vertices,
-                            vseq[0],
-                            vseq[1],
-                            vseq[0].dist);
+                            vertexDistanceList[0],
+                            vertexDistanceList[1],
+                            vertexDistanceList[0].dist);
 
                         m_src_vertex = 1;
                         m_prev_status = StrokeMath.Status.Outline1;
@@ -211,9 +211,9 @@ namespace PixelFarm.Agg.VertexSource
 
                     case StrokeMath.Status.Cap2:
                         m_stroker.CreateCap(m_out_vertices,
-                            vseq[vseq.Count - 1],
-                            vseq[vseq.Count - 2],
-                            vseq[vseq.Count - 2].dist);
+                            vertexDistanceList[vertexDistanceList.Count - 1],
+                            vertexDistanceList[vertexDistanceList.Count - 2],
+                            vertexDistanceList[vertexDistanceList.Count - 2].dist);
                         m_prev_status = StrokeMath.Status.Outline2;
                         m_status = StrokeMath.Status.OutVertices;
                         m_out_vertex = 0;
@@ -222,7 +222,7 @@ namespace PixelFarm.Agg.VertexSource
                     case StrokeMath.Status.Outline1:
                         if (m_closed)
                         {
-                            if (m_src_vertex >= vseq.Count)
+                            if (m_src_vertex >= vertexDistanceList.Count)
                             {
                                 m_prev_status = StrokeMath.Status.CloseFirst;
                                 m_status = StrokeMath.Status.EndPoly1;
@@ -231,7 +231,7 @@ namespace PixelFarm.Agg.VertexSource
                         }
                         else
                         {
-                            if (m_src_vertex >= vseq.Count - 1)
+                            if (m_src_vertex >= vertexDistanceList.Count - 1)
                             {
                                 m_status = StrokeMath.Status.Cap2;
                                 break;
@@ -239,11 +239,11 @@ namespace PixelFarm.Agg.VertexSource
                         }
 
                         m_stroker.CreateJoin(m_out_vertices,
-                            vseq.prev(m_src_vertex),
-                            vseq.curr(m_src_vertex),
-                            vseq.next(m_src_vertex),
-                            vseq.prev(m_src_vertex).dist,
-                            vseq.curr(m_src_vertex).dist);
+                            vertexDistanceList.prev(m_src_vertex),
+                            vertexDistanceList.curr(m_src_vertex),
+                            vertexDistanceList.next(m_src_vertex),
+                            vertexDistanceList.prev(m_src_vertex).dist,
+                            vertexDistanceList.curr(m_src_vertex).dist);
                         ++m_src_vertex;
                         m_prev_status = m_status;
                         m_status = StrokeMath.Status.OutVertices;
@@ -266,11 +266,11 @@ namespace PixelFarm.Agg.VertexSource
 
                         --m_src_vertex;
                         m_stroker.CreateJoin(m_out_vertices,
-                            vseq.next(m_src_vertex),
-                            vseq.curr(m_src_vertex),
-                            vseq.prev(m_src_vertex),
-                            vseq.curr(m_src_vertex).dist,
-                            vseq.prev(m_src_vertex).dist);
+                            vertexDistanceList.next(m_src_vertex),
+                            vertexDistanceList.curr(m_src_vertex),
+                            vertexDistanceList.prev(m_src_vertex),
+                            vertexDistanceList.curr(m_src_vertex).dist,
+                            vertexDistanceList.prev(m_src_vertex).dist);
 
                         m_prev_status = m_status;
                         m_status = StrokeMath.Status.OutVertices;

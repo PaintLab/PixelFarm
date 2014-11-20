@@ -24,7 +24,7 @@ namespace PixelFarm.Agg
         public enum CmdAndFlags : byte
         {
             //---------------------------------
-            //order of this value is significant!
+            //the order of these fields are significant!
             //---------------------------------
             //first lower 4 bits compact flags
             Empty = 0x00,
@@ -98,29 +98,29 @@ namespace PixelFarm.Agg
         //    shorten_path(vs, s, 0);
         //}
 
-        public static void ShortenPath(VertexDistanceList vseq, double s, bool closed)
+        public static void ShortenPath(VertexDistanceList vertexDistanceList, double s, bool closed)
         {
-            if (s > 0.0 && vseq.Count > 1)
+            if (s > 0.0 && vertexDistanceList.Count > 1)
             {
                 double d;
-                int n = (int)(vseq.Count - 2);
+                int n = (int)(vertexDistanceList.Count - 2);
                 while (n != 0)
                 {
-                    d = vseq[n].dist;
+                    d = vertexDistanceList[n].dist;
                     if (d > s) break;
-                    vseq.RemoveLast();
+                    vertexDistanceList.RemoveLast();
                     s -= d;
                     --n;
                 }
-                if (vseq.Count < 2)
+                if (vertexDistanceList.Count < 2)
                 {
-                    vseq.Clear();
+                    vertexDistanceList.Clear();
                 }
                 else
                 {
-                    n = (int)vseq.Count - 1;
-                    VertexDistance prev = vseq[n - 1];
-                    VertexDistance last = vseq[n];
+                    n = (int)vertexDistanceList.Count - 1;
+                    VertexDistance prev = vertexDistanceList[n - 1];
+                    VertexDistance last = vertexDistanceList[n];
                     d = (prev.dist - s) / prev.dist;
                     double x = prev.x + (last.x - prev.x) * d;
                     double y = prev.y + (last.y - prev.y) * d;
@@ -128,9 +128,9 @@ namespace PixelFarm.Agg
                     last.y = y;
                     if (!prev.IsEqual(last))
                     {
-                        vseq.RemoveLast();
+                        vertexDistanceList.RemoveLast();
                     }
-                    vseq.Close(closed);
+                    vertexDistanceList.Close(closed);
                 }
             }
         }
