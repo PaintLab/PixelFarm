@@ -150,7 +150,7 @@ namespace PixelFarm.Agg.VertexSource
             {
                 var cmd = GetNextVertex(ref x, ref y);
                 outputVxs.AddVertex(x, y, cmd);
-                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                if (cmd == ShapePath.FlagsAndCommand.CommandEmpty)
                 {
                     break;
                 }
@@ -186,7 +186,7 @@ namespace PixelFarm.Agg.VertexSource
 
                         if (m_src_vertices.Count < 2 + (m_closed != 0 ? 1 : 0))
                         {
-                            cmd = ShapePath.FlagsAndCommand.CommandStop;
+                            cmd = ShapePath.FlagsAndCommand.CommandEmpty;
                             break;
                         }
                         m_status = (m_closed != 0) ? StrokeMath.Status.Outline1 : StrokeMath.Status.Cap1;
@@ -292,18 +292,18 @@ namespace PixelFarm.Agg.VertexSource
 
                     case StrokeMath.Status.EndPoly1:
                         m_status = m_prev_status;
-                        return ShapePath.FlagsAndCommand.CommandEndPoly
+                        return ShapePath.FlagsAndCommand.CmdEndFigure
                             | ShapePath.FlagsAndCommand.FlagClose
                             | ShapePath.FlagsAndCommand.FlagCCW;
 
                     case StrokeMath.Status.EndPoly2:
                         m_status = m_prev_status;
-                        return ShapePath.FlagsAndCommand.CommandEndPoly
+                        return ShapePath.FlagsAndCommand.CmdEndFigure
                             | ShapePath.FlagsAndCommand.FlagClose
                             | ShapePath.FlagsAndCommand.FlagCW;
 
                     case StrokeMath.Status.Stop:
-                        cmd = ShapePath.FlagsAndCommand.CommandStop;
+                        cmd = ShapePath.FlagsAndCommand.CommandEmpty;
                         break;
                 }
             }

@@ -261,7 +261,7 @@ namespace OpenTkEssTest
                                             coords[nn++] = (float)vx;
                                             coords[nn++] = (float)vy;
                                         } break;
-                                    case ShapePath.FlagsAndCommand.CommandStop:
+                                    case ShapePath.FlagsAndCommand.CommandEmpty:
                                         {
                                         } break;
                                     default:
@@ -383,7 +383,7 @@ namespace OpenTkEssTest
                 switch (vertexData.command)
                 {
 
-                    case ShapePath.FlagsAndCommand.CommandStop:
+                    case ShapePath.FlagsAndCommand.CommandEmpty:
                         stopLoop = true;
                         break;
                     default:
@@ -799,7 +799,7 @@ namespace OpenTkEssTest
                                 coords[nn++] = (float)vy;
                                 npoints++;
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandStop:
+                        case ShapePath.FlagsAndCommand.CommandEmpty:
                             {
                             } break;
                         default:

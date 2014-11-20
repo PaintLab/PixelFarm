@@ -590,7 +590,7 @@ namespace PixelFarm.Agg.Lines
                     Render(false);
                     MoveTo(x, y);
                     break;
-                case ShapePath.FlagsAndCommand.CommandEndPoly:
+                case ShapePath.FlagsAndCommand.CmdEndFigure:
 
                     bool is_closed = ((cmd & ShapePath.FlagsAndCommand.FlagClose) != 0);
                     Render(is_closed);
@@ -612,7 +612,7 @@ namespace PixelFarm.Agg.Lines
             ShapePath.FlagsAndCommand cmd;
 
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
             {
                 AddVertex(x, y, cmd);
             }

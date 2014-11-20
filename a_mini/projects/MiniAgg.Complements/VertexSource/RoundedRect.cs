@@ -200,7 +200,7 @@ namespace PixelFarm.Agg.VertexSource
                 {
                     case ShapePath.FlagsAndCommand.CommandMoveTo:
                         continue;
-                    case ShapePath.FlagsAndCommand.CommandStop:
+                    case ShapePath.FlagsAndCommand.CommandEmpty:
                         break;
                     default:
                         yield return vertexData;
@@ -208,8 +208,8 @@ namespace PixelFarm.Agg.VertexSource
                 }
             }
 
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
+            yield return new VertexData(ShapePath.FlagsAndCommand.CmdEndFigure | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
+            yield return new VertexData(ShapePath.FlagsAndCommand.CommandEmpty);
         }
         
         public VertexStore MakeVxs()

@@ -71,7 +71,7 @@ namespace PixelFarm.Agg
             {
 
                 ShapePath.FlagsAndCommand flags;
-                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
                 {
                     switch (flags)
                     {
@@ -212,7 +212,7 @@ namespace PixelFarm.Agg
             {
 
                 ShapePath.FlagsAndCommand flags;
-                while ((flags = vxs.GetVertex(iterindex++, out x_d, out y_d)) != ShapePath.FlagsAndCommand.CommandStop)
+                while ((flags = vxs.GetVertex(iterindex++, out x_d, out y_d)) != ShapePath.FlagsAndCommand.CommandEmpty)
                 {
                     x = (int)x_d;
                     y = (int)y_d;

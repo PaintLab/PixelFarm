@@ -58,6 +58,7 @@ namespace PixelFarm.Agg
         }
 
         internal bool HasMoreThanOnePart { get; set; }
+
         public int Count
         {
             get { return m_num_vertices; }
@@ -69,7 +70,7 @@ namespace PixelFarm.Agg
                 return GetCommand(m_num_vertices - 1);
             }
 
-            return ShapePath.FlagsAndCommand.CommandStop;
+            return ShapePath.FlagsAndCommand.CommandEmpty;
         }
         public ShapePath.FlagsAndCommand GetLastVertex(out double x, out double y)
         {
@@ -80,7 +81,7 @@ namespace PixelFarm.Agg
 
             x = 0;
             y = 0;
-            return ShapePath.FlagsAndCommand.CommandStop;
+            return ShapePath.FlagsAndCommand.CommandEmpty;
         }
         public ShapePath.FlagsAndCommand GetBeforeLastVetex(out double x, out double y)
         {
@@ -91,7 +92,7 @@ namespace PixelFarm.Agg
             }
             x = 0;
             y = 0;
-            return ShapePath.FlagsAndCommand.CommandStop;
+            return ShapePath.FlagsAndCommand.CommandEmpty;
         }
         public double GetLastX()
         {
@@ -150,22 +151,26 @@ namespace PixelFarm.Agg
             m_CommandAndFlags[m_num_vertices] = CommandAndFlags;
             m_num_vertices++;
         }
-        internal void AddVertexCurve3(double x, double y)
+        //--------------------------------------------------
+        public void AddVertexCurve3(double x, double y)
         {
             AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve3);
         }
-        internal void AddVertexCurve4(double x, double y)
+        public void AddVertexCurve4(double x, double y)
         {
             AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve4);
         }
-        internal void AddMoveTo(double x, double y)
+        public void AddMoveTo(double x, double y)
         {
             AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);
         }
-
-        internal void LineTo(double x, double y)
+        public void AddLineTo(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo); 
+        }
+        public void AddStop()
+        {
+            AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandEmpty);
 
         }
         internal void ReplaceVertex(int index, double x, double y)
@@ -196,8 +201,6 @@ namespace PixelFarm.Agg
             m_CommandAndFlags[v1] = m_CommandAndFlags[v2];
             m_CommandAndFlags[v2] = cmd;
         }
-
-
         void AllocIfRequired(int indexToAdd)
         {
             if (indexToAdd < m_allocated_vertices)

@@ -290,7 +290,7 @@ namespace PixelFarm.Agg
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = vxs.GetVertex(i, out x, out y);
-                    if (cmd != ShapePath.FlagsAndCommand.CommandStop)
+                    if (cmd != ShapePath.FlagsAndCommand.CommandEmpty)
                     {
                         AddVertex(cmd, x, y);
                     }
@@ -300,7 +300,7 @@ namespace PixelFarm.Agg
             {
                 var snapIter = snap.GetVertexSnapIter();
                 ShapePath.FlagsAndCommand cmd;
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
                 {
                     AddVertex(cmd, x, y);
                 }

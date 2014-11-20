@@ -99,7 +99,8 @@ namespace PixelFarm.Agg.VertexSource
                 case ShapePath.FlagsAndCommand.CommandMoveTo:
                     m_src_vertices.ReplaceLast(new VertexDistance(x, y));
                     break;
-                case ShapePath.FlagsAndCommand.CommandEndPoly:
+                case ShapePath.FlagsAndCommand.CmdEndFigure:
+
                     m_closed = (ShapePath.GetCloseFlags(cmd) == ShapePath.FlagsAndCommand.FlagClose);
                     if (m_orientation == ShapePath.FlagsAndCommand.FlagNone)
                     {
@@ -154,7 +155,7 @@ namespace PixelFarm.Agg.VertexSource
 
                         if (m_src_vertices.Count < 2 + (m_closed ? 1 : 0))
                         {
-                            cmd = ShapePath.FlagsAndCommand.CommandStop;
+                            cmd = ShapePath.FlagsAndCommand.CommandEmpty;
                             break;
                         }
                         m_status = StrokeMath.Status.Outline1;
@@ -194,12 +195,12 @@ namespace PixelFarm.Agg.VertexSource
                         break;
 
                     case StrokeMath.Status.EndPoly1:
-                        if (!m_closed) return ShapePath.FlagsAndCommand.CommandStop;
+                        if (!m_closed) return ShapePath.FlagsAndCommand.CommandEmpty;
                         m_status = StrokeMath.Status.Stop;
-                        return ShapePath.FlagsAndCommand.CommandEndPoly | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW;
+                        return ShapePath.FlagsAndCommand.CmdEndFigure | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW;
 
                     case StrokeMath.Status.Stop:
-                        return ShapePath.FlagsAndCommand.CommandStop;
+                        return ShapePath.FlagsAndCommand.CommandEmpty;
                 }
             }
             return cmd;

@@ -58,13 +58,13 @@ namespace PixelFarm.Agg.VertexSource
         {
             if (!ShapePath.IsStop(myvxs.GetLastCommand()))
             {
-                myvxs.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandStop);
+                myvxs.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandEmpty);
             }
             return myvxs.Count;
         }
         public void Stop()
         {
-            myvxs.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandStop);
+            myvxs.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandEmpty);
         }
         //--------------------------------------------------------------------
 
@@ -90,17 +90,17 @@ namespace PixelFarm.Agg.VertexSource
 
         public void LineTo(double x, double y)
         {
-            myvxs.LineTo(x, y);
+            myvxs.AddLineTo(x, y);
         }
 
         public void HorizontalLineTo(double x)
         {
-            myvxs.LineTo(x, GetLastY());
+            myvxs.AddLineTo(x, GetLastY());
         }
 
         public void VerticalLineTo(double y)
         {
-            myvxs.LineTo(GetLastX(), y);
+            myvxs.AddLineTo(GetLastX(), y);
         }
 
         //--------------------------------------------------------------------
@@ -369,19 +369,17 @@ namespace PixelFarm.Agg.VertexSource
 
             if (ShapePath.IsVertextCommand(myvxs.GetLastCommand()))
             {
-                myvxs.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CommandEndPoly | flags2);
+                myvxs.AddVertex(0.0, 0.0, ShapePath.FlagsAndCommand.CmdEndFigure | flags2);
             }
         }
 
         //// Concatenate path. The path is added as is.
-
-
         public void ConcatPath(VertexStoreSnap s)
         {
             double x, y;
             ShapePath.FlagsAndCommand cmd_flags;
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd_flags = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            while ((cmd_flags = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
             {
                 myvxs.AddVertex(x, y, cmd_flags);
             }
@@ -396,7 +394,7 @@ namespace PixelFarm.Agg.VertexSource
             double x, y;
             var snapIter = s.GetVertexSnapIter();
             ShapePath.FlagsAndCommand cmd = snapIter.GetNextVertex(out x, out y);
-            if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+            if (cmd == ShapePath.FlagsAndCommand.CommandEmpty)
             {
                 return;
             }
@@ -434,7 +432,7 @@ namespace PixelFarm.Agg.VertexSource
                 }
             }
 
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
             {
                 myvxs.AddVertex(x, y, ShapePath.IsMoveTo(cmd) ? ShapePath.FlagsAndCommand.CommandLineTo : cmd);
             }

@@ -101,11 +101,11 @@ namespace PixelFarm.Agg.VertexSource
                 var cmd = sourceVxs.GetVertex(i, out x, out y);
                 switch (ShapePath.FlagsAndCommand.CommandsMask & cmd)
                 {
-                    case ShapePath.FlagsAndCommand.CommandStop:
+                    case ShapePath.FlagsAndCommand.CommandEmpty:
                         {
 
                         } break;
-                    case ShapePath.FlagsAndCommand.CommandEndPoly:
+                    case ShapePath.FlagsAndCommand.CmdEndFigure:
                         {
                             stgen.AddVertex(x, y, cmd);
                             if (i < j - 2)

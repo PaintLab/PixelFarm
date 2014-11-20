@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
 
         public SpanGenGourand()
         {
-            m_cmd[0] = ShapePath.FlagsAndCommand.CommandStop;
+            m_cmd[0] = ShapePath.FlagsAndCommand.CommandEmpty;
         }
 
         public SpanGenGourand(ColorRGBA c1,
@@ -89,7 +89,7 @@ namespace PixelFarm.Agg
             m_cmd[0] = ShapePath.FlagsAndCommand.CommandMoveTo;
             m_cmd[1] = ShapePath.FlagsAndCommand.CommandLineTo;
             m_cmd[2] = ShapePath.FlagsAndCommand.CommandLineTo;
-            m_cmd[3] = ShapePath.FlagsAndCommand.CommandStop;
+            m_cmd[3] = ShapePath.FlagsAndCommand.CommandEmpty;
 
             if (d != 0.0)
             {
@@ -113,7 +113,7 @@ namespace PixelFarm.Agg
                 m_cmd[3] = ShapePath.FlagsAndCommand.CommandLineTo;
                 m_cmd[4] = ShapePath.FlagsAndCommand.CommandLineTo;
                 m_cmd[5] = ShapePath.FlagsAndCommand.CommandLineTo;
-                m_cmd[6] = ShapePath.FlagsAndCommand.CommandStop;
+                m_cmd[6] = ShapePath.FlagsAndCommand.CommandEmpty;
             }
         }
         public VertexStore MakeVxs()
@@ -125,7 +125,7 @@ namespace PixelFarm.Agg
                 ShapePath.FlagsAndCommand cmd;
                 vxs.AddVertex(m_x[i], m_y[i], cmd = m_cmd[i]);
 
-                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                if (cmd == ShapePath.FlagsAndCommand.CommandEmpty)
                 {
                     break;
                 }

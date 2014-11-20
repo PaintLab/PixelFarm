@@ -156,7 +156,7 @@ namespace OpenTkEssTest
                                 npoints++;
 
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandStop:
+                        case ShapePath.FlagsAndCommand.CommandEmpty:
                             {
                             } break;
                         default:

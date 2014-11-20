@@ -19,20 +19,17 @@ namespace PixelFarm.Agg.VertexSource
             Vector2 control1, Vector2 control2)
         {
             var curve = new VectorMath.BezierCurveCubic(
-                start, end, control1, control2);
-
-            vxs.AddVertex(new VertexData(FlagsAndCommand.CommandMoveTo, start));
-
+                start, end, 
+                control1, control2); 
+            vxs.AddMoveTo(start.x, start.y); 
             float eachstep = (float)1 / 20;
             for (int i = 1; i < 20; ++i)
             {
-                vxs.AddVertex(new VertexData(FlagsAndCommand.CommandLineTo, curve.CalculatePoint((float)(i * eachstep))));
+                var vector2 = curve.CalculatePoint((float)(i * eachstep));
+                vxs.AddLineTo(vector2.x, vector2.y); 
             }
-            vxs.AddVertex(new VertexData(FlagsAndCommand.CommandLineTo, end));
-            vxs.AddVertex(new VertexData(FlagsAndCommand.CommandStop));
+            vxs.AddLineTo(end.x, end.y);
+            vxs.AddStop();             
         }
-
-
-
     }
 }

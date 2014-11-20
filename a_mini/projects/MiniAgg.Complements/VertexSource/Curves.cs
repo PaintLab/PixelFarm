@@ -428,7 +428,7 @@ namespace PixelFarm.Agg.VertexSource
 
                 }
             }
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
+            yield return new VertexData(ShapePath.FlagsAndCommand.CommandEmpty);
         }
         
         void AddBezier(double x1, double y1,
@@ -717,7 +717,7 @@ namespace PixelFarm.Agg.VertexSource
             {
                 x = 0;
                 y = 0;
-                return ShapePath.FlagsAndCommand.CommandStop;
+                return ShapePath.FlagsAndCommand.CommandEmpty;
             }
 
             if (m_step == m_num_steps)
@@ -847,7 +847,7 @@ namespace PixelFarm.Agg.VertexSource
                 yield return vertexData;
             }
 
-            vertexData.command = FlagsAndCommand.CommandStop;
+            vertexData.command = FlagsAndCommand.CommandEmpty;
             vertexData.position = new Vector2();
             yield return vertexData;
         }

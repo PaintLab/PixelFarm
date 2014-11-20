@@ -114,10 +114,10 @@ namespace PixelFarm.Agg.VertexSource
 
 
             vertexData.x = vertexData.y = 0;
-            vertexData.command = FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
+            vertexData.command = FlagsAndCommand.CmdEndFigure | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
             yield return vertexData;
 
-            vertexData.command = FlagsAndCommand.CommandStop;
+            vertexData.command = FlagsAndCommand.CommandEmpty;
             yield return vertexData;
         }
 

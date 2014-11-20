@@ -182,6 +182,7 @@ namespace PixelFarm.Agg.VertexSource
 
                                 vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position);
                                 vxs.AddVertex(vertexData);
+                                
                                 lastVertextData = vertexData;
                             }
                         }
@@ -192,7 +193,7 @@ namespace PixelFarm.Agg.VertexSource
                         lastVertextData = vertexData;
                         break;
                 }
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+            } while (cmd != ShapePath.FlagsAndCommand.CommandEmpty);
             return vxs;
 
         }

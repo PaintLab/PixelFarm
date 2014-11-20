@@ -143,7 +143,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         last = first;
                     }
                 }
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+            } while (cmd != ShapePath.FlagsAndCommand.CommandEmpty);
 
 
 
@@ -582,7 +582,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 cmd = GetNextVertex(out x, out y);
                 switch (cmd)
                 {
-                    case ShapePath.FlagsAndCommand.CommandStop:
+                    case ShapePath.FlagsAndCommand.CommandEmpty:
                         {
                             yield return new VertexData(cmd, x, y);
                             yield break;
@@ -611,7 +611,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             y = 0;
             if (m_curr_r > m_r2)
             {
-                return ShapePath.FlagsAndCommand.CommandStop;
+                return ShapePath.FlagsAndCommand.CommandEmpty;
             }
 
             x = m_x + Math.Cos(m_angle) * m_curr_r;
@@ -656,7 +656,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                     ++m_contours;
                 }
 
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+            } while (cmd != ShapePath.FlagsAndCommand.CommandEmpty);
 
             //foreach (VertexData vertexData in src.GetVertexIter())
             //{
