@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.VectorMath;
 
-using FlagsAndCommand = PixelFarm.Agg.ShapePath.FlagsAndCommand;
+using FlagsAndCommand = PixelFarm.Agg.ShapePath.CmdAndFlags;
 
 namespace PixelFarm.Agg.VertexSource
 {
@@ -138,13 +138,13 @@ namespace PixelFarm.Agg.VertexSource
 
                 //---------------------------------------------------------
                 VertexData vertexData = new VertexData();
-                vertexData.command = FlagsAndCommand.CommandMoveTo;
+                vertexData.command = FlagsAndCommand.MoveTo;
                 vertexData.x = startX;
                 vertexData.y = startY;
                 yield return vertexData;
                 //---------------------------------------------------------
                 double angle = startAngle;
-                vertexData.command = FlagsAndCommand.CommandLineTo;
+                vertexData.command = FlagsAndCommand.LineTo;
                 //calculate nsteps
                 int n = 0;
                 while (n < calculateNSteps - 1)
@@ -169,21 +169,21 @@ namespace PixelFarm.Agg.VertexSource
                 vertexData.y = endY;
                 yield return vertexData;
 
-                vertexData.command = FlagsAndCommand.CommandEmpty;
+                vertexData.command = FlagsAndCommand.Empty;
                 yield return vertexData;
             }
             else
             {
 
                 VertexData vertexData = new VertexData();
-                vertexData.command = FlagsAndCommand.CommandMoveTo;
+                vertexData.command = FlagsAndCommand.MoveTo;
                 vertexData.x = originX + Math.Cos(startAngle) * radiusX;
                 vertexData.y = originY + Math.Sin(startAngle) * radiusY;
 
                 yield return vertexData;
                 //---------------------------------------------------------
                 double angle = startAngle;
-                vertexData.command = FlagsAndCommand.CommandLineTo;
+                vertexData.command = FlagsAndCommand.LineTo;
                 while ((angle < endAngle - flatenDeltaAngle / 4) == (((int)ArcDirection.CounterClockWise) == 1))
                 {
                     angle += flatenDeltaAngle;
@@ -197,7 +197,7 @@ namespace PixelFarm.Agg.VertexSource
                 vertexData.y = originY + Math.Sin(endAngle) * radiusY;
                 yield return vertexData;
 
-                vertexData.command = FlagsAndCommand.CommandEmpty;
+                vertexData.command = FlagsAndCommand.Empty;
                 yield return vertexData;
             }
         }

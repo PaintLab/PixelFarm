@@ -56,20 +56,18 @@ namespace PixelFarm.Agg.UI
         public bool Close() { return m_close; }
 
 
-        ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        ShapePath.CmdAndFlags GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
             if (m_vertex > m_num_points)
             {
-                return ShapePath.FlagsAndCommand.CommandEmpty;
-            }
-
+                return ShapePath.CmdAndFlags.Empty;
+            } 
             if (m_vertex == m_num_points)
             {
                 ++m_vertex;
-
-                return ShapePath.FlagsAndCommand.CmdEndFigure | (m_close ? ShapePath.FlagsAndCommand.FlagClose : 0);
+                return m_close ? ShapePath.CmdAndFlags.EndAndCloseFigure : ShapePath.CmdAndFlags.EndFigure;                 
             }
             x = m_polygon[m_vertex * 2];
             y = m_polygon[m_vertex * 2 + 1];
@@ -79,7 +77,7 @@ namespace PixelFarm.Agg.UI
                 y = Math.Floor(y) + 0.5;
             }
             ++m_vertex;
-            return (m_vertex == 1) ? ShapePath.FlagsAndCommand.CommandMoveTo : ShapePath.FlagsAndCommand.CommandLineTo;
+            return (m_vertex == 1) ? ShapePath.CmdAndFlags.MoveTo : ShapePath.CmdAndFlags.LineTo;
         }
 
 
@@ -93,7 +91,7 @@ namespace PixelFarm.Agg.UI
                 double x, y;
                 var cmd = this.GetNextVertex(out x, out y);
                 vxs.AddVertex(x, y, cmd);
-                if (cmd == ShapePath.FlagsAndCommand.CommandEmpty)
+                if (cmd == ShapePath.CmdAndFlags.Empty)
                 {
                     break;
                 }
@@ -210,7 +208,7 @@ namespace PixelFarm.Agg.UI
             for (int i = 0; i < j; ++i)
             {
                 var cmd = s_vxs.GetVertex(i, out x, out y);
-                if (cmd == ShapePath.FlagsAndCommand.CommandEmpty)
+                if (cmd == ShapePath.CmdAndFlags.Empty)
                 {
                     break;
                 }
@@ -235,7 +233,7 @@ namespace PixelFarm.Agg.UI
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = ellipseVxs.GetVertex(i, out x, out y);
-                    if (cmd == ShapePath.FlagsAndCommand.CommandEmpty)
+                    if (cmd == ShapePath.CmdAndFlags.Empty)
                     {
                         break;
                     }
@@ -246,7 +244,7 @@ namespace PixelFarm.Agg.UI
             //------------------------------------------------------------
 
             //close with stop
-            vxs.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandEmpty);
+            vxs.AddVertex(0, 0, ShapePath.CmdAndFlags.Empty);
             return vxs;
         }
         protected override RectD CalculateLocalBounds()

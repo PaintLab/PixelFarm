@@ -232,7 +232,7 @@ namespace PixelFarm.Agg.Font
             for (int i = 0; i < j; ++i)
             {
                 var cmd = glyphVxs.GetVertex(i, out x, out y);
-                if (cmd == ShapePath.FlagsAndCommand.CommandEmpty)
+                if (cmd == ShapePath.CmdAndFlags.Empty)
                 {
                     break;
                 }

@@ -335,7 +335,7 @@ namespace PixelFarm.Agg.VertexSource
         } 
         static void AddVertex(VertexStore output, double x, double y)
         {
-            output.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+            output.AddVertex(x, y, ShapePath.CmdAndFlags.LineTo);
         }
 
         void CreateArc(VertexStore output,

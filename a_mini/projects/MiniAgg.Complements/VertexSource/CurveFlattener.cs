@@ -115,7 +115,7 @@ namespace PixelFarm.Agg.VertexSource
             m_curve4.Reset();
             var snapIter = vsnap.GetVertexSnapIter();
             double x, y;
-            ShapePath.FlagsAndCommand cmd;
+            ShapePath.CmdAndFlags cmd;
             do
             {
                 cmd = snapIter.GetNextVertex(out x, out y);
@@ -123,7 +123,7 @@ namespace PixelFarm.Agg.VertexSource
 
                 switch (cmd)
                 {
-                    case ShapePath.FlagsAndCommand.CommandCurve3:
+                    case ShapePath.CmdAndFlags.Curve3:
                         {
                             double tmp_vx, tmp_vy;
                             cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
@@ -138,24 +138,24 @@ namespace PixelFarm.Agg.VertexSource
                             {
                                 curveIterator.MoveNext();
                                 VertexData currentVertextData = curveIterator.Current;
-                                if (ShapePath.IsStop(currentVertextData.command))
+                                if (ShapePath.IsEmpty(currentVertextData.command))
                                 {
                                     break;
                                 }
 
                                 vertexData = new VertexData(
-                                   ShapePath.FlagsAndCommand.CommandLineTo,
+                                   ShapePath.CmdAndFlags.LineTo,
                                    currentVertextData.position);
 
                                 vxs.AddVertex(vertexData);
 
                                 lastVertextData = vertexData;
 
-                            } while (!ShapePath.IsStop(curveIterator.Current.command));
+                            } while (!ShapePath.IsEmpty(curveIterator.Current.command));
                         }
                         break;
 
-                    case ShapePath.FlagsAndCommand.CommandCurve4:
+                    case ShapePath.CmdAndFlags.Curve4:
                         {
                             double tmp_vx, tmp_vy;
 
@@ -168,11 +168,11 @@ namespace PixelFarm.Agg.VertexSource
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
 
-                            while (!ShapePath.IsStop(vertexData.command))
+                            while (!ShapePath.IsEmpty(vertexData.command))
                             {
                                 curveIterator.MoveNext();
 
-                                if (ShapePath.IsStop(curveIterator.Current.command))
+                                if (ShapePath.IsEmpty(curveIterator.Current.command))
                                 {
                                     break;
                                 }
@@ -180,7 +180,7 @@ namespace PixelFarm.Agg.VertexSource
 
                                 var position = curveIterator.Current.position;
 
-                                vertexData = new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, position);
+                                vertexData = new VertexData(ShapePath.CmdAndFlags.LineTo, position);
                                 vxs.AddVertex(vertexData);
                                 
                                 lastVertextData = vertexData;
@@ -193,7 +193,7 @@ namespace PixelFarm.Agg.VertexSource
                         lastVertextData = vertexData;
                         break;
                 }
-            } while (cmd != ShapePath.FlagsAndCommand.CommandEmpty);
+            } while (cmd != ShapePath.CmdAndFlags.Empty);
             return vxs;
 
         }

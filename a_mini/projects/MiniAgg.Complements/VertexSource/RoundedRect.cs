@@ -143,7 +143,7 @@ namespace PixelFarm.Agg.VertexSource
            
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.IsStop(vertexData.command))
+                if (ShapePath.IsEmpty(vertexData.command))
                 {
                     break;
                 }
@@ -162,7 +162,7 @@ namespace PixelFarm.Agg.VertexSource
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.IsStop(vertexData.command))
+                if (ShapePath.IsEmpty(vertexData.command))
                 {
                     break;
                 }
@@ -181,7 +181,7 @@ namespace PixelFarm.Agg.VertexSource
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.IsStop(vertexData.command))
+                if (ShapePath.IsEmpty(vertexData.command))
                 {
                     break;
                 }
@@ -198,9 +198,9 @@ namespace PixelFarm.Agg.VertexSource
             {
                 switch (vertexData.command)
                 {
-                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                    case ShapePath.CmdAndFlags.MoveTo:
                         continue;
-                    case ShapePath.FlagsAndCommand.CommandEmpty:
+                    case ShapePath.CmdAndFlags.Empty:
                         break;
                     default:
                         yield return vertexData;
@@ -208,8 +208,8 @@ namespace PixelFarm.Agg.VertexSource
                 }
             }
 
-            yield return new VertexData(ShapePath.FlagsAndCommand.CmdEndFigure | ShapePath.FlagsAndCommand.FlagClose | ShapePath.FlagsAndCommand.FlagCCW);
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandEmpty);
+            yield return new VertexData(ShapePath.CmdAndFlags.EndAndCloseFigure | ShapePath.CmdAndFlags.FlagCCW);
+            yield return new VertexData(ShapePath.CmdAndFlags.Empty);
         }
         
         public VertexStore MakeVxs()

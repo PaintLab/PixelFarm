@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.VectorMath;
 
-using FlagsAndCommand = PixelFarm.Agg.ShapePath.FlagsAndCommand;
+using FlagsAndCommand = PixelFarm.Agg.ShapePath.CmdAndFlags;
 
 namespace PixelFarm.Agg.VertexSource
 {

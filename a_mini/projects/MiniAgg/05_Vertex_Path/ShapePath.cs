@@ -7,107 +7,82 @@ using System.Text;
 namespace PixelFarm.Agg
 {
 
+
     public static class ShapePath
     {
+        public enum ShapeOrientation
+        {
+            Unknown,
+            CCW,
+            CW
+        }
+
+        /// <summary>
+        /// vertex command and flags
+        /// </summary>
         [Flags]
-        public enum FlagsAndCommand : byte
+        public enum CmdAndFlags : byte
         {
+            //---------------------------------
+            //order of this value is significant!
+            //---------------------------------
             //first lower 4 bits compact flags
-            CommandEmpty = 0x00,
-
-            CommandMoveTo = 0x01,
-            CommandLineTo = 0x02,
-            CommandCurve3 = 0x03,
-            CommandCurve4 = 0x04,
-
-
-            CmdEndFigure = 0x0F,
-
-            CommandsMask = 0x0F,
+            Empty = 0x00,
             //-----------------------
-            //upper 4 bits
-            FlagNone = 0x00,
-            FlagCCW = 1 << (5 - 1),
-            FlagCW = 1 << (6 - 1),
-            FlagClose = 1 << (7 - 1),
-
-            FlagsMask = 0xF0
+            //end figure command 2 lower bits 
+            //is end command when 2 lower bit > 0
+            EndFigure = 0x01,
+            EndAndCloseFigure = 0x02,
+            //----------------------- 
+            //start from move to is 
+            MoveTo = 0x04,
+            LineTo = 0x05,
+            Curve3 = 0x06,
+            Curve4 = 0x07,
+            //-----------------------       
+            MASK = 0x0F,
+            //----------------------- 
+            //upper 4 bits for shape ShapeOrientation
+            //0 = unknown
+            //1 = CCW
+            //2 = CW
+            FlagCCW = (1 << 4),
+            FlagCW = (2 << 4)
+            //-----------------------            
+        }
+        public static bool IsVertextCommand(CmdAndFlags c)
+        {
+            return (CmdAndFlags.MASK & c) >= CmdAndFlags.MoveTo;
+        }
+        public static bool IsEmpty(CmdAndFlags c)
+        {
+            return c == CmdAndFlags.Empty;
         }
 
-        public static bool IsVertextCommand(FlagsAndCommand c)
+        public static bool IsMoveTo(CmdAndFlags c)
         {
-            return c >= FlagsAndCommand.CommandMoveTo
-                && c < FlagsAndCommand.CmdEndFigure;
+            return c == CmdAndFlags.MoveTo;
         }
-
-
-        public static bool IsStop(FlagsAndCommand c)
+        public static bool IsCurve(CmdAndFlags c)
         {
-            return c == FlagsAndCommand.CommandEmpty;
+            return c == CmdAndFlags.Curve3
+                || c == CmdAndFlags.Curve4;
         }
-
-        public static bool IsMoveTo(FlagsAndCommand c)
+        public static bool IsEndFigure(CmdAndFlags c)
         {
-            return c == FlagsAndCommand.CommandMoveTo;
+            return ((int)c & 0x3) > 0;
         }
-
-        public static bool IsCurve(FlagsAndCommand c)
+        public static bool IsClose(CmdAndFlags c)
         {
-            return c == FlagsAndCommand.CommandCurve3
-                || c == FlagsAndCommand.CommandCurve4;
+            return ((CmdAndFlags.MASK) & c) == CmdAndFlags.EndAndCloseFigure;
         }
-
-
-
-        public static bool IsEndPoly(FlagsAndCommand c)
+        public static bool IsNextPoly(CmdAndFlags c)
         {
-            return (c & FlagsAndCommand.CommandsMask) == FlagsAndCommand.CmdEndFigure;
+            return c <= CmdAndFlags.MoveTo;
         }
-
-        public static bool IsClose(FlagsAndCommand c)
+        public static ShapeOrientation GetOrientation(CmdAndFlags c)
         {
-            return (c & ~(FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW)) ==
-                   (FlagsAndCommand.CmdEndFigure | FlagsAndCommand.FlagClose);
-        }
-
-        public static bool IsNextPoly(FlagsAndCommand c)
-        {
-            return IsStop(c) || IsMoveTo(c) || IsEndPoly(c);
-        }
-
-        public static bool IsCw(FlagsAndCommand c)
-        {
-            return (c & FlagsAndCommand.FlagCW) != 0;
-        }
-
-        public static bool IsCcw(FlagsAndCommand c)
-        {
-            return (c & FlagsAndCommand.FlagCCW) != 0;
-        }
-
-        public static bool HasOrientationInfo(FlagsAndCommand c)
-        {
-            return (c & (FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW)) != 0;
-        }
-
-        //public static bool IsClosed(FlagsAndCommand c)
-        //{
-        //    return (c & FlagsAndCommand.FlagClose) != 0;
-        //}
-
-        public static FlagsAndCommand GetCloseFlags(FlagsAndCommand c)
-        {
-            return (FlagsAndCommand)(c & FlagsAndCommand.FlagClose);
-        }
-
-        public static FlagsAndCommand ClearOritentation(FlagsAndCommand c)
-        {
-            return c & ~(FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW);
-        }
-
-        public static FlagsAndCommand GetOrientation(FlagsAndCommand c)
-        {
-            return c & (FlagsAndCommand.FlagCW | FlagsAndCommand.FlagCCW);
+            return (ShapeOrientation)(((int)c) >> 4);
         }
 
         /*
@@ -123,29 +98,29 @@ namespace PixelFarm.Agg
         //    shorten_path(vs, s, 0);
         //}
 
-        public static void ShortenPath(VertexSequence vs, double s, int closed)
+        public static void ShortenPath(VertexDistanceList vseq, double s, bool closed)
         {
-            if (s > 0.0 && vs.Count > 1)
+            if (s > 0.0 && vseq.Count > 1)
             {
                 double d;
-                int n = (int)(vs.Count - 2);
+                int n = (int)(vseq.Count - 2);
                 while (n != 0)
                 {
-                    d = vs[n].dist;
+                    d = vseq[n].dist;
                     if (d > s) break;
-                    vs.RemoveLast();
+                    vseq.RemoveLast();
                     s -= d;
                     --n;
                 }
-                if (vs.Count < 2)
+                if (vseq.Count < 2)
                 {
-                    vs.Clear();
+                    vseq.Clear();
                 }
                 else
                 {
-                    n = (int)vs.Count - 1;
-                    VertexDistance prev = vs[n - 1];
-                    VertexDistance last = vs[n];
+                    n = (int)vseq.Count - 1;
+                    VertexDistance prev = vseq[n - 1];
+                    VertexDistance last = vseq[n];
                     d = (prev.dist - s) / prev.dist;
                     double x = prev.x + (last.x - prev.x) * d;
                     double y = prev.y + (last.y - prev.y) * d;
@@ -153,9 +128,9 @@ namespace PixelFarm.Agg
                     last.y = y;
                     if (!prev.IsEqual(last))
                     {
-                        vs.RemoveLast();
+                        vseq.RemoveLast();
                     }
-                    vs.Close(closed != 0);
+                    vseq.Close(closed);
                 }
             }
         }
@@ -202,8 +177,7 @@ namespace PixelFarm.Agg
 
             // Find the last vertex
             int end = start + 1;
-            while (end < vcount &&
-                  !ShapePath.IsNextPoly(myvxs.GetCommand(end)))
+            while (end < vcount && !ShapePath.IsNextPoly(myvxs.GetCommand(end)))
             {
                 ++end;
             }
@@ -214,13 +188,13 @@ namespace PixelFarm.Agg
                 {
                     // Invert polygon, set orientation flag, and skip all end_poly
                     InvertPolygon(myvxs, start, end);
-                    ShapePath.FlagsAndCommand flags;
+                    ShapePath.CmdAndFlags flags;
                     int myvxs_count = myvxs.Count;
 
-                    var orientFlags = isCW ? ShapePath.FlagsAndCommand.FlagCW : ShapePath.FlagsAndCommand.FlagCCW;
+                    var orientFlags = isCW ? ShapePath.CmdAndFlags.FlagCW : ShapePath.CmdAndFlags.FlagCCW;
 
                     while (end < myvxs_count &&
-                          ShapePath.IsEndPoly(flags = myvxs.GetCommand(end)))
+                          ShapePath.IsEndFigure(flags = myvxs.GetCommand(end)))
                     {
                         myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
                     }
@@ -235,7 +209,7 @@ namespace PixelFarm.Agg
             while (start < myvxs.Count)
             {
                 start = ArrangePolygonOrientation(myvxs, start, closewise);
-                if (ShapePath.IsStop(myvxs.GetCommand(start)))
+                if (ShapePath.IsEmpty(myvxs.GetCommand(start)))
                 {
                     ++start;
                     break;
@@ -277,8 +251,7 @@ namespace PixelFarm.Agg
 
             // Find the last vertex
             int end = start + 1;
-            while (end < vcount  &&
-                  !ShapePath.IsNextPoly(myvxs.GetCommand(end))) { ++end; }
+            while (end < vcount && !ShapePath.IsNextPoly(myvxs.GetCommand(end))) { ++end; }
 
             InvertPolygon(myvxs, start, end);
         }
@@ -288,7 +261,7 @@ namespace PixelFarm.Agg
         static void InvertPolygon(VertexStore myvxs, int start, int end)
         {
             int i;
-            ShapePath.FlagsAndCommand tmp_PathAndFlags = myvxs.GetCommand(start);
+            ShapePath.CmdAndFlags tmp_PathAndFlags = myvxs.GetCommand(start);
 
             --end; // Make "end" inclusive
 

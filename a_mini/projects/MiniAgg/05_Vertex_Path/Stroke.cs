@@ -92,25 +92,27 @@ namespace PixelFarm.Agg.VertexSource
             //1st vertex
 
             sourceVxs.GetVertex(0, out x, out y);
-            stgen.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);
+            stgen.AddVertex(x, y, ShapePath.CmdAndFlags.MoveTo);
 
             double startX = x, startY = y;
             bool hasMoreThanOnePart = false;
             for (int i = 0; i < j; ++i)
             {
                 var cmd = sourceVxs.GetVertex(i, out x, out y);
-                switch (ShapePath.FlagsAndCommand.CommandsMask & cmd)
+                switch (ShapePath.CmdAndFlags.MASK & cmd)
                 {
-                    case ShapePath.FlagsAndCommand.CommandEmpty:
+                    case ShapePath.CmdAndFlags.Empty:
                         {
 
                         } break;
-                    case ShapePath.FlagsAndCommand.CmdEndFigure:
+                    
+                    case ShapePath.CmdAndFlags.EndFigure:
+                    case ShapePath.CmdAndFlags.EndAndCloseFigure:
                         {
                             stgen.AddVertex(x, y, cmd);
                             if (i < j - 2)
                             {
-                                stgen.AddVertex(startX, startY, ShapePath.FlagsAndCommand.CommandLineTo);
+                                stgen.AddVertex(startX, startY, ShapePath.CmdAndFlags.LineTo);
                                 stgen.WriteTo(vxs);
                                 stgen.RemoveAll();
                                 hasMoreThanOnePart = true;
@@ -118,15 +120,15 @@ namespace PixelFarm.Agg.VertexSource
                             //end this polygon
 
                         } break;
-                    case ShapePath.FlagsAndCommand.CommandLineTo:
-                    case ShapePath.FlagsAndCommand.CommandCurve3:
-                    case ShapePath.FlagsAndCommand.CommandCurve4:
+                    case ShapePath.CmdAndFlags.LineTo:
+                    case ShapePath.CmdAndFlags.Curve3:
+                    case ShapePath.CmdAndFlags.Curve4:
                         {
 
                             stgen.AddVertex(x, y, cmd);
 
                         } break;
-                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                    case ShapePath.CmdAndFlags.MoveTo:
                         {
                             stgen.AddVertex(x, y, cmd);
                             startX = x;

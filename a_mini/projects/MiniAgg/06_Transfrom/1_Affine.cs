@@ -913,7 +913,7 @@ namespace PixelFarm.Agg.Transform
         {
             int count = src.Count;
             VertexStore vxs = new VertexStore(count);
-            ShapePath.FlagsAndCommand cmd;
+            ShapePath.CmdAndFlags cmd;
             double x, y; 
             for (int i = 0; i < count; ++i)
             {
@@ -927,9 +927,9 @@ namespace PixelFarm.Agg.Transform
         {
             var vxs = new VertexStore();
             var snapIter = src.GetVertexSnapIter();
-            ShapePath.FlagsAndCommand cmd;
+            ShapePath.CmdAndFlags cmd;
             double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.CmdAndFlags.Empty)
             {
                 this.Transform(ref x, ref y);
                 vxs.AddVertex(x, y, cmd);
@@ -941,7 +941,7 @@ namespace PixelFarm.Agg.Transform
         {
             int count = src.Count;
             VertexStore vxs = new VertexStore(count);
-            ShapePath.FlagsAndCommand cmd;
+            ShapePath.CmdAndFlags cmd;
             double x, y;
            
             for (int i = 0; i < count; ++i)
@@ -958,9 +958,9 @@ namespace PixelFarm.Agg.Transform
             var vxs = new VertexStore();
             var snapIter = src.GetVertexSnapIter();
 
-            ShapePath.FlagsAndCommand cmd;
+            ShapePath.CmdAndFlags cmd;
             double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.CmdAndFlags.Empty)
             {
                 x += dx;
                 y += dy;

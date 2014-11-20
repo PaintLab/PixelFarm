@@ -244,7 +244,7 @@ namespace PixelFarm.Agg
         }
 
         //-------------------------------------------------------calc_polygon_area
-        public static double calc_polygon_area(VertexSequence st)
+        public static double CalculatePolygonArea(VertexDistanceList st)
         {
             int i;
             double sum = 0.0;
@@ -253,7 +253,8 @@ namespace PixelFarm.Agg
             double xs = x;
             double ys = y;
 
-            for (i = 1; i < st.Count; i++)
+            int j = st.Count;
+            for (i = 1; i < j; i++)
             {
                 VertexDistance v = st[i];
                 sum += x * v.y - y * v.x;

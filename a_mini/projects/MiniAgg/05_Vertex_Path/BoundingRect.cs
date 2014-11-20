@@ -70,16 +70,16 @@ namespace PixelFarm.Agg
             for (i = 0; i < num; i++)
             {
 
-                ShapePath.FlagsAndCommand flags;
-                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
+                ShapePath.CmdAndFlags flags;
+                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != ShapePath.CmdAndFlags.Empty)
                 {
                     switch (flags)
                     {
                         //if is vertext cmd
-                        case ShapePath.FlagsAndCommand.CommandLineTo:
-                        case ShapePath.FlagsAndCommand.CommandMoveTo:
-                        case ShapePath.FlagsAndCommand.CommandCurve3:
-                        case ShapePath.FlagsAndCommand.CommandCurve4:
+                        case ShapePath.CmdAndFlags.LineTo:
+                        case ShapePath.CmdAndFlags.MoveTo:
+                        case ShapePath.CmdAndFlags.Curve3:
+                        case ShapePath.CmdAndFlags.Curve4:
                             {
                                 if (first)
                                 {
@@ -122,8 +122,8 @@ namespace PixelFarm.Agg
 
             var vsnapIter = vs.GetVertexSnapIter();
 
-            ShapePath.FlagsAndCommand PathAndFlags;
-            while (!ShapePath.IsStop(PathAndFlags = vsnapIter.GetNextVertex(out x, out y)))
+            ShapePath.CmdAndFlags PathAndFlags;
+            while (!ShapePath.IsEmpty(PathAndFlags = vsnapIter.GetNextVertex(out x, out y)))
             {
 
 
@@ -211,8 +211,8 @@ namespace PixelFarm.Agg
             for (i = 0; i < num; i++)
             {
 
-                ShapePath.FlagsAndCommand flags;
-                while ((flags = vxs.GetVertex(iterindex++, out x_d, out y_d)) != ShapePath.FlagsAndCommand.CommandEmpty)
+                ShapePath.CmdAndFlags flags;
+                while ((flags = vxs.GetVertex(iterindex++, out x_d, out y_d)) != ShapePath.CmdAndFlags.Empty)
                 {
                     x = (int)x_d;
                     y = (int)y_d;
@@ -220,10 +220,10 @@ namespace PixelFarm.Agg
                     switch (flags)
                     {
                         //if is vertext cmd
-                        case ShapePath.FlagsAndCommand.CommandLineTo:
-                        case ShapePath.FlagsAndCommand.CommandMoveTo:
-                        case ShapePath.FlagsAndCommand.CommandCurve3:
-                        case ShapePath.FlagsAndCommand.CommandCurve4:
+                        case ShapePath.CmdAndFlags.LineTo:
+                        case ShapePath.CmdAndFlags.MoveTo:
+                        case ShapePath.CmdAndFlags.Curve3:
+                        case ShapePath.CmdAndFlags.Curve4:
                             {
                                 if (first)
                                 {
@@ -269,8 +269,8 @@ namespace PixelFarm.Agg
 
             var vsnapIter = vs.GetVertexSnapIter();
 
-            ShapePath.FlagsAndCommand PathAndFlags;
-            while (!ShapePath.IsStop(PathAndFlags = vsnapIter.GetNextVertex(out x_d, out y_d)))
+            ShapePath.CmdAndFlags PathAndFlags;
+            while (!ShapePath.IsEmpty(PathAndFlags = vsnapIter.GetNextVertex(out x_d, out y_d)))
             {
                 x = (int)x_d;
                 y = (int)y_d;

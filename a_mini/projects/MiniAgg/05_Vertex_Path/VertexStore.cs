@@ -29,7 +29,7 @@ namespace PixelFarm.Agg
         int m_num_vertices;
         int m_allocated_vertices;
         double[] m_coord_xy;
-        ShapePath.FlagsAndCommand[] m_CommandAndFlags;
+        ShapePath.CmdAndFlags[] m_CommandAndFlags;
 
 #if DEBUG
         static int dbugTotal = 0;
@@ -63,16 +63,16 @@ namespace PixelFarm.Agg
         {
             get { return m_num_vertices; }
         }
-        public ShapePath.FlagsAndCommand GetLastCommand()
+        public ShapePath.CmdAndFlags GetLastCommand()
         {
             if (m_num_vertices != 0)
             {
                 return GetCommand(m_num_vertices - 1);
             }
 
-            return ShapePath.FlagsAndCommand.CommandEmpty;
+            return ShapePath.CmdAndFlags.Empty;
         }
-        public ShapePath.FlagsAndCommand GetLastVertex(out double x, out double y)
+        public ShapePath.CmdAndFlags GetLastVertex(out double x, out double y)
         {
             if (m_num_vertices != 0)
             {
@@ -81,9 +81,9 @@ namespace PixelFarm.Agg
 
             x = 0;
             y = 0;
-            return ShapePath.FlagsAndCommand.CommandEmpty;
+            return ShapePath.CmdAndFlags.Empty;
         }
-        public ShapePath.FlagsAndCommand GetBeforeLastVetex(out double x, out double y)
+        public ShapePath.CmdAndFlags GetBeforeLastVetex(out double x, out double y)
         {
 
             if (m_num_vertices > 1)
@@ -92,7 +92,7 @@ namespace PixelFarm.Agg
             }
             x = 0;
             y = 0;
-            return ShapePath.FlagsAndCommand.CommandEmpty;
+            return ShapePath.CmdAndFlags.Empty;
         }
         public double GetLastX()
         {
@@ -112,7 +112,7 @@ namespace PixelFarm.Agg
             }
             return 0;
         }
-        public ShapePath.FlagsAndCommand GetVertex(int index, out double x, out double y)
+        public ShapePath.CmdAndFlags GetVertex(int index, out double x, out double y)
         {
             int i = index << 1;
             x = m_coord_xy[i];
@@ -125,7 +125,7 @@ namespace PixelFarm.Agg
             x = m_coord_xy[i];
             y = m_coord_xy[i + 1];
         }
-        public ShapePath.FlagsAndCommand GetCommand(int index)
+        public ShapePath.CmdAndFlags GetCommand(int index)
         {
             return m_CommandAndFlags[index];
         } 
@@ -139,7 +139,7 @@ namespace PixelFarm.Agg
         {
             this.AddVertex(vertextData.x, vertextData.y, vertextData.command);
         }
-        public void AddVertex(double x, double y, ShapePath.FlagsAndCommand CommandAndFlags)
+        public void AddVertex(double x, double y, ShapePath.CmdAndFlags CommandAndFlags)
         {
             if (m_num_vertices >= m_allocated_vertices)
             {
@@ -154,23 +154,23 @@ namespace PixelFarm.Agg
         //--------------------------------------------------
         public void AddVertexCurve3(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve3);
+            AddVertex(x, y, ShapePath.CmdAndFlags.Curve3);
         }
         public void AddVertexCurve4(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandCurve4);
+            AddVertex(x, y, ShapePath.CmdAndFlags.Curve4);
         }
         public void AddMoveTo(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandMoveTo);
+            AddVertex(x, y, ShapePath.CmdAndFlags.MoveTo);
         }
         public void AddLineTo(double x, double y)
         {
-            AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo); 
+            AddVertex(x, y, ShapePath.CmdAndFlags.LineTo); 
         }
         public void AddStop()
         {
-            AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandEmpty);
+            AddVertex(0, 0, ShapePath.CmdAndFlags.Empty);
 
         }
         internal void ReplaceVertex(int index, double x, double y)
@@ -178,7 +178,7 @@ namespace PixelFarm.Agg
             m_coord_xy[index << 1] = x;
             m_coord_xy[(index << 1) + 1] = y;
         }
-        internal void ReplaceCommand(int index, ShapePath.FlagsAndCommand CommandAndFlags)
+        internal void ReplaceCommand(int index, ShapePath.CmdAndFlags CommandAndFlags)
         {
             m_CommandAndFlags[index] = CommandAndFlags;
         }
@@ -197,7 +197,7 @@ namespace PixelFarm.Agg
             m_coord_xy[(v2 << 1) + 1] = y_tmp;
 
 
-            ShapePath.FlagsAndCommand cmd = m_CommandAndFlags[v1];
+            ShapePath.CmdAndFlags cmd = m_CommandAndFlags[v1];
             m_CommandAndFlags[v1] = m_CommandAndFlags[v2];
             m_CommandAndFlags[v2] = cmd;
         }
@@ -213,7 +213,7 @@ namespace PixelFarm.Agg
                 int newSize = m_allocated_vertices + 256;
 
                 double[] new_xy = new double[newSize << 1];
-                ShapePath.FlagsAndCommand[] newCmd = new ShapePath.FlagsAndCommand[newSize];
+                ShapePath.CmdAndFlags[] newCmd = new ShapePath.CmdAndFlags[newSize];
                 if (m_coord_xy != null)
                 {
                     //copy old buffer to new buffer 
@@ -244,7 +244,7 @@ namespace PixelFarm.Agg
             int m_allocated_vertices,
             int m_num_vertices,
             double[] m_coord_xy,
-            ShapePath.FlagsAndCommand[] m_CommandAndFlags)
+            ShapePath.CmdAndFlags[] m_CommandAndFlags)
         {
             vstore.m_num_vertices = m_num_vertices;
             vstore.m_allocated_vertices = m_allocated_vertices;
@@ -256,7 +256,7 @@ namespace PixelFarm.Agg
             out int m_allocated_vertices,
             out int m_num_vertices,
             out double[] m_coord_xy,
-            out ShapePath.FlagsAndCommand[] m_CommandAndFlags)
+            out ShapePath.CmdAndFlags[] m_CommandAndFlags)
         {
 
             m_num_vertices = vstore.m_num_vertices;

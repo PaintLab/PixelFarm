@@ -19,11 +19,11 @@ namespace PixelFarm.Agg.VertexSource
                 string[] elements = line.Split(',');
                 double x = double.Parse(elements[0]);
                 double y = double.Parse(elements[1]);
-                ShapePath.FlagsAndCommand flagsAndCommand = (ShapePath.FlagsAndCommand)System.Enum.Parse(typeof(ShapePath.FlagsAndCommand), elements[2].Trim());
+                ShapePath.CmdAndFlags flagsAndCommand = (ShapePath.CmdAndFlags)System.Enum.Parse(typeof(ShapePath.CmdAndFlags), elements[2].Trim());
                 int len = elements.Length;
                 for (int i = 3; i < len; i++)
                 {
-                    flagsAndCommand |= (ShapePath.FlagsAndCommand)System.Enum.Parse(typeof(ShapePath.FlagsAndCommand), elements[i].Trim());
+                    flagsAndCommand |= (ShapePath.CmdAndFlags)System.Enum.Parse(typeof(ShapePath.CmdAndFlags), elements[i].Trim());
                 }
                 vxs.AddVertex(x, y, flagsAndCommand);                 
             }
@@ -66,7 +66,7 @@ namespace PixelFarm.Agg.VertexSource
             int num_vertice;
             int num_alloc_vertice;
             double[] coord_xy;
-            ShapePath.FlagsAndCommand[] cmds;
+            ShapePath.CmdAndFlags[] cmds;
             PathStore.UnsafeDirectGetData(pathSource,
                 out num_alloc_vertice,
                 out num_vertice,
@@ -138,7 +138,7 @@ namespace PixelFarm.Agg.VertexSource
             //3.
             double[] coord_xy = new double[totalCoord];
             //4.
-            ShapePath.FlagsAndCommand[] cmds = new ShapePath.FlagsAndCommand[num_vertice];
+            ShapePath.CmdAndFlags[] cmds = new ShapePath.CmdAndFlags[num_vertice];
 
             for (int i = 0; i < totalCoord; )
             {
@@ -151,7 +151,7 @@ namespace PixelFarm.Agg.VertexSource
             int cmds_count = reader.ReadInt32();
             for (int i = 0; i < cmds_count; ++i)
             {
-                cmds[i] = (ShapePath.FlagsAndCommand)reader.ReadByte();
+                cmds[i] = (ShapePath.CmdAndFlags)reader.ReadByte();
             }
 
             PathStore.UnsafeDirectSetData(

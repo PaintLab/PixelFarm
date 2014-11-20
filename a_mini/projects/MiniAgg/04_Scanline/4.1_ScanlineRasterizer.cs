@@ -237,17 +237,17 @@ namespace PixelFarm.Agg
             get { return this.addVertextOffsetY; }
             set { this.addVertextOffsetY = value; }
         }
-        void AddVertex(ShapePath.FlagsAndCommand cmd, double x, double y)
+        void AddVertex(ShapePath.CmdAndFlags cmd, double x, double y)
         {
             switch (cmd)
             {
-                case ShapePath.FlagsAndCommand.CommandMoveTo:
+                case ShapePath.CmdAndFlags.MoveTo:
                     {
                         MoveTo(x, y);
                     } break;
-                case ShapePath.FlagsAndCommand.CommandLineTo:
-                case ShapePath.FlagsAndCommand.CommandCurve3:
-                case ShapePath.FlagsAndCommand.CommandCurve4:
+                case ShapePath.CmdAndFlags.LineTo:
+                case ShapePath.CmdAndFlags.Curve3:
+                case ShapePath.CmdAndFlags.Curve4:
                     {
                         LineTo(x, y);
                     } break;
@@ -290,7 +290,7 @@ namespace PixelFarm.Agg
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = vxs.GetVertex(i, out x, out y);
-                    if (cmd != ShapePath.FlagsAndCommand.CommandEmpty)
+                    if (cmd != ShapePath.CmdAndFlags.Empty)
                     {
                         AddVertex(cmd, x, y);
                     }
@@ -299,8 +299,8 @@ namespace PixelFarm.Agg
             else
             {
                 var snapIter = snap.GetVertexSnapIter();
-                ShapePath.FlagsAndCommand cmd;
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandEmpty)
+                ShapePath.CmdAndFlags cmd;
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.CmdAndFlags.Empty)
                 {
                     AddVertex(cmd, x, y);
                 }

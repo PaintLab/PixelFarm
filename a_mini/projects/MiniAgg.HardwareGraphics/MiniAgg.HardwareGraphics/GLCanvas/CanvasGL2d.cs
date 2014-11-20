@@ -251,17 +251,17 @@ namespace OpenTkEssTest
                             {
                                 switch (cmd)
                                 {
-                                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                                    case ShapePath.CmdAndFlags.MoveTo:
                                         {
                                             coords[nn++] = (float)vx;
                                             coords[nn++] = (float)vy;
                                         } break;
-                                    case ShapePath.FlagsAndCommand.CommandLineTo:
+                                    case ShapePath.CmdAndFlags.LineTo:
                                         {
                                             coords[nn++] = (float)vx;
                                             coords[nn++] = (float)vy;
                                         } break;
-                                    case ShapePath.FlagsAndCommand.CommandEmpty:
+                                    case ShapePath.CmdAndFlags.Empty:
                                         {
                                         } break;
                                     default:
@@ -383,7 +383,7 @@ namespace OpenTkEssTest
                 switch (vertexData.command)
                 {
 
-                    case ShapePath.FlagsAndCommand.CommandEmpty:
+                    case ShapePath.CmdAndFlags.Empty:
                         stopLoop = true;
                         break;
                     default:
@@ -787,19 +787,19 @@ namespace OpenTkEssTest
                 {
                     switch (cmd)
                     {
-                        case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        case ShapePath.CmdAndFlags.MoveTo:
                             {
                                 coords[nn++] = (float)vx;
                                 coords[nn++] = (float)vy;
                                 npoints++;
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandLineTo:
+                        case ShapePath.CmdAndFlags.LineTo:
                             {
                                 coords[nn++] = (float)vx;
                                 coords[nn++] = (float)vy;
                                 npoints++;
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandEmpty:
+                        case ShapePath.CmdAndFlags.Empty:
                             {
                             } break;
                         default:

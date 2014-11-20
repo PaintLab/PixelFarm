@@ -298,25 +298,25 @@ namespace PixelFarm.Agg
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = vxs.GetVertex(i, out x, out y);
-                    switch (cmd & (ShapePath.FlagsAndCommand.CommandsMask))
+                    switch (cmd & (ShapePath.CmdAndFlags.MASK))
                     {
-                        case ShapePath.FlagsAndCommand.CommandEmpty:
+                        case ShapePath.CmdAndFlags.Empty:
                             {
                                 //stop 
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        case ShapePath.CmdAndFlags.MoveTo:
                             {
                                 MoveTo(x, y);
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandLineTo:
+                        case ShapePath.CmdAndFlags.LineTo:
                             {
                                 LineTo(x, y);
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandCurve3:
+                        case ShapePath.CmdAndFlags.Curve3:
                             {
                                 LineTo(x, y);
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandCurve4:
+                        case ShapePath.CmdAndFlags.Curve4:
                             {
                                 LineTo(x, y);
                             } break;
@@ -333,30 +333,30 @@ namespace PixelFarm.Agg
             else
             {
                 var snapIter = snap.GetVertexSnapIter();
-                ShapePath.FlagsAndCommand cmd;
+                ShapePath.CmdAndFlags cmd;
                 bool stop = false;
                 while (!stop)
                 {
                     cmd = snapIter.GetNextVertex(out x, out y);
-                    switch (cmd & (ShapePath.FlagsAndCommand.CommandsMask))
+                    switch (cmd & (ShapePath.CmdAndFlags.MASK))
                     {
-                        case ShapePath.FlagsAndCommand.CommandEmpty:
+                        case ShapePath.CmdAndFlags.Empty:
                             {
                                 stop = true;
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        case ShapePath.CmdAndFlags.MoveTo:
                             {
                                 MoveTo(x, y);
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandLineTo:
+                        case ShapePath.CmdAndFlags.LineTo:
                             {
                                 LineTo(x, y);
                             } break; 
-                        case ShapePath.FlagsAndCommand.CommandCurve3:
+                        case ShapePath.CmdAndFlags.Curve3:
                             {
                                 LineTo(x, y);
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandCurve4:
+                        case ShapePath.CmdAndFlags.Curve4:
                             {
                                 LineTo(x, y);
                             } break;
