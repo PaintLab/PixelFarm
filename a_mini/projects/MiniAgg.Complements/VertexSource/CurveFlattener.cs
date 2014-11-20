@@ -50,7 +50,10 @@ namespace PixelFarm.Agg.VertexSource
     // Class conv_curve recognizes commands path_cmd_curve3 and path_cmd_curve4 
     // and converts these vertices into a move_to/line_to sequence. 
     //-----------------------------------------------------------------------
-    public class FlattenCurves
+
+
+
+    public class CurveFlattener
     {
 
         readonly Curve3 m_curve3 = new Curve3();
@@ -103,9 +106,7 @@ namespace PixelFarm.Agg.VertexSource
                 m_curve3.CuspLimit = value;
                 m_curve4.CuspLimit = value;
             }
-        }
-
-
+        } 
         public VertexStore MakeVxs(VertexStoreSnap vsnap)
         {
             VertexStore vxs = new VertexStore();

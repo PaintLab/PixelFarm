@@ -80,7 +80,7 @@
     <Compile Include="VertexSource\Contour.cs" />
     <Compile Include="VertexSource\ContourGenerator.cs" />
     <Compile Include="VertexSource\Ellipse.cs" />
-    <Compile Include="VertexSource\FlattenCurve.cs" />
+    <Compile Include="VertexSource\CurveFlattener.cs" />
     <Compile Include="VertexSource\RoundedRect.cs" />
     <Compile Include="Font\LiberationSansFont.cs" />
     <Compile Include="Font\StyledTypeFace.cs" />

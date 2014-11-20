@@ -435,10 +435,11 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         var t_glyph = mtx.TransformToVertexSnap(glyph);
 
-                        FlattenCurves curve = new FlattenCurves();
+                        CurveFlattener curveFlattener = new CurveFlattener();
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
-                        var curveVxs = curve.MakeVxs(t_glyph);
+
+                        var curveVxs = curveFlattener.MakeVxs(t_glyph);
 
                         CreateAndRenderCombined(graphics2D, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
 

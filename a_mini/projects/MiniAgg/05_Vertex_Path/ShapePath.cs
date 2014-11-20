@@ -268,17 +268,17 @@ namespace PixelFarm.Agg
         {
             // Skip all non-vertices at the beginning
             while (start < myvxs.Count &&
-                  !ShapePath.IsVertextCommand(myvxs.GetCommand(start))) ++start;
+                  !ShapePath.IsVertextCommand(myvxs.GetCommand(start))) { ++start; }
 
             // Skip all insignificant move_to
             while (start + 1 < myvxs.Count &&
                   ShapePath.IsMoveTo(myvxs.GetCommand(start)) &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start + 1))) ++start;
+                  ShapePath.IsMoveTo(myvxs.GetCommand(start + 1))) { ++start; }
 
             // Find the last vertex
             int end = start + 1;
             while (end < myvxs.Count &&
-                  !ShapePath.IsNextPoly(myvxs.GetCommand(end))) ++end;
+                  !ShapePath.IsNextPoly(myvxs.GetCommand(end))) { ++end; }
 
             InvertPolygon(myvxs, start, end);
         }
