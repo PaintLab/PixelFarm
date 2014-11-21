@@ -582,19 +582,19 @@ namespace PixelFarm.Agg.Lines
             m_src_vertices.Clear();
         }
 
-        public void AddVertex(double x, double y, ShapePath.CmdAndFlags cmd)
+        public void AddVertex(double x, double y, VertexCmd cmd)
         {
-            switch (ShapePath.CmdAndFlags.MASK & cmd)
+            switch (VertexCmd.MASK & cmd)
             {
-                case ShapePath.CmdAndFlags.MoveTo:
+                case VertexCmd.MoveTo:
                     Render(false);
                     MoveTo(x, y);
                     break;
-                case ShapePath.CmdAndFlags.EndAndCloseFigure:
+                case VertexCmd.EndAndCloseFigure:
                     Render(true);
                     MoveTo(m_start_x, m_start_y);
                     break;
-                case ShapePath.CmdAndFlags.EndFigure:
+                case VertexCmd.EndFigure:
                     Render(false);
                     break;
                 default:
@@ -607,10 +607,10 @@ namespace PixelFarm.Agg.Lines
         {
             double x;
             double y;
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
 
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.CmdAndFlags.Empty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
             {
                 AddVertex(x, y, cmd);
             }

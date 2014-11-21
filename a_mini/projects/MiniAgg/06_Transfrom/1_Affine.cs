@@ -903,7 +903,7 @@ namespace PixelFarm.Agg.Transform
         {
             int count = src.Count;
             VertexStore vxs = new VertexStore(count);
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y; 
             for (int i = 0; i < count; ++i)
             {
@@ -917,9 +917,9 @@ namespace PixelFarm.Agg.Transform
         {
             var vxs = new VertexStore();
             var snapIter = src.GetVertexSnapIter();
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.CmdAndFlags.Empty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
             {
                 this.Transform(ref x, ref y);
                 vxs.AddVertex(x, y, cmd);
@@ -931,7 +931,7 @@ namespace PixelFarm.Agg.Transform
         {
             int count = src.Count;
             VertexStore vxs = new VertexStore(count);
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y;
            
             for (int i = 0; i < count; ++i)
@@ -948,9 +948,9 @@ namespace PixelFarm.Agg.Transform
             var vxs = new VertexStore();
             var snapIter = src.GetVertexSnapIter();
 
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.CmdAndFlags.Empty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
             {
                 x += dx;
                 y += dy;

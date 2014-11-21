@@ -141,14 +141,14 @@ namespace OpenTkEssTest
                 {
                     switch (cmd)
                     {
-                        case ShapePath.CmdAndFlags.MoveTo:
+                        case VertexCmd.MoveTo:
                             {
                                 coords[nn] = (float)vx;
                                 coords[nn + 1] = (float)vy;
                                 nn += 2;
                                 npoints++;
                             } break;
-                        case ShapePath.CmdAndFlags.LineTo:
+                        case VertexCmd.LineTo:
                             {
                                 coords[nn] = (float)vx;
                                 coords[nn + 1] = (float)vy;
@@ -156,7 +156,7 @@ namespace OpenTkEssTest
                                 npoints++;
 
                             } break;
-                        case ShapePath.CmdAndFlags.Empty:
+                        case VertexCmd.Empty:
                             {
                             } break;
                         default:

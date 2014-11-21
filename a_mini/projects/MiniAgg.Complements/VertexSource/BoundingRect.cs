@@ -70,16 +70,16 @@ namespace PixelFarm.Agg
             for (i = 0; i < num; i++)
             {
 
-                ShapePath.CmdAndFlags flags;
-                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != ShapePath.CmdAndFlags.Empty)
+                VertexCmd flags;
+                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != VertexCmd.Empty)
                 {
                     switch (flags)
                     {
                         //if is vertext cmd
-                        case ShapePath.CmdAndFlags.LineTo:
-                        case ShapePath.CmdAndFlags.MoveTo:
-                        case ShapePath.CmdAndFlags.Curve3:
-                        case ShapePath.CmdAndFlags.Curve4:
+                        case VertexCmd.LineTo:
+                        case VertexCmd.MoveTo:
+                        case VertexCmd.Curve3:
+                        case VertexCmd.Curve4:
                             {
                                 if (first)
                                 {
@@ -122,12 +122,12 @@ namespace PixelFarm.Agg
 
             var vsnapIter = vs.GetVertexSnapIter();
 
-            ShapePath.CmdAndFlags PathAndFlags;
-            while (!ShapePath.IsEmpty(PathAndFlags = vsnapIter.GetNextVertex(out x, out y)))
+            VertexCmd PathAndFlags;
+            while (!VertexHelper.IsEmpty(PathAndFlags = vsnapIter.GetNextVertex(out x, out y)))
             {
 
 
-                if (ShapePath.IsVertextCommand(PathAndFlags))
+                if (VertexHelper.IsVertextCommand(PathAndFlags))
                 {
                     if (first)
                     {
@@ -203,12 +203,12 @@ namespace PixelFarm.Agg
 
             var vsnapIter = vs.GetVertexSnapIter();
 
-            ShapePath.CmdAndFlags PathAndFlags;
-            while (!ShapePath.IsEmpty(PathAndFlags = vsnapIter.GetNextVertex(out x_d, out y_d)))
+            VertexCmd PathAndFlags;
+            while (!VertexHelper.IsEmpty(PathAndFlags = vsnapIter.GetNextVertex(out x_d, out y_d)))
             {
                 x = (int)x_d;
                 y = (int)y_d;
-                if (ShapePath.IsVertextCommand(PathAndFlags))
+                if (VertexHelper.IsVertextCommand(PathAndFlags))
                 {
                     if (first)
                     {

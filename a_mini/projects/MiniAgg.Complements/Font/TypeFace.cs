@@ -358,7 +358,7 @@ namespace PixelFarm.Agg.Font
                         // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
                         // We stored the position of the start of this polygon, no we flip it as we colse it.
                         //newGlyph.glyphData.InvertPolygon(polyStartVertexSourceIndex);
-                        ShapePath.InvertPolygon(newGlyph.glyphData.Vxs, polyStartVertexSourceIndex);
+                        VertexHelper.InvertPolygon(newGlyph.glyphData.Vxs, polyStartVertexSourceIndex);
                         break;
 
                     case ' ':

@@ -1,88 +1,88 @@
 ﻿//2014 BSD,WinterDev   
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using System.Text;
 
- 
+
 namespace PixelFarm.Agg
 {
 
+    /// <summary>
+    /// vertex command and flags
+    /// </summary>
 
-    public static class ShapePath
+    public enum VertexCmd : byte
     {
-        public enum ShapeOrientation
+        //---------------------------------
+        //the order of these fields are significant!
+        //---------------------------------
+        //first lower 4 bits compact flags
+        Empty = 0x00,
+        //-----------------------
+        //end figure command 2 lower bits 
+        //is end command when 2 lower bit > 0
+        EndFigure = 0x01,
+        EndAndCloseFigure = 0x02,
+        //----------------------- 
+        //start from move to is 
+        MoveTo = 0x04,
+        LineTo = 0x05,
+        Curve3 = 0x06,
+        Curve4 = 0x07,
+        //-----------------------       
+        MASK = 0x0F,
+        //----------------------- 
+        //upper 4 bits for shape ShapeOrientation
+        //0 = unknown
+        //1 = CCW
+        //2 = CW
+        FlagCCW = (1 << 4),
+        FlagCW = (2 << 4)
+        //-----------------------            
+    }
+
+    public enum EndVertexOrientation
+    {
+        Unknown,
+        CCW,
+        CW
+    }
+
+    public static class VertexHelper
+    {
+        public static bool IsVertextCommand(VertexCmd c)
         {
-            Unknown,
-            CCW,
-            CW
+            return (VertexCmd.MASK & c) >= VertexCmd.MoveTo;
+        }
+        public static bool IsEmpty(VertexCmd c)
+        {
+            return c == VertexCmd.Empty;
         }
 
-        /// <summary>
-        /// vertex command and flags
-        /// </summary>
-       
-        public enum CmdAndFlags : byte
+        public static bool IsMoveTo(VertexCmd c)
         {
-            //---------------------------------
-            //the order of these fields are significant!
-            //---------------------------------
-            //first lower 4 bits compact flags
-            Empty = 0x00,
-            //-----------------------
-            //end figure command 2 lower bits 
-            //is end command when 2 lower bit > 0
-            EndFigure = 0x01,
-            EndAndCloseFigure = 0x02,
-            //----------------------- 
-            //start from move to is 
-            MoveTo = 0x04,
-            LineTo = 0x05,
-            Curve3 = 0x06,
-            Curve4 = 0x07,
-            //-----------------------       
-            MASK = 0x0F,
-            //----------------------- 
-            //upper 4 bits for shape ShapeOrientation
-            //0 = unknown
-            //1 = CCW
-            //2 = CW
-            FlagCCW = (1 << 4),
-            FlagCW = (2 << 4)
-            //-----------------------            
+            return c == VertexCmd.MoveTo;
         }
-        public static bool IsVertextCommand(CmdAndFlags c)
+        public static bool IsCurve(VertexCmd c)
         {
-            return (CmdAndFlags.MASK & c) >= CmdAndFlags.MoveTo;
+            return c == VertexCmd.Curve3
+                || c == VertexCmd.Curve4;
         }
-        public static bool IsEmpty(CmdAndFlags c)
-        {
-            return c == CmdAndFlags.Empty;
-        }
-
-        public static bool IsMoveTo(CmdAndFlags c)
-        {
-            return c == CmdAndFlags.MoveTo;
-        }
-        public static bool IsCurve(CmdAndFlags c)
-        {
-            return c == CmdAndFlags.Curve3
-                || c == CmdAndFlags.Curve4;
-        }
-        public static bool IsEndFigure(CmdAndFlags c)
+        public static bool IsEndFigure(VertexCmd c)
         {
             return ((int)c & 0x3) > 0;
         }
-        public static bool IsClose(CmdAndFlags c)
+        public static bool IsClose(VertexCmd c)
         {
-            return ((CmdAndFlags.MASK) & c) == CmdAndFlags.EndAndCloseFigure;
+            return ((VertexCmd.MASK) & c) == VertexCmd.EndAndCloseFigure;
         }
-        public static bool IsNextPoly(CmdAndFlags c)
+        public static bool IsNextPoly(VertexCmd c)
         {
-            return c <= CmdAndFlags.MoveTo;
+            return c <= VertexCmd.MoveTo;
         }
-        public static ShapeOrientation GetOrientation(CmdAndFlags c)
+        public static EndVertexOrientation GetOrientation(VertexCmd c)
         {
-            return (ShapeOrientation)(((int)c) >> 4);
+            return (EndVertexOrientation)(((int)c) >> 4);
         }
 
 
@@ -145,22 +145,22 @@ namespace PixelFarm.Agg
 
             int vcount = myvxs.Count;
             while (start < vcount &&
-                  !ShapePath.IsVertextCommand(myvxs.GetCommand(start)))
+                  !VertexHelper.IsVertextCommand(myvxs.GetCommand(start)))
             {
                 ++start;
             }
 
             // Skip all insignificant move_to
             while (start + 1 < vcount &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start)) &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start + 1)))
+                  VertexHelper.IsMoveTo(myvxs.GetCommand(start)) &&
+                  VertexHelper.IsMoveTo(myvxs.GetCommand(start + 1)))
             {
                 ++start;
             }
 
             // Find the last vertex
             int end = start + 1;
-            while (end < vcount && !ShapePath.IsNextPoly(myvxs.GetCommand(end)))
+            while (end < vcount && !VertexHelper.IsNextPoly(myvxs.GetCommand(end)))
             {
                 ++end;
             }
@@ -171,13 +171,13 @@ namespace PixelFarm.Agg
                 {
                     // Invert polygon, set orientation flag, and skip all end_poly
                     InvertPolygon(myvxs, start, end);
-                    ShapePath.CmdAndFlags flags;
+                    VertexCmd flags;
                     int myvxs_count = myvxs.Count;
 
-                    var orientFlags = isCW ? ShapePath.CmdAndFlags.FlagCW : ShapePath.CmdAndFlags.FlagCCW;
+                    var orientFlags = isCW ? VertexCmd.FlagCW : VertexCmd.FlagCCW;
 
                     while (end < myvxs_count &&
-                          ShapePath.IsEndFigure(flags = myvxs.GetCommand(end)))
+                          VertexHelper.IsEndFigure(flags = myvxs.GetCommand(end)))
                     {
                         myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
                     }
@@ -192,7 +192,7 @@ namespace PixelFarm.Agg
             while (start < myvxs.Count)
             {
                 start = ArrangePolygonOrientation(myvxs, start, closewise);
-                if (ShapePath.IsEmpty(myvxs.GetCommand(start)))
+                if (VertexHelper.IsEmpty(myvxs.GetCommand(start)))
                 {
                     ++start;
                     break;
@@ -225,16 +225,16 @@ namespace PixelFarm.Agg
             int vcount = myvxs.Count;
 
             while (start < vcount &&
-                  !ShapePath.IsVertextCommand(myvxs.GetCommand(start))) { ++start; }
+                  !VertexHelper.IsVertextCommand(myvxs.GetCommand(start))) { ++start; }
 
             // Skip all insignificant move_to
             while (start + 1 < vcount &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start)) &&
-                  ShapePath.IsMoveTo(myvxs.GetCommand(start + 1))) { ++start; }
+                  VertexHelper.IsMoveTo(myvxs.GetCommand(start)) &&
+                  VertexHelper.IsMoveTo(myvxs.GetCommand(start + 1))) { ++start; }
 
             // Find the last vertex
             int end = start + 1;
-            while (end < vcount && !ShapePath.IsNextPoly(myvxs.GetCommand(end))) { ++end; }
+            while (end < vcount && !VertexHelper.IsNextPoly(myvxs.GetCommand(end))) { ++end; }
 
             InvertPolygon(myvxs, start, end);
         }
@@ -244,7 +244,7 @@ namespace PixelFarm.Agg
         static void InvertPolygon(VertexStore myvxs, int start, int end)
         {
             int i;
-            ShapePath.CmdAndFlags tmp_PathAndFlags = myvxs.GetCommand(start); 
+            VertexCmd tmp_PathAndFlags = myvxs.GetCommand(start);
             --end; // Make "end" inclusive 
             // Shift all commands to one position
             for (i = start; i < end; i++)
@@ -268,8 +268,8 @@ namespace PixelFarm.Agg
             int count = vxs.Count;
             for (i = 0; i < count; ++i)
             {
-                ShapePath.CmdAndFlags flags = vxs.GetVertex(i, out x, out y);
-                if (ShapePath.IsVertextCommand(flags))
+                VertexCmd flags = vxs.GetVertex(i, out x, out y);
+                if (VertexHelper.IsVertextCommand(flags))
                 {
                     vxs.ReplaceVertex(i, x2 - x + x1, y);
                 }
@@ -283,8 +283,8 @@ namespace PixelFarm.Agg
             int count = vxs.Count;
             for (i = 0; i < count; ++i)
             {
-                ShapePath.CmdAndFlags flags = vxs.GetVertex(i, out x, out y);
-                if (ShapePath.IsVertextCommand(flags))
+                VertexCmd flags = vxs.GetVertex(i, out x, out y);
+                if (VertexHelper.IsVertextCommand(flags))
                 {
                     vxs.ReplaceVertex(i, x, y2 - y + y1);
                 }

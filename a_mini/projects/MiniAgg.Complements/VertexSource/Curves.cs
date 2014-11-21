@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
-using FlagsAndCommand = PixelFarm.Agg.ShapePath.CmdAndFlags;
+using FlagsAndCommand = PixelFarm.Agg.VertexCmd;
 
 namespace PixelFarm.Agg.VertexSource
 {
@@ -324,15 +324,15 @@ namespace PixelFarm.Agg.VertexSource
         //    {
         //        //first cmd 
         //        //cmd0
-        //        yield return new VertexData(ShapePath.CmdAndFlags.MoveTo, m_points[0]);
+        //        yield return new VertexData(NxCmdAndFlags.MoveTo, m_points[0]);
         //        //others
         //        for (int i = 1; i < j; i++)
         //        {
-        //            yield return new VertexData(ShapePath.CmdAndFlags.LineTo, m_points[i]);
+        //            yield return new VertexData(NxCmdAndFlags.LineTo, m_points[i]);
 
         //        }
         //    }
-        //    yield return new VertexData(ShapePath.CmdAndFlags.Empty);
+        //    yield return new VertexData(NxCmdAndFlags.Empty);
         //}
 
         void AddBezier(double x1, double y1,
@@ -615,13 +615,13 @@ namespace PixelFarm.Agg.VertexSource
             m_ddfy = m_saved_ddfy;
         }
 
-        public ShapePath.CmdAndFlags GetNextVertex(out double x, out double y)
+        public VertexCmd GetNextVertex(out double x, out double y)
         {
             if (m_step < 0)
             {
                 x = 0;
                 y = 0;
-                return ShapePath.CmdAndFlags.Empty;
+                return VertexCmd.Empty;
             }
 
             if (m_step == m_num_steps)
@@ -629,7 +629,7 @@ namespace PixelFarm.Agg.VertexSource
                 x = m_start_x;
                 y = m_start_y;
                 --m_step;
-                return ShapePath.CmdAndFlags.MoveTo;
+                return VertexCmd.MoveTo;
             }
 
             if (m_step == 0)
@@ -637,7 +637,7 @@ namespace PixelFarm.Agg.VertexSource
                 x = m_end_x;
                 y = m_end_y;
                 --m_step;
-                return ShapePath.CmdAndFlags.LineTo;
+                return VertexCmd.LineTo;
             }
 
             m_fx += m_dfx;
@@ -650,7 +650,7 @@ namespace PixelFarm.Agg.VertexSource
             x = m_fx;
             y = m_fy;
             --m_step;
-            return ShapePath.CmdAndFlags.LineTo;
+            return VertexCmd.LineTo;
         }
 
     }
@@ -1103,7 +1103,7 @@ namespace PixelFarm.Agg.VertexSource
                 //    }
 
                 //    VertexData vertexData = new VertexData(
-                //       ShapePath.CmdAndFlags.LineTo,
+                //       NxCmdAndFlags.LineTo,
                 //       currentVertextData.position);
 
                 //    vxs.AddVertex(vertexData);
@@ -1129,7 +1129,7 @@ namespace PixelFarm.Agg.VertexSource
             //    }
 
             //    VertexData vertexData = new VertexData(
-            //       ShapePath.CmdAndFlags.LineTo,
+            //       NxCmdAndFlags.LineTo,
             //       currentVertextData.position);
 
             //    vxs.AddVertex(vertexData);

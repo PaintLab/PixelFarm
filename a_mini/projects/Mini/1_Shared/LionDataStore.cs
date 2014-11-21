@@ -214,7 +214,7 @@ namespace PixelFarm.Agg
 
             //path.ArrangeOrientationsAll(ShapePath.FlagsAndCommand.FlagCW);
              
-            ShapePath.ArrangeOrientationsAll(path.Vxs, true);
+            VertexHelper.ArrangeOrientationsAll(path.Vxs, true);
             return npaths;
         }
     }

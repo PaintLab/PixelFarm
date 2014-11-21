@@ -633,13 +633,13 @@ namespace PixelFarm.Agg.Transform
             var vxs = new VertexStore();
             var vsnapIter = snap.GetVertexSnapIter();
             double x, y;
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             do
             {
                 cmd = vsnapIter.GetNextVertex(out x, out y);
                 this.Transform(ref x, ref y);
                 vxs.AddVertex(x, y, cmd);
-            } while (!ShapePath.IsEmpty(cmd));
+            } while (!VertexHelper.IsEmpty(cmd));
 
             return vxs;
         }
@@ -647,7 +647,7 @@ namespace PixelFarm.Agg.Transform
         {
 
 
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y;
             int count = src.Count;
             var vxs = new VertexStore(count);

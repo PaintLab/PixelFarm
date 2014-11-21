@@ -34,7 +34,7 @@ namespace PixelFarm.Agg
 
         double[] m_x = new double[8];
         double[] m_y = new double[8];
-        ShapePath.CmdAndFlags[] m_cmd = new ShapePath.CmdAndFlags[8];
+        VertexCmd[] m_cmd = new VertexCmd[8];
 
         public struct CoordAndColor
         {
@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
 
         public SpanGenGourand()
         {
-            m_cmd[0] = ShapePath.CmdAndFlags.Empty;
+            m_cmd[0] = VertexCmd.Empty;
         }
 
         public SpanGenGourand(ColorRGBA c1,
@@ -86,10 +86,10 @@ namespace PixelFarm.Agg
             m_coord_1.y = m_y[1] = y2;
             m_coord_2.x = m_x[2] = x3;
             m_coord_2.y = m_y[2] = y3;
-            m_cmd[0] = ShapePath.CmdAndFlags.MoveTo;
-            m_cmd[1] = ShapePath.CmdAndFlags.LineTo;
-            m_cmd[2] = ShapePath.CmdAndFlags.LineTo;
-            m_cmd[3] = ShapePath.CmdAndFlags.Empty;
+            m_cmd[0] = VertexCmd.MoveTo;
+            m_cmd[1] = VertexCmd.LineTo;
+            m_cmd[2] = VertexCmd.LineTo;
+            m_cmd[3] = VertexCmd.Empty;
 
             if (d != 0.0)
             {
@@ -110,10 +110,10 @@ namespace PixelFarm.Agg
                                   m_x[4], m_y[4], m_x[5], m_y[5],
                                   out m_coord_2.x, out m_coord_2.y);
 
-                m_cmd[3] = ShapePath.CmdAndFlags.LineTo;
-                m_cmd[4] = ShapePath.CmdAndFlags.LineTo;
-                m_cmd[5] = ShapePath.CmdAndFlags.LineTo;
-                m_cmd[6] = ShapePath.CmdAndFlags.Empty;
+                m_cmd[3] = VertexCmd.LineTo;
+                m_cmd[4] = VertexCmd.LineTo;
+                m_cmd[5] = VertexCmd.LineTo;
+                m_cmd[6] = VertexCmd.Empty;
             }
         }
         public VertexStore MakeVxs()
@@ -122,10 +122,10 @@ namespace PixelFarm.Agg
             VertexStore vxs = new VertexStore();
             for (int i = 0; i < 8; ++i)
             {
-                ShapePath.CmdAndFlags cmd;
+                VertexCmd cmd;
                 vxs.AddVertex(m_x[i], m_y[i], cmd = m_cmd[i]);
 
-                if (cmd == ShapePath.CmdAndFlags.Empty)
+                if (cmd == VertexCmd.Empty)
                 {
                     break;
                 }

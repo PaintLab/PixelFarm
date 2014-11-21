@@ -110,18 +110,18 @@ namespace PixelFarm.Agg
             m_status = StrokeMath.Status.Init;
         }
 
-        public void AddVertex(double x, double y, ShapePath.CmdAndFlags cmd)
+        public void AddVertex(double x, double y, VertexCmd cmd)
         {
             m_status = StrokeMath.Status.Init;
-            switch (cmd & ShapePath.CmdAndFlags.MASK)
+            switch (cmd & VertexCmd.MASK)
             {
-                case ShapePath.CmdAndFlags.MoveTo:
+                case VertexCmd.MoveTo:
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
                     break;
-                case ShapePath.CmdAndFlags.EndAndCloseFigure:
+                case VertexCmd.EndAndCloseFigure:
                     m_closed = true;
                     break;
-                case ShapePath.CmdAndFlags.EndFigure:
+                case VertexCmd.EndFigure:
                     m_closed = false;
                     break;
                 default:
@@ -138,7 +138,7 @@ namespace PixelFarm.Agg
             {
                 var cmd = GetNextVertex(ref x, ref y);
                 outputVxs.AddVertex(x, y, cmd);
-                if (cmd == ShapePath.CmdAndFlags.Empty)
+                if (cmd == VertexCmd.Empty)
                 {
                     break;
                 }
@@ -151,7 +151,7 @@ namespace PixelFarm.Agg
             if (m_status == StrokeMath.Status.Init)
             {
                 vertexDistanceList.Close(m_closed);
-                ShapePath.ShortenPath(vertexDistanceList, m_shorten, m_closed);
+                VertexHelper.ShortenPath(vertexDistanceList, m_shorten, m_closed);
                 if (vertexDistanceList.Count < 3) { m_closed = false; }
             }
             m_status = StrokeMath.Status.Ready;
@@ -159,10 +159,10 @@ namespace PixelFarm.Agg
             m_out_vertex = 0;
         }
 
-        ShapePath.CmdAndFlags GetNextVertex(ref double x, ref double y)
+        VertexCmd GetNextVertex(ref double x, ref double y)
         {
-            ShapePath.CmdAndFlags cmd = ShapePath.CmdAndFlags.LineTo;
-            while (!ShapePath.IsEmpty(cmd))
+            VertexCmd cmd = VertexCmd.LineTo;
+            while (!VertexHelper.IsEmpty(cmd))
             {
                 switch (m_status)
                 {
@@ -174,11 +174,11 @@ namespace PixelFarm.Agg
 
                         if (vertexDistanceList.Count < 2 + (m_closed ? 1 : 0))
                         {
-                            cmd = ShapePath.CmdAndFlags.Empty;
+                            cmd = VertexCmd.Empty;
                             break;
                         }
                         m_status = m_closed ? StrokeMath.Status.Outline1 : StrokeMath.Status.Cap1;
-                        cmd = ShapePath.CmdAndFlags.MoveTo;
+                        cmd = VertexCmd.MoveTo;
                         m_src_vertex = 0;
                         m_out_vertex = 0;
                         break;
@@ -239,7 +239,7 @@ namespace PixelFarm.Agg
 
                     case StrokeMath.Status.CloseFirst:
                         m_status = StrokeMath.Status.Outline2;
-                        cmd = ShapePath.CmdAndFlags.MoveTo;
+                        cmd = VertexCmd.MoveTo;
                         goto case StrokeMath.Status.Outline2;
 
                     case StrokeMath.Status.Outline2:
@@ -281,16 +281,16 @@ namespace PixelFarm.Agg
 
                     case StrokeMath.Status.EndPoly1:
                         m_status = m_prev_status;
-                        return ShapePath.CmdAndFlags.EndAndCloseFigure                             
-                            | ShapePath.CmdAndFlags.FlagCCW;
+                        return VertexCmd.EndAndCloseFigure                             
+                            | VertexCmd.FlagCCW;
 
                     case StrokeMath.Status.EndPoly2:
                         m_status = m_prev_status;
-                        return ShapePath.CmdAndFlags.EndAndCloseFigure 
-                            | ShapePath.CmdAndFlags.FlagCW;
+                        return VertexCmd.EndAndCloseFigure 
+                            | VertexCmd.FlagCW;
 
                     case StrokeMath.Status.Stop:
-                        cmd = ShapePath.CmdAndFlags.Empty;
+                        cmd = VertexCmd.Empty;
                         break;
                 }
             }

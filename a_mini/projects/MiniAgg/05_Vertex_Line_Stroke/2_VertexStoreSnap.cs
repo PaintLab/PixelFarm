@@ -16,7 +16,7 @@ namespace PixelFarm.Agg
             this.currentIterIndex = vsnap.StartAt;            
         }
        
-        public ShapePath.CmdAndFlags GetNextVertex(out double x, out double y)
+        public VertexCmd GetNextVertex(out double x, out double y)
         {
             return vxs.GetVertex(currentIterIndex++, out x, out y);   
         }        

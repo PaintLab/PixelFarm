@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.Font
                             {
                                 double x, y;
                                 var cmd = currentGlyph.GetVertex(i, out x, out y);
-                                if (cmd != ShapePath.CmdAndFlags.Empty)
+                                if (cmd != VertexCmd.Empty)
                                 {
                                     yield return new VertexData(cmd,
                                         (x + currentOffset.x + Origin.x),
@@ -271,7 +271,7 @@ namespace PixelFarm.Agg.Font
             }
 
 
-            yield return new VertexData(ShapePath.CmdAndFlags.Empty);
+            yield return new VertexData(VertexCmd.Empty);
         }
 
         public VertexStore MakeVxs()
@@ -336,11 +336,11 @@ namespace PixelFarm.Agg.Font
             currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();
         }
-        public ShapePath.CmdAndFlags GetNextVertex(out double x, out double y)
+        public VertexCmd GetNextVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.x;
             y = currentEnumerator.Current.y;
-            ShapePath.CmdAndFlags command = currentEnumerator.Current.command;
+            VertexCmd command = currentEnumerator.Current.command;
 
             currentEnumerator.MoveNext();
 

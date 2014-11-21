@@ -113,12 +113,12 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             bool addedFirst = false;
 
             var snapIter = a.GetVertexSnapIter();
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y;
             cmd = snapIter.GetNextVertex(out x, out y);
             do
             {
-                if (cmd == ShapePath.CmdAndFlags.LineTo)
+                if (cmd == VertexCmd.LineTo)
                 {
                     if (!addedFirst)
                     {
@@ -134,7 +134,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                     addedFirst = false;
                     currentPoly = new List<IntPoint>();
                     allPolys.Add(currentPoly);
-                    if (cmd == ShapePath.CmdAndFlags.MoveTo)
+                    if (cmd == VertexCmd.MoveTo)
                     {
                         last = new VertexData(cmd, x, y);
                     }
@@ -143,7 +143,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         last = first;
                     }
                 }
-            } while (cmd != ShapePath.CmdAndFlags.Empty);
+            } while (cmd != VertexCmd.Empty);
 
             return allPolys;
         }
@@ -544,14 +544,14 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             m_start = true;
             //--------------
 
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y;
             for (; ; )
             {
                 cmd = GetNextVertex(out x, out y);
                 switch (cmd)
                 {
-                    case ShapePath.CmdAndFlags.Empty:
+                    case VertexCmd.Empty:
                         {
                             yield return new VertexData(cmd, x, y);
                             yield break;
@@ -578,13 +578,13 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
         }
 
 
-        public ShapePath.CmdAndFlags GetNextVertex(out double x, out double y)
+        public VertexCmd GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
             if (m_curr_r > m_r2)
             {
-                return ShapePath.CmdAndFlags.Empty;
+                return VertexCmd.Empty;
             }
 
             x = m_x + Math.Cos(m_angle) * m_curr_r;
@@ -594,9 +594,9 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             if (m_start)
             {
                 m_start = false;
-                return ShapePath.CmdAndFlags.MoveTo;
+                return VertexCmd.MoveTo;
             }
-            return ShapePath.CmdAndFlags.LineTo;
+            return VertexCmd.LineTo;
         }
     }
 
@@ -612,24 +612,24 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
             var snapIter = src.GetVertexSnapIter();
 
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y;
 
             do
             {
 
                 cmd = snapIter.GetNextVertex(out x, out y);
-                if (ShapePath.IsVertextCommand(cmd))
+                if (VertexHelper.IsVertextCommand(cmd))
                 {
                     ++m_points;
                 }
 
-                if (ShapePath.IsMoveTo(cmd))
+                if (VertexHelper.IsMoveTo(cmd))
                 {
                     ++m_contours;
                 }
 
-            } while (cmd != ShapePath.CmdAndFlags.Empty);
+            } while (cmd != VertexCmd.Empty);
 
             //foreach (VertexData vertexData in src.GetVertexIter())
             //{

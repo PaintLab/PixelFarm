@@ -93,27 +93,27 @@ namespace PixelFarm.Agg
             //1st vertex
 
             sourceVxs.GetVertex(0, out x, out y);
-            strkgen.AddVertex(x, y, ShapePath.CmdAndFlags.MoveTo);
+            strkgen.AddVertex(x, y, VertexCmd.MoveTo);
 
             double startX = x, startY = y;
             bool hasMoreThanOnePart = false;
             for (int i = 0; i < j; ++i)
             {
                 var cmd = sourceVxs.GetVertex(i, out x, out y);
-                switch (ShapePath.CmdAndFlags.MASK & cmd)
+                switch (VertexCmd.MASK & cmd)
                 {
-                    case ShapePath.CmdAndFlags.Empty:
+                    case VertexCmd.Empty:
                         {
 
                         } break;
                     
-                    case ShapePath.CmdAndFlags.EndFigure:
-                    case ShapePath.CmdAndFlags.EndAndCloseFigure:
+                    case VertexCmd.EndFigure:
+                    case VertexCmd.EndAndCloseFigure:
                         {
                             strkgen.AddVertex(x, y, cmd);
                             if (i < j - 2)
                             {
-                                strkgen.AddVertex(startX, startY, ShapePath.CmdAndFlags.LineTo);
+                                strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
                                 strkgen.WriteTo(vxs);
                                 strkgen.RemoveAll();
                                 hasMoreThanOnePart = true;
@@ -121,14 +121,14 @@ namespace PixelFarm.Agg
                             //end this polygon
 
                         } break;
-                    case ShapePath.CmdAndFlags.LineTo:
-                    case ShapePath.CmdAndFlags.Curve3:
-                    case ShapePath.CmdAndFlags.Curve4:
+                    case VertexCmd.LineTo:
+                    case VertexCmd.Curve3:
+                    case VertexCmd.Curve4:
                         {
                             strkgen.AddVertex(x, y, cmd);
 
                         } break;
-                    case ShapePath.CmdAndFlags.MoveTo:
+                    case VertexCmd.MoveTo:
                         {
                             strkgen.AddVertex(x, y, cmd);
                             startX = x;

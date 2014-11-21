@@ -298,31 +298,31 @@ namespace PixelFarm.Agg
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = vxs.GetVertex(i, out x, out y);
-                    switch (cmd & (ShapePath.CmdAndFlags.MASK))
+                    switch (cmd & (VertexCmd.MASK))
                     {
-                        case ShapePath.CmdAndFlags.Empty:
+                        case VertexCmd.Empty:
                             {
                                 //stop 
                             } break;
-                        case ShapePath.CmdAndFlags.MoveTo:
+                        case VertexCmd.MoveTo:
                             {
                                 MoveTo(x, y);
                             } break;
-                        case ShapePath.CmdAndFlags.LineTo:
+                        case VertexCmd.LineTo:
                             {
                                 LineTo(x, y);
                             } break;
-                        case ShapePath.CmdAndFlags.Curve3:
+                        case VertexCmd.Curve3:
                             {
                                 LineTo(x, y);
                             } break;
-                        case ShapePath.CmdAndFlags.Curve4:
+                        case VertexCmd.Curve4:
                             {
                                 LineTo(x, y);
                             } break;
                         default:
                             {
-                                if (ShapePath.IsClose(cmd))
+                                if (VertexHelper.IsClose(cmd))
                                 {
                                     ClosePolygon();
                                 }
@@ -333,36 +333,36 @@ namespace PixelFarm.Agg
             else
             {
                 var snapIter = snap.GetVertexSnapIter();
-                ShapePath.CmdAndFlags cmd;
+                VertexCmd cmd;
                 bool stop = false;
                 while (!stop)
                 {
                     cmd = snapIter.GetNextVertex(out x, out y);
-                    switch (cmd & (ShapePath.CmdAndFlags.MASK))
+                    switch (cmd & (VertexCmd.MASK))
                     {
-                        case ShapePath.CmdAndFlags.Empty:
+                        case VertexCmd.Empty:
                             {
                                 stop = true;
                             } break;
-                        case ShapePath.CmdAndFlags.MoveTo:
+                        case VertexCmd.MoveTo:
                             {
                                 MoveTo(x, y);
                             } break;
-                        case ShapePath.CmdAndFlags.LineTo:
+                        case VertexCmd.LineTo:
                             {
                                 LineTo(x, y);
                             } break; 
-                        case ShapePath.CmdAndFlags.Curve3:
+                        case VertexCmd.Curve3:
                             {
                                 LineTo(x, y);
                             } break;
-                        case ShapePath.CmdAndFlags.Curve4:
+                        case VertexCmd.Curve4:
                             {
                                 LineTo(x, y);
                             } break;
                         default:
                             {
-                                if (ShapePath.IsClose(cmd))
+                                if (VertexHelper.IsClose(cmd))
                                 {
                                     ClosePolygon();
                                 }

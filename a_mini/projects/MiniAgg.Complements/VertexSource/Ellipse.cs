@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using FlagsAndCommand = PixelFarm.Agg.ShapePath.CmdAndFlags;
+using FlagsAndCommand = PixelFarm.Agg.VertexCmd;
 
 using PixelFarm.VectorMath;
 

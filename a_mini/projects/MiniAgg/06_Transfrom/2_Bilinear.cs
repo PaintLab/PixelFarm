@@ -165,7 +165,7 @@ namespace PixelFarm.Agg.Transform
         {
             int count = src.Count;
             var vxs = new VertexStore();
-            ShapePath.CmdAndFlags cmd;
+            VertexCmd cmd;
             double x, y;
             for (int i = 0; i < count; ++i)
             {

@@ -19,7 +19,7 @@ namespace PixelFarm.Agg.VertexSource
         int m_src_vertex;
         int m_out_vertex;
         bool m_closed;
-        ShapePath.ShapeOrientation m_orientation;
+        EndVertexOrientation m_orientation;
         bool m_auto_detect;
         double m_shorten;
 
@@ -92,28 +92,28 @@ namespace PixelFarm.Agg.VertexSource
             m_closed = false;
             m_status = StrokeMath.Status.Init;
         }
-        public void AddVertex(double x, double y, ShapePath.CmdAndFlags cmd)
+        public void AddVertex(double x, double y, VertexCmd cmd)
         {
             m_status = StrokeMath.Status.Init;
-            switch ((ShapePath.CmdAndFlags.MASK) & cmd)
+            switch ((VertexCmd.MASK) & cmd)
             {
-                case ShapePath.CmdAndFlags.MoveTo:
+                case VertexCmd.MoveTo:
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
                     break;
-                case ShapePath.CmdAndFlags.EndAndCloseFigure:
+                case VertexCmd.EndAndCloseFigure:
                     {
                         //end and close
                         m_closed = true;
-                        if (m_orientation == ShapePath.ShapeOrientation.Unknown)
+                        if (m_orientation == EndVertexOrientation.Unknown)
                         {
-                            m_orientation = ShapePath.GetOrientation(cmd);
+                            m_orientation = VertexHelper.GetOrientation(cmd);
                         }
                     } break;
-                case ShapePath.CmdAndFlags.EndFigure:
+                case VertexCmd.EndFigure:
                     //end not close 
-                    if (m_orientation == ShapePath.ShapeOrientation.Unknown)
+                    if (m_orientation == EndVertexOrientation.Unknown)
                     {
-                        m_orientation = ShapePath.GetOrientation(cmd);
+                        m_orientation = VertexHelper.GetOrientation(cmd);
                     }
                     break;
                 default:
@@ -132,20 +132,20 @@ namespace PixelFarm.Agg.VertexSource
                 vertexDistanceList.Close(true);
                 if (m_auto_detect)
                 {
-                    if (m_orientation == ShapePath.ShapeOrientation.Unknown)
+                    if (m_orientation == EndVertexOrientation.Unknown)
                     {
                         m_orientation = (AggMath.CalculatePolygonArea(vertexDistanceList) > 0.0) ?
-                                        ShapePath.ShapeOrientation.CCW :
-                                        ShapePath.ShapeOrientation.CW;
+                                        EndVertexOrientation.CCW :
+                                        EndVertexOrientation.CW;
                     }
                 }
                 switch (m_orientation)
                 {
-                    case ShapePath.ShapeOrientation.CCW:
+                    case EndVertexOrientation.CCW:
                         {
                             m_stroker.Width = m_width;
                         } break;
-                    case ShapePath.ShapeOrientation.CW:
+                    case EndVertexOrientation.CW:
                         {
                             m_stroker.Width = -m_width;
                         } break;
@@ -155,10 +155,10 @@ namespace PixelFarm.Agg.VertexSource
             m_src_vertex = 0;
         }
 
-        public ShapePath.CmdAndFlags GetNextVertex(ref double x, ref double y)
+        public VertexCmd GetNextVertex(ref double x, ref double y)
         {
-            ShapePath.CmdAndFlags cmd = ShapePath.CmdAndFlags.LineTo;
-            while (!ShapePath.IsEmpty(cmd))
+            VertexCmd cmd = VertexCmd.LineTo;
+            while (!VertexHelper.IsEmpty(cmd))
             {
                 switch (m_status)
                 {
@@ -170,11 +170,11 @@ namespace PixelFarm.Agg.VertexSource
 
                         if (vertexDistanceList.Count < 2 + (m_closed ? 1 : 0))
                         {
-                            cmd = ShapePath.CmdAndFlags.Empty;
+                            cmd = VertexCmd.Empty;
                             break;
                         }
                         m_status = StrokeMath.Status.Outline1;
-                        cmd = ShapePath.CmdAndFlags.MoveTo;
+                        cmd = VertexCmd.MoveTo;
                         m_src_vertex = 0;
                         m_out_vertex = 0;
                         goto case StrokeMath.Status.Outline1;
@@ -211,12 +211,12 @@ namespace PixelFarm.Agg.VertexSource
 
                     case StrokeMath.Status.EndPoly1:
                         
-                        if (!m_closed) return ShapePath.CmdAndFlags.Empty;
+                        if (!m_closed) return VertexCmd.Empty;
                         m_status = StrokeMath.Status.Stop;
-                        return ShapePath.CmdAndFlags.EndAndCloseFigure | ShapePath.CmdAndFlags.FlagCCW;
+                        return VertexCmd.EndAndCloseFigure | VertexCmd.FlagCCW;
 
                     case StrokeMath.Status.Stop:
-                        return ShapePath.CmdAndFlags.Empty;
+                        return VertexCmd.Empty;
                 }
             }
             return cmd;

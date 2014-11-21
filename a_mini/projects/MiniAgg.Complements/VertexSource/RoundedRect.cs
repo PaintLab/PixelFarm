@@ -143,7 +143,7 @@ namespace PixelFarm.Agg.VertexSource
            
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.IsEmpty(vertexData.command))
+                if (VertexHelper.IsEmpty(vertexData.command))
                 {
                     break;
                 }
@@ -157,12 +157,12 @@ namespace PixelFarm.Agg.VertexSource
 
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.IsMoveTo(vertexData.command))
+                if (VertexHelper.IsMoveTo(vertexData.command))
                 {
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.IsEmpty(vertexData.command))
+                if (VertexHelper.IsEmpty(vertexData.command))
                 {
                     break;
                 }
@@ -176,12 +176,12 @@ namespace PixelFarm.Agg.VertexSource
 
             foreach (VertexData vertexData in currentProcessingArc.GetVertexIter())
             {
-                if (ShapePath.IsMoveTo(vertexData.command))
+                if (VertexHelper.IsMoveTo(vertexData.command))
                 {
                     // skip the initial moveto
                     continue;
                 }
-                if (ShapePath.IsEmpty(vertexData.command))
+                if (VertexHelper.IsEmpty(vertexData.command))
                 {
                     break;
                 }
@@ -198,9 +198,9 @@ namespace PixelFarm.Agg.VertexSource
             {
                 switch (vertexData.command)
                 {
-                    case ShapePath.CmdAndFlags.MoveTo:
+                    case VertexCmd.MoveTo:
                         continue;
-                    case ShapePath.CmdAndFlags.Empty:
+                    case VertexCmd.Empty:
                         break;
                     default:
                         yield return vertexData;
@@ -208,8 +208,8 @@ namespace PixelFarm.Agg.VertexSource
                 }
             }
 
-            yield return new VertexData(ShapePath.CmdAndFlags.EndAndCloseFigure | ShapePath.CmdAndFlags.FlagCCW);
-            yield return new VertexData(ShapePath.CmdAndFlags.Empty);
+            yield return new VertexData(VertexCmd.EndAndCloseFigure | VertexCmd.FlagCCW);
+            yield return new VertexData(VertexCmd.Empty);
         }
         
         public VertexStore MakeVxs()
