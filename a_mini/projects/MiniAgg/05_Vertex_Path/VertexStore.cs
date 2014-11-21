@@ -47,15 +47,15 @@ namespace PixelFarm.Agg
         {
             AllocIfRequired(initsize);
         }
-        public VertexStore(IEnumerable<VertexData> vertEnumerable)
-        {
-            //init
-            AllocIfRequired(2);
-            foreach (var v in vertEnumerable)
-            {
-                this.AddVertex(v);
-            }
-        }
+        //public VertexStore(IEnumerable<VertexData> vertEnumerable)
+        //{
+        //    //init
+        //    AllocIfRequired(2);
+        //    foreach (var v in vertEnumerable)
+        //    {
+        //        this.AddVertex(v);
+        //    }
+        //}
 
         internal bool HasMoreThanOnePart { get; set; }
 
@@ -135,10 +135,7 @@ namespace PixelFarm.Agg
         {
             m_num_vertices = 0;
         }
-        public void AddVertex(VertexData vertextData)
-        {
-            this.AddVertex(vertextData.x, vertextData.y, vertextData.command);
-        }
+         
         public void AddVertex(double x, double y, ShapePath.CmdAndFlags CommandAndFlags)
         {
             if (m_num_vertices >= m_allocated_vertices)

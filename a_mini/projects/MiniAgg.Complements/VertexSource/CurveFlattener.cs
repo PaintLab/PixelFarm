@@ -174,16 +174,15 @@ namespace PixelFarm.Agg.VertexSource
 
                                 var position = curveIterator.Current.position;
 
-                                vertexData = new VertexData(ShapePath.CmdAndFlags.LineTo, position);
-                                vxs.AddVertex(vertexData);
-                                
+                                vertexData = new VertexData(ShapePath.CmdAndFlags.LineTo, position);                                 
+                                vxs.AddLineTo(position.X, position.Y);
                                 lastVertextData = vertexData;
                             }
                         }
                         break;
                     default:
 
-                        vxs.AddVertex(vertexData);
+                        vxs.AddVertex(vertexData.x, vertexData.y, vertexData.command);
                         lastVertextData = vertexData;
                         break;
                 }

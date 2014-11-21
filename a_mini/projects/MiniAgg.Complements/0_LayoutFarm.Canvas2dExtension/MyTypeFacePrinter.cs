@@ -61,7 +61,8 @@ namespace PixelFarm.Agg.Font
 
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter(textToPrint));
+        
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter(textToPrint));         
         }
         public VertexStoreSnap MakeVertexSnap()
         {

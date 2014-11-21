@@ -128,7 +128,6 @@
     <Compile Include="06_Transfrom\3_Perspective.cs" />
     <Compile Include="06_Transfrom\Viewport.cs" />
     <Compile Include="04_Scanline\4.3_VectorClipper.cs" />
-    <Compile Include="05_Vertex_Path\VertexData.cs" />
     <Compile Include="05_Vertex_Path\Stroke.cs" />
     <Compile Include="05_Vertex_Path\StrokeGenerator.cs" />
     <Compile Include="05_Vertex_Path\StrokeMath.cs" />

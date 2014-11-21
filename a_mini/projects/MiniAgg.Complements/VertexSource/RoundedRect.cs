@@ -213,8 +213,9 @@ namespace PixelFarm.Agg.VertexSource
         }
         
         public VertexStore MakeVxs()
-        {   
-             return new VertexStore(this.GetVertexIter());
+        {
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());             
+            
         }
         public VertexStoreSnap MakeVertexSnap()
         {

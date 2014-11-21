@@ -561,12 +561,16 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                             yield return new VertexData(cmd, x, y);
                         } break;
                 }
-            }
-
+            } 
         }
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter());
+            VertexStore vxs = new VertexStore(2);
+            foreach (VertexData v in this.GetVertexIter())
+            {
+                vxs.AddVertex(v.x, v.y, v.command);
+            }
+            return vxs; 
         }
         public VertexStoreSnap MakeVertexSnap()
         {

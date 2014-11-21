@@ -276,7 +276,7 @@ namespace PixelFarm.Agg.Font
 
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter());             
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {
@@ -348,7 +348,8 @@ namespace PixelFarm.Agg.Font
         }
         public VertexStore CreateVxs()
         {
-            return new VertexStore(this.GetVertexIter());
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());             
+          
 
             //return new VertexSnap(new VertexStorage(list));
         }

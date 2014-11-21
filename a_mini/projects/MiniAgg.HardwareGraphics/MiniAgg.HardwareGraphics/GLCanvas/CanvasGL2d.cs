@@ -164,7 +164,7 @@ namespace OpenTkEssTest
         }
         public void DrawVxs(VertexStore vxs)
         {
-          
+
             sclineRas.Reset();
             sclineRas.AddPath(stroke1.MakeVxs(vxs));
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -387,7 +387,7 @@ namespace OpenTkEssTest
                         stopLoop = true;
                         break;
                     default:
-                        vxs.AddVertex(vertexData);
+                        vxs.AddVertex(vertexData.x, vertexData.y, vertexData.command);
                         //yield return vertexData;
                         break;
                 }

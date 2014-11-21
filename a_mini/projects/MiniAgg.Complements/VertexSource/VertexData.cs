@@ -22,6 +22,7 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg
 {
+    
     public struct VertexData
     {
         public ShapePath.CmdAndFlags command;
