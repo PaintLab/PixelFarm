@@ -70,10 +70,7 @@ namespace PixelFarm.Agg
         {
             return c <= VertexCmd.MoveTo;
         }
-        public static EndVertexOrientation GetOrientation(VertexCmd c)
-        {
-            return (EndVertexOrientation)(((int)c) >> 4);
-        }
+         
 
 
         public static void ShortenPath(VertexDistanceList vertexDistanceList, double s, bool closed)

@@ -180,7 +180,7 @@ namespace PixelFarm.Agg
                     path.ClosePolygon();
 
                     colors[npaths] = ColorRGBA.CreatRGB8Packed((int)newColor);
-                    path_idx[npaths] = path.StartNewPath();
+                    path_idx[npaths] = path.StartFigure();
                     npaths++;
                 }
                 else

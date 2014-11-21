@@ -106,14 +106,29 @@ namespace PixelFarm.Agg.VertexSource
                         m_closed = true;
                         if (m_orientation == EndVertexOrientation.Unknown)
                         {
-                            m_orientation = VertexHelper.GetOrientation(cmd);
+                            switch ((int)x)
+                            {
+                                case 1: 
+                                case 2:
+                                    {
+                                        m_orientation = (EndVertexOrientation)x;
+                                    } break;
+                            }
                         }
                     } break;
                 case VertexCmd.EndFigure:
+
                     //end not close 
                     if (m_orientation == EndVertexOrientation.Unknown)
-                    {
-                        m_orientation = VertexHelper.GetOrientation(cmd);
+                    {   
+                        switch ((int)x)
+                        {
+                            case 1:
+                            case 2:
+                                {
+                                    m_orientation = (EndVertexOrientation)x;
+                                } break;
+                        }
                     }
                     break;
                 default:

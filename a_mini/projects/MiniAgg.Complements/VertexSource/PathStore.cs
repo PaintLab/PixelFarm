@@ -35,14 +35,20 @@ namespace PixelFarm.Agg.VertexSource
     //
     // See also: vertex_source concept
     //------------------------------------------------------------------------ 
+
+
+    /// <summary>
+    /// forward path writer
+    /// </summary>
     public sealed class PathStore
     {
         VertexStore myvxs;
+
+
         public PathStore()
         {
             myvxs = new VertexStore();
-        }
-
+        } 
         public int Count
         {
             get { return myvxs.Count; }
@@ -50,12 +56,13 @@ namespace PixelFarm.Agg.VertexSource
         public void Clear()
         {
             myvxs.Clear();
+            
         }
 
-        // Make path functions
+        
         //--------------------------------------------------------------------
-        public int StartNewPath()
-        {
+        public int StartFigure()
+        {   
             if (!VertexHelper.IsEmpty(myvxs.GetLastCommand()))
             {
                 myvxs.AddVertex(0.0, 0.0, VertexCmd.Empty);
