@@ -47,6 +47,7 @@
     <Compile Include="Font2\MyFonts.cs" />
     <Compile Include="Font2\NativeMyFonts.cs" />
     <Compile Include="VertexSource\BezireCurve.cs" />
+    <Compile Include="VertexSource\BoundingRect.cs" />
     <Compile Include="VertexSource\PathStore.cs" />
     <Compile Include="VertexSource\VertexData.cs" />
     <Compile Include="VertexSource\VertexStoreBuilder.cs" />

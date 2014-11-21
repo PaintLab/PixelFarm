@@ -86,7 +86,6 @@
     <Compile Include="04_Scanline\4.4_FillingRule.cs" />
     <Compile Include="03_SpanGenerators\IGammaFunction.cs" />
     <Compile Include="06_Transfrom\4_SimulEqGeneral.cs" />
-    <Compile Include="05_Vertex_Path\BoundingRect.cs" />
     <Compile Include="05_Vertex_Path\LineCapAndJoin.cs" />
     <Compile Include="07_Lines\1.1_LinesAA.cs" />
     <Compile Include="05_Vertex_Path\VertexStoreSnap.cs" />
@@ -103,7 +102,7 @@
     <Compile Include="06_Transfrom\SpanInterpolatorPerspectiveLerp.cs" />
     <Compile Include="08_ImageResampling\ImageFilterLookupTable.cs" />
     <Compile Include="08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs" />
-    <Compile Include="05_Vertex_Path\VertexSequence.cs" />
+    <Compile Include="05_Vertex_Path\VertexDistanceList.cs" />
     <Compile Include="01_Base\NativeBufferMan.cs" />
     <Compile Include="02_PixelBuffer\GammaLookUpTable.cs" />
     <Compile Include="00_Context\Graphics2D.cs" />
