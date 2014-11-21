@@ -125,22 +125,21 @@ namespace PixelFarm.Agg.VertexSource
         public void AddVertex(double x, double y, ShapePath.CmdAndFlags cmd)
         {
             m_status = StrokeMath.Status.Init;
-            if (ShapePath.IsMoveTo(cmd))
+            switch (cmd & ShapePath.CmdAndFlags.MASK)
             {
-                vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
-            }
-            else
-            {
-                if (ShapePath.IsVertextCommand(cmd))
-                {
+                case ShapePath.CmdAndFlags.MoveTo:
+                    vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
+                    break;
+                case ShapePath.CmdAndFlags.EndAndCloseFigure:
+                    m_closed = true;
+                    break;
+                case ShapePath.CmdAndFlags.EndFigure:
+                    m_closed = false;
+                    break;
+                default:
                     vertexDistanceList.AddVertex(new VertexDistance(x, y));
-                }
-                else
-                {
-                    m_closed = ((cmd & ShapePath.CmdAndFlags.MASK) == ShapePath.CmdAndFlags.EndAndCloseFigure);
-                    //m_closed = (int)ShapePath.GetCloseFlags(cmd);
-                }
-            }
+                    break;
+            } 
         }
 
         public void WriteTo(VertexStore outputVxs)

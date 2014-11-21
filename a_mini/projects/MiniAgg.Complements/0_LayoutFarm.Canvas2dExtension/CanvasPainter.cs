@@ -253,6 +253,7 @@ namespace PixelFarm.Agg
         }
         public void Fill(VertexStore vxs)
         {
+          
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
@@ -313,6 +314,24 @@ namespace PixelFarm.Agg
             filterMan.DoRecursiveBlur(img, r);
         }
         //---------------- 
+        public void DrawBezierCurve(float startX, float startY, float endX, float endY,
+           float controlX1, float controlY1,
+           float controlX2, float controlY2)
+        {
+            VertexStore vxs = new VertexStore();
+            PixelFarm.Agg.VertexSource.BezierCurve.CreateBezierVxs4(vxs,
+                new PixelFarm.VectorMath.Vector2(startX, startY),
+                new PixelFarm.VectorMath.Vector2(endX, endY),
+                new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
+                new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
+
+            vxs = this.stroke.MakeVxs(vxs);
+
+            sclineRas.Reset();
+            sclineRas.AddPath(vxs);
+            //sclineRasToBmp.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+            sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
+        }
     }
 
 }

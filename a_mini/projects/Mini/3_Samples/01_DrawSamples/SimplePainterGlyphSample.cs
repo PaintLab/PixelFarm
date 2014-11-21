@@ -19,8 +19,8 @@ namespace PixelFarm.Agg.SimplePainter
 {
 
     [Info(OrderCode = "01")]
-    [Info("SimplePainter")]
-    public class SimplePainterSample1 : DemoBase
+    [Info("SimplePainterGlyph")]
+    public class SimplePainterGlyphSample : DemoBase
     {
         public override void Init()
         {
@@ -32,30 +32,20 @@ namespace PixelFarm.Agg.SimplePainter
             // clear the image to white
             CanvasPainter p = new CanvasPainter(g);
             p.Clear(ColorRGBA.White);
-            // draw a circle  
             p.FillColor = ColorRGBA.Blue;
-            p.FillCircle(50, 50, 30);
 
-            p.StrokeColor = new ColorRGBA(20, 200, 200);
-            p.Line(10, 100, 520, 50);
+            p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
+            //---------------------------------------------------
 
-            // draw a filled box
-            p.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
-            // and an outline around it
-            p.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
+            //test font ***
+            var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 48);
+            var fontGlyph = font.GetGlyph('ด');
+            CurveFlattener curveFlatter = new CurveFlattener();
+            var fontVxsFlatten = curveFlatter.MakeVxs(fontGlyph.vxs);
+            //p.Fill(fontGlyph.vxs);
+            p.Fill(fontVxsFlatten);
 
-
-            // draw some text
-            p.FillColor = ColorRGBA.Black;//black font color
-
-            p.DrawString("A Simple Example", 300, 400);
-
-            p.DrawString("A Simple Example2", 300, 350);
-
-            p.DrawString("A Simple Example3", 300, 300);
-
-            p.DrawString("A Simple Example4", 300, 250);
-           
+            
         }
     }
 

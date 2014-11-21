@@ -171,9 +171,7 @@ namespace PixelFarm.Agg
                         //fast clear buffer
                         //skip clipping ****
                         //TODO: reimplement clipping***
-                        //------------------------------
-
-
+                        //------------------------------ 
                         if (color == ColorRGBA.White)
                         {
                             //fast cleat with white color

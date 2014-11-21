@@ -26,7 +26,7 @@ namespace Mini
             int code = PixelFarm.Font2.MyFonts.InitLib();
             //-------------------------------------------------- 
            
-            //----------
+          
         }
         void listBox1_DoubleClick(object sender, EventArgs e)
         {

@@ -51,11 +51,10 @@ namespace PixelFarm.Agg.VertexSource
     // and converts these vertices into a move_to/line_to sequence. 
     //-----------------------------------------------------------------------
 
-
-
     public class CurveFlattener
     {
-
+        
+        //tools , curve producer
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
 
@@ -109,15 +108,18 @@ namespace PixelFarm.Agg.VertexSource
         } 
         public VertexStore MakeVxs(VertexStoreSnap vsnap)
         {
+
             VertexStore vxs = new VertexStore();
             VertexData lastVertextData = new VertexData();
             m_curve3.Reset();
             m_curve4.Reset();
+
             var snapIter = vsnap.GetVertexSnapIter();
             double x, y;
             ShapePath.CmdAndFlags cmd;
             do
             {
+                //this vertex
                 cmd = snapIter.GetNextVertex(out x, out y);
                 VertexData vertexData = new VertexData(cmd, x, y);
 
@@ -125,46 +127,38 @@ namespace PixelFarm.Agg.VertexSource
                 {
                     case ShapePath.CmdAndFlags.Curve3:
                         {
+                            //curve3  have one contol point
+                            //current x,y is control point
+
+                            //forward read next for endpoint 
                             double tmp_vx, tmp_vy;
                             cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
+                            VertexData endPoint = new VertexData(cmd, tmp_vx, tmp_vy);                             
+                            //----------------------------------------------------- 
+                            m_curve3.MakeLines(vxs, lastVertextData.x, lastVertextData.y, x, y, endPoint.x, endPoint.y); 
+                            //-----------------------------------------------------
+                            vertexData = endPoint;
+                            lastVertextData = endPoint;
 
-                            VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
-                            m_curve3.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
-
-                            IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
-                            curveIterator.MoveNext(); // First call returns path_cmd_move_to
-
-                            do
-                            {
-                                curveIterator.MoveNext();
-                                VertexData currentVertextData = curveIterator.Current;
-                                if (ShapePath.IsEmpty(currentVertextData.command))
-                                {
-                                    break;
-                                }
-
-                                vertexData = new VertexData(
-                                   ShapePath.CmdAndFlags.LineTo,
-                                   currentVertextData.position);
-
-                                vxs.AddVertex(vertexData);
-
-                                lastVertextData = vertexData;
-
-                            } while (!ShapePath.IsEmpty(curveIterator.Current.command));
                         }
                         break;
 
                     case ShapePath.CmdAndFlags.Curve4:
                         {
+                            //curve 4 has 2 control points
+                            //current x,y is first control point
+                            //then read next control point
+                            //and end point
+
                             double tmp_vx, tmp_vy;
+                            //second control point
+                            cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
+                            VertexData secondCtrlPoint = new VertexData(cmd, tmp_vx, tmp_vy);
 
                             cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-                            VertexData vertexDataControl = new VertexData(cmd, tmp_vx, tmp_vy);
-                            cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-                            VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
+                            VertexData endPoint = new VertexData(cmd, tmp_vx, tmp_vy);
 
-                            m_curve4.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
+                            m_curve4.Init(lastVertextData.x, lastVertextData.y, x, y, secondCtrlPoint.x, secondCtrlPoint.y, endPoint.x, endPoint.y);
                             IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
                             curveIterator.MoveNext(); // First call returns path_cmd_move_to
 
@@ -197,6 +191,101 @@ namespace PixelFarm.Agg.VertexSource
             return vxs;
 
         }
+        
+        //public VertexStore MakeVxs2(VertexStoreSnap vsnap)
+        //{
+
+        //    VertexStore vxs = new VertexStore();
+        //    VertexData lastVertextData = new VertexData();
+        //    m_curve3.Reset();
+        //    m_curve4.Reset();
+
+        //    var snapIter = vsnap.GetVertexSnapIter();
+        //    double x, y;
+        //    ShapePath.CmdAndFlags cmd;
+        //    do
+        //    {
+        //        cmd = snapIter.GetNextVertex(out x, out y);
+        //        VertexData vertexData = new VertexData(cmd, x, y);
+
+        //        switch (cmd)
+        //        {
+        //            case ShapePath.CmdAndFlags.Curve3:
+        //                {
+        //                    double tmp_vx, tmp_vy;
+        //                    cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
+
+        //                    VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
+        //                    m_curve3.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
+
+        //                    IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
+        //                    curveIterator.MoveNext(); // First call returns path_cmd_move_to
+
+        //                    do
+        //                    {
+        //                        curveIterator.MoveNext();
+        //                        VertexData currentVertextData = curveIterator.Current;
+        //                        if (ShapePath.IsEmpty(currentVertextData.command))
+        //                        {
+        //                            break;
+        //                        }
+
+        //                        vertexData = new VertexData(
+        //                           ShapePath.CmdAndFlags.LineTo,
+        //                           currentVertextData.position);
+
+        //                        vxs.AddVertex(vertexData);
+
+        //                        lastVertextData = vertexData;
+
+        //                    } while (!ShapePath.IsEmpty(curveIterator.Current.command));
+        //                }
+        //                break;
+
+        //            case ShapePath.CmdAndFlags.Curve4:
+        //                {
+        //                    double tmp_vx, tmp_vy;
+
+        //                    cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
+        //                    VertexData vertexDataControl = new VertexData(cmd, tmp_vx, tmp_vy);
+        //                    cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
+        //                    VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
+
+        //                    m_curve4.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
+        //                    IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
+        //                    curveIterator.MoveNext(); // First call returns path_cmd_move_to
+
+        //                    while (!ShapePath.IsEmpty(vertexData.command))
+        //                    {
+        //                        curveIterator.MoveNext();
+
+        //                        if (ShapePath.IsEmpty(curveIterator.Current.command))
+        //                        {
+        //                            break;
+        //                        }
+
+
+        //                        var position = curveIterator.Current.position;
+
+        //                        vertexData = new VertexData(ShapePath.CmdAndFlags.LineTo, position);
+        //                        vxs.AddVertex(vertexData);
+
+        //                        lastVertextData = vertexData;
+        //                    }
+        //                }
+        //                break;
+        //            default:
+
+        //                vxs.AddVertex(vertexData);
+        //                lastVertextData = vertexData;
+        //                break;
+        //        }
+        //    } while (cmd != ShapePath.CmdAndFlags.Empty);
+        //    return vxs;
+
+        //}
+        
+        
         public VertexStore MakeVxs(VertexStore srcVxs)
         {
             return MakeVxs(new VertexStoreSnap(srcVxs));            

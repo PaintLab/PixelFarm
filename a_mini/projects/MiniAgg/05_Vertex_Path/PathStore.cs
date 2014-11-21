@@ -114,7 +114,8 @@ namespace PixelFarm.Agg.VertexSource
         public void Curve3(double xControl, double yControl, double x, double y)
         {
             myvxs.AddVertexCurve3(xControl, yControl);
-            myvxs.AddVertexCurve3(x, y);
+            //myvxs.AddVertexCurve3(x, y);
+            myvxs.AddLineTo(x, y);
         }
 
         /// <summary>
@@ -128,8 +129,11 @@ namespace PixelFarm.Agg.VertexSource
         {
             RelToAbs(ref dx_ctrl, ref dy_ctrl);
             RelToAbs(ref dx_to, ref dy_to);
+
+            //control point
             myvxs.AddVertexCurve3(dx_ctrl, dy_ctrl);
-            myvxs.AddVertexCurve3(dx_to, dy_to);
+            //myvxs.AddVertexCurve3(dx_to, dy_to);
+            myvxs.AddLineTo(dx_to, dy_to);
         }
 
         /// <summary>
@@ -181,7 +185,7 @@ namespace PixelFarm.Agg.VertexSource
         {
             myvxs.AddVertexCurve4(x_ctrl1, y_ctrl1);
             myvxs.AddVertexCurve4(x_ctrl2, y_ctrl2);
-            myvxs.AddVertexCurve4(x_to, y_to);
+            myvxs.AddLineTo(x_to, y_to);
         }
 
         public void Curve4Rel(double dx_ctrl1, double dy_ctrl1,
@@ -194,7 +198,7 @@ namespace PixelFarm.Agg.VertexSource
 
             myvxs.AddVertexCurve4(dx_ctrl1, dy_ctrl1);
             myvxs.AddVertexCurve4(dx_ctrl2, dy_ctrl2);
-            myvxs.AddVertexCurve4(dx_to, dy_to);
+            myvxs.AddLineTo(dx_to, dy_to);
 
         }
       
@@ -291,8 +295,7 @@ namespace PixelFarm.Agg.VertexSource
     }
      */
         //=======================================================================
-
-        //--------------------------------------------------------------------
+        
         public VertexStore Vxs
         {
             get { return this.myvxs; }
@@ -326,35 +329,7 @@ namespace PixelFarm.Agg.VertexSource
         // Flip all vertices horizontally or vertically, 
         // between x1 and x2, or between y1 and y2 respectively
         //--------------------------------------------------------------------
-        public void FlipX(double x1, double x2)
-        {
-            int i;
-            double x, y;
-            int count = this.myvxs.Count;
-            for (i = 0; i < count; ++i)
-            {
-                ShapePath.CmdAndFlags flags = myvxs.GetVertex(i, out x, out y);
-                if (ShapePath.IsVertextCommand(flags))
-                {
-                    myvxs.ReplaceVertex(i, x2 - x + x1, y);
-                }
-            }
-        }
-
-        public void FlipY(double y1, double y2)
-        {
-            int i;
-            double x, y;
-            int count = this.myvxs.Count;
-            for (i = 0; i < count; ++i)
-            {
-                ShapePath.CmdAndFlags flags = myvxs.GetVertex(i, out x, out y);
-                if (ShapePath.IsVertextCommand(flags))
-                {
-                    myvxs.ReplaceVertex(i, x, y2 - y + y1);
-                }
-            }
-        }
+        
         
         public void ClosePolygonCCW()
         {
@@ -435,43 +410,8 @@ namespace PixelFarm.Agg.VertexSource
             }
 
         }
-            
-
-        public void TranslateAll(double dx, double dy)
-        {
-            int index;
-            int num_ver = myvxs.Count;
-            for (index = 0; index < num_ver; index++)
-            {
-                double x, y;
-                if (ShapePath.IsVertextCommand(myvxs.GetVertex(index, out x, out y)))
-                {
-                    x += dx;
-                    y += dy;
-                    myvxs.ReplaceVertex(index, x, y);
-                }
-            }
-        } 
-
-        //--------------------------------------------------------------------
-        public void TransformAll(Transform.Affine trans)
-        {
-            int index;
-            int num_ver = myvxs.Count;
-            for (index = 0; index < num_ver; index++)
-            {
-                double x, y;
-                if (ShapePath.IsVertextCommand(myvxs.GetVertex(index, out x, out y)))
-                {
-                    trans.Transform(ref x, ref y);
-                    myvxs.ReplaceVertex(index, x, y);
-                }
-            }
-        }
-
-      
-        //----------------------------------------------------------
-
+             
+     
         public static void UnsafeDirectSetData(
             PathStore pathStore,
             int m_allocated_vertices,

@@ -684,7 +684,7 @@ namespace OpenTkEssTest
             float controlX2, float controlY2)
         {
             VertexStore vxs = new VertexStore();
-            BezierCurve.CreateBezierVxs(vxs,
+            BezierCurve.CreateBezierVxs4(vxs,
                 new PixelFarm.VectorMath.Vector2(startX, startY),
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),

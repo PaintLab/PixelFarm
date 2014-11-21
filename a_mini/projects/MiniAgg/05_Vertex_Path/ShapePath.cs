@@ -20,7 +20,7 @@ namespace PixelFarm.Agg
         /// <summary>
         /// vertex command and flags
         /// </summary>
-        [Flags]
+       
         public enum CmdAndFlags : byte
         {
             //---------------------------------
@@ -85,18 +85,6 @@ namespace PixelFarm.Agg
             return (ShapeOrientation)(((int)c) >> 4);
         }
 
-        /*
-        //---------------------------------------------------------set_orientation
-        public static path_flags_e set_orientation(int c, path_flags_e o)
-        {
-            return clear_orientation(c) | o;
-        }
-         */
-
-        //static public void shorten_path(MatterHackers.Agg.VertexSequence vs, double s)
-        //{
-        //    shorten_path(vs, s, 0);
-        //}
 
         public static void ShortenPath(VertexDistanceList vertexDistanceList, double s, bool closed)
         {
@@ -134,9 +122,6 @@ namespace PixelFarm.Agg
                 }
             }
         }
-
-
-
         public static void ArrangeOrientationsAll(VertexStore myvxs, bool closewise)
         {
             int start = 0;
@@ -145,9 +130,7 @@ namespace PixelFarm.Agg
                 start = ArrangeOrientations(myvxs, start, closewise);
             }
         }
-
-        //----------------------------------------------------------------
-
+        //---------------------------------------------------------------- 
         // Arrange the orientation of a polygon, all polygons in a path, 
         // or in all paths. After calling arrange_orientations() or 
         // arrange_orientations_all_paths(), all the polygons will have 
@@ -261,10 +244,8 @@ namespace PixelFarm.Agg
         static void InvertPolygon(VertexStore myvxs, int start, int end)
         {
             int i;
-            ShapePath.CmdAndFlags tmp_PathAndFlags = myvxs.GetCommand(start);
-
-            --end; // Make "end" inclusive
-
+            ShapePath.CmdAndFlags tmp_PathAndFlags = myvxs.GetCommand(start); 
+            --end; // Make "end" inclusive 
             // Shift all commands to one position
             for (i = start; i < end; i++)
             {
@@ -280,7 +261,35 @@ namespace PixelFarm.Agg
                 myvxs.SwapVertices(start++, end--);
             }
         }
+        public static void FlipX(VertexStore vxs, double x1, double x2)
+        {
+            int i;
+            double x, y;
+            int count = vxs.Count;
+            for (i = 0; i < count; ++i)
+            {
+                ShapePath.CmdAndFlags flags = vxs.GetVertex(i, out x, out y);
+                if (ShapePath.IsVertextCommand(flags))
+                {
+                    vxs.ReplaceVertex(i, x2 - x + x1, y);
+                }
+            }
+        }
 
+        public static void FlipY(VertexStore vxs, double y1, double y2)
+        {
+            int i;
+            double x, y;
+            int count = vxs.Count;
+            for (i = 0; i < count; ++i)
+            {
+                ShapePath.CmdAndFlags flags = vxs.GetVertex(i, out x, out y);
+                if (ShapePath.IsVertextCommand(flags))
+                {
+                    vxs.ReplaceVertex(i, x, y2 - y + y1);
+                }
+            }
+        }
 
     }
 }

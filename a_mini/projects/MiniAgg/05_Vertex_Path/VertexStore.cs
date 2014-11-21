@@ -128,7 +128,7 @@ namespace PixelFarm.Agg
         public ShapePath.CmdAndFlags GetCommand(int index)
         {
             return m_CommandAndFlags[index];
-        } 
+        }
         //--------------------------------------------------
         //mutable properties
         public void Clear()
@@ -160,13 +160,14 @@ namespace PixelFarm.Agg
         {
             AddVertex(x, y, ShapePath.CmdAndFlags.Curve4);
         }
+        
         public void AddMoveTo(double x, double y)
         {
             AddVertex(x, y, ShapePath.CmdAndFlags.MoveTo);
         }
         public void AddLineTo(double x, double y)
         {
-            AddVertex(x, y, ShapePath.CmdAndFlags.LineTo); 
+            AddVertex(x, y, ShapePath.CmdAndFlags.LineTo);
         }
         public void AddStop()
         {
@@ -186,9 +187,8 @@ namespace PixelFarm.Agg
         internal void SwapVertices(int v1, int v2)
         {
 
-            double x_tmp, y_tmp;
-            x_tmp = m_coord_xy[v1 << 1];
-            y_tmp = m_coord_xy[(v1 << 1) + 1];
+            double x_tmp = m_coord_xy[v1 << 1];
+            double y_tmp = m_coord_xy[(v1 << 1) + 1];
 
             m_coord_xy[v1 << 1] = m_coord_xy[v2 << 1];//x
             m_coord_xy[(v1 << 1) + 1] = m_coord_xy[(v2 << 1) + 1];//y

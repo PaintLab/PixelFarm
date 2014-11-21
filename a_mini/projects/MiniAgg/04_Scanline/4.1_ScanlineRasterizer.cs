@@ -245,18 +245,20 @@ namespace PixelFarm.Agg
                     {
                         MoveTo(x, y);
                     } break;
-                case ShapePath.CmdAndFlags.LineTo:
+                case ShapePath.CmdAndFlags.LineTo: 
+
                 case ShapePath.CmdAndFlags.Curve3:
                 case ShapePath.CmdAndFlags.Curve4:
-                    {
+                    {                      
+
                         LineTo(x, y);
+                    } break;
+                case ShapePath.CmdAndFlags.EndAndCloseFigure:
+                    {
+                        ClosePolygon();
                     } break;
                 default:
                     {
-                        if (ShapePath.IsClose(cmd))
-                        {
-                            ClosePolygon();
-                        }
                     } break;
             }
         }
@@ -279,12 +281,13 @@ namespace PixelFarm.Agg
 
             double x = 0;
             double y = 0;
-
             if (m_cellAARas.Sorted) { Reset(); }
 
             if (snap.VxsHasMoreThanOnePart)
             {
-                var vxs = snap.GetInternalVxs();
+                //****
+                //render all parts
+                VertexStore vxs = snap.GetInternalVxs();
                 int j = vxs.Count;
 
                 for (int i = 0; i < j; ++i)
@@ -298,12 +301,13 @@ namespace PixelFarm.Agg
             }
             else
             {
-                var snapIter = snap.GetVertexSnapIter();
+                VertexSnapIter snapIter = snap.GetVertexSnapIter();
                 ShapePath.CmdAndFlags cmd;
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.CmdAndFlags.Empty)
                 {
                     AddVertex(cmd, x, y);
                 }
+               
             }
 
         }

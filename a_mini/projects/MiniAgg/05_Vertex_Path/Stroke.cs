@@ -82,17 +82,17 @@ namespace PixelFarm.Agg.VertexSource
         public VertexStore MakeVxs(VertexStore sourceVxs)
         {
 
-            StrokeGenerator stgen = strokeGen;
+            StrokeGenerator strkgen = strokeGen;
             VertexStore vxs = new VertexStore();
 
             int j = sourceVxs.Count;
             double x, y;
 
-            stgen.RemoveAll();
+            strkgen.RemoveAll();
             //1st vertex
 
             sourceVxs.GetVertex(0, out x, out y);
-            stgen.AddVertex(x, y, ShapePath.CmdAndFlags.MoveTo);
+            strkgen.AddVertex(x, y, ShapePath.CmdAndFlags.MoveTo);
 
             double startX = x, startY = y;
             bool hasMoreThanOnePart = false;
@@ -109,12 +109,12 @@ namespace PixelFarm.Agg.VertexSource
                     case ShapePath.CmdAndFlags.EndFigure:
                     case ShapePath.CmdAndFlags.EndAndCloseFigure:
                         {
-                            stgen.AddVertex(x, y, cmd);
+                            strkgen.AddVertex(x, y, cmd);
                             if (i < j - 2)
                             {
-                                stgen.AddVertex(startX, startY, ShapePath.CmdAndFlags.LineTo);
-                                stgen.WriteTo(vxs);
-                                stgen.RemoveAll();
+                                strkgen.AddVertex(startX, startY, ShapePath.CmdAndFlags.LineTo);
+                                strkgen.WriteTo(vxs);
+                                strkgen.RemoveAll();
                                 hasMoreThanOnePart = true;
                             }
                             //end this polygon
@@ -124,20 +124,19 @@ namespace PixelFarm.Agg.VertexSource
                     case ShapePath.CmdAndFlags.Curve3:
                     case ShapePath.CmdAndFlags.Curve4:
                         {
-
-                            stgen.AddVertex(x, y, cmd);
+                            strkgen.AddVertex(x, y, cmd);
 
                         } break;
                     case ShapePath.CmdAndFlags.MoveTo:
                         {
-                            stgen.AddVertex(x, y, cmd);
+                            strkgen.AddVertex(x, y, cmd);
                             startX = x;
                             startY = y;
                         } break;
                 }
             }
-            stgen.WriteTo(vxs);
-            stgen.RemoveAll();
+            strkgen.WriteTo(vxs);
+            strkgen.RemoveAll();
 
             vxs.HasMoreThanOnePart = hasMoreThanOnePart;
             return vxs;

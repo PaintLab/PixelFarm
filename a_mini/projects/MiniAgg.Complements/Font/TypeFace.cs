@@ -243,6 +243,23 @@ namespace PixelFarm.Agg.Font
             {
                 return newGlyph;
             }
+            //-------
+
+    //         public enum SvgPathCommand : byte
+    //{
+    //    MoveTo,
+    //    LineTo,
+    //    HorizontalLineTo,
+    //    VerticalLineTo,
+    //    CurveTo,
+    //    SmoothCurveTo,
+    //    QuadraticBezierCurve,
+    //    TSmoothQuadraticBezierCurveTo,
+    //    Arc,
+    //    ZClosePath
+    //}
+
+            //-------
 
             while (parseIndex < dString.Length)
             {
@@ -302,7 +319,7 @@ namespace PixelFarm.Agg.Font
 
                     case 'q':
                     case 'Q':
-                        {
+                        {    
                             parseIndex++;
                             Vector2 controlPoint;
                             controlPoint.x = GetNextNumber(dString, ref parseIndex);

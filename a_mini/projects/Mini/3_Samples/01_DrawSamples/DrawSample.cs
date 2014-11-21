@@ -55,7 +55,8 @@ namespace PixelFarm.Agg.Sample_Draw
             g.DrawString2("A Simple Example4", 300, 250, 20);
             //---------------------------------------------------
 
-
+          
+             
         }
     }
 

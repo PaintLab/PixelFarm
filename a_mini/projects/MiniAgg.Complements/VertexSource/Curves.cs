@@ -219,9 +219,7 @@ namespace PixelFarm.Agg.VertexSource
             m_ddfy = tmpy * 2.0;
 
             m_step = m_num_steps;
-        }
-
-
+        } 
 
         public Curves.CurveApproximationMethod ApproximationMethod
         {
@@ -243,115 +241,7 @@ namespace PixelFarm.Agg.VertexSource
             get { return 0; }
             set { }
         }
-        public IEnumerable<VertexData> GetVertexIter()
-        {
-            throw new NotSupportedException();
-            //RewindZero();
-            //if (m_num_steps == 0)
-            //{
-            //    m_step = -1; 
-            //}
-            //m_step = m_num_steps;
-            //m_fx = m_saved_fx;
-            //m_fy = m_saved_fy;
-            //m_dfx = m_saved_dfx;
-            //m_dfy = m_saved_dfy;
-            ////-----------------------
-            ////2. iter
-
-            //int j = m_points.Count;
-            //if (j > 0)
-            //{
-            //    //first cmd 
-            //    //cmd0
-            //    yield return new VertexData(ShapePath.FlagsAndCommand.CommandMoveTo, m_points[0]);
-            //    //others
-            //    for (int i = 1; i < j; i++)
-            //    {
-            //        yield return new VertexData(ShapePath.FlagsAndCommand.CommandLineTo, m_points[i]);
-
-            //    }
-            //}
-            //yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop, new Vector2());
-        }
-
-        //void RewindZero()
-        //{
-        //    if (m_num_steps == 0)
-        //    {
-        //        m_step = -1;
-        //        return;
-        //    }
-        //    m_step = m_num_steps;
-        //    m_fx = m_saved_fx;
-        //    m_fy = m_saved_fy;
-        //    m_dfx = m_saved_dfx;
-        //    m_dfy = m_saved_dfy;
-
-
-        //    if (m_step < 0)
-        //    {
-        //        x = 0;
-        //        y = 0;
-        //        return ShapePath.FlagsAndCommand.CommandStop;
-        //    }
-        //    if (m_step == m_num_steps)
-        //    {
-        //        x = m_start_x;
-        //        y = m_start_y;
-        //        --m_step;
-        //        return ShapePath.FlagsAndCommand.CommandMoveTo;
-        //    }
-        //    if (m_step == 0)
-        //    {
-        //        x = m_end_x;
-        //        y = m_end_y;
-        //        --m_step;
-        //        return ShapePath.FlagsAndCommand.CommandLineTo;
-        //    }
-        //    m_fx += m_dfx;
-        //    m_fy += m_dfy;
-        //    m_dfx += m_ddfx;
-        //    m_dfy += m_ddfy;
-        //    x = m_fx;
-        //    y = m_fy;
-        //    --m_step;
-        //    return ShapePath.FlagsAndCommand.CommandLineTo;
-
-        //}
-
-        //ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        //{
-        //    if (m_step < 0)
-        //    {
-        //        x = 0;
-        //        y = 0;
-        //        return ShapePath.FlagsAndCommand.CommandStop;
-        //    }
-        //    if (m_step == m_num_steps)
-        //    {
-        //        x = m_start_x;
-        //        y = m_start_y;
-        //        --m_step;
-        //        return ShapePath.FlagsAndCommand.CommandMoveTo;
-        //    }
-        //    if (m_step == 0)
-        //    {
-        //        x = m_end_x;
-        //        y = m_end_y;
-        //        --m_step;
-        //        return ShapePath.FlagsAndCommand.CommandLineTo;
-        //    }
-        //    m_fx += m_dfx;
-        //    m_fy += m_dfy;
-        //    m_dfx += m_ddfx;
-        //    m_dfy += m_ddfy;
-        //    x = m_fx;
-        //    y = m_fy;
-        //    --m_step;
-        //    return ShapePath.FlagsAndCommand.CommandLineTo;
-        //}
-
+       
     }
 
     //-------------------------------------------------------------curve3_div
@@ -413,24 +303,38 @@ namespace PixelFarm.Agg.VertexSource
             set { }
         }
 
-        public IEnumerable<VertexData> GetVertexIter()
+        public void MakeLines(VertexStore vxs)
         {
-            int j = m_points.Count; 
+            int j = m_points.Count;
             if (j > 0)
-            {
-                //first cmd 
-                //cmd0
-                yield return new VertexData(ShapePath.CmdAndFlags.MoveTo, m_points[0]);
+            {   
+                 
                 //others
                 for (int i = 1; i < j; i++)
                 {
-                    yield return new VertexData(ShapePath.CmdAndFlags.LineTo, m_points[i]);
-
+                    var p = m_points[i];
+                    vxs.AddLineTo(p.x, p.y); 
                 }
             }
-            yield return new VertexData(ShapePath.CmdAndFlags.Empty);
         }
-        
+        //public IEnumerable<VertexData> GetVertexIter()
+        //{
+        //    int j = m_points.Count;
+        //    if (j > 0)
+        //    {
+        //        //first cmd 
+        //        //cmd0
+        //        yield return new VertexData(ShapePath.CmdAndFlags.MoveTo, m_points[0]);
+        //        //others
+        //        for (int i = 1; i < j; i++)
+        //        {
+        //            yield return new VertexData(ShapePath.CmdAndFlags.LineTo, m_points[i]);
+
+        //        }
+        //    }
+        //    yield return new VertexData(ShapePath.CmdAndFlags.Empty);
+        //}
+
         void AddBezier(double x1, double y1,
                     double x2, double y2,
                     double x3, double y3)
@@ -688,8 +592,8 @@ namespace PixelFarm.Agg.VertexSource
         public double CuspLmit
         {
             get { return 0; }
-            set { } 
-        } 
+            set { }
+        }
         public IEnumerable<VertexData> GetVertexIter()
         {
             throw new NotImplementedException();
@@ -1104,6 +1008,9 @@ namespace PixelFarm.Agg.VertexSource
     }
 
     //-----------------------------------------------------------------curve3
+    /// <summary>
+    /// curve to line segment
+    /// </summary>
     public sealed class Curve3
     {
         Curve3Inc m_curve_inc = new Curve3Inc();
@@ -1115,25 +1022,15 @@ namespace PixelFarm.Agg.VertexSource
             m_approximation_method = Curves.CurveApproximationMethod.Div;
         }
 
-        public Curve3(double x1, double y1,
-               double cx, double cy,
-               double x2, double y2)
-            : base()
-        {
-            m_approximation_method = Curves.CurveApproximationMethod.Div;
-            Init(x1, y1, cx, cy, x2, y2);
-        }
-
-
         public void Reset()
         {
             m_curve_inc.Reset();
             m_curve_div.Reset();
         }
 
-        public void Init(double x1, double y1,
-               double cx, double cy,
-               double x2, double y2)
+        void Init(double x1, double y1,
+             double cx, double cy,
+             double x2, double y2)
         {
             if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
             {
@@ -1174,44 +1071,88 @@ namespace PixelFarm.Agg.VertexSource
             set { this.m_curve_div.CuspLimit = value; }
         }
 
-        public IEnumerable<VertexData> GetVertexIter()
+        /// <summary>
+        /// create lines from curve
+        /// </summary>
+        /// <param name="vxs"></param>
+        public void MakeLines(VertexStore vxs, double x1, double y1,
+               double cx, double cy,
+               double x2, double y2)
         {
-            if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
+            BezierCurve.CreateBezierVxs3(vxs,
+               new PixelFarm.VectorMath.Vector2(x1, y1),
+               new PixelFarm.VectorMath.Vector2(x2, y2),
+               new PixelFarm.VectorMath.Vector2(cx, cy));
+
+            return;
+            if (this.m_approximation_method == Curves.CurveApproximationMethod.Inc)
             {
-                foreach (VertexData vertexData in m_curve_inc.GetVertexIter())
-                {
-                    yield return vertexData;
-                }
+                //m_curve_inc.Init(x1, y1, cx, cy, x2, y2);
+                //bool isFirst = true;
+                //foreach (VertexData currentVertextData in m_curve_inc.GetVertexIter())
+                //{
+                //    if (isFirst)
+                //    {
+                //        isFirst = false;
+                //        continue;
+                //    }
+
+                //    if (ShapePath.IsEmpty(currentVertextData.command))
+                //    {
+                //        break;
+                //    }
+
+                //    VertexData vertexData = new VertexData(
+                //       ShapePath.CmdAndFlags.LineTo,
+                //       currentVertextData.position);
+
+                //    vxs.AddVertex(vertexData);
+                //}
             }
             else
             {
-                foreach (VertexData vertexData in m_curve_div.GetVertexIter())
-                {
-                    yield return vertexData;
-                }
+                m_curve_div.Init(x1, y1, cx, cy, x2, y2); 
+                m_curve_div.MakeLines(vxs); 
             }
+
+
+            ////---------------------------------------------------------------------
+            //IEnumerator<VertexData> curveIterator = this.GetVertexIter().GetEnumerator();
+            //curveIterator.MoveNext(); // First call returns path_cmd_move_to
+            //do
+            //{
+            //    curveIterator.MoveNext();
+            //    VertexData currentVertextData = curveIterator.Current;
+            //    if (ShapePath.IsEmpty(currentVertextData.command))
+            //    {
+            //        break;
+            //    }
+
+            //    VertexData vertexData = new VertexData(
+            //       ShapePath.CmdAndFlags.LineTo,
+            //       currentVertextData.position);
+
+            //    vxs.AddVertex(vertexData);
+
+            //} while (!ShapePath.IsEmpty(curveIterator.Current.command));
+
         }
 
-        //public void RewindZero()
+        //IEnumerable<VertexData> GetVertexIter()
         //{
         //    if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
         //    {
-        //        m_curve_inc.RewindZero();
+        //        foreach (VertexData vertexData in m_curve_inc.GetVertexIter())
+        //        {
+        //            yield return vertexData;
+        //        }
         //    }
         //    else
         //    {
-        //        m_curve_div.RewindZero();
-        //    }
-        //}
-        //public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
-        //{
-        //    if (m_approximation_method == Curves.CurveApproximationMethod.Inc)
-        //    {
-        //        return m_curve_inc.GetNextVertex(out x, out y);
-        //    }
-        //    else
-        //    {
-        //        return m_curve_div.GetNextVertex(out x, out y);
+        //        foreach (VertexData vertexData in m_curve_div.GetVertexIter())
+        //        {
+        //            yield return vertexData;
+        //        }
         //    }
         //}
 
