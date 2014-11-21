@@ -83,7 +83,7 @@ namespace PixelFarm.Agg
         {
 
             numPaths = PixelFarm.Agg.LionDataStore.LoadLionData(path, colors, pathIndexList);
-            PixelFarm.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
+            PixelFarm.Agg.BoundingRect.GetBoundingRect(path.Vxs, pathIndexList, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
@@ -101,7 +101,7 @@ namespace PixelFarm.Agg
         }
         void UpdateBoundingRect()
         {
-            PixelFarm.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
+            PixelFarm.Agg.BoundingRect.GetBoundingRect(path.Vxs, pathIndexList, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }

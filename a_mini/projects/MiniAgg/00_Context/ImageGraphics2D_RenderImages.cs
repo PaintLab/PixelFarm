@@ -33,7 +33,7 @@ namespace PixelFarm.Agg
 
 
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
-            PathStore drawImageRectPath,
+            VertexStore drawImageRectPath,
             double destX, double destY,
             double hotspotOffsetX, double hotSpotOffsetY,
             double scaleX, double scaleY,
@@ -73,16 +73,17 @@ namespace PixelFarm.Agg
             int srcH = sourceImage.Height;
 
             drawImageRectPath.Clear();
-            drawImageRectPath.MoveTo(0, 0);
-            drawImageRectPath.LineTo(srcW, 0);
-            drawImageRectPath.LineTo(srcW, srcH);
-            drawImageRectPath.LineTo(0, srcH);
-            drawImageRectPath.ClosePolygon();
+            drawImageRectPath.AddMoveTo(0, 0);
+            drawImageRectPath.AddLineTo(srcW, 0);
+            drawImageRectPath.AddLineTo(srcW, srcH);
+            drawImageRectPath.AddLineTo(0, srcH);
+            drawImageRectPath.AddCloseFigure();
+
 
             return Affine.NewMatix(plan);
         }
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
-           PathStore drawImageRectPath,
+           VertexStore drawImageRectPath,
            double destX, double destY)
         {
 
@@ -91,34 +92,33 @@ namespace PixelFarm.Agg
             {
                 plan = AffinePlan.Translate(destX, destY);
             }
-
             int srcW = sourceImage.Width;
             int srcH = sourceImage.Height;
 
             drawImageRectPath.Clear();
-            drawImageRectPath.MoveTo(0, 0);
-            drawImageRectPath.LineTo(srcW, 0);
-            drawImageRectPath.LineTo(srcW, srcH);
-            drawImageRectPath.LineTo(0, srcH);
-            drawImageRectPath.ClosePolygon();
+            drawImageRectPath.AddMoveTo(0, 0);
+            drawImageRectPath.AddLineTo(srcW, 0);
+            drawImageRectPath.AddLineTo(srcW, srcH);
+            drawImageRectPath.AddLineTo(0, srcH);
+            drawImageRectPath.AddCloseFigure();
 
             return Affine.NewMatix(plan);
 
         }
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
-           PathStore drawImageRectPath, AffinePlan[] affPlans)
+           VertexStore drawImageRectPath, AffinePlan[] affPlans)
         {
 
-            
+
             int srcW = sourceImage.Width;
             int srcH = sourceImage.Height;
 
             drawImageRectPath.Clear();
-            drawImageRectPath.MoveTo(0, 0);
-            drawImageRectPath.LineTo(srcW, 0);
-            drawImageRectPath.LineTo(srcW, srcH);
-            drawImageRectPath.LineTo(0, srcH);
-            drawImageRectPath.ClosePolygon();
+            drawImageRectPath.AddMoveTo(0, 0);
+            drawImageRectPath.AddLineTo(srcW, 0);
+            drawImageRectPath.AddLineTo(srcW, srcH);
+            drawImageRectPath.AddLineTo(0, srcH);
+            drawImageRectPath.AddCloseFigure();
 
             return Affine.NewMatix(affPlans);
 
@@ -197,7 +197,7 @@ namespace PixelFarm.Agg
 
             bool renderRequriesSourceSampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
-            PathStore imgBoundsPath = GetFreePathStorage();
+            VertexStore imgBoundsPath = GetFreeVxs();
             // this is the fast drawing path
             if (renderRequriesSourceSampling)
             {
@@ -279,7 +279,7 @@ namespace PixelFarm.Agg
                 unchecked { destImageChanged++; };
 
             }
-            ReleasePathStorage(imgBoundsPath);
+            ReleaseVxs(imgBoundsPath);
         }
 
         int destImageChanged = 0;
@@ -288,8 +288,8 @@ namespace PixelFarm.Agg
         {
 
 
-            var imgBoundsPath = GetFreePathStorage();
-            Affine destRectTransform = BuildImageBoundsPath(source, imgBoundsPath, affinePlans);
+            var tmpImgBoundVxs = GetFreeVxs();
+            Affine destRectTransform = BuildImageBoundsPath(source, tmpImgBoundVxs, affinePlans);
 
 
             // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
@@ -300,8 +300,8 @@ namespace PixelFarm.Agg
                 ColorRGBA.Black,
                 new SpanInterpolatorLinear(sourceRectTransform));
 
-            Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
-            ReleasePathStorage(imgBoundsPath);
+            Render(destRectTransform.TransformToVxs(tmpImgBoundVxs), imgSpanGen);
+            ReleaseVxs(tmpImgBoundVxs);
 
         }
         public override void Render(IImageReaderWriter source, double destX, double destY)
@@ -369,7 +369,7 @@ namespace PixelFarm.Agg
 
             bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
 
-            var imgBoundsPath = GetFreePathStorage();
+            var imgBoundsPath = GetFreeVxs();
             // this is the fast drawing path
             if (needSourceResampling)
             {
@@ -453,7 +453,7 @@ namespace PixelFarm.Agg
 
                 unchecked { destImageChanged++; };
             }
-            ReleasePathStorage(imgBoundsPath);
+            ReleaseVxs(imgBoundsPath);
         }
 
 

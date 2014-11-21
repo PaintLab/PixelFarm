@@ -29,11 +29,11 @@ namespace PixelFarm.Agg
     {
 
 
-        public static bool GetBoundingRect(PathStore vs, int[] gi,
+        public static bool GetBoundingRect(VertexStore vxs, int[] gi,
                            int num,
                            out RectD boundingRect)
         {
-            return GetBoundingRect(vs, gi, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
+            return GetBoundingRect(vxs, gi, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
         }
         public static bool GetBoundingRect(VertexStoreSnap vs, ref RectD rect)
         {
@@ -47,7 +47,7 @@ namespace PixelFarm.Agg
         }
 
         //----------------------------------
-        static bool GetBoundingRect(PathStore ps, int[] gi,
+        static bool GetBoundingRect(VertexStore vxs, int[] gi,
                          int num,
                          out double x1,
                          out double y1,
@@ -58,7 +58,7 @@ namespace PixelFarm.Agg
             double x = 0;
             double y = 0;
             bool first = true;
-            var vxs = ps.Vxs;
+
 
             x1 = 1;
             y1 = 1;
@@ -156,12 +156,7 @@ namespace PixelFarm.Agg
     {
 
 
-        public static bool GetBoundingRect(PathStore vs, int[] gi,
-                           int num,
-                           out RectInt boundingRect)
-        {
-            return GetBoundingRect(vs, gi, num, out boundingRect.Left, out boundingRect.Bottom, out boundingRect.Right, out boundingRect.Top);
-        }
+
         public static bool GetBoundingRect(VertexStoreSnap vs, ref RectInt rect)
         {
             int x1, y1, x2, y2;
@@ -185,68 +180,7 @@ namespace PixelFarm.Agg
             bool rValue = GetBoundingRect(new VertexStoreSnap(vxs), out x1, out y1, out x2, out y2);
             return new RectInt(x1, y1, x2, y2);
         }
-        static bool GetBoundingRect(PathStore ps, int[] gi,
-                         int num,
-                         out int x1,
-                         out int y1,
-                         out int x2,
-                         out int y2)
-        {
-            int i;
-
-            int x = 0;
-            int y = 0;
-
-            bool first = true;
-            var vxs = ps.Vxs;
-
-            x1 = 1;
-            y1 = 1;
-            x2 = 0;
-            y2 = 0;
-
-            double x_d = 0;
-            double y_d = 0;
-            int iterindex = 0;
-            for (i = 0; i < num; i++)
-            {
-
-                ShapePath.CmdAndFlags flags;
-                while ((flags = vxs.GetVertex(iterindex++, out x_d, out y_d)) != ShapePath.CmdAndFlags.Empty)
-                {
-                    x = (int)x_d;
-                    y = (int)y_d;
-
-                    switch (flags)
-                    {
-                        //if is vertext cmd
-                        case ShapePath.CmdAndFlags.LineTo:
-                        case ShapePath.CmdAndFlags.MoveTo:
-                        case ShapePath.CmdAndFlags.Curve3:
-                        case ShapePath.CmdAndFlags.Curve4:
-                            {
-                                if (first)
-                                {
-                                    x1 = x;
-                                    y1 = y;
-                                    x2 = x;
-                                    y2 = y;
-                                    first = false;
-                                }
-                                else
-                                {
-                                    if (x < x1) x1 = x;
-                                    if (y < y1) y1 = y;
-                                    if (x > x2) x2 = x;
-                                    if (y > y2) y2 = y;
-                                }
-
-                            } break;
-                    }
-                }
-            }
-            return x1 <= x2 && y1 <= y2;
-        }
+      
 
         //-----------------------------------------------------bounding_rect_single
         //template<class VertexSource, class CoordT> 

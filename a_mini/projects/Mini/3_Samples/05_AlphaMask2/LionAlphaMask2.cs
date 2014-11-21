@@ -209,7 +209,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
                    rasterizer,
                    scline,
-                   transform.TransformToVxs(lionShape.Path),
+                   transform.TransformToVxs(lionShape.Path.Vxs),
                    lionShape.Colors,
                    lionShape.PathIndexList,
                    lionShape.NumPaths);

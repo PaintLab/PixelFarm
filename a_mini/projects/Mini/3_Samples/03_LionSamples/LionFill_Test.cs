@@ -166,7 +166,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
 
                 //convert
                 //System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
-                vxStorage = transform.TransformToVxs(lionShape.Path);
+                vxStorage = transform.TransformToVxs(lionShape.Path.Vxs);
                 //transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
                 //transformedPathStorage.DoTransform(list);
 

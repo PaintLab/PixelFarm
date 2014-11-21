@@ -893,22 +893,12 @@ namespace PixelFarm.Agg.Transform
         static bool is_equal_eps(double v1, double v2)
         {
             return Math.Abs(v1 - v2) <= (EPSILON);
-        }
-
-
-        //----------------------------------------------------------------------------------------------
-        public VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStore src)
-        {
-            return new VertexStoreSnap(TransformToVxs(src));
-        }
+        } 
         public VertexStoreSnap TransformToVertexSnap(VertexStore src)
         {
             return new VertexStoreSnap(this.TransformToVxs(src));
         }
-        public VertexStore TransformToVxs(Agg.VertexSource.PathStore src)
-        {
-            return TransformToVxs(src.Vxs);
-        }
+        
         public VertexStore TransformToVxs(VertexStore src)
         {
             int count = src.Count;

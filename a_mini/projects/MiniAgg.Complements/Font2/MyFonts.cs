@@ -129,7 +129,7 @@ namespace PixelFarm.Font2
                         else
                         {
                             //bit 1 set=> off curve, this is a control point
-                            //if if this is a 2nd order or 3rd order control point
+                            //if this is a 2nd order or 3rd order control point
                             if (((vtag >> 1) & 0x1) != 0)
                             {
                                 //printf("[%d] bzc3rd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);

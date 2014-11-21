@@ -626,16 +626,7 @@ namespace PixelFarm.Agg.Transform
             x = Math.Sqrt(sx * sx + shx * shx);
             y = Math.Sqrt(shy * shy + sy * sy);
         }
-
-        //-------------------------------------------------------------------------
-        public VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStore src)
-        {
-            return new VertexStoreSnap(TransformToVxs(src));
-        }
-        public VertexStore TransformToVxs(Agg.VertexSource.PathStore src)
-        {
-            return TransformToVxs(src.Vxs);
-        }
+         
         public VertexStore TransformToVxs(VertexStoreSnap snap)
         {
 

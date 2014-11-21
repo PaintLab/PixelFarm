@@ -41,9 +41,9 @@ namespace PixelFarm.Agg.SimplePainter
             var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 48);
             var fontGlyph = font.GetGlyph('ด');
             CurveFlattener curveFlatter = new CurveFlattener();
-            var fontVxsFlatten = curveFlatter.MakeVxs(fontGlyph.vxs);
-            //p.Fill(fontGlyph.vxs);
-            p.Fill(fontVxsFlatten);
+            //var fontVxsFlatten = curveFlatter.MakeVxs(fontGlyph.vxs);
+            p.Fill(fontGlyph.vxs);
+            //p.Fill(fontVxsFlatten);
 
             
         }

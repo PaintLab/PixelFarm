@@ -169,10 +169,13 @@ namespace PixelFarm.Agg
         {
             AddVertex(x, y, ShapePath.CmdAndFlags.LineTo);
         }
+        public void AddCloseFigure()
+        {
+            AddVertex(0, 0, ShapePath.CmdAndFlags.EndAndCloseFigure);
+        }
         public void AddStop()
         {
-            AddVertex(0, 0, ShapePath.CmdAndFlags.Empty);
-
+            AddVertex(0, 0, ShapePath.CmdAndFlags.Empty); 
         }
         internal void ReplaceVertex(int index, double x, double y)
         {
@@ -239,7 +242,7 @@ namespace PixelFarm.Agg
         //----------------------------------------------------------
 
         //internal use only!
-        internal static void UnsafeDirectSetData(
+        public static void UnsafeDirectSetData(
             VertexStore vstore,
             int m_allocated_vertices,
             int m_num_vertices,
@@ -251,7 +254,7 @@ namespace PixelFarm.Agg
             vstore.m_coord_xy = m_coord_xy;
             vstore.m_CommandAndFlags = m_CommandAndFlags;
         }
-        internal static void UnsafeDirectGetData(
+        public static void UnsafeDirectGetData(
             VertexStore vstore,
             out int m_allocated_vertices,
             out int m_num_vertices,

@@ -160,10 +160,7 @@ namespace PixelFarm.Agg.Transform
         {
             return new VertexStoreSnap(TransformToVxs(src));
         }
-        public VertexStore TransformToVxs(Agg.VertexSource.PathStore src)
-        {
-            return TransformToVxs(src.Vxs);
-        }
+        
         public VertexStore TransformToVxs(VertexStore src)
         {
             int count = src.Count;

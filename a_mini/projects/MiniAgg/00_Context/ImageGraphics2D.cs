@@ -32,7 +32,8 @@ namespace PixelFarm.Agg
     {
         ImageReaderWriterBase destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
-        PathStore drawImageRectPath = new PathStore();
+        VertexStore myTmpImgRectVxs = new VertexStore();
+
 
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
         PixelBlenderBGRA pixBlenderRGBA32;
@@ -99,23 +100,23 @@ namespace PixelFarm.Agg
             get { return this.ImageInterpolationQuality; }
             set { this.imgInterpolationQuality = value; }
         }
-        PathStore GetFreePathStorage()
+        VertexStore GetFreeVxs()
         {
-            if (drawImageRectPath != null)
+            if (myTmpImgRectVxs != null)
             {
-                PathStore tmp = this.drawImageRectPath;
-                this.drawImageRectPath = null;
+                VertexStore tmp = this.myTmpImgRectVxs;
+                this.myTmpImgRectVxs = null;
                 return tmp;
             }
             else
             {
-                return new PathStore();
+                return new VertexStore(4);
             }
         }
-        void ReleasePathStorage(PathStore ps)
+        void ReleaseVxs(VertexStore vxs)
         {
-            this.drawImageRectPath = ps;
-            ps.Clear();
+            this.myTmpImgRectVxs = vxs;
+            vxs.Clear();
         }
         public override void Clear(ColorRGBA color)
         {

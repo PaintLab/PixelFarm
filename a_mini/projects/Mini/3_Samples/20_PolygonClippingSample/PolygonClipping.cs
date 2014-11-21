@@ -99,7 +99,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 output.ClosePolygon();
             }
 
-             
+
             output.Stop();
             return output;
         }
@@ -133,7 +133,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 {
                     addedFirst = false;
                     currentPoly = new List<IntPoint>();
-                    allPolys.Add(currentPoly);                    
+                    allPolys.Add(currentPoly);
                     if (cmd == ShapePath.CmdAndFlags.MoveTo)
                     {
                         last = new VertexData(cmd, x, y);
@@ -143,7 +143,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         last = first;
                     }
                 }
-            } while (cmd != ShapePath.CmdAndFlags.Empty); 
+            } while (cmd != ShapePath.CmdAndFlags.Empty);
 
             return allPolys;
         }
@@ -301,8 +301,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         //VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
                         //VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
-                        var trans_gb_poly = mtx1.TransformToVxs(gb_poly);
-                        var trans_arrows = mtx2.TransformToVxs(arrows);
+                        var trans_gb_poly = mtx1.TransformToVxs(gb_poly.Vxs);
+                        var trans_arrows = mtx2.TransformToVxs(arrows.Vxs);
 
                         graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
 
@@ -330,7 +330,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                                 AffinePlan.Scale(2));
 
 
-                        VertexStore s1 = mtx.TransformToVxs(gb_poly);
+                        VertexStore s1 = mtx.TransformToVxs(gb_poly.Vxs);
                         graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
                         graphics2D.Render(new Stroke(0.1).MakeVxs(s1), ColorRGBA.Black);
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs());
@@ -402,7 +402,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                             AffinePlan.Scale(4),
                             AffinePlan.Translate(220, 200));
 
-                        var t_glyph = mtx.TransformToVertexSnap(glyph);
+                        var t_glyph = mtx.TransformToVertexSnap(glyph.Vxs);
 
                         CurveFlattener curveFlattener = new CurveFlattener();
 
