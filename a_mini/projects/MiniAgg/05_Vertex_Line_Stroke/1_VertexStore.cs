@@ -135,7 +135,7 @@ namespace PixelFarm.Agg
         {
             m_num_vertices = 0;
         }
-         
+
         public void AddVertex(double x, double y, VertexCmd CommandAndFlags)
         {
             if (m_num_vertices >= m_allocated_vertices)
@@ -157,7 +157,7 @@ namespace PixelFarm.Agg
         {
             AddVertex(x, y, VertexCmd.Curve4);
         }
-        
+
         public void AddMoveTo(double x, double y)
         {
             AddVertex(x, y, VertexCmd.MoveTo);
@@ -172,7 +172,7 @@ namespace PixelFarm.Agg
         }
         public void AddStop()
         {
-            AddVertex(0, 0, VertexCmd.Empty); 
+            AddVertex(0, 0, VertexCmd.Empty);
         }
         internal void ReplaceVertex(int index, double x, double y)
         {

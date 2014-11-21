@@ -62,7 +62,7 @@ namespace PixelFarm.Agg.VertexSource
           
         public VertexStore MakeVxs()
         {
-            PathStore m_LinesToDraw = new PathStore();
+            PathWriter m_LinesToDraw = new PathWriter();
             m_LinesToDraw.Clear();             
             m_LinesToDraw.MoveTo(bounds.Left, bounds.Bottom);
             m_LinesToDraw.LineTo(bounds.Right, bounds.Bottom);

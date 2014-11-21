@@ -9,7 +9,7 @@ namespace PixelFarm.Agg.VertexSource
 {
     public class VertexSourceIO
     {
-        public static void Load(PathStore vertexSource, string pathAndFileName)
+        public static void Load(PathWriter vertexSource, string pathAndFileName)
         {
             vertexSource.Clear();
             var vxs = vertexSource.Vxs;
@@ -61,13 +61,13 @@ namespace PixelFarm.Agg.VertexSource
 
 
         //-------------------------------------------------
-        public static void WriteToStream(BinaryWriter writer, PathStore pathSource)
+        public static void WriteToStream(BinaryWriter writer, PathWriter pathSource)
         {
             int num_vertice;
             int num_alloc_vertice;
             double[] coord_xy;
             VertexCmd[] cmds;
-            PathStore.UnsafeDirectGetData(pathSource,
+            PathWriter.UnsafeDirectGetData(pathSource,
                 out num_alloc_vertice,
                 out num_vertice,
                 out coord_xy,
@@ -127,9 +127,9 @@ namespace PixelFarm.Agg.VertexSource
             writer.Flush();
 
         }
-        public static void ReadPathDataFromStream(BinaryReader reader, out PathStore newPath)
+        public static void ReadPathDataFromStream(BinaryReader reader, out PathWriter newPath)
         {
-            newPath = new PathStore();
+            newPath = new PathWriter();
             //1.
             int num_alloc_vertice = reader.ReadInt32();//hint
             //2.
@@ -154,7 +154,7 @@ namespace PixelFarm.Agg.VertexSource
                 cmds[i] = (VertexCmd)reader.ReadByte();
             }
 
-            PathStore.UnsafeDirectSetData(
+            PathWriter.UnsafeDirectSetData(
                 newPath,
                 num_alloc_vertice,
                 num_vertice,

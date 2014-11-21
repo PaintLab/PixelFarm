@@ -1878,7 +1878,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             1283.6,1393.6
         };
 
-        public static void Make(PathStore ps)
+        public static void Make(PathWriter ps)
         {
             ps.Clear();
             ps.MoveTo(poly1[0], poly1[1]);

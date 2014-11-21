@@ -68,7 +68,7 @@ namespace PixelFarm.Font2
                 int cpoint_index = 0;
                 int todoContourCount = outline.n_contours;
 
-                PixelFarm.Agg.VertexSource.PathStore ps = new Agg.VertexSource.PathStore();
+                PixelFarm.Agg.VertexSource.PathWriter ps = new Agg.VertexSource.PathWriter();
 
                 while (todoContourCount > 0)
                 {

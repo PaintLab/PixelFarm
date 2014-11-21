@@ -96,7 +96,7 @@ namespace PixelFarm.Agg.Sample_Draw
             }
 
             // and a little polygon
-            PathStore littlePoly = new PathStore();
+            PathWriter littlePoly = new PathWriter();
             littlePoly.MoveTo(50, 50);
             littlePoly.LineTo(150, 50);
             littlePoly.LineTo(200, 200);

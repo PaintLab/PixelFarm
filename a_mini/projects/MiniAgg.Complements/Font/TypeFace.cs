@@ -35,7 +35,7 @@ namespace PixelFarm.Agg.Font
             public int horiz_adv_x;
             public int unicode;
             public string glyphName;
-            public PathStore glyphData = new PathStore();
+            public PathWriter glyphData = new PathWriter();
         }
 
         class Panos_1
@@ -346,7 +346,7 @@ namespace PixelFarm.Agg.Font
                             curXY += lastXY;
                         }
 
-                        newGlyph.glyphData.Curve3(curXY.x, curXY.y);
+                        newGlyph.glyphData.SmoothCurve3(curXY.x, curXY.y);
                         break;
 
                     case 'z':

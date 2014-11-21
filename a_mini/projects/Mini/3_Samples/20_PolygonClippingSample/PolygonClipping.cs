@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        PathStore CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
+        PathWriter CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
         {
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
@@ -59,7 +59,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
             clipper.Execute(clipType, intersectedPolys);
 
-            PathStore output = new PathStore();
+            PathWriter output = new PathWriter();
 
             foreach (List<IntPoint> polygon in intersectedPolys)
             {
@@ -191,8 +191,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Two simple paths
                         //
-                        PathStore ps1 = new PathStore();
-                        PathStore ps2 = new PathStore();
+                        PathWriter ps1 = new PathWriter();
+                        PathWriter ps2 = new PathWriter();
 
                         double x = m_x - Width / 2 + 100;
                         double y = m_y - Height / 2 + 100;
@@ -233,8 +233,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Closed stroke
                         //
-                        PathStore ps1 = new PathStore();
-                        PathStore ps2 = new PathStore();
+                        PathWriter ps1 = new PathWriter();
+                        PathWriter ps2 = new PathWriter();
                         Stroke stroke = new Stroke(1);
 
                         stroke.Width = 10;
@@ -278,8 +278,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Great Britain and Arrows
                         //
-                        PathStore gb_poly = new PathStore();
-                        PathStore arrows = new PathStore();
+                        PathWriter gb_poly = new PathWriter();
+                        PathWriter arrows = new PathWriter();
                         PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
                         make_arrows(arrows);
@@ -322,7 +322,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
 
 
-                        PathStore gb_poly = new PathStore();
+                        PathWriter gb_poly = new PathWriter();
                         PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
                         Affine mtx = Affine.NewMatix(
@@ -349,7 +349,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         Stroke stroke = new Stroke(15);
 
 
-                        PathStore glyph = new PathStore();
+                        PathWriter glyph = new PathWriter();
                         glyph.MoveTo(28.47, 6.45);
                         glyph.Curve3(21.58, 1.12, 19.82, 0.29);
                         glyph.Curve3(17.19, -0.93, 14.21, -0.93);
@@ -423,7 +423,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
         void CreateAndRenderCombined(Graphics2D graphics2D, VertexStoreSnap ps1, VertexStoreSnap ps2)
         {
-            PathStore combined = null;
+            PathWriter combined = null;
 
             switch (this.OpOption)
             {
@@ -464,7 +464,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             m_x = x;
             m_y = y;
         }
-        void make_arrows(PathStore ps)
+        void make_arrows(PathWriter ps)
         {
             ps.Clear();
             ps.MoveTo(1330.599999999999909, 1282.399999999999864);
