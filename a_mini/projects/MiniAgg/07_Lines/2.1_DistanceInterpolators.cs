@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-using PixelFarm.Agg.VertexSource;
+
 
 namespace PixelFarm.Agg.Lines
 {

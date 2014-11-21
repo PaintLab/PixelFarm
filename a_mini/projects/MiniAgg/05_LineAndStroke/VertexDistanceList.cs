@@ -22,8 +22,8 @@
 //
 //----------------------------------------------------------------------------
 
-using PixelFarm.Agg.VertexSource;
-namespace PixelFarm.Agg
+ 
+namespace PixelFarm.Agg 
 {
 
     //----------------------------------------------------------vertex_sequence

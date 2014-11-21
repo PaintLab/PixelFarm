@@ -26,7 +26,7 @@ using System;
 
 using PixelFarm.VectorMath;
 
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.Agg 
 {
 
     public class StrokeMath

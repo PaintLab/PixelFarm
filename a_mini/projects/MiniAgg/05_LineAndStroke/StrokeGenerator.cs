@@ -20,21 +20,9 @@
 using System;
 using PixelFarm.VectorMath;
 
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.Agg 
 {
-    //public class Vector2Container : ArrayList<Vector2>, IVertexDest
-    //{
-    //    public Vector2Container()
-    //    {
-
-    //    }
-    //    public void AddVertex(double x, double y)
-    //    {
-    //        base.AddVertex(new Vector2(x, y));
-    //    }
-    //}
-    //============================================================vcgen_stroke
-
+    
     class StrokeGenerator
     {
         StrokeMath m_stroker;

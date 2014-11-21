@@ -22,7 +22,8 @@
 //
 //----------------------------------------------------------------------------
 using System.Collections.Generic;
-namespace PixelFarm.Agg.VertexSource
+ 
+namespace PixelFarm.Agg
 {
     public sealed class Stroke
     {

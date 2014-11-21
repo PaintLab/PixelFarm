@@ -22,7 +22,7 @@
 // Contact: castor.vulgaris@gmail.com
 //----------------------------------------------------------------------------
 using System;
-using PixelFarm.Agg.VertexSource;
+
 
 namespace PixelFarm.Agg
 {
