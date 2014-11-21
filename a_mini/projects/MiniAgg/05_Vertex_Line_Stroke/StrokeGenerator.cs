@@ -20,9 +20,9 @@
 using System;
 using PixelFarm.VectorMath;
 
-namespace PixelFarm.Agg 
+namespace PixelFarm.Agg
 {
-    
+
     class StrokeGenerator
     {
         StrokeMath m_stroker;
@@ -113,7 +113,7 @@ namespace PixelFarm.Agg
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
             m_status = StrokeMath.Status.Init;
-            switch (cmd & VertexCmd.MASK)
+            switch (cmd)
             {
                 case VertexCmd.MoveTo:
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
@@ -127,7 +127,7 @@ namespace PixelFarm.Agg
                 default:
                     vertexDistanceList.AddVertex(new VertexDistance(x, y));
                     break;
-            } 
+            }
         }
 
         public void WriteTo(VertexStore outputVxs)
@@ -143,9 +143,7 @@ namespace PixelFarm.Agg
                     break;
                 }
             }
-
         }
-
         void Rewind()
         {
             if (m_status == StrokeMath.Status.Init)
@@ -281,13 +279,14 @@ namespace PixelFarm.Agg
 
                     case StrokeMath.Status.EndPoly1:
                         m_status = m_prev_status;
-                        return VertexCmd.EndAndCloseFigure                             
-                            | VertexCmd.FlagCCW;
+                        x = (int)EndVertexOrientation.CCW;
+                        return VertexCmd.EndAndCloseFigure;
 
                     case StrokeMath.Status.EndPoly2:
                         m_status = m_prev_status;
-                        return VertexCmd.EndAndCloseFigure 
-                            | VertexCmd.FlagCW;
+                        x = (int)EndVertexOrientation.CW;
+                        return VertexCmd.EndAndCloseFigure;
+                             
 
                     case StrokeMath.Status.Stop:
                         cmd = VertexCmd.Empty;

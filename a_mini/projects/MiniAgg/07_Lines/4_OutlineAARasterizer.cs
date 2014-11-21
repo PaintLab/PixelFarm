@@ -584,7 +584,7 @@ namespace PixelFarm.Agg.Lines
 
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
-            switch (VertexCmd.MASK & cmd)
+            switch (cmd)
             {
                 case VertexCmd.MoveTo:
                     Render(false);

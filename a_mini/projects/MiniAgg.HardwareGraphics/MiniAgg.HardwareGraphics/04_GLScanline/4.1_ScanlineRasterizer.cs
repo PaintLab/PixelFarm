@@ -298,7 +298,7 @@ namespace PixelFarm.Agg
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = vxs.GetVertex(i, out x, out y);
-                    switch (cmd & (VertexCmd.MASK))
+                    switch (cmd)
                     {
                         case VertexCmd.Empty:
                             {
@@ -327,7 +327,7 @@ namespace PixelFarm.Agg
                                     ClosePolygon();
                                 }
                             } break;
-                    } 
+                    }
                 }
             }
             else
@@ -338,7 +338,7 @@ namespace PixelFarm.Agg
                 while (!stop)
                 {
                     cmd = snapIter.GetNextVertex(out x, out y);
-                    switch (cmd & (VertexCmd.MASK))
+                    switch (cmd)
                     {
                         case VertexCmd.Empty:
                             {
@@ -351,7 +351,7 @@ namespace PixelFarm.Agg
                         case VertexCmd.LineTo:
                             {
                                 LineTo(x, y);
-                            } break; 
+                            } break;
                         case VertexCmd.Curve3:
                             {
                                 LineTo(x, y);
@@ -366,8 +366,8 @@ namespace PixelFarm.Agg
                                 {
                                     ClosePolygon();
                                 }
-                            } break; 
-                    } 
+                            } break;
+                    }
                 }
             }
 

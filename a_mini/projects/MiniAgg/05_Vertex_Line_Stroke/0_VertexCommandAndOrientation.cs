@@ -28,31 +28,21 @@ namespace PixelFarm.Agg
         MoveTo = 0x04,
         LineTo = 0x05,
         Curve3 = 0x06,
-        Curve4 = 0x07,
-        //-----------------------       
-        MASK = 0x0F,
-        //----------------------- 
-        //upper 4 bits for shape ShapeOrientation
-        //0 = unknown
-        //1 = CCW
-        //2 = CW
-        FlagCCW = (1 << 4),
-        FlagCW = (2 << 4)
-        //-----------------------            
+        Curve4 = 0x07, 
     }
 
     public enum EndVertexOrientation
     {
-        Unknown,
-        CCW,
-        CW
+        Unknown, //0
+        CCW,//1
+        CW//2
     }
 
     public static class VertexHelper
     {
         public static bool IsVertextCommand(VertexCmd c)
         {
-            return (VertexCmd.MASK & c) >= VertexCmd.MoveTo;
+            return  c >= VertexCmd.MoveTo;
         }
         public static bool IsEmpty(VertexCmd c)
         {
@@ -74,7 +64,7 @@ namespace PixelFarm.Agg
         }
         public static bool IsClose(VertexCmd c)
         {
-            return ((VertexCmd.MASK) & c) == VertexCmd.EndAndCloseFigure;
+            return c == VertexCmd.EndAndCloseFigure;
         }
         public static bool IsNextPoly(VertexCmd c)
         {
@@ -174,12 +164,13 @@ namespace PixelFarm.Agg
                     VertexCmd flags;
                     int myvxs_count = myvxs.Count;
 
-                    var orientFlags = isCW ? VertexCmd.FlagCW : VertexCmd.FlagCCW;
+                    var orientFlags = isCW ? (int)EndVertexOrientation.CW : (int)EndVertexOrientation.CCW;
 
                     while (end < myvxs_count &&
                           VertexHelper.IsEndFigure(flags = myvxs.GetCommand(end)))
                     {
-                        myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
+                        myvxs.ReplaceVertex(end++, orientFlags, 0);
+                        //myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
                     }
                 }
             }

@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 using System.Collections.Generic;
- 
+
 namespace PixelFarm.Agg
 {
     public sealed class Stroke
@@ -100,13 +100,13 @@ namespace PixelFarm.Agg
             for (int i = 0; i < j; ++i)
             {
                 var cmd = sourceVxs.GetVertex(i, out x, out y);
-                switch (VertexCmd.MASK & cmd)
+                switch (cmd)
                 {
                     case VertexCmd.Empty:
                         {
 
                         } break;
-                    
+
                     case VertexCmd.EndFigure:
                     case VertexCmd.EndAndCloseFigure:
                         {

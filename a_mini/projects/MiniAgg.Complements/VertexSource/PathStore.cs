@@ -41,8 +41,8 @@ namespace PixelFarm.Agg.VertexSource
         public PathStore()
         {
             myvxs = new VertexStore();
-        } 
-         
+        }
+
         public int Count
         {
             get { return myvxs.Count; }
@@ -201,7 +201,7 @@ namespace PixelFarm.Agg.VertexSource
             myvxs.AddLineTo(dx_to, dy_to);
 
         }
-      
+
         //--------------------------------------------------------------------
         public void Curve4(double x_ctrl2, double y_ctrl2,
                        double x_to, double y_to)
@@ -295,7 +295,7 @@ namespace PixelFarm.Agg.VertexSource
     }
      */
         //=======================================================================
-        
+
         public VertexStore Vxs
         {
             get { return this.myvxs; }
@@ -324,27 +324,27 @@ namespace PixelFarm.Agg.VertexSource
         {
             return myvxs.GetLastY();
         }
-         
+
 
         // Flip all vertices horizontally or vertically, 
         // between x1 and x2, or between y1 and y2 respectively
         //--------------------------------------------------------------------
-        
-        
+
+
         public void ClosePolygonCCW()
         {
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
             {
-                myvxs.AddVertex(0.0, 0.0, VertexCmd.EndAndCloseFigure | VertexCmd.FlagCCW);
+                myvxs.AddVertex((int)EndVertexOrientation.CCW, 0.0, VertexCmd.EndAndCloseFigure);
             }
         }
         public void ClosePolygon()
-        { 
+        {
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
             {
                 myvxs.AddVertex(0.0, 0.0, VertexCmd.EndAndCloseFigure);
             }
-        } 
+        }
         //// Concatenate path. The path is added as is.
         public void ConcatPath(VertexStoreSnap s)
         {
@@ -410,8 +410,8 @@ namespace PixelFarm.Agg.VertexSource
             }
 
         }
-             
-     
+
+
         public static void UnsafeDirectSetData(
             PathStore pathStore,
             int m_allocated_vertices,

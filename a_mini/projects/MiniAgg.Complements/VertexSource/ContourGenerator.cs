@@ -95,7 +95,7 @@ namespace PixelFarm.Agg.VertexSource
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
             m_status = StrokeMath.Status.Init;
-            switch ((VertexCmd.MASK) & cmd)
+            switch (cmd)
             {
                 case VertexCmd.MoveTo:
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
@@ -149,7 +149,7 @@ namespace PixelFarm.Agg.VertexSource
                         {
                             m_stroker.Width = -m_width;
                         } break;
-                }                 
+                }
             }
             m_status = StrokeMath.Status.Ready;
             m_src_vertex = 0;
@@ -210,10 +210,11 @@ namespace PixelFarm.Agg.VertexSource
                         break;
 
                     case StrokeMath.Status.EndPoly1:
-                        
+
                         if (!m_closed) return VertexCmd.Empty;
                         m_status = StrokeMath.Status.Stop;
-                        return VertexCmd.EndAndCloseFigure | VertexCmd.FlagCCW;
+                        x = (int)EndVertexOrientation.CCW;
+                        return VertexCmd.EndAndCloseFigure;
 
                     case StrokeMath.Status.Stop:
                         return VertexCmd.Empty;
