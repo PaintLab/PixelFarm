@@ -51,6 +51,13 @@ namespace PixelFarm.Font2
         {
             return NativeMyFonts.MyFtInitLib();
         }
+        static FT_Vector GetMidPoint(FT_Vector v1, FT_Vector v2)
+        {
+            
+            return new FT_Vector(
+                (v1.x + v2.x) / 2,
+                (v1.y + v2.y) / 2);
+        }
         internal static MyFontGlyph GetGlyph(char unicodeChar)
         {
 
@@ -114,7 +121,7 @@ namespace PixelFarm.Font2
                                     default:
                                         {
                                             throw new NotSupportedException();
-                                        } break;
+                                        }
                                 }
                                 controlPointCount = 0;
                                 justFromCurveMode = false;
@@ -169,8 +176,19 @@ namespace PixelFarm.Font2
                                         }
                                         else
                                         {
+                                            //we already have prev second control point
+                                            //so auto calculate line to 
+                                            //between 2 point
+                                            var mid = GetMidPoint(secondControlPoint, vpoint);
+                                            //----------
+                                            //generate curve3
+                                            ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                                mid.x / resize, mid.y / resize);
+                                            //------------------------
+                                            controlPointCount--;
+                                            //------------------------
                                             //printf("[%d] bzc2nd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
-                                            thirdControlPoint = vpoint;
+                                            secondControlPoint = vpoint;
                                         }
                                     } break;
                                 default:

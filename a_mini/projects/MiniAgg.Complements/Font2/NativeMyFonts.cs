@@ -18,6 +18,12 @@ namespace PixelFarm.Font2
     {
         public int x;
         public int y;
+
+        public FT_Vector(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]

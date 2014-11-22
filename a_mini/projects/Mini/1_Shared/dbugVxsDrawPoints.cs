@@ -41,7 +41,7 @@ namespace Mini
                         } break;
                     case VertexCmd.LineTo:
                         {
-                            p.FillColor = ColorRGBA.Black;
+                            p.FillColor = ColorRGBA.Yellow;
                             p.FillRectLBWH(x, y, 5, 5);
                             p.DrawString(i.ToString(), x, y + 5);
                         } break;

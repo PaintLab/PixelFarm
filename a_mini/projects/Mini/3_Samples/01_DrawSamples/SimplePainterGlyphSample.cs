@@ -58,12 +58,12 @@ namespace PixelFarm.Agg.SimplePainter
             var fontGlyph = font.GetGlyph('a'); 
             //p.Fill(fontGlyph.vxs);
 #if DEBUG             
-            //p.Fill(fontGlyph.vxs);
-            //dbugVxsDrawPoints.DrawVxsPoints(fontGlyph.vxs, g); 
+            //p.Fill(fontGlyph.vxs); 
 
             var flat_v = p.FlattenCurves(fontGlyph.vxs);
             p.Fill(flat_v);
-            //dbugVxsDrawPoints.DrawVxsPoints(flat_v, g);
+           // dbugVxsDrawPoints.DrawVxsPoints(flat_v, g);
+            //dbugVxsDrawPoints.DrawVxsPoints(fontGlyph.vxs, g); 
 #endif
 
             //p.Fill(p.FlattenCurves(fontGlyph.vxs));
