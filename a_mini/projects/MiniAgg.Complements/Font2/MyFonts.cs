@@ -18,7 +18,8 @@ namespace PixelFarm.Font2
 
     public class MyFontGlyph
     {
-        public VertexStore vxs;
+        public VertexStore originalVxs;
+        public VertexStore flattenVxs;
     }
 
     public class FontFace
@@ -46,6 +47,7 @@ namespace PixelFarm.Font2
     public static class MyFonts
     {
         static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>();
+        static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
 
         public static int InitLib()
         {
@@ -76,10 +78,8 @@ namespace PixelFarm.Font2
                 int todoContourCount = outline.n_contours;
 
                 PixelFarm.Agg.VertexSource.PathWriter ps = new Agg.VertexSource.PathWriter();
-                fontGlyph.vxs = ps.Vxs;
-
-
-                const int resize = 16;
+                fontGlyph.originalVxs = ps.Vxs; 
+                const int resize = 64;
                 int controlPointCount = 0;
 
                 while (todoContourCount > 0)
@@ -233,8 +233,7 @@ namespace PixelFarm.Font2
                     todoContourCount--;
                 }
 
-
-
+                fontGlyph.flattenVxs = curveFlattener.MakeVxs(fontGlyph.originalVxs);
                 return fontGlyph;
             }
         }
