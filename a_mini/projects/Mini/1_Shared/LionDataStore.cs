@@ -177,7 +177,7 @@ namespace PixelFarm.Agg
                     && Int32.TryParse(line, NumberStyles.HexNumber, null, out newColor))
                 {
                     // New color. Every new color creates new path in the path object.
-                    path.ClosePolygon();
+                    path.CloseFigure();
 
                     colors[npaths] = ColorRGBA.CreatRGB8Packed((int)newColor);
                     path_idx[npaths] = path.StartFigure();
@@ -200,7 +200,7 @@ namespace PixelFarm.Agg
                             if (!startedPoly)
                             {
                                 startedPoly = true;
-                                path.ClosePolygon();
+                                path.CloseFigure();
                                 path.MoveTo(x, y);
                             }
                             else

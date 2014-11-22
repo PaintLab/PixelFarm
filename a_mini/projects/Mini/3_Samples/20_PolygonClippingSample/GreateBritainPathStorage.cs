@@ -1886,14 +1886,14 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             {
                 ps.LineTo(poly1[i * 2 + 0], poly1[i * 2 + 1]);
             }
-            ps.ClosePolygon();
+            ps.CloseFigure();
 
             ps.MoveTo(poly2[0], poly2[1]);
             for (int i = 1; i < poly2.Length / 2; i++)
             {
                 ps.LineTo(poly2[i * 2 + 0], poly2[i * 2 + 1]);
             }
-            ps.ClosePolygon();
+            ps.CloseFigure();
         }
     }
 }

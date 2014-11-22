@@ -53,7 +53,7 @@ namespace PixelFarm.Agg.VertexSource
 
     public class CurveFlattener
     {
-        
+
         //tools , curve producer
         readonly Curve3 m_curve3 = new Curve3();
         readonly Curve4 m_curve4 = new Curve4();
@@ -105,190 +105,141 @@ namespace PixelFarm.Agg.VertexSource
                 m_curve3.CuspLimit = value;
                 m_curve4.CuspLimit = value;
             }
-        } 
+        }
+
+        enum CurveMode
+        {
+            NotCurve,
+            Curve3,
+            Curve4
+        }
+
         public VertexStore MakeVxs(VertexStoreSnap vsnap)
         {
 
             VertexStore vxs = new VertexStore();
-            VertexData lastVertextData = new VertexData();
+
             m_curve3.Reset();
             m_curve4.Reset();
-
             var snapIter = vsnap.GetVertexSnapIter();
+            CurveMode latestCurveMode = CurveMode.NotCurve;
             double x, y;
             VertexCmd cmd;
+
+            VectorMath.Vector2 c3p = new VectorMath.Vector2();
+            VectorMath.Vector2 c4p1 = new VectorMath.Vector2();
+            VectorMath.Vector2 c4p2 = new VectorMath.Vector2();
+
+            double lastX = 0;
+            double lasty = 0;
+
             do
             {
                 //this vertex
                 cmd = snapIter.GetNextVertex(out x, out y);
-                VertexData vertexData = new VertexData(cmd, x, y);
 
                 switch (cmd)
                 {
+                    //this is a control point 3
                     case VertexCmd.Curve3:
                         {
-                            //curve3  have one contol point
-                            //current x,y is control point
+                            switch (latestCurveMode)
+                            {
+                                case CurveMode.Curve3:
+                                    {
+                                        //add svg smooth curve3
 
-                            //forward read next for endpoint 
-                            double tmp_vx, tmp_vy;
-                            cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-                            VertexData endPoint = new VertexData(cmd, tmp_vx, tmp_vy);                             
-                            //----------------------------------------------------- 
-                            m_curve3.MakeLines(vxs, lastVertextData.x, lastVertextData.y, x, y, endPoint.x, endPoint.y); 
-                            //-----------------------------------------------------
-                            vertexData = endPoint;
-                            lastVertextData = endPoint;
 
+
+
+                                    } break;
+                                case CurveMode.Curve4:
+                                    {
+
+                                    } break;
+                                case CurveMode.NotCurve:
+                                    {
+                                        //temp store curve3
+                                        c3p.x = x;
+                                        c3p.y = y;
+                                    } break;
+                                default:
+                                    {
+                                    } break;
+                            }  
+                            latestCurveMode = CurveMode.Curve3;
                         }
                         break;
-
                     case VertexCmd.Curve4:
-                        {
+                        {   
                             //curve 4 has 2 control points
                             //current x,y is first control point
                             //then read next control point
                             //and end point
 
-                            double tmp_vx, tmp_vy;
-                            //second control point
-                            cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-                            VertexData secondCtrlPoint = new VertexData(cmd, tmp_vx, tmp_vy);
-
-                            cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-                            VertexData endPoint = new VertexData(cmd, tmp_vx, tmp_vy);
-
-                            m_curve4.Init(lastVertextData.x, lastVertextData.y, x, y, secondCtrlPoint.x, secondCtrlPoint.y, endPoint.x, endPoint.y);
-                            IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
-                            curveIterator.MoveNext(); // First call returns path_cmd_move_to
-
-                            while (!VertexHelper.IsEmpty(vertexData.command))
+                            switch (latestCurveMode)
                             {
-                                curveIterator.MoveNext();
-
-                                if (VertexHelper.IsEmpty(curveIterator.Current.command))
-                                {
-                                    break;
-                                }
-
-
-                                var position = curveIterator.Current.position;
-
-                                vertexData = new VertexData(VertexCmd.LineTo, position);                                 
-                                vxs.AddLineTo(position.X, position.Y);
-                                lastVertextData = vertexData;
+                                case CurveMode.Curve3:
+                                    {
+                                    } break;
+                                case CurveMode.Curve4:
+                                    {
+                                    } break;
+                                case CurveMode.NotCurve:
+                                    {
+                                    } break;
                             }
+                            latestCurveMode = CurveMode.Curve4; 
                         }
                         break;
+                    case VertexCmd.LineTo:
+                        {
+                            switch (latestCurveMode)
+                            {
+                                case CurveMode.Curve3:
+                                    {
+                                        //from curve3
+                                        m_curve3.MakeLines(vxs,
+                                            lastX,
+                                            lasty,
+                                            c3p.X,
+                                            c3p.Y,
+                                            x,
+                                            y); 
+                                    } break;
+                                case CurveMode.Curve4:
+                                    {
+                                        //from curve4
+                                        vxs.AddVertex(x, y, cmd);
+                                    } break;
+                                default:
+                                    {
+                                        vxs.AddVertex(x, y, cmd);
+                                    } break;
+                            } 
+                            //-----------
+                            latestCurveMode = CurveMode.NotCurve;
+                            lastX = x;
+                            lasty = y;
+                            //-----------
+                        } break;
                     default:
-
-                        vxs.AddVertex(vertexData.x, vertexData.y, vertexData.command);
-                        lastVertextData = vertexData;
-                        break;
+                        {
+                            //move to, and end command
+                            vxs.AddVertex(x, y, cmd);
+                            //-----------
+                            latestCurveMode = CurveMode.NotCurve;
+                            lastX = x;
+                            lasty = y;
+                            //-----------
+                        } break;
                 }
             } while (cmd != VertexCmd.Empty);
             return vxs;
-
         }
-        
-        //public VertexStore MakeVxs2(VertexStoreSnap vsnap)
-        //{
-
-        //    VertexStore vxs = new VertexStore();
-        //    VertexData lastVertextData = new VertexData();
-        //    m_curve3.Reset();
-        //    m_curve4.Reset();
-
-        //    var snapIter = vsnap.GetVertexSnapIter();
-        //    double x, y;
-        //    NxCmdAndFlags cmd;
-        //    do
-        //    {
-        //        cmd = snapIter.GetNextVertex(out x, out y);
-        //        VertexData vertexData = new VertexData(cmd, x, y);
-
-        //        switch (cmd)
-        //        {
-        //            case NxCmdAndFlags.Curve3:
-        //                {
-        //                    double tmp_vx, tmp_vy;
-        //                    cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-
-        //                    VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
-        //                    m_curve3.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataEnd.x, vertexDataEnd.y);
-
-        //                    IEnumerator<VertexData> curveIterator = m_curve3.GetVertexIter().GetEnumerator();
-        //                    curveIterator.MoveNext(); // First call returns path_cmd_move_to
-
-        //                    do
-        //                    {
-        //                        curveIterator.MoveNext();
-        //                        VertexData currentVertextData = curveIterator.Current;
-        //                        if (ShapePath.IsEmpty(currentVertextData.command))
-        //                        {
-        //                            break;
-        //                        }
-
-        //                        vertexData = new VertexData(
-        //                           NxCmdAndFlags.LineTo,
-        //                           currentVertextData.position);
-
-        //                        vxs.AddVertex(vertexData);
-
-        //                        lastVertextData = vertexData;
-
-        //                    } while (!ShapePath.IsEmpty(curveIterator.Current.command));
-        //                }
-        //                break;
-
-        //            case NxCmdAndFlags.Curve4:
-        //                {
-        //                    double tmp_vx, tmp_vy;
-
-        //                    cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-        //                    VertexData vertexDataControl = new VertexData(cmd, tmp_vx, tmp_vy);
-        //                    cmd = snapIter.GetNextVertex(out tmp_vx, out tmp_vy);
-        //                    VertexData vertexDataEnd = new VertexData(cmd, tmp_vx, tmp_vy);
-
-        //                    m_curve4.Init(lastVertextData.x, lastVertextData.y, x, y, vertexDataControl.x, vertexDataControl.y, vertexDataEnd.x, vertexDataEnd.y);
-        //                    IEnumerator<VertexData> curveIterator = m_curve4.GetVertexIter().GetEnumerator();
-        //                    curveIterator.MoveNext(); // First call returns path_cmd_move_to
-
-        //                    while (!ShapePath.IsEmpty(vertexData.command))
-        //                    {
-        //                        curveIterator.MoveNext();
-
-        //                        if (ShapePath.IsEmpty(curveIterator.Current.command))
-        //                        {
-        //                            break;
-        //                        }
-
-
-        //                        var position = curveIterator.Current.position;
-
-        //                        vertexData = new VertexData(NxCmdAndFlags.LineTo, position);
-        //                        vxs.AddVertex(vertexData);
-
-        //                        lastVertextData = vertexData;
-        //                    }
-        //                }
-        //                break;
-        //            default:
-
-        //                vxs.AddVertex(vertexData);
-        //                lastVertextData = vertexData;
-        //                break;
-        //        }
-        //    } while (cmd != NxCmdAndFlags.Empty);
-        //    return vxs;
-
-        //}
-        
-        
         public VertexStore MakeVxs(VertexStore srcVxs)
         {
-            return MakeVxs(new VertexStoreSnap(srcVxs));            
-             
+            return MakeVxs(new VertexStoreSnap(srcVxs)); 
         }
     }
 }

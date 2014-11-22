@@ -96,7 +96,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 //    }
                 //}
 
-                output.ClosePolygon();
+                output.CloseFigure();
             }
 
 
@@ -199,7 +199,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps1.MoveTo(x + 140, y + 145);
                         ps1.LineTo(x + 225, y + 44);
                         ps1.LineTo(x + 296, y + 219);
-                        ps1.ClosePolygon();
+                        ps1.CloseFigure();
 
                         ps1.LineTo(x + 226, y + 289);
                         ps1.LineTo(x + 82, y + 292);
@@ -245,7 +245,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps1.MoveTo(x + 140, y + 145);
                         ps1.LineTo(x + 225, y + 44);
                         ps1.LineTo(x + 296, y + 219);
-                        ps1.ClosePolygon();
+                        ps1.CloseFigure();
 
                         ps1.LineTo(x + 226, y + 289);
                         ps1.LineTo(x + 82, y + 292);
@@ -253,7 +253,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps1.MoveTo(x + 220 - 50, y + 222);
                         ps1.LineTo(x + 265 - 50, y + 331);
                         ps1.LineTo(x + 363 - 50, y + 249);
-                        ps1.ClosePolygonCCW();
+                        ps1.CloseFigureCCW();
                         //-----------------------------------------
 
 
@@ -261,7 +261,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 473, 100 + 263);
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
-                        ps2.ClosePolygon();
+                        ps2.CloseFigure();
 
                         graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
 
@@ -383,7 +383,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         glyph.Curve3(38.72, -0.88, 33.74, -0.88);
                         glyph.Curve3(31.35, -0.88, 29.93, 0.78);
                         glyph.Curve3(28.52, 2.44, 28.47, 6.45);
-                        glyph.ClosePolygon();
+                        glyph.CloseFigure();
 
                         glyph.MoveTo(28.47, 9.62);
                         glyph.LineTo(28.47, 26.66);
@@ -393,7 +393,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         glyph.Curve3(11.77, 9.38, 13.87, 7.06);
                         glyph.Curve3(15.97, 4.74, 18.70, 4.74);
                         glyph.Curve3(22.41, 4.74, 28.47, 9.62);
-                        glyph.ClosePolygon();
+                        glyph.CloseFigure();
 
                         //Affine mtx = Affine.NewIdentity();
                         //mtx *= Affine.NewScaling(4.0);
@@ -474,7 +474,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             ps.LineTo(1361.799999999999955, 1344.799999999999955);
             ps.LineTo(1346.200000000000045, 1313.599999999999909);
             ps.LineTo(1330.599999999999909, 1329.200000000000045);
-            ps.ClosePolygon();
+            ps.CloseFigure();
 
             ps.MoveTo(1330.599999999999909, 1266.799999999999955);
             ps.LineTo(1377.400000000000091, 1266.799999999999955);
@@ -483,7 +483,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             ps.LineTo(1361.799999999999955, 1204.399999999999864);
             ps.LineTo(1346.200000000000045, 1235.599999999999909);
             ps.LineTo(1330.599999999999909, 1220.000000000000000);
-            ps.ClosePolygon();
+            ps.CloseFigure();
 
             ps.MoveTo(1315.000000000000000, 1282.399999999999864);
             ps.LineTo(1315.000000000000000, 1329.200000000000045);
@@ -492,7 +492,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             ps.LineTo(1252.599999999999909, 1313.599999999999909);
             ps.LineTo(1283.799999999999955, 1298.000000000000000);
             ps.LineTo(1268.200000000000045, 1282.399999999999864);
-            ps.ClosePolygon();
+            ps.CloseFigure();
 
             ps.MoveTo(1268.200000000000045, 1266.799999999999955);
             ps.LineTo(1315.000000000000000, 1266.799999999999955);
@@ -501,7 +501,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             ps.LineTo(1283.799999999999955, 1204.399999999999864);
             ps.LineTo(1252.599999999999909, 1235.599999999999909);
             ps.LineTo(1283.799999999999955, 1251.200000000000045);
-            ps.ClosePolygon();
+            ps.CloseFigure();
         }
     }
 

@@ -195,7 +195,7 @@ namespace OpenTkEssTest
                                 polygon2dVertices[nn++]);
                         }
                         //close
-                        ps.ClosePolygon();
+                        ps.CloseFigure();
 
                         VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
                         sclineRas.Reset();
@@ -867,7 +867,7 @@ namespace OpenTkEssTest
                                 vertex2dCoords[nn++]);
                         }
                         //close
-                        ps.ClosePolygon();
+                        ps.CloseFigure();
                         VertexStore vxs = ps.Vxs;
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);

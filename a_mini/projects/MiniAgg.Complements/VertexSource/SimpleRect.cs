@@ -68,7 +68,7 @@ namespace PixelFarm.Agg.VertexSource
             m_LinesToDraw.LineTo(bounds.Right, bounds.Bottom);
             m_LinesToDraw.LineTo(bounds.Right, bounds.Top);
             m_LinesToDraw.LineTo(bounds.Left, bounds.Top);
-            m_LinesToDraw.ClosePolygon();
+            m_LinesToDraw.CloseFigure();
             return m_LinesToDraw.Vxs;
         }
         public VertexStoreSnap MakeVertexSnap()

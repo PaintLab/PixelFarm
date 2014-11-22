@@ -236,29 +236,29 @@ namespace PixelFarm.Agg.VertexSource
             this.SmoothCurve3(this.lastX + x, this.lastY + y);
         }
         //-----------------------------------------------------------------------
-        public void Curve4(double cx1, double cy1,
-                                   double cx2, double xy2,
-                                   double x, double y)
+        public void Curve4(double p2x, double p2y,
+                           double p3x, double p3y,
+                           double x, double y)
         {
             this.latestSVGPathCmd = SvgPathCommand.CurveTo;
-            myvxs.AddVertexCurve4(cx1, cy1);
-            myvxs.AddVertexCurve4(cx2, xy2);
+            myvxs.AddVertexCurve4(p2x, p2y);
+            myvxs.AddVertexCurve4(p3x, p3y);
             myvxs.AddLineTo(this.lastX = x, this.lastY = y);
         }
 
-        public void Curve4Rel(double cx1, double cy1,
-                              double cx2, double cy2,
+        public void Curve4Rel(double p2x, double p2y,
+                              double p3x, double p3y,
                               double x, double y)
         {
 
             this.latestSVGPathCmd = SvgPathCommand.CurveTo;
-            myvxs.AddVertexCurve4(this.lastX + cx1, this.lastY + cy1);
-            myvxs.AddVertexCurve4(this.lastX + cx2, this.lastY + cy2);
+            myvxs.AddVertexCurve4(this.lastX + p2x, this.lastY + p2y);
+            myvxs.AddVertexCurve4(this.lastX + p3x, this.lastY + p3y);
             myvxs.AddLineTo(this.lastX += x, this.lastY += y);
         }
 
         //--------------------------------------------------------------------
-        public void SmoothCurve4(double cx2, double cy2,
+        public void SmoothCurve4(double p3x, double p3y,
                        double x, double y)
         {
 
@@ -269,28 +269,28 @@ namespace PixelFarm.Agg.VertexSource
                     {
                         //curve3
                         var newC4p1 = CreateMirrorPoint(this.curve3c, new Vector2(this.lastX, this.lastY));
-                        Curve4(newC4p1.X, newC4p1.Y, cx2, cy2, x, y);
+                        Curve4(newC4p1.X, newC4p1.Y, p3x, p3y, x, y);
                     } break;
                 case SvgPathCommand.CurveTo:
                 case SvgPathCommand.SmoothCurveTo:
                     {
                         //curve4
                         var newC4p1 = CreateMirrorPoint(this.curve4c2, new Vector2(this.lastX, this.lastY));
-                        Curve4(newC4p1.X, newC4p1.Y, cx2, cy2, x, y);
+                        Curve4(newC4p1.X, newC4p1.Y, p3x, p3y, x, y);
                     } break;
                 default:
                     {
-                        Curve4(this.lastX, this.lastY, cx2, cy2, x, y);
+                        Curve4(this.lastX, this.lastY, p3x, p3y, x, y);
                     } break;
             }
             this.latestSVGPathCmd = SvgPathCommand.SmoothCurveTo;
         }
 
-        public void SmoothCurve4Rel(double cx2, double cy2,
+        public void SmoothCurve4Rel(double p3x, double p3y,
                                     double x, double y)
         {
 
-            SmoothCurve4(this.lastX + cx2, this.lastY + cy2, this.lastX + x, this.lastY + y);
+            SmoothCurve4(this.lastX + p3x, this.lastY + p3y, this.lastX + x, this.lastY + y);
         }
 
         //=======================================================================
@@ -375,14 +375,14 @@ namespace PixelFarm.Agg.VertexSource
         //--------------------------------------------------------------------
 
 
-        public void ClosePolygonCCW()
+        public void CloseFigureCCW()
         {
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
             {
                 myvxs.AddVertex((int)EndVertexOrientation.CCW, 0, VertexCmd.EndAndCloseFigure);
             }
         }
-        public void ClosePolygon()
+        public void CloseFigure()
         {
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
             {

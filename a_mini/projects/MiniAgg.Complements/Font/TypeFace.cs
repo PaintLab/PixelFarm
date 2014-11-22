@@ -354,7 +354,7 @@ namespace PixelFarm.Agg.Font
                         parseIndex++;
                         curXY = lastXY; // value not used this is to remove an error.
                         //newGlyph.glyphData.ClosePathStorage();
-                        newGlyph.glyphData.ClosePolygon();
+                        newGlyph.glyphData.CloseFigure();
                         // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
                         // We stored the position of the start of this polygon, no we flip it as we colse it.
                         //newGlyph.glyphData.InvertPolygon(polyStartVertexSourceIndex);

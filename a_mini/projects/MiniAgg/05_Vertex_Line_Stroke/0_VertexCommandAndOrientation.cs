@@ -21,8 +21,8 @@ namespace PixelFarm.Agg
         //-----------------------
         //end figure command 2 lower bits 
         //is end command when 2 lower bit > 0
-        EndFigure = 0x01,
-        EndAndCloseFigure = 0x02,
+        EndFigure = 0x02,
+        EndAndCloseFigure = 0x03,
         //----------------------- 
         //start from move to is 
         MoveTo = 0x04,
@@ -30,7 +30,6 @@ namespace PixelFarm.Agg
         Curve3 = 0x06,
         Curve4 = 0x07, 
     }
-
     public enum EndVertexOrientation
     {
         Unknown, //0
@@ -52,12 +51,7 @@ namespace PixelFarm.Agg
         public static bool IsMoveTo(VertexCmd c)
         {
             return c == VertexCmd.MoveTo;
-        }
-        public static bool IsCurve(VertexCmd c)
-        {
-            return c == VertexCmd.Curve3
-                || c == VertexCmd.Curve4;
-        }
+        } 
         public static bool IsEndFigure(VertexCmd c)
         {
             return ((int)c & 0x3) > 0;
@@ -69,9 +63,7 @@ namespace PixelFarm.Agg
         public static bool IsNextPoly(VertexCmd c)
         {
             return c <= VertexCmd.MoveTo;
-        }
-         
-
+        } 
 
         public static void ShortenPath(VertexDistanceList vertexDistanceList, double s, bool closed)
         {

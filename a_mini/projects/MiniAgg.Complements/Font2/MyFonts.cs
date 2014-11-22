@@ -147,7 +147,7 @@ namespace PixelFarm.Font2
                         }
                     }
 
-                    ps.ClosePolygon();
+                    ps.CloseFigure();
                     startContour++;
                     todoContourCount--;
                 }

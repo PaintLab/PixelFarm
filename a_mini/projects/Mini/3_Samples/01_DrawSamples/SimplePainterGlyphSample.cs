@@ -34,18 +34,28 @@ namespace PixelFarm.Agg.SimplePainter
             p.Clear(ColorRGBA.White);
             p.FillColor = ColorRGBA.Blue;
 
-            p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
+
+            //<path d="M414 20q-163 40 -245 126t-82 276z"/> 
+            PathWriter path = new PathWriter();
+            path.MoveTo(414, 20);
+            path.Curve3Rel(-163, 40, -245, 126);
+            path.SmoothCurve3Rel(-82, 246);
+            path.CloseFigure();
+
+
+            p.Fill(p.FlattenCurves(path.Vxs));
+            //p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
             //---------------------------------------------------
+
 
             //test font ***
             var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 48);
             var fontGlyph = font.GetGlyph('ด');
-            CurveFlattener curveFlatter = new CurveFlattener();
-            //var fontVxsFlatten = curveFlatter.MakeVxs(fontGlyph.vxs);
-            p.Fill(fontGlyph.vxs);
+             
+            p.Fill(p.FlattenCurves(fontGlyph.vxs));
             //p.Fill(fontVxsFlatten);
 
-            
+
         }
     }
 

@@ -41,6 +41,7 @@ namespace PixelFarm.Agg.VertexSource
                 control1);
             vxs.AddLineTo(start.x, start.y);
             float eachstep = (float)1 / 20;
+
             for (int i = 1; i < 20; ++i)
             {
                 var vector2 = curve.CalculatePoint((float)(i * eachstep));

@@ -56,7 +56,7 @@ namespace PixelFarm.Agg
         RoundedRect roundRect = null;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
-
+        CurveFlattener curveFlattener = new CurveFlattener();
         //-------------
         public CanvasPainter(Graphics2D graphic2d)
         {
@@ -331,6 +331,11 @@ namespace PixelFarm.Agg
             sclineRas.AddPath(vxs);
             //sclineRasToBmp.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
+        }
+        //---------------- 
+        public VertexStore FlattenCurves(VertexStore srcVxs)
+        {
+            return curveFlattener.MakeVxs(srcVxs);
         }
     }
 
