@@ -300,7 +300,7 @@ namespace PixelFarm.Agg
                     var cmd = vxs.GetVertex(i, out x, out y);
                     switch (cmd)
                     {
-                        case VertexCmd.Empty:
+                        case VertexCmd.Stop:
                             {
                                 //stop 
                             } break;
@@ -340,7 +340,7 @@ namespace PixelFarm.Agg
                     cmd = snapIter.GetNextVertex(out x, out y);
                     switch (cmd)
                     {
-                        case VertexCmd.Empty:
+                        case VertexCmd.Stop:
                             {
                                 stop = true;
                             } break;

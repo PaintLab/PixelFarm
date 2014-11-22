@@ -142,7 +142,7 @@ namespace PixelFarm.Agg.Font
                             {
                                 double x, y;
                                 var cmd = currentGlyph.GetVertex(i, out x, out y);
-                                if (cmd != VertexCmd.Empty)
+                                if (cmd != VertexCmd.Stop)
                                 {
                                     yield return new VertexData(cmd,
                                         (x + currentOffset.x),
@@ -168,7 +168,7 @@ namespace PixelFarm.Agg.Font
                     currentOffset.y -= typeFaceStyle.EmSizeInPixels;
                 }
             }
-            yield return new VertexData(VertexCmd.Empty);
+            yield return new VertexData(VertexCmd.Stop);
         }
 
         private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)

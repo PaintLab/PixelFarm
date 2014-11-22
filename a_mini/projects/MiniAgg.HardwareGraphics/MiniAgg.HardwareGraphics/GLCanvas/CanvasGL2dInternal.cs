@@ -156,7 +156,7 @@ namespace OpenTkEssTest
                                 npoints++;
 
                             } break;
-                        case VertexCmd.Empty:
+                        case VertexCmd.Stop:
                             {
                             } break;
                         default:

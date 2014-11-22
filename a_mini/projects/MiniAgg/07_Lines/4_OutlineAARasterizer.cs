@@ -586,6 +586,8 @@ namespace PixelFarm.Agg.Lines
         {
             switch (cmd)
             {
+                case VertexCmd.HasMore:
+                    break;                    
                 case VertexCmd.MoveTo:
                     Render(false);
                     MoveTo(x, y);
@@ -610,7 +612,7 @@ namespace PixelFarm.Agg.Lines
             VertexCmd cmd;
 
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 AddVertex(x, y, cmd);
             }

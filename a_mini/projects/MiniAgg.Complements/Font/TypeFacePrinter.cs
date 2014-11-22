@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.Font
                             {
                                 double x, y;
                                 var cmd = currentGlyph.GetVertex(i, out x, out y);
-                                if (cmd != VertexCmd.Empty)
+                                if (cmd != VertexCmd.Stop)
                                 {
                                     yield return new VertexData(cmd,
                                         (x + currentOffset.x + Origin.x),
@@ -271,7 +271,7 @@ namespace PixelFarm.Agg.Font
             }
 
 
-            yield return new VertexData(VertexCmd.Empty);
+            yield return new VertexData(VertexCmd.Stop);
         }
 
         public VertexStore MakeVxs()

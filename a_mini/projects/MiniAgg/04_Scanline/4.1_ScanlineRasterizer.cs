@@ -293,7 +293,7 @@ namespace PixelFarm.Agg
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = vxs.GetVertex(i, out x, out y);
-                    if (cmd != VertexCmd.Empty)
+                    if (cmd != VertexCmd.Stop)
                     {
                         AddVertex(cmd, x, y);
                     }
@@ -303,7 +303,7 @@ namespace PixelFarm.Agg
             {
                 VertexSnapIter snapIter = snap.GetVertexSnapIter();
                 VertexCmd cmd;
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
                 {
                     AddVertex(cmd, x, y);
                 }

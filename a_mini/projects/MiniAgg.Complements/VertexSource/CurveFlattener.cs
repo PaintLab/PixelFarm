@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.VertexSource
                             //-----------
                         } break;
                 }
-            } while (cmd != VertexCmd.Empty);
+            } while (cmd != VertexCmd.Stop);
             return vxs;
         }
         public VertexStore MakeVxs(VertexStore srcVxs)

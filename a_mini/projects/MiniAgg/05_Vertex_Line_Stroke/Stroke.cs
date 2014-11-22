@@ -102,11 +102,10 @@ namespace PixelFarm.Agg
                 var cmd = sourceVxs.GetVertex(i, out x, out y);
                 switch (cmd)
                 {
-                    case VertexCmd.Empty:
-                        {
-
-                        } break;
-
+                    case VertexCmd.Stop:
+                    case VertexCmd.HasMore:                    
+                        { 
+                        } break;                         
                     case VertexCmd.EndFigure:
                     case VertexCmd.EndAndCloseFigure:
                         {
@@ -134,6 +133,8 @@ namespace PixelFarm.Agg
                             startX = x;
                             startY = y;
                         } break;
+
+                    default: throw new System.NotSupportedException();
                 }
             }
             strkgen.WriteTo(vxs);

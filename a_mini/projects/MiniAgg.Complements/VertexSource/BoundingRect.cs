@@ -71,7 +71,7 @@ namespace PixelFarm.Agg
             {
 
                 VertexCmd flags;
-                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != VertexCmd.Empty)
+                while ((flags = vxs.GetVertex(iterindex++, out x, out y)) != VertexCmd.Stop)
                 {
                     switch (flags)
                     {

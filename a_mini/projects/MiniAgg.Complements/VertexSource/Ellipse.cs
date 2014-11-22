@@ -116,7 +116,7 @@ namespace PixelFarm.Agg.VertexSource
             vertexData.command = FlagsAndCommand.EndAndCloseFigure;
             yield return vertexData;
 
-            vertexData.command = FlagsAndCommand.Empty;
+            vertexData.command = FlagsAndCommand.Stop;
             yield return vertexData;
         }
 

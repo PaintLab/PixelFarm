@@ -70,7 +70,7 @@ namespace PixelFarm.Agg
                 return GetCommand(m_num_vertices - 1);
             }
 
-            return VertexCmd.Empty;
+            return VertexCmd.Stop;
         }
         public VertexCmd GetLastVertex(out double x, out double y)
         {
@@ -81,7 +81,7 @@ namespace PixelFarm.Agg
 
             x = 0;
             y = 0;
-            return VertexCmd.Empty;
+            return VertexCmd.Stop;
         }
         public VertexCmd GetBeforeLastVetex(out double x, out double y)
         {
@@ -92,7 +92,7 @@ namespace PixelFarm.Agg
             }
             x = 0;
             y = 0;
-            return VertexCmd.Empty;
+            return VertexCmd.Stop;
         }
         public double GetLastX()
         {
@@ -172,7 +172,7 @@ namespace PixelFarm.Agg
         }
         public void AddStop()
         {
-            AddVertex(0, 0, VertexCmd.Empty);
+            AddVertex(0, 0, VertexCmd.Stop);
         }
         internal void ReplaceVertex(int index, double x, double y)
         {

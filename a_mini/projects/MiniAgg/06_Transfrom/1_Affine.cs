@@ -919,7 +919,7 @@ namespace PixelFarm.Agg.Transform
             var snapIter = src.GetVertexSnapIter();
             VertexCmd cmd;
             double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 this.Transform(ref x, ref y);
                 vxs.AddVertex(x, y, cmd);
@@ -950,7 +950,7 @@ namespace PixelFarm.Agg.Transform
 
             VertexCmd cmd;
             double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 x += dx;
                 y += dy;

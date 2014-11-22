@@ -91,17 +91,15 @@ namespace PixelFarm.Agg.VertexSource
         public int StartFigure()
         {
             if (figureCount > 0)
-            {
-                //add sep command
-                myvxs.AddVertex(0.0, 0.0, VertexCmd.Empty);
-
+            {   
+                myvxs.AddVertex(0, 0, VertexCmd.Stop); 
             }
             figureCount++;
             return myvxs.Count;
         }
         public void Stop()
         {
-            myvxs.AddVertex(0, 0, VertexCmd.Empty);
+            myvxs.AddVertex(0, 0, VertexCmd.Stop);
         }
         //--------------------------------------------------------------------
         public void MoveTo(double x, double y)
@@ -395,7 +393,7 @@ namespace PixelFarm.Agg.VertexSource
             double x, y;
             VertexCmd cmd_flags;
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd_flags = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
+            while ((cmd_flags = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 myvxs.AddVertex(x, y, cmd_flags);
             }
@@ -410,7 +408,7 @@ namespace PixelFarm.Agg.VertexSource
             double x, y;
             var snapIter = s.GetVertexSnapIter();
             VertexCmd cmd = snapIter.GetNextVertex(out x, out y);
-            if (cmd == VertexCmd.Empty)
+            if (cmd == VertexCmd.Stop)
             {
                 return;
             }
@@ -448,7 +446,7 @@ namespace PixelFarm.Agg.VertexSource
                 }
             }
 
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Empty)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 myvxs.AddVertex(x, y, VertexHelper.IsMoveTo(cmd) ? VertexCmd.LineTo : cmd);
             }

@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
 
         public SpanGenGourand()
         {
-            m_cmd[0] = VertexCmd.Empty;
+            m_cmd[0] = VertexCmd.Stop;
         }
 
         public SpanGenGourand(ColorRGBA c1,
@@ -89,7 +89,7 @@ namespace PixelFarm.Agg
             m_cmd[0] = VertexCmd.MoveTo;
             m_cmd[1] = VertexCmd.LineTo;
             m_cmd[2] = VertexCmd.LineTo;
-            m_cmd[3] = VertexCmd.Empty;
+            m_cmd[3] = VertexCmd.Stop;
 
             if (d != 0.0)
             {
@@ -113,7 +113,7 @@ namespace PixelFarm.Agg
                 m_cmd[3] = VertexCmd.LineTo;
                 m_cmd[4] = VertexCmd.LineTo;
                 m_cmd[5] = VertexCmd.LineTo;
-                m_cmd[6] = VertexCmd.Empty;
+                m_cmd[6] = VertexCmd.Stop;
             }
         }
         public VertexStore MakeVxs()
@@ -125,7 +125,7 @@ namespace PixelFarm.Agg
                 VertexCmd cmd;
                 vxs.AddVertex(m_x[i], m_y[i], cmd = m_cmd[i]);
 
-                if (cmd == VertexCmd.Empty)
+                if (cmd == VertexCmd.Stop)
                 {
                     break;
                 }

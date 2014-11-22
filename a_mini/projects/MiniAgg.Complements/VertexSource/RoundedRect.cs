@@ -200,7 +200,7 @@ namespace PixelFarm.Agg.VertexSource
                 {
                     case VertexCmd.MoveTo:
                         continue;
-                    case VertexCmd.Empty:
+                    case VertexCmd.Stop:
                         break;
                     default:
                         yield return vertexData;
@@ -209,7 +209,7 @@ namespace PixelFarm.Agg.VertexSource
             }
 
             yield return new VertexData(VertexCmd.EndAndCloseFigure, (int)EndVertexOrientation.CCW, 0);
-            yield return new VertexData(VertexCmd.Empty);
+            yield return new VertexData(VertexCmd.Stop);
         }
         
         public VertexStore MakeVxs()

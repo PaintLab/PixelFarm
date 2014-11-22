@@ -62,7 +62,7 @@ namespace PixelFarm.Agg.UI
             y = 0;
             if (m_vertex > m_num_points)
             {
-                return VertexCmd.Empty;
+                return VertexCmd.Stop;
             } 
             if (m_vertex == m_num_points)
             {
@@ -91,7 +91,7 @@ namespace PixelFarm.Agg.UI
                 double x, y;
                 var cmd = this.GetNextVertex(out x, out y);
                 vxs.AddVertex(x, y, cmd);
-                if (cmd == VertexCmd.Empty)
+                if (cmd == VertexCmd.Stop)
                 {
                     break;
                 }
@@ -208,7 +208,7 @@ namespace PixelFarm.Agg.UI
             for (int i = 0; i < j; ++i)
             {
                 var cmd = s_vxs.GetVertex(i, out x, out y);
-                if (cmd == VertexCmd.Empty)
+                if (cmd == VertexCmd.Stop)
                 {
                     break;
                 }
@@ -233,7 +233,7 @@ namespace PixelFarm.Agg.UI
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = ellipseVxs.GetVertex(i, out x, out y);
-                    if (cmd == VertexCmd.Empty)
+                    if (cmd == VertexCmd.Stop)
                     {
                         break;
                     }
@@ -244,7 +244,7 @@ namespace PixelFarm.Agg.UI
             //------------------------------------------------------------
 
             //close with stop
-            vxs.AddVertex(0, 0, VertexCmd.Empty);
+            vxs.AddVertex(0, 0, VertexCmd.Stop);
             return vxs;
         }
         protected override RectD CalculateLocalBounds()

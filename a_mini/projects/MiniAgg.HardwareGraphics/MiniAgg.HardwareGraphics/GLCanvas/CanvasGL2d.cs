@@ -261,7 +261,7 @@ namespace OpenTkEssTest
                                             coords[nn++] = (float)vx;
                                             coords[nn++] = (float)vy;
                                         } break;
-                                    case VertexCmd.Empty:
+                                    case VertexCmd.Stop:
                                         {
                                         } break;
                                     default:
@@ -383,7 +383,7 @@ namespace OpenTkEssTest
                 switch (vertexData.command)
                 {
 
-                    case VertexCmd.Empty:
+                    case VertexCmd.Stop:
                         stopLoop = true;
                         break;
                     default:
@@ -799,7 +799,7 @@ namespace OpenTkEssTest
                                 coords[nn++] = (float)vy;
                                 npoints++;
                             } break;
-                        case VertexCmd.Empty:
+                        case VertexCmd.Stop:
                             {
                             } break;
                         default:
