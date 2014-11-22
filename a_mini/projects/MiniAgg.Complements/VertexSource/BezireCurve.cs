@@ -15,6 +15,7 @@ namespace PixelFarm.Agg.VertexSource
     /// </summary>
     public static class BezierCurve
     {
+        static int NSteps = 20;
         public static void CreateBezierVxs4(Agg.VertexStore vxs, Vector2 start, Vector2 end,
             Vector2 control1, Vector2 control2)
         {
@@ -22,15 +23,19 @@ namespace PixelFarm.Agg.VertexSource
                 start, end,
                 control1, control2);
 
-            vxs.AddMoveTo(start.x, start.y);
-            float eachstep = (float)1 / 20;
-            for (int i = 1; i < 20; ++i)
+            vxs.AddLineTo(start.x, start.y);
+            float eachstep = (float)1 / NSteps;
+
+            float stepSum = eachstep;//start
+            for (int i = 1; i < NSteps; ++i)
             {
-                var vector2 = curve.CalculatePoint((float)(i * eachstep));
+                var vector2 = curve.CalculatePoint(stepSum);              
                 vxs.AddLineTo(vector2.x, vector2.y);
+
+                stepSum += eachstep;
             }
             vxs.AddLineTo(end.x, end.y);
-            vxs.AddStop();
+
         }
         public static void Curve3GetControlPoints(Vector2 start, Vector2 controlPoint, Vector2 endPoint, out Vector2 control1, out Vector2 control2)
         {
@@ -45,25 +50,28 @@ namespace PixelFarm.Agg.VertexSource
         public static void CreateBezierVxs3(Agg.VertexStore vxs, Vector2 start, Vector2 end,
            Vector2 control1)
         {
-            //convert c3 to c4
-            //Vector2 c4p2, c4p3;
-            //Curve3GetControlPoints(start, control1, end, out c4p2, out c4p3);
-            //CreateBezierVxs4(vxs, start, end, c4p2, c4p3);
-
-
+           
             var curve = new VectorMath.BezierCurveQuadric(
                 start, end,
                 control1);
             vxs.AddLineTo(start.x, start.y);
-            float eachstep = (float)1 / 20;
+            float eachstep = (float)1 / NSteps;
 
-            for (int i = 1; i < 20; ++i)
+            float stepSum = eachstep;//start
+            for (int i = 1; i < NSteps; ++i)
             {
-                var vector2 = curve.CalculatePoint((float)(i * eachstep));
+                var vector2 = curve.CalculatePoint(stepSum);              
                 vxs.AddLineTo(vector2.x, vector2.y);
+                stepSum += eachstep;
             }
             vxs.AddLineTo(end.x, end.y);
 
+
+            //------------------------------------------------------
+            //convert c3 to c4
+            //Vector2 c4p2, c4p3;
+            //Curve3GetControlPoints(start, control1, end, out c4p2, out c4p3);
+            //CreateBezierVxs4(vxs, start, end, c4p2, c4p3); 
         }
     }
 }

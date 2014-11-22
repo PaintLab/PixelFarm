@@ -196,6 +196,17 @@ namespace PixelFarm.Agg
             simpleRect.SetRect(left, bottom, right, top);
             gx.Render(simpleRect.MakeVertexSnap(), this.fillColor);
         }
+        public void FillRectLBWH(double left, double bottom, double width, double height)
+        {
+            double right = left + width;
+            double top = bottom + height;
+            if (right < left || top < bottom)
+            {
+                throw new ArgumentException();
+            }
+            simpleRect.SetRect(left, bottom, right, top);
+            gx.Render(simpleRect.MakeVertexSnap(), this.fillColor);
+        }
         public void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
             if (roundRect == null)
@@ -253,7 +264,7 @@ namespace PixelFarm.Agg
         }
         public void Fill(VertexStore vxs)
         {
-          
+
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }

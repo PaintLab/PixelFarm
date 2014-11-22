@@ -219,7 +219,7 @@ namespace PixelFarm.Agg.VertexSource
             m_ddfy = tmpy * 2.0;
 
             m_step = m_num_steps;
-        } 
+        }
 
         public Curves.CurveApproximationMethod ApproximationMethod
         {
@@ -241,7 +241,7 @@ namespace PixelFarm.Agg.VertexSource
             get { return 0; }
             set { }
         }
-       
+
     }
 
     //-------------------------------------------------------------curve3_div
@@ -307,13 +307,13 @@ namespace PixelFarm.Agg.VertexSource
         {
             int j = m_points.Count;
             if (j > 0)
-            {   
-                 
+            {
+
                 //others
                 for (int i = 1; i < j; i++)
                 {
                     var p = m_points[i];
-                    vxs.AddLineTo(p.x, p.y); 
+                    vxs.AddLineTo(p.x, p.y);
                 }
             }
         }
@@ -1111,8 +1111,8 @@ namespace PixelFarm.Agg.VertexSource
             }
             else
             {
-                m_curve_div.Init(x1, y1, cx, cy, x2, y2); 
-                m_curve_div.MakeLines(vxs); 
+                m_curve_div.Init(x1, y1, cx, cy, x2, y2);
+                m_curve_div.MakeLines(vxs);
             }
 
 
@@ -1179,7 +1179,18 @@ namespace PixelFarm.Agg.VertexSource
             m_approximation_method = Curves.CurveApproximationMethod.Div;
             Init(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
         }
+        public void MakeLines(VertexStore vxs, double x1, double y1,
+             double p2x, double p2y,
+             double p3x, double p3y,
+             double x2, double y2)
+        {
+            BezierCurve.CreateBezierVxs4(vxs,
+               new PixelFarm.VectorMath.Vector2(x1, y1),
+               new PixelFarm.VectorMath.Vector2(x2, y2),
+               new PixelFarm.VectorMath.Vector2(p2x, p2y ),
+               new PixelFarm.VectorMath.Vector2(p3x, p3y ));
 
+        }
         public Curve4(Curve4Points cp)
         {
             m_approximation_method = Curves.CurveApproximationMethod.Div;

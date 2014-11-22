@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\DemoBase.cs" />
+    <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
     <Compile Include="1_Shared\Square.cs" />
     <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="2_Platform\BitmapHelper.cs" />

@@ -34,7 +34,7 @@ namespace PixelFarm.Font2
         {
             MyFontGlyph found;
             if (!dicGlyphs.TryGetValue(c, out found))
-            { 
+            {
                 found = MyFonts.GetGlyph(c);
                 this.dicGlyphs.Add(c, found);
             }
@@ -46,7 +46,7 @@ namespace PixelFarm.Font2
     public static class MyFonts
     {
         static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>();
-        
+
         public static int InitLib()
         {
             return NativeMyFonts.MyFtInitLib();
@@ -69,6 +69,11 @@ namespace PixelFarm.Font2
                 int todoContourCount = outline.n_contours;
 
                 PixelFarm.Agg.VertexSource.PathWriter ps = new Agg.VertexSource.PathWriter();
+                fontGlyph.vxs = ps.Vxs;
+
+
+                const int resize = 16;
+                int controlPointCount = 0;
 
                 while (todoContourCount > 0)
                 {
@@ -76,8 +81,10 @@ namespace PixelFarm.Font2
                     bool isFirstPoint = true;
                     FT_Vector secondControlPoint = new FT_Vector();
                     FT_Vector thirdControlPoint = new FT_Vector();
-                    bool hasThirdControlPoint = false;
+
+
                     bool justFromCurveMode = false;
+                    //FT_Vector vpoint = new FT_Vector();
                     for (; cpoint_index < nextContour; ++cpoint_index)
                     {
                         FT_Vector vpoint = outline.points[cpoint_index];
@@ -90,30 +97,39 @@ namespace PixelFarm.Font2
                             //on curve
                             if (justFromCurveMode)
                             {
-                                if (hasThirdControlPoint)
+                                switch (controlPointCount)
                                 {
-                                    ps.Curve4(secondControlPoint.x / 64, secondControlPoint.y / 64,
-                                        thirdControlPoint.x / 64, thirdControlPoint.y / 64,
-                                        vpoint.x / 64, vpoint.y / 64);
-                                }
-                                else
-                                {
-                                    ps.Curve3(secondControlPoint.x / 64, secondControlPoint.y / 64,
-                                        vpoint.x / 64, vpoint.y / 64);
+                                    case 1:
+                                        {
+                                            ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                                vpoint.x / resize, vpoint.y / resize);
 
+                                        } break;
+                                    case 2:
+                                        {
+                                            ps.Curve4(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                               thirdControlPoint.x / resize, thirdControlPoint.y / resize,
+                                               vpoint.x / resize, vpoint.y / resize);
+                                        } break;
+                                    default:
+                                        {
+                                            throw new NotSupportedException();
+                                        } break;
                                 }
+                                controlPointCount = 0;
                                 justFromCurveMode = false;
                             }
                             else
                             {
+
                                 if (isFirstPoint)
                                 {
                                     isFirstPoint = false;
-                                    ps.MoveTo(vpoint.x / 64, vpoint.y / 64);
+                                    ps.MoveTo(vpoint.x / resize, vpoint.y / resize);
                                 }
                                 else
                                 {
-                                    ps.LineTo(vpoint.x / 64, vpoint.y / 64);
+                                    ps.LineTo(vpoint.x / resize, vpoint.y / resize);
                                 }
                                 if (has_dropout)
                                 {
@@ -128,35 +144,82 @@ namespace PixelFarm.Font2
                         }
                         else
                         {
-                            //bit 1 set=> off curve, this is a control point
-                            //if this is a 2nd order or 3rd order control point
-                            if (((vtag >> 1) & 0x1) != 0)
+                            switch (controlPointCount)
                             {
-                                //printf("[%d] bzc3rd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
-                                thirdControlPoint = vpoint;
-                                hasThirdControlPoint = true;
+                                case 0:
+                                    {   //bit 1 set=> off curve, this is a control point
+                                        //if this is a 2nd order or 3rd order control point
+                                        if (((vtag >> 1) & 0x1) != 0)
+                                        {
+                                            //printf("[%d] bzc3rd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                            thirdControlPoint = vpoint;
+                                        }
+                                        else
+                                        {
+                                            //printf("[%d] bzc2nd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                            secondControlPoint = vpoint;
+                                        }
+                                    } break;
+                                case 1:
+                                    {
+                                        if (((vtag >> 1) & 0x1) != 0)
+                                        {
+                                            //printf("[%d] bzc3rd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                            thirdControlPoint = vpoint;
+                                        }
+                                        else
+                                        {
+                                            //printf("[%d] bzc2nd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                            thirdControlPoint = vpoint;
+                                        }
+                                    } break;
+                                default:
+                                    {
+                                        throw new NotSupportedException();
+                                    } break;
+                            }
 
-                            }
-                            else
-                            {
-                                //printf("[%d] bzc2nd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
-                                secondControlPoint = vpoint;
-                                hasThirdControlPoint = false;
-                            }
+                            controlPointCount++;
                             justFromCurveMode = true;
                         }
                     }
+                    //--------
+                    //close figure
+                    //if in curve mode
+                    if (justFromCurveMode)
+                    {
+                        switch (controlPointCount)
+                        {
+                            case 0: break;
+                            case 1:
+                                {
+                                    ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                        ps.LastMoveX, ps.LastMoveY);
 
+                                } break;
+                            case 2:
+                                {
+                                    ps.Curve4(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                       thirdControlPoint.x / resize, thirdControlPoint.y / resize,
+                                       ps.LastMoveX, ps.LastMoveY);
+                                } break;
+                            default:
+                                { throw new NotSupportedException(); }
+                        }
+                        justFromCurveMode = false;
+                        controlPointCount = 0;
+                    }
                     ps.CloseFigure();
+                    //--------                   
                     startContour++;
                     todoContourCount--;
                 }
 
-                fontGlyph.vxs = ps.Vxs;
+
 
                 return fontGlyph;
             }
-        } 
+        }
         public static void SetShapingEngine()
         {
             PixelFarm.Font2.NativeMyFonts.MyFtSetupShapingEngine("en", 2, 1);
@@ -193,7 +256,7 @@ namespace PixelFarm.Font2
                 fonts.Add(filename, fontFace);
 
                 PixelFarm.Font2.NativeMyFonts.MyFtNewMemoryFace(unmanagedMem, fileContent, pixelSize);
-                
+
             }
             return fontFace;
 

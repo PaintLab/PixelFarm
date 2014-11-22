@@ -92,7 +92,12 @@ namespace PixelFarm.Agg.VertexSource
 
             figureCount = 0; 
         }
-        //--------------------------------------------------------------------
+
+        //-------------------------------------------------------------------
+        public double LastMoveX { get { return this.lastMoveX; } }
+        public double LastMoveY { get { return this.lastMoveY; } }
+        //-------------------------------------------------------------------
+         
         public int StartFigure()
         {
             if (figureCount > 0)
