@@ -142,7 +142,7 @@ namespace PixelFarm.Agg.VertexSource
                 switch (cmd)
                 {
 
-                    case VertexCmd.P2:
+                    case VertexCmd.P2c:
                         {
                             switch (latestCurveMode)
                             {
@@ -168,7 +168,7 @@ namespace PixelFarm.Agg.VertexSource
                             latestCurveMode = CurvePointMode.P2;
                         }
                         break;
-                    case VertexCmd.P3:
+                    case VertexCmd.P3c:
                         {
 
                             switch (latestCurveMode)

@@ -175,7 +175,7 @@ namespace PixelFarm.Agg.VertexSource
             this.c3p2.x = p2x;
             this.c3p2.y = p2y;
 
-            myvxs.AddP2Curve(p2x, p2y);
+            myvxs.AddP2c(p2x, p2y);
             myvxs.AddLineTo(this.lastX = x, this.lastY = y);
         }
         /// <summary>
@@ -192,7 +192,7 @@ namespace PixelFarm.Agg.VertexSource
             this.c3p2.x = this.lastX + p2x;
             this.c3p2.y = this.lastY + p2y;
 
-            myvxs.AddP2Curve(this.lastX + p2x, this.lastY + p2y);
+            myvxs.AddP2c(this.lastX + p2x, this.lastY + p2y);
             myvxs.AddLineTo(this.lastX += x, this.lastY += y);
 
         }
@@ -247,8 +247,8 @@ namespace PixelFarm.Agg.VertexSource
                            double x, double y)
         {
             this.latestSVGPathCmd = SvgPathCommand.CurveTo;
-            myvxs.AddP3Curve(p2x, p2y);
-            myvxs.AddP3Curve(p3x, p3y);
+            myvxs.AddP3c(p2x, p2y);
+            myvxs.AddP3c(p3x, p3y);
             myvxs.AddLineTo(this.lastX = x, this.lastY = y);
         }
 
@@ -258,8 +258,8 @@ namespace PixelFarm.Agg.VertexSource
         {
 
             this.latestSVGPathCmd = SvgPathCommand.CurveTo;
-            myvxs.AddP3Curve(this.lastX + p2x, this.lastY + p2y);
-            myvxs.AddP3Curve(this.lastX + p3x, this.lastY + p3y);
+            myvxs.AddP3c(this.lastX + p2x, this.lastY + p2y);
+            myvxs.AddP3c(this.lastX + p3x, this.lastY + p3y);
             myvxs.AddLineTo(this.lastX += x, this.lastY += y);
         }
 
@@ -274,15 +274,15 @@ namespace PixelFarm.Agg.VertexSource
                 case SvgPathCommand.TSmoothQuadraticBezierCurveTo:
                     {
                         //create c4p1 from c3p1
-                        var newC4p1 = CreateMirrorPoint(this.c3p2, new Vector2(this.lastX, this.lastY));
-                        Curve4(newC4p1.X, newC4p1.Y, p3x, p3y, x, y);
+                        var c4p2 = CreateMirrorPoint(this.c3p2, new Vector2(this.lastX, this.lastY));
+                        Curve4(c4p2.X, c4p2.Y, p3x, p3y, x, y);
                     } break;
                 case SvgPathCommand.CurveTo:
                 case SvgPathCommand.SmoothCurveTo:
                     {
                         //curve4
-                        var newC4p1 = CreateMirrorPoint(this.c4p3, new Vector2(this.lastX, this.lastY));
-                        Curve4(newC4p1.X, newC4p1.Y, p3x, p3y, x, y);
+                        var c4p2 = CreateMirrorPoint(this.c4p3, new Vector2(this.lastX, this.lastY));
+                        Curve4(c4p2.X, c4p2.Y, p3x, p3y, x, y);
                     } break;
                 default:
                     {

@@ -29,7 +29,8 @@ namespace OpenTkEssTest
         GLScanlineRasToDestBitmapRenderer sclineRasToGL;
         GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
-
+        CurveFlattener curveFlattener = new CurveFlattener();
+  
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
@@ -44,7 +45,7 @@ namespace OpenTkEssTest
             get;
             set;
         }
-
+        
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.AccumBufferBit | ClearBufferMask.StencilBufferBit);
@@ -887,5 +888,9 @@ namespace OpenTkEssTest
         }
         //-----------------------------------------------------
 
+        public VertexStore FlattenCurves(VertexStore vxs)
+        {
+            return curveFlattener.MakeVxs(vxs);
+        }
     }
 }

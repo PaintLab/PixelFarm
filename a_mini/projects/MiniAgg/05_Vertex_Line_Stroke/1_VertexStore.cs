@@ -152,18 +152,18 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void AddP2Curve(double x, double y)
+        public void AddP2c(double x, double y)
         {
-            AddVertex(x, y, VertexCmd.P2);
+            AddVertex(x, y, VertexCmd.P2c);
         }
         /// <summary>
         /// add 3rd curve point (for C4 curve)
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void AddP3Curve(double x, double y)
+        public void AddP3c(double x, double y)
         {
-            AddVertex(x, y, VertexCmd.P3);
+            AddVertex(x, y, VertexCmd.P3c);
         }
         public void AddMoveTo(double x, double y)
         {
