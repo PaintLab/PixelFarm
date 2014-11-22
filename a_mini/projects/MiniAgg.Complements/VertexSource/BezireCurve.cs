@@ -32,10 +32,25 @@ namespace PixelFarm.Agg.VertexSource
             vxs.AddLineTo(end.x, end.y);
             vxs.AddStop();
         }
+        public static void Curve3GetControlPoints(Vector2 start, Vector2 controlPoint, Vector2 endPoint, out Vector2 control1, out Vector2 control2)
+        {
+            double x1 = start.X + (controlPoint.X - start.X) * 2 / 3;
+            double y1 = start.Y + (controlPoint.Y - start.Y) * 2 / 3;
+            double x2 = controlPoint.X + (endPoint.X - controlPoint.X) / 3;
+            double y2 = controlPoint.Y + (endPoint.Y - controlPoint.Y) / 3;
 
+            control1 = new Vector2(x1, y1);
+            control2 = new Vector2(x2, y2);
+        }
         public static void CreateBezierVxs3(Agg.VertexStore vxs, Vector2 start, Vector2 end,
            Vector2 control1)
         {
+            //convert c3 to c4
+            //Vector2 c4p2, c4p3;
+            //Curve3GetControlPoints(start, control1, end, out c4p2, out c4p3);
+            //CreateBezierVxs4(vxs, start, end, c4p2, c4p3);
+
+
             var curve = new VectorMath.BezierCurveQuadric(
                 start, end,
                 control1);

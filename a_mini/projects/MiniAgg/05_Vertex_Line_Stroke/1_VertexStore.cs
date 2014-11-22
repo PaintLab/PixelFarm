@@ -29,7 +29,7 @@ namespace PixelFarm.Agg
         int m_num_vertices;
         int m_allocated_vertices;
         double[] m_coord_xy;
-        VertexCmd[] m_CommandAndFlags;
+        VertexCmd[] m_cmds;
 
 #if DEBUG
         static int dbugTotal = 0;
@@ -117,7 +117,7 @@ namespace PixelFarm.Agg
             int i = index << 1;
             x = m_coord_xy[i];
             y = m_coord_xy[i + 1];
-            return m_CommandAndFlags[index];
+            return m_cmds[index];
         }
         public void GetVertexXY(int index, out double x, out double y)
         {
@@ -127,7 +127,7 @@ namespace PixelFarm.Agg
         }
         public VertexCmd GetCommand(int index)
         {
-            return m_CommandAndFlags[index];
+            return m_cmds[index];
         }
         //--------------------------------------------------
         //mutable properties
@@ -135,29 +135,36 @@ namespace PixelFarm.Agg
         {
             m_num_vertices = 0;
         }
-
-        public void AddVertex(double x, double y, VertexCmd CommandAndFlags)
+        public void AddVertex(double x, double y, VertexCmd cmd)
         {
             if (m_num_vertices >= m_allocated_vertices)
             {
                 AllocIfRequired(m_num_vertices);
-            }
-
+            } 
             m_coord_xy[m_num_vertices << 1] = x;
             m_coord_xy[(m_num_vertices << 1) + 1] = y;
-            m_CommandAndFlags[m_num_vertices] = CommandAndFlags;
+            m_cmds[m_num_vertices] = cmd;
             m_num_vertices++;
         }
         //--------------------------------------------------
-        public void AddVertexCurve3(double x, double y)
+        /// <summary>
+        /// add 2nd curve point (for C3,C4 curve)
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void AddP2Curve(double x, double y)
         {
-            AddVertex(x, y, VertexCmd.Curve3);
+            AddVertex(x, y, VertexCmd.P2);
         }
-        public void AddVertexCurve4(double x, double y)
+        /// <summary>
+        /// add 3rd curve point (for C4 curve)
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void AddP3Curve(double x, double y)
         {
-            AddVertex(x, y, VertexCmd.Curve4);
+            AddVertex(x, y, VertexCmd.P3);
         }
-
         public void AddMoveTo(double x, double y)
         {
             AddVertex(x, y, VertexCmd.MoveTo);
@@ -181,7 +188,7 @@ namespace PixelFarm.Agg
         }
         internal void ReplaceCommand(int index, VertexCmd CommandAndFlags)
         {
-            m_CommandAndFlags[index] = CommandAndFlags;
+            m_cmds[index] = CommandAndFlags;
         }
 
         internal void SwapVertices(int v1, int v2)
@@ -197,9 +204,9 @@ namespace PixelFarm.Agg
             m_coord_xy[(v2 << 1) + 1] = y_tmp;
 
 
-            VertexCmd cmd = m_CommandAndFlags[v1];
-            m_CommandAndFlags[v1] = m_CommandAndFlags[v2];
-            m_CommandAndFlags[v2] = cmd;
+            VertexCmd cmd = m_cmds[v1];
+            m_cmds[v1] = m_cmds[v2];
+            m_cmds[v2] = cmd;
         }
         void AllocIfRequired(int indexToAdd)
         {
@@ -227,11 +234,11 @@ namespace PixelFarm.Agg
                     }
                     for (int i = m_num_vertices - 1; i >= 0; --i)
                     {
-                        newCmd[i] = m_CommandAndFlags[i];
+                        newCmd[i] = m_cmds[i];
                     }
                 }
                 m_coord_xy = new_xy;
-                m_CommandAndFlags = newCmd;
+                m_cmds = newCmd;
 
                 m_allocated_vertices = newSize;
             }
@@ -249,7 +256,7 @@ namespace PixelFarm.Agg
             vstore.m_num_vertices = m_num_vertices;
             vstore.m_allocated_vertices = m_allocated_vertices;
             vstore.m_coord_xy = m_coord_xy;
-            vstore.m_CommandAndFlags = m_CommandAndFlags;
+            vstore.m_cmds = m_CommandAndFlags;
         }
         public static void UnsafeDirectGetData(
             VertexStore vstore,
@@ -262,7 +269,7 @@ namespace PixelFarm.Agg
             m_num_vertices = vstore.m_num_vertices;
             m_allocated_vertices = vstore.m_allocated_vertices;
             m_coord_xy = vstore.m_coord_xy;
-            m_CommandAndFlags = vstore.m_CommandAndFlags;
+            m_CommandAndFlags = vstore.m_cmds;
         }
 
         //----------------------------------------------------------

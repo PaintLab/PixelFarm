@@ -78,8 +78,8 @@ namespace PixelFarm.Agg
                         //if is vertext cmd
                         case VertexCmd.LineTo:
                         case VertexCmd.MoveTo:
-                        case VertexCmd.Curve3:
-                        case VertexCmd.Curve4:
+                        case VertexCmd.P2:
+                        case VertexCmd.P3:
                             {
                                 if (first)
                                 {

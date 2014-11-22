@@ -121,8 +121,8 @@ namespace PixelFarm.Agg
 
                         } break;
                     case VertexCmd.LineTo:
-                    case VertexCmd.Curve3:
-                    case VertexCmd.Curve4:
+                    case VertexCmd.P2:
+                    case VertexCmd.P3:
                         {
                             strkgen.AddVertex(x, y, cmd);
 

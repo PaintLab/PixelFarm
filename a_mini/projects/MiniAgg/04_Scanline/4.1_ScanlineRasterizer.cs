@@ -245,10 +245,9 @@ namespace PixelFarm.Agg
                     {
                         MoveTo(x, y);
                     } break;
-                case VertexCmd.LineTo: 
-
-                case VertexCmd.Curve3:
-                case VertexCmd.Curve4:
+                case VertexCmd.LineTo:  
+                case VertexCmd.P2:
+                case VertexCmd.P3:
                     {                      
 
                         LineTo(x, y);

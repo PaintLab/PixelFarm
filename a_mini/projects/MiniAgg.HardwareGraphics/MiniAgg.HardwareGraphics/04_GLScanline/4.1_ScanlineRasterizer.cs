@@ -308,16 +308,11 @@ namespace PixelFarm.Agg
                             {
                                 MoveTo(x, y);
                             } break;
-                        case VertexCmd.LineTo:
-                            {
-                                LineTo(x, y);
-                            } break;
-                        case VertexCmd.Curve3:
-                            {
-                                LineTo(x, y);
-                            } break;
-                        case VertexCmd.Curve4:
-                            {
+                        case VertexCmd.LineTo: 
+                        case VertexCmd.P2: 
+                        case VertexCmd.P3:
+                            { 
+                                //curve must be flatten before using here
                                 LineTo(x, y);
                             } break;
                         default:
@@ -348,15 +343,9 @@ namespace PixelFarm.Agg
                             {
                                 MoveTo(x, y);
                             } break;
-                        case VertexCmd.LineTo:
-                            {
-                                LineTo(x, y);
-                            } break;
-                        case VertexCmd.Curve3:
-                            {
-                                LineTo(x, y);
-                            } break;
-                        case VertexCmd.Curve4:
+                        case VertexCmd.LineTo: 
+                        case VertexCmd.P2: 
+                        case VertexCmd.P3:
                             {
                                 LineTo(x, y);
                             } break;

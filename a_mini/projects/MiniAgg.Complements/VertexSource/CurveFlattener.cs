@@ -107,11 +107,11 @@ namespace PixelFarm.Agg.VertexSource
             }
         }
 
-        enum CurveMode
+        enum CurvePointMode
         {
             NotCurve,
-            Curve3,
-            Curve4
+            P2,
+            P3
         }
 
         public VertexStore MakeVxs(VertexStoreSnap vsnap)
@@ -122,16 +122,17 @@ namespace PixelFarm.Agg.VertexSource
             m_curve3.Reset();
             m_curve4.Reset();
             var snapIter = vsnap.GetVertexSnapIter();
-            CurveMode latestCurveMode = CurveMode.NotCurve;
+            CurvePointMode latestCurveMode = CurvePointMode.NotCurve;
             double x, y;
             VertexCmd cmd;
 
-            VectorMath.Vector2 c3p = new VectorMath.Vector2();
-            VectorMath.Vector2 c4p1 = new VectorMath.Vector2();
-            VectorMath.Vector2 c4p2 = new VectorMath.Vector2();
+            VectorMath.Vector2 p2c = new VectorMath.Vector2();
+            VectorMath.Vector2 p3c = new VectorMath.Vector2();
 
             double lastX = 0;
             double lasty = 0;
+            double lastMoveX = 0;
+            double lastMoveY = 0;
 
             do
             {
@@ -140,74 +141,67 @@ namespace PixelFarm.Agg.VertexSource
 
                 switch (cmd)
                 {
-                    //this is a control point 3
-                    case VertexCmd.Curve3:
+
+                    case VertexCmd.P2:
                         {
                             switch (latestCurveMode)
                             {
-                                case CurveMode.Curve3:
+                                case CurvePointMode.P2:
                                     {
-                                        //add svg smooth curve3
-
-
 
 
                                     } break;
-                                case CurveMode.Curve4:
+                                case CurvePointMode.P3:
                                     {
 
                                     } break;
-                                case CurveMode.NotCurve:
+                                case CurvePointMode.NotCurve:
                                     {
-                                        //temp store curve3
-                                        c3p.x = x;
-                                        c3p.y = y;
+
+                                        p2c.x = x;
+                                        p2c.y = y;
                                     } break;
                                 default:
                                     {
                                     } break;
-                            }  
-                            latestCurveMode = CurveMode.Curve3;
+                            }
+                            latestCurveMode = CurvePointMode.P2;
                         }
                         break;
-                    case VertexCmd.Curve4:
-                        {   
-                            //curve 4 has 2 control points
-                            //current x,y is first control point
-                            //then read next control point
-                            //and end point
+                    case VertexCmd.P3:
+                        {
 
                             switch (latestCurveMode)
                             {
-                                case CurveMode.Curve3:
+                                case CurvePointMode.P2:
                                     {
                                     } break;
-                                case CurveMode.Curve4:
+                                case CurvePointMode.P3:
                                     {
                                     } break;
-                                case CurveMode.NotCurve:
+                                case CurvePointMode.NotCurve:
                                     {
                                     } break;
                             }
-                            latestCurveMode = CurveMode.Curve4; 
+                            latestCurveMode = CurvePointMode.P3;
                         }
                         break;
                     case VertexCmd.LineTo:
                         {
                             switch (latestCurveMode)
                             {
-                                case CurveMode.Curve3:
+                                case CurvePointMode.P2:
                                     {
-                                        //from curve3
+
                                         m_curve3.MakeLines(vxs,
                                             lastX,
                                             lasty,
-                                            c3p.X,
-                                            c3p.Y,
+                                            p2c.X,
+                                            p2c.Y,
                                             x,
-                                            y); 
+                                            y);
                                     } break;
-                                case CurveMode.Curve4:
+                                case CurvePointMode.P3:
                                     {
                                         //from curve4
                                         vxs.AddVertex(x, y, cmd);
@@ -216,19 +210,44 @@ namespace PixelFarm.Agg.VertexSource
                                     {
                                         vxs.AddVertex(x, y, cmd);
                                     } break;
-                            } 
+                            }
                             //-----------
-                            latestCurveMode = CurveMode.NotCurve;
+                            latestCurveMode = CurvePointMode.NotCurve;
                             lastX = x;
                             lasty = y;
                             //-----------
+                        } break;
+                    case VertexCmd.MoveTo:
+                        { 
+                            //move to, and end command
+                            vxs.AddVertex(x, y, cmd);
+                            //-----------
+                            latestCurveMode = CurvePointMode.NotCurve;
+                            lastMoveX = lastX = x;
+                            lastMoveY = lasty = y;
+                            //-----------
+                        } break;
+                    case VertexCmd.EndAndCloseFigure:
+                        {
+                            latestCurveMode = CurvePointMode.NotCurve; 
+                            vxs.AddVertex(x, y, cmd);
+                            //move to begin 
+                            lastX = lastMoveX;
+                            lasty = lastMoveY;
+
+                        } break;
+                    case VertexCmd.EndFigure:
+                        {
+                            latestCurveMode = CurvePointMode.NotCurve;
+                            vxs.AddVertex(x, y, cmd);
+                           
                         } break;
                     default:
                         {
                             //move to, and end command
                             vxs.AddVertex(x, y, cmd);
                             //-----------
-                            latestCurveMode = CurveMode.NotCurve;
+                            latestCurveMode = CurvePointMode.NotCurve;
                             lastX = x;
                             lasty = y;
                             //-----------
@@ -239,7 +258,7 @@ namespace PixelFarm.Agg.VertexSource
         }
         public VertexStore MakeVxs(VertexStore srcVxs)
         {
-            return MakeVxs(new VertexStoreSnap(srcVxs)); 
+            return MakeVxs(new VertexStoreSnap(srcVxs));
         }
     }
 }
