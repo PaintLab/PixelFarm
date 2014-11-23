@@ -50,6 +50,7 @@
     <Compile Include="02_PixelBuffer\ImageHelper.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
+    <Compile Include="05_Vertex_Line_Stroke\0_VertexCommandAndOrientation.cs" />
     <Compile Include="07_Lines\2.2_LineInterpolators.cs" />
     <Compile Include="07_Lines\2.1_DistanceInterpolators.cs" />
     <Compile Include="07_Lines\2.3_EllipseBrensenhemInterpolator.cs" />
@@ -86,11 +87,10 @@
     <Compile Include="04_Scanline\4.4_FillingRule.cs" />
     <Compile Include="03_SpanGenerators\IGammaFunction.cs" />
     <Compile Include="06_Transfrom\4_SimulEqGeneral.cs" />
-    <Compile Include="05_Vertex_Path\BoundingRect.cs" />
-    <Compile Include="05_Vertex_Path\LineCapAndJoin.cs" />
+    <Compile Include="05_Vertex_Line_Stroke\LineCapAndJoin.cs" />
     <Compile Include="07_Lines\1.1_LinesAA.cs" />
-    <Compile Include="05_Vertex_Path\VertexStoreSnap.cs" />
-    <Compile Include="05_Vertex_Path\VertexStore.cs" />
+    <Compile Include="05_Vertex_Line_Stroke\2_VertexStoreSnap.cs" />
+    <Compile Include="05_Vertex_Line_Stroke\1_VertexStore.cs" />
     <Compile Include="01_Base\AggMath.cs" />
     <Compile Include="04_Scanline\4.2_CellAARasterizer.cs" />
     <Compile Include="08_ImageResampling\IImageFilter.cs" />
@@ -103,7 +103,7 @@
     <Compile Include="06_Transfrom\SpanInterpolatorPerspectiveLerp.cs" />
     <Compile Include="08_ImageResampling\ImageFilterLookupTable.cs" />
     <Compile Include="08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs" />
-    <Compile Include="05_Vertex_Path\VertexSequence.cs" />
+    <Compile Include="05_Vertex_Line_Stroke\VertexDistanceList.cs" />
     <Compile Include="01_Base\NativeBufferMan.cs" />
     <Compile Include="02_PixelBuffer\GammaLookUpTable.cs" />
     <Compile Include="00_Context\Graphics2D.cs" />
@@ -121,18 +121,15 @@
     <Compile Include="01_Base\RectInt.cs" />
     <Compile Include="04_Scanline\4.1_ScanlineRasterizer.cs" />
     <Compile Include="04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
-    <Compile Include="05_Vertex_Path\ShapePath.cs" />
     <Compile Include="06_Transfrom\1_Affine.cs" />
     <Compile Include="06_Transfrom\2_Bilinear.cs" />
     <Compile Include="06_Transfrom\0_ICoordTransformer.cs" />
     <Compile Include="06_Transfrom\3_Perspective.cs" />
     <Compile Include="06_Transfrom\Viewport.cs" />
     <Compile Include="04_Scanline\4.3_VectorClipper.cs" />
-    <Compile Include="05_Vertex_Path\VertexData.cs" />
-    <Compile Include="05_Vertex_Path\PathStorage.cs" />
-    <Compile Include="05_Vertex_Path\Stroke.cs" />
-    <Compile Include="05_Vertex_Path\StrokeGenerator.cs" />
-    <Compile Include="05_Vertex_Path\StrokeMath.cs" />
+    <Compile Include="05_Vertex_Line_Stroke\Stroke.cs" />
+    <Compile Include="05_Vertex_Line_Stroke\StrokeGenerator.cs" />
+    <Compile Include="05_Vertex_Line_Stroke\StrokeMath.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -152,7 +152,13 @@ namespace OpenTkEssTest
                 canvas.DrawLine(100, 200, 300, 200);
 
 
-
+                //load font data
+                var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 18);
+                var fontGlyph = font.GetGlyph('{');
+                //PixelFarm.Font2.MyFonts.SetShapingEngine();
+                //PixelFarm.Font2.MyFonts.ShapeText("ดุ");  
+                canvas.FillVxs(fontGlyph.flattenVxs);
+                //canvas.DrawString("ฟ", 50, 50); 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 //---------------------------------------------  
 

@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
+using PixelFarm.Font2;
+
 namespace Mini
 {
     partial class FormDev : Form
@@ -17,10 +19,14 @@ namespace Mini
             InitializeComponent();
             this.Load += new EventHandler(DevForm_Load);
             this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick);
-
             this.Text = "DevForm: Double Click The Example!";
 
 
+            //-------------------------------------------------- 
+            int code = PixelFarm.Font2.MyFonts.InitLib();
+            //-------------------------------------------------- 
+           
+          
         }
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
@@ -34,7 +40,7 @@ namespace Mini
                     return;
                 }
                 exBase.Init();
-                 
+
                 //FormTestBed1 testBed = new FormTestBed1();
                 //testBed.WindowState = FormWindowState.Maximized;
                 //testBed.Show();
@@ -72,7 +78,12 @@ namespace Mini
             }
         }
 
-      
-       
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+
+
+
+        }
     }
 }

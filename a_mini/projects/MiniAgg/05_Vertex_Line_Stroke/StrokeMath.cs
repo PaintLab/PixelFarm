@@ -26,7 +26,7 @@ using System;
 
 using PixelFarm.VectorMath;
 
-namespace PixelFarm.Agg.VertexSource
+namespace PixelFarm.Agg 
 {
 
     public class StrokeMath
@@ -335,7 +335,7 @@ namespace PixelFarm.Agg.VertexSource
         } 
         static void AddVertex(VertexStore output, double x, double y)
         {
-            output.AddVertex(x, y, ShapePath.FlagsAndCommand.CommandLineTo);
+            output.AddVertex(x, y, VertexCmd.LineTo);
         }
 
         void CreateArc(VertexStore output,

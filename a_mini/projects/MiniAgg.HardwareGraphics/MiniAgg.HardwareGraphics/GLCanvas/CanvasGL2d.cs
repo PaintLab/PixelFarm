@@ -23,27 +23,29 @@ namespace OpenTkEssTest
         //tools---------------------------------
         RoundedRect roundRect = new RoundedRect();
         Ellipse ellipse = new Ellipse();
-        PathStorage ps = new PathStorage();
+        PathWriter ps = new PathWriter();
         Stroke stroke1 = new Stroke(1);
         GLScanlineRasterizer sclineRas;
         GLScanlineRasToDestBitmapRenderer sclineRasToGL;
         GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
-
+        CurveFlattener curveFlattener = new CurveFlattener();
+  
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
             sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
-        }
 
+            SetupFonts();
+        }
         public CanvasSmoothMode SmoothMode
         {
             get;
             set;
         }
-
+        
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.AccumBufferBit | ClearBufferMask.StencilBufferBit);
@@ -155,7 +157,19 @@ namespace OpenTkEssTest
             }
         }
 
+        public void FillVxs(VertexStore vxs)
+        {
+            sclineRas.Reset();
+            sclineRas.AddPath(vxs);
+            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+        }
+        public void DrawVxs(VertexStore vxs)
+        {
 
+            sclineRas.Reset();
+            sclineRas.AddPath(stroke1.MakeVxs(vxs));
+            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+        }
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
         {
             //closed polyline
@@ -182,7 +196,7 @@ namespace OpenTkEssTest
                                 polygon2dVertices[nn++]);
                         }
                         //close
-                        ps.ClosePolygon();
+                        ps.CloseFigure();
 
                         VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
                         sclineRas.Reset();
@@ -238,17 +252,17 @@ namespace OpenTkEssTest
                             {
                                 switch (cmd)
                                 {
-                                    case ShapePath.FlagsAndCommand.CommandMoveTo:
+                                    case VertexCmd.MoveTo:
                                         {
                                             coords[nn++] = (float)vx;
                                             coords[nn++] = (float)vy;
                                         } break;
-                                    case ShapePath.FlagsAndCommand.CommandLineTo:
+                                    case VertexCmd.LineTo:
                                         {
                                             coords[nn++] = (float)vx;
                                             coords[nn++] = (float)vy;
                                         } break;
-                                    case ShapePath.FlagsAndCommand.CommandStop:
+                                    case VertexCmd.Stop:
                                         {
                                         } break;
                                     default:
@@ -370,11 +384,11 @@ namespace OpenTkEssTest
                 switch (vertexData.command)
                 {
 
-                    case ShapePath.FlagsAndCommand.CommandStop:
+                    case VertexCmd.Stop:
                         stopLoop = true;
                         break;
                     default:
-                        vxs.AddVertex(vertexData);
+                        vxs.AddVertex(vertexData.x, vertexData.y, vertexData.command);
                         //yield return vertexData;
                         break;
                 }
@@ -400,7 +414,7 @@ namespace OpenTkEssTest
                     scaleRatio = distance2 / distance1;
                 }
                 else
-                { 
+                {
 
                 }
             }
@@ -434,7 +448,7 @@ namespace OpenTkEssTest
                 {
                     var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
-                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),                             
+                            new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                     vxs = mat.TransformToVxs(vxs);
                 }
@@ -671,7 +685,7 @@ namespace OpenTkEssTest
             float controlX2, float controlY2)
         {
             VertexStore vxs = new VertexStore();
-            BezierCurve.CreateBezierVxs(vxs,
+            BezierCurve.CreateBezierVxs4(vxs,
                 new PixelFarm.VectorMath.Vector2(startX, startY),
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
@@ -774,19 +788,19 @@ namespace OpenTkEssTest
                 {
                     switch (cmd)
                     {
-                        case ShapePath.FlagsAndCommand.CommandMoveTo:
+                        case VertexCmd.MoveTo:
                             {
                                 coords[nn++] = (float)vx;
                                 coords[nn++] = (float)vy;
                                 npoints++;
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandLineTo:
+                        case VertexCmd.LineTo:
                             {
                                 coords[nn++] = (float)vx;
                                 coords[nn++] = (float)vy;
                                 npoints++;
                             } break;
-                        case ShapePath.FlagsAndCommand.CommandStop:
+                        case VertexCmd.Stop:
                             {
                             } break;
                         default:
@@ -854,7 +868,7 @@ namespace OpenTkEssTest
                                 vertex2dCoords[nn++]);
                         }
                         //close
-                        ps.ClosePolygon();
+                        ps.CloseFigure();
                         VertexStore vxs = ps.Vxs;
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
@@ -872,6 +886,11 @@ namespace OpenTkEssTest
             }
 
         }
+        //-----------------------------------------------------
 
+        public VertexStore FlattenCurves(VertexStore vxs)
+        {
+            return curveFlattener.MakeVxs(vxs);
+        }
     }
 }

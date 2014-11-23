@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.Font
                             {
                                 double x, y;
                                 var cmd = currentGlyph.GetVertex(i, out x, out y);
-                                if (cmd != ShapePath.FlagsAndCommand.CommandStop)
+                                if (cmd != VertexCmd.Stop)
                                 {
                                     yield return new VertexData(cmd,
                                         (x + currentOffset.x + Origin.x),
@@ -271,12 +271,12 @@ namespace PixelFarm.Agg.Font
             }
 
 
-            yield return new VertexData(ShapePath.FlagsAndCommand.CommandStop);
+            yield return new VertexData(VertexCmd.Stop);
         }
 
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter());             
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());             
         }
         public VertexStoreSnap MakeVertexSnap()
         {
@@ -336,11 +336,11 @@ namespace PixelFarm.Agg.Font
             currentEnumerator = GetVertexIter().GetEnumerator();
             currentEnumerator.MoveNext();
         }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        public VertexCmd GetNextVertex(out double x, out double y)
         {
             x = currentEnumerator.Current.x;
             y = currentEnumerator.Current.y;
-            ShapePath.FlagsAndCommand command = currentEnumerator.Current.command;
+            VertexCmd command = currentEnumerator.Current.command;
 
             currentEnumerator.MoveNext();
 
@@ -348,7 +348,8 @@ namespace PixelFarm.Agg.Font
         }
         public VertexStore CreateVxs()
         {
-            return new VertexStore(this.GetVertexIter());
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());             
+          
 
             //return new VertexSnap(new VertexStorage(list));
         }

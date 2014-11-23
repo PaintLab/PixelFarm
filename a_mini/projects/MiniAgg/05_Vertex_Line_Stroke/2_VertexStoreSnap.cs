@@ -11,13 +11,12 @@ namespace PixelFarm.Agg
         int currentIterIndex;
         VertexStore vxs;
         internal VertexSnapIter(VertexStoreSnap vsnap)
-        { 
-            
+        {             
             this.vxs = vsnap.GetInternalVxs();
-            this.currentIterIndex = vsnap.StartAt;
-            
+            this.currentIterIndex = vsnap.StartAt;            
         }
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+       
+        public VertexCmd GetNextVertex(out double x, out double y)
         {
             return vxs.GetVertex(currentIterIndex++, out x, out y);   
         }        

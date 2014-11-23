@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using FlagsAndCommand = PixelFarm.Agg.ShapePath.FlagsAndCommand;
+using FlagsAndCommand = PixelFarm.Agg.VertexCmd;
 
 using PixelFarm.VectorMath;
 
@@ -82,14 +82,14 @@ namespace PixelFarm.Agg.VertexSource
         IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
-            vertexData.command = FlagsAndCommand.CommandMoveTo;
+            vertexData.command = FlagsAndCommand.MoveTo;
             vertexData.x = originX + radiusX;
             vertexData.y = originY;
             yield return vertexData;
 
             double anglePerStep = MathHelper.Tau / (double)numSteps;
             double angle = 0;
-            vertexData.command = FlagsAndCommand.CommandLineTo;
+            vertexData.command = FlagsAndCommand.LineTo;
 
             if (m_cw)
             {
@@ -111,13 +111,12 @@ namespace PixelFarm.Agg.VertexSource
                     yield return vertexData;
                 }
             }
-
-
-            vertexData.x = vertexData.y = 0;
-            vertexData.command = FlagsAndCommand.CommandEndPoly | FlagsAndCommand.FlagClose | FlagsAndCommand.FlagCCW;
+            vertexData.x = (int)EndVertexOrientation.CCW;
+            vertexData.y = 0;
+            vertexData.command = FlagsAndCommand.EndAndCloseFigure;
             yield return vertexData;
 
-            vertexData.command = FlagsAndCommand.CommandStop;
+            vertexData.command = FlagsAndCommand.Stop;
             yield return vertexData;
         }
 
@@ -135,7 +134,7 @@ namespace PixelFarm.Agg.VertexSource
         }
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter());
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());             
         }
         //-------------------------------------------------------
     }
