@@ -38,9 +38,7 @@ namespace TessTest
 
         List<Vertex> inputVertextList;
         List<Vertex> tempVertextList = new List<Vertex>();
-
-        public List<Vertex> resultVertexList = new List<Vertex>();
-
+        public List<Vertex> resultVertexList = new List<Vertex>(); 
         public TessListener()
         {
             //empty not use

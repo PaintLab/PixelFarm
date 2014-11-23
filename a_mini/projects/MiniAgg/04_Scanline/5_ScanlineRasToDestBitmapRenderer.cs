@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
+
 
 namespace PixelFarm.Agg
 {
@@ -32,7 +32,7 @@ namespace PixelFarm.Agg
 
         ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
 
-        internal ScanlineRasToDestBitmapRenderer()
+        public ScanlineRasToDestBitmapRenderer()
         {
 
         }

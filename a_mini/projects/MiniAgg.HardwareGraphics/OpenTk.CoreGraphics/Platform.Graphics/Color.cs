@@ -71,7 +71,13 @@ namespace LayoutFarm.Drawing
         {
             return new Color(255, (byte)r, (byte)g, (byte)b);
         }
-
+        public uint ToARGB()
+        {
+            //return (uint)((b << 24) | (g << 16) | (r << 8) | (a));
+            return (uint)((a << 24) | (b << 16) | (g << 8) | (r));
+           // return (uint)((a << 24) | (r << 16) | (g << 8) | (r));
+           
+        }
 
         public static readonly Color Empty = new Color(0, 0, 0, 0);
         public static readonly Color Transparent = new Color(0, 0, 0, 0);

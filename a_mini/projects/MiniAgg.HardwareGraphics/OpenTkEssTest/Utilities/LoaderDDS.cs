@@ -33,9 +33,9 @@ namespace Examples.TextureLoaders
         #region Constants
         private const byte HeaderSizeInBytes = 128; // all non-image data together is 128 Bytes
         private const uint BitMask = 0x00000007; // bits = 00 00 01 11
-       
 
-        private static NotImplementedException Unfinished = new NotImplementedException( "ERROR: Only 2 Dimensional DXT1/3/5 compressed images for now. 1D/3D Textures may not be compressed according to spec." );
+
+        private static NotImplementedException Unfinished = new NotImplementedException("ERROR: Only 2 Dimensional DXT1/3/5 compressed images for now. 1D/3D Textures may not be compressed according to spec.");
         #endregion Constants
 
         #region Simplified In-Memory representation of the Image
@@ -48,7 +48,7 @@ namespace Examples.TextureLoaders
 
         #region Flag Enums
         [Flags] // Surface Description
-        private enum eDDSD: uint
+        private enum eDDSD : uint
         {
             CAPS = 0x00000001, // is always present
             HEIGHT = 0x00000002, // is always present
@@ -61,7 +61,7 @@ namespace Examples.TextureLoaders
         }
 
         [Flags] // Pixelformat 
-        private enum eDDPF: uint
+        private enum eDDPF : uint
         {
             NONE = 0x00000000, // not part of DX, added for convenience
             ALPHAPIXELS = 0x00000001,
@@ -72,7 +72,7 @@ namespace Examples.TextureLoaders
 
         /// <summary>This list was derived from nVidia OpenGL SDK</summary>
         [Flags] // Texture types
-        private enum eFOURCC: uint
+        private enum eFOURCC : uint
         {
             UNKNOWN = 0,
 #if READALL
@@ -124,7 +124,7 @@ namespace Examples.TextureLoaders
         }
 
         [Flags] // dwCaps1
-        private enum eDDSCAPS: uint
+        private enum eDDSCAPS : uint
         {
             NONE = 0x00000000, // not part of DX, added for convenience
             COMPLEX = 0x00000008, // should be set for any DDS file with more than one main surface
@@ -133,7 +133,7 @@ namespace Examples.TextureLoaders
         }
 
         [Flags]  // dwCaps2
-        private enum eDDSCAPS2: uint
+        private enum eDDSCAPS2 : uint
         {
             NONE = 0x00000000, // not part of DX, added for convenience
             CUBEMAP = 0x00000200,
@@ -188,11 +188,11 @@ namespace Examples.TextureLoaders
         /// <param name="filename">The name of the file you wish to load, including path and file extension.</param>
         /// <param name="texturehandle">0 if invalid, otherwise a Texture Object usable with GL.BindTexture().</param>
         /// <param name="dimension">0 if invalid, will output what was loaded (typically Texture1D/2D/3D or Cubemap)</param>
-        public static void LoadFromDisk( string filename, out uint texturehandle, out TextureTarget dimension )
+        public static void LoadFromDisk(string filename, out uint texturehandle, out TextureTarget dimension)
         {
             #region Prep data
             // invalidate whatever it was before
-            dimension = (TextureTarget) 0;
+            dimension = (TextureTarget)0;
             texturehandle = TextureLoaderParameters.OpenGLDefaultTexture;
             ErrorCode GLError = ErrorCode.NoError;
 
@@ -210,44 +210,46 @@ namespace Examples.TextureLoaders
             #region Try
             try // Exceptions will be thrown if any Problem occurs while working on the file. 
             {
-                _RawDataFromFile = File.ReadAllBytes( @filename );
+                _RawDataFromFile = File.ReadAllBytes(@filename);
 
                 #region Translate Header to less cryptic representation
-                ConvertDX9Header( ref _RawDataFromFile ); // The first 128 Bytes of the file is non-image data
+                ConvertDX9Header(ref _RawDataFromFile); // The first 128 Bytes of the file is non-image data
 
                 // start by checking if all forced flags are present. Flags indicate valid fields, but aren't written by every tool .....
-                if ( idString != "DDS " || // magic key
+                if (idString != "DDS " || // magic key
                      dwSize != 124 || // constant size of struct, never reused
                      pfSize != 32 || // constant size of struct, never reused
-                     !CheckFlag( dwFlags, (uint) eDDSD.CAPS ) ||        // must know it's caps
-                     !CheckFlag( dwFlags, (uint) eDDSD.PIXELFORMAT ) || // must know it's format
-                     !CheckFlag( dwCaps1, (uint) eDDSCAPS.TEXTURE )     // must be a Texture
+                     !CheckFlag(dwFlags, (uint)eDDSD.CAPS) ||        // must know it's caps
+                     !CheckFlag(dwFlags, (uint)eDDSD.PIXELFORMAT) || // must know it's format
+                     !CheckFlag(dwCaps1, (uint)eDDSCAPS.TEXTURE)     // must be a Texture
                     )
-                    throw new ArgumentException( "ERROR: File has invalid signature or missing Flags." );
+                    throw new ArgumentException("ERROR: File has invalid signature or missing Flags.");
 
                 #region Examine Flags
-                if ( CheckFlag( dwFlags, (uint) eDDSD.WIDTH ) )
-                    _Width = (int) dwWidth;
+                if (CheckFlag(dwFlags, (uint)eDDSD.WIDTH))
+                    _Width = (int)dwWidth;
                 else
-                    throw new ArgumentException( "ERROR: Flag for Width not set." );
+                    throw new ArgumentException("ERROR: Flag for Width not set.");
 
-                if ( CheckFlag( dwFlags, (uint) eDDSD.HEIGHT ) )
-                    _Height = (int) dwHeight;
+                if (CheckFlag(dwFlags, (uint)eDDSD.HEIGHT))
+                    _Height = (int)dwHeight;
                 else
-                    throw new ArgumentException( "ERROR: Flag for Height not set." );
+                    throw new ArgumentException("ERROR: Flag for Height not set.");
 
-                if ( CheckFlag( dwFlags, (uint) eDDSD.DEPTH ) && CheckFlag( dwCaps2, (uint) eDDSCAPS2.VOLUME ) )
+                if (CheckFlag(dwFlags, (uint)eDDSD.DEPTH) && CheckFlag(dwCaps2, (uint)eDDSCAPS2.VOLUME))
                 {
                     dimension = TextureTarget.Texture3D; // image is 3D Volume
-                    _Depth = (int) dwDepth;
+                    _Depth = (int)dwDepth;
                     throw Unfinished;
-                } else
+                }
+                else
                 {// image is 2D or Cube
-                    if ( CheckFlag( dwCaps2, (uint) eDDSCAPS2.CUBEMAP ) )
+                    if (CheckFlag(dwCaps2, (uint)eDDSCAPS2.CUBEMAP))
                     {
                         dimension = TextureTarget.TextureCubeMap;
                         _Depth = 6;
-                    } else
+                    }
+                    else
                     {
                         dimension = TextureTarget.Texture2D;
                         _Depth = 1;
@@ -255,17 +257,17 @@ namespace Examples.TextureLoaders
                 }
 
                 // these flags must be set for mipmaps to be included
-                if ( CheckFlag( dwCaps1, (uint) eDDSCAPS.MIPMAP ) && CheckFlag( dwFlags, (uint) eDDSD.MIPMAPCOUNT ) )
-                    _MipMapCount = (int) dwMipMapCount; // image contains MipMaps
+                if (CheckFlag(dwCaps1, (uint)eDDSCAPS.MIPMAP) && CheckFlag(dwFlags, (uint)eDDSD.MIPMAPCOUNT))
+                    _MipMapCount = (int)dwMipMapCount; // image contains MipMaps
                 else
                     _MipMapCount = 1; // only 1 main image
 
                 // Should never happen
-                if ( CheckFlag( dwFlags, (uint) eDDSD.PITCH ) && CheckFlag( dwFlags, (uint) eDDSD.LINEARSIZE ) )
-                    throw new ArgumentException( "INVALID: Pitch AND Linear Flags both set. Image cannot be uncompressed and DTXn compressed at the same time." );
+                if (CheckFlag(dwFlags, (uint)eDDSD.PITCH) && CheckFlag(dwFlags, (uint)eDDSD.LINEARSIZE))
+                    throw new ArgumentException("INVALID: Pitch AND Linear Flags both set. Image cannot be uncompressed and DTXn compressed at the same time.");
 
                 // This flag is set if format is uncompressed RGB RGBA etc.
-                if ( CheckFlag( dwFlags, (uint) eDDSD.PITCH ) )
+                if (CheckFlag(dwFlags, (uint)eDDSD.PITCH))
                 {
                     // _BytesForMainSurface = (int) dwPitchOrLinearSize; // holds bytes-per-scanline for uncompressed
                     _IsCompressed = false;
@@ -273,37 +275,38 @@ namespace Examples.TextureLoaders
                 }
 
                 // This flag is set if format is compressed DXTn.
-                if ( CheckFlag( dwFlags, (uint) eDDSD.LINEARSIZE ) )
+                if (CheckFlag(dwFlags, (uint)eDDSD.LINEARSIZE))
                 {
-                    _BytesForMainSurface = (int) dwPitchOrLinearSize;
+                    _BytesForMainSurface = (int)dwPitchOrLinearSize;
                     _IsCompressed = true;
                 }
                 #endregion Examine Flags
 
                 #region Examine Pixel Format, anything but DXTn will fail atm.
-                if ( CheckFlag( pfFlags, (uint) eDDPF.FOURCC ) )
-                    switch ( (eFOURCC) pfFourCC )
+                if (CheckFlag(pfFlags, (uint)eDDPF.FOURCC))
+                    switch ((eFOURCC)pfFourCC)
                     {
-                    case eFOURCC.DXT1:
-                        _PixelInternalFormat = (PixelInternalFormat) ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext;
-                        _BytesPerBlock = 8;
-                        _IsCompressed = true;
-                        break;
-                    //case eFOURCC.DXT2:
-                    case eFOURCC.DXT3:
-                        _PixelInternalFormat = (PixelInternalFormat) ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt3Ext;
-                        _BytesPerBlock = 16;
-                        _IsCompressed = true;
-                        break;
-                    //case eFOURCC.DXT4:
-                    case eFOURCC.DXT5:
-                        _PixelInternalFormat = (PixelInternalFormat) ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt5Ext;
-                        _BytesPerBlock = 16;
-                        _IsCompressed = true;
-                        break;
-                    default:
-                        throw Unfinished; // handle uncompressed formats 
-                    } else
+                        case eFOURCC.DXT1:
+                            _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext;
+                            _BytesPerBlock = 8;
+                            _IsCompressed = true;
+                            break;
+                        //case eFOURCC.DXT2:
+                        case eFOURCC.DXT3:
+                            _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt3Ext;
+                            _BytesPerBlock = 16;
+                            _IsCompressed = true;
+                            break;
+                        //case eFOURCC.DXT4:
+                        case eFOURCC.DXT5:
+                            _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt5Ext;
+                            _BytesPerBlock = 16;
+                            _IsCompressed = true;
+                            break;
+                        default:
+                            throw Unfinished; // handle uncompressed formats 
+                    }
+                else
                     throw Unfinished;
                 // pf*Bitmasks should be examined here
                 #endregion
@@ -316,109 +319,110 @@ namespace Examples.TextureLoaders
                         Trace.WriteLine( "Warning: Image is declared complex, but contains only 1 surface." );
                 }*/
 
-                if ( TextureLoaderParameters.Verbose )
-                    Trace.WriteLine( "\n" + GetDescriptionFromMemory( filename, dimension ) );
+                if (TextureLoaderParameters.Verbose)
+                    Trace.WriteLine("\n" + GetDescriptionFromMemory(filename, dimension));
                 #endregion Translate Header to less cryptic representation
 
                 #region send the Texture to GL
                 #region Generate and Bind Handle
-                GL.GenTextures( 1, out texturehandle );
-                GL.BindTexture( dimension, texturehandle );
+                GL.GenTextures(1, out texturehandle);
+                GL.BindTexture(dimension, texturehandle);
                 #endregion Generate and Bind Handle
 
                 int Cursor = HeaderSizeInBytes;
                 // foreach face in the cubemap, get all it's mipmaps levels. Only one iteration for Texture2D
-                for ( int Slices = 0 ; Slices < _Depth ; Slices++ )
+                for (int Slices = 0; Slices < _Depth; Slices++)
                 {
                     int trueMipMapCount = _MipMapCount - 1; // TODO: triplecheck correctness
                     int Width = _Width;
                     int Height = _Height;
-                    for ( int Level = 0 ; Level < _MipMapCount ; Level++ ) // start at base image
+                    for (int Level = 0; Level < _MipMapCount; Level++) // start at base image
                     {
                         #region determine Dimensions
-                        int BlocksPerRow = ( Width + 3 ) >> 2;
-                        int BlocksPerColumn = ( Height + 3 ) >> 2;
+                        int BlocksPerRow = (Width + 3) >> 2;
+                        int BlocksPerColumn = (Height + 3) >> 2;
                         int SurfaceBlockCount = BlocksPerRow * BlocksPerColumn; //   // DXTn stores Texels in 4x4 blocks, a Color block is 8 Bytes, an Alpha block is 8 Bytes for DXT3/5
                         int SurfaceSizeInBytes = SurfaceBlockCount * _BytesPerBlock;
 
                         // this check must evaluate to false for 2D and Cube maps, or it's impossible to determine MipMap sizes.
-                        if ( TextureLoaderParameters.Verbose && Level == 0 && _IsCompressed && _BytesForMainSurface != SurfaceSizeInBytes )
-                            Trace.WriteLine( "Warning: Calculated byte-count of main image differs from what was read from file." );
+                        if (TextureLoaderParameters.Verbose && Level == 0 && _IsCompressed && _BytesForMainSurface != SurfaceSizeInBytes)
+                            Trace.WriteLine("Warning: Calculated byte-count of main image differs from what was read from file.");
                         #endregion determine Dimensions
 
                         // skip mipmaps smaller than a 4x4 Pixels block, which is the smallest DXTn unit.
-                        if ( Width > 2 && Height > 2 )
+                        if (Width > 2 && Height > 2)
                         { // Note: there could be a potential problem with non-power-of-two cube maps
                             #region Prepare Array for TexImage
                             byte[] RawDataOfSurface = new byte[SurfaceSizeInBytes];
-                            if ( !TextureLoaderParameters.FlipImages )
+                            if (!TextureLoaderParameters.FlipImages)
                             { // no changes to the image, copy as is
-                                Array.Copy( _RawDataFromFile, Cursor, RawDataOfSurface, 0, SurfaceSizeInBytes );
-                            } else
+                                Array.Copy(_RawDataFromFile, Cursor, RawDataOfSurface, 0, SurfaceSizeInBytes);
+                            }
+                            else
                             {  // Turn the blocks upside down and the rows aswell, done in a single pass through all blocks
-                                for ( int sourceColumn = 0 ; sourceColumn < BlocksPerColumn ; sourceColumn++ )
+                                for (int sourceColumn = 0; sourceColumn < BlocksPerColumn; sourceColumn++)
                                 {
                                     int targetColumn = BlocksPerColumn - sourceColumn - 1;
-                                    for ( int row = 0 ; row < BlocksPerRow ; row++ )
+                                    for (int row = 0; row < BlocksPerRow; row++)
                                     {
-                                        int target = ( targetColumn * BlocksPerRow + row ) * _BytesPerBlock;
-                                        int source = ( sourceColumn * BlocksPerRow + row ) * _BytesPerBlock + Cursor;
+                                        int target = (targetColumn * BlocksPerRow + row) * _BytesPerBlock;
+                                        int source = (sourceColumn * BlocksPerRow + row) * _BytesPerBlock + Cursor;
                                         #region Swap Bytes
-                                        switch ( _PixelInternalFormat )
+                                        switch (_PixelInternalFormat)
                                         {
-                                        case (PixelInternalFormat) ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext:
-                                            // Color only
-                                            RawDataOfSurface[target + 0] = _RawDataFromFile[source + 0];
-                                            RawDataOfSurface[target + 1] = _RawDataFromFile[source + 1];
-                                            RawDataOfSurface[target + 2] = _RawDataFromFile[source + 2];
-                                            RawDataOfSurface[target + 3] = _RawDataFromFile[source + 3];
-                                            RawDataOfSurface[target + 4] = _RawDataFromFile[source + 7];
-                                            RawDataOfSurface[target + 5] = _RawDataFromFile[source + 6];
-                                            RawDataOfSurface[target + 6] = _RawDataFromFile[source + 5];
-                                            RawDataOfSurface[target + 7] = _RawDataFromFile[source + 4];
-                                            break;
-                                        case (PixelInternalFormat) ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt3Ext:
-                                            // Alpha
-                                            RawDataOfSurface[target + 0] = _RawDataFromFile[source + 6];
-                                            RawDataOfSurface[target + 1] = _RawDataFromFile[source + 7];
-                                            RawDataOfSurface[target + 2] = _RawDataFromFile[source + 4];
-                                            RawDataOfSurface[target + 3] = _RawDataFromFile[source + 5];
-                                            RawDataOfSurface[target + 4] = _RawDataFromFile[source + 2];
-                                            RawDataOfSurface[target + 5] = _RawDataFromFile[source + 3];
-                                            RawDataOfSurface[target + 6] = _RawDataFromFile[source + 0];
-                                            RawDataOfSurface[target + 7] = _RawDataFromFile[source + 1];
+                                            case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext:
+                                                // Color only
+                                                RawDataOfSurface[target + 0] = _RawDataFromFile[source + 0];
+                                                RawDataOfSurface[target + 1] = _RawDataFromFile[source + 1];
+                                                RawDataOfSurface[target + 2] = _RawDataFromFile[source + 2];
+                                                RawDataOfSurface[target + 3] = _RawDataFromFile[source + 3];
+                                                RawDataOfSurface[target + 4] = _RawDataFromFile[source + 7];
+                                                RawDataOfSurface[target + 5] = _RawDataFromFile[source + 6];
+                                                RawDataOfSurface[target + 6] = _RawDataFromFile[source + 5];
+                                                RawDataOfSurface[target + 7] = _RawDataFromFile[source + 4];
+                                                break;
+                                            case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt3Ext:
+                                                // Alpha
+                                                RawDataOfSurface[target + 0] = _RawDataFromFile[source + 6];
+                                                RawDataOfSurface[target + 1] = _RawDataFromFile[source + 7];
+                                                RawDataOfSurface[target + 2] = _RawDataFromFile[source + 4];
+                                                RawDataOfSurface[target + 3] = _RawDataFromFile[source + 5];
+                                                RawDataOfSurface[target + 4] = _RawDataFromFile[source + 2];
+                                                RawDataOfSurface[target + 5] = _RawDataFromFile[source + 3];
+                                                RawDataOfSurface[target + 6] = _RawDataFromFile[source + 0];
+                                                RawDataOfSurface[target + 7] = _RawDataFromFile[source + 1];
 
-                                            // Color
-                                            RawDataOfSurface[target + 8] = _RawDataFromFile[source + 8];
-                                            RawDataOfSurface[target + 9] = _RawDataFromFile[source + 9];
-                                            RawDataOfSurface[target + 10] = _RawDataFromFile[source + 10];
-                                            RawDataOfSurface[target + 11] = _RawDataFromFile[source + 11];
-                                            RawDataOfSurface[target + 12] = _RawDataFromFile[source + 15];
-                                            RawDataOfSurface[target + 13] = _RawDataFromFile[source + 14];
-                                            RawDataOfSurface[target + 14] = _RawDataFromFile[source + 13];
-                                            RawDataOfSurface[target + 15] = _RawDataFromFile[source + 12];
-                                            break;
-                                        case (PixelInternalFormat) ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt5Ext:
-                                            // Alpha, the first 2 bytes remain 
-                                            RawDataOfSurface[target + 0] = _RawDataFromFile[source + 0];
-                                            RawDataOfSurface[target + 1] = _RawDataFromFile[source + 1];
+                                                // Color
+                                                RawDataOfSurface[target + 8] = _RawDataFromFile[source + 8];
+                                                RawDataOfSurface[target + 9] = _RawDataFromFile[source + 9];
+                                                RawDataOfSurface[target + 10] = _RawDataFromFile[source + 10];
+                                                RawDataOfSurface[target + 11] = _RawDataFromFile[source + 11];
+                                                RawDataOfSurface[target + 12] = _RawDataFromFile[source + 15];
+                                                RawDataOfSurface[target + 13] = _RawDataFromFile[source + 14];
+                                                RawDataOfSurface[target + 14] = _RawDataFromFile[source + 13];
+                                                RawDataOfSurface[target + 15] = _RawDataFromFile[source + 12];
+                                                break;
+                                            case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt5Ext:
+                                                // Alpha, the first 2 bytes remain 
+                                                RawDataOfSurface[target + 0] = _RawDataFromFile[source + 0];
+                                                RawDataOfSurface[target + 1] = _RawDataFromFile[source + 1];
 
-                                            // extract 3 bits each and flip them
-                                            GetBytesFromUInt24( ref RawDataOfSurface, (uint) target + 5, FlipUInt24( GetUInt24( ref _RawDataFromFile, (uint) source + 2 ) ) );
-                                            GetBytesFromUInt24( ref RawDataOfSurface, (uint) target + 2, FlipUInt24( GetUInt24( ref _RawDataFromFile, (uint) source + 5 ) ) );
+                                                // extract 3 bits each and flip them
+                                                GetBytesFromUInt24(ref RawDataOfSurface, (uint)target + 5, FlipUInt24(GetUInt24(ref _RawDataFromFile, (uint)source + 2)));
+                                                GetBytesFromUInt24(ref RawDataOfSurface, (uint)target + 2, FlipUInt24(GetUInt24(ref _RawDataFromFile, (uint)source + 5)));
 
-                                            // Color
-                                            RawDataOfSurface[target + 8] = _RawDataFromFile[source + 8];
-                                            RawDataOfSurface[target + 9] = _RawDataFromFile[source + 9];
-                                            RawDataOfSurface[target + 10] = _RawDataFromFile[source + 10];
-                                            RawDataOfSurface[target + 11] = _RawDataFromFile[source + 11];
-                                            RawDataOfSurface[target + 12] = _RawDataFromFile[source + 15];
-                                            RawDataOfSurface[target + 13] = _RawDataFromFile[source + 14];
-                                            RawDataOfSurface[target + 14] = _RawDataFromFile[source + 13];
-                                            RawDataOfSurface[target + 15] = _RawDataFromFile[source + 12];
-                                            break;
-                                        default:
-                                            throw new ArgumentException( "ERROR: Should have never arrived here! Bad _PixelInternalFormat! Should have been dealt with much earlier." );
+                                                // Color
+                                                RawDataOfSurface[target + 8] = _RawDataFromFile[source + 8];
+                                                RawDataOfSurface[target + 9] = _RawDataFromFile[source + 9];
+                                                RawDataOfSurface[target + 10] = _RawDataFromFile[source + 10];
+                                                RawDataOfSurface[target + 11] = _RawDataFromFile[source + 11];
+                                                RawDataOfSurface[target + 12] = _RawDataFromFile[source + 15];
+                                                RawDataOfSurface[target + 13] = _RawDataFromFile[source + 14];
+                                                RawDataOfSurface[target + 14] = _RawDataFromFile[source + 13];
+                                                RawDataOfSurface[target + 15] = _RawDataFromFile[source + 12];
+                                                break;
+                                            default:
+                                                throw new ArgumentException("ERROR: Should have never arrived here! Bad _PixelInternalFormat! Should have been dealt with much earlier.");
                                         }
                                         #endregion Swap Bytes
                                     }
@@ -427,121 +431,124 @@ namespace Examples.TextureLoaders
                             #endregion Prepare Array for TexImage
 
                             #region Create TexImage
-                            switch ( dimension )
+                            switch (dimension)
                             {
-                            case TextureTarget.Texture2D:
-                                GL.CompressedTexImage2D( TextureTarget.Texture2D,
-                                                         Level,
-                                                         _PixelInternalFormat,
-                                                         Width,
-                                                         Height,
-                                                        TextureLoaderParameters.Border,
-                                                         SurfaceSizeInBytes,
-                                                         RawDataOfSurface );
-                                break;
-                            case TextureTarget.TextureCubeMap:
-                                GL.CompressedTexImage2D( TextureTarget.TextureCubeMapPositiveX + Slices,
-                                                         Level,
-                                                         _PixelInternalFormat,
-                                                         Width,
-                                                         Height,
-                                                         TextureLoaderParameters.Border,
-                                                         SurfaceSizeInBytes,
-                                                         RawDataOfSurface );
-                                break;
-                            case TextureTarget.Texture1D: // Untested
-                            case TextureTarget.Texture3D: // Untested
-                            default:
-                                throw new ArgumentException( "ERROR: Use DXT for 2D Images only. Cannot evaluate " + dimension );
+                                case TextureTarget.Texture2D:
+                                    GL.CompressedTexImage2D(TextureTarget.Texture2D,
+                                                             Level,
+                                                             _PixelInternalFormat,
+                                                             Width,
+                                                             Height,
+                                                            TextureLoaderParameters.Border,
+                                                             SurfaceSizeInBytes,
+                                                             RawDataOfSurface);
+                                    break;
+                                case TextureTarget.TextureCubeMap:
+                                    GL.CompressedTexImage2D(TextureTarget.TextureCubeMapPositiveX + Slices,
+                                                             Level,
+                                                             _PixelInternalFormat,
+                                                             Width,
+                                                             Height,
+                                                             TextureLoaderParameters.Border,
+                                                             SurfaceSizeInBytes,
+                                                             RawDataOfSurface);
+                                    break;
+                                case TextureTarget.Texture1D: // Untested
+                                case TextureTarget.Texture3D: // Untested
+                                default:
+                                    throw new ArgumentException("ERROR: Use DXT for 2D Images only. Cannot evaluate " + dimension);
                             }
-                            GL.Finish( );
+                            GL.Finish();
                             #endregion Create TexImage
 
                             #region Query Success
                             int width, height, internalformat, compressed;
-                            switch ( dimension )
+                            switch (dimension)
                             {
-                            case TextureTarget.Texture1D:
-                            case TextureTarget.Texture2D:
-                            case TextureTarget.Texture3D:
-                                GL.GetTexLevelParameter( dimension, Level, GetTextureParameter.TextureWidth, out width );
-                                GL.GetTexLevelParameter( dimension, Level, GetTextureParameter.TextureHeight, out height );
-                                GL.GetTexLevelParameter( dimension, Level, GetTextureParameter.TextureInternalFormat, out internalformat );
-                                GL.GetTexLevelParameter( dimension, Level, GetTextureParameter.TextureCompressed, out compressed );
-                                break;
-                            case TextureTarget.TextureCubeMap:
-                                GL.GetTexLevelParameter( TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureWidth, out width );
-                                GL.GetTexLevelParameter( TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureHeight, out height );
-                                GL.GetTexLevelParameter( TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureInternalFormat, out internalformat );
-                                GL.GetTexLevelParameter( TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureCompressed, out compressed );
-                                break;
-                            default:
-                                throw Unfinished;
+                                case TextureTarget.Texture1D:
+                                case TextureTarget.Texture2D:
+                                case TextureTarget.Texture3D:
+                                    GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureWidth, out width);
+                                    GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureHeight, out height);
+                                    GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureInternalFormat, out internalformat);
+                                    GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureCompressed, out compressed);
+                                    break;
+                                case TextureTarget.TextureCubeMap:
+                                    GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureWidth, out width);
+                                    GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureHeight, out height);
+                                    GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureInternalFormat, out internalformat);
+                                    GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureCompressed, out compressed);
+                                    break;
+                                default:
+                                    throw Unfinished;
                             }
-                            GLError = GL.GetError( );
-                            if ( TextureLoaderParameters.Verbose )
-                                Trace.WriteLine( "GL: " + GLError.ToString( ) + " Level: " + Level + " DXTn: " + ( ( compressed == 1 ) ? "Yes" : "No" ) + " Frmt:" + (ExtTextureCompressionS3tc) internalformat + " " + width + "*" + height );
-                            if ( GLError != ErrorCode.NoError || compressed == 0 || width == 0 || height == 0 || internalformat == 0 )
+                            GLError = GL.GetError();
+                            if (TextureLoaderParameters.Verbose)
+                                Trace.WriteLine("GL: " + GLError.ToString() + " Level: " + Level + " DXTn: " + ((compressed == 1) ? "Yes" : "No") + " Frmt:" + (ExtTextureCompressionS3tc)internalformat + " " + width + "*" + height);
+                            if (GLError != ErrorCode.NoError || compressed == 0 || width == 0 || height == 0 || internalformat == 0)
                             {
-                                GL.DeleteTextures( 1, ref texturehandle );
-                                throw new ArgumentException( "ERROR: Something went wrong after GL.CompressedTexImage(); Last GL Error: " + GLError.ToString( ) );
+                                GL.DeleteTextures(1, ref texturehandle);
+                                throw new ArgumentException("ERROR: Something went wrong after GL.CompressedTexImage(); Last GL Error: " + GLError.ToString());
                             }
                             #endregion Query Success
-                        } else
+                        }
+                        else
                         {
-                            if ( trueMipMapCount > Level )
+                            if (trueMipMapCount > Level)
                                 trueMipMapCount = Level - 1; // The current Level is invalid
                         }
 
                         #region Prepare the next MipMap level
                         Width /= 2;
-                        if ( Width < 1 )
+                        if (Width < 1)
                             Width = 1;
                         Height /= 2;
-                        if ( Height < 1 )
+                        if (Height < 1)
                             Height = 1;
                         Cursor += SurfaceSizeInBytes;
                         #endregion Prepare the next MipMap level
                     }
 
                     #region Set States properly
-                    GL.TexParameter( dimension, (TextureParameterName) All.TextureBaseLevel, 0 );
-                    GL.TexParameter( dimension, (TextureParameterName) All.TextureMaxLevel, trueMipMapCount );
+                    GL.TexParameter(dimension, (TextureParameterName)All.TextureBaseLevel, 0);
+                    GL.TexParameter(dimension, (TextureParameterName)All.TextureMaxLevel, trueMipMapCount);
 
                     int TexMaxLevel;
-                    GL.GetTexParameter( dimension, GetTextureParameter.TextureMaxLevel, out TexMaxLevel );
+                    GL.GetTexParameter(dimension, GetTextureParameter.TextureMaxLevel, out TexMaxLevel);
 
-                    if ( TextureLoaderParameters.Verbose )
-                        Trace.WriteLine( "Verification: GL: " + GL.GetError( ).ToString( ) + " TextureMaxLevel: " + TexMaxLevel + ( ( TexMaxLevel == trueMipMapCount ) ? " (Correct.)" : " (Wrong!)" ) );
+                    if (TextureLoaderParameters.Verbose)
+                        Trace.WriteLine("Verification: GL: " + GL.GetError().ToString() + " TextureMaxLevel: " + TexMaxLevel + ((TexMaxLevel == trueMipMapCount) ? " (Correct.)" : " (Wrong!)"));
                     #endregion Set States properly
                 }
 
                 #region Set Texture Parameters
-                GL.TexParameter( dimension, TextureParameterName.TextureMinFilter, (int) TextureLoaderParameters.MinificationFilter );
-                GL.TexParameter( dimension, TextureParameterName.TextureMagFilter, (int) TextureLoaderParameters.MagnificationFilter );
+                GL.TexParameter(dimension, TextureParameterName.TextureMinFilter, (int)TextureLoaderParameters.MinificationFilter);
+                GL.TexParameter(dimension, TextureParameterName.TextureMagFilter, (int)TextureLoaderParameters.MagnificationFilter);
 
-                GL.TexParameter( dimension, TextureParameterName.TextureWrapS, (int) TextureLoaderParameters.WrapModeS );
-                GL.TexParameter( dimension, TextureParameterName.TextureWrapT, (int) TextureLoaderParameters.WrapModeT );
+                GL.TexParameter(dimension, TextureParameterName.TextureWrapS, (int)TextureLoaderParameters.WrapModeS);
+                GL.TexParameter(dimension, TextureParameterName.TextureWrapT, (int)TextureLoaderParameters.WrapModeT);
 
-                GL.TexEnv( TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int) TextureLoaderParameters.EnvMode );
+                GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureLoaderParameters.EnvMode);
 
-                GLError = GL.GetError( );
-                if ( GLError != ErrorCode.NoError )
+                GLError = GL.GetError();
+                if (GLError != ErrorCode.NoError)
                 {
-                    throw new ArgumentException( "Error setting Texture Parameters. GL Error: " + GLError );
+                    throw new ArgumentException("Error setting Texture Parameters. GL Error: " + GLError);
                 }
                 #endregion Set Texture Parameters
 
                 // If it made it here without throwing any Exception the result is a valid Texture.
                 return; // success
                 #endregion send the Texture to GL
-            } catch ( Exception e )
+            }
+            catch (Exception e)
             {
-                dimension = (TextureTarget) 0;
+                dimension = (TextureTarget)0;
                 texturehandle = TextureLoaderParameters.OpenGLDefaultTexture;
-                throw new ArgumentException( "ERROR: Exception caught when attempting to load file " + filename + ".\n" + e + "\n" + GetDescriptionFromFile( filename ) );
+                throw new ArgumentException("ERROR: Exception caught when attempting to load file " + filename + ".\n" + e + "\n" + GetDescriptionFromFile(filename));
                 // return; // failure
-            } finally
+            }
+            finally
             {
                 _RawDataFromFile = null; // clarity, not really needed
             }
@@ -549,34 +556,34 @@ namespace Examples.TextureLoaders
         }
 
         #region Helpers
-        private static void ConvertDX9Header( ref byte[] input )
+        private static void ConvertDX9Header(ref byte[] input)
         {
             UInt32 offset = 0;
-            idString = GetString( ref input, offset );
+            idString = GetString(ref input, offset);
             offset += 4;
-            dwSize = GetUInt32( ref input, offset );
+            dwSize = GetUInt32(ref input, offset);
             offset += 4;
-            dwFlags = GetUInt32( ref input, offset );
+            dwFlags = GetUInt32(ref input, offset);
             offset += 4;
-            dwHeight = GetUInt32( ref input, offset );
+            dwHeight = GetUInt32(ref input, offset);
             offset += 4;
-            dwWidth = GetUInt32( ref input, offset );
+            dwWidth = GetUInt32(ref input, offset);
             offset += 4;
-            dwPitchOrLinearSize = GetUInt32( ref input, offset );
+            dwPitchOrLinearSize = GetUInt32(ref input, offset);
             offset += 4;
-            dwDepth = GetUInt32( ref input, offset );
+            dwDepth = GetUInt32(ref input, offset);
             offset += 4;
-            dwMipMapCount = GetUInt32( ref input, offset );
+            dwMipMapCount = GetUInt32(ref input, offset);
             offset += 4;
 #if READALL
             dwReserved1 = new UInt32[11]; // reserved
 #endif
             offset += 4 * 11;
-            pfSize = GetUInt32( ref input, offset );
+            pfSize = GetUInt32(ref input, offset);
             offset += 4;
-            pfFlags = GetUInt32( ref input, offset );
+            pfFlags = GetUInt32(ref input, offset);
             offset += 4;
-            pfFourCC = GetUInt32( ref input, offset );
+            pfFourCC = GetUInt32(ref input, offset);
             offset += 4;
 #if READALL
             pfRGBBitCount = GetUInt32( ref input, offset );
@@ -592,9 +599,9 @@ namespace Examples.TextureLoaders
 #else
             offset += 20;
 #endif
-            dwCaps1 = GetUInt32( ref input, offset );
+            dwCaps1 = GetUInt32(ref input, offset);
             offset += 4;
-            dwCaps2 = GetUInt32( ref input, offset );
+            dwCaps2 = GetUInt32(ref input, offset);
             offset += 4;
 #if READALL
             dwReserved2 = new UInt32[3]; // offset is 4+112 here, + 12 = 4+124 
@@ -603,79 +610,79 @@ namespace Examples.TextureLoaders
         }
 
         /// <summary> Returns true if the flag is set, false otherwise</summary>
-        private static bool CheckFlag( uint variable, uint flag )
+        private static bool CheckFlag(uint variable, uint flag)
         {
-            return ( variable & flag ) > 0 ? true : false;
+            return (variable & flag) > 0 ? true : false;
         }
 
-        private static string GetString( ref byte[] input, uint offset )
+        private static string GetString(ref byte[] input, uint offset)
         {
-            return "" + (char) input[offset + 0] + (char) input[offset + 1] + (char) input[offset + 2] + (char) input[offset + 3];
+            return "" + (char)input[offset + 0] + (char)input[offset + 1] + (char)input[offset + 2] + (char)input[offset + 3];
         }
 
-        private static uint GetUInt32( ref byte[] input, uint offset )
+        private static uint GetUInt32(ref byte[] input, uint offset)
         {
-            return (uint) ( ( ( input[offset + 3] * 256 + input[offset + 2] ) * 256 + input[offset + 1] ) * 256 + input[offset + 0] );
+            return (uint)(((input[offset + 3] * 256 + input[offset + 2]) * 256 + input[offset + 1]) * 256 + input[offset + 0]);
         }
 
-        private static uint GetUInt24( ref byte[] input, uint offset )
+        private static uint GetUInt24(ref byte[] input, uint offset)
         {
-            return (uint) ( ( input[offset + 2] * 256 + input[offset + 1] ) * 256 + input[offset + 0] );
+            return (uint)((input[offset + 2] * 256 + input[offset + 1]) * 256 + input[offset + 0]);
         }
 
-        private static void GetBytesFromUInt24( ref byte[] input, uint offset, uint splitme )
+        private static void GetBytesFromUInt24(ref byte[] input, uint offset, uint splitme)
         {
-            input[offset + 0] = (byte) ( splitme & 0x000000ff );
-            input[offset + 1] = (byte) ( ( splitme & 0x0000ff00 ) >> 8 );
-            input[offset + 2] = (byte) ( ( splitme & 0x00ff0000 ) >> 16 );
+            input[offset + 0] = (byte)(splitme & 0x000000ff);
+            input[offset + 1] = (byte)((splitme & 0x0000ff00) >> 8);
+            input[offset + 2] = (byte)((splitme & 0x00ff0000) >> 16);
             return;
         }
 
         /// <summary>DXT5 Alpha block flipping, inspired by code from Evan Hart (nVidia SDK)</summary>
-        private static uint FlipUInt24( uint inputUInt24 )
+        private static uint FlipUInt24(uint inputUInt24)
         {
             byte[][] ThreeBits = new byte[2][];
-            for ( int i = 0 ; i < 2 ; i++ )
+            for (int i = 0; i < 2; i++)
                 ThreeBits[i] = new byte[4];
 
             // extract 3 bits each into the array
-            ThreeBits[0][0] = (byte) ( inputUInt24 & BitMask );
+            ThreeBits[0][0] = (byte)(inputUInt24 & BitMask);
             inputUInt24 >>= 3;
-            ThreeBits[0][1] = (byte) ( inputUInt24 & BitMask );
+            ThreeBits[0][1] = (byte)(inputUInt24 & BitMask);
             inputUInt24 >>= 3;
-            ThreeBits[0][2] = (byte) ( inputUInt24 & BitMask );
+            ThreeBits[0][2] = (byte)(inputUInt24 & BitMask);
             inputUInt24 >>= 3;
-            ThreeBits[0][3] = (byte) ( inputUInt24 & BitMask );
+            ThreeBits[0][3] = (byte)(inputUInt24 & BitMask);
             inputUInt24 >>= 3;
-            ThreeBits[1][0] = (byte) ( inputUInt24 & BitMask );
+            ThreeBits[1][0] = (byte)(inputUInt24 & BitMask);
             inputUInt24 >>= 3;
-            ThreeBits[1][1] = (byte) ( inputUInt24 & BitMask );
+            ThreeBits[1][1] = (byte)(inputUInt24 & BitMask);
             inputUInt24 >>= 3;
-            ThreeBits[1][2] = (byte) ( inputUInt24 & BitMask );
+            ThreeBits[1][2] = (byte)(inputUInt24 & BitMask);
             inputUInt24 >>= 3;
-            ThreeBits[1][3] = (byte) ( inputUInt24 & BitMask );
+            ThreeBits[1][3] = (byte)(inputUInt24 & BitMask);
 
             // stuff 8x 3bits into 3 bytes
             uint Result = 0;
-            Result = Result | (uint) ( ThreeBits[1][0] << 0 );
-            Result = Result | (uint) ( ThreeBits[1][1] << 3 );
-            Result = Result | (uint) ( ThreeBits[1][2] << 6 );
-            Result = Result | (uint) ( ThreeBits[1][3] << 9 );
-            Result = Result | (uint) ( ThreeBits[0][0] << 12 );
-            Result = Result | (uint) ( ThreeBits[0][1] << 15 );
-            Result = Result | (uint) ( ThreeBits[0][2] << 18 );
-            Result = Result | (uint) ( ThreeBits[0][3] << 21 );
+            Result = Result | (uint)(ThreeBits[1][0] << 0);
+            Result = Result | (uint)(ThreeBits[1][1] << 3);
+            Result = Result | (uint)(ThreeBits[1][2] << 6);
+            Result = Result | (uint)(ThreeBits[1][3] << 9);
+            Result = Result | (uint)(ThreeBits[0][0] << 12);
+            Result = Result | (uint)(ThreeBits[0][1] << 15);
+            Result = Result | (uint)(ThreeBits[0][2] << 18);
+            Result = Result | (uint)(ThreeBits[0][3] << 21);
             return Result;
         }
         #endregion Helpers
 
         #region String Representations
-        private static string GetDescriptionFromFile( string filename )
+        private static string GetDescriptionFromFile(string filename)
         {
             return "\n--> Header of " + filename +
                    "\nID: " + idString +
                    "\nSize: " + dwSize +
-                   "\nFlags: " + dwFlags + " (" + (eDDSD) dwFlags + ")" +
+                   "\nFlags: " + dwFlags + " (" + (eDDSD)dwFlags + ")" +
                    "\nHeight: " + dwHeight +
                    "\nWidth: " + dwWidth +
                    "\nPitch: " + dwPitchOrLinearSize +
@@ -683,8 +690,8 @@ namespace Examples.TextureLoaders
                    "\nMipMaps: " + dwMipMapCount +
                    "\n\n---PixelFormat---" + filename +
                    "\nSize: " + pfSize +
-                   "\nFlags: " + pfFlags + " (" + (eDDPF) pfFlags + ")" +
-                   "\nFourCC: " + pfFourCC + " (" + (eFOURCC) pfFourCC + ")" +
+                   "\nFlags: " + pfFlags + " (" + (eDDPF)pfFlags + ")" +
+                   "\nFourCC: " + pfFourCC + " (" + (eFOURCC)pfFourCC + ")" +
 #if READALL
                    "\nBitcount: " + pfRGBBitCount +
                    "\nBitMask Red: " + pfRBitMask +
@@ -693,11 +700,11 @@ namespace Examples.TextureLoaders
                    "\nBitMask Alpha: " + pfABitMask +
 #endif
  "\n\n---Capabilities---" + filename +
-                   "\nCaps1: " + dwCaps1 + " (" + (eDDSCAPS) dwCaps1 + ")" +
-                   "\nCaps2: " + dwCaps2 + " (" + (eDDSCAPS2) dwCaps2 + ")";
+                   "\nCaps1: " + dwCaps1 + " (" + (eDDSCAPS)dwCaps1 + ")" +
+                   "\nCaps2: " + dwCaps2 + " (" + (eDDSCAPS2)dwCaps2 + ")";
         }
 
-        private static string GetDescriptionFromMemory( string filename, TextureTarget Dimension )
+        private static string GetDescriptionFromMemory(string filename, TextureTarget Dimension)
         {
             return "\nFile: " + filename +
                    "\nDimension: " + Dimension +

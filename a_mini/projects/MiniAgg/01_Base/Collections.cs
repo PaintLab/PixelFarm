@@ -65,7 +65,7 @@ namespace PixelFarm.Agg
             get { return currentSize; }
         }
 
-        internal int AllocatedSize
+        public int AllocatedSize
         {
             get
             {

@@ -16,16 +16,29 @@ using System.Drawing.Imaging;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
+using Mini;
 
 namespace OpenTkEssTest
 {
+    [Info(OrderCode = "02")]
+    [Info("T04_TextureMapping")]
+    public class T04_TextureMapping : DemoBase
+    {
+        public override void Init() 
+        {
+            using (var example = new Textures())
+            {
+                example.Run(30.0, 0.0);
+            }
+        }
+    }
     /// <summary>
     /// Demonstrates simple OpenGL Texturing.
     /// </summary>
     // [Example("Texture mapping", ExampleCategory.OpenGL, "1.x", 5, Documentation = "Textures")]
     public class Textures : GameWindow
     {
-        Bitmap bitmap = new Bitmap("Data/Textures/logo.jpg");
+        Bitmap bitmap = new Bitmap("../../Data/Textures/logo-dark.jpg");
         int texture;
 
         public Textures()

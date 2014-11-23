@@ -9,23 +9,23 @@ namespace PixelFarm.Agg.VertexSource
 {
     public class VertexSourceIO
     {
-        public static void Load(PathStorage vertexSource, string pathAndFileName)
+        public static void Load(PathWriter vertexSource, string pathAndFileName)
         {
             vertexSource.Clear();
+            var vxs = vertexSource.Vxs;
             string[] allLines = File.ReadAllLines(pathAndFileName);
             foreach (string line in allLines)
             {
                 string[] elements = line.Split(',');
                 double x = double.Parse(elements[0]);
                 double y = double.Parse(elements[1]);
-                ShapePath.FlagsAndCommand flagsAndCommand = (ShapePath.FlagsAndCommand)System.Enum.Parse(typeof(ShapePath.FlagsAndCommand), elements[2].Trim());
+                VertexCmd flagsAndCommand = (VertexCmd)System.Enum.Parse(typeof(VertexCmd), elements[2].Trim());
                 int len = elements.Length;
                 for (int i = 3; i < len; i++)
                 {
-                    flagsAndCommand |= (ShapePath.FlagsAndCommand)System.Enum.Parse(typeof(ShapePath.FlagsAndCommand), elements[i].Trim());
+                    flagsAndCommand |= (VertexCmd)System.Enum.Parse(typeof(VertexCmd), elements[i].Trim());
                 }
-
-                vertexSource.AddVertex(x, y, flagsAndCommand);
+                vxs.AddVertex(x, y, flagsAndCommand);                 
             }
         }
 
@@ -61,13 +61,13 @@ namespace PixelFarm.Agg.VertexSource
 
 
         //-------------------------------------------------
-        public static void WriteToStream(BinaryWriter writer, PathStorage pathSource)
+        public static void WriteToStream(BinaryWriter writer, PathWriter pathSource)
         {
             int num_vertice;
             int num_alloc_vertice;
             double[] coord_xy;
-            ShapePath.FlagsAndCommand[] cmds;
-            PathStorage.UnsafeDirectGetData(pathSource,
+            VertexCmd[] cmds;
+            PathWriter.UnsafeDirectGetData(pathSource,
                 out num_alloc_vertice,
                 out num_vertice,
                 out coord_xy,
@@ -127,9 +127,9 @@ namespace PixelFarm.Agg.VertexSource
             writer.Flush();
 
         }
-        public static void ReadPathDataFromStream(BinaryReader reader, out PathStorage newPath)
+        public static void ReadPathDataFromStream(BinaryReader reader, out PathWriter newPath)
         {
-            newPath = new PathStorage();
+            newPath = new PathWriter();
             //1.
             int num_alloc_vertice = reader.ReadInt32();//hint
             //2.
@@ -138,7 +138,7 @@ namespace PixelFarm.Agg.VertexSource
             //3.
             double[] coord_xy = new double[totalCoord];
             //4.
-            ShapePath.FlagsAndCommand[] cmds = new ShapePath.FlagsAndCommand[num_vertice];
+            VertexCmd[] cmds = new VertexCmd[num_vertice];
 
             for (int i = 0; i < totalCoord; )
             {
@@ -151,10 +151,10 @@ namespace PixelFarm.Agg.VertexSource
             int cmds_count = reader.ReadInt32();
             for (int i = 0; i < cmds_count; ++i)
             {
-                cmds[i] = (ShapePath.FlagsAndCommand)reader.ReadByte();
+                cmds[i] = (VertexCmd)reader.ReadByte();
             }
 
-            PathStorage.UnsafeDirectSetData(
+            PathWriter.UnsafeDirectSetData(
                 newPath,
                 num_alloc_vertice,
                 num_vertice,

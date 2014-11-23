@@ -57,7 +57,7 @@ namespace OpenTkEssTest
             GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
 
             // Setup VBO state
-            GL.EnableClientState(EnableCap.ColorArray);
+            GL.EnableClientState(EnableCap.ColorArray); 
             GL.EnableClientState(EnableCap.VertexArray);
 
             GL.GenBuffers(1, out VBOHandle);

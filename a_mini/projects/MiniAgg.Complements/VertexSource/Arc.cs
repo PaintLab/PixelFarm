@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.VectorMath;
 
-using FlagsAndCommand = PixelFarm.Agg.ShapePath.FlagsAndCommand;
+using FlagsAndCommand = PixelFarm.Agg.VertexCmd;
 
 namespace PixelFarm.Agg.VertexSource
 {
@@ -44,16 +44,21 @@ namespace PixelFarm.Agg.VertexSource
 
         double startAngle;
         double endAngle;
+
         double m_Scale;
-        EDirection m_Direction;
-
-        double m_CurrentFlatenAngle;
+        ArcDirection m_Direction;
         double flatenDeltaAngle;
-
         bool m_IsInitialized;
-        ShapePath.FlagsAndCommand m_NextPathCommand;
 
-        public enum EDirection
+        //------------        
+        double startX;
+        double startY;
+        double endX;
+        double endY;
+
+        int calculateNSteps;
+
+        public enum ArcDirection
         {
             ClockWise,
             CounterClockWise,
@@ -65,49 +70,56 @@ namespace PixelFarm.Agg.VertexSource
             m_IsInitialized = false;
         }
 
-        public Arc(double OriginX, double OriginY,
-             double RadiusX, double RadiusY,
-             double Angle1, double Angle2)
-            : this(OriginX, OriginY, RadiusX, RadiusY, Angle1, Angle2, EDirection.CounterClockWise)
-        {
 
+        public Arc(double ox, double oy,
+             double rx, double ry,
+             double angle1, double angle2,
+             ArcDirection direction)
+        {
+            this.originX = ox;
+            this.originY = oy;
+            this.radiusX = rx;
+            this.radiusY = ry;
+            this.m_Scale = 1.0;
+            Normalize(angle1, angle2, direction);
         }
 
-        public Arc(double OriginX, double OriginY,
-             double RadiusX, double RadiusY,
-             double Angle1, double Angle2,
-             EDirection Direction)
+        public void Init(double ox, double oy,
+                  double rx, double ry,
+                  double angle1, double angle2)
         {
-            originX = OriginX;
-            originY = OriginY;
-            radiusX = RadiusX;
-            radiusY = RadiusY;
-            m_Scale = 1.0;
-            Normalize(Angle1, Angle2, Direction);
+            Init(ox, oy, rx, ry, angle1, angle2, ArcDirection.CounterClockWise);
         }
 
-        public void Init(double OriginX, double OriginY,
-                  double RadiusX, double RadiusY,
-                  double Angle1, double Angle2)
+
+        public void Init(double ox, double oy,
+                   double rx, double ry,
+                   double angle1, double angle2,
+                   ArcDirection direction)
         {
-            Init(OriginX, OriginY, RadiusX, RadiusY, Angle1, Angle2, EDirection.CounterClockWise);
+            this.originX = ox;
+            this.originY = oy;
+            this.radiusX = rx;
+            this.radiusY = ry;
+            Normalize(angle1, angle2, direction);
         }
 
-        public void Init(double OriginX, double OriginY,
-                   double RadiusX, double RadiusY,
-                   double Angle1, double Angle2,
-                   EDirection Direction)
+        public void SetStartEndLimit(double startX, double startY, double endX, double endY)
         {
-            originX = OriginX;
-            originY = OriginY;
-            radiusX = RadiusX;
-            radiusY = RadiusY;
-            Normalize(Angle1, Angle2, Direction);
-        }
+            this.startX = startX;
+            this.startY = startY;
+            this.endX = endX;
+            this.endY = endY;
 
-        public double ApproximateScale 
+        }
+        public bool UseStartEndLimit
         {
-            get{ return this.m_Scale;}
+            get;
+            set;
+        }
+        public double ApproximateScale
+        {
+            get { return this.m_Scale; }
             set
             {
                 m_Scale = value;
@@ -117,93 +129,103 @@ namespace PixelFarm.Agg.VertexSource
                 }
             }
         }
-         
+
         public IEnumerable<VertexData> GetVertexIter()
         {
             // go to the start
-            VertexData vertexData = new VertexData();
-            vertexData.command = FlagsAndCommand.CommandMoveTo;
-            vertexData.x = originX + Math.Cos(startAngle) * radiusX;
-            vertexData.y = originY + Math.Sin(startAngle) * radiusY;
-            yield return vertexData;
-
-            double angle = startAngle;
-            vertexData.command = FlagsAndCommand.CommandLineTo;
-            while ((angle < endAngle - flatenDeltaAngle / 4) == (((int)EDirection.CounterClockWise) == 1))
+            if (UseStartEndLimit)
             {
-                angle += flatenDeltaAngle;
 
-                vertexData.x = originX + Math.Cos(angle) * radiusX;
-                vertexData.y = originY + Math.Sin(angle) * radiusY;
+                //---------------------------------------------------------
+                VertexData vertexData = new VertexData();
+                vertexData.command = FlagsAndCommand.MoveTo;
+                vertexData.x = startX;
+                vertexData.y = startY;
+                yield return vertexData;
+                //---------------------------------------------------------
+                double angle = startAngle;
+                vertexData.command = FlagsAndCommand.LineTo;
+                //calculate nsteps
+                int n = 0;
+                while (n < calculateNSteps - 1)
+                {
+                    angle += flatenDeltaAngle;
+                    vertexData.x = originX + Math.Cos(angle) * radiusX;
+                    vertexData.y = originY + Math.Sin(angle) * radiusY;
+                    yield return vertexData;
+                    n++;
+                }
+
+                //while ((angle < endAngle - flatenDeltaAngle / 4) == (((int)ArcDirection.CounterClockWise) == 1))
+                //{
+                //    angle += flatenDeltaAngle;
+                //    vertexData.x = originX + Math.Cos(angle) * radiusX;
+                //    vertexData.y = originY + Math.Sin(angle) * radiusY;
+
+                //    yield return vertexData;
+                //}
+                //---------------------------------------------------------
+                vertexData.x = endX;
+                vertexData.y = endY;
+                yield return vertexData;
+
+                vertexData.command = FlagsAndCommand.Stop;
                 yield return vertexData;
             }
+            else
+            {
 
-            vertexData.x = originX + Math.Cos(endAngle) * radiusX;
-            vertexData.y = originY + Math.Sin(endAngle) * radiusY;
-            yield return vertexData;
+                VertexData vertexData = new VertexData();
+                vertexData.command = FlagsAndCommand.MoveTo;
+                vertexData.x = originX + Math.Cos(startAngle) * radiusX;
+                vertexData.y = originY + Math.Sin(startAngle) * radiusY;
 
-            vertexData.command = FlagsAndCommand.CommandStop;
-            yield return vertexData;
+                yield return vertexData;
+                //---------------------------------------------------------
+                double angle = startAngle;
+                vertexData.command = FlagsAndCommand.LineTo;
+                while ((angle < endAngle - flatenDeltaAngle / 4) == (((int)ArcDirection.CounterClockWise) == 1))
+                {
+                    angle += flatenDeltaAngle;
+
+                    vertexData.x = originX + Math.Cos(angle) * radiusX;
+                    vertexData.y = originY + Math.Sin(angle) * radiusY;
+                    yield return vertexData;
+                }
+                //---------------------------------------------------------
+                vertexData.x = originX + Math.Cos(endAngle) * radiusX;
+                vertexData.y = originY + Math.Sin(endAngle) * radiusY;
+                yield return vertexData;
+
+                vertexData.command = FlagsAndCommand.Stop;
+                yield return vertexData;
+            }
         }
 
-        //public void RewindZero()
-        //{
-        //    m_NextPathCommand = ShapePath.FlagsAndCommand.CommandMoveTo;
-        //    m_CurrentFlatenAngle = startAngle;
-        //}
-
-        //public ShapePath.FlagsAndCommand vertex(out double x, out double y)
-        //{
-        //    x = 0;
-        //    y = 0;
-
-        //    if (ShapePath.IsStop(m_NextPathCommand))
-        //    {
-        //        return ShapePath.FlagsAndCommand.CommandStop;
-        //    }
-
-        //    if ((m_CurrentFlatenAngle < endAngle - flatenDeltaAngle / 4) != ((int)EDirection.CounterClockWise == 1))
-        //    {
-        //        x = originX + Math.Cos(endAngle) * radiusX;
-        //        y = originY + Math.Sin(endAngle) * radiusY;
-        //        m_NextPathCommand = ShapePath.FlagsAndCommand.CommandStop;
-
-        //        return ShapePath.FlagsAndCommand.CommandLineTo;
-        //    }
-
-        //    x = originX + Math.Cos(m_CurrentFlatenAngle) * radiusX;
-        //    y = originY + Math.Sin(m_CurrentFlatenAngle) * radiusY;
-
-        //    m_CurrentFlatenAngle += flatenDeltaAngle;
-
-        //    ShapePath.FlagsAndCommand CurrentPathCommand = m_NextPathCommand;
-        //    m_NextPathCommand = ShapePath.FlagsAndCommand.CommandLineTo;
-        //    return CurrentPathCommand;
-        //}
-
-        private void Normalize(double Angle1, double Angle2, EDirection Direction)
+        void Normalize(double angle1, double angle2, ArcDirection direction)
         {
             double ra = (Math.Abs(radiusX) + Math.Abs(radiusY)) / 2;
             flatenDeltaAngle = Math.Acos(ra / (ra + 0.125 / m_Scale)) * 2;
-            if (Direction == EDirection.CounterClockWise)
+            if (direction == ArcDirection.CounterClockWise)
             {
-                while (Angle2 < Angle1)
+                while (angle2 < angle1)
                 {
-                    Angle2 += Math.PI * 2.0;
+                    angle2 += Math.PI * 2.0;
                 }
             }
             else
             {
-                while (Angle1 < Angle2)
+                while (angle1 < angle2)
                 {
-                    Angle1 += Math.PI * 2.0;
+                    angle1 += Math.PI * 2.0;
                 }
                 flatenDeltaAngle = -flatenDeltaAngle;
             }
-            m_Direction = Direction;
-            startAngle = Angle1;
-            endAngle = Angle2;
+            m_Direction = direction;
+            startAngle = angle1;
+            endAngle = angle2;
             m_IsInitialized = true;
+            calculateNSteps = (int)Math.Floor(((endAngle - startAngle) / flatenDeltaAngle));
         }
     }
 }

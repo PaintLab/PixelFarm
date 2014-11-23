@@ -74,7 +74,7 @@ namespace PixelFarm.Agg.Sample_Perspective
         }
         public void OnDraw(Graphics2D gx)
         {
-            CanvasPainter painter = new CanvasPainter(gx); 
+            CanvasPainter painter = new CanvasPainter(gx);
 
             IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
 
@@ -119,11 +119,11 @@ namespace PixelFarm.Agg.Sample_Perspective
 
                 if (txBilinear.IsValid)
                 {
-                     
-                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Path),
+
+                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Path.Vxs),
                         lionShape.Colors,
                         lionShape.PathIndexList,
-                        lionShape.NumPaths);  
+                        lionShape.NumPaths);
 
                     RectD lionBound = lionShape.Bounds;
 
@@ -132,9 +132,9 @@ namespace PixelFarm.Agg.Sample_Perspective
                                      (lionBound.Right - lionBound.Left) * 0.5,
                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
-                     
+
                     VertexStore trans_ell = txBilinear.TransformToVxs(ell.MakeVxs());
-                    painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);                    
+                    painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(trans_ell);
 
                     //-------------------------------------------------------------
@@ -144,7 +144,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                     painter.StrokeColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
-                     
+
                 }
             }
             else
@@ -156,10 +156,10 @@ namespace PixelFarm.Agg.Sample_Perspective
                 if (txPerspective.IsValid)
                 {
 
-                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Path),
+                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Path.Vxs ),
                       lionShape.Colors,
                       lionShape.PathIndexList,
-                      lionShape.NumPaths); 
+                      lionShape.NumPaths);
                     //--------------------------------------------------------------------------------------
                     //filled Ellipse
                     //1. create original fill ellipse
@@ -170,22 +170,22 @@ namespace PixelFarm.Agg.Sample_Perspective
                                       (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
 
-                    VertexStore transformedEll = txPerspective.TransformToVxs(filledEllipse.MakeVxs()); 
+                    VertexStore transformedEll = txPerspective.TransformToVxs(filledEllipse.MakeVxs());
                     painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);
-                    painter.Fill(transformedEll);  
+                    painter.Fill(transformedEll);
                     //-------------------------------------------------------- 
                     var prevStrokeW = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
                     painter.StrokeColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
-                    painter.Draw(transformedEll); 
-                    painter.StrokeWidth = prevStrokeW; 
+                    painter.Draw(transformedEll);
+                    painter.StrokeWidth = prevStrokeW;
                 }
             }
 
             //--------------------------
             // Render the "quad" tool and controls
             painter.FillColor = ColorRGBA.Make(0f, 0.3f, 0.5f, 0.6f);
-            painter.Fill(quadPolygonControl.MakeVxs());  
+            painter.Fill(quadPolygonControl.MakeVxs());
 
         }
         public override void MouseDown(int x, int y, bool isRightButton)

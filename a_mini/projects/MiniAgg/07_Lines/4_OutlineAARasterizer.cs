@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------------
 using System;
 
-using PixelFarm.Agg.VertexSource;
+
 
 namespace PixelFarm.Agg.Lines
 {
@@ -35,7 +35,7 @@ namespace PixelFarm.Agg.Lines
             this.x = x;
             this.y = y;
             len = 0;
-        } 
+        }
         public bool IsDiff(LineAAVertex val)
         {
             int dx = val.x - x;
@@ -44,9 +44,9 @@ namespace PixelFarm.Agg.Lines
             if ((dx + dy) == 0)
             {
                 return false;
-            } 
+            }
             return (len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy))) > SIGDIFF;
-             
+
         }
     }
 
@@ -582,22 +582,22 @@ namespace PixelFarm.Agg.Lines
             m_src_vertices.Clear();
         }
 
-        public void AddVertex(double x, double y, ShapePath.FlagsAndCommand cmd)
+        public void AddVertex(double x, double y, VertexCmd cmd)
         {
-            switch (ShapePath.FlagsAndCommand.CommandsMask & cmd)
+            switch (cmd)
             {
-                case ShapePath.FlagsAndCommand.CommandMoveTo:
+                case VertexCmd.HasMore:
+                    break;                    
+                case VertexCmd.MoveTo:
                     Render(false);
                     MoveTo(x, y);
                     break;
-                case ShapePath.FlagsAndCommand.CommandEndPoly:
-
-                    bool is_closed = ((cmd & ShapePath.FlagsAndCommand.FlagClose) != 0);
-                    Render(is_closed);
-                    if (is_closed)
-                    {
-                        MoveTo(m_start_x, m_start_y);
-                    }
+                case VertexCmd.EndAndCloseFigure:
+                    Render(true);
+                    MoveTo(m_start_x, m_start_y);
+                    break;
+                case VertexCmd.EndFigure:
+                    Render(false);
                     break;
                 default:
                     LineTo(x, y);
@@ -609,10 +609,10 @@ namespace PixelFarm.Agg.Lines
         {
             double x;
             double y;
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
 
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 AddVertex(x, y, cmd);
             }

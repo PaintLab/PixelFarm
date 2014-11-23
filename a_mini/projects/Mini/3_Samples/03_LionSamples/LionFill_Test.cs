@@ -96,7 +96,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new PixelFarm.Agg.SpriteShape();
 
-                PixelFarm.Agg.VertexSource.PathStorage path;
+                PixelFarm.Agg.VertexSource.PathWriter path;
                 PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
                 //1. path and command
@@ -166,7 +166,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
 
                 //convert
                 //System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
-                vxStorage = transform.TransformToVxs(lionShape.Path);
+                vxStorage = transform.TransformToVxs(lionShape.Path.Vxs);
                 //transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
                 //transformedPathStorage.DoTransform(list);
 

@@ -57,8 +57,10 @@ namespace PixelFarm.Agg.Sample_Blur2
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            var m_shape = new FlattenCurves();
-            m_path_2 = new VertexStoreSnap(m_shape.MakeVxs(m_pathVxs));
+            
+            var curveFlattener = new CurveFlattener();
+
+            m_path_2 = new VertexStoreSnap(curveFlattener.MakeVxs(m_pathVxs));
             BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
 
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);

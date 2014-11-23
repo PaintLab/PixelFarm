@@ -41,8 +41,22 @@ using OpenTK.Graphics.OpenGL;
 
 #endregion --- Using Directives ---
 
+using Mini;
+
 namespace OpenTkEssTest
 {
+    [Info(OrderCode = "01")]
+    [Info("T07_Display_Lists_FlowerDemo")]
+    public class T07_Display_Lists_FlowerDemo : DemoBase
+    {
+        public override void Init()
+        {
+            using (var example = new T07_Display_Lists_Flower())
+            { 
+                example.Run(30.0, 0.0); 
+            }
+        }
+    }
     //[Example("Display Lists", ExampleCategory.OpenGL, "1.x", 2, Documentation = "DisplayLists")]
     public class T07_Display_Lists_Flower : GameWindow
     {
@@ -66,7 +80,7 @@ namespace OpenTkEssTest
 
         protected override void OnLoad(EventArgs e)
         {
-             
+
             GLClearColor(Color.MidnightBlue);
             GL.Enable(EnableCap.DepthTest);
 
@@ -80,7 +94,7 @@ namespace OpenTkEssTest
             {
                 lists[i] = first_list + i;
                 GL.NewList(first_list + i, ListMode.Compile);
-
+                
                 GL.Color3(0.3 + 0.7 * c * c, 0.3 + 1.4 * c * c, 0.7 - 0.7 * c * c);
                 c += 1 / (float)num_lists;
 
@@ -151,7 +165,7 @@ namespace OpenTkEssTest
             Matrix4 lookat = Matrix4.LookAt(0, 0, 16, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
-
+            
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.CallLists(num_lists, ListNameType.Int, lists);
 

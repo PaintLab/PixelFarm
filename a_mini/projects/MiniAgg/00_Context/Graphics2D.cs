@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
+
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
 
@@ -33,6 +33,7 @@ namespace PixelFarm.Agg
         protected ActualImage destActualImage;
 
         protected ScanlineRasterizer sclineRas;
+
         Affine currentTxMatrix = Affine.IdentityMatrix;
 
         public Graphics2D()
@@ -130,12 +131,14 @@ namespace PixelFarm.Agg
 #if DEBUG
         public void dbugLine(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
-            PathStorage m_LinesToDraw = new PathStorage();
-            m_LinesToDraw.Clear();
-            m_LinesToDraw.MoveTo(x1, y1);
-            m_LinesToDraw.LineTo(x2, y2);
+        
 
-            Render(new Stroke(1).MakeVxs(m_LinesToDraw.Vxs), color);
+            VertexStore vxs = new VertexStore(8);
+            vxs.AddMoveTo(x1, y1);
+            vxs.AddLineTo(x2, y2);
+            vxs.AddStop();
+
+            Render(new Stroke(1).MakeVxs(vxs), color);
         }
 #endif
 

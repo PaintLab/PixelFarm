@@ -20,15 +20,13 @@
 using System;
 using System.Runtime;
 
-using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
+using PixelFarm.Agg; 
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
 {
-
-
+    
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
 

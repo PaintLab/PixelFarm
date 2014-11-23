@@ -21,7 +21,7 @@
 //using System.Runtime;
 
 //using PixelFarm.Agg;
-//using PixelFarm.Agg.VertexSource;
+//
 //using PixelFarm.VectorMath;
 
 //namespace PixelFarm.Agg.Image
