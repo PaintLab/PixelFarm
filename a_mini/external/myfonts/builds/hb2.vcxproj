@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\hb2\src\hb-blob.cc" />
+    <ClCompile Include="..\hb2\src\hb-buffer-serialize.cc" />
+    <ClCompile Include="..\hb2\src\hb-buffer.cc" />
+    <ClCompile Include="..\hb2\src\hb-common.cc" />
+    <ClCompile Include="..\hb2\src\hb-face.cc" />
+    <ClCompile Include="..\hb2\src\hb-fallback-shape.cc" />
+    <ClCompile Include="..\hb2\src\hb-font.cc" />
+    <ClCompile Include="..\hb2\src\hb-ft.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-font.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-layout.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-map.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-arabic.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-default.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-hangul.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-hebrew.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-indic-table.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-indic.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-myanmar.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-sea.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-thai.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-tibetan.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-fallback.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-normalize.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-tag.cc" />
+    <ClCompile Include="..\hb2\src\hb-set.cc" />
+    <ClCompile Include="..\hb2\src\hb-shape-plan.cc" />
+    <ClCompile Include="..\hb2\src\hb-shape.cc" />
+    <ClCompile Include="..\hb2\src\hb-shaper.cc" />
+    <ClCompile Include="..\hb2\src\hb-ucdn.cc" />
+    <ClCompile Include="..\hb2\src\hb-ucdn\ucdn.c" />
+    <ClCompile Include="..\hb2\src\hb-unicode.cc" />
+    <ClCompile Include="..\hb2\src\hb-uniscribe.cc" />
+    <ClCompile Include="..\hb2\src\hb-warning.cc" />
+    <ClCompile Include="..\hb2\src\main.cc" />
+    <ClCompile Include="..\hb2\src\test-buffer-serialize.cc" />
+    <ClCompile Include="..\hb2\src\test-size-params.cc" />
+    <ClCompile Include="..\hb2\src\test-would-substitute.cc" />
+    <ClCompile Include="..\hb2\src\test.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\hb2\src\hb.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FA2C04EC-C714-4969-B2BD-7EA6CD11628C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>hb2</RootNamespace>
+    <ProjectName>harfbuzz</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\builds\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;HARFBUZZ_EXPORTS;HAVE_OT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\freetype-2.5.3\include;..\hb2\src\hb-ucdn;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

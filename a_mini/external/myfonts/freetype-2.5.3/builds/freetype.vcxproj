@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{23B3B6B3-596A-48F9-A07E-B38B4CE12BDE}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>freetype</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\Debug\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">freetype.dir\Debug\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">freetype</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\Release\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">freetype.dir\Release\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">freetype</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\MinSizeRel\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">freetype.dir\MinSizeRel\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">freetype</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\RelWithDebInfo\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">freetype.dir\RelWithDebInfo\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">freetype</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>Debug</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/Debug/freetype.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat></DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>Release</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/Release/freetype.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat></DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>MinSizeRel</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/MinSizeRel/freetype.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>RelWithDebInfo</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/RelWithDebInfo/freetype.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:/zzshare/zz2/myfonts/freetype-2.5.3/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/include;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/truetype;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/sfnt;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/autofit;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/smooth;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/raster;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psaux;D:/zzshare/zz2/myfonts/freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake 2.8\bin\cmake.exe" -HD:/zzshare/zz2/myfonts/freetype-2.5.3 -BD:/zzshare/zz2/myfonts/freetype-2.5.3/builds --check-stamp-file D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt;D:\zzshare\zz2\myfonts\freetype-2.5.3\CMakeLists.txt;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeVS10FindMake.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeSystem.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-CXX.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeRCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CPack.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CPackComponent.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Templates\CPackConfig.cmake.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Templates\CPackConfig.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\generate.stamp</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake 2.8\bin\cmake.exe" -HD:/zzshare/zz2/myfonts/freetype-2.5.3 -BD:/zzshare/zz2/myfonts/freetype-2.5.3/builds --check-stamp-file D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt;D:\zzshare\zz2\myfonts\freetype-2.5.3\CMakeLists.txt;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeVS10FindMake.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeSystem.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-CXX.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeRCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CPack.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CPackComponent.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Templates\CPackConfig.cmake.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Templates\CPackConfig.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\generate.stamp</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake 2.8\bin\cmake.exe" -HD:/zzshare/zz2/myfonts/freetype-2.5.3 -BD:/zzshare/zz2/myfonts/freetype-2.5.3/builds --check-stamp-file D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt;D:\zzshare\zz2\myfonts\freetype-2.5.3\CMakeLists.txt;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeVS10FindMake.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeSystem.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-CXX.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeRCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CPack.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CPackComponent.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Templates\CPackConfig.cmake.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Templates\CPackConfig.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\generate.stamp</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake 2.8\bin\cmake.exe" -HD:/zzshare/zz2/myfonts/freetype-2.5.3 -BD:/zzshare/zz2/myfonts/freetype-2.5.3/builds --check-stamp-file D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt;D:\zzshare\zz2\myfonts\freetype-2.5.3\CMakeLists.txt;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeVS10FindMake.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeSystem.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-CXX.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeClDeps.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeRCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXCompiler.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\2.8.11.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CPack.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Modules\CPackComponent.cmake;C:\Program Files\CMake 2.8\share\cmake-2.8\Templates\CPackConfig.cmake.in;C:\Program Files\CMake 2.8\share\cmake-2.8\Templates\CPackConfig.cmake.in;D:\zzshare\zz2\myfonts\freetype-2.5.3\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\zzshare\zz2\myfonts\freetype-2.5.3\builds\CMakeFiles\generate.stamp</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\autofit\autofit.c"  />
+    <ClCompile Include="..\src\base\ftadvanc.c"  />
+    <ClCompile Include="..\src\base\ftbbox.c"  />
+    <ClCompile Include="..\src\base\ftbitmap.c"  />
+    <ClCompile Include="..\src\base\ftcalc.c"  />
+    <ClCompile Include="..\src\base\ftcid.c"  />
+    <ClCompile Include="..\src\base\ftdbgmem.c"  />
+    <ClCompile Include="..\src\base\ftdebug.c"  />
+    <ClCompile Include="..\src\base\ftfstype.c"  />
+    <ClCompile Include="..\src\base\ftgasp.c"  />
+    <ClCompile Include="..\src\base\ftgloadr.c"  />
+    <ClCompile Include="..\src\base\ftglyph.c"  />
+    <ClCompile Include="..\src\base\ftgxval.c"  />
+    <ClCompile Include="..\src\base\ftinit.c"  />
+    <ClCompile Include="..\src\base\ftlcdfil.c"  />
+    <ClCompile Include="..\src\base\ftmm.c"  />
+    <ClCompile Include="..\src\base\ftobjs.c"  />
+    <ClCompile Include="..\src\base\ftotval.c"  />
+    <ClCompile Include="..\src\base\ftoutln.c"  />
+    <ClCompile Include="..\src\base\ftpatent.c"  />
+    <ClCompile Include="..\src\base\ftpfr.c"  />
+    <ClCompile Include="..\src\base\ftrfork.c"  />
+    <ClCompile Include="..\src\base\ftsnames.c"  />
+    <ClCompile Include="..\src\base\ftstream.c"  />
+    <ClCompile Include="..\src\base\ftstroke.c"  />
+    <ClCompile Include="..\src\base\ftsynth.c"  />
+    <ClCompile Include="..\src\base\ftsystem.c"  />
+    <ClCompile Include="..\src\base\fttrigon.c"  />
+    <ClCompile Include="..\src\base\fttype1.c"  />
+    <ClCompile Include="..\src\base\ftutil.c"  />
+    <ClCompile Include="..\src\base\ftwinfnt.c"  />
+    <ClCompile Include="..\src\base\ftxf86.c"  />
+    <ClCompile Include="..\src\bdf\bdf.c"  />
+    <ClCompile Include="..\src\bzip2\ftbzip2.c"  />
+    <ClCompile Include="..\src\cache\ftcache.c"  />
+    <ClCompile Include="..\src\cff\cff.c"  />
+    <ClCompile Include="..\src\cid\type1cid.c"  />
+    <ClCompile Include="..\src\gzip\ftgzip.c"  />
+    <ClCompile Include="..\src\lzw\ftlzw.c"  />
+    <ClCompile Include="..\src\pcf\pcf.c"  />
+    <ClCompile Include="..\src\pfr\pfr.c"  />
+    <ClCompile Include="..\src\psaux\psaux.c"  />
+    <ClCompile Include="..\src\pshinter\pshinter.c"  />
+    <ClCompile Include="..\src\psnames\psmodule.c"  />
+    <ClCompile Include="..\src\raster\raster.c"  />
+    <ClCompile Include="..\src\sfnt\sfnt.c"  />
+    <ClCompile Include="..\src\smooth\smooth.c"  />
+    <ClCompile Include="..\src\truetype\truetype.c"  />
+    <ClCompile Include="..\src\type1\type1.c"  />
+    <ClCompile Include="..\src\type42\type42.c"  />
+    <ClCompile Include="..\src\winfonts\winfnt.c"  />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/ZERO_CHECK.vcxproj">
+      <Project>BD11A3AB-FF7C-416E-8218-CDECA9892263</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
