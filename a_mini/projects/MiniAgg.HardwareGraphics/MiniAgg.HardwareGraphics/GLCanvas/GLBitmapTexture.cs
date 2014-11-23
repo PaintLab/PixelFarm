@@ -1,7 +1,6 @@
-﻿using System.Text;
- 
+﻿//MIT 2014, WinterDev
+using System.Text; 
 using System;
-
 using OpenTK.Graphics.OpenGL; 
 using Tesselate;
 using System.Drawing;

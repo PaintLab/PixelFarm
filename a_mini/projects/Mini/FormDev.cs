@@ -20,6 +20,8 @@ namespace Mini
 
             this.Text = "DevForm: Double Click The Example!";
 
+            //test native font
+            int code = PixelFarm.Font2.MyFonts.InitLib();
 
         }
         void listBox1_DoubleClick(object sender, EventArgs e)
@@ -109,7 +111,7 @@ namespace Mini
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new PixelFarm.Agg.SpriteShape();
 
-                PixelFarm.Agg.VertexSource.PathStorage path;
+                PixelFarm.Agg.VertexSource.PathWriter path;
                 PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
 

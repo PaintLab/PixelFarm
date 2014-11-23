@@ -22,23 +22,24 @@ using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg
 {
+    
     public struct VertexData
     {
-        public ShapePath.FlagsAndCommand command;
+        public VertexCmd command;
         public double x;
         public double y;
-        public VertexData(ShapePath.FlagsAndCommand command)
+        public VertexData(VertexCmd command)
         {
             this.command = command;
             x = y = 0;
         }
-        public VertexData(ShapePath.FlagsAndCommand command, Vector2 position)
+        public VertexData(VertexCmd command, Vector2 position)
         {
             this.command = command;
             this.x = position.x;
             this.y = position.y;
         }
-        public VertexData(ShapePath.FlagsAndCommand command, double x, double y)
+        public VertexData(VertexCmd command, double x, double y)
         {
             this.command = command;
             this.x = x;

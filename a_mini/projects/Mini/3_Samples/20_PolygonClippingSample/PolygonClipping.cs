@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        PathStorage CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
+        PathWriter CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
         {
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
@@ -59,7 +59,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
             clipper.Execute(clipType, intersectedPolys);
 
-            PathStorage output = new PathStorage();
+            PathWriter output = new PathWriter();
 
             foreach (List<IntPoint> polygon in intersectedPolys)
             {
@@ -71,9 +71,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                     //first one
                     IntPoint point = polygon[0];
 
-                    output.AddVertex(point.X / 1000.0,
-                        point.Y / 1000.0,
-                        ShapePath.FlagsAndCommand.CommandMoveTo);
+                    output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
 
                     //next ...
                     if (j > 1)
@@ -81,9 +79,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         for (int i = 1; i < j; ++i)
                         {
                             point = polygon[i];
-                            output.AddVertex(point.X / 1000.0,
-                                point.Y / 1000.0,
-                                ShapePath.FlagsAndCommand.CommandLineTo);
+                            output.LineTo(point.X / 1000.0, point.Y / 1000.0);
                         }
                     }
                 }
@@ -100,11 +96,11 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 //    }
                 //}
 
-                output.ClosePolygon();
+                output.CloseFigure();
             }
 
-            output.AddVertex(0, 0, ShapePath.FlagsAndCommand.CommandStop);
 
+            output.Stop();
             return output;
         }
 
@@ -117,12 +113,12 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             bool addedFirst = false;
 
             var snapIter = a.GetVertexSnapIter();
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             double x, y;
             cmd = snapIter.GetNextVertex(out x, out y);
             do
             {
-                if (cmd == ShapePath.FlagsAndCommand.CommandLineTo)
+                if (cmd == VertexCmd.LineTo)
                 {
                     if (!addedFirst)
                     {
@@ -138,7 +134,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                     addedFirst = false;
                     currentPoly = new List<IntPoint>();
                     allPolys.Add(currentPoly);
-                    if (cmd == ShapePath.FlagsAndCommand.CommandMoveTo)
+                    if (cmd == VertexCmd.MoveTo)
                     {
                         last = new VertexData(cmd, x, y);
                     }
@@ -147,38 +143,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         last = first;
                     }
                 }
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
-
-
-
-            //foreach (VertexData vertexData in a.GetVertexIter())
-            //{
-            //    if (vertexData.command == ShapePath.FlagsAndCommand.CommandLineTo)
-            //    {
-            //        if (!addedFirst)
-            //        {
-            //            currentPoly.Add(new IntPoint((long)(last.x * 1000), (long)(last.y * 1000)));
-            //            addedFirst = true;
-            //            first = last;
-            //        }
-            //        currentPoly.Add(new IntPoint((long)(vertexData.x * 1000), (long)(vertexData.y * 1000)));
-            //        last = vertexData;
-            //    }
-            //    else
-            //    {
-            //        addedFirst = false;
-            //        currentPoly = new List<IntPoint>();
-            //        allPolys.Add(currentPoly);
-            //        if (vertexData.command == ShapePath.FlagsAndCommand.CommandMoveTo)
-            //        {
-            //            last = vertexData;
-            //        }
-            //        else
-            //        {
-            //            last = first;
-            //        }
-            //    }
-            //}
+            } while (cmd != VertexCmd.Stop);
 
             return allPolys;
         }
@@ -226,15 +191,15 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Two simple paths
                         //
-                        PathStorage ps1 = new PathStorage();
-                        PathStorage ps2 = new PathStorage();
+                        PathWriter ps1 = new PathWriter();
+                        PathWriter ps2 = new PathWriter();
 
                         double x = m_x - Width / 2 + 100;
                         double y = m_y - Height / 2 + 100;
                         ps1.MoveTo(x + 140, y + 145);
                         ps1.LineTo(x + 225, y + 44);
                         ps1.LineTo(x + 296, y + 219);
-                        ps1.ClosePolygon();
+                        ps1.CloseFigure();
 
                         ps1.LineTo(x + 226, y + 289);
                         ps1.LineTo(x + 82, y + 292);
@@ -268,8 +233,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Closed stroke
                         //
-                        PathStorage ps1 = new PathStorage();
-                        PathStorage ps2 = new PathStorage();
+                        PathWriter ps1 = new PathWriter();
+                        PathWriter ps2 = new PathWriter();
                         Stroke stroke = new Stroke(1);
 
                         stroke.Width = 10;
@@ -280,7 +245,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps1.MoveTo(x + 140, y + 145);
                         ps1.LineTo(x + 225, y + 44);
                         ps1.LineTo(x + 296, y + 219);
-                        ps1.ClosePolygon();
+                        ps1.CloseFigure();
 
                         ps1.LineTo(x + 226, y + 289);
                         ps1.LineTo(x + 82, y + 292);
@@ -288,7 +253,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps1.MoveTo(x + 220 - 50, y + 222);
                         ps1.LineTo(x + 265 - 50, y + 331);
                         ps1.LineTo(x + 363 - 50, y + 249);
-                        ps1.ClosePolygonCCW();
+                        ps1.CloseFigureCCW();
                         //-----------------------------------------
 
 
@@ -296,7 +261,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 473, 100 + 263);
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
-                        ps2.ClosePolygon();
+                        ps2.CloseFigure();
 
                         graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
 
@@ -313,8 +278,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //------------------------------------
                         // Great Britain and Arrows
                         //
-                        PathStorage gb_poly = new PathStorage();
-                        PathStorage arrows = new PathStorage();
+                        PathWriter gb_poly = new PathWriter();
+                        PathWriter arrows = new PathWriter();
                         PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
                         make_arrows(arrows);
@@ -336,8 +301,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         //VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
                         //VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
-                        var trans_gb_poly = mtx1.TransformToVxs(gb_poly);
-                        var trans_arrows = mtx2.TransformToVxs(arrows);
+                        var trans_gb_poly = mtx1.TransformToVxs(gb_poly.Vxs);
+                        var trans_arrows = mtx2.TransformToVxs(arrows.Vxs);
 
                         graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
 
@@ -357,7 +322,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         spiral sp = new spiral(m_x, m_y, 10, 150, 30, 0.0);
 
 
-                        PathStorage gb_poly = new PathStorage();
+                        PathWriter gb_poly = new PathWriter();
                         PixelFarm.Agg.Sample_PolygonClipping.GreatBritanPathStorage.Make(gb_poly);
 
                         Affine mtx = Affine.NewMatix(
@@ -365,13 +330,13 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                                 AffinePlan.Scale(2));
 
 
-                        VertexStore s1 = mtx.TransformToVxs(gb_poly);
+                        VertexStore s1 = mtx.TransformToVxs(gb_poly.Vxs);
                         graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
                         graphics2D.Render(new Stroke(0.1).MakeVxs(s1), ColorRGBA.Black);
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs());
                         graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
 
-                        CreateAndRenderCombined(graphics2D, new VertexStoreSnap( s1), new VertexStoreSnap(stroke_vxs));
+                        CreateAndRenderCombined(graphics2D, new VertexStoreSnap(s1), new VertexStoreSnap(stroke_vxs));
                     }
                     break;
 
@@ -384,7 +349,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         Stroke stroke = new Stroke(15);
 
 
-                        PathStorage glyph = new PathStorage();
+                        PathWriter glyph = new PathWriter();
                         glyph.MoveTo(28.47, 6.45);
                         glyph.Curve3(21.58, 1.12, 19.82, 0.29);
                         glyph.Curve3(17.19, -0.93, 14.21, -0.93);
@@ -418,7 +383,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         glyph.Curve3(38.72, -0.88, 33.74, -0.88);
                         glyph.Curve3(31.35, -0.88, 29.93, 0.78);
                         glyph.Curve3(28.52, 2.44, 28.47, 6.45);
-                        glyph.ClosePolygon();
+                        glyph.CloseFigure();
 
                         glyph.MoveTo(28.47, 9.62);
                         glyph.LineTo(28.47, 26.66);
@@ -428,7 +393,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         glyph.Curve3(11.77, 9.38, 13.87, 7.06);
                         glyph.Curve3(15.97, 4.74, 18.70, 4.74);
                         glyph.Curve3(22.41, 4.74, 28.47, 9.62);
-                        glyph.ClosePolygon();
+                        glyph.CloseFigure();
 
                         //Affine mtx = Affine.NewIdentity();
                         //mtx *= Affine.NewScaling(4.0);
@@ -437,12 +402,13 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                             AffinePlan.Scale(4),
                             AffinePlan.Translate(220, 200));
 
-                        var t_glyph = mtx.TransformToVertexSnap(glyph);
+                        var t_glyph = mtx.TransformToVertexSnap(glyph.Vxs);
 
-                        FlattenCurves curve = new FlattenCurves(); 
+                        CurveFlattener curveFlattener = new CurveFlattener();
 
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
-                        var curveVxs = curve.MakeVxs(t_glyph);
+
+                        var curveVxs = curveFlattener.MakeVxs(t_glyph);
 
                         CreateAndRenderCombined(graphics2D, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
 
@@ -457,7 +423,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
         void CreateAndRenderCombined(Graphics2D graphics2D, VertexStoreSnap ps1, VertexStoreSnap ps2)
         {
-            PathStorage combined = null;
+            PathWriter combined = null;
 
             switch (this.OpOption)
             {
@@ -498,7 +464,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             m_x = x;
             m_y = y;
         }
-        void make_arrows(PathStorage ps)
+        void make_arrows(PathWriter ps)
         {
             ps.Clear();
             ps.MoveTo(1330.599999999999909, 1282.399999999999864);
@@ -508,7 +474,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             ps.LineTo(1361.799999999999955, 1344.799999999999955);
             ps.LineTo(1346.200000000000045, 1313.599999999999909);
             ps.LineTo(1330.599999999999909, 1329.200000000000045);
-            ps.ClosePolygon();
+            ps.CloseFigure();
 
             ps.MoveTo(1330.599999999999909, 1266.799999999999955);
             ps.LineTo(1377.400000000000091, 1266.799999999999955);
@@ -517,7 +483,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             ps.LineTo(1361.799999999999955, 1204.399999999999864);
             ps.LineTo(1346.200000000000045, 1235.599999999999909);
             ps.LineTo(1330.599999999999909, 1220.000000000000000);
-            ps.ClosePolygon();
+            ps.CloseFigure();
 
             ps.MoveTo(1315.000000000000000, 1282.399999999999864);
             ps.LineTo(1315.000000000000000, 1329.200000000000045);
@@ -526,7 +492,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             ps.LineTo(1252.599999999999909, 1313.599999999999909);
             ps.LineTo(1283.799999999999955, 1298.000000000000000);
             ps.LineTo(1268.200000000000045, 1282.399999999999864);
-            ps.ClosePolygon();
+            ps.CloseFigure();
 
             ps.MoveTo(1268.200000000000045, 1266.799999999999955);
             ps.LineTo(1315.000000000000000, 1266.799999999999955);
@@ -535,7 +501,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             ps.LineTo(1283.799999999999955, 1204.399999999999864);
             ps.LineTo(1252.599999999999909, 1235.599999999999909);
             ps.LineTo(1283.799999999999955, 1251.200000000000045);
-            ps.ClosePolygon();
+            ps.CloseFigure();
         }
     }
 
@@ -578,14 +544,14 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             m_start = true;
             //--------------
 
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             double x, y;
             for (; ; )
             {
                 cmd = GetNextVertex(out x, out y);
                 switch (cmd)
                 {
-                    case ShapePath.FlagsAndCommand.CommandStop:
+                    case VertexCmd.Stop:
                         {
                             yield return new VertexData(cmd, x, y);
                             yield break;
@@ -595,12 +561,16 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                             yield return new VertexData(cmd, x, y);
                         } break;
                 }
-            }
-
-        } 
+            } 
+        }
         public VertexStore MakeVxs()
         {
-            return new VertexStore(this.GetVertexIter());             
+            VertexStore vxs = new VertexStore(2);
+            foreach (VertexData v in this.GetVertexIter())
+            {
+                vxs.AddVertex(v.x, v.y, v.command);
+            }
+            return vxs; 
         }
         public VertexStoreSnap MakeVertexSnap()
         {
@@ -608,13 +578,13 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
         }
 
 
-        public ShapePath.FlagsAndCommand GetNextVertex(out double x, out double y)
+        public VertexCmd GetNextVertex(out double x, out double y)
         {
             x = 0;
             y = 0;
             if (m_curr_r > m_r2)
             {
-                return ShapePath.FlagsAndCommand.CommandStop;
+                return VertexCmd.Stop;
             }
 
             x = m_x + Math.Cos(m_angle) * m_curr_r;
@@ -624,9 +594,9 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             if (m_start)
             {
                 m_start = false;
-                return ShapePath.FlagsAndCommand.CommandMoveTo;
+                return VertexCmd.MoveTo;
             }
-            return ShapePath.FlagsAndCommand.CommandLineTo;
+            return VertexCmd.LineTo;
         }
     }
 
@@ -642,24 +612,24 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
             var snapIter = src.GetVertexSnapIter();
 
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             double x, y;
 
             do
             {
 
                 cmd = snapIter.GetNextVertex(out x, out y);
-                if (ShapePath.IsVertextCommand(cmd))
+                if (VertexHelper.IsVertextCommand(cmd))
                 {
                     ++m_points;
                 }
 
-                if (ShapePath.IsMoveTo(cmd))
+                if (VertexHelper.IsMoveTo(cmd))
                 {
                     ++m_contours;
                 }
 
-            } while (cmd != ShapePath.FlagsAndCommand.CommandStop);
+            } while (cmd != VertexCmd.Stop);
 
             //foreach (VertexData vertexData in src.GetVertexIter())
             //{

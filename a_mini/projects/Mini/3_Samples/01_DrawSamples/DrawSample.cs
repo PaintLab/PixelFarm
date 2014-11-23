@@ -55,7 +55,8 @@ namespace PixelFarm.Agg.Sample_Draw
             g.DrawString2("A Simple Example4", 300, 250, 20);
             //---------------------------------------------------
 
-
+          
+             
         }
     }
 
@@ -95,7 +96,7 @@ namespace PixelFarm.Agg.Sample_Draw
             }
 
             // and a little polygon
-            PathStorage littlePoly = new PathStorage();
+            PathWriter littlePoly = new PathWriter();
             littlePoly.MoveTo(50, 50);
             littlePoly.LineTo(150, 50);
             littlePoly.LineTo(200, 200);

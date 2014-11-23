@@ -94,7 +94,7 @@ namespace OpenTkEssTest
             {
                 lists[i] = first_list + i;
                 GL.NewList(first_list + i, ListMode.Compile);
-
+                
                 GL.Color3(0.3 + 0.7 * c * c, 0.3 + 1.4 * c * c, 0.7 - 0.7 * c * c);
                 c += 1 / (float)num_lists;
 
@@ -165,7 +165,7 @@ namespace OpenTkEssTest
             Matrix4 lookat = Matrix4.LookAt(0, 0, 16, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
-
+            
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.CallLists(num_lists, ListNameType.Int, lists);
 

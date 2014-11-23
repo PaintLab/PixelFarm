@@ -36,9 +36,24 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="04_GLScanline\0_ScanlineSpan.cs" />
+    <Compile Include="04_GLScanline\1_Scanline.cs" />
+    <Compile Include="04_GLScanline\2_ScanlinePacked8.cs" />
+    <Compile Include="04_GLScanline\3_ScanlineUnpacked8.cs" />
+    <Compile Include="04_GLScanline\4.1_ScanlineRasterizer.cs" />
+    <Compile Include="04_GLScanline\4.2_CellAARasterizer.cs" />
+    <Compile Include="04_GLScanline\4.3_VectorClipper.cs" />
+    <Compile Include="04_GLScanline\4.4_FillingRule.cs" />
+    <Compile Include="04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
+    <Compile Include="04_GLScanline\6_ClipLiangBarsky.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
+    <Compile Include="GLCanvas\CanvasGL2dInternal.cs" />
+    <Compile Include="GLCanvas\CanvasGL2d_TextAndFont.cs" />
+    <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="GLCanvas\GLBitmapTexture.cs" />
+    <Compile Include="GLCanvas\SvgArc.cs" />
     <Compile Include="GLCanvas\TessListener.cs" />
+    <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

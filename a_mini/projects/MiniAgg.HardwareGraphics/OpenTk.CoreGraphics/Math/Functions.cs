@@ -159,6 +159,7 @@ namespace OpenTK
 
         #region DegreesToRadians
 
+        const float DEG_TO_RAD = (float)System.Math.PI / 180.0f;
         /// <summary>
         /// Convert degrees to radians
         /// </summary>
@@ -166,8 +167,8 @@ namespace OpenTK
         /// <returns>The angle expressed in radians</returns>
         public static float DegreesToRadians(float degrees)
         {
-            const float degToRad = (float)System.Math.PI / 180.0f;
-            return degrees * degToRad;
+            
+            return degrees * DEG_TO_RAD;
         }
 
         /// <summary>
