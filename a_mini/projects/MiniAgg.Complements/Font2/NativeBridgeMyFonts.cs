@@ -42,13 +42,34 @@ namespace PixelFarm.Font2
     static class NativeMyFontsLib
     {
         const string myfontLib = @"myft.dll";
+        static object syncObj = new object();
+        static bool isInitLib = false;
+
+        static NativeModuleHolder nativeModuleHolder;
         static NativeMyFontsLib()
         {
+
             //dynamic load dll
+            
             string appBaseDir = AppDomain.CurrentDomain.BaseDirectory;
             LoadLib(appBaseDir + "\\" + myfontLib);
-        }
 
+            
+            //---------------
+            //init library
+            int initResult = 0;
+            lock (syncObj)
+            {
+                if (!isInitLib)
+                {
+                    initResult = NativeMyFontsLib.MyFtInitLib();
+                    isInitLib = true;
+                }
+            }
+            //---------------
+            nativeModuleHolder = new NativeModuleHolder();
+
+        } 
         [DllImport(myfontLib)]
         public static extern int MyFtLibGetVersion();
 
@@ -67,7 +88,7 @@ namespace PixelFarm.Font2
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
         public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, ref ExportTypeFace ftOutline);
 
-        
+
 
         //============================================================================
         //HB shaping ....
@@ -103,7 +124,19 @@ namespace PixelFarm.Font2
             }
             isLoaded = true;
             return true;
-        }
+        } 
 
+
+        class NativeModuleHolder : IDisposable
+        {
+            ~NativeModuleHolder()
+            {
+                Dispose();
+            }
+            public void Dispose()
+            {
+                NativeMyFontsLib.MyFtShutdownLib();
+            }
+        }
     }
 }

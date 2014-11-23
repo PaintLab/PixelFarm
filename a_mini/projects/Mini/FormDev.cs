@@ -21,7 +21,7 @@ namespace Mini
             this.Text = "DevForm: Double Click The Example!";
 
             //test native font
-            int code = PixelFarm.Font2.FontStore.InitLib();
+            
 
         }
         void listBox1_DoubleClick(object sender, EventArgs e)

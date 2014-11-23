@@ -18,27 +18,9 @@ namespace PixelFarm.Font2
      
     public static class FontStore
     {
-        static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>();
-       
-        static object syncObj = new object();
-        static bool isInitLib = false; 
-
-        public static int InitLib()
-        {
-            int initResult = 0;
-            lock (syncObj)
-            {
-                if (!isInitLib)
-                {
-                    initResult = NativeMyFontsLib.MyFtInitLib();
-                    isInitLib = true;
-                }
-            }
-            return initResult;
-        }
-
-
-
+        static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>(); 
+        
+        
        
         internal static FontGlyph GetGlyph(IntPtr ftFaceHandle, char unicodeChar)
         {
