@@ -187,7 +187,16 @@ namespace PixelFarm.VectorMath
         {
             return new Vector2(y, -x);
         }
-
+        /// <summary>
+        /// Gets the perpendicular vector on the right side of this vector.
+        /// </summary>
+        public Vector2 PerpendicularRight
+        {
+            get
+            {
+                return new Vector2(Y, -X);
+            }
+        }
         #endregion
 
         #region public Vector2d PerpendicularLeft
@@ -919,7 +928,16 @@ namespace PixelFarm.VectorMath
 
             return false;
         }
-
+        public double X
+        {
+            get { return this.x; }
+            set { this.x = value; }
+        }
+        public double Y
+        {
+            get { return this.y; }
+            set { this.y = value; }
+        }
         #endregion
 
     }

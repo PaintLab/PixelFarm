@@ -155,7 +155,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
                 Stroke stroke = new Stroke(strokeWidth);
                 stroke.LineJoin = LineJoin.Round;
-                var vxs = affTx.TransformToVxs(lionShape.Path);
+                var vxs = affTx.TransformToVxs(lionShape.Path.Vxs);
 
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
 
@@ -183,7 +183,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 rasterizer.RoundCap = true;
 
                 //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-                var vxs = affTx.TransformToVxs(lionShape.Path);// trans.DoTransformToNewVxStorage();
+                var vxs = affTx.TransformToVxs(lionShape.Path.Vxs);// trans.DoTransformToNewVxStorage();
 
                 int j = lionShape.NumPaths;
                 for (int i = 0; i < j; ++i)

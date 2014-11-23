@@ -44,7 +44,7 @@ namespace PixelFarm.Agg.SimplePainter
             // and an outline around it
             p.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
 
-            
+
             // draw some text
             p.FillColor = ColorRGBA.Black;//black font color
 
@@ -55,9 +55,7 @@ namespace PixelFarm.Agg.SimplePainter
             p.DrawString("A Simple Example3", 300, 300);
 
             p.DrawString("A Simple Example4", 300, 250);
-            //---------------------------------------------------
-
-
+           
         }
     }
 

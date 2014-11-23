@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{E2450D2C-7C5E-4CFD-9F29-86F8F99F9FC6}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>freetype</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">freetype.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">freetype</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../freetype-2.5.3/\builds\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">freetype.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">freetype</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">../freetype-2.5.3/\builds\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">freetype.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">freetype</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">../freetype-2.5.3/\builds\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">freetype.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">freetype</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>Debug</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>../freetype-2.5.3/builds/Debug/freetype.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>Release</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>../freetype-2.5.3/builds/Release/freetype.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>MinSizeRel</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>../freetype-2.5.3/builds/MinSizeRel/freetype.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>RelWithDebInfo</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>../freetype-2.5.3/builds/RelWithDebInfo/freetype.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FT2_BUILD_LIBRARY;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>../freetype-2.5.3/include;../freetype-2.5.3/builds/include;../freetype-2.5.3/src/truetype;../freetype-2.5.3/src/sfnt;../freetype-2.5.3/src/autofit;../freetype-2.5.3/src/smooth;../freetype-2.5.3/src/raster;../freetype-2.5.3/src/psaux;../freetype-2.5.3/src/psnames;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\freetype-2.5.3\src\autofit\autofit.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftadvanc.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftbbox.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftbitmap.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftcalc.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftcid.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftdbgmem.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftdebug.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftfstype.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftgasp.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftgloadr.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftglyph.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftgxval.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftinit.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftlcdfil.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftmm.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftobjs.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftotval.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftoutln.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftpatent.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftpfr.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftrfork.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftsnames.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftstream.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftstroke.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftsynth.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftsystem.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\fttrigon.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\fttype1.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftutil.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftwinfnt.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\base\ftxf86.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\bdf\bdf.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\bzip2\ftbzip2.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\cache\ftcache.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\cff\cff.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\cid\type1cid.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\gzip\ftgzip.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\lzw\ftlzw.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\pcf\pcf.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\pfr\pfr.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\psaux\psaux.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\pshinter\pshinter.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\psnames\psmodule.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\raster\raster.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\sfnt\sfnt.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\smooth\smooth.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\truetype\truetype.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\type1\type1.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\type42\type42.c" />
+    <ClCompile Include="..\freetype-2.5.3\src\winfonts\winfnt.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

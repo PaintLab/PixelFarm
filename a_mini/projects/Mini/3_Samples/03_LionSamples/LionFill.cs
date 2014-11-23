@@ -124,7 +124,7 @@ namespace PixelFarm.Agg.Sample_LionFill
                         AffinePlan.Translate(Width / 2, Height / 2)
                 ); 
                 //create vertextStore again from origiinal path
-                myvxs = transform.TransformToVxs(lionShape.Path);
+                myvxs = transform.TransformToVxs(lionShape.Path.Vxs);
             }
             //---------------------------------------------------------------------------------------------
             {

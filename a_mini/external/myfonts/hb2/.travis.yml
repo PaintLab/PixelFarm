@@ -1,0 +1,25 @@
+language: cpp
+compiler:
+  - clang
+  - gcc
+env:
+  global:
+    - CPPFLAGS=""
+    - CFLAGS="-Werror --coverage"
+    - CXXFLAGS="-Werror --coverage"
+    - LDFLAGS="--coverage"
+install:
+  - sudo apt-get install pkg-config ragel gtk-doc-tools # for autogen.sh
+  - sudo apt-get install libfreetype6-dev # for font functions
+  - sudo apt-get install libglib2.0-dev # for font functions / tests / utils
+  - sudo apt-get install libcairo2-dev # for utils
+  - sudo apt-get install libicu-dev # for extra unicode functions
+  - sudo apt-get install libgraphite2-dev # for extra shapers
+  - sudo pip install cpp-coveralls # for coveralls.io code coverage tracking
+script:
+  - NOCONFIGURE=1 ./autogen.sh
+  - ./configure --with-freetype --with-glib --with-gobject --with-cairo --with-icu --with-graphite2
+  - make && make check && { rm -f src/.libs/NONE.gcov; touch src/NONE; test $CC != gcc || coveralls; }
+notifications:
+  irc: "irc.freenode.org#harfbuzz"
+  email: harfbuzz@lists.freedesktop.org

@@ -76,7 +76,6 @@ namespace PixelFarm.Agg.Sample_Images
                     AffinePlan.Scale(0.5));
 
 
-
             painter.FillColor = ColorRGBA.Blue;
             painter.FillRectangle(0, 0, 5, 5);
             painter.FillColor = ColorRGBA.Green;
