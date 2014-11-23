@@ -9,7 +9,7 @@
 #include FT_OUTLINE_H 
 
 FT_Library ft;
-FT_Face myface;
+//FT_Face myface;
 
 hb_font_t *my_hb_ft_font;
 hb_buffer_t *my_hb_buf;
@@ -40,28 +40,33 @@ int MyFtInitLib()
 };
 
 
-int MyFtNewFace(const char* faceName, int pxsize)
-{	   
-		int code=0;
-		if(code= FT_New_Face(ft,faceName,0, &myface))
-		{	//error
-			return code;
-		}		
-		else
-		{	
-			FT_Set_Pixel_Sizes(myface,0,pxsize);
-			force_ucs2_charmap2(myface);			
-			return code;
-		}
-};
-int MyFtNewMemoryFace(const void* membuffer,int sizeInBytes,int pxsize)
+//int MyFtNewFace(const char* faceName, int pxsize)
+//{	   
+//		int code=0;
+//		FT_Face myFace = new FT_FaceRec();
+//		if(code= FT_New_Face(ft,faceName,0, &myFace))
+//		{	//error
+//			return code;
+//		}		
+//		else
+//		{	
+//			FT_Set_Pixel_Sizes( myFace,0,pxsize);
+//			force_ucs2_charmap2( myFace);			
+//			return code;
+//		}
+//};
+
+FT_Face MyFtNewMemoryFace(const void* membuffer, int sizeInBytes,int pxsize)
 {
 		int code= 0;
+		//create on heap
+		FT_Face myface= new FT_FaceRec_();
+
 		if(code= FT_New_Memory_Face(ft,(FT_Byte*)membuffer,sizeInBytes,0,&myface))
 		{
 			//error
-		
-			return code;
+			delete myface;
+			return 0; //errpr
 		}
 		else
 		{
@@ -76,11 +81,20 @@ int MyFtNewMemoryFace(const void* membuffer,int sizeInBytes,int pxsize)
 			//-------------------------------------  
 
 			force_ucs2_charmap2(myface);			
-			return code;
+			return myface;
 		} 
 
 }
-int MyFtLoadChar(unsigned int charcode, ExportTypeFace *exportTypeFace)
+void MyFtDoneFace(FT_Face face)
+{
+	if(face)
+	{
+		FT_Done_Face(face);
+	}
+};
+
+
+int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportTypeFace *exportTypeFace)
 {	  		 
 		 if(!FT_Load_Char(myface,charcode,FT_LOAD_RENDER))
 		 {  
@@ -109,7 +123,7 @@ int MyFtLoadChar(unsigned int charcode, ExportTypeFace *exportTypeFace)
 		 return 0;
 };
 	 
-int MyFtSetupShapingEngine(const char* langName,int langNameLen, int direction,int scriptCode)
+int MyFtSetupShapingEngine(FT_Face myface,const char* langName,int langNameLen, int direction,int scriptCode)
 {
 	 
 	my_hb_ft_font = hb_ft_font_create(myface,NULL); 
@@ -151,6 +165,16 @@ int MyFtShaping(const uint16_t* text,int charCount)
 	}
 	return 0; 
 };
+
+
+ void MyFtShutdownLib()
+ {
+	 if(ft)
+	 {
+		 FT_Done_FreeType(ft);
+		 ft=0;
+	 }
+ };
 
 
 

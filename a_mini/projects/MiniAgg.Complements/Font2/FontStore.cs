@@ -15,20 +15,14 @@ using PixelFarm.Agg;
 
 namespace PixelFarm.Font2
 {
-
-
-
-
-
-
+     
     public static class FontStore
     {
         static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>();
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
 
         static object syncObj = new object();
-        static bool isInitLib = false;
-
+        static bool isInitLib = false; 
 
         public static int InitLib()
         {
@@ -110,7 +104,7 @@ namespace PixelFarm.Font2
                 (v1.x + v2.x) / 2,
                 (v1.y + v2.y) / 2);
         }
-        internal static FontGlyph GetGlyph(char unicodeChar)
+        internal static FontGlyph GetGlyph(IntPtr ftFaceHandle, char unicodeChar)
         {
 
             //--------------------------------------------------
@@ -118,7 +112,7 @@ namespace PixelFarm.Font2
             {
                 ExportTypeFace exportTypeFace = new ExportTypeFace();
 
-                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(unicodeChar, ref exportTypeFace);
+                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
                 FT_Outline outline = *exportTypeFace.outline;
                 FontGlyph fontGlyph = new FontGlyph();
 
@@ -294,10 +288,11 @@ namespace PixelFarm.Font2
                 return fontGlyph;
             }
         }
-        public static void SetShapingEngine()
+        internal static void SetShapingEngine(IntPtr ftFaceHandle)
         {
             string lang = "en";
-            PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(lang,
+            PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(ftFaceHandle,
+                lang,
                 lang.Length,
                 HBDirection.HB_DIRECTION_LTR,
                 HBScriptCode.HB_SCRIPT_LATIN);
@@ -331,9 +326,20 @@ namespace PixelFarm.Font2
                 int filelen = fontFileContent.Length;
                 IntPtr unmanagedMem = Marshal.AllocHGlobal(filelen);
                 Marshal.Copy(fontFileContent, 0, unmanagedMem, filelen);
-                fontFace = new FontFace(unmanagedMem);
-                fonts.Add(filename, fontFace);
-                PixelFarm.Font2.NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen, pixelSize);
+
+                IntPtr faceHandle = PixelFarm.Font2.NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen, pixelSize);
+                if (faceHandle != IntPtr.Zero)
+                {
+                    //ok pass
+                    fontFace = new FontFace(unmanagedMem, faceHandle);
+                    fonts.Add(filename, fontFace);
+                }
+                else
+                {
+                    //load font error
+                    Marshal.FreeHGlobal(unmanagedMem);
+                }
+
             }
             return fontFace;
 

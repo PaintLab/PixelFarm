@@ -36,7 +36,7 @@ namespace PixelFarm.Font2
         public FT_Bitmap* bitmap;
         public FT_Outline* outline;
     }
- 
+
 
 
     static class NativeMyFontsLib
@@ -46,7 +46,7 @@ namespace PixelFarm.Font2
         {
             //dynamic load dll
             string appBaseDir = AppDomain.CurrentDomain.BaseDirectory;
-            LoadOrExtract(appBaseDir + "\\" + myfontLib);
+            LoadLib(appBaseDir + "\\" + myfontLib);
         }
 
         [DllImport(myfontLib)]
@@ -54,29 +54,36 @@ namespace PixelFarm.Font2
 
         [DllImport(myfontLib)]
         public static extern int MyFtInitLib();
-
-
-        [DllImport(myfontLib, CharSet = CharSet.Ansi)]
-        public static extern int MyFtNewFace(string fontfaceName, int pxsize);
+        [DllImport(myfontLib)]
+        public static extern void MyFtShutdownLib();
 
         [DllImport(myfontLib)]
-        public static extern int MyFtNewMemoryFace(IntPtr membuffer, int sizeInBytes, int pxsize);
+        public static extern IntPtr MyFtNewMemoryFace(IntPtr membuffer, int sizeInBytes, int pxsize);
+
+        [DllImport(myfontLib)]
+        public static extern void MyFtDoneFace(IntPtr faceHandle);
+
 
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MyFtLoadChar(int charcode, ref ExportTypeFace ftOutline);
+        public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, ref ExportTypeFace ftOutline);
 
+        
+
+        //============================================================================
+        //HB shaping ....
         [DllImport(myfontLib, CharSet = CharSet.Ansi)]
-        public static extern int MyFtSetupShapingEngine(string langName, int langNameLen, HBDirection hbDirection, int hbScriptCode);
+        public static extern int MyFtSetupShapingEngine(IntPtr faceHandle, string langName, int langNameLen, HBDirection hbDirection, int hbScriptCode);
         [DllImport(myfontLib)]
         public static unsafe extern int MyFtShaping(byte* utf8Buffer, int charCount);
-         
+
 
         static bool isLoaded = false;
-        public static bool LoadOrExtract(string dllFilename)
+        static bool LoadLib(string dllFilename)
         {
             //dev:
 #if DEBUG
             return true;
+
             string dev = @"D:\projects\myagg_cs\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
             UnsafeMethods.LoadLibrary(dev);
             return true;
@@ -97,5 +104,6 @@ namespace PixelFarm.Font2
             isLoaded = true;
             return true;
         }
+
     }
 }
