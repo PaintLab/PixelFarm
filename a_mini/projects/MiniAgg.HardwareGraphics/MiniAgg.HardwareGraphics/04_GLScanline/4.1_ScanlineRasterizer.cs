@@ -137,13 +137,13 @@ namespace PixelFarm.Agg
                 m_gammaLut[i] = i;
             }
         }
-        
+
         //--------------------------------------------------------------------
         public void Reset()
         {
             m_cellAARas.Reset();
             m_status = Status.Initial;
-            
+
         }
         public RectInt GetVectorClipBox()
         {
@@ -239,29 +239,36 @@ namespace PixelFarm.Agg
             get { return this.addVertextOffsetY; }
             set { this.addVertextOffsetY = value; }
         }
-        void AddVertex(ShapePath.FlagsAndCommand cmd, double x, double y)
-        {
-            switch (cmd)
-            {
-                case ShapePath.FlagsAndCommand.CommandMoveTo:
-                    {
-                        MoveTo(x, y);
-                    } break;
-                case ShapePath.FlagsAndCommand.CommandLineTo:
-                case ShapePath.FlagsAndCommand.CommandCurve3:
-                case ShapePath.FlagsAndCommand.CommandCurve4:
-                    {
-                        LineTo(x, y);
-                    } break;
-                default:
-                    {
-                        if (ShapePath.IsClose(cmd))
-                        {
-                            ClosePolygon();
-                        }
-                    } break;
-            }
-        }
+        //void AddVertex(ShapePath.FlagsAndCommand cmd, double x, double y)
+        //{
+        //    switch (cmd)
+        //    {
+        //        case ShapePath.FlagsAndCommand.CommandMoveTo:
+        //            {
+        //                MoveTo(x, y);
+        //            } break;
+        //        case ShapePath.FlagsAndCommand.CommandLineTo:
+        //            {
+        //                LineTo(x, y);
+        //            } break;
+        //        case ShapePath.FlagsAndCommand.CommandCurve3:
+        //            {
+        //                //generate curve here
+        //            } break;
+        //        case ShapePath.FlagsAndCommand.CommandCurve4:
+        //            {
+        //                //generate curve here
+        //                LineTo(x, y);
+        //            } break;
+        //        default:
+        //            {
+        //                if (ShapePath.IsClose(cmd))
+        //                {
+        //                    ClosePolygon();
+        //                }
+        //            } break;
+        //    }
+        //}
         //------------------------------------------------------------------------
         void Edge(double x1, double y1, double x2, double y2)
         {
@@ -283,28 +290,73 @@ namespace PixelFarm.Agg
             double y = 0;
 
             if (m_cellAARas.Sorted) { Reset(); }
-
+            //--------------------------------------------
             if (snap.VxsHasMoreThanOnePart)
             {
                 var vxs = snap.GetInternalVxs();
                 int j = vxs.Count;
-
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = vxs.GetVertex(i, out x, out y);
-                    if (cmd != ShapePath.FlagsAndCommand.CommandStop)
+                    switch (cmd)
                     {
-                        AddVertex(cmd, x, y);
+                        case VertexCmd.Stop:
+                            {
+                                //stop 
+                            } break;
+                        case VertexCmd.MoveTo:
+                            {
+                                MoveTo(x, y);
+                            } break;
+                        case VertexCmd.LineTo: 
+                        case VertexCmd.P2c: 
+                        case VertexCmd.P3c:
+                            { 
+                                //curve must be flatten before using here
+                                LineTo(x, y);
+                            } break;
+                        default:
+                            {
+                                if (VertexHelper.IsClose(cmd))
+                                {
+                                    ClosePolygon();
+                                }
+                            } break;
                     }
                 }
             }
             else
             {
                 var snapIter = snap.GetVertexSnapIter();
-                ShapePath.FlagsAndCommand cmd;
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+                VertexCmd cmd;
+                bool stop = false;
+                while (!stop)
                 {
-                    AddVertex(cmd, x, y);
+                    cmd = snapIter.GetNextVertex(out x, out y);
+                    switch (cmd)
+                    {
+                        case VertexCmd.Stop:
+                            {
+                                stop = true;
+                            } break;
+                        case VertexCmd.MoveTo:
+                            {
+                                MoveTo(x, y);
+                            } break;
+                        case VertexCmd.LineTo: 
+                        case VertexCmd.P2c: 
+                        case VertexCmd.P3c:
+                            {
+                                LineTo(x, y);
+                            } break;
+                        default:
+                            {
+                                if (VertexHelper.IsClose(cmd))
+                                {
+                                    ClosePolygon();
+                                }
+                            } break;
+                    }
                 }
             }
 

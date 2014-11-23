@@ -70,7 +70,7 @@ namespace OpenTkEssTest
                     }
                 }
 
-                canvas.DrawImage(hwBmp, 10, 10);
+                //canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
 
 
@@ -92,8 +92,8 @@ namespace OpenTkEssTest
                 //canvas.DrawPolygon(polygonCoords);
                 //fill polygon test                
                 canvas.FillPolygon(polygonCoords);
-                            
-                              
+
+
 
                 var polygonCoords2 = new float[]{
                         5+10,300,
@@ -122,17 +122,43 @@ namespace OpenTkEssTest
                 }
 
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.Green;
+                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
 
                 ////---------------------------------------------
                 ////draw ellipse and circle
 
                 canvas.StrokeWidth = 0.75f;
-                canvas.DrawCircle(400, 500, 50); 
-                canvas.FillCircle(450, 550, 25); 
-                canvas.SmoothMode = CanvasSmoothMode.No;
-               
+                canvas.DrawCircle(400, 500, 50);
+                canvas.FillCircle(450, 550, 25);
 
+                canvas.StrokeWidth = 3;
+                canvas.DrawRoundRect(500, 450, 100, 100, 10, 10);
+
+
+                canvas.StrokeWidth = 3;
+                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Blue);
+
+                //canvas.DrawBezierCurve(0, 0, 500, 500, 0, 250, 500, 250);
+                canvas.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
+                canvas.SmoothMode = CanvasSmoothMode.No;
+
+                //canvas.DrawArc(150, 200, 300, 50, 0, 150, 150, SvgArcSize.Large, SvgArcSweep.Negative);
+                canvas.DrawArc(100, 200, 300, 200, 30, 30, 50, SvgArcSize.Large, SvgArcSweep.Negative);
+
+                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+                // canvas.DrawArc(100, 200, 300, 200, 0, 100, 100, SvgArcSize.Large, SvgArcSweep.Negative);
+
+                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
+                canvas.DrawLine(100, 200, 300, 200);
+
+
+                //load font data
+                var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 18);
+                var fontGlyph = font.GetGlyph('{');
+                //PixelFarm.Font2.MyFonts.SetShapingEngine();
+                //PixelFarm.Font2.MyFonts.ShapeText("ดุ");  
+                canvas.FillVxs(fontGlyph.flattenVxs);
+                //canvas.DrawString("ฟ", 50, 50); 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 //---------------------------------------------  
 

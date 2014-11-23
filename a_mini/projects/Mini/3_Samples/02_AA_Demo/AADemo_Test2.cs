@@ -171,7 +171,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             //-----------------------------------------------------------------------------------------------------------
             rasterizer.ResetGamma(new GammaNone());
 
-            PathStorage ps = new PathStorage();
+            PathWriter ps = new PathWriter();
             ps.Clear();
             ps.MoveTo(m_x[0], m_y[0]);
             ps.LineTo(m_x[1], m_y[1]);

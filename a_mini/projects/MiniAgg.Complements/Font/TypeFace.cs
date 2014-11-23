@@ -35,7 +35,7 @@ namespace PixelFarm.Agg.Font
             public int horiz_adv_x;
             public int unicode;
             public string glyphName;
-            public PathStorage glyphData = new PathStorage();
+            public PathWriter glyphData = new PathWriter();
         }
 
         class Panos_1
@@ -232,129 +232,145 @@ namespace PixelFarm.Agg.Font
             }
 
             String dString = GetStringValue(SVGGlyphData, "d");
-
+            //if (newGlyph.glyphName == "a")
+            //{ 
+            //}
             int parseIndex = 0;
             int polyStartVertexSourceIndex = 0;
-            Vector2 polyStart = new Vector2(0, 0);
+
+
             Vector2 lastXY = new Vector2(0, 0);
-            Vector2 curXY;
+
+            double px = 0;
+            double py = 0;
+
 
             if (dString == null || dString.Length == 0)
             {
                 return newGlyph;
             }
 
+
+            var gyphPath = newGlyph.glyphData;
+
             while (parseIndex < dString.Length)
             {
-                Char command = dString[parseIndex];
+
+                char command = dString[parseIndex];
                 switch (command)
                 {
+
                     case 'M':
-                        parseIndex++;
-                        // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
-                        // so we store the position of the start of this polygon so we can flip it when we colse it.
-                        polyStartVertexSourceIndex = newGlyph.glyphData.Count;
-                        curXY.x = GetNextNumber(dString, ref parseIndex);
-                        curXY.y = GetNextNumber(dString, ref parseIndex);
-
-                        newGlyph.glyphData.MoveTo(curXY.x, curXY.y);
-                        polyStart = curXY;
-                        break;
-
-                    case 'v':
-                    case 'V':
-                        parseIndex++;
-                        curXY.x = lastXY.x;
-                        curXY.y = GetNextNumber(dString, ref parseIndex);
-                        if (command == 'v')
-                        {
-                            curXY.y += lastXY.y;
-                        }
-
-                        newGlyph.glyphData.VerticalLineTo(curXY.y);
-                        break;
-
-                    case 'h':
-                    case 'H':
-                        parseIndex++;
-                        curXY.y = lastXY.y;
-                        curXY.x = GetNextNumber(dString, ref parseIndex);
-                        if (command == 'h')
-                        {
-                            curXY.x += lastXY.x;
-                        }
-
-                        newGlyph.glyphData.HorizontalLineTo(curXY.x);
-                        break;
-
-                    case 'l':
-                    case 'L':
-                        parseIndex++;
-                        curXY.x = GetNextNumber(dString, ref parseIndex);
-                        curXY.y = GetNextNumber(dString, ref parseIndex);
-                        if (command == 'l')
-                        {
-                            curXY += lastXY;
-                        }
-
-                        newGlyph.glyphData.LineTo(curXY.x, curXY.y);
-                        break;
-
-                    case 'q':
-                    case 'Q':
                         {
                             parseIndex++;
-                            Vector2 controlPoint;
-                            controlPoint.x = GetNextNumber(dString, ref parseIndex);
-                            controlPoint.y = GetNextNumber(dString, ref parseIndex);
-                            curXY.x = GetNextNumber(dString, ref parseIndex);
-                            curXY.y = GetNextNumber(dString, ref parseIndex);
-                            if (command == 'q')
-                            {
-                                controlPoint += lastXY;
-                                curXY += lastXY;
-                            }
+                            // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
+                            // so we store the position of the start of this polygon so we can flip it when we colse it.
+                            polyStartVertexSourceIndex = gyphPath.Count;
+                            px = GetNextNumber(dString, ref parseIndex);
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.MoveTo(px, py);
 
-                            newGlyph.glyphData.Curve3(controlPoint.x, controlPoint.y, curXY.x, curXY.y);
-                        }
-                        break;
-
-                    case 't':
-                    case 'T':
-                        parseIndex++;
-                        curXY.x = GetNextNumber(dString, ref parseIndex);
-                        curXY.y = GetNextNumber(dString, ref parseIndex);
-                        if (command == 't')
+                        } break;
+                    case 'v':
                         {
-                            curXY += lastXY;
+                            parseIndex++;
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.VerticalLineToRel(py);
+
+                        } break;
+                    case 'V':
+                        {
+                            parseIndex++;
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.VerticalLineTo(py);
+                        } break;
+                    case 'h':
+                        {
+                            parseIndex++;
+                            px = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.HorizontalLineToRel(px);
+                        } break;
+                    case 'H':
+                        {
+                            parseIndex++;
+                            px = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.HorizontalLineTo(px);
+                        } break;
+                    case 'l':
+                        {
+                            parseIndex++;
+                            px = GetNextNumber(dString, ref parseIndex);
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.LineToRel(px, py);
+
+                        } break;
+                    case 'L':
+                        {
+                            parseIndex++;
+                            px = GetNextNumber(dString, ref parseIndex);
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.LineTo(px, py);
+                        } break;
+                    case 'q':
+                        {
+                            //Curve3 
+                            parseIndex++;
+                            double p2x = GetNextNumber(dString, ref parseIndex);
+                            double p2y = GetNextNumber(dString, ref parseIndex);
+                            px = GetNextNumber(dString, ref parseIndex);
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.Curve3Rel(p2x, p2y, px, py);
+
+                        } break;
+                    case 'Q':
+                        {   //Curve3 
+                            parseIndex++;
+                            double p2x = GetNextNumber(dString, ref parseIndex);
+                            double p2y = GetNextNumber(dString, ref parseIndex);
+                            px = GetNextNumber(dString, ref parseIndex);
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.Curve3(p2x, p2y, px, py);
                         }
-
-                        newGlyph.glyphData.Curve3(curXY.x, curXY.y);
                         break;
+                    case 't':
+                        {
+                            //svg smooth curve3
+                            parseIndex++;
+                            px = GetNextNumber(dString, ref parseIndex);
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.SmoothCurve3Rel(px, py);
 
+                        }break;
+                    case 'T':
+                        {
+                            parseIndex++;
+                            px = GetNextNumber(dString, ref parseIndex);
+                            py = GetNextNumber(dString, ref parseIndex);
+                            gyphPath.SmoothCurve3(px, py);
+                        } break;
                     case 'z':
                     case 'Z':
-                        parseIndex++;
-                        curXY = lastXY; // value not used this is to remove an error.
-                        //newGlyph.glyphData.ClosePathStorage();
-                        newGlyph.glyphData.ClosePolygon();
-                        // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
-                        // We stored the position of the start of this polygon, no we flip it as we colse it.
-                        newGlyph.glyphData.InvertPolygon(polyStartVertexSourceIndex);
-                        break;
-
+                        {
+                            parseIndex++;
+                            //curXY = lastXY; // value not used this is to remove an error.
+                            //newGlyph.glyphData.ClosePathStorage();
+                            gyphPath.CloseFigure();
+                            // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
+                            // We stored the position of the start of this polygon, no we flip it as we colse it.
+                            //newGlyph.glyphData.InvertPolygon(polyStartVertexSourceIndex);
+                           // VertexHelper.InvertPolygon(gyphPath.Vxs, polyStartVertexSourceIndex);
+                        } break;
                     case ' ':
                     case '\n': // some white space we need to skip
                     case '\r':
-                        parseIndex++;
-                        curXY = lastXY; // value not used this is to remove an error.
-                        break;
-
+                        {
+                            parseIndex++;
+                        } break;
                     default:
                         throw new NotImplementedException("unrecognized d command '" + command + "'.");
                 }
 
-                lastXY = curXY;
+               
             }
 
             return newGlyph;
@@ -396,6 +412,7 @@ namespace PixelFarm.Agg.Font
             while (nextGlyphString != null)
             {
                 // get the data and put it in the glyph dictionary
+
                 Glyph newGlyph = CreateGlyphFromSVGGlyphData(nextGlyphString);
                 if (newGlyph.unicode > 0)
                 {

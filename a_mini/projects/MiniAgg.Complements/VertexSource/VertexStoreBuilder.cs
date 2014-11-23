@@ -17,33 +17,21 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using System;
-using System.Runtime;
-
-using PixelFarm.Agg;
-
+using System.Collections.Generic;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
 {
-    public static class CO
+    public static class VertexStoreBuilder
     {
-        /// <summary>
-        /// order b
-        /// </summary>
-        public const int B = 0;
-        /// <summary>
-        /// order g
-        /// </summary>
-        public const int G = 1;
-        /// <summary>
-        /// order b
-        /// </summary>
-        public const int R = 2;
-        /// <summary>
-        /// order a
-        /// </summary>
-        public const int A = 3;
+        public static VertexStore CreateVxs(IEnumerable<VertexData> iter)
+        {
+            VertexStore vxs = new VertexStore(2);
+            foreach (VertexData v in iter)
+            {
+                vxs.AddVertex(v.x, v.y, v.command);
+            }
+            return vxs;
+        }
     }
 }

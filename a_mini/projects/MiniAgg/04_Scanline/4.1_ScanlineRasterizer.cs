@@ -32,7 +32,7 @@
 // 
 //----------------------------------------------------------------------------
 using System;
-using PixelFarm.Agg.VertexSource;
+
 using PixelFarm.VectorMath;
 using poly_subpix = PixelFarm.Agg.AggBasics.PolySubPix;
 
@@ -237,26 +237,27 @@ namespace PixelFarm.Agg
             get { return this.addVertextOffsetY; }
             set { this.addVertextOffsetY = value; }
         }
-        void AddVertex(ShapePath.FlagsAndCommand cmd, double x, double y)
+        void AddVertex(VertexCmd cmd, double x, double y)
         {
             switch (cmd)
             {
-                case ShapePath.FlagsAndCommand.CommandMoveTo:
+                case VertexCmd.MoveTo:
                     {
                         MoveTo(x, y);
                     } break;
-                case ShapePath.FlagsAndCommand.CommandLineTo:
-                case ShapePath.FlagsAndCommand.CommandCurve3:
-                case ShapePath.FlagsAndCommand.CommandCurve4:
-                    {
+                case VertexCmd.LineTo:  
+                case VertexCmd.P2c:
+                case VertexCmd.P3c:
+                    {                      
+
                         LineTo(x, y);
+                    } break;
+                case VertexCmd.EndAndCloseFigure:
+                    {
+                        ClosePolygon();
                     } break;
                 default:
                     {
-                        if (ShapePath.IsClose(cmd))
-                        {
-                            ClosePolygon();
-                        }
                     } break;
             }
         }
@@ -279,18 +280,19 @@ namespace PixelFarm.Agg
 
             double x = 0;
             double y = 0;
-
             if (m_cellAARas.Sorted) { Reset(); }
 
             if (snap.VxsHasMoreThanOnePart)
             {
-                var vxs = snap.GetInternalVxs();
+                //****
+                //render all parts
+                VertexStore vxs = snap.GetInternalVxs();
                 int j = vxs.Count;
 
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = vxs.GetVertex(i, out x, out y);
-                    if (cmd != ShapePath.FlagsAndCommand.CommandStop)
+                    if (cmd != VertexCmd.Stop)
                     {
                         AddVertex(cmd, x, y);
                     }
@@ -298,12 +300,13 @@ namespace PixelFarm.Agg
             }
             else
             {
-                var snapIter = snap.GetVertexSnapIter();
-                ShapePath.FlagsAndCommand cmd;
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+                VertexSnapIter snapIter = snap.GetVertexSnapIter();
+                VertexCmd cmd;
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
                 {
                     AddVertex(cmd, x, y);
                 }
+               
             }
 
         }

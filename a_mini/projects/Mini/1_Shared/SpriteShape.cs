@@ -16,7 +16,7 @@ namespace PixelFarm.Agg
 {
     public class SpriteShape
     {
-        PathStorage path = new PathStorage();
+        PathWriter path = new PathWriter();
         ColorRGBA[] colors = new ColorRGBA[100];
         int[] pathIndexList = new int[100];
         int numPaths = 0;
@@ -27,7 +27,7 @@ namespace PixelFarm.Agg
 
         }
 
-        public PathStorage Path
+        public PathWriter Path
         {
             get
             {
@@ -83,13 +83,13 @@ namespace PixelFarm.Agg
         {
 
             numPaths = PixelFarm.Agg.LionDataStore.LoadLionData(path, colors, pathIndexList);
-            PixelFarm.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
+            PixelFarm.Agg.BoundingRect.GetBoundingRect(path.Vxs, pathIndexList, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }
         public static void UnsafeDirectSetData(SpriteShape lion,
             int numPaths,
-            PathStorage pathStore,
+            PathWriter pathStore,
             ColorRGBA[] colors,
             int[] pathIndice)
         {
@@ -101,7 +101,7 @@ namespace PixelFarm.Agg
         }
         void UpdateBoundingRect()
         {
-            PixelFarm.Agg.BoundingRect.GetBoundingRect(path, pathIndexList, numPaths, out boundingRect);
+            PixelFarm.Agg.BoundingRect.GetBoundingRect(path.Vxs, pathIndexList, numPaths, out boundingRect);
             center.x = (boundingRect.Right - boundingRect.Left) / 2.0;
             center.y = (boundingRect.Top - boundingRect.Bottom) / 2.0;
         }

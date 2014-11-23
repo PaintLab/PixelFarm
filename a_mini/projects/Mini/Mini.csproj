@@ -42,10 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\DemoBase.cs" />
+    <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
     <Compile Include="1_Shared\Square.cs" />
     <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="2_Platform\BitmapHelper.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test1.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />

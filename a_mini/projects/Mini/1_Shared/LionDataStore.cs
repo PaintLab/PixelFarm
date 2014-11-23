@@ -161,7 +161,7 @@ namespace PixelFarm.Agg
         "M 157,342 L 156,349 L 150,356 L 157,353 L 163,346 L 162,342 L 157,342 L 157,342 L 157,342\n" +
         "M 99,265 L 96,284 L 92,299 L 73,339 L 73,333 L 87,300 L 99,265 L 99,265 L 99,265\n";
 
-        static public int LoadLionData(PathStorage path, ColorRGBA[] colors, int[] path_idx)
+        static public int LoadLionData(PathWriter path, ColorRGBA[] colors, int[] path_idx)
         {
             // Parse the lion and then detect its bounding
             // box and arrange polygons orientations (make all polygons
@@ -177,10 +177,10 @@ namespace PixelFarm.Agg
                     && Int32.TryParse(line, NumberStyles.HexNumber, null, out newColor))
                 {
                     // New color. Every new color creates new path in the path object.
-                    path.ClosePolygon();
+                    path.CloseFigure();
 
                     colors[npaths] = ColorRGBA.CreatRGB8Packed((int)newColor);
-                    path_idx[npaths] = path.StartNewPath();
+                    path_idx[npaths] = path.StartFigure();
                     npaths++;
                 }
                 else
@@ -200,7 +200,7 @@ namespace PixelFarm.Agg
                             if (!startedPoly)
                             {
                                 startedPoly = true;
-                                path.ClosePolygon();
+                                path.CloseFigure();
                                 path.MoveTo(x, y);
                             }
                             else
@@ -213,8 +213,8 @@ namespace PixelFarm.Agg
             }
 
             //path.ArrangeOrientationsAll(ShapePath.FlagsAndCommand.FlagCW);
-            path.ArrangeOrientationsAll(true);
-
+             
+            VertexHelper.ArrangeOrientationsAll(path.Vxs, true);
             return npaths;
         }
     }

@@ -48,8 +48,10 @@
     <Compile Include="04_GLScanline\6_ClipLiangBarsky.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\CanvasGL2dInternal.cs" />
+    <Compile Include="GLCanvas\CanvasGL2d_TextAndFont.cs" />
     <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="GLCanvas\GLBitmapTexture.cs" />
+    <Compile Include="GLCanvas\SvgArc.cs" />
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

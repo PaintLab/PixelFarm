@@ -232,7 +232,7 @@ namespace PixelFarm.Agg.Font
             for (int i = 0; i < j; ++i)
             {
                 var cmd = glyphVxs.GetVertex(i, out x, out y);
-                if (cmd == ShapePath.FlagsAndCommand.CommandStop)
+                if (cmd == VertexCmd.Stop)
                 {
                     break;
                 }
@@ -269,14 +269,12 @@ namespace PixelFarm.Agg.Font
                     //    typeFace.GetAdvanceForCharacter(character),
                     //    typeFace.Underline_position,
                     //    typeFace.Underline_thickness).MakeVxs();
-                }
-
-
+                } 
                 Affine glyphTransform = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
                 VertexStore characterGlyph = glyphTransform.TransformToVxs(sourceGlyph);
                 if (FlatenCurves)
                 {
-                    characterGlyph = new FlattenCurves().MakeVxs(characterGlyph);
+                    characterGlyph = new CurveFlattener().MakeVxs(characterGlyph);
                 }
                 return characterGlyph;
             }

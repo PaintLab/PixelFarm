@@ -893,27 +893,17 @@ namespace PixelFarm.Agg.Transform
         static bool is_equal_eps(double v1, double v2)
         {
             return Math.Abs(v1 - v2) <= (EPSILON);
-        }
-
-
-        //----------------------------------------------------------------------------------------------
-        public VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
-        {
-            return new VertexStoreSnap(TransformToVxs(src));
-        }
+        } 
         public VertexStoreSnap TransformToVertexSnap(VertexStore src)
         {
             return new VertexStoreSnap(this.TransformToVxs(src));
         }
-        public VertexStore TransformToVxs(Agg.VertexSource.PathStorage src)
-        {
-            return TransformToVxs(src.Vsx);
-        }
+        
         public VertexStore TransformToVxs(VertexStore src)
         {
             int count = src.Count;
             VertexStore vxs = new VertexStore(count);
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             double x, y; 
             for (int i = 0; i < count; ++i)
             {
@@ -927,9 +917,9 @@ namespace PixelFarm.Agg.Transform
         {
             var vxs = new VertexStore();
             var snapIter = src.GetVertexSnapIter();
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 this.Transform(ref x, ref y);
                 vxs.AddVertex(x, y, cmd);
@@ -941,7 +931,7 @@ namespace PixelFarm.Agg.Transform
         {
             int count = src.Count;
             VertexStore vxs = new VertexStore(count);
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             double x, y;
            
             for (int i = 0; i < count; ++i)
@@ -958,9 +948,9 @@ namespace PixelFarm.Agg.Transform
             var vxs = new VertexStore();
             var snapIter = src.GetVertexSnapIter();
 
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             double x, y;
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != ShapePath.FlagsAndCommand.CommandStop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 x += dx;
                 y += dy;

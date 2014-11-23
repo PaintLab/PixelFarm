@@ -626,29 +626,20 @@ namespace PixelFarm.Agg.Transform
             x = Math.Sqrt(sx * sx + shx * shx);
             y = Math.Sqrt(shy * shy + sy * sy);
         }
-
-        //-------------------------------------------------------------------------
-        public VertexStoreSnap TransformToVertexSnap(Agg.VertexSource.PathStorage src)
-        {
-            return new VertexStoreSnap(TransformToVxs(src));
-        }
-        public VertexStore TransformToVxs(Agg.VertexSource.PathStorage src)
-        {
-            return TransformToVxs(src.Vsx);
-        }
+         
         public VertexStore TransformToVxs(VertexStoreSnap snap)
         {
 
             var vxs = new VertexStore();
             var vsnapIter = snap.GetVertexSnapIter();
             double x, y;
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             do
             {
                 cmd = vsnapIter.GetNextVertex(out x, out y);
                 this.Transform(ref x, ref y);
                 vxs.AddVertex(x, y, cmd);
-            } while (!ShapePath.IsStop(cmd));
+            } while (!VertexHelper.IsEmpty(cmd));
 
             return vxs;
         }
@@ -656,7 +647,7 @@ namespace PixelFarm.Agg.Transform
         {
 
 
-            ShapePath.FlagsAndCommand cmd;
+            VertexCmd cmd;
             double x, y;
             int count = src.Count;
             var vxs = new VertexStore(count);

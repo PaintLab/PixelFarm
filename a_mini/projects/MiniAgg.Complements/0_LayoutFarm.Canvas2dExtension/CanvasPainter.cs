@@ -52,11 +52,11 @@ namespace PixelFarm.Agg
         //-------------
         SimpleRect simpleRect = new SimpleRect();
         Ellipse ellipse = new Ellipse();
-        PathStorage lines = new PathStorage();
+        PathWriter lines = new PathWriter();
         RoundedRect roundRect = null;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
-
+        CurveFlattener curveFlattener = new CurveFlattener();
         //-------------
         public CanvasPainter(Graphics2D graphic2d)
         {
@@ -196,6 +196,17 @@ namespace PixelFarm.Agg
             simpleRect.SetRect(left, bottom, right, top);
             gx.Render(simpleRect.MakeVertexSnap(), this.fillColor);
         }
+        public void FillRectLBWH(double left, double bottom, double width, double height)
+        {
+            double right = left + width;
+            double top = bottom + height;
+            if (right < left || top < bottom)
+            {
+                throw new ArgumentException();
+            }
+            simpleRect.SetRect(left, bottom, right, top);
+            gx.Render(simpleRect.MakeVertexSnap(), this.fillColor);
+        }
         public void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
             if (roundRect == null)
@@ -253,6 +264,7 @@ namespace PixelFarm.Agg
         }
         public void Fill(VertexStore vxs)
         {
+
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
@@ -313,6 +325,29 @@ namespace PixelFarm.Agg
             filterMan.DoRecursiveBlur(img, r);
         }
         //---------------- 
+        public void DrawBezierCurve(float startX, float startY, float endX, float endY,
+           float controlX1, float controlY1,
+           float controlX2, float controlY2)
+        {
+            VertexStore vxs = new VertexStore();
+            PixelFarm.Agg.VertexSource.BezierCurve.CreateBezierVxs4(vxs,
+                new PixelFarm.VectorMath.Vector2(startX, startY),
+                new PixelFarm.VectorMath.Vector2(endX, endY),
+                new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
+                new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
+
+            vxs = this.stroke.MakeVxs(vxs);
+
+            sclineRas.Reset();
+            sclineRas.AddPath(vxs);
+            //sclineRasToBmp.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+            sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
+        }
+        //---------------- 
+        public VertexStore FlattenCurves(VertexStore srcVxs)
+        {
+            return curveFlattener.MakeVxs(srcVxs);
+        }
     }
 
 }
