@@ -40,12 +40,19 @@ namespace PixelFarm.Font2
     }
 
 
-    
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    delegate int MyFtInitLib_del();
+
 
     static class NativeMyFonts
     {
-        //source code in a_mini/external/myfonts/
         const string myfontLib = @"myft.dll";
+        static NativeMyFonts()
+        {
+            //dynamic load dll
+            string appBaseDir = AppDomain.CurrentDomain.BaseDirectory;
+            NativeMyFontsLib.LoadOrExtract(appBaseDir + "\\" + myfontLib);
+        }
 
         [DllImport(myfontLib)]
         public static extern int MyFtLibGetVersion();
