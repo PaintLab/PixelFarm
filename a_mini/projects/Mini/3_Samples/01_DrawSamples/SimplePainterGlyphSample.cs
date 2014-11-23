@@ -26,7 +26,7 @@ namespace PixelFarm.Agg.SimplePainter
         PixelFarm.Font2.FontFace font;
         public override void Init()
         {
-            font = PixelFarm.Font2.MyFonts.LoadFont(fontfile, 150);
+            font = PixelFarm.Font2.FontStore.LoadFont(fontfile, 150);
         }
         public override void Draw(Graphics2D g)
         {

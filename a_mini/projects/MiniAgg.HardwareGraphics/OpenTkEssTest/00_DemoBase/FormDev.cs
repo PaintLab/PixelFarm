@@ -23,7 +23,7 @@ namespace Mini
 
 
             //-------------------------------------------------- 
-            int code = PixelFarm.Font2.MyFonts.InitLib();
+            int code = PixelFarm.Font2.FontStore.InitLib();
             //-------------------------------------------------- 
            
           

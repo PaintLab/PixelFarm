@@ -91,9 +91,7 @@ namespace OpenTkEssTest
                         10f,340};
                 //canvas.DrawPolygon(polygonCoords);
                 //fill polygon test                
-                canvas.FillPolygon(polygonCoords);
-
-
+                canvas.FillPolygon(polygonCoords); 
 
                 var polygonCoords2 = new float[]{
                         5+10,300,
@@ -101,9 +99,7 @@ namespace OpenTkEssTest
                         50+10,340,
                         10f +10,340};
                 canvas.FillColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
-                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
-
-
+                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length); 
 
                 int strkW = 10;
                 canvas.FillColor = LayoutFarm.Drawing.Color.Red;
@@ -153,7 +149,7 @@ namespace OpenTkEssTest
 
 
                 //load font data
-                var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
+                var font = PixelFarm.Font2.FontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
                 var fontGlyph = font.GetGlyph('{');
                 //PixelFarm.Font2.MyFonts.SetShapingEngine();
                 

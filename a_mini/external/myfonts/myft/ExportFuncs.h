@@ -38,7 +38,7 @@ extern "C"{
 	MY_DLL_EXPORT int MyFtNewMemoryFace(const void* membuffer,int sizeInBytes,int pxsize);
 	
 	MY_DLL_EXPORT int MyFtLoadChar(unsigned int charcode,ExportTypeFace *exportTypeFace);
-	MY_DLL_EXPORT int MyFtSetupShapingEngine(const char* langName,int langNameLen,int direction);
+	MY_DLL_EXPORT int MyFtSetupShapingEngine(const char* langName,int langNameLen,int direction,int scriptCode);
 	MY_DLL_EXPORT int MyFtShaping(const uint16_t* text,int charCount); 
 }
 

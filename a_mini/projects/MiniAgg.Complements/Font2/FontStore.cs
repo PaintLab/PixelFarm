@@ -1,5 +1,4 @@
 ﻿//MIT 2014,WinterDev
-
 //-----------------------------------
 //use FreeType and HarfBuzz wrapper
 //native dll lib
@@ -17,67 +16,37 @@ using PixelFarm.Agg;
 namespace PixelFarm.Font2
 {
 
-    public class MyFontGlyph
-    {
-        /// <summary>
-        /// original 8bpp image buffer
-        /// </summary>
-        public byte[] glyImgBuffer8;
-        /// <summary>
-        /// 32 bpp image for render
-        /// </summary>
-        public ActualImage glyphImage32;
-        //----------------------------
-        /// <summary>
-        /// original glyph outline
-        /// </summary>
-        public VertexStore originalVxs;
-        /// <summary>
-        /// flaten version of original glyph outline
-        /// </summary>
-        public VertexStore flattenVxs;
-    }
-
-    public class FontFace
-    {
-        IntPtr unmanagedMem;
-        Dictionary<char, MyFontGlyph> dicGlyphs = new Dictionary<char, MyFontGlyph>();
-
-        public FontFace(IntPtr unmanagedMem)
-        {
-            this.unmanagedMem = unmanagedMem;
-        }
-        public MyFontGlyph GetGlyph(char c)
-        {
-            MyFontGlyph found;
-            if (!dicGlyphs.TryGetValue(c, out found))
-            {
-                found = MyFonts.GetGlyph(c);
-                this.dicGlyphs.Add(c, found);
-            }
-            return found;
-        }
-    }
 
 
-    public static class MyFonts
+
+
+
+    public static class FontStore
     {
         static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>();
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
 
+        static object syncObj = new object();
+        static bool isInitLib = false;
+
+
         public static int InitLib()
         {
-            return NativeMyFonts.MyFtInitLib();
+            int initResult = 0;
+            lock (syncObj)
+            {
+                if (!isInitLib)
+                {
+                    initResult = NativeMyFontsLib.MyFtInitLib();
+                    isInitLib = true;
+                }
+            }
+            return initResult;
         }
-        static FT_Vector GetMidPoint(FT_Vector v1, FT_Vector v2)
-        {
 
-            return new FT_Vector(
-                (v1.x + v2.x) / 2,
-                (v1.y + v2.y) / 2);
-        }
 
-        unsafe static void CopyGlyphBitmap(ref ExportTypeFace exportTypeFace, MyFontGlyph fontGlyph)
+
+        unsafe static void CopyGlyphBitmap(ref ExportTypeFace exportTypeFace, FontGlyph fontGlyph)
         {
             FT_Bitmap* ftBmp = exportTypeFace.bitmap;
             //image is 8 bits grayscale
@@ -132,7 +101,16 @@ namespace PixelFarm.Font2
 
 
         }
-        internal static MyFontGlyph GetGlyph(char unicodeChar)
+
+
+        static FT_Vector GetMidPoint(FT_Vector v1, FT_Vector v2)
+        {
+
+            return new FT_Vector(
+                (v1.x + v2.x) / 2,
+                (v1.y + v2.y) / 2);
+        }
+        internal static FontGlyph GetGlyph(char unicodeChar)
         {
 
             //--------------------------------------------------
@@ -140,9 +118,9 @@ namespace PixelFarm.Font2
             {
                 ExportTypeFace exportTypeFace = new ExportTypeFace();
 
-                PixelFarm.Font2.NativeMyFonts.MyFtLoadChar(unicodeChar, ref exportTypeFace);
+                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(unicodeChar, ref exportTypeFace);
                 FT_Outline outline = *exportTypeFace.outline;
-                MyFontGlyph fontGlyph = new MyFontGlyph();
+                FontGlyph fontGlyph = new FontGlyph();
 
                 //copy raw image 
                 CopyGlyphBitmap(ref exportTypeFace, fontGlyph);
@@ -318,7 +296,11 @@ namespace PixelFarm.Font2
         }
         public static void SetShapingEngine()
         {
-            PixelFarm.Font2.NativeMyFonts.MyFtSetupShapingEngine("en", 2, 1);
+            string lang = "en";
+            PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(lang,
+                lang.Length,
+                HBDirection.HB_DIRECTION_LTR,
+                HBScriptCode.HB_SCRIPT_LATIN);
         }
         public static void ShapeText(string data)
         {
@@ -331,10 +313,11 @@ namespace PixelFarm.Font2
             {
                 fixed (byte* u = &unicodeBuffer[0])
                 {
-                    PixelFarm.Font2.NativeMyFonts.MyFtShaping(u, 2);
+                    PixelFarm.Font2.NativeMyFontsLib.MyFtShaping(u, 2);
                 }
             }
         }
+
         public static FontFace LoadFont(string filename, int pixelSize)
         {
             //load font from specific file 
@@ -345,14 +328,12 @@ namespace PixelFarm.Font2
                 //if not found
                 //then load it
                 byte[] fontFileContent = File.ReadAllBytes(filename);
-                int fileContent = fontFileContent.Length;
-                IntPtr unmanagedMem = Marshal.AllocHGlobal(fileContent);
-                Marshal.Copy(fontFileContent, 0, unmanagedMem, fileContent);
+                int filelen = fontFileContent.Length;
+                IntPtr unmanagedMem = Marshal.AllocHGlobal(filelen);
+                Marshal.Copy(fontFileContent, 0, unmanagedMem, filelen);
                 fontFace = new FontFace(unmanagedMem);
                 fonts.Add(filename, fontFace);
-
-                PixelFarm.Font2.NativeMyFonts.MyFtNewMemoryFace(unmanagedMem, fileContent, pixelSize);
-
+                PixelFarm.Font2.NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen, pixelSize);
             }
             return fontFace;
 

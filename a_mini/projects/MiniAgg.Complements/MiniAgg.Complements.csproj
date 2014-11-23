@@ -45,10 +45,13 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\FilterMan.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\ScanlineRasToDestBitmapRendererExtension.cs" />
-    <Compile Include="Font2\MyFonts.cs" />
+    <Compile Include="Font2\FontFace.cs" />
+    <Compile Include="Font2\FontGlyph.cs" />
+    <Compile Include="Font2\FontStore.cs" />
+    <Compile Include="Font2\NativeBridgeHB.cs" />
+    <Compile Include="Font2\NativeBridgeMyFonts.cs" />
     <Compile Include="Font2\UnsafeMethods.cs" />
-    <Compile Include="Font2\NativeMyFontLib.cs" />
-    <Compile Include="Font2\NativeMyFonts.cs" />
+    <Compile Include="Font2\NativeBridgeFreeType.cs" />
     <Compile Include="myfonts_dll.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -116,8 +119,9 @@
       <LastGenOutput>myfonts_dll.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <None Include="Resources\myft.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

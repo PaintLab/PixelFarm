@@ -11,8 +11,12 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using System.IO;
+
 namespace PixelFarm.Font2
 {
+     
+
     [StructLayout(LayoutKind.Sequential)]
     struct FT_Vector
     {
@@ -39,26 +43,7 @@ namespace PixelFarm.Font2
         public int flags;           /* outline masks                      */
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    unsafe struct ExportTypeFace
-    {
-
-       public short unit_per_em;
-       public short ascender;
-       public short descender;
-       public short height;
-
-       public int advanceX;
-       public int advanceY;
-
-       public int bboxXmin;
-       public int bboxXmax;
-       public int bboxYmin;
-       public int bboxYmax;
-
-       public FT_Bitmap* bitmap;
-       public FT_Outline* outline;
-    };
+    
 
     /*************************************************************************/
     /*                                                                       */
@@ -134,38 +119,7 @@ namespace PixelFarm.Font2
         public void* palette;
     }
 
-
-    static class NativeMyFonts
-    {
-        const string myfontLib = @"myft.dll";
-        static NativeMyFonts()
-        {
-            //dynamic load dll
-            string appBaseDir = AppDomain.CurrentDomain.BaseDirectory;
-            NativeMyFontsLib.LoadOrExtract(appBaseDir + "\\" + myfontLib);
-        }
-
-        [DllImport(myfontLib)]
-        public static extern int MyFtLibGetVersion();
-
-        [DllImport(myfontLib)]
-        public static extern int MyFtInitLib();
-
-
-        [DllImport(myfontLib, CharSet = CharSet.Ansi)]
-        public static extern int MyFtNewFace(string fontfaceName, int pxsize);
-
-        [DllImport(myfontLib)]
-        public static extern int MyFtNewMemoryFace(IntPtr membuffer, int sizeInBytes, int pxsize);
-
-        [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MyFtLoadChar(int charcode, ref ExportTypeFace ftOutline);
-
-        [DllImport(myfontLib, CharSet = CharSet.Ansi)]
-        public static extern int MyFtSetupShapingEngine(string langName, int langNameLen, int direction);
-        [DllImport(myfontLib)]
-        public static unsafe extern int MyFtShaping(byte* utf8Buffer, int charCount);
-    }
+    
 
 
 

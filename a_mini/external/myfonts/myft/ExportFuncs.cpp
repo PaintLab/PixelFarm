@@ -30,16 +30,18 @@ int force_ucs2_charmap2(FT_Face ftf)
 }
 //------------------------------------------------------------
  
-	int MyFtLibGetVersion()
-	{	
+int MyFtLibGetVersion()
+{	
 		return 1;		
-	};
-	int MyFtInitLib()
-	{ 
+};
+int MyFtInitLib()
+{ 
 		return FT_Init_FreeType(&ft); 
-	};
-	int MyFtNewFace(const char* faceName, int pxsize)
-	{	   
+};
+
+
+int MyFtNewFace(const char* faceName, int pxsize)
+{	   
 		int code=0;
 		if(code= FT_New_Face(ft,faceName,0, &myface))
 		{	//error
@@ -51,9 +53,9 @@ int force_ucs2_charmap2(FT_Face ftf)
 			force_ucs2_charmap2(myface);			
 			return code;
 		}
-	};
-	int MyFtNewMemoryFace(const void* membuffer,int sizeInBytes,int pxsize)
-	{
+};
+int MyFtNewMemoryFace(const void* membuffer,int sizeInBytes,int pxsize)
+{
 		int code= 0;
 		if(code= FT_New_Memory_Face(ft,(FT_Byte*)membuffer,sizeInBytes,0,&myface))
 		{
@@ -71,16 +73,15 @@ int force_ucs2_charmap2(FT_Face ftf)
 			auto num_glyph= myface->num_glyphs;
 			auto style_name= myface->style_name;
 			auto familyName= myface->family_name; 
-			//------------------------------------- 
-
+			//-------------------------------------  
 
 			force_ucs2_charmap2(myface);			
 			return code;
 		} 
 
-	}
-	int MyFtLoadChar(unsigned int charcode, ExportTypeFace *exportTypeFace)
-	{	  		 
+}
+int MyFtLoadChar(unsigned int charcode, ExportTypeFace *exportTypeFace)
+{	  		 
 		 if(!FT_Load_Char(myface,charcode,FT_LOAD_RENDER))
 		 {  
 			
@@ -106,19 +107,19 @@ int force_ucs2_charmap2(FT_Face ftf)
 
 		 }
 		 return 0;
-	};
+};
 	 
-int MyFtSetupShapingEngine(const char* langName,int langNameLen,int direction)
+int MyFtSetupShapingEngine(const char* langName,int langNameLen, int direction,int scriptCode)
 {
 	 
 	my_hb_ft_font = hb_ft_font_create(myface,NULL); 
 
 	//--create a buffer for harfbuzz to use
 	my_hb_buf= hb_buffer_create();
-	hb_buffer_set_direction(my_hb_buf,HB_DIRECTION_LTR);
+	hb_buffer_set_direction(my_hb_buf,(hb_direction_t)direction);
 	//hb_buffer_set_script(my_hb_buf,HB_SCRIPT_LATIN);
-	hb_buffer_set_script(my_hb_buf,HB_SCRIPT_THAI); 
-	hb_buffer_set_language(my_hb_buf,hb_language_from_string("th",strlen("th"))); 
+	hb_buffer_set_script(my_hb_buf,(hb_script_t)scriptCode); 
+	hb_buffer_set_language(my_hb_buf,hb_language_from_string(langName,langNameLen)); 
 
 	return 0;
 	

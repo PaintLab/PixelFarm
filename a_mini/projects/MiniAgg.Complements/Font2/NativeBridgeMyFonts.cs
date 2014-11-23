@@ -1,0 +1,101 @@
+﻿//MIT 2014,WinterDev
+
+//-----------------------------------
+//use FreeType and HarfBuzz wrapper
+//native dll lib
+//plan?: port  them to C#  :)
+//-----------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+
+using System.IO;
+
+namespace PixelFarm.Font2
+{
+
+    [StructLayout(LayoutKind.Sequential)]
+    unsafe struct ExportTypeFace
+    {
+
+        public short unit_per_em;
+        public short ascender;
+        public short descender;
+        public short height;
+
+        public int advanceX;
+        public int advanceY;
+
+        public int bboxXmin;
+        public int bboxXmax;
+        public int bboxYmin;
+        public int bboxYmax;
+
+        public FT_Bitmap* bitmap;
+        public FT_Outline* outline;
+    }
+ 
+
+
+    static class NativeMyFontsLib
+    {
+        const string myfontLib = @"myft.dll";
+        static NativeMyFontsLib()
+        {
+            //dynamic load dll
+            string appBaseDir = AppDomain.CurrentDomain.BaseDirectory;
+            LoadOrExtract(appBaseDir + "\\" + myfontLib);
+        }
+
+        [DllImport(myfontLib)]
+        public static extern int MyFtLibGetVersion();
+
+        [DllImport(myfontLib)]
+        public static extern int MyFtInitLib();
+
+
+        [DllImport(myfontLib, CharSet = CharSet.Ansi)]
+        public static extern int MyFtNewFace(string fontfaceName, int pxsize);
+
+        [DllImport(myfontLib)]
+        public static extern int MyFtNewMemoryFace(IntPtr membuffer, int sizeInBytes, int pxsize);
+
+        [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int MyFtLoadChar(int charcode, ref ExportTypeFace ftOutline);
+
+        [DllImport(myfontLib, CharSet = CharSet.Ansi)]
+        public static extern int MyFtSetupShapingEngine(string langName, int langNameLen, HBDirection hbDirection, int hbScriptCode);
+        [DllImport(myfontLib)]
+        public static unsafe extern int MyFtShaping(byte* utf8Buffer, int charCount);
+         
+
+        static bool isLoaded = false;
+        public static bool LoadOrExtract(string dllFilename)
+        {
+            //dev:
+#if DEBUG
+            return true;
+            string dev = @"D:\projects\myagg_cs\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
+            UnsafeMethods.LoadLibrary(dev);
+            return true;
+
+#endif
+            //for Windows , dynamic load dll       
+            if (isLoaded)
+            {
+                return true;
+            }
+            if (!File.Exists(dllFilename))
+            {
+                //extract to it 
+                File.WriteAllBytes(dllFilename, global::MiniAgg.Complements.myfonts_dll.myft);
+                UnsafeMethods.LoadLibrary(dllFilename);
+
+            }
+            isLoaded = true;
+            return true;
+        }
+    }
+}
