@@ -44,9 +44,8 @@ namespace PixelFarm.Font2
 
     static class NativeMyFonts
     {
-        
-
-        const string myfontLib = @"D:\zzshare\zz2\freetype-2.5.3\builds\Debug\myft.dll";
+        //source code in a_mini/external/myfonts/
+        const string myfontLib = @"myft.dll";
 
         [DllImport(myfontLib)]
         public static extern int MyFtLibGetVersion();

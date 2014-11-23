@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\hb2\src\hb-blob.cc" />
+    <ClCompile Include="..\hb2\src\hb-buffer-serialize.cc" />
+    <ClCompile Include="..\hb2\src\hb-buffer.cc" />
+    <ClCompile Include="..\hb2\src\hb-common.cc" />
+    <ClCompile Include="..\hb2\src\hb-face.cc" />
+    <ClCompile Include="..\hb2\src\hb-fallback-shape.cc" />
+    <ClCompile Include="..\hb2\src\hb-font.cc" />
+    <ClCompile Include="..\hb2\src\hb-ft.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-font.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-layout.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-map.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-arabic.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-default.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-hangul.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-hebrew.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-indic-table.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-indic.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-myanmar.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-sea.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-thai.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-complex-tibetan.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-fallback.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape-normalize.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-shape.cc" />
+    <ClCompile Include="..\hb2\src\hb-ot-tag.cc" />
+    <ClCompile Include="..\hb2\src\hb-set.cc" />
+    <ClCompile Include="..\hb2\src\hb-shape-plan.cc" />
+    <ClCompile Include="..\hb2\src\hb-shape.cc" />
+    <ClCompile Include="..\hb2\src\hb-shaper.cc" />
+    <ClCompile Include="..\hb2\src\hb-ucdn.cc" />
+    <ClCompile Include="..\hb2\src\hb-ucdn\ucdn.c" />
+    <ClCompile Include="..\hb2\src\hb-unicode.cc" />
+    <ClCompile Include="..\hb2\src\hb-uniscribe.cc" />
+    <ClCompile Include="..\hb2\src\hb-warning.cc" />
+    <ClCompile Include="..\hb2\src\main.cc" />
+    <ClCompile Include="..\hb2\src\test-buffer-serialize.cc" />
+    <ClCompile Include="..\hb2\src\test-size-params.cc" />
+    <ClCompile Include="..\hb2\src\test-would-substitute.cc" />
+    <ClCompile Include="..\hb2\src\test.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\hb2\src\hb.h" />
+  </ItemGroup>
+</Project>
