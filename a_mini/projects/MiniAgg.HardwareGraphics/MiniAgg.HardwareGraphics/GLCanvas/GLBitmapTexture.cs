@@ -1,7 +1,7 @@
 ﻿//MIT 2014, WinterDev
-using System.Text; 
+using System.Text;
 using System;
-using OpenTK.Graphics.OpenGL; 
+using OpenTK.Graphics.OpenGL;
 using Tesselate;
 using System.Drawing;
 
@@ -34,6 +34,31 @@ namespace OpenTkEssTest
                 PixelType.UnsignedByte, data.Scan0);
 
             bitmap.UnlockBits(data);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+        }
+        public GLBitmapTexture(PixelFarm.Agg.ActualImage image)
+        {
+            GL.GenTextures(1, out textureId);
+            GL.BindTexture(TextureTarget.Texture2D, textureId);
+
+
+            this.width = image.Width;
+            this.height = image.Height;
+
+            byte[] buffer = image.GetBuffer();
+            unsafe
+            {
+                fixed (byte* buffHead = &buffer[0])
+                {
+                    GL.TexImage2D(TextureTarget.Texture2D, 0,
+                        PixelInternalFormat.Rgba, width, height, 0,
+                        OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                        PixelType.UnsignedByte, buffer);
+                }
+            }
+
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);

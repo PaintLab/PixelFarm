@@ -20,17 +20,26 @@ namespace PixelFarm.Font2
         }
         public static bool LoadOrExtract(string dllFilename)
         {
-            //for Windows , dynamic load dll        
-       
+            //dev:
+#if DEBUG
+            return true;
+            string dev = @"D:\projects\myagg_cs\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
+            UnsafeMethods.LoadLibrary(dev);
+            return true;
+
+#endif
+            //for Windows , dynamic load dll       
             if (isLoaded)
             {
                 return true;
-            } 
+            }
             if (!File.Exists(dllFilename))
             {
                 //extract to it 
                 File.WriteAllBytes(dllFilename, global::MiniAgg.Complements.myfonts_dll.myft);
+
                 UnsafeMethods.LoadLibrary(dllFilename);
+
             }
             isLoaded = true;
             return true;

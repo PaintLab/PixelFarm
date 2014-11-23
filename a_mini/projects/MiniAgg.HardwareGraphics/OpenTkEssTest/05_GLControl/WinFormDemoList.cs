@@ -153,15 +153,16 @@ namespace OpenTkEssTest
 
 
                 //load font data
-                var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 18);
+                var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
                 var fontGlyph = font.GetGlyph('{');
                 //PixelFarm.Font2.MyFonts.SetShapingEngine();
-                //PixelFarm.Font2.MyFonts.ShapeText("ดุ");  
+                
                 canvas.FillVxs(fontGlyph.flattenVxs);
                 //canvas.DrawString("ฟ", 50, 50); 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 //---------------------------------------------  
-
+                GLBitmapTexture bmp= new GLBitmapTexture(fontGlyph.glyphImage32);
+                canvas.DrawImage(bmp, 50, 50); 
             });
             form.Show();
         }

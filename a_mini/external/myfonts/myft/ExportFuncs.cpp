@@ -79,26 +79,30 @@ int force_ucs2_charmap2(FT_Face ftf)
 		} 
 
 	}
-	int MyFtLoadChar(unsigned int charcode, FT_Outline *glyph_outline)
+	int MyFtLoadChar(unsigned int charcode, ExportTypeFace *exportTypeFace)
 	{	  		 
 		 if(!FT_Load_Char(myface,charcode,FT_LOAD_RENDER))
 		 {  
-
+			
 			 //----------------------------------------
 			//information about this glyph
-			auto bbox= myface->bbox;
-			auto unit_per_em = myface->units_per_EM; 
-			auto ascender= myface->ascender;
-			auto descender= myface->descender;
-			auto height = myface->height;
-			auto size= myface->size;
-			 
-			//----------------------------------------
+			//exportTypeFace->n= myface->bbox;
+			exportTypeFace->unit_per_em = myface->units_per_EM; 
+			exportTypeFace->ascender= myface->ascender;
+			exportTypeFace->descender= myface->descender;
+			exportTypeFace->height = myface->height;
 
+			exportTypeFace->advanceX = myface->glyph->advance.x;
+			exportTypeFace->advanceY = myface->glyph->advance.y;
+		    
+			exportTypeFace->bboxXmin = myface->bbox.xMin;
+			exportTypeFace->bboxXmax = myface->bbox.xMax;
+			exportTypeFace->bboxYmin = myface->bbox.xMax;
+			exportTypeFace->bboxYmax = myface->bbox.xMax;
 
-
-		    *glyph_outline = myface->glyph->outline; 
-
+			//---------------------------------------- 
+			exportTypeFace->outline  = &myface->glyph->outline; 
+		    exportTypeFace->bitmap  =  &myface->glyph->bitmap;		     
 
 		 }
 		 return 0;

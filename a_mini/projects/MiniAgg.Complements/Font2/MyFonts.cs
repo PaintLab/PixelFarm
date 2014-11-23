@@ -13,12 +13,28 @@ using System.Text;
 using System.IO;
 using PixelFarm.Agg;
 
+
 namespace PixelFarm.Font2
 {
 
     public class MyFontGlyph
     {
+        /// <summary>
+        /// original 8bpp image buffer
+        /// </summary>
+        public byte[] glyImgBuffer8;
+        /// <summary>
+        /// 32 bpp image for render
+        /// </summary>
+        public ActualImage glyphImage32;
+        //----------------------------
+        /// <summary>
+        /// original glyph outline
+        /// </summary>
         public VertexStore originalVxs;
+        /// <summary>
+        /// flaten version of original glyph outline
+        /// </summary>
         public VertexStore flattenVxs;
     }
 
@@ -55,10 +71,66 @@ namespace PixelFarm.Font2
         }
         static FT_Vector GetMidPoint(FT_Vector v1, FT_Vector v2)
         {
-            
+
             return new FT_Vector(
                 (v1.x + v2.x) / 2,
                 (v1.y + v2.y) / 2);
+        }
+
+        unsafe static void CopyGlyphBitmap(ref ExportTypeFace exportTypeFace, MyFontGlyph fontGlyph)
+        {
+            FT_Bitmap* ftBmp = exportTypeFace.bitmap;
+            //image is 8 bits grayscale
+            int h = ftBmp->rows;
+            int w = ftBmp->width;
+            int stride = ftBmp->pitch;
+            int size = stride * h;
+            //copy it to array  
+            byte[] buff = new byte[size];
+            Marshal.Copy((IntPtr)ftBmp->buffer, buff, 0, size);
+            //------------------------------------------------
+
+            //convert to 32bpp
+            //make gray value as alpha channel color value
+            ActualImage actualImage = new ActualImage(w, h, Agg.Image.PixelFormat.Rgba32);
+            int newstride = stride * 4;
+            byte[] newBmp32Buffer = actualImage.GetBuffer();
+            int src_p = 0;
+            int target_p = 0;
+            for (int r = 0; r < h; ++r)
+            {
+                for (int c = 0; c < w; ++c)
+                {
+                    byte srcColor = buff[src_p + c];
+                    //expand to 4 channel
+                    newBmp32Buffer[target_p] = 0; //R
+                    newBmp32Buffer[target_p + 1] = 0; //G
+                    newBmp32Buffer[target_p + 2] = 0; //B
+                    newBmp32Buffer[target_p + 3] = srcColor; //A
+                    target_p += 4;
+                }
+                src_p += stride;
+            }
+            fontGlyph.glyphImage32 = actualImage;
+
+            ////------------------------------------------------
+            //{
+            //      //add System.Drawing to references 
+            //      //save image for debug***
+            //    
+            //    byte[] buffer = new byte[size];
+            //    Marshal.Copy((IntPtr)ftBmp->buffer, buffer, 0, size);
+            //    ////save to 
+            //    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+            //    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h),
+            //        System.Drawing.Imaging.ImageLockMode.ReadWrite,
+            //        bmp.PixelFormat);
+            //    Marshal.Copy(buffer, 0, bmpdata.Scan0, size);
+            //    bmp.UnlockBits(bmpdata);
+            //    bmp.Save("d:\\WImageTest\\glyph.png");
+            //} 
+
+
         }
         internal static MyFontGlyph GetGlyph(char unicodeChar)
         {
@@ -66,10 +138,17 @@ namespace PixelFarm.Font2
             //--------------------------------------------------
             unsafe
             {
-                FT_Outline outline = new FT_Outline();
-                PixelFarm.Font2.NativeMyFonts.MyFtLoadChar(unicodeChar, ref outline);
-                //then fetch outline data from ft_outline          
+                ExportTypeFace exportTypeFace = new ExportTypeFace();
+
+                PixelFarm.Font2.NativeMyFonts.MyFtLoadChar(unicodeChar, ref exportTypeFace);
+                FT_Outline outline = *exportTypeFace.outline;
                 MyFontGlyph fontGlyph = new MyFontGlyph();
+
+                //copy raw image 
+                CopyGlyphBitmap(ref exportTypeFace, fontGlyph);
+
+
+                //outline version
                 //------------------------------
                 int npoints = outline.n_points;
                 List<PixelFarm.VectorMath.Vector2> points = new List<PixelFarm.VectorMath.Vector2>(npoints);
@@ -78,7 +157,7 @@ namespace PixelFarm.Font2
                 int todoContourCount = outline.n_contours;
 
                 PixelFarm.Agg.VertexSource.PathWriter ps = new Agg.VertexSource.PathWriter();
-                fontGlyph.originalVxs = ps.Vxs; 
+                fontGlyph.originalVxs = ps.Vxs;
                 const int resize = 64;
                 int controlPointCount = 0;
 

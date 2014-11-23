@@ -55,13 +55,19 @@ namespace PixelFarm.Agg.SimplePainter
 
             //p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
             //--------------------------------------------------- 
-            var fontGlyph = font.GetGlyph('{'); 
+            var fontGlyph = font.GetGlyph('{');
+            //outline version
+            var flat_v = p.FlattenCurves(fontGlyph.flattenVxs);            
+            p.Fill(flat_v);
+
+            //bitmap version
+            p.DrawImage(fontGlyph.glyphImage32, 20, 30);
+            //--------------------------------------------------- 
             //p.Fill(fontGlyph.vxs);
 #if DEBUG             
             //p.Fill(fontGlyph.vxs); 
 
-            var flat_v = p.FlattenCurves(fontGlyph.flattenVxs);
-            p.Fill(flat_v);
+           
            // dbugVxsDrawPoints.DrawVxsPoints(flat_v, g);
             //dbugVxsDrawPoints.DrawVxsPoints(fontGlyph.vxs, g); 
 #endif

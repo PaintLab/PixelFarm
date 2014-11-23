@@ -8,13 +8,38 @@
  
 #define MY_DLL_EXPORT __declspec(dllexport)  
 
+
+
+struct ExportTypeFace
+{
+	
+	FT_Short unit_per_em;
+	FT_Short ascender;
+	FT_Short descender;
+	FT_Short height;
+	
+	int advanceX;
+	int advanceY;
+
+	int bboxXmin;
+	int bboxXmax;
+	int bboxYmin;
+	int bboxYmax;
+
+	FT_Bitmap* bitmap;
+	FT_Outline* outline;
+};
+
+
 extern "C"{
 	MY_DLL_EXPORT int MyFtLibGetVersion();
 	MY_DLL_EXPORT int MyFtInitLib();
 	MY_DLL_EXPORT int MyFtNewFace(const char* faceName,int pxsize);
 	MY_DLL_EXPORT int MyFtNewMemoryFace(const void* membuffer,int sizeInBytes,int pxsize);
- 
-	MY_DLL_EXPORT int MyFtLoadChar(unsigned int charcode,FT_Outline *glyph_outline);
+	
+	MY_DLL_EXPORT int MyFtLoadChar(unsigned int charcode,ExportTypeFace *exportTypeFace);
 	MY_DLL_EXPORT int MyFtSetupShapingEngine(const char* langName,int langNameLen,int direction);
-	MY_DLL_EXPORT int MyFtShaping(const uint16_t* text,int charCount);
+	MY_DLL_EXPORT int MyFtShaping(const uint16_t* text,int charCount); 
 }
+
+
