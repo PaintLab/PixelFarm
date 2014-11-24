@@ -19,6 +19,8 @@ namespace PixelFarm.Font2
     {
         FontFace currentFontFace;
         CanvasPainter painter;
+       
+
         public TextPrinter(CanvasPainter painter)
         {
             this.painter = painter;
@@ -34,40 +36,36 @@ namespace PixelFarm.Font2
         }
         public void Print(char[] buffer, double x, double y)
         {
+            ProperGlyph[] properGlyphs = null;
             int j = buffer.Length;
-            double xpos = x;
-
+            int buffsize = j * 2;
             //get kerning list
-
-            for (int i = 0; i < j; ++i)
+            if (properGlyphs == null)
             {
-                char c = buffer[i];
-                switch (c)
+                properGlyphs = new ProperGlyph[buffsize];
+                this.currentFontFace.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
+            }
+
+            double xpos = x;
+            for (int i = 0; i < buffsize; ++i)
+            {
+                uint codepoint = properGlyphs[i].codepoint;
+                if (codepoint == 0)
                 {
-                    case ' ':
-                        {
-                        } break;
-                    case '\r':
-                        {
-                        } break;
-                    case '\n':
-                        {
-                        } break;
-                    default:
-                        {
-                            FontGlyph glyph = this.currentFontFace.GetGlyph(c);
-                           
-                            var left = glyph.exportGlyph.img_horiBearingX;
-
-
-                            this.painter.DrawImage(glyph.glyphImage32,
-                                (float)(xpos + (left >> 6)),
-                                (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
-
-                            int w = (glyph.exportGlyph.advanceX) >> 6;
-                            xpos += (w); 
-                        } break;
+                    break;
                 }
+                //-------------------------------------------------------------
+                FontGlyph glyph = this.currentFontFace.GetGlyphByCodePoint(codepoint); 
+                var left = glyph.exportGlyph.img_horiBearingX;
+
+
+                this.painter.DrawImage(glyph.glyphImage32,
+                    (float)(xpos + (left >> 6)),
+                    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+
+                int w = (glyph.exportGlyph.advanceX) >> 6;
+                xpos += (w);
+                //-------------------------------------------------------------                
             }
         }
     }

@@ -31,12 +31,14 @@ namespace PixelFarm.Font2
 
         IntPtr hb_font;
 
-        IntPtr hb_buffer;
+      
 
         /// <summary>
         /// glyph
         /// </summary>
         Dictionary<char, FontGlyph> dicGlyphs = new Dictionary<char, FontGlyph>();
+        Dictionary<uint, FontGlyph> dicGlyphs2 = new Dictionary<uint, FontGlyph>();
+
         internal FontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
             //store font file in unmanaged memory side
@@ -53,12 +55,21 @@ namespace PixelFarm.Font2
         }
         public FontGlyph GetGlyph(char c)
         {
-
             FontGlyph found;
             if (!dicGlyphs.TryGetValue(c, out found))
             {
                 found = FontStore.GetGlyph(ftFaceHandle, c);
                 this.dicGlyphs.Add(c, found);
+            }
+            return found;
+        }
+        public FontGlyph GetGlyphByCodePoint(uint codePoint)
+        {
+            FontGlyph found;
+            if (!dicGlyphs2.TryGetValue(codePoint, out found))
+            {
+                found = FontStore.GetGlyphByGlyphIndex(ftFaceHandle, codePoint);
+                this.dicGlyphs2.Add(codePoint, found);
             }
             return found;
         }
@@ -87,25 +98,18 @@ namespace PixelFarm.Font2
             get { return this.hb_font; }
             set { this.hb_font = value; }
         }
-        internal IntPtr HBBuffer
-        {
-            get { return this.hb_buffer; }
-            set { this.hb_buffer = value; }
-        }
-
+         
         public void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
         {
 
             unsafe
             {
-                byte[] unicodeBuffer = System.Text.Encoding.Unicode.GetBytes(buffer);
-
+                //byte[] unicodeBuffer = System.Text.Encoding.Unicode.GetBytes(buffer); 
                 fixed (ProperGlyph* propGlyphH = &properGlyphs[0])
-                fixed (byte* head = &unicodeBuffer[0])
+                fixed (char* head = &buffer[0])
                 {
                     NativeMyFontsLib.MyFtShaping(
-                        this.hb_font,
-                        this.hb_buffer,
+                        this.hb_font, 
                         head,
                         buffer.Length,
                         propGlyphH);

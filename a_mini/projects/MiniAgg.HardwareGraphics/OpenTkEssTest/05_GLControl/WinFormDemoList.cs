@@ -103,7 +103,7 @@ namespace OpenTkEssTest
                 canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
 
                 int strkW = 10;
-                canvas.FillColor = LayoutFarm.Drawing.Color.Red;
+                canvas.FillColor = LayoutFarm.Drawing.Color.LightGray;
 
                 for (int i = 1; i < 90; i += 10)
                 {
@@ -155,16 +155,17 @@ namespace OpenTkEssTest
                 //PixelFarm.Font2.MyFonts.SetShapingEngine();
 
                 canvas.FillVxs(fontGlyph.flattenVxs);
-                 
+
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 canvas.CurrentFontFace = font;
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.Black;
                 canvas.DrawLine(0, 200, 500, 200);
-                
+
                 //test Thai words
-                canvas.DrawString("ดุดีดำด่าญญู", 80, 200);
-               
+                canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
+                //canvas.DrawString("1234567890", 80, 200);
+
                 //---------------------------------------------  
                 GLBitmapTexture bmp = new GLBitmapTexture(fontGlyph.glyphImage32);
                 canvas.DrawImage(bmp, 50, 50);

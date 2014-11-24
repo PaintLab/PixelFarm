@@ -51,7 +51,7 @@ struct ExportTypeFaceInfo
 };
 
 struct ProperGlyph
-{	
+{			 
 	 uint32_t codepoint;
 	 hb_position_t  x_advance;
      hb_position_t  y_advance;
@@ -73,13 +73,14 @@ extern "C"{
 	MY_DLL_EXPORT void MyFtSetPixelSizes(FT_Face myface,int pxsize);
 	MY_DLL_EXPORT void MyFtSetCharSize(FT_Face myface,int char_width,int char_height,int h_device_resolution, int v_device_resolution);
 		
-	MY_DLL_EXPORT int MyFtLoadChar(FT_Face myface,unsigned int charcode,ExportGlyph *exportTypeFace);
+	MY_DLL_EXPORT int MyFtLoadChar(FT_Face myface,unsigned int charcode,ExportGlyph *expGlyph);
+	MY_DLL_EXPORT int MyFtLoadGlyph(FT_Face myface,unsigned int glyphIndex,ExportGlyph *expGlyph);
 		
 	MY_DLL_EXPORT int MyFtSetupShapingEngine(FT_Face myface,
 		const char* langName,int langNameLen,
 		int direction,int scriptCode,ExportTypeFaceInfo* exportTypeInfo);
 
-	MY_DLL_EXPORT  int MyFtShaping(hb_font_t *my_hb_ft_font,hb_buffer_t *my_hb_buf, 
+	MY_DLL_EXPORT  int MyFtShaping(hb_font_t *my_hb_ft_font, 
 		const uint16_t* text,
 		int charCount,
 		ProperGlyph* properGlyphs);

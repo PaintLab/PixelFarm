@@ -22,7 +22,6 @@ namespace PixelFarm.Font2
         static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>();
         internal static FontGlyph GetGlyph(IntPtr ftFaceHandle, char unicodeChar)
         {
-
             //--------------------------------------------------
             unsafe
             {
@@ -31,7 +30,16 @@ namespace PixelFarm.Font2
                 return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
             }
         }
-
+        internal static FontGlyph GetGlyphByGlyphIndex(IntPtr ftFaceHandle, uint glyphIndex)
+        {
+            //--------------------------------------------------
+            unsafe
+            {
+                ExportGlyph exportTypeFace = new ExportGlyph();
+                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
+                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
+            }
+        }
 
         internal static void SetShapingEngine(FontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
@@ -48,8 +56,7 @@ namespace PixelFarm.Font2
                 hb_direction,
                 hb_scriptcode,
                 ref exportTypeInfo);
-            fontFace.HBFont = exportTypeInfo.hb_font;
-            fontFace.HBBuffer = exportTypeInfo.hb_fontBuffer;
+            fontFace.HBFont = exportTypeInfo.hb_font; 
 
 
         }

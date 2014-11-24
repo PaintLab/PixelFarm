@@ -114,10 +114,7 @@ namespace PixelFarm.Font2
             FontGlyph fontGlyph = new FontGlyph();
             //------------------------------------------
             //copy font metrics
-            fontGlyph.exportGlyph = *(exportTypeFace);
-             
-
-
+            fontGlyph.exportGlyph = *(exportTypeFace); 
             //------------------------------------------
             //copy raw image 
             CopyGlyphBitmap(exportTypeFace, fontGlyph);

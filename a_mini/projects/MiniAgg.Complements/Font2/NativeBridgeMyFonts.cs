@@ -20,8 +20,7 @@ namespace PixelFarm.Font2
     struct ExportTypeFaceInfo
     {
         public bool hasKerning;
-        public IntPtr hb_font;
-        public IntPtr hb_fontBuffer;
+        public IntPtr hb_font; 
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -121,6 +120,9 @@ namespace PixelFarm.Font2
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
         public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, ref ExportGlyph ftOutline);
 
+        [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int MyFtLoadGlyph(IntPtr faceHandle, uint codepoint, ref ExportGlyph ftOutline);
+
 
 
         //============================================================================
@@ -130,9 +132,8 @@ namespace PixelFarm.Font2
             int langNameLen, HBDirection hbDirection, int hbScriptCode, ref ExportTypeFaceInfo exportTypeFaceInfo);
 
         [DllImport(myfontLib)]
-        public static unsafe extern int MyFtShaping(IntPtr my_hb_ft_font,
-            IntPtr my_hb_buf,
-            byte* text,
+        public static unsafe extern int MyFtShaping(IntPtr my_hb_ft_font, 
+            char* text,
             int charCount,
             ProperGlyph* properGlyphs);
 

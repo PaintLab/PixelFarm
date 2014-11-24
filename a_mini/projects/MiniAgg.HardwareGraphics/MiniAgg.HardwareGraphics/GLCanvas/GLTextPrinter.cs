@@ -29,12 +29,48 @@ namespace OpenTkEssTest
         public void Print(char[] buffer, double x, double y)
         {
             int j = buffer.Length;
+            int buffsize = j * 2;
             //get kerning list
-            //if (properGlyphs == null)
-            //{
-            //    properGlyphs = new ProperGlyph[j];
-            //    this.currentFontFace.GetGlyphPos(buffer, 0, j, properGlyphs);
-            //}
+            if (properGlyphs == null)
+            {
+                properGlyphs = new ProperGlyph[buffsize];
+                this.currentFontFace.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
+            }
+
+            double xpos = x;
+            for (int i = 0; i < buffsize; ++i)
+            {
+                uint codepoint = properGlyphs[i].codepoint;
+                if (codepoint == 0)
+                {
+                    break;
+                }
+                //-------------------------------------------------------------
+                FontGlyph glyph = this.currentFontFace.GetGlyphByCodePoint(codepoint); 
+                GLBitmapTexture bmp = new GLBitmapTexture(glyph.glyphImage32);
+                var left = glyph.exportGlyph.img_horiBearingX;
+
+                GLBitmapTexture glbmp = new GLBitmapTexture(glyph.glyphImage32);
+                this.canvas2d.DrawImageInvert(glbmp,
+                    (float)(xpos + (left >> 6)),
+                    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+
+                int w = (glyph.exportGlyph.advanceX) >> 6;
+                xpos += (w);
+                //-------------------------------------------------------------                
+            }
+        }
+
+        public void xPrint(char[] buffer, double x, double y)
+        {
+            int j = buffer.Length;
+            int size = j * 2;
+            //get kerning list
+            if (properGlyphs == null)
+            {
+                properGlyphs = new ProperGlyph[size];
+                this.currentFontFace.GetGlyphPos(buffer, 0, size, properGlyphs);
+            }
 
             double xpos = x;
             for (int i = 0; i < j; ++i)
@@ -53,20 +89,21 @@ namespace OpenTkEssTest
                         } break;
                     default:
                         {
-                            FontGlyph glyph = this.currentFontFace.GetGlyph(c);
+                            FontGlyph glyph = this.currentFontFace.GetGlyphByCodePoint(properGlyphs[i].codepoint);
+                            //FontGlyph glyph = this.currentFontFace.GetGlyph(c);
                             GLBitmapTexture bmp = new GLBitmapTexture(glyph.glyphImage32);
                             var left = glyph.exportGlyph.img_horiBearingX;
-                             
-                            GLBitmapTexture glbmp = new GLBitmapTexture(glyph.glyphImage32); 
-                            this.canvas2d.DrawImageInvert(glbmp,
-                                (float)(xpos + (left >>6)),
-                                (float)(y + (glyph.exportGlyph.bboxYmin >> 6))); 
 
-                            int w = (glyph.exportGlyph.advanceX) >> 6; 
+                            GLBitmapTexture glbmp = new GLBitmapTexture(glyph.glyphImage32);
+                            this.canvas2d.DrawImageInvert(glbmp,
+                                (float)(xpos + (left >> 6)),
+                                (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+
+                            int w = (glyph.exportGlyph.advanceX) >> 6;
                             xpos += (w);
                         } break;
                 }
             }
-        } 
+        }
     }
 }

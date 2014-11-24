@@ -109,32 +109,16 @@ void MyFtGetFaceInfo(FT_Face face,ExportTypeFaceInfo* exportTypeFaceInfo)
 	exportTypeFaceInfo->hasKerning = FT_HAS_KERNING(face);
 };
 
-int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportGlyph *expGlyph)
-{	  		 
-		 if(!FT_Load_Char(myface,charcode,FT_LOAD_RENDER))
-		 {  
-			
-			//1. bounding box
-		 
+int MyFtLoadGlyph(FT_Face myface,unsigned int glyphIndex,ExportGlyph *expGlyph)
+{
+	if(!FT_Load_Glyph(myface,glyphIndex,FT_LOAD_RENDER))
+	{
+		//1. bounding box		 
 			FT_BBox bbox;
 			FT_Glyph glyph;
 			FT_Get_Glyph(myface->glyph,&glyph);
-			FT_Glyph_Get_CBox(glyph,FT_LOAD_NO_SCALE,&bbox);
-
-			
-
-
-		/*	expGlyph->unit_per_em = myface->units_per_EM; 
-			expGlyph->ascender= myface->ascender;
-			expGlyph->descender= myface->descender;
-			expGlyph->height = myface->height; 
-			expGlyph->bboxXmin = myface->bbox.xMin;
-			expGlyph->bboxXmax = myface->bbox.xMax;
-			expGlyph->bboxYmin = myface->bbox.xMax;
-			expGlyph->bboxYmax = myface->bbox.xMax;
-			
-*/			
-			//-------------------------------------------
+			FT_Glyph_Get_CBox(glyph,FT_LOAD_NO_SCALE,&bbox); 
+			 
 			expGlyph->bboxXmin = bbox.xMin;
 			expGlyph->bboxXmax = bbox.xMax;
 			expGlyph->bboxYmin = bbox.yMin;
@@ -158,35 +142,79 @@ int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportGlyph *expGlyph)
 			expGlyph->bitmap_top = myface->glyph->bitmap_top;
 			//---------------------------------------- 
 			expGlyph->outline  = &myface->glyph->outline; 
-		    expGlyph->bitmap  =  &myface->glyph->bitmap;		     
+		    expGlyph->bitmap  =  &myface->glyph->bitmap;		    
+			 
+	}
+	return 0;
+};
+int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportGlyph *expGlyph)
+{	  		 
+		 if(!FT_Load_Char(myface,charcode,FT_LOAD_RENDER))
+		 {  
+			
+			//1. bounding box		 
+			FT_BBox bbox;
+			FT_Glyph glyph;
+			FT_Get_Glyph(myface->glyph,&glyph);
+			FT_Glyph_Get_CBox(glyph,FT_LOAD_NO_SCALE,&bbox); 
+			 
+			expGlyph->bboxXmin = bbox.xMin;
+			expGlyph->bboxXmax = bbox.xMax;
+			expGlyph->bboxYmin = bbox.yMin;
+			expGlyph->bboxYmax = bbox.yMax;
+			//-------------------------------------------
+			auto glypMetric= myface->glyph->metrics;
+			expGlyph->img_height = glypMetric.height;
+			expGlyph->img_width = glypMetric.width;
+			expGlyph->img_horiBearingX  = glypMetric.horiBearingX;
+			expGlyph->img_horiBearingY  = glypMetric.horiBearingY;
+			expGlyph->img_horiAdvance = glypMetric.horiAdvance;
 
+			expGlyph->img_vertBearingX  = glypMetric.vertBearingX;
+			expGlyph->img_horiBearingY  = glypMetric.vertBearingY;
+			expGlyph->img_vertAdvance = glypMetric.vertAdvance;
+			//-------------------------------------------
+
+			expGlyph->advanceX = myface->glyph->advance.x;
+			expGlyph->advanceY = myface->glyph->advance.y;
+			expGlyph->bitmap_left = myface->glyph->bitmap_left;
+			expGlyph->bitmap_top = myface->glyph->bitmap_top;
+			//---------------------------------------- 
+			expGlyph->outline  = &myface->glyph->outline; 
+		    expGlyph->bitmap  =  &myface->glyph->bitmap;		    
+			 
 		 }
 		 return 0;
 };
 	 
+hb_direction_t current_direction;
+hb_script_t current_script;
+hb_language_t current_lang;
+
 int MyFtSetupShapingEngine(FT_Face myface,const char* langName,int langNameLen, int direction,int scriptCode,ExportTypeFaceInfo* exportTypeInfo)
 {
 	 
 	exportTypeInfo->my_hb_ft_font = hb_ft_font_create(myface,NULL); 
-	//--create a buffer for harfbuzz to use
-	auto my_hb_buf = hb_buffer_create();
-	exportTypeInfo->my_hb_buf= my_hb_buf;
 
-	hb_buffer_set_direction(my_hb_buf,(hb_direction_t)direction);
-	//hb_buffer_set_script(my_hb_buf,HB_SCRIPT_LATIN);
-	hb_buffer_set_script(my_hb_buf,HB_SCRIPT_THAI); 
-	hb_buffer_set_language(my_hb_buf,hb_language_from_string(langName,langNameLen)); 
 
-	return 0;
-	
+	//--create a buffer for harfbuzz to use 
+	current_direction = (hb_direction_t)direction;
+	current_script = (hb_script_t)scriptCode;
+	current_lang= hb_language_from_string(langName,langNameLen); 
+	return 0; 
 };
-int MyFtShaping(hb_font_t *my_hb_ft_font,hb_buffer_t *my_hb_buf, 
+
+int MyFtShaping(hb_font_t *my_hb_ft_font, 
 	const uint16_t* text,
 	int charCount,
 	ProperGlyph* properGlyphs)
-{ 
-
-	 
+{	
+	
+	auto my_hb_buf = hb_buffer_create(); 
+	hb_buffer_set_direction(my_hb_buf,current_direction);	 
+	hb_buffer_set_script(my_hb_buf,current_script); 
+	hb_buffer_set_language(my_hb_buf,current_lang); 
+	  
 	hb_buffer_add_utf16(my_hb_buf,text,charCount,0,charCount);
 	hb_shape(my_hb_ft_font,my_hb_buf,NULL,0); 
 	//--------------------------
@@ -208,7 +236,8 @@ int MyFtShaping(hb_font_t *my_hb_ft_font,hb_buffer_t *my_hb_buf,
 		 properGlyphs[p].y_advance =glyph_pos[n].y_advance;
 		 p++;  
 	}
-	 
+	
+	hb_buffer_destroy(my_hb_buf);
 	return 0;
 };
  

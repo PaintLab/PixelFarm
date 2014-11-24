@@ -253,14 +253,7 @@ namespace PixelFarm.Agg
            double x,
            double y)
         {
-            textPrinter.Print(text.ToString(), x, y);
-
-            ////1. parse text              
-            //stringPrinter.DrawFromHintedCache = false;
-            //stringPrinter.LoadText(text);
-            //var vxs = stringPrinter.MakeVxs();
-            //vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
-            //this.gx.Render(vxs, this.fillColor);
+            textPrinter.Print(text.ToString(), x, y); 
 
         }
         //-------------------------------------------------------
