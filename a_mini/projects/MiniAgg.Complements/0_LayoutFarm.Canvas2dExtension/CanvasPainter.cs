@@ -29,6 +29,7 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Font;
+using PixelFarm.Font2;
 
 
 namespace PixelFarm.Agg
@@ -57,6 +58,7 @@ namespace PixelFarm.Agg
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         CurveFlattener curveFlattener = new CurveFlattener();
+        TextPrinter textPrinter;
         //-------------
         public CanvasPainter(Graphics2D graphic2d)
         {
@@ -66,6 +68,7 @@ namespace PixelFarm.Agg
 
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
+            this.textPrinter = new TextPrinter(this);
 
         }
         public void Clear(ColorRGBA color)
@@ -238,19 +241,28 @@ namespace PixelFarm.Agg
             this.Draw(roundRect.MakeVxs());
         }
 
+        //-------------------------------------------------------
+        public PixelFarm.Font2.FontFace CurrentFontFace
+        {
+            get { return this.textPrinter.CurrentFontFace; }
+            set { this.textPrinter.CurrentFontFace = value; }
+        }
         public void DrawString(
            string text,
            double x,
            double y)
         {
+            textPrinter.Print(text.ToString(), x, y);
 
-            //1. parse text              
-            stringPrinter.DrawFromHintedCache = false;
-            stringPrinter.LoadText(text);
-            var vxs = stringPrinter.MakeVxs();
-            vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
-            this.gx.Render(vxs, this.fillColor);
+            ////1. parse text              
+            //stringPrinter.DrawFromHintedCache = false;
+            //stringPrinter.LoadText(text);
+            //var vxs = stringPrinter.MakeVxs();
+            //vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
+            //this.gx.Render(vxs, this.fillColor);
+
         }
+        //-------------------------------------------------------
 
         /// <summary>
         /// fill vertex store
@@ -348,6 +360,8 @@ namespace PixelFarm.Agg
         {
             return curveFlattener.MakeVxs(srcVxs);
         }
+        //---------------- 
+
     }
 
 }

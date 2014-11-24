@@ -62,6 +62,9 @@ namespace PixelFarm.Agg.SimplePainter
 
             //bitmap version
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
+            p.CurrentFontFace = font;
+            p.DrawString("abcd", 50, 60);
+
             //--------------------------------------------------- 
             //p.Fill(fontGlyph.vxs);
 #if DEBUG             

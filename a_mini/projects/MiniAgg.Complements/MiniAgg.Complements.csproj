@@ -51,6 +51,7 @@
     <Compile Include="Font2\FontStore.cs" />
     <Compile Include="Font2\NativeBridgeHB.cs" />
     <Compile Include="Font2\NativeBridgeMyFonts.cs" />
+    <Compile Include="Font2\TextPrinter.cs" />
     <Compile Include="Font2\UnsafeMethods.cs" />
     <Compile Include="Font2\NativeBridgeFreeType.cs" />
     <Compile Include="myfonts_dll.Designer.cs">

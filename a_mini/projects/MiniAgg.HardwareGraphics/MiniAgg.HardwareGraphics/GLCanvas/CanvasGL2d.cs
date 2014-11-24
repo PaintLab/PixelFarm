@@ -30,14 +30,14 @@ namespace OpenTkEssTest
         GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
         CurveFlattener curveFlattener = new CurveFlattener();
-  
+        GLTextPrinter textPriner;
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
             sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
-
+            textPriner = new GLTextPrinter(this);
             SetupFonts();
         }
         public CanvasSmoothMode SmoothMode
@@ -45,7 +45,7 @@ namespace OpenTkEssTest
             get;
             set;
         }
-        
+
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.AccumBufferBit | ClearBufferMask.StencilBufferBit);
@@ -117,6 +117,36 @@ namespace OpenTkEssTest
                     byte* indices = stackalloc byte[6];
                     indices[0] = 0; indices[1] = 1; indices[2] = 2;
                     indices[3] = 2; indices[4] = 3; indices[5] = 0;
+
+                    GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
+                    //------------------------------------------ 
+                    //fill rect with texture
+                    FillRect(x, y, bmp.Width, bmp.Height);
+                    GL.DisableClientState(ArrayCap.TextureCoordArray);
+
+                } GL.Disable(EnableCap.Texture2D);
+            }
+        }
+        public void DrawImageInvert(GLBitmapTexture bmp, float x, float y)
+        {
+            unsafe
+            {
+
+                GL.Enable(EnableCap.Texture2D);
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                    GL.EnableClientState(ArrayCap.TextureCoordArray); //***
+
+                    float* arr = stackalloc float[8];
+                    arr[0] = 0; arr[1] = 0;
+                    arr[2] = 1; arr[3] = 0;
+                    arr[4] = 1; arr[5] = 1;
+                    arr[6] = 0; arr[7] = 1;
+
+                    byte* indices = stackalloc byte[6];
+                    indices[0] = 0; indices[1] = 1; indices[2] = 2;
+                    indices[3] = 2; indices[4] = 3; indices[5] = 0;
+
 
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                     //------------------------------------------ 

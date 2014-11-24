@@ -156,6 +156,9 @@ namespace OpenTkEssTest
                 canvas.FillVxs(fontGlyph.flattenVxs);
                 //canvas.DrawString("ฟ", 50, 50); 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
+                canvas.CurrentFontFace = font;
+
+                canvas.DrawString("1234567890", 80, 50);
                 //---------------------------------------------  
                 GLBitmapTexture bmp= new GLBitmapTexture(fontGlyph.glyphImage32);
                 canvas.DrawImage(bmp, 50, 50); 

@@ -28,9 +28,33 @@ namespace PixelFarm.Font2
             int w = ftBmp->width;
             int stride = ftBmp->pitch;
             int size = stride * h;
+
             //copy it to array  
+            //bmp glyph is bottom up 
+            //so .. invert it...
+
             byte[] buff = new byte[size];
-            Marshal.Copy((IntPtr)ftBmp->buffer, buff, 0, size);
+
+            //------------------------------------------------
+            byte* currentSrc = ftBmp->buffer;
+            int srcpos = size;
+            int targetpos = 0;
+            for (int r = 1; r <= h; ++r)
+            {
+                srcpos -= stride;
+                currentSrc = ftBmp->buffer + srcpos;
+                for (int c = 0; c < stride; ++c)
+                {
+                    buff[targetpos] = *(currentSrc + c);
+                    targetpos++;
+                }
+            }
+             
+            ////------------------------------------------------
+            //IntPtr bmpPtr = (IntPtr)ftBmp->buffer;
+            //Marshal.Copy((IntPtr)ftBmp->buffer, buff, 0, size);
+            ////------------------------------------------------ 
+
             //------------------------------------------------
             fontGlyph.glyImgBuffer8 = buff;
             //convert to 32bpp
@@ -93,7 +117,7 @@ namespace PixelFarm.Font2
             fontGlyph.advanceX = exportTypeFace->advanceX;
             fontGlyph.advanceY = exportTypeFace->advanceY;
             fontGlyph.ascender = exportTypeFace->ascender;
-            
+
             fontGlyph.bboxXmin = exportTypeFace->bboxXmin;
             fontGlyph.bboxXmax = exportTypeFace->bboxXmax;
 
@@ -101,7 +125,7 @@ namespace PixelFarm.Font2
             fontGlyph.bboxYmax = exportTypeFace->bboxYmax;
             fontGlyph.descender = exportTypeFace->descender;
             fontGlyph.height = exportTypeFace->height;
-            
+
 
 
 

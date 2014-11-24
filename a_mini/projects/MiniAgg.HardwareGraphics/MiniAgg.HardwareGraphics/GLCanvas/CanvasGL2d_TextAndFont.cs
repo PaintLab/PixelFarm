@@ -18,20 +18,21 @@ namespace OpenTkEssTest
 {
     partial class CanvasGL2d
     {
-        GraphicsPath myGraphicsPath = new GraphicsPath();
+       
+        
         void SetupFonts()
         {
 
         }
+        public PixelFarm.Font2.FontFace CurrentFontFace
+        {
+            get { return this.textPriner.CurrentFontFace; }
+            set { this.textPriner.CurrentFontFace = value; }
+        }
         public void DrawString(string str, float x, float y)
         {
-            //test bitmap
-             
-
-
-
-
-
+            //test bitmap 
+            this.textPriner.Print(str.ToCharArray(), x, y);
 
             //test----------------------------------
             //myGraphicsPath.AddString(str,
