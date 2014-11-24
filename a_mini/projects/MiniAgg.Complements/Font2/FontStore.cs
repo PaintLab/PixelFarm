@@ -15,48 +15,56 @@ using PixelFarm.Agg;
 
 namespace PixelFarm.Font2
 {
-     
+
     public static class FontStore
     {
 
-        static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>(); 
+        static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>();
         internal static FontGlyph GetGlyph(IntPtr ftFaceHandle, char unicodeChar)
         {
-            
+
             //--------------------------------------------------
             unsafe
-            {   
-                ExportGlyph exportTypeFace = new ExportGlyph(); 
+            {
+                ExportGlyph exportTypeFace = new ExportGlyph();
                 PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
-                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);                
+                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
             }
         }
-        
-        
-        internal static void SetShapingEngine(IntPtr ftFaceHandle)
+
+
+        internal static void SetShapingEngine(FontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
-            string lang = "en";
-            PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(ftFaceHandle,
+            //string lang = "en";
+            //PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(ftFaceHandle,
+            //    lang,
+            //    lang.Length,
+            //    HBDirection.HB_DIRECTION_LTR,
+            //    HBScriptCode.HB_SCRIPT_LATIN); 
+            ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
+            PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(fontFace.Handle,
                 lang,
                 lang.Length,
-                HBDirection.HB_DIRECTION_LTR,
-                HBScriptCode.HB_SCRIPT_LATIN);
+                hb_direction,
+                hb_scriptcode,
+                ref exportTypeInfo);
+            fontFace.HBFont = exportTypeInfo.hb_font;
+            fontFace.HBBuffer = exportTypeInfo.hb_fontBuffer;
+
+
         }
-        public static void ShapeText(string data)
-        {
-            ShapeText(data.ToCharArray());
-        }
-        public static void ShapeText(char[] data)
-        {
-            byte[] unicodeBuffer = Encoding.Unicode.GetBytes(data);
-            unsafe
-            {
-                fixed (byte* u = &unicodeBuffer[0])
-                {
-                    PixelFarm.Font2.NativeMyFontsLib.MyFtShaping(u, 2);
-                }
-            }
-        }
+
+        //public static void ShapeText(char[] data)
+        //{
+        //    byte[] unicodeBuffer = Encoding.Unicode.GetBytes(data);
+        //    unsafe
+        //    {
+        //        fixed (byte* u = &unicodeBuffer[0])
+        //        {
+        //            PixelFarm.Font2.NativeMyFontsLib.MyFtShaping(u, 2);
+        //        }
+        //    }
+        //}
 
         public static FontFace LoadFont(string filename, int pixelSize)
         {
@@ -72,11 +80,18 @@ namespace PixelFarm.Font2
                 IntPtr unmanagedMem = Marshal.AllocHGlobal(filelen);
                 Marshal.Copy(fontFileContent, 0, unmanagedMem, filelen);
 
-                IntPtr faceHandle =  NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen, pixelSize); 
+                IntPtr faceHandle = NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen, pixelSize);
                 if (faceHandle != IntPtr.Zero)
-                {  
+                {
                     //ok pass
                     fontFace = new FontFace(unmanagedMem, faceHandle);
+
+                    ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
+                    NativeMyFontsLib.MyFtGetFaceInfo(faceHandle, ref exportTypeInfo);
+                    fontFace.HasKerning = exportTypeInfo.hasKerning;
+
+                    SetShapingEngine(fontFace, "th", HBDirection.HB_DIRECTION_LTR, HBScriptCode.HB_SCRIPT_THAI);
+
                     fonts.Add(filename, fontFace);
                 }
                 else

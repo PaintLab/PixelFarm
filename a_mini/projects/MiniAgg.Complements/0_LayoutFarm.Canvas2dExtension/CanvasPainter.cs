@@ -106,6 +106,7 @@ namespace PixelFarm.Agg
             ellipse.Reset(x, y, radius, radius);
             gx.Render(ellipse.MakeVxs(), this.fillColor);
         }
+         
         public void FillEllipse(double left, double bottom, double right, double top, int nsteps)
         {
             ellipse.Reset((left + right) * 0.5,

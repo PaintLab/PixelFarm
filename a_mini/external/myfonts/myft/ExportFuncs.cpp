@@ -8,11 +8,9 @@
 #include FT_GLYPH_H
 #include FT_OUTLINE_H 
 
-FT_Library ft;
-//FT_Face myface;
+FT_Library ft; 
 
-hb_font_t *my_hb_ft_font;
-hb_buffer_t *my_hb_buf;
+
 //------------------------------------------------------------
 int force_ucs2_charmap2(FT_Face ftf)
 {
@@ -60,13 +58,15 @@ FT_Face MyFtNewMemoryFace(const void* membuffer, int sizeInBytes,int pxsize)
 {
 		int code= 0;
 		//create on heap
+		 
 		FT_Face myface= new FT_FaceRec_();
+		 
 
 		if(code= FT_New_Memory_Face(ft,(FT_Byte*)membuffer,sizeInBytes,0,&myface))
 		{
 			//error
-			delete myface;
-			return 0; //errpr
+			delete myface; 
+			return NULL;
 		}
 		else
 		{
@@ -96,89 +96,122 @@ void MyFtSetCharSize(FT_Face myface,int char_width,int
 		v_device_resolution);        
 }
 
-void MyFtDoneFace(FT_Face face)
+void MyFtDoneFace(FT_Face  face)
 {
 	if(face)
-	{
-		FT_Done_Face(face);
+	{	
+		FT_Done_Face(face);		 
 	}
 };
 
+void MyFtGetFaceInfo(FT_Face face,ExportTypeFaceInfo* exportTypeFaceInfo)
+{
+	exportTypeFaceInfo->hasKerning = FT_HAS_KERNING(face);
+};
 
-int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportGlyph *exportTypeFace)
+int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportGlyph *expGlyph)
 {	  		 
 		 if(!FT_Load_Char(myface,charcode,FT_LOAD_RENDER))
 		 {  
 			
-			 //----------------------------------------
-			//information about this glyph
-			//exportTypeFace->n= myface->bbox;
-			exportTypeFace->unit_per_em = myface->units_per_EM; 
-			exportTypeFace->ascender= myface->ascender;
-			exportTypeFace->descender= myface->descender;
-			exportTypeFace->height = myface->height;
+			//1. bounding box
+		 
+			FT_BBox bbox;
+			FT_Glyph glyph;
+			FT_Get_Glyph(myface->glyph,&glyph);
+			FT_Glyph_Get_CBox(glyph,FT_LOAD_NO_SCALE,&bbox);
 
 			
-			exportTypeFace->advanceX = myface->glyph->advance.x;
-			exportTypeFace->advanceY = myface->glyph->advance.y;
-		    
-			exportTypeFace->bboxXmin = myface->bbox.xMin;
-			exportTypeFace->bboxXmax = myface->bbox.xMax;
-			exportTypeFace->bboxYmin = myface->bbox.xMax;
-			exportTypeFace->bboxYmax = myface->bbox.xMax;
+
+
+		/*	expGlyph->unit_per_em = myface->units_per_EM; 
+			expGlyph->ascender= myface->ascender;
+			expGlyph->descender= myface->descender;
+			expGlyph->height = myface->height; 
+			expGlyph->bboxXmin = myface->bbox.xMin;
+			expGlyph->bboxXmax = myface->bbox.xMax;
+			expGlyph->bboxYmin = myface->bbox.xMax;
+			expGlyph->bboxYmax = myface->bbox.xMax;
 			
+*/			
+			//-------------------------------------------
+			expGlyph->bboxXmin = bbox.xMin;
+			expGlyph->bboxXmax = bbox.xMax;
+			expGlyph->bboxYmin = bbox.yMin;
+			expGlyph->bboxYmax = bbox.yMax;
+			//-------------------------------------------
+			auto glypMetric= myface->glyph->metrics;
+			expGlyph->img_height = glypMetric.height;
+			expGlyph->img_width = glypMetric.width;
+			expGlyph->img_horiBearingX  = glypMetric.horiBearingX;
+			expGlyph->img_horiBearingY  = glypMetric.horiBearingY;
+			expGlyph->img_horiAdvance = glypMetric.horiAdvance;
+
+			expGlyph->img_vertBearingX  = glypMetric.vertBearingX;
+			expGlyph->img_horiBearingY  = glypMetric.vertBearingY;
+			expGlyph->img_vertAdvance = glypMetric.vertAdvance;
+			//-------------------------------------------
+
+			expGlyph->advanceX = myface->glyph->advance.x;
+			expGlyph->advanceY = myface->glyph->advance.y;
+			expGlyph->bitmap_left = myface->glyph->bitmap_left;
+			expGlyph->bitmap_top = myface->glyph->bitmap_top;
 			//---------------------------------------- 
-			exportTypeFace->outline  = &myface->glyph->outline; 
-		    exportTypeFace->bitmap  =  &myface->glyph->bitmap;		     
+			expGlyph->outline  = &myface->glyph->outline; 
+		    expGlyph->bitmap  =  &myface->glyph->bitmap;		     
 
 		 }
 		 return 0;
 };
 	 
-int MyFtSetupShapingEngine(FT_Face myface,const char* langName,int langNameLen, int direction,int scriptCode)
+int MyFtSetupShapingEngine(FT_Face myface,const char* langName,int langNameLen, int direction,int scriptCode,ExportTypeFaceInfo* exportTypeInfo)
 {
 	 
-	my_hb_ft_font = hb_ft_font_create(myface,NULL); 
-
+	exportTypeInfo->my_hb_ft_font = hb_ft_font_create(myface,NULL); 
 	//--create a buffer for harfbuzz to use
-	my_hb_buf= hb_buffer_create();
+	auto my_hb_buf = hb_buffer_create();
+	exportTypeInfo->my_hb_buf= my_hb_buf;
+
 	hb_buffer_set_direction(my_hb_buf,(hb_direction_t)direction);
 	//hb_buffer_set_script(my_hb_buf,HB_SCRIPT_LATIN);
-	hb_buffer_set_script(my_hb_buf,(hb_script_t)scriptCode); 
+	hb_buffer_set_script(my_hb_buf,HB_SCRIPT_THAI); 
 	hb_buffer_set_language(my_hb_buf,hb_language_from_string(langName,langNameLen)); 
 
 	return 0;
 	
 };
-int MyFtShaping(const uint16_t* text,int charCount)
-{	
-	
-	hb_buffer_add_utf16(my_hb_buf,text,charCount,0,charCount);
-	hb_shape(my_hb_ft_font,my_hb_buf,NULL,0);
+int MyFtShaping(hb_font_t *my_hb_ft_font,hb_buffer_t *my_hb_buf, 
+	const uint16_t* text,
+	int charCount,
+	ProperGlyph* properGlyphs)
+{ 
 
+	 
+	hb_buffer_add_utf16(my_hb_buf,text,charCount,0,charCount);
+	hb_shape(my_hb_ft_font,my_hb_buf,NULL,0); 
 	//--------------------------
-	unsigned int glyph_count;
+	unsigned int glyph_count=0;
+	//count glyph
 	hb_glyph_info_t *glyph_info = hb_buffer_get_glyph_infos(my_hb_buf,&glyph_count);
 	hb_glyph_position_t *glyph_pos= hb_buffer_get_glyph_positions(my_hb_buf,&glyph_count);
-	
+	 
 	int posX=0;
 	int posY=0;
+	int p=0;
+
     for(unsigned int n =0;n<glyph_count;++n)
 	{  
-		 int gx= posX+ (glyph_pos[n].x_offset/64);
-		 int gy= posY+ (glyph_pos[n].x_offset/64);
-		 
-		 //codepoint
-		 auto code_point= glyph_info[n].codepoint;
-		 
-		 //position of each glyph
-		 posX += glyph_pos[n].x_advance /64;
-		 posY += glyph_pos[n].y_advance /64;			 
+		 properGlyphs[p].codepoint = glyph_info[n].codepoint;// 
+		 properGlyphs[p].x_offset  = glyph_pos[n].x_offset;
+		 properGlyphs[p].y_offset = glyph_pos[n].y_offset;
+		 properGlyphs[p].x_advance = glyph_pos[n].x_advance;
+		 properGlyphs[p].y_advance =glyph_pos[n].y_advance;
+		 p++;  
 	}
-	return 0; 
+	 
+	return 0;
 };
-
-
+ 
  void MyFtShutdownLib()
  {
 	 if(ft)

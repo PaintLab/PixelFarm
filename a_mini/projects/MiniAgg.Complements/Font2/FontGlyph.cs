@@ -17,19 +17,23 @@ namespace PixelFarm.Font2
 {
     public class FontGlyph
     {
+        public ExportGlyph exportGlyph;
 
-        public short unit_per_em;
-        public short ascender;
-        public short descender;
-        public short height;
+        //public short unit_per_em;
+        //public short ascender;
+        //public short descender;
+        //public short height;
 
-        public int advanceX;
-        public int advanceY;
+        //public int advanceX;
+        //public int advanceY;
 
-        public int bboxXmin;
-        public int bboxXmax;
-        public int bboxYmin;
-        public int bboxYmax;
+        //public int bboxXmin;
+        //public int bboxXmax;
+        //public int bboxYmin;
+        //public int bboxYmax;
+
+        //public int bitmap_left;
+        //public int bitmap_top;
         //-------------------------
         /// <summary>
         /// original 8bpp image buffer

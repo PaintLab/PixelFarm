@@ -22,7 +22,7 @@ namespace PixelFarm.Font2
 
         unsafe static void CopyGlyphBitmap(ExportGlyph* exportTypeFace, FontGlyph fontGlyph)
         {
-            FT_Bitmap* ftBmp = exportTypeFace->bitmap;
+            FT_Bitmap* ftBmp = (FT_Bitmap*)exportTypeFace->bitmap;
             //image is 8 bits grayscale
             int h = ftBmp->rows;
             int w = ftBmp->width;
@@ -49,7 +49,7 @@ namespace PixelFarm.Font2
                     targetpos++;
                 }
             }
-             
+
             ////------------------------------------------------
             //IntPtr bmpPtr = (IntPtr)ftBmp->buffer;
             //Marshal.Copy((IntPtr)ftBmp->buffer, buff, 0, size);
@@ -110,24 +110,12 @@ namespace PixelFarm.Font2
 
         unsafe internal static FontGlyph BuildGlyph(ExportGlyph* exportTypeFace)
         {
-            FT_Outline outline = *exportTypeFace->outline;
+            FT_Outline outline = (*(FT_Outline*)exportTypeFace->outline);
             FontGlyph fontGlyph = new FontGlyph();
             //------------------------------------------
             //copy font metrics
-            fontGlyph.advanceX = exportTypeFace->advanceX;
-            fontGlyph.advanceY = exportTypeFace->advanceY;
-            fontGlyph.ascender = exportTypeFace->ascender;
-
-            fontGlyph.bboxXmin = exportTypeFace->bboxXmin;
-            fontGlyph.bboxXmax = exportTypeFace->bboxXmax;
-
-            fontGlyph.bboxYmin = exportTypeFace->bboxYmin;
-            fontGlyph.bboxYmax = exportTypeFace->bboxYmax;
-            fontGlyph.descender = exportTypeFace->descender;
-            fontGlyph.height = exportTypeFace->height;
-
-
-
+            fontGlyph.exportGlyph = *(exportTypeFace);
+             
 
 
             //------------------------------------------

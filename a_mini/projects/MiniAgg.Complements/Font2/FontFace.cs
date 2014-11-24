@@ -23,17 +23,20 @@ namespace PixelFarm.Font2
         /// store font file content in unmanaged memory
         /// </summary>
         IntPtr unmanagedMem;
-        
+
         /// <summary>
         /// free type handle (unmanaged mem)
         /// </summary>
         IntPtr ftFaceHandle;
 
+        IntPtr hb_font;
+
+        IntPtr hb_buffer;
+
         /// <summary>
         /// glyph
         /// </summary>
         Dictionary<char, FontGlyph> dicGlyphs = new Dictionary<char, FontGlyph>();
-
         internal FontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
             //store font file in unmanaged memory side
@@ -61,7 +64,7 @@ namespace PixelFarm.Font2
         }
         public void Dispose()
         {
-            
+
             if (this.ftFaceHandle != IntPtr.Zero)
             {
                 NativeMyFontsLib.MyFtDoneFace(this.ftFaceHandle);
@@ -76,6 +79,38 @@ namespace PixelFarm.Font2
             dicGlyphs.Clear();
             dicGlyphs = null;
 
+        }
+        public bool HasKerning { get; set; }
+
+        internal IntPtr HBFont
+        {
+            get { return this.hb_font; }
+            set { this.hb_font = value; }
+        }
+        internal IntPtr HBBuffer
+        {
+            get { return this.hb_buffer; }
+            set { this.hb_buffer = value; }
+        }
+
+        public void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
+        {
+
+            unsafe
+            {
+                byte[] unicodeBuffer = System.Text.Encoding.Unicode.GetBytes(buffer);
+
+                fixed (ProperGlyph* propGlyphH = &properGlyphs[0])
+                fixed (byte* head = &unicodeBuffer[0])
+                {
+                    NativeMyFontsLib.MyFtShaping(
+                        this.hb_font,
+                        this.hb_buffer,
+                        head,
+                        buffer.Length,
+                        propGlyphH);
+                }
+            }
         }
     }
 

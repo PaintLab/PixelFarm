@@ -72,7 +72,8 @@ namespace OpenTkEssTest
 
                 //canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
-
+                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.DrawLine(0, 300, 500, 300);
 
                 //-----------------------------------------------------
                 canvas.FillColor = LayoutFarm.Drawing.Color.Magenta;
@@ -91,7 +92,7 @@ namespace OpenTkEssTest
                         10f,340};
                 //canvas.DrawPolygon(polygonCoords);
                 //fill polygon test                
-                canvas.FillPolygon(polygonCoords); 
+                canvas.FillPolygon(polygonCoords);
 
                 var polygonCoords2 = new float[]{
                         5+10,300,
@@ -99,7 +100,7 @@ namespace OpenTkEssTest
                         50+10,340,
                         10f +10,340};
                 canvas.FillColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
-                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length); 
+                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
 
                 int strkW = 10;
                 canvas.FillColor = LayoutFarm.Drawing.Color.Red;
@@ -152,16 +153,21 @@ namespace OpenTkEssTest
                 var font = PixelFarm.Font2.FontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
                 var fontGlyph = font.GetGlyph('{');
                 //PixelFarm.Font2.MyFonts.SetShapingEngine();
-                
+
                 canvas.FillVxs(fontGlyph.flattenVxs);
-                //canvas.DrawString("ฟ", 50, 50); 
+                 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
                 canvas.CurrentFontFace = font;
 
-                canvas.DrawString("1234567890", 80, 50);
+                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.DrawLine(0, 200, 500, 200);
+                
+                //test Thai words
+                canvas.DrawString("ดุดีดำด่าญญู", 80, 200);
+               
                 //---------------------------------------------  
-                GLBitmapTexture bmp= new GLBitmapTexture(fontGlyph.glyphImage32);
-                canvas.DrawImage(bmp, 50, 50); 
+                GLBitmapTexture bmp = new GLBitmapTexture(fontGlyph.glyphImage32);
+                canvas.DrawImage(bmp, 50, 50);
             });
             form.Show();
         }

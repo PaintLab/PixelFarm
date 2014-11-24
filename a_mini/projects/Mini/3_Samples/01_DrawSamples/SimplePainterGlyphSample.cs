@@ -63,7 +63,10 @@ namespace PixelFarm.Agg.SimplePainter
             //bitmap version
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
             p.CurrentFontFace = font;
-            p.DrawString("abcd", 50, 60);
+            p.DrawString("ดุดีดำด่าง", 50, 200);
+
+            p.StrokeColor = ColorRGBA.Black;
+            p.Line(0, 200, 800, 200);
 
             //--------------------------------------------------- 
             //p.Fill(fontGlyph.vxs);

@@ -15,7 +15,7 @@ using System.IO;
 
 namespace PixelFarm.Font2
 {
-     
+
 
     [StructLayout(LayoutKind.Sequential)]
     struct FT_Vector
@@ -43,7 +43,7 @@ namespace PixelFarm.Font2
         public int flags;           /* outline masks                      */
     }
 
-    
+
 
     /*************************************************************************/
     /*                                                                       */
@@ -119,9 +119,15 @@ namespace PixelFarm.Font2
         public void* palette;
     }
 
-    
-
-
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ProperGlyph
+    {
+       public uint codepoint;
+       public int x_advance;
+       public int y_advance;
+       public int x_offset;
+       public int y_offset;
+    } 
 
 
 }

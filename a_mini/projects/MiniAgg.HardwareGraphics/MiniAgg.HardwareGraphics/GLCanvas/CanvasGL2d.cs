@@ -114,9 +114,9 @@ namespace OpenTkEssTest
                     arr[4] = 1; arr[5] = 0;
                     arr[6] = 0; arr[7] = 0;
 
-                    byte* indices = stackalloc byte[6];
-                    indices[0] = 0; indices[1] = 1; indices[2] = 2;
-                    indices[3] = 2; indices[4] = 3; indices[5] = 0;
+                    //byte* indices = stackalloc byte[6];
+                    //indices[0] = 0; indices[1] = 1; indices[2] = 2;
+                    //indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                     //------------------------------------------ 
@@ -143,9 +143,9 @@ namespace OpenTkEssTest
                     arr[4] = 1; arr[5] = 1;
                     arr[6] = 0; arr[7] = 1;
 
-                    byte* indices = stackalloc byte[6];
-                    indices[0] = 0; indices[1] = 1; indices[2] = 2;
-                    indices[3] = 2; indices[4] = 3; indices[5] = 0;
+                    //byte* indices = stackalloc byte[6];
+                    //indices[0] = 0; indices[1] = 1; indices[2] = 2;
+                    //indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
 
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
@@ -173,9 +173,9 @@ namespace OpenTkEssTest
                     arr[4] = 1; arr[5] = 0;
                     arr[6] = 0; arr[7] = 0;
 
-                    byte* indices = stackalloc byte[6];
-                    indices[0] = 0; indices[1] = 1; indices[2] = 2;
-                    indices[3] = 2; indices[4] = 3; indices[5] = 0;
+                    //byte* indices = stackalloc byte[6];
+                    //indices[0] = 0; indices[1] = 1; indices[2] = 2;
+                    //indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                     //------------------------------------------ 
@@ -319,37 +319,37 @@ namespace OpenTkEssTest
 
         public void DrawRect(float x, float y, float w, float h)
         {
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.AggSmooth:
-                    {
-                        unsafe
-                        {
-                            float* arr = stackalloc float[8];
-                            byte* indices = stackalloc byte[6];
-                            CreateRectCoords(arr, indices, x, y, w, h);
-                            GL.EnableClientState(ArrayCap.VertexArray); //***
-                            //vertex
-                            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                            GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                            GL.DisableClientState(ArrayCap.VertexArray);
-                        }
-                    } break;
-                default:
-                    {
-                        unsafe
-                        {
-                            float* arr = stackalloc float[8];
-                            byte* indices = stackalloc byte[6];
-                            CreateRectCoords(arr, indices, x, y, w, h);
-                            GL.EnableClientState(ArrayCap.VertexArray); //***
-                            //vertex
-                            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                            GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                            GL.DisableClientState(ArrayCap.VertexArray);
-                        }
-                    } break;
-            }
+            //switch (this.SmoothMode)
+            //{
+            //    case CanvasSmoothMode.AggSmooth:
+            //        {
+            //            unsafe
+            //            {
+            //                float* arr = stackalloc float[8];
+            //                byte* indices = stackalloc byte[6];
+            //                CreateRectCoords2(arr, indices, x, y, w, h);
+            //                GL.EnableClientState(ArrayCap.VertexArray); //***
+            //                //vertex
+            //                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+            //                GL.DrawElements(BeginMode.Lines ,6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+            //                GL.DisableClientState(ArrayCap.VertexArray);
+            //            }
+            //        } break;
+            //    default:
+            //        {
+            //            unsafe
+            //            {
+            //                float* arr = stackalloc float[8];
+            //                byte* indices = stackalloc byte[6];
+            //                CreateRectCoords2(arr, indices, x, y, w, h);
+            //                GL.EnableClientState(ArrayCap.VertexArray); //***
+            //                //vertex
+            //                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+            //                GL.DrawElements(BeginMode.Lines, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+            //                GL.DisableClientState(ArrayCap.VertexArray);
+            //            }
+            //        } break;
+            //}
         }
         public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
         {

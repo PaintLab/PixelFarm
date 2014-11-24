@@ -12,6 +12,7 @@ namespace OpenTkEssTest
     {
         FontFace currentFontFace;
         CanvasGL2d canvas2d;
+        ProperGlyph[] properGlyphs = null;
         public GLTextPrinter(CanvasGL2d canvas2d)
         {
             this.canvas2d = canvas2d;
@@ -28,6 +29,13 @@ namespace OpenTkEssTest
         public void Print(char[] buffer, double x, double y)
         {
             int j = buffer.Length;
+            //get kerning list
+            //if (properGlyphs == null)
+            //{
+            //    properGlyphs = new ProperGlyph[j];
+            //    this.currentFontFace.GetGlyphPos(buffer, 0, j, properGlyphs);
+            //}
+
             double xpos = x;
             for (int i = 0; i < j; ++i)
             {
@@ -47,12 +55,18 @@ namespace OpenTkEssTest
                         {
                             FontGlyph glyph = this.currentFontFace.GetGlyph(c);
                             GLBitmapTexture bmp = new GLBitmapTexture(glyph.glyphImage32);
-                            this.canvas2d.DrawImageInvert(bmp, (float)xpos, (float)y);
-                            bmp.Dispose();
-                            xpos += (glyph.advanceX / 64);
+                            var left = glyph.exportGlyph.img_horiBearingX;
+                             
+                            GLBitmapTexture glbmp = new GLBitmapTexture(glyph.glyphImage32); 
+                            this.canvas2d.DrawImageInvert(glbmp,
+                                (float)(xpos + (left >>6)),
+                                (float)(y + (glyph.exportGlyph.bboxYmin >> 6))); 
+
+                            int w = (glyph.exportGlyph.advanceX) >> 6; 
+                            xpos += (w);
                         } break;
                 }
             }
-        }
+        } 
     }
 }

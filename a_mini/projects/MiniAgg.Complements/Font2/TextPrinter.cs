@@ -36,6 +36,9 @@ namespace PixelFarm.Font2
         {
             int j = buffer.Length;
             double xpos = x;
+
+            //get kerning list
+
             for (int i = 0; i < j; ++i)
             {
                 char c = buffer[i];
@@ -53,8 +56,16 @@ namespace PixelFarm.Font2
                     default:
                         {
                             FontGlyph glyph = this.currentFontFace.GetGlyph(c);
-                            this.painter.DrawImage(glyph.glyphImage32, xpos, y);
-                            xpos += (glyph.advanceX / 64);
+                           
+                            var left = glyph.exportGlyph.img_horiBearingX;
+
+
+                            this.painter.DrawImage(glyph.glyphImage32,
+                                (float)(xpos + (left >> 6)),
+                                (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+
+                            int w = (glyph.exportGlyph.advanceX) >> 6;
+                            xpos += (w); 
                         } break;
                 }
             }
