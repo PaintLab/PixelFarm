@@ -17,7 +17,7 @@ namespace PixelFarm.Font2
 {
 
     [StructLayout(LayoutKind.Sequential)]
-    unsafe struct ExportTypeFace
+    unsafe struct ExportGlyph
     {
 
         public short unit_per_em;
@@ -50,11 +50,11 @@ namespace PixelFarm.Font2
         {
 
             //dynamic load dll
-            
+
             string appBaseDir = AppDomain.CurrentDomain.BaseDirectory;
             LoadLib(appBaseDir + "\\" + myfontLib);
 
-            
+
             //---------------
             //init library
             int initResult = 0;
@@ -69,7 +69,7 @@ namespace PixelFarm.Font2
             //---------------
             nativeModuleHolder = new NativeModuleHolder();
 
-        } 
+        }
         [DllImport(myfontLib)]
         public static extern int MyFtLibGetVersion();
 
@@ -84,11 +84,15 @@ namespace PixelFarm.Font2
         [DllImport(myfontLib)]
         public static extern void MyFtDoneFace(IntPtr faceHandle);
 
+        [DllImport(myfontLib)]
+        public static extern void MyFtSetPixelSizes(IntPtr myface, int pxsize);
+        [DllImport(myfontLib)]
+        public static extern void MyFtSetCharSize(IntPtr myface, int char_width, int char_height, int h_device_resolution, int v_device_resolution);
+
+
 
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, ref ExportTypeFace ftOutline);
-
-
+        public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, ref ExportGlyph ftOutline); 
 
         //============================================================================
         //HB shaping ....
@@ -96,6 +100,11 @@ namespace PixelFarm.Font2
         public static extern int MyFtSetupShapingEngine(IntPtr faceHandle, string langName, int langNameLen, HBDirection hbDirection, int hbScriptCode);
         [DllImport(myfontLib)]
         public static unsafe extern int MyFtShaping(byte* utf8Buffer, int charCount);
+
+
+
+
+
 
 
         static bool isLoaded = false;
@@ -124,7 +133,7 @@ namespace PixelFarm.Font2
             }
             isLoaded = true;
             return true;
-        } 
+        }
 
 
         class NativeModuleHolder : IDisposable

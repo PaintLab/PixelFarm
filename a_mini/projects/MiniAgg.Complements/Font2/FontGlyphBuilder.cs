@@ -20,7 +20,7 @@ namespace PixelFarm.Font2
     {
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
 
-        unsafe static void CopyGlyphBitmap(ExportTypeFace* exportTypeFace, FontGlyph fontGlyph)
+        unsafe static void CopyGlyphBitmap(ExportGlyph* exportTypeFace, FontGlyph fontGlyph)
         {
             FT_Bitmap* ftBmp = exportTypeFace->bitmap;
             //image is 8 bits grayscale
@@ -32,7 +32,7 @@ namespace PixelFarm.Font2
             byte[] buff = new byte[size];
             Marshal.Copy((IntPtr)ftBmp->buffer, buff, 0, size);
             //------------------------------------------------
-
+            fontGlyph.glyImgBuffer8 = buff;
             //convert to 32bpp
             //make gray value as alpha channel color value
             ActualImage actualImage = new ActualImage(w, h, Agg.Image.PixelFormat.Rgba32);
@@ -84,11 +84,29 @@ namespace PixelFarm.Font2
                 (v1.y + v2.y) / 2);
         }
 
-        unsafe internal static FontGlyph BuildGlyph(ExportTypeFace* exportTypeFace)
+        unsafe internal static FontGlyph BuildGlyph(ExportGlyph* exportTypeFace)
         {
             FT_Outline outline = *exportTypeFace->outline;
             FontGlyph fontGlyph = new FontGlyph();
+            //------------------------------------------
+            //copy font metrics
+            fontGlyph.advanceX = exportTypeFace->advanceX;
+            fontGlyph.advanceY = exportTypeFace->advanceY;
+            fontGlyph.ascender = exportTypeFace->ascender;
+            
+            fontGlyph.bboxXmin = exportTypeFace->bboxXmin;
+            fontGlyph.bboxXmax = exportTypeFace->bboxXmax;
 
+            fontGlyph.bboxYmin = exportTypeFace->bboxYmin;
+            fontGlyph.bboxYmax = exportTypeFace->bboxYmax;
+            fontGlyph.descender = exportTypeFace->descender;
+            fontGlyph.height = exportTypeFace->height;
+            
+
+
+
+
+            //------------------------------------------
             //copy raw image 
             CopyGlyphBitmap(exportTypeFace, fontGlyph);
 

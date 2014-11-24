@@ -10,7 +10,7 @@
 
 
 
-struct ExportTypeFace
+struct ExportGlyph
 {
 	
 	FT_Short unit_per_em;
@@ -39,8 +39,12 @@ extern "C"{
 	//MY_DLL_EXPORT int MyFtNewFace(const char* faceName,int pxsize);
 	MY_DLL_EXPORT FT_Face MyFtNewMemoryFace(const void* membuffer,int sizeInBytes,int pxsize);
 	MY_DLL_EXPORT void MyFtDoneFace(FT_Face face);
-
-	MY_DLL_EXPORT int MyFtLoadChar(FT_Face myface,unsigned int charcode,ExportTypeFace *exportTypeFace);
+	
+	MY_DLL_EXPORT void MyFtSetPixelSizes(FT_Face myface,int pxsize);
+	MY_DLL_EXPORT void MyFtSetCharSize(FT_Face myface,int char_width,int char_height,int h_device_resolution, int v_device_resolution);
+		
+	MY_DLL_EXPORT int MyFtLoadChar(FT_Face myface,unsigned int charcode,ExportGlyph *exportTypeFace);
+		
 	MY_DLL_EXPORT int MyFtSetupShapingEngine(FT_Face myface,const char* langName,int langNameLen,int direction,int scriptCode);
 	MY_DLL_EXPORT int MyFtShaping(const uint16_t* text,int charCount); 
 }

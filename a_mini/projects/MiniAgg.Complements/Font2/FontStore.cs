@@ -18,17 +18,15 @@ namespace PixelFarm.Font2
      
     public static class FontStore
     {
+
         static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>(); 
-        
-        
-       
         internal static FontGlyph GetGlyph(IntPtr ftFaceHandle, char unicodeChar)
         {
             
             //--------------------------------------------------
             unsafe
             {   
-                ExportTypeFace exportTypeFace = new ExportTypeFace(); 
+                ExportGlyph exportTypeFace = new ExportGlyph(); 
                 PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
                 return FontGlyphBuilder.BuildGlyph(&exportTypeFace);                
             }
@@ -74,15 +72,16 @@ namespace PixelFarm.Font2
                 IntPtr unmanagedMem = Marshal.AllocHGlobal(filelen);
                 Marshal.Copy(fontFileContent, 0, unmanagedMem, filelen);
 
-                IntPtr faceHandle = PixelFarm.Font2.NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen, pixelSize);
+                IntPtr faceHandle =  NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen, pixelSize); 
                 if (faceHandle != IntPtr.Zero)
-                {
+                {  
                     //ok pass
                     fontFace = new FontFace(unmanagedMem, faceHandle);
                     fonts.Add(filename, fontFace);
                 }
                 else
                 {
+
                     //load font error
                     Marshal.FreeHGlobal(unmanagedMem);
                 }

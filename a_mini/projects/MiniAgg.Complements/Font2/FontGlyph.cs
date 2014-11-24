@@ -17,6 +17,20 @@ namespace PixelFarm.Font2
 {
     public class FontGlyph
     {
+
+        public short unit_per_em;
+        public short ascender;
+        public short descender;
+        public short height;
+
+        public int advanceX;
+        public int advanceY;
+
+        public int bboxXmin;
+        public int bboxXmax;
+        public int bboxYmin;
+        public int bboxYmax;
+        //-------------------------
         /// <summary>
         /// original 8bpp image buffer
         /// </summary>
@@ -34,5 +48,6 @@ namespace PixelFarm.Font2
         /// flaten version of original glyph outline
         /// </summary>
         public VertexStore flattenVxs;
+
     }
 }

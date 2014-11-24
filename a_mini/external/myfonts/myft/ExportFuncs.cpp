@@ -70,21 +70,32 @@ FT_Face MyFtNewMemoryFace(const void* membuffer, int sizeInBytes,int pxsize)
 		}
 		else
 		{
-			
+			force_ucs2_charmap2(myface);	
 			FT_Set_Pixel_Sizes(myface,0,pxsize);
 			//-------------------------------------
-			auto num_faces= myface->num_faces;
-			auto face_index= myface->face_index;
-			auto num_glyph= myface->num_glyphs;
-			auto style_name= myface->style_name;
-			auto familyName= myface->family_name; 
-			//-------------------------------------  
-
-			force_ucs2_charmap2(myface);			
+			//auto num_faces= myface->num_faces;
+			//auto face_index= myface->face_index;
+			//auto num_glyph= myface->num_glyphs;
+			//auto style_name= myface->style_name;
+			//auto familyName= myface->family_name; 
+			////------------------------------------- 
 			return myface;
 		} 
-
 }
+void MyFtSetPixelSizes(FT_Face myface,int pxsize)
+{
+	FT_Set_Pixel_Sizes(myface,0,pxsize);
+}
+void MyFtSetCharSize(FT_Face myface,int char_width,int 
+	char_height,int h_device_resolution, int v_device_resolution)
+{
+	FT_Set_Char_Size(myface,
+		char_width, // in  1/64th of points
+		char_height, // in 1/64th of points
+		h_device_resolution,
+		v_device_resolution);        
+}
+
 void MyFtDoneFace(FT_Face face)
 {
 	if(face)
@@ -94,7 +105,7 @@ void MyFtDoneFace(FT_Face face)
 };
 
 
-int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportTypeFace *exportTypeFace)
+int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportGlyph *exportTypeFace)
 {	  		 
 		 if(!FT_Load_Char(myface,charcode,FT_LOAD_RENDER))
 		 {  
@@ -107,6 +118,7 @@ int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportTypeFace *exportTyp
 			exportTypeFace->descender= myface->descender;
 			exportTypeFace->height = myface->height;
 
+			
 			exportTypeFace->advanceX = myface->glyph->advance.x;
 			exportTypeFace->advanceY = myface->glyph->advance.y;
 		    
@@ -114,7 +126,7 @@ int MyFtLoadChar(FT_Face myface,unsigned int charcode, ExportTypeFace *exportTyp
 			exportTypeFace->bboxXmax = myface->bbox.xMax;
 			exportTypeFace->bboxYmin = myface->bbox.xMax;
 			exportTypeFace->bboxYmax = myface->bbox.xMax;
-
+			
 			//---------------------------------------- 
 			exportTypeFace->outline  = &myface->glyph->outline; 
 		    exportTypeFace->bitmap  =  &myface->glyph->bitmap;		     
