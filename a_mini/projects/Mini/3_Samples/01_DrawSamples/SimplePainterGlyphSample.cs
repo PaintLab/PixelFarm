@@ -22,11 +22,14 @@ namespace PixelFarm.Agg.SimplePainter
     public class SimplePainterGlyphSample : DemoBase
     {
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-        PixelFarm.Font2.Font font;
+        PixelFarm.Font2.Font font1;
+        PixelFarm.Font2.Font font2;
         public override void Init()
         {
             //load font ?
-            font = PixelFarm.Font2.FontStore.LoadFont(fontfile, 64);
+            font1 = PixelFarm.Font2.FontStore.LoadFont(fontfile, 64);
+            font2 = PixelFarm.Font2.FontStore.LoadFont(fontfile, 10);
+
         }
         public override void Draw(Graphics2D g)
         {
@@ -55,19 +58,22 @@ namespace PixelFarm.Agg.SimplePainter
 
             //p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
             //--------------------------------------------------- 
-            var fontGlyph = font.GetGlyph('{');
+            var fontGlyph = font1.GetGlyph('{');
             //outline version
             var flat_v = p.FlattenCurves(fontGlyph.flattenVxs);
             p.Fill(flat_v);
 
             //bitmap version
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
-            p.CurrentFont = font;
+            p.CurrentFont = font1;
             p.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
-            //p.DrawString("12345", 50, 200);
-
+            //p.DrawString("12345", 50, 200); 
             p.StrokeColor = ColorRGBA.Black;
             p.Line(0, 200, 800, 200);
+
+
+            p.CurrentFont = font2;
+            p.DrawString("ดุดีดำด่าด่ำญญู", 80, 100);
 
             //--------------------------------------------------- 
             //p.Fill(fontGlyph.vxs);

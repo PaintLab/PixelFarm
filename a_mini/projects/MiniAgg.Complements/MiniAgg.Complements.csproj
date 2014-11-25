@@ -38,7 +38,6 @@
       <HintPath>..\..\..\AggTests\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="03_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />

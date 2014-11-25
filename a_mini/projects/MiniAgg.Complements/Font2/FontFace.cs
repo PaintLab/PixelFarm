@@ -108,21 +108,25 @@ namespace PixelFarm.Font2
 
         internal FontGlyph ReloadGlyphFromIndex(uint glyphIndex, int pixelSize)
         {
-            if (pixelSize != currentFacePixelSize)
+            if (currentFacePixelSize != pixelSize)
             {
+                currentFacePixelSize = pixelSize;
                 NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
             }
+
+            //--------------------------------------------------
             unsafe
             {
                 ExportGlyph exportTypeFace = new ExportGlyph();
                 PixelFarm.Font2.NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
                 return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
-            } 
+            }
         }
         internal FontGlyph ReloadGlyphFromChar(char unicodeChar, int pixelSize)
         {
-            if (pixelSize != currentFacePixelSize)
+            if (currentFacePixelSize != pixelSize)
             {
+                currentFacePixelSize = pixelSize;
                 NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
             }
             //--------------------------------------------------
@@ -132,7 +136,7 @@ namespace PixelFarm.Font2
                 PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
                 return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
             }
-             
+
         }
     }
 

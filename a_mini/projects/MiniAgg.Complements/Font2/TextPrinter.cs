@@ -19,13 +19,13 @@ namespace PixelFarm.Font2
     {
         Font currentFont;
         CanvasPainter painter;
-       
+
 
         public TextPrinter(CanvasPainter painter)
         {
             this.painter = painter;
         }
-        public Font CurrentFont 
+        public Font CurrentFont
         {
             get { return this.currentFont; }
             set { this.currentFont = value; }
@@ -36,15 +36,16 @@ namespace PixelFarm.Font2
         }
         public void Print(char[] buffer, double x, double y)
         {
-            ProperGlyph[] properGlyphs = null;
+          
             int j = buffer.Length;
             int buffsize = j * 2;
             //get kerning list
-            if (properGlyphs == null)
-            {
-                properGlyphs = new ProperGlyph[buffsize];
-                FontShaping.GetGlyphPos(currentFont, buffer, 0, buffsize, properGlyphs);                 
-            }
+
+
+
+            ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
+            FontShaping.GetGlyphPos(currentFont, buffer, 0, buffsize, properGlyphs);
+
 
             double xpos = x;
             for (int i = 0; i < buffsize; ++i)
@@ -55,7 +56,7 @@ namespace PixelFarm.Font2
                     break;
                 }
                 //-------------------------------------------------------------
-                FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint); 
+                FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
                 var left = glyph.exportGlyph.img_horiBearingX;
 
 
