@@ -157,18 +157,18 @@ namespace OpenTkEssTest
                 canvas.FillVxs(fontGlyph.flattenVxs);
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
-                canvas.CurrentFontFace = font;
+                canvas.CurrentFont = font;
 
                 canvas.FillColor = LayoutFarm.Drawing.Color.Black;
                 canvas.DrawLine(0, 200, 500, 200);
 
                 //test Thai words
                 canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
-                //canvas.DrawString("1234567890", 80, 200);
-
-                //---------------------------------------------  
+                //canvas.DrawString("1234567890", 80, 200); 
                 GLBitmapTexture bmp = new GLBitmapTexture(fontGlyph.glyphImage32);
                 canvas.DrawImage(bmp, 50, 50);
+                bmp.Dispose();
+
             });
             form.Show();
         }

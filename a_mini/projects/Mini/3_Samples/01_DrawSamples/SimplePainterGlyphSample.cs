@@ -12,9 +12,8 @@ using PixelFarm.Agg.VertexSource;
 using PixelFarm.Agg.Font;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
-
-
 using Mini;
+
 namespace PixelFarm.Agg.SimplePainter
 {
 
@@ -23,9 +22,10 @@ namespace PixelFarm.Agg.SimplePainter
     public class SimplePainterGlyphSample : DemoBase
     {
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-        PixelFarm.Font2.FontFace font;
+        PixelFarm.Font2.Font font;
         public override void Init()
         {
+            //load font ?
             font = PixelFarm.Font2.FontStore.LoadFont(fontfile, 64);
         }
         public override void Draw(Graphics2D g)
@@ -57,25 +57,25 @@ namespace PixelFarm.Agg.SimplePainter
             //--------------------------------------------------- 
             var fontGlyph = font.GetGlyph('{');
             //outline version
-            var flat_v = p.FlattenCurves(fontGlyph.flattenVxs);            
+            var flat_v = p.FlattenCurves(fontGlyph.flattenVxs);
             p.Fill(flat_v);
 
             //bitmap version
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
-            p.CurrentFontFace = font;
+            p.CurrentFont = font;
             p.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
             //p.DrawString("12345", 50, 200);
-           
+
             p.StrokeColor = ColorRGBA.Black;
             p.Line(0, 200, 800, 200);
 
             //--------------------------------------------------- 
             //p.Fill(fontGlyph.vxs);
-#if DEBUG             
+#if DEBUG
             //p.Fill(fontGlyph.vxs); 
 
-           
-           // dbugVxsDrawPoints.DrawVxsPoints(flat_v, g);
+
+            // dbugVxsDrawPoints.DrawVxsPoints(flat_v, g);
             //dbugVxsDrawPoints.DrawVxsPoints(fontGlyph.vxs, g); 
 #endif
 

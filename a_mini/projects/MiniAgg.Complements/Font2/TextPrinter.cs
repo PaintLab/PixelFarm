@@ -17,7 +17,7 @@ namespace PixelFarm.Font2
 {
     class TextPrinter
     {
-        FontFace currentFontFace;
+        Font currentFont;
         CanvasPainter painter;
        
 
@@ -25,10 +25,10 @@ namespace PixelFarm.Font2
         {
             this.painter = painter;
         }
-        public FontFace CurrentFontFace
+        public Font CurrentFont 
         {
-            get { return this.currentFontFace; }
-            set { this.currentFontFace = value; }
+            get { return this.currentFont; }
+            set { this.currentFont = value; }
         }
         public void Print(string t, double x, double y)
         {
@@ -43,7 +43,7 @@ namespace PixelFarm.Font2
             if (properGlyphs == null)
             {
                 properGlyphs = new ProperGlyph[buffsize];
-                this.currentFontFace.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
+                FontShaping.GetGlyphPos(currentFont, buffer, 0, buffsize, properGlyphs);                 
             }
 
             double xpos = x;
@@ -55,7 +55,7 @@ namespace PixelFarm.Font2
                     break;
                 }
                 //-------------------------------------------------------------
-                FontGlyph glyph = this.currentFontFace.GetGlyphByCodePoint(codepoint); 
+                FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint); 
                 var left = glyph.exportGlyph.img_horiBearingX;
 
 

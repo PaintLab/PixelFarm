@@ -46,8 +46,10 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\FilterMan.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="Font2\FontFace.cs" />
+    <Compile Include="Font2\Font.cs" />
     <Compile Include="Font2\FontGlyph.cs" />
     <Compile Include="Font2\FontGlyphBuilder.cs" />
+    <Compile Include="Font2\FontShaping.cs" />
     <Compile Include="Font2\FontStore.cs" />
     <Compile Include="Font2\NativeBridgeHB.cs" />
     <Compile Include="Font2\NativeBridgeMyFonts.cs" />

@@ -2,25 +2,24 @@
 using System.Text;
 using System;
 using OpenTK.Graphics.OpenGL;
-using Tesselate;
-using System.Drawing;
+using Tesselate; 
 using PixelFarm.Font2;
 
 namespace OpenTkEssTest
 {
     class GLTextPrinter
     {
-        FontFace currentFontFace;
+        Font currentFont;
         CanvasGL2d canvas2d;
         ProperGlyph[] properGlyphs = null;
         public GLTextPrinter(CanvasGL2d canvas2d)
         {
             this.canvas2d = canvas2d;
         }
-        public FontFace CurrentFontFace
+        public Font CurrentFont 
         {
-            get { return this.currentFontFace; }
-            set { this.currentFontFace = value; }
+            get { return this.currentFont; }
+            set { this.currentFont = value; }
         }
         public void Print(string t, double x, double y)
         {
@@ -33,8 +32,8 @@ namespace OpenTkEssTest
             //get kerning list
             if (properGlyphs == null)
             {
-                properGlyphs = new ProperGlyph[buffsize];
-                this.currentFontFace.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
+                properGlyphs = new ProperGlyph[buffsize]; 
+                FontShaping.GetGlyphPos(this.currentFont, buffer, 0, buffsize, properGlyphs); 
             }
 
             double xpos = x;
@@ -45,18 +44,20 @@ namespace OpenTkEssTest
                 {
                     break;
                 }
+
+
                 //-------------------------------------------------------------
-                FontGlyph glyph = this.currentFontFace.GetGlyphByCodePoint(codepoint); 
+                FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
                 GLBitmapTexture bmp = new GLBitmapTexture(glyph.glyphImage32);
                 var left = glyph.exportGlyph.img_horiBearingX;
-
-                GLBitmapTexture glbmp = new GLBitmapTexture(glyph.glyphImage32);
-                this.canvas2d.DrawImageInvert(glbmp,
+                this.canvas2d.DrawImageInvert(bmp,
                     (float)(xpos + (left >> 6)),
                     (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
 
                 int w = (glyph.exportGlyph.advanceX) >> 6;
                 xpos += (w);
+
+                bmp.Dispose(); //temp here 
                 //-------------------------------------------------------------                
             }
         }
@@ -68,8 +69,8 @@ namespace OpenTkEssTest
             //get kerning list
             if (properGlyphs == null)
             {
-                properGlyphs = new ProperGlyph[size];
-                this.currentFontFace.GetGlyphPos(buffer, 0, size, properGlyphs);
+                properGlyphs = new ProperGlyph[size];                 
+                FontShaping.GetGlyphPos(this.currentFont, buffer, 0, size, properGlyphs);
             }
 
             double xpos = x;
@@ -89,7 +90,7 @@ namespace OpenTkEssTest
                         } break;
                     default:
                         {
-                            FontGlyph glyph = this.currentFontFace.GetGlyphByCodePoint(properGlyphs[i].codepoint);
+                            FontGlyph glyph =  this.currentFont.GetGlyphByIndex(properGlyphs[i].codepoint);
                             //FontGlyph glyph = this.currentFontFace.GetGlyph(c);
                             GLBitmapTexture bmp = new GLBitmapTexture(glyph.glyphImage32);
                             var left = glyph.exportGlyph.img_horiBearingX;

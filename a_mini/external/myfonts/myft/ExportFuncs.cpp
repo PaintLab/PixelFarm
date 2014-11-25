@@ -54,13 +54,12 @@ int MyFtInitLib()
 //		}
 //};
 
-FT_Face MyFtNewMemoryFace(const void* membuffer, int sizeInBytes,int pxsize)
+FT_Face MyFtNewMemoryFace(const void* membuffer, int sizeInBytes )
 {
 		int code= 0;
 		//create on heap
 		 
-		FT_Face myface= new FT_FaceRec_();
-		 
+		FT_Face myface= new FT_FaceRec_(); 
 
 		if(code= FT_New_Memory_Face(ft,(FT_Byte*)membuffer,sizeInBytes,0,&myface))
 		{
@@ -71,7 +70,7 @@ FT_Face MyFtNewMemoryFace(const void* membuffer, int sizeInBytes,int pxsize)
 		else
 		{
 			force_ucs2_charmap2(myface);	
-			FT_Set_Pixel_Sizes(myface,0,pxsize);
+			//FT_Set_Pixel_Sizes(myface,0,pxsize);
 			//-------------------------------------
 			//auto num_faces= myface->num_faces;
 			//auto face_index= myface->face_index;
@@ -85,6 +84,19 @@ FT_Face MyFtNewMemoryFace(const void* membuffer, int sizeInBytes,int pxsize)
 void MyFtSetPixelSizes(FT_Face myface,int pxsize)
 {
 	FT_Set_Pixel_Sizes(myface,0,pxsize);
+	 
+}
+void MyFtSetCharSizes(FT_Face myface,FT_F26Dot6  char_width,
+                    FT_F26Dot6  char_height,
+                    FT_UInt     horz_resolution,
+                    FT_UInt     vert_resolution)
+{
+	 
+	FT_Set_Char_Size(myface,
+		char_width,
+		char_height,
+		horz_resolution,
+		vert_resolution);
 }
 void MyFtSetCharSize(FT_Face myface,int char_width,int 
 	char_height,int h_device_resolution, int v_device_resolution)

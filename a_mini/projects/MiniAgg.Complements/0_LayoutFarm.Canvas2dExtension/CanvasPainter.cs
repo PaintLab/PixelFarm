@@ -243,10 +243,10 @@ namespace PixelFarm.Agg
         }
 
         //-------------------------------------------------------
-        public PixelFarm.Font2.FontFace CurrentFontFace
+        public PixelFarm.Font2.Font CurrentFont
         {
-            get { return this.textPrinter.CurrentFontFace; }
-            set { this.textPrinter.CurrentFontFace = value; }
+            get { return this.textPrinter.CurrentFont; }
+            set { this.textPrinter.CurrentFont = value; }
         }
         public void DrawString(
            string text,

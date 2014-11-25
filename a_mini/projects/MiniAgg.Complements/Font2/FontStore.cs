@@ -19,28 +19,8 @@ namespace PixelFarm.Font2
     public static class FontStore
     {
 
-        static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>();
-        internal static FontGlyph GetGlyph(IntPtr ftFaceHandle, char unicodeChar)
-        {
-            //--------------------------------------------------
-            unsafe
-            {
-                ExportGlyph exportTypeFace = new ExportGlyph();
-                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
-                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
-            }
-        }
-        internal static FontGlyph GetGlyphByGlyphIndex(IntPtr ftFaceHandle, uint glyphIndex)
-        {
-            //--------------------------------------------------
-            unsafe
-            {
-                ExportGlyph exportTypeFace = new ExportGlyph();
-                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
-                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
-            }
-        }
-
+        static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>(); 
+        
         internal static void SetShapingEngine(FontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
             //string lang = "en";
@@ -56,49 +36,46 @@ namespace PixelFarm.Font2
                 hb_direction,
                 hb_scriptcode,
                 ref exportTypeInfo);
-            fontFace.HBFont = exportTypeInfo.hb_font; 
-
-
+            fontFace.HBFont = exportTypeInfo.hb_font;
         }
-
-        //public static void ShapeText(char[] data)
-        //{
-        //    byte[] unicodeBuffer = Encoding.Unicode.GetBytes(data);
-        //    unsafe
-        //    {
-        //        fixed (byte* u = &unicodeBuffer[0])
-        //        {
-        //            PixelFarm.Font2.NativeMyFontsLib.MyFtShaping(u, 2);
-        //        }
-        //    }
-        //}
-
-        public static FontFace LoadFont(string filename, int pixelSize)
+ 
+        public static Font LoadFont(string filename, int fontPointSize)
         {
             //load font from specific file 
             FontFace fontFace;
             if (!fonts.TryGetValue(filename, out fontFace))
             {
-
                 //if not found
                 //then load it
                 byte[] fontFileContent = File.ReadAllBytes(filename);
                 int filelen = fontFileContent.Length;
                 IntPtr unmanagedMem = Marshal.AllocHGlobal(filelen);
                 Marshal.Copy(fontFileContent, 0, unmanagedMem, filelen);
+                //---------------------------------------------------
+                //convert font point size to pixel size
 
-                IntPtr faceHandle = NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen, pixelSize);
+
+                //---------------------------------------------------
+                IntPtr faceHandle = NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen);
+
                 if (faceHandle != IntPtr.Zero)
                 {
                     //ok pass
                     fontFace = new FontFace(unmanagedMem, faceHandle);
+                    //-------------------
+                    //test change font size
+                    //NativeMyFontsLib.MyFtSetCharSize(faceHandle,
+                    //    0, //char_width in 1/64th of points, value 0 => same as height
+                    //    16 * 64,//16 pt //char_height in 1*64 of ppoints
+                    //    96,//horizontal device resolution (eg screen resolution 96 dpi)
+                    //    96);// vertical device resolution 
 
+                    //-------------------
                     ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
                     NativeMyFontsLib.MyFtGetFaceInfo(faceHandle, ref exportTypeInfo);
                     fontFace.HasKerning = exportTypeInfo.hasKerning;
-
+                    //for shaping engine***
                     SetShapingEngine(fontFace, "th", HBDirection.HB_DIRECTION_LTR, HBScriptCode.HB_SCRIPT_THAI);
-
                     fonts.Add(filename, fontFace);
                 }
                 else
@@ -107,11 +84,26 @@ namespace PixelFarm.Font2
                     //load font error
                     Marshal.FreeHGlobal(unmanagedMem);
                 }
-
             }
-            return fontFace;
+            //-------------------------------------------------
+            //get font that specific size from found font face
+            //-------------------------------------------------
 
+            return fontFace.GetFontAtPointSize(fontPointSize);
+
+           
         }
+
+
+        //---------------------------------------------------
+        //helper function
+        public static int ConvertFromPointUnitToPixelUnit(float point)
+        {
+            //from FreeType Documenetation
+            //pixel_size = (pointsize * (resolution/72);
+            return (int)(point * 96 / 72);
+        }
+
     }
 
 }

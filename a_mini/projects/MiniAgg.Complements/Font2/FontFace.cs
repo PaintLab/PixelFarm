@@ -3,20 +3,15 @@
 //use FreeType and HarfBuzz wrapper
 //native dll lib
 //plan?: port  them to C#  :)
-//-----------------------------------
-
+//----------------------------------- 
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.IO;
 using PixelFarm.Agg;
-
-
 namespace PixelFarm.Font2
 {
-
-
     public class FontFace : IDisposable
     {
         /// <summary>
@@ -29,50 +24,35 @@ namespace PixelFarm.Font2
         /// </summary>
         IntPtr ftFaceHandle;
 
-        IntPtr hb_font;
-
-      
+        int currentFacePixelSize = 0;
 
         /// <summary>
-        /// glyph
+        /// store font glyph for each px size
         /// </summary>
-        Dictionary<char, FontGlyph> dicGlyphs = new Dictionary<char, FontGlyph>();
-        Dictionary<uint, FontGlyph> dicGlyphs2 = new Dictionary<uint, FontGlyph>();
-
+        Dictionary<int, Font> fonts = new Dictionary<int, Font>();
+        IntPtr hb_font;
         internal FontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
-            //store font file in unmanaged memory side
+
             this.unmanagedMem = unmanagedMem;
             this.ftFaceHandle = ftFaceHandle;
         }
+
+
         ~FontFace()
         {
             Dispose();
         }
-        public IntPtr Handle
+
+        /// <summary>
+        /// free typpe handler
+        /// </summary>
+        internal IntPtr Handle
         {
             get { return this.ftFaceHandle; }
         }
-        public FontGlyph GetGlyph(char c)
-        {
-            FontGlyph found;
-            if (!dicGlyphs.TryGetValue(c, out found))
-            {
-                found = FontStore.GetGlyph(ftFaceHandle, c);
-                this.dicGlyphs.Add(c, found);
-            }
-            return found;
-        }
-        public FontGlyph GetGlyphByCodePoint(uint codePoint)
-        {
-            FontGlyph found;
-            if (!dicGlyphs2.TryGetValue(codePoint, out found))
-            {
-                found = FontStore.GetGlyphByGlyphIndex(ftFaceHandle, codePoint);
-                this.dicGlyphs2.Add(codePoint, found);
-            }
-            return found;
-        }
+
+
         public void Dispose()
         {
 
@@ -87,34 +67,72 @@ namespace PixelFarm.Font2
                 Marshal.FreeHGlobal(unmanagedMem);
                 unmanagedMem = IntPtr.Zero;
             }
-            dicGlyphs.Clear();
-            dicGlyphs = null;
+
+            fonts.Clear();
+            fonts = null;
 
         }
         public bool HasKerning { get; set; }
 
+        //---------------------------
+        //for font shaping engine
+        //--------------------------- 
         internal IntPtr HBFont
         {
             get { return this.hb_font; }
             set { this.hb_font = value; }
         }
-         
-        public void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        {
 
+        internal Font GetFontAtPointSize(float fontPointSize)
+        {
+            //convert from point size to pixelsize *** 
+
+            int pixelSize = FontStore.ConvertFromPointUnitToPixelUnit(fontPointSize);
+            Font found;
+            if (!fonts.TryGetValue(pixelSize, out found))
+            {
+                //----------------------------------
+                //set current fontface size
+                currentFacePixelSize = pixelSize;
+                NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
+
+                //create font size
+                Font f = new Font(this, fontPointSize);
+                fonts.Add(pixelSize, f);
+
+                //------------------------------------
+                return f;
+            }
+            return found;
+        }
+
+        internal FontGlyph ReloadGlyphFromIndex(uint glyphIndex, int pixelSize)
+        {
+            if (pixelSize != currentFacePixelSize)
+            {
+                NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
+            }
             unsafe
             {
-                //byte[] unicodeBuffer = System.Text.Encoding.Unicode.GetBytes(buffer); 
-                fixed (ProperGlyph* propGlyphH = &properGlyphs[0])
-                fixed (char* head = &buffer[0])
-                {
-                    NativeMyFontsLib.MyFtShaping(
-                        this.hb_font, 
-                        head,
-                        buffer.Length,
-                        propGlyphH);
-                }
+                ExportGlyph exportTypeFace = new ExportGlyph();
+                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
+                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
+            } 
+        }
+        internal FontGlyph ReloadGlyphFromChar(char unicodeChar, int pixelSize)
+        {
+            if (pixelSize != currentFacePixelSize)
+            {
+                NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
             }
+            //--------------------------------------------------
+            unsafe
+            {
+                ExportGlyph exportTypeFace = new ExportGlyph();
+                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
+                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
+            }
+             
         }
     }
 

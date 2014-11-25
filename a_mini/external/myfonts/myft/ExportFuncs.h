@@ -65,7 +65,7 @@ extern "C"{
 	MY_DLL_EXPORT void MyFtShutdownLib();
 
 	//MY_DLL_EXPORT int MyFtNewFace(const char* faceName,int pxsize);
-	MY_DLL_EXPORT FT_Face MyFtNewMemoryFace(const void* membuffer,int sizeInBytes,int pxsize);	
+	MY_DLL_EXPORT FT_Face MyFtNewMemoryFace(const void* membuffer,int sizeInBytes);	
 	MY_DLL_EXPORT void MyFtDoneFace(FT_Face face);
 	MY_DLL_EXPORT void MyFtGetFaceInfo(FT_Face face,ExportTypeFaceInfo* exportTypeFaceInfo);
 
@@ -79,6 +79,11 @@ extern "C"{
 	MY_DLL_EXPORT int MyFtSetupShapingEngine(FT_Face myface,
 		const char* langName,int langNameLen,
 		int direction,int scriptCode,ExportTypeFaceInfo* exportTypeInfo);
+
+	MY_DLL_EXPORT void MyFtSetCharSizes(FT_Face myface,FT_F26Dot6  char_width,
+                    FT_F26Dot6  char_height,
+                    FT_UInt     horz_resolution,
+                    FT_UInt     vert_resolution);
 
 	MY_DLL_EXPORT  int MyFtShaping(hb_font_t *my_hb_ft_font, 
 		const uint16_t* text,

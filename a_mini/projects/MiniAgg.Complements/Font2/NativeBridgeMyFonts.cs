@@ -20,7 +20,7 @@ namespace PixelFarm.Font2
     struct ExportTypeFaceInfo
     {
         public bool hasKerning;
-        public IntPtr hb_font; 
+        public IntPtr hb_font;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -101,7 +101,7 @@ namespace PixelFarm.Font2
         public static extern void MyFtShutdownLib();
 
         [DllImport(myfontLib)]
-        public static extern IntPtr MyFtNewMemoryFace(IntPtr membuffer, int sizeInBytes, int pxsize);
+        public static extern IntPtr MyFtNewMemoryFace(IntPtr membuffer, int memSizeInBytes);
 
 
         [DllImport(myfontLib)]
@@ -112,9 +112,12 @@ namespace PixelFarm.Font2
 
         [DllImport(myfontLib)]
         public static extern void MyFtSetPixelSizes(IntPtr myface, int pxsize);
-        [DllImport(myfontLib)]
-        public static extern void MyFtSetCharSize(IntPtr myface, int char_width, int char_height, int h_device_resolution, int v_device_resolution);
 
+        [DllImport(myfontLib)]
+        public static extern void MyFtSetCharSize(IntPtr faceHandle, int char_width26_6, 
+            int char_height26_6, 
+            int h_device_resolution,
+            int v_device_resolution);       
 
 
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
@@ -123,8 +126,6 @@ namespace PixelFarm.Font2
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
         public static extern int MyFtLoadGlyph(IntPtr faceHandle, uint codepoint, ref ExportGlyph ftOutline);
 
-
-
         //============================================================================
         //HB shaping ....
         [DllImport(myfontLib, CharSet = CharSet.Ansi)]
@@ -132,7 +133,7 @@ namespace PixelFarm.Font2
             int langNameLen, HBDirection hbDirection, int hbScriptCode, ref ExportTypeFaceInfo exportTypeFaceInfo);
 
         [DllImport(myfontLib)]
-        public static unsafe extern int MyFtShaping(IntPtr my_hb_ft_font, 
+        public static unsafe extern int MyFtShaping(IntPtr my_hb_ft_font,
             char* text,
             int charCount,
             ProperGlyph* properGlyphs);
