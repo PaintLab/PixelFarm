@@ -27,8 +27,8 @@ namespace PixelFarm.Agg.SimplePainter
         public override void Init()
         {
             //load font ?
-            font1 = PixelFarm.Font2.FontStore.LoadFont(fontfile, 64);
-            font2 = PixelFarm.Font2.FontStore.LoadFont(fontfile, 10);
+            font1 = PixelFarm.Font2.FontStore.LoadFont(fontfile, 72);
+            font2 = PixelFarm.Font2.FontStore.LoadFont(fontfile, 64);
 
         }
         public override void Draw(Graphics2D g)
@@ -64,16 +64,18 @@ namespace PixelFarm.Agg.SimplePainter
             p.Fill(flat_v);
 
             //bitmap version
+            
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
             p.CurrentFont = font1;
-            p.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
+            p.FillColor = ColorRGBA.Black;
+            p.DrawString("มีญูดุญคำค่าค่ำ", 80, 200);
             //p.DrawString("12345", 50, 200); 
             p.StrokeColor = ColorRGBA.Black;
             p.Line(0, 200, 800, 200);
 
-
+            p.FillColor = ColorRGBA.Black;
             p.CurrentFont = font2;
-            p.DrawString("ดุดีดำด่าด่ำญญู", 80, 100);
+            p.DrawString("มีญูดุญคำค่าค่ำ", 80, 100);
 
             //--------------------------------------------------- 
             //p.Fill(fontGlyph.vxs);

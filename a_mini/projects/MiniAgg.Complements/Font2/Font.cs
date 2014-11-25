@@ -19,12 +19,11 @@ namespace PixelFarm.Font2
         Dictionary<uint, FontGlyph> dicGlyphs2 = new Dictionary<uint, FontGlyph>();
 
 
-        internal Font(FontFace ownerFace, float fontSizeInPoint)
+        internal Font(FontFace ownerFace, int pixelSize)
         {
             //store unmanage font file information
-            this.ownerFace = ownerFace;
-            this.fontSizeInPoint = fontSizeInPoint;
-            this.fontSizeInPixelUnit = FontStore.ConvertFromPointUnitToPixelUnit(fontSizeInPoint);
+            this.ownerFace = ownerFace; 
+            this.fontSizeInPixelUnit = pixelSize;
         }
 
         public void Dispose()

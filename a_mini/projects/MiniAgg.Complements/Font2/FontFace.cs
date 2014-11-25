@@ -31,11 +31,19 @@ namespace PixelFarm.Font2
         /// </summary>
         Dictionary<int, Font> fonts = new Dictionary<int, Font>();
         IntPtr hb_font;
+        Font px64Font;
+
+
         internal FontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
-
             this.unmanagedMem = unmanagedMem;
             this.ftFaceHandle = ftFaceHandle;
+
+
+            //---------------------------------
+            //for master font at 64px
+            px64Font = GetFontAtPixelSize(64);
+
         }
 
 
@@ -83,12 +91,11 @@ namespace PixelFarm.Font2
             set { this.hb_font = value; }
         }
 
-        internal Font GetFontAtPointSize(float fontPointSize)
-        {
-            //convert from point size to pixelsize *** 
 
-            int pixelSize = FontStore.ConvertFromPointUnitToPixelUnit(fontPointSize);
+        internal Font GetFontAtPixelSize(int pixelSize)
+        {
             Font found;
+
             if (!fonts.TryGetValue(pixelSize, out found))
             {
                 //----------------------------------
@@ -97,13 +104,19 @@ namespace PixelFarm.Font2
                 NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
 
                 //create font size
-                Font f = new Font(this, fontPointSize);
+                Font f = new Font(this, pixelSize);
                 fonts.Add(pixelSize, f);
 
                 //------------------------------------
                 return f;
             }
             return found;
+
+        }
+        internal Font GetFontAtPointSize(float fontPointSize)
+        {
+            //convert from point size to pixelsize ***              
+            return GetFontAtPixelSize(FontStore.ConvertFromPointUnitToPixelUnit(fontPointSize));
         }
 
         internal FontGlyph ReloadGlyphFromIndex(uint glyphIndex, int pixelSize)
@@ -119,7 +132,10 @@ namespace PixelFarm.Font2
             {
                 ExportGlyph exportTypeFace = new ExportGlyph();
                 PixelFarm.Font2.NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
-                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
+
+                FontGlyph fontGlyph = new FontGlyph();
+                BuildGlyph(fontGlyph, &exportTypeFace, pixelSize);
+                return fontGlyph;
             }
         }
         internal FontGlyph ReloadGlyphFromChar(char unicodeChar, int pixelSize)
@@ -134,9 +150,38 @@ namespace PixelFarm.Font2
             {
                 ExportGlyph exportTypeFace = new ExportGlyph();
                 PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
-                return FontGlyphBuilder.BuildGlyph(&exportTypeFace);
+                FontGlyph fontGlyph = new FontGlyph();
+                BuildGlyph(fontGlyph, &exportTypeFace, pixelSize);
+                return fontGlyph;
             }
 
+        }
+
+        unsafe void BuildGlyph(FontGlyph fontGlyph, ExportGlyph* exportTypeFace, int pxsize)
+        {
+            //------------------------------------------
+            //copy font metrics
+            fontGlyph.exportGlyph = *(exportTypeFace);
+            //------------------------------------------
+            //copy raw image 
+            FontGlyphBuilder.CopyGlyphBitmap(fontGlyph, exportTypeFace); 
+            //outline version
+            //------------------------------------------
+            if (px64Font != null)
+            {
+                if (pxsize < 64)
+                {
+                    FontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
+                }
+                else
+                {
+                    FontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
+                }
+            }
+            else
+            {
+                FontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
+            }
         }
     }
 

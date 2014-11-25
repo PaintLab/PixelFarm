@@ -52,16 +52,14 @@ namespace PixelFarm.Font2
                 IntPtr unmanagedMem = Marshal.AllocHGlobal(filelen);
                 Marshal.Copy(fontFileContent, 0, unmanagedMem, filelen);
                 //---------------------------------------------------
-                //convert font point size to pixel size
-
-
+                //convert font point size to pixel size 
                 //---------------------------------------------------
                 IntPtr faceHandle = NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen);
 
                 if (faceHandle != IntPtr.Zero)
                 {
                     //ok pass
-                    fontFace = new FontFace(unmanagedMem, faceHandle);
+                   
                     //-------------------
                     //test change font size
                     //NativeMyFontsLib.MyFtSetCharSize(faceHandle,
@@ -71,6 +69,8 @@ namespace PixelFarm.Font2
                     //    96);// vertical device resolution 
 
                     //-------------------
+
+                    fontFace = new FontFace(unmanagedMem, faceHandle);
                     ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
                     NativeMyFontsLib.MyFtGetFaceInfo(faceHandle, ref exportTypeInfo);
                     fontFace.HasKerning = exportTypeInfo.hasKerning;

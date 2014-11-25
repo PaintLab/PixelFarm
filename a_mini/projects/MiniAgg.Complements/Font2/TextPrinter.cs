@@ -36,12 +36,10 @@ namespace PixelFarm.Font2
         }
         public void Print(char[] buffer, double x, double y)
         {
-          
+
             int j = buffer.Length;
             int buffsize = j * 2;
-            //get kerning list
-
-
+            //get kerning list 
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
             FontShaping.GetGlyphPos(currentFont, buffer, 0, buffsize, properGlyphs);
@@ -59,10 +57,18 @@ namespace PixelFarm.Font2
                 FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
                 var left = glyph.exportGlyph.img_horiBearingX;
 
-
-                this.painter.DrawImage(glyph.glyphImage32,
-                    (float)(xpos + (left >> 6)),
-                    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+                //--------------------------------------------------------
+                //render with vector
+                VertexStore vxs1 = Agg.Transform.Affine.TranslateToVxs(
+                    glyph.flattenVxs,
+                    (float)(xpos),
+                    (float)(y));
+                this.painter.Fill(vxs1);
+                //--------------------------------------------------------
+                //render with bitmap
+                //this.painter.DrawImage(glyph.glyphImage32,
+                //    (float)(xpos + (left >> 6)),
+                //    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
 
                 int w = (glyph.exportGlyph.advanceX) >> 6;
                 xpos += (w);

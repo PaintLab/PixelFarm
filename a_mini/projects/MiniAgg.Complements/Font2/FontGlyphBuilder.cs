@@ -20,7 +20,7 @@ namespace PixelFarm.Font2
     {
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
 
-        unsafe static void CopyGlyphBitmap(ExportGlyph* exportTypeFace, FontGlyph fontGlyph)
+        unsafe internal static void CopyGlyphBitmap(FontGlyph fontGlyph, ExportGlyph* exportTypeFace)
         {
             FT_Bitmap* ftBmp = (FT_Bitmap*)exportTypeFace->bitmap;
             //image is 8 bits grayscale
@@ -108,18 +108,11 @@ namespace PixelFarm.Font2
                 (v1.y + v2.y) / 2);
         }
 
-        unsafe internal static FontGlyph BuildGlyph(ExportGlyph* exportTypeFace)
+
+
+        unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph, ExportGlyph* exportTypeFace)
         {
             FT_Outline outline = (*(FT_Outline*)exportTypeFace->outline);
-            FontGlyph fontGlyph = new FontGlyph();
-            //------------------------------------------
-            //copy font metrics
-            fontGlyph.exportGlyph = *(exportTypeFace); 
-            //------------------------------------------
-            //copy raw image 
-            CopyGlyphBitmap(exportTypeFace, fontGlyph);
-
-
             //outline version
             //------------------------------
             int npoints = outline.n_points;
@@ -285,9 +278,9 @@ namespace PixelFarm.Font2
             }
 
             fontGlyph.flattenVxs = curveFlattener.MakeVxs(fontGlyph.originalVxs);
-            return fontGlyph;
 
         }
+
     }
 
 
