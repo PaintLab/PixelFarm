@@ -10,17 +10,17 @@ using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 
 using Mini;
-namespace PixelFarm.Agg.Sample_AADemoTest1
+namespace PixelFarm.Agg.Sample_AADemoTest3
 {
 
-    class CustomScanlineRasToBmp_EnlargedV1 : CustomScanlineRasToDestBitmapRenderer
+    class CustomScanlineRasToBmp_EnlargedV3 : CustomScanlineRasToDestBitmapRenderer
     {
         double m_size;
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         Graphics2D gfx;
 
-        public CustomScanlineRasToBmp_EnlargedV1(double size, ActualImage destImage)
+        public CustomScanlineRasToBmp_EnlargedV3(double size, ActualImage destImage)
         {
             this.UseCustomRenderSingleScanLine = true;
             m_size = size;
@@ -37,20 +37,78 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
             var rasToBmp = gfx.ScanlineRasToDestBitmap;
             for (int i = 1; i <= num_spans; ++i)
             {
+                //render span by span 
                 ScanlineSpan span = scanline.GetSpan(i);
                 int x = span.x;
                 int num_pix = span.len;
                 int coverIndex = span.cover_index;
-                do
+                //test subpixel rendering concept 
+                //----------------------------------------------------
+                //first px of span***
                 {
-                    int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
+                    int covarageValue = covers[coverIndex++];
+                    if (covarageValue < 45)
+                    {
+                        //light color
+                        //int a = (covarageValue * color.Alpha0To255) >> 8;
+                        //ColorRGBA c = new ColorRGBA(ColorRGBA.Red, a); 
+                        ////c.red = 0;//off blue component 
+                        //m_square.Draw(rasToBmp,
+                        //      ras, m_sl, destImage,
+                        //      c,
+                        //      x, y);
+                    }
+                    else
+                    {
+                        int a = (covarageValue * color.Alpha0To255) >> 8;
+                        ColorRGBA c = new ColorRGBA(color, a);
+
+
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                               c,
+                               x, y);
+                    }
+                    ++x;
+                    --num_pix;
+                }
+                //----------------------------------------------------
+                //in between ...
+                while (num_pix > 1)
+                {
+                    int covarageValue = covers[coverIndex++];
+                    int a = (covarageValue * color.Alpha0To255) >> 8;
                     m_square.Draw(rasToBmp,
                            ras, m_sl, destImage,
                            new ColorRGBA(color, a),
                            x, y);
                     ++x;
+                    --num_pix;
                 }
-                while (--num_pix > 0);
+                //----------------------------------------------------
+                {
+                    //last pixel
+
+                    int covarageValue = covers[coverIndex++];
+                    if (covarageValue < 45)
+                    {
+                        
+                    }
+                    else
+                    {
+                        int a = (covarageValue * color.Alpha0To255) >> 8;
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                               new ColorRGBA(color, a),
+                               x, y);
+                    }
+                    ++x;
+                    --num_pix;
+                    ++x;
+                    --num_pix;
+                }
+                //----------------------------------------------------
+
             }
         }
     }
@@ -61,7 +119,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
                     + "To draw the enlarged version there is a special scanline renderer written (see "
                     + "class renderer_enlarged in the source code). You can drag the whole triangle as well "
                     + "as each vertex of it. Also change “Gamma” to see how it affects the quality of Anti-Aliasing.")]
-    public class aa_demo_test1 : DemoBase
+    public class aa_demo_test3 : DemoBase
     {
         double[] m_x = new double[3];
         double[] m_y = new double[3];
@@ -70,7 +128,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
         int m_idx;
 
 
-        public aa_demo_test1()
+        public aa_demo_test3()
         {
             m_idx = -1;
             m_x[0] = 57; m_y[0] = 100;
@@ -119,7 +177,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest1
 
             int size_mul = (int)this.PixelSize;
 
-            CustomScanlineRasToBmp_EnlargedV1 ren_en = new CustomScanlineRasToBmp_EnlargedV1(size_mul, graphics2D.DestActualImage);
+            CustomScanlineRasToBmp_EnlargedV3 ren_en = new CustomScanlineRasToBmp_EnlargedV3(size_mul, graphics2D.DestActualImage);
 
             rasterizer.Reset();
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);

@@ -21,9 +21,7 @@ namespace PixelFarm.Font2
         {
 
             unsafe
-            {
-
-
+            {   
                 fixed (ProperGlyph* propGlyphH = &properGlyphs[0])
                 fixed (char* head = &buffer[0])
                 {
