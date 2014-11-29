@@ -44,8 +44,22 @@
     <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\FilterMan.cs" />
     <Compile Include="0_LayoutFarm.Canvas2dExtension\ScanlineRasToDestBitmapRendererExtension.cs" />
-    <Compile Include="Font2\MyFonts.cs" />
-    <Compile Include="Font2\NativeMyFonts.cs" />
+    <Compile Include="Font2\FontFace.cs" />
+    <Compile Include="Font2\Font.cs" />
+    <Compile Include="Font2\FontGlyph.cs" />
+    <Compile Include="Font2\FontGlyphBuilder.cs" />
+    <Compile Include="Font2\FontShaping.cs" />
+    <Compile Include="Font2\FontStore.cs" />
+    <Compile Include="Font2\NativeBridgeHB.cs" />
+    <Compile Include="Font2\NativeBridgeMyFonts.cs" />
+    <Compile Include="Font2\TextPrinter.cs" />
+    <Compile Include="Font2\UnsafeMethods.cs" />
+    <Compile Include="Font2\NativeBridgeFreeType.cs" />
+    <Compile Include="myfonts_dll.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>myfonts_dll.resx</DependentUpon>
+    </Compile>
     <Compile Include="VertexSource\BezireCurve.cs" />
     <Compile Include="VertexSource\BoundingRect.cs" />
     <Compile Include="VertexSource\PathWriter.cs" />
@@ -102,7 +116,16 @@
       <Name>MiniAgg</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="myfonts_dll.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>myfonts_dll.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\myft.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

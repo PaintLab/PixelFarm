@@ -68,15 +68,21 @@ namespace PixelFarm.Agg
                     int y = scline.Y;
                     int num_spans = scline.SpanCount;
                     byte[] covers = scline.GetCovers();
+
+                    //render each span in the scanline
                     for (int i = 1; i <= num_spans; ++i)
                     {
-                        ScanlineSpan span = scline.GetSpan(i);
+
+                        ScanlineSpan span = scline.GetSpan(i); 
                         if (span.len > 0)
                         {
-                            dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                            //positive len
+                            dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index); 
+                            
                         }
                         else
                         {
+                            //fill the line
                             int x = span.x;
                             int x2 = (x - span.len - 1);
                             dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
@@ -123,7 +129,11 @@ namespace PixelFarm.Agg
                     int span_len = span.len;
                     bool firstCoverForAll = false;
 
-                    if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
+                    if (span_len < 0)
+                    {
+                        span_len = -span_len; 
+                        firstCoverForAll = true;
+                    } //make absolute value
 
                     //1. generate colors -> store in colorArray
                     spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);

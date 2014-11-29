@@ -48,6 +48,7 @@
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\PixelBlenderGray.cs" />
     <Compile Include="02_PixelBuffer\ImageHelper.cs" />
+    <Compile Include="02_PixelBuffer\PixelFormat.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
     <Compile Include="05_Vertex_Line_Stroke\0_VertexCommandAndOrientation.cs" />

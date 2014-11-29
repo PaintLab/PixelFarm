@@ -45,6 +45,9 @@ namespace PixelFarm.Agg.Sample_Draw
             g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
 
 
+
+            //------------------------------------
+            //
             // draw some text
             g.DrawString("A Simple Example", 300, 400, 20);
 

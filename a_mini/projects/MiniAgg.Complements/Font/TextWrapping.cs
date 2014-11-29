@@ -9,7 +9,7 @@ namespace PixelFarm.Agg.Font
     {
         protected StyledTypeFace styledTypeFace;
 
-        // you can't 
+        
         public TextWrapping(StyledTypeFace styledTypeFace)
         {
             this.styledTypeFace = styledTypeFace;

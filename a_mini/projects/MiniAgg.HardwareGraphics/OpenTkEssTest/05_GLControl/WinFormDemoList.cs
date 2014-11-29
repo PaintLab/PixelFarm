@@ -72,7 +72,8 @@ namespace OpenTkEssTest
 
                 //canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
-
+                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.DrawLine(0, 300, 500, 300);
 
                 //-----------------------------------------------------
                 canvas.FillColor = LayoutFarm.Drawing.Color.Magenta;
@@ -93,8 +94,6 @@ namespace OpenTkEssTest
                 //fill polygon test                
                 canvas.FillPolygon(polygonCoords);
 
-
-
                 var polygonCoords2 = new float[]{
                         5+10,300,
                         40+10,300,
@@ -103,10 +102,8 @@ namespace OpenTkEssTest
                 canvas.FillColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
                 canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
 
-
-
                 int strkW = 10;
-                canvas.FillColor = LayoutFarm.Drawing.Color.Red;
+                canvas.FillColor = LayoutFarm.Drawing.Color.LightGray;
 
                 for (int i = 1; i < 90; i += 10)
                 {
@@ -153,14 +150,24 @@ namespace OpenTkEssTest
 
 
                 //load font data
-                var font = PixelFarm.Font2.MyFonts.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 18);
+                var font = PixelFarm.Font2.FontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
                 var fontGlyph = font.GetGlyph('{');
                 //PixelFarm.Font2.MyFonts.SetShapingEngine();
-                //PixelFarm.Font2.MyFonts.ShapeText("ดุ");  
+
                 canvas.FillVxs(fontGlyph.flattenVxs);
-                //canvas.DrawString("ฟ", 50, 50); 
+
                 canvas.FillColor = LayoutFarm.Drawing.Color.White;
-                //---------------------------------------------  
+                canvas.CurrentFont = font;
+
+                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.DrawLine(0, 200, 500, 200);
+
+                //test Thai words
+                canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
+                //canvas.DrawString("1234567890", 80, 200); 
+                GLBitmapTexture bmp = new GLBitmapTexture(fontGlyph.glyphImage32);
+                canvas.DrawImage(bmp, 50, 50);
+                bmp.Dispose();
 
             });
             form.Show();
