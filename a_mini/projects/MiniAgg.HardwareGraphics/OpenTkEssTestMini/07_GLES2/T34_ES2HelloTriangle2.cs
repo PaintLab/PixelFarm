@@ -37,19 +37,19 @@ using Mini;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "31")]
-    [Info("T32_HelloTriangle")]
-    public class T32_ES2HelloTriangleDemo : DemoBase
+    [Info("T34_HelloTriangle")]
+    public class T34_ES2HelloTriangleDemo : DemoBase
     {
         public override void Init()
         {
-            T32_ES2HelloTriangle example;
+            T34_ES2HelloTriangle example;
             try
             {
-                example = new T32_ES2HelloTriangle(GraphicsContextFlags.Embedded);
+                example = new T34_ES2HelloTriangle(GraphicsContextFlags.Embedded);
             }
             catch
             {
-                example = new T32_ES2HelloTriangle(GraphicsContextFlags.Default);
+                example = new T34_ES2HelloTriangle(GraphicsContextFlags.Default);
             }
 
             if (example != null)
@@ -63,13 +63,13 @@ namespace OpenTkEssTest
         }
     }
     //[Example("Simple ES 2.0", ExampleCategory.OpenGLES, "2.0", Documentation = "SimpleES20Window")]
-    public class T32_ES2HelloTriangle : GameWindow
+    public class T34_ES2HelloTriangle : GameWindow
     {
         #region Constructor
         int mProgram;
+        int locInputColor;
 
-
-        public T32_ES2HelloTriangle(GraphicsContextFlags flags)
+        public T34_ES2HelloTriangle(GraphicsContextFlags flags)
             : base(800, 600, GraphicsMode.Default, "", GameWindowFlags.Default, DisplayDevice.Default, 2, 0, flags)
         {
         }
@@ -96,9 +96,10 @@ namespace OpenTkEssTest
             //fragment source
             string fs = @"
                 precision mediump float;
+               
                 void main()
                 {
-                    gl_FragColor = vec4(1.0,0.0, 0.0, 1.0);
+                     gl_FragColor = vec4(1.0,0.0, 0.0, 1.0);
                 }
             ";
 
@@ -108,9 +109,14 @@ namespace OpenTkEssTest
             {
                 //return false
             }
-           
-             
-            GL.ClearColor(0, 0, 0, 0);
+
+            locInputColor = GL.GetAttribLocation(mProgram, "inputColor");
+
+            GL.Enable(EnableCap.Blend);
+            GL.Enable(EnableCap.SampleAlphaToCoverage);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.ClearColor(255, 255, 255, 0);
+
 
         }
 
@@ -186,11 +192,17 @@ namespace OpenTkEssTest
             // Load the vertex data
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, vertices);
             GL.EnableVertexAttribArray(0);
+
+            byte[] inputColors = new byte[] { 255, 255, 0, 255 };
+            GL.VertexAttribPointer(locInputColor, 4, VertexAttribPointerType.Byte, false, 5 * sizeof(byte), inputColors);
+            GL.EnableVertexAttribArray(locInputColor);
+
             //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
             //glEnableVertexAttribArray(0);
             GL.DrawArrays(BeginMode.Triangles, 0, 3);
-            //glDrawArrays(GL_TRIANGLES, 0, 3);
 
+
+            //glDrawArrays(GL_TRIANGLES, 0, 3);
 
             this.SwapBuffers();
         }

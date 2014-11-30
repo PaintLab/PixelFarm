@@ -145,8 +145,8 @@ namespace PixelFarm.Font2
             //dev:
 #if DEBUG
             ///return true;
-
-            string dev = @"D:\projects\myagg_cs\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
+            //location of myft dll
+            string dev = @"c:\WImageTest\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
             UnsafeMethods.LoadLibrary(dev);
             return true;
 

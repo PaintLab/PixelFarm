@@ -46,6 +46,7 @@
     <Compile Include="00_DemoBase\FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
+    <Compile Include="07_GLES2\T34_ES2HelloTriangle2.cs" />
     <Compile Include="07_GLES2\ES2Utils.cs" />
     <Compile Include="07_GLES2\T31_SimpleES20Window.cs" />
     <Compile Include="07_GLES2\T32_ES2HelloTriangle.cs" />

@@ -27,7 +27,24 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
         }
+        static float mix(float x, float y, float a)
+        {
+            //from ...
+            //opengl es2 mix function              
+            return x * (1f - a) + (y * a);
+        }
+        const float cover_1_3 = 255f / 3f;
+        const float cover_2_3 = cover_1_3 * 2f;
+
+
+
         protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        {
+
+            //SubPixRender1(destImage, scanline, color);
+            SubPixRender2(destImage, scanline, color);
+        }
+        void SubPixRender1(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -35,7 +52,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             byte[] covers = scanline.GetCovers();
             ScanlineRasterizer ras = gfx.ScanlineRasterizer;
             var rasToBmp = gfx.ScanlineRasToDestBitmap;
-            for (int i = 1; i <= num_spans; ++i)
+            ColorRGBA prevColor = ColorRGBA.White;
+
+            for (int i = 0; i <= num_spans; ++i)
             {
                 //render span by span 
                 ScanlineSpan span = scanline.GetSpan(i);
@@ -44,70 +63,199 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 int coverIndex = span.cover_index;
                 //test subpixel rendering concept 
                 //----------------------------------------------------
-                //first px of span***
+                while (num_pix > 0)
                 {
-                    int covarageValue = covers[coverIndex++];
-                    if (covarageValue < 45)
+                    int coverageValue = covers[coverIndex++];
+                    if (coverageValue >= 255)
                     {
-                        //light color
-                        //int a = (covarageValue * color.Alpha0To255) >> 8;
-                        //ColorRGBA c = new ColorRGBA(ColorRGBA.Red, a); 
-                        ////c.red = 0;//off blue component 
-                        //m_square.Draw(rasToBmp,
-                        //      ras, m_sl, destImage,
-                        //      c,
-                        //      x, y);
+                        //100% cover
+                        ColorRGBA newc = new ColorRGBA(color.red, color.green, color.blue);
+                        prevColor = newc;
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                                new ColorRGBA(newc, a),
+                               x, y);
+                    }
+                    else if (coverageValue >= cover_2_3)
+                    {
+                        // > 2/3 % cover
+                        float n_coverage = ((float)coverageValue / 256f);
+                        byte c_r = (byte)((color.red + prevColor.blue) / 2f);
+                        byte c_g = (byte)((color.green + color.red) / 2f);
+                        byte c_b = (byte)((color.blue + color.green) / 2f);
+
+
+                        ColorRGBA newc = new ColorRGBA(
+                          (byte)(c_r),
+                          (byte)(c_g),
+                          (byte)(c_b));
+
+                        prevColor = newc;
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                                new ColorRGBA(newc, a),
+                               x, y);
+
+                    }
+                    else if (coverageValue > cover_1_3)
+                    {
+
+
+                        float n_coverage = ((float)coverageValue / 256f);
+                        byte c_r = (byte)((prevColor.blue + prevColor.green) / 2f);
+                        byte c_g = (byte)((color.red + prevColor.blue) / 2f);
+                        byte c_b = (byte)((color.blue + color.red) / 2f);
+                        ColorRGBA newc = new ColorRGBA(
+                          (byte)(c_r),
+                          (byte)(c_g),
+                          (byte)(c_b));
+
+                        prevColor = newc;
+
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                               new ColorRGBA(newc, a),
+                               x, y);
                     }
                     else
                     {
-                        int a = (covarageValue * color.Alpha0To255) >> 8;
-                        ColorRGBA c = new ColorRGBA(color, a);
+                        //least coverage                         
+
+                        float n_coverage = ((float)coverageValue / 256f);
+                        byte c_r = (byte)((prevColor.green + prevColor.red) / 2f);
+                        byte c_g = (byte)((prevColor.blue + prevColor.green) / 2f);
+                        byte c_b = (byte)(255 - ((byte)((float)255 * (n_coverage))));
 
 
+                        ColorRGBA newc = new ColorRGBA(
+                           (byte)(c_r),
+                           (byte)(c_g),
+                           (byte)(c_b));
+
+                        prevColor = newc;
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
                         m_square.Draw(rasToBmp,
                                ras, m_sl, destImage,
-                               c,
+                                new ColorRGBA(newc, a),
+                               x, y);
+
+                    }
+
+                    ++x;
+                    --num_pix;
+                }
+
+            }
+        }
+
+        void SubPixRender2(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        {
+            int y = scanline.Y;
+            int num_spans = scanline.SpanCount;
+
+            byte[] covers = scanline.GetCovers();
+            ScanlineRasterizer ras = gfx.ScanlineRasterizer;
+            var rasToBmp = gfx.ScanlineRasToDestBitmap;
+            ColorRGBA prevColor = ColorRGBA.White;
+
+            for (int i = 0; i <= num_spans; ++i)
+            {
+                //render span by span 
+                ScanlineSpan span = scanline.GetSpan(i);
+                int x = span.x;
+                int num_pix = span.len;
+                int coverIndex = span.cover_index;
+                //test subpixel rendering concept 
+                //----------------------------------------------------
+                while (num_pix > 0)
+                {
+                    int coverageValue = covers[coverIndex++];
+                    if (coverageValue >= 255)
+                    {
+                        //100% cover
+                        ColorRGBA newc = new ColorRGBA(color.red, color.green, color.blue);
+                        prevColor = newc;
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                                new ColorRGBA(newc, a),
                                x, y);
                     }
-                    ++x;
-                    --num_pix;
-                }
-                //----------------------------------------------------
-                //in between ...
-                while (num_pix > 1)
-                {
-                    int covarageValue = covers[coverIndex++];
-                    int a = (covarageValue * color.Alpha0To255) >> 8;
-                    m_square.Draw(rasToBmp,
-                           ras, m_sl, destImage,
-                           new ColorRGBA(color, a),
-                           x, y);
-                    ++x;
-                    --num_pix;
-                }
-                //----------------------------------------------------
-                {
-                    //last pixel
-
-                    int covarageValue = covers[coverIndex++];
-                    if (covarageValue < 45)
+                    else if (coverageValue >= cover_2_3)
                     {
-                        
+                        // > 2/3 % cover
+                        float n_coverage = ((float)coverageValue / 256f);
+                        byte c_r = (byte)(255 - ((byte)((float)255 * (n_coverage))));
+                        byte c_g = color.green;
+                        byte c_b = color.blue;
+
+
+                        ColorRGBA newc = new ColorRGBA(
+                          (byte)((prevColor.blue + c_r) / 2f),
+                          (byte)((c_g + c_r) / 2f),
+                          (byte)((c_g + c_b) / 2f));
+
+                        prevColor = newc;
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                                new ColorRGBA(newc, a),
+                               x, y);
+
+                    }
+                    else if (coverageValue > cover_1_3)
+                    {
+
+
+                        float n_coverage = ((float)coverageValue / 256f);
+                        byte c_r = 255;
+                        byte c_g = (byte)(255 - ((byte)((float)255 * (n_coverage))));
+                        byte c_b = color.blue;
+
+
+                        ColorRGBA newc = new ColorRGBA(
+                          (byte)((prevColor.blue + c_r) / 2f),
+                          (byte)(c_g),
+                          (byte)(c_b));
+
+                        prevColor = newc;
+
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                               new ColorRGBA(newc, a),
+                               x, y);
                     }
                     else
                     {
-                        int a = (covarageValue * color.Alpha0To255) >> 8;
+                        //least coverage                         
+
+                        float n_coverage = ((float)coverageValue / 256f);
+                        byte c_r = 255;
+                        byte c_g = 255;
+                        byte c_b = (byte)(255 - ((byte)((float)255 * (n_coverage))));
+
+
+                        ColorRGBA newc = new ColorRGBA(
+                           (byte)((prevColor.blue + c_r) / 2f),
+                           (byte)(c_g),
+                           (byte)(c_b));
+
+                        prevColor = newc;
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
                         m_square.Draw(rasToBmp,
                                ras, m_sl, destImage,
-                               new ColorRGBA(color, a),
+                                new ColorRGBA(newc, a),
                                x, y);
+
                     }
-                    ++x;
-                    --num_pix;
+
                     ++x;
                     --num_pix;
                 }
-                //----------------------------------------------------
 
             }
         }
