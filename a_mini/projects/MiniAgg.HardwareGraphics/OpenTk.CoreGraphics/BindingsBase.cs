@@ -145,6 +145,7 @@ namespace OpenTK
 
             foreach (FieldInfo f in delegates)
             {
+                 
                 Delegate d = LoadDelegate(f.Name, f.FieldType);
                 if (d != null)
                     ++supported;
@@ -210,7 +211,7 @@ namespace OpenTK
         internal Delegate GetExtensionDelegate(string name, Type signature)
         {
             IntPtr address = GetAddress(name);
-            
+
             if (address == IntPtr.Zero ||
                 address == new IntPtr(1) ||     // Workaround for buggy nvidia drivers which return
                 address == new IntPtr(2))       // 1 or 2 instead of IntPtr.Zero for some extensions.
