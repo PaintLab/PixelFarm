@@ -775,14 +775,7 @@ namespace PixelFarm.Agg
             blue = (byte)c.blue;
             alpha = (byte)a_;
         }
-
-        //public ColorRGBA(uint fourByteColor)
-        //{
-        //    red = (byte)((fourByteColor >> 16) & 0xFF);
-        //    green = (byte)((fourByteColor >> 8) & 0xFF);
-        //    blue = (byte)((fourByteColor >> 0) & 0xFF);
-        //    alpha = (byte)((fourByteColor >> 24) & 0xFF);
-        //}
+         
 
         public ColorRGBA(ColorRGBAf c)
         {
@@ -940,8 +933,7 @@ namespace PixelFarm.Agg
         {
 
             return this * (1 - weight) + other * weight;
-            //ColorRGBA result = new ColorRGBA(this);
-            // return result;
+      
         }
 #if DEBUG
         public override string ToString()
