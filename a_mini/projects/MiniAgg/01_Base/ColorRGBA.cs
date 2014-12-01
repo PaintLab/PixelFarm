@@ -789,7 +789,7 @@ namespace PixelFarm.Agg
         {
             //if a.red== bred then
             //a.red ^ b.red =0 
-            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.alpha) ^ (a.alpha ^ b.alpha)) == 0;
+            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) == 0;
 
             //if (a.red == b.red && a.green == b.green && a.blue == b.blue && a.alpha == b.alpha)
             //{
@@ -801,9 +801,8 @@ namespace PixelFarm.Agg
         public static bool operator !=(ColorRGBA a, ColorRGBA b)
         {
             //if a.red !=  b.red then
-            //a.red ^ b.red  =1
-            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.alpha) ^ (a.alpha ^ b.alpha)) != 0;
-
+            //a.red ^ b.red  =1 
+            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) != 0; 
             //if (a.red != b.red || a.green != b.green || a.blue != b.blue || a.alpha != b.alpha)
             //{
             //    return true;

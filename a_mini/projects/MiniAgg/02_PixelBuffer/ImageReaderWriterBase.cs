@@ -20,13 +20,13 @@
 using System;
 using System.Runtime;
 
-using PixelFarm.Agg; 
+using PixelFarm.Agg;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
 {
-    
+
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
 
@@ -57,8 +57,8 @@ namespace PixelFarm.Agg
             {
                 throw new ArgumentOutOfRangeException("You must have a width and height > than 0.");
             }
-            
-            
+
+
 
             if (bitsPerPixel != 32 && bitsPerPixel != 24 && bitsPerPixel != 8)
             {
@@ -357,37 +357,174 @@ namespace PixelFarm.Agg
             while (--len != 0);
 #endif
         }
-
-
         public void BlendHL(int x1, int y, int x2, ColorRGBA sourceColor, byte cover)
         {
-            if (sourceColor.alpha != 0)
+
+            if (sourceColor.alpha == 0) { return; }
+            //-------------------------------------------------
+
+            int len = x2 - x1 + 1;
+            byte[] buffer = GetBuffer();
+            int bufferOffset = GetBufferOffsetXY(x1, y);
+
+            int alpha = (((int)(sourceColor.alpha) * (cover + 1)) >> 8);
+
+            if (alpha == BASE_MASK)
             {
-                int len = x2 - x1 + 1;
-
-
-                byte[] buffer = GetBuffer();
-                int bufferOffset = GetBufferOffsetXY(x1, y);
-
-                int alpha = (((int)(sourceColor.alpha) * (cover + 1)) >> 8);
-                if (alpha == BASE_MASK)
-                {
-                    recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
-                }
-                else
-                {
-                    do
-                    {
-                        recieveBlender.BlendPixel(buffer, bufferOffset,
-                            new ColorRGBA(sourceColor, alpha));
-
-                        bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
-                    }
-                    while (--len != 0);
-                }
+                //full
+                recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
             }
-        }
+            else
+            {
 
+                ColorRGBA c2 = new ColorRGBA(sourceColor, alpha);
+                do
+                {
+                    //copy pixel-by-pixel
+                    recieveBlender.BlendPixel(buffer, bufferOffset, c2);
+                    bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                }
+                while (--len != 0);
+            } 
+        } 
+        //void SubPixRender(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        //{
+        //    int y = scanline.Y;
+        //    int num_spans = scanline.SpanCount;
+
+        //    byte[] covers = scanline.GetCovers();
+        //    ScanlineRasterizer ras = gfx.ScanlineRasterizer;
+        //    var rasToBmp = gfx.ScanlineRasToDestBitmap;
+        //    ColorRGBA prevColor = ColorRGBA.White;
+
+
+
+        //    for (int i = 0; i <= num_spans; ++i)
+        //    {
+        //        //render span by span 
+        //        ScanlineSpan span = scanline.GetSpan(i);
+        //        int x = span.x;
+        //        int num_pix = span.len;
+        //        int coverIndex = span.cover_index;
+        //        //test subpixel rendering concept 
+        //        //----------------------------------------------------
+
+        //        int prev_cover = 0;
+
+        //        while (num_pix > 0)
+        //        {
+        //            int coverageValue = covers[coverIndex++];
+
+        //            if (coverageValue >= 255)
+        //            {
+
+        //                //100% cover
+        //                ColorRGBA newc = new ColorRGBA(color.red, color.green, color.blue);
+        //                prevColor = newc;
+        //                int a = (coverageValue * color.Alpha0To255) >> 8;
+        //                m_square.Draw(rasToBmp,
+        //                       ras, m_sl, destImage,
+        //                        new ColorRGBA(newc, a),
+        //                       x, y);
+
+        //                prev_cover = 255;//full
+        //            }
+        //            else
+        //            {
+
+        //                //check direction : 
+        //                bool isLeftToRight = coverageValue >= prev_cover;
+        //                prev_cover = coverageValue;
+
+
+        //                byte c_r, c_g, c_b;
+        //                float subpix_percent = ((float)(coverageValue) / 256f);
+
+        //                if (coverageValue < cover_1_3)
+        //                {
+        //                    if (isLeftToRight)
+        //                    {
+        //                        c_r = 255;
+        //                        c_g = 255;
+        //                        c_b = (byte)(255 - (255f * (subpix_percent)));
+
+        //                    }
+        //                    else
+        //                    {
+        //                        c_r = (byte)(255 - (255f * (subpix_percent)));
+        //                        c_g = 255;
+        //                        c_b = 255;
+        //                    }
+
+        //                    ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+
+
+        //                    int a = (coverageValue * color.Alpha0To255) >> 8;
+        //                    m_square.Draw(rasToBmp,
+        //                           ras, m_sl, destImage,
+        //                            new ColorRGBA(newc, a),
+        //                           x, y);
+        //                }
+        //                else if (coverageValue < cover_2_3)
+        //                {
+
+        //                    if (isLeftToRight)
+        //                    {
+        //                        c_r = prevColor.blue;
+        //                        c_g = (byte)(255 - (255f * (subpix_percent)));
+        //                        c_b = color.blue;
+        //                    }
+        //                    else
+        //                    {
+        //                        c_r = color.blue;
+        //                        c_g = (byte)(255 - (255f * (subpix_percent)));
+        //                        c_b = 255;
+        //                    }
+
+
+        //                    ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+
+        //                    int a = (coverageValue * color.Alpha0To255) >> 8;
+        //                    m_square.Draw(rasToBmp,
+        //                           ras, m_sl, destImage,
+        //                           new ColorRGBA(newc, a),
+        //                           x, y);
+        //                }
+        //                else
+        //                {
+        //                    //cover > 2/3 but not full 
+        //                    if (isLeftToRight)
+        //                    {
+        //                        c_r = (byte)(255 - (255f * (subpix_percent)));
+        //                        c_g = color.green;
+        //                        c_b = color.blue;
+        //                    }
+        //                    else
+        //                    {
+        //                        c_r = prevColor.green;
+        //                        c_g = prevColor.blue;
+        //                        c_b = (byte)(255 - (255f * (subpix_percent)));
+        //                    }
+
+        //                    ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+
+        //                    int a = (coverageValue * color.Alpha0To255) >> 8;
+        //                    m_square.Draw(rasToBmp,
+        //                           ras, m_sl, destImage,
+        //                           new ColorRGBA(newc, a),
+        //                           x, y);
+        //                }
+
+        //            }
+
+
+
+
+        //            ++x;
+        //            --num_pix;
+        //        }
+
+        //    }
         public void BlendVL(int x, int y1, int y2, ColorRGBA sourceColor, byte cover)
         {
             throw new NotImplementedException();
@@ -438,32 +575,70 @@ namespace PixelFarm.Agg
 #endif
         }
 
+    
+        
         public void BlendSolidHSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex)
         {
             int colorAlpha = sourceColor.alpha;
             if (colorAlpha != 0)
             {
-                unchecked
+                byte[] buffer = GetBuffer();
+                int bufferOffset = GetBufferOffsetXY(x, y);
+                do
                 {
-                    byte[] buffer = GetBuffer();
-                    int bufferOffset = GetBufferOffsetXY(x, y);
-
-                    do
+                    int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
+                    if (alpha == BASE_MASK)
                     {
-                        int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
-                        if (alpha == BASE_MASK)
-                        {
-                            recieveBlender.CopyPixel(buffer, bufferOffset, sourceColor);
-                        }
-                        else
-                        {
-                            recieveBlender.BlendPixel(buffer, bufferOffset, new ColorRGBA(sourceColor, alpha));
-                        }
-                        bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
-                        coversIndex++;
+                        recieveBlender.CopyPixel(buffer, bufferOffset, sourceColor);
                     }
-                    while (--len != 0);
+                    else
+                    {
+                        recieveBlender.BlendPixel(buffer, bufferOffset, new ColorRGBA(sourceColor, alpha));
+                    }
+                    bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                    coversIndex++;
                 }
+                while (--len != 0);
+
+                //if (this.UseSubPixelBlend)
+                //{   
+                //    //SubPixRender( 
+                //    //do
+                //    //{ 
+                //    //    int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;  
+                //    //    if (alpha == BASE_MASK)
+                //    //    {
+                //    //        recieveBlender.CopyPixel(buffer, bufferOffset, sourceColor);
+                //    //    }
+                //    //    else
+                //    //    {
+                //    //        recieveBlender.BlendPixel(buffer, bufferOffset, new ColorRGBA(sourceColor, alpha));
+                //    //    }
+                //    //    bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                //    //    coversIndex++;
+                //    //}
+                //    //while (--len != 0);
+                   
+                //}
+                //else
+                //{
+                //    do
+                //    {
+                //        int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
+                //        if (alpha == BASE_MASK)
+                //        {
+                //            recieveBlender.CopyPixel(buffer, bufferOffset, sourceColor);
+                //        }
+                //        else
+                //        {
+                //            recieveBlender.BlendPixel(buffer, bufferOffset, new ColorRGBA(sourceColor, alpha));
+                //        }
+                //        bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                //        coversIndex++;
+                //    }
+                //    while (--len != 0);
+                //}
+
             }
         }
 
@@ -623,6 +798,8 @@ namespace PixelFarm.Agg
                 }
             }
         }
+
+        public bool UseSubPixelBlend { get; set; }
         //public void apply_gamma_inv(GammaLookUpTable g)
         //{
         //    throw new System.NotImplementedException();

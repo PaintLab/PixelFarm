@@ -59,7 +59,7 @@ namespace PixelFarm.Agg
         public abstract void Render(IImageReaderWriter source, double x, double y);
         public abstract void Render(IImageReaderWriter source, AffinePlan[] affinePlans);
 
-
+       
         public void Render(VertexStore vxStorage, ColorRGBA c)
         {
             Render(new VertexStoreSnap(vxStorage), c);
@@ -125,7 +125,11 @@ namespace PixelFarm.Agg
             get { return this.sclineRas.AddVertexOffsetY; }
             set { this.sclineRas.AddVertexOffsetY = value; }
         }
-
+        public abstract bool UseSubPixelRendering
+        {
+            get;
+            set;
+        }
 
 
 #if DEBUG

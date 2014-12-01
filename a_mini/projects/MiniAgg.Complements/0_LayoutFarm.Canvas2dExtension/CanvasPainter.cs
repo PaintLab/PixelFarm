@@ -106,7 +106,7 @@ namespace PixelFarm.Agg
             ellipse.Reset(x, y, radius, radius);
             gx.Render(ellipse.MakeVxs(), this.fillColor);
         }
-         
+
         public void FillEllipse(double left, double bottom, double right, double top, int nsteps)
         {
             ellipse.Reset((left + right) * 0.5,
@@ -253,7 +253,7 @@ namespace PixelFarm.Agg
            double x,
            double y)
         {
-            textPrinter.Print(text.ToString(), x, y); 
+            textPrinter.Print(text.ToString(), x, y);
 
         }
         //-------------------------------------------------------
@@ -274,7 +274,11 @@ namespace PixelFarm.Agg
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
-
+        public bool UseSubPixelRendering
+        {
+            get { return this.gx.DestImage.UseSubPixelBlend; }
+            set { this.gx.DestImage.UseSubPixelBlend = value; }
+        }
         public ColorRGBA FillColor
         {
             get { return fillColor; }

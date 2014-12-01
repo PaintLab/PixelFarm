@@ -22,7 +22,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
         public CustomScanlineRasToBmp_EnlargedV3(double size, ActualImage destImage)
         {
-            this.UseCustomRenderSingleScanLine = true;
+            this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
@@ -230,7 +230,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         public void OnDraw(Graphics2D graphics2D)
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-
+            graphics2D.UseSubPixelRendering = false;
 
             IPixelBlender NormalBlender = new PixelBlenderBGRA();
             IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
@@ -242,7 +242,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
             clippingProxyNormal.Clear(ColorRGBA.White);
             var rasterizer = graphics2D.ScanlineRasterizer;
-
+        
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 
             int size_mul = (int)this.PixelSize;
@@ -257,9 +257,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
             //----------------------------------------
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+            graphics2D.UseSubPixelRendering = true;
             sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
-
+            graphics2D.UseSubPixelRendering = false;
             //----------------------------------------
             PathWriter ps = new PathWriter();
             ps.Clear();
@@ -273,7 +274,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
             rasterizer.AddPath(StrokeHelp.MakeVxs(ps.Vxs, 2));
             //----------------------------------------
-
+           
             sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }

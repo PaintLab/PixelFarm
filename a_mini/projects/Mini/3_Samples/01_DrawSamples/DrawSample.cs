@@ -47,7 +47,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
             //------------------------------------
-            //
+            //g.UseSubPixelRendering = true;
             // draw some text
             g.DrawString("A Simple Example", 300, 400, 20);
 
@@ -57,9 +57,9 @@ namespace PixelFarm.Agg.Sample_Draw
 
             g.DrawString2("A Simple Example4", 300, 250, 20);
             //---------------------------------------------------
+            //g.UseSubPixelRendering = false;
 
-          
-             
+
         }
     }
 
@@ -108,20 +108,27 @@ namespace PixelFarm.Agg.Sample_Draw
             g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
 
             // draw some text
+            // draw some text
+
+
+
+
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
             VertexStore vxs = textPrinter.CreateVxs();
-
             var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStore s1 = affTx.TransformToVxs(vxs);
 
-            g.Render(s1, ColorRGBA.Red);
+            
+            g.Render(s1, ColorRGBA.Black); 
+            g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
 
-            g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Black);
 
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
                 AffinePlan.Translate(40, height / 2));
             g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
+
+
         }
     }
 
