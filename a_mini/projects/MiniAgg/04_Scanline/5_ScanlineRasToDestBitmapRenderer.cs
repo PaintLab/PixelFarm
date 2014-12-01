@@ -60,126 +60,74 @@ namespace PixelFarm.Agg
             byte[] buffer = dest.GetBuffer();
             IPixelBlender blender = dest.GetRecieveBlender();
 
-            int lasx = 0;
+            int last_x = int.MinValue;
             int prev_cover = 0;
+            int bufferOffset = 0;
             ColorRGBA prevColor = ColorRGBA.White;
+
             for (int i = 1; i <= num_spans; ++i)
             {
                 //render span by span 
 
                 ScanlineSpan span = scanline.GetSpan(i);
 
-                int coverIndex = span.cover_index;
-                int bufferOffset = dest.GetBufferOffsetXY(span.x, y);
-                if (span.x != lasx + 1)
+                if (span.x != last_x + 1)
                 {
-                    //when skip 
-                    //reset 
+                    bufferOffset = dest.GetBufferOffsetXY(span.x, y);
+
+                    //when skip  then reset                     
                     prev_cover = 0;
                     prevColor = ColorRGBA.White;
                 }
 
-                lasx = span.x;
+                last_x = span.x;
                 int num_pix = span.len;
 
                 if (num_pix < 0)
                 {
                     //special encode***
+                    num_pix = -num_pix; //make it positive value
+                    last_x += (num_pix - 1);
 
-                    num_pix = -num_pix;
+                    //long span with coverage
                     int coverageValue = covers[span.cover_index];
-                    //int alpha = (((int)(color.alpha) * (coverageValue + 1)) >> 8);
-                    //ColorRGBA c2 = new ColorRGBA(color, alpha); 
-                    while (num_pix > 0)
+                    //------------------------------------------- 
+                    if (coverageValue >= 255)
                     {
 
-                        if (coverageValue >= 255)
+                        //100% cover
+                        int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
+                        ColorRGBA newc = prevColor = new ColorRGBA(color.red, color.green, color.blue);
+                        ColorRGBA todrawColor = new ColorRGBA(newc, a);
+                        prev_cover = 255;//full
+                        while (num_pix > 0)
                         {
 
-                            //100% cover
-                            ColorRGBA newc = new ColorRGBA(color.red, color.green, color.blue);
-                            prevColor = newc;
-                            int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                            blender.BlendPixel(buffer, bufferOffset, new ColorRGBA(newc, a));
-                            prev_cover = 255;//full
+                            blender.BlendPixel(buffer, bufferOffset, todrawColor);
+                            bufferOffset += 4; //1 pixel 4 bytes
+                            --num_pix;
                         }
-                        else
-                        {
 
-                            //check direction : 
-                            bool isLeftToRight = coverageValue >= prev_cover;
-                            prev_cover = coverageValue;
-
-
-                            byte c_r, c_g, c_b;
-                            float subpix_percent = ((float)(coverageValue) / 256f);
-
-                            if (coverageValue < cover_1_3)
-                            {
-                                if (isLeftToRight)
-                                {
-                                    c_r = 255;
-                                    c_g = 255;
-                                    c_b = (byte)(255 - (255f * (subpix_percent)));
-
-                                }
-                                else
-                                {
-                                    c_r = (byte)(255 - (255f * (subpix_percent)));
-                                    c_g = 255;
-                                    c_b = 255;
-                                }
-
-                                ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
-                                int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, new ColorRGBA(newc, a));
-                            }
-                            else if (coverageValue < cover_2_3)
-                            {
-
-                                if (isLeftToRight)
-                                {
-                                    c_r = prevColor.blue;
-                                    c_g = (byte)(255 - (255f * (subpix_percent)));
-                                    c_b = color.blue;
-                                }
-                                else
-                                {
-                                    c_r = color.blue;
-                                    c_g = (byte)(255 - (255f * (subpix_percent)));
-                                    c_b = 255;
-                                }
-                                ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
-                                int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, new ColorRGBA(newc, a));
-                            }
-                            else
-                            {
-                                //cover > 2/3 but not full 
-                                if (isLeftToRight)
-                                {
-                                    c_r = (byte)(255 - (255f * (subpix_percent)));
-                                    c_g = color.green;
-                                    c_b = color.blue;
-                                }
-                                else
-                                {
-                                    c_r = prevColor.green;
-                                    c_g = prevColor.blue;
-                                    c_b = (byte)(255 - (255f * (subpix_percent)));
-                                }
-
-                                ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
-                                int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, new ColorRGBA(newc, a));
-                            }
-                        }
-                        bufferOffset += 4; //1 pixel 4 bytes
-                        --num_pix;
                     }
+                    else
+                    {   
+                        prev_cover = coverageValue;  
+                        int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
+                        ColorRGBA newc = prevColor = new ColorRGBA(color.red, color.green, color.blue);
+                        ColorRGBA todrawColor = new ColorRGBA(newc, a);
+                        while (num_pix > 0)
+                        {
+                            blender.BlendPixel(buffer, bufferOffset, todrawColor);
+                            bufferOffset += 4; //1 pixel 4 bytes
+                            --num_pix;
+                        }
+                    }
+
                 }
                 else
                 {
+                    int coverIndex = span.cover_index;
+                    last_x += (num_pix - 1);
                     while (num_pix > 0)
                     {
                         int coverageValue = covers[coverIndex++];
@@ -197,9 +145,10 @@ namespace PixelFarm.Agg
                         {
 
                             //check direction : 
+
+
                             bool isLeftToRight = coverageValue >= prev_cover;
                             prev_cover = coverageValue;
-
 
                             byte c_r, c_g, c_b;
                             float subpix_percent = ((float)(coverageValue) / 256f);
@@ -317,11 +266,24 @@ namespace PixelFarm.Agg
                 case Agg.ScanlineRenderMode.SubPixelRendering:
                     {
 
-
+                        int dbugMinScanlineCount = 0;
                         while (sclineRas.SweepScanline(scline))
                         {
                             //render solid single scanline
+                            //if (dbugMinScanlineCount == 8)
+                            //{
+
+                            //}
                             SubPixRender(dest, scline, color);
+                            //if (dbugMinScanlineCount == 8)
+                            //{
+                            //    break;
+                            //}
+                            dbugMinScanlineCount++;
+                            //if (dbugMinScanlineCount > 2)
+                            //{
+                            //    break;
+                            //}
                         }
 
                     } break;

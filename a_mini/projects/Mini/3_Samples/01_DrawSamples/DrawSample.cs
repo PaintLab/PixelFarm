@@ -28,7 +28,7 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         public override void Draw(Graphics2D g)
         {
-           // Draw2(g);
+            // Draw2(g);
 
             ////1.
             //// clear the image to white 
@@ -37,9 +37,9 @@ namespace PixelFarm.Agg.Sample_Draw
             //------------------------------------
             g.UseSubPixelRendering = true;
             // draw some text
-            g.DrawString("E", 300, 400, 20);
+            g.DrawString("ABCDE abcd 1230 Hello!", 300, 400, 20);
             g.UseSubPixelRendering = false;
-
+            g.DrawString("ABCDE abcd 1230 Hello!", 300, 422, 20);
         }
         void Draw2(Graphics2D g)
         {
@@ -54,9 +54,9 @@ namespace PixelFarm.Agg.Sample_Draw
 
             g.dbugLine(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
             // draw a filled box
-            g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow); 
+            g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
             // and an outline around it
-            g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);  
+            g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
             //------------------------------------ 
             // draw some text
             g.DrawString("A Simple Example abcd1234", 300, 400, 20);
@@ -67,7 +67,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
             g.DrawString2("A Simple Example4", 300, 250, 20);
             //---------------------------------------------------
-           
+
 
 
         }
