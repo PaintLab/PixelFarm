@@ -28,6 +28,21 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         public override void Draw(Graphics2D g)
         {
+           // Draw2(g);
+
+            ////1.
+            //// clear the image to white 
+
+            g.Clear(ColorRGBA.White);
+            //------------------------------------
+            g.UseSubPixelRendering = true;
+            // draw some text
+            g.DrawString("E", 300, 400, 20);
+            g.UseSubPixelRendering = false;
+
+        }
+        void Draw2(Graphics2D g)
+        {
             //1.
             // clear the image to white
 
@@ -39,17 +54,12 @@ namespace PixelFarm.Agg.Sample_Draw
 
             g.dbugLine(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
             // draw a filled box
-            g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
-
+            g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow); 
             // and an outline around it
-            g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
-
-
-
-            //------------------------------------
-            //g.UseSubPixelRendering = true;
+            g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);  
+            //------------------------------------ 
             // draw some text
-            g.DrawString("A Simple Example", 300, 400, 20);
+            g.DrawString("A Simple Example abcd1234", 300, 400, 20);
 
             g.DrawString2("A Simple Example2 : hintCached", 300, 350, 20);
 
@@ -57,7 +67,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
             g.DrawString2("A Simple Example4", 300, 250, 20);
             //---------------------------------------------------
-            //g.UseSubPixelRendering = false;
+           
 
 
         }
@@ -118,8 +128,8 @@ namespace PixelFarm.Agg.Sample_Draw
             var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStore s1 = affTx.TransformToVxs(vxs);
 
-            
-            g.Render(s1, ColorRGBA.Black); 
+
+            g.Render(s1, ColorRGBA.Black);
             g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
 
 
