@@ -90,13 +90,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                         //check direction : 
                         bool isLeftToRight = coverageValue >= prev_cover;
                         prev_cover = coverageValue;
-
-
                         byte c_r, c_g, c_b;
                         float subpix_percent = ((float)(coverageValue) / 256f);
 
                         if (coverageValue < cover_1_3)
                         {
+                            
                             if (isLeftToRight)
                             {
                                 c_r = 255;
@@ -127,11 +126,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                             {
                                 c_r = prevColor.blue;
                                 c_g = (byte)(255 - (255f * (subpix_percent)));
-                                c_b = color.blue;
+                                c_b = color.blue;// (byte)(255 - (255f * (subpix_percent)));// color.blue;
                             }
                             else
                             {
-                                c_r = color.blue;
+                                c_r = color.blue;// (byte)(255 - (255f * (subpix_percent))); //color.blue;
                                 c_g = (byte)(255 - (255f * (subpix_percent)));
                                 c_b = 255;
                             }
@@ -242,7 +241,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
             clippingProxyNormal.Clear(ColorRGBA.White);
             var rasterizer = graphics2D.ScanlineRasterizer;
-        
+
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
 
             int size_mul = (int)this.PixelSize;
@@ -274,7 +273,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
             rasterizer.AddPath(StrokeHelp.MakeVxs(ps.Vxs, 2));
             //----------------------------------------
-           
+
             sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
 
         }

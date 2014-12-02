@@ -276,8 +276,8 @@ namespace PixelFarm.Agg
         }
         public bool UseSubPixelRendering
         {
-            get { return this.gx.DestImage.UseSubPixelBlend; }
-            set { this.gx.DestImage.UseSubPixelBlend = value; }
+            get { return sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
+            set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
         }
         public ColorRGBA FillColor
         {

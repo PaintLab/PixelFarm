@@ -623,7 +623,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public bool UseSubPixelBlend { get; set; }
+         
         //public void apply_gamma_inv(GammaLookUpTable g)
         //{
         //    throw new System.NotImplementedException();

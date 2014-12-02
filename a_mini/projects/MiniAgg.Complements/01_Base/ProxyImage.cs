@@ -31,11 +31,7 @@ namespace PixelFarm.Agg.Image
         {
             this.linkedImage = linkedImage;
         }
-        public bool UseSubPixelBlend
-        {
-            get { return this.linkedImage.UseSubPixelBlend; }
-            set { this.linkedImage.UseSubPixelBlend = value; }
-        }
+    
         public virtual int Width
         {
             get

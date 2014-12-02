@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
         ColorRGBA GetPixel(int x, int y);
         void SetPixel(int x, int y, ColorRGBA color);
 
-        bool UseSubPixelBlend { get; set; }
+     
         //-------------------------------------------------------------------------------------------
         void BlendHL(int x, int y, int x2, ColorRGBA sourceColor, byte cover); //**
         void BlendVL(int x, int y1, int y2, ColorRGBA sourceColor, byte cover);

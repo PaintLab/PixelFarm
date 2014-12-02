@@ -110,8 +110,8 @@ namespace PixelFarm.Agg
 
                     }
                     else
-                    {   
-                        prev_cover = coverageValue;  
+                    {
+                        prev_cover = coverageValue;
                         int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
                         ColorRGBA newc = prevColor = new ColorRGBA(color.red, color.green, color.blue);
                         ColorRGBA todrawColor = new ColorRGBA(newc, a);
@@ -155,6 +155,8 @@ namespace PixelFarm.Agg
 
                             if (coverageValue < cover_1_3)
                             {
+                                 
+
                                 if (isLeftToRight)
                                 {
                                     c_r = 255;
@@ -197,7 +199,7 @@ namespace PixelFarm.Agg
                                 //cover > 2/3 but not full 
                                 if (isLeftToRight)
                                 {
-                                    c_r = (byte)(255 - (255f * (subpix_percent)));
+                                    c_r =  (byte)(255 - (255f * (subpix_percent)));
                                     c_g = color.green;
                                     c_b = color.blue;
                                 }
@@ -205,7 +207,7 @@ namespace PixelFarm.Agg
                                 {
                                     c_r = prevColor.green;
                                     c_g = prevColor.blue;
-                                    c_b = (byte)(255 - (255f * (subpix_percent)));
+                                    c_b =  (byte)(255 - (255f * (subpix_percent)));
                                 }
 
                                 ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
