@@ -35,6 +35,9 @@ using OpenTK.Graphics;
 using OpenTK.Input;
 using OpenTK.Platform;
 
+
+using OpenTK.Graphics.ES20;
+ 
 namespace OpenTK
 {
     /// <summary>
@@ -1070,7 +1073,7 @@ namespace OpenTK
 
         protected void GLClearColor(System.Drawing.Color c)
         {
-            OpenTK.Graphics.OpenGL.GL.ClearColor(LayoutFarm.Drawing.Conv.ToColor(c));
+            GL.ClearColor(LayoutFarm.Drawing.Conv.ToColor(c));
         }
 
     }

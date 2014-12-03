@@ -30,14 +30,34 @@ using OpenTK.Graphics;
 
 namespace OpenTK.Platform
 {
+    public enum DesktopBackend
+    {
+        OpenGL,
+        ES20
+    }
     // Provides the foundation for all desktop IGraphicsContext implementations.
     public abstract class DesktopGraphicsContext : GraphicsContextBase
     {
+        DesktopBackend backend;
+        public DesktopGraphicsContext(DesktopBackend backend)
+        {
+            this.backend = backend;
+        }
+
         public override void LoadAll()
         {
-            //
-            new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
-            //new OpenTK.Graphics.OpenGL.GL().LoadEntryPoints();
+            switch (this.backend)
+            {
+                case DesktopBackend.ES20:
+
+                    new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
+                    break;
+                default:
+                    new OpenTK.Graphics.OpenGL.GL().LoadEntryPoints();
+                    break;
+
+            }
+
         }
     }
 }

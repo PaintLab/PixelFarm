@@ -198,7 +198,7 @@ namespace OpenTK.Platform.Egl
         public static extern bool GetConfigAttrib(EGLDisplay dpy, EGLConfig config, int attribute, out int value);
 
         [DllImportAttribute("libEGL.dll", EntryPoint = "eglCreateWindowSurface")]
-        public static extern  EGLSurface CreateWindowSurface(EGLDisplay dpy, EGLConfig config, IntPtr win, int[] attrib_list);
+        public static extern EGLSurface CreateWindowSurface(EGLDisplay dpy, EGLConfig config, IntPtr win, int[] attrib_list);
 
         [DllImportAttribute("libEGL.dll", EntryPoint = "eglCreatePbufferSurface")]
         public static extern EGLSurface CreatePbufferSurface(EGLDisplay dpy, EGLConfig config, int[] attrib_list);
@@ -304,8 +304,9 @@ namespace OpenTK.Platform.Egl
         {
             get
             {
+                
                 try { GetCurrentContext(); }
-                catch (Exception) { return false;  }
+                catch (Exception ex) { return false; }
                 return true;
             }
         }

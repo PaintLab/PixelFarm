@@ -34,8 +34,9 @@ namespace OpenTK.Platform.Dummy
         {
             Mode = new GraphicsMode(new IntPtr(2), 32, 16, 0, 0, 0, 2, false);
         }
-        
+
         public DummyGLContext(ContextHandle handle)
+            : base(DesktopBackend.OpenGL)
         {
             Handle = handle;
         }

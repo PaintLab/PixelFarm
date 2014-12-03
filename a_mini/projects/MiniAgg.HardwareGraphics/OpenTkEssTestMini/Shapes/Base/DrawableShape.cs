@@ -113,27 +113,27 @@ namespace Examples.Shapes
 
         private void DrawImmediateMode()
         {
-            GL.Begin(PrimitiveMode);
-            {
-                if (IndexArray == null)
-                    foreach (VertexT2dN3dV3d v in VertexArray)
-                    {
-                        GL.TexCoord2(v.TexCoord.X, v.TexCoord.Y);
-                        GL.Normal3(v.Normal.X, v.Normal.Y, v.Normal.Z);
-                        GL.Vertex3(v.Position.X, v.Position.Y, v.Position.Z);
-                    }
-                else
-                {
-                    for (uint i = 0; i < IndexArray.Length; i++)
-                    {
-                        uint index = IndexArray[i];
-                        GL.TexCoord2(VertexArray[index].TexCoord.X, VertexArray[index].TexCoord.Y);
-                        GL.Normal3(VertexArray[index].Normal.X, VertexArray[index].Normal.Y, VertexArray[index].Normal.Z);
-                        GL.Vertex3(VertexArray[index].Position.X, VertexArray[index].Position.Y, VertexArray[index].Position.Z);
-                    }
-                }
-            }
-            GL.End();
+            //GL.Begin(PrimitiveMode);
+            //{
+            //    if (IndexArray == null)
+            //        foreach (VertexT2dN3dV3d v in VertexArray)
+            //        {
+            //            GL.TexCoord2(v.TexCoord.X, v.TexCoord.Y);
+            //            GL.Normal3(v.Normal.X, v.Normal.Y, v.Normal.Z);
+            //            GL.Vertex3(v.Position.X, v.Position.Y, v.Position.Z);
+            //        }
+            //    else
+            //    {
+            //        for (uint i = 0; i < IndexArray.Length; i++)
+            //        {
+            //            uint index = IndexArray[i];
+            //            GL.TexCoord2(VertexArray[index].TexCoord.X, VertexArray[index].TexCoord.Y);
+            //            GL.Normal3(VertexArray[index].Normal.X, VertexArray[index].Normal.Y, VertexArray[index].Normal.Z);
+            //            GL.Vertex3(VertexArray[index].Position.X, VertexArray[index].Position.Y, VertexArray[index].Position.Z);
+            //        }
+            //    }
+            //}
+            //GL.End();
         }
 
         /// <summary>
@@ -142,20 +142,20 @@ namespace Examples.Shapes
         /// </summary>
         public void Draw()
         {
-            if (!UseDisplayList)
-                DrawImmediateMode();
-            else
-                if (DisplayListHandle == 0)
-                {
-                    if (VertexArray == null)
-                        throw new Exception("Cannot draw null Vertex Array.");
-                    DisplayListHandle = GL.GenLists(1);
-                    GL.NewList(DisplayListHandle, ListMode.CompileAndExecute);
-                    DrawImmediateMode();
-                    GL.EndList();
-                }
-                else
-                    GL.CallList(DisplayListHandle);
+            //if (!UseDisplayList)
+            //    DrawImmediateMode();
+            //else
+            //    if (DisplayListHandle == 0)
+            //    {
+            //        if (VertexArray == null)
+            //            throw new Exception("Cannot draw null Vertex Array.");
+            //        DisplayListHandle = GL.GenLists(1);
+            //        GL.NewList(DisplayListHandle, ListMode.CompileAndExecute);
+            //        DrawImmediateMode();
+            //        GL.EndList();
+            //    }
+            //    else
+            //        GL.CallList(DisplayListHandle);
         }
 
         #region IDisposable Members
@@ -167,15 +167,15 @@ namespace Examples.Shapes
         /// </summary>
         public void Dispose()
         {
-            if (VertexArray != null)
-                VertexArray = null;
-            if (IndexArray != null)
-                IndexArray = null;
-            if (DisplayListHandle != 0)
-            {
-                GL.DeleteLists(DisplayListHandle, 1);
-                DisplayListHandle = 0;
-            }
+            //    if (VertexArray != null)
+            //        VertexArray = null;
+            //    if (IndexArray != null)
+            //        IndexArray = null;
+            //    if (DisplayListHandle != 0)
+            //    {
+            //        GL.DeleteLists(DisplayListHandle, 1);
+            //        DisplayListHandle = 0;
+            //    }
         }
 
         #endregion

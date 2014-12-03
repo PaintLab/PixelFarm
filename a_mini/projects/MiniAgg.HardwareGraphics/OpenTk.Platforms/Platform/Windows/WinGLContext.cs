@@ -54,7 +54,8 @@ namespace OpenTK.Platform.Windows
         }
 
         public WinGLContext(GraphicsMode format, WinWindowInfo window, IGraphicsContext sharedContext,
-            int major, int minor, GraphicsContextFlags flags)
+            int major, int minor, GraphicsContextFlags flags, DesktopBackend backEnd)
+            : base(backEnd)
         {
             // There are many ways this code can break when accessed by multiple threads. The biggest offender is
             // the sharedContext stuff, which will only become valid *after* this constructor returns.
@@ -150,7 +151,8 @@ namespace OpenTK.Platform.Windows
         }
 
         public WinGLContext(ContextHandle handle, WinWindowInfo window, IGraphicsContext sharedContext,
-            int major, int minor, GraphicsContextFlags flags)
+            int major, int minor, GraphicsContextFlags flags, DesktopBackend backEnd)
+            :base(backEnd)
         {
             if (handle == ContextHandle.Zero)
                 throw new ArgumentException("handle");

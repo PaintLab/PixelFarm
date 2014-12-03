@@ -34,10 +34,15 @@ namespace OpenTK.Platform.Windows
     using Graphics;
     using OpenTK.Input;
 
-    class WinFactory : IPlatformFactory 
+    class WinFactory : IPlatformFactory
     {
         #region IPlatformFactory Members
 
+        DesktopBackend desktopBackEnd;
+        public WinFactory(DesktopBackend desktopBackEnd)
+        {
+            this.desktopBackEnd = desktopBackEnd;
+        }
         public virtual INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
         {
             return new WinGLNative(x, y, width, height, title, options, device);
@@ -50,12 +55,12 @@ namespace OpenTK.Platform.Windows
 
         public virtual IGraphicsContext CreateGLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
         {
-            return new WinGLContext(mode, (WinWindowInfo)window, shareContext, major, minor, flags);
+            return new WinGLContext(mode, (WinWindowInfo)window, shareContext, major, minor, flags, desktopBackEnd);
         }
 
         public virtual IGraphicsContext CreateGLContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
         {
-            return new WinGLContext(handle, (WinWindowInfo)window, shareContext, major, minor, flags);
+            return new WinGLContext(handle, (WinWindowInfo)window, shareContext, major, minor, flags, desktopBackEnd);
         }
 
         public virtual GraphicsContext.GetCurrentContextDelegate CreateGetCurrentGraphicsContext()
@@ -73,14 +78,14 @@ namespace OpenTK.Platform.Windows
 
         public virtual OpenTK.Input.IKeyboardDriver CreateKeyboardDriver()
         {
-            throw new NotImplementedException();            
+            throw new NotImplementedException();
             // If Windows version is NT5 or higher, we are able to use raw input.
             if (System.Environment.OSVersion.Version.Major >= 5)
                 return new WinRawKeyboard();
             else
                 return new WMInput(null);
         }
-        
+
         #endregion
     }
 }

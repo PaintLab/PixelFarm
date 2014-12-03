@@ -50,12 +50,14 @@ namespace OpenTK.Platform.Windows
 
         public virtual IGraphicsContext CreateGLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
         {
-            return new WinGLContext(mode, (WinWindowInfo)window, shareContext, major, minor, flags);
+            throw new NotSupportedException();
+            //return new WinGLContext(mode, (WinWindowInfo)window, shareContext, major, minor, flags);
         }
 
         public virtual IGraphicsContext CreateGLContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
         {
-            return new WinGLContext(handle, (WinWindowInfo)window, shareContext, major, minor, flags);
+            throw new NotSupportedException();
+            //return new WinGLContext(handle, (WinWindowInfo)window, shareContext, major, minor, flags);
         }
 
         public virtual GraphicsContext.GetCurrentContextDelegate CreateGetCurrentGraphicsContext()

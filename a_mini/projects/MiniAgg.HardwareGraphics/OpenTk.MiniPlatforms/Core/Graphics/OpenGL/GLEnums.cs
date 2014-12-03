@@ -27,9 +27,11 @@
 
 using System;
 
+ 
+
 namespace OpenTK.Graphics.OpenGL
 {
-    #pragma warning disable 1591
+#pragma warning disable 1591
 
     public enum AccumOp : int
     {
@@ -12024,3 +12026,5 @@ namespace OpenTK.Graphics.OpenGL
     }
 
 }
+
+ 

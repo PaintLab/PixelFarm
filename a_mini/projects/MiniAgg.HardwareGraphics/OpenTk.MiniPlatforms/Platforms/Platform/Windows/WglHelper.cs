@@ -12,7 +12,8 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 
 namespace OpenTK.Platform.Windows
-{
+{   
+#if !DISABLE_DESKTOP_OPENGL
     internal partial class Wgl
     {
         #region --- Constructors ---
@@ -198,4 +199,5 @@ namespace OpenTK.Platform.Windows
 
         #endregion
     }
+#endif
 }

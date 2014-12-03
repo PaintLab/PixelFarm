@@ -19,6 +19,7 @@ using System.Reflection.Emit;
 
 #endregion
 
+#if !DISABLE_DESKTOP_OPENGL
 namespace OpenTK.Graphics.OpenGL
 {
     /// <summary>
@@ -1021,3 +1022,7 @@ namespace OpenTK.Graphics.OpenGL
         #endregion
     }
 }
+
+
+
+#endif
