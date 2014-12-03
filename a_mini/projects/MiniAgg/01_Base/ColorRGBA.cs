@@ -775,14 +775,7 @@ namespace PixelFarm.Agg
             blue = (byte)c.blue;
             alpha = (byte)a_;
         }
-
-        //public ColorRGBA(uint fourByteColor)
-        //{
-        //    red = (byte)((fourByteColor >> 16) & 0xFF);
-        //    green = (byte)((fourByteColor >> 8) & 0xFF);
-        //    blue = (byte)((fourByteColor >> 0) & 0xFF);
-        //    alpha = (byte)((fourByteColor >> 24) & 0xFF);
-        //}
+         
 
         public ColorRGBA(ColorRGBAf c)
         {
@@ -796,7 +789,7 @@ namespace PixelFarm.Agg
         {
             //if a.red== bred then
             //a.red ^ b.red =0 
-            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.alpha) ^ (a.alpha ^ b.alpha)) == 0;
+            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) == 0;
 
             //if (a.red == b.red && a.green == b.green && a.blue == b.blue && a.alpha == b.alpha)
             //{
@@ -808,9 +801,8 @@ namespace PixelFarm.Agg
         public static bool operator !=(ColorRGBA a, ColorRGBA b)
         {
             //if a.red !=  b.red then
-            //a.red ^ b.red  =1
-            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.alpha) ^ (a.alpha ^ b.alpha)) != 0;
-
+            //a.red ^ b.red  =1 
+            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) != 0; 
             //if (a.red != b.red || a.green != b.green || a.blue != b.blue || a.alpha != b.alpha)
             //{
             //    return true;
@@ -940,8 +932,7 @@ namespace PixelFarm.Agg
         {
 
             return this * (1 - weight) + other * weight;
-            //ColorRGBA result = new ColorRGBA(this);
-            // return result;
+      
         }
 #if DEBUG
         public override string ToString()

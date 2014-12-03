@@ -237,8 +237,8 @@ namespace PixelFarm.Agg.Lines
                            int x1, int y1, int x2)
         {
             byte[] covers = new byte[MAX_HALF_WIDTH * 2 + 4];
-            int Offset0 = 0;
-            int Offset1 = 0;
+            int offset0 = 0;
+            int offset1 = 0;
             int x = x1 << LineAA.SUBPIXEL_SHIFT;
             int y = y1 << LineAA.SUBPIXEL_SHIFT;
             int w = SubPixelWidth;
@@ -254,20 +254,20 @@ namespace PixelFarm.Agg.Lines
             do
             {
                 int d = (int)(AggMath.fast_sqrt(dx * dx + dy * dy));
-                covers[Offset1] = 0;
+                covers[offset1] = 0;
                 if (cmp(di.Distance) && d <= w)
                 {
-                    covers[Offset1] = (byte)GetCover(d);
+                    covers[offset1] = (byte)GetCover(d);
                 }
-                ++Offset1;
+                ++offset1;
                 dx += LineAA.SUBPIXEL_SCALE;
                 di.IncX();
             }
             while (++x1 <= x2);
             destImageSurface.BlendSolidHSpan(x0, y1,
-                                     Offset1 - Offset0,
+                                     offset1 - offset0,
                                      Color, covers,
-                                     Offset0);
+                                     offset0);
         }
 
         public override void SemiDot(CompareFunction cmp, int xc1, int yc1, int xc2, int yc2)

@@ -148,8 +148,10 @@ namespace PixelFarm.Agg.Sample_LionOutline
             //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
             //transform *= Affine.NewTranslation(width / 2, height / 2);
 
+             
             if (RenderAsScanline)
             {
+                
                 var rasterizer = graphics2D.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
 
@@ -186,6 +188,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 var vxs = affTx.TransformToVxs(lionShape.Path.Vxs);// trans.DoTransformToNewVxStorage();
 
                 int j = lionShape.NumPaths;
+                
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderVertexSnap(

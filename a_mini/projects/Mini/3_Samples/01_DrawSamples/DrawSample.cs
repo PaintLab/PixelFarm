@@ -28,6 +28,21 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         public override void Draw(Graphics2D g)
         {
+            // Draw2(g);
+
+            ////1.
+            //// clear the image to white 
+
+            g.Clear(ColorRGBA.White);
+            //------------------------------------
+            g.UseSubPixelRendering = true;
+            // draw some text
+            g.DrawString("ABCDE abcd 1230 Hello!", 300, 400, 20);
+            g.UseSubPixelRendering = false;
+            g.DrawString("ABCDE abcd 1230 Hello!", 300, 422, 20);
+        }
+        void Draw2(Graphics2D g)
+        {
             //1.
             // clear the image to white
 
@@ -40,16 +55,11 @@ namespace PixelFarm.Agg.Sample_Draw
             g.dbugLine(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
             // draw a filled box
             g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
-
             // and an outline around it
             g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
-
-
-
-            //------------------------------------
-            //
+            //------------------------------------ 
             // draw some text
-            g.DrawString("A Simple Example", 300, 400, 20);
+            g.DrawString("A Simple Example abcd1234", 300, 400, 20);
 
             g.DrawString2("A Simple Example2 : hintCached", 300, 350, 20);
 
@@ -58,8 +68,8 @@ namespace PixelFarm.Agg.Sample_Draw
             g.DrawString2("A Simple Example4", 300, 250, 20);
             //---------------------------------------------------
 
-          
-             
+
+
         }
     }
 
@@ -108,20 +118,27 @@ namespace PixelFarm.Agg.Sample_Draw
             g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
 
             // draw some text
+            // draw some text
+
+
+
+
             var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
             VertexStore vxs = textPrinter.CreateVxs();
-
             var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStore s1 = affTx.TransformToVxs(vxs);
 
-            g.Render(s1, ColorRGBA.Red);
 
-            g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Black);
+            g.Render(s1, ColorRGBA.Black);
+            g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
+
 
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
                 AffinePlan.Translate(40, height / 2));
             g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
+
+
         }
     }
 

@@ -64,17 +64,17 @@ namespace PixelFarm.Font2
                 //Agg.Transform.AffinePlan.Translate(xpos, y));
                 //var vxs1 = mat.TransformToVxs(glyph.flattenVxs);
 
-                //VertexStore vxs1 = Agg.Transform.Affine.TranslateToVxs(
-                //    glyph.flattenVxs,
-                //    (float)(xpos),
-                //    (float)(y));
-                //Agg.Transform.Affine.NewScaling(0.25);
-                //this.painter.Fill(vxs1);
+                VertexStore vxs1 = Agg.Transform.Affine.TranslateToVxs(
+                    glyph.flattenVxs,
+                    (float)(xpos),
+                    (float)(y));
+                
+                this.painter.Fill(vxs1);
                 //--------------------------------------------------------
                 ////render with bitmap
-                this.painter.DrawImage(glyph.glyphImage32,
-                    (float)(xpos + (left >> 6)),
-                    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+                //this.painter.DrawImage(glyph.glyphImage32,
+                //    (float)(xpos + (left >> 6)),
+                //    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
 
                 int w = (glyph.exportGlyph.advanceX) >> 6;
                 xpos += (w);

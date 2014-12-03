@@ -43,8 +43,9 @@ namespace PixelFarm.Agg
 
         byte[] GetBuffer(); 
         ColorRGBA GetPixel(int x, int y);
-        void SetPixel(int x, int y, ColorRGBA color);        
+        void SetPixel(int x, int y, ColorRGBA color);
 
+     
         //-------------------------------------------------------------------------------------------
         void BlendHL(int x, int y, int x2, ColorRGBA sourceColor, byte cover); //**
         void BlendVL(int x, int y1, int y2, ColorRGBA sourceColor, byte cover);
