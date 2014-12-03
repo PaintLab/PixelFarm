@@ -31,12 +31,14 @@ using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.Font
 {
     public enum Justification { Left, Center, Right };
-    public enum Baseline { 
-        BoundsTop, 
-        BoundsCenter, 
+    public enum Baseline
+    {
+        BoundsTop,
+        BoundsCenter,
         TextCenter,
-        Text, 
-        BoundsBottom };
+        Text,
+        BoundsBottom
+    };
 
 
 
@@ -156,7 +158,7 @@ namespace PixelFarm.Agg.Font
 
         public void Render(Graphics2D graphics2D, ColorRGBA color)
         {
-            this.RewindZero();
+
             if (DrawFromHintedCache)
             {
                 RenderFromCache(graphics2D, color);
@@ -210,7 +212,7 @@ namespace PixelFarm.Agg.Font
             }
         }
 
-        public IEnumerable<VertexData> GetVertexIter()
+        IEnumerable<VertexData> GetVertexIter()
         {
             if (text != null && text.Length > 0)
             {
@@ -274,15 +276,19 @@ namespace PixelFarm.Agg.Font
             yield return new VertexData(VertexCmd.Stop);
         }
 
-        public VertexStore MakeVxs()
+        VertexStore MakeVxs()
         {
-            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());             
+            //rewind zero
+            currentEnumerator = GetVertexIter().GetEnumerator();
+            currentEnumerator.MoveNext();
+
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());
         }
-        public VertexStoreSnap MakeVertexSnap()
+        internal VertexStoreSnap MakeVertexSnap()
         {
             return new VertexStoreSnap(this.MakeVxs());
         }
-        private Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)
+        Vector2 GetXPositionForLineBasedOnJustification(Vector2 currentOffset, string line)
         {
             Vector2 size = GetSize(line);
             switch (Justification)
@@ -305,7 +311,7 @@ namespace PixelFarm.Agg.Font
             return currentOffset;
         }
 
-        private Vector2 GetBaseline(Vector2 currentOffset)
+        Vector2 GetBaseline(Vector2 currentOffset)
         {
             switch (Baseline)
             {
@@ -331,25 +337,12 @@ namespace PixelFarm.Agg.Font
         IEnumerator<VertexData> currentEnumerator;
 
 
-        public void RewindZero()
-        {
-            currentEnumerator = GetVertexIter().GetEnumerator();
-            currentEnumerator.MoveNext();
-        }
-        public VertexCmd GetNextVertex(out double x, out double y)
-        {
-            x = currentEnumerator.Current.x;
-            y = currentEnumerator.Current.y;
-            VertexCmd command = currentEnumerator.Current.command;
+         
 
-            currentEnumerator.MoveNext();
-
-            return command;
-        }
         public VertexStore CreateVxs()
         {
-            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());             
-          
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter());
+
 
             //return new VertexSnap(new VertexStorage(list));
         }

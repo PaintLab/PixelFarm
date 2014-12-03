@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         Graphics2D gfx;
         public CustomScanlineRasToBmp_EnlargedV2(double size, ActualImage destImage)
         {
-            this.UseCustomRenderSingleScanLine = true;
+            this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
@@ -137,6 +137,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
 
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+            
             sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //-----------------------------------------------------------------------------------------------------------

@@ -22,12 +22,27 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
         public CustomScanlineRasToBmp_EnlargedV3(double size, ActualImage destImage)
         {
-            this.UseCustomRenderSingleScanLine = true;
+            this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
         }
+        static float mix(float farColor, float nearColor, float weight)
+        {
+            //from ...
+            //opengl es2 mix function              
+            return farColor * (1f - weight) + (nearColor * weight);
+        }
+
+        const float cover_1_3 = 255f / 3f;
+        const float cover_2_3 = cover_1_3 * 2f;
+
         protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        {
+            SubPixRender(destImage, scanline, color);
+        }
+
+        void SubPixRender(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -35,7 +50,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             byte[] covers = scanline.GetCovers();
             ScanlineRasterizer ras = gfx.ScanlineRasterizer;
             var rasToBmp = gfx.ScanlineRasToDestBitmap;
-            for (int i = 1; i <= num_spans; ++i)
+            ColorRGBA prevColor = ColorRGBA.White;
+
+
+
+            for (int i = 0; i <= num_spans; ++i)
             {
                 //render span by span 
                 ScanlineSpan span = scanline.GetSpan(i);
@@ -44,70 +63,120 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 int coverIndex = span.cover_index;
                 //test subpixel rendering concept 
                 //----------------------------------------------------
-                //first px of span***
+
+                int prev_cover = 0;
+
+                while (num_pix > 0)
                 {
-                    int covarageValue = covers[coverIndex++];
-                    if (covarageValue < 45)
+                    int coverageValue = covers[coverIndex++];
+
+                    if (coverageValue >= 255)
                     {
-                        //light color
-                        //int a = (covarageValue * color.Alpha0To255) >> 8;
-                        //ColorRGBA c = new ColorRGBA(ColorRGBA.Red, a); 
-                        ////c.red = 0;//off blue component 
-                        //m_square.Draw(rasToBmp,
-                        //      ras, m_sl, destImage,
-                        //      c,
-                        //      x, y);
+
+                        //100% cover
+                        ColorRGBA newc = new ColorRGBA(color.red, color.green, color.blue);
+                        prevColor = newc;
+                        int a = (coverageValue * color.Alpha0To255) >> 8;
+                        m_square.Draw(rasToBmp,
+                               ras, m_sl, destImage,
+                                new ColorRGBA(newc, a),
+                               x, y);
+
+                        prev_cover = 255;//full
                     }
                     else
                     {
-                        int a = (covarageValue * color.Alpha0To255) >> 8;
-                        ColorRGBA c = new ColorRGBA(color, a);
+
+                        //check direction : 
+                        bool isLeftToRight = coverageValue >= prev_cover;
+                        prev_cover = coverageValue;
+                        byte c_r, c_g, c_b;
+                        float subpix_percent = ((float)(coverageValue) / 256f);
+
+                        if (coverageValue < cover_1_3)
+                        {
+                            
+                            if (isLeftToRight)
+                            {
+                                c_r = 255;
+                                c_g = 255;
+                                c_b = (byte)(255 - (255f * (subpix_percent)));
+
+                            }
+                            else
+                            {
+                                c_r = (byte)(255 - (255f * (subpix_percent)));
+                                c_g = 255;
+                                c_b = 255;
+                            }
+
+                            ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
 
 
-                        m_square.Draw(rasToBmp,
-                               ras, m_sl, destImage,
-                               c,
-                               x, y);
+                            int a = (coverageValue * color.Alpha0To255) >> 8;
+                            m_square.Draw(rasToBmp,
+                                   ras, m_sl, destImage,
+                                    new ColorRGBA(newc, a),
+                                   x, y);
+                        }
+                        else if (coverageValue < cover_2_3)
+                        {
+
+                            if (isLeftToRight)
+                            {
+                                c_r = prevColor.blue;
+                                c_g = (byte)(255 - (255f * (subpix_percent)));
+                                c_b = color.blue;// (byte)(255 - (255f * (subpix_percent)));// color.blue;
+                            }
+                            else
+                            {
+                                c_r = color.blue;// (byte)(255 - (255f * (subpix_percent))); //color.blue;
+                                c_g = (byte)(255 - (255f * (subpix_percent)));
+                                c_b = 255;
+                            }
+
+
+                            ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+
+                            int a = (coverageValue * color.Alpha0To255) >> 8;
+                            m_square.Draw(rasToBmp,
+                                   ras, m_sl, destImage,
+                                   new ColorRGBA(newc, a),
+                                   x, y);
+                        }
+                        else
+                        {
+                            //cover > 2/3 but not full 
+                            if (isLeftToRight)
+                            {
+                                c_r = (byte)(255 - (255f * (subpix_percent)));
+                                c_g = color.green;
+                                c_b = color.blue;
+                            }
+                            else
+                            {
+                                c_r = prevColor.green;
+                                c_g = prevColor.blue;
+                                c_b = (byte)(255 - (255f * (subpix_percent)));
+                            }
+
+                            ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+
+                            int a = (coverageValue * color.Alpha0To255) >> 8;
+                            m_square.Draw(rasToBmp,
+                                   ras, m_sl, destImage,
+                                   new ColorRGBA(newc, a),
+                                   x, y);
+                        }
+
                     }
+
+
+
+
                     ++x;
                     --num_pix;
                 }
-                //----------------------------------------------------
-                //in between ...
-                while (num_pix > 1)
-                {
-                    int covarageValue = covers[coverIndex++];
-                    int a = (covarageValue * color.Alpha0To255) >> 8;
-                    m_square.Draw(rasToBmp,
-                           ras, m_sl, destImage,
-                           new ColorRGBA(color, a),
-                           x, y);
-                    ++x;
-                    --num_pix;
-                }
-                //----------------------------------------------------
-                {
-                    //last pixel
-
-                    int covarageValue = covers[coverIndex++];
-                    if (covarageValue < 45)
-                    {
-                        
-                    }
-                    else
-                    {
-                        int a = (covarageValue * color.Alpha0To255) >> 8;
-                        m_square.Draw(rasToBmp,
-                               ras, m_sl, destImage,
-                               new ColorRGBA(color, a),
-                               x, y);
-                    }
-                    ++x;
-                    --num_pix;
-                    ++x;
-                    --num_pix;
-                }
-                //----------------------------------------------------
 
             }
         }
@@ -133,7 +202,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             m_idx = -1;
             m_x[0] = 57; m_y[0] = 100;
             m_x[1] = 369; m_y[1] = 170;
-            m_x[2] = 143; m_y[2] = 310;
+            m_x[2] = 80; m_y[2] = 310;
 
             //init value
             this.PixelSize = 32;
@@ -160,7 +229,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         public void OnDraw(Graphics2D graphics2D)
         {
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-
+            graphics2D.UseSubPixelRendering = false;
 
             IPixelBlender NormalBlender = new PixelBlenderBGRA();
             IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
@@ -187,9 +256,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
             //----------------------------------------
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+            graphics2D.UseSubPixelRendering = true;
             sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
-
+            graphics2D.UseSubPixelRendering = false;
             //----------------------------------------
             PathWriter ps = new PathWriter();
             ps.Clear();

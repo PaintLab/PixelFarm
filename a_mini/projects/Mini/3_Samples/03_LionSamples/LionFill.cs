@@ -131,6 +131,8 @@ namespace PixelFarm.Agg.Sample_LionFill
                 int j = lionShape.NumPaths;
                 int[] pathList = lionShape.PathIndexList;
                 ColorRGBA[] colors = lionShape.Colors;
+                //graphics2D.UseSubPixelRendering = true;
+
                 for (int i = 0; i < j; ++i)
                 {
                     graphics2D.Render(new VertexStoreSnap(myvxs, pathList[i]), colors[i]);

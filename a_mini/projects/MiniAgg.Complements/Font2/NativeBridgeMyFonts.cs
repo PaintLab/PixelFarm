@@ -114,10 +114,10 @@ namespace PixelFarm.Font2
         public static extern void MyFtSetPixelSizes(IntPtr myface, int pxsize);
 
         [DllImport(myfontLib)]
-        public static extern void MyFtSetCharSize(IntPtr faceHandle, int char_width26_6, 
-            int char_height26_6, 
+        public static extern void MyFtSetCharSize(IntPtr faceHandle, int char_width26_6,
+            int char_height26_6,
             int h_device_resolution,
-            int v_device_resolution);       
+            int v_device_resolution);
 
 
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
@@ -145,7 +145,8 @@ namespace PixelFarm.Font2
             //dev:
 #if DEBUG
             ///return true;
-
+            //location of myft dll
+            //string dev = @"c:\WImageTest\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
             string dev = @"D:\projects\myagg_cs\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
             UnsafeMethods.LoadLibrary(dev);
             return true;
@@ -179,5 +180,6 @@ namespace PixelFarm.Font2
                 NativeMyFontsLib.MyFtShutdownLib();
             }
         }
+
     }
 }

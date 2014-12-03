@@ -21,7 +21,7 @@ namespace Mini
             this.Text = "DevForm: Double Click The Example!";
 
             //test native font
-            
+
 
         }
         void listBox1_DoubleClick(object sender, EventArgs e)
@@ -142,38 +142,60 @@ namespace Mini
         private void button2_Click(object sender, EventArgs e)
         {
 
-            Bitmap bmp = new Bitmap("d:\\WImageTest\\test002.png");
-            //MatterHackers.StackBlur2.FastBlur32RGBA(bmp, 15);
+            using (Bitmap bmp = new Bitmap("d:\\WImageTest\\test002.png"))
+            {
+                //MatterHackers.StackBlur2.FastBlur32RGBA(bmp, 15);
 
-            var rct = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                var rct = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
-            //assign dimension info and copy buffer 
-            var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-            int bmpStride = bitmapData.Stride;
-            int width = bmp.Width;
-            int height = bmp.Height;
-            int wh = width * height;
+                //assign dimension info and copy buffer 
+                var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                int bmpStride = bitmapData.Stride;
+                int width = bmp.Width;
+                int height = bmp.Height;
+                int wh = width * height;
 
-            //var dest = new int[wh];
-            //var source = new int[wh];
+                //var dest = new int[wh];
+                //var source = new int[wh];
 
-            var source = new int[width * height];
-            var dest = new int[width * height];
-            Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
-            PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
-            Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
+                var source = new int[width * height];
+                var dest = new int[width * height];
+                Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
+                PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
+                Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
 
-            bmp.UnlockBits(bitmapData);
+                bmp.UnlockBits(bitmapData);
 
-            bmp.Save("d:\\WImageTest\\test002_2.png");
+                bmp.Save("d:\\WImageTest\\test002_2.png");
+            }
         }
 
         private void cmdTestRasterImage_Click(object sender, EventArgs e)
         {
 
-
         }
 
-       
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //using (Bitmap bmp = new Bitmap("c:\\WImageTest\\subpix01.png"))
+            //{ 
+            //    var rct = new Rectangle(0, 0, bmp.Width, bmp.Height); 
+            //    //assign dimension info and copy buffer 
+            //    var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+            //    int bmpStride = bitmapData.Stride;
+            //    int width = bmp.Width;
+            //    int height = bmp.Height;
+            //    int wh = width * height; 
+            //    var source = new int[bmpStride * height];
+            //    var dest = new int[bmpStride * height];
+            //    Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
+            //    PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
+            //    Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
+
+            //    bmp.UnlockBits(bitmapData);
+
+            //    bmp.Save("d:\\WImageTest\\subpix01_1.png");
+            //}
+        }
     }
 }

@@ -20,13 +20,13 @@
 using System;
 using System.Runtime;
 
-using PixelFarm.Agg; 
+using PixelFarm.Agg;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Image;
 
 namespace PixelFarm.Agg
 {
-    
+
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
 
@@ -57,8 +57,8 @@ namespace PixelFarm.Agg
             {
                 throw new ArgumentOutOfRangeException("You must have a width and height > than 0.");
             }
-            
-            
+
+
 
             if (bitsPerPixel != 32 && bitsPerPixel != 24 && bitsPerPixel != 8)
             {
@@ -357,37 +357,37 @@ namespace PixelFarm.Agg
             while (--len != 0);
 #endif
         }
-
-
         public void BlendHL(int x1, int y, int x2, ColorRGBA sourceColor, byte cover)
         {
-            if (sourceColor.alpha != 0)
+
+            if (sourceColor.alpha == 0) { return; }
+            //-------------------------------------------------
+
+            int len = x2 - x1 + 1;
+            byte[] buffer = GetBuffer();
+            int bufferOffset = GetBufferOffsetXY(x1, y);
+
+            int alpha = (((int)(sourceColor.alpha) * (cover + 1)) >> 8);
+
+            if (alpha == BASE_MASK)
             {
-                int len = x2 - x1 + 1;
-
-
-                byte[] buffer = GetBuffer();
-                int bufferOffset = GetBufferOffsetXY(x1, y);
-
-                int alpha = (((int)(sourceColor.alpha) * (cover + 1)) >> 8);
-                if (alpha == BASE_MASK)
-                {
-                    recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
-                }
-                else
-                {
-                    do
-                    {
-                        recieveBlender.BlendPixel(buffer, bufferOffset,
-                            new ColorRGBA(sourceColor, alpha));
-
-                        bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
-                    }
-                    while (--len != 0);
-                }
+                //full
+                recieveBlender.CopyPixels(buffer, bufferOffset, sourceColor, len);
             }
-        }
+            else
+            {
 
+                ColorRGBA c2 = new ColorRGBA(sourceColor, alpha);
+                do
+                {
+                    //copy pixel-by-pixel
+                    recieveBlender.BlendPixel(buffer, bufferOffset, c2);
+                    bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                }
+                while (--len != 0);
+            } 
+        } 
+       
         public void BlendVL(int x, int y1, int y2, ColorRGBA sourceColor, byte cover)
         {
             throw new NotImplementedException();
@@ -438,32 +438,31 @@ namespace PixelFarm.Agg
 #endif
         }
 
+    
+        
         public void BlendSolidHSpan(int x, int y, int len, ColorRGBA sourceColor, byte[] covers, int coversIndex)
         {
             int colorAlpha = sourceColor.alpha;
             if (colorAlpha != 0)
             {
-                unchecked
+                byte[] buffer = GetBuffer();
+                int bufferOffset = GetBufferOffsetXY(x, y);
+                do
                 {
-                    byte[] buffer = GetBuffer();
-                    int bufferOffset = GetBufferOffsetXY(x, y);
-
-                    do
+                    int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
+                    if (alpha == BASE_MASK)
                     {
-                        int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
-                        if (alpha == BASE_MASK)
-                        {
-                            recieveBlender.CopyPixel(buffer, bufferOffset, sourceColor);
-                        }
-                        else
-                        {
-                            recieveBlender.BlendPixel(buffer, bufferOffset, new ColorRGBA(sourceColor, alpha));
-                        }
-                        bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
-                        coversIndex++;
+                        recieveBlender.CopyPixel(buffer, bufferOffset, sourceColor);
                     }
-                    while (--len != 0);
+                    else
+                    {
+                        recieveBlender.BlendPixel(buffer, bufferOffset, new ColorRGBA(sourceColor, alpha));
+                    }
+                    bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                    coversIndex++;
                 }
+                while (--len != 0); 
+
             }
         }
 
@@ -623,6 +622,8 @@ namespace PixelFarm.Agg
                 }
             }
         }
+
+         
         //public void apply_gamma_inv(GammaLookUpTable g)
         //{
         //    throw new System.NotImplementedException();
