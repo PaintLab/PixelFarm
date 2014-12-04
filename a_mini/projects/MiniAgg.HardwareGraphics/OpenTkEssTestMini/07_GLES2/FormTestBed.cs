@@ -13,7 +13,7 @@ namespace OpenTkEssTest
 {
     public partial class FormTestBed : Form
     {
-        MiniGLControl miniGLControl;
+        DerivedMiniGLControl miniGLControl;
         public FormTestBed()
         {
             InitializeComponent();
@@ -22,9 +22,10 @@ namespace OpenTkEssTest
         }
         void InitMiniGLControl()
         {
-            miniGLControl = new MiniGLControl();
+            miniGLControl = new DerivedMiniGLControl();
             miniGLControl.Width = 800;
             miniGLControl.Height = 600;
+            miniGLControl.ClearColor = LayoutFarm.Drawing.Color.Blue;
             this.Controls.Add(miniGLControl);
         }
     }

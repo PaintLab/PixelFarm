@@ -76,8 +76,9 @@ namespace OpenTK
         /// </summary>
         /// <param name="mode">The OpenTK.Graphics.GraphicsMode of the control.</param>
         public MiniGLControl(GraphicsMode mode)
-            : this(mode, 1, 0, GraphicsContextFlags.Default)
-        { }
+            : this(mode, 2, 0, GraphicsContextFlags.Default)
+        { 
+        }
 
         /// <summary>
         /// Constructs a new GLControl with the specified GraphicsMode.

@@ -58,6 +58,12 @@
     <Compile Include="07_GLES2\T31_SimpleES20Window.cs" />
     <Compile Include="07_GLES2\T32_ES2HelloTriangle.cs" />
     <Compile Include="07_GLES2\T33_ES2SimpleTexture2d.cs" />
+    <Compile Include="MiniGLControl\DerivedMiniGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MiniGLControl\DerivedMiniGLControl.Designer.cs">
+      <DependentUpon>DerivedMiniGLControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
@@ -88,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="07_GLES2\FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MiniGLControl\DerivedMiniGLControl.resx">
+      <DependentUpon>DerivedMiniGLControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
