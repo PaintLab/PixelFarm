@@ -4,9 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using PixelFarm.Agg;
 
 namespace Mini
 {
@@ -177,25 +180,121 @@ namespace Mini
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //using (Bitmap bmp = new Bitmap("c:\\WImageTest\\subpix01.png"))
-            //{ 
-            //    var rct = new Rectangle(0, 0, bmp.Width, bmp.Height); 
-            //    //assign dimension info and copy buffer 
-            //    var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-            //    int bmpStride = bitmapData.Stride;
-            //    int width = bmp.Width;
-            //    int height = bmp.Height;
-            //    int wh = width * height; 
-            //    var source = new int[bmpStride * height];
-            //    var dest = new int[bmpStride * height];
-            //    Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
-            //    PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
-            //    Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
+            //----------------------
+            //1. test gdi+ font path
+            string teststr = "Q";
+            float fontSize = 24;
 
-            //    bmp.UnlockBits(bitmapData);
+            using (System.Drawing.Font ff = new Font("tahoma", fontSize))
+            using (GraphicsPath gpath = new GraphicsPath())
+            using (Graphics g = this.pictureBox1.CreateGraphics())
+            {
+                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.Clear(Color.White);
+                gpath.AddString(teststr, ff.FontFamily, 0, fontSize, new Point(0, 0), null);
+                //-----------------------------
+                //get font shape from gpath
+                int pointCount = gpath.PointCount;
+                byte[] pointTypes = gpath.PathTypes;
+                PointF[] points = gpath.PathPoints;
+                //from MSDN document
+                //0 = start of figure (MoveTo)
+                //1 = one of the two endpoints of a line (LineTo)
+                //3 = an endpoint or control point of a cubic Bezier spline (4 points spline)
+                //masks..
+                //0x7 = 111b (binary) => for masking lower 3 bits
+                //0x20 = (1<<6) specific that point is a marker
+                //0x80 = (1<<7) specific that point is the last point of a closed subpath( figure)
 
-            //    bmp.Save("d:\\WImageTest\\subpix01_1.png");
-            //}
+                //----------------------------------
+                //convert to Agg's VertexStorage  
+                VertexStore vxs = new VertexStore();
+                int curvePointCount = 0;
+
+                for (int i = 0; i < pointCount; ++i)
+                {
+                    byte pointType = pointTypes[i];
+                    PointF p = points[i];
+
+                    switch (0x7 & pointType)
+                    {
+                        case 0:
+                            //move to
+                            vxs.AddMoveTo(p.X, p.Y);
+                            curvePointCount = 0;
+                            break;
+                        case 1:
+                            //line to
+                            vxs.AddLineTo(p.X, p.Y);
+                            curvePointCount = 0;
+                            break;
+                        case 3:
+                            //end point of control point of cubic Bezier spline
+                            {
+                                switch (curvePointCount)
+                                {
+                                    case 0:
+                                        {
+                                            vxs.AddP2c(p.X, p.Y);
+                                            curvePointCount++;
+                                        } break;
+                                    case 1:
+                                        {
+                                            vxs.AddP3c(p.X, p.Y);
+                                            curvePointCount++;
+                                        } break;
+                                    case 2:
+                                        {
+                                            vxs.AddLineTo(p.X, p.Y);
+                                            curvePointCount = 0;//reset
+                                        } break;
+                                    default:
+                                        {
+                                            throw new NotSupportedException();
+                                        }
+                                }
+
+                            } break;
+                        default:
+                            {
+
+                            } break;
+                    }
+
+                    if ((pointType >> 7) == 1)
+                    {
+                        //close figure to
+                        vxs.AddCloseFigure();
+                    }
+                    if ((pointType >> 6) == 1)
+                    {
+
+                    }
+                }
+                //-----------------------------
+                //convert Agg vxs to bitmap
+                int bmpW = 50;
+                int bmpH = 50;
+                using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
+                {
+                    ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.Rgba32);
+                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
+                    gfx.Render(vxs, ColorRGBA.Black);
+                    //convert to bmp 
+                    BitmapHelper.CopyToWindowsBitmap(
+                      actualImage, //src from actual img buffer
+                      bufferBmp, //dest to buffer bmp
+                     new RectInt(0, 0, bmpW, bmpH));
+                    //-----------------------------------------
+                    bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                    g.DrawImage(bufferBmp, new Point(0, 30));
+                }
+                //-----------------------------
+
+                //g.DrawPath(Pens.Black, gpath);
+                g.FillPath(Brushes.Black, gpath);
+                g.DrawString(teststr, ff, Brushes.Black, new PointF(0, 50));
+            } 
         }
     }
 }
