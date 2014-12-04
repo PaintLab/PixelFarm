@@ -34,9 +34,11 @@ using System.Runtime.InteropServices;
 
 using OpenTK.Graphics;
 using ColorDepth = OpenTK.Graphics.ColorFormat;
-
+ 
+#if ENABLE_DESKTOP_OPENGL
 namespace OpenTK.Platform.Windows
 {
+   
     internal class WinGraphicsMode : IGraphicsMode
     {
         // Todo: Get rid of the System.Windows.Forms.Control dependency.
@@ -270,3 +272,6 @@ namespace OpenTK.Platform.Windows
     }
 }
 
+
+
+#endif

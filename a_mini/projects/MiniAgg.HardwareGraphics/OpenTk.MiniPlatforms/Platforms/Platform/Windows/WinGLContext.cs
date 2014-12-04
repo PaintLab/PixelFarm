@@ -6,7 +6,7 @@
 #endregion
 
  
-
+#if ENABLE_DESKTOP_OPENGL
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +16,7 @@ using System.Diagnostics;
 namespace OpenTK.Platform.Windows
 {
 
-#if !DISABLE_DESKTOP_OPENGL
+
     using OpenTK.Graphics;
     using OpenTK.Graphics.OpenGL;
     /// \internal
@@ -383,5 +383,6 @@ namespace OpenTK.Platform.Windows
     #endregion
     }
 
-#endif
+
 }
+#endif

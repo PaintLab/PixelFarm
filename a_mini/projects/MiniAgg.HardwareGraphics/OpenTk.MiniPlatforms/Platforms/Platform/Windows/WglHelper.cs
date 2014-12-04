@@ -12,11 +12,11 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 
 namespace OpenTK.Platform.Windows
-{   
-#if !DISABLE_DESKTOP_OPENGL
+{
+#if ENABLE_DESKTOP_OPENGL
     internal partial class Wgl
     {
-        #region --- Constructors ---
+    #region --- Constructors ---
 
         static Wgl()
         {
@@ -32,7 +32,7 @@ namespace OpenTK.Platform.Windows
 
         #endregion
 
-        #region --- Fields ---
+    #region --- Fields ---
 
         internal const string Library = "OPENGL32.DLL";
 
@@ -45,7 +45,7 @@ namespace OpenTK.Platform.Windows
 
         #endregion
 
-        #region static Delegate LoadDelegate(string name, Type signature)
+    #region static Delegate LoadDelegate(string name, Type signature)
 
         /// <summary>
         /// Creates a System.Delegate that can be used to call an OpenGL function, core or extension.
@@ -73,7 +73,7 @@ namespace OpenTK.Platform.Windows
 
         #endregion
 
-        #region private static Delegate GetExtensionDelegate(string name, Type signature)
+    #region private static Delegate GetExtensionDelegate(string name, Type signature)
 
         /// <summary>
         /// Creates a System.Delegate that can be used to call a dynamically exported OpenGL function.
@@ -102,7 +102,7 @@ namespace OpenTK.Platform.Windows
 
         #endregion
 
-        #region public static void LoadAll()
+    #region public static void LoadAll()
 
         /// <summary>
         /// Loads all Wgl entry points, core and extensions.
@@ -114,7 +114,7 @@ namespace OpenTK.Platform.Windows
 
         #endregion
 
-        #region public static bool Load(string function)
+    #region public static bool Load(string function)
 
         /// <summary>
         /// Loads the given Wgl entry point.
@@ -128,7 +128,7 @@ namespace OpenTK.Platform.Windows
 
         #endregion
 
-        #region public static partial class Arb
+    #region public static partial class Arb
 
         /// <summary>Contains ARB extensions for WGL.</summary>
         public static partial class Arb
@@ -169,7 +169,7 @@ namespace OpenTK.Platform.Windows
 
         #endregion 
 
-        #region public static partial class Ext
+    #region public static partial class Ext
 
         /// <summary>Contains EXT extensions for WGL.</summary>
         public static partial class Ext

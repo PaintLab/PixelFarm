@@ -1,4 +1,4 @@
-#if !DISABLE_DESKTOP_OPENGL
+#if ENABLE_DESKTOP_OPENGL
 namespace OpenTK.Platform.Windows
 {
 

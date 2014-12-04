@@ -34,9 +34,10 @@ namespace OpenTK.Platform.Windows
     using Graphics;
     using OpenTK.Input;
 
-    class WinFactory : IPlatformFactory 
+#if ENABLE_DESKTOP_OPENGL
+    class WinFactory : IPlatformFactory
     {
-        #region IPlatformFactory Members
+    #region IPlatformFactory Members
 
         public virtual INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
         {
@@ -48,9 +49,9 @@ namespace OpenTK.Platform.Windows
         }
         public virtual IGraphicsContext CreateGLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
         {
-            
+
             throw new NotSupportedException();
-             //return new WinGLContext(mode, (WinWindowInfo)window, shareContext, major, minor, flags);
+            //return new WinGLContext(mode, (WinWindowInfo)window, shareContext, major, minor, flags);
         }
 
         public virtual IGraphicsContext CreateGLContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
@@ -60,11 +61,11 @@ namespace OpenTK.Platform.Windows
         }
 
         public virtual GraphicsContext.GetCurrentContextDelegate CreateGetCurrentGraphicsContext()
-        {
+        { 
             return (GraphicsContext.GetCurrentContextDelegate)delegate
             {
                 return new ContextHandle(Wgl.GetCurrentContext());
-            };
+            }; 
         }
 
         public virtual IGraphicsMode CreateGraphicsMode()
@@ -74,14 +75,57 @@ namespace OpenTK.Platform.Windows
 
         public virtual OpenTK.Input.IKeyboardDriver CreateKeyboardDriver()
         {
-            throw new NotImplementedException();            
+            throw new NotImplementedException();
             // If Windows version is NT5 or higher, we are able to use raw input.
             if (System.Environment.OSVersion.Version.Major >= 5)
                 return new WinRawKeyboard();
             else
                 return new WMInput(null);
         }
-        
+
+    #endregion
+    }
+#else
+
+    abstract class WinFactory : IPlatformFactory
+    {
+        #region IPlatformFactory Members
+
+        public virtual INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
+        {
+            return new WinGLNative(x, y, width, height, title, options, device);
+        }
+        public virtual IDisplayDeviceDriver CreateDisplayDeviceDriver()
+        {
+            return new WinDisplayDeviceDriver();
+        }
+        public abstract IGraphicsContext CreateGLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags);
+
+
+        public abstract IGraphicsContext CreateGLContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags);
+
+
+        public abstract GraphicsContext.GetCurrentContextDelegate CreateGetCurrentGraphicsContext();
+
+
+        public abstract IGraphicsMode CreateGraphicsMode();
+
+
+        public virtual OpenTK.Input.IKeyboardDriver CreateKeyboardDriver()
+        {
+            throw new NotImplementedException();
+            // If Windows version is NT5 or higher, we are able to use raw input.
+            if (System.Environment.OSVersion.Version.Major >= 5)
+                return new WinRawKeyboard();
+            else
+                return new WMInput(null);
+        }
+
         #endregion
     }
+
+#endif
 }
+
+
+
