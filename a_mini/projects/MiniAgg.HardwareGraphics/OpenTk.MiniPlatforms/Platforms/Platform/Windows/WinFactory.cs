@@ -42,16 +42,15 @@ namespace OpenTK.Platform.Windows
         {
             return new WinGLNative(x, y, width, height, title, options, device);
         }
-
         public virtual IDisplayDeviceDriver CreateDisplayDeviceDriver()
         {
             return new WinDisplayDeviceDriver();
         }
-
         public virtual IGraphicsContext CreateGLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
         {
+            
             throw new NotSupportedException();
-            //return new WinGLContext(mode, (WinWindowInfo)window, shareContext, major, minor, flags);
+             //return new WinGLContext(mode, (WinWindowInfo)window, shareContext, major, minor, flags);
         }
 
         public virtual IGraphicsContext CreateGLContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)

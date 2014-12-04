@@ -45,27 +45,39 @@ namespace OpenTK.Platform
 
         static Factory2()
         {
-
+            //WinterDev
+#if !ENABLE_DESKTOP_OPENGL
             if (Egl.Egl.IsSupported)
             {
+                if (Configuration.RunningOnWindows) Default = new Egl.EglWinPlatformFactory();
+                else if (Configuration.RunningOnMacOS) Default = new MacOS.MacOSFactory();
+                else if (Configuration.RunningOnX11) Default = new X11.X11Factory();
+                else Default = new UnsupportedPlatform();
             }
-
-            if (Configuration.RunningOnWindows) Default = new Windows.WinFactory();
-            else if (Configuration.RunningOnMacOS) Default = new MacOS.MacOSFactory();
-            else if (Configuration.RunningOnX11) Default = new X11.X11Factory();
-            else Default = new UnsupportedPlatform();
-
-            if (Egl.Egl.IsSupported)
+            else
             {
-                if (Configuration.RunningOnWindows) Embedded = new Egl.EglWinPlatformFactory();
-                else if (Configuration.RunningOnMacOS) Embedded = new Egl.EglMacPlatformFactory();
-                else if (Configuration.RunningOnX11) Embedded = new Egl.EglX11PlatformFactory();
-                else Embedded = new UnsupportedPlatform();
+                Default = Embedded = new UnsupportedPlatform();
             }
-            else Embedded = new UnsupportedPlatform();
+#else            
+            //------------------------------------------------------------------------------
+            //if (Configuration.RunningOnWindows) Default = new Windows.WinFactory();
+            //else if (Configuration.RunningOnMacOS) Default = new MacOS.MacOSFactory();
+            //else if (Configuration.RunningOnX11) Default = new X11.X11Factory();
+            //else Default = new UnsupportedPlatform();
 
-            if (Default is UnsupportedPlatform && !(Embedded is UnsupportedPlatform))
-                Default = Embedded;
+            //if (Egl.Egl.IsSupported)
+            //{
+            //    if (Configuration.RunningOnWindows) Embedded = new Egl.EglWinPlatformFactory();
+            //    else if (Configuration.RunningOnMacOS) Embedded = new Egl.EglMacPlatformFactory();
+            //    else if (Configuration.RunningOnX11) Embedded = new Egl.EglX11PlatformFactory();
+            //    else Embedded = new UnsupportedPlatform();
+            //}
+            //else Embedded = new UnsupportedPlatform();
+
+            //if (Default is UnsupportedPlatform && !(Embedded is UnsupportedPlatform))
+            //    Default = Embedded;
+            //------------------------------------------------------------------------------
+#endif
         }
 
         #endregion

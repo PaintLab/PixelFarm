@@ -45,6 +45,8 @@ namespace OpenTK.Platform
 
         static Factory2()
         {
+             
+            //----------------------------------------------
             if (Configuration.RunningOnWindows) Default = new Windows.WinFactory(DesktopBackend.ES20);
             else if (Configuration.RunningOnMacOS) Default = new MacOS.MacOSFactory();
             else if (Configuration.RunningOnX11) Default = new X11.X11Factory();

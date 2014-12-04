@@ -25,7 +25,7 @@
 //
 #endregion
 
-#if !DISABLE_DESKTOP_OPENGL
+#if ENABLE_DESKTOP_OPENGL
 namespace OpenTK.Graphics.OpenGL
 {
     using System;

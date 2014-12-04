@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-#if !DISABLE_DESKTOP_OPENGL
+#if ENABLE_DESKTOP_OPENGL
 namespace OpenTK.Graphics.OpenGL
 {
     // Used in debug-mode only, for automatic OpenGL error-checking.
