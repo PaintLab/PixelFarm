@@ -109,11 +109,11 @@
     <Compile Include="Core\Platform\IPlatformFactory.cs" />
     <Compile Include="Core\Serialization\XmlIgnoreAttribute.cs" />
     <Compile Include="DummyGLControl.cs" />
-    <Compile Include="GLControl.cs">
+    <Compile Include="MiniGLControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GLControl.Designer.cs">
-      <DependentUpon>GLControl.cs</DependentUpon>
+    <Compile Include="MiniGLControl.Designer.cs">
+      <DependentUpon>MiniGLControl.cs</DependentUpon>
     </Compile>
     <Compile Include="GLControlFactory.cs" />
     <Compile Include="IGLControl.cs" />

@@ -43,9 +43,9 @@ namespace OpenTK
     /// <summary>
     /// Defines a UserControl with OpenGL rendering capabilities.
     /// </summary>
-    public partial class GLControl : UserControl
+    public partial class MiniGLControl : UserControl
     {
-        static GLControl()
+        static MiniGLControl()
         {
             OpenTK.Toolkit.Init();
 
@@ -67,7 +67,7 @@ namespace OpenTK
         /// <summary>
         /// Constructs a new GLControl.
         /// </summary>
-        public GLControl()
+        public MiniGLControl()
             : this(GraphicsMode.Default)
         { }
 
@@ -75,7 +75,7 @@ namespace OpenTK
         /// Constructs a new GLControl with the specified GraphicsMode.
         /// </summary>
         /// <param name="mode">The OpenTK.Graphics.GraphicsMode of the control.</param>
-        public GLControl(GraphicsMode mode)
+        public MiniGLControl(GraphicsMode mode)
             : this(mode, 1, 0, GraphicsContextFlags.Default)
         { }
 
@@ -86,7 +86,7 @@ namespace OpenTK
         /// <param name="major">The major version for the OpenGL GraphicsContext.</param>
         /// <param name="minor">The minor version for the OpenGL GraphicsContext.</param>
         /// <param name="flags">The GraphicsContextFlags for the OpenGL GraphicsContext.</param>
-        public GLControl(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags)
+        public MiniGLControl(GraphicsMode mode, int major, int minor, GraphicsContextFlags flags)
         {
             if (mode == null)
                 throw new ArgumentNullException("mode");

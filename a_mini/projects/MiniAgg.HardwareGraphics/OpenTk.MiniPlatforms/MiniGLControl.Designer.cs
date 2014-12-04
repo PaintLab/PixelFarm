@@ -1,6 +1,6 @@
 ﻿namespace OpenTK
 {
-    partial class GLControl
+    partial class MiniGLControl
     {
         /// <summary> 
         /// Required designer variable.
