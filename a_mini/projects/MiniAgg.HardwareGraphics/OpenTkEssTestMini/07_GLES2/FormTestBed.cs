@@ -28,5 +28,11 @@ namespace OpenTkEssTest
             miniGLControl.ClearColor = LayoutFarm.Drawing.Color.Blue;
             this.Controls.Add(miniGLControl);
         }
+        public DerivedMiniGLControl MiniGLControl
+        {
+            get { return this.miniGLControl; }
+        }
+         
+
     }
 }

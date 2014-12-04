@@ -17,11 +17,11 @@ namespace OpenTkEssTest
             //----------------------------
             OpenTK.Toolkit.Init();
             Application.EnableVisualStyles();
-            //var formDev = new FormDev();
-            //Application.Run(formDev);
+            var formDev = new FormDev();
+            Application.Run(formDev);
 
-            var form2 = new FormTestBed();
-            Application.Run(form2);
+            //var form2 = new FormTestBed();
+            //Application.Run(form2);
             //----------------------------
 
             //int appcode = 7; 
