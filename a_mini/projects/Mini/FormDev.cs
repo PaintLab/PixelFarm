@@ -182,8 +182,8 @@ namespace Mini
         {
             //----------------------
             //1. test gdi+ font path
-            string teststr = "Q";
-            float fontSize = 24;
+            string teststr = "a";
+            float fontSize = 12;
 
             using (System.Drawing.Font ff = new Font("tahoma", fontSize))
             using (GraphicsPath gpath = new GraphicsPath())
@@ -279,8 +279,15 @@ namespace Mini
                 {
                     ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.Rgba32);
                     Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
+
                     gfx.Render(vxs, ColorRGBA.Black);
-                    //convert to bmp 
+
+                    //test subpixel rendering 
+                    vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
+                    gfx.UseSubPixelRendering = true;
+                    gfx.Render(vxs, ColorRGBA.Black);
+
+
                     BitmapHelper.CopyToWindowsBitmap(
                       actualImage, //src from actual img buffer
                       bufferBmp, //dest to buffer bmp
@@ -294,7 +301,7 @@ namespace Mini
                 //g.DrawPath(Pens.Black, gpath);
                 g.FillPath(Brushes.Black, gpath);
                 g.DrawString(teststr, ff, Brushes.Black, new PointF(0, 50));
-            } 
+            }
         }
     }
 }
