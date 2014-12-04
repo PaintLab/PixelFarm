@@ -179,381 +179,381 @@ namespace Examples.TextureLoaders
 #endif
         #endregion Private Members
 
-        /// <summary>
-        /// This function will generate, bind and fill a Texture Object with a DXT1/3/5 compressed Texture in .dds Format.
-        /// MipMaps below 4x4 Pixel Size are discarded, because DXTn's smallest unit is a 4x4 block of Pixel data.
-        /// It will set correct MipMap parameters, Filtering, Wrapping and EnvMode for the Texture. 
-        /// The only call inside this function affecting OpenGL State is GL.BindTexture();
-        /// </summary>
-        /// <param name="filename">The name of the file you wish to load, including path and file extension.</param>
-        /// <param name="texturehandle">0 if invalid, otherwise a Texture Object usable with GL.BindTexture().</param>
-        /// <param name="dimension">0 if invalid, will output what was loaded (typically Texture1D/2D/3D or Cubemap)</param>
-        public static void LoadFromDisk(string filename, out uint texturehandle, out TextureTarget dimension)
-        {
-            #region Prep data
-            // invalidate whatever it was before
-            dimension = (TextureTarget)0;
-            texturehandle = TextureLoaderParameters.OpenGLDefaultTexture;
-            ErrorCode GLError = ErrorCode.NoError;
+        ///// <summary>
+        ///// This function will generate, bind and fill a Texture Object with a DXT1/3/5 compressed Texture in .dds Format.
+        ///// MipMaps below 4x4 Pixel Size are discarded, because DXTn's smallest unit is a 4x4 block of Pixel data.
+        ///// It will set correct MipMap parameters, Filtering, Wrapping and EnvMode for the Texture. 
+        ///// The only call inside this function affecting OpenGL State is GL.BindTexture();
+        ///// </summary>
+        ///// <param name="filename">The name of the file you wish to load, including path and file extension.</param>
+        ///// <param name="texturehandle">0 if invalid, otherwise a Texture Object usable with GL.BindTexture().</param>
+        ///// <param name="dimension">0 if invalid, will output what was loaded (typically Texture1D/2D/3D or Cubemap)</param>
+        //public static void LoadFromDisk(string filename, out uint texturehandle, out TextureTarget dimension)
+        //{
+        //    //#region Prep data
+        //    //// invalidate whatever it was before
+        //    //dimension = (TextureTarget)0;
+        //    //texturehandle = TextureLoaderParameters.OpenGLDefaultTexture;
+        //    //ErrorCode GLError = ErrorCode.NoError;
 
-            _IsCompressed = false;
-            _Width = 0;
-            _Height = 0;
-            _Depth = 0;
-            _MipMapCount = 0;
-            _BytesForMainSurface = 0;
-            _BytesPerBlock = 0;
-            _PixelInternalFormat = PixelInternalFormat.Rgba8;
-            byte[] _RawDataFromFile;
-            #endregion
+        //    //_IsCompressed = false;
+        //    //_Width = 0;
+        //    //_Height = 0;
+        //    //_Depth = 0;
+        //    //_MipMapCount = 0;
+        //    //_BytesForMainSurface = 0;
+        //    //_BytesPerBlock = 0;
+        //    //_PixelInternalFormat = PixelInternalFormat.Rgba8;
+        //    //byte[] _RawDataFromFile;
+        //    //#endregion
 
-            #region Try
-            try // Exceptions will be thrown if any Problem occurs while working on the file. 
-            {
-                _RawDataFromFile = File.ReadAllBytes(@filename);
+        //    //#region Try
+        //    //try // Exceptions will be thrown if any Problem occurs while working on the file. 
+        //    //{
+        //    //    _RawDataFromFile = File.ReadAllBytes(@filename);
 
-                #region Translate Header to less cryptic representation
-                ConvertDX9Header(ref _RawDataFromFile); // The first 128 Bytes of the file is non-image data
+        //    //    #region Translate Header to less cryptic representation
+        //    //    ConvertDX9Header(ref _RawDataFromFile); // The first 128 Bytes of the file is non-image data
 
-                // start by checking if all forced flags are present. Flags indicate valid fields, but aren't written by every tool .....
-                if (idString != "DDS " || // magic key
-                     dwSize != 124 || // constant size of struct, never reused
-                     pfSize != 32 || // constant size of struct, never reused
-                     !CheckFlag(dwFlags, (uint)eDDSD.CAPS) ||        // must know it's caps
-                     !CheckFlag(dwFlags, (uint)eDDSD.PIXELFORMAT) || // must know it's format
-                     !CheckFlag(dwCaps1, (uint)eDDSCAPS.TEXTURE)     // must be a Texture
-                    )
-                    throw new ArgumentException("ERROR: File has invalid signature or missing Flags.");
+        //    //    // start by checking if all forced flags are present. Flags indicate valid fields, but aren't written by every tool .....
+        //    //    if (idString != "DDS " || // magic key
+        //    //         dwSize != 124 || // constant size of struct, never reused
+        //    //         pfSize != 32 || // constant size of struct, never reused
+        //    //         !CheckFlag(dwFlags, (uint)eDDSD.CAPS) ||        // must know it's caps
+        //    //         !CheckFlag(dwFlags, (uint)eDDSD.PIXELFORMAT) || // must know it's format
+        //    //         !CheckFlag(dwCaps1, (uint)eDDSCAPS.TEXTURE)     // must be a Texture
+        //    //        )
+        //    //        throw new ArgumentException("ERROR: File has invalid signature or missing Flags.");
 
-                #region Examine Flags
-                if (CheckFlag(dwFlags, (uint)eDDSD.WIDTH))
-                    _Width = (int)dwWidth;
-                else
-                    throw new ArgumentException("ERROR: Flag for Width not set.");
+        //    //    #region Examine Flags
+        //    //    if (CheckFlag(dwFlags, (uint)eDDSD.WIDTH))
+        //    //        _Width = (int)dwWidth;
+        //    //    else
+        //    //        throw new ArgumentException("ERROR: Flag for Width not set.");
 
-                if (CheckFlag(dwFlags, (uint)eDDSD.HEIGHT))
-                    _Height = (int)dwHeight;
-                else
-                    throw new ArgumentException("ERROR: Flag for Height not set.");
+        //    //    if (CheckFlag(dwFlags, (uint)eDDSD.HEIGHT))
+        //    //        _Height = (int)dwHeight;
+        //    //    else
+        //    //        throw new ArgumentException("ERROR: Flag for Height not set.");
 
-                if (CheckFlag(dwFlags, (uint)eDDSD.DEPTH) && CheckFlag(dwCaps2, (uint)eDDSCAPS2.VOLUME))
-                {
-                    dimension = TextureTarget.Texture3D; // image is 3D Volume
-                    _Depth = (int)dwDepth;
-                    throw Unfinished;
-                }
-                else
-                {// image is 2D or Cube
-                    if (CheckFlag(dwCaps2, (uint)eDDSCAPS2.CUBEMAP))
-                    {
-                        dimension = TextureTarget.TextureCubeMap;
-                        _Depth = 6;
-                    }
-                    else
-                    {
-                        dimension = TextureTarget.Texture2D;
-                        _Depth = 1;
-                    }
-                }
+        //    //    if (CheckFlag(dwFlags, (uint)eDDSD.DEPTH) && CheckFlag(dwCaps2, (uint)eDDSCAPS2.VOLUME))
+        //    //    {
+        //    //        dimension = TextureTarget.Texture3D; // image is 3D Volume
+        //    //        _Depth = (int)dwDepth;
+        //    //        throw Unfinished;
+        //    //    }
+        //    //    else
+        //    //    {// image is 2D or Cube
+        //    //        if (CheckFlag(dwCaps2, (uint)eDDSCAPS2.CUBEMAP))
+        //    //        {
+        //    //            dimension = TextureTarget.TextureCubeMap;
+        //    //            _Depth = 6;
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            dimension = TextureTarget.Texture2D;
+        //    //            _Depth = 1;
+        //    //        }
+        //    //    }
 
-                // these flags must be set for mipmaps to be included
-                if (CheckFlag(dwCaps1, (uint)eDDSCAPS.MIPMAP) && CheckFlag(dwFlags, (uint)eDDSD.MIPMAPCOUNT))
-                    _MipMapCount = (int)dwMipMapCount; // image contains MipMaps
-                else
-                    _MipMapCount = 1; // only 1 main image
+        //    //    // these flags must be set for mipmaps to be included
+        //    //    if (CheckFlag(dwCaps1, (uint)eDDSCAPS.MIPMAP) && CheckFlag(dwFlags, (uint)eDDSD.MIPMAPCOUNT))
+        //    //        _MipMapCount = (int)dwMipMapCount; // image contains MipMaps
+        //    //    else
+        //    //        _MipMapCount = 1; // only 1 main image
 
-                // Should never happen
-                if (CheckFlag(dwFlags, (uint)eDDSD.PITCH) && CheckFlag(dwFlags, (uint)eDDSD.LINEARSIZE))
-                    throw new ArgumentException("INVALID: Pitch AND Linear Flags both set. Image cannot be uncompressed and DTXn compressed at the same time.");
+        //    //    // Should never happen
+        //    //    if (CheckFlag(dwFlags, (uint)eDDSD.PITCH) && CheckFlag(dwFlags, (uint)eDDSD.LINEARSIZE))
+        //    //        throw new ArgumentException("INVALID: Pitch AND Linear Flags both set. Image cannot be uncompressed and DTXn compressed at the same time.");
 
-                // This flag is set if format is uncompressed RGB RGBA etc.
-                if (CheckFlag(dwFlags, (uint)eDDSD.PITCH))
-                {
-                    // _BytesForMainSurface = (int) dwPitchOrLinearSize; // holds bytes-per-scanline for uncompressed
-                    _IsCompressed = false;
-                    throw Unfinished;
-                }
+        //    //    // This flag is set if format is uncompressed RGB RGBA etc.
+        //    //    if (CheckFlag(dwFlags, (uint)eDDSD.PITCH))
+        //    //    {
+        //    //        // _BytesForMainSurface = (int) dwPitchOrLinearSize; // holds bytes-per-scanline for uncompressed
+        //    //        _IsCompressed = false;
+        //    //        throw Unfinished;
+        //    //    }
 
-                // This flag is set if format is compressed DXTn.
-                if (CheckFlag(dwFlags, (uint)eDDSD.LINEARSIZE))
-                {
-                    _BytesForMainSurface = (int)dwPitchOrLinearSize;
-                    _IsCompressed = true;
-                }
-                #endregion Examine Flags
+        //    //    // This flag is set if format is compressed DXTn.
+        //    //    if (CheckFlag(dwFlags, (uint)eDDSD.LINEARSIZE))
+        //    //    {
+        //    //        _BytesForMainSurface = (int)dwPitchOrLinearSize;
+        //    //        _IsCompressed = true;
+        //    //    }
+        //    //    #endregion Examine Flags
 
-                #region Examine Pixel Format, anything but DXTn will fail atm.
-                if (CheckFlag(pfFlags, (uint)eDDPF.FOURCC))
-                    switch ((eFOURCC)pfFourCC)
-                    {
-                        case eFOURCC.DXT1:
-                            _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext;
-                            _BytesPerBlock = 8;
-                            _IsCompressed = true;
-                            break;
-                        //case eFOURCC.DXT2:
-                        case eFOURCC.DXT3:
-                            _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt3Ext;
-                            _BytesPerBlock = 16;
-                            _IsCompressed = true;
-                            break;
-                        //case eFOURCC.DXT4:
-                        case eFOURCC.DXT5:
-                            _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt5Ext;
-                            _BytesPerBlock = 16;
-                            _IsCompressed = true;
-                            break;
-                        default:
-                            throw Unfinished; // handle uncompressed formats 
-                    }
-                else
-                    throw Unfinished;
-                // pf*Bitmasks should be examined here
-                #endregion
+        //    //    #region Examine Pixel Format, anything but DXTn will fail atm.
+        //    //    if (CheckFlag(pfFlags, (uint)eDDPF.FOURCC))
+        //    //        switch ((eFOURCC)pfFourCC)
+        //    //        {
+        //    //            case eFOURCC.DXT1:
+        //    //                _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext;
+        //    //                _BytesPerBlock = 8;
+        //    //                _IsCompressed = true;
+        //    //                break;
+        //    //            //case eFOURCC.DXT2:
+        //    //            case eFOURCC.DXT3:
+        //    //                _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt3Ext;
+        //    //                _BytesPerBlock = 16;
+        //    //                _IsCompressed = true;
+        //    //                break;
+        //    //            //case eFOURCC.DXT4:
+        //    //            case eFOURCC.DXT5:
+        //    //                _PixelInternalFormat = (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt5Ext;
+        //    //                _BytesPerBlock = 16;
+        //    //                _IsCompressed = true;
+        //    //                break;
+        //    //            default:
+        //    //                throw Unfinished; // handle uncompressed formats 
+        //    //        }
+        //    //    else
+        //    //        throw Unfinished;
+        //    //    // pf*Bitmasks should be examined here
+        //    //    #endregion
 
-                // Works, but commented out because some texture authoring tools don't set this flag.
-                /* Safety Check, if file is only 1x 2D surface without mipmaps, eDDSCAPS.COMPLEX should not be set
-                if ( CheckFlag( dwCaps1, (uint) eDDSCAPS.COMPLEX ) )
-                {
-                    if ( result == eTextureDimension.Texture2D && _MipMapCount == 1 ) // catch potential problem
-                        Trace.WriteLine( "Warning: Image is declared complex, but contains only 1 surface." );
-                }*/
+        //    //    // Works, but commented out because some texture authoring tools don't set this flag.
+        //    //    /* Safety Check, if file is only 1x 2D surface without mipmaps, eDDSCAPS.COMPLEX should not be set
+        //    //    if ( CheckFlag( dwCaps1, (uint) eDDSCAPS.COMPLEX ) )
+        //    //    {
+        //    //        if ( result == eTextureDimension.Texture2D && _MipMapCount == 1 ) // catch potential problem
+        //    //            Trace.WriteLine( "Warning: Image is declared complex, but contains only 1 surface." );
+        //    //    }*/
 
-                if (TextureLoaderParameters.Verbose)
-                    Trace.WriteLine("\n" + GetDescriptionFromMemory(filename, dimension));
-                #endregion Translate Header to less cryptic representation
+        //    //    if (TextureLoaderParameters.Verbose)
+        //    //        Trace.WriteLine("\n" + GetDescriptionFromMemory(filename, dimension));
+        //    //    #endregion Translate Header to less cryptic representation
 
-                #region send the Texture to GL
-                #region Generate and Bind Handle
-                GL.GenTextures(1, out texturehandle);
-                GL.BindTexture(dimension, texturehandle);
-                #endregion Generate and Bind Handle
+        //    //    #region send the Texture to GL
+        //    //    #region Generate and Bind Handle
+        //    //    GL.GenTextures(1, out texturehandle);
+        //    //    GL.BindTexture(dimension, texturehandle);
+        //    //    #endregion Generate and Bind Handle
 
-                int Cursor = HeaderSizeInBytes;
-                // foreach face in the cubemap, get all it's mipmaps levels. Only one iteration for Texture2D
-                for (int Slices = 0; Slices < _Depth; Slices++)
-                {
-                    int trueMipMapCount = _MipMapCount - 1; // TODO: triplecheck correctness
-                    int Width = _Width;
-                    int Height = _Height;
-                    for (int Level = 0; Level < _MipMapCount; Level++) // start at base image
-                    {
-                        #region determine Dimensions
-                        int BlocksPerRow = (Width + 3) >> 2;
-                        int BlocksPerColumn = (Height + 3) >> 2;
-                        int SurfaceBlockCount = BlocksPerRow * BlocksPerColumn; //   // DXTn stores Texels in 4x4 blocks, a Color block is 8 Bytes, an Alpha block is 8 Bytes for DXT3/5
-                        int SurfaceSizeInBytes = SurfaceBlockCount * _BytesPerBlock;
+        //    //    int Cursor = HeaderSizeInBytes;
+        //    //    // foreach face in the cubemap, get all it's mipmaps levels. Only one iteration for Texture2D
+        //    //    for (int Slices = 0; Slices < _Depth; Slices++)
+        //    //    {
+        //    //        int trueMipMapCount = _MipMapCount - 1; // TODO: triplecheck correctness
+        //    //        int Width = _Width;
+        //    //        int Height = _Height;
+        //    //        for (int Level = 0; Level < _MipMapCount; Level++) // start at base image
+        //    //        {
+        //    //            #region determine Dimensions
+        //    //            int BlocksPerRow = (Width + 3) >> 2;
+        //    //            int BlocksPerColumn = (Height + 3) >> 2;
+        //    //            int SurfaceBlockCount = BlocksPerRow * BlocksPerColumn; //   // DXTn stores Texels in 4x4 blocks, a Color block is 8 Bytes, an Alpha block is 8 Bytes for DXT3/5
+        //    //            int SurfaceSizeInBytes = SurfaceBlockCount * _BytesPerBlock;
 
-                        // this check must evaluate to false for 2D and Cube maps, or it's impossible to determine MipMap sizes.
-                        if (TextureLoaderParameters.Verbose && Level == 0 && _IsCompressed && _BytesForMainSurface != SurfaceSizeInBytes)
-                            Trace.WriteLine("Warning: Calculated byte-count of main image differs from what was read from file.");
-                        #endregion determine Dimensions
+        //    //            // this check must evaluate to false for 2D and Cube maps, or it's impossible to determine MipMap sizes.
+        //    //            if (TextureLoaderParameters.Verbose && Level == 0 && _IsCompressed && _BytesForMainSurface != SurfaceSizeInBytes)
+        //    //                Trace.WriteLine("Warning: Calculated byte-count of main image differs from what was read from file.");
+        //    //            #endregion determine Dimensions
 
-                        // skip mipmaps smaller than a 4x4 Pixels block, which is the smallest DXTn unit.
-                        if (Width > 2 && Height > 2)
-                        { // Note: there could be a potential problem with non-power-of-two cube maps
-                            #region Prepare Array for TexImage
-                            byte[] RawDataOfSurface = new byte[SurfaceSizeInBytes];
-                            if (!TextureLoaderParameters.FlipImages)
-                            { // no changes to the image, copy as is
-                                Array.Copy(_RawDataFromFile, Cursor, RawDataOfSurface, 0, SurfaceSizeInBytes);
-                            }
-                            else
-                            {  // Turn the blocks upside down and the rows aswell, done in a single pass through all blocks
-                                for (int sourceColumn = 0; sourceColumn < BlocksPerColumn; sourceColumn++)
-                                {
-                                    int targetColumn = BlocksPerColumn - sourceColumn - 1;
-                                    for (int row = 0; row < BlocksPerRow; row++)
-                                    {
-                                        int target = (targetColumn * BlocksPerRow + row) * _BytesPerBlock;
-                                        int source = (sourceColumn * BlocksPerRow + row) * _BytesPerBlock + Cursor;
-                                        #region Swap Bytes
-                                        switch (_PixelInternalFormat)
-                                        {
-                                            case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext:
-                                                // Color only
-                                                RawDataOfSurface[target + 0] = _RawDataFromFile[source + 0];
-                                                RawDataOfSurface[target + 1] = _RawDataFromFile[source + 1];
-                                                RawDataOfSurface[target + 2] = _RawDataFromFile[source + 2];
-                                                RawDataOfSurface[target + 3] = _RawDataFromFile[source + 3];
-                                                RawDataOfSurface[target + 4] = _RawDataFromFile[source + 7];
-                                                RawDataOfSurface[target + 5] = _RawDataFromFile[source + 6];
-                                                RawDataOfSurface[target + 6] = _RawDataFromFile[source + 5];
-                                                RawDataOfSurface[target + 7] = _RawDataFromFile[source + 4];
-                                                break;
-                                            case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt3Ext:
-                                                // Alpha
-                                                RawDataOfSurface[target + 0] = _RawDataFromFile[source + 6];
-                                                RawDataOfSurface[target + 1] = _RawDataFromFile[source + 7];
-                                                RawDataOfSurface[target + 2] = _RawDataFromFile[source + 4];
-                                                RawDataOfSurface[target + 3] = _RawDataFromFile[source + 5];
-                                                RawDataOfSurface[target + 4] = _RawDataFromFile[source + 2];
-                                                RawDataOfSurface[target + 5] = _RawDataFromFile[source + 3];
-                                                RawDataOfSurface[target + 6] = _RawDataFromFile[source + 0];
-                                                RawDataOfSurface[target + 7] = _RawDataFromFile[source + 1];
+        //    //            // skip mipmaps smaller than a 4x4 Pixels block, which is the smallest DXTn unit.
+        //    //            if (Width > 2 && Height > 2)
+        //    //            { // Note: there could be a potential problem with non-power-of-two cube maps
+        //    //                #region Prepare Array for TexImage
+        //    //                byte[] RawDataOfSurface = new byte[SurfaceSizeInBytes];
+        //    //                if (!TextureLoaderParameters.FlipImages)
+        //    //                { // no changes to the image, copy as is
+        //    //                    Array.Copy(_RawDataFromFile, Cursor, RawDataOfSurface, 0, SurfaceSizeInBytes);
+        //    //                }
+        //    //                else
+        //    //                {  // Turn the blocks upside down and the rows aswell, done in a single pass through all blocks
+        //    //                    for (int sourceColumn = 0; sourceColumn < BlocksPerColumn; sourceColumn++)
+        //    //                    {
+        //    //                        int targetColumn = BlocksPerColumn - sourceColumn - 1;
+        //    //                        for (int row = 0; row < BlocksPerRow; row++)
+        //    //                        {
+        //    //                            int target = (targetColumn * BlocksPerRow + row) * _BytesPerBlock;
+        //    //                            int source = (sourceColumn * BlocksPerRow + row) * _BytesPerBlock + Cursor;
+        //    //                            #region Swap Bytes
+        //    //                            switch (_PixelInternalFormat)
+        //    //                            {
+        //    //                                case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext:
+        //    //                                    // Color only
+        //    //                                    RawDataOfSurface[target + 0] = _RawDataFromFile[source + 0];
+        //    //                                    RawDataOfSurface[target + 1] = _RawDataFromFile[source + 1];
+        //    //                                    RawDataOfSurface[target + 2] = _RawDataFromFile[source + 2];
+        //    //                                    RawDataOfSurface[target + 3] = _RawDataFromFile[source + 3];
+        //    //                                    RawDataOfSurface[target + 4] = _RawDataFromFile[source + 7];
+        //    //                                    RawDataOfSurface[target + 5] = _RawDataFromFile[source + 6];
+        //    //                                    RawDataOfSurface[target + 6] = _RawDataFromFile[source + 5];
+        //    //                                    RawDataOfSurface[target + 7] = _RawDataFromFile[source + 4];
+        //    //                                    break;
+        //    //                                case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt3Ext:
+        //    //                                    // Alpha
+        //    //                                    RawDataOfSurface[target + 0] = _RawDataFromFile[source + 6];
+        //    //                                    RawDataOfSurface[target + 1] = _RawDataFromFile[source + 7];
+        //    //                                    RawDataOfSurface[target + 2] = _RawDataFromFile[source + 4];
+        //    //                                    RawDataOfSurface[target + 3] = _RawDataFromFile[source + 5];
+        //    //                                    RawDataOfSurface[target + 4] = _RawDataFromFile[source + 2];
+        //    //                                    RawDataOfSurface[target + 5] = _RawDataFromFile[source + 3];
+        //    //                                    RawDataOfSurface[target + 6] = _RawDataFromFile[source + 0];
+        //    //                                    RawDataOfSurface[target + 7] = _RawDataFromFile[source + 1];
 
-                                                // Color
-                                                RawDataOfSurface[target + 8] = _RawDataFromFile[source + 8];
-                                                RawDataOfSurface[target + 9] = _RawDataFromFile[source + 9];
-                                                RawDataOfSurface[target + 10] = _RawDataFromFile[source + 10];
-                                                RawDataOfSurface[target + 11] = _RawDataFromFile[source + 11];
-                                                RawDataOfSurface[target + 12] = _RawDataFromFile[source + 15];
-                                                RawDataOfSurface[target + 13] = _RawDataFromFile[source + 14];
-                                                RawDataOfSurface[target + 14] = _RawDataFromFile[source + 13];
-                                                RawDataOfSurface[target + 15] = _RawDataFromFile[source + 12];
-                                                break;
-                                            case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt5Ext:
-                                                // Alpha, the first 2 bytes remain 
-                                                RawDataOfSurface[target + 0] = _RawDataFromFile[source + 0];
-                                                RawDataOfSurface[target + 1] = _RawDataFromFile[source + 1];
+        //    //                                    // Color
+        //    //                                    RawDataOfSurface[target + 8] = _RawDataFromFile[source + 8];
+        //    //                                    RawDataOfSurface[target + 9] = _RawDataFromFile[source + 9];
+        //    //                                    RawDataOfSurface[target + 10] = _RawDataFromFile[source + 10];
+        //    //                                    RawDataOfSurface[target + 11] = _RawDataFromFile[source + 11];
+        //    //                                    RawDataOfSurface[target + 12] = _RawDataFromFile[source + 15];
+        //    //                                    RawDataOfSurface[target + 13] = _RawDataFromFile[source + 14];
+        //    //                                    RawDataOfSurface[target + 14] = _RawDataFromFile[source + 13];
+        //    //                                    RawDataOfSurface[target + 15] = _RawDataFromFile[source + 12];
+        //    //                                    break;
+        //    //                                case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbaS3tcDxt5Ext:
+        //    //                                    // Alpha, the first 2 bytes remain 
+        //    //                                    RawDataOfSurface[target + 0] = _RawDataFromFile[source + 0];
+        //    //                                    RawDataOfSurface[target + 1] = _RawDataFromFile[source + 1];
 
-                                                // extract 3 bits each and flip them
-                                                GetBytesFromUInt24(ref RawDataOfSurface, (uint)target + 5, FlipUInt24(GetUInt24(ref _RawDataFromFile, (uint)source + 2)));
-                                                GetBytesFromUInt24(ref RawDataOfSurface, (uint)target + 2, FlipUInt24(GetUInt24(ref _RawDataFromFile, (uint)source + 5)));
+        //    //                                    // extract 3 bits each and flip them
+        //    //                                    GetBytesFromUInt24(ref RawDataOfSurface, (uint)target + 5, FlipUInt24(GetUInt24(ref _RawDataFromFile, (uint)source + 2)));
+        //    //                                    GetBytesFromUInt24(ref RawDataOfSurface, (uint)target + 2, FlipUInt24(GetUInt24(ref _RawDataFromFile, (uint)source + 5)));
 
-                                                // Color
-                                                RawDataOfSurface[target + 8] = _RawDataFromFile[source + 8];
-                                                RawDataOfSurface[target + 9] = _RawDataFromFile[source + 9];
-                                                RawDataOfSurface[target + 10] = _RawDataFromFile[source + 10];
-                                                RawDataOfSurface[target + 11] = _RawDataFromFile[source + 11];
-                                                RawDataOfSurface[target + 12] = _RawDataFromFile[source + 15];
-                                                RawDataOfSurface[target + 13] = _RawDataFromFile[source + 14];
-                                                RawDataOfSurface[target + 14] = _RawDataFromFile[source + 13];
-                                                RawDataOfSurface[target + 15] = _RawDataFromFile[source + 12];
-                                                break;
-                                            default:
-                                                throw new ArgumentException("ERROR: Should have never arrived here! Bad _PixelInternalFormat! Should have been dealt with much earlier.");
-                                        }
-                                        #endregion Swap Bytes
-                                    }
-                                }
-                            }
-                            #endregion Prepare Array for TexImage
+        //    //                                    // Color
+        //    //                                    RawDataOfSurface[target + 8] = _RawDataFromFile[source + 8];
+        //    //                                    RawDataOfSurface[target + 9] = _RawDataFromFile[source + 9];
+        //    //                                    RawDataOfSurface[target + 10] = _RawDataFromFile[source + 10];
+        //    //                                    RawDataOfSurface[target + 11] = _RawDataFromFile[source + 11];
+        //    //                                    RawDataOfSurface[target + 12] = _RawDataFromFile[source + 15];
+        //    //                                    RawDataOfSurface[target + 13] = _RawDataFromFile[source + 14];
+        //    //                                    RawDataOfSurface[target + 14] = _RawDataFromFile[source + 13];
+        //    //                                    RawDataOfSurface[target + 15] = _RawDataFromFile[source + 12];
+        //    //                                    break;
+        //    //                                default:
+        //    //                                    throw new ArgumentException("ERROR: Should have never arrived here! Bad _PixelInternalFormat! Should have been dealt with much earlier.");
+        //    //                            }
+        //    //                            #endregion Swap Bytes
+        //    //                        }
+        //    //                    }
+        //    //                }
+        //    //                #endregion Prepare Array for TexImage
 
-                            #region Create TexImage
-                            switch (dimension)
-                            {
-                                case TextureTarget.Texture2D:
-                                    GL.CompressedTexImage2D(TextureTarget.Texture2D,
-                                                             Level,
-                                                             _PixelInternalFormat,
-                                                             Width,
-                                                             Height,
-                                                            TextureLoaderParameters.Border,
-                                                             SurfaceSizeInBytes,
-                                                             RawDataOfSurface);
-                                    break;
-                                case TextureTarget.TextureCubeMap:
-                                    GL.CompressedTexImage2D(TextureTarget.TextureCubeMapPositiveX + Slices,
-                                                             Level,
-                                                             _PixelInternalFormat,
-                                                             Width,
-                                                             Height,
-                                                             TextureLoaderParameters.Border,
-                                                             SurfaceSizeInBytes,
-                                                             RawDataOfSurface);
-                                    break;
-                                case TextureTarget.Texture1D: // Untested
-                                case TextureTarget.Texture3D: // Untested
-                                default:
-                                    throw new ArgumentException("ERROR: Use DXT for 2D Images only. Cannot evaluate " + dimension);
-                            }
-                            GL.Finish();
-                            #endregion Create TexImage
+        //    //                #region Create TexImage
+        //    //                switch (dimension)
+        //    //                {
+        //    //                    case TextureTarget.Texture2D:
+        //    //                        GL.CompressedTexImage2D(TextureTarget.Texture2D,
+        //    //                                                 Level,
+        //    //                                                 _PixelInternalFormat,
+        //    //                                                 Width,
+        //    //                                                 Height,
+        //    //                                                TextureLoaderParameters.Border,
+        //    //                                                 SurfaceSizeInBytes,
+        //    //                                                 RawDataOfSurface);
+        //    //                        break;
+        //    //                    case TextureTarget.TextureCubeMap:
+        //    //                        GL.CompressedTexImage2D(TextureTarget.TextureCubeMapPositiveX + Slices,
+        //    //                                                 Level,
+        //    //                                                 _PixelInternalFormat,
+        //    //                                                 Width,
+        //    //                                                 Height,
+        //    //                                                 TextureLoaderParameters.Border,
+        //    //                                                 SurfaceSizeInBytes,
+        //    //                                                 RawDataOfSurface);
+        //    //                        break;
+        //    //                    case TextureTarget.Texture1D: // Untested
+        //    //                    case TextureTarget.Texture3D: // Untested
+        //    //                    default:
+        //    //                        throw new ArgumentException("ERROR: Use DXT for 2D Images only. Cannot evaluate " + dimension);
+        //    //                }
+        //    //                GL.Finish();
+        //    //                #endregion Create TexImage
 
-                            #region Query Success
-                            int width, height, internalformat, compressed;
-                            switch (dimension)
-                            {
-                                case TextureTarget.Texture1D:
-                                case TextureTarget.Texture2D:
-                                case TextureTarget.Texture3D:
-                                    GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureWidth, out width);
-                                    GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureHeight, out height);
-                                    GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureInternalFormat, out internalformat);
-                                    GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureCompressed, out compressed);
-                                    break;
-                                case TextureTarget.TextureCubeMap:
-                                    GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureWidth, out width);
-                                    GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureHeight, out height);
-                                    GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureInternalFormat, out internalformat);
-                                    GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureCompressed, out compressed);
-                                    break;
-                                default:
-                                    throw Unfinished;
-                            }
-                            GLError = GL.GetError();
-                            if (TextureLoaderParameters.Verbose)
-                                Trace.WriteLine("GL: " + GLError.ToString() + " Level: " + Level + " DXTn: " + ((compressed == 1) ? "Yes" : "No") + " Frmt:" + (ExtTextureCompressionS3tc)internalformat + " " + width + "*" + height);
-                            if (GLError != ErrorCode.NoError || compressed == 0 || width == 0 || height == 0 || internalformat == 0)
-                            {
-                                GL.DeleteTextures(1, ref texturehandle);
-                                throw new ArgumentException("ERROR: Something went wrong after GL.CompressedTexImage(); Last GL Error: " + GLError.ToString());
-                            }
-                            #endregion Query Success
-                        }
-                        else
-                        {
-                            if (trueMipMapCount > Level)
-                                trueMipMapCount = Level - 1; // The current Level is invalid
-                        }
+        //    //                #region Query Success
+        //    //                int width, height, internalformat, compressed;
+        //    //                switch (dimension)
+        //    //                {
+        //    //                    case TextureTarget.Texture1D:
+        //    //                    case TextureTarget.Texture2D:
+        //    //                    case TextureTarget.Texture3D:
+        //    //                        GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureWidth, out width);
+        //    //                        GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureHeight, out height);
+        //    //                        GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureInternalFormat, out internalformat);
+        //    //                        GL.GetTexLevelParameter(dimension, Level, GetTextureParameter.TextureCompressed, out compressed);
+        //    //                        break;
+        //    //                    case TextureTarget.TextureCubeMap:
+        //    //                        GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureWidth, out width);
+        //    //                        GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureHeight, out height);
+        //    //                        GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureInternalFormat, out internalformat);
+        //    //                        GL.GetTexLevelParameter(TextureTarget.TextureCubeMapPositiveX + Slices, Level, GetTextureParameter.TextureCompressed, out compressed);
+        //    //                        break;
+        //    //                    default:
+        //    //                        throw Unfinished;
+        //    //                }
+        //    //                GLError = GL.GetError();
+        //    //                if (TextureLoaderParameters.Verbose)
+        //    //                    Trace.WriteLine("GL: " + GLError.ToString() + " Level: " + Level + " DXTn: " + ((compressed == 1) ? "Yes" : "No") + " Frmt:" + (ExtTextureCompressionS3tc)internalformat + " " + width + "*" + height);
+        //    //                if (GLError != ErrorCode.NoError || compressed == 0 || width == 0 || height == 0 || internalformat == 0)
+        //    //                {
+        //    //                    GL.DeleteTextures(1, ref texturehandle);
+        //    //                    throw new ArgumentException("ERROR: Something went wrong after GL.CompressedTexImage(); Last GL Error: " + GLError.ToString());
+        //    //                }
+        //    //                #endregion Query Success
+        //    //            }
+        //    //            else
+        //    //            {
+        //    //                if (trueMipMapCount > Level)
+        //    //                    trueMipMapCount = Level - 1; // The current Level is invalid
+        //    //            }
 
-                        #region Prepare the next MipMap level
-                        Width /= 2;
-                        if (Width < 1)
-                            Width = 1;
-                        Height /= 2;
-                        if (Height < 1)
-                            Height = 1;
-                        Cursor += SurfaceSizeInBytes;
-                        #endregion Prepare the next MipMap level
-                    }
+        //    //            #region Prepare the next MipMap level
+        //    //            Width /= 2;
+        //    //            if (Width < 1)
+        //    //                Width = 1;
+        //    //            Height /= 2;
+        //    //            if (Height < 1)
+        //    //                Height = 1;
+        //    //            Cursor += SurfaceSizeInBytes;
+        //    //            #endregion Prepare the next MipMap level
+        //    //        }
 
-                    #region Set States properly
-                    GL.TexParameter(dimension, (TextureParameterName)All.TextureBaseLevel, 0);
-                    GL.TexParameter(dimension, (TextureParameterName)All.TextureMaxLevel, trueMipMapCount);
+        //    //        #region Set States properly
+        //    //        GL.TexParameter(dimension, (TextureParameterName)All.TextureBaseLevel, 0);
+        //    //        GL.TexParameter(dimension, (TextureParameterName)All.TextureMaxLevel, trueMipMapCount);
 
-                    int TexMaxLevel;
-                    GL.GetTexParameter(dimension, GetTextureParameter.TextureMaxLevel, out TexMaxLevel);
+        //    //        int TexMaxLevel;
+        //    //        GL.GetTexParameter(dimension, GetTextureParameter.TextureMaxLevel, out TexMaxLevel);
 
-                    if (TextureLoaderParameters.Verbose)
-                        Trace.WriteLine("Verification: GL: " + GL.GetError().ToString() + " TextureMaxLevel: " + TexMaxLevel + ((TexMaxLevel == trueMipMapCount) ? " (Correct.)" : " (Wrong!)"));
-                    #endregion Set States properly
-                }
+        //    //        if (TextureLoaderParameters.Verbose)
+        //    //            Trace.WriteLine("Verification: GL: " + GL.GetError().ToString() + " TextureMaxLevel: " + TexMaxLevel + ((TexMaxLevel == trueMipMapCount) ? " (Correct.)" : " (Wrong!)"));
+        //    //        #endregion Set States properly
+        //    //    }
 
-                #region Set Texture Parameters
-                GL.TexParameter(dimension, TextureParameterName.TextureMinFilter, (int)TextureLoaderParameters.MinificationFilter);
-                GL.TexParameter(dimension, TextureParameterName.TextureMagFilter, (int)TextureLoaderParameters.MagnificationFilter);
+        //    //    #region Set Texture Parameters
+        //    //    GL.TexParameter(dimension, TextureParameterName.TextureMinFilter, (int)TextureLoaderParameters.MinificationFilter);
+        //    //    GL.TexParameter(dimension, TextureParameterName.TextureMagFilter, (int)TextureLoaderParameters.MagnificationFilter);
 
-                GL.TexParameter(dimension, TextureParameterName.TextureWrapS, (int)TextureLoaderParameters.WrapModeS);
-                GL.TexParameter(dimension, TextureParameterName.TextureWrapT, (int)TextureLoaderParameters.WrapModeT);
+        //    //    GL.TexParameter(dimension, TextureParameterName.TextureWrapS, (int)TextureLoaderParameters.WrapModeS);
+        //    //    GL.TexParameter(dimension, TextureParameterName.TextureWrapT, (int)TextureLoaderParameters.WrapModeT);
 
-                GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureLoaderParameters.EnvMode);
+        //    //    GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureLoaderParameters.EnvMode);
 
-                GLError = GL.GetError();
-                if (GLError != ErrorCode.NoError)
-                {
-                    throw new ArgumentException("Error setting Texture Parameters. GL Error: " + GLError);
-                }
-                #endregion Set Texture Parameters
+        //    //    GLError = GL.GetError();
+        //    //    if (GLError != ErrorCode.NoError)
+        //    //    {
+        //    //        throw new ArgumentException("Error setting Texture Parameters. GL Error: " + GLError);
+        //    //    }
+        //    //    #endregion Set Texture Parameters
 
-                // If it made it here without throwing any Exception the result is a valid Texture.
-                return; // success
-                #endregion send the Texture to GL
-            }
-            catch (Exception e)
-            {
-                dimension = (TextureTarget)0;
-                texturehandle = TextureLoaderParameters.OpenGLDefaultTexture;
-                throw new ArgumentException("ERROR: Exception caught when attempting to load file " + filename + ".\n" + e + "\n" + GetDescriptionFromFile(filename));
-                // return; // failure
-            }
-            finally
-            {
-                _RawDataFromFile = null; // clarity, not really needed
-            }
-            #endregion Try
-        }
+        //    //    // If it made it here without throwing any Exception the result is a valid Texture.
+        //    //    return; // success
+        //    //    #endregion send the Texture to GL
+        //    //}
+        //    //catch (Exception e)
+        //    //{
+        //    //    dimension = (TextureTarget)0;
+        //    //    texturehandle = TextureLoaderParameters.OpenGLDefaultTexture;
+        //    //    throw new ArgumentException("ERROR: Exception caught when attempting to load file " + filename + ".\n" + e + "\n" + GetDescriptionFromFile(filename));
+        //    //    // return; // failure
+        //    //}
+        //    //finally
+        //    //{
+        //    //    _RawDataFromFile = null; // clarity, not really needed
+        //    //}
+        //    //#endregion Try
+        //}
 
         #region Helpers
         private static void ConvertDX9Header(ref byte[] input)

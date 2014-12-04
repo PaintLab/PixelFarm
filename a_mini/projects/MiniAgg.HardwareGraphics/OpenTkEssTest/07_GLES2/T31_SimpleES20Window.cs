@@ -29,10 +29,7 @@ namespace OpenTkEssTest
     public class T31_SimpleES20Window : DemoBase
     {
         public override void Init()
-        {
-
-
-
+        { 
 
             SimpleES20Window example;
             try

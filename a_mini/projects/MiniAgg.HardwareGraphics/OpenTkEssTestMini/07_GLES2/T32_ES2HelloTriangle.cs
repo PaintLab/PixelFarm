@@ -108,8 +108,8 @@ namespace OpenTkEssTest
             {
                 //return false
             }
-           
-             
+
+
             GL.ClearColor(0, 0, 0, 0);
 
         }
