@@ -27,9 +27,7 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Font;
-//using LayoutFarm.Agg.Font;
-
+ 
 namespace PixelFarm.Agg
 {
 

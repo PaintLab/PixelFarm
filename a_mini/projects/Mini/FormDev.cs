@@ -193,7 +193,7 @@ namespace Mini
 
                 //--------------------------------------------------------
                 VertexStore vxs = new VertexStore();
-                Mini.GdiFontHelper.ConvertCharToVertexGlyph(ff, testChar, vxs);
+                GdiFontHelper.ConvertCharToVertexGlyph(ff, testChar, vxs);
 
                 //--------------------------------------------------------
                 //convert Agg vxs to bitmap
@@ -202,12 +202,12 @@ namespace Mini
                 using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
                 {
                     ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.Rgba32);
-                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage); 
-                    gfx.Render(vxs, ColorRGBA.Black); 
+                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
+                    gfx.Render(vxs, ColorRGBA.Black);
                     //test subpixel rendering 
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
                     gfx.UseSubPixelRendering = true;
-                    gfx.Render(vxs, ColorRGBA.Black); 
+                    gfx.Render(vxs, ColorRGBA.Black);
                     BitmapHelper.CopyToWindowsBitmap(
                       actualImage, //src from actual img buffer
                       bufferBmp, //dest to buffer bmp

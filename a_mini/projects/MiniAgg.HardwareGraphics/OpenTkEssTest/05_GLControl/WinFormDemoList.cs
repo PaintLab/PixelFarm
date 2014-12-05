@@ -150,7 +150,7 @@ namespace OpenTkEssTest
 
 
                 //load font data
-                var font = PixelFarm.Font2.FontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
+                var font = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
                 var fontGlyph = font.GetGlyph('{');
                 //PixelFarm.Font2.MyFonts.SetShapingEngine();
 

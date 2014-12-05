@@ -9,7 +9,7 @@ using System;
 
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Font;
+ 
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
 

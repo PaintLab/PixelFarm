@@ -12,29 +12,11 @@ using System.Text;
 using System.IO;
 using PixelFarm.Agg;
 
-
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
     public class FontGlyph
     {
         public ExportGlyph exportGlyph;
-
-        //public short unit_per_em;
-        //public short ascender;
-        //public short descender;
-        //public short height;
-
-        //public int advanceX;
-        //public int advanceY;
-
-        //public int bboxXmin;
-        //public int bboxXmax;
-        //public int bboxYmin;
-        //public int bboxYmax;
-
-        //public int bitmap_left;
-        //public int bitmap_top;
-        //-------------------------
         /// <summary>
         /// original 8bpp image buffer
         /// </summary>
@@ -52,6 +34,10 @@ namespace PixelFarm.Font2
         /// flaten version of original glyph outline
         /// </summary>
         public VertexStore flattenVxs;
-
+        //----------------------------
+        //metrics
+        public int horiz_adv_x;
+        public string glyphName;
+        public int unicode;
     }
 }

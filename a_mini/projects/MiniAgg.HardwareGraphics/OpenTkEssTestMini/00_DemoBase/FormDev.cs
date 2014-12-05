@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-using PixelFarm.Font2;
+ 
 
 namespace Mini
 {

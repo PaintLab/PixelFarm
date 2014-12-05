@@ -13,7 +13,7 @@ using System.Text;
 
 using System.IO;
 
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
 
     [StructLayout(LayoutKind.Sequential)]
@@ -54,9 +54,7 @@ namespace PixelFarm.Font2
         public int bitmap_top;
 
         internal IntPtr bitmap;
-        internal IntPtr outline;
-        //public FT_Bitmap* bitmap;
-        //public FT_Outline* outline;
+        internal IntPtr outline; 
     }
 
 

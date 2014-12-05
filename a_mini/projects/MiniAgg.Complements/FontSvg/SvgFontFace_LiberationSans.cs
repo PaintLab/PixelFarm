@@ -3,19 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PixelFarm.Agg.Font
+namespace PixelFarm.Agg.Fonts
 {
-    public class LiberationSansFont
+    class SvgFontFace_LiberationSans
     {
-        static TypeFace instance;
+        static SvgFontFace instance;
 
-        public static TypeFace Instance
-        {
+        public static SvgFontFace Instance
+        {   
             get
             {
                 if (instance == null)
                 {
-                    instance = new TypeFace();
+                    instance = new SvgFontFace();
                     instance.ReadSVG(FontData());
                 }
 
@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Font
             }
         }
 
-        private static String FontData()
+        static String FontData()
         {
             return @"<?xml version=""1.0"" standalone=""no""?>
 <!DOCTYPE svg PUBLIC ""-//W3C//DTD SVG 1.1//EN"" ""http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"" >

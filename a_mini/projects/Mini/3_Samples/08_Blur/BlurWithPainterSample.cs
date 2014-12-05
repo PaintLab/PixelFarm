@@ -10,9 +10,9 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 
-using PixelFarm.Agg.Font;
-using PixelFarm.VectorMath;
 
+using PixelFarm.VectorMath;
+using PixelFarm.Agg.Fonts;
 
 using Mini;
 namespace PixelFarm.Agg.Sample_Blur2
@@ -51,13 +51,12 @@ namespace PixelFarm.Agg.Sample_Blur2
             this.BlurRadius = 15;
 
 
-            StyledTypeFace typeFaceForLargeA = new StyledTypeFace(LiberationSansFont.Instance, 300, flatenCurves: false);
-
-            m_pathVxs = typeFaceForLargeA.GetGlyphForCharacter('a');
+            Font svgFont = SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
+            m_pathVxs = svgFont.GetGlyph('a').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            
+
             var curveFlattener = new CurveFlattener();
 
             m_path_2 = new VertexStoreSnap(curveFlattener.MakeVxs(m_pathVxs));

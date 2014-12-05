@@ -24,7 +24,7 @@ namespace OpenTkEssTest
         {
 
         }
-        public PixelFarm.Font2.Font CurrentFont 
+        public PixelFarm.Agg.Fonts.Font CurrentFont 
         {
             get { return this.textPriner.CurrentFont; }
             set { this.textPriner.CurrentFont = value; }

@@ -13,7 +13,7 @@ using System.Text;
 
 using System.IO;
 
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
 
 
@@ -122,12 +122,12 @@ namespace PixelFarm.Font2
     [StructLayout(LayoutKind.Sequential)]
     public struct ProperGlyph
     {
-       public uint codepoint;
-       public int x_advance;
-       public int y_advance;
-       public int x_offset;
-       public int y_offset;
-    } 
+        public uint codepoint;
+        public int x_advance;
+        public int y_advance;
+        public int x_offset;
+        public int y_offset;
+    }
 
 
 }
