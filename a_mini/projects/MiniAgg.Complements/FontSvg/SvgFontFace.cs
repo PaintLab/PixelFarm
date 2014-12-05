@@ -109,10 +109,15 @@ namespace PixelFarm.Agg.Fonts
         public int Underline_position { get { return underline_position; } }
         String unicode_range;
 
-        FontGlyph missingGlyph;
+        FontGlyph missingGlyph; 
 
-        Dictionary<int, FontGlyph> glyphs = new Dictionary<int, FontGlyph>(); // a glyph is indexed by the string it represents, usually one character, but sometimes multiple
-        Dictionary<Char, Dictionary<Char, int>> HKerns = new Dictionary<char, Dictionary<char, int>>();
+        //-----------------------------------
+        Dictionary<int, FontGlyph> originalGlyphs = new Dictionary<int, FontGlyph>(); // a glyph is indexed by the string it represents, usually one character, but sometimes multiple
+        Dictionary<Char, Dictionary<Char, int>> hkerns = new Dictionary<char, Dictionary<char, int>>();
+        Dictionary<int, SvgFont> stockFonts = new Dictionary<int, SvgFont>();
+        //-----------------------------------
+
+
 
         public int UnitsPerEm
         {
@@ -126,6 +131,18 @@ namespace PixelFarm.Agg.Fonts
         {
 
         }
+        public SvgFont GetFontAtSpecificSize(int emsize)
+        {
+            SvgFont found;
+            if (!stockFonts.TryGetValue(emsize, out found))
+            {
+                found = new SvgFont(this, emsize);
+                stockFonts.Add(emsize, found);
+            }
+            return found;
+        }
+
+
         static String GetSubString(String source, String start, String end)
         {
             int startIndex = 0;
@@ -170,25 +187,10 @@ namespace PixelFarm.Agg.Fonts
             return GetIntValue(source, name, out outValue, ref startIndex);
         }
 
-        public static SvgFontFace LoadSVG(String filename)
-        {
-            SvgFontFace fontUnderConstruction = new SvgFontFace();
 
-            string svgContent = "";
-            using (FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                using (StreamReader reader = new StreamReader(fileStream))
-                {
-                    svgContent = reader.ReadToEnd();
-                }
-            }
-            fontUnderConstruction.ReadSVG(svgContent);
-
-            return fontUnderConstruction;
-        }
 
         static Regex numberRegex = new Regex(@"[-+]?[0-9]*\.?[0-9]+");
-        static double GetNextNumber(String source, ref int startIndex)
+        static double GetNextNumber(string source, ref int startIndex)
         {
             Match numberMatch = numberRegex.Match(source, startIndex);
             String returnString = numberMatch.Value;
@@ -198,7 +200,7 @@ namespace PixelFarm.Agg.Fonts
             return returnVal;
         }
 
-        FontGlyph CreateGlyphFromSVGGlyphData(String svgGlyphData)
+        FontGlyph CreateGlyphFromSVGGlyphData(string svgGlyphData)
         {
             FontGlyph newGlyph = new FontGlyph();
             if (!GetIntValue(svgGlyphData, "horiz-adv-x", out newGlyph.horiz_adv_x))
@@ -380,7 +382,7 @@ namespace PixelFarm.Agg.Fonts
             return newGlyph;
         }
 
-        public void ReadSVG(String svgContent)
+        public void ReadSVG(string svgContent)
         {
             int startIndex = 0;
             String fontElementString = GetSubString(svgContent, "<font", ">", ref startIndex);
@@ -420,7 +422,7 @@ namespace PixelFarm.Agg.Fonts
                 FontGlyph newGlyph = CreateGlyphFromSVGGlyphData(nextGlyphString);
                 if (newGlyph.unicode > 0)
                 {
-                    glyphs.Add(newGlyph.unicode, newGlyph);
+                    originalGlyphs.Add(newGlyph.unicode, newGlyph);
                 }
 
                 nextGlyphString = GetSubString(svgContent, "<glyph", "/>", ref startIndex);
@@ -431,7 +433,7 @@ namespace PixelFarm.Agg.Fonts
         {
             // TODO: check for multi character glyphs (we don't currently support them in the reader).
             FontGlyph glyph;
-            if (!glyphs.TryGetValue(character, out glyph))
+            if (!originalGlyphs.TryGetValue(character, out glyph))
             {
                 return missingGlyph;
             }
@@ -441,7 +443,7 @@ namespace PixelFarm.Agg.Fonts
         {
             // TODO: check for multi character glyphs (we don't currently support them in the reader).
             FontGlyph glyph;
-            if (!glyphs.TryGetValue(index, out glyph))
+            if (!originalGlyphs.TryGetValue(index, out glyph))
             {
                 return missingGlyph;
             }
@@ -451,9 +453,9 @@ namespace PixelFarm.Agg.Fonts
         {
             // TODO: check for kerning and adjust
             FontGlyph glyph;
-            if (!glyphs.TryGetValue(character, out glyph))
+            if (!originalGlyphs.TryGetValue(character, out glyph))
             {
-                return 0;                
+                return 0;
             }
             return glyph.horiz_adv_x;
         }
@@ -461,7 +463,7 @@ namespace PixelFarm.Agg.Fonts
         internal int GetAdvanceForCharacter(char character)
         {
             FontGlyph glyph;
-            if (glyphs.TryGetValue(character, out glyph))
+            if (originalGlyphs.TryGetValue(character, out glyph))
             {
 
                 return glyph.horiz_adv_x;

@@ -20,7 +20,7 @@ namespace PixelFarm.Agg.Fonts
     {
         public const string DEFAULT_SVG_FONTNAME = "svg-LiberationSansFont";
 
-        static Dictionary<string, SvgFontFace> fonts = new Dictionary<string, SvgFontFace>();
+        static Dictionary<string, SvgFontFace> fontFaces = new Dictionary<string, SvgFontFace>();
 
         internal static void SetShapingEngine(SvgFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
@@ -45,7 +45,7 @@ namespace PixelFarm.Agg.Fonts
 
             //load font from specific file 
             SvgFontFace fontFace;
-            if (!fonts.TryGetValue(filename, out fontFace))
+            if (!fontFaces.TryGetValue(filename, out fontFace))
             {   
                 //temp ....
                 //all svg font remap to DEFAULT_SVG_FONTNAME
@@ -57,22 +57,22 @@ namespace PixelFarm.Agg.Fonts
                 //----------------------------------------
                 if (filename == DEFAULT_SVG_FONTNAME)
                 {
-                    fonts.Add(filename, fontFace = SvgFontFace_LiberationSans.Instance);
+                    fontFaces.Add(filename, fontFace = SvgFontFace_LiberationSans.Instance);
                 }
                 else
                 {
                     //use default?,  svg-liberation san fonts
 
                 }
-            }
-
+            } 
             if (fontFace == null)
             {
                 return null;
             }
 
-            
-            return new SvgFont(fontFace, fontPointSize);
+
+
+            return fontFace.GetFontAtSpecificSize(fontPointSize);             
 
         }
 
