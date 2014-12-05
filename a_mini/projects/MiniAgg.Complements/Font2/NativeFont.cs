@@ -7,9 +7,9 @@ using System.IO;
 using PixelFarm.Agg;
 namespace PixelFarm.Font2
 {
-    public class Font : IDisposable
+    public class NativeFont : Font
     {
-        FontFace ownerFace;
+        NativeFontFace ownerFace;
         float fontSizeInPoint;
         int fontSizeInPixelUnit;
         /// <summary>
@@ -19,22 +19,23 @@ namespace PixelFarm.Font2
         Dictionary<uint, FontGlyph> dicGlyphs2 = new Dictionary<uint, FontGlyph>();
 
 
-        internal Font(FontFace ownerFace, int pixelSize)
+        internal NativeFont(NativeFontFace ownerFace, int pixelSize)
         {
             //store unmanage font file information
-            this.ownerFace = ownerFace; 
+            this.ownerFace = ownerFace;
             this.fontSizeInPixelUnit = pixelSize;
         }
-
-        public void Dispose()
+        protected override void OnDispose()
         {
             //TODO: clear resource here 
+
         }
+
         public float SizeInPoint
         {
             get { return this.fontSizeInPoint; }
         }
-        public FontGlyph GetGlyph(char c)
+        public override FontGlyph GetGlyph(char c)
         {
             FontGlyph found;
             if (!dicGlyphs.TryGetValue(c, out found))
@@ -45,7 +46,7 @@ namespace PixelFarm.Font2
             }
             return found;
         }
-        public FontGlyph GetGlyphByIndex(uint glyphIndex)
+        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             FontGlyph found;
             if (!dicGlyphs2.TryGetValue(glyphIndex, out found))
@@ -59,9 +60,28 @@ namespace PixelFarm.Font2
         /// <summary>
         /// owner font face
         /// </summary>
-        public FontFace FontFace
+        public override FontFace FontFace
         {
             get { return this.ownerFace; }
         }
+        internal NativeFontFace NativeFontFace
+        {
+            get { return this.ownerFace; }
+        }
+        public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
+        {
+            unsafe
+            {
+                fixed (ProperGlyph* propGlyphH = &properGlyphs[0])
+                fixed (char* head = &buffer[0])
+                {
+                    NativeMyFontsLib.MyFtShaping(
+                        this.NativeFontFace.HBFont,
+                        head,
+                        buffer.Length,
+                        propGlyphH);
+                }
+            }
+        } 
     }
 }

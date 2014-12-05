@@ -54,9 +54,7 @@ namespace PixelFarm.Font2
         public int bitmap_top;
 
         internal IntPtr bitmap;
-        internal IntPtr outline;
-        //public FT_Bitmap* bitmap;
-        //public FT_Outline* outline;
+        internal IntPtr outline; 
     }
 
 

@@ -16,12 +16,12 @@ using PixelFarm.Agg;
 namespace PixelFarm.Font2
 {
 
-    public static class FontStore
+    public static class NativeFontStore
     {
 
-        static Dictionary<string, FontFace> fonts = new Dictionary<string, FontFace>(); 
-        
-        internal static void SetShapingEngine(FontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
+        static Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
+
+        internal static void SetShapingEngine(NativeFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
             //string lang = "en";
             //PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(ftFaceHandle,
@@ -38,11 +38,12 @@ namespace PixelFarm.Font2
                 ref exportTypeInfo);
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
- 
+
         public static Font LoadFont(string filename, int fontPointSize)
         {
+
             //load font from specific file 
-            FontFace fontFace;
+            NativeFontFace fontFace;
             if (!fonts.TryGetValue(filename, out fontFace))
             {
                 //if not found
@@ -59,7 +60,7 @@ namespace PixelFarm.Font2
                 if (faceHandle != IntPtr.Zero)
                 {
                     //ok pass
-                   
+
                     //-------------------
                     //test change font size
                     //NativeMyFontsLib.MyFtSetCharSize(faceHandle,
@@ -70,7 +71,7 @@ namespace PixelFarm.Font2
 
                     //-------------------
 
-                    fontFace = new FontFace(unmanagedMem, faceHandle);
+                    fontFace = new NativeFontFace(unmanagedMem, faceHandle);
                     ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
                     NativeMyFontsLib.MyFtGetFaceInfo(faceHandle, ref exportTypeInfo);
                     fontFace.HasKerning = exportTypeInfo.hasKerning;
@@ -91,7 +92,7 @@ namespace PixelFarm.Font2
 
             return fontFace.GetFontAtPointSize(fontPointSize);
 
-           
+
         }
 
 
@@ -102,8 +103,7 @@ namespace PixelFarm.Font2
             //from FreeType Documenetation
             //pixel_size = (pointsize * (resolution/72);
             return (int)(point * 96 / 72);
-        }
-
+        } 
     }
 
 }

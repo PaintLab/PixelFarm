@@ -42,7 +42,7 @@ namespace PixelFarm.Font2
             //get kerning list 
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
-            FontShaping.GetGlyphPos(currentFont, buffer, 0, buffsize, properGlyphs);
+            currentFont.GetGlyphPos( buffer, 0, buffsize, properGlyphs);
 
 
             double xpos = x;

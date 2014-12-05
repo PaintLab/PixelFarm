@@ -2,7 +2,7 @@
 using System.Text;
 using System;
 using OpenTK.Graphics.OpenGL;
-using Tesselate; 
+using Tesselate;
 using PixelFarm.Font2;
 
 namespace OpenTkEssTest
@@ -16,7 +16,7 @@ namespace OpenTkEssTest
         {
             this.canvas2d = canvas2d;
         }
-        public Font CurrentFont 
+        public Font CurrentFont
         {
             get { return this.currentFont; }
             set { this.currentFont = value; }
@@ -32,8 +32,8 @@ namespace OpenTkEssTest
             //get kerning list
             if (properGlyphs == null)
             {
-                properGlyphs = new ProperGlyph[buffsize]; 
-                FontShaping.GetGlyphPos(this.currentFont, buffer, 0, buffsize, properGlyphs); 
+                properGlyphs = new ProperGlyph[buffsize];
+                currentFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
             }
 
             double xpos = x;
@@ -69,8 +69,8 @@ namespace OpenTkEssTest
             //get kerning list
             if (properGlyphs == null)
             {
-                properGlyphs = new ProperGlyph[size];                 
-                FontShaping.GetGlyphPos(this.currentFont, buffer, 0, size, properGlyphs);
+                properGlyphs = new ProperGlyph[size];
+                currentFont.GetGlyphPos( buffer, 0, size, properGlyphs);
             }
 
             double xpos = x;
@@ -90,7 +90,7 @@ namespace OpenTkEssTest
                         } break;
                     default:
                         {
-                            FontGlyph glyph =  this.currentFont.GetGlyphByIndex(properGlyphs[i].codepoint);
+                            FontGlyph glyph = this.currentFont.GetGlyphByIndex(properGlyphs[i].codepoint);
                             //FontGlyph glyph = this.currentFontFace.GetGlyph(c);
                             GLBitmapTexture bmp = new GLBitmapTexture(glyph.glyphImage32);
                             var left = glyph.exportGlyph.img_horiBearingX;

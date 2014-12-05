@@ -10,15 +10,17 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.IO;
 using PixelFarm.Agg;
+
 namespace PixelFarm.Font2
 {
-    public class FontFace : IDisposable
+
+
+    class NativeFontFace : FontFace
     {
         /// <summary>
         /// store font file content in unmanaged memory
         /// </summary>
         IntPtr unmanagedMem;
-
         /// <summary>
         /// free type handle (unmanaged mem)
         /// </summary>
@@ -34,7 +36,7 @@ namespace PixelFarm.Font2
         Font px64Font;
 
 
-        internal FontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
+        internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
             this.unmanagedMem = unmanagedMem;
             this.ftFaceHandle = ftFaceHandle;
@@ -47,7 +49,7 @@ namespace PixelFarm.Font2
         }
 
 
-        ~FontFace()
+        ~NativeFontFace()
         {
             Dispose();
         }
@@ -61,15 +63,13 @@ namespace PixelFarm.Font2
         }
 
 
-        public void Dispose()
+        protected override void OnDispose()
         {
-
             if (this.ftFaceHandle != IntPtr.Zero)
             {
                 NativeMyFontsLib.MyFtDoneFace(this.ftFaceHandle);
                 ftFaceHandle = IntPtr.Zero;
             }
-
             if (unmanagedMem != IntPtr.Zero)
             {
                 Marshal.FreeHGlobal(unmanagedMem);
@@ -80,7 +80,7 @@ namespace PixelFarm.Font2
             fonts = null;
 
         }
-        public bool HasKerning { get; set; }
+
 
         //---------------------------
         //for font shaping engine
@@ -95,7 +95,6 @@ namespace PixelFarm.Font2
         internal Font GetFontAtPixelSize(int pixelSize)
         {
             Font found;
-
             if (!fonts.TryGetValue(pixelSize, out found))
             {
                 //----------------------------------
@@ -104,7 +103,7 @@ namespace PixelFarm.Font2
                 NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
 
                 //create font size
-                Font f = new Font(this, pixelSize);
+                NativeFont f = new NativeFont(this, pixelSize);
                 fonts.Add(pixelSize, f);
 
                 //------------------------------------
@@ -116,7 +115,7 @@ namespace PixelFarm.Font2
         internal Font GetFontAtPointSize(float fontPointSize)
         {
             //convert from point size to pixelsize ***              
-            return GetFontAtPixelSize(FontStore.ConvertFromPointUnitToPixelUnit(fontPointSize));
+            return GetFontAtPixelSize(NativeFontStore.ConvertFromPointUnitToPixelUnit(fontPointSize));
         }
 
         internal FontGlyph ReloadGlyphFromIndex(uint glyphIndex, int pixelSize)
@@ -164,7 +163,7 @@ namespace PixelFarm.Font2
             fontGlyph.exportGlyph = *(exportTypeFace);
             //------------------------------------------
             //copy raw image 
-            FontGlyphBuilder.CopyGlyphBitmap(fontGlyph, exportTypeFace); 
+            FontGlyphBuilder.CopyGlyphBitmap(fontGlyph, exportTypeFace);
             //outline version
             //------------------------------------------
             if (px64Font != null)
@@ -183,6 +182,10 @@ namespace PixelFarm.Font2
                 FontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
             }
         }
+
+        
+
+        
     }
 
 }
