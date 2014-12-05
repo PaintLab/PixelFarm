@@ -28,52 +28,51 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Font;
 
-namespace PixelFarm.Agg.Font
+
+namespace PixelFarm.Agg.Fonts
 {
 
-    public class MyTypeFacePrinter
+    class MyTypeFacePrinter
     {
-        StyledTypeFace typeFaceStyle; 
+
         Vector2 totalSizeCach;
         string textToPrint;
+        Font currentFont;
 
         public MyTypeFacePrinter()
         {
-            this.Baseline = Font.Baseline.Text;
-            this.Justification = Font.Justification.Left;
-            this.typeFaceStyle = new StyledTypeFace(LiberationSansFont.Instance, 12);
+            this.Baseline = Baseline.Text;
+            this.Justification = Justification.Left;
         }
+        public Font CurrentFont
+        {
+            get { return this.currentFont; }
+            set
+            {
+                this.currentFont = value;
 
-
+            }
+        }
         public Justification Justification { get; set; }
         public Baseline Baseline { get; set; }
         public bool DrawFromHintedCache { get; set; }
 
-        public StyledTypeFace TypeFaceStyle
-        {
-            get
-            {
-                return typeFaceStyle;
-            }
-        }
 
         public VertexStore MakeVxs()
         {
-        
-            return VertexStoreBuilder.CreateVxs(this.GetVertexIter(textToPrint));         
+            return VertexStoreBuilder.CreateVxs(this.GetVertexIter(textToPrint));
         }
         public VertexStoreSnap MakeVertexSnap()
         {
             return new VertexStoreSnap(this.MakeVxs());
         }
-       
+
         public void LoadText(string textToPrint)
         {
             this.textToPrint = textToPrint;
         }
-       
+
 
         void RenderFromCache(Graphics2D graphics2D, double x, double y, string text)
         {
@@ -120,6 +119,9 @@ namespace PixelFarm.Agg.Font
 
         IEnumerable<VertexData> GetVertexIter(string text)
         {
+
+
+
             if (text != null && text.Length > 0)
             {
                 Vector2 currentOffset = new Vector2(0, 0);
@@ -133,15 +135,18 @@ namespace PixelFarm.Agg.Font
 
                     for (int currentChar = 0; currentChar < line.Length; currentChar++)
                     {
-                        var currentGlyph = typeFaceStyle.GetGlyphForCharacter(line[currentChar]);
+                        var currentGlyph = currentFont.GetGlyph(line[currentChar]);
 
                         if (currentGlyph != null)
                         {
-                            int j = currentGlyph.Count;
+                            //use flatten ?
+                            var glyphVxs = currentGlyph.flattenVxs;
+
+                            int j = glyphVxs.Count;
                             for (int i = 0; i < j; ++i)
                             {
                                 double x, y;
-                                var cmd = currentGlyph.GetVertex(i, out x, out y);
+                                var cmd = glyphVxs.GetVertex(i, out x, out y);
                                 if (cmd != VertexCmd.Stop)
                                 {
                                     yield return new VertexData(cmd,
@@ -155,17 +160,17 @@ namespace PixelFarm.Agg.Font
                         if (currentChar < line.Length - 1)
                         {
                             // pass the next char so the typeFaceStyle can do kerning if it needs to.
-                            currentOffset.x += typeFaceStyle.GetAdvanceForCharacter(line[currentChar], line[currentChar + 1]);
+                            currentOffset.x += currentFont.GetAdvanceForCharacter(line[currentChar], line[currentChar + 1]);
                         }
                         else
                         {
-                            currentOffset.x += typeFaceStyle.GetAdvanceForCharacter(line[currentChar]);
+                            currentOffset.x += currentFont.GetAdvanceForCharacter(line[currentChar]);
                         }
                     }
 
                     // before we go onto the next line we need to move down a line
                     currentOffset.x = 0;
-                    currentOffset.y -= typeFaceStyle.EmSizeInPixels;
+                    currentOffset.y -= currentFont.EmSizeInPixels;
                 }
             }
             yield return new VertexData(VertexCmd.Stop);
@@ -194,7 +199,7 @@ namespace PixelFarm.Agg.Font
             return currentOffset;
         }
 
-        private Vector2 GetBaseline(Vector2 currentOffset)
+        Vector2 GetBaseline(Vector2 currentOffset)
         {
             switch (Baseline)
             {
@@ -203,11 +208,11 @@ namespace PixelFarm.Agg.Font
                     break;
 
                 case Baseline.BoundsTop:
-                    currentOffset.y = -typeFaceStyle.AscentInPixels;
+                    currentOffset.y = -currentFont.AscentInPixels;
                     break;
 
                 case Baseline.BoundsCenter:
-                    currentOffset.y = -typeFaceStyle.AscentInPixels / 2;
+                    currentOffset.y = -currentFont.AscentInPixels / 2;
                     break;
 
                 default:
@@ -372,9 +377,9 @@ namespace PixelFarm.Agg.Font
             return totalSizeCach;
         }
 
-        public void GetSize(int characterToMeasureStartIndexInclusive, 
-            int characterToMeasureEndIndexInclusive, 
-            out Vector2 offset, 
+        public void GetSize(int characterToMeasureStartIndexInclusive,
+            int characterToMeasureEndIndexInclusive,
+            out Vector2 offset,
             string text)
         {
             if (text == null)
@@ -383,7 +388,7 @@ namespace PixelFarm.Agg.Font
             }
 
             offset.x = 0;
-            offset.y = typeFaceStyle.EmSizeInPixels;
+            offset.y = currentFont.EmSizeInPixels;
 
             double currentLineX = 0;
 
@@ -396,17 +401,17 @@ namespace PixelFarm.Agg.Font
                         i++;
                     }
                     currentLineX = 0;
-                    offset.y += typeFaceStyle.EmSizeInPixels;
+                    offset.y += currentFont.EmSizeInPixels;
                 }
                 else
                 {
                     if (i + 1 < text.Length)
                     {
-                        currentLineX += typeFaceStyle.GetAdvanceForCharacter(text[i], text[i + 1]);
+                        currentLineX += currentFont.GetAdvanceForCharacter(text[i], text[i + 1]);
                     }
                     else
                     {
-                        currentLineX += typeFaceStyle.GetAdvanceForCharacter(text[i]);
+                        currentLineX += currentFont.GetAdvanceForCharacter(text[i]);
                     }
                     if (currentLineX > offset.x)
                     {
@@ -420,14 +425,14 @@ namespace PixelFarm.Agg.Font
                 if (text[characterToMeasureEndIndexInclusive] == '\n')
                 {
                     currentLineX = 0;
-                    offset.y += typeFaceStyle.EmSizeInPixels;
+                    offset.y += currentFont.EmSizeInPixels;
                 }
                 else
                 {
-                    offset.x += typeFaceStyle.GetAdvanceForCharacter(text[characterToMeasureEndIndexInclusive]);
+                    offset.x += currentFont.GetAdvanceForCharacter(text[characterToMeasureEndIndexInclusive]);
                 }
             }
         }
- 
+
     }
 }

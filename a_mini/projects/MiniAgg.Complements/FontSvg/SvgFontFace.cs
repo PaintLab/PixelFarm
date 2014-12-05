@@ -26,17 +26,13 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 
-namespace PixelFarm.Agg.Font
+namespace PixelFarm.Agg.Fonts
 {
-    public class TypeFace
+
+
+    class SvgFontFace : FontFace
     {
-        class Glyph
-        {
-            public int horiz_adv_x;
-            public int unicode;
-            public string glyphName;
-            public PathWriter glyphData = new PathWriter();
-        }
+
 
         class Panos_1
         {
@@ -113,9 +109,9 @@ namespace PixelFarm.Agg.Font
         public int Underline_position { get { return underline_position; } }
         String unicode_range;
 
-        Glyph missingGlyph;
+        FontGlyph missingGlyph;
 
-        Dictionary<int, Glyph> glyphs = new Dictionary<int, Glyph>(); // a glyph is indexed by the string it represents, usually one character, but sometimes multiple
+        Dictionary<int, FontGlyph> glyphs = new Dictionary<int, FontGlyph>(); // a glyph is indexed by the string it represents, usually one character, but sometimes multiple
         Dictionary<Char, Dictionary<Char, int>> HKerns = new Dictionary<char, Dictionary<char, int>>();
 
         public int UnitsPerEm
@@ -126,6 +122,10 @@ namespace PixelFarm.Agg.Font
             }
         }
 
+        protected override void OnDispose()
+        {
+
+        }
         static String GetSubString(String source, String start, String end)
         {
             int startIndex = 0;
@@ -170,9 +170,9 @@ namespace PixelFarm.Agg.Font
             return GetIntValue(source, name, out outValue, ref startIndex);
         }
 
-        public static TypeFace LoadSVG(String filename)
+        public static SvgFontFace LoadSVG(String filename)
         {
-            TypeFace fontUnderConstruction = new TypeFace();
+            SvgFontFace fontUnderConstruction = new SvgFontFace();
 
             string svgContent = "";
             using (FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -198,16 +198,16 @@ namespace PixelFarm.Agg.Font
             return returnVal;
         }
 
-        Glyph CreateGlyphFromSVGGlyphData(String SVGGlyphData)
+        FontGlyph CreateGlyphFromSVGGlyphData(String svgGlyphData)
         {
-            Glyph newGlyph = new Glyph();
-            if (!GetIntValue(SVGGlyphData, "horiz-adv-x", out newGlyph.horiz_adv_x))
+            FontGlyph newGlyph = new FontGlyph();
+            if (!GetIntValue(svgGlyphData, "horiz-adv-x", out newGlyph.horiz_adv_x))
             {
                 newGlyph.horiz_adv_x = horiz_adv_x;
             }
 
-            newGlyph.glyphName = GetStringValue(SVGGlyphData, "glyph-name");
-            String unicodeString = GetStringValue(SVGGlyphData, "unicode");
+            newGlyph.glyphName = GetStringValue(svgGlyphData, "glyph-name");
+            String unicodeString = GetStringValue(svgGlyphData, "unicode");
 
             if (unicodeString != null)
             {
@@ -231,7 +231,7 @@ namespace PixelFarm.Agg.Font
                 }
             }
 
-            String dString = GetStringValue(SVGGlyphData, "d");
+            String dString = GetStringValue(svgGlyphData, "d");
             //if (newGlyph.glyphName == "a")
             //{ 
             //}
@@ -245,13 +245,17 @@ namespace PixelFarm.Agg.Font
             double py = 0;
 
 
+
+            PathWriter gyphPath = new PathWriter();
+            newGlyph.originalVxs = gyphPath.Vxs;
+
             if (dString == null || dString.Length == 0)
             {
                 return newGlyph;
             }
 
 
-            var gyphPath = newGlyph.glyphData;
+
 
             while (parseIndex < dString.Length)
             {
@@ -340,7 +344,7 @@ namespace PixelFarm.Agg.Font
                             py = GetNextNumber(dString, ref parseIndex);
                             gyphPath.SmoothCurve3Rel(px, py);
 
-                        }break;
+                        } break;
                     case 'T':
                         {
                             parseIndex++;
@@ -358,7 +362,7 @@ namespace PixelFarm.Agg.Font
                             // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
                             // We stored the position of the start of this polygon, no we flip it as we colse it.
                             //newGlyph.glyphData.InvertPolygon(polyStartVertexSourceIndex);
-                           // VertexHelper.InvertPolygon(gyphPath.Vxs, polyStartVertexSourceIndex);
+                            // VertexHelper.InvertPolygon(gyphPath.Vxs, polyStartVertexSourceIndex);
                         } break;
                     case ' ':
                     case '\n': // some white space we need to skip
@@ -370,7 +374,7 @@ namespace PixelFarm.Agg.Font
                         throw new NotImplementedException("unrecognized d command '" + command + "'.");
                 }
 
-               
+
             }
 
             return newGlyph;
@@ -413,7 +417,7 @@ namespace PixelFarm.Agg.Font
             {
                 // get the data and put it in the glyph dictionary
 
-                Glyph newGlyph = CreateGlyphFromSVGGlyphData(nextGlyphString);
+                FontGlyph newGlyph = CreateGlyphFromSVGGlyphData(nextGlyphString);
                 if (newGlyph.unicode > 0)
                 {
                     glyphs.Add(newGlyph.unicode, newGlyph);
@@ -423,39 +427,43 @@ namespace PixelFarm.Agg.Font
             }
         }
 
-        internal VertexStore GetGlyphForCharacter(char character)
+        internal FontGlyph GetGlyphForCharacter(char character)
         {
             // TODO: check for multi character glyphs (we don't currently support them in the reader).
-            Glyph glyph;
-            if (glyphs.TryGetValue(character, out glyph))
+            FontGlyph glyph;
+            if (!glyphs.TryGetValue(character, out glyph))
             {
-                //PathStorage writeableGlyph = new PathStorage(glyph.glyphData);
-                //writeableGlyph.ShareVertexData(glyph.glyphData);
-                //return writeableGlyph;
-                return glyph.glyphData.Vxs;
-                //return new PathStorage(glyph.glyphData);
+                return missingGlyph;
             }
-
-            return null;
+            return glyph;
         }
-
+        internal FontGlyph GetGlyphByIndex(int index)
+        {
+            // TODO: check for multi character glyphs (we don't currently support them in the reader).
+            FontGlyph glyph;
+            if (!glyphs.TryGetValue(index, out glyph))
+            {
+                return missingGlyph;
+            }
+            return glyph;
+        }
         internal int GetAdvanceForCharacter(char character, char nextCharacterToKernWith)
         {
             // TODO: check for kerning and adjust
-            Glyph glyph;
-            if (glyphs.TryGetValue(character, out glyph))
+            FontGlyph glyph;
+            if (!glyphs.TryGetValue(character, out glyph))
             {
-                return glyph.horiz_adv_x;
+                return 0;                
             }
-
-            return 0;
+            return glyph.horiz_adv_x;
         }
 
         internal int GetAdvanceForCharacter(char character)
         {
-            Glyph glyph;
+            FontGlyph glyph;
             if (glyphs.TryGetValue(character, out glyph))
             {
+
                 return glyph.horiz_adv_x;
             }
 
@@ -464,66 +472,69 @@ namespace PixelFarm.Agg.Font
 #if DEBUG
         public void dbugShowDebugInfo(Graphics2D graphics2D)
         {
-            StyledTypeFace typeFaceNameStyle = new StyledTypeFace(this, 30);
-            TypeFacePrinter fontNamePrinter = new TypeFacePrinter(this.fontFamily + " - 30 point", typeFaceNameStyle);
+            //StyledTypeFace typeFaceNameStyle = new StyledTypeFace(this, 30);
 
-            RectD bounds = typeFaceNameStyle.BoundingBoxInPixels;
-            double origX = 10 - bounds.Left;
-            double x = origX;
-            double y = 10 - typeFaceNameStyle.DescentInPixels;
-            int width = 50;
-            ColorRGBA boundingBoxColor = new ColorRGBA(0, 0, 0);
-            ColorRGBA originColor = new ColorRGBA(0, 0, 0);
-            ColorRGBA ascentColor = new ColorRGBA(255, 0, 0);
-            ColorRGBA descentColor = new ColorRGBA(255, 0, 0);
-            ColorRGBA xHeightColor = new ColorRGBA(12, 25, 200);
-            ColorRGBA capHeightColor = new ColorRGBA(12, 25, 200);
-            ColorRGBA underlineColor = new ColorRGBA(0, 150, 55);
+            //TypeFacePrinter fontNamePrinter = new TypeFacePrinter(this.fontFamily + " - 30 point", typeFaceNameStyle);
+            //TextPrinter printer = new TextPrinter(graphics2D);
+            //var svgFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
 
-            // the origin
-            graphics2D.dbugLine(x, y, x + width, y, originColor);
+            //RectD bounds = typeFaceNameStyle.BoundingBoxInPixels;
+            //double origX = 10 - bounds.Left;
+            //double x = origX;
+            //double y = 10 - typeFaceNameStyle.DescentInPixels;
+            //int width = 50;
+            //ColorRGBA boundingBoxColor = new ColorRGBA(0, 0, 0);
+            //ColorRGBA originColor = new ColorRGBA(0, 0, 0);
+            //ColorRGBA ascentColor = new ColorRGBA(255, 0, 0);
+            //ColorRGBA descentColor = new ColorRGBA(255, 0, 0);
+            //ColorRGBA xHeightColor = new ColorRGBA(12, 25, 200);
+            //ColorRGBA capHeightColor = new ColorRGBA(12, 25, 200);
+            //ColorRGBA underlineColor = new ColorRGBA(0, 150, 55);
 
-            graphics2D.Rectangle(x + bounds.Left, y + bounds.Bottom, x + bounds.Right, y + bounds.Top, boundingBoxColor);
+            //// the origin
+            //graphics2D.dbugLine(x, y, x + width, y, originColor);
 
-            x += typeFaceNameStyle.BoundingBoxInPixels.Width * 1.5;
+            //graphics2D.Rectangle(x + bounds.Left, y + bounds.Bottom, x + bounds.Right, y + bounds.Top, boundingBoxColor);
 
-            width = width * 3;
+            //x += typeFaceNameStyle.BoundingBoxInPixels.Width * 1.5;
 
-            double temp = typeFaceNameStyle.AscentInPixels;
-            graphics2D.dbugLine(x, y + temp, x + width, y + temp, ascentColor);
+            //width = width * 3;
 
-            temp = typeFaceNameStyle.DescentInPixels;
-            graphics2D.dbugLine(x, y + temp, x + width, y + temp, descentColor);
+            //double temp = typeFaceNameStyle.AscentInPixels;
+            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, ascentColor);
 
-            temp = typeFaceNameStyle.XHeightInPixels;
-            graphics2D.dbugLine(x, y + temp, x + width, y + temp, xHeightColor);
+            //temp = typeFaceNameStyle.DescentInPixels;
+            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, descentColor);
 
-            temp = typeFaceNameStyle.CapHeightInPixels;
-            graphics2D.dbugLine(x, y + temp, x + width, y + temp, capHeightColor);
+            //temp = typeFaceNameStyle.XHeightInPixels;
+            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, xHeightColor);
 
-            temp = typeFaceNameStyle.UnderlinePositionInPixels;
-            graphics2D.dbugLine(x, y + temp, x + width, y + temp, underlineColor);
+            //temp = typeFaceNameStyle.CapHeightInPixels;
+            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, capHeightColor);
 
-            Affine textTransform = Affine.NewMatix(AffinePlan.Translate(10, origX));
-            //textTransform = Affine.NewIdentity();
-            //textTransform *= Affine.NewTranslation(10, origX);
+            //temp = typeFaceNameStyle.UnderlinePositionInPixels;
+            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, underlineColor);
 
-            //VertexSourceApplyTransform transformedText = new VertexSourceApplyTransform(textTransform);
-            //fontNamePrinter.Render(graphics2D, ColorRGBA.Black, transformedText);
-            //graphics2D.Render(transformedText, ColorRGBA.Black);
+            //Affine textTransform = Affine.NewMatix(AffinePlan.Translate(10, origX));
+            ////textTransform = Affine.NewIdentity();
+            ////textTransform *= Affine.NewTranslation(10, origX);
 
-            // render the legend
-            StyledTypeFace legendFont = new StyledTypeFace(this, 12);
-            double newx = x + width / 2;
-            double newy = y + typeFaceNameStyle.EmSizeInPixels * 1.5;
+            ////VertexSourceApplyTransform transformedText = new VertexSourceApplyTransform(textTransform);
+            ////fontNamePrinter.Render(graphics2D, ColorRGBA.Black, transformedText);
+            ////graphics2D.Render(transformedText, ColorRGBA.Black);
 
-            graphics2D.Render(new TypeFacePrinter("Descent").MakeVertexSnap(), newx, newy, descentColor); newy += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("Underline").MakeVertexSnap(), newx, newy, underlineColor); newy += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("X Height").MakeVertexSnap(), newx, newy, xHeightColor); newy += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("CapHeight").MakeVertexSnap(), newx, newy, capHeightColor); newy += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("Ascent").MakeVertexSnap(), newx, newy, ascentColor); newy += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("Origin").MakeVertexSnap(), newx, newy, originColor); newy += legendFont.EmSizeInPixels;
-            graphics2D.Render(new TypeFacePrinter("Bounding Box").MakeVertexSnap(), newx, newy, boundingBoxColor);
+            //// render the legend
+            //StyledTypeFace legendFont = new StyledTypeFace(this, 12);
+            //double newx = x + width / 2;
+            //double newy = y + typeFaceNameStyle.EmSizeInPixels * 1.5;
+
+            //graphics2D.Render(new TypeFacePrinter("Descent").MakeVertexSnap(), newx, newy, descentColor); newy += legendFont.EmSizeInPixels;
+            //graphics2D.Render(new TypeFacePrinter("Underline").MakeVertexSnap(), newx, newy, underlineColor); newy += legendFont.EmSizeInPixels;
+            //graphics2D.Render(new TypeFacePrinter("X Height").MakeVertexSnap(), newx, newy, xHeightColor); newy += legendFont.EmSizeInPixels;
+            //graphics2D.Render(new TypeFacePrinter("CapHeight").MakeVertexSnap(), newx, newy, capHeightColor); newy += legendFont.EmSizeInPixels;
+            //graphics2D.Render(new TypeFacePrinter("Ascent").MakeVertexSnap(), newx, newy, ascentColor); newy += legendFont.EmSizeInPixels;
+            //graphics2D.Render(new TypeFacePrinter("Origin").MakeVertexSnap(), newx, newy, originColor); newy += legendFont.EmSizeInPixels;
+            //graphics2D.Render(new TypeFacePrinter("Bounding Box").MakeVertexSnap(), newx, newy, boundingBoxColor);
         }
 #endif
     }

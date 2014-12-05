@@ -6,12 +6,13 @@ using System.Drawing.Drawing2D;
 using PixelFarm;
 using PixelFarm.Agg;
 
+
 namespace Mini
 {
 
     public static class GdiFontHelper
     {
-        public static void ConvertCharToVertexGlyph(Font font, char c, VertexStore outputVxs)
+        public static void ConvertCharToVertexGlyph(System.Drawing.Font font, char c, VertexStore outputVxs)
         {
 
             using (GraphicsPath gpath = new GraphicsPath())

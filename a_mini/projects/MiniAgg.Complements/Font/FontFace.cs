@@ -11,7 +11,7 @@ using System.Text;
 using System.IO;
 using PixelFarm.Agg;
 
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
 
     public abstract class FontFace : IDisposable

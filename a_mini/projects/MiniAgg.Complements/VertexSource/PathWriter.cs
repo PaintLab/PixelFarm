@@ -77,6 +77,10 @@ namespace PixelFarm.Agg.VertexSource
         List<int> figureList;
         VertexStore myvxs = new VertexStore();
 
+        public PathWriter()
+        {
+        }
+
         public int Count
         {
             get { return myvxs.Count; }
@@ -90,18 +94,18 @@ namespace PixelFarm.Agg.VertexSource
             c4p3 = new Vector2();
             latestSVGPathCmd = SvgPathCommand.MoveTo;
 
-            figureCount = 0; 
+            figureCount = 0;
         }
 
         //-------------------------------------------------------------------
         public double LastMoveX { get { return this.lastMoveX; } }
         public double LastMoveY { get { return this.lastMoveY; } }
         //-------------------------------------------------------------------
-         
+
         public int StartFigure()
         {
             if (figureCount > 0)
-            {   
+            {
                 myvxs.AddVertex(0, 0, VertexCmd.Stop);
             }
             figureCount++;
@@ -193,7 +197,7 @@ namespace PixelFarm.Agg.VertexSource
         public void Curve3Rel(double p2x, double p2y, double x, double y)
         {
             this.latestSVGPathCmd = SvgPathCommand.QuadraticBezierCurve;
-          
+
             this.c3p2.x = this.lastX + p2x;
             this.c3p2.y = this.lastY + p2y;
 
@@ -379,7 +383,7 @@ namespace PixelFarm.Agg.VertexSource
         {
             return myvxs.GetLastVertex(out x, out y);
         }
-         
+
         public void CloseFigureCCW()
         {
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))

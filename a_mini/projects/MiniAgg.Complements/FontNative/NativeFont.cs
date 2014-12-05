@@ -1,13 +1,14 @@
-﻿//----------------------------------- 
+﻿//MIT 2014, WinterDev
+//----------------------------------- 
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.IO;
 using PixelFarm.Agg;
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
-    public class NativeFont : Font
+    class NativeFont : Font
     {
         NativeFontFace ownerFace;
         float fontSizeInPoint;
@@ -82,6 +83,38 @@ namespace PixelFarm.Font2
                         propGlyphH);
                 }
             }
-        } 
+        }
+        public override double AscentInPixels
+        {
+            get { throw new NotImplementedException(); }
+        }
+        public override double CapHeightInPixels
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public override double DescentInPixels
+        {
+            get { throw new NotImplementedException(); }
+        }
+        public override int EmSizeInPixels
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override double XHeightInPixels
+        {
+            get { throw new NotImplementedException(); }
+        }
+        public override int GetAdvanceForCharacter(char c)
+        {
+            throw new NotImplementedException();
+        }
+        public override int GetAdvanceForCharacter(char c, char next_c)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

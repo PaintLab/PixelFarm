@@ -13,7 +13,7 @@ using System.IO;
 using PixelFarm.Agg;
 
 
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
 
     public static class NativeFontStore
@@ -30,12 +30,12 @@ namespace PixelFarm.Font2
             //    HBDirection.HB_DIRECTION_LTR,
             //    HBScriptCode.HB_SCRIPT_LATIN); 
             ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
-            PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(fontFace.Handle,
-                lang,
-                lang.Length,
-                hb_direction,
-                hb_scriptcode,
-                ref exportTypeInfo);
+            NativeMyFontsLib.MyFtSetupShapingEngine(fontFace.Handle,
+               lang,
+               lang.Length,
+               hb_direction,
+               hb_scriptcode,
+               ref exportTypeInfo);
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
 
@@ -103,7 +103,7 @@ namespace PixelFarm.Font2
             //from FreeType Documenetation
             //pixel_size = (pointsize * (resolution/72);
             return (int)(point * 96 / 72);
-        } 
+        }
     }
 
 }

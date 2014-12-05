@@ -9,9 +9,11 @@ using System;
 
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Font;
+
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
+
+using PixelFarm.Agg.Fonts;
 using Mini;
 
 namespace PixelFarm.Agg.SimplePainter
@@ -22,13 +24,13 @@ namespace PixelFarm.Agg.SimplePainter
     public class SimplePainterGlyphSample : DemoBase
     {
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-        PixelFarm.Font2.Font font1;
-        PixelFarm.Font2.Font font2;
+        PixelFarm.Agg.Fonts.Font font1;
+        PixelFarm.Agg.Fonts.Font font2;
         public override void Init()
         {
             //load font ?
-            font1 = PixelFarm.Font2.NativeFontStore.LoadFont(fontfile, 72);
-            font2 = PixelFarm.Font2.NativeFontStore.LoadFont(fontfile, 10);
+            font1 = NativeFontStore.LoadFont(fontfile, 72);
+            font2 = NativeFontStore.LoadFont(fontfile, 10);
 
         }
         public override void Draw(Graphics2D g)

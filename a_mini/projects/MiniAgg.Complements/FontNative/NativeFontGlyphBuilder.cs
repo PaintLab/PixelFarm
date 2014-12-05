@@ -13,10 +13,10 @@ using System.IO;
 using PixelFarm.Agg;
 
 
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
 
-    static class FontGlyphBuilder
+    static class NativeFontGlyphBuilder
     {
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
 

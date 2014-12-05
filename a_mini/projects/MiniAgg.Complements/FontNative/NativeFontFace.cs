@@ -11,7 +11,7 @@ using System.Text;
 using System.IO;
 using PixelFarm.Agg;
 
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
 
 
@@ -130,7 +130,7 @@ namespace PixelFarm.Font2
             unsafe
             {
                 ExportGlyph exportTypeFace = new ExportGlyph();
-                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
+                NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
 
                 FontGlyph fontGlyph = new FontGlyph();
                 BuildGlyph(fontGlyph, &exportTypeFace, pixelSize);
@@ -148,7 +148,7 @@ namespace PixelFarm.Font2
             unsafe
             {
                 ExportGlyph exportTypeFace = new ExportGlyph();
-                PixelFarm.Font2.NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
+                NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
                 FontGlyph fontGlyph = new FontGlyph();
                 BuildGlyph(fontGlyph, &exportTypeFace, pixelSize);
                 return fontGlyph;
@@ -163,29 +163,29 @@ namespace PixelFarm.Font2
             fontGlyph.exportGlyph = *(exportTypeFace);
             //------------------------------------------
             //copy raw image 
-            FontGlyphBuilder.CopyGlyphBitmap(fontGlyph, exportTypeFace);
+            NativeFontGlyphBuilder.CopyGlyphBitmap(fontGlyph, exportTypeFace);
             //outline version
             //------------------------------------------
             if (px64Font != null)
             {
                 if (pxsize < 64)
                 {
-                    FontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
+                    NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
                 }
                 else
                 {
-                    FontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
+                    NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
                 }
             }
             else
             {
-                FontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
+                NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
             }
         }
 
-        
 
-        
+
+
     }
 
 }

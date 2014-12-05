@@ -13,7 +13,7 @@ using System.Text;
 
 using System.IO;
 
-namespace PixelFarm.Font2
+namespace PixelFarm.Agg.Fonts
 {
 
     [StructLayout(LayoutKind.Sequential)]

@@ -3,7 +3,7 @@ using System.Text;
 using System;
 using OpenTK.Graphics.OpenGL;
 using Tesselate;
-using PixelFarm.Font2;
+using PixelFarm.Agg.Fonts;
 
 namespace OpenTkEssTest
 {

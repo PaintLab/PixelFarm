@@ -28,8 +28,7 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Font;
-using PixelFarm.Font2;
+using PixelFarm.Agg.Fonts;
 
 
 namespace PixelFarm.Agg
@@ -55,10 +54,12 @@ namespace PixelFarm.Agg
         Ellipse ellipse = new Ellipse();
         PathWriter lines = new PathWriter();
         RoundedRect roundRect = null;
-        MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+       
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         CurveFlattener curveFlattener = new CurveFlattener();
+
         TextPrinter textPrinter;
+        MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
         //-------------
         public CanvasPainter(Graphics2D graphic2d)
         {
@@ -68,7 +69,7 @@ namespace PixelFarm.Agg
 
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
-            this.textPrinter = new TextPrinter(this);
+            this.textPrinter = new TextPrinter();
 
         }
         public void Clear(ColorRGBA color)
@@ -243,18 +244,18 @@ namespace PixelFarm.Agg
         }
 
         //-------------------------------------------------------
-        public PixelFarm.Font2.Font CurrentFont
+        public Font CurrentFont
         {
             get { return this.textPrinter.CurrentFont; }
             set { this.textPrinter.CurrentFont = value; }
         }
+
         public void DrawString(
            string text,
            double x,
            double y)
         {
-            textPrinter.Print(text.ToString(), x, y);
-
+            textPrinter.Print(this,text.ToString(), x, y); 
         }
         //-------------------------------------------------------
 
