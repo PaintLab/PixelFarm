@@ -78,7 +78,7 @@
     <Compile Include="03_SpanGenerators\SpanGradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
-    <Compile Include="Image\ImageSequence.cs" />
+    <Compile Include="x_notused\ImageSequence.cs" />
     <Compile Include="x_notused\x_ImageTgaIO.cs" />
     <Compile Include="Filter\RecursiveBlur.cs" />
     <Compile Include="Filter\StackBlur.cs" />

@@ -168,7 +168,7 @@ namespace Mini
             windowsBitmap.UnlockBits(bitmapData1);
         }
 
-        internal static void CopyFromWindowsBitmapSameSize(
+        public static void CopyFromWindowsBitmapSameSize(
            Bitmap windowsBitmap,
            ActualImage actualImage)
         {

@@ -182,112 +182,32 @@ namespace Mini
         {
             //----------------------
             //1. test gdi+ font path
-            string teststr = "a";
+            char testChar = 'a';
             float fontSize = 12;
 
             using (System.Drawing.Font ff = new Font("tahoma", fontSize))
-            using (GraphicsPath gpath = new GraphicsPath())
             using (Graphics g = this.pictureBox1.CreateGraphics())
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 g.Clear(Color.White);
-                gpath.AddString(teststr, ff.FontFamily, 0, fontSize, new Point(0, 0), null);
-                //-----------------------------
-                //get font shape from gpath
-                int pointCount = gpath.PointCount;
-                byte[] pointTypes = gpath.PathTypes;
-                PointF[] points = gpath.PathPoints;
-                //from MSDN document
-                //0 = start of figure (MoveTo)
-                //1 = one of the two endpoints of a line (LineTo)
-                //3 = an endpoint or control point of a cubic Bezier spline (4 points spline)
-                //masks..
-                //0x7 = 111b (binary) => for masking lower 3 bits
-                //0x20 = (1<<6) specific that point is a marker
-                //0x80 = (1<<7) specific that point is the last point of a closed subpath( figure)
 
-                //----------------------------------
-                //convert to Agg's VertexStorage  
+                //--------------------------------------------------------
                 VertexStore vxs = new VertexStore();
-                int curvePointCount = 0;
+                Mini.GdiFontHelper.ConvertCharToVertexGlyph(ff, testChar, vxs);
 
-                for (int i = 0; i < pointCount; ++i)
-                {
-                    byte pointType = pointTypes[i];
-                    PointF p = points[i];
-
-                    switch (0x7 & pointType)
-                    {
-                        case 0:
-                            //move to
-                            vxs.AddMoveTo(p.X, p.Y);
-                            curvePointCount = 0;
-                            break;
-                        case 1:
-                            //line to
-                            vxs.AddLineTo(p.X, p.Y);
-                            curvePointCount = 0;
-                            break;
-                        case 3:
-                            //end point of control point of cubic Bezier spline
-                            {
-                                switch (curvePointCount)
-                                {
-                                    case 0:
-                                        {
-                                            vxs.AddP2c(p.X, p.Y);
-                                            curvePointCount++;
-                                        } break;
-                                    case 1:
-                                        {
-                                            vxs.AddP3c(p.X, p.Y);
-                                            curvePointCount++;
-                                        } break;
-                                    case 2:
-                                        {
-                                            vxs.AddLineTo(p.X, p.Y);
-                                            curvePointCount = 0;//reset
-                                        } break;
-                                    default:
-                                        {
-                                            throw new NotSupportedException();
-                                        }
-                                }
-
-                            } break;
-                        default:
-                            {
-
-                            } break;
-                    }
-
-                    if ((pointType >> 7) == 1)
-                    {
-                        //close figure to
-                        vxs.AddCloseFigure();
-                    }
-                    if ((pointType >> 6) == 1)
-                    {
-
-                    }
-                }
-                //-----------------------------
+                //--------------------------------------------------------
                 //convert Agg vxs to bitmap
                 int bmpW = 50;
                 int bmpH = 50;
                 using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
                 {
                     ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.Rgba32);
-                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
-
-                    gfx.Render(vxs, ColorRGBA.Black);
-
+                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage); 
+                    gfx.Render(vxs, ColorRGBA.Black); 
                     //test subpixel rendering 
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
                     gfx.UseSubPixelRendering = true;
-                    gfx.Render(vxs, ColorRGBA.Black);
-
-
+                    gfx.Render(vxs, ColorRGBA.Black); 
                     BitmapHelper.CopyToWindowsBitmap(
                       actualImage, //src from actual img buffer
                       bufferBmp, //dest to buffer bmp
@@ -296,11 +216,22 @@ namespace Mini
                     bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
                     g.DrawImage(bufferBmp, new Point(0, 30));
                 }
-                //-----------------------------
+                //----------------------------------------------
 
-                //g.DrawPath(Pens.Black, gpath);
-                g.FillPath(Brushes.Black, gpath);
-                g.DrawString(teststr, ff, Brushes.Black, new PointF(0, 50));
+
+
+                //----------------------------------------------
+                //compare with GraphicsPath's Font                
+                using (GraphicsPath gpath = new GraphicsPath())
+                {
+                    gpath.AddString(testChar.ToString(), ff.FontFamily, 1, ff.Size,
+                        new Point(0, 0), null);
+                    g.FillPath(Brushes.Black, gpath);
+                    //g.DrawPath(Pens.Black, gpath);
+                }
+                //-------------------------------------------------
+                //Compare with Gdi+ Font
+                g.DrawString(testChar.ToString(), ff, Brushes.Black, new PointF(0, 50));
             }
         }
     }
