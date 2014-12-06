@@ -58,9 +58,7 @@
     <Compile Include="07_GLES2\T31_SimpleES20Window.cs" />
     <Compile Include="07_GLES2\T32_ES2HelloTriangle.cs" />
     <Compile Include="07_GLES2\T33_ES2SimpleTexture2d.cs" />
-    <Compile Include="07_GLES2\DerivedMiniGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="07_GLES2\DerivedMiniGLControl.cs" />
     <Compile Include="07_GLES2\DerivedMiniGLControl.Designer.cs">
       <DependentUpon>DerivedMiniGLControl.cs</DependentUpon>
     </Compile>
@@ -136,9 +134,13 @@
       <Project>{EED04403-8D2A-4A7F-9E46-E1FF8BE89042}</Project>
       <Name>MiniAgg.Hw2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTk.MiniPlatforms\OpenTk.MiniPlatforms.csproj">
-      <Project>{4F4CC52B-C5B5-4B7A-8CBF-9F4D9362D02E}</Project>
-      <Name>OpenTk.MiniPlatforms</Name>
+    <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
+      <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
+      <Name>OpenTk.CoreGraphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenTk.Platforms\OpenTk.Platforms.csproj">
+      <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>
+      <Name>OpenTk.Platforms</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

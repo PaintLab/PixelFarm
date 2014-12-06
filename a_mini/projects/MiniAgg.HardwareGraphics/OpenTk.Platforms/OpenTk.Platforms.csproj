@@ -130,6 +130,18 @@
     <Compile Include="Platform\X11\X11WindowInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Toolkit.cs" />
+    <Compile Include="UserGLControl\CarbonGLControl.cs" />
+    <Compile Include="UserGLControl\DummyGLControl.cs" />
+    <Compile Include="UserGLControl\GLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserGLControl\GLControl.Designer.cs">
+      <DependentUpon>GLControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserGLControl\GLControlFactory.cs" />
+    <Compile Include="UserGLControl\IGLControl.cs" />
+    <Compile Include="UserGLControl\WinGLControl.cs" />
+    <Compile Include="UserGLControl\X11GLControl.cs" />
     <Compile Include="WindowBorder.cs" />
     <Compile Include="WindowState.cs" />
   </ItemGroup>

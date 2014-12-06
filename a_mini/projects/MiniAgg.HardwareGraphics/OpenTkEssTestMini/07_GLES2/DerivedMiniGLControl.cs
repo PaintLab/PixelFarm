@@ -11,7 +11,7 @@ using OpenTK.Graphics.ES20;
 
 namespace OpenTkEssTest
 {
-    public partial class DerivedMiniGLControl : MiniGLControl
+    public partial class DerivedMiniGLControl : GLControl
     {
         LayoutFarm.Drawing.Color clearColor;
         EventHandler glPaintHandler;
