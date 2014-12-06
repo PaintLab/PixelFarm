@@ -46,11 +46,11 @@ namespace OpenTkEssTest
             {
 
                 MakeCurrent();
-                GL.Clear(ClearBufferMask.ColorBufferBit);
+                //GL.Clear(ClearBufferMask.ColorBufferBit);
                 if (glPaintHandler != null)
                 {
                     glPaintHandler(this, e);
-                }
+                }              
                 SwapBuffers();
             }
         }

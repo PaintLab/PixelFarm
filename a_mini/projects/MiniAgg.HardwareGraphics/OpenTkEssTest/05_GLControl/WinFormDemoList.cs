@@ -46,33 +46,30 @@ namespace OpenTkEssTest
         }
     }
     [Info(OrderCode = "24")]
-    [Info("T24_FormMultipleGLControlsFormDemo2")]
-    public class T24_FormMultipleGLControlsFormDemo2 : DemoBase
+    [Info("T24_FormTestGLCanvasDemo")]
+    public class T24_FormTestGLCanvasDemo : DemoBase
     {
+
+        GLBitmapTexture hwBmp = null;
         public override void Init()
         {
             FormTestWinGLControl2 form = new FormTestWinGLControl2();
             CanvasGL2d canvas = new CanvasGL2d();
-            GLBitmapTexture hwBmp = null;
 
             form.SetGLPaintHandler((o, s) =>
             {
+
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
-
-
-                //canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
-                //canvas.FillRect(1, 1, 1f, 1f); 
                 if (hwBmp == null)
                 {
                     using (Bitmap bitmap = new Bitmap("../../Data/Textures/logo-dark.jpg"))
                     {
-                        hwBmp = new GLBitmapTexture(bitmap);
+                        hwBmp = GLBitmapTexture.CreateBitmapTexture(bitmap);
                     }
                 }
-
                 //canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
-                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.FillColor = LayoutFarm.Drawing.Color.DeepPink;
                 canvas.DrawLine(0, 300, 500, 300);
 
                 //-----------------------------------------------------
@@ -164,8 +161,9 @@ namespace OpenTkEssTest
 
                 //test Thai words
                 canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
-                //canvas.DrawString("1234567890", 80, 200); 
-                GLBitmapTexture bmp = new GLBitmapTexture(fontGlyph.glyphImage32);
+                canvas.DrawString("1234567890", 80, 200);
+                GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
+
                 canvas.DrawImage(bmp, 50, 50);
                 bmp.Dispose();
 

@@ -184,7 +184,8 @@ namespace OpenTkEssTest
                     FillRect(x, y, w, h);
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
 
-                } GL.Disable(EnableCap.Texture2D);
+                }
+                GL.Disable(EnableCap.Texture2D);
             }
         }
 
@@ -738,8 +739,7 @@ namespace OpenTkEssTest
             }
             set
             {
-                this.fillColor = value;
-                GL.Color4(value);
+                this.fillColor = value; 
             }
         }
         public void FillRect(float x, float y, float w, float h)

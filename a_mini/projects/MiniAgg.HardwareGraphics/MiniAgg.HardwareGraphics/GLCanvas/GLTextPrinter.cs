@@ -48,7 +48,8 @@ namespace OpenTkEssTest
 
                 //-------------------------------------------------------------
                 FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
-                GLBitmapTexture bmp = new GLBitmapTexture(glyph.glyphImage32);
+                GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(glyph.glyphImage32);
+                 
                 var left = glyph.exportGlyph.img_horiBearingX;
                 this.canvas2d.DrawImageInvert(bmp,
                     (float)(xpos + (left >> 6)),
@@ -64,47 +65,48 @@ namespace OpenTkEssTest
 
         public void xPrint(char[] buffer, double x, double y)
         {
-            int j = buffer.Length;
-            int size = j * 2;
-            //get kerning list
-            if (properGlyphs == null)
-            {
-                properGlyphs = new ProperGlyph[size];
-                currentFont.GetGlyphPos( buffer, 0, size, properGlyphs);
-            }
+            //int j = buffer.Length;
+            //int size = j * 2;
+            ////get kerning list
+            //if (properGlyphs == null)
+            //{
+            //    properGlyphs = new ProperGlyph[size];
+            //    currentFont.GetGlyphPos(buffer, 0, size, properGlyphs);
+            //}
 
-            double xpos = x;
-            for (int i = 0; i < j; ++i)
-            {
-                char c = buffer[i];
-                switch (c)
-                {
-                    case ' ':
-                        {
-                        } break;
-                    case '\r':
-                        {
-                        } break;
-                    case '\n':
-                        {
-                        } break;
-                    default:
-                        {
-                            FontGlyph glyph = this.currentFont.GetGlyphByIndex(properGlyphs[i].codepoint);
-                            //FontGlyph glyph = this.currentFontFace.GetGlyph(c);
-                            GLBitmapTexture bmp = new GLBitmapTexture(glyph.glyphImage32);
-                            var left = glyph.exportGlyph.img_horiBearingX;
+            //double xpos = x;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    char c = buffer[i];
+            //    switch (c)
+            //    {
+            //        case ' ':
+            //            {
+            //            } break;
+            //        case '\r':
+            //            {
+            //            } break;
+            //        case '\n':
+            //            {
+            //            } break;
+            //        default:
+            //            {
+            //                FontGlyph glyph = this.currentFont.GetGlyphByIndex(properGlyphs[i].codepoint);
+            //                //FontGlyph glyph = this.currentFontFace.GetGlyph(c);
+            //                //GLBitmapTexture bmp = new GLBitmapTexture();
 
-                            GLBitmapTexture glbmp = new GLBitmapTexture(glyph.glyphImage32);
-                            this.canvas2d.DrawImageInvert(glbmp,
-                                (float)(xpos + (left >> 6)),
-                                (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+            //                var left = glyph.exportGlyph.img_horiBearingX;
 
-                            int w = (glyph.exportGlyph.advanceX) >> 6;
-                            xpos += (w);
-                        } break;
-                }
-            }
+            //                GLBitmapTexture glbmp = new GLBitmapTexture();
+            //                this.canvas2d.DrawImageInvert(glbmp,
+            //                    (float)(xpos + (left >> 6)),
+            //                    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+
+            //                int w = (glyph.exportGlyph.advanceX) >> 6;
+            //                xpos += (w);
+            //            } break;
+            //    }
+            //}
         }
     }
 }
