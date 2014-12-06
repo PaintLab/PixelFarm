@@ -38,7 +38,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;ENABLE_DESKTOP_OPENGL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -211,10 +211,6 @@
     <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
       <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
       <Name>OpenTk.CoreGraphics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenTk.GLControl\OpenTk.GLControl.csproj">
-      <Project>{36A8F6FB-1536-435B-8386-284206493380}</Project>
-      <Name>OpenTk.GLControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenTk.Platforms\OpenTk.Platforms.csproj">
       <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>

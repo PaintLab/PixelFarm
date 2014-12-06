@@ -71,9 +71,9 @@
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTk.MiniPlatforms\OpenTk.MiniPlatforms.csproj">
-      <Project>{4F4CC52B-C5B5-4B7A-8CBF-9F4D9362D02E}</Project>
-      <Name>OpenTk.MiniPlatforms</Name>
+    <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
+      <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
+      <Name>OpenTk.CoreGraphics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
