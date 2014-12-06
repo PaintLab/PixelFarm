@@ -47,7 +47,7 @@ namespace OpenTK.Platform
         {
              
             //----------------------------------------------
-            if (Configuration.RunningOnWindows) Default = new Windows.WinFactory(DesktopBackend.ES20);
+            if (Configuration.RunningOnWindows) Default = new Windows.WinFactory(DesktopBackend.OpenGL);
             else if (Configuration.RunningOnMacOS) Default = new MacOS.MacOSFactory();
             else if (Configuration.RunningOnX11) Default = new X11.X11Factory();
             else Default = new UnsupportedPlatform();
