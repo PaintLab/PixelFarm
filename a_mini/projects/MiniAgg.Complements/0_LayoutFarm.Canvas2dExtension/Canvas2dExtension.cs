@@ -27,8 +27,9 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Font;
-//using LayoutFarm.Agg.Font;
+using PixelFarm.Agg.Fonts;
+
+
 
 namespace PixelFarm.Agg
 {
@@ -47,38 +48,22 @@ namespace PixelFarm.Agg
             ColorRGBA backgroundColor = new ColorRGBA())
         {
 
-            TypeFacePrinter stringPrinter = new TypeFacePrinter(text, pointSize, new Vector2(x, y), justification, baseline);
-            if (color.Alpha0To255 == 0)
-            {
-                color = ColorRGBA.Black;
-            }
+            //use svg font 
+            var svgFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, (int)pointSize);
+            var stringPrinter = new MyTypeFacePrinter();
 
-            if (backgroundColor.Alpha0To255 != 0)
-            {
-                gx.FillRectangle(stringPrinter.LocalBounds, backgroundColor);
-            }
+            stringPrinter.CurrentFont = svgFont;
 
-            stringPrinter.DrawFromHintedCache = drawFromHintedCache;
-            stringPrinter.Render(gx, color);
-        }
-        public static void DrawString2(this Graphics2D gx,
-           string text,
-           double x,
-           double y,
-           double pointSize)
-        {
-
-            //1. parse text  
-            var stringPrinter = new PixelFarm.Agg.Font.MyTypeFacePrinter(); 
             stringPrinter.DrawFromHintedCache = false;
             stringPrinter.LoadText(text);
 
             var vxs = stringPrinter.MakeVxs();
             vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
+             
             gx.Render(vxs, ColorRGBA.Black);
-
         }
          
+
         public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
         {
             RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);

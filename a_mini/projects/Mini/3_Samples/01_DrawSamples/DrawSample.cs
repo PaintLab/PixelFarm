@@ -9,10 +9,10 @@ using System;
 
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Font;
+
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
-
+using PixelFarm.Agg.Fonts;
 
 using Mini;
 namespace PixelFarm.Agg.Sample_Draw
@@ -28,49 +28,19 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         public override void Draw(Graphics2D g)
         {
-            // Draw2(g);
-
+            // Draw2(g); 
             ////1.
-            //// clear the image to white 
-
+            //// clear the image to white  
             g.Clear(ColorRGBA.White);
             //------------------------------------
             g.UseSubPixelRendering = true;
             // draw some text
-            g.DrawString("ABCDE abcd 1230 Hello!", 300, 400, 20);
+            string teststr = "ABCDE abcd 1230 Hello!";
+            g.DrawString(teststr, 300, 400, 22);
             g.UseSubPixelRendering = false;
-            g.DrawString("ABCDE abcd 1230 Hello!", 300, 422, 20);
+            g.DrawString(teststr, 300, 422, 22);
         }
-        void Draw2(Graphics2D g)
-        {
-            //1.
-            // clear the image to white
-
-
-            g.Clear(ColorRGBA.White);
-            // draw a circle
-            g.Circle(50, 50, 30, ColorRGBA.Blue);
-            // draw a line
-
-            g.dbugLine(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
-            // draw a filled box
-            g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
-            // and an outline around it
-            g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
-            //------------------------------------ 
-            // draw some text
-            g.DrawString("A Simple Example abcd1234", 300, 400, 20);
-
-            g.DrawString2("A Simple Example2 : hintCached", 300, 350, 20);
-
-            g.DrawString2("A Simple Example3", 300, 300, 20);
-
-            g.DrawString2("A Simple Example4", 300, 250, 20);
-            //---------------------------------------------------
-
-
-
-        }
+        
     }
 
 
@@ -118,13 +88,15 @@ namespace PixelFarm.Agg.Sample_Draw
             g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
 
             // draw some text
-            // draw some text
+            // draw some text 
 
 
 
+            var textPrinter = new TextPrinter();
+            textPrinter.CurrentFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
+            //new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
 
-            var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
-            VertexStore vxs = textPrinter.CreateVxs();
+            VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());
             var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStore s1 = affTx.TransformToVxs(vxs);
 

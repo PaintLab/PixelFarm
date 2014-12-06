@@ -47,15 +47,7 @@ namespace PixelFarm.Agg
         {
             AllocIfRequired(initsize);
         }
-        //public VertexStore(IEnumerable<VertexData> vertEnumerable)
-        //{
-        //    //init
-        //    AllocIfRequired(2);
-        //    foreach (var v in vertEnumerable)
-        //    {
-        //        this.AddVertex(v);
-        //    }
-        //}
+
 
         internal bool HasMoreThanOnePart { get; set; }
 
@@ -94,24 +86,7 @@ namespace PixelFarm.Agg
             y = 0;
             return VertexCmd.Stop;
         }
-        public double GetLastX()
-        {
-            if (m_num_vertices > 0)
-            {
-                int index = (int)(m_num_vertices - 1);
-                return m_coord_xy[index << 1];
-            }
-            return new double();
-        }
-        public double GetLastY()
-        {
-            if (m_num_vertices > 0)
-            {
-                int index = (int)(m_num_vertices - 1);
-                return m_coord_xy[(index << 1) + 1];
-            }
-            return 0;
-        }
+
         public VertexCmd GetVertex(int index, out double x, out double y)
         {
             int i = index << 1;
@@ -140,7 +115,7 @@ namespace PixelFarm.Agg
             if (m_num_vertices >= m_allocated_vertices)
             {
                 AllocIfRequired(m_num_vertices);
-            } 
+            }
             m_coord_xy[m_num_vertices << 1] = x;
             m_coord_xy[(m_num_vertices << 1) + 1] = y;
             m_cmds[m_num_vertices] = cmd;
@@ -245,6 +220,21 @@ namespace PixelFarm.Agg
         }
         //----------------------------------------------------------
 
+        public void AddSubVertices(VertexStore anotherVxs)
+        {
+            int j = anotherVxs.Count; 
+            this.HasMoreThanOnePart = true;
+            for (int i = 0; i < j; ++i)
+            {
+                double x,y;
+                VertexCmd cmd = anotherVxs.GetVertex(i, out x, out y);
+                this.AddVertex(x, y, cmd);
+                if (cmd == VertexCmd.Stop)
+                {
+                    break;
+                }
+            }
+        }
         //internal use only!
         public static void UnsafeDirectSetData(
             VertexStore vstore,
