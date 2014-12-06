@@ -7,8 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-
-using PixelFarm.Font2;
+ 
 
 namespace Mini
 {
@@ -22,10 +21,7 @@ namespace Mini
             this.Text = "DevForm: Double Click The Example!";
 
 
-            //-------------------------------------------------- 
-            int code = PixelFarm.Font2.MyFonts.InitLib();
-            //-------------------------------------------------- 
-           
+             
           
         }
         void listBox1_DoubleClick(object sender, EventArgs e)

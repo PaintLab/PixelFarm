@@ -18,21 +18,14 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-using System.Runtime;
-
-using PixelFarm.Agg;
-
+using System.Runtime; 
 using PixelFarm.VectorMath;
+using PixelFarm.Agg.Image;
 
-namespace PixelFarm.Agg.Image
+namespace PixelFarm.Agg 
 {
 
-    public enum PixelFormat
-    {
-        Rgba32,
-        Rgb24,
-        GrayScale8,
-    }
+     
     public class ActualImage
     {
         int width;
@@ -81,6 +74,9 @@ namespace PixelFarm.Agg.Image
             }
 
         }
+      
+        
+        
         public int Width
         {
             get { return this.width; }

@@ -9,10 +9,10 @@ using System;
 
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Font;
+
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
-
+using PixelFarm.Agg.Fonts;
 
 using Mini;
 namespace PixelFarm.Agg.Sample_Draw
@@ -28,36 +28,19 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         public override void Draw(Graphics2D g)
         {
-            //1.
-            // clear the image to white
-
-
+            // Draw2(g); 
+            ////1.
+            //// clear the image to white  
             g.Clear(ColorRGBA.White);
-            // draw a circle
-            g.Circle(50, 50, 30, ColorRGBA.Blue);
-            // draw a line
-
-            g.dbugLine(10, 100, 520, 50, new ColorRGBA(20, 200, 200));
-            // draw a filled box
-            g.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
-
-            // and an outline around it
-            g.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
-
-
+            //------------------------------------
+            g.UseSubPixelRendering = true;
             // draw some text
-            g.DrawString("A Simple Example", 300, 400, 20);
-
-            g.DrawString2("A Simple Example2 : hintCached", 300, 350, 20);
-
-            g.DrawString2("A Simple Example3", 300, 300, 20);
-
-            g.DrawString2("A Simple Example4", 300, 250, 20);
-            //---------------------------------------------------
-
-          
-             
+            string teststr = "ABCDE abcd 1230 Hello!";
+            g.DrawString(teststr, 300, 400, 22);
+            g.UseSubPixelRendering = false;
+            g.DrawString(teststr, 300, 422, 22);
         }
+        
     }
 
 
@@ -105,20 +88,29 @@ namespace PixelFarm.Agg.Sample_Draw
             g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
 
             // draw some text
-            var textPrinter = new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
-            VertexStore vxs = textPrinter.CreateVxs();
+            // draw some text 
 
+
+
+            var textPrinter = new TextPrinter();
+            textPrinter.CurrentFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
+            //new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
+
+            VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());
             var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStore s1 = affTx.TransformToVxs(vxs);
 
-            g.Render(s1, ColorRGBA.Red);
 
-            g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Black);
+            g.Render(s1, ColorRGBA.Black);
+            g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
+
 
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
                 AffinePlan.Translate(40, height / 2));
             g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
+
+
         }
     }
 

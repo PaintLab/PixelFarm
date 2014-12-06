@@ -252,5 +252,6 @@ namespace PixelFarm.Agg
             unchecked { destImageChanged++; };
             //-----------------------------
         }
+    
     }
 }

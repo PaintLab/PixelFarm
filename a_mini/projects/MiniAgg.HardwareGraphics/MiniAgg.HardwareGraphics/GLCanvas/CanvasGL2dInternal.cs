@@ -27,6 +27,7 @@ namespace OpenTkEssTest
             indices[0] = 0; indices[1] = 1; indices[2] = 2;
             indices[3] = 2; indices[4] = 3; indices[5] = 0;
         }
+       
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
             int ncoords = vertex2dCoords.Length / 2;

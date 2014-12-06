@@ -31,7 +31,7 @@ namespace PixelFarm.Agg.Image
         {
             this.linkedImage = linkedImage;
         }
-          
+    
         public virtual int Width
         {
             get

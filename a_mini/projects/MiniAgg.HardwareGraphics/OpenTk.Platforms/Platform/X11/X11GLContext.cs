@@ -39,6 +39,7 @@ namespace OpenTK.Platform.X11
 
         public X11GLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shared, bool direct,
             int major, int minor, GraphicsContextFlags flags)
+            :base(DesktopBackend.OpenGL)
         {
             if (mode == null)
                 throw new ArgumentNullException("mode");
@@ -188,6 +189,7 @@ namespace OpenTK.Platform.X11
 
         public X11GLContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shared, bool direct,
             int major, int minor, GraphicsContextFlags flags)
+            :base(DesktopBackend.OpenGL)
         {
             if (handle == ContextHandle.Zero)
                 throw new ArgumentException("handle");

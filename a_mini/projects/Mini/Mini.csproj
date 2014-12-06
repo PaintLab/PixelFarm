@@ -45,11 +45,10 @@
     <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
     <Compile Include="1_Shared\Square.cs" />
     <Compile Include="1_Shared\SpriteShape.cs" />
-    <Compile Include="2_Platform\BitmapHelper.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
-    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test1.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
@@ -85,8 +84,11 @@
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="MiniCinema\SimpleSprite.cs" />
+    <Compile Include="MiniGUI\IncompleteWidget.cs" />
+    <Compile Include="MiniGUI\MouseEventArgs.cs" />
+    <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
+    <Compile Include="MiniGUI\PolygonWidget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="2_Platform\WindowsFormsBitmapBackBuffer.cs" />
     <Compile Include="SoftAggControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -129,18 +131,16 @@
       <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
       <Name>MiniAgg.Complements</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.WinGdi\MiniAgg.WinGdi.csproj">
+      <Project>{F9C07AF0-7394-4C56-894A-BC9AD23FD724}</Project>
+      <Name>MiniAgg.WinGdi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiniGui\MiniGui.csproj">
-      <Project>{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}</Project>
-      <Name>MiniGui</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="7_HardwareGraphics\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

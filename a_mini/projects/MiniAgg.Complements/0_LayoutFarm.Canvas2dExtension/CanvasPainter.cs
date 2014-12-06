@@ -28,7 +28,7 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Font;
+using PixelFarm.Agg.Fonts;
 
 
 namespace PixelFarm.Agg
@@ -54,9 +54,12 @@ namespace PixelFarm.Agg
         Ellipse ellipse = new Ellipse();
         PathWriter lines = new PathWriter();
         RoundedRect roundRect = null;
-        MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+       
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         CurveFlattener curveFlattener = new CurveFlattener();
+
+        TextPrinter textPrinter;
+        MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
         //-------------
         public CanvasPainter(Graphics2D graphic2d)
         {
@@ -66,6 +69,7 @@ namespace PixelFarm.Agg
 
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
+            this.textPrinter = new TextPrinter();
 
         }
         public void Clear(ColorRGBA color)
@@ -103,6 +107,7 @@ namespace PixelFarm.Agg
             ellipse.Reset(x, y, radius, radius);
             gx.Render(ellipse.MakeVxs(), this.fillColor);
         }
+
         public void FillEllipse(double left, double bottom, double right, double top, int nsteps)
         {
             ellipse.Reset((left + right) * 0.5,
@@ -238,19 +243,21 @@ namespace PixelFarm.Agg
             this.Draw(roundRect.MakeVxs());
         }
 
+        //-------------------------------------------------------
+        public Font CurrentFont
+        {
+            get { return this.textPrinter.CurrentFont; }
+            set { this.textPrinter.CurrentFont = value; }
+        }
+
         public void DrawString(
            string text,
            double x,
            double y)
         {
-
-            //1. parse text              
-            stringPrinter.DrawFromHintedCache = false;
-            stringPrinter.LoadText(text);
-            var vxs = stringPrinter.MakeVxs();
-            vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
-            this.gx.Render(vxs, this.fillColor);
+            textPrinter.Print(this,text.ToString(), x, y); 
         }
+        //-------------------------------------------------------
 
         /// <summary>
         /// fill vertex store
@@ -268,7 +275,11 @@ namespace PixelFarm.Agg
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
-
+        public bool UseSubPixelRendering
+        {
+            get { return sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
+            set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
+        }
         public ColorRGBA FillColor
         {
             get { return fillColor; }
@@ -348,6 +359,8 @@ namespace PixelFarm.Agg
         {
             return curveFlattener.MakeVxs(srcVxs);
         }
+        //---------------- 
+
     }
 
 }

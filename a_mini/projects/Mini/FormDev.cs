@@ -4,9 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using PixelFarm.Agg;
 
 namespace Mini
 {
@@ -21,7 +24,7 @@ namespace Mini
             this.Text = "DevForm: Double Click The Example!";
 
             //test native font
-            int code = PixelFarm.Font2.MyFonts.InitLib();
+
 
         }
         void listBox1_DoubleClick(object sender, EventArgs e)
@@ -142,38 +145,93 @@ namespace Mini
         private void button2_Click(object sender, EventArgs e)
         {
 
-            Bitmap bmp = new Bitmap("d:\\WImageTest\\test002.png");
-            //MatterHackers.StackBlur2.FastBlur32RGBA(bmp, 15);
+            using (Bitmap bmp = new Bitmap("d:\\WImageTest\\test002.png"))
+            {
+                //MatterHackers.StackBlur2.FastBlur32RGBA(bmp, 15);
 
-            var rct = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                var rct = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
-            //assign dimension info and copy buffer 
-            var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-            int bmpStride = bitmapData.Stride;
-            int width = bmp.Width;
-            int height = bmp.Height;
-            int wh = width * height;
+                //assign dimension info and copy buffer 
+                var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                int bmpStride = bitmapData.Stride;
+                int width = bmp.Width;
+                int height = bmp.Height;
+                int wh = width * height;
 
-            //var dest = new int[wh];
-            //var source = new int[wh];
+                //var dest = new int[wh];
+                //var source = new int[wh];
 
-            var source = new int[width * height];
-            var dest = new int[width * height];
-            Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
-            PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
-            Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
+                var source = new int[width * height];
+                var dest = new int[width * height];
+                Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
+                PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
+                Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
 
-            bmp.UnlockBits(bitmapData);
+                bmp.UnlockBits(bitmapData);
 
-            bmp.Save("d:\\WImageTest\\test002_2.png");
+                bmp.Save("d:\\WImageTest\\test002_2.png");
+            }
         }
 
         private void cmdTestRasterImage_Click(object sender, EventArgs e)
         {
 
-
         }
 
-       
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //----------------------
+            //1. test gdi+ font path
+            char testChar = 'b';
+            float fontSize = 20;
+
+            using (System.Drawing.Font ff = new Font("tahoma", fontSize))
+            using (Graphics g = this.pictureBox1.CreateGraphics())
+            {
+                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.Clear(Color.White);
+
+                var winFont = PixelFarm.Agg.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
+                var winFontGlyph = winFont.GetGlyph(testChar);
+
+                //convert Agg vxs to bitmap
+                int bmpW = 50;
+                int bmpH = 50;
+                using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
+                {
+                    ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.Rgba32);
+                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
+                    var vxs = winFontGlyph.originalVxs;
+                    gfx.Render(vxs, ColorRGBA.Black);
+                    //test subpixel rendering 
+                    vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
+                    gfx.UseSubPixelRendering = true;
+                    gfx.Render(vxs, ColorRGBA.Black);
+                    BitmapHelper.CopyToWindowsBitmap(
+                      actualImage, //src from actual img buffer
+                      bufferBmp, //dest to buffer bmp
+                     new RectInt(0, 0, bmpW, bmpH));
+                    //-----------------------------------------
+                    bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                    g.DrawImage(bufferBmp, new Point(0, 30));
+                }
+                //----------------------------------------------
+
+
+
+                //----------------------------------------------
+                //compare with GraphicsPath's Font                
+                using (GraphicsPath gpath = new GraphicsPath())
+                {
+                    gpath.AddString(testChar.ToString(), ff.FontFamily, 1, ff.Size,
+                        new Point(0, 0), null);
+                    g.FillPath(Brushes.Black, gpath);
+                    //g.DrawPath(Pens.Black, gpath);
+                }
+                //-------------------------------------------------
+                //Compare with Gdi+ Font
+                g.DrawString(testChar.ToString(), ff, Brushes.Black, new PointF(0, 50));
+            }
+        }
     }
 }

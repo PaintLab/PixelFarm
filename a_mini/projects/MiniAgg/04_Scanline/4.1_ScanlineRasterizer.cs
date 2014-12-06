@@ -245,10 +245,10 @@ namespace PixelFarm.Agg
                     {
                         MoveTo(x, y);
                     } break;
-                case VertexCmd.LineTo:  
+                case VertexCmd.LineTo:
                 case VertexCmd.P2c:
                 case VertexCmd.P3c:
-                    {                      
+                    {
 
                         LineTo(x, y);
                     } break;
@@ -302,11 +302,14 @@ namespace PixelFarm.Agg
             {
                 VertexSnapIter snapIter = snap.GetVertexSnapIter();
                 VertexCmd cmd;
+                int dbugVertexCount = 0;
+
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
                 {
+                    dbugVertexCount++;
                     AddVertex(cmd, x, y);
                 }
-               
+
             }
 
         }

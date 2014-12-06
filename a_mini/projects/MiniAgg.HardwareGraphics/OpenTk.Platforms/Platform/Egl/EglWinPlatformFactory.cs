@@ -39,6 +39,10 @@ namespace OpenTK.Platform.Egl
     {
         #region Public Members
 
+        public EglWinPlatformFactory()
+            : base(DesktopBackend.ES20)
+        {
+        }
         public override IGraphicsContext CreateGLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, bool directRendering, int major, int minor, GraphicsContextFlags flags)
         {
             WinWindowInfo win_win = (WinWindowInfo)window;

@@ -9,7 +9,7 @@ using System;
 
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Font;
+ 
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
 
@@ -45,8 +45,7 @@ namespace PixelFarm.Agg.SimplePainter
             p.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
 
 
-            // draw some text
-            p.FillColor = ColorRGBA.Black;//black font color
+           
 
             p.DrawString("A Simple Example", 300, 400);
 

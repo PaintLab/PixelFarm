@@ -31,7 +31,11 @@ namespace PixelFarm.Agg
     partial class ImageGraphics2D
     {
 
-
+        public override bool UseSubPixelRendering
+        {
+            get { return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
+            set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
+        }
         Affine BuildImageBoundsPath(IImageReaderWriter sourceImage,
             VertexStore drawImageRectPath,
             double destX, double destY,
@@ -281,7 +285,7 @@ namespace PixelFarm.Agg
             }
             ReleaseVxs(imgBoundsPath);
         }
-
+        
         int destImageChanged = 0;
 
         public override void Render(IImageReaderWriter source, AffinePlan[] affinePlans)

@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         Graphics2D gfx;
         public CustomScanlineRasToBmp_EnlargedV2(double size, ActualImage destImage)
         {
-            this.UseCustomRenderSingleScanLine = true;
+            this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
@@ -58,36 +58,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
 
             }
 
-
-
-            //ScanlineSpan span = scanline.begin();
-            //for (; ; )
-            //{
-            //    int x = span.x;
-            //    int num_pix = span.len;
-            //    int coverIndex = span.cover_index;
-
-            //    do
-            //    {
-            //        int a = (coverArray[coverIndex++] * color.Alpha0To255) >> 8;
-            //        m_square.draw(
-            //                gfx.Rasterizer, m_sl, destImage,
-            //                RGBA_Bytes.Make(
-            //                    color.Red0To255,
-            //                    color.Green0To255,
-            //                    color.Blue0To255, a),
-            //                x, y);
-            //        ++x;
-            //    }
-            //    while (--num_pix > 0);
-            //    if (--num_spans == 0)
-            //    {
-            //        break;
-            //    }
-
-            //    span = scanline.GetNextScanlineSpan();
-            //}
-
+             
 
         }
     }
@@ -166,6 +137,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
 
 
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+            
             sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
 
             //-----------------------------------------------------------------------------------------------------------

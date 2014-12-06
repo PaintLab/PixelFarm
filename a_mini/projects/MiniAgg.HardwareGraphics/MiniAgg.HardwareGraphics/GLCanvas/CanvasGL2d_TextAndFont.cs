@@ -18,43 +18,22 @@ namespace OpenTkEssTest
 {
     partial class CanvasGL2d
     {
-        GraphicsPath myGraphicsPath = new GraphicsPath();
+
+
         void SetupFonts()
         {
 
         }
+        public PixelFarm.Agg.Fonts.Font CurrentFont 
+        {
+            get { return this.textPriner.CurrentFont; }
+            set { this.textPriner.CurrentFont = value; }
+        }
         public void DrawString(string str, float x, float y)
         {
-            //test bitmap
-             
+            //test bitmap 
+            this.textPriner.Print(str.ToCharArray(), x, y);
 
-
-
-
-
-
-            //test----------------------------------
-            //myGraphicsPath.AddString(str,
-            //    FontFamily.GenericSerif,
-            //    0,120,
-            //    new Point(0, 0), new StringFormat(StringFormatFlags.NoClip));
-            //myGraphicsPath.Flatten();
-            ////the get path points
-
-            //PointF[] points = myGraphicsPath.PathPoints;
-            //int j = myGraphicsPath.PointCount;
-            //float[] coords = new float[j * 2];
-            //int nn = 0;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    PointF p = points[i];
-            //    coords[nn] = p.X;
-            //    coords[nn + 1] = p.Y;
-            //    nn += 2;
-            //}
-            //var pathData = myGraphicsPath.PathData;
-            //DrawPolygon(coords, j * 2);
-            //test----------------------------------
         }
 
     }
