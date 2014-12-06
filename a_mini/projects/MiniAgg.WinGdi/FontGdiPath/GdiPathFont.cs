@@ -84,8 +84,11 @@ namespace PixelFarm.Agg.Fonts
                 //create flatten version 
                 found.flattenVxs = curveFlattener.MakeVxs(vxs);//?
                 //-------------------------
-                //create bmp version 
 
+                //create bmp version 
+                //find vxs bound
+
+                
 
 
                 this.cachedGlyphs.Add(c, found);
