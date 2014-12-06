@@ -39,6 +39,7 @@ namespace PixelFarm.Agg.Fonts
         {
             get { return fontface; }
         }
+
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             FontGlyph glyph;

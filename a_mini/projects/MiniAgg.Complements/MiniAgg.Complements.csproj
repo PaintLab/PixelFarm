@@ -47,7 +47,7 @@
     <Compile Include="FontNative\NativeFontFace.cs" />
     <Compile Include="Font\Font.cs" />
     <Compile Include="Font\FontGlyph.cs" />
-    <Compile Include="FontNative\NativeFontGlyphBuilder.cs" />
+    <Compile Include="FontSvg\NativeFontGlyphBuilder.cs" />
     <Compile Include="FontNative\NativeFontStore.cs" />
     <Compile Include="FontNative\NativeBridgeHB.cs" />
     <Compile Include="FontNative\NativeBridgeMyFonts.cs" />

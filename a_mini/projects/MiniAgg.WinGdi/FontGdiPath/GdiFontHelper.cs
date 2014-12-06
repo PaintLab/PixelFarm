@@ -7,7 +7,7 @@ using PixelFarm;
 using PixelFarm.Agg;
 
 
-namespace Mini
+namespace PixelFarm.Agg.Fonts
 {
 
     public static class GdiFontHelper
@@ -17,6 +17,8 @@ namespace Mini
 
             using (GraphicsPath gpath = new GraphicsPath())
             {
+            
+
                 gpath.AddString(c.ToString(), font.FontFamily, 1, font.Size, new Point(0, 0), null);
                 //get font shape from gpath
                 int pointCount = gpath.PointCount;

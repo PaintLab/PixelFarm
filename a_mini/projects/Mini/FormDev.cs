@@ -182,8 +182,8 @@ namespace Mini
         {
             //----------------------
             //1. test gdi+ font path
-            char testChar = 'a';
-            float fontSize = 12;
+            char testChar = 'b';
+            float fontSize = 20;
 
             using (System.Drawing.Font ff = new Font("tahoma", fontSize))
             using (Graphics g = this.pictureBox1.CreateGraphics())
@@ -191,11 +191,9 @@ namespace Mini
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 g.Clear(Color.White);
 
-                //--------------------------------------------------------
-                VertexStore vxs = new VertexStore();
-                GdiFontHelper.ConvertCharToVertexGlyph(ff, testChar, vxs);
+                var winFont = PixelFarm.Agg.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
+                var winFontGlyph = winFont.GetGlyph(testChar);
 
-                //--------------------------------------------------------
                 //convert Agg vxs to bitmap
                 int bmpW = 50;
                 int bmpH = 50;
@@ -203,6 +201,7 @@ namespace Mini
                 {
                     ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.Rgba32);
                     Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
+                    var vxs = winFontGlyph.originalVxs;
                     gfx.Render(vxs, ColorRGBA.Black);
                     //test subpixel rendering 
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
