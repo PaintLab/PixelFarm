@@ -45,7 +45,7 @@ namespace OpenTK
             if (!this.DesignMode)
             {
                 MakeCurrent();
-                //GL.Clear(ClearBufferMask.ColorBufferBit);
+                GL.Clear(ClearBufferMask.ColorBufferBit);
                 if (glPaintHandler != null)
                 {
                     glPaintHandler(this, e);
@@ -54,8 +54,8 @@ namespace OpenTK
             }
         }
         public void InitSetup2d(Rectangle screenBound)
-        { 
-            int max = Math.Max(screenBound.Width, screenBound.Height); 
+        {
+            int max = Math.Max(screenBound.Width, screenBound.Height);
             //init
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);

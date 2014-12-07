@@ -32,18 +32,40 @@ namespace Mini2
             {
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
                 //-------------------------------------
-                //draw lion from bitmap to GL screen
+                // draw lion from bitmap to GL screen
                 if (bmp == null)
                 {
                     bmp = GLBitmapTexture.CreateBitmapTexture(actualImage);
                 }
                 //lion is inverted from software layer ,
                 //so... we use DrawImageInvert()
-                canvas.DrawImageInvert(bmp, 50, 50);
+                int xpos = 0;
+                int w = bmp.Width;
+                int h = bmp.Height;
+
+                for (int i = 0; i < 3; ++i)
+                {
+                    canvas.DrawImageInvert(bmp, xpos, 50, w, h);
+                    w = (int)(w * 1.2);
+                    h = (int)(h * 1.2);
+                    xpos += 150;
+                }
+                w = bmp.Width;
+                h = bmp.Height;
+                xpos = 0;
+                for (int i = 0; i < 2; ++i)
+                {
+                    
+                    w = (int)(w * 0.75);
+                    h = (int)(h * 0.75);
+                    xpos -= 50;
+                    canvas.DrawImageInvert(bmp, xpos, 50, w, h);
+                    
+                }
             });
 
             form.Show();
-            
+
         }
     }
 }

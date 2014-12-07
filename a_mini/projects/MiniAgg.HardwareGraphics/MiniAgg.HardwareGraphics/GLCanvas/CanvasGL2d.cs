@@ -49,7 +49,11 @@ namespace LayoutFarm.DrawingGL
 
         public void Clear(LayoutFarm.Drawing.Color c)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.AccumBufferBit | ClearBufferMask.StencilBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit |
+                ClearBufferMask.DepthBufferBit |
+                ClearBufferMask.AccumBufferBit |
+                ClearBufferMask.StencilBufferBit);
+
             GL.ClearColor(c);
         }
         public double StrokeWidth
@@ -130,6 +134,10 @@ namespace LayoutFarm.DrawingGL
         }
         public void DrawImageInvert(GLBitmapTexture bmp, float x, float y)
         {
+            DrawImageInvert(bmp, x, y, bmp.Width, bmp.Height);
+        }
+        public void DrawImageInvert(GLBitmapTexture bmp, float x, float y, float w, float h)
+        {
             unsafe
             {
 
@@ -152,7 +160,7 @@ namespace LayoutFarm.DrawingGL
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                     //------------------------------------------ 
                     //fill rect with texture
-                    FillRect(x, y, bmp.Width, bmp.Height);
+                    FillRect(x, y, w, h);
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
 
                 } GL.Disable(EnableCap.Texture2D);
@@ -739,7 +747,7 @@ namespace LayoutFarm.DrawingGL
             }
             set
             {
-                this.fillColor = value; 
+                this.fillColor = value;
             }
         }
         public void FillRect(float x, float y, float w, float h)
