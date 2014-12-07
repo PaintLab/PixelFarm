@@ -11,7 +11,7 @@ using Tesselate;
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 
-namespace OpenTkEssTest
+namespace LayoutFarm.DrawingGL
 {
 
     public partial class CanvasGL2d

@@ -14,7 +14,7 @@ using PixelFarm.Agg.VertexSource;
 
 
 
-namespace OpenTkEssTest
+namespace LayoutFarm.DrawingGL
 {
     partial class CanvasGL2d
     {

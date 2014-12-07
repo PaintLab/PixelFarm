@@ -75,9 +75,11 @@ namespace PixelFarm.Agg.Fonts
                 Marshal.FreeHGlobal(unmanagedMem);
                 unmanagedMem = IntPtr.Zero;
             }
-
-            fonts.Clear();
-            fonts = null;
+            if (fonts != null)
+            {
+                fonts.Clear();
+                fonts = null;
+            }           
 
         }
 

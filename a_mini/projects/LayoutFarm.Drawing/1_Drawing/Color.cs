@@ -87,8 +87,8 @@ namespace LayoutFarm.Drawing
         public static readonly Color Green = new Color(0xFF, 0x00, 0x80, 0x00);
         public static readonly Color OrangeRed = new Color(0xFF, 0xFF, 0x45, 0x00);//0xFF FF 45 00
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
-        public static readonly Color Magenta = new Color(0xFF, 0xFF, 0,0xFF);
-       
+        public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
+
 
 
         //internal static Color ColorFromDrawingColor(System.Drawing.Color c)
@@ -133,6 +133,11 @@ namespace LayoutFarm.Drawing
         public bool IsTransparent()
         {
             return this == Color.Transparent;
+        }
+
+        public uint ToARGB()
+        {
+            return (uint)((this.a << 24) | (this.r << 16) | (this.g << 8) | this.b);
         }
     }
 }

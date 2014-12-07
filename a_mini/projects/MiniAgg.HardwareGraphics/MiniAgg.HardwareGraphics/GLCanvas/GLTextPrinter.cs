@@ -5,7 +5,7 @@ using OpenTK.Graphics.OpenGL;
 using Tesselate;
 using PixelFarm.Agg.Fonts;
 
-namespace OpenTkEssTest
+namespace LayoutFarm.DrawingGL
 {
     class GLTextPrinter
     {

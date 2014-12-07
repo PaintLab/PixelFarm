@@ -48,7 +48,6 @@ namespace OpenTK
         static GLControl()
         {
             OpenTK.Toolkit.Init();
-
         }
         IGraphicsContext context;
         IGLControl implementation;

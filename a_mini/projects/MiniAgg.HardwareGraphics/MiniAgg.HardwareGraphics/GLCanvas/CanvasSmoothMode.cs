@@ -1,5 +1,5 @@
 ﻿//MIT 2014, WinterDev
-namespace OpenTkEssTest
+namespace LayoutFarm.DrawingGL
 {
     public enum CanvasSmoothMode
     {

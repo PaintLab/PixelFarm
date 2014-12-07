@@ -77,12 +77,6 @@
     <Compile Include="05_GLControl\FormTestWinGLControl2.Designer.cs">
       <DependentUpon>FormTestWinGLControl2.cs</DependentUpon>
     </Compile>
-    <Compile Include="05_GLControl\DerivedGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="05_GLControl\DerivedGLControl.Designer.cs">
-      <DependentUpon>DerivedGLControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="05_GLControl\FormTestWinGLControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,9 +134,6 @@
     <EmbeddedResource Include="05_GLControl\FormTestWinGLControl2.resx">
       <DependentUpon>FormTestWinGLControl2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="05_GLControl\DerivedGLControl.resx">
-      <DependentUpon>DerivedGLControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="05_GLControl\FormTestWinGLControl.resx">
       <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -192,6 +183,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
+      <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
+      <Name>LayoutFarm.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MiniAgg.Complements\MiniAgg.Complements.csproj">
       <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
       <Name>MiniAgg.Complements</Name>

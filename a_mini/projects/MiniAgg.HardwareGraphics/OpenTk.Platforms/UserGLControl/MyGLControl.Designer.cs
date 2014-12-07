@@ -1,6 +1,6 @@
-﻿namespace OpenTkEssTest
+﻿namespace OpenTK
 {
-    partial class DerivedGLControl
+    partial class MyGLControl
     {
         /// <summary> 
         /// Required designer variable.

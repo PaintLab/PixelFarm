@@ -50,6 +50,7 @@
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
+    <Compile Include="1_Shared\LionFillSprite.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
@@ -71,19 +72,19 @@
     <Compile Include="FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormTestBed1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormTestBed1.Designer.cs">
-      <DependentUpon>FormTestBed1.cs</DependentUpon>
-    </Compile>
     <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
     <Compile Include="1_Shared\LionDataStore.cs" />
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
-    <Compile Include="MiniCinema\SimpleSprite.cs" />
+    <Compile Include="FormTestBed1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTestBed1.designer.cs">
+      <DependentUpon>FormTestBed1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="1_Shared\SimpleSprite.cs" />
     <Compile Include="MiniGUI\IncompleteWidget.cs" />
     <Compile Include="MiniGUI\MouseEventArgs.cs" />
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
