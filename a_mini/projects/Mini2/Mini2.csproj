@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="0_Start\DemoBase.cs" />
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
     <Compile Include="1_Shared\LionDataStore.cs" />
@@ -48,6 +49,9 @@
     <Compile Include="1_Shared\Point2D.cs" />
     <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="1_Shared\Square.cs" />
+    <Compile Include="2_Samples\02_DrawSample02.cs" />
+    <Compile Include="2_Samples\01_WhiteBlank.cs" />
+    <Compile Include="2_Samples\03_LionFillOnGLControl.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,7 +65,7 @@
       <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
     </Compile>
     <Compile Include="1_Shared\SimpleSprite.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="0_Start\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +114,7 @@
       <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

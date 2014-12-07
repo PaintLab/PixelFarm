@@ -19,10 +19,8 @@ namespace Mini
         {
             InitializeComponent();
             this.Load += new EventHandler(DevForm_Load);
-            this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick);
-
-            this.Text = "DevForm: Double Click The Example!";
-
+            this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick); 
+            this.Text = "DevForm: Double Click The Example!"; 
             //test native font
 
 
