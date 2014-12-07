@@ -58,7 +58,9 @@
     <Compile Include="07_GLES2\T31_SimpleES20Window.cs" />
     <Compile Include="07_GLES2\T32_ES2HelloTriangle.cs" />
     <Compile Include="07_GLES2\T33_ES2SimpleTexture2d.cs" />
-    <Compile Include="07_GLES2\DerivedMiniGLControl.cs" />
+    <Compile Include="07_GLES2\DerivedMiniGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="07_GLES2\DerivedMiniGLControl.Designer.cs">
       <DependentUpon>DerivedMiniGLControl.cs</DependentUpon>
     </Compile>
@@ -118,6 +120,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
+      <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
+      <Name>LayoutFarm.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MiniAgg.Complements\MiniAgg.Complements.csproj">
       <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
       <Name>MiniAgg.Complements</Name>

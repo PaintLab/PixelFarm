@@ -9,13 +9,13 @@ using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace OpenTkEssTest
+namespace OpenTK
 {
-    public partial class DerivedGLControl : GLControl
+    public partial class MyGLControl : GLControl
     {
         LayoutFarm.Drawing.Color clearColor;
         EventHandler glPaintHandler;
-        public DerivedGLControl()
+        public MyGLControl()
         {
             this.InitializeComponent();
         }
@@ -41,18 +41,32 @@ namespace OpenTkEssTest
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-
+            //------------------------------------------
             if (!this.DesignMode)
             {
-
                 MakeCurrent();
                 //GL.Clear(ClearBufferMask.ColorBufferBit);
                 if (glPaintHandler != null)
                 {
                     glPaintHandler(this, e);
-                }              
+                }
                 SwapBuffers();
             }
+        }
+        public void InitSetup2d(Rectangle screenBound)
+        { 
+            int max = Math.Max(screenBound.Width, screenBound.Height); 
+            //init
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            //---------------- 
+            GL.Viewport(0, 0, max, max);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            GL.Ortho(0, max, 0, max, 0.0, 100.0);
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
         }
     }
 }

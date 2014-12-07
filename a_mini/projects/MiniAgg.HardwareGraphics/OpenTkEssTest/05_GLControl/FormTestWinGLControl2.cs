@@ -4,10 +4,8 @@ using System.ComponentModel;
 
 using System.Drawing;
 using System.Text;
-using System.Windows.Forms;
-
-using OpenTK.Graphics.OpenGL;
-using Mini;
+using System.Windows.Forms; 
+ 
 
 namespace OpenTkEssTest
 {
@@ -18,9 +16,9 @@ namespace OpenTkEssTest
         public FormTestWinGLControl2()
         {
             InitializeComponent();
-            this.derivedGLControl1.SetBounds(0, 30, 800, 600);
-
-
+            
+            this.derivedGLControl1.SetBounds(0, 30, 800, 600);             
+            //------------------------------------------------------
             b1 = new Button();
             this.Controls.Add(b1);
             b1.Text = "Refresh GLControl";
@@ -36,24 +34,11 @@ namespace OpenTkEssTest
             this.derivedGLControl1.ClearColor = LayoutFarm.Drawing.Color.White;
 
             if (!this.DesignMode)
-            {
+            {   
+
                 //for 2d 
-                var screenBound = Screen.PrimaryScreen.Bounds;
-                int max = Math.Max(screenBound.Width, screenBound.Height);
+                this.derivedGLControl1.InitSetup2d(Screen.PrimaryScreen.Bounds);
 
-                //init
-                GL.Enable(EnableCap.Blend);
-                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-                //----------------
-
-
-                GL.Viewport(0, 0, max, max);
-                GL.MatrixMode(MatrixMode.Projection);
-                GL.LoadIdentity();
-                GL.Ortho(0, max, 0, max, 0.0, 100.0);
-
-                GL.MatrixMode(MatrixMode.Modelview);
-                GL.LoadIdentity();
 
             }
 

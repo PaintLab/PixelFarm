@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.derivedGLControl1 = new DerivedGLControl();
-            this.derivedGLControl2 = new DerivedGLControl();
+            this.derivedGLControl1 = new OpenTK.MyGLControl();
+            this.derivedGLControl2 = new OpenTK.MyGLControl();
             this.SuspendLayout();
             // 
             // derivedGLControl1
@@ -45,7 +45,7 @@
             // derivedGLControl2
             // 
             this.derivedGLControl2.BackColor = System.Drawing.Color.Black;
-            this.derivedGLControl2.ClearColor =LayoutFarm.Drawing.Color.FromArgb (((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.derivedGLControl2.ClearColor = LayoutFarm.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.derivedGLControl2.Location = new System.Drawing.Point(319, 13);
             this.derivedGLControl2.Name = "derivedGLControl2";
             this.derivedGLControl2.Size = new System.Drawing.Size(293, 224);
@@ -67,8 +67,8 @@
 
         #endregion
 
-        private DerivedGLControl derivedGLControl1;
-        private DerivedGLControl derivedGLControl2;
+        private OpenTK.MyGLControl derivedGLControl1;
+        private OpenTK.MyGLControl derivedGLControl2;
 
     }
 }

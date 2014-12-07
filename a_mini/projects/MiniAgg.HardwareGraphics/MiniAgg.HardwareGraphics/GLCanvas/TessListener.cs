@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 
 using Tesselate;
-namespace OpenTkEssTest
+namespace LayoutFarm.DrawingGL
 {
     public struct Vertex
     {

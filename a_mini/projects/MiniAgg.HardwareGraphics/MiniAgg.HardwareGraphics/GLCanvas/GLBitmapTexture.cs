@@ -6,7 +6,7 @@ using Tesselate;
 using System.Drawing;
 
 
-namespace OpenTkEssTest
+namespace LayoutFarm.DrawingGL
 {
     public class GLBitmapTexture : IDisposable
     {
