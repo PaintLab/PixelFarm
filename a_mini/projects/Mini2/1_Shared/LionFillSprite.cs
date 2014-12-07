@@ -5,7 +5,7 @@ using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 
 using Mini;
-namespace PixelFarm.Agg 
+namespace PixelFarm.Agg
 {
 
     public class LionFillSprite : BasicSprite
@@ -59,8 +59,7 @@ namespace PixelFarm.Agg
                         AffinePlan.Rotate(angle + Math.PI),
                         AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                         AffinePlan.Translate(Width / 2, Height / 2)
-                );
-                //create vertextStore again from origiinal path
+                ); 
                 myvxs = transform.TransformToVxs(lionShape.Path.Vxs);
             }
             //---------------------------------------------------------------------------------------------

@@ -398,21 +398,12 @@ namespace OpenTK.Graphics.ES20
         #endregion
 
         #region Viewport
-
-        public static void Viewport(LayoutFarm.Drawing.Size size)
+        //----------------------------
+        public static void Viewport(float w, float h)
         {
-            GL.Viewport(0, 0, size.Width, size.Height);
+            GL.Viewport(0, 0, (int)w, (int)h);
         }
 
-        public static void Viewport(LayoutFarm.Drawing.Point location, LayoutFarm.Drawing.Size size)
-        {
-            GL.Viewport(location.X, location.Y, size.Width, size.Height);
-        }
-
-        public static void Viewport(LayoutFarm.Drawing.Rectangle rectangle)
-        {
-            GL.Viewport(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
-        }
 #if NO_SYSDRAWING
         public static void Viewport(OpenTK.Point location, OpenTK.Size size)
         {
