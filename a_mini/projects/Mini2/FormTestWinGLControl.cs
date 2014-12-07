@@ -10,10 +10,10 @@ using System.Windows.Forms;
 namespace Mini2
 {
 
-    public partial class FormTestWinGLControl2 : Form
+    public partial class FormTestWinGLControl : Form
     {
         Button b1;
-        public FormTestWinGLControl2()
+        public FormTestWinGLControl()
         {
             InitializeComponent();
             

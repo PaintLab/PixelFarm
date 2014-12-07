@@ -85,9 +85,7 @@ namespace LayoutFarm.DrawingGL
         }
         public void Dispose()
         {
-            if (this.dbugId == 0)
-            {
-            }
+            
 
             GL.DeleteTextures(1, ref textureId);
         }

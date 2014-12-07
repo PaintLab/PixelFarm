@@ -50,6 +50,7 @@
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
+    <Compile Include="1_Shared\LionFillSprite.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="FormTestBed1.designer.cs">
       <DependentUpon>FormTestBed1.cs</DependentUpon>
     </Compile>
-    <Compile Include="MiniCinema\SimpleSprite.cs" />
+    <Compile Include="1_Shared\SimpleSprite.cs" />
     <Compile Include="MiniGUI\IncompleteWidget.cs" />
     <Compile Include="MiniGUI\MouseEventArgs.cs" />
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />

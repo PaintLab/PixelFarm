@@ -1,6 +1,6 @@
 ﻿namespace Mini2
 {
-    partial class FormTestWinGLControl2
+    partial class FormTestWinGLControl
     {
         /// <summary>
         /// Required designer variable.

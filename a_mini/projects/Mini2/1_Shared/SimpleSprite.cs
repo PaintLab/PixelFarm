@@ -1,4 +1,4 @@
-//BSD 2014, WinterDev
+ï»¿//2014 BSD, WinterDev
 
 /*
 Copyright (c) 2013, Lars Brubaker
@@ -30,49 +30,61 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
+
+using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 
-using Mini;
-namespace PixelFarm.Agg.Sample_LionFill
+namespace LayoutFarm.MiniCinema
 {
-    [Info(OrderCode = "03")]
-    [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
-      + " left mouse button. Right mouse button adds “skewing” transformations, proportional to the “X” "
-      + "coordinate. The image is drawn over the old one with a cetrain opacity value. Change “Alpha” "
-      + "to draw funny looking “lions”. Change window size to clear the window.")]
-    public class LionFillExample : DemoBase
+    public abstract class SimpleSprite
     {
-        PixelFarm.Agg.LionFillSprite lionFill;
-        public override void Init()
-        {
-            lionFill = new LionFillSprite();
-        }
-        public override void Draw(Graphics2D g)
-        {
-            lionFill.OnDraw(g);
-        }
-        public override void MouseDrag(int x, int y)
-        {
-            lionFill.Move(x, y);
-        }
+        protected double angle = 0;
+        protected double spriteScale = 1.0;
+        protected double skewX = 0;
+        protected double skewY = 0;
 
-        [DemoConfig(MaxValue = 255)]
-        public int AlphaValue
+        bool isFreeze;
+        public int Width { get; set; }
+        public int Height { get; set; }
+
+        public void Freeze()
         {
-            get { return lionFill.AlphaValue; }
-            set
+            this.isFreeze = true;
+        }
+        public bool IsFreezed
+        {
+            get
             {
-                lionFill.AlphaValue = (byte)value;
+                return this.isFreeze;
             }
         }
+        public virtual void OnDraw(Graphics2D graphics2D)
+        {
+
+        }
+
+        protected void UpdateTransform(double width, double height, double x, double y)
+        {    
+            x -= width / 2;
+            y -= height / 2;
+            angle = Math.Atan2(y, x);
+            spriteScale = Math.Sqrt(y * y + x * x) / 100.0;
+        }
+
+        public virtual bool Move(int mouseX, int mouseY)
+        {
+            double x = mouseX;
+            double y = mouseY;
+
+            int width = (int)Width;
+            int height = (int)Height;
+            UpdateTransform(width, height, x, y);
+
+            return true;
+
+        }
     }
-
-    //--------------------------------------------------
-  
-
-
 }
-

@@ -41,18 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="1_Shared\BasicSprite.cs" />
+    <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
+    <Compile Include="1_Shared\LionDataStore.cs" />
+    <Compile Include="1_Shared\LionFillSprite.cs" />
+    <Compile Include="1_Shared\Point2D.cs" />
+    <Compile Include="1_Shared\SpriteShape.cs" />
+    <Compile Include="1_Shared\Square.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormTestWinGLControl2.cs">
+    <Compile Include="FormTestWinGLControl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormTestWinGLControl2.Designer.cs">
-      <DependentUpon>FormTestWinGLControl2.cs</DependentUpon>
+    <Compile Include="FormTestWinGLControl.Designer.cs">
+      <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="1_Shared\SimpleSprite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -98,8 +106,8 @@
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormTestWinGLControl2.resx">
-      <DependentUpon>FormTestWinGLControl2.cs</DependentUpon>
+    <EmbeddedResource Include="FormTestWinGLControl.resx">
+      <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

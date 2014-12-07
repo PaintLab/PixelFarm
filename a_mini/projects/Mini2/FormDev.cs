@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel; 
+using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
+using PixelFarm.Agg;
 using LayoutFarm.DrawingGL;
 namespace Mini2
 {
@@ -18,7 +19,8 @@ namespace Mini2
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FormTestWinGLControl2 form = new FormTestWinGLControl2();
+            //draw 1
+            FormTestWinGLControl form = new FormTestWinGLControl();
             CanvasGL2d canvas = new CanvasGL2d();
 
             form.SetGLPaintHandler((o, s) =>
@@ -129,12 +131,43 @@ namespace Mini2
                 canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
                 canvas.DrawString("1234567890", 80, 200);
                 GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
-
                 canvas.DrawImage(bmp, 50, 50);
                 bmp.Dispose();
 
             });
             form.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //lion fill test 
+            FormTestWinGLControl form = new FormTestWinGLControl();
+            CanvasGL2d canvas = new CanvasGL2d();
+            var lionFill = new LionFillSprite();
+            //----------
+            //draw lion on software layer
+            ActualImage actualImage = new ActualImage(800, 600, PixelFarm.Agg.Image.PixelFormat.Rgba32);
+            Graphics2D g2d = Graphics2D.CreateFromImage(actualImage);
+            lionFill.OnDraw(g2d);
+
+            GLBitmapTexture bmp = null;
+
+            form.SetGLPaintHandler((o, s) =>
+            {
+                canvas.Clear(LayoutFarm.Drawing.Color.White);
+                //-------------------------------------
+                //draw lion from bitmap to GL screen
+                if (bmp == null)
+                {
+                    bmp = GLBitmapTexture.CreateBitmapTexture(actualImage);
+                }
+                //lion is inverted from software layer ,
+                //so... we use DrawImageInvert()
+                canvas.DrawImageInvert(bmp, 50, 50);
+            });
+
+            form.Show();
+           
         }
     }
 }
