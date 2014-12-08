@@ -34,8 +34,9 @@ namespace LayoutFarm.DrawingGL
 
             GL.TexImage2D(TextureTarget.Texture2D, 0,
                 PixelInternalFormat.Rgba, w, h, 0,
-                OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                PixelFormat.Bgra,
                 PixelType.UnsignedByte, data.Scan0);
+          
 
             bitmap.UnlockBits(data);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
@@ -47,7 +48,7 @@ namespace LayoutFarm.DrawingGL
             GLBitmapTexture bmpTexture = new GLBitmapTexture();
             GL.GenTextures(1, out bmpTexture.textureId);
             GL.BindTexture(TextureTarget.Texture2D, bmpTexture.textureId);
-          
+
             int w = bmpTexture.width = image.Width;
             int h = bmpTexture.height = image.Height;
 
@@ -58,7 +59,7 @@ namespace LayoutFarm.DrawingGL
                 {
                     GL.TexImage2D(TextureTarget.Texture2D, 0,
                         PixelInternalFormat.Rgba, w, h, 0,
-                        OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                        PixelFormat.Bgra, 
                         PixelType.UnsignedByte, buffer);
                 }
             }
@@ -85,7 +86,7 @@ namespace LayoutFarm.DrawingGL
         }
         public void Dispose()
         {
-            
+
 
             GL.DeleteTextures(1, ref textureId);
         }

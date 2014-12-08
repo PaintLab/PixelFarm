@@ -15,27 +15,24 @@ namespace Mini2
     {
         public override void Load()
         {
-            //-----------------------------------------------
-            //test draw with LayoutFarm.Canvas interface ***
-            //with OpenGL backend ***
+   
+            
             //-----------------------------------------------
             FormTestWinGLControl form = new FormTestWinGLControl();
             CanvasGL2d canvas = new CanvasGL2d();
             var lionFill = new LionFillSprite();
-            //----------
-            //draw lion on software layer
-            ActualImage actualImage = new ActualImage(800, 600, PixelFarm.Agg.Image.PixelFormat.Rgba32);
-            Graphics2D g2d = Graphics2D.CreateFromImage(actualImage);
-            lionFill.OnDraw(g2d);
- 
+            //-----------------------------------------------
+             
              
             form.SetGLPaintHandler((o, s) =>
             {
+                canvas.Clear(LayoutFarm.Drawing.Color.White); 
+                canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
+                canvas.FillRect(0, 0, 400, 400);
 
-                canvas.Clear(LayoutFarm.Drawing.Color.White);
-                //draw vxs direct to GL surface
-                lionFill.Draw(canvas);
-
+                //draw vxs direct to GL surface 
+                lionFill.Draw(canvas); 
+                
             });
             form.Show();
         }

@@ -45,16 +45,14 @@ namespace PixelFarm.Agg
             this.color = color;
             this.x = (short)x;
             this.y = (short)y;
-            //z = 0;
-
+            //z = 0; 
         }
         //--------------------------------------------
 
         public override string ToString()
         {
             return x + "," + y;
-        }
-
+        } 
         public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(short) * 2;
         public const int VX_OFFSET = sizeof(uint);
         public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Short;
@@ -90,10 +88,39 @@ namespace PixelFarm.Agg
 
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    struct VertexC4V3f
+    {
+        public uint color;
+        public float  x;
+        public float y;
+        float z;
+        public VertexC4V3f(uint color, float x, float y)
+        {
+            this.color = color;
+            this.x = x;
+            this.y =  y;
+            z = 0; 
+        }
+
+        public override string ToString()
+        {
+            return x + "," + y;
+        }
+
+        public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(float) * 3;
+        public const int VX_OFFSET = sizeof(uint);
+        public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Float;
+        public const int N_COORDS = 3;
+
+    }
+
+
+
     /// <summary>
     /// vertex buffer object
     /// </summary>
-    public struct Vbo
+    public struct VboC4V2S
     {
         public int VboID;
         public void Dispose()
@@ -111,6 +138,23 @@ namespace PixelFarm.Agg
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
     }
-
+    public struct VboC4V3f
+    {
+        public int VboID;
+        public void Dispose()
+        {
+            OpenTK.Graphics.OpenGL.GL.DeleteBuffers(1, ref this.VboID);
+        }
+        public void BindBuffer()
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VboID);
+            GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V3f.SIZE_IN_BYTES, (IntPtr)0);
+            GL.VertexPointer(VertexC4V3f.N_COORDS, VertexC4V3f.VX_PTR_TYPE, VertexC4V3f.SIZE_IN_BYTES, VertexC4V3f.VX_OFFSET);
+        }
+        public void UnbindBuffer()
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+        }
+    }
 
 }
