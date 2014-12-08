@@ -203,13 +203,19 @@ namespace LayoutFarm.DrawingGL
             sclineRas.AddPath(vxs);
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
         }
+        public void FillVxsSnap(VertexStoreSnap snap)
+        {
+            sclineRas.Reset();
+            sclineRas.AddPath(snap);
+            sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
+        }
         public void DrawVxs(VertexStore vxs)
         {
-
             sclineRas.Reset();
             sclineRas.AddPath(stroke1.MakeVxs(vxs));
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
         }
+      
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
         {
             //closed polyline

@@ -90,14 +90,8 @@ namespace LayoutFarm.Drawing
         public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
 
 
-
-        //internal static Color ColorFromDrawingColor(System.Drawing.Color c)
-        //{
-        //    return new Color(c.A, c.R, c.G, c.B);
-        //}
         public static Color FromName(string name)
         {
-
             var color = KnownColors.FromKnownColor(name);
             return new Color(color.A, color.R, color.G, color.B);
 
@@ -105,10 +99,9 @@ namespace LayoutFarm.Drawing
         public override bool Equals(object obj)
         {
             Color c2 = (Color)obj;
-            return this.r == c2.r &&
-                 this.g == c2.g &&
-                 this.b == c2.b &&
-                 this.a == c2.a;
+            return (uint)((this.a << 24) | (this.r << 16) | (this.g << 8) | (this.b)) ==
+                (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
+
         }
         public override int GetHashCode()
         {
@@ -116,23 +109,15 @@ namespace LayoutFarm.Drawing
         }
         public static bool operator ==(Color c1, Color c2)
         {
-            return c1.r == c2.r &&
-                c1.g == c2.g &&
-                c1.b == c2.b &&
-                c1.a == c2.a;
+            return (uint)((c1.a << 24) | (c1.r << 16) | (c1.g << 8) | (c1.b)) ==
+                   (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
+
         }
         public static bool operator !=(Color c1, Color c2)
         {
 
-            return c1.r != c2.r ||
-                c1.g != c2.g ||
-                c1.b != c2.b ||
-                c1.a != c2.a;
-        }
-
-        public bool IsTransparent()
-        {
-            return this == Color.Transparent;
+            return (uint)((c1.a << 24) | (c1.r << 16) | (c1.g << 8) | (c1.b)) !=
+                  (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
         }
 
         public uint ToARGB()

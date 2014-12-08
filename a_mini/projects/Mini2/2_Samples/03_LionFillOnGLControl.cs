@@ -24,7 +24,7 @@ namespace Mini2
             //draw lion on software layer
             ActualImage actualImage = new ActualImage(800, 600, PixelFarm.Agg.Image.PixelFormat.Rgba32);
             Graphics2D g2d = Graphics2D.CreateFromImage(actualImage);
-            lionFill.OnDraw(g2d);
+           
 
             GLBitmapTexture bmp = null;
 
@@ -35,6 +35,7 @@ namespace Mini2
                 // draw lion from bitmap to GL screen
                 if (bmp == null)
                 {
+                    lionFill.OnDraw(g2d);
                     bmp = GLBitmapTexture.CreateBitmapTexture(actualImage);
                 }
                 //lion is inverted from software layer ,

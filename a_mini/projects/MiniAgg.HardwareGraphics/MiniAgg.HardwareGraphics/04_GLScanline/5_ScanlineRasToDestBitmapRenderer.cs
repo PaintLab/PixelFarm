@@ -384,7 +384,7 @@ namespace PixelFarm.Agg
 
                 do
                 {
-                    //foreach single pixel
+                    //alpha change
                     int alpha = ((sourceColor.A) * ((covers[coversIndex]) + 1)) >> 8;
                     if (alpha == BASE_MASK)
                     {
