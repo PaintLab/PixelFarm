@@ -13,7 +13,7 @@ namespace Mini2
     [Info("Drawing")]
     public class DrawSample02 : DemoBase
     {
-         
+
         public override void Load()
         {
             //draw 1
@@ -33,6 +33,7 @@ namespace Mini2
                         hwBmp = GLBitmapTexture.CreateBitmapTexture(bitmap);
                     }
                 }
+
                 //canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
                 canvas.FillColor = LayoutFarm.Drawing.Color.DeepPink;
@@ -131,6 +132,9 @@ namespace Mini2
                 GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
                 canvas.DrawImage(bmp, 50, 50);
                 bmp.Dispose();
+
+                //canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
+                //canvas.FillRect(0, 0, 300, 300);
 
             });
             form.Show();

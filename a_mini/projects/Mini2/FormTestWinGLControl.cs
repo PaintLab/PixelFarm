@@ -31,22 +31,21 @@ namespace Mini2
         void FormTestWinGLControl_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
-            this.derivedGLControl1.ClearColor = LayoutFarm.Drawing.Color.White;
-
+            this.derivedGLControl1.ClearColor = LayoutFarm.Drawing.Color.White; 
             if (!this.DesignMode)
             {   
 
                 //for 2d 
-                this.derivedGLControl1.InitSetup2d(Screen.PrimaryScreen.Bounds);
-
-
-            }
-
+                this.derivedGLControl1.InitSetup2d(Screen.PrimaryScreen.Bounds); 
+            } 
         }
         public void SetGLPaintHandler(EventHandler handler)
         {
             this.derivedGLControl1.SetGLPaintHandler(handler);
-
+        }
+        public UserControl GetCanvasControl()
+        {
+            return this.derivedGLControl1;
         }
     }
 }

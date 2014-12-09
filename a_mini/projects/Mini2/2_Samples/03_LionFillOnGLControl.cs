@@ -23,9 +23,7 @@ namespace Mini2
             //----------
             //draw lion on software layer
             ActualImage actualImage = new ActualImage(800, 600, PixelFarm.Agg.Image.PixelFormat.Rgba32);
-            Graphics2D g2d = Graphics2D.CreateFromImage(actualImage);
-           
-
+            Graphics2D g2d = Graphics2D.CreateFromImage(actualImage); 
             GLBitmapTexture bmp = null;
 
             form.SetGLPaintHandler((o, s) =>

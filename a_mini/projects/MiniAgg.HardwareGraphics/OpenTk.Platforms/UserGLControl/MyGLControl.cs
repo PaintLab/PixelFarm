@@ -64,7 +64,6 @@ namespace OpenTK
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Ortho(0, max, 0, max, 0.0, 100.0);
-
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
         }

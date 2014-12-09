@@ -37,14 +37,11 @@ namespace LayoutFarm.Drawing
         public abstract int Bottom { get; }
         public abstract int Right { get; }
 
-        public abstract Rectangle Rect { get; }
-        //public abstract void OffsetCanvasOrigin(int dx, int dy);
-        //public abstract void OffsetCanvasOriginX(int dx);
-        //public abstract void OffsetCanvasOriginY(int dy);
+        public abstract Rectangle Rect { get; } 
 
-        public abstract float CanvasOriginX { get; }
-        public abstract float CanvasOriginY { get; }
-        public abstract void SetCanvasOrigin(float x, float y);
+        public abstract int CanvasOriginX { get; }
+        public abstract int CanvasOriginY { get; }
+        public abstract void SetCanvasOrigin(int x, int y);
         public abstract bool IntersectsWith(Rect clientRect);
         //---------------------------------------------------------------------
         //clip area
@@ -59,9 +56,7 @@ namespace LayoutFarm.Drawing
         public abstract void ClearSurface(LayoutFarm.Drawing.Color c);
         public abstract void CopyFrom(Canvas sourceCanvas, int logicalSrcX, int logicalSrcY, Rectangle destArea);
         public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea);
-        //-------------------------------------------------------
-
-
+        //------------------------------------------------------- 
 
         //--------------------------------------- 
         //text ,font, strings 
@@ -77,7 +72,7 @@ namespace LayoutFarm.Drawing
         public abstract void DrawLine(float x1, float y1, float x2, float y2);
         //-------------------------------------------------------
         //rects 
-        public abstract void FillRectangle(Color color, float left, float top, float right, float bottom);
+        public abstract void FillRectangle(Color color, float left, float top, float width, float height);
         public abstract void FillRectangle(Brush brush, float left, float top, float width, float height);
         public abstract void DrawRectangle(Color color, float left, float top, float width, float height);
 

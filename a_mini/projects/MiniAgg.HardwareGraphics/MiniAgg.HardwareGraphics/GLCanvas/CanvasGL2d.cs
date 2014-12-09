@@ -32,6 +32,11 @@ namespace LayoutFarm.DrawingGL
         Arc arcTool = new Arc();
         CurveFlattener curveFlattener = new CurveFlattener();
         GLTextPrinter textPriner;
+
+        int canvasOriginX = 0;
+        int canvasOriginY = 0;
+
+
         public CanvasGL2d()
         {
             sclineRas = new GLScanlineRasterizer();
@@ -978,6 +983,27 @@ namespace LayoutFarm.DrawingGL
         public VertexStore FlattenCurves(VertexStore vxs)
         {
             return curveFlattener.MakeVxs(vxs);
+        }
+
+        public int CanvasOriginX
+        {
+            get { return this.canvasOriginX; }
+        }
+        public int CanvasOriginY
+        {
+            get { return this.canvasOriginY; }
+        }
+
+        public void SetCanvasOrigin(int x, int y)
+        {
+            int originalW = 800; 
+            //set new viewport
+            GL.Viewport(x, y, originalW, originalW);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
         }
     }
 }

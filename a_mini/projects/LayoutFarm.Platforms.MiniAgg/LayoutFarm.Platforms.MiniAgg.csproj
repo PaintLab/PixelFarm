@@ -54,6 +54,9 @@
     <Compile Include="LayoutFarm.Drawing.MiniAgg\MyCanvas\3_MyCanvas_DrawGraphics.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\MyCanvas\4_MyCanvas_TextAndFonts.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\MyCanvas\QuadPages.cs" />
+    <Compile Include="LayoutFarm.DrawingGL\MyCanvas_GL\MyCanvasGL_specific.cs" />
+    <Compile Include="LayoutFarm.DrawingGL\0_Start\CanvasGLPlatform.cs" />
+    <Compile Include="LayoutFarm.DrawingGL\0_Start\CanvasGLPortal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
