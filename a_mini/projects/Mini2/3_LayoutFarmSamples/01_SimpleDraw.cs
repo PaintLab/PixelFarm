@@ -41,7 +41,7 @@ namespace Mini2
                   0, 0, 200, 200);
 
                 softCanvas.SetCanvasOrigin(50, 50);
-
+                
                 softCanvas.FillRectangle(
                   LayoutFarm.Drawing.Color.Green,
                   0, 0, 200, 200);

@@ -996,7 +996,7 @@ namespace LayoutFarm.DrawingGL
 
         public void SetCanvasOrigin(int x, int y)
         {
-            int originalW = 800; 
+            int originalW = 800;
             //set new viewport
             GL.Viewport(x, y, originalW, originalW);
             GL.MatrixMode(MatrixMode.Projection);
@@ -1004,6 +1004,18 @@ namespace LayoutFarm.DrawingGL
             GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
+        }
+        public void EnableClipRect()
+        {
+            GL.Enable(EnableCap.ScissorTest);
+        }
+        public void DisableClipRect()
+        {
+            GL.Disable(EnableCap.ScissorTest);
+        }
+        public void SetClipRect(int x, int y, int w, int h)
+        {
+            GL.Scissor(x, y, w, h);
         }
     }
 }

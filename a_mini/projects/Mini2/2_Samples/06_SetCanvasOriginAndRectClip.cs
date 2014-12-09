@@ -10,8 +10,8 @@ using LayoutFarm.DrawingGL;
 namespace Mini2
 {
     [Info(OrderCode = "06")]
-    [Info("OffsetCanvasOrigin")]
-    public class OffsetCanvasOrigin : DemoBase
+    [Info("SetCanvasOriginAndRectClip")]
+    public class SetCanvasOriginAndRectClip : DemoBase
     {
         public override void Load()
         {
@@ -32,7 +32,15 @@ namespace Mini2
                 lionFill.Draw(canvas); //before offset
 
                 canvas.SetCanvasOrigin(50, 50);
+
+                //test clipping
+                canvas.EnableClipRect();
+                canvas.SetClipRect(300, 350, 100, 100);
+
                 lionFill.Draw(canvas);
+                canvas.DisableClipRect();
+
+
                 canvas.SetCanvasOrigin(0, 0);
             });
             form.Show();

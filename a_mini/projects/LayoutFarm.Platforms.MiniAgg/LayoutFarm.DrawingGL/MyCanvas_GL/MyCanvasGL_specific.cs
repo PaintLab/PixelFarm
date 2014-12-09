@@ -50,8 +50,17 @@ namespace LayoutFarm
                 return canvasGL2d.CanvasOriginY;
             }
         }
-
-
+        public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
+        {
+            canvasGL2d.EnableClipRect();
+            //--------------------------
+            canvasGL2d.SetClipRect(
+                 rect.X,
+                 rect.Y,
+                rect.Width,
+                 rect.Height);
+            //--------------------------
+        }
         //-------------------------------------------
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
