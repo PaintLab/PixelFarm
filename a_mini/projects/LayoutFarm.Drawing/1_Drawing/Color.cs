@@ -87,20 +87,19 @@ namespace LayoutFarm.Drawing
         public static readonly Color Green = new Color(0xFF, 0x00, 0x80, 0x00);
         public static readonly Color OrangeRed = new Color(0xFF, 0xFF, 0x45, 0x00);//0xFF FF 45 00
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
-        public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
+        public static readonly Color Magenta = new Color(0xFF, 0xFF, 0,0xFF);
+       
 
 
+        //internal static Color ColorFromDrawingColor(System.Drawing.Color c)
+        //{
+        //    return new Color(c.A, c.R, c.G, c.B);
+        //}
         public static Color FromName(string name)
         {
+
             var color = KnownColors.FromKnownColor(name);
             return new Color(color.A, color.R, color.G, color.B);
-
-        }
-        public override bool Equals(object obj)
-        {
-            Color c2 = (Color)obj;
-            return (uint)((this.a << 24) | (this.r << 16) | (this.g << 8) | (this.b)) ==
-                (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
 
         }
         public override int GetHashCode()
@@ -114,12 +113,10 @@ namespace LayoutFarm.Drawing
 
         }
         public static bool operator !=(Color c1, Color c2)
-        {
-
+        { 
             return (uint)((c1.a << 24) | (c1.r << 16) | (c1.g << 8) | (c1.b)) !=
                   (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
-        }
-
+        } 
         public uint ToARGB()
         {
             return (uint)((this.a << 24) | (this.r << 16) | (this.g << 8) | this.b);

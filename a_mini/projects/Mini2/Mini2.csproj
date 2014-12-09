@@ -55,6 +55,7 @@
     <Compile Include="2_Samples\03_LionFillOnGLControl.cs" />
     <Compile Include="2_Samples\04_LionFillDirect.cs" />
     <Compile Include="2_Samples\05_LionFillDirectBufferDemo.cs" />
+    <Compile Include="3_LayoutFarmSamples\01_SimpleDraw.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
