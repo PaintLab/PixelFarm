@@ -1,17 +1,19 @@
 ﻿using System;
-namespace LayoutFarm.Drawing.WinGdi
+using LayoutFarm.Drawing.WinGdi;
+
+namespace LayoutFarm.Drawing
 {
 
-    class WinGdiPlatform : GraphicsPlatform
+    class CanvasGLPlatform : GraphicsPlatform
     {
 
         System.Drawing.Bitmap sampleBmp;
         IFonts sampleIFonts;
-        public WinGdiPlatform()
+        public CanvasGLPlatform()
         {
         }
 
-        ~WinGdiPlatform()
+        ~CanvasGLPlatform()
         {
             if (sampleBmp != null)
             {
@@ -87,7 +89,7 @@ namespace LayoutFarm.Drawing.WinGdi
         }
         public override Canvas CreateCanvas(int left, int top, int width, int height)
         {
-            return new MyCanvas(this, 0, 0, left, top, width, height);
+            return new MyCanvasGL(this, 0, 0, left, top, width, height); 
         }
         public override IFonts SampleIFonts
         {

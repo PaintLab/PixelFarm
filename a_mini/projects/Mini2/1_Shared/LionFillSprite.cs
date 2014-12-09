@@ -5,7 +5,7 @@ using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 
 using Mini;
-namespace PixelFarm.Agg 
+namespace PixelFarm.Agg
 {
 
     public class LionFillSprite : BasicSprite
@@ -48,6 +48,36 @@ namespace PixelFarm.Agg
             myvxs = null;
             return result;
         }
+        public void Draw(LayoutFarm.DrawingGL.CanvasGL2d canvas)
+        {
+            if (myvxs == null)
+            {
+                var transform = Affine.NewMatix(
+                        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                        AffinePlan.Scale(spriteScale, spriteScale),
+                        AffinePlan.Rotate(angle + Math.PI),
+                        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                        AffinePlan.Translate(Width / 2, Height / 2)
+                );
+                myvxs = transform.TransformToVxs(lionShape.Path.Vxs);
+            }
+            //---------------------------------------------------------------------------------------------
+            {
+                int j = lionShape.NumPaths;
+                int[] pathList = lionShape.PathIndexList;
+                ColorRGBA[] colors = lionShape.Colors;
+                //graphics2D.UseSubPixelRendering = true;
+
+                for (int i = 0; i < j; ++i)
+                {
+                    var color = colors[i];
+                    //?
+                    canvas.FillColor = new LayoutFarm.Drawing.Color(color.alpha, color.blue, color.green, color.red);
+                    canvas.FillVxsSnap(new VertexStoreSnap(myvxs, pathList[i]));
+                }
+            }
+
+        }
         public override void OnDraw(Graphics2D graphics2D)
         {
 
@@ -60,7 +90,6 @@ namespace PixelFarm.Agg
                         AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                         AffinePlan.Translate(Width / 2, Height / 2)
                 );
-                //create vertextStore again from origiinal path
                 myvxs = transform.TransformToVxs(lionShape.Path.Vxs);
             }
             //---------------------------------------------------------------------------------------------

@@ -15,6 +15,9 @@ namespace Mini2
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            //--------
+            LayoutFarm.Drawing.WinGdiPortal.Start();
+            //--------
             Application.Run(new FormDev());
         }
     }

@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using LayoutFarm.Drawing.WinGdi;
+using LayoutFarm.Drawing;
 
 namespace LayoutFarm.Drawing
 {
-    public static class WinGdiPortal
+    public static class CanvasGLPortal
     {
         static bool isInit;
-        static WinGdiPlatform platform;
+        static CanvasGLPlatform platform;
         public static void Start()
         {
 
@@ -17,8 +17,8 @@ namespace LayoutFarm.Drawing
             {
                 return;
             }
-            isInit = true; 
-            CurrentGraphicsPlatform.SetCurrentPlatform(WinGdiPortal.platform = new WinGdiPlatform());
+            isInit = true;
+            CurrentGraphicsPlatform.SetCurrentPlatform(CanvasGLPortal.platform = new CanvasGLPlatform());
             CurrentGraphicsPlatform.GenericSerifFontName = System.Drawing.FontFamily.GenericSerif.Name;
 
         }

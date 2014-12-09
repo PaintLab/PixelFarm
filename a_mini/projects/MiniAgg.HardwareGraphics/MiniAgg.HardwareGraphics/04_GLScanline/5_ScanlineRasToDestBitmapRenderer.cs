@@ -96,7 +96,7 @@ namespace PixelFarm.Agg
             //---------------------------------------------
             //points
             int nelements = mySinglePixelBuffer.Count;
-            Vbo vbo = GenerateVBOForC4V2I();
+            VboC4V2S vbo = GenerateVBOForC4V2I();
             if (nelements > 0)
             {
                 vbo.BindBuffer();
@@ -173,7 +173,7 @@ namespace PixelFarm.Agg
             //---------------------------------------------
             //points
             int nelements = mySinglePixelBuffer.Count;
-            Vbo vbo = GenerateVBOForC4V2I();
+            VboC4V2S vbo = GenerateVBOForC4V2I();
             if (nelements > 0)
             {
                 vbo.BindBuffer();
@@ -248,9 +248,10 @@ namespace PixelFarm.Agg
             }
         }
 
-        static Vbo GenerateVBOForC4V2I()
+        static VboC4V2S GenerateVBOForC4V2I()
         {
-            Vbo vboHandle = new Vbo();
+            VboC4V2S vboHandle = new VboC4V2S();
+
             //must open these ... before call this func
             //GL.EnableClientState(ArrayCap.ColorArray);
             //GL.EnableClientState(ArrayCap.VertexArray);
@@ -384,7 +385,7 @@ namespace PixelFarm.Agg
 
                 do
                 {
-                    //foreach single pixel
+                    //alpha change
                     int alpha = ((sourceColor.A) * ((covers[coversIndex]) + 1)) >> 8;
                     if (alpha == BASE_MASK)
                     {

@@ -87,8 +87,8 @@ namespace LayoutFarm.Drawing
         public static readonly Color Green = new Color(0xFF, 0x00, 0x80, 0x00);
         public static readonly Color OrangeRed = new Color(0xFF, 0xFF, 0x45, 0x00);//0xFF FF 45 00
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
-        public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
-
+        public static readonly Color Magenta = new Color(0xFF, 0xFF, 0,0xFF);
+       
 
 
         //internal static Color ColorFromDrawingColor(System.Drawing.Color c)
@@ -102,42 +102,28 @@ namespace LayoutFarm.Drawing
             return new Color(color.A, color.R, color.G, color.B);
 
         }
-        public override bool Equals(object obj)
-        {
-            Color c2 = (Color)obj;
-            return this.r == c2.r &&
-                 this.g == c2.g &&
-                 this.b == c2.b &&
-                 this.a == c2.a;
-        }
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
         public static bool operator ==(Color c1, Color c2)
         {
-            return c1.r == c2.r &&
-                c1.g == c2.g &&
-                c1.b == c2.b &&
-                c1.a == c2.a;
+            return (uint)((c1.a << 24) | (c1.r << 16) | (c1.g << 8) | (c1.b)) ==
+                   (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
+
         }
         public static bool operator !=(Color c1, Color c2)
-        {
-
-            return c1.r != c2.r ||
-                c1.g != c2.g ||
-                c1.b != c2.b ||
-                c1.a != c2.a;
-        }
-
-        public bool IsTransparent()
-        {
-            return this == Color.Transparent;
-        }
-
+        { 
+            return (uint)((c1.a << 24) | (c1.r << 16) | (c1.g << 8) | (c1.b)) !=
+                  (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
+        } 
         public uint ToARGB()
         {
             return (uint)((this.a << 24) | (this.r << 16) | (this.g << 8) | this.b);
+        }
+        public uint ToABGR()
+        {
+            return (uint)((this.a << 24) | (this.b << 16) | (this.g << 8) | this.r);
         }
     }
 }

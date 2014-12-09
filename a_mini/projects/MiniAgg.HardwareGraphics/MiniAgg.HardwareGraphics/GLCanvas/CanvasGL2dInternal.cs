@@ -27,7 +27,19 @@ namespace LayoutFarm.DrawingGL
             indices[0] = 0; indices[1] = 1; indices[2] = 2;
             indices[3] = 2; indices[4] = 3; indices[5] = 0;
         }
-       
+        static unsafe void CreateRectCoords(ArrayList<VertexC4V3f> vrx,
+                   LayoutFarm.Drawing.Color color,
+                   float x, float y, float w, float h)
+        {
+            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y));
+            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y));
+            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y + h));
+
+            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y + h));
+            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y + h));
+            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y));
+
+        }
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
             int ncoords = vertex2dCoords.Length / 2;
@@ -168,15 +180,6 @@ namespace LayoutFarm.DrawingGL
                     i++;
                     cmd = vxs.GetVertex(i, out vx, out vy);
                 }
-
-                //int num_indices = npoints;
-                //int* indx = stackalloc int[num_indices];
-                //nn = 0;//reset
-                //for (i = 0; i < num_indices; ++i)
-                //{
-                //    indx[nn++] = i;
-                //}
-
                 //--------------------------------------
                 GL.EnableClientState(ArrayCap.VertexArray); //***
                 //vertex 2d
@@ -187,7 +190,7 @@ namespace LayoutFarm.DrawingGL
                 //--------------------------------------
             }
         }
-        
+
         unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
         {
 
