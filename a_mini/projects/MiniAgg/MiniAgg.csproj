@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="00_Context\ImageGraphics2D_RenderImages.cs" />
     <Compile Include="01_Base\ExtensionAttribute.cs" />
-    <Compile Include="01_Base\Collections.cs" />
     <Compile Include="01_Base\AggBasics.cs" />
     <Compile Include="02_PixelBuffer\ActualImage.cs" />
     <Compile Include="02_PixelBuffer\ChildImage.cs" />
