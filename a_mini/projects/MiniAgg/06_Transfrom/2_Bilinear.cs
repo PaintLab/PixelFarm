@@ -60,10 +60,7 @@ namespace PixelFarm.Agg.Transform
             src[0] = srcX1; src[1] = srcY1;//(x1,y1)
             src[2] = srcX2; src[3] = srcY1;//(x2,y1)
             src[4] = srcX2; src[5] = srcY2;//(x2,y2)
-            src[6] = srcX1; src[7] = srcY2;//(x2,y2)
-
-
-
+            src[6] = srcX1; src[7] = srcY2;//(x2,y2) 
 
             double[,] result = new double[4, 2];
 

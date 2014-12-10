@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using LayoutFarm.Drawing;
+using LayoutFarm.Drawing.DrawingGL;
 
-namespace LayoutFarm.Drawing
+namespace LayoutFarm.Drawing.DrawingGL
 {
     public static class CanvasGLPortal
     {

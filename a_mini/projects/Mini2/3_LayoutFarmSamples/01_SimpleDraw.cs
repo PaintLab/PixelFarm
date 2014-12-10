@@ -18,7 +18,8 @@ namespace Mini2
     {
         static DrawSample03()
         {
-            CanvasGLPortal.Start();
+            LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
+            
         }
         public override void Load()
         {
@@ -31,7 +32,7 @@ namespace Mini2
             //form.Controls.Add(pp);
             //WinGdiPortal.P.CreateCanvas(0, 0, 800, 600); 
 
-            var softCanvas = CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
+            var softCanvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
 
             form.SetGLPaintHandler((o, s) =>
             {

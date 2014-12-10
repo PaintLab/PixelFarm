@@ -43,7 +43,6 @@
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\FontsUtils.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\MyFontInfo.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\MyGraphicPath.cs" />
-    <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\MyMatrix.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\MyWin32.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\NativeTextWin32.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\Region.cs" />
@@ -54,6 +53,7 @@
     <Compile Include="LayoutFarm.Drawing.MiniAgg\MyCanvas\3_MyCanvas_DrawGraphics.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\MyCanvas\4_MyCanvas_TextAndFonts.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\MyCanvas\QuadPages.cs" />
+    <Compile Include="LayoutFarm.DrawingGL\Implementation\MyBitmapGL.cs" />
     <Compile Include="LayoutFarm.DrawingGL\MyCanvas_GL\MyCanvasGL_specific.cs" />
     <Compile Include="LayoutFarm.DrawingGL\0_Start\CanvasGLPlatform.cs" />
     <Compile Include="LayoutFarm.DrawingGL\0_Start\CanvasGLPortal.cs" />
@@ -67,6 +67,10 @@
     <ProjectReference Include="..\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics.csproj">
       <Project>{2B1F2C53-2F8D-4E0E-94EB-79171C91337B}</Project>
       <Name>MiniAgg.HardwareGraphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
+      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
+      <Name>MiniAgg</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
