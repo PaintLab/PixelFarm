@@ -20,7 +20,7 @@ using LayoutFarm.Drawing;
 using LayoutFarm.DrawingGL;
 using DrawingBridge;
 
-namespace LayoutFarm
+namespace LayoutFarm.Drawing.DrawingGL
 {
 
     partial class MyCanvasGL : LayoutFarm.Drawing.WinGdi.MyCanvas
@@ -103,6 +103,7 @@ namespace LayoutFarm
         //-------------------------------------------
         public override void DrawImage(Image image, RectangleF destRect)
         {
+
             base.DrawImage(image, destRect);
         }
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
@@ -111,7 +112,7 @@ namespace LayoutFarm
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-            base.DrawLine(x1, y1, x2, y2);
+            canvasGL2d.DrawLine(x1, y1, x2, y2);
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {

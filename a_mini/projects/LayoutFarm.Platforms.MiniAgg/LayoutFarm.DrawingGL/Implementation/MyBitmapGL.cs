@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace LayoutFarm.Drawing.WinGdi
+namespace LayoutFarm.Drawing.DrawingGL
 {
-    
+     
 
     class MyFont : Font
     {
@@ -63,5 +63,5 @@ namespace LayoutFarm.Drawing.WinGdi
             get { return this.myFont; }
         }
     }
-
+    
 }

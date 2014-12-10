@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mini", "Mini\Mini.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg", "MiniAgg\MiniAgg.csproj", "{4D5CE655-58FA-4523-8E46-738B941E9E47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniGui", "MiniGui\MiniGui.csproj", "{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg.Complements", "MiniAgg.Complements\MiniAgg.Complements.csproj", "{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}"
 EndProject
 Global
@@ -39,16 +37,6 @@ Global
 		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4D5CE655-58FA-4523-8E46-738B941E9E47}.Release|x86.ActiveCfg = Release|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F4D30F80-2AD8-48B9-9CBC-1020F3491FCA}.Release|x86.ActiveCfg = Release|Any CPU
 		{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
