@@ -132,13 +132,13 @@
       <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
       <Name>LayoutFarm.Drawing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LayoutFarm.Platforms.Drawing\LayoutFarm.Platforms.Drawing.csproj">
+      <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>
+      <Name>LayoutFarm.Platforms.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">
       <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
       <Name>MiniAgg.Complements</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MiniAgg.WinGdi\MiniAgg.WinGdi.csproj">
-      <Project>{F9C07AF0-7394-4C56-894A-BC9AD23FD724}</Project>
-      <Name>MiniAgg.WinGdi</Name>
     </ProjectReference>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>

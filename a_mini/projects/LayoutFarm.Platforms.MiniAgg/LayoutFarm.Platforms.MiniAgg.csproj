@@ -39,6 +39,12 @@
     <Compile Include="LayoutFarm.Drawing.MiniAgg\0_Start\Conv.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\0_Start\WinGdiPlatform.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\0_Start\WinGdiPortal.cs" />
+    <Compile Include="LayoutFarm.Drawing.MiniAgg\BitmapBuffer\BitmapHelper.cs" />
+    <Compile Include="LayoutFarm.Drawing.MiniAgg\BitmapBuffer\WindowsFormsBitmapBackBuffer.cs" />
+    <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiFontHelper.cs" />
+    <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiPathFont.cs" />
+    <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiPathFontFace.cs" />
+    <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiPathFontStore.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\Bitmap_Brush_Pen.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\FontsUtils.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\Implementation\MyFontInfo.cs" />
@@ -63,6 +69,10 @@
     <ProjectReference Include="..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
       <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
       <Name>LayoutFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
+      <Name>MiniAgg.Complements</Name>
     </ProjectReference>
     <ProjectReference Include="..\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics.csproj">
       <Project>{2B1F2C53-2F8D-4E0E-94EB-79171C91337B}</Project>
