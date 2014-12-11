@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using System.Drawing;
+
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 //using OpenTK.Graphics.ES20;
@@ -86,21 +86,39 @@ namespace LayoutFarm.DrawingGL
                     } break;
                 default:
                     {
-                        unsafe
-                        {
-                            float* arr = stackalloc float[4];
-                            arr[0] = x1; arr[1] = y1;
-                            arr[2] = x2; arr[3] = y2;
-                            //byte* indices = stackalloc byte[2];
-                            //indices[0] = 0; indices[1] = 1;
+                        //unsafe
+                        //{
+                        //    float* arr = stackalloc float[4];
+                        //    arr[0] = x1; arr[1] = y1;
+                        //    arr[2] = x2; arr[3] = y2;
+                        //    //------------------------------------------------------------
+                        //    GL.EnableClientState(ArrayCap.VertexArray); //***
+                        //    //vertex
+                        //    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+                        //    GL.DrawArrays(BeginMode.Lines, 0, 2);
+                        //    GL.DisableClientState(ArrayCap.VertexArray);
+                        //    //------------------------------------------------------------
+                        //}
 
-                            GL.EnableClientState(ArrayCap.VertexArray); //***
-                            //vertex
-                            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                            //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                            GL.DrawArrays(BeginMode.Lines, 0, 2);
-                            GL.DisableClientState(ArrayCap.VertexArray);
-                        }
+                        GL.EnableClientState(ArrayCap.ColorArray);
+                        GL.EnableClientState(ArrayCap.VertexArray);
+                        VboC4V3f vbo = GenerateVboC4V3f();
+                        ////points 
+                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>(2);
+                        //create line coord  
+                        CreateLineCoords(vrx, this.fillColor, x1, y1, x2, y2);
+
+                         
+                        vbo.BindBuffer();
+                        //DrawTrianglesWithVertexBuffer(vrx, pcount);
+                        DrawLinesWithVertexBuffer(vrx, 2);
+                        vbo.UnbindBuffer();
+
+                        //vbo.Dispose();
+                        GL.DisableClientState(ArrayCap.ColorArray);
+                        GL.DisableClientState(ArrayCap.VertexArray);
+
+
                     } break;
 
             }
@@ -180,21 +198,105 @@ namespace LayoutFarm.DrawingGL
                     GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
                     GL.EnableClientState(ArrayCap.TextureCoordArray); //***
 
+                    //texture source coord 1= 100% of original width
                     float* arr = stackalloc float[8];
                     arr[0] = 0; arr[1] = 1;
                     arr[2] = 1; arr[3] = 1;
                     arr[4] = 1; arr[5] = 0;
                     arr[6] = 0; arr[7] = 0;
 
-                    //byte* indices = stackalloc byte[6];
-                    //indices[0] = 0; indices[1] = 1; indices[2] = 2;
-                    //indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                     //------------------------------------------ 
                     //fill rect with texture
                     FillRectWithTexture(x, y, w, h);
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
+
+                }
+                GL.Disable(EnableCap.Texture2D);
+            }
+        }
+        public void DrawImage(GLBitmapTexture bmp,
+            LayoutFarm.Drawing.RectangleF srcRect,
+            float x, float y, float w, float h,
+            ImageFillStyle imageFillStyle)
+        {
+            unsafe
+            {
+
+                GL.Enable(EnableCap.Texture2D);
+                {
+
+                    switch (imageFillStyle)
+                    {
+                        case ImageFillStyle.Stretch:
+                            {
+
+                                GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                                GL.EnableClientState(ArrayCap.TextureCoordArray); //***
+
+
+                                //texture source coord 1= 100% of original width
+                                float* arr = stackalloc float[8];
+                                float srcW = srcRect.Width;
+                                float srcH = srcRect.Height;
+
+                                //find scale on w and h 
+                                float wscale = w / srcW;
+                                float hscale = h / srcH;
+
+                                arr[0] = 0; arr[1] = 1;
+                                arr[2] = 1; arr[3] = 1;
+                                arr[4] = 1; arr[5] = 0;
+                                arr[6] = 0; arr[7] = 0;
+                                GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
+                                //------------------------------------------ 
+                                //fill rect with texture                              
+
+                                //dest image scale
+                                float newW = wscale * bmp.Width;
+                                float newH = hscale * bmp.Height;
+
+
+                                EnableClipRect();
+                                SetClipRect((int)x, (int)y, (int)w, (int)h);
+                                FillRectWithTexture(-(int)(wscale * srcRect.X), -(int)(hscale * srcRect.Y), newW, newH);
+                                // FillRectWithTexture(x, y, newW, newH);
+                                DisableClipRect();
+
+                                GL.DisableClientState(ArrayCap.TextureCoordArray);
+
+
+                            } break;
+                        case ImageFillStyle.Title:
+                        default:
+                            {
+                                GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                                GL.EnableClientState(ArrayCap.TextureCoordArray); //***
+
+                                //texture source coord 1= 100% of original width
+                                float* arr = stackalloc float[8];
+                                float srcW = srcRect.Width;
+                                float srcH = srcRect.Height;
+
+
+                                //arr[0] = 0; arr[1] = 1;
+                                arr[0] = srcRect.Left / srcW; arr[1] = srcRect.Top / srcH;
+                                //arr[2] = 1; arr[3] = 1;
+                                arr[2] = srcRect.Right / srcW; arr[3] = srcRect.Top / srcH;
+                                //arr[4] = 1; arr[5] = 0;
+                                arr[4] = srcRect.Right / srcW; arr[5] = srcRect.Bottom / srcH;
+                                //arr[6] = 0; arr[7] = 0;
+                                arr[6] = srcRect.Left / srcW; arr[7] = srcRect.Bottom / srcH;
+
+                                GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
+                                //------------------------------------------ 
+                                //fill rect with texture
+                                FillRectWithTexture(x, y, w, h);
+                                GL.DisableClientState(ArrayCap.TextureCoordArray);
+                            } break;
+                    }
+
 
                 }
                 GL.Disable(EnableCap.Texture2D);
@@ -767,7 +869,6 @@ namespace LayoutFarm.DrawingGL
             //GL.EnableClientState(ArrayCap.ColorArray);
             //GL.EnableClientState(ArrayCap.VertexArray); 
             GL.GenBuffers(1, out vboHandle.VboID);
-
             return vboHandle;
         }
 
@@ -781,6 +882,16 @@ namespace LayoutFarm.DrawingGL
                 // Fill newly allocated buffer
                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
                 GL.DrawArrays(BeginMode.Triangles, 0, nelements);
+            }
+        }
+        static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
+        {
+            unsafe
+            {
+                VertexC4V3f[] vpoints = buffer.Array;
+                IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                GL.DrawArrays(BeginMode.Lines, 0, nelements);
             }
         }
         void FillRectWithTexture(float x, float y, float w, float h)
@@ -806,7 +917,7 @@ namespace LayoutFarm.DrawingGL
             GL.EnableClientState(ArrayCap.VertexArray);
             VboC4V3f vbo = GenerateVboC4V3f();
             ////points 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>(6);
             CreateRectCoords(vrx, this.fillColor, x, y, w, h);
             int pcount = vrx.Count;
             vbo.BindBuffer();

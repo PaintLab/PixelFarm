@@ -35,34 +35,37 @@ namespace PixelFarm.Agg
     //------------------------------------------------------------------------
     public class ArrayList<T>
     {
-        int currentSize;
-        T[] internalArray = new T[0];
+        int usedSize; 
+        T[] internalArray;
         public ArrayList()
         {
+            //current size=0
+            internalArray = new T[4];//default 4
         }
         public ArrayList(int cap)
         {
-            Allocate(cap, 0);
+            internalArray = new T[cap];//default 4
+            usedSize = 0;
         }
         public ArrayList(ArrayList<T> srcCopy, int plusSize)
         {
             Allocate(srcCopy.AllocatedSize, srcCopy.AllocatedSize + plusSize);
-            if (srcCopy.currentSize != 0)
+            if (srcCopy.usedSize != 0)
             {
                 srcCopy.internalArray.CopyTo(internalArray, 0);
             }
         }
         public void RemoveLast()
         {
-            if (currentSize != 0)
+            if (usedSize != 0)
             {
-                currentSize--;
+                usedSize--;
             }
         }
 
         public int Count
         {
-            get { return currentSize; }
+            get { return usedSize; }
         }
 
         public int AllocatedSize
@@ -75,7 +78,7 @@ namespace PixelFarm.Agg
 
         public void Clear()
         {
-            currentSize = 0;
+            usedSize = 0;
         }
       
         // Set new capacity. All data is lost, size is set to zero.
@@ -85,7 +88,7 @@ namespace PixelFarm.Agg
         }
         public void Clear(int newCapacity, int extraTail)
         {
-            currentSize = 0;
+            usedSize = 0;
             if (newCapacity > AllocatedSize)
             {
                 internalArray = null;
@@ -109,7 +112,7 @@ namespace PixelFarm.Agg
         void Allocate(int size, int extraTail)
         {
             Clear(size, extraTail);
-            currentSize = size;
+            usedSize = size;
         }
 
         /// <summary>
@@ -118,7 +121,7 @@ namespace PixelFarm.Agg
         /// <param name="newSize"></param>
         public void AdjustSize(int newSize)
         {
-            if (newSize > currentSize)
+            if (newSize > usedSize)
             {
                 if (newSize > AllocatedSize)
                 {
@@ -153,18 +156,18 @@ namespace PixelFarm.Agg
 
         public virtual void AddVertex(T v)
         {
-            if (internalArray.Length < (currentSize + 1))
+            if (internalArray.Length < (usedSize + 1))
             {
-                if (currentSize < 100000)
+                if (usedSize < 100000)
                 {
-                    AdjustSize(currentSize + (currentSize / 2) + 16);
+                    AdjustSize(usedSize + (usedSize / 2) + 16);
                 }
                 else
                 {
-                    AdjustSize(currentSize + currentSize / 4);
+                    AdjustSize(usedSize + usedSize / 4);
                 }
             }
-            internalArray[currentSize++] = v;
+            internalArray[usedSize++] = v;
         }
 
 
@@ -195,7 +198,7 @@ namespace PixelFarm.Agg
         {
             get
             {
-                return currentSize;
+                return usedSize;
             }
         }
     }

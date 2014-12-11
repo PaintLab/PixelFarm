@@ -85,11 +85,9 @@ namespace LayoutFarm.Drawing.DrawingGL
         public override void FillPath(GraphicsPath gfxPath)
         {
             //convert graphics path to vxs ?
-
         }
         public override void FillPath(GraphicsPath path, Brush brush)
         {
-
 
         }
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
@@ -103,38 +101,87 @@ namespace LayoutFarm.Drawing.DrawingGL
         //-------------------------------------------
         public override void DrawImage(Image image, RectangleF destRect)
         {
-
-            base.DrawImage(image, destRect);
+            GLBitmapTexture glBitmapTexture = image.InnerImage as GLBitmapTexture;
+            if (glBitmapTexture != null)
+            {
+                canvasGL2d.DrawImage(glBitmapTexture, destRect.X, destRect.Y, destRect.Width, destRect.Height);
+            }
+            else
+            {
+                var currentInnerImage = image.InnerImage as System.Drawing.Bitmap;
+                if (currentInnerImage != null)
+                {
+                    //create  and replace ?
+                    //TODO: add to another field
+                    image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
+                    canvasGL2d.DrawImage(glBitmapTexture, destRect.X, destRect.Y, destRect.Width, destRect.Height);
+                }
+            }
         }
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            base.DrawImage(image, destRect, srcRect);
+            //copy from src to dest
+
+            GLBitmapTexture glBitmapTexture = image.InnerImage as GLBitmapTexture;
+            if (glBitmapTexture != null)
+            {
+                canvasGL2d.DrawImage(glBitmapTexture, srcRect,
+                    destRect.X, destRect.Y, destRect.Width, destRect.Height, ImageFillStyle.Stretch);
+            }
+            else
+            {
+                var currentInnerImage = image.InnerImage as System.Drawing.Bitmap;
+                if (currentInnerImage != null)
+                {
+                    //create  and replace ?
+                    //TODO: add to another field
+                    image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
+                    canvasGL2d.DrawImage(glBitmapTexture,
+                        srcRect, destRect.X, destRect.Y, destRect.Width, destRect.Height, ImageFillStyle.Stretch);
+                }
+            }
+        }
+        public override Color StrokeColor
+        {
+            get
+            {
+                return base.StrokeColor;
+            }
+            set
+            {
+                base.StrokeColor = value;
+                canvasGL2d.FillColor = value;
+            }
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
+
             canvasGL2d.DrawLine(x1, y1, x2, y2);
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
-            base.DrawPath(gfxPath);
+            throw new NotImplementedException();
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            base.DrawRectangle(color, left, top, width, height);
+            throw new NotImplementedException();
+
         }
         //---------------------------------------------------
         public override void DrawText(char[] buffer, int x, int y)
         {
-            base.DrawText(buffer, x, y);
+            //base.DrawText(buffer, x, y);
+            throw new NotImplementedException();
         }
-
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-            base.DrawText(buffer, logicalTextBox, textAlignment);
+            //base.DrawText(buffer, logicalTextBox, textAlignment);
+            throw new NotImplementedException();
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
-            base.DrawText(str, startAt, len, logicalTextBox, textAlignment);
+            //base.DrawText(str, startAt, len, logicalTextBox, textAlignment);
+            throw new NotImplementedException();
         }
         //---------------------------------------------------
 

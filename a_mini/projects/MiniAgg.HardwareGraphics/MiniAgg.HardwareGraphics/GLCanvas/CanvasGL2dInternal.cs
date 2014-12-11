@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using System.Drawing;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 using Tesselate;
@@ -26,6 +25,13 @@ namespace LayoutFarm.DrawingGL
 
             indices[0] = 0; indices[1] = 1; indices[2] = 2;
             indices[3] = 2; indices[4] = 3; indices[5] = 0;
+        }
+        static unsafe void CreateLineCoords(ArrayList<VertexC4V3f> vrx,
+                 LayoutFarm.Drawing.Color color,
+                 float x1, float y1, float x2, float y2)
+        {   
+            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x1, y1));
+            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x2, y2));
         }
         static unsafe void CreateRectCoords(ArrayList<VertexC4V3f> vrx,
                    LayoutFarm.Drawing.Color color,

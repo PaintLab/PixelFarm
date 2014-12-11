@@ -26,7 +26,7 @@
 #endregion
 
 using System;
-using System.Drawing;
+ 
 using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;

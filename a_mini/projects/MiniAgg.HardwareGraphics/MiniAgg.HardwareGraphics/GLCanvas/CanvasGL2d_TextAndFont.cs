@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using System.Drawing;
-using System.Drawing.Drawing2D;
+ 
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 using Tesselate;
@@ -17,12 +16,9 @@ using PixelFarm.Agg.VertexSource;
 namespace LayoutFarm.DrawingGL
 {
     partial class CanvasGL2d
-    {
-
-
+    { 
         void SetupFonts()
-        {
-
+        { 
         }
         public PixelFarm.Agg.Fonts.Font CurrentFont 
         {

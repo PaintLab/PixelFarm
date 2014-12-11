@@ -1,10 +1,9 @@
 ﻿//MIT 2014, WinterDev
 using System.Text;
 using System;
-using OpenTK.Graphics.OpenGL;
-using Tesselate;
-using System.Drawing;
 
+using Tesselate;
+using OpenTK.Graphics.OpenGL;
 
 namespace LayoutFarm.DrawingGL
 {
@@ -16,32 +15,26 @@ namespace LayoutFarm.DrawingGL
         private GLBitmapTexture()
         {
         }
-        public static GLBitmapTexture CreateBitmapTexture(Bitmap bitmap)
+
+        public static GLBitmapTexture CreateBitmapTexture(int width, int height, IntPtr bmpScan0)
         {
             GLBitmapTexture bmpTexture = new GLBitmapTexture();
             GL.GenTextures(1, out bmpTexture.textureId);
             GL.BindTexture(TextureTarget.Texture2D, bmpTexture.textureId);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 0);
 
-            System.Drawing.Imaging.BitmapData data = bitmap.LockBits(
-                new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            int w = bmpTexture.width = data.Width;
-            int h = bmpTexture.height = data.Height;
+            int w = bmpTexture.width = width;
+            int h = bmpTexture.height = height;
 
             GL.TexImage2D(TextureTarget.Texture2D, 0,
                 PixelInternalFormat.Rgba, w, h, 0,
                 PixelFormat.Bgra,
-                PixelType.UnsignedByte, data.Scan0);
-          
+                PixelType.UnsignedByte, bmpScan0);
 
-            bitmap.UnlockBits(data);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             return bmpTexture;
+
         }
         public static GLBitmapTexture CreateBitmapTexture(PixelFarm.Agg.ActualImage image)
         {
@@ -59,7 +52,7 @@ namespace LayoutFarm.DrawingGL
                 {
                     GL.TexImage2D(TextureTarget.Texture2D, 0,
                         PixelInternalFormat.Rgba, w, h, 0,
-                        PixelFormat.Bgra, 
+                        PixelFormat.Bgra,
                         PixelType.UnsignedByte, buffer);
                 }
             }
@@ -90,6 +83,7 @@ namespace LayoutFarm.DrawingGL
 
             GL.DeleteTextures(1, ref textureId);
         }
+
 #if DEBUG
 
         public readonly int dbugId = dbugIdTotal++;

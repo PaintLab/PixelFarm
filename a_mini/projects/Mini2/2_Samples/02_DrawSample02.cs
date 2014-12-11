@@ -30,7 +30,7 @@ namespace Mini2
 
                     using (Bitmap bitmap = new Bitmap("../../../Data/Textures/logo-dark.jpg"))
                     {
-                        hwBmp = GLBitmapTexture.CreateBitmapTexture(bitmap);
+                        hwBmp = GLBitmapTextureHelper.CreateBitmapTexture(bitmap);
                     }
                 }
 
