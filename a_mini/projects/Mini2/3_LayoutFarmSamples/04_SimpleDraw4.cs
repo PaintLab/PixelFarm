@@ -25,19 +25,18 @@ namespace Mini2
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
-            //form.GetCanvasControl().Visible = false;
-            //System.Windows.Forms.Panel pp = new Panel();
-            //pp.Size = new System.Drawing.Size(500, 500);
-            //pp.BackColor = System.Drawing.Color.Black;
-            //form.Controls.Add(pp);
-            //WinGdiPortal.P.CreateCanvas(0, 0, 800, 600); 
-
             var canvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
+            GraphicsPath path = null;
+            FontInfo fontinfo = null;
+            LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
 
-            GraphicsPath path= null;
-            LayoutFarm.Drawing.Bitmap bmp = null;
             form.SetGLPaintHandler((o, s) =>
             {
+                if (fontinfo == null)
+                {
+                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
+                    canvas.CurrentFont = fontinfo.ResolvedFont;
+                }
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
                 canvas.FillRectangle(
                   LayoutFarm.Drawing.Color.Blue,
@@ -55,7 +54,13 @@ namespace Mini2
                     path.AddEllipse(30, 30, 25, 25);
 
                 }
-                canvas.FillPath(path);
+                //canvas.FillPath(path);
+                canvas.DrawPath(path);
+                //------------
+                //test draw text
+                canvas.DrawText("ABCD".ToCharArray(), 100, 500);
+                //------------
+
             });
             form.Show();
         }

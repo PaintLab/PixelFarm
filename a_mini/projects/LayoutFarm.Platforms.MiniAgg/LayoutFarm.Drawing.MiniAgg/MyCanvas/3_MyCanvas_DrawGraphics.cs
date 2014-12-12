@@ -64,7 +64,7 @@ namespace LayoutFarm.Drawing.WinGdi
         {
             get { return this.platform; }
         }
-
+        
 
         //==========================================================
         public override void CopyFrom(Canvas sourceCanvas, int logicalSrcX, int logicalSrcY, Rectangle destArea)

@@ -158,7 +158,7 @@ namespace LayoutFarm.DrawingGL
             ps.Clear();
             ps.MoveTo(x1, y1);
             ps.LineTo(x2, y2);
-            VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+            VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
             int n = vxs.Count;
 
             unsafe

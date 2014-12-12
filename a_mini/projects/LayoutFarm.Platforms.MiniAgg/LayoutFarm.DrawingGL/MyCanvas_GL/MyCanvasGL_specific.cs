@@ -25,11 +25,11 @@ namespace LayoutFarm.Drawing.DrawingGL
 
     partial class MyCanvasGL : LayoutFarm.Drawing.WinGdi.MyCanvas
     {
-        CanvasGL2d canvasGL2d;
+        CanvasGL2d canvasGL2d = new CanvasGL2d();
         public MyCanvasGL(GraphicsPlatform platform, int hPageNum, int vPageNum, int left, int top, int width, int height)
             : base(platform, hPageNum, vPageNum, left, top, width, height)
         {
-            canvasGL2d = new CanvasGL2d();
+
         }
         //-------------------------------------------
         public override void SetCanvasOrigin(int x, int y)
@@ -178,20 +178,32 @@ namespace LayoutFarm.Drawing.DrawingGL
 
         }
         //---------------------------------------------------
+
+        public override Font CurrentFont
+        {
+            get
+            {
+                return base.CurrentFont;
+            }
+            set
+            {
+                //sample only *** 
+                canvasGL2d.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
+                base.CurrentFont = value;
+            }
+        }
         public override void DrawText(char[] buffer, int x, int y)
         {
-            //base.DrawText(buffer, x, y);
-            throw new NotImplementedException();
+            canvasGL2d.DrawString(buffer, x, y);
+
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-            //base.DrawText(buffer, logicalTextBox, textAlignment);
-            throw new NotImplementedException();
+            canvasGL2d.DrawString(buffer, logicalTextBox.X, logicalTextBox.Y);
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
-            //base.DrawText(str, startAt, len, logicalTextBox, textAlignment);
-            throw new NotImplementedException();
+            canvasGL2d.DrawString(str, logicalTextBox.X, logicalTextBox.Y);
         }
         //--------------------------------------------------- 
         public override void FillPath(GraphicsPath gfxPath)
@@ -215,18 +227,44 @@ namespace LayoutFarm.Drawing.DrawingGL
                 {
                     this.canvasGL2d.FillVxs(vxs);
                 }
-
             }
-
-
         }
         public override void FillPath(GraphicsPath path, Brush brush)
         {
-
+            switch (brush.BrushKind)
+            {
+                case BrushKind.Solid:
+                    {
+                        //solid brush
+                        var solidBrush = (SolidBrush)brush;
+                        this.FillColor = solidBrush.Color;
+                        this.FillPath(path);
+                    } break;
+            }
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
+            var innerPath2 = gfxPath.InnerPath2;
+            if (innerPath2 == null)
+            {
+                System.Drawing.Drawing2D.PathData pathData = gfxPath.GetPathData() as System.Drawing.Drawing2D.PathData;
+                PixelFarm.Agg.VertexStore vxs = new PixelFarm.Agg.VertexStore();
+                PixelFarm.Agg.GdiPathConverter.ConvertToVxs(pathData, vxs);
+                PixelFarm.Agg.VertexSource.CurveFlattener flattener = new PixelFarm.Agg.VertexSource.CurveFlattener();
+                vxs = flattener.MakeVxs2(vxs);
+                gfxPath.InnerPath2 = vxs;
 
+                this.canvasGL2d.DrawVxs(vxs);
+
+            }
+            else
+            {
+                PixelFarm.Agg.VertexStore vxs = innerPath2 as PixelFarm.Agg.VertexStore;
+                if (vxs != null)
+                {
+                    this.canvasGL2d.DrawVxs(vxs);
+                }
+            }
         }
         //---------------------------------------------------
 

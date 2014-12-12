@@ -25,7 +25,7 @@ namespace LayoutFarm.DrawingGL
         RoundedRect roundRect = new RoundedRect();
         Ellipse ellipse = new Ellipse();
         PathWriter ps = new PathWriter();
-        Stroke stroke1 = new Stroke(1);
+        Stroke aggStroke = new Stroke(1);
         GLScanlineRasterizer sclineRas;
         GLScanlineRasToDestBitmapRenderer sclineRasToGL;
         GLScanlinePacked8 sclinePack8;
@@ -63,8 +63,12 @@ namespace LayoutFarm.DrawingGL
         }
         public double StrokeWidth
         {
-            get { return this.stroke1.Width; }
-            set { this.stroke1.Width = value; }
+            get { return this.aggStroke.Width; }
+            set
+            {
+                //agg stroke
+                this.aggStroke.Width = value;
+            }
         }
 
         public void DrawLine(float x1, float y1, float x2, float y2)
@@ -78,7 +82,7 @@ namespace LayoutFarm.DrawingGL
                         ps.Clear();
                         ps.MoveTo(x1, y1);
                         ps.LineTo(x2, y2);
-                        VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+                        VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -108,7 +112,7 @@ namespace LayoutFarm.DrawingGL
                         //create line coord  
                         CreateLineCoords(vrx, this.fillColor, x1, y1, x2, y2);
 
-                         
+
                         vbo.BindBuffer();
                         //DrawTrianglesWithVertexBuffer(vrx, pcount);
                         DrawLinesWithVertexBuffer(vrx, 2);
@@ -318,7 +322,7 @@ namespace LayoutFarm.DrawingGL
         public void DrawVxs(VertexStore vxs)
         {
             sclineRas.Reset();
-            sclineRas.AddPath(stroke1.MakeVxs(vxs));
+            sclineRas.AddPath(aggStroke.MakeVxs(vxs));
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
         }
 
@@ -350,7 +354,7 @@ namespace LayoutFarm.DrawingGL
                         //close
                         ps.CloseFigure();
 
-                        VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+                        VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -383,7 +387,7 @@ namespace LayoutFarm.DrawingGL
                 case CanvasSmoothMode.AggSmooth:
                     {
 
-                        VertexStore vxs = stroke1.MakeVxs(ellipse.MakeVxs());
+                        VertexStore vxs = aggStroke.MakeVxs(ellipse.MakeVxs());
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -434,22 +438,22 @@ namespace LayoutFarm.DrawingGL
 
         }
         public void DrawCircle(float x, float y, double radius)
-        { 
+        {
             DrawEllipse(x, y, radius, radius);
-        } 
+        }
         public void DrawRect(float x, float y, float w, float h)
-        {       
+        {
             //early exit
             GL.EnableClientState(ArrayCap.ColorArray);
             GL.EnableClientState(ArrayCap.VertexArray);
             VboC4V3f vbo = GenerateVboC4V3f();
             ////points 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();             
+            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
             CreatePolyLineRectCoords(vrx, this.fillColor, x, y, w, h);
             int pcount = vrx.Count;
-            vbo.BindBuffer(); 
+            vbo.BindBuffer();
             DrawLineStripWithVertexBuffer(vrx, pcount);
-            vbo.UnbindBuffer(); 
+            vbo.UnbindBuffer();
             //vbo.Dispose();
             GL.DisableClientState(ArrayCap.ColorArray);
             GL.DisableClientState(ArrayCap.VertexArray);
@@ -498,7 +502,7 @@ namespace LayoutFarm.DrawingGL
         {
             roundRect.SetRect(x, y, x + w, y + h);
             roundRect.SetRadius(rx, ry);
-            var vxs = this.stroke1.MakeVxs(roundRect.MakeVxs());
+            var vxs = this.aggStroke.MakeVxs(roundRect.MakeVxs());
 
             switch (this.SmoothMode)
             {
@@ -627,7 +631,7 @@ namespace LayoutFarm.DrawingGL
                 }
             }
 
-            vxs = stroke1.MakeVxs(vxs);
+            vxs = aggStroke.MakeVxs(vxs);
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -864,7 +868,7 @@ namespace LayoutFarm.DrawingGL
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
                 new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
 
-            vxs = this.stroke1.MakeVxs(vxs);
+            vxs = this.aggStroke.MakeVxs(vxs);
 
             sclineRas.Reset();
             sclineRas.AddPath(vxs);

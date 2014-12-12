@@ -99,19 +99,19 @@ namespace OpenTkEssTest
                 canvas.FillColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
                 canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
 
-                int strkW = 10;
+                int strokeW = 10;
                 canvas.FillColor = LayoutFarm.Drawing.Color.LightGray;
 
                 for (int i = 1; i < 90; i += 10)
                 {
-                    canvas.StrokeWidth = strkW;
+                    canvas.StrokeWidth = strokeW;
                     double angle = OpenTK.MathHelper.DegreesToRadians(i);
                     canvas.DrawLine(20, 400, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
 
-                    strkW--;
-                    if (strkW < 1)
+                    strokeW--;
+                    if (strokeW < 1)
                     {
-                        strkW = 1;
+                        strokeW = 1;
                     }
                 }
 
