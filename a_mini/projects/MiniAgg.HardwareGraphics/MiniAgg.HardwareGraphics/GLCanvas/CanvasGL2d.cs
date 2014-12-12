@@ -434,27 +434,48 @@ namespace LayoutFarm.DrawingGL
 
         }
         public void DrawCircle(float x, float y, double radius)
-        {
-
+        { 
             DrawEllipse(x, y, radius, radius);
-        }
-
+        } 
         public void DrawRect(float x, float y, float w, float h)
-        {
+        {       
+            //early exit
+            GL.EnableClientState(ArrayCap.ColorArray);
+            GL.EnableClientState(ArrayCap.VertexArray);
+            VboC4V3f vbo = GenerateVboC4V3f();
+            ////points 
+            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();             
+            CreatePolyLineRectCoords(vrx, this.fillColor, x, y, w, h);
+            int pcount = vrx.Count;
+            vbo.BindBuffer(); 
+            DrawLineStripWithVertexBuffer(vrx, pcount);
+            vbo.UnbindBuffer(); 
+            //vbo.Dispose();
+            GL.DisableClientState(ArrayCap.ColorArray);
+            GL.DisableClientState(ArrayCap.VertexArray);
+            //------------------------ 
             //switch (this.SmoothMode)
             //{
             //    case CanvasSmoothMode.AggSmooth:
             //        {
             //            unsafe
             //            {
-            //                float* arr = stackalloc float[8];
-            //                byte* indices = stackalloc byte[6];
-            //                CreateRectCoords2(arr, indices, x, y, w, h);
-            //                GL.EnableClientState(ArrayCap.VertexArray); //***
-            //                //vertex
-            //                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-            //                GL.DrawElements(BeginMode.Lines ,6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+            //                //early exit
+            //                GL.EnableClientState(ArrayCap.ColorArray);
+            //                GL.EnableClientState(ArrayCap.VertexArray);
+            //                VboC4V3f vbo = GenerateVboC4V3f();
+            //                ////points 
+            //                ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+            //                CreateRectCoords(vrx, this.fillColor, x, y, w, h);
+            //                int pcount = vrx.Count;
+            //                vbo.BindBuffer();
+            //                DrawTrianglesWithVertexBuffer(vrx, pcount);
+            //                vbo.UnbindBuffer();
+
+            //                //vbo.Dispose();
+            //                GL.DisableClientState(ArrayCap.ColorArray);
             //                GL.DisableClientState(ArrayCap.VertexArray);
+            //                //------------------------ 
             //            }
             //        } break;
             //    default:
@@ -892,6 +913,16 @@ namespace LayoutFarm.DrawingGL
                 IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
                 GL.DrawArrays(BeginMode.Lines, 0, nelements);
+            }
+        }
+        static void DrawLineStripWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
+        {
+            unsafe
+            {
+                VertexC4V3f[] vpoints = buffer.Array;
+                IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
             }
         }
         void FillRectWithTexture(float x, float y, float w, float h)

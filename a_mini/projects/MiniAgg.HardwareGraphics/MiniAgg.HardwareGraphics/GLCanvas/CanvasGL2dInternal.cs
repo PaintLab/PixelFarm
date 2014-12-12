@@ -29,21 +29,35 @@ namespace LayoutFarm.DrawingGL
         static unsafe void CreateLineCoords(ArrayList<VertexC4V3f> vrx,
                  LayoutFarm.Drawing.Color color,
                  float x1, float y1, float x2, float y2)
-        {   
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x1, y1));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x2, y2));
+        {
+            uint color_uint = color.ToABGR();
+            vrx.AddVertex(new VertexC4V3f(color_uint, x1, y1));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x2, y2));
         }
         static unsafe void CreateRectCoords(ArrayList<VertexC4V3f> vrx,
                    LayoutFarm.Drawing.Color color,
                    float x, float y, float w, float h)
         {
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y + h));
+            uint color_uint = color.ToABGR();
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y + h));
 
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y + h));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y + h));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y + h));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y + h));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
+
+        }
+        static unsafe void CreatePolyLineRectCoords(ArrayList<VertexC4V3f> vrx,
+                   LayoutFarm.Drawing.Color color,
+                   float x, float y, float w, float h)
+        {
+            uint color_uint = color.ToABGR();
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y + h));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y + h));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
 
         }
         List<Vertex> TessPolygon(float[] vertex2dCoords)

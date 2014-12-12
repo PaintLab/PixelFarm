@@ -67,6 +67,28 @@ namespace LayoutFarm.Drawing.DrawingGL
             canvasGL2d.FillColor = color;
             canvasGL2d.FillRect(left, top, width, height);
         }
+        public override void FillRectangle(Brush brush, float left, float top, float width, float height)
+        {
+            switch (brush.BrushKind)
+            {
+                case BrushKind.Solid:
+                    {
+                        var solidBrush = brush as SolidBrush;
+                        canvasGL2d.FillColor = solidBrush.Color;
+                        canvasGL2d.FillRect(left, top, width, height);
+
+                    } break;
+                case BrushKind.LinearGradient:
+                    {
+
+
+                    } break;
+                default:
+                    {
+
+                    } break;
+            }
+        }
         public override void FillPolygon(PointF[] points)
         {
             int j = points.Length;
@@ -82,18 +104,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             canvasGL2d.FillPolygon(polygonPoints);
 
         }
-        public override void FillPath(GraphicsPath gfxPath)
-        {
-            //convert graphics path to vxs ?
-        }
-        public override void FillPath(GraphicsPath path, Brush brush)
-        {
 
-        }
-        public override void FillRectangle(Brush brush, float left, float top, float width, float height)
-        {
-            //not implement
-        }
         public override void ClearSurface(Color c)
         {
             canvasGL2d.Clear(c);
@@ -158,13 +169,12 @@ namespace LayoutFarm.Drawing.DrawingGL
 
             canvasGL2d.DrawLine(x1, y1, x2, y2);
         }
-        public override void DrawPath(GraphicsPath gfxPath)
-        {
-            throw new NotImplementedException();
-        }
+
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            throw new NotImplementedException();
+            //stroke color
+            canvasGL2d.FillColor = color;
+            canvasGL2d.DrawRect(left, top, width, height);
 
         }
         //---------------------------------------------------
@@ -183,8 +193,42 @@ namespace LayoutFarm.Drawing.DrawingGL
             //base.DrawText(str, startAt, len, logicalTextBox, textAlignment);
             throw new NotImplementedException();
         }
-        //---------------------------------------------------
+        //--------------------------------------------------- 
+        public override void FillPath(GraphicsPath gfxPath)
+        {
+            var innerPath2 = gfxPath.InnerPath2;
+            if (innerPath2 == null)
+            {
+                System.Drawing.Drawing2D.PathData pathData = gfxPath.GetPathData() as System.Drawing.Drawing2D.PathData;
+                PixelFarm.Agg.VertexStore vxs = new PixelFarm.Agg.VertexStore();
+                PixelFarm.Agg.GdiPathConverter.ConvertToVxs(pathData, vxs);
+                PixelFarm.Agg.VertexSource.CurveFlattener flattener = new PixelFarm.Agg.VertexSource.CurveFlattener();
+                vxs = flattener.MakeVxs2(vxs);
+                gfxPath.InnerPath2 = vxs;
 
+                this.canvasGL2d.FillVxs(vxs);
+            }
+            else
+            {
+                PixelFarm.Agg.VertexStore vxs = innerPath2 as PixelFarm.Agg.VertexStore;
+                if (vxs != null)
+                {
+                    this.canvasGL2d.FillVxs(vxs);
+                }
+
+            }
+
+
+        }
+        public override void FillPath(GraphicsPath path, Brush brush)
+        {
+
+        }
+        public override void DrawPath(GraphicsPath gfxPath)
+        {
+
+        }
+        //---------------------------------------------------
 
     }
 }

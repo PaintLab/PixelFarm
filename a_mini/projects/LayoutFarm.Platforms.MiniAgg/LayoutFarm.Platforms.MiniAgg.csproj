@@ -41,7 +41,7 @@
     <Compile Include="LayoutFarm.Drawing.MiniAgg\0_Start\WinGdiPortal.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\BitmapBuffer\BitmapHelper.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\BitmapBuffer\WindowsFormsBitmapBackBuffer.cs" />
-    <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiFontHelper.cs" />
+    <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiPathConverter.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiPathFont.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiPathFontFace.cs" />
     <Compile Include="LayoutFarm.Drawing.MiniAgg\FontGdiPath\GdiPathFontStore.cs" />

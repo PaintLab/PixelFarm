@@ -56,7 +56,8 @@
     <Compile Include="2_Samples\04_LionFillDirect.cs" />
     <Compile Include="2_Samples\05_LionFillDirectBufferDemo.cs" />
     <Compile Include="2_Samples\06_SetCanvasOriginAndRectClip.cs" />
-    <Compile Include="3_LayoutFarmSamples\01_SimpleDraw.cs" />
+    <Compile Include="3_LayoutFarmSamples\03_SimpleDraw3.cs" />
+    <Compile Include="3_LayoutFarmSamples\04_SimpleDraw4.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
