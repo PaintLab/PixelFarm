@@ -104,7 +104,7 @@ namespace LayoutFarm.DrawingGL
                         GL.EnableClientState(ArrayCap.VertexArray);
                         VboC4V3f vbo = GenerateVboC4V3f();
                         ////points 
-                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>(2);
+                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
                         //create line coord  
                         CreateLineCoords(vrx, this.fillColor, x1, y1, x2, y2);
 
@@ -917,7 +917,7 @@ namespace LayoutFarm.DrawingGL
             GL.EnableClientState(ArrayCap.VertexArray);
             VboC4V3f vbo = GenerateVboC4V3f();
             ////points 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>(6);
+            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
             CreateRectCoords(vrx, this.fillColor, x, y, w, h);
             int pcount = vrx.Count;
             vbo.BindBuffer();
