@@ -887,6 +887,16 @@ namespace LayoutFarm.DrawingGL
                 this.fillColor = value;
             }
         }
+        public LayoutFarm.Drawing.Brush Brush
+        {
+            get;
+            set;
+        }
+        public bool UseGradientFillBrush
+        {
+            get;
+            set;
+        }
         static VboC4V3f GenerateVboC4V3f()
         {
             VboC4V3f vboHandle = new VboC4V3f();
@@ -946,22 +956,82 @@ namespace LayoutFarm.DrawingGL
         }
         public void FillRect(float x, float y, float w, float h)
         {
+            if (this.UseGradientFillBrush)
+            {
 
-            //early exit
-            GL.EnableClientState(ArrayCap.ColorArray);
-            GL.EnableClientState(ArrayCap.VertexArray);
-            VboC4V3f vbo = GenerateVboC4V3f();
-            ////points 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-            CreateRectCoords(vrx, this.fillColor, x, y, w, h);
-            int pcount = vrx.Count;
-            vbo.BindBuffer();
-            DrawTrianglesWithVertexBuffer(vrx, pcount);
-            vbo.UnbindBuffer();
+                var linearGradientBrush = this.Brush as LayoutFarm.Drawing.LinearGradientBrush;
+                if (linearGradientBrush != null)
+                {
+                    //use clip rect for fill rect gradient
+                    EnableClipRect();
+                    SetClipRect((int)x, (int)y, (int)w, (int)h);
 
-            //vbo.Dispose();
-            GL.DisableClientState(ArrayCap.ColorArray);
-            GL.DisableClientState(ArrayCap.VertexArray);
+                    //early exit
+
+                    ////points 
+                    var colors = linearGradientBrush.GetColors();
+                    var points = linearGradientBrush.GetStopPoints();
+                    uint c1 = colors[0].ToABGR();
+                    uint c2 = colors[1].ToABGR();
+                    //create polygon for graident bg 
+                    var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                         points[0].X, points[0].Y,
+                         points[1].X, points[1].Y,
+                         colors[0],
+                         colors[1]);
+
+                    //-----------------------------
+                    //var colors = linearGradientBrush.GetColorArray();
+                    //uint c1 = colors[0].ToABGR();
+                    //uint c2 = colors[1].ToABGR();
+
+
+                    //ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                    //vrx.AddVertex(new VertexC4V3f(c1, x, y));
+                    //vrx.AddVertex(new VertexC4V3f(c1, x + w, y));
+                    //vrx.AddVertex(new VertexC4V3f(c2, x + w, y + h));
+
+                    //vrx.AddVertex(new VertexC4V3f(c2, x + w, y + h));
+                    //vrx.AddVertex(new VertexC4V3f(c2, x, y + h));
+                    //vrx.AddVertex(new VertexC4V3f(c1, x, y));
+
+                    //-------------------
+
+                    int pcount = vrx.Count;
+
+                    GL.EnableClientState(ArrayCap.ColorArray);
+                    GL.EnableClientState(ArrayCap.VertexArray);
+
+                    VboC4V3f vbo = GenerateVboC4V3f();
+                    vbo.BindBuffer();
+                    DrawTrianglesWithVertexBuffer(vrx, pcount);
+
+                    vbo.UnbindBuffer();
+                    //vbo.Dispose();
+                    GL.DisableClientState(ArrayCap.ColorArray);
+                    GL.DisableClientState(ArrayCap.VertexArray);
+
+                    DisableClipRect();
+                }
+            }
+            else
+            {
+                //early exit
+                GL.EnableClientState(ArrayCap.ColorArray);
+                GL.EnableClientState(ArrayCap.VertexArray);
+                VboC4V3f vbo = GenerateVboC4V3f();
+                ////points 
+                ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                CreateRectCoords(vrx, this.fillColor, x, y, w, h);
+                int pcount = vrx.Count;
+                vbo.BindBuffer();
+                DrawTrianglesWithVertexBuffer(vrx, pcount);
+                vbo.UnbindBuffer();
+
+                //vbo.Dispose();
+                GL.DisableClientState(ArrayCap.ColorArray);
+                GL.DisableClientState(ArrayCap.VertexArray);
+            }
             //------------------------ 
         }
         public void FillRoundRect(float x, float y, float w, float h, float rx, float ry)

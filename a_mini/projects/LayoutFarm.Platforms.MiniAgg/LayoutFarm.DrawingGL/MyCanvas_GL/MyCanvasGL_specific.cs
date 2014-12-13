@@ -80,7 +80,16 @@ namespace LayoutFarm.Drawing.DrawingGL
                     } break;
                 case BrushKind.LinearGradient:
                     {
-
+                        var linearGradientBrush = brush as LinearGradientBrush;
+                        //create bg gradient first 
+                        //fill linear gradient in spefic area
+                        canvasGL2d.UseGradientFillBrush = true;
+                        canvasGL2d.Brush = linearGradientBrush;
+                        canvasGL2d.FillRect(left, top, width, height);
+                        canvasGL2d.UseGradientFillBrush = false;
+                    } break;
+                case BrushKind.CirculatGraident:
+                    {
 
                     } break;
                 default:
@@ -166,10 +175,8 @@ namespace LayoutFarm.Drawing.DrawingGL
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-
             canvasGL2d.DrawLine(x1, y1, x2, y2);
         }
-
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
             //stroke color

@@ -26,7 +26,7 @@
 #endregion
 
 using System;
- 
+
 using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -52,7 +52,7 @@ namespace PixelFarm.Agg
         public override string ToString()
         {
             return x + "," + y;
-        } 
+        }
         public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(short) * 2;
         public const int VX_OFFSET = sizeof(uint);
         public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Short;
@@ -89,18 +89,18 @@ namespace PixelFarm.Agg
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct VertexC4V3f
+     struct VertexC4V3f
     {
         public uint color;
-        public float  x;
+        public float x;
         public float y;
         float z;
         public VertexC4V3f(uint color, float x, float y)
         {
             this.color = color;
             this.x = x;
-            this.y =  y;
-            z = 0; 
+            this.y = y;
+            z = 0;
         }
 
         public override string ToString()
@@ -128,10 +128,10 @@ namespace PixelFarm.Agg
             OpenTK.Graphics.OpenGL.GL.DeleteBuffers(1, ref this.VboID);
         }
         public void BindBuffer()
-        {   
-            GL.BindBuffer(BufferTarget.ArrayBuffer,  VboID);
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VboID);
             GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V2S.SIZE_IN_BYTES, (IntPtr)0);
-            GL.VertexPointer(VertexC4V2S.N_COORDS, VertexC4V2S.VX_PTR_TYPE, VertexC4V2S.SIZE_IN_BYTES, VertexC4V2S.VX_OFFSET); 
+            GL.VertexPointer(VertexC4V2S.N_COORDS, VertexC4V2S.VX_PTR_TYPE, VertexC4V2S.SIZE_IN_BYTES, VertexC4V2S.VX_OFFSET);
         }
         public void UnbindBuffer()
         {

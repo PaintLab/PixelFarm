@@ -45,6 +45,7 @@
     <Compile Include="04_GLScanline\4.4_FillingRule.cs" />
     <Compile Include="04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="04_GLScanline\6_ClipLiangBarsky.cs" />
+    <Compile Include="GLCanvas\GLGradientColorProvider.cs" />
     <Compile Include="GLCanvas\ImageFillStyle.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\CanvasGL2dInternal.cs" />
