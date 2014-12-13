@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
- 
+
 using System.Text;
 using System.Windows.Forms;
 
@@ -68,7 +68,9 @@ namespace OpenTK
         /// </summary>
         public GLControl()
             : this(GraphicsMode.Default)
-        { }
+        {
+
+        }
 
         /// <summary>
         /// Constructs a new GLControl with the specified GraphicsMode.
@@ -89,7 +91,7 @@ namespace OpenTK
         {
             if (mode == null)
                 throw new ArgumentNullException("mode");
-            
+
             SetStyle(ControlStyles.Opaque, true);
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -102,7 +104,10 @@ namespace OpenTK
 
             InitializeComponent();
         }
-
+        protected void ChildCtorOnlyResetGraphicMode(GraphicsMode mode)
+        {
+            this.format = mode;
+        }
         #endregion
 
         #region --- Private  Methods ---
@@ -382,7 +387,7 @@ namespace OpenTK
         {
             get { return implementation.WindowInfo; }
         }
-        
+
         #endregion
 
         #region public Bitmap GrabScreenshot()

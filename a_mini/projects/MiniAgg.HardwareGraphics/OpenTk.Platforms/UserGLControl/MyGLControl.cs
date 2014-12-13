@@ -17,6 +17,12 @@ namespace OpenTK
         EventHandler glPaintHandler;
         public MyGLControl()
         {
+
+            //if want to use stencil buffer then set stencil buffer too!            
+            var gfxmode = new OpenTK.Graphics.GraphicsMode(DisplayDevice.Default.BitsPerPixel, 16, 8, 0, 0, 2, false);
+            ChildCtorOnlyResetGraphicMode(gfxmode);
+
+            //-----------
             this.InitializeComponent();
         }
         public void SetGLPaintHandler(EventHandler glPaintHandler)

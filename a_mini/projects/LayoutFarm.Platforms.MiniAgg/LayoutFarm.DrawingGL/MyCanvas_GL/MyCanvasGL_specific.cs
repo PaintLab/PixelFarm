@@ -101,19 +101,45 @@ namespace LayoutFarm.Drawing.DrawingGL
         public override void FillPolygon(PointF[] points)
         {
             int j = points.Length;
-            float[] polygonPoints = new float[j];
-
+            float[] polygonPoints = new float[j * 2];
             int n = 0;
-            for (int i = 0; i < j; )
+            for (int i = 0; i < j; ++i)
             {
                 polygonPoints[n] = points[i].X;
                 polygonPoints[n + 1] = points[i].Y;
                 n += 2;
             }
             canvasGL2d.FillPolygon(polygonPoints);
-
         }
+        public override Brush CurrentBrush
+        {
+            get
+            {
+                return base.CurrentBrush;
+            }
+            set
+            {
 
+                base.CurrentBrush = value;
+                if (value != null)
+                {
+                    this.canvasGL2d.UseGradientFillBrush = value.BrushKind == BrushKind.LinearGradient; 
+                }
+            }
+        }
+        public override Color FillColor
+        {
+            get
+            {
+
+                return this.canvasGL2d.FillColor;
+            }
+            set
+            {
+                this.canvasGL2d.FillColor = value;
+                base.FillColor = value;
+            }
+        }
         public override void ClearSurface(Color c)
         {
             canvasGL2d.Clear(c);

@@ -965,7 +965,7 @@ namespace LayoutFarm.DrawingGL
                     //use clip rect for fill rect gradient
                     EnableClipRect();
                     SetClipRect((int)x, (int)y, (int)w, (int)h);
-
+                    
                     //early exit
 
                     ////points 
@@ -980,22 +980,6 @@ namespace LayoutFarm.DrawingGL
                          colors[0],
                          colors[1]);
 
-                    //-----------------------------
-                    //var colors = linearGradientBrush.GetColorArray();
-                    //uint c1 = colors[0].ToABGR();
-                    //uint c2 = colors[1].ToABGR();
-
-
-                    //ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                    //vrx.AddVertex(new VertexC4V3f(c1, x, y));
-                    //vrx.AddVertex(new VertexC4V3f(c1, x + w, y));
-                    //vrx.AddVertex(new VertexC4V3f(c2, x + w, y + h));
-
-                    //vrx.AddVertex(new VertexC4V3f(c2, x + w, y + h));
-                    //vrx.AddVertex(new VertexC4V3f(c2, x, y + h));
-                    //vrx.AddVertex(new VertexC4V3f(c1, x, y));
-
-                    //-------------------
 
                     int pcount = vrx.Count;
 
@@ -1181,15 +1165,44 @@ namespace LayoutFarm.DrawingGL
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.FillWithColor(sclineRas, sclinePack8, this.fillColor);
-                        //-------------------------------------- 
+
 
                     } break;
                 default:
                     {
+
                         var vertextList = TessPolygon(vertex2dCoords);
-                        //-----------------------------
-                        FillTriangles(vertextList);
-                        //-----------------------------
+                        //-----------------------------   
+                        //switch how to fill polygon
+                        if (this.UseGradientFillBrush)
+                        {
+                            
+
+                        }
+                        else
+                        {
+                            int j = vertextList.Count;
+                            int j2 = j * 2;
+                            VboC4V3f vbo = GenerateVboC4V3f();
+                            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                            uint color = this.fillColor.ToABGR();
+                            for (int i = 0; i < j; ++i)
+                            {
+                                var v = vertextList[i];
+                                vrx.AddVertex(new VertexC4V3f(color, (float)v.m_X, (float)v.m_Y));
+                            }
+                            //------------------------------------- 
+                            GL.EnableClientState(ArrayCap.ColorArray);
+                            GL.EnableClientState(ArrayCap.VertexArray);
+                            int pcount = vrx.Count;
+                            vbo.BindBuffer();
+                            DrawTrianglesWithVertexBuffer(vrx, pcount);
+                            vbo.UnbindBuffer();
+                            GL.DisableClientState(ArrayCap.ColorArray);
+                            GL.DisableClientState(ArrayCap.VertexArray);
+                            //-------------------------------------- 
+                        }
+
                     } break;
             }
 

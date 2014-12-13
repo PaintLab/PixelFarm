@@ -23,7 +23,7 @@ namespace LayoutFarm.Drawing.WinGdi
 {
     partial class MyCanvas
     {
-
+        Brush currentBrush;
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
         //======================================
@@ -159,7 +159,17 @@ namespace LayoutFarm.Drawing.WinGdi
                 gx.ReleaseHdc();
             }
         }
-
+        public override Brush CurrentBrush
+        {
+            get
+            {
+                return this.currentBrush;
+            }
+            set
+            {
+                this.currentBrush = value;
+            }
+        }
         public override Font CurrentFont
         {
             get
