@@ -64,6 +64,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         //-------------------------------------------
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
+            canvasGL2d.UseGradientFillBrush = false;
             canvasGL2d.FillColor = color;
             canvasGL2d.FillRect(left, top, width, height);
         }
@@ -74,6 +75,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 case BrushKind.Solid:
                     {
                         var solidBrush = brush as SolidBrush;
+                        canvasGL2d.UseGradientFillBrush = false;
                         canvasGL2d.FillColor = solidBrush.Color;
                         canvasGL2d.FillRect(left, top, width, height);
 
@@ -100,6 +102,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         }
         public override void FillPolygon(PointF[] points)
         {
+
             int j = points.Length;
             float[] polygonPoints = new float[j * 2];
             int n = 0;
@@ -109,11 +112,14 @@ namespace LayoutFarm.Drawing.DrawingGL
                 polygonPoints[n + 1] = points[i].Y;
                 n += 2;
             }
+            canvasGL2d.Note1 = this.Note1;
             canvasGL2d.FillPolygon(polygonPoints);
+
+
         }
         public override void FillPolygon(Brush brush, PointF[] points)
         {
-            switch (brush.BrushKind )
+            switch (brush.BrushKind)
             {
                 case BrushKind.LinearGradient:
                     {
@@ -134,13 +140,13 @@ namespace LayoutFarm.Drawing.DrawingGL
                         canvasGL2d.FillPolygon(polygonPoints);
                         canvasGL2d.UseGradientFillBrush = false;
 
-                    }break;
+                    } break;
                 default:
-                    {   
+                    {
                         FillPolygon(points);
-                    }break;
+                    } break;
             }
-         
+
         }
         public override Brush CurrentBrush
         {
@@ -155,7 +161,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 if (value != null)
                 {
                     this.canvasGL2d.UseGradientFillBrush = value.BrushKind == BrushKind.LinearGradient;
-                     
+
                 }
                 this.canvasGL2d.Brush = value;
             }

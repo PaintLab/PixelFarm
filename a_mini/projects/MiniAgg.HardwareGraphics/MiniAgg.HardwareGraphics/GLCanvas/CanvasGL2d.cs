@@ -51,12 +51,17 @@ namespace LayoutFarm.DrawingGL
             get;
             set;
         }
+        public int Note1
+        {
+            get;
+            set;
+        }
 
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             //set value for clear color buffer
             GL.ClearColor(c);
-
+            GL.ClearStencil(0);
             //actual clear here 
             GL.Clear(ClearBufferMask.ColorBufferBit |
                 ClearBufferMask.DepthBufferBit |
@@ -1137,6 +1142,7 @@ namespace LayoutFarm.DrawingGL
         {
             FillPolygon(vertex2dCoords, vertex2dCoords.Length);
         }
+        static int dbugCount = 0;
         public void FillPolygon(float[] vertex2dCoords, int npoints)
         {
             //-------------
@@ -1180,6 +1186,13 @@ namespace LayoutFarm.DrawingGL
                         //switch how to fill polygon
                         if (this.UseGradientFillBrush)
                         {
+                            if (dbugCount == 1)
+                            {
+
+                            }
+                            dbugCount++;
+
+
                             var linearGradientBrush = this.Brush as LayoutFarm.Drawing.LinearGradientBrush;
 
                             GL.ClearStencil(0); //set value for clearing stencil buffer 
@@ -1196,7 +1209,36 @@ namespace LayoutFarm.DrawingGL
                             GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
                             //render  to stencill buffer
                             //-----------------
+                            if (this.Note1 == 1)
                             {
+                                ////create stencil with Agg shape
+                                int j = npoints / 2;
+                                //first point
+                                if (j < 2)
+                                {
+                                    return;
+                                }
+                                ps.Clear();
+                                ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
+                                int nn = 2;
+                                for (int i = 1; i < j; ++i)
+                                {
+                                    ps.LineTo(vertex2dCoords[nn++],
+                                        vertex2dCoords[nn++]);
+                                }
+                                //close
+                                ps.CloseFigure();
+                                VertexStore vxs = ps.Vxs;
+                                sclineRas.Reset();
+                                sclineRas.AddPath(vxs);
+                                sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.White);
+
+                                //create stencil with normal OpenGL
+
+                            }
+                            else
+                            {
+                                //create stencil with normal OpenGL
                                 int j = vertextList.Count;
                                 int j2 = j * 2;
                                 VboC4V3f vbo = GenerateVboC4V3f();
@@ -1216,18 +1258,87 @@ namespace LayoutFarm.DrawingGL
                                 vbo.UnbindBuffer();
                                 GL.DisableClientState(ArrayCap.ColorArray);
                                 GL.DisableClientState(ArrayCap.VertexArray);
-
                             }
                             //-------------------------------------- 
                             //render color
+                            //--------------------------------------  
+                            //reenable color buffer 
                             GL.ColorMask(true, true, true, true);
                             //where a 1 was not rendered
                             GL.StencilFunc(StencilFunction.Equal, 1, 1);
-                            //keep the pixel
+                            //freeze stencill buffer
                             GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
-                            //fill with grdient color
-                            {
 
+                            if (this.Note1 == 1)
+                            {
+                                //prepare black bg
+                                int j = npoints / 2;
+                                //first point
+                                if (j < 2)
+                                {
+                                    return;
+                                }
+                                ps.Clear();
+                                ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
+                                int nn = 2;
+                                for (int i = 1; i < j; ++i)
+                                {
+                                    ps.LineTo(vertex2dCoords[nn++],
+                                        vertex2dCoords[nn++]);
+                                }
+                                //close
+                                ps.CloseFigure();
+                                VertexStore vxs = ps.Vxs;
+                                sclineRas.Reset();
+                                sclineRas.AddPath(vxs);
+
+                                //-------------------------------------------------------------------------------------
+                                //1.  we draw only alpha chanel of this black color to destination color
+                                //so we use  BlendFuncSeparate  as follow ...
+                                 
+                                GL.BlendFuncSeparate(
+                                     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
+                                     BlendingFactorSrc.One, BlendingFactorDest.Zero); //use alpha chanel from source
+                               
+                                sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.Black);
+                                //at this point alpha component is fill in to destination 
+                                //-------------------------------------------------------------------------------------
+                                //2. then fill again!, 
+                                //we use alpha information from dest, 
+                                //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
+
+                                GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
+                                {  //draw box of gradient color
+                                    var colors = linearGradientBrush.GetColors();
+                                    var points = linearGradientBrush.GetStopPoints();
+                                    uint c1 = colors[0].ToABGR();
+                                    uint c2 = colors[1].ToABGR();
+                                    //create polygon for graident bg 
+                                    var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                                         points[0].X, points[0].Y,
+                                         points[1].X, points[1].Y,
+                                         colors[0],
+                                         colors[1]);
+                                    int pcount = vrx.Count;
+                                    GL.EnableClientState(ArrayCap.ColorArray);
+                                    GL.EnableClientState(ArrayCap.VertexArray);
+                                    //--- 
+                                    VboC4V3f vbo = GenerateVboC4V3f();
+                                    vbo.BindBuffer();
+                                    DrawTrianglesWithVertexBuffer(vrx, pcount);
+                                    vbo.UnbindBuffer();
+                                    //vbo.Dispose();
+                                    GL.DisableClientState(ArrayCap.ColorArray);
+                                    GL.DisableClientState(ArrayCap.VertexArray);
+                                    //restore back 
+                                }
+                                //3. switch to normal blending mode 
+                                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+                            }
+                            else
+                            {
+                                //draw box of gradient color
                                 var colors = linearGradientBrush.GetColors();
                                 var points = linearGradientBrush.GetStopPoints();
                                 uint c1 = colors[0].ToABGR();
@@ -1238,23 +1349,19 @@ namespace LayoutFarm.DrawingGL
                                      points[1].X, points[1].Y,
                                      colors[0],
                                      colors[1]);
-
-
                                 int pcount = vrx.Count;
-
                                 GL.EnableClientState(ArrayCap.ColorArray);
                                 GL.EnableClientState(ArrayCap.VertexArray);
-
+                                //--- 
                                 VboC4V3f vbo = GenerateVboC4V3f();
                                 vbo.BindBuffer();
                                 DrawTrianglesWithVertexBuffer(vrx, pcount);
-
                                 vbo.UnbindBuffer();
                                 //vbo.Dispose();
                                 GL.DisableClientState(ArrayCap.ColorArray);
                                 GL.DisableClientState(ArrayCap.VertexArray);
-                            }
 
+                            }
                             GL.Disable(EnableCap.StencilTest);
                         }
                         else

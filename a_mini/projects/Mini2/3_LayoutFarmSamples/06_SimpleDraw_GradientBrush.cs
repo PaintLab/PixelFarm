@@ -39,24 +39,47 @@ namespace Mini2
                     LayoutFarm.Drawing.Color.Blue);
                 //1. 
                 //fill rectangle is easy
-                canvas.FillRectangle(linearGrBrush,
-                    0, 0, 150, 150);
+                //canvas.FillRectangle(linearGrBrush, 0, 0, 150, 150);
+                canvas.FillRectangle(LayoutFarm.Drawing.Color.Black, 0, 0, 150, 150);
                 //---------------------------------------------------- 
                 var linearGrBrush2 = new LinearGradientBrush(
-                    new LayoutFarm.Drawing.PointF(0, 200),
-                    LayoutFarm.Drawing.Color.Yellow,
-                    new LayoutFarm.Drawing.PointF(25, 250),
-                    LayoutFarm.Drawing.Color.Blue);
-
-                //2. fill polygon with gradient brush
+                    new LayoutFarm.Drawing.PointF(0, 50),
+                    LayoutFarm.Drawing.Color.Red,
+                    new LayoutFarm.Drawing.PointF(25, 100),
+                    LayoutFarm.Drawing.Color.OrangeRed);
+                //2. fill polygon with gradient brush 
                 canvas.CurrentBrush = linearGrBrush2;
+                canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     new LayoutFarm.Drawing.PointF[]{
-                        new LayoutFarm.Drawing.PointF(0, 200),
-                        new LayoutFarm.Drawing.PointF(50, 200),
-                        new LayoutFarm.Drawing.PointF(25, 250)});
+                        new LayoutFarm.Drawing.PointF(0, 50),
+                        new LayoutFarm.Drawing.PointF(50, 50),
+                        new LayoutFarm.Drawing.PointF(10, 100)});
+                canvas.Note1 = 0;
+                //-------------------------------------------------------------------------
 
+                //another  ...                
+                canvas.FillRectangle(LayoutFarm.Drawing.Color.Yellow, 200, 0, 150, 150);
+                canvas.CurrentBrush = linearGrBrush2;
+                canvas.Note1 = 1; //temp
+                canvas.FillPolygon(
+                    new LayoutFarm.Drawing.PointF[]{
+                        new LayoutFarm.Drawing.PointF(200, 50),
+                        new LayoutFarm.Drawing.PointF(250, 50),
+                        new LayoutFarm.Drawing.PointF(210, 100)});
+                canvas.Note1 = 0;
+                //-------------------------------------------------------------------------
 
+                canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 400, 0, 150, 150);
+                canvas.CurrentBrush = linearGrBrush2;
+                canvas.Note1 = 1; //temp
+                canvas.FillPolygon(
+                    new LayoutFarm.Drawing.PointF[]{
+                        new LayoutFarm.Drawing.PointF(400, 50),
+                        new LayoutFarm.Drawing.PointF(450, 50),
+                        new LayoutFarm.Drawing.PointF(410, 100)});
+                canvas.Note1 = 0;
+                //-------------------------------------------------------------------------
             });
             form.Show();
         }

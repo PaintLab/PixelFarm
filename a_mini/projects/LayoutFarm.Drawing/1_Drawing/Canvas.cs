@@ -108,5 +108,12 @@ namespace LayoutFarm.Drawing
         {
             this.OffsetCanvasOrigin(0, dy);
         }
+
+        //for debug
+        public int Note1
+        {
+            get;
+            set;
+        }
     }
 }
