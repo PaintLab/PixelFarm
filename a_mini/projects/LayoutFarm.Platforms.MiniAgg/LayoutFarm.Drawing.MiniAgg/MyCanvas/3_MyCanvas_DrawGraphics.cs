@@ -327,7 +327,14 @@ namespace LayoutFarm.Drawing.WinGdi
             gx.FillPolygon(this.internalSolidBrush, pps);
         }
 
+        public override void FillPolygon(Brush brush, PointF[] points)
+        {
 
+            ReleaseHdc();
+            //create Point
+            var pps = ConvPointFArray(points);
+            gx.FillPolygon(this.internalSolidBrush, pps);
+        }
 
         ////==================================================== 
         ///// <summary>

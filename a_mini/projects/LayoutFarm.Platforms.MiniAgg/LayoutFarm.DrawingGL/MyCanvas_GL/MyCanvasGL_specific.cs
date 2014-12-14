@@ -111,6 +111,37 @@ namespace LayoutFarm.Drawing.DrawingGL
             }
             canvasGL2d.FillPolygon(polygonPoints);
         }
+        public override void FillPolygon(Brush brush, PointF[] points)
+        {
+            switch (brush.BrushKind )
+            {
+                case BrushKind.LinearGradient:
+                    {
+                        //linear grdient brush for polygon 
+
+                        int j = points.Length;
+                        float[] polygonPoints = new float[j * 2];
+                        int n = 0;
+                        for (int i = 0; i < j; ++i)
+                        {
+                            polygonPoints[n] = points[i].X;
+                            polygonPoints[n + 1] = points[i].Y;
+                            n += 2;
+                        }
+
+                        //use stencil buffer
+                        canvasGL2d.UseGradientFillBrush = true;
+                        canvasGL2d.FillPolygon(polygonPoints);
+                        canvasGL2d.UseGradientFillBrush = false;
+
+                    }break;
+                default:
+                    {   
+                        FillPolygon(points);
+                    }break;
+            }
+         
+        }
         public override Brush CurrentBrush
         {
             get
@@ -123,8 +154,10 @@ namespace LayoutFarm.Drawing.DrawingGL
                 base.CurrentBrush = value;
                 if (value != null)
                 {
-                    this.canvasGL2d.UseGradientFillBrush = value.BrushKind == BrushKind.LinearGradient; 
+                    this.canvasGL2d.UseGradientFillBrush = value.BrushKind == BrushKind.LinearGradient;
+                     
                 }
+                this.canvasGL2d.Brush = value;
             }
         }
         public override Color FillColor
@@ -299,6 +332,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
+
         //---------------------------------------------------
 
     }

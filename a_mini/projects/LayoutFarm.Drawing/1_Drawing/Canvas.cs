@@ -85,6 +85,7 @@ namespace LayoutFarm.Drawing
         public abstract void FillPath(GraphicsPath gfxPath, Brush brush);
         public abstract void DrawPath(GraphicsPath gfxPath);
         public abstract void FillPolygon(PointF[] points);
+        public abstract void FillPolygon(Brush brush, PointF[] points);
         //-------------------------------------------------------  
         //images
         public abstract void DrawImage(Image image, RectangleF dest, RectangleF src);

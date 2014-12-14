@@ -327,34 +327,13 @@ namespace LayoutFarm.Drawing.WinGdi
             gx.FillPolygon(this.internalSolidBrush, pps);
         }
 
-
-
-        ////==================================================== 
-        ///// <summary>
-        ///// Gets the bounding clipping region of this graphics.
-        ///// </summary>
-        ///// <returns>The bounding rectangle for the clipping region</returns>
-        //public override RectangleF GetClip()
-        //{
-        //    if (_hdc == IntPtr.Zero)
-        //    {
-        //        var clip1 = gx.ClipBounds;
-        //        return new RectangleF(
-        //            clip1.X, clip1.Y,
-        //            clip1.Width, clip1.Height);
-        //    }
-        //    else
-        //    {
-        //        System.Drawing.Rectangle lprc;
-        //        DrawingBridge.Win32Utils.GetClipBox(_hdc, out lprc);
-
-
-        //        return new RectangleF(
-        //            lprc.X, lprc.Y,
-        //            lprc.Width, lprc.Height);
-        //    }
-        //}
-
+        public override void FillPolygon(Brush brush, PointF[] points)
+        {
+            ReleaseHdc();
+            //create Point
+            var pps = ConvPointFArray(points);
+            gx.FillPolygon(this.internalSolidBrush, pps);
+        } 
     }
 
 }

@@ -18,8 +18,16 @@ namespace OpenTK
         public MyGLControl()
         {
 
-            //if want to use stencil buffer then set stencil buffer too!            
-            var gfxmode = new OpenTK.Graphics.GraphicsMode(DisplayDevice.Default.BitsPerPixel, 16, 8, 0, 0, 2, false);
+                     
+            var gfxmode = new OpenTK.Graphics.GraphicsMode(
+                DisplayDevice.Default.BitsPerPixel,//default 32 bits color
+                16,//depth buffer => 16
+                8,  //stencil buffer => 8 (  //if want to use stencil buffer then set stencil buffer too! )
+                0,//number of sample of FSAA
+                0,  //accum buffer
+                2, // n buffer, 2=> double buffer
+                false);//sterio
+            
             ChildCtorOnlyResetGraphicMode(gfxmode);
 
             //-----------

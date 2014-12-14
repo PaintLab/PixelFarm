@@ -31,12 +31,13 @@ namespace Mini2
 
             form.SetGLPaintHandler((o, s) =>
             {
- 
-               
-                ////-----------------------------
+                //-----------------------------
+                //see:  lazyfoo.net/tutorials/OpenGL/26_the_stencil_buffer/index.php
+                //-----------------------------
                 //test gradient brush
-                GL.ClearColor(LayoutFarm.Drawing.Color.White);
-                GL.ClearStencil(0);
+                GL.ClearColor(LayoutFarm.Drawing.Color.White);//set value for clear color
+                GL.ClearStencil(0); //set value for clearing stencil buffer 
+                //actual clear here
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
                 //-------------------
                 //disable rendering to color buffer
@@ -66,7 +67,7 @@ namespace Mini2
                 //draw  
                 GL.Begin(BeginMode.Quads);
                 {
-                  
+
                     GL.Color3(1f, 0, 0);
                     GL.Vertex2(5, 5);
 
