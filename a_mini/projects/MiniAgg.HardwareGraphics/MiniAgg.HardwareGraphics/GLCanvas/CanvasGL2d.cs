@@ -901,11 +901,12 @@ namespace LayoutFarm.DrawingGL
             get;
             set;
         }
-        public bool UseGradientFillBrush
+        public LayoutFarm.Drawing.BrushKind CurrentBrushKind
         {
             get;
             set;
         }
+
         static VboC4V3f GenerateVboC4V3f()
         {
             VboC4V3f vboHandle = new VboC4V3f();
@@ -965,66 +966,72 @@ namespace LayoutFarm.DrawingGL
         }
         public void FillRect(float x, float y, float w, float h)
         {
-            if (this.UseGradientFillBrush)
+            switch (this.CurrentBrushKind)
             {
+                case Drawing.BrushKind.LinearGradient:
+                    {
+                        var linearGradientBrush = this.Brush as LayoutFarm.Drawing.LinearGradientBrush;
+                        if (linearGradientBrush != null)
+                        {
+                            //use clip rect for fill rect gradient
+                            EnableClipRect();
+                            SetClipRect((int)x, (int)y, (int)w, (int)h);
 
-                var linearGradientBrush = this.Brush as LayoutFarm.Drawing.LinearGradientBrush;
-                if (linearGradientBrush != null)
-                {
-                    //use clip rect for fill rect gradient
-                    EnableClipRect();
-                    SetClipRect((int)x, (int)y, (int)w, (int)h);
+                            //early exit
 
-                    //early exit
-
-                    ////points 
-                    var colors = linearGradientBrush.GetColors();
-                    var points = linearGradientBrush.GetStopPoints();
-                    uint c1 = colors[0].ToABGR();
-                    uint c2 = colors[1].ToABGR();
-                    //create polygon for graident bg 
-                    var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
-                         points[0].X, points[0].Y,
-                         points[1].X, points[1].Y,
-                         colors[0],
-                         colors[1]);
+                            ////points 
+                            var colors = linearGradientBrush.GetColors();
+                            var points = linearGradientBrush.GetStopPoints();
+                            uint c1 = colors[0].ToABGR();
+                            uint c2 = colors[1].ToABGR();
+                            //create polygon for graident bg 
+                            var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                                 points[0].X, points[0].Y,
+                                 points[1].X, points[1].Y,
+                                 colors[0],
+                                 colors[1]);
 
 
-                    int pcount = vrx.Count;
+                            int pcount = vrx.Count;
 
-                    GL.EnableClientState(ArrayCap.ColorArray);
-                    GL.EnableClientState(ArrayCap.VertexArray);
+                            GL.EnableClientState(ArrayCap.ColorArray);
+                            GL.EnableClientState(ArrayCap.VertexArray);
 
-                    VboC4V3f vbo = GenerateVboC4V3f();
-                    vbo.BindBuffer();
-                    DrawTrianglesWithVertexBuffer(vrx, pcount);
+                            VboC4V3f vbo = GenerateVboC4V3f();
+                            vbo.BindBuffer();
+                            DrawTrianglesWithVertexBuffer(vrx, pcount);
 
-                    vbo.UnbindBuffer();
-                    //vbo.Dispose();
-                    GL.DisableClientState(ArrayCap.ColorArray);
-                    GL.DisableClientState(ArrayCap.VertexArray);
+                            vbo.UnbindBuffer();
+                            //vbo.Dispose();
+                            GL.DisableClientState(ArrayCap.ColorArray);
+                            GL.DisableClientState(ArrayCap.VertexArray);
 
-                    DisableClipRect();
-                }
+                            DisableClipRect();
+                        }
+                    } break;
+                case Drawing.BrushKind.Texture:
+                    {
+                        throw new NotImplementedException();
+                    } break;
+                default:
+                    {//early exit
+                        GL.EnableClientState(ArrayCap.ColorArray);
+                        GL.EnableClientState(ArrayCap.VertexArray);
+                        VboC4V3f vbo = GenerateVboC4V3f();
+                        ////points 
+                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                        CreateRectCoords(vrx, this.fillColor, x, y, w, h);
+                        int pcount = vrx.Count;
+                        vbo.BindBuffer();
+                        DrawTrianglesWithVertexBuffer(vrx, pcount);
+                        vbo.UnbindBuffer();
+
+                        //vbo.Dispose();
+                        GL.DisableClientState(ArrayCap.ColorArray);
+                        GL.DisableClientState(ArrayCap.VertexArray);
+                    } break;
             }
-            else
-            {
-                //early exit
-                GL.EnableClientState(ArrayCap.ColorArray);
-                GL.EnableClientState(ArrayCap.VertexArray);
-                VboC4V3f vbo = GenerateVboC4V3f();
-                ////points 
-                ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                CreateRectCoords(vrx, this.fillColor, x, y, w, h);
-                int pcount = vrx.Count;
-                vbo.BindBuffer();
-                DrawTrianglesWithVertexBuffer(vrx, pcount);
-                vbo.UnbindBuffer();
 
-                //vbo.Dispose();
-                GL.DisableClientState(ArrayCap.ColorArray);
-                GL.DisableClientState(ArrayCap.VertexArray);
-            }
             //------------------------ 
         }
         public void FillRoundRect(float x, float y, float w, float h, float rx, float ry)
@@ -1142,7 +1149,7 @@ namespace LayoutFarm.DrawingGL
         {
             FillPolygon(vertex2dCoords, vertex2dCoords.Length);
         }
-        static int dbugCount = 0;
+
         public void FillPolygon(float[] vertex2dCoords, int npoints)
         {
             //-------------
@@ -1184,209 +1191,221 @@ namespace LayoutFarm.DrawingGL
                         var vertextList = TessPolygon(vertex2dCoords);
                         //-----------------------------   
                         //switch how to fill polygon
-                        if (this.UseGradientFillBrush)
+                        switch (this.CurrentBrushKind)
                         {
-                            if (dbugCount == 1)
-                            {
-
-                            }
-                            dbugCount++;
-
-
-                            var linearGradientBrush = this.Brush as LayoutFarm.Drawing.LinearGradientBrush;
-
-                            GL.ClearStencil(0); //set value for clearing stencil buffer 
-                            //actual clear here
-                            GL.Clear(ClearBufferMask.StencilBufferBit);
-                            //-------------------
-                            //disable rendering to color buffer
-                            GL.ColorMask(false, false, false, false);
-                            //start using stencil
-                            GL.Enable(EnableCap.StencilTest);
-                            //place a 1 where rendered
-                            GL.StencilFunc(StencilFunction.Always, 1, 1);
-                            //replace where rendered
-                            GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
-                            //render  to stencill buffer
-                            //-----------------
-                            if (this.Note1 == 1)
-                            {
-                                ////create stencil with Agg shape
-                                int j = npoints / 2;
-                                //first point
-                                if (j < 2)
+                            case Drawing.BrushKind.LinearGradient:
+                            case Drawing.BrushKind.Texture:
                                 {
-                                    return;
-                                }
-                                ps.Clear();
-                                ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
-                                int nn = 2;
-                                for (int i = 1; i < j; ++i)
+                                    var linearGradientBrush = this.Brush as LayoutFarm.Drawing.LinearGradientBrush;
+                                    GL.ClearStencil(0); //set value for clearing stencil buffer 
+                                    //actual clear here
+                                    GL.Clear(ClearBufferMask.StencilBufferBit);
+                                    //-------------------
+                                    //disable rendering to color buffer
+                                    GL.ColorMask(false, false, false, false);
+                                    //start using stencil
+                                    GL.Enable(EnableCap.StencilTest);
+                                    //place a 1 where rendered
+                                    GL.StencilFunc(StencilFunction.Always, 1, 1);
+                                    //replace where rendered
+                                    GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
+                                    //render  to stencill buffer
+                                    //-----------------
+                                    if (this.Note1 == 1)
+                                    {
+                                        ////create stencil with Agg shape
+                                        int j = npoints / 2;
+                                        //first point
+                                        if (j < 2)
+                                        {
+                                            return;
+                                        }
+                                        ps.Clear();
+                                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
+                                        int nn = 2;
+                                        for (int i = 1; i < j; ++i)
+                                        {
+                                            ps.LineTo(vertex2dCoords[nn++],
+                                                vertex2dCoords[nn++]);
+                                        }
+                                        //close
+                                        ps.CloseFigure();
+                                        VertexStore vxs = ps.Vxs;
+                                        sclineRas.Reset();
+                                        sclineRas.AddPath(vxs);
+                                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.White);
+                                        //create stencil with normal OpenGL 
+                                    }
+                                    else
+                                    {
+                                        //create stencil with normal OpenGL
+                                        int j = vertextList.Count;
+                                        int j2 = j * 2;
+                                        VboC4V3f vbo = GenerateVboC4V3f();
+                                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                                        uint color = this.fillColor.ToABGR();
+                                        for (int i = 0; i < j; ++i)
+                                        {
+                                            var v = vertextList[i];
+                                            vrx.AddVertex(new VertexC4V3f(color, (float)v.m_X, (float)v.m_Y));
+                                        }
+
+                                        GL.EnableClientState(ArrayCap.ColorArray);
+                                        GL.EnableClientState(ArrayCap.VertexArray);
+                                        int pcount = vrx.Count;
+                                        vbo.BindBuffer();
+                                        DrawTrianglesWithVertexBuffer(vrx, pcount);
+                                        vbo.UnbindBuffer();
+                                        GL.DisableClientState(ArrayCap.ColorArray);
+                                        GL.DisableClientState(ArrayCap.VertexArray);
+                                    }
+                                    //-------------------------------------- 
+                                    //render color
+                                    //--------------------------------------  
+                                    //reenable color buffer 
+                                    GL.ColorMask(true, true, true, true);
+                                    //where a 1 was not rendered
+                                    GL.StencilFunc(StencilFunction.Equal, 1, 1);
+                                    //freeze stencill buffer
+                                    GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
+
+                                    if (this.Note1 == 1)
+                                    {
+                                        //prepare black bg
+                                        int j = npoints / 2;
+                                        //first point
+                                        if (j < 2)
+                                        {
+                                            return;
+                                        }
+                                        ps.Clear();
+                                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
+                                        int nn = 2;
+                                        for (int i = 1; i < j; ++i)
+                                        {
+                                            ps.LineTo(vertex2dCoords[nn++],
+                                                vertex2dCoords[nn++]);
+                                        }
+                                        //close
+                                        ps.CloseFigure();
+                                        VertexStore vxs = ps.Vxs;
+                                        sclineRas.Reset();
+                                        sclineRas.AddPath(vxs);
+
+                                        //-------------------------------------------------------------------------------------
+                                        //1.  we draw only alpha chanel of this black color to destination color
+                                        //so we use  BlendFuncSeparate  as follow ...
+
+                                        GL.BlendFuncSeparate(
+                                             BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
+                                             BlendingFactorSrc.One, BlendingFactorDest.Zero); //use alpha chanel from source
+
+                                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.Black);
+                                        //at this point alpha component is fill in to destination 
+                                        //-------------------------------------------------------------------------------------
+                                        //2. then fill again!, 
+                                        //we use alpha information from dest, 
+                                        //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
+
+                                        GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
+                                        {
+
+                                            //draw box of gradient color
+                                            if (this.CurrentBrushKind == Drawing.BrushKind.LinearGradient)
+                                            {
+                                                var colors = linearGradientBrush.GetColors();
+                                                var points = linearGradientBrush.GetStopPoints();
+                                                uint c1 = colors[0].ToABGR();
+                                                uint c2 = colors[1].ToABGR();
+                                                //create polygon for graident bg 
+                                                var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                                                     points[0].X, points[0].Y,
+                                                     points[1].X, points[1].Y,
+                                                     colors[0],
+                                                     colors[1]);
+                                                int pcount = vrx.Count;
+                                                GL.EnableClientState(ArrayCap.ColorArray);
+                                                GL.EnableClientState(ArrayCap.VertexArray);
+                                                //--- 
+                                                VboC4V3f vbo = GenerateVboC4V3f();
+                                                vbo.BindBuffer();
+                                                DrawTrianglesWithVertexBuffer(vrx, pcount);
+                                                vbo.UnbindBuffer();
+                                                //vbo.Dispose();
+                                                GL.DisableClientState(ArrayCap.ColorArray);
+                                                GL.DisableClientState(ArrayCap.VertexArray);
+                                            }
+                                            else if (this.CurrentBrushKind == Drawing.BrushKind.Texture)
+                                            {
+                                                //draw texture image 
+                                                LayoutFarm.Drawing.TextureBrush tbrush = (LayoutFarm.Drawing.TextureBrush)this.Brush;
+                                                LayoutFarm.Drawing.Image img = tbrush.TextureImage;
+                                                GLBitmapTexture bmpTexture = (GLBitmapTexture)tbrush.InnerImage2;
+                                                this.DrawImage(bmpTexture, 0, 0);
+                                                //GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
+                                                //this.DrawImage(bmp, 0, 0);
+                                                //bmp.Dispose();
+
+                                            }
+                                        }
+                                        //restore back 
+                                        //3. switch to normal blending mode 
+                                        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+                                    }
+                                    else
+                                    {
+                                        //draw box of gradient color
+                                        var colors = linearGradientBrush.GetColors();
+                                        var points = linearGradientBrush.GetStopPoints();
+                                        uint c1 = colors[0].ToABGR();
+                                        uint c2 = colors[1].ToABGR();
+                                        //create polygon for graident bg 
+                                        var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                                             points[0].X, points[0].Y,
+                                             points[1].X, points[1].Y,
+                                             colors[0],
+                                             colors[1]);
+                                        int pcount = vrx.Count;
+                                        GL.EnableClientState(ArrayCap.ColorArray);
+                                        GL.EnableClientState(ArrayCap.VertexArray);
+                                        //--- 
+                                        VboC4V3f vbo = GenerateVboC4V3f();
+                                        vbo.BindBuffer();
+                                        DrawTrianglesWithVertexBuffer(vrx, pcount);
+                                        vbo.UnbindBuffer();
+                                        //vbo.Dispose();
+                                        GL.DisableClientState(ArrayCap.ColorArray);
+                                        GL.DisableClientState(ArrayCap.VertexArray);
+
+                                    }
+                                    GL.Disable(EnableCap.StencilTest);
+                                } break;
+                            default:
                                 {
-                                    ps.LineTo(vertex2dCoords[nn++],
-                                        vertex2dCoords[nn++]);
-                                }
-                                //close
-                                ps.CloseFigure();
-                                VertexStore vxs = ps.Vxs;
-                                sclineRas.Reset();
-                                sclineRas.AddPath(vxs);
-                                sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.White);
-
-                                //create stencil with normal OpenGL
-
-                            }
-                            else
-                            {
-                                //create stencil with normal OpenGL
-                                int j = vertextList.Count;
-                                int j2 = j * 2;
-                                VboC4V3f vbo = GenerateVboC4V3f();
-                                ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                                uint color = this.fillColor.ToABGR();
-                                for (int i = 0; i < j; ++i)
-                                {
-                                    var v = vertextList[i];
-                                    vrx.AddVertex(new VertexC4V3f(color, (float)v.m_X, (float)v.m_Y));
-                                }
-
-                                GL.EnableClientState(ArrayCap.ColorArray);
-                                GL.EnableClientState(ArrayCap.VertexArray);
-                                int pcount = vrx.Count;
-                                vbo.BindBuffer();
-                                DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                vbo.UnbindBuffer();
-                                GL.DisableClientState(ArrayCap.ColorArray);
-                                GL.DisableClientState(ArrayCap.VertexArray);
-                            }
-                            //-------------------------------------- 
-                            //render color
-                            //--------------------------------------  
-                            //reenable color buffer 
-                            GL.ColorMask(true, true, true, true);
-                            //where a 1 was not rendered
-                            GL.StencilFunc(StencilFunction.Equal, 1, 1);
-                            //freeze stencill buffer
-                            GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
-
-                            if (this.Note1 == 1)
-                            {
-                                //prepare black bg
-                                int j = npoints / 2;
-                                //first point
-                                if (j < 2)
-                                {
-                                    return;
-                                }
-                                ps.Clear();
-                                ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
-                                int nn = 2;
-                                for (int i = 1; i < j; ++i)
-                                {
-                                    ps.LineTo(vertex2dCoords[nn++],
-                                        vertex2dCoords[nn++]);
-                                }
-                                //close
-                                ps.CloseFigure();
-                                VertexStore vxs = ps.Vxs;
-                                sclineRas.Reset();
-                                sclineRas.AddPath(vxs);
-
-                                //-------------------------------------------------------------------------------------
-                                //1.  we draw only alpha chanel of this black color to destination color
-                                //so we use  BlendFuncSeparate  as follow ...
-                                 
-                                GL.BlendFuncSeparate(
-                                     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
-                                     BlendingFactorSrc.One, BlendingFactorDest.Zero); //use alpha chanel from source
-                               
-                                sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.Black);
-                                //at this point alpha component is fill in to destination 
-                                //-------------------------------------------------------------------------------------
-                                //2. then fill again!, 
-                                //we use alpha information from dest, 
-                                //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
-
-                                GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
-                                {  //draw box of gradient color
-                                    var colors = linearGradientBrush.GetColors();
-                                    var points = linearGradientBrush.GetStopPoints();
-                                    uint c1 = colors[0].ToABGR();
-                                    uint c2 = colors[1].ToABGR();
-                                    //create polygon for graident bg 
-                                    var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
-                                         points[0].X, points[0].Y,
-                                         points[1].X, points[1].Y,
-                                         colors[0],
-                                         colors[1]);
-                                    int pcount = vrx.Count;
+                                    int j = vertextList.Count;
+                                    int j2 = j * 2;
+                                    VboC4V3f vbo = GenerateVboC4V3f();
+                                    ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                                    uint color = this.fillColor.ToABGR();
+                                    for (int i = 0; i < j; ++i)
+                                    {
+                                        var v = vertextList[i];
+                                        vrx.AddVertex(new VertexC4V3f(color, (float)v.m_X, (float)v.m_Y));
+                                    }
+                                    //------------------------------------- 
                                     GL.EnableClientState(ArrayCap.ColorArray);
                                     GL.EnableClientState(ArrayCap.VertexArray);
-                                    //--- 
-                                    VboC4V3f vbo = GenerateVboC4V3f();
+                                    int pcount = vrx.Count;
                                     vbo.BindBuffer();
                                     DrawTrianglesWithVertexBuffer(vrx, pcount);
                                     vbo.UnbindBuffer();
-                                    //vbo.Dispose();
                                     GL.DisableClientState(ArrayCap.ColorArray);
                                     GL.DisableClientState(ArrayCap.VertexArray);
-                                    //restore back 
-                                }
-                                //3. switch to normal blending mode 
-                                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
-                            }
-                            else
-                            {
-                                //draw box of gradient color
-                                var colors = linearGradientBrush.GetColors();
-                                var points = linearGradientBrush.GetStopPoints();
-                                uint c1 = colors[0].ToABGR();
-                                uint c2 = colors[1].ToABGR();
-                                //create polygon for graident bg 
-                                var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
-                                     points[0].X, points[0].Y,
-                                     points[1].X, points[1].Y,
-                                     colors[0],
-                                     colors[1]);
-                                int pcount = vrx.Count;
-                                GL.EnableClientState(ArrayCap.ColorArray);
-                                GL.EnableClientState(ArrayCap.VertexArray);
-                                //--- 
-                                VboC4V3f vbo = GenerateVboC4V3f();
-                                vbo.BindBuffer();
-                                DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                vbo.UnbindBuffer();
-                                //vbo.Dispose();
-                                GL.DisableClientState(ArrayCap.ColorArray);
-                                GL.DisableClientState(ArrayCap.VertexArray);
-
-                            }
-                            GL.Disable(EnableCap.StencilTest);
+                                    //-------------------------------------- 
+                                } break;
                         }
-                        else
-                        {
-                            int j = vertextList.Count;
-                            int j2 = j * 2;
-                            VboC4V3f vbo = GenerateVboC4V3f();
-                            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                            uint color = this.fillColor.ToABGR();
-                            for (int i = 0; i < j; ++i)
-                            {
-                                var v = vertextList[i];
-                                vrx.AddVertex(new VertexC4V3f(color, (float)v.m_X, (float)v.m_Y));
-                            }
-                            //------------------------------------- 
-                            GL.EnableClientState(ArrayCap.ColorArray);
-                            GL.EnableClientState(ArrayCap.VertexArray);
-                            int pcount = vrx.Count;
-                            vbo.BindBuffer();
-                            DrawTrianglesWithVertexBuffer(vrx, pcount);
-                            vbo.UnbindBuffer();
-                            GL.DisableClientState(ArrayCap.ColorArray);
-                            GL.DisableClientState(ArrayCap.VertexArray);
-                            //-------------------------------------- 
-                        }
+
 
                     } break;
             }

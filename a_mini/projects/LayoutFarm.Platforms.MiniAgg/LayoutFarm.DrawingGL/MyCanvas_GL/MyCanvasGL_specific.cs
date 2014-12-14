@@ -64,7 +64,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         //-------------------------------------------
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-            canvasGL2d.UseGradientFillBrush = false;
+            canvasGL2d.CurrentBrushKind = BrushKind.Solid;
             canvasGL2d.FillColor = color;
             canvasGL2d.FillRect(left, top, width, height);
         }
@@ -75,20 +75,22 @@ namespace LayoutFarm.Drawing.DrawingGL
                 case BrushKind.Solid:
                     {
                         var solidBrush = brush as SolidBrush;
-                        canvasGL2d.UseGradientFillBrush = false;
+                        var currentKind = canvasGL2d.CurrentBrushKind;
+                        canvasGL2d.CurrentBrushKind = BrushKind.Solid;
                         canvasGL2d.FillColor = solidBrush.Color;
                         canvasGL2d.FillRect(left, top, width, height);
-
+                        canvasGL2d.CurrentBrushKind = currentKind;
                     } break;
                 case BrushKind.LinearGradient:
                     {
                         var linearGradientBrush = brush as LinearGradientBrush;
                         //create bg gradient first 
                         //fill linear gradient in spefic area
-                        canvasGL2d.UseGradientFillBrush = true;
+                        var currentKind = canvasGL2d.CurrentBrushKind;
+                        canvasGL2d.CurrentBrushKind = BrushKind.LinearGradient;
                         canvasGL2d.Brush = linearGradientBrush;
                         canvasGL2d.FillRect(left, top, width, height);
-                        canvasGL2d.UseGradientFillBrush = false;
+                        canvasGL2d.CurrentBrushKind = currentKind;
                     } break;
                 case BrushKind.CirculatGraident:
                     {
@@ -119,6 +121,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         }
         public override void FillPolygon(Brush brush, PointF[] points)
         {
+            canvasGL2d.Note1 = this.Note1;
             switch (brush.BrushKind)
             {
                 case BrushKind.LinearGradient:
@@ -136,9 +139,45 @@ namespace LayoutFarm.Drawing.DrawingGL
                         }
 
                         //use stencil buffer
-                        canvasGL2d.UseGradientFillBrush = true;
+                        var currentBrushKind = canvasGL2d.CurrentBrushKind;
+                        canvasGL2d.CurrentBrushKind = BrushKind.LinearGradient;
                         canvasGL2d.FillPolygon(polygonPoints);
-                        canvasGL2d.UseGradientFillBrush = false;
+                        canvasGL2d.CurrentBrushKind = currentBrushKind;
+
+                    } break;
+                case BrushKind.Texture:
+                    {
+
+                        int j = points.Length;
+                        float[] polygonPoints = new float[j * 2];
+                        int n = 0;
+                        for (int i = 0; i < j; ++i)
+                        {
+                            polygonPoints[n] = points[i].X;
+                            polygonPoints[n + 1] = points[i].Y;
+                            n += 2;
+                        }
+
+                        //use stencil buffer
+                        var currentBrushKind = canvasGL2d.CurrentBrushKind;
+                        canvasGL2d.CurrentBrushKind = BrushKind.Texture;
+                        //prepare texture brush 
+
+                        var tbrush = (TextureBrush)brush;
+                        GLBitmapTexture bmpTexture = null;
+                        if (tbrush.InnerImage2 == null)
+                        {
+                            //create gl image
+                            var textureImage = tbrush.TextureImage; 
+                            tbrush.InnerImage2 = bmpTexture = GLBitmapTextureHelper.CreateBitmapTexture((System.Drawing.Bitmap)textureImage.InnerImage);
+                            canvasGL2d.Brush = tbrush; //set current brush**
+                        }
+                        canvasGL2d.FillPolygon(polygonPoints);
+                        canvasGL2d.CurrentBrushKind = currentBrushKind;
+
+                        //delete gl
+                        bmpTexture.Dispose();
+                        tbrush.InnerImage2 = null;
 
                     } break;
                 default:
@@ -160,8 +199,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 base.CurrentBrush = value;
                 if (value != null)
                 {
-                    this.canvasGL2d.UseGradientFillBrush = value.BrushKind == BrushKind.LinearGradient;
-
+                    this.canvasGL2d.CurrentBrushKind = value.BrushKind;
                 }
                 this.canvasGL2d.Brush = value;
             }
