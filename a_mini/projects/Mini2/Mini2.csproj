@@ -51,7 +51,7 @@
     <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="1_Shared\Square.cs" />
     <Compile Include="2_Samples\02_DrawSample02.cs" />
-    <Compile Include="2_Samples\01_WhiteBlank.cs" />
+    <Compile Include="2_Samples\00_WhiteBlank.cs" />
     <Compile Include="2_Samples\03_LionFillOnGLControl.cs" />
     <Compile Include="2_Samples\04_LionFillDirect.cs" />
     <Compile Include="2_Samples\05_LionFillDirectBufferDemo.cs" />
@@ -61,6 +61,7 @@
     <Compile Include="3_LayoutFarmSamples\05_SimpleDraw_BasicStencil.cs" />
     <Compile Include="3_LayoutFarmSamples\06_SimpleDraw_GradientBrush.cs" />
     <Compile Include="3_LayoutFarmSamples\07_SimpleDraw_PolygonStencil.cs" />
+    <Compile Include="3_LayoutFarmSamples\08_SimpleDraw_DrawText2.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>

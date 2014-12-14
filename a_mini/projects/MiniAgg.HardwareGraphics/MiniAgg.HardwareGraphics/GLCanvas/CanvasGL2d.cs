@@ -173,6 +173,9 @@ namespace LayoutFarm.DrawingGL
         }
         public void DrawImageInvert(GLBitmapTexture bmp, float x, float y, float w, float h)
         {
+            //DrawImage(bmp,
+            //      new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
+            //      x, y, w, h, ImageFillStyle.Tile, true);
             unsafe
             {
 
@@ -186,12 +189,6 @@ namespace LayoutFarm.DrawingGL
                     arr[2] = 1; arr[3] = 0;
                     arr[4] = 1; arr[5] = 1;
                     arr[6] = 0; arr[7] = 1;
-
-                    //byte* indices = stackalloc byte[6];
-                    //indices[0] = 0; indices[1] = 1; indices[2] = 2;
-                    //indices[3] = 2; indices[4] = 3; indices[5] = 0;
-
-
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                     //------------------------------------------ 
                     //fill rect with texture
@@ -201,38 +198,18 @@ namespace LayoutFarm.DrawingGL
                 } GL.Disable(EnableCap.Texture2D);
             }
         }
+        
         public void DrawImage(GLBitmapTexture bmp, float x, float y, float w, float h)
         {
-            unsafe
-            {
+            DrawImage(bmp,
+                new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
+                x, y, w, h, ImageFillStyle.Tile, true);
 
-                GL.Enable(EnableCap.Texture2D);
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
-                    GL.EnableClientState(ArrayCap.TextureCoordArray); //***
-
-                    //texture source coord 1= 100% of original width
-                    float* arr = stackalloc float[8];
-                    arr[0] = 0; arr[1] = 1;
-                    arr[2] = 1; arr[3] = 1;
-                    arr[4] = 1; arr[5] = 0;
-                    arr[6] = 0; arr[7] = 0;
-
-
-                    GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
-                    //------------------------------------------ 
-                    //fill rect with texture
-                    FillRectWithTexture(x, y, w, h);
-                    GL.DisableClientState(ArrayCap.TextureCoordArray);
-
-                }
-                GL.Disable(EnableCap.Texture2D);
-            }
         }
         public void DrawImage(GLBitmapTexture bmp,
             LayoutFarm.Drawing.RectangleF srcRect,
             float x, float y, float w, float h,
-            ImageFillStyle imageFillStyle)
+            ImageFillStyle imageFillStyle, bool invert = false)
         {
             unsafe
             {
@@ -276,12 +253,11 @@ namespace LayoutFarm.DrawingGL
                                 FillRectWithTexture(-(int)(wscale * srcRect.X), -(int)(hscale * srcRect.Y), newW, newH);
                                 // FillRectWithTexture(x, y, newW, newH);
                                 DisableClipRect();
-
                                 GL.DisableClientState(ArrayCap.TextureCoordArray);
 
 
                             } break;
-                        case ImageFillStyle.Title:
+                        case ImageFillStyle.Tile:
                         default:
                             {
                                 GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
@@ -292,19 +268,37 @@ namespace LayoutFarm.DrawingGL
                                 float srcW = srcRect.Width;
                                 float srcH = srcRect.Height;
 
+                                if (invert)
+                                {
+                                    //arr[0] = 0; arr[1] = 0;
+                                    arr[0] = srcRect.Left / srcW; arr[1] = srcRect.Bottom / srcH;
+                                    //arr[2] = 1; arr[3] = 0;
+                                    arr[2] = srcRect.Right / srcW; arr[3] = srcRect.Bottom / srcH;
+                                    //arr[4] = 1; arr[5] = 1;
+                                    arr[4] = srcRect.Right / srcW; arr[6] = srcRect.Top / srcH;
+                                    //arr[6] = 0; arr[7] = 1;
+                                    arr[6] = srcRect.Left / srcW; arr[7] = srcRect.Top / srcH;
 
-                                //arr[0] = 0; arr[1] = 1;
-                                arr[0] = srcRect.Left / srcW; arr[1] = srcRect.Top / srcH;
-                                //arr[2] = 1; arr[3] = 1;
-                                arr[2] = srcRect.Right / srcW; arr[3] = srcRect.Top / srcH;
-                                //arr[4] = 1; arr[5] = 0;
-                                arr[4] = srcRect.Right / srcW; arr[5] = srcRect.Bottom / srcH;
-                                //arr[6] = 0; arr[7] = 0;
-                                arr[6] = srcRect.Left / srcW; arr[7] = srcRect.Bottom / srcH;
+                                }
+                                else
+                                {
+                                    //arr[0] = 0; arr[1] = 1;
+                                    arr[0] = srcRect.Left / srcW; arr[1] = srcRect.Top / srcH;
+                                    //arr[2] = 1; arr[3] = 1;
+                                    arr[2] = srcRect.Right / srcW; arr[3] = srcRect.Top / srcH;
+                                    //arr[4] = 1; arr[5] = 0;
+                                    arr[4] = srcRect.Right / srcW; arr[5] = srcRect.Bottom / srcH;
+                                    //arr[6] = 0; arr[7] = 0;
+                                    arr[6] = srcRect.Left / srcW; arr[7] = srcRect.Bottom / srcH;
 
+                                }
                                 GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                                 //------------------------------------------ 
                                 //fill rect with texture
+                                float newW = bmp.Width;
+                                float newH = bmp.Height;
+
+                                //FillRectWithTexture(-(int)(srcRect.X), -(int)(srcRect.Y), newW, newH);
                                 FillRectWithTexture(x, y, w, h);
                                 GL.DisableClientState(ArrayCap.TextureCoordArray);
                             } break;

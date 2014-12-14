@@ -9,7 +9,7 @@ using PixelFarm.Agg;
 using LayoutFarm.DrawingGL;
 namespace Mini2
 {
-    [Info(OrderCode = "02")]
+    [Info(OrderCode = "00")]
     [Info("Drawing")]
     public class WhiteBlankDemo : DemoBase
     {

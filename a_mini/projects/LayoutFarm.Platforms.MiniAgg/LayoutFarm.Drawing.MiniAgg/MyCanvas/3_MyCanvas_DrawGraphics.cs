@@ -174,7 +174,7 @@ namespace LayoutFarm.Drawing.WinGdi
                 case BrushKind.GeometryGradient:
                     {
                     } break;
-                case BrushKind.CirculatGraident:
+                case BrushKind.CircularGraident:
                     {
 
                     } break;

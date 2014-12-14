@@ -26,9 +26,26 @@ namespace LayoutFarm.Drawing.DrawingGL
     partial class MyCanvasGL : LayoutFarm.Drawing.WinGdi.MyCanvas
     {
         CanvasGL2d canvasGL2d = new CanvasGL2d();
+
+        //-------
+        //platform specific code
+        System.Drawing.Bitmap textBoardBmp;
+        System.Drawing.Graphics gx;
+        int textBoardW = 800;
+        int textBoardH = 100;
+        //-------
+
         public MyCanvasGL(GraphicsPlatform platform, int hPageNum, int vPageNum, int left, int top, int width, int height)
             : base(platform, hPageNum, vPageNum, left, top, width, height)
         {
+
+            //------------------------
+            //platform specific code
+            //-------------------------
+            //32 bits bitmap
+            textBoardBmp = new System.Drawing.Bitmap(textBoardW, textBoardH, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            gx = System.Drawing.Graphics.FromImage(textBoardBmp);
+
 
         }
         //-------------------------------------------
@@ -92,7 +109,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                         canvasGL2d.FillRect(left, top, width, height);
                         canvasGL2d.CurrentBrushKind = currentKind;
                     } break;
-                case BrushKind.CirculatGraident:
+                case BrushKind.CircularGraident:
                     {
 
                     } break;
@@ -168,7 +185,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                         if (tbrush.InnerImage2 == null)
                         {
                             //create gl image
-                            var textureImage = tbrush.TextureImage; 
+                            var textureImage = tbrush.TextureImage;
                             tbrush.InnerImage2 = bmpTexture = GLBitmapTextureHelper.CreateBitmapTexture((System.Drawing.Bitmap)textureImage.InnerImage);
                             canvasGL2d.Brush = tbrush; //set current brush**
                         }
@@ -264,6 +281,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
+         
         public override Color StrokeColor
         {
             get
@@ -304,8 +322,37 @@ namespace LayoutFarm.Drawing.DrawingGL
         }
         public override void DrawText(char[] buffer, int x, int y)
         {
-            canvasGL2d.DrawString(buffer, x, y);
+            if (this.Note1 == 2)
+            {
+                //test draw string to gdi hdc:
 
+                //if need Gdi+/gdi to draw string                              
+                //then draw it to hdc and  copy to canvas2d
+                //[ platform specfic code]
+                //1. use bitmap 
+                IntPtr gxdc = gx.GetHdc();
+                //MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
+                NativeTextWin32.TextOut(gxdc, 0, 0, buffer, buffer.Length);
+                //MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
+                gx.ReleaseHdc(gxdc);
+                //---------------------------                 
+                //this.textBoardBmp.Save("d:\\WImageTest\\t.png"); 
+                //var bmp = new LayoutFarm.Drawing.Bitmap(this.textBoardBmp.Width, this.Height, this.textBoardBmp);
+                var glbmp = GLBitmapTextureHelper.CreateBitmapTexture(this.textBoardBmp);
+                canvasGL2d.DrawImage(glbmp, x, y, textBoardW, textBoardH);
+                //DrawImageInvert(bmp, new RectangleF(x, y, 800, 600),
+                //    new RectangleF(0, 0, 800, 600));
+                glbmp.Dispose();
+                //var innerImg = bmp.InnerImage as GLBitmapTexture;
+                //innerImg.Dispose();
+                //bmp.InnerImage = null;
+                //bmp.Dispose();
+                //---------------------------                 
+            }
+            else
+            {
+                canvasGL2d.DrawString(buffer, x, y);
+            }
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
@@ -324,6 +371,8 @@ namespace LayoutFarm.Drawing.DrawingGL
                 System.Drawing.Drawing2D.PathData pathData = gfxPath.GetPathData() as System.Drawing.Drawing2D.PathData;
                 PixelFarm.Agg.VertexStore vxs = new PixelFarm.Agg.VertexStore();
                 PixelFarm.Agg.GdiPathConverter.ConvertToVxs(pathData, vxs);
+
+                //TODO: reuse flattener 
                 PixelFarm.Agg.VertexSource.CurveFlattener flattener = new PixelFarm.Agg.VertexSource.CurveFlattener();
                 vxs = flattener.MakeVxs2(vxs);
                 gfxPath.InnerPath2 = vxs;
