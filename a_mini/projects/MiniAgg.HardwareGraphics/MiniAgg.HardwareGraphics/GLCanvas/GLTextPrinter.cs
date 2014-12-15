@@ -52,7 +52,7 @@ namespace LayoutFarm.DrawingGL
 
 
                 var left = glyph.exportGlyph.img_horiBearingX;
-                this.canvas2d.DrawImageInvert(bmp,
+                this.canvas2d.DrawImage(bmp,
                     (float)(xpos + (left >> 6)),
                     (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
 

@@ -21,6 +21,12 @@ namespace Mini2
             LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
         }
+
+        static LayoutFarm.Drawing.RectangleF GenRect(float ux, float uy, float uw, float uh)
+        {
+            //from user coord to cartesian coord
+            return new LayoutFarm.Drawing.RectangleF(ux, uy + uh, uw, uh);
+        }
         public override void Load()
         {
             //draw 1
@@ -33,7 +39,6 @@ namespace Mini2
             //WinGdiPortal.P.CreateCanvas(0, 0, 800, 600); 
 
             var canvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
-
 
             LayoutFarm.Drawing.Bitmap bmp = null;
             form.SetGLPaintHandler((o, s) =>
@@ -58,17 +63,42 @@ namespace Mini2
                     bmp = new LayoutFarm.Drawing.Bitmap(bitmap.Width, bitmap.Height, bitmap);
                 }
 
-                canvas.DrawImage(bmp, new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height));
-
+                //draw full image to destination
+                //canvas.DrawImage(bmp, GenRect(0, 0, bmp.Width / 2, bmp.Height / 2));
+                canvas.DrawImage(bmp, new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width / 2, bmp.Height / 2));
+                //----------------------
+                //1. draw from some part of src image to dest
+                //canvas.DrawImage(bmp,
+                //    //dest
+                //    //new LayoutFarm.Drawing.RectangleF(0, 350, bmp.Width, bmp.Height),
+                //    new LayoutFarm.Drawing.RectangleF(0, 350, bmp.Width, bmp.Height),
+                //    //src
+                //    new LayoutFarm.Drawing.RectangleF(0, 0, 100, 100));
                 canvas.DrawImage(bmp,
                     //dest
-                    new LayoutFarm.Drawing.RectangleF(0, 350, bmp.Width, bmp.Height),
+                    //new LayoutFarm.Drawing.RectangleF(0, 350, bmp.Width, bmp.Height),
+                   new LayoutFarm.Drawing.RectangleF(0, 350, bmp.Width / 2, bmp.Height / 2),
                     //src
-                    new LayoutFarm.Drawing.RectangleF(50, 50, 100, 100));
-                //----------------------
+                   new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height));
+
+                 
+                ////----------------------
+                canvas.DrawImage(bmp,
+                    //dest 
+                    new LayoutFarm.Drawing.RectangleF(350, 350, bmp.Width / 2, bmp.Height / 2),
+                    //src
+                    new LayoutFarm.Drawing.RectangleF(100, 100, bmp.Width - 100, bmp.Height - 100)); 
+                 ////----------------------
+                 //2. another method
+
+                 var refBmp = new LayoutFarm.Drawing.ReferenceBitmap(bmp, 50, 50, 100, 100);
+                 canvas.DrawImage(refBmp,
+                     new LayoutFarm.Drawing.RectangleF(300, 100, refBmp.Width, refBmp.Height));
+
+
                 canvas.StrokeColor = LayoutFarm.Drawing.Color.Blue;
 
-                canvas.DrawLine(0, 0, 400, 400);
+                canvas.DrawLine(0, 0, 800, 800);
             });
             form.Show();
         }

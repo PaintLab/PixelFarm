@@ -16,6 +16,10 @@ namespace LayoutFarm.DrawingGL
         {
             this.image = image;
         }
+        public override bool IsInvert
+        {   
+            get { return false; }
+        }
         public override IntPtr GetRawBufferHead()
         {
             byte[] buffer = image.GetBuffer();

@@ -42,8 +42,55 @@
         }
         public override void Dispose()
         {
-
         }
     }
 
+    public sealed class ReferenceBitmap : Image
+    {
+        int width;
+        int height;
+        int referenceX;
+        int referenceY;
+        Bitmap originalBmp;
+        public ReferenceBitmap(Bitmap originalBmp, int x, int y, int w, int h)
+        {
+            this.originalBmp = originalBmp;
+            this.referenceX = x;
+            this.referenceY = y;
+            this.width = w;
+            this.height = h;
+        }
+        public override int Width
+        {
+            get { return this.width; }
+        }
+        public override object InnerImage
+        {
+            get
+            {
+                return this.originalBmp.InnerImage;
+            }
+            set
+            {
+                //can't set
+            }
+        }
+        public override int Height
+        {
+            get { return this.height; }
+        }
+        public override void Dispose()
+        {
+            this.originalBmp = null;
+        }
+        public int ReferenceX
+        {
+            get { return this.referenceX; }
+        }
+        public int ReferenceY
+        {
+            get { return this.referenceY; }
+        }
+         
+    }
 }

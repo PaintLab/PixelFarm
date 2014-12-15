@@ -19,6 +19,10 @@ namespace LayoutFarm.DrawingGL
                 this.bmpW = bitmap.Width;
                 this.bmpH = bitmap.Height;
             }
+            public override bool IsInvert
+            {
+                get { return true; }
+            }
             public override int Width
             {
                 get { return this.bmpW; }

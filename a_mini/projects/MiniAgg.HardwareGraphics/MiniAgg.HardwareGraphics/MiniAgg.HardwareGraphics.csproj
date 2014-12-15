@@ -57,6 +57,7 @@
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Texture\GLBitmapReference.cs" />
     <Compile Include="Texture\LazyAggBitmapBufferProvider.cs" />
     <Compile Include="Texture\TextureAtlas.cs" />
   </ItemGroup>

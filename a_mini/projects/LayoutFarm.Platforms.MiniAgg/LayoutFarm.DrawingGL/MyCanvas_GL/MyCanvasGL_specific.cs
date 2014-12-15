@@ -239,7 +239,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             canvasGL2d.Clear(c);
         }
         //-------------------------------------------
-        public override void DrawImage(Image image, RectangleF destRect)
+        public override void DrawImage(Bitmap image, RectangleF destRect)
         {
             GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
             if (glBitmapTexture != null)
@@ -258,7 +258,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
-        public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
+        public override void DrawImage(Bitmap image, RectangleF destRect, RectangleF srcRect)
         {
             //copy from src to dest
 
@@ -266,7 +266,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             if (glBitmapTexture != null)
             {
                 canvasGL2d.DrawImage(glBitmapTexture, srcRect,
-                    destRect.X, destRect.Y, destRect.Width, destRect.Height, ImageFillStyle.Stretch);
+                    destRect.X, destRect.Y, destRect.Width, destRect.Height);
             }
             else
             {
@@ -277,11 +277,53 @@ namespace LayoutFarm.Drawing.DrawingGL
                     //TODO: add to another field
                     image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
                     canvasGL2d.DrawImage(glBitmapTexture,
-                        srcRect, destRect.X, destRect.Y, destRect.Width, destRect.Height, ImageFillStyle.Stretch);
+                       srcRect, destRect.X, destRect.Y, destRect.Width, destRect.Height);
                 }
             }
+
         }
-         
+        public override void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest)
+        {
+            //use reference image  
+            GLBitmapReference glBitmapTextureRef = referenceBmp.InnerImage as GLBitmapReference;
+            if (glBitmapTextureRef != null)
+            {
+                canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
+            }
+            else
+            {
+                var currentInnerImage = referenceBmp.InnerImage as System.Drawing.Bitmap;
+                if (currentInnerImage != null)
+                {
+                    //create  and replace ?
+                    //TODO: add to another field
+                    referenceBmp.InnerImage = glBitmapTextureRef = new GLBitmapReference(
+                        GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage),
+                        referenceBmp.ReferenceX,
+                        referenceBmp.ReferenceY,
+                        referenceBmp.Width,
+                        referenceBmp.Height);
+                    canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
+                }
+                else
+                {
+                    var currentGLImage = referenceBmp.InnerImage as GLBitmap;
+                    if (currentGLImage != null)
+                    {
+                        glBitmapTextureRef = new GLBitmapReference(
+                              currentGLImage,
+                              referenceBmp.ReferenceX,
+                              referenceBmp.ReferenceY,
+                              referenceBmp.Width,
+                              referenceBmp.Height);
+                        canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
+                    }
+                }
+
+            }
+
+
+        }
         public override Color StrokeColor
         {
             get

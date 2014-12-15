@@ -1,9 +1,7 @@
 ﻿//MIT 2014, WinterDev
-using System.Text;
-using System;
-using System.Runtime.InteropServices;
 
-using Tesselate;
+using System;
+using System.Text;
 using OpenTK.Graphics.OpenGL;
 
 namespace LayoutFarm.DrawingGL
@@ -17,9 +15,10 @@ namespace LayoutFarm.DrawingGL
         public abstract void ReleaseBufferHead();
         public abstract int Width { get; }
         public abstract int Height { get; }
+        public abstract bool IsInvert { get; }
     }
 
-   
+
     public class GLBitmap : IDisposable
     {
         int textureId;
@@ -27,20 +26,41 @@ namespace LayoutFarm.DrawingGL
         int height;
         byte[] rawBuffer;
         LazyBitmapBufferProvider lazyProvider;
+        bool isInvertImage = false;
 
-        public GLBitmap(int w, int h, byte[] rawBuffer)
+        public GLBitmap(int w, int h, byte[] rawBuffer, bool isInvertImage)
         {
             this.width = w;
             this.height = h;
             this.rawBuffer = rawBuffer;
+            this.isInvertImage = isInvertImage;
         }
         public GLBitmap(LazyBitmapBufferProvider lazyProvider)
         {
             this.width = lazyProvider.Width;
             this.height = lazyProvider.Height;
             this.lazyProvider = lazyProvider;
+            this.isInvertImage = lazyProvider.IsInvert;
+        }
+        public bool IsInvert
+        {
+            get { return this.isInvertImage; }
         }
 
+
+
+        public int Width
+        {
+            get { return this.width; }
+        }
+        public int Height
+        {
+            get { return this.height; }
+        }
+
+
+        //---------------------------------
+        //only after gl context is created
         internal int GetServerTextureId()
         {
             if (this.textureId == 0)
@@ -50,7 +70,6 @@ namespace LayoutFarm.DrawingGL
                 GL.GenTextures(1, out this.textureId);
                 //bind
                 GL.BindTexture(TextureTarget.Texture2D, this.textureId);
-
                 if (this.rawBuffer != null)
                 {
                     unsafe
@@ -79,18 +98,9 @@ namespace LayoutFarm.DrawingGL
             }
             return this.textureId;
         }
-        public int Width
-        {
-            get { return this.width; }
-        }
-        public int Height
-        {
-            get { return this.height; }
-        }
-
-       
         public void Dispose()
         {
+
             GL.DeleteTextures(1, ref textureId);
         }
 
@@ -100,7 +110,6 @@ namespace LayoutFarm.DrawingGL
         static int dbugIdTotal;
 #endif
     }
-
 
 
 }
