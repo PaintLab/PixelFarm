@@ -61,6 +61,7 @@
     <Compile Include="LayoutFarm.Drawing.MiniAgg\MyCanvas\QuadPages.cs" />
     <Compile Include="LayoutFarm.DrawingGL\Implementation\GLBitmapTextureHelper.cs" />
     <Compile Include="LayoutFarm.DrawingGL\Implementation\MyBitmapGL.cs" />
+    <Compile Include="LayoutFarm.DrawingGL\MyCanvas_GL\GdiTextBoard.cs" />
     <Compile Include="LayoutFarm.DrawingGL\MyCanvas_GL\MyCanvasGL_specific.cs" />
     <Compile Include="LayoutFarm.DrawingGL\0_Start\CanvasGLPlatform.cs" />
     <Compile Include="LayoutFarm.DrawingGL\0_Start\CanvasGLPortal.cs" />

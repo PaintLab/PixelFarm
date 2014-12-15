@@ -1,17 +1,4 @@
-﻿//2014 BSD, WinterDev
-//ArthurHub
-
-// "Therefore those skilled at the unorthodox
-// are infinite as heaven and earth,
-// inexhaustible as the great rivers.
-// When they come to an end,
-// they begin again,
-// like the days and months;
-// they die and are reborn,
-// like the four seasons."
-// 
-// - Sun Tsu,
-// "The Art of War"
+﻿//MIT 2014, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -29,10 +16,8 @@ namespace LayoutFarm.Drawing.DrawingGL
 
         //-------
         //platform specific code
-        System.Drawing.Bitmap textBoardBmp;
-        System.Drawing.Graphics gx;
-        int textBoardW = 800;
-        int textBoardH = 100;
+        GdiTextBoard gdiTextBoard;
+
         //-------
 
         public MyCanvasGL(GraphicsPlatform platform, int hPageNum, int vPageNum, int left, int top, int width, int height)
@@ -42,9 +27,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             //------------------------
             //platform specific code
             //-------------------------
-            //32 bits bitmap
-            textBoardBmp = new System.Drawing.Bitmap(textBoardW, textBoardH, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            gx = System.Drawing.Graphics.FromImage(textBoardBmp);
+            gdiTextBoard = new GdiTextBoard(800, 100);
 
 
         }
@@ -258,10 +241,10 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
+        
         public override void DrawImage(Bitmap image, RectangleF destRect, RectangleF srcRect)
         {
-            //copy from src to dest
-
+            //copy from src to dest 
             GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
             if (glBitmapTexture != null)
             {
@@ -279,8 +262,26 @@ namespace LayoutFarm.Drawing.DrawingGL
                     canvasGL2d.DrawImage(glBitmapTexture,
                        srcRect, destRect.X, destRect.Y, destRect.Width, destRect.Height);
                 }
+            } 
+        }
+        public override void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs)
+        {
+            GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
+            if (glBitmapTexture != null)
+            {
+                canvasGL2d.DrawImages(glBitmapTexture, destAndSrcPairs);
             }
-
+            else
+            {
+                var currentInnerImage = image.InnerImage as System.Drawing.Bitmap;
+                if (currentInnerImage != null)
+                {
+                    //create  and replace ?
+                    //TODO: add to another field
+                    image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
+                    canvasGL2d.DrawImages(glBitmapTexture, destAndSrcPairs);
+                }
+            }  
         }
         public override void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest)
         {
@@ -366,30 +367,14 @@ namespace LayoutFarm.Drawing.DrawingGL
         {
             if (this.Note1 == 2)
             {
-                //test draw string to gdi hdc:
 
+                //test draw string to gdi hdc: 
                 //if need Gdi+/gdi to draw string                              
                 //then draw it to hdc and  copy to canvas2d
                 //[ platform specfic code]
-                //1. use bitmap 
-                IntPtr gxdc = gx.GetHdc();
-                //MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
-                NativeTextWin32.TextOut(gxdc, 0, 0, buffer, buffer.Length);
-                //MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
-                gx.ReleaseHdc(gxdc);
-                //---------------------------                 
-                //this.textBoardBmp.Save("d:\\WImageTest\\t.png"); 
-                //var bmp = new LayoutFarm.Drawing.Bitmap(this.textBoardBmp.Width, this.Height, this.textBoardBmp);
-                var glbmp = GLBitmapTextureHelper.CreateBitmapTexture(this.textBoardBmp);
-                canvasGL2d.DrawImage(glbmp, x, y, textBoardW, textBoardH);
-                //DrawImageInvert(bmp, new RectangleF(x, y, 800, 600),
-                //    new RectangleF(0, 0, 800, 600));
-                glbmp.Dispose();
-                //var innerImg = bmp.InnerImage as GLBitmapTexture;
-                //innerImg.Dispose();
-                //bmp.InnerImage = null;
-                //bmp.Dispose();
-                //---------------------------                 
+                //1. use bitmap  
+                gdiTextBoard.DrawText(this, buffer, x, y);
+
             }
             else
             {

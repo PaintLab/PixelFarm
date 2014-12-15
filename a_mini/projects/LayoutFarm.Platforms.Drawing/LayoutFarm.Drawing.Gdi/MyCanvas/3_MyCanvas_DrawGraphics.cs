@@ -291,6 +291,29 @@ namespace LayoutFarm.Drawing.WinGdi
                      referenceBmp.Width, referenceBmp.Height),
                 System.Drawing.GraphicsUnit.Pixel);
         }
+        public override void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs)
+        {
+            ReleaseHdc();
+            int j = destAndSrcPairs.Length;
+            if (j > 1)
+            {
+                if ((j % 2) != 0)
+                {
+                    //make it even number
+                    j -= 1;
+                }
+                //loop draw
+                var inner = image.InnerImage as System.Drawing.Image;
+                for (int i = 0; i < j; )
+                {
+                    gx.DrawImage(inner,
+                        destAndSrcPairs[i].ToRectF(),
+                        destAndSrcPairs[i + 1].ToRectF(),
+                        System.Drawing.GraphicsUnit.Pixel);
+                    i += 2;
+                }
+            }
+        }
         /// <summary>
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
         /// </summary>

@@ -270,7 +270,29 @@ namespace LayoutFarm.Drawing.WinGdi
                 srcRect.ToRectF(),
                 System.Drawing.GraphicsUnit.Pixel);
         }
-
+        public override void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs)
+        {
+            ReleaseHdc();
+            int j = destAndSrcPairs.Length;
+            if (j > 1)
+            {
+                if ((j % 2) != 0)
+                {
+                    //make it even number
+                    j -= 1;
+                }
+                //loop draw
+                var inner = image.InnerImage as System.Drawing.Image;
+                for (int i = 0; i < j; )
+                {
+                    gx.DrawImage(inner,
+                        destAndSrcPairs[i].ToRectF(),
+                        destAndSrcPairs[i + 1].ToRectF(),
+                        System.Drawing.GraphicsUnit.Pixel);
+                    i += 2;
+                }
+            }
+        }
         /// <summary>
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
@@ -288,8 +310,8 @@ namespace LayoutFarm.Drawing.WinGdi
             gx.DrawImage(referenceBmp.InnerImage as System.Drawing.Image,
                 dest.ToRectF(),
                  new System.Drawing.RectangleF(
-                     referenceBmp.ReferenceX,referenceBmp.ReferenceY,
-                     referenceBmp.Width,referenceBmp.Height), 
+                     referenceBmp.ReferenceX, referenceBmp.ReferenceY,
+                     referenceBmp.Width, referenceBmp.Height),
                 System.Drawing.GraphicsUnit.Pixel);
         }
         /// <summary>
