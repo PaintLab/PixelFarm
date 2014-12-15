@@ -36,16 +36,14 @@ namespace Mini2
                 {
                     fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
                     canvas.CurrentFont = fontinfo.ResolvedFont;
-                }
-
-                
+                } 
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White); 
-                canvas.FillRectangle(LayoutFarm.Drawing.Color.Blue, 0, 0, 400, 400);
+                canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 0, 0, 400, 400);
                 //test draw text
                 canvas.Note1 = 2;
-                canvas.DrawText("AaBbCc0123".ToCharArray(), 0, 0);
+                canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 0);
                 canvas.Note1 = 0;
-                canvas.DrawText("ABCD".ToCharArray(), 0, 100);
+                canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100);
 
             });
             form.Show();

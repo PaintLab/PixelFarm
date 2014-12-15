@@ -45,12 +45,11 @@ namespace LayoutFarm.DrawingGL
                     break;
                 }
 
-
                 //-------------------------------------------------------------
                 FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
+                //glyph image32 
+                //-------------------------------------------------------------
                 GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(glyph.glyphImage32));
-
-
                 var left = glyph.exportGlyph.img_horiBearingX;
                 this.canvas2d.DrawImage(bmp,
                     (float)(xpos + (left >> 6)),

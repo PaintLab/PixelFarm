@@ -1178,6 +1178,7 @@ namespace LayoutFarm.DrawingGL
                                         }
                                         //close
                                         ps.CloseFigure();
+
                                         VertexStore vxs = ps.Vxs;
                                         sclineRas.Reset();
                                         sclineRas.AddPath(vxs);
@@ -1217,33 +1218,17 @@ namespace LayoutFarm.DrawingGL
                                     //freeze stencill buffer
                                     GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
 
-                                    if (this.Note1 == 1)
-                                    {
-                                        //prepare black bg
-                                        int j = npoints / 2;
-                                        //first point
-                                        if (j < 2)
-                                        {
-                                            return;
-                                        }
-                                        ps.Clear();
-                                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
-                                        int nn = 2;
-                                        for (int i = 1; i < j; ++i)
-                                        {
-                                            ps.LineTo(vertex2dCoords[nn++],
-                                                vertex2dCoords[nn++]);
-                                        }
-                                        //close
-                                        ps.CloseFigure();
+                                    if (this.Note1 == 1) //temp
+                                    {   
+                                        //------------------------------------------
+                                        //we already have valid ps from stencil step
+                                        //------------------------------------------
                                         VertexStore vxs = ps.Vxs;
                                         sclineRas.Reset();
-                                        sclineRas.AddPath(vxs);
-
+                                        sclineRas.AddPath(vxs); 
                                         //-------------------------------------------------------------------------------------
                                         //1.  we draw only alpha chanel of this black color to destination color
-                                        //so we use  BlendFuncSeparate  as follow ...
-
+                                        //so we use  BlendFuncSeparate  as follow ... 
                                         GL.BlendFuncSeparate(
                                              BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
                                              BlendingFactorSrc.One, BlendingFactorDest.Zero); //use alpha chanel from source

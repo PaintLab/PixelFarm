@@ -27,7 +27,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             //------------------------
             //platform specific code
             //-------------------------
-            gdiTextBoard = new GdiTextBoard(800, 100,this.GetDefaultHFont());
+            gdiTextBoard = new GdiTextBoard(800, 100, new System.Drawing.Font("tahoma", 10));
 
 
         }
@@ -241,7 +241,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
-        
+
         public override void DrawImage(Bitmap image, RectangleF destRect, RectangleF srcRect)
         {
             //copy from src to dest 
@@ -262,7 +262,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                     canvasGL2d.DrawImage(glBitmapTexture,
                        srcRect, destRect.X, destRect.Y, destRect.Width, destRect.Height);
                 }
-            } 
+            }
         }
         public override void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs)
         {
@@ -281,7 +281,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                     image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
                     canvasGL2d.DrawImages(glBitmapTexture, destAndSrcPairs);
                 }
-            }  
+            }
         }
         public override void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest)
         {
@@ -359,7 +359,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             set
             {
                 //sample only *** 
-                canvasGL2d.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
+                canvasGL2d.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 10);
                 base.CurrentFont = value;
             }
         }
