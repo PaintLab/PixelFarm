@@ -27,7 +27,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             //------------------------
             //platform specific code
             //-------------------------
-            gdiTextBoard = new GdiTextBoard(800, 100);
+            gdiTextBoard = new GdiTextBoard(800, 100,this.GetDefaultHFont());
 
 
         }

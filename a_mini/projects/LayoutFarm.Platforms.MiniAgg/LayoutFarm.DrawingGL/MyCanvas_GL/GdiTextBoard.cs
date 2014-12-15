@@ -21,12 +21,13 @@ namespace LayoutFarm.Drawing.DrawingGL
         int height;
         Dictionary<char, LayoutFarm.Drawing.RectangleF> charMap = new Dictionary<char, RectangleF>();
         LayoutFarm.Drawing.Bitmap myTextBoardBmp;
-
-        public GdiTextBoard(int width, int height)
+        IntPtr hFont;
+        public GdiTextBoard(int width, int height, IntPtr hFont)
         {
             this.width = width;
             this.height = height;
             this.textureAtlas = new TextureAtlas(width, height);
+            this.hFont = hFont;
             //32 bits bitmap
             textBoardBmp = new System.Drawing.Bitmap(textBoardW, textBoardH, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             gx = System.Drawing.Graphics.FromImage(textBoardBmp);
@@ -42,6 +43,13 @@ namespace LayoutFarm.Drawing.DrawingGL
             //draw each character
             int curX = 0;
             int curY = 0;
+
+            //transparent background
+            MyWin32.SetBkMode(gxdc, MyWin32._SetBkMode_TRANSPARENT);
+            
+            //set user font to dc
+            //MyWin32.SelectObject(gxdc, this.hFont);
+
             for (int i = 0; i < len; ++i)
             {
 
@@ -97,7 +105,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                     //dest
                     destAndSrc[pp] = new RectangleF(curX, curY, found.Width, found.Height);
                     //src
-                    destAndSrc[pp + 1] = found; 
+                    destAndSrc[pp + 1] = found;
                     curX += found.Width;
 
                 }
