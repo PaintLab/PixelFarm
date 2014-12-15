@@ -48,8 +48,9 @@ namespace LayoutFarm.DrawingGL
 
                 //-------------------------------------------------------------
                 FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
-                GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(glyph.glyphImage32);
-                 
+                GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(glyph.glyphImage32));
+
+
                 var left = glyph.exportGlyph.img_horiBearingX;
                 this.canvas2d.DrawImageInvert(bmp,
                     (float)(xpos + (left >> 6)),

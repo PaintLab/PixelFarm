@@ -138,14 +138,15 @@ namespace LayoutFarm.DrawingGL
         }
 
 
-        public void DrawImage(GLBitmapTexture bmp, float x, float y)
+        public void DrawImage(GLBitmap bmp, float x, float y)
         {
             unsafe
             {
 
                 GL.Enable(EnableCap.Texture2D);
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                    
+                    GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
                     GL.EnableClientState(ArrayCap.TextureCoordArray); //***
 
                     float* arr = stackalloc float[8];
@@ -167,11 +168,11 @@ namespace LayoutFarm.DrawingGL
                 } GL.Disable(EnableCap.Texture2D);
             }
         }
-        public void DrawImageInvert(GLBitmapTexture bmp, float x, float y)
+        public void DrawImageInvert(GLBitmap bmp, float x, float y)
         {
             DrawImageInvert(bmp, x, y, bmp.Width, bmp.Height);
         }
-        public void DrawImageInvert(GLBitmapTexture bmp, float x, float y, float w, float h)
+        public void DrawImageInvert(GLBitmap bmp, float x, float y, float w, float h)
         {
             //DrawImage(bmp,
             //      new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
@@ -181,7 +182,8 @@ namespace LayoutFarm.DrawingGL
 
                 GL.Enable(EnableCap.Texture2D);
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                     
+                    GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
                     GL.EnableClientState(ArrayCap.TextureCoordArray); //***
 
                     float* arr = stackalloc float[8];
@@ -199,14 +201,14 @@ namespace LayoutFarm.DrawingGL
             }
         }
         
-        public void DrawImage(GLBitmapTexture bmp, float x, float y, float w, float h)
+        public void DrawImage(GLBitmap bmp, float x, float y, float w, float h)
         {
             DrawImage(bmp,
                 new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                 x, y, w, h, ImageFillStyle.Tile, true);
 
         }
-        public void DrawImage(GLBitmapTexture bmp,
+        public void DrawImage(GLBitmap bmp,
             LayoutFarm.Drawing.RectangleF srcRect,
             float x, float y, float w, float h,
             ImageFillStyle imageFillStyle, bool invert = false)
@@ -222,7 +224,7 @@ namespace LayoutFarm.DrawingGL
                         case ImageFillStyle.Stretch:
                             {
 
-                                GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                                GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
                                 GL.EnableClientState(ArrayCap.TextureCoordArray); //***
 
 
@@ -260,7 +262,8 @@ namespace LayoutFarm.DrawingGL
                         case ImageFillStyle.Tile:
                         default:
                             {
-                                GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+
+                                GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
                                 GL.EnableClientState(ArrayCap.TextureCoordArray); //***
 
                                 //texture source coord 1= 100% of original width
@@ -1334,7 +1337,7 @@ namespace LayoutFarm.DrawingGL
                                                 //draw texture image 
                                                 LayoutFarm.Drawing.TextureBrush tbrush = (LayoutFarm.Drawing.TextureBrush)this.Brush;
                                                 LayoutFarm.Drawing.Image img = tbrush.TextureImage;
-                                                GLBitmapTexture bmpTexture = (GLBitmapTexture)tbrush.InnerImage2;
+                                                GLBitmap bmpTexture = (GLBitmap)tbrush.InnerImage2;
                                                 this.DrawImage(bmpTexture, 0, 0);
                                                 //GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
                                                 //this.DrawImage(bmp, 0, 0);

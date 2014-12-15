@@ -62,6 +62,7 @@
     <Compile Include="3_LayoutFarmSamples\06_SimpleDraw_GradientBrush.cs" />
     <Compile Include="3_LayoutFarmSamples\07_SimpleDraw_PolygonStencil.cs" />
     <Compile Include="3_LayoutFarmSamples\08_SimpleDraw_DrawText2.cs" />
+    <Compile Include="3_LayoutFarmSamples\09_TestTextureAtlas.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>

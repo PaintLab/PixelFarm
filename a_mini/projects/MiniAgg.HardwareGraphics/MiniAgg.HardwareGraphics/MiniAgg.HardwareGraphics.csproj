@@ -51,12 +51,14 @@
     <Compile Include="GLCanvas\CanvasGL2dInternal.cs" />
     <Compile Include="GLCanvas\CanvasGL2d_TextAndFont.cs" />
     <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
-    <Compile Include="GLCanvas\GLBitmapTexture.cs" />
+    <Compile Include="Texture\GLBitmap.cs" />
     <Compile Include="GLCanvas\GLTextPrinter.cs" />
     <Compile Include="GLCanvas\SvgArc.cs" />
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Texture\LazyAggBitmapBufferProvider.cs" />
+    <Compile Include="Texture\TextureAtlas.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">

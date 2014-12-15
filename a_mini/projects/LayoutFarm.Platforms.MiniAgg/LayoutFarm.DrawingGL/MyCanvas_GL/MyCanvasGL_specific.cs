@@ -181,7 +181,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                         //prepare texture brush 
 
                         var tbrush = (TextureBrush)brush;
-                        GLBitmapTexture bmpTexture = null;
+                        GLBitmap bmpTexture = null;
                         if (tbrush.InnerImage2 == null)
                         {
                             //create gl image
@@ -241,7 +241,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         //-------------------------------------------
         public override void DrawImage(Image image, RectangleF destRect)
         {
-            GLBitmapTexture glBitmapTexture = image.InnerImage as GLBitmapTexture;
+            GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
             if (glBitmapTexture != null)
             {
                 canvasGL2d.DrawImage(glBitmapTexture, destRect.X, destRect.Y, destRect.Width, destRect.Height);
@@ -262,7 +262,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         {
             //copy from src to dest
 
-            GLBitmapTexture glBitmapTexture = image.InnerImage as GLBitmapTexture;
+            GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
             if (glBitmapTexture != null)
             {
                 canvasGL2d.DrawImage(glBitmapTexture, srcRect,

@@ -1,22 +1,60 @@
-﻿using System.Drawing;
-using LayoutFarm.DrawingGL;
+﻿using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
+
 namespace LayoutFarm.DrawingGL
 {
     public static class GLBitmapTextureHelper
     {
-
-        public static GLBitmapTexture CreateBitmapTexture(System.Drawing.Bitmap bitmap)
+        class LazyGdiBitmapBufferProvider : LazyBitmapBufferProvider
         {
-
-            System.Drawing.Imaging.BitmapData data = bitmap.LockBits(
-                new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            var bmpTexture = GLBitmapTexture.CreateBitmapTexture(bitmap.Width, bitmap.Height, data.Scan0);
-
-            bitmap.UnlockBits(data);
-            return bmpTexture;
+            System.Drawing.Bitmap bitmap;
+            System.Drawing.Imaging.BitmapData bmpdata;
+            int bmpW;
+            int bmpH;
+            public LazyGdiBitmapBufferProvider(System.Drawing.Bitmap bitmap)
+            {
+                this.bitmap = bitmap;
+                this.bmpW = bitmap.Width;
+                this.bmpH = bitmap.Height;
+            }
+            public override int Width
+            {
+                get { return this.bmpW; }
+            }
+            public override int Height
+            {
+                get { return this.bmpH; }
+            }
+            public override IntPtr GetRawBufferHead()
+            {
+                this.bmpdata = this.bitmap.LockBits(
+                    new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                    System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb); //read data as 32 bppArgb
+                return bmpdata.Scan0;
+            }
+            public override void ReleaseBufferHead()
+            {
+                if (this.bmpdata != null)
+                {
+                    this.bitmap.UnlockBits(this.bmpdata);
+                    this.bmpdata = null;
+                }
+            }
+        }
+        public static GLBitmap CreateBitmapTexture(int width, int height, System.Drawing.Bitmap bitmap)
+        {
+            return new GLBitmap(new LazyGdiBitmapBufferProvider(bitmap));
+        }
+        public static GLBitmap CreateBitmapTexture(PixelFarm.Agg.ActualImage image)
+        {
+            return new GLBitmap(new LazyAggBitmapBufferProvider(image));
+        }
+        public static GLBitmap CreateBitmapTexture(System.Drawing.Bitmap bitmap)
+        {
+            return new GLBitmap(new LazyGdiBitmapBufferProvider(bitmap));
         }
     }
 }
