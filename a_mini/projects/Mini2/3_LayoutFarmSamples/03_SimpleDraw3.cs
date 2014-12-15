@@ -81,20 +81,34 @@ namespace Mini2
                     //src
                    new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height));
 
-                 
                 ////----------------------
                 canvas.DrawImage(bmp,
                     //dest 
                     new LayoutFarm.Drawing.RectangleF(350, 350, bmp.Width / 2, bmp.Height / 2),
                     //src
-                    new LayoutFarm.Drawing.RectangleF(100, 100, bmp.Width - 100, bmp.Height - 100)); 
-                 ////----------------------
-                 //2. another method
+                    new LayoutFarm.Drawing.RectangleF(100, 100, bmp.Width - 100, bmp.Height - 100));
+                ////----------------------
+                //2. 
 
-                 var refBmp = new LayoutFarm.Drawing.ReferenceBitmap(bmp, 50, 50, 100, 100);
-                 canvas.DrawImage(refBmp,
-                     new LayoutFarm.Drawing.RectangleF(300, 100, refBmp.Width, refBmp.Height));
-
+                {
+                    var refBmp = new LayoutFarm.Drawing.ReferenceBitmap(bmp, 50, 50, 100, 100);
+                    canvas.DrawImage(refBmp,
+                        new LayoutFarm.Drawing.RectangleF(300, 100, refBmp.Width, refBmp.Height));
+                }
+                ////----------------------
+                //3. small glyph 
+                int startAt = 50;
+                int lineHeight = 20;
+                int drawXPos = 300;
+                int drawYPos = 50;
+                for (int i = 0; i < 5; ++i)
+                {
+                    var refBmp = new LayoutFarm.Drawing.ReferenceBitmap(bmp, 50, startAt, 50, 20);
+                    canvas.DrawImage(refBmp,
+                        new LayoutFarm.Drawing.RectangleF(drawXPos, drawYPos, refBmp.Width, refBmp.Height));
+                    drawXPos += 50;
+                    startAt += lineHeight;
+                }
 
                 canvas.StrokeColor = LayoutFarm.Drawing.Color.Blue;
 
