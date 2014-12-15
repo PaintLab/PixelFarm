@@ -44,7 +44,8 @@ namespace Mini2
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 0);
                 canvas.Note1 = 0;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100);
-
+                 
+                
             });
             form.Show();
         }

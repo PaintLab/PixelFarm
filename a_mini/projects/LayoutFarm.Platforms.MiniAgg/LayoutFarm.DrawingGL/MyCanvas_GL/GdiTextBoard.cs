@@ -34,7 +34,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             gx = System.Drawing.Graphics.FromImage(textBoardBmp);
             //draw character map
             //basic eng 
-            char[] chars= new char[255];
+            char[] chars = new char[255];
             for (int i = 0; i < 255; ++i)
             {
                 chars[i] = (char)i;
@@ -50,11 +50,13 @@ namespace LayoutFarm.Drawing.DrawingGL
             int curX = 0;
             int curY = 0;
 
-            //transparent background
+            //1. clear with white color, 
+            MyWin32.PatBlt(gxdc, 0, 0, width, height, MyWin32.WHITENESS);
+            //2. transparent background
             MyWin32.SetBkMode(gxdc, MyWin32._SetBkMode_TRANSPARENT);
 
             //set user font to dc
-            //MyWin32.SelectObject(gxdc, this.hFont);
+            MyWin32.SelectObject(gxdc, this.hFont);
 
             int maxLineHeight = 0;
             for (int i = 0; i < len; ++i)
@@ -84,16 +86,14 @@ namespace LayoutFarm.Drawing.DrawingGL
                     curY += maxLineHeight;
                     maxLineHeight = 0;
                 }
+
                 NativeTextWin32.TextOut(gxdc, curX, curY, buff, 1);
-
                 charMap.Add(c, new RectangleF(curX, curY, size.Width, size.Height));
-
                 curX += size.Width; //move next 
 
             }
 
             gx.ReleaseHdc(gxdc);
-
             myTextBoardBmp = new Bitmap(width, height, new LazyGdiBitmapBufferProvider(this.textBoardBmp));
             myTextBoardBmp.InnerImage = GLBitmapTextureHelper.CreateBitmapTexture(this.textBoardBmp);
 
