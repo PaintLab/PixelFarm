@@ -42,7 +42,7 @@ namespace LayoutFarm.Drawing.WinGdi
             this.gx.TranslateTransform(x, y);
 
             this.canvasOriginX = x;
-            this.canvasOriginY = y; 
+            this.canvasOriginY = y;
         }
         public override int CanvasOriginX
         {
@@ -74,7 +74,7 @@ namespace LayoutFarm.Drawing.WinGdi
             return clientRect.IntersectsWith(left, top, right, bottom);
         }
 
-        public override bool PushClipArea(int width, int height, ref Rect updateArea)
+        public override bool PushClipAreaRect(int width, int height, ref Rect updateArea)
         {
             clipRectStack.Push(currentClipRect);
 
@@ -98,7 +98,7 @@ namespace LayoutFarm.Drawing.WinGdi
                 return true;
             }
         }
-        public override void PopClipArea()
+        public override void PopClipAreaRect()
         {
             if (clipRectStack.Count > 0)
             {

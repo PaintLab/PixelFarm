@@ -65,30 +65,7 @@ namespace Mini2
                             new LayoutFarm.Drawing.PointF(70, 100)});
 
                 canvas.Note1 = 0;
-                //-------------------------------------------------------------------------
-
-                ////another  ...                
-                //canvas.FillRectangle(LayoutFarm.Drawing.Color.Yellow, 200, 0, 150, 150);
-                //canvas.CurrentBrush = linearGrBrush2;
-                //canvas.Note1 = 1; //temp
-                //canvas.FillPolygon(
-                //    new LayoutFarm.Drawing.PointF[]{
-                //        new LayoutFarm.Drawing.PointF(200, 50),
-                //        new LayoutFarm.Drawing.PointF(250, 50),
-                //        new LayoutFarm.Drawing.PointF(210, 100)});
-                //canvas.Note1 = 0;
-                ////-------------------------------------------------------------------------
-
-                //canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 400, 0, 150, 150);
-                //canvas.CurrentBrush = linearGrBrush2;
-                //canvas.Note1 = 1; //temp
-                //canvas.FillPolygon(
-                //    new LayoutFarm.Drawing.PointF[]{
-                //        new LayoutFarm.Drawing.PointF(400, 50),
-                //        new LayoutFarm.Drawing.PointF(450, 50),
-                //        new LayoutFarm.Drawing.PointF(410, 100)});
-                //canvas.Note1 = 0;
-                //-------------------------------------------------------------------------
+                //------------------------------------------------------------------------- 
             });
             form.Show();
         }
