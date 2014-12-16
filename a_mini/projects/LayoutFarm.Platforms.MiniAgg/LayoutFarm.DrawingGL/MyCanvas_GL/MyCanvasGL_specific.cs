@@ -222,27 +222,74 @@ namespace LayoutFarm.Drawing.DrawingGL
             canvasGL2d.Clear(c);
         }
         //-------------------------------------------
-        public override void DrawImage(Bitmap image, RectangleF destRect)
+        public override void DrawImage(Image image, RectangleF destRect)
         {
-            GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
-            if (glBitmapTexture != null)
+
+            if (image.IsReferenceImage)
             {
-                canvasGL2d.DrawImage(glBitmapTexture, destRect.X, destRect.Y, destRect.Width, destRect.Height);
+                //use reference image  
+
+                GLBitmapReference bmpRef = image.InnerImage as GLBitmapReference;
+                if (bmpRef != null)
+                {
+                    canvasGL2d.DrawImage(bmpRef, destRect.X, destRect.Y);
+                }
+                else
+                {
+                    var currentInnerImage = image.InnerImage as System.Drawing.Bitmap;
+                    if (currentInnerImage != null)
+                    {
+                        //create  and replace ?
+                        //TODO: add to another field
+                        image.InnerImage = bmpRef = new GLBitmapReference(
+                            GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage),
+                            image.ReferenceX,
+                            image.ReferenceY,
+                            image.Width,
+                            image.Height);
+                        canvasGL2d.DrawImage(bmpRef, destRect.X, destRect.Y);
+                    }
+                    else
+                    {
+                        var currentGLImage = image.InnerImage as GLBitmap;
+                        if (currentGLImage != null)
+                        {
+                            bmpRef = new GLBitmapReference(
+                                  currentGLImage,
+                                  image.ReferenceX,
+                                  image.ReferenceY,
+                                  image.Width,
+                                  image.Height);
+                            canvasGL2d.DrawImage(bmpRef, destRect.X, destRect.Y);
+                        }
+                    }
+                }
             }
             else
             {
-                var currentInnerImage = image.InnerImage as System.Drawing.Bitmap;
-                if (currentInnerImage != null)
+
+                GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
+                if (glBitmapTexture != null)
                 {
-                    //create  and replace ?
-                    //TODO: add to another field
-                    image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
                     canvasGL2d.DrawImage(glBitmapTexture, destRect.X, destRect.Y, destRect.Width, destRect.Height);
                 }
+                else
+                {
+                    var currentInnerImage = image.InnerImage as System.Drawing.Bitmap;
+                    if (currentInnerImage != null)
+                    {
+                        //create  and replace ?
+                        //TODO: add to another field
+                        image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
+                        canvasGL2d.DrawImage(glBitmapTexture, destRect.X, destRect.Y, destRect.Width, destRect.Height);
+                    }
+                }
             }
+
+
         }
 
-        public override void DrawImage(Bitmap image, RectangleF destRect, RectangleF srcRect)
+        public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
             //copy from src to dest 
             GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
@@ -264,7 +311,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
-        public override void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs)
+        public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
             GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
             if (glBitmapTexture != null)
@@ -283,48 +330,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
-        public override void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest)
-        {
-            //use reference image  
-            GLBitmapReference glBitmapTextureRef = referenceBmp.InnerImage as GLBitmapReference;
-            if (glBitmapTextureRef != null)
-            {
-                canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
-            }
-            else
-            {
-                var currentInnerImage = referenceBmp.InnerImage as System.Drawing.Bitmap;
-                if (currentInnerImage != null)
-                {
-                    //create  and replace ?
-                    //TODO: add to another field
-                    referenceBmp.InnerImage = glBitmapTextureRef = new GLBitmapReference(
-                        GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage),
-                        referenceBmp.ReferenceX,
-                        referenceBmp.ReferenceY,
-                        referenceBmp.Width,
-                        referenceBmp.Height);
-                    canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
-                }
-                else
-                {
-                    var currentGLImage = referenceBmp.InnerImage as GLBitmap;
-                    if (currentGLImage != null)
-                    {
-                        glBitmapTextureRef = new GLBitmapReference(
-                              currentGLImage,
-                              referenceBmp.ReferenceX,
-                              referenceBmp.ReferenceY,
-                              referenceBmp.Width,
-                              referenceBmp.Height);
-                        canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
-                    }
-                }
 
-            }
-
-
-        }
         public override Color StrokeColor
         {
             get

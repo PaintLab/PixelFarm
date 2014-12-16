@@ -10,6 +10,10 @@
         {
             get { return new Size(this.Width, this.Height); }
         }
+        public abstract bool IsReferenceImage { get; }
+        public abstract int ReferenceX { get; }
+        public abstract int ReferenceY { get; }
+
     }
     public sealed class Bitmap : Image
     {
@@ -42,6 +46,18 @@
         }
         public override void Dispose()
         {
+        }
+        public override bool IsReferenceImage
+        {
+            get { return false; }
+        }
+        public override int ReferenceX
+        {
+            get { return 0; }
+        }
+        public override int ReferenceY
+        {
+            get { return 0; }
         }
     }
 
@@ -83,14 +99,17 @@
         {
             this.originalBmp = null;
         }
-        public int ReferenceX
+        public override int ReferenceX
         {
             get { return this.referenceX; }
         }
-        public int ReferenceY
+        public override int ReferenceY
         {
             get { return this.referenceY; }
         }
-         
+        public override bool IsReferenceImage
+        {
+            get { return true; }
+        }
     }
 }

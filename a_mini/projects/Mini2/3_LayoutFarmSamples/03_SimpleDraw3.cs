@@ -88,8 +88,7 @@ namespace Mini2
                     //src
                     new LayoutFarm.Drawing.RectangleF(100, 100, bmp.Width - 100, bmp.Height - 100));
                 ////----------------------
-                //2. 
-
+                //2.  
                 {
                     var refBmp = new LayoutFarm.Drawing.ReferenceBitmap(bmp, 50, 50, 100, 100);
                     canvas.DrawImage(refBmp,

@@ -88,10 +88,10 @@ namespace LayoutFarm.Drawing
         public abstract void FillPolygon(Brush brush, PointF[] points);
         //-------------------------------------------------------  
         //images
-        public abstract void DrawImage(Bitmap image, RectangleF dest, RectangleF src);
-        public abstract void DrawImage(Bitmap image, RectangleF dest);
-        public abstract void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest);
-        public abstract void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs);
+        public abstract void DrawImage(Image image, RectangleF dest, RectangleF src);
+        public abstract void DrawImage(Image image, RectangleF dest);
+        //public abstract void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest);
+        public abstract void DrawImages(Image image, RectangleF[] destAndSrcPairs);
         //---------------------------------------------------------------------------
 #if DEBUG
         public abstract void dbug_DrawRuler(int x);

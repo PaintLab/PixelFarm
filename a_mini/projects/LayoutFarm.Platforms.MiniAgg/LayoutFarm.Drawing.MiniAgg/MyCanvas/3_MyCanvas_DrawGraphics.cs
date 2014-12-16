@@ -262,7 +262,7 @@ namespace LayoutFarm.Drawing.WinGdi
         /// <param name="destRect"><see cref="T:System.Drawing.RectangleF"/> structure that specifies the location and size of the drawn image. The image is scaled to fit the rectangle. </param>
         /// <param name="srcRect"><see cref="T:System.Drawing.RectangleF"/> structure that specifies the portion of the <paramref name="image"/> object to draw. </param>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
-        public override void DrawImage(Bitmap image, RectangleF destRect, RectangleF srcRect)
+        public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
             ReleaseHdc();
             gx.DrawImage(image.InnerImage as System.Drawing.Image,
@@ -270,7 +270,7 @@ namespace LayoutFarm.Drawing.WinGdi
                 srcRect.ToRectF(),
                 System.Drawing.GraphicsUnit.Pixel);
         }
-        public override void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs)
+        public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
             ReleaseHdc();
             int j = destAndSrcPairs.Length;
@@ -297,23 +297,26 @@ namespace LayoutFarm.Drawing.WinGdi
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
         /// <param name="image"><see cref="T:System.Drawing.Image"/> to draw. </param><param name="destRect"><see cref="T:System.Drawing.Rectangle"/> structure that specifies the location and size of the drawn image. </param><exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        public override void DrawImage(Bitmap image, RectangleF destRect)
+        public override void DrawImage(Image image, RectangleF destRect)
         {
             ReleaseHdc();
-            gx.DrawImage(image.InnerImage as System.Drawing.Image, destRect.ToRectF());
-        }
-        public override void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest)
-        {
+            if (image.IsReferenceImage)
+            {
 
-            ReleaseHdc();
+                gx.DrawImage(image.InnerImage as System.Drawing.Image,
+                    destRect.ToRectF(),
+                     new System.Drawing.RectangleF(
+                         image.ReferenceX, image.ReferenceY,
+                         image.Width, image.Height),
+                    System.Drawing.GraphicsUnit.Pixel);
+            }
+            else
+            {
+                gx.DrawImage(image.InnerImage as System.Drawing.Image, destRect.ToRectF());
+            }
 
-            gx.DrawImage(referenceBmp.InnerImage as System.Drawing.Image,
-                dest.ToRectF(),
-                 new System.Drawing.RectangleF(
-                     referenceBmp.ReferenceX, referenceBmp.ReferenceY,
-                     referenceBmp.Width, referenceBmp.Height),
-                System.Drawing.GraphicsUnit.Pixel);
         }
+
         /// <summary>
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
         /// </summary>
