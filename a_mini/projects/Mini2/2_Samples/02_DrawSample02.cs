@@ -43,7 +43,6 @@ namespace Mini2
                 //-----------------------------------------------------
                 //smooth with agg 
 
-                canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
                 var color = new LayoutFarm.Drawing.Color(50, 255, 0, 0);  //  LayoutFarm.Drawing.Color.Red;
                 //rect polygon
                 var polygonCoords = new float[]{
@@ -61,6 +60,7 @@ namespace Mini2
                         50+10,340,
                         10f +10,340};
 
+                canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
                 canvas.StrokeColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
                 canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
 

@@ -65,7 +65,6 @@ namespace LayoutFarm.Drawing.DrawingGL
         //-------------------------------------------
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-
             canvasGL2d.FillRect(color, left, top, width, height);
         }
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
