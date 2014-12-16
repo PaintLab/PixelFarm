@@ -1,17 +1,4 @@
-﻿//2014 BSD, WinterDev
-//ArthurHub
-
-// "Therefore those skilled at the unorthodox
-// are infinite as heaven and earth,
-// inexhaustible as the great rivers.
-// When they come to an end,
-// they begin again,
-// like the days and months;
-// they die and are reborn,
-// like the four seasons."
-// 
-// - Sun Tsu,
-// "The Art of War"
+﻿//MIT 2014, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -26,9 +13,22 @@ namespace LayoutFarm.Drawing.DrawingGL
     partial class MyCanvasGL : LayoutFarm.Drawing.WinGdi.MyCanvas
     {
         CanvasGL2d canvasGL2d = new CanvasGL2d();
+
+        //-------
+        //platform specific code
+        GdiTextBoard gdiTextBoard;
+
+        //-------
+
         public MyCanvasGL(GraphicsPlatform platform, int hPageNum, int vPageNum, int left, int top, int width, int height)
             : base(platform, hPageNum, vPageNum, left, top, width, height)
         {
+
+            //------------------------
+            //platform specific code
+            //-------------------------
+            gdiTextBoard = new GdiTextBoard(800, 100, new System.Drawing.Font("tahoma", 10));
+
 
         }
         //-------------------------------------------
@@ -92,7 +92,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                         canvasGL2d.FillRect(left, top, width, height);
                         canvasGL2d.CurrentBrushKind = currentKind;
                     } break;
-                case BrushKind.CirculatGraident:
+                case BrushKind.CircularGraident:
                     {
 
                     } break;
@@ -164,11 +164,11 @@ namespace LayoutFarm.Drawing.DrawingGL
                         //prepare texture brush 
 
                         var tbrush = (TextureBrush)brush;
-                        GLBitmapTexture bmpTexture = null;
+                        GLBitmap bmpTexture = null;
                         if (tbrush.InnerImage2 == null)
                         {
                             //create gl image
-                            var textureImage = tbrush.TextureImage; 
+                            var textureImage = tbrush.TextureImage;
                             tbrush.InnerImage2 = bmpTexture = GLBitmapTextureHelper.CreateBitmapTexture((System.Drawing.Bitmap)textureImage.InnerImage);
                             canvasGL2d.Brush = tbrush; //set current brush**
                         }
@@ -222,9 +222,9 @@ namespace LayoutFarm.Drawing.DrawingGL
             canvasGL2d.Clear(c);
         }
         //-------------------------------------------
-        public override void DrawImage(Image image, RectangleF destRect)
+        public override void DrawImage(Bitmap image, RectangleF destRect)
         {
-            GLBitmapTexture glBitmapTexture = image.InnerImage as GLBitmapTexture;
+            GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
             if (glBitmapTexture != null)
             {
                 canvasGL2d.DrawImage(glBitmapTexture, destRect.X, destRect.Y, destRect.Width, destRect.Height);
@@ -241,15 +241,15 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
-        public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
-        {
-            //copy from src to dest
 
-            GLBitmapTexture glBitmapTexture = image.InnerImage as GLBitmapTexture;
+        public override void DrawImage(Bitmap image, RectangleF destRect, RectangleF srcRect)
+        {
+            //copy from src to dest 
+            GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
             if (glBitmapTexture != null)
             {
                 canvasGL2d.DrawImage(glBitmapTexture, srcRect,
-                    destRect.X, destRect.Y, destRect.Width, destRect.Height, ImageFillStyle.Stretch);
+                    destRect.X, destRect.Y, destRect.Width, destRect.Height);
             }
             else
             {
@@ -260,9 +260,70 @@ namespace LayoutFarm.Drawing.DrawingGL
                     //TODO: add to another field
                     image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
                     canvasGL2d.DrawImage(glBitmapTexture,
-                        srcRect, destRect.X, destRect.Y, destRect.Width, destRect.Height, ImageFillStyle.Stretch);
+                       srcRect, destRect.X, destRect.Y, destRect.Width, destRect.Height);
                 }
             }
+        }
+        public override void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs)
+        {
+            GLBitmap glBitmapTexture = image.InnerImage as GLBitmap;
+            if (glBitmapTexture != null)
+            {
+                canvasGL2d.DrawImages(glBitmapTexture, destAndSrcPairs);
+            }
+            else
+            {
+                var currentInnerImage = image.InnerImage as System.Drawing.Bitmap;
+                if (currentInnerImage != null)
+                {
+                    //create  and replace ?
+                    //TODO: add to another field
+                    image.InnerImage = glBitmapTexture = GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage);
+                    canvasGL2d.DrawImages(glBitmapTexture, destAndSrcPairs);
+                }
+            }
+        }
+        public override void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest)
+        {
+            //use reference image  
+            GLBitmapReference glBitmapTextureRef = referenceBmp.InnerImage as GLBitmapReference;
+            if (glBitmapTextureRef != null)
+            {
+                canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
+            }
+            else
+            {
+                var currentInnerImage = referenceBmp.InnerImage as System.Drawing.Bitmap;
+                if (currentInnerImage != null)
+                {
+                    //create  and replace ?
+                    //TODO: add to another field
+                    referenceBmp.InnerImage = glBitmapTextureRef = new GLBitmapReference(
+                        GLBitmapTextureHelper.CreateBitmapTexture(currentInnerImage),
+                        referenceBmp.ReferenceX,
+                        referenceBmp.ReferenceY,
+                        referenceBmp.Width,
+                        referenceBmp.Height);
+                    canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
+                }
+                else
+                {
+                    var currentGLImage = referenceBmp.InnerImage as GLBitmap;
+                    if (currentGLImage != null)
+                    {
+                        glBitmapTextureRef = new GLBitmapReference(
+                              currentGLImage,
+                              referenceBmp.ReferenceX,
+                              referenceBmp.ReferenceY,
+                              referenceBmp.Width,
+                              referenceBmp.Height);
+                        canvasGL2d.DrawImage(glBitmapTextureRef, dest.X, dest.Y);
+                    }
+                }
+
+            }
+
+
         }
         public override Color StrokeColor
         {
@@ -298,14 +359,27 @@ namespace LayoutFarm.Drawing.DrawingGL
             set
             {
                 //sample only *** 
-                canvasGL2d.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
+                canvasGL2d.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 10);
                 base.CurrentFont = value;
             }
         }
         public override void DrawText(char[] buffer, int x, int y)
         {
-            canvasGL2d.DrawString(buffer, x, y);
+            if (this.Note1 == 2)
+            {
 
+                //test draw string to gdi hdc: 
+                //if need Gdi+/gdi to draw string                              
+                //then draw it to hdc and  copy to canvas2d
+                //[ platform specfic code]
+                //1. use bitmap  
+                gdiTextBoard.DrawText(this, buffer, x, y);
+
+            }
+            else
+            {
+                canvasGL2d.DrawString(buffer, x, y);
+            }
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
@@ -324,6 +398,8 @@ namespace LayoutFarm.Drawing.DrawingGL
                 System.Drawing.Drawing2D.PathData pathData = gfxPath.GetPathData() as System.Drawing.Drawing2D.PathData;
                 PixelFarm.Agg.VertexStore vxs = new PixelFarm.Agg.VertexStore();
                 PixelFarm.Agg.GdiPathConverter.ConvertToVxs(pathData, vxs);
+
+                //TODO: reuse flattener 
                 PixelFarm.Agg.VertexSource.CurveFlattener flattener = new PixelFarm.Agg.VertexSource.CurveFlattener();
                 vxs = flattener.MakeVxs2(vxs);
                 gfxPath.InnerPath2 = vxs;

@@ -8,6 +8,6 @@ namespace LayoutFarm.DrawingGL
     public enum ImageFillStyle
     {
         Stretch,
-        Title,
+        Tile,
     }
 }

@@ -18,6 +18,7 @@ namespace LayoutFarm.DrawingGL
         static unsafe void CreateRectCoords(float* arr, byte* indices,
                   float x, float y, float w, float h)
         {
+            //cartesian 
             arr[0] = x; arr[1] = y;
             arr[2] = x + w; arr[3] = y;
             arr[4] = x + w; arr[5] = y + h;

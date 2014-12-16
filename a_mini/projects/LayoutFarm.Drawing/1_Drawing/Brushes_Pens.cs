@@ -13,7 +13,7 @@ namespace LayoutFarm.Drawing
     {
         Solid,
         LinearGradient,
-        CirculatGraident,
+        CircularGraident,
         GeometryGradient,
         Texture
     }

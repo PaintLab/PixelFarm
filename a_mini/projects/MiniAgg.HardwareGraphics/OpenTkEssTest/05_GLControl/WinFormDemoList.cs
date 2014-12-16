@@ -50,7 +50,7 @@ namespace OpenTkEssTest
     public class T24_FormTestGLCanvasDemo : DemoBase
     {
 
-        GLBitmapTexture hwBmp = null;
+        GLBitmap hwBmp = null;
         public override void Init()
         {
             FormTestWinGLControl2 form = new FormTestWinGLControl2();
@@ -62,10 +62,10 @@ namespace OpenTkEssTest
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
                 if (hwBmp == null)
                 {
-                    using (Bitmap bitmap = new Bitmap("../../Data/Textures/logo-dark.jpg"))
-                    {
-                        hwBmp = LayoutFarm.DrawingGL.GLBitmapTextureHelper.CreateBitmapTexture(bitmap);
-                    }
+ 
+                    hwBmp = LayoutFarm.DrawingGL.GLBitmapTextureHelper.CreateBitmapTexture(
+                        new Bitmap("../../Data/Textures/logo-dark.jpg"));
+
                 }
                 //canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
@@ -162,7 +162,7 @@ namespace OpenTkEssTest
                 //test Thai words
                 canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
                 canvas.DrawString("1234567890", 80, 200);
-                GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
+                GLBitmap bmp = GLBitmapTextureHelper.CreateBitmapTexture(fontGlyph.glyphImage32);
 
                 canvas.DrawImage(bmp, 50, 50);
                 bmp.Dispose();

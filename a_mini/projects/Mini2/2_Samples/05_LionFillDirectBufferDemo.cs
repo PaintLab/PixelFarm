@@ -23,7 +23,7 @@ namespace Mini2
             var lionFill = new LionFillSprite();
             //-----------------------------------------------
 
-            GLBitmapTexture bmp1 = null;
+            GLBitmap bmp1 = null;
             int bmpW = 0;
             int bmpH = 0;
 
