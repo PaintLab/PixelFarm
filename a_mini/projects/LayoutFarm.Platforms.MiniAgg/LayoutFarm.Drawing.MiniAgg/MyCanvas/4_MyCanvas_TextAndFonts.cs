@@ -159,17 +159,7 @@ namespace LayoutFarm.Drawing.WinGdi
                 gx.ReleaseHdc();
             }
         }
-        public override Brush CurrentBrush
-        {
-            get
-            {
-                return this.currentBrush;
-            }
-            set
-            {
-                this.currentBrush = value;
-            }
-        }
+        
         public override Font CurrentFont
         {
             get

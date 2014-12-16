@@ -18,6 +18,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         //platform specific code
         GdiTextBoard gdiTextBoard;
 
+        PixelFarm.Agg.VertexSource.CurveFlattener flattener = new PixelFarm.Agg.VertexSource.CurveFlattener();
         //-------
 
         public MyCanvasGL(GraphicsPlatform platform, int hPageNum, int vPageNum, int left, int top, int width, int height)
@@ -64,9 +65,8 @@ namespace LayoutFarm.Drawing.DrawingGL
         //-------------------------------------------
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-            canvasGL2d.CurrentBrushKind = BrushKind.Solid;
-            canvasGL2d.FillColor = color;
-            canvasGL2d.FillRect(left, top, width, height);
+             
+            canvasGL2d.FillRect(color, left, top, width, height);
         }
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
         {
@@ -74,27 +74,27 @@ namespace LayoutFarm.Drawing.DrawingGL
             {
                 case BrushKind.Solid:
                     {
-                        var solidBrush = brush as SolidBrush;
-                        var currentKind = canvasGL2d.CurrentBrushKind;
-                        canvasGL2d.CurrentBrushKind = BrushKind.Solid;
-                        canvasGL2d.FillColor = solidBrush.Color;
-                        canvasGL2d.FillRect(left, top, width, height);
-                        canvasGL2d.CurrentBrushKind = currentKind;
+                        var solidBrush = brush as SolidBrush; 
+                        canvasGL2d.FillRect(solidBrush.Color, left, top, width, height);
+                       
                     } break;
                 case BrushKind.LinearGradient:
                     {
                         var linearGradientBrush = brush as LinearGradientBrush;
                         //create bg gradient first 
-                        //fill linear gradient in spefic area
-                        var currentKind = canvasGL2d.CurrentBrushKind;
-                        canvasGL2d.CurrentBrushKind = BrushKind.LinearGradient;
-                        canvasGL2d.Brush = linearGradientBrush;
-                        canvasGL2d.FillRect(left, top, width, height);
-                        canvasGL2d.CurrentBrushKind = currentKind;
+                        //fill linear gradient in spefic area 
+                        canvasGL2d.FillRect(linearGradientBrush, left, top, width, height);
+                        
                     } break;
                 case BrushKind.CircularGraident:
                     {
 
+                    } break;
+                case BrushKind.GeometryGradient:
+                    {
+                    } break;
+                case BrushKind.Texture:
+                    {
                     } break;
                 default:
                     {
@@ -102,8 +102,10 @@ namespace LayoutFarm.Drawing.DrawingGL
                     } break;
             }
         }
-        public override void FillPolygon(PointF[] points)
+
+        public override void FillPolygon(Color color, PointF[] points)
         {
+            //solid color
 
             int j = points.Length;
             float[] polygonPoints = new float[j * 2];
@@ -115,9 +117,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 n += 2;
             }
             canvasGL2d.Note1 = this.Note1;
-            canvasGL2d.FillPolygon(polygonPoints);
-
-
+            canvasGL2d.FillPolygon(color, polygonPoints);
         }
         public override void FillPolygon(Brush brush, PointF[] points)
         {
@@ -136,13 +136,9 @@ namespace LayoutFarm.Drawing.DrawingGL
                             polygonPoints[n] = points[i].X;
                             polygonPoints[n + 1] = points[i].Y;
                             n += 2;
-                        }
-
-                        //use stencil buffer
-                        var currentBrushKind = canvasGL2d.CurrentBrushKind;
-                        canvasGL2d.CurrentBrushKind = BrushKind.LinearGradient;
-                        canvasGL2d.FillPolygon(polygonPoints);
-                        canvasGL2d.CurrentBrushKind = currentBrushKind;
+                        } 
+                        //use stencil buffer 
+                        canvasGL2d.FillPolygon(brush, polygonPoints, polygonPoints.Length); 
 
                     } break;
                 case BrushKind.Texture:
@@ -158,11 +154,8 @@ namespace LayoutFarm.Drawing.DrawingGL
                             n += 2;
                         }
 
-                        //use stencil buffer
-                        var currentBrushKind = canvasGL2d.CurrentBrushKind;
-                        canvasGL2d.CurrentBrushKind = BrushKind.Texture;
-                        //prepare texture brush 
-
+                        //use stencil buffer 
+                        //prepare texture brush  
                         var tbrush = (TextureBrush)brush;
                         GLBitmap bmpTexture = null;
                         if (tbrush.InnerImage2 == null)
@@ -170,53 +163,32 @@ namespace LayoutFarm.Drawing.DrawingGL
                             //create gl image
                             var textureImage = tbrush.TextureImage;
                             tbrush.InnerImage2 = bmpTexture = GLBitmapTextureHelper.CreateBitmapTexture((System.Drawing.Bitmap)textureImage.InnerImage);
-                            canvasGL2d.Brush = tbrush; //set current brush**
+                             
                         }
-                        canvasGL2d.FillPolygon(polygonPoints);
-                        canvasGL2d.CurrentBrushKind = currentBrushKind;
+
+                        canvasGL2d.FillPolygon(brush, polygonPoints, polygonPoints.Length);
+                        
 
                         //delete gl
                         bmpTexture.Dispose();
                         tbrush.InnerImage2 = null;
 
                     } break;
+                case BrushKind.Solid:
+                    {
+                        var solidColorBrush = (SolidBrush)brush;
+                        this.FillPolygon(solidColorBrush.Color, points);
+
+                    } break;
                 default:
                     {
-                        FillPolygon(points);
+
+
                     } break;
             }
 
         }
-        public override Brush CurrentBrush
-        {
-            get
-            {
-                return base.CurrentBrush;
-            }
-            set
-            {
 
-                base.CurrentBrush = value;
-                if (value != null)
-                {
-                    this.canvasGL2d.CurrentBrushKind = value.BrushKind;
-                }
-                this.canvasGL2d.Brush = value;
-            }
-        }
-        public override Color FillColor
-        {
-            get
-            {
-
-                return this.canvasGL2d.FillColor;
-            }
-            set
-            {
-                this.canvasGL2d.FillColor = value;
-                base.FillColor = value;
-            }
-        }
         public override void ClearSurface(Color c)
         {
             canvasGL2d.Clear(c);
@@ -228,7 +200,6 @@ namespace LayoutFarm.Drawing.DrawingGL
             if (image.IsReferenceImage)
             {
                 //use reference image  
-
                 GLBitmapReference bmpRef = image.InnerImage as GLBitmapReference;
                 if (bmpRef != null)
                 {
@@ -340,7 +311,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             set
             {
                 base.StrokeColor = value;
-                canvasGL2d.FillColor = value;
+                canvasGL2d.StrokeColor = value;
             }
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
@@ -350,7 +321,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
             //stroke color
-            canvasGL2d.FillColor = color;
+            canvasGL2d.StrokeColor = color;
             canvasGL2d.DrawRect(left, top, width, height);
 
         }
@@ -395,44 +366,76 @@ namespace LayoutFarm.Drawing.DrawingGL
         {
             canvasGL2d.DrawString(str, logicalTextBox.X, logicalTextBox.Y);
         }
-        //--------------------------------------------------- 
-        public override void FillPath(GraphicsPath gfxPath)
+        public override void FillPath(Color color, GraphicsPath path)
         {
-            var innerPath2 = gfxPath.InnerPath2;
+            //solid color
+            var innerPath2 = path.InnerPath2;
+
+
             if (innerPath2 == null)
             {
-                System.Drawing.Drawing2D.PathData pathData = gfxPath.GetPathData() as System.Drawing.Drawing2D.PathData;
+                System.Drawing.Drawing2D.PathData pathData = path.GetPathData() as System.Drawing.Drawing2D.PathData;
                 PixelFarm.Agg.VertexStore vxs = new PixelFarm.Agg.VertexStore();
                 PixelFarm.Agg.GdiPathConverter.ConvertToVxs(pathData, vxs);
 
                 //TODO: reuse flattener 
                 PixelFarm.Agg.VertexSource.CurveFlattener flattener = new PixelFarm.Agg.VertexSource.CurveFlattener();
                 vxs = flattener.MakeVxs2(vxs);
-                gfxPath.InnerPath2 = vxs;
+                path.InnerPath2 = vxs;
 
-                this.canvasGL2d.FillVxs(vxs);
+                this.canvasGL2d.FillVxs(color, vxs);
             }
             else
             {
                 PixelFarm.Agg.VertexStore vxs = innerPath2 as PixelFarm.Agg.VertexStore;
                 if (vxs != null)
                 {
-                    this.canvasGL2d.FillVxs(vxs);
+                    this.canvasGL2d.FillVxs(color, vxs);
                 }
             }
         }
-        public override void FillPath(GraphicsPath path, Brush brush)
+        public override void FillPath(Brush brush, GraphicsPath path)
         {
             switch (brush.BrushKind)
             {
                 case BrushKind.Solid:
                     {
-                        //solid brush
-                        var solidBrush = (SolidBrush)brush;
-                        this.FillColor = solidBrush.Color;
-                        this.FillPath(path);
+                        SolidBrush solidBrush = (SolidBrush)brush;
+
+
+                        var innerPath2 = path.InnerPath2;
+                        if (innerPath2 == null)
+                        {
+                            System.Drawing.Drawing2D.PathData pathData = path.GetPathData() as System.Drawing.Drawing2D.PathData;
+                            PixelFarm.Agg.VertexStore vxs = new PixelFarm.Agg.VertexStore();
+                            PixelFarm.Agg.GdiPathConverter.ConvertToVxs(pathData, vxs);
+
+                            //TODO: reuse flattener 
+
+                            vxs = flattener.MakeVxs2(vxs);
+                            path.InnerPath2 = vxs;
+
+                            this.canvasGL2d.FillVxs(solidBrush.Color, vxs);
+                        }
+                        else
+                        {
+                            PixelFarm.Agg.VertexStore vxs = innerPath2 as PixelFarm.Agg.VertexStore;
+                            if (vxs != null)
+                            {
+                                this.canvasGL2d.FillVxs(solidBrush.Color, vxs);
+                            }
+                        }
+                    } break;
+                case BrushKind.LinearGradient:
+                    {
+
+
+                    } break;
+                default:
+                    {
                     } break;
             }
+
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
@@ -445,7 +448,6 @@ namespace LayoutFarm.Drawing.DrawingGL
                 PixelFarm.Agg.VertexSource.CurveFlattener flattener = new PixelFarm.Agg.VertexSource.CurveFlattener();
                 vxs = flattener.MakeVxs2(vxs);
                 gfxPath.InnerPath2 = vxs;
-
                 this.canvasGL2d.DrawVxs(vxs);
 
             }

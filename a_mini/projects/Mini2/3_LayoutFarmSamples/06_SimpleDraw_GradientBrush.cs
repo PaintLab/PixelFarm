@@ -48,9 +48,10 @@ namespace Mini2
                     new LayoutFarm.Drawing.PointF(25, 100),
                     LayoutFarm.Drawing.Color.OrangeRed);
                 //2. fill polygon with gradient brush 
-                canvas.CurrentBrush = linearGrBrush2;
+                 
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
+                    linearGrBrush2,
                     new LayoutFarm.Drawing.PointF[]{
                         new LayoutFarm.Drawing.PointF(0, 50),
                         new LayoutFarm.Drawing.PointF(50, 50),
@@ -60,9 +61,10 @@ namespace Mini2
 
                 //another  ...                
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.Yellow, 200, 0, 150, 150);
-                canvas.CurrentBrush = linearGrBrush2;
+                 
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
+                    linearGrBrush2,
                     new LayoutFarm.Drawing.PointF[]{
                         new LayoutFarm.Drawing.PointF(200, 50),
                         new LayoutFarm.Drawing.PointF(250, 50),
@@ -71,9 +73,10 @@ namespace Mini2
                 //-------------------------------------------------------------------------
 
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 400, 0, 150, 150);
-                canvas.CurrentBrush = linearGrBrush2;
+      
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
+                    linearGrBrush2,
                     new LayoutFarm.Drawing.PointF[]{
                         new LayoutFarm.Drawing.PointF(400, 50),
                         new LayoutFarm.Drawing.PointF(450, 50),

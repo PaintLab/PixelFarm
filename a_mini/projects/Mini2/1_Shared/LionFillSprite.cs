@@ -71,9 +71,10 @@ namespace PixelFarm.Agg
                 for (int i = 0; i < j; ++i)
                 {
                     var color = colors[i];
-                    //?
-                    canvas.FillColor = new LayoutFarm.Drawing.Color(color.alpha, color.blue, color.green, color.red);
-                    canvas.FillVxsSnap(new VertexStoreSnap(myvxs, pathList[i]));
+                    //? 
+                    canvas.FillVxsSnap(
+                        new LayoutFarm.Drawing.Color(color.alpha, color.blue, color.green, color.red),
+                        new VertexStoreSnap(myvxs, pathList[i]));
                 }
             }
 
