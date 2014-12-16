@@ -22,7 +22,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         Dictionary<char, LayoutFarm.Drawing.RectangleF> charMap = new Dictionary<char, RectangleF>();
         LayoutFarm.Drawing.Bitmap myTextBoardBmp;
         IntPtr hFont;
-
+        FontInfo fontInfo;
         public GdiTextBoard(int width, int height, System.Drawing.Font font)
         {
             this.width = width;
@@ -34,11 +34,16 @@ namespace LayoutFarm.Drawing.DrawingGL
             gx = System.Drawing.Graphics.FromImage(textBoardBmp);
             //draw character map
             //basic eng 
+
+            fontInfo = FontsUtils.GetCachedFont(font);
+
             char[] chars = new char[255];
             for (int i = 0; i < 255; ++i)
             {
                 chars[i] = (char)i;
             }
+
+            //PrepareCharacterMap("ญู".ToCharArray());
             PrepareCharacterMap(chars);
         }
         void PrepareCharacterMap(char[] buffer)
@@ -57,29 +62,21 @@ namespace LayoutFarm.Drawing.DrawingGL
 
             //set user font to dc
             MyWin32.SelectObject(gxdc, this.hFont);
-
-            int maxLineHeight = 0;
+            int fontHeight = fontInfo.FontHeight;
+            int maxLineHeight = fontHeight;
             for (int i = 0; i < len; ++i)
             {
-
                 //-----------------------------------------------------------------------
                 //measure string 
                 //and make simple character map
                 //----------------------------------------------------------------------- 
                 //measure each character ***
                 //not adjust kerning*** 
+
                 char c = buffer[i];
-                char[] buff = new char[] { c };
-
-                NativeTextWin32.WIN32SIZE size;
-                NativeTextWin32.GetTextExtentPoint32(gxdc, buff, 1, out size);
-
-                if (size.Height > maxLineHeight)
-                {
-                    maxLineHeight = size.Height;
-                }
-
-                if (size.Width + curX > this.width)
+                FontABC abcWidth = fontInfo.GetCharABCWidth(c);
+                int glyphBoxWidth = Math.Abs(abcWidth.a) + (int)abcWidth.b + abcWidth.c; 
+                if (abcWidth.Sum + curX > this.width)
                 {
                     //start newline
                     curX = 0;
@@ -87,9 +84,9 @@ namespace LayoutFarm.Drawing.DrawingGL
                     maxLineHeight = 0;
                 }
 
-                NativeTextWin32.TextOut(gxdc, curX, curY, buff, 1);
-                charMap.Add(c, new RectangleF(curX, curY, size.Width, size.Height));
-                curX += size.Width; //move next 
+                NativeTextWin32.TextOut(gxdc, curX, curY, new char[] { c }, 1);
+                charMap.Add(c, new RectangleF(curX, curY, glyphBoxWidth, fontHeight));
+                curX += glyphBoxWidth; //move next 
 
             }
 
