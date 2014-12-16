@@ -1,4 +1,4 @@
-﻿namespace OpenTkEssTest
+﻿namespace Mini
 {
     partial class MyMiniGLES2Control
     {

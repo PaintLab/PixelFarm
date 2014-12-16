@@ -8,8 +8,9 @@ using System.Windows.Forms;
 
 
 using OpenTK;
+using OpenTkEssTest;
 
-namespace OpenTkEssTest
+namespace Mini
 {
     public partial class FormTestBed : Form
     {

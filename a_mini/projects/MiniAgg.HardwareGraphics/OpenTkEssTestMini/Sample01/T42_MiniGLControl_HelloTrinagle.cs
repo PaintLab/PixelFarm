@@ -38,36 +38,13 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "42")]
     [Info("T42_HelloTriangle")]
-    public class T42_ES2HelloTriangleDemo : DemoBase
+    public class T42_ES2HelloTriangleDemo : PrebuiltGLControlDemoBase
     {
-        FormTestBed formTestBed;
-        public override void Init()
+         
+
+         
+        protected override void InitGLProgram(object sender, EventArgs args)
         {
-            formTestBed = new FormTestBed();
-            
-            formTestBed.Load += new EventHandler((o, s) =>
-            {
-                T42_ES2HelloTriangle tt = new T42_ES2HelloTriangle();
-                tt.Load(formTestBed.MiniGLControl);
-            });
-            formTestBed.Show();
-            formTestBed.WindowState = FormWindowState.Maximized;
-        } 
-    }
-
-    //[Example("Simple ES 2.0", ExampleCategory.OpenGLES, "2.0", Documentation = "SimpleES20Window")]
-    public class T42_ES2HelloTriangle
-    {
-
-       
-        int mProgram;
-        public T42_ES2HelloTriangle()
-        {
-
-        }
-        public void Load(MyMiniGLES2Control miniGLControl)
-        {
-
             //----------------
             //vertex shader source
             string vs = @"        
@@ -92,44 +69,43 @@ namespace OpenTkEssTest
                 //return false
             }
             GL.ClearColor(0, 0, 0, 0); 
+        }
+        protected override void OnGLRender(object sender, EventArgs args)
+        {
+            //------------------------------------------------------------------------------------------------
+            int width = miniGLControl.Width;
+            int height = miniGLControl.Height;
 
-            miniGLControl.SetGLPaintHandler((o, s) =>
-            {
-                //------------------------------------------------------------------------------------------------
-                int width = miniGLControl.Width;
-                int height = miniGLControl.Height;
-
-                float[] vertices =
+            float[] vertices =
                 {
                      0.0f,  0.5f, 0.0f,
                     -0.5f, -0.5f, 0.0f,
                      0.5f, -0.5f, 0.0f,
                 };
 
-                GL.Viewport(0, 0, width, height);
+            GL.Viewport(0, 0, width, height);
 
-                // Set the viewport
-                //glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
-                GL.Clear(ClearBufferMask.ColorBufferBit);
-                // Clear the color buffer
-                // glClear(GL_COLOR_BUFFER_BIT); 
-                // Use the program object
-                //glUseProgram(mProgram);
-                GL.UseProgram(mProgram);
-                // Load the vertex data
-                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, vertices);
-                GL.EnableVertexAttribArray(0);
-                //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-                //glEnableVertexAttribArray(0);
-                GL.DrawArrays(BeginMode.Triangles, 0, 3);
-                //glDrawArrays(GL_TRIANGLES, 0, 3); 
-                //miniGLControl.SwapBuffers();
-            });
-
+            // Set the viewport
+            //glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+            // Clear the color buffer
+            // glClear(GL_COLOR_BUFFER_BIT); 
+            // Use the program object
+            //glUseProgram(mProgram);
+            GL.UseProgram(mProgram);
+            // Load the vertex data
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, vertices);
+            GL.EnableVertexAttribArray(0);
+            //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+            //glEnableVertexAttribArray(0);
+            GL.DrawArrays(BeginMode.Triangles, 0, 3);
+            //glDrawArrays(GL_TRIANGLES, 0, 3); 
+            //miniGLControl.SwapBuffers();
         }
-
-
-
+        //-------------------------------
+        int mProgram;
 
     }
+
+     
 }

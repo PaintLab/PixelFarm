@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using OpenTK;
 using OpenTK.Graphics.ES20;
 
-namespace OpenTkEssTest
+namespace Mini
 {
     public partial class MyMiniGLES2Control : GLControl
     {

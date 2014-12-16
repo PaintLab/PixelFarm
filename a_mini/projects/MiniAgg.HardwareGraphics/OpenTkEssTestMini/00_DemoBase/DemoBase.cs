@@ -52,7 +52,30 @@ namespace Mini
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }
- 
+
+        protected virtual void InitGLProgram(object sender,EventArgs args)
+        {
+        }
+        protected virtual void OnGLRender(object sender, EventArgs args)
+        {
+        }
+    }
+    public abstract class PrebuiltGLControlDemoBase : DemoBase
+    {
+        public override void Init()
+        {
+            formTestBed = new FormTestBed();
+            this.miniGLControl = formTestBed.MiniGLControl;
+            this.formTestBed.Load += this.InitGLProgram;
+            miniGLControl.SetGLPaintHandler(this.OnGLRender);
+            formTestBed.Show();
+            formTestBed.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+        }
+        //-------------------------------
+        protected FormTestBed formTestBed;
+        protected MyMiniGLES2Control miniGLControl;
+        //-------------------------------
+
     }
 
     public class DemoConfigAttribute : Attribute
