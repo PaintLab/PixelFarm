@@ -23,7 +23,7 @@ namespace Mini2
             var lionFill = new LionFillSprite();
             //-----------------------------------------------
 
-            GLBitmapTexture bmp1 = null;
+            GLBitmap bmp1 = null;
             int bmpW = 0;
             int bmpH = 0;
 
@@ -58,7 +58,7 @@ namespace Mini2
                     bmp.Save("d:\\WImageTest\\glLion.png");
                     //--------- 
                     //canvas.DrawImage(GLBitmapTexture.CreateBitmapTexture(bmp), 0, 0, bmp.Width, bmp.Height);
-                    bmp1 = GLBitmapTexture.CreateBitmapTexture(bmp);
+                    bmp1 = GLBitmapTextureHelper.CreateBitmapTexture(bmp);
                     bmpW = bmp.Width;
                     bmpH = bmp.Height;
 

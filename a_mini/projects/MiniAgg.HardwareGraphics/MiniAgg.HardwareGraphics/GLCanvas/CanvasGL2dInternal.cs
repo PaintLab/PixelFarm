@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using System.Drawing;
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 using Tesselate;
@@ -19,6 +18,7 @@ namespace LayoutFarm.DrawingGL
         static unsafe void CreateRectCoords(float* arr, byte* indices,
                   float x, float y, float w, float h)
         {
+            //cartesian 
             arr[0] = x; arr[1] = y;
             arr[2] = x + w; arr[3] = y;
             arr[4] = x + w; arr[5] = y + h;
@@ -27,17 +27,38 @@ namespace LayoutFarm.DrawingGL
             indices[0] = 0; indices[1] = 1; indices[2] = 2;
             indices[3] = 2; indices[4] = 3; indices[5] = 0;
         }
+        static unsafe void CreateLineCoords(ArrayList<VertexC4V3f> vrx,
+                 LayoutFarm.Drawing.Color color,
+                 float x1, float y1, float x2, float y2)
+        {
+            uint color_uint = color.ToABGR();
+            vrx.AddVertex(new VertexC4V3f(color_uint, x1, y1));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x2, y2));
+        }
         static unsafe void CreateRectCoords(ArrayList<VertexC4V3f> vrx,
                    LayoutFarm.Drawing.Color color,
                    float x, float y, float w, float h)
         {
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y + h));
+            uint color_uint = color.ToABGR();
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y + h));
 
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x + w, y + h));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y + h));
-            vrx.AddVertex(new VertexC4V3f(color.ToABGR(), x, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y + h));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y + h));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
+
+        }
+        static unsafe void CreatePolyLineRectCoords(ArrayList<VertexC4V3f> vrx,
+                   LayoutFarm.Drawing.Color color,
+                   float x, float y, float w, float h)
+        {
+            uint color_uint = color.ToABGR();
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y + h));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y + h));
+            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
 
         }
         List<Vertex> TessPolygon(float[] vertex2dCoords)
@@ -65,72 +86,7 @@ namespace LayoutFarm.DrawingGL
             tess.EndPolygon();
             return tessListener.resultVertexList;
         }
-        void FillTriangles(List<Vertex> m_VertexList)
-        {
-            //convert vertex to float array
-            {
-                unsafe
-                {
-                    int j = m_VertexList.Count;
-                    int j2 = j * 2;
-                    float* vertices = stackalloc float[j2];
-                    //float[] vx2 = new float[j2];
-                    int nn = 0;
-                    for (int i = 0; i < j; ++i)
-                    {
-                        var v = m_VertexList[i];
-                        vertices[nn] = (float)v.m_X;
-                        vertices[nn + 1] = (float)v.m_Y;
-
-                        nn += 2;
-                    }
-                    //--------------------------------------
-                    //int num_indices = j - 2;
-                    //int* indx = stackalloc int[j];
-                    //nn = 0;//reset
-                    //for (int i = 0; i < num_indices; )
-                    //{
-                    //    indx[nn] = i;
-                    //    indx[nn + 1] = i + 1;
-                    //    indx[nn + 2] = i + 2;
-                    //    nn += 3;
-                    //    i += 3;
-                    //}
-                    //--------------------------------------
-                    GL.EnableClientState(ArrayCap.VertexArray); //***
-                    //vertex 2d
-                    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)vertices);
-                    //GL.DrawElements(BeginMode.Triangles, j, DrawElementsType.UnsignedInt, (IntPtr)indx);
-                    GL.DrawArrays(BeginMode.Triangles, 0, nn);
-                    GL.DisableClientState(ArrayCap.VertexArray);
-
-                }
-            }
-            {
-
-                //var currentColor = this.fillColor;
-                //this.FillColor = LayoutFarm.Drawing.Color.Black;
-
-                //int j = m_VertexList.Count;
-                //int lim = j - 2;
-                //for (int i = 0; i < lim; )
-                //{
-                //    var v0 = m_VertexList[i];
-                //    var v1 = m_VertexList[i + 1];
-                //    var v2 = m_VertexList[i + 2]; 
-
-                //    DrawLine((float)v0.m_X, (float)v0.m_Y,
-                //            (float)v1.m_X, (float)v1.m_Y);
-                //    DrawLine((float)v1.m_X, (float)v1.m_Y,
-                //          (float)v2.m_X, (float)v2.m_Y);
-                //    DrawLine((float)v2.m_X, (float)v2.m_Y,
-                //         (float)v0.m_X, (float)v0.m_Y);
-
-                //    i += 3;
-                //}
-                //this.FillColor = currentColor;
-            }
-        }
+        
         //---test only ----
         void DrawLineAgg(float x1, float y1, float x2, float y2)
         {
@@ -138,7 +94,7 @@ namespace LayoutFarm.DrawingGL
             ps.Clear();
             ps.MoveTo(x1, y1);
             ps.LineTo(x2, y2);
-            VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+            VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
             int n = vxs.Count;
 
             unsafe

@@ -17,6 +17,20 @@ namespace OpenTK
         EventHandler glPaintHandler;
         public MyGLControl()
         {
+
+                     
+            var gfxmode = new OpenTK.Graphics.GraphicsMode(
+                DisplayDevice.Default.BitsPerPixel,//default 32 bits color
+                16,//depth buffer => 16
+                8,  //stencil buffer => 8 (  //if want to use stencil buffer then set stencil buffer too! )
+                0,//number of sample of FSAA
+                0,  //accum buffer
+                2, // n buffer, 2=> double buffer
+                false);//sterio
+            
+            ChildCtorOnlyResetGraphicMode(gfxmode);
+
+            //-----------
             this.InitializeComponent();
         }
         public void SetGLPaintHandler(EventHandler glPaintHandler)

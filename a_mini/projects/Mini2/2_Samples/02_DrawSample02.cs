@@ -19,19 +19,16 @@ namespace Mini2
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
             CanvasGL2d canvas = new CanvasGL2d();
-            GLBitmapTexture hwBmp = null;
+            GLBitmap hwBmp = null;
 
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
                 if (hwBmp == null)
                 {
-                    string app = Application.ExecutablePath;
+                    string app = Application.ExecutablePath; 
+                    hwBmp = GLBitmapTextureHelper.CreateBitmapTexture(new Bitmap("../../../Data/Textures/logo-dark.jpg"));
 
-                    using (Bitmap bitmap = new Bitmap("../../../Data/Textures/logo-dark.jpg"))
-                    {
-                        hwBmp = GLBitmapTexture.CreateBitmapTexture(bitmap);
-                    }
                 }
 
                 //canvas.DrawImage(hwBmp, 10, 10);
@@ -129,7 +126,7 @@ namespace Mini2
                 //test Thai words
                 canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
                 canvas.DrawString("1234567890", 80, 200);
-                GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
+                GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(fontGlyph.glyphImage32));
                 canvas.DrawImage(bmp, 50, 50);
                 bmp.Dispose();
 

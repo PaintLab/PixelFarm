@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using System.Drawing;
+
 using System.Text;
 using OpenTK.Graphics.OpenGL;
 //using OpenTK.Graphics.ES20;
@@ -25,7 +25,7 @@ namespace LayoutFarm.DrawingGL
         RoundedRect roundRect = new RoundedRect();
         Ellipse ellipse = new Ellipse();
         PathWriter ps = new PathWriter();
-        Stroke stroke1 = new Stroke(1);
+        Stroke aggStroke = new Stroke(1);
         GLScanlineRasterizer sclineRas;
         GLScanlineRasToDestBitmapRenderer sclineRasToGL;
         GLScanlinePacked8 sclinePack8;
@@ -51,20 +51,33 @@ namespace LayoutFarm.DrawingGL
             get;
             set;
         }
+        public int Note1
+        {
+            get;
+            set;
+        }
 
         public void Clear(LayoutFarm.Drawing.Color c)
         {
+            //set value for clear color buffer
+            GL.ClearColor(c);
+            GL.ClearStencil(0);
+            //actual clear here 
             GL.Clear(ClearBufferMask.ColorBufferBit |
                 ClearBufferMask.DepthBufferBit |
                 ClearBufferMask.AccumBufferBit |
                 ClearBufferMask.StencilBufferBit);
 
-            GL.ClearColor(c);
+
         }
         public double StrokeWidth
         {
-            get { return this.stroke1.Width; }
-            set { this.stroke1.Width = value; }
+            get { return this.aggStroke.Width; }
+            set
+            {
+                //agg stroke
+                this.aggStroke.Width = value;
+            }
         }
 
         public void DrawLine(float x1, float y1, float x2, float y2)
@@ -78,7 +91,7 @@ namespace LayoutFarm.DrawingGL
                         ps.Clear();
                         ps.MoveTo(x1, y1);
                         ps.LineTo(x2, y2);
-                        VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+                        VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -86,116 +99,166 @@ namespace LayoutFarm.DrawingGL
                     } break;
                 default:
                     {
-                        unsafe
-                        {
-                            float* arr = stackalloc float[4];
-                            arr[0] = x1; arr[1] = y1;
-                            arr[2] = x2; arr[3] = y2;
-                            //byte* indices = stackalloc byte[2];
-                            //indices[0] = 0; indices[1] = 1;
 
-                            GL.EnableClientState(ArrayCap.VertexArray); //***
-                            //vertex
-                            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                            //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                            GL.DrawArrays(BeginMode.Lines, 0, 2);
-                            GL.DisableClientState(ArrayCap.VertexArray);
-                        }
+                        GL.EnableClientState(ArrayCap.ColorArray);
+                        GL.EnableClientState(ArrayCap.VertexArray);
+                        VboC4V3f vbo = GenerateVboC4V3f();
+                        ////points 
+                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                        //create line coord  
+                        CreateLineCoords(vrx, this.fillColor, x1, y1, x2, y2);
+
+
+                        vbo.BindBuffer();
+                        //DrawTrianglesWithVertexBuffer(vrx, pcount);
+                        DrawLinesWithVertexBuffer(vrx, 2);
+                        vbo.UnbindBuffer();
+
+                        //vbo.Dispose();
+                        GL.DisableClientState(ArrayCap.ColorArray);
+                        GL.DisableClientState(ArrayCap.VertexArray);
+
+
                     } break;
 
             }
         }
 
-
-        public void DrawImage(GLBitmapTexture bmp, float x, float y)
+        //-------------------------------------------------------------------------------
+        public void DrawImage(GLBitmap bmp, float x, float y)
+        {
+            DrawImage(bmp,
+                   new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
+                   x, y, bmp.Width, bmp.Height);
+        }
+        public void DrawImage(GLBitmap bmp, float x, float y, float w, float h)
+        {
+            DrawImage(bmp,
+                new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
+                x, y, w, h);
+        }
+        public void DrawImage(GLBitmap bmp,
+            LayoutFarm.Drawing.RectangleF srcRect,
+            float x, float y, float w, float h)
         {
             unsafe
             {
 
                 GL.Enable(EnableCap.Texture2D);
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                    GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
                     GL.EnableClientState(ArrayCap.TextureCoordArray); //***
 
+                    //texture source coord 1= 100% of original width
                     float* arr = stackalloc float[8];
-                    arr[0] = 0; arr[1] = 1;
-                    arr[2] = 1; arr[3] = 1;
-                    arr[4] = 1; arr[5] = 0;
-                    arr[6] = 0; arr[7] = 0;
+                    float fullsrcW = bmp.Width;
+                    float fullsrcH = bmp.Height;
+                    if (bmp.IsInvert)
+                    {
 
-                    //byte* indices = stackalloc byte[6];
-                    //indices[0] = 0; indices[1] = 1; indices[2] = 2;
-                    //indices[3] = 2; indices[4] = 3; indices[5] = 0;
+                        ////arr[0] = 0; arr[1] = 0;
+                        arr[0] = srcRect.Left / fullsrcW; arr[1] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                        //arr[2] = 1; arr[3] = 0;
+                        arr[2] = srcRect.Right / fullsrcW; arr[3] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                        //arr[4] = 1; arr[5] = 1;
+                        arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Top / fullsrcH;
+                        //arr[6] = 0; arr[7] = 1;
+                        arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Top / fullsrcH;
+                    }
+                    else
+                    {
 
+                        arr[0] = srcRect.Left / fullsrcW; arr[1] = srcRect.Top / fullsrcH;
+                        //arr[2] = 1; arr[3] = 1;
+                        arr[2] = srcRect.Right / fullsrcW; arr[3] = srcRect.Top / fullsrcH;
+                        //arr[4] = 1; arr[5] = 0;
+                        arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Bottom / fullsrcH;
+                        //arr[6] = 0; arr[7] = 0;
+                        arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Bottom / fullsrcH;
+                    }
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                     //------------------------------------------ 
-                    //fill rect with texture
-                    FillRectWithTexture(x, y, bmp.Width, bmp.Height);
-                    GL.DisableClientState(ArrayCap.TextureCoordArray);
-
-                } GL.Disable(EnableCap.Texture2D);
-            }
-        }
-        public void DrawImageInvert(GLBitmapTexture bmp, float x, float y)
-        {
-            DrawImageInvert(bmp, x, y, bmp.Width, bmp.Height);
-        }
-        public void DrawImageInvert(GLBitmapTexture bmp, float x, float y, float w, float h)
-        {
-            unsafe
-            {
-
-                GL.Enable(EnableCap.Texture2D);
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
-                    GL.EnableClientState(ArrayCap.TextureCoordArray); //***
-
-                    float* arr = stackalloc float[8];
-                    arr[0] = 0; arr[1] = 0;
-                    arr[2] = 1; arr[3] = 0;
-                    arr[4] = 1; arr[5] = 1;
-                    arr[6] = 0; arr[7] = 1;
-
-                    //byte* indices = stackalloc byte[6];
-                    //indices[0] = 0; indices[1] = 1; indices[2] = 2;
-                    //indices[3] = 2; indices[4] = 3; indices[5] = 0;
-
-
-                    GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
-                    //------------------------------------------ 
-                    //fill rect with texture
+                    //fill rect with texture 
                     FillRectWithTexture(x, y, w, h);
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
-
-                } GL.Disable(EnableCap.Texture2D);
+                }
+                GL.Disable(EnableCap.Texture2D);
             }
         }
-        public void DrawImage(GLBitmapTexture bmp, float x, float y, float w, float h)
+
+
+
+        //-------------------------------------------------------------------------------
+        public void DrawImage(GLBitmapReference bmp, float x, float y)
         {
+            this.DrawImage(bmp.OwnerBitmap,
+                 bmp.GetRectF(),
+                 x, y, bmp.Width, bmp.Height);
+        }
+        //-------------------------------------------------------------------------------
+
+        public void DrawImages(GLBitmap bmp, LayoutFarm.Drawing.RectangleF[] destAndSrcPairs)
+        {
+
             unsafe
             {
 
                 GL.Enable(EnableCap.Texture2D);
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+                    GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
                     GL.EnableClientState(ArrayCap.TextureCoordArray); //***
 
+                    //texture source coord 1= 100% of original width
                     float* arr = stackalloc float[8];
-                    arr[0] = 0; arr[1] = 1;
-                    arr[2] = 1; arr[3] = 1;
-                    arr[4] = 1; arr[5] = 0;
-                    arr[6] = 0; arr[7] = 0;
+                    float fullsrcW = bmp.Width;
+                    float fullsrcH = bmp.Height;
 
-                    //byte* indices = stackalloc byte[6];
-                    //indices[0] = 0; indices[1] = 1; indices[2] = 2;
-                    //indices[3] = 2; indices[4] = 3; indices[5] = 0;
+                    int len = destAndSrcPairs.Length;
+                    if (len > 1)
+                    {
+                        if ((len % 2 != 0))
+                        {
+                            len -= 1;
+                        }
+                        for (int i = 0; i < len; )
+                        {
+                            //each 
 
-                    GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
-                    //------------------------------------------ 
-                    //fill rect with texture
-                    FillRectWithTexture(x, y, w, h);
+                            var destRect = destAndSrcPairs[i];
+                            var srcRect = destAndSrcPairs[i + 1];
+                            i += 2;
+
+                            if (bmp.IsInvert)
+                            {
+
+                                ////arr[0] = 0; arr[1] = 0;
+                                arr[0] = srcRect.Left / fullsrcW; arr[1] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                                //arr[2] = 1; arr[3] = 0;
+                                arr[2] = srcRect.Right / fullsrcW; arr[3] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                                //arr[4] = 1; arr[5] = 1;
+                                arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Top / fullsrcH;
+                                //arr[6] = 0; arr[7] = 1;
+                                arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Top / fullsrcH;
+                            }
+                            else
+                            {
+
+                                arr[0] = srcRect.Left / fullsrcW; arr[1] = srcRect.Top / fullsrcH;
+                                //arr[2] = 1; arr[3] = 1;
+                                arr[2] = srcRect.Right / fullsrcW; arr[3] = srcRect.Top / fullsrcH;
+                                //arr[4] = 1; arr[5] = 0;
+                                arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Bottom / fullsrcH;
+                                //arr[6] = 0; arr[7] = 0;
+                                arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Bottom / fullsrcH;
+                            }
+                            GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
+                            //------------------------------------------ 
+                            //fill rect with texture                             
+                            FillRectWithTexture(destRect.X, destRect.Y, destRect.Width, destRect.Height);
+                        }
+                    }
+
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
-
                 }
                 GL.Disable(EnableCap.Texture2D);
             }
@@ -216,7 +279,7 @@ namespace LayoutFarm.DrawingGL
         public void DrawVxs(VertexStore vxs)
         {
             sclineRas.Reset();
-            sclineRas.AddPath(stroke1.MakeVxs(vxs));
+            sclineRas.AddPath(aggStroke.MakeVxs(vxs));
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
         }
 
@@ -248,7 +311,7 @@ namespace LayoutFarm.DrawingGL
                         //close
                         ps.CloseFigure();
 
-                        VertexStore vxs = stroke1.MakeVxs(ps.Vxs);
+                        VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -281,7 +344,7 @@ namespace LayoutFarm.DrawingGL
                 case CanvasSmoothMode.AggSmooth:
                     {
 
-                        VertexStore vxs = stroke1.MakeVxs(ellipse.MakeVxs());
+                        VertexStore vxs = aggStroke.MakeVxs(ellipse.MakeVxs());
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -333,26 +396,47 @@ namespace LayoutFarm.DrawingGL
         }
         public void DrawCircle(float x, float y, double radius)
         {
-
             DrawEllipse(x, y, radius, radius);
         }
-
         public void DrawRect(float x, float y, float w, float h)
         {
+            //early exit
+            GL.EnableClientState(ArrayCap.ColorArray);
+            GL.EnableClientState(ArrayCap.VertexArray);
+            VboC4V3f vbo = GenerateVboC4V3f();
+            ////points 
+            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+            CreatePolyLineRectCoords(vrx, this.fillColor, x, y, w, h);
+            int pcount = vrx.Count;
+            vbo.BindBuffer();
+            DrawLineStripWithVertexBuffer(vrx, pcount);
+            vbo.UnbindBuffer();
+            //vbo.Dispose();
+            GL.DisableClientState(ArrayCap.ColorArray);
+            GL.DisableClientState(ArrayCap.VertexArray);
+            //------------------------ 
             //switch (this.SmoothMode)
             //{
             //    case CanvasSmoothMode.AggSmooth:
             //        {
             //            unsafe
             //            {
-            //                float* arr = stackalloc float[8];
-            //                byte* indices = stackalloc byte[6];
-            //                CreateRectCoords2(arr, indices, x, y, w, h);
-            //                GL.EnableClientState(ArrayCap.VertexArray); //***
-            //                //vertex
-            //                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-            //                GL.DrawElements(BeginMode.Lines ,6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+            //                //early exit
+            //                GL.EnableClientState(ArrayCap.ColorArray);
+            //                GL.EnableClientState(ArrayCap.VertexArray);
+            //                VboC4V3f vbo = GenerateVboC4V3f();
+            //                ////points 
+            //                ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+            //                CreateRectCoords(vrx, this.fillColor, x, y, w, h);
+            //                int pcount = vrx.Count;
+            //                vbo.BindBuffer();
+            //                DrawTrianglesWithVertexBuffer(vrx, pcount);
+            //                vbo.UnbindBuffer();
+
+            //                //vbo.Dispose();
+            //                GL.DisableClientState(ArrayCap.ColorArray);
             //                GL.DisableClientState(ArrayCap.VertexArray);
+            //                //------------------------ 
             //            }
             //        } break;
             //    default:
@@ -375,7 +459,7 @@ namespace LayoutFarm.DrawingGL
         {
             roundRect.SetRect(x, y, x + w, y + h);
             roundRect.SetRadius(rx, ry);
-            var vxs = this.stroke1.MakeVxs(roundRect.MakeVxs());
+            var vxs = this.aggStroke.MakeVxs(roundRect.MakeVxs());
 
             switch (this.SmoothMode)
             {
@@ -504,7 +588,7 @@ namespace LayoutFarm.DrawingGL
                 }
             }
 
-            vxs = stroke1.MakeVxs(vxs);
+            vxs = aggStroke.MakeVxs(vxs);
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
@@ -741,7 +825,7 @@ namespace LayoutFarm.DrawingGL
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
                 new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
 
-            vxs = this.stroke1.MakeVxs(vxs);
+            vxs = this.aggStroke.MakeVxs(vxs);
 
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
@@ -760,6 +844,17 @@ namespace LayoutFarm.DrawingGL
                 this.fillColor = value;
             }
         }
+        public LayoutFarm.Drawing.Brush Brush
+        {
+            get;
+            set;
+        }
+        public LayoutFarm.Drawing.BrushKind CurrentBrushKind
+        {
+            get;
+            set;
+        }
+
         static VboC4V3f GenerateVboC4V3f()
         {
             VboC4V3f vboHandle = new VboC4V3f();
@@ -767,7 +862,6 @@ namespace LayoutFarm.DrawingGL
             //GL.EnableClientState(ArrayCap.ColorArray);
             //GL.EnableClientState(ArrayCap.VertexArray); 
             GL.GenBuffers(1, out vboHandle.VboID);
-
             return vboHandle;
         }
 
@@ -781,6 +875,26 @@ namespace LayoutFarm.DrawingGL
                 // Fill newly allocated buffer
                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
                 GL.DrawArrays(BeginMode.Triangles, 0, nelements);
+            }
+        }
+        static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
+        {
+            unsafe
+            {
+                VertexC4V3f[] vpoints = buffer.Array;
+                IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                GL.DrawArrays(BeginMode.Lines, 0, nelements);
+            }
+        }
+        static void DrawLineStripWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
+        {
+            unsafe
+            {
+                VertexC4V3f[] vpoints = buffer.Array;
+                IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
             }
         }
         void FillRectWithTexture(float x, float y, float w, float h)
@@ -800,22 +914,72 @@ namespace LayoutFarm.DrawingGL
         }
         public void FillRect(float x, float y, float w, float h)
         {
+            switch (this.CurrentBrushKind)
+            {
+                case Drawing.BrushKind.LinearGradient:
+                    {
+                        var linearGradientBrush = this.Brush as LayoutFarm.Drawing.LinearGradientBrush;
+                        if (linearGradientBrush != null)
+                        {
+                            //use clip rect for fill rect gradient
+                            EnableClipRect();
+                            SetClipRect((int)x, (int)y, (int)w, (int)h);
 
-            //early exit
-            GL.EnableClientState(ArrayCap.ColorArray);
-            GL.EnableClientState(ArrayCap.VertexArray);
-            VboC4V3f vbo = GenerateVboC4V3f();
-            ////points 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-            CreateRectCoords(vrx, this.fillColor, x, y, w, h);
-            int pcount = vrx.Count;
-            vbo.BindBuffer();
-            DrawTrianglesWithVertexBuffer(vrx, pcount);
-            vbo.UnbindBuffer();
+                            //early exit
 
-            //vbo.Dispose();
-            GL.DisableClientState(ArrayCap.ColorArray);
-            GL.DisableClientState(ArrayCap.VertexArray);
+                            ////points 
+                            var colors = linearGradientBrush.GetColors();
+                            var points = linearGradientBrush.GetStopPoints();
+                            uint c1 = colors[0].ToABGR();
+                            uint c2 = colors[1].ToABGR();
+                            //create polygon for graident bg 
+                            var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                                 points[0].X, points[0].Y,
+                                 points[1].X, points[1].Y,
+                                 colors[0],
+                                 colors[1]);
+
+
+                            int pcount = vrx.Count;
+
+                            GL.EnableClientState(ArrayCap.ColorArray);
+                            GL.EnableClientState(ArrayCap.VertexArray);
+
+                            VboC4V3f vbo = GenerateVboC4V3f();
+                            vbo.BindBuffer();
+                            DrawTrianglesWithVertexBuffer(vrx, pcount);
+
+                            vbo.UnbindBuffer();
+                            //vbo.Dispose();
+                            GL.DisableClientState(ArrayCap.ColorArray);
+                            GL.DisableClientState(ArrayCap.VertexArray);
+
+                            DisableClipRect();
+                        }
+                    } break;
+                case Drawing.BrushKind.Texture:
+                    {
+                        throw new NotImplementedException();
+                    } break;
+                default:
+                    {//early exit
+                        GL.EnableClientState(ArrayCap.ColorArray);
+                        GL.EnableClientState(ArrayCap.VertexArray);
+                        VboC4V3f vbo = GenerateVboC4V3f();
+                        ////points 
+                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                        CreateRectCoords(vrx, this.fillColor, x, y, w, h);
+                        int pcount = vrx.Count;
+                        vbo.BindBuffer();
+                        DrawTrianglesWithVertexBuffer(vrx, pcount);
+                        vbo.UnbindBuffer();
+
+                        //vbo.Dispose();
+                        GL.DisableClientState(ArrayCap.ColorArray);
+                        GL.DisableClientState(ArrayCap.VertexArray);
+                    } break;
+            }
+
             //------------------------ 
         }
         public void FillRoundRect(float x, float y, float w, float h, float rx, float ry)
@@ -933,6 +1097,7 @@ namespace LayoutFarm.DrawingGL
         {
             FillPolygon(vertex2dCoords, vertex2dCoords.Length);
         }
+
         public void FillPolygon(float[] vertex2dCoords, int npoints)
         {
             //-------------
@@ -965,15 +1130,216 @@ namespace LayoutFarm.DrawingGL
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.FillWithColor(sclineRas, sclinePack8, this.fillColor);
-                        //-------------------------------------- 
+
 
                     } break;
                 default:
                     {
+
                         var vertextList = TessPolygon(vertex2dCoords);
-                        //-----------------------------
-                        FillTriangles(vertextList);
-                        //-----------------------------
+                        //-----------------------------   
+                        //switch how to fill polygon
+                        switch (this.CurrentBrushKind)
+                        {
+                            case Drawing.BrushKind.LinearGradient:
+                            case Drawing.BrushKind.Texture:
+                                {
+                                    var linearGradientBrush = this.Brush as LayoutFarm.Drawing.LinearGradientBrush;
+                                    GL.ClearStencil(0); //set value for clearing stencil buffer 
+                                    //actual clear here
+                                    GL.Clear(ClearBufferMask.StencilBufferBit);
+                                    //-------------------
+                                    //disable rendering to color buffer
+                                    GL.ColorMask(false, false, false, false);
+                                    //start using stencil
+                                    GL.Enable(EnableCap.StencilTest);
+                                    //place a 1 where rendered
+                                    GL.StencilFunc(StencilFunction.Always, 1, 1);
+                                    //replace where rendered
+                                    GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
+                                    //render  to stencill buffer
+                                    //-----------------
+                                    if (this.Note1 == 1)
+                                    {
+                                        ////create stencil with Agg shape
+                                        int j = npoints / 2;
+                                        //first point
+                                        if (j < 2)
+                                        {
+                                            return;
+                                        }
+                                        ps.Clear();
+                                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
+                                        int nn = 2;
+                                        for (int i = 1; i < j; ++i)
+                                        {
+                                            ps.LineTo(vertex2dCoords[nn++],
+                                                vertex2dCoords[nn++]);
+                                        }
+                                        //close
+                                        ps.CloseFigure();
+
+                                        VertexStore vxs = ps.Vxs;
+                                        sclineRas.Reset();
+                                        sclineRas.AddPath(vxs);
+                                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.White);
+                                        //create stencil with normal OpenGL 
+                                    }
+                                    else
+                                    {
+                                        //create stencil with normal OpenGL
+                                        int j = vertextList.Count;
+                                        int j2 = j * 2;
+                                        VboC4V3f vbo = GenerateVboC4V3f();
+                                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                                        uint color = this.fillColor.ToABGR();
+                                        for (int i = 0; i < j; ++i)
+                                        {
+                                            var v = vertextList[i];
+                                            vrx.AddVertex(new VertexC4V3f(color, (float)v.m_X, (float)v.m_Y));
+                                        }
+
+                                        GL.EnableClientState(ArrayCap.ColorArray);
+                                        GL.EnableClientState(ArrayCap.VertexArray);
+                                        int pcount = vrx.Count;
+                                        vbo.BindBuffer();
+                                        DrawTrianglesWithVertexBuffer(vrx, pcount);
+                                        vbo.UnbindBuffer();
+                                        GL.DisableClientState(ArrayCap.ColorArray);
+                                        GL.DisableClientState(ArrayCap.VertexArray);
+                                    }
+                                    //-------------------------------------- 
+                                    //render color
+                                    //--------------------------------------  
+                                    //reenable color buffer 
+                                    GL.ColorMask(true, true, true, true);
+                                    //where a 1 was not rendered
+                                    GL.StencilFunc(StencilFunction.Equal, 1, 1);
+                                    //freeze stencill buffer
+                                    GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
+
+                                    if (this.Note1 == 1) //temp
+                                    {   
+                                        //------------------------------------------
+                                        //we already have valid ps from stencil step
+                                        //------------------------------------------
+                                        VertexStore vxs = ps.Vxs;
+                                        sclineRas.Reset();
+                                        sclineRas.AddPath(vxs); 
+                                        //-------------------------------------------------------------------------------------
+                                        //1.  we draw only alpha chanel of this black color to destination color
+                                        //so we use  BlendFuncSeparate  as follow ... 
+                                        GL.BlendFuncSeparate(
+                                             BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
+                                             BlendingFactorSrc.One, BlendingFactorDest.Zero); //use alpha chanel from source
+
+                                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.Black);
+                                        //at this point alpha component is fill in to destination 
+                                        //-------------------------------------------------------------------------------------
+                                        //2. then fill again!, 
+                                        //we use alpha information from dest, 
+                                        //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
+
+                                        GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
+                                        {
+
+                                            //draw box of gradient color
+                                            if (this.CurrentBrushKind == Drawing.BrushKind.LinearGradient)
+                                            {
+                                                var colors = linearGradientBrush.GetColors();
+                                                var points = linearGradientBrush.GetStopPoints();
+                                                uint c1 = colors[0].ToABGR();
+                                                uint c2 = colors[1].ToABGR();
+                                                //create polygon for graident bg 
+                                                var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                                                     points[0].X, points[0].Y,
+                                                     points[1].X, points[1].Y,
+                                                     colors[0],
+                                                     colors[1]);
+                                                int pcount = vrx.Count;
+                                                GL.EnableClientState(ArrayCap.ColorArray);
+                                                GL.EnableClientState(ArrayCap.VertexArray);
+                                                //--- 
+                                                VboC4V3f vbo = GenerateVboC4V3f();
+                                                vbo.BindBuffer();
+                                                DrawTrianglesWithVertexBuffer(vrx, pcount);
+                                                vbo.UnbindBuffer();
+                                                //vbo.Dispose();
+                                                GL.DisableClientState(ArrayCap.ColorArray);
+                                                GL.DisableClientState(ArrayCap.VertexArray);
+                                            }
+                                            else if (this.CurrentBrushKind == Drawing.BrushKind.Texture)
+                                            {
+                                                //draw texture image 
+                                                LayoutFarm.Drawing.TextureBrush tbrush = (LayoutFarm.Drawing.TextureBrush)this.Brush;
+                                                LayoutFarm.Drawing.Image img = tbrush.TextureImage;
+                                                GLBitmap bmpTexture = (GLBitmap)tbrush.InnerImage2;
+                                                this.DrawImage(bmpTexture, 0, 0);
+                                                //GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
+                                                //this.DrawImage(bmp, 0, 0);
+                                                //bmp.Dispose();
+
+                                            }
+                                        }
+                                        //restore back 
+                                        //3. switch to normal blending mode 
+                                        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+                                    }
+                                    else
+                                    {
+                                        //draw box of gradient color
+                                        var colors = linearGradientBrush.GetColors();
+                                        var points = linearGradientBrush.GetStopPoints();
+                                        uint c1 = colors[0].ToABGR();
+                                        uint c2 = colors[1].ToABGR();
+                                        //create polygon for graident bg 
+                                        var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                                             points[0].X, points[0].Y,
+                                             points[1].X, points[1].Y,
+                                             colors[0],
+                                             colors[1]);
+                                        int pcount = vrx.Count;
+                                        GL.EnableClientState(ArrayCap.ColorArray);
+                                        GL.EnableClientState(ArrayCap.VertexArray);
+                                        //--- 
+                                        VboC4V3f vbo = GenerateVboC4V3f();
+                                        vbo.BindBuffer();
+                                        DrawTrianglesWithVertexBuffer(vrx, pcount);
+                                        vbo.UnbindBuffer();
+                                        //vbo.Dispose();
+                                        GL.DisableClientState(ArrayCap.ColorArray);
+                                        GL.DisableClientState(ArrayCap.VertexArray);
+
+                                    }
+                                    GL.Disable(EnableCap.StencilTest);
+                                } break;
+                            default:
+                                {
+                                    int j = vertextList.Count;
+                                    int j2 = j * 2;
+                                    VboC4V3f vbo = GenerateVboC4V3f();
+                                    ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                                    uint color = this.fillColor.ToABGR();
+                                    for (int i = 0; i < j; ++i)
+                                    {
+                                        var v = vertextList[i];
+                                        vrx.AddVertex(new VertexC4V3f(color, (float)v.m_X, (float)v.m_Y));
+                                    }
+                                    //------------------------------------- 
+                                    GL.EnableClientState(ArrayCap.ColorArray);
+                                    GL.EnableClientState(ArrayCap.VertexArray);
+                                    int pcount = vrx.Count;
+                                    vbo.BindBuffer();
+                                    DrawTrianglesWithVertexBuffer(vrx, pcount);
+                                    vbo.UnbindBuffer();
+                                    GL.DisableClientState(ArrayCap.ColorArray);
+                                    GL.DisableClientState(ArrayCap.VertexArray);
+                                    //-------------------------------------- 
+                                } break;
+                        }
+
+
                     } break;
             }
 

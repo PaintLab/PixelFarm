@@ -160,8 +160,8 @@ namespace LayoutFarm.Drawing.WinGdi
                     {
                         //draw with gradient
                         LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
-                        var colors = linearBrush.GetColorArray();
-                        var points = linearBrush.GetStopPointArray();
+                        var colors = linearBrush.GetColors();
+                        var points = linearBrush.GetStopPoints();
                         using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
                              points[0].ToPointF(),
                              points[1].ToPointF(),
@@ -174,7 +174,7 @@ namespace LayoutFarm.Drawing.WinGdi
                 case BrushKind.GeometryGradient:
                     {
                     } break;
-                case BrushKind.CirculatGraident:
+                case BrushKind.CircularGraident:
                     {
 
                     } break;
@@ -262,7 +262,7 @@ namespace LayoutFarm.Drawing.WinGdi
         /// <param name="destRect"><see cref="T:System.Drawing.RectangleF"/> structure that specifies the location and size of the drawn image. The image is scaled to fit the rectangle. </param>
         /// <param name="srcRect"><see cref="T:System.Drawing.RectangleF"/> structure that specifies the portion of the <paramref name="image"/> object to draw. </param>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
-        public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
+        public override void DrawImage(Bitmap image, RectangleF destRect, RectangleF srcRect)
         {
             ReleaseHdc();
             gx.DrawImage(image.InnerImage as System.Drawing.Image,
@@ -275,10 +275,44 @@ namespace LayoutFarm.Drawing.WinGdi
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
         /// <param name="image"><see cref="T:System.Drawing.Image"/> to draw. </param><param name="destRect"><see cref="T:System.Drawing.Rectangle"/> structure that specifies the location and size of the drawn image. </param><exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        public override void DrawImage(Image image, RectangleF destRect)
+        public override void DrawImage(Bitmap image, RectangleF destRect)
         {
             ReleaseHdc();
             gx.DrawImage(image.InnerImage as System.Drawing.Image, destRect.ToRectF());
+        }
+        public override void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest)
+        {
+            ReleaseHdc();
+
+            gx.DrawImage(referenceBmp.InnerImage as System.Drawing.Image,
+                dest.ToRectF(),
+                 new System.Drawing.RectangleF(
+                     referenceBmp.ReferenceX, referenceBmp.ReferenceY,
+                     referenceBmp.Width, referenceBmp.Height),
+                System.Drawing.GraphicsUnit.Pixel);
+        }
+        public override void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs)
+        {
+            ReleaseHdc();
+            int j = destAndSrcPairs.Length;
+            if (j > 1)
+            {
+                if ((j % 2) != 0)
+                {
+                    //make it even number
+                    j -= 1;
+                }
+                //loop draw
+                var inner = image.InnerImage as System.Drawing.Image;
+                for (int i = 0; i < j; )
+                {
+                    gx.DrawImage(inner,
+                        destAndSrcPairs[i].ToRectF(),
+                        destAndSrcPairs[i + 1].ToRectF(),
+                        System.Drawing.GraphicsUnit.Pixel);
+                    i += 2;
+                }
+            }
         }
         /// <summary>
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
@@ -327,34 +361,13 @@ namespace LayoutFarm.Drawing.WinGdi
             gx.FillPolygon(this.internalSolidBrush, pps);
         }
 
-
-
-        ////==================================================== 
-        ///// <summary>
-        ///// Gets the bounding clipping region of this graphics.
-        ///// </summary>
-        ///// <returns>The bounding rectangle for the clipping region</returns>
-        //public override RectangleF GetClip()
-        //{
-        //    if (_hdc == IntPtr.Zero)
-        //    {
-        //        var clip1 = gx.ClipBounds;
-        //        return new RectangleF(
-        //            clip1.X, clip1.Y,
-        //            clip1.Width, clip1.Height);
-        //    }
-        //    else
-        //    {
-        //        System.Drawing.Rectangle lprc;
-        //        DrawingBridge.Win32Utils.GetClipBox(_hdc, out lprc);
-
-
-        //        return new RectangleF(
-        //            lprc.X, lprc.Y,
-        //            lprc.Width, lprc.Height);
-        //    }
-        //}
-
+        public override void FillPolygon(Brush brush, PointF[] points)
+        {
+            ReleaseHdc();
+            //create Point
+            var pps = ConvPointFArray(points);
+            gx.FillPolygon(this.internalSolidBrush, pps);
+        } 
     }
 
 }

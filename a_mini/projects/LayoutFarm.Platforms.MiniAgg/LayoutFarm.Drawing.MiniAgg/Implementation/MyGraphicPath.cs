@@ -67,6 +67,14 @@ namespace LayoutFarm.Drawing.WinGdi
                 p3.X, p3.Y,
                 p4.X, p4.Y);
         }
-        
+        public override object GetPathData()
+        {
+            return p.PathData;
+        }
+        public override object InnerPath2
+        {
+            get;
+            set;
+        }
     }
 }

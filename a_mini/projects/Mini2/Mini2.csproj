@@ -51,12 +51,18 @@
     <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="1_Shared\Square.cs" />
     <Compile Include="2_Samples\02_DrawSample02.cs" />
-    <Compile Include="2_Samples\01_WhiteBlank.cs" />
+    <Compile Include="2_Samples\00_WhiteBlank.cs" />
     <Compile Include="2_Samples\03_LionFillOnGLControl.cs" />
     <Compile Include="2_Samples\04_LionFillDirect.cs" />
     <Compile Include="2_Samples\05_LionFillDirectBufferDemo.cs" />
     <Compile Include="2_Samples\06_SetCanvasOriginAndRectClip.cs" />
-    <Compile Include="3_LayoutFarmSamples\01_SimpleDraw.cs" />
+    <Compile Include="3_LayoutFarmSamples\03_SimpleDraw3.cs" />
+    <Compile Include="3_LayoutFarmSamples\04_SimpleDraw4.cs" />
+    <Compile Include="3_LayoutFarmSamples\05_SimpleDraw_BasicStencil.cs" />
+    <Compile Include="3_LayoutFarmSamples\06_SimpleDraw_GradientBrush.cs" />
+    <Compile Include="3_LayoutFarmSamples\07_SimpleDraw_PolygonStencil.cs" />
+    <Compile Include="3_LayoutFarmSamples\08_SimpleDraw_DrawText2.cs" />
+    <Compile Include="3_LayoutFarmSamples\09_TestTextureAtlas.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,10 +103,6 @@
     <ProjectReference Include="..\MiniAgg.HardwareGraphics\OpenTk.Platforms\OpenTk.Platforms.csproj">
       <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>
       <Name>OpenTk.Platforms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MiniAgg.WinGdi\MiniAgg.WinGdi.csproj">
-      <Project>{F9C07AF0-7394-4C56-894A-BC9AD23FD724}</Project>
-      <Name>MiniAgg.WinGdi</Name>
     </ProjectReference>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>

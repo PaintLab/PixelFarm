@@ -23,6 +23,7 @@ namespace LayoutFarm.Drawing
         public abstract float StrokeWidth { get; set; }
         public abstract Color StrokeColor { get; set; }
         public abstract Color FillColor { get; set; }
+        public abstract Brush CurrentBrush { get; set; }
         //states
         public abstract void Invalidate(Rect rect);
 
@@ -37,7 +38,7 @@ namespace LayoutFarm.Drawing
         public abstract int Bottom { get; }
         public abstract int Right { get; }
 
-        public abstract Rectangle Rect { get; } 
+        public abstract Rectangle Rect { get; }
 
         public abstract int CanvasOriginX { get; }
         public abstract int CanvasOriginY { get; }
@@ -49,7 +50,7 @@ namespace LayoutFarm.Drawing
         public abstract bool PushClipArea(int width, int height, ref Rect updateArea);
         public abstract void PopClipArea();
 
-        public abstract void SetClipRect(Rectangle  clip, CombineMode combineMode = CombineMode.Replace);
+        public abstract void SetClipRect(Rectangle clip, CombineMode combineMode = CombineMode.Replace);
         public abstract Rectangle CurrentClipRect { get; }
         //---------------------------------------
         //buffer
@@ -83,12 +84,14 @@ namespace LayoutFarm.Drawing
         public abstract void FillPath(GraphicsPath gfxPath);
         public abstract void FillPath(GraphicsPath gfxPath, Brush brush);
         public abstract void DrawPath(GraphicsPath gfxPath);
-
         public abstract void FillPolygon(PointF[] points);
+        public abstract void FillPolygon(Brush brush, PointF[] points);
         //-------------------------------------------------------  
         //images
-        public abstract void DrawImage(Image image, RectangleF dest, RectangleF src);
-        public abstract void DrawImage(Image image, RectangleF rect);
+        public abstract void DrawImage(Bitmap image, RectangleF dest, RectangleF src);
+        public abstract void DrawImage(Bitmap image, RectangleF dest);
+        public abstract void DrawImage(ReferenceBitmap referenceBmp, RectangleF dest);
+        public abstract void DrawImages(Bitmap image, RectangleF[] destAndSrcPairs);
         //---------------------------------------------------------------------------
 #if DEBUG
         public abstract void dbug_DrawRuler(int x);
@@ -106,6 +109,13 @@ namespace LayoutFarm.Drawing
         public void OffsetCanvasOriginY(int dy)
         {
             this.OffsetCanvasOrigin(0, dy);
+        }
+
+        //for debug
+        public int Note1
+        {
+            get;
+            set;
         }
     }
 }

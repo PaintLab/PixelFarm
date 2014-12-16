@@ -187,6 +187,10 @@
       <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
       <Name>LayoutFarm.Drawing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\LayoutFarm.Platforms.MiniAgg\LayoutFarm.Platforms.MiniAgg.csproj">
+      <Project>{15285430-FED2-47EA-AF54-F5A3723CE5ED}</Project>
+      <Name>LayoutFarm.Platforms.MiniAgg</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MiniAgg.Complements\MiniAgg.Complements.csproj">
       <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
       <Name>MiniAgg.Complements</Name>
