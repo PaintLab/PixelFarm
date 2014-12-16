@@ -45,8 +45,8 @@ namespace LayoutFarm.Drawing
         //---------------------------------------------------------------------
         //clip area
 
-        public abstract bool PushClipArea(int width, int height, ref Rect updateArea);
-        public abstract void PopClipArea();
+        public abstract bool PushClipAreaRect(int width, int height, ref Rect updateArea);
+        public abstract void PopClipAreaRect();
 
         public abstract void SetClipRect(Rectangle clip, CombineMode combineMode = CombineMode.Replace);
         public abstract Rectangle CurrentClipRect { get; }

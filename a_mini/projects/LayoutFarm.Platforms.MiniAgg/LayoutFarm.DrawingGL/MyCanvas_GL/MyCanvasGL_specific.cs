@@ -58,14 +58,14 @@ namespace LayoutFarm.Drawing.DrawingGL
             canvasGL2d.SetClipRect(
                  rect.X,
                  rect.Y,
-                rect.Width,
+                 rect.Width,
                  rect.Height);
             //--------------------------
         }
         //-------------------------------------------
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-             
+
             canvasGL2d.FillRect(color, left, top, width, height);
         }
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
@@ -74,9 +74,9 @@ namespace LayoutFarm.Drawing.DrawingGL
             {
                 case BrushKind.Solid:
                     {
-                        var solidBrush = brush as SolidBrush; 
+                        var solidBrush = brush as SolidBrush;
                         canvasGL2d.FillRect(solidBrush.Color, left, top, width, height);
-                       
+
                     } break;
                 case BrushKind.LinearGradient:
                     {
@@ -84,7 +84,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                         //create bg gradient first 
                         //fill linear gradient in spefic area 
                         canvasGL2d.FillRect(linearGradientBrush, left, top, width, height);
-                        
+
                     } break;
                 case BrushKind.CircularGraident:
                     {
@@ -136,9 +136,9 @@ namespace LayoutFarm.Drawing.DrawingGL
                             polygonPoints[n] = points[i].X;
                             polygonPoints[n + 1] = points[i].Y;
                             n += 2;
-                        } 
+                        }
                         //use stencil buffer 
-                        canvasGL2d.FillPolygon(brush, polygonPoints, polygonPoints.Length); 
+                        canvasGL2d.FillPolygon(brush, polygonPoints, polygonPoints.Length);
 
                     } break;
                 case BrushKind.Texture:
@@ -163,11 +163,11 @@ namespace LayoutFarm.Drawing.DrawingGL
                             //create gl image
                             var textureImage = tbrush.TextureImage;
                             tbrush.InnerImage2 = bmpTexture = GLBitmapTextureHelper.CreateBitmapTexture((System.Drawing.Bitmap)textureImage.InnerImage);
-                             
+
                         }
 
                         canvasGL2d.FillPolygon(brush, polygonPoints, polygonPoints.Length);
-                        
+
 
                         //delete gl
                         bmpTexture.Dispose();
@@ -460,7 +460,30 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
+        public override bool PushClipAreaRect(int width, int height, ref Rect updateArea)
+        {
+            if (base.PushClipAreaRect(width, height, ref updateArea))
+            {   
+                //result
+                var currentClipRect = this.CurrentClipRect;
+                canvasGL2d.EnableClipRect();
+                canvasGL2d.SetClipRect(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
+        }
+        public override void PopClipAreaRect()
+        {
+            base.PopClipAreaRect();
+            var currentClipRect = this.CurrentClipRect;
+            canvasGL2d.EnableClipRect();
+            canvasGL2d.SetClipRect(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
+        }
+        
         //---------------------------------------------------
 
     }
