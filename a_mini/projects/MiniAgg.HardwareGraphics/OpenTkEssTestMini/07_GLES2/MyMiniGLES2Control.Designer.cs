@@ -1,6 +1,6 @@
 ﻿namespace OpenTkEssTest
 {
-    partial class DerivedMiniGLControl
+    partial class MyMiniGLES2Control
     {
         /// <summary> 
         /// Required designer variable.

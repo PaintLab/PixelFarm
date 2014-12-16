@@ -65,7 +65,7 @@ namespace OpenTkEssTest
         {
 
         }
-        public void Load(DerivedMiniGLControl miniGLControl)
+        public void Load(MyMiniGLES2Control miniGLControl)
         {
 
             //----------------

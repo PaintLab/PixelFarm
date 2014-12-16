@@ -1,5 +1,5 @@
 ﻿using System;
-namespace OpenTkEssTest
+namespace LayoutFarm.DrawingGL
 {
     [Flags]
     public enum SvgArcSweep

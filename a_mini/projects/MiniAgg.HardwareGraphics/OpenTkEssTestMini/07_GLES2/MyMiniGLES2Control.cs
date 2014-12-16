@@ -7,20 +7,16 @@ using System.Text;
 using System.Windows.Forms;
 
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.ES20;
 
-namespace OpenTK
+namespace OpenTkEssTest
 {
-    public partial class MyGLControl : GLControl
+    public partial class MyMiniGLES2Control : GLControl
     {
         LayoutFarm.Drawing.Color clearColor;
         EventHandler glPaintHandler;
 
-
-
-        public MyGLControl()
-        {
-            OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
+        static OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
              DisplayDevice.Default.BitsPerPixel,//default 32 bits color
              16,//depth buffer => 16
              8,  //stencil buffer => 8 (  //if want to use stencil buffer then set stencil buffer too! )
@@ -28,9 +24,11 @@ namespace OpenTK
              0,  //accum buffer
              2, // n buffer, 2=> double buffer
              false);//sterio
-            ChildCtorOnlyResetGraphicMode(gfxmode);
 
-            //-----------
+        public MyMiniGLES2Control()
+            : base(gfxmode, 2, 0, OpenTK.Graphics.GraphicsContextFlags.Embedded)
+        {
+        
             this.InitializeComponent();
         }
         public void SetGLPaintHandler(EventHandler glPaintHandler)
@@ -55,9 +53,10 @@ namespace OpenTK
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            //------------------------------------------
+
             if (!this.DesignMode)
             {
+
                 MakeCurrent();
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 if (glPaintHandler != null)
@@ -66,20 +65,6 @@ namespace OpenTK
                 }
                 SwapBuffers();
             }
-        }
-        public void InitSetup2d(Rectangle screenBound)
-        {
-            int max = Math.Max(screenBound.Width, screenBound.Height);
-            //init
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            //---------------- 
-            GL.Viewport(0, 0, max, max);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-            GL.Ortho(0, max, 0, max, 0.0, 100.0);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
         }
     }
 }

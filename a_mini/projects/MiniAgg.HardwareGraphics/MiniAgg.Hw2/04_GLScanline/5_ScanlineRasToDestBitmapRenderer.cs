@@ -54,70 +54,70 @@ namespace PixelFarm.Agg
                 LayoutFarm.Drawing.Color color)
         {
 
-            ////early exit
-            //if (color.A == 0) { return; }
-            //if (!sclineRas.RewindScanlines()) { return; }
-            ////----------------------------------------------- 
+            //early exit
+            if (color.A == 0) { return; }
+            if (!sclineRas.RewindScanlines()) { return; }
+            //----------------------------------------------- 
 
-            //scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
-            ////-----------------------------------------------  
-
-
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray);
+            scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
+            //-----------------------------------------------  
 
 
-            //this.mySinglePixelBuffer.Clear();
-            //this.myLineBuffer.Clear();
+            GL.EnableClientState(ArrayCap.ColorArray);
+            GL.EnableClientState(ArrayCap.VertexArray);
 
-            //while (sclineRas.SweepScanline(scline))
-            //{
-            //    int y = scline.Y;
-            //    int num_spans = scline.SpanCount;
-            //    byte[] covers = scline.GetCovers();
-            //    for (int i = 1; i <= num_spans; ++i)
-            //    {
-            //        ScanlineSpan span = scline.GetSpan(i);
-            //        if (span.len > 0)
-            //        {
-            //            //outline
-            //            GLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
-            //        }
-            //        else
-            //        {
-            //            //fill
-            //            int x = span.x;
-            //            int x2 = (x - span.len - 1);
-            //            GLBlendHL(x, y, x2, color, covers[span.cover_index]);
-            //        }
-            //    }
-            //}
 
-            ////---------------------------------------------
-            ////points
-            //int nelements = mySinglePixelBuffer.Count;
-            //Vbo vbo = GenerateVBOForC4V2I();
-            //if (nelements > 0)
-            //{
-            //    vbo.BindBuffer();
-            //    DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
-            //    vbo.UnbindBuffer();
-            //}
-            ////---------------------------------------------
-            ////lines
-            //nelements = myLineBuffer.Count;
-            //if (nelements > 0)
-            //{
-            //    vbo.BindBuffer();
-            //    DrawLinesWithVertexBuffer(myLineBuffer, nelements);
-            //    vbo.UnbindBuffer();
-            //}
-            ////---------------------------------------------
+            this.mySinglePixelBuffer.Clear();
+            this.myLineBuffer.Clear();
 
-            //vbo.Dispose();
-            //GL.DisableClientState(ArrayCap.ColorArray);
-            //GL.DisableClientState(ArrayCap.VertexArray);
-            ////------------------------ 
+            while (sclineRas.SweepScanline(scline))
+            {
+                int y = scline.Y;
+                int num_spans = scline.SpanCount;
+                byte[] covers = scline.GetCovers();
+                for (int i = 1; i <= num_spans; ++i)
+                {
+                    ScanlineSpan span = scline.GetSpan(i);
+                    if (span.len > 0)
+                    {
+                        //outline
+                        GLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                    }
+                    else
+                    {
+                        //fill
+                        int x = span.x;
+                        int x2 = (x - span.len - 1);
+                        GLBlendHL(x, y, x2, color, covers[span.cover_index]);
+                    }
+                }
+            }
+
+            //---------------------------------------------
+            //points
+            int nelements = mySinglePixelBuffer.Count;
+            VboC4V2S vbo = GenerateVBOForC4V2I();
+            if (nelements > 0)
+            {
+                vbo.BindBuffer();
+                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
+                vbo.UnbindBuffer();
+            }
+            //---------------------------------------------
+            //lines
+            nelements = myLineBuffer.Count;
+            if (nelements > 0)
+            {
+                vbo.BindBuffer();
+                DrawLinesWithVertexBuffer(myLineBuffer, nelements);
+                vbo.UnbindBuffer();
+            }
+            //---------------------------------------------
+
+            vbo.Dispose();
+            GL.DisableClientState(ArrayCap.ColorArray);
+            GL.DisableClientState(ArrayCap.VertexArray);
+            //------------------------ 
         }
         /// <summary>
         /// for lines
@@ -132,152 +132,153 @@ namespace PixelFarm.Agg
         {
 
             //early exit
-            //if (color.A == 0) { return; }
-            //if (!sclineRas.RewindScanlines()) { return; }
-            ////----------------------------------------------- 
+            if (color.A == 0) { return; }
+            if (!sclineRas.RewindScanlines()) { return; }
+            //----------------------------------------------- 
 
-            //scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
-            ////-----------------------------------------------  
-
-
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray);
+            scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
+            //-----------------------------------------------  
 
 
-            //this.mySinglePixelBuffer.Clear();
-            //this.myLineBuffer.Clear();
+            GL.EnableClientState(ArrayCap.ColorArray);
+            GL.EnableClientState(ArrayCap.VertexArray);
 
-            //while (sclineRas.SweepScanline(scline))
-            //{
-            //    int y = scline.Y;
-            //    int num_spans = scline.SpanCount;
-            //    byte[] covers = scline.GetCovers();
-            //    for (int i = 1; i <= num_spans; ++i)
-            //    {
-            //        ScanlineSpan span = scline.GetSpan(i);
-            //        if (span.len > 0)
-            //        {
-            //            //outline
-            //            GLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
-            //        }
-            //        else
-            //        {
-            //            //fill
-            //            int x = span.x;
-            //            int x2 = (x - span.len - 1);
-            //            GLBlendHL(x, y, x2, color, covers[span.cover_index]);
-            //        }
-            //    }
-            //}
 
-            ////---------------------------------------------
-            ////points
-            //int nelements = mySinglePixelBuffer.Count;
-            //Vbo vbo = GenerateVBOForC4V2I();
-            //if (nelements > 0)
-            //{
-            //    vbo.BindBuffer();
-            //    DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
-            //    vbo.UnbindBuffer();
-            //}
-            ////---------------------------------------------
-            ////lines
-            //nelements = myLineBuffer.Count;
-            //if (nelements > 0)
-            //{
-            //    vbo.BindBuffer();
-            //    DrawLinesWithVertexBuffer(myLineBuffer, nelements);
-            //    vbo.UnbindBuffer();
-            //}
-            ////---------------------------------------------
+            this.mySinglePixelBuffer.Clear();
+            this.myLineBuffer.Clear();
 
-            //vbo.Dispose();
-            //GL.DisableClientState(ArrayCap.ColorArray);
-            //GL.DisableClientState(ArrayCap.VertexArray);
-            ////------------------------ 
+            while (sclineRas.SweepScanline(scline))
+            {
+                int y = scline.Y;
+                int num_spans = scline.SpanCount;
+                byte[] covers = scline.GetCovers();
+                for (int i = 1; i <= num_spans; ++i)
+                {
+                    ScanlineSpan span = scline.GetSpan(i);
+                    if (span.len > 0)
+                    {
+                        //outline
+                        GLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                    }
+                    else
+                    {
+                        //fill
+                        int x = span.x;
+                        int x2 = (x - span.len - 1);
+                        GLBlendHL(x, y, x2, color, covers[span.cover_index]);
+                    }
+                }
+            }
+
+            //---------------------------------------------
+            //points
+            int nelements = mySinglePixelBuffer.Count;
+            VboC4V2S vbo = GenerateVBOForC4V2I();
+            if (nelements > 0)
+            {
+                vbo.BindBuffer();
+                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
+                vbo.UnbindBuffer();
+            }
+            //---------------------------------------------
+            //lines
+            nelements = myLineBuffer.Count;
+            if (nelements > 0)
+            {
+                vbo.BindBuffer();
+                DrawLinesWithVertexBuffer(myLineBuffer, nelements);
+                vbo.UnbindBuffer();
+            }
+            //---------------------------------------------
+
+            vbo.Dispose();
+            GL.DisableClientState(ArrayCap.ColorArray);
+            GL.DisableClientState(ArrayCap.VertexArray);
+            //------------------------ 
         }
 
         static void DrawPoint(float x1, float y1)
         {
-            //unsafe
-            //{
-            //    float* arr = stackalloc float[2];
-            //    arr[0] = x1; arr[1] = y1;
+            unsafe
+            {
+                float* arr = stackalloc float[2];
+                arr[0] = x1; arr[1] = y1;
 
-            //    //byte* indices = stackalloc byte[1];
-            //    //indices[0] = 0;
+                //byte* indices = stackalloc byte[1];
+                //indices[0] = 0;
 
-            //    GL.EnableClientState(ArrayCap.VertexArray); //***
-            //    //vertex
-            //    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-            //    //GL.DrawElements(BeginMode.Points, 1, DrawElementsType.UnsignedByte, (IntPtr)indices);
-            //    GL.DrawArrays(BeginMode.Points, 0, 1);
-            //    GL.DisableClientState(ArrayCap.VertexArray);
-            //}
+                GL.EnableClientState(ArrayCap.VertexArray); //***
+                //vertex
+                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+                //GL.DrawElements(BeginMode.Points, 1, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                GL.DrawArrays(BeginMode.Points, 0, 1);
+                GL.DisableClientState(ArrayCap.VertexArray);
+            }
         }
 
         static void DrawPoints(ArrayList<int> pointsList, ArrayList<uint> colorsList)
         {
-            //unsafe
-            //{
-            //    int n = pointsList.Count / 2;
-            //    int[] points = pointsList.Array;
-            //    uint[] cbuff = colorsList.Array;
+            unsafe
+            {
+                int n = pointsList.Count / 2;
+                int[] points = pointsList.Array;
+                uint[] cbuff = colorsList.Array;
 
-            //    fixed (uint* cbuff0 = &cbuff[0])
-            //    fixed (int* arr = &points[0])
-            //    {
+                fixed (uint* cbuff0 = &cbuff[0])
+                fixed (int* arr = &points[0])
+                {
 
-            //        //int* indices = stackalloc int[n];
-            //        //for (int i = n - 1; i >= 0; --i)
-            //        //{
-            //        //    indices[i] = i;
-            //        //}
-            //        GL.EnableClientState(ArrayCap.ColorArray);
-            //        GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0);
+                    //int* indices = stackalloc int[n];
+                    //for (int i = n - 1; i >= 0; --i)
+                    //{
+                    //    indices[i] = i;
+                    //}
+                    GL.EnableClientState(ArrayCap.ColorArray);
+                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0);
 
 
-            //        GL.EnableClientState(ArrayCap.VertexArray); //***
-            //        //vertex
-            //        GL.VertexPointer(2, VertexPointerType.Int, 0, (IntPtr)arr);
-            //        //GL.DrawElements(BeginMode.Points, n, DrawElementsType.UnsignedInt, (IntPtr)indices);
-            //        GL.DrawArrays(BeginMode.Points, 0, n);
-            //        GL.DisableClientState(ArrayCap.VertexArray);
-            //        GL.DisableClientState(ArrayCap.ColorArray);
-            //    }
-            //}
+                    GL.EnableClientState(ArrayCap.VertexArray); //***
+                    //vertex
+                    GL.VertexPointer(2, VertexPointerType.Int, 0, (IntPtr)arr);
+                    //GL.DrawElements(BeginMode.Points, n, DrawElementsType.UnsignedInt, (IntPtr)indices);
+                    GL.DrawArrays(BeginMode.Points, 0, n);
+                    GL.DisableClientState(ArrayCap.VertexArray);
+                    GL.DisableClientState(ArrayCap.ColorArray);
+                }
+            }
         }
 
-        static Vbo GenerateVBOForC4V2I()
+        static VboC4V2S GenerateVBOForC4V2I()
         {
-            Vbo vboHandle = new Vbo();
+            VboC4V2S vboHandle = new VboC4V2S();
+
             //must open these ... before call this func
             //GL.EnableClientState(ArrayCap.ColorArray);
             //GL.EnableClientState(ArrayCap.VertexArray);
 
-            //GL.GenBuffers(1, out vboHandle.VboID);
+            GL.GenBuffers(1, out vboHandle.VboID);
 
             return vboHandle;
         }
 
         static void DrawLine(float x1, float y1, float x2, float y2)
         {
-            //unsafe
-            //{
-            //    float* arr = stackalloc float[4];
-            //    arr[0] = x1; arr[1] = y1;
-            //    arr[2] = x2; arr[3] = y2;
+            unsafe
+            {
+                float* arr = stackalloc float[4];
+                arr[0] = x1; arr[1] = y1;
+                arr[2] = x2; arr[3] = y2;
 
-            //    //byte* indices = stackalloc byte[2];
-            //    //indices[0] = 0; indices[1] = 1;
+                //byte* indices = stackalloc byte[2];
+                //indices[0] = 0; indices[1] = 1;
 
-            //    GL.EnableClientState(ArrayCap.VertexArray); //***
-            //    //vertex
-            //    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-            //    //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
-            //    GL.DrawArrays(BeginMode.Lines, 0, 2);
-            //    GL.DisableClientState(ArrayCap.VertexArray);
-            //}
+                GL.EnableClientState(ArrayCap.VertexArray); //***
+                //vertex
+                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+                //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
+                GL.DrawArrays(BeginMode.Lines, 0, 2);
+                GL.DisableClientState(ArrayCap.VertexArray);
+            }
         }
         const int BASE_MASK = 255;
 
@@ -285,34 +286,34 @@ namespace PixelFarm.Agg
         //======================================================================================
         static void DrawPointsWithVertexBuffer(ArrayList<VertexC4V2S> singlePxBuffer, int nelements)
         {
-            //unsafe
-            //{
+            unsafe
+            {
 
-            //    //--------------------------------------------- 
-            //    VertexC4V2S[] vpoints = singlePxBuffer.Array;
+                //--------------------------------------------- 
+                VertexC4V2S[] vpoints = singlePxBuffer.Array;
 
-            //    IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
-            //    //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
-            //    // Fill newly allocated buffer
-            //    GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-            //    // Only draw particles that are alive
-            //    GL.DrawArrays(BeginMode.Points, 0, nelements);
+                IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
+                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
+                // Fill newly allocated buffer
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                // Only draw particles that are alive
+                GL.DrawArrays(BeginMode.Points, 0, nelements);
 
-            //    //--------------------------------------------- 
-            //}
+                //--------------------------------------------- 
+            }
         }
         static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V2S> linesBuffer, int nelements)
         {
-            //unsafe
-            //{
-            //    VertexC4V2S[] vpoints = linesBuffer.Array;
-            //    IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
-            //    //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
-            //    // Fill newly allocated buffer
-            //    GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-            //    // Only draw particles that are alive
-            //    GL.DrawArrays(BeginMode.Lines, 0, nelements);
-            //}
+            unsafe
+            {
+                VertexC4V2S[] vpoints = linesBuffer.Array;
+                IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
+                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
+                // Fill newly allocated buffer
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                // Only draw particles that are alive
+                GL.DrawArrays(BeginMode.Lines, 0, nelements);
+            }
         }
         void GLBlendHL(int x1, int y, int x2, LayoutFarm.Drawing.Color color, byte cover)
         {
@@ -384,7 +385,7 @@ namespace PixelFarm.Agg
 
                 do
                 {
-                    //foreach single pixel
+                    //alpha change
                     int alpha = ((sourceColor.A) * ((covers[coversIndex]) + 1)) >> 8;
                     if (alpha == BASE_MASK)
                     {

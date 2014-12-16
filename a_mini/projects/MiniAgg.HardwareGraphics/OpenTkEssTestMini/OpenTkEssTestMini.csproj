@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;  </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -58,11 +58,11 @@
     <Compile Include="07_GLES2\T31_SimpleES20Window.cs" />
     <Compile Include="07_GLES2\T32_ES2HelloTriangle.cs" />
     <Compile Include="07_GLES2\T33_ES2SimpleTexture2d.cs" />
-    <Compile Include="07_GLES2\DerivedMiniGLControl.cs">
+    <Compile Include="07_GLES2\MyMiniGLES2Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="07_GLES2\DerivedMiniGLControl.Designer.cs">
-      <DependentUpon>DerivedMiniGLControl.cs</DependentUpon>
+    <Compile Include="07_GLES2\MyMiniGLES2Control.Designer.cs">
+      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
     <Compile Include="07_GLES2\T42_MiniGLControl_HelloTrinagle.cs" />
     <Compile Include="Program.cs" />
@@ -96,8 +96,8 @@
     <EmbeddedResource Include="07_GLES2\FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="07_GLES2\DerivedMiniGLControl.resx">
-      <DependentUpon>DerivedMiniGLControl.cs</DependentUpon>
+    <EmbeddedResource Include="07_GLES2\MyMiniGLES2Control.resx">
+      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
