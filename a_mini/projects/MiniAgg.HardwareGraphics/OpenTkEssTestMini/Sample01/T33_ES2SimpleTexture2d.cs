@@ -66,15 +66,12 @@ namespace OpenTkEssTest
     public class T33_ES2SimpleTexture2d : GameWindow
     {
         #region Constructor
-        int mProgram;
-
+        int mProgram; 
         // Attribute locations
         int mPositionLoc;
-        int mTexCoordLoc;
-
+        int mTexCoordLoc; 
         // Sampler location
-        int mSamplerLoc;
-
+        int mSamplerLoc; 
         // Texture handle
         int mTexture;
         public T33_ES2SimpleTexture2d(GraphicsContextFlags flags)
@@ -271,13 +268,6 @@ namespace OpenTkEssTest
 
         #endregion
 
-        #region private void DrawCube()
-
-        private void DrawCube()
-        {
-        }
-
-        #endregion
-
+         
     }
 }

@@ -91,8 +91,7 @@ namespace OpenTkEssTest
             {
                 //return false
             }
-            GL.ClearColor(0, 0, 0, 0);
-            //--------------------------------------------------
+            GL.ClearColor(0, 0, 0, 0); 
 
             miniGLControl.SetGLPaintHandler((o, s) =>
             {
@@ -113,8 +112,7 @@ namespace OpenTkEssTest
                 //glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 // Clear the color buffer
-                // glClear(GL_COLOR_BUFFER_BIT);
-
+                // glClear(GL_COLOR_BUFFER_BIT); 
                 // Use the program object
                 //glUseProgram(mProgram);
                 GL.UseProgram(mProgram);
@@ -125,7 +123,7 @@ namespace OpenTkEssTest
                 //glEnableVertexAttribArray(0);
                 GL.DrawArrays(BeginMode.Triangles, 0, 3);
                 //glDrawArrays(GL_TRIANGLES, 0, 3); 
-                miniGLControl.SwapBuffers();
+                //miniGLControl.SwapBuffers();
             });
 
         }
