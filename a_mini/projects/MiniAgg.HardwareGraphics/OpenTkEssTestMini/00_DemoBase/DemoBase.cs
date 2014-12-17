@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
- 
+
 
 
 namespace Mini
@@ -38,21 +38,66 @@ namespace Mini
         Vector,
         Bitmap
     }
-    
+
     public abstract class DemoBase
     {
         public DemoBase()
         {
             this.Width = 800;
             this.Height = 600;
-        } 
-        public virtual void Init() { } 
+        }
+        public virtual void Init() { }
         public virtual void MouseDrag(int x, int y) { }
         public virtual void MouseDown(int x, int y, bool isRightButton) { }
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }
- 
+
+        protected virtual void OnInitGLProgram(object sender, EventArgs args)
+        {
+        }
+        protected virtual void OnGLRender(object sender, EventArgs args)
+        {
+        }
+    }
+    public abstract class PrebuiltGLControlDemoBase : DemoBase
+    {
+        System.Windows.Forms.Timer aniTimer;
+        public override void Init()
+        {
+            formTestBed = new FormTestBed();
+            this.miniGLControl = formTestBed.InitMiniGLControl(this.Width, this.Height);//1276,720
+
+
+            this.aniTimer = new System.Windows.Forms.Timer();
+
+            this.formTestBed.Load += this.OnInitGLProgram;
+            miniGLControl.SetGLPaintHandler(this.OnGLRender);
+            formTestBed.Show();
+            formTestBed.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+
+            this.aniTimer.Interval = 200;//ms
+            this.aniTimer.Tick += TimerTick;
+
+        }
+        void TimerTick(object sender, EventArgs e)
+        {
+            OnTimerTick(sender, e);
+            this.miniGLControl.Refresh();
+        }
+        protected virtual void OnTimerTick(object sender, EventArgs e)
+        {
+        }
+        protected bool EnableAnimationTimer
+        {
+            get { return this.aniTimer.Enabled; }
+            set { this.aniTimer.Enabled = value; }
+        }
+        //-------------------------------
+        protected FormTestBed formTestBed;
+        protected MyMiniGLES2Control miniGLControl;
+        //-------------------------------
+
     }
 
     public class DemoConfigAttribute : Attribute
