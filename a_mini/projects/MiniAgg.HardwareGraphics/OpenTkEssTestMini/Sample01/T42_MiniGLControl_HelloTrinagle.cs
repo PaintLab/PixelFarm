@@ -43,7 +43,7 @@ namespace OpenTkEssTest
          
 
          
-        protected override void InitGLProgram(object sender, EventArgs args)
+        protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             //----------------
             //vertex shader source

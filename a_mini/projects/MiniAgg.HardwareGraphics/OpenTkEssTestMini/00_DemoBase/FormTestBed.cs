@@ -17,23 +17,25 @@ namespace Mini
         MyMiniGLES2Control miniGLControl;
         public FormTestBed()
         {
-            InitializeComponent();
-            InitMiniGLControl();
-
+            InitializeComponent(); 
         }
-        void InitMiniGLControl()
+        public MyMiniGLES2Control InitMiniGLControl(int w, int h)
         {
-            miniGLControl = new MyMiniGLES2Control();
-            miniGLControl.Width = 800;
-            miniGLControl.Height = 600;
-            miniGLControl.ClearColor = LayoutFarm.Drawing.Color.Blue;
-            this.Controls.Add(miniGLControl);
+            if (miniGLControl == null)
+            {
+                miniGLControl = new MyMiniGLES2Control();
+                miniGLControl.Width = w;
+                miniGLControl.Height = h;
+                miniGLControl.ClearColor = LayoutFarm.Drawing.Color.Blue;
+                this.Controls.Add(miniGLControl);
+            }
+            return miniGLControl;
         }
         public MyMiniGLES2Control MiniGLControl
         {
             get { return this.miniGLControl; }
         }
-         
+
 
     }
 }
