@@ -71,6 +71,7 @@ namespace OpenTkEssTest
             if (mProgram == 0)
             {
                 //return false
+                throw new NotSupportedException();
             }
             
             

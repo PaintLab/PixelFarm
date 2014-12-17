@@ -155,6 +155,111 @@ namespace OpenTkEssTest
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             return texture;
         }
+
+        public static int CreateMipMappedTexture2D()
+        {
+            int width = 256;
+            int height = 256;
+            byte[] pixels = new byte[width * height * 3];
+            int checkerSize = 8;
+
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    byte rColor = 0;
+                    byte bColor = 0;
+                    if ((x / checkerSize) % 2 == 0)
+                    {
+                        rColor = (byte)(255 * ((y / checkerSize) % 2));
+                        bColor = (byte)(255 * (1 - ((y / checkerSize) % 2)));
+                    }
+                    else
+                    {
+
+                        bColor = (byte)(255 * ((y / checkerSize) % 2));
+                        rColor = (byte)(255 * (1 - ((y / checkerSize) % 2)));
+                    }
+
+                    pixels[(y * height + x) * 3] = rColor;
+                    pixels[(y * height + x) * 3 + 1] = 0;
+                    pixels[(y * height + x) * 3 + 2] = bColor;
+                }
+            }
+            // Generate a texture object
+            int texture;
+            //    glGenTextures(1, &texture);
+            GL.GenTextures(1, out texture);
+            // Bind the texture object
+            //glBindTexture(GL_TEXTURE_2D, texture);
+            GL.BindTexture(TextureTarget.Texture2D, texture);
+            // Load mipmap level 0
+            // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, width, height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, pixels);
+            //    // Generate mipmaps
+            //    glGenerateMipmap(GL_TEXTURE_2D);
+            GL.GenerateMipmap(TextureTarget.Texture2D);
+
+            //    // Set the filtering mode
+            //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,(int) TextureMinFilter.NearestMipmapNearest);
+            //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Linear);
+
+            return texture;
+        }
+        //        GLuint CreateMipMappedTexture2D()
+        //{
+        //    // Texture object handle
+        //    const size_t width = 256;
+        //    const size_t height = 256;
+        //    std::array<GLubyte, width * height * 3> pixels;
+
+        //    const size_t checkerSize = 8;
+        //    for (GLsizei y = 0; y < height; y++)
+        //    {
+        //        for (GLsizei x = 0; x < width; x++)
+        //        {
+        //            GLubyte rColor = 0;
+        //            GLubyte bColor = 0;
+
+        //            if ((x / checkerSize) % 2 == 0)
+        //            {
+        //                rColor = 255 * ((y / checkerSize) % 2);
+        //                bColor = 255 * (1 - ((y / checkerSize) % 2));
+        //            }
+        //            else
+        //            {
+        //                bColor = 255 * ((y / checkerSize) % 2);
+        //                rColor = 255 * (1 - ((y / checkerSize) % 2));
+        //            }
+
+        //            pixels[(y * height + x) * 3] = rColor;
+        //            pixels[(y * height + x) * 3 + 1] = 0;
+        //            pixels[(y * height + x) * 3 + 2] = bColor;
+        //        }
+        //    }
+
+        //    // Generate a texture object
+        //    GLuint texture;
+        //    glGenTextures(1, &texture);
+
+        //    // Bind the texture object
+        //    glBindTexture(GL_TEXTURE_2D, texture);
+
+        //    // Load mipmap level 0
+        //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+
+        //    // Generate mipmaps
+        //    glGenerateMipmap(GL_TEXTURE_2D);
+
+        //    // Set the filtering mode
+        //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+        //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        //    return texture;
+        //}
+
     }
 
 }
