@@ -31,10 +31,13 @@ using System.Text;
 using OpenTK.Graphics;
 
 namespace OpenTK.Platform.Egl
-{
+{   
+    
+
     class EglGraphicsMode : IGraphicsMode
     {
         #region IGraphicsMode Members
+
 
         public GraphicsMode SelectGraphicsMode(ColorFormat color, int depth, int stencil, int samples, ColorFormat accum, int buffers, bool stereo)
         {
@@ -52,10 +55,13 @@ namespace OpenTK.Platform.Egl
                 Egl.STENCIL_SIZE, stencil > 0 ? stencil : 0,
 
                 //Egl.SAMPLE_BUFFERS, samples > 0 ? 1 : 0,
-                Egl.SAMPLES, samples > 0 ? samples : 0,
-
+                Egl.SAMPLES, samples > 0 ? samples : 0, 
+                //------------
                 Egl.NONE,
             };
+
+
+
 
             // Todo: what if we don't wish to use the default display?
             IntPtr display = Egl.GetDisplay(IntPtr.Zero);

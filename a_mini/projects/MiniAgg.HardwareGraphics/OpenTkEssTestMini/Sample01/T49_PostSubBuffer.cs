@@ -50,6 +50,7 @@ namespace OpenTkEssTest
         //EGLBoolean (EGLAPIENTRYP PFNEGLPOSTSUBBUFFERNVPROC) (EGLDisplay dpy, EGLSurface surface, EGLint x, EGLint y, EGLint width, EGLint height);
 
         delegate bool PFNEGLPOSTSUBBUFFERNVPROC(EGLDisplay dpy, EGLSurface surface, int x, int y, int width, int height);
+       
         public T49_PostSubBuffer()
         {
             this.Width = 1280;
@@ -57,20 +58,21 @@ namespace OpenTkEssTest
         }
 
         bool isGLInit;
+        
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
 
 
-            isGLInit = true;
+          
             IntPtr eglPostSubBufferNVFuncPtr = OpenTK.Platform.Egl.EglFuncs.GetProcAddress("eglPostSubBufferNV");
+         
             if (eglPostSubBufferNVFuncPtr == IntPtr.Zero)
             {
                 throw new NotSupportedException();
             }
 
             mPostSubBufferNV = (PFNEGLPOSTSUBBUFFERNVPROC)System.Runtime.InteropServices.Marshal.GetDelegateForFunctionPointer(eglPostSubBufferNVFuncPtr, typeof(PFNEGLPOSTSUBBUFFERNVPROC));
-
-
+            
             //   mPostSubBufferNV = (PFNEGLPOSTSUBBUFFERNVPROC)eglGetProcAddress("eglPostSubBufferNV");
             //if (!mPostSubBufferNV)
             //{
@@ -125,23 +127,22 @@ namespace OpenTkEssTest
             //mRotation = 45.0f;
             mRotation = 45.0f;
             //// Clear the whole window surface to blue.
-            //glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
+            //glClearColor(0.0f, 0.0f, 1.0f, 0.0f); 
             GL.ClearColor(0, 0, 1, 0);
             //glClear(GL_COLOR_BUFFER_BIT);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            //SampleApplication::swap();
-            this.miniGLControl.SwapBuffers();
+            //SampleApplication::swap(); 
+           
+            //this.miniGLControl.SwapBuffers();
 
             //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            GL.ClearColor(0, 0, 0, 0);
-
+            GL.ClearColor(0, 0, 0, 0); 
             //glCullFace(GL_BACK);
             GL.CullFace(CullFaceMode.Back);
             //glEnable(GL_CULL_FACE);
             GL.Enable(EnableCap.CullFace);
-            //return true;
-
-
+            //return true; 
+            isGLInit = true;
             this.EnableAnimationTimer = true;
         }
 
@@ -153,7 +154,9 @@ namespace OpenTkEssTest
             int windowHeight = this.Height;
             EGLDisplay display = getDisplay();
             EGLSurface surface = getSurface();
-            mPostSubBufferNV(display, surface, 60, 60, windowWidth - 120, windowHeight - 120);
+
+            //test drop draw target to (60,200) and resize 
+            mPostSubBufferNV(display, surface, 60, 200, windowWidth - 120, windowHeight - 120);
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
@@ -188,7 +191,7 @@ namespace OpenTkEssTest
             GL.DrawElements(BeginMode.Triangles, mCube.indices.Length, DrawElementsType.UnsignedShort, mCube.indices);
 
             // this.miniGLControl.SwapBuffers(); 
-            // Instead of letting the application call eglSwapBuffers, call eglPostSubBufferNV here instead
+            // Instead of letting the application call eglSwapBuffers, call eglPostSubBufferNV here instead 
             CustomSwap();
         }
 
@@ -242,6 +245,7 @@ namespace OpenTkEssTest
 
         // Geometry data
         CubeGeometry mCube;
+
 
         //// eglPostSubBufferNV entry point
         PFNEGLPOSTSUBBUFFERNVPROC mPostSubBufferNV;

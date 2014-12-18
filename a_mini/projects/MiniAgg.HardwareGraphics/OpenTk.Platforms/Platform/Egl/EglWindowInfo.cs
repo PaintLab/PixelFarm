@@ -72,7 +72,15 @@ namespace OpenTK.Platform.Egl
 
         public void CreateWindowSurface(IntPtr config)
         {
-            Surface = Egl.CreateWindowSurface(Display, config, Handle, null);
+
+            int[] eglSurfaceConfigs = new int[]{ 
+                //key,value
+                AngleProjectEglConfig.EGL_POST_SUB_BUFFER_SUPPORTED_NV,1,
+
+                Egl.NONE//end config array with zero
+            };
+
+            Surface = Egl.CreateWindowSurface(Display, config, Handle, eglSurfaceConfigs);
             int error = Egl.GetError();
             if (error != Egl.SUCCESS)
                 throw new GraphicsContextException(String.Format("[Error] Failed to create EGL window surface, error {0}.", error));

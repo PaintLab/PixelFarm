@@ -323,6 +323,9 @@ namespace OpenTK.Platform.Egl
     {
         [DllImportAttribute("libEGL.dll", EntryPoint = "eglGetProcAddress")]
         public static extern IntPtr GetProcAddress(string funcname);
+        [DllImportAttribute("libEGL.dll", EntryPoint = "eglSwapBuffers")]
+        [return: MarshalAsAttribute(UnmanagedType.I1)]
+        public static extern bool SwapBuffers(EGLDisplay dpy, EGLSurface surface);
 
     }
 #pragma warning restore 0169
