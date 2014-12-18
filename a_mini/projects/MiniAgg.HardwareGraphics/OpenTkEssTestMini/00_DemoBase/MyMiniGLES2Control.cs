@@ -30,6 +30,7 @@ namespace Mini
         {
         
             this.InitializeComponent();
+               
         }
         public void SetGLPaintHandler(EventHandler glPaintHandler)
         {
@@ -58,13 +59,15 @@ namespace Mini
             {
 
                 MakeCurrent();
-                GL.Clear(ClearBufferMask.ColorBufferBit);
+                
                 if (glPaintHandler != null)
                 {
                     glPaintHandler(this, e);
+
                 }
-                SwapBuffers();
+               
             }
         }
+        
     }
 }

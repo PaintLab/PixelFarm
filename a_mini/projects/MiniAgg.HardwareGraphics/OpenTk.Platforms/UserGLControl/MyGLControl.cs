@@ -14,10 +14,7 @@ namespace OpenTK
     public partial class MyGLControl : GLControl
     {
         LayoutFarm.Drawing.Color clearColor;
-        EventHandler glPaintHandler;
-
-
-
+        EventHandler glPaintHandler; 
         public MyGLControl()
         {
             OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(

@@ -307,6 +307,9 @@ namespace OpenTkEssTest
             //      // Reset the stencil mask
             //      glStencilMask(0xFF);
             GL.StencilMask(0xFF);
+
+
+            this.miniGLControl.SwapBuffers();
         }
         // Handle to a program object
         int mProgram;

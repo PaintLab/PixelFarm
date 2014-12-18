@@ -203,7 +203,7 @@ namespace OpenTkEssTest
             GL.Uniform1(mLightMapLoc, 1);
             //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
-
+            this.miniGLControl.SwapBuffers();
         }
 
 

@@ -100,7 +100,8 @@ namespace OpenTkEssTest
             //glEnableVertexAttribArray(0);
             GL.DrawArrays(BeginMode.Triangles, 0, 3);
             //glDrawArrays(GL_TRIANGLES, 0, 3); 
-            //miniGLControl.SwapBuffers();
+            miniGLControl.SwapBuffers();
+
         }
         //-------------------------------
         int mProgram;

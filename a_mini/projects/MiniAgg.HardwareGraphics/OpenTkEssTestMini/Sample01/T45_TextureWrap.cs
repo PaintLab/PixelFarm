@@ -191,7 +191,7 @@ namespace OpenTkEssTest
             //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
             GL.DrawElements(BeginMode.Triangles,6, DrawElementsType.UnsignedShort,indices);
 
-
+            this.miniGLControl.SwapBuffers();
 
         }
         int mProgram;

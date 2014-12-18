@@ -66,9 +66,7 @@ namespace Mini
         public override void Init()
         {
             formTestBed = new FormTestBed();
-            this.miniGLControl = formTestBed.InitMiniGLControl(this.Width, this.Height);//1276,720
-
-
+            this.miniGLControl = formTestBed.InitMiniGLControl(this.Width, this.Height);//1276,720 
             this.aniTimer = new System.Windows.Forms.Timer();
 
             this.formTestBed.Load += this.OnInitGLProgram;
@@ -83,7 +81,7 @@ namespace Mini
         void TimerTick(object sender, EventArgs e)
         {
             OnTimerTick(sender, e);
-            this.miniGLControl.Refresh();
+           this.miniGLControl.Refresh();
         }
         protected virtual void OnTimerTick(object sender, EventArgs e)
         {
@@ -97,6 +95,14 @@ namespace Mini
         protected FormTestBed formTestBed;
         protected MyMiniGLES2Control miniGLControl;
         //-------------------------------
+        protected IntPtr getDisplay()
+        {
+            return this.miniGLControl.GetEglDisplay();
+        }
+        protected IntPtr getSurface()
+        {
+            return this.miniGLControl.GetEglSurface();
+        }
 
     }
 

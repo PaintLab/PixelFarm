@@ -85,7 +85,10 @@ namespace OpenTK.Platform.Egl
 
             Handle = handle;
         }
-
+        public EglWindowInfo MyWindowInfo
+        {
+            get { return this.WindowInfo; }
+        }
         #endregion
 
         #region IGraphicsContext Members
