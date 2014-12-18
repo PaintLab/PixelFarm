@@ -73,6 +73,7 @@
     <Compile Include="Sample01\T45_TextureWrap.cs" />
     <Compile Include="Sample01\T46_StencilOperations.cs" />
     <Compile Include="Sample01\T47_Mipmap2d.cs" />
+    <Compile Include="Sample01\T48_MultiTexture.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />
