@@ -71,6 +71,10 @@ namespace Mini
 
             this.formTestBed.Load += this.OnInitGLProgram;
             this.formTestBed.FormClosing += formTestBed_FormClosing;
+
+            this.formTestBed.Text = this.GetType().Name;
+
+
             miniGLControl.SetGLPaintHandler(this.OnGLRender);
             formTestBed.Show();
             formTestBed.WindowState = System.Windows.Forms.FormWindowState.Maximized;
