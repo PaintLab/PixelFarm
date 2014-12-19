@@ -67,6 +67,7 @@
     <Compile Include="LayoutFarm.Drawing\ExtensionAttribute.cs" />
     <Compile Include="Minimal.cs" />
     <Compile Include="NativeWindow.cs" />
+    <Compile Include="Platform\Egl\AngleProjectEglConfig.cs" />
     <Compile Include="Platform\Egl\Egl.cs" />
     <Compile Include="Platform\Egl\EglContext.cs" />
     <Compile Include="Platform\Egl\EglGraphicsMode.cs" />

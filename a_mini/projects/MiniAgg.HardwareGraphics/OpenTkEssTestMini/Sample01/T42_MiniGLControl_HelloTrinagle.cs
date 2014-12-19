@@ -40,9 +40,9 @@ namespace OpenTkEssTest
     [Info("T42_HelloTriangle")]
     public class T42_ES2HelloTriangleDemo : PrebuiltGLControlDemoBase
     {
-         
 
-         
+
+
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             //----------------
@@ -68,7 +68,12 @@ namespace OpenTkEssTest
             {
                 //return false
             }
-            GL.ClearColor(0, 0, 0, 0); 
+            GL.ClearColor(0, 0, 0, 0);
+        }
+        protected override void DemoClosing()
+        {
+            GL.DeleteProgram(mProgram);
+            mProgram = 0;
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
@@ -100,12 +105,13 @@ namespace OpenTkEssTest
             //glEnableVertexAttribArray(0);
             GL.DrawArrays(BeginMode.Triangles, 0, 3);
             //glDrawArrays(GL_TRIANGLES, 0, 3); 
-            //miniGLControl.SwapBuffers();
+            miniGLControl.SwapBuffers();
+
         }
         //-------------------------------
         int mProgram;
 
     }
 
-     
+
 }

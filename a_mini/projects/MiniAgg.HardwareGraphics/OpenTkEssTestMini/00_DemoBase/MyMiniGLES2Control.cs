@@ -18,7 +18,7 @@ namespace Mini
 
         static OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
              DisplayDevice.Default.BitsPerPixel,//default 32 bits color
-             16,//depth buffer => 16
+             16,//depth buffer => 24
              8,  //stencil buffer => 8 (  //if want to use stencil buffer then set stencil buffer too! )
              0,//number of sample of FSAA
              0,  //accum buffer
@@ -30,6 +30,7 @@ namespace Mini
         {
         
             this.InitializeComponent();
+               
         }
         public void SetGLPaintHandler(EventHandler glPaintHandler)
         {
@@ -40,13 +41,12 @@ namespace Mini
             get { return clearColor; }
             set
             {
-                clearColor = value;
-
-                if (!this.DesignMode)
-                {
-                    MakeCurrent();
-                    GL.ClearColor(clearColor);
-                }
+                clearColor = value; 
+                //if (!this.DesignMode)
+                //{
+                //    MakeCurrent();
+                //    GL.ClearColor(clearColor);
+                //}
             }
         }
 
@@ -57,14 +57,14 @@ namespace Mini
             if (!this.DesignMode)
             {
 
-                MakeCurrent();
-                GL.Clear(ClearBufferMask.ColorBufferBit);
+                MakeCurrent(); 
                 if (glPaintHandler != null)
                 {
                     glPaintHandler(this, e);
-                }
-                SwapBuffers();
+
+                } 
             }
         }
+        
     }
 }

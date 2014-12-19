@@ -66,12 +66,11 @@ namespace Mini
         public override void Init()
         {
             formTestBed = new FormTestBed();
-            this.miniGLControl = formTestBed.InitMiniGLControl(this.Width, this.Height);//1276,720
-
-
+            this.miniGLControl = formTestBed.InitMiniGLControl(this.Width, this.Height);//1276,720 
             this.aniTimer = new System.Windows.Forms.Timer();
 
             this.formTestBed.Load += this.OnInitGLProgram;
+            this.formTestBed.FormClosing += formTestBed_FormClosing;
             miniGLControl.SetGLPaintHandler(this.OnGLRender);
             formTestBed.Show();
             formTestBed.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -79,6 +78,18 @@ namespace Mini
             this.aniTimer.Interval = 200;//ms
             this.aniTimer.Tick += TimerTick;
 
+        }
+
+        void formTestBed_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            //stop timer
+            this.aniTimer.Enabled = false;
+            this.miniGLControl.SetGLPaintHandler(null);
+
+            DemoClosing();
+        }
+        protected virtual void DemoClosing()
+        {
         }
         void TimerTick(object sender, EventArgs e)
         {
@@ -97,6 +108,14 @@ namespace Mini
         protected FormTestBed formTestBed;
         protected MyMiniGLES2Control miniGLControl;
         //-------------------------------
+        protected IntPtr getDisplay()
+        {
+            return this.miniGLControl.GetEglDisplay();
+        }
+        protected IntPtr getSurface()
+        {
+            return this.miniGLControl.GetEglSurface();
+        }
 
     }
 

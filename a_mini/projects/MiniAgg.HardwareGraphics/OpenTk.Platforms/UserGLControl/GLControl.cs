@@ -388,6 +388,25 @@ namespace OpenTK
             get { return implementation.WindowInfo; }
         }
 
+        public IntPtr GetEglDisplay()
+        {
+
+            var eglContext = ((IGraphicsContextInternal)this.context).Implementation as OpenTK.Platform.Egl.EglContext; 
+            if(eglContext != null )
+            {
+                return eglContext.MyWindowInfo.Display;
+            }
+            return IntPtr.Zero;
+        }
+        public IntPtr GetEglSurface()
+        {
+            var eglContext = ((IGraphicsContextInternal)this.context).Implementation as OpenTK.Platform.Egl.EglContext;
+            if (eglContext != null)
+            {
+                return eglContext.MyWindowInfo.Surface;
+            }
+            return IntPtr.Zero;
+        }
         #endregion
 
         #region public Bitmap GrabScreenshot()

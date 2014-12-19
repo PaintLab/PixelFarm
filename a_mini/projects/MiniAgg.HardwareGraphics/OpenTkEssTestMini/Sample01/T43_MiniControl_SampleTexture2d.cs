@@ -30,7 +30,7 @@ using Examples.Tutorial;
 using Mini;
 
 #endregion
- 
+
 
 namespace OpenTkEssTest
 {
@@ -40,8 +40,8 @@ namespace OpenTkEssTest
     [Info("T43_HelloTriangle")]
     public class T43_MiniControl_SampleTexture2dDemo : PrebuiltGLControlDemoBase
     {
-        
-        protected override void OnInitGLProgram(object sender, EventArgs  handler)
+
+        protected override void OnInitGLProgram(object sender, EventArgs handler)
         {
             //--------------------------------------------------------------------------
             string vs = @"
@@ -82,7 +82,7 @@ namespace OpenTkEssTest
             mTexture = ES2Utils.CreateSimpleTexture2D();
             GL.ClearColor(0, 0, 0, 0);
             //================================================================================
-             
+
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
@@ -151,9 +151,14 @@ namespace OpenTkEssTest
             //    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
 
-            //miniGLControl.SwapBuffers();
+            miniGLControl.SwapBuffers();
         }
-        
+        protected override void DemoClosing()
+        {
+            GL.DeleteProgram(mProgram);
+            GL.DeleteTexture(mTexture);
+            mProgram = mTexture = 0;
+        }
         int mProgram;
         // Attribute locations
         int mPositionLoc;
@@ -163,5 +168,5 @@ namespace OpenTkEssTest
         // Texture handle
         int mTexture;
 
-    } 
+    }
 }

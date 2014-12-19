@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
- 
+
 
 namespace Mini
 {
@@ -19,8 +19,8 @@ namespace Mini
             InitializeComponent();
             this.Load += new EventHandler(DevForm_Load);
             this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick);
-            this.Text = "DevForm: Double Click The Example!"; 
-          
+            this.Text = "DevForm: Double Click The Example!";
+
         }
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
@@ -52,7 +52,7 @@ namespace Mini
             for (int i = 0; i < j; ++i)
             {
                 Type t = allTypes[i];
-                if (exBase.IsAssignableFrom(t) && t != exBase)
+                if (exBase.IsAssignableFrom(t) && t != exBase && !t.IsAbstract)
                 {
                     ExampleAndDesc ex = new ExampleAndDesc(t, t.Name);
                     exlist.Add(ex);

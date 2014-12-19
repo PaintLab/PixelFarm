@@ -69,7 +69,10 @@ namespace OpenTK.Platform.Egl
             if (window.Surface == IntPtr.Zero)
                 window.CreateWindowSurface(config);
 
-            int[] attrib_list = new int[] { Egl.CONTEXT_CLIENT_VERSION, major, Egl.NONE };
+            int[] attrib_list = new int[] { 
+                //key,value
+                Egl.CONTEXT_CLIENT_VERSION, major, 
+                Egl.NONE };
             HandleAsEGLContext = Egl.CreateContext(window.Display, config, shared != null ? shared.HandleAsEGLContext : IntPtr.Zero, attrib_list);
 
             MakeCurrent(window);
@@ -85,7 +88,10 @@ namespace OpenTK.Platform.Egl
 
             Handle = handle;
         }
-
+        public EglWindowInfo MyWindowInfo
+        {
+            get { return this.WindowInfo; }
+        }
         #endregion
 
         #region IGraphicsContext Members

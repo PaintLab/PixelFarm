@@ -168,6 +168,8 @@ namespace OpenTK.Platform.Egl
         public const int ALPHA_FORMAT_NONPRE = VG_ALPHA_FORMAT_NONPRE;
         public const int ALPHA_FORMAT_PRE = VG_ALPHA_FORMAT_PRE;
 
+
+
         [DllImportAttribute("libEGL.dll", EntryPoint = "eglGetError")]
         public static extern int GetError();
 
@@ -299,17 +301,31 @@ namespace OpenTK.Platform.Egl
         [DllImportAttribute("libEGL.dll", EntryPoint = "eglGetProcAddress")]
         public static extern IntPtr GetProcAddress(string funcname);
 
+
+
+       
         // Returns true if Egl drivers exist on the system.
         public static bool IsSupported
         {
             get
             {
-                
+
                 try { GetCurrentContext(); }
                 catch (Exception ex) { return false; }
                 return true;
             }
         }
+
+    }
+
+
+    public static class EglFuncs
+    {
+        [DllImportAttribute("libEGL.dll", EntryPoint = "eglGetProcAddress")]
+        public static extern IntPtr GetProcAddress(string funcname);
+        [DllImportAttribute("libEGL.dll", EntryPoint = "eglSwapBuffers")]
+        [return: MarshalAsAttribute(UnmanagedType.I1)]
+        public static extern bool SwapBuffers(EGLDisplay dpy, EGLSurface surface);
 
     }
 #pragma warning restore 0169

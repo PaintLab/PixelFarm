@@ -468,7 +468,7 @@ namespace OpenTK.Graphics
         {
             get { return implementation; }
         }
-
+         
         /// <summary>
         /// Gets a handle to the OpenGL rendering context.
         /// </summary>
