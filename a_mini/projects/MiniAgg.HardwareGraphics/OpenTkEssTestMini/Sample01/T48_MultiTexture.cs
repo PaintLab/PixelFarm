@@ -84,8 +84,8 @@ namespace OpenTkEssTest
             mLightMapLoc = GL.GetUniformLocation(mProgram, "s_lightMap");
 
             // Load the textures
-            mBaseMapTexID = LoadTexture("basemap01.png");
-            mLightMapTexID = LoadTexture("lightmap01.png");
+            mBaseMapTexID = LoadTexture(@"..\..\SampleImages\basemap01.png");
+            mLightMapTexID = LoadTexture(@"..\..\SampleImages\lightmap01.png");
             if (mBaseMapTexID == 0 || mLightMapTexID == 0)
             {
                 throw new NotSupportedException();

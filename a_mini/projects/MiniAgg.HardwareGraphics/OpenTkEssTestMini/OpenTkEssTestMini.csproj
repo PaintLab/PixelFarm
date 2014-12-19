@@ -145,13 +145,13 @@
       <Project>{EED04403-8D2A-4A7F-9E46-E1FF8BE89042}</Project>
       <Name>MiniAgg.Hw2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
-      <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
-      <Name>OpenTk.CoreGraphics</Name>
+    <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
+      <Project>{D8FAE26D-C772-4E86-B9F3-439F0A1718B5}</Project>
+      <Name>OpenTK.ES</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTk.Platforms\OpenTk.Platforms.csproj">
-      <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>
-      <Name>OpenTk.Platforms</Name>
+    <ProjectReference Include="..\OpenTK.PlatformMini\OpenTK.PlatformMini.csproj">
+      <Project>{77870ADC-CE4A-423C-B736-A1FA4AA2D697}</Project>
+      <Name>OpenTK.PlatformMini</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
