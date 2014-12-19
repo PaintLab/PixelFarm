@@ -99,10 +99,6 @@
     <Compile Include="06_GameWindows\GameWindowMsaa.cs" />
     <Compile Include="06_GameWindows\GameWindowSimple.cs" />
     <Compile Include="06_GameWindows\GameWindowThreaded.cs" />
-    <Compile Include="07_GLES2\T32_ES2HelloTriangle.cs" />
-    <Compile Include="07_GLES2\T33_ES2SimpleTexture2d.cs" />
-    <Compile Include="07_GLES2\ES2Utils.cs" />
-    <Compile Include="07_GLES2\T31_SimpleES20Window.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />

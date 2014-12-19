@@ -100,6 +100,7 @@ namespace OpenTkEssTest
             //glDrawArrays(GL_TRIANGLES, 0, 3); 
             miniGLControl.SwapBuffers();
 
+            
         }
         //-------------------------------
         ShaderAttribute a_position;
