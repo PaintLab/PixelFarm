@@ -16,10 +16,14 @@ namespace Mini
     public struct ShaderAttribute
     {
         internal readonly int location;
+        
         public ShaderAttribute(int location)
         {
             this.location = location;
         }
+        
+         
+
         /// <summary>
         /// load and enable
         /// </summary>
@@ -29,6 +33,11 @@ namespace Mini
         public void LoadV3f(float[] vertices, int fieldCount, int startOffset)
         {
             BindV3f(vertices, fieldCount, startOffset);
+            Enable();
+        }
+        public void LoadV4f(float[] vertices, int fieldCount, int startOffset)
+        {
+            BindV4f(vertices, fieldCount, startOffset);
             Enable();
         }
         /// <summary>
@@ -42,6 +51,7 @@ namespace Mini
             BindV2f(vertices, fieldCount, startOffset);
             Enable();
         }
+
         public void BindV3f(float[] vertices, int fieldCount, int startOffset)
         {
             if (startOffset == 0)
@@ -88,6 +98,33 @@ namespace Mini
                     {
                         GL.VertexAttribPointer(location,
                             2, //float3
+                            VertexAttribPointerType.Float,
+                            false,
+                            fieldCount * sizeof(float), //total size
+                            (IntPtr)(h + startOffset));
+                    }
+                }
+            }
+        }
+        public void BindV4f(float[] vertices, int fieldCount, int startOffset)
+        {
+            if (startOffset == 0)
+            {
+                GL.VertexAttribPointer(location,
+                    4, //float4
+                    VertexAttribPointerType.Float,
+                    false,
+                    fieldCount * sizeof(float), //total size
+                    vertices);
+            }
+            else
+            {
+                unsafe
+                {
+                    fixed (float* h = &vertices[0])
+                    {
+                        GL.VertexAttribPointer(location,
+                            4, //float3
                             VertexAttribPointerType.Float,
                             false,
                             fieldCount * sizeof(float), //total size
