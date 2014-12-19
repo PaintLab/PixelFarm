@@ -75,6 +75,7 @@
     <Compile Include="Sample01\T49_PostSubBuffer.cs" />
     <Compile Include="Sample02\T52_HelloTriangle2.cs" />
     <Compile Include="Sample02\T51_View2d.cs" />
+    <Compile Include="Sample02\T53_Viewport.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />

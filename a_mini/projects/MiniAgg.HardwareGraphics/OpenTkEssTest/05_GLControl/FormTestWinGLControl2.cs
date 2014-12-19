@@ -17,13 +17,13 @@ namespace OpenTkEssTest
         {
             InitializeComponent();
             
-            this.derivedGLControl1.SetBounds(0, 30, 800, 600);             
+            this.myGLControl1.SetBounds(0, 30, 800, 600);             
             //------------------------------------------------------
             b1 = new Button();
             this.Controls.Add(b1);
             b1.Text = "Refresh GLControl";
             b1.Size = new Size(200, 30); 
-            b1.Click += new EventHandler((o, s) => { this.derivedGLControl1.Refresh(); });
+            b1.Click += new EventHandler((o, s) => { this.myGLControl1.Refresh(); });
             this.Load += new EventHandler(FormTestWinGLControl_Load);
         }
 
@@ -31,21 +31,19 @@ namespace OpenTkEssTest
         void FormTestWinGLControl_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
-            this.derivedGLControl1.ClearColor = LayoutFarm.Drawing.Color.White;
+            this.myGLControl1.ClearColor = LayoutFarm.Drawing.Color.White;
 
             if (!this.DesignMode)
             {   
 
                 //for 2d 
-                this.derivedGLControl1.InitSetup2d(Screen.PrimaryScreen.Bounds);
-
-
+                this.myGLControl1.InitSetup2d(Screen.PrimaryScreen.Bounds); 
             }
 
         }
         public void SetGLPaintHandler(EventHandler handler)
         {
-            this.derivedGLControl1.SetGLPaintHandler(handler);
+            this.myGLControl1.SetGLPaintHandler(handler);
 
         }
     }

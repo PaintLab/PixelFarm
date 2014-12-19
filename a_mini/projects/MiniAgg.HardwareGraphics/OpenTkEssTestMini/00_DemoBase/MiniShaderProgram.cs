@@ -204,5 +204,9 @@ namespace Mini
         {
             GL.UseProgram(mProgram);
         }
+        public int ProgramId
+        {
+            get { return this.mProgram; }
+        }
     }
 }

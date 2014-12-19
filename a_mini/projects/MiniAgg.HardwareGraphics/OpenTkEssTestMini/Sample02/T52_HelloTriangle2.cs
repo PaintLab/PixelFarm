@@ -57,7 +57,8 @@ namespace OpenTkEssTest
 
             a_position = shaderProgram.GetAttribVar("a_position");
             a_color = shaderProgram.GetAttribVar("a_color");
-
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(0, 0, 0, 0);
         }
         protected override void DemoClosing()
@@ -73,34 +74,26 @@ namespace OpenTkEssTest
             float[] vertices =
             {
                      0.0f,  0.5f, //2d coord
-                     1, 0, 0, 1,//r
+                     1, 0, 0, 0.1f,//r
                     -0.5f, -0.5f,  //2d coord
-                     0,1,0,1,//g
+                     0,1,0,0.1f,//g
                      0.5f, -0.5f,  //2d corrd
-                     0,0,1,1, //b
+                     0,0,1,0.1f, //b
             };
 
             GL.Viewport(0, 0, width, height);
 
-            // Set the viewport
-            //glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
+            // Set the viewport 
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            // Clear the color buffer
-            // glClear(GL_COLOR_BUFFER_BIT); 
-            // Use the program object
-            //glUseProgram(mProgram);
-
+        
             shaderProgram.UseProgram();
-            // Load the vertex data
-            //GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, vertices);
-            //GL.EnableVertexAttribArray(0); 
+            // Load the vertex data 
             a_position.LoadV2f(vertices, 6, 0);
             a_color.LoadV3f(vertices, 6, 2);
-            GL.DrawArrays(BeginMode.Triangles, 0, 3);
-            //glDrawArrays(GL_TRIANGLES, 0, 3); 
-            miniGLControl.SwapBuffers();
+            GL.DrawArrays(BeginMode.Triangles, 0, 3); 
 
-            
+
+            miniGLControl.SwapBuffers(); 
         }
         //-------------------------------
         ShaderAttribute a_position;

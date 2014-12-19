@@ -146,7 +146,7 @@ namespace OpenTkEssTest
 
 
         }
-     
+
     }
 
     struct MyMat4
@@ -229,6 +229,13 @@ namespace OpenTkEssTest
             return new MyMat4(1.0f, 0.0f, 0.0f, t.X,
                            0.0f, 1.0f, 0.0f, t.Y,
                            0.0f, 0.0f, 1.0f, t.Z,
+                           0.0f, 0.0f, 0.0f, 1.0f);
+        }
+        public static MyMat4 ortho(float left, float right, float bottom, float top, float near, float far)
+        {
+            return new MyMat4(2f / (right - 1), 0, 0, -(right + 1) / (right - 1),
+                           0.0f, 2f / (top - bottom), 0.0f, -(top + bottom) / (top - bottom),
+                           0.0f, 0.0f, -2f / (far - near), -(far + near) / (far - near),
                            0.0f, 0.0f, 0.0f, 1.0f);
         }
         public static MyMat4 operator *(MyMat4 a, MyMat4 b)
