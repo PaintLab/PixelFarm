@@ -56,6 +56,7 @@
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
     <Compile Include="00_DemoBase\GeometryUtils.cs" />
+    <Compile Include="00_DemoBase\MiniShaderProgram.cs" />
     <Compile Include="00_DemoBase\MyMiniGLES2Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -72,6 +73,7 @@
     <Compile Include="Sample01\T47_Mipmap2d.cs" />
     <Compile Include="Sample01\T48_MultiTexture.cs" />
     <Compile Include="Sample01\T49_PostSubBuffer.cs" />
+    <Compile Include="Sample02\T51_View2d.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />

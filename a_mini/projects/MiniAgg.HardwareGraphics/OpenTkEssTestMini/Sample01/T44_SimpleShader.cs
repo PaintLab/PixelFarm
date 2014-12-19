@@ -43,9 +43,7 @@ namespace OpenTkEssTest
         bool isGLInit;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-
-
-
+            
             string vs = @"
                 uniform mat4 u_mvpMatrix;
                 attribute vec4 a_position;
@@ -57,6 +55,7 @@ namespace OpenTkEssTest
                         v_texcoord = a_texcoord;
                 }
             ";
+
             string fs = @"
                   precision mediump float;
                   varying vec2 v_texcoord;

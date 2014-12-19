@@ -36,14 +36,14 @@ namespace OpenTkEssTest
 {
 
 
-    [Info(OrderCode = "43")]
-    [Info("T43_HelloTriangle")]
-    public class T43_MiniControl_SampleTexture2dDemo : PrebuiltGLControlDemoBase
+    [Info(OrderCode = "51")]
+    [Info("T51_View2d")]
+    public class T51_View2d : PrebuiltGLControlDemoBase
     {
-
+        MiniShaderProgram shaderProgram;
         protected override void OnInitGLProgram(object sender, EventArgs handler)
         {
-            //--------------------------------------------------------------------------
+            shaderProgram = new MiniShaderProgram();
             string vs = @"
                 attribute vec4 a_position;
                 attribute vec2 a_texCoord;
@@ -64,19 +64,15 @@ namespace OpenTkEssTest
                          gl_FragColor = texture2D(s_texture, v_texCoord);
                       }
                 ";
-
-            mProgram = ES2Utils.CompileProgram(vs, fs);
-            if (mProgram == 0)
-            {
-                //return false
-            }
+             
+            shaderProgram.Build(vs, fs);
+            //-------------------------------------------
 
             // Get the attribute locations
-            mPositionLoc = GL.GetAttribLocation(mProgram, "a_position");
-            mTexCoordLoc = GL.GetAttribLocation(mProgram, "a_texCoord");
-
+            a_position = shaderProgram.GetAttribVar("a_position");// GL.GetAttribLocation(mProgram, "a_position");
+            a_textCoord = shaderProgram.GetAttribVar("a_texCoord");
             // Get the sampler location
-            mSamplerLoc = GL.GetUniformLocation(mProgram, "s_texture");
+            s_texture = shaderProgram.GetUniform("s_texture");
 
             //// Load the texture
             mTexture = ES2Utils.CreateSimpleTexture2D();
@@ -86,19 +82,6 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            //    GLfloat vertices[] =
-            //{
-            //    -0.5f,  0.5f, 0.0f,  // Position 0
-            //     0.0f,  0.0f,        // TexCoord 0
-            //    -0.5f, -0.5f, 0.0f,  // Position 1
-            //     0.0f,  1.0f,        // TexCoord 1
-            //     0.5f, -0.5f, 0.0f,  // Position 2
-            //     1.0f,  1.0f,        // TexCoord 2
-            //     0.5f,  0.5f, 0.0f,  // Position 3
-            //     1.0f,  0.0f         // TexCoord 3
-            //};
-            //    GLushort indices[] = { 0, 1, 2, 0, 2, 3 };
-
             float[] vertices = new float[] {
                     -0.5f,  0.5f, 0.0f,  // Position 0
                      0.0f,  0.0f,        // TexCoord 0
@@ -111,60 +94,35 @@ namespace OpenTkEssTest
                      };
             ushort[] indices = new ushort[] { 0, 1, 2, 0, 2, 3 };
 
-
-            //    // Set the viewport
-            //    glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
-            GL.Viewport(0, 0, 800, 600);
-
-            //    // Clear the color buffer
-            //    glClear(GL_COLOR_BUFFER_BIT);
+            GL.Viewport(0, 0, this.Width, this.Height);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            //    // Use the program object
-            //    glUseProgram(mProgram);
-            GL.UseProgram(mProgram);
-            //    // Load the vertex position
-            //    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), vertices);
-            GL.VertexAttribPointer(mPositionLoc, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), vertices);
 
-            //    // Load the texture coordinate
-            //    glVertexAttribPointer(mTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), vertices + 3);
-            unsafe
-            {
-                fixed (float* v_3 = &vertices[3])
-                {
-                    GL.VertexAttribPointer(mTexCoordLoc, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (IntPtr)v_3);
-                }
-            }
-            //    glEnableVertexAttribArray(mPositionLoc);
-            //    glEnableVertexAttribArray(mTexCoordLoc);
-            GL.EnableVertexAttribArray(mPositionLoc);
-            GL.EnableVertexAttribArray(mTexCoordLoc);
+            shaderProgram.UseProgram();
 
-            //    // Bind the texture
-            //    glActiveTexture(GL_TEXTURE0);
+            a_position.LoadV3f(vertices, 5, 0);
+            a_textCoord.LoadV2f(vertices, 5, 3);
+
+
             GL.ActiveTexture(TextureUnit.Texture0);
-            //    glBindTexture(GL_TEXTURE_2D, mTexture);
             GL.BindTexture(TextureTarget.Texture2D, mTexture);
-            //    // Set the texture sampler to texture unit to 0
-            //    glUniform1i(mSamplerLoc, 0);
-            GL.Uniform1(mSamplerLoc, 0);
-            //    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
+            GL.Uniform1(s_texture.location, 0);
+
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
 
             miniGLControl.SwapBuffers();
         }
         protected override void DemoClosing()
         {
-            GL.DeleteProgram(mProgram);
+            shaderProgram.DeleteMe();
             GL.DeleteTexture(mTexture);
-            mProgram = mTexture = 0;
+            mTexture = 0;
         }
-        int mProgram;
+
         // Attribute locations
-        int mPositionLoc;
-        int mTexCoordLoc;
+        ShaderAttribute a_position;
+        ShaderAttribute a_textCoord;
         // Sampler location
-        int mSamplerLoc;
+        ShaderUniformVar s_texture;
         // Texture handle
         int mTexture;
 
