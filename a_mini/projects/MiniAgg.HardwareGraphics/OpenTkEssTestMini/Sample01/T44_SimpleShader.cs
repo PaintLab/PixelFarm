@@ -73,13 +73,13 @@ namespace OpenTkEssTest
                 //return false
                 throw new NotSupportedException();
             }
-            
-            
+
+
             //GL.Enable(EnableCap.Blend);
             //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             // Get the attribute locations
-           
+
             mPositionLoc = GL.GetAttribLocation(mProgram, "a_position");
             mTexCoordLoc = GL.GetAttribLocation(mProgram, "a_texcoord");
 
@@ -95,7 +95,7 @@ namespace OpenTkEssTest
             GL.ClearColor(0, 0, 0, 0);
             GL.CullFace(CullFaceMode.Front);
             GL.Enable(EnableCap.CullFace);
-         
+
             this.EnableAnimationTimer = true;
             isGLInit = true;
         }
@@ -166,6 +166,11 @@ namespace OpenTkEssTest
 
 
         }
+        protected override void DemoClosing()
+        {
+            GL.DeleteProgram(mProgram);
+            mProgram = 0;
+        }
         // Handle to a program object
         int mProgram;
 
@@ -185,6 +190,6 @@ namespace OpenTkEssTest
     }
 
 
-   
+
 
 }

@@ -153,7 +153,12 @@ namespace OpenTkEssTest
 
             miniGLControl.SwapBuffers();
         }
-
+        protected override void DemoClosing()
+        {
+            GL.DeleteProgram(mProgram);
+            GL.DeleteTexture(mTexture);
+            mProgram = mTexture = 0;
+        }
         int mProgram;
         // Attribute locations
         int mPositionLoc;

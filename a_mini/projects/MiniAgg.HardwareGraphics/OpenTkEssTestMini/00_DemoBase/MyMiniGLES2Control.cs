@@ -57,14 +57,12 @@ namespace Mini
             if (!this.DesignMode)
             {
 
-                MakeCurrent();
-                
+                MakeCurrent(); 
                 if (glPaintHandler != null)
                 {
                     glPaintHandler(this, e);
 
-                }
-               
+                } 
             }
         }
         

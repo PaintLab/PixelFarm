@@ -230,6 +230,10 @@ namespace OpenTkEssTest
 
 
         }
+        protected override void DemoClosing()
+        {
+            GL.DeleteProgram(mProgram);
+        }
         // Handle to a program object
         int mProgram;
 

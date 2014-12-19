@@ -70,6 +70,7 @@ namespace Mini
             this.aniTimer = new System.Windows.Forms.Timer();
 
             this.formTestBed.Load += this.OnInitGLProgram;
+            this.formTestBed.FormClosing += formTestBed_FormClosing;
             miniGLControl.SetGLPaintHandler(this.OnGLRender);
             formTestBed.Show();
             formTestBed.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -78,10 +79,22 @@ namespace Mini
             this.aniTimer.Tick += TimerTick;
 
         }
+
+        void formTestBed_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            //stop timer
+            this.aniTimer.Enabled = false;
+            this.miniGLControl.SetGLPaintHandler(null);
+
+            DemoClosing();
+        }
+        protected virtual void DemoClosing()
+        {
+        }
         void TimerTick(object sender, EventArgs e)
         {
             OnTimerTick(sender, e);
-           this.miniGLControl.Refresh();
+            this.miniGLControl.Refresh();
         }
         protected virtual void OnTimerTick(object sender, EventArgs e)
         {

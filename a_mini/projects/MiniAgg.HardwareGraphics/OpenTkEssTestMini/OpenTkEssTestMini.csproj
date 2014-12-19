@@ -56,9 +56,6 @@
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
     <Compile Include="00_DemoBase\GeometryUtils.cs" />
-    <Compile Include="Sample01\T31_SimpleES20Window.cs" />
-    <Compile Include="Sample01\T32_ES2HelloTriangle.cs" />
-    <Compile Include="Sample01\T33_ES2SimpleTexture2d.cs" />
     <Compile Include="00_DemoBase\MyMiniGLES2Control.cs">
       <SubType>UserControl</SubType>
     </Compile>

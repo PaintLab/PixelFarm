@@ -311,6 +311,11 @@ namespace OpenTkEssTest
 
             this.miniGLControl.SwapBuffers();
         }
+        protected override void DemoClosing()
+        {
+            GL.DeleteProgram(mProgram);
+            mProgram = 0;
+        }
         // Handle to a program object
         int mProgram;
 

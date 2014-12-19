@@ -206,7 +206,13 @@ namespace OpenTkEssTest
             this.miniGLControl.SwapBuffers();
         }
 
-
+        protected override void DemoClosing()
+        {
+            GL.DeleteProgram(mProgram);
+            GL.DeleteTexture(mBaseMapTexID);
+            GL.DeleteTexture(mLightMapTexID);
+            mProgram = mBaseMapTexID = mLightMapTexID = 0;
+        }
         // Handle to a program object
         int mProgram;
 
