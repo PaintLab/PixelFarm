@@ -55,8 +55,8 @@ namespace OpenTkEssTest
             }
 
 
-            a_position = shaderProgram.GetAttribVar("a_position");
-            a_color = shaderProgram.GetAttribVar("a_color");
+            a_position = shaderProgram.GetVtxAttrib("a_position");
+            a_color = shaderProgram.GetVtxAttrib("a_color");
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(0, 0, 0, 0);
@@ -96,8 +96,8 @@ namespace OpenTkEssTest
             miniGLControl.SwapBuffers(); 
         }
         //-------------------------------
-        ShaderAttribute a_position;
-        ShaderAttribute a_color;
+        ShaderVertexAttrib a_position;
+        ShaderVertexAttrib a_color;
 
     }
 

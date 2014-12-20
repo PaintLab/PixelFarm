@@ -13,11 +13,11 @@ using OpenTK.Graphics.ES20;
 
 namespace Mini
 {
-    public struct ShaderAttribute
+    public struct ShaderVtxAttrib
     {
         internal readonly int location;
 
-        public ShaderAttribute(int location)
+        public ShaderVtxAttrib(int location)
         {
             this.location = location;
         }
@@ -252,9 +252,9 @@ namespace Mini
             }
             return true;
         }
-        public ShaderAttribute GetAttribVar(string attrName)
+        public ShaderVtxAttrib GetVtxAttrib(string attrName)
         {
-            return new ShaderAttribute(GL.GetAttribLocation(mProgram, attrName));
+            return new ShaderVtxAttrib(GL.GetAttribLocation(mProgram, attrName));
         }
 
         public ShaderUniformVar1 GetUniform1(string uniformVarName)

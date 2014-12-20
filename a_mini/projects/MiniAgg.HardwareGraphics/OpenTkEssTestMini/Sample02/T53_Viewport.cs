@@ -23,8 +23,8 @@ namespace OpenTkEssTest
     public class T53_Viewport : PrebuiltGLControlDemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        ShaderAttribute a_position;
-        ShaderAttribute a_color;
+        ShaderVtxAttrib a_position;
+        ShaderVtxAttrib a_color;
 
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
@@ -73,8 +73,9 @@ namespace OpenTkEssTest
             }
 
 
-            a_position = shaderProgram.GetAttribVar("a_position");
-            a_color = shaderProgram.GetAttribVar("a_color");
+            a_position = shaderProgram.GetVtxAttrib("a_position");
+            a_color = shaderProgram.GetVtxAttrib("a_color");
+
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor"); 
@@ -99,16 +100,7 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             //------------------------------------------------------------------------------------------------
-
-            //float[] vertices =
-            //{
-            //         0.0f,  0.5f, //2d coord
-            //         1, 0, 0, 0.1f,//r
-            //        -0.5f, -0.5f,  //2d coord
-            //         0,1,0,0.1f,//g
-            //         0.5f, -0.5f,  //2d corrd
-            //         0,0,1,0.1f, //b
-            //};
+            
             float[] vertices =
             {
                  50,  100f, //2d coord

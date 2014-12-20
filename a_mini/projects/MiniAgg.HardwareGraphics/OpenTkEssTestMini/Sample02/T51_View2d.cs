@@ -69,8 +69,8 @@ namespace OpenTkEssTest
             //-------------------------------------------
 
             // Get the attribute locations
-            a_position = shaderProgram.GetAttribVar("a_position");// GL.GetAttribLocation(mProgram, "a_position");
-            a_textCoord = shaderProgram.GetAttribVar("a_texCoord");
+            a_position = shaderProgram.GetVtxAttrib("a_position");// GL.GetAttribLocation(mProgram, "a_position");
+            a_textCoord = shaderProgram.GetVtxAttrib("a_texCoord");
             // Get the sampler location
             s_texture = shaderProgram.GetUniform1("s_texture");
 
@@ -119,8 +119,8 @@ namespace OpenTkEssTest
         }
 
         // Attribute locations
-        ShaderAttribute a_position;
-        ShaderAttribute a_textCoord;
+        ShaderVtxAttrib a_position;
+        ShaderVtxAttrib a_textCoord;
         // Sampler location
         ShaderUniformVar1 s_texture;
         // Texture handle
