@@ -48,14 +48,12 @@
     <Compile Include="00_DemoBase\FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
-    <Compile Include="00_DemoBase\ES2Utils.cs" />
     <Compile Include="00_DemoBase\FormTestBed.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="00_DemoBase\FormTestBed.Designer.cs">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
-    <Compile Include="00_DemoBase\GeometryUtils.cs" />
     <Compile Include="00_DemoBase\MiniShaderProgram.cs" />
     <Compile Include="00_DemoBase\MyMiniGLES2Control.cs">
       <SubType>UserControl</SubType>
@@ -146,10 +144,6 @@
     <ProjectReference Include="..\..\MiniTesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MiniAgg.Hw2\MiniAgg.Hw2.csproj">
-      <Project>{EED04403-8D2A-4A7F-9E46-E1FF8BE89042}</Project>
-      <Name>MiniAgg.Hw2</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
       <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>

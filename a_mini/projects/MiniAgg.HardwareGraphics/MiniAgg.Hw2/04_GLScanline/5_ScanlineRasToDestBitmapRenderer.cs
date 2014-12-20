@@ -22,7 +22,8 @@ using System.Text;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.ES20;
+
 
 namespace PixelFarm.Agg
 {
@@ -62,9 +63,9 @@ namespace PixelFarm.Agg
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------  
 
-
-            GL.EnableClientState(ArrayCap.ColorArray);
-            GL.EnableClientState(ArrayCap.VertexArray);
+            throw new NotSupportedException();
+            //GL.EnableClientState(ArrayCap.ColorArray);
+            //GL.EnableClientState(ArrayCap.VertexArray);
 
 
             this.mySinglePixelBuffer.Clear();
@@ -115,9 +116,9 @@ namespace PixelFarm.Agg
             //---------------------------------------------
 
             vbo.Dispose();
-            GL.DisableClientState(ArrayCap.ColorArray);
-            GL.DisableClientState(ArrayCap.VertexArray);
-            //------------------------ 
+            //GL.DisableClientState(ArrayCap.ColorArray);
+            //GL.DisableClientState(ArrayCap.VertexArray);
+            ////------------------------ 
         }
         /// <summary>
         /// for lines
@@ -140,8 +141,8 @@ namespace PixelFarm.Agg
             //-----------------------------------------------  
 
 
-            GL.EnableClientState(ArrayCap.ColorArray);
-            GL.EnableClientState(ArrayCap.VertexArray);
+            //GL.EnableClientState(ArrayCap.ColorArray);
+            //GL.EnableClientState(ArrayCap.VertexArray);
 
 
             this.mySinglePixelBuffer.Clear();
@@ -189,11 +190,10 @@ namespace PixelFarm.Agg
                 DrawLinesWithVertexBuffer(myLineBuffer, nelements);
                 vbo.UnbindBuffer();
             }
-            //---------------------------------------------
-
+            //--------------------------------------------- 
             vbo.Dispose();
-            GL.DisableClientState(ArrayCap.ColorArray);
-            GL.DisableClientState(ArrayCap.VertexArray);
+            //GL.DisableClientState(ArrayCap.ColorArray);
+            //GL.DisableClientState(ArrayCap.VertexArray);
             //------------------------ 
         }
 
@@ -204,15 +204,13 @@ namespace PixelFarm.Agg
                 float* arr = stackalloc float[2];
                 arr[0] = x1; arr[1] = y1;
 
-                //byte* indices = stackalloc byte[1];
-                //indices[0] = 0;
 
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                //GL.DrawElements(BeginMode.Points, 1, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                GL.DrawArrays(BeginMode.Points, 0, 1);
-                GL.DisableClientState(ArrayCap.VertexArray);
+                throw new NotSupportedException();
+                //GL.EnableClientState(ArrayCap.VertexArray); //***
+                ////vertex
+                //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr); 
+                //GL.DrawArrays(BeginMode.Points, 0, 1);
+                //GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
 
@@ -228,22 +226,15 @@ namespace PixelFarm.Agg
                 fixed (int* arr = &points[0])
                 {
 
-                    //int* indices = stackalloc int[n];
-                    //for (int i = n - 1; i >= 0; --i)
-                    //{
-                    //    indices[i] = i;
-                    //}
-                    GL.EnableClientState(ArrayCap.ColorArray);
-                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0);
-
-
-                    GL.EnableClientState(ArrayCap.VertexArray); //***
-                    //vertex
-                    GL.VertexPointer(2, VertexPointerType.Int, 0, (IntPtr)arr);
-                    //GL.DrawElements(BeginMode.Points, n, DrawElementsType.UnsignedInt, (IntPtr)indices);
-                    GL.DrawArrays(BeginMode.Points, 0, n);
-                    GL.DisableClientState(ArrayCap.VertexArray);
-                    GL.DisableClientState(ArrayCap.ColorArray);
+                    throw new NotSupportedException();
+                    //GL.EnableClientState(ArrayCap.ColorArray);
+                    //GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0); 
+                    //GL.EnableClientState(ArrayCap.VertexArray); //***
+                    ////vertex
+                    //GL.VertexPointer(2, VertexPointerType.Int, 0, (IntPtr)arr); 
+                    //GL.DrawArrays(BeginMode.Points, 0, n);
+                    //GL.DisableClientState(ArrayCap.VertexArray);
+                    //GL.DisableClientState(ArrayCap.ColorArray);
                 }
             }
         }
@@ -269,15 +260,13 @@ namespace PixelFarm.Agg
                 arr[0] = x1; arr[1] = y1;
                 arr[2] = x2; arr[3] = y2;
 
-                //byte* indices = stackalloc byte[2];
-                //indices[0] = 0; indices[1] = 1;
+                throw new NotSupportedException();
+                //GL.EnableClientState(ArrayCap.VertexArray); //***
+                ////vertex
+                //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
 
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                GL.DrawArrays(BeginMode.Lines, 0, 2);
-                GL.DisableClientState(ArrayCap.VertexArray);
+                //GL.DrawArrays(BeginMode.Lines, 0, 2);
+                //GL.DisableClientState(ArrayCap.VertexArray);
             }
         }
         const int BASE_MASK = 255;
@@ -291,11 +280,9 @@ namespace PixelFarm.Agg
 
                 //--------------------------------------------- 
                 VertexC4V2S[] vpoints = singlePxBuffer.Array;
-
-                IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
+                IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements); 
                 // Fill newly allocated buffer
-                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
                 // Only draw particles that are alive
                 GL.DrawArrays(BeginMode.Points, 0, nelements);
 
@@ -307,10 +294,9 @@ namespace PixelFarm.Agg
             unsafe
             {
                 VertexC4V2S[] vpoints = linesBuffer.Array;
-                IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
+                IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements); 
                 // Fill newly allocated buffer
-                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
+                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
                 // Only draw particles that are alive
                 GL.DrawArrays(BeginMode.Lines, 0, nelements);
             }
@@ -343,16 +329,7 @@ namespace PixelFarm.Agg
                         {
                             var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
                             lineBuffer.AddVertex(new VertexC4V2S(c, x1, y));
-                            lineBuffer.AddVertex(new VertexC4V2S(c, x2 + 1, y));
-
-                            //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
-
-                            //for (int i = 0; i < len; ++i)
-                            //{
-                            //    //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-                            //    singlePxBuff.AddVertex(new VertexC4XYZ3I(
-                            //        c, x1 + i, y));
-                            //}
+                            lineBuffer.AddVertex(new VertexC4V2S(c, x2 + 1, y)); 
 
                         } break;
                 }
@@ -374,7 +351,7 @@ namespace PixelFarm.Agg
             LayoutFarm.Drawing.Color sourceColor,
             byte[] covers, int coversIndex)
         {
-            
+
             unchecked
             {
 
@@ -456,184 +433,7 @@ namespace PixelFarm.Agg
             }
         }
 
-
-
-
-        //======================================================================================
-
-        //following methods for render with vertext array
-        //ArrayList<int> xyPointBuffer = new ArrayList<int>();
-        //ArrayList<uint> pointColorBuffer = new ArrayList<uint>();
-        //public void RenderWithColor(GLScanlineRasterizer sclineRas,
-        //    GLScanline scline,
-        //    LayoutFarm.Drawing.Color color)
-        //{
-        //    if (!sclineRas.RewindScanlines()) { return; } //early exit
-        //    //----------------------------------------------- 
-        //    scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
-        //    //----------------------------------------------- 
-
-        //    GL.EnableClientState(ArrayCap.ColorArray);
-        //    GL.EnableClientState(ArrayCap.VertexArray);
-        //    while (sclineRas.SweepScanline(scline))
-        //    {
-        //        this.pointColorBuffer.Clear();
-        //        this.xyPointBuffer.Clear();
-        //        //render solid single scanline
-        //        int y = scline.Y;
-        //        int num_spans = scline.SpanCount;
-        //        byte[] covers = scline.GetCovers();
-        //        for (int i = 1; i <= num_spans; ++i)
-        //        {
-        //            ScanlineSpan span = scline.GetSpan(i);
-        //            if (span.len > 0)
-        //            {
-        //                //outline
-        //                xGLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
-        //            }
-        //            else
-        //            {
-        //                //fill
-        //                int x = span.x;
-        //                int x2 = (x - span.len - 1);
-        //                xGLBlendHL(x, y, x2, color, covers[span.cover_index]);
-        //            }
-        //        }
-
-        //        //DrawPoints(xyPointBuffer, pointColorBuffer);
-        //        xDrawPointsWithVertexBuffer(xyPointBuffer, pointColorBuffer);
-        //    }
-        //    GL.DisableClientState(ArrayCap.ColorArray);
-        //    GL.DisableClientState(ArrayCap.VertexArray);
-        //    //------------------------
-
-        //}
-        //static void xDrawPointsWithVertexBuffer(ArrayList<int> pointsList, ArrayList<uint> colorsList)
-        //{
-        //    unsafe
-        //    {
-        //        int n = pointsList.Count / 2;
-        //        int[] points = pointsList.Array;
-        //        uint[] cbuff = colorsList.Array;
-
-        //        fixed (uint* cbuff0 = &cbuff[0])
-        //        fixed (int* arr = &points[0])
-        //        {
-        //            VertexC4ubV3f[] vpoints = new VertexC4ubV3f[n];
-        //            int mm = 0;
-        //            //vertices and color
-        //            for (int i = 0; i < n; ++i)
-        //            {
-        //                vpoints[i] = new VertexC4ubV3f(cbuff0[i], pointsList[mm], pointsList[mm + 1]);
-        //                mm += 2;
-        //            }
-
-        //            var vbo = LoadVBO(vpoints);
-        //            int stride = BlittableValueType.StrideOf(vpoints);
-
-        //            int nelements = vpoints.Length;
-        //            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(stride * nelements), IntPtr.Zero, BufferUsageHint.StreamDraw);
-        //            // Fill newly allocated buffer
-        //            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(stride * nelements), vpoints, BufferUsageHint.StreamDraw);
-        //            // Only draw particles that are alive
-        //            GL.DrawArrays(BeginMode.Points, 0, vpoints.Length);
-
-        //        }
-        //    }
-        //}
-        //void xGLBlendHL(int x1, int y, int x2, LayoutFarm.Drawing.Color color, byte cover)
-        //{
-        //    if (color.A == 0) { return; }
-
-        //    int len = x2 - x1 + 1;
-        //    int alpha = (((int)(color.A) * (cover + 1)) >> 8);
-
-        //    var colors = this.pointColorBuffer;
-        //    var points = this.xyPointBuffer;
-        //    if (alpha == BASE_MASK)
-        //    {
-
-        //        switch (len)
-        //        {
-        //            case 0:
-        //                {
-        //                } break;
-        //            case 1:
-        //                {
-        //                    //colors.AddVertex(LayoutFarm.Drawing.Color.FromArgb(alpha, color)); 
-        //                    var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-        //                    colors.AddVertex(c.ToARGB());
-        //                    points.AddVertex(x1);
-        //                    points.AddVertex(y);
-        //                } break;
-        //            default:
-        //                {
-        //                    for (int i = 0; i < len; ++i)
-        //                    {
-        //                        //colors.AddVertex(LayoutFarm.Drawing.Color.FromArgb(alpha, color)); 
-        //                        var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-        //                        colors.AddVertex(c.ToARGB());
-        //                        points.AddVertex(x1 + i);
-        //                        points.AddVertex(y);
-        //                    }
-        //                    //DrawLine(x1, y, x2 + 1, y);
-        //                } break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        int xpos = x1;
-        //        do
-        //        {
-
-        //            var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-        //            colors.AddVertex(c.ToARGB());
-        //            points.AddVertex(xpos);
-        //            points.AddVertex(y);
-
-        //            xpos++;
-        //        }
-        //        while (--len != 0);
-        //    }
-        //}
-        //void xGLBlendSolidHSpan(int x, int y, int len,
-        //    LayoutFarm.Drawing.Color sourceColor,
-        //    byte[] covers, int coversIndex)
-        //{
-        //    int colorAlpha = sourceColor.A;
-        //    if (colorAlpha == 0) { return; }
-
-        //    unchecked
-        //    {
-
-        //        int xpos = x;
-        //        var colors = this.pointColorBuffer;
-        //        var points = this.xyPointBuffer;
-        //        do
-        //        {
-        //            //foreach single pixel
-        //            int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
-        //            if (alpha == BASE_MASK)
-        //            {
-        //                colors.AddVertex(sourceColor.ToARGB());
-        //                points.AddVertex(xpos);
-        //                points.AddVertex(y);
-        //                xpos++;
-        //            }
-        //            else
-        //            {
-
-        //                var c = LayoutFarm.Drawing.Color.FromArgb(alpha, sourceColor);
-        //                colors.AddVertex(c.ToARGB());
-        //                points.AddVertex(xpos);
-        //                points.AddVertex(y);
-        //                xpos++;
-        //            }
-        //            coversIndex++;
-        //        }
-        //        while (--len != 0);
-        //    }
-        //} 
+         
     }
 
 }

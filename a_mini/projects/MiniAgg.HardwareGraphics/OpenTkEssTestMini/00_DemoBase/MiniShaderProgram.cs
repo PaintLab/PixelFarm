@@ -207,7 +207,7 @@ namespace Mini
         public bool Build()
         {
 
-            mProgram = OpenTkEssTest.ES2Utils.CompileProgram(vs, fs);
+            mProgram = OpenTK.Graphics.ES20.ES2Utils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 return false;
@@ -218,7 +218,7 @@ namespace Mini
         {
             LoadVertexShaderSource(vs);
             LoadFragmentShaderSource(fs);
-            mProgram = OpenTkEssTest.ES2Utils.CompileProgram(vs, fs);
+            mProgram = OpenTK.Graphics.ES20.ES2Utils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 return false;

@@ -43,7 +43,6 @@
     <Compile Include="04_GLScanline\4.1_ScanlineRasterizer.cs" />
     <Compile Include="04_GLScanline\4.2_CellAARasterizer.cs" />
     <Compile Include="04_GLScanline\4.3_VectorClipper.cs" />
-    <Compile Include="04_GLScanline\4.4_FillingRule.cs" />
     <Compile Include="04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="04_GLScanline\6_ClipLiangBarsky.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
@@ -79,9 +78,9 @@
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
-      <Project>{d9e24f68-37fa-4c11-ac17-0c351681908f}</Project>
-      <Name>OpenTk.CoreGraphics</Name>
+    <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
+      <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
+      <Name>OpenTK.ES</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

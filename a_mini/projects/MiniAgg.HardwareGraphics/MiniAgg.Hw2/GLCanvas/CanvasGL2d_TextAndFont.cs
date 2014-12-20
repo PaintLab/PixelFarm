@@ -1,18 +1,4 @@
-﻿//MIT 2014, WinterDev
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-
-
-using System.Text;
-using OpenTK.Graphics.OpenGL;
-using Tesselate;
-
-using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
-
-
-
+﻿//MIT 2014, WinterDev 
 namespace LayoutFarm.DrawingGL
 {
     partial class CanvasGL2d

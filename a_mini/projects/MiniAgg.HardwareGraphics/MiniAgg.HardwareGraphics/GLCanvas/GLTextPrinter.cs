@@ -1,7 +1,6 @@
 ﻿//MIT 2014, WinterDev
 using System.Text;
-using System;
-using OpenTK.Graphics.OpenGL;
+using System; 
 using Tesselate;
 using PixelFarm.Agg.Fonts;
 

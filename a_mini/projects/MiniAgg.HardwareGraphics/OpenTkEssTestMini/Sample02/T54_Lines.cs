@@ -42,14 +42,14 @@ namespace OpenTkEssTest
 
             uniform mat4 u_mvpMatrix;
             uniform vec4 u_solidColor;
-            uniform bool u_useSolidColor;            
+            uniform int u_useSolidColor;              
 
             varying vec4 v_color;
  
             void main()
             {
                 gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);
-                if(u_useSolidColor)
+                if(u_useSolidColor !=0)
                 {
                     v_color= u_solidColor;
                 }
@@ -104,7 +104,7 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             //------------------------------------------------------------------------------------------------
-
+             
             
             GL.Clear(ClearBufferMask.ColorBufferBit);
             shaderProgram.UseProgram();
@@ -172,7 +172,7 @@ namespace OpenTkEssTest
         }
         void DrawImage(float x, float y)
         {
-
+            
         }
 
     }

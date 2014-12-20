@@ -48,7 +48,7 @@ namespace OpenTkEssTest
 
             varying vec4 v_color;
             varying vec2 v_texcoord;
-
+             
             void main()
             {
                 
@@ -56,6 +56,7 @@ namespace OpenTkEssTest
                 if(u_useSolidColor !=0)
                 {
                     v_color= u_solidColor;                   
+                    
                 }
                 else
                 {
@@ -68,13 +69,12 @@ namespace OpenTkEssTest
             string fs = @"
                 precision mediump float;
                 varying vec4 v_color; 
-                varying vec2 v_texcoord;
-
+                varying vec2 v_texcoord;                 
                 void main()
-                {   
-                    //gl_FragColor = vec4(v_texcoord.x, v_texcoord.y, 1.0, 1.0);
-                    //gl_FragColor = vec4(1,0,0,1);
-                    gl_FragColor = v_color;
+                {       
+                    
+                    //gl_FragColor = vec4(1,v_texcoord.y,0,1);
+                    gl_FragColor= v_color;
                 }
             ";
 
@@ -144,17 +144,16 @@ namespace OpenTkEssTest
 
             //float[] quadVertices2 = CreateRectCoords(250f, 450f, 100f, 100f);
             float[] quadVertices2 = CreateRectCoords(260f, 160f, 100f, 100f);
-            float[] textureCoords = CreateRectTextureCoords(250f, 450f, 100f, 100f);
+            float[] textureCoords = CreateRectTextureCoords();
 
             //FillPolygonWithSolidColor2(quadVertices2, textureCoords, 6, LayoutFarm.Drawing.Color.Blue);
             FillPolygonWithSolidColor(quadVertices2, 6, LayoutFarm.Drawing.Color.Blue);
             //---------------------------------------------------------
             float[] quadVertices3 = CreateRectCoords(280f, 180f, 100f, 100f);
-            float[] textureCoords3 = CreateRectTextureCoords(250f, 450f, 100f, 100f);
+            float[] textureCoords3 = CreateRectTextureCoords();
 
 
-            //FillPolygonWithSolidColor2(quadVertices2, textureCoords, 6, LayoutFarm.Drawing.Color.Blue);
-            FillPolygonWithSolidColor(quadVertices3, 6, LayoutFarm.Drawing.Color.Blue);
+            FillPolygonWithSolidColor2(quadVertices3, textureCoords3, 6, LayoutFarm.Drawing.Color.Blue); 
             //---------------------------------------------------------
             float[] quadVertices = CreateRectCoords(250f, 150f, 100f, 100f);
             FillPolygonWithSolidColor(quadVertices, 6, LayoutFarm.Drawing.Color.Yellow);
@@ -185,7 +184,7 @@ namespace OpenTkEssTest
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)c.R / 255f, (float)c.G / 255f, (float)c.B / 255f, (float)c.A / 255f);//use solid color  
             a_position.LoadV2f(onlyCoords, 2, 0);
-            //a_textureCoord.LoadV2f(textureCoords, 2, 0);
+            a_textureCoord.LoadV2f(textureCoords, 2, 0);
             GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
 
         }
@@ -211,17 +210,17 @@ namespace OpenTkEssTest
             };
             return vertices;
         }
-        static float[] CreateRectTextureCoords(float x, float y, float w, float h)
+        static float[] CreateRectTextureCoords()
         {
 
             float[] vertices = new float[]{
-               1,1,
-               1,1,
-               1,1,
+               0.5f,0.5f,
+               0.5f,0.5f,
+               0.5f,0.5f,
 
-               1,1,
-               1,1,
-               1,1};
+               0.7f,0.7f,
+               0.7f,0.7f,
+               0.7f,0.7f};
             return vertices;
         }
         //------------------------------- 
