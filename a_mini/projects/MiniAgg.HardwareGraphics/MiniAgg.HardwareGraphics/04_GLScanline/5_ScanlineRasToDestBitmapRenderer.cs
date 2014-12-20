@@ -198,57 +198,7 @@ namespace PixelFarm.Agg
             //------------------------ 
         }
 
-        static void DrawPoint(float x1, float y1)
-        {
-            unsafe
-            {
-                float* arr = stackalloc float[2];
-                arr[0] = x1; arr[1] = y1;
-
-                //byte* indices = stackalloc byte[1];
-                //indices[0] = 0;
-
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                //GL.DrawElements(BeginMode.Points, 1, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                GL.DrawArrays(BeginMode.Points, 0, 1);
-                GL.DisableClientState(ArrayCap.VertexArray);
-            }
-        }
-
-        static void DrawPoints(ArrayList<int> pointsList, ArrayList<uint> colorsList)
-        {
-            unsafe
-            {
-                int n = pointsList.Count / 2;
-                int[] points = pointsList.Array;
-                uint[] cbuff = colorsList.Array;
-
-                fixed (uint* cbuff0 = &cbuff[0])
-                fixed (int* arr = &points[0])
-                {
-
-                    //int* indices = stackalloc int[n];
-                    //for (int i = n - 1; i >= 0; --i)
-                    //{
-                    //    indices[i] = i;
-                    //}
-                    GL.EnableClientState(ArrayCap.ColorArray);
-                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0);
-
-
-                    GL.EnableClientState(ArrayCap.VertexArray); //***
-                    //vertex
-                    GL.VertexPointer(2, VertexPointerType.Int, 0, (IntPtr)arr);
-                    //GL.DrawElements(BeginMode.Points, n, DrawElementsType.UnsignedInt, (IntPtr)indices);
-                    GL.DrawArrays(BeginMode.Points, 0, n);
-                    GL.DisableClientState(ArrayCap.VertexArray);
-                    GL.DisableClientState(ArrayCap.ColorArray);
-                }
-            }
-        }
-
+        
         static VboC4V2S GenerateVBOForC4V2I()
         {
             VboC4V2S vboHandle = new VboC4V2S();
@@ -262,25 +212,25 @@ namespace PixelFarm.Agg
             return vboHandle;
         }
 
-        static void DrawLine(float x1, float y1, float x2, float y2)
-        {
-            unsafe
-            {
-                float* arr = stackalloc float[4];
-                arr[0] = x1; arr[1] = y1;
-                arr[2] = x2; arr[3] = y2;
+        //static void DrawLine(float x1, float y1, float x2, float y2)
+        //{
+        //    unsafe
+        //    {
+        //        float* arr = stackalloc float[4];
+        //        arr[0] = x1; arr[1] = y1;
+        //        arr[2] = x2; arr[3] = y2;
 
-                //byte* indices = stackalloc byte[2];
-                //indices[0] = 0; indices[1] = 1;
+        //        //byte* indices = stackalloc byte[2];
+        //        //indices[0] = 0; indices[1] = 1;
 
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                GL.DrawArrays(BeginMode.Lines, 0, 2);
-                GL.DisableClientState(ArrayCap.VertexArray);
-            }
-        }
+        //        GL.EnableClientState(ArrayCap.VertexArray); //***
+        //        //vertex
+        //        GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+        //        //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
+        //        GL.DrawArrays(BeginMode.Lines, 0, 2);
+        //        GL.DisableClientState(ArrayCap.VertexArray);
+        //    }
+        //}
         const int BASE_MASK = 255;
 
 

@@ -95,9 +95,7 @@ namespace PixelFarm.Agg
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------  
 
-            throw new NotSupportedException();
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray); 
+            
             this.mySinglePixelBuffer.Clear();
             this.myLineBuffer.Clear();
 
@@ -139,10 +137,7 @@ namespace PixelFarm.Agg
             {
                 this.scanlineShader.DrawLinesWithVertexBuffer(myLineBuffer, nelements, color);
             }
-            //--------------------------------------------- 
-            //GL.DisableClientState(ArrayCap.ColorArray);
-            //GL.DisableClientState(ArrayCap.VertexArray);
-            ////------------------------ 
+            
         }
         /// <summary>
         /// for lines
@@ -162,10 +157,7 @@ namespace PixelFarm.Agg
             //-----------------------------------------------  
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------  
-
-
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray);
+             
 
 
             this.mySinglePixelBuffer.Clear();
@@ -212,75 +204,12 @@ namespace PixelFarm.Agg
 
                 this.scanlineShader.DrawLinesWithVertexBuffer(myLineBuffer, nelements, color);
 
-            }
-            //--------------------------------------------- 
-
-            //GL.DisableClientState(ArrayCap.ColorArray);
-            //GL.DisableClientState(ArrayCap.VertexArray);
-            //------------------------ 
+            } 
         }
 
-        static void DrawPoint(float x1, float y1)
-        {
-            unsafe
-            {
-                float* arr = stackalloc float[2];
-                arr[0] = x1; arr[1] = y1;
+     
 
-
-                throw new NotSupportedException();
-                //GL.EnableClientState(ArrayCap.VertexArray); //***
-                ////vertex
-                //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr); 
-                //GL.DrawArrays(BeginMode.Points, 0, 1);
-                //GL.DisableClientState(ArrayCap.VertexArray);
-            }
-        }
-
-        static void DrawPoints(ArrayList<int> pointsList, ArrayList<uint> colorsList)
-        {
-            unsafe
-            {
-                int n = pointsList.Count / 2;
-                int[] points = pointsList.Array;
-                uint[] cbuff = colorsList.Array;
-
-                fixed (uint* cbuff0 = &cbuff[0])
-                fixed (int* arr = &points[0])
-                {
-
-                    throw new NotSupportedException();
-                    //GL.EnableClientState(ArrayCap.ColorArray);
-                    //GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0); 
-                    //GL.EnableClientState(ArrayCap.VertexArray); //***
-                    ////vertex
-                    //GL.VertexPointer(2, VertexPointerType.Int, 0, (IntPtr)arr); 
-                    //GL.DrawArrays(BeginMode.Points, 0, n);
-                    //GL.DisableClientState(ArrayCap.VertexArray);
-                    //GL.DisableClientState(ArrayCap.ColorArray);
-                }
-            }
-        }
-
-
-
-        static void DrawLine(float x1, float y1, float x2, float y2)
-        {
-            unsafe
-            {
-                float* arr = stackalloc float[4];
-                arr[0] = x1; arr[1] = y1;
-                arr[2] = x2; arr[3] = y2;
-
-                throw new NotSupportedException();
-                //GL.EnableClientState(ArrayCap.VertexArray); //***
-                ////vertex
-                //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-
-                //GL.DrawArrays(BeginMode.Lines, 0, 2);
-                //GL.DisableClientState(ArrayCap.VertexArray);
-            }
-        }
+ 
         const int BASE_MASK = 255;
 
 
