@@ -56,7 +56,6 @@
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shaders\ScanlineShader.cs" />
     <Compile Include="Texture\GLBitmap.cs" />
     <Compile Include="Texture\GLBitmapReference.cs" />
     <Compile Include="Texture\LazyAggBitmapBufferProvider.cs" />
@@ -79,12 +78,11 @@
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
-      <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
-      <Name>OpenTK.ES</Name>
+    <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
+      <Project>{d9e24f68-37fa-4c11-ac17-0c351681908f}</Project>
+      <Name>OpenTk.CoreGraphics</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
