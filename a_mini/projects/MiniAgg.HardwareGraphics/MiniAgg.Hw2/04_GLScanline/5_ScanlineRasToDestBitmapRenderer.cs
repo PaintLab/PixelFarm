@@ -34,9 +34,9 @@ namespace PixelFarm.Agg
     public class GLScanlineRasToDestBitmapRenderer
     {
 
-        ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
-        ArrayList<VertexC4V2S> mySinglePixelBuffer = new ArrayList<VertexC4V2S>();
-        ArrayList<VertexC4V2S> myLineBuffer = new ArrayList<VertexC4V2S>();
+
+        ArrayList<VertexV2S1Cvr> mySinglePixelBuffer = new ArrayList<VertexV2S1Cvr>();
+        ArrayList<VertexV2S1Cvr> myLineBuffer = new ArrayList<VertexV2S1Cvr>();
 
         public GLScanlineRasToDestBitmapRenderer()
         {
@@ -94,7 +94,8 @@ namespace PixelFarm.Agg
                 }
             }
 
-            //---------------------------------------------
+            //----------------------------------------
+            //draw ...
             //points
             int nelements = mySinglePixelBuffer.Count;
             VboC4V2S vbo = GenerateVBOForC4V2I();
@@ -135,8 +136,7 @@ namespace PixelFarm.Agg
             //early exit
             if (color.A == 0) { return; }
             if (!sclineRas.RewindScanlines()) { return; }
-            //----------------------------------------------- 
-
+            //-----------------------------------------------  
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------  
 
@@ -273,32 +273,35 @@ namespace PixelFarm.Agg
 
 
         //======================================================================================
-        static void DrawPointsWithVertexBuffer(ArrayList<VertexC4V2S> singlePxBuffer, int nelements)
+        static void DrawPointsWithVertexBuffer(ArrayList<VertexV2S1Cvr> singlePxBuffer, int nelements)
         {
             unsafe
             {
 
-                //--------------------------------------------- 
-                VertexC4V2S[] vpoints = singlePxBuffer.Array;
-                IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements); 
-                // Fill newly allocated buffer
-                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
-                // Only draw particles that are alive
-                GL.DrawArrays(BeginMode.Points, 0, nelements);
+                ////--------------------------------------------- 
+                //VertexC4V2S[] vpoints = singlePxBuffer.Array;
+                //IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
+                //// Fill newly allocated buffer
+                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
+                //// Only draw particles that are alive
+                //GL.DrawArrays(BeginMode.Points, 0, nelements);
 
+                throw new NotSupportedException();
                 //--------------------------------------------- 
             }
         }
-        static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V2S> linesBuffer, int nelements)
+        static void DrawLinesWithVertexBuffer(ArrayList<VertexV2S1Cvr> linesBuffer, int nelements)
         {
             unsafe
-            {
-                VertexC4V2S[] vpoints = linesBuffer.Array;
-                IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements); 
-                // Fill newly allocated buffer
-                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
-                // Only draw particles that are alive
-                GL.DrawArrays(BeginMode.Lines, 0, nelements);
+            {   
+                //VertexC4V2S[] vpoints = linesBuffer.Array;
+                //IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
+                //// Fill newly allocated buffer
+                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
+                //// Only draw particles that are alive
+                //GL.DrawArrays(BeginMode.Lines, 0, nelements);
+
+                throw new NotSupportedException();
             }
         }
         void GLBlendHL(int x1, int y, int x2, LayoutFarm.Drawing.Color color, byte cover)
@@ -320,16 +323,18 @@ namespace PixelFarm.Agg
                         } break;
                     case 1:
                         {
-                            singlePxBuff.AddVertex(new VertexC4V2S(
-                                LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
-                                x1, y));
-
+                            //singlePxBuff.AddVertex(new VertexV2S1Cvr(
+                            //    LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
+                            //    x1, y));
+                            singlePxBuff.AddVertex(new VertexV2S1Cvr(x1, y, alpha));
+                            //LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
+                            //x1, y));
                         } break;
                     default:
                         {
-                            var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
-                            lineBuffer.AddVertex(new VertexC4V2S(c, x1, y));
-                            lineBuffer.AddVertex(new VertexC4V2S(c, x2 + 1, y)); 
+                            //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
+                            lineBuffer.AddVertex(new VertexV2S1Cvr(x1, y, alpha));
+                            lineBuffer.AddVertex(new VertexV2S1Cvr(x2 + 1, y, alpha));
 
                         } break;
                 }
@@ -339,9 +344,7 @@ namespace PixelFarm.Agg
                 int xpos = x1;
                 do
                 {
-                    singlePxBuff.AddVertex(new VertexC4V2S(
-                        LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
-                        xpos, y));
+                    singlePxBuff.AddVertex(new VertexV2S1Cvr(xpos, y, alpha));
                     xpos++;
                 }
                 while (--len != 0);
@@ -362,17 +365,19 @@ namespace PixelFarm.Agg
                 {
                     //alpha change
                     int alpha = ((sourceColor.A) * ((covers[coversIndex]) + 1)) >> 8;
-                    if (alpha == BASE_MASK)
-                    {
-                        pointAndColors.AddVertex(
-                            new VertexC4V2S(sourceColor.ToARGB(), xpos, y));
-                    }
-                    else
-                    {
-                        pointAndColors.AddVertex(
-                            new VertexC4V2S(LayoutFarm.Drawing.Color.FromArgb(alpha, sourceColor).ToARGB(),
-                            xpos, y));
-                    }
+                    pointAndColors.AddVertex(new VertexV2S1Cvr(xpos, y, alpha));
+
+                    //if (alpha == BASE_MASK)
+                    //{
+                    //    pointAndColors.AddVertex(
+                    //        new VertexV2S1Cvr(xpos, y, alpha));
+                    //}
+                    //else
+                    //{
+                    //    pointAndColors.AddVertex(
+                    //        new VertexC4V2S(LayoutFarm.Drawing.Color.FromArgb(alpha, sourceColor).ToARGB(),
+                    //        xpos, y));
+                    //}
                     xpos++;
                     coversIndex++;
                 }
@@ -382,58 +387,58 @@ namespace PixelFarm.Agg
         //======================================================================================
 
 
-        public void RenderWithSpan(IImageReaderWriter dest,
-                 GLScanlineRasterizer sclineRas,
-                 GLScanline scline,
-                ISpanGenerator spanGenerator)
-        {
-            if (!sclineRas.RewindScanlines()) { return; } //early exit
-            //-----------------------------------------------
+        //public void RenderWithSpan(IImageReaderWriter dest,
+        //         GLScanlineRasterizer sclineRas,
+        //         GLScanline scline,
+        //        ISpanGenerator spanGenerator)
+        //{
+        //    if (!sclineRas.RewindScanlines()) { return; } //early exit
+        //    //-----------------------------------------------
 
-            scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
+        //    scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
 
-            spanGenerator.Prepare();
+        //    spanGenerator.Prepare();
 
 
-            if (dest.Stride / 4 > (tempSpanColors.AllocatedSize))
-            {
-                //if not enough -> alloc more
-                tempSpanColors.Clear(dest.Stride / 4);
-            }
+        //    if (dest.Stride / 4 > (tempSpanColors.AllocatedSize))
+        //    {
+        //        //if not enough -> alloc more
+        //        tempSpanColors.Clear(dest.Stride / 4);
+        //    }
 
-            ColorRGBA[] colorArray = tempSpanColors.Array;
+        //    ColorRGBA[] colorArray = tempSpanColors.Array;
 
-            while (sclineRas.SweepScanline(scline))
-            {
+        //    while (sclineRas.SweepScanline(scline))
+        //    {
 
-                //render single scanline 
-                int y = scline.Y;
-                int num_spans = scline.SpanCount;
-                byte[] covers = scline.GetCovers();
+        //        //render single scanline 
+        //        int y = scline.Y;
+        //        int num_spans = scline.SpanCount;
+        //        byte[] covers = scline.GetCovers();
 
-                for (int i = 1; i <= num_spans; ++i)
-                {
-                    ScanlineSpan span = scline.GetSpan(i);
-                    int x = span.x;
-                    int span_len = span.len;
-                    bool firstCoverForAll = false;
+        //        for (int i = 1; i <= num_spans; ++i)
+        //        {
+        //            ScanlineSpan span = scline.GetSpan(i);
+        //            int x = span.x;
+        //            int span_len = span.len;
+        //            bool firstCoverForAll = false;
 
-                    if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
+        //            if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
 
-                    //1. generate colors -> store in colorArray
-                    spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
+        //            //1. generate colors -> store in colorArray
+        //            spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
 
-                    //2. blend color in colorArray to destination image
-                    dest.BlendColorHSpan(x, y, span_len,
-                        colorArray, 0,
-                        covers, span.cover_index,
-                        firstCoverForAll);
-                }
+        //            //2. blend color in colorArray to destination image
+        //            dest.BlendColorHSpan(x, y, span_len,
+        //                colorArray, 0,
+        //                covers, span.cover_index,
+        //                firstCoverForAll);
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
-         
+
     }
 
 }

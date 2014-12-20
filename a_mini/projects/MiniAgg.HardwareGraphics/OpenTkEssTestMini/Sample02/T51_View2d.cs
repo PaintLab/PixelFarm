@@ -75,7 +75,7 @@ namespace OpenTkEssTest
             s_texture = shaderProgram.GetUniform1("s_texture");
 
             //// Load the texture
-            mTexture = ES2Utils.CreateSimpleTexture2D();
+            mTexture = ES2Utils2.CreateSimpleTexture2D();
             GL.ClearColor(0, 0, 0, 0);
             //================================================================================
 

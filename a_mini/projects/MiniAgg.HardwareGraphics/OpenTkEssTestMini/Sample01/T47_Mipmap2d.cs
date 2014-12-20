@@ -85,7 +85,7 @@ namespace OpenTkEssTest
             mOffsetLoc = GL.GetUniformLocation(mProgram, "u_offset");
             //// Load the texture
             //mTextureID = CreateMipMappedTexture2D();
-            mTextureID = ES2Utils.CreateMipMappedTexture2D();
+            mTextureID = ES2Utils2.CreateMipMappedTexture2D();
 
             //// Check Anisotropy limits
             //glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &mMaxAnisotropy);

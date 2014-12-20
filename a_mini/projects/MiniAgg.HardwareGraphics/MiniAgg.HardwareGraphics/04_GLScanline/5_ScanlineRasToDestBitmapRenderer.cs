@@ -33,7 +33,8 @@ namespace PixelFarm.Agg
     public class GLScanlineRasToDestBitmapRenderer
     {
 
-        ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
+        //ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
+
         ArrayList<VertexC4V2S> mySinglePixelBuffer = new ArrayList<VertexC4V2S>();
         ArrayList<VertexC4V2S> myLineBuffer = new ArrayList<VertexC4V2S>();
 
@@ -407,56 +408,56 @@ namespace PixelFarm.Agg
         //======================================================================================
 
 
-        public void RenderWithSpan(IImageReaderWriter dest,
-                 GLScanlineRasterizer sclineRas,
-                 GLScanline scline,
-                ISpanGenerator spanGenerator)
-        {
-            if (!sclineRas.RewindScanlines()) { return; } //early exit
-            //-----------------------------------------------
+        //public void RenderWithSpan(IImageReaderWriter dest,
+        //         GLScanlineRasterizer sclineRas,
+        //         GLScanline scline,
+        //        ISpanGenerator spanGenerator)
+        //{
+        //    if (!sclineRas.RewindScanlines()) { return; } //early exit
+        //    //-----------------------------------------------
 
-            scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
+        //    scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
 
-            spanGenerator.Prepare();
+        //    spanGenerator.Prepare();
 
 
-            if (dest.Stride / 4 > (tempSpanColors.AllocatedSize))
-            {
-                //if not enough -> alloc more
-                tempSpanColors.Clear(dest.Stride / 4);
-            }
+        //    if (dest.Stride / 4 > (tempSpanColors.AllocatedSize))
+        //    {
+        //        //if not enough -> alloc more
+        //        tempSpanColors.Clear(dest.Stride / 4);
+        //    }
 
-            ColorRGBA[] colorArray = tempSpanColors.Array;
+        //    ColorRGBA[] colorArray = tempSpanColors.Array;
 
-            while (sclineRas.SweepScanline(scline))
-            {
+        //    while (sclineRas.SweepScanline(scline))
+        //    {
 
-                //render single scanline 
-                int y = scline.Y;
-                int num_spans = scline.SpanCount;
-                byte[] covers = scline.GetCovers();
+        //        //render single scanline 
+        //        int y = scline.Y;
+        //        int num_spans = scline.SpanCount;
+        //        byte[] covers = scline.GetCovers();
 
-                for (int i = 1; i <= num_spans; ++i)
-                {
-                    ScanlineSpan span = scline.GetSpan(i);
-                    int x = span.x;
-                    int span_len = span.len;
-                    bool firstCoverForAll = false;
+        //        for (int i = 1; i <= num_spans; ++i)
+        //        {
+        //            ScanlineSpan span = scline.GetSpan(i);
+        //            int x = span.x;
+        //            int span_len = span.len;
+        //            bool firstCoverForAll = false;
 
-                    if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
+        //            if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
 
-                    //1. generate colors -> store in colorArray
-                    spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
+        //            //1. generate colors -> store in colorArray
+        //            spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
 
-                    //2. blend color in colorArray to destination image
-                    dest.BlendColorHSpan(x, y, span_len,
-                        colorArray, 0,
-                        covers, span.cover_index,
-                        firstCoverForAll);
-                }
+        //            //2. blend color in colorArray to destination image
+        //            dest.BlendColorHSpan(x, y, span_len,
+        //                colorArray, 0,
+        //                covers, span.cover_index,
+        //                firstCoverForAll);
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
 
 

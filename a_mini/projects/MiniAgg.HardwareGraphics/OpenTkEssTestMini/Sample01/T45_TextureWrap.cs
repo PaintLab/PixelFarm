@@ -88,7 +88,7 @@ namespace OpenTkEssTest
             //mOffsetLoc = glGetUniformLocation(mProgram, "u_offset");
             mOffsetLoc = GL.GetUniformLocation(mProgram, "u_offset");
             //// Load the texture
-            mTexture = ES2Utils.CreateMipMappedTexture2D();
+            mTexture = ES2Utils2.CreateMipMappedTexture2D();
             //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.ClearColor(0, 0, 0, 0);
 
