@@ -63,6 +63,7 @@
     <Compile Include="00_DemoBase\MyMiniGLES2Control.Designer.cs">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="01_MiniCanvas\MiniCanvas2d.cs" />
     <Compile Include="Sample01\T42_MiniGLControl_HelloTrinagle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Sample02\T52_HelloTriangle2.cs" />
     <Compile Include="Sample02\T51_View2d.cs" />
     <Compile Include="Sample02\T53_Viewport.cs" />
+    <Compile Include="Sample02\T54_Lines.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />

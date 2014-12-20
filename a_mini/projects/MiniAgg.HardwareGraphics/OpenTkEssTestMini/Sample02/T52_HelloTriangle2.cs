@@ -96,8 +96,8 @@ namespace OpenTkEssTest
             miniGLControl.SwapBuffers(); 
         }
         //-------------------------------
-        ShaderVertexAttrib a_position;
-        ShaderVertexAttrib a_color;
+        ShaderVtxAttrib a_position;
+        ShaderVtxAttrib a_color;
 
     }
 

@@ -80,7 +80,7 @@
       <Name>Tesselate</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
-      <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
+      <Project>{d9e24f68-37fa-4c11-ac17-0c351681908f}</Project>
       <Name>OpenTk.CoreGraphics</Name>
     </ProjectReference>
   </ItemGroup>

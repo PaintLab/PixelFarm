@@ -374,9 +374,7 @@ namespace PixelFarm.Agg
             LayoutFarm.Drawing.Color sourceColor,
             byte[] covers, int coversIndex)
         {
-            //int colorAlpha = sourceColor.A;
-            //if (colorAlpha == 0) { return; }
-
+            
             unchecked
             {
 

@@ -28,110 +28,80 @@ namespace Mini
         /// load and enable
         /// </summary>
         /// <param name="vertices"></param>
-        /// <param name="fieldCount"></param>
+        /// <param name="totalFieldCount"></param>
         /// <param name="startOffset"></param>
-        public void LoadV3f(float[] vertices, int fieldCount, int startOffset)
+        public void LoadV3f(float[] vertices, int totalFieldCount, int startOffset)
         {
-            BindV3f(vertices, fieldCount, startOffset);
+            BindV3f(vertices, totalFieldCount, startOffset);
             Enable();
         }
-        public void LoadV4f(float[] vertices, int fieldCount, int startOffset)
+        public void LoadV4f(float[] vertices, int totalFieldCount, int startOffset)
         {
-            BindV4f(vertices, fieldCount, startOffset);
+            BindV4f(vertices, totalFieldCount, startOffset);
             Enable();
         }
         /// <summary>
         /// load and enable
         /// </summary>
         /// <param name="vertices"></param>
-        /// <param name="fieldCount"></param>
+        /// <param name="totalFieldCount"></param>
         /// <param name="startOffset"></param>
-        public void LoadV2f(float[] vertices, int fieldCount, int startOffset)
+        public void LoadV2f(float[] vertices, int totalFieldCount, int startOffset)
         {
-            BindV2f(vertices, fieldCount, startOffset);
+            BindV2f(vertices, totalFieldCount, startOffset);
             Enable();
         }
 
-        public void BindV3f(float[] vertices, int fieldCount, int startOffset)
+        public void BindV3f(float[] vertices, int totalFieldCount, int startOffset)
         {
-            if (startOffset == 0)
+
+            unsafe
             {
-                GL.VertexAttribPointer(location,
-                    3, //float3
-                    VertexAttribPointerType.Float,
-                    false,
-                    fieldCount * sizeof(float), //total size
-                    vertices);
-            }
-            else
-            {
-                unsafe
+                fixed (float* h = &vertices[0])
                 {
-                    fixed (float* h = &vertices[0])
-                    {
-                        GL.VertexAttribPointer(location,
-                            3, //float3
-                            VertexAttribPointerType.Float,
-                            false,
-                            fieldCount * sizeof(float), //total size
-                            (IntPtr)(h + startOffset));
-                    }
+                    GL.VertexAttribPointer(location,
+                        3, //float3
+                        VertexAttribPointerType.Float,
+                        false,
+                        totalFieldCount * sizeof(float), //total size
+                        (IntPtr)(h + startOffset));
                 }
             }
+
         }
-        public void BindV2f(float[] vertices, int fieldCount, int startOffset)
+        public void BindV2f(float[] vertices, int totalFieldCount, int startOffset)
         {
-            if (startOffset == 0)
+
+            unsafe
             {
-                GL.VertexAttribPointer(location,
-                    2, //float2
-                    VertexAttribPointerType.Float,
-                    false,
-                    fieldCount * sizeof(float), //total size
-                    vertices);
-            }
-            else
-            {
-                unsafe
+                fixed (float* h = &vertices[0])
                 {
-                    fixed (float* h = &vertices[0])
-                    {
-                        GL.VertexAttribPointer(location,
-                            2, //float3
-                            VertexAttribPointerType.Float,
-                            false,
-                            fieldCount * sizeof(float), //total size
-                            (IntPtr)(h + startOffset));
-                    }
+                    GL.VertexAttribPointer(location,
+                        2, //float2
+                        VertexAttribPointerType.Float,
+                        false,
+                        totalFieldCount * sizeof(float), //total size
+                        (IntPtr)(h + startOffset));
                 }
             }
+
         }
-        public void BindV4f(float[] vertices, int fieldCount, int startOffset)
+        public void BindV4f(float[] vertices, int totalFieldCount, int startOffset)
         {
-            if (startOffset == 0)
+
+            unsafe
             {
-                GL.VertexAttribPointer(location,
-                    4, //float4
-                    VertexAttribPointerType.Float,
-                    false,
-                    fieldCount * sizeof(float), //total size
-                    vertices);
-            }
-            else
-            {
-                unsafe
+                fixed (float* h = &vertices[0])
                 {
-                    fixed (float* h = &vertices[0])
-                    {
-                        GL.VertexAttribPointer(location,
-                            4, //float3
-                            VertexAttribPointerType.Float,
-                            false,
-                            fieldCount * sizeof(float), //total size
-                            (IntPtr)(h + startOffset));
-                    }
+                    GL.VertexAttribPointer(location,
+                        4, //float4
+                        VertexAttribPointerType.Float,
+                        false,
+                        totalFieldCount * sizeof(float), //total size
+                        (IntPtr)(h + startOffset));
                 }
             }
+
         }
         public void Enable()
         {
@@ -208,7 +178,10 @@ namespace Mini
         {
             GL.Uniform4(this.location, a, b, c, d);
         }
-
+        public void SetValue(byte a, byte b, byte c, byte d)
+        {
+            GL.Uniform4(this.location, a, b, c, d);
+        }
     }
 
 
