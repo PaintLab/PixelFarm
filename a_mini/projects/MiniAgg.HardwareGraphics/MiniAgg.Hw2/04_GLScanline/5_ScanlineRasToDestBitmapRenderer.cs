@@ -23,7 +23,7 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using OpenTK;
 using OpenTK.Graphics.ES20;
-
+using LayoutFarm.DrawingGL;
 
 namespace PixelFarm.Agg
 {
@@ -34,7 +34,7 @@ namespace PixelFarm.Agg
     public class GLScanlineRasToDestBitmapRenderer
     {
 
-
+        ScanlineShader scanlineShader = new ScanlineShader();
         ArrayList<VertexV2S1Cvr> mySinglePixelBuffer = new ArrayList<VertexV2S1Cvr>();
         ArrayList<VertexV2S1Cvr> myLineBuffer = new ArrayList<VertexV2S1Cvr>();
 

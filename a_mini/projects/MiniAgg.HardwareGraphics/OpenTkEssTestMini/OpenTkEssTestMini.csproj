@@ -55,7 +55,6 @@
     <Compile Include="00_DemoBase\FormTestBed.Designer.cs">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
-    <Compile Include="00_DemoBase\MiniShaderProgram.cs" />
     <Compile Include="00_DemoBase\MyMiniGLES2Control.cs">
       <SubType>UserControl</SubType>
     </Compile>

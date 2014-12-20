@@ -38,8 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
-    <Compile Include="Es2Utils\ES2Utils.cs" />
-    <Compile Include="Es2Utils\GeometryUtils.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FrameEventArgs.cs" />
     <Compile Include="GameWindow.cs" />

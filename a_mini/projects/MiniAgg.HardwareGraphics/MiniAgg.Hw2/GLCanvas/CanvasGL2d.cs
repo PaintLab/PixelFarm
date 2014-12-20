@@ -46,6 +46,18 @@ namespace LayoutFarm.DrawingGL
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             textPriner = new GLTextPrinter(this);
             SetupFonts();
+
+
+            ////--------------------------------------------------------------------------------
+            //GL.Enable(EnableCap.Blend);
+            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            //GL.ClearColor(1, 1, 1, 1);
+            ////setup viewport size
+            //int max = Math.Max(this.Width, this.Height);
+            ////square viewport
+            //GL.Viewport(0, 0, max, max);
+            //orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
+            ////-------------------------------------------------------------------------------
         }
         public CanvasSmoothMode SmoothMode
         {
