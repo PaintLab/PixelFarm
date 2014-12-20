@@ -150,11 +150,11 @@
       <Name>MiniAgg.Hw2</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
-      <Project>{D8FAE26D-C772-4E86-B9F3-439F0A1718B5}</Project>
+      <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
       <Name>OpenTK.ES</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenTK.PlatformMini\OpenTK.PlatformMini.csproj">
-      <Project>{77870ADC-CE4A-423C-B736-A1FA4AA2D697}</Project>
+      <Project>{77870adc-ce4a-423c-b736-a1fa4aa2d697}</Project>
       <Name>OpenTK.PlatformMini</Name>
     </ProjectReference>
   </ItemGroup>

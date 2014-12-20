@@ -231,13 +231,14 @@ namespace OpenTkEssTest
                            0.0f, 0.0f, 1.0f, t.Z,
                            0.0f, 0.0f, 0.0f, 1.0f);
         }
-        public static MyMat4 ortho(float left, float right, float bottom, float top, float near, float far)
+        public static MyMat4 ortho(float l, float r, float b, float t, float n, float f)
         {
-            return new MyMat4(2f / (right - 1), 0, 0, -(right + 1) / (right - 1),
-                           0.0f, 2f / (top - bottom), 0.0f, -(top + bottom) / (top - bottom),
-                           0.0f, 0.0f, -2f / (far - near), -(far + near) / (far - near),
-                           0.0f, 0.0f, 0.0f, 1.0f);
+                return  new MyMat4(2.0f / (r - l),           0.0f,            0.0f, -(r + l) / (r - l),
+                                         0.0f, 2.0f / (t - b),            0.0f, -(t + b) / (t - b),
+                                         0.0f,           0.0f, -2.0f / (f - n), -(f + n) / (f - n),
+                                         0.0f,           0.0f,            0.0f,               1.0f);
         }
+
         public static MyMat4 operator *(MyMat4 a, MyMat4 b)
         {
             return new MyMat4(a.data[0] * b.data[0] + a.data[4] * b.data[1] + a.data[8] * b.data[2] + a.data[12] * b.data[3],

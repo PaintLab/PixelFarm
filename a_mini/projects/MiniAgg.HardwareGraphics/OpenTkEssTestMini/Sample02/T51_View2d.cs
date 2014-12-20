@@ -72,7 +72,7 @@ namespace OpenTkEssTest
             a_position = shaderProgram.GetAttribVar("a_position");// GL.GetAttribLocation(mProgram, "a_position");
             a_textCoord = shaderProgram.GetAttribVar("a_texCoord");
             // Get the sampler location
-            s_texture = shaderProgram.GetUniform("s_texture");
+            s_texture = shaderProgram.GetUniform1("s_texture");
 
             //// Load the texture
             mTexture = ES2Utils.CreateSimpleTexture2D();
@@ -104,8 +104,8 @@ namespace OpenTkEssTest
 
 
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, mTexture);
-            GL.Uniform1(s_texture.location, 0);
+            GL.BindTexture(TextureTarget.Texture2D, mTexture);             
+            s_texture.SetValue(0);
 
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
 
@@ -122,7 +122,7 @@ namespace OpenTkEssTest
         ShaderAttribute a_position;
         ShaderAttribute a_textCoord;
         // Sampler location
-        ShaderUniformVar s_texture;
+        ShaderUniformVar1 s_texture;
         // Texture handle
         int mTexture;
 
