@@ -145,6 +145,10 @@
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.Hw2\MiniAgg.Hw2.csproj">
+      <Project>{eed04403-8d2a-4a7f-9e46-e1ff8be89042}</Project>
+      <Name>MiniAgg.Hw2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
       <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
       <Name>OpenTK.ES</Name>

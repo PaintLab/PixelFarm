@@ -36,16 +36,20 @@ namespace LayoutFarm.DrawingGL
 
         int canvasOriginX = 0;
         int canvasOriginY = 0;
+        int canvasW;
+        int canvasH;
+        MyMat4 orthoView;
 
-
-        public CanvasGL2d()
+        public CanvasGL2d(int canvasW, int canvasH)
         {
+            this.canvasW = canvasW;
+            this.canvasH = canvasH;
             sclineRas = new GLScanlineRasterizer();
             sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             textPriner = new GLTextPrinter(this);
-            SetupFonts();
+            SetupFonts();  
 
 
             ////--------------------------------------------------------------------------------
@@ -53,11 +57,12 @@ namespace LayoutFarm.DrawingGL
             //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             //GL.ClearColor(1, 1, 1, 1);
             ////setup viewport size
-            //int max = Math.Max(this.Width, this.Height);
+            int max = Math.Max(canvasW, canvasH); 
             ////square viewport
             //GL.Viewport(0, 0, max, max);
-            //orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
+            orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
             ////-------------------------------------------------------------------------------
+            sclineRasToGL.SetViewMatrix(orthoView);
         }
         public CanvasSmoothMode SmoothMode
         {
@@ -75,11 +80,11 @@ namespace LayoutFarm.DrawingGL
             //set value for clear color buffer
             GL.ClearColor(c);
             GL.ClearStencil(0);
-            //actual clear here 
+
+            //actual clear here !
             GL.Clear(ClearBufferMask.ColorBufferBit |
                 ClearBufferMask.DepthBufferBit |
                 ClearBufferMask.StencilBufferBit);
-
 
         }
         public double StrokeWidth
@@ -1032,7 +1037,7 @@ namespace LayoutFarm.DrawingGL
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
                     } break;
                 default:
-                    {  
+                    {
                         ////other mode
                         //int n = vxs.Count;
                         ////make triangular fan*** 

@@ -183,8 +183,11 @@ namespace OpenTkEssTest
 
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)c.R / 255f, (float)c.G / 255f, (float)c.B / 255f, (float)c.A / 255f);//use solid color  
+          
+           
             a_position.LoadV2f(onlyCoords, 2, 0);
             a_textureCoord.LoadV2f(textureCoords, 2, 0);
+           
             GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
 
         }

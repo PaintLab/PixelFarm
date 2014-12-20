@@ -17,8 +17,9 @@ namespace Mini2
         public override void Load()
         {
             //draw 1
+            
             FormTestWinGLControl form = new FormTestWinGLControl();
-            CanvasGL2d canvas = new CanvasGL2d();
+            CanvasGL2d canvas = new CanvasGL2d(this.Width, this.Height);
             GLBitmap hwBmp = null;
 
             form.SetGLPaintHandler((o, s) =>

@@ -36,10 +36,13 @@ namespace LayoutFarm.DrawingGL
 
         int canvasOriginX = 0;
         int canvasOriginY = 0;
+        int canvasW;
+        int canvasH;
 
-
-        public CanvasGL2d()
+        public CanvasGL2d(int canvasW, int canvasH)
         {
+            this.canvasW = canvasW;
+            this.canvasH = canvasH;
             sclineRas = new GLScanlineRasterizer();
             sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
@@ -320,7 +323,7 @@ namespace LayoutFarm.DrawingGL
                         sclineRas.Reset();
                         sclineRas.AddPath(snap);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
-                    }break;
+                    } break;
                 default:
                     {
                         sclineRas.Reset();
@@ -394,13 +397,13 @@ namespace LayoutFarm.DrawingGL
                                 DrawPolygonUnsafe(arr, npoints);
                             }
                         }
-                    } break; 
-            } 
-        } 
+                    } break;
+            }
+        }
         public void DrawEllipse(float x, float y, double rx, double ry)
         {
 
-            ellipse.Reset(x, y, rx, ry); 
+            ellipse.Reset(x, y, rx, ry);
             switch (this.SmoothMode)
             {
                 case CanvasSmoothMode.AggSmooth:
