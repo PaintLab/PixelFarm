@@ -58,9 +58,9 @@ namespace LayoutFarm.DrawingGL
             coordList.AddCoord(x + w, y + h);
 
             coordList.AddCoord(x + w, y + h);
-            coordList.AddCoord(x, y + h); 
-            coordList.AddCoord(x, y); 
-        } 
+            coordList.AddCoord(x, y + h);
+            coordList.AddCoord(x, y);
+        }
         static unsafe void CreatePolyLineRectCoords(CoordList2f coords,
                   float x, float y, float w, float h)
         {
@@ -68,7 +68,7 @@ namespace LayoutFarm.DrawingGL
             coords.AddCoord(x + w, y);
             coords.AddCoord(x + w, y + h);
             coords.AddCoord(x, y + h);
-            coords.AddCoord(x, y); 
+            coords.AddCoord(x, y);
         }
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
@@ -158,12 +158,15 @@ namespace LayoutFarm.DrawingGL
 
         unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
         {
-            throw new NotSupportedException();
+
+
             //GL.EnableClientState(ArrayCap.VertexArray); //***
             ////vertex 2d 
             //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
             //GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
             //GL.DisableClientState(ArrayCap.VertexArray);
+
+            this.basicShader.DrawLineLoopWithVertexBuffer(polygon2dVertices, npoints, this.strokeColor);
         }
     }
 }

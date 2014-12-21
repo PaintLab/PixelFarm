@@ -48,11 +48,13 @@ namespace OpenTkEssTest
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             canvas2d.StrokeColor = LayoutFarm.Drawing.Color.Blue;
-            
+
             canvas2d.DrawRect(2, 1, 50, 50);
             canvas2d.FillRect(LayoutFarm.Drawing.Color.Green, 50, 50, 50, 50);
-
-           
+            //--------------------------------------------
+            
+            canvas2d.DrawCircle(100, 100, 25);
+            canvas2d.DrawEllipse(200, 200, 25, 50);
 
             miniGLControl.SwapBuffers();
         }

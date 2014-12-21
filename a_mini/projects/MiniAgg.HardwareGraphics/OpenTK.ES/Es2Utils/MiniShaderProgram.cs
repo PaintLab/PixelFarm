@@ -1,10 +1,10 @@
 ﻿//MIT 2014, WinterDev
 using System;
-using System.Collections.Generic; 
- 
+using System.Collections.Generic;
+
 
 using OpenTK;
-using OpenTK.Graphics;  
+using OpenTK.Graphics;
 
 
 namespace OpenTK.Graphics.ES20
@@ -34,6 +34,19 @@ namespace OpenTK.Graphics.ES20
         public void LoadV4f(float[] vertices, int totalFieldCount, int startOffset)
         {
             BindV4f(vertices, totalFieldCount, startOffset);
+            Enable();
+        }
+        public unsafe void LoadV2f(float* vertices, int totalFieldCount, int startOffset)
+        {
+            //bind 
+            GL.VertexAttribPointer(location,
+                2, //float2
+                VertexAttribPointerType.Float,
+                false,
+                totalFieldCount * sizeof(float), //total size
+                (IntPtr)(vertices + startOffset));
+
+
             Enable();
         }
         /// <summary>
@@ -82,6 +95,7 @@ namespace OpenTK.Graphics.ES20
             }
 
         }
+
         public void BindV4f(float[] vertices, int totalFieldCount, int startOffset)
         {
 

@@ -129,9 +129,9 @@ namespace LayoutFarm.DrawingGL
         //---------------------------------- 
         public void DrawLineStripsWithVertexBuffer(CoordList2f linesBuffer, int nelements, LayoutFarm.Drawing.Color color)
         {
-        
+
             u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f); 
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
             GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
         }
@@ -140,9 +140,17 @@ namespace LayoutFarm.DrawingGL
         {
 
             u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f); 
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
+        }
+        public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, LayoutFarm.Drawing.Color color)
+        {
+            u_useSolidColor.SetValue(1);
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            GL.DrawArrays(BeginMode.LineLoop, 0, nelements);
+
         }
     }
 
