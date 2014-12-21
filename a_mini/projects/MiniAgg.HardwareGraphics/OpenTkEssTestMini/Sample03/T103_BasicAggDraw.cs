@@ -49,10 +49,18 @@ namespace OpenTkEssTest
 
             canvas2d.StrokeColor = LayoutFarm.Drawing.Color.Red;   
             //line
-            canvas2d.DrawLine(50, 50, 200, 200);
+            canvas2d.SmoothMode = CanvasSmoothMode.No;
+            canvas2d.DrawLine(50, 50, 200, 120);
 
             canvas2d.SmoothMode = CanvasSmoothMode.AggSmooth;
-            canvas2d.DrawLine(55, 50, 205, 200);
+            canvas2d.DrawLine(55, 50, 205, 120);
+
+
+            //circle & ellipse
+            canvas2d.DrawCircle(100, 100, 25);
+            canvas2d.DrawEllipse(200, 200, 25, 50);
+
+
             //--------------------------------------------
             ////rect
             //canvas2d.DrawRect(2, 1, 50, 50);

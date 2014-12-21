@@ -74,7 +74,7 @@ namespace PixelFarm.Agg
             while (sclineRas.SweepScanline(scline))
             {
                 int y = scline.Y;
-                lineBuff.BeginNewLine(y); 
+                lineBuff.BeginNewLine(y);
                 int num_spans = scline.SpanCount;
                 byte[] covers = scline.GetCovers();
                 for (int i = 1; i <= num_spans; ++i)
@@ -140,11 +140,10 @@ namespace PixelFarm.Agg
             while (sclineRas.SweepScanline(scline))
             {
                 int y = scline.Y;
-                lineBuff.BeginNewLine(y);
-
+                lineBuff.BeginNewLine(y); 
                 int num_spans = scline.SpanCount;
                 byte[] covers = scline.GetCovers();
-                //render not overlap pixels 
+                
                 for (int i = 1; i <= num_spans; ++i)
                 {
                     ScanlineSpan span = scline.GetSpan(i);
@@ -162,9 +161,8 @@ namespace PixelFarm.Agg
                         GLBlendHL(x, y, x2, lineBuff, srcColorA, covers[span.cover_index]);
                     }
                 }
-                lineBuff.CloseLine();
-            }
-
+                lineBuff.CloseLine(); 
+            } 
             //---------------------------------------------
             //points
             //Angle under d3d9 (shader model=2) not works with PointSize
@@ -182,6 +180,7 @@ namespace PixelFarm.Agg
             if (nelements > 0)
             {
                 this.scanlineShader.AggDrawLines(myLineBuffer, nelements, color);
+                myLineBuffer.Clear();
             }
         }
         const int BASE_MASK = 255;
@@ -225,6 +224,7 @@ namespace PixelFarm.Agg
                 {
                     //singlePxBuff.AddVertex(new VertexV2S1Cvr(xpos, y, alpha));
                     lineBuffer.AddCoord(xpos, alpha);
+                    lineBuffer.AddCoord(xpos + 1, alpha);
                     xpos++;
                 }
                 while (--len != 0);
@@ -244,36 +244,34 @@ namespace PixelFarm.Agg
                 {
                     case 1:
                         {
-                            do
-                            {
-                                //alpha change ***
-                                int alpha = ((srcColorAlpha) * ((covers[coversIndex]) + 1)) >> 8; 
-                                //single point
-                                lineBuffer.AddCoord(xpos, alpha);
-                                lineBuffer.AddCoord(xpos + 1, alpha); 
-                                xpos++;
-                                coversIndex++;
-                            }
-                            while (--len != 0);
+                            //just one pix , 
+                            //alpha change ***
+                            int alpha = ((srcColorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
+                            //single px
+                            lineBuffer.AddCoord(xpos, alpha);
+                            lineBuffer.AddCoord(xpos + 1, alpha);
+                            xpos++;
+                            coversIndex++;
+
                         } break;
                     default:
                         {
-                             
+                            int alpha = 0;
                             do
                             {
                                 //alpha change ***
-                                int alpha = ((srcColorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
+                                alpha = ((srcColorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
                                 //single point
-                                lineBuffer.AddCoord(xpos, alpha); 
+                                lineBuffer.AddCoord(xpos, alpha);
                                 xpos++;
                                 coversIndex++;
                             }
                             while (--len != 0);
                             //close with single px
-                            lineBuffer.AddCoord(xpos, 0); 
+                            lineBuffer.AddCoord(xpos, 0);
 
                         } break;
-                } 
+                }
             }
         }
     }
