@@ -23,8 +23,7 @@ using System.Threading;
 using System.Drawing;
 
 using OpenTK;
-using OpenTK.Graphics;
-//using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics; 
 using OpenTK.Graphics.ES20;
 using Examples.Tutorial;
 using Mini;
@@ -36,7 +35,7 @@ namespace OpenTkEssTest
 {
 
 
-    [Info(OrderCode = "51")]
+    [Info(OrderCode = "051")]
     [Info("T51_View2d")]
     public class T51_View2d : PrebuiltGLControlDemoBase
     {

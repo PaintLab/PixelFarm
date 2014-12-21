@@ -17,7 +17,7 @@ namespace LayoutFarm.DrawingGL
 
     public partial class CanvasGL2d
     {
-        BasicShader scanlineShader;
+        BasicShader basicShader;
         LayoutFarm.Drawing.Color strokeColor = LayoutFarm.Drawing.Color.Black;
 
         Tesselator tess = new Tesselator();
@@ -45,10 +45,10 @@ namespace LayoutFarm.DrawingGL
             this.canvasW = canvasW;
             this.canvasH = canvasH;
             sclineRas = new GLScanlineRasterizer();
-            scanlineShader = new BasicShader();
-            scanlineShader.InitShader();
+            basicShader = new BasicShader();
+            basicShader.InitShader();
 
-            sclineRasToGL = new GLScanlineRasToDestBitmapRenderer(scanlineShader);
+            sclineRasToGL = new GLScanlineRasToDestBitmapRenderer(basicShader);
             sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             textPriner = new GLTextPrinter(this);
@@ -495,7 +495,7 @@ namespace LayoutFarm.DrawingGL
             CoordList2f coords = new CoordList2f();
             CreatePolyLineRectCoords(coords, x, y, w, h);
             //render
-            this.scanlineShader.DrawLineStripsWithVertexBuffer(coords, coords.Count, this.strokeColor);
+            this.basicShader.DrawLineStripsWithVertexBuffer(coords, coords.Count, this.strokeColor);
 
         }
         public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
@@ -940,7 +940,7 @@ namespace LayoutFarm.DrawingGL
         {
             CoordList2f coords = new CoordList2f();
             CreateRectCoords(coords, x, y, w, h);
-            this.scanlineShader.DrawTrianglesWithVertexBuffer(coords, coords.Count, color);
+            this.basicShader.DrawTrianglesWithVertexBuffer(coords, coords.Count, color);
             ////fill with solid color
             //GL.EnableClientState(ArrayCap.ColorArray);
             //GL.EnableClientState(ArrayCap.VertexArray);

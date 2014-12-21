@@ -26,7 +26,6 @@ using System.Drawing;
 
 using OpenTK;
 using OpenTK.Graphics;
-//using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics.ES20;
 using Examples.Tutorial;
 using Mini;
@@ -35,7 +34,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "47")]
+    [Info(OrderCode = "047")]
     [Info("T47_TextureWrap")]
     public class T47_Mipmap2d : PrebuiltGLControlDemoBase
     {

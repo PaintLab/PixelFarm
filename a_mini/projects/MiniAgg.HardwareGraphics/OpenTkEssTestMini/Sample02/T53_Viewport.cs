@@ -18,7 +18,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "53")]
+    [Info(OrderCode = "053")]
     [Info("T53_Viewport")]
     public class T53_Viewport : PrebuiltGLControlDemoBase
     {

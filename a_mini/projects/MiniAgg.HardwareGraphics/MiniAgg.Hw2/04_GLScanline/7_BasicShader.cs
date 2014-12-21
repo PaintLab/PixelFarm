@@ -95,6 +95,7 @@ namespace LayoutFarm.DrawingGL
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
 
+            shaderProgram.UseProgram();
             isInited = true;
         }
 

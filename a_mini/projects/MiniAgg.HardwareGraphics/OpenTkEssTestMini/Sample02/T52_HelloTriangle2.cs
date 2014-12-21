@@ -18,7 +18,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "52")]
+    [Info(OrderCode = "052")]
     [Info("T52_HelloTriangle2")]
     public class T52_HelloTriangle2 : PrebuiltGLControlDemoBase
     {
