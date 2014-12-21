@@ -65,6 +65,11 @@ namespace LayoutFarm.DrawingGL
             ////-------------------------------------------------------------------------------
             sclineRasToGL.SetViewMatrix(orthoView);
         }
+        public void Dispose()
+        {
+
+        }
+        
         public CanvasSmoothMode SmoothMode
         {
             get;
@@ -122,20 +127,7 @@ namespace LayoutFarm.DrawingGL
                 default:
                     {
                         this.basicShader.DrawLine(x1, y1, x2, y2, this.strokeColor);
-
-                        //GL.EnableClientState(ArrayCap.ColorArray);
-                        //GL.EnableClientState(ArrayCap.VertexArray);
-                        //VboC4V3f vbo = GenerateVboC4V3f();
-                        ////points 
-                        //ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                        ////create line coord  
-                        //CreateLineCoords(vrx, this.strokeColor, x1, y1, x2, y2); 
-                        //vbo.BindBuffer(); 
-                        //DrawLinesWithVertexBuffer(vrx, 2);
-                        //vbo.UnbindBuffer(); 
-                        //GL.DisableClientState(ArrayCap.ColorArray);
-                        //GL.DisableClientState(ArrayCap.VertexArray);
-
+                         
 
                     } break;
 

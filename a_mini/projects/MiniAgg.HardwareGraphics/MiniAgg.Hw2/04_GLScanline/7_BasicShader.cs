@@ -22,28 +22,36 @@ namespace LayoutFarm.DrawingGL
 
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
-        ShaderUniformVar4 u_solidColor;
+        ShaderUniformVar1 u_useAggColor;
+
+        ShaderUniformVar4 u_solidColor; 
         MyMat4 mymat4;
 
         public BasicShader()
         {
             shaderProgram = new MiniShaderProgram();
+            
+        }
+        public void UnloadShader()
+        {
+            shaderProgram.DeleteMe();
+            shaderProgram = null;
         }
         public void InitShader()
         {
             if (isInited) { return; }
             //----------------
 
-
             //vertex shader source
             string vs = @"        
-            attribute vec2 a_position;
+            attribute vec3 a_position;
             attribute vec4 a_color; 
             attribute vec2 a_texcoord;
             
             uniform mat4 u_mvpMatrix;
             uniform vec4 u_solidColor;
             uniform int u_useSolidColor;            
+            uniform int u_useAggColor;             
 
             varying vec4 v_color;
             varying vec2 v_texcoord;
@@ -52,10 +60,14 @@ namespace LayoutFarm.DrawingGL
             {
                 
                 gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);
-                if(u_useSolidColor !=0)
+                if(u_useAggColor !=0)
                 {
-                    v_color= u_solidColor;                   
-                    
+                    float a= a_position[2];
+                    v_color= vec4(u_solidColor.r,u_solidColor.g,u_solidColor.b, a/255.0);
+                }
+                else if(u_useSolidColor !=0)
+                {   
+                    v_color= u_solidColor;                         
                 }
                 else
                 {
@@ -85,8 +97,12 @@ namespace LayoutFarm.DrawingGL
             a_textureCoord = shaderProgram.GetVtxAttrib("a_texcoord");
 
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
+            
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
+            u_useAggColor = shaderProgram.GetUniform1("u_useAggColor");
+
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
+            
 
             shaderProgram.UseProgram();
             isInited = true;
@@ -101,35 +117,21 @@ namespace LayoutFarm.DrawingGL
                 u_matrix.SetData(this.ViewMatrix.data);
             }
         }
-        //----------------------------------
-        public void DrawPointsWithVertexBuffer(CoordList3f singlePxBuffer, int nelements, LayoutFarm.Drawing.Color color)
+        
+        public void AggDrawLines(CoordList3f linesBuffer, int nelements, LayoutFarm.Drawing.Color color)
         {
-            //u_matrix.SetData(this.ViewMatrix.data);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-
-            //load v3f for (x,y,alpha)
-
-            //a_position.LoadV2f(onlyCoords, 2, 0);
-            a_position.LoadV3f(singlePxBuffer.GetInternalArray(), 3, 0);
-            GL.DrawArrays(BeginMode.Points, 0, nelements);
-        }
-        public void DrawLinesWithVertexBuffer(CoordList3f linesBuffer, int nelements, LayoutFarm.Drawing.Color color)
-        {
-            //u_matrix.SetData(this.ViewMatrix.data);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-
+            u_useAggColor.SetValue(1); //***
+            u_useSolidColor.SetValue(1); 
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f); 
             //load v3f for (x,y,alpha) 
             //a_position.LoadV2f(onlyCoords, 2, 0); 
             a_position.LoadV3f(linesBuffer.GetInternalArray(), 3, 0);
-            GL.DrawArrays(BeginMode.Lines, 0, nelements);
-
+            GL.DrawArrays(BeginMode.Lines, 0, nelements); 
         }
         //---------------------------------- 
         public void DrawLineStripsWithVertexBuffer(CoordList2f linesBuffer, int nelements, LayoutFarm.Drawing.Color color)
         {
-
+            u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
@@ -138,14 +140,16 @@ namespace LayoutFarm.DrawingGL
 
         public void DrawTrianglesWithVertexBuffer(CoordList2f linesBuffer, int nelements, LayoutFarm.Drawing.Color color)
         {
-
+            u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
+        
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, LayoutFarm.Drawing.Color color)
         {
+            u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadV2f(polygon2dVertices, 2, 0);
@@ -153,6 +157,7 @@ namespace LayoutFarm.DrawingGL
         }
         public void DrawLine(float x1, float y1, float x2, float y2, LayoutFarm.Drawing.Color color)
         {
+            u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
 
@@ -167,6 +172,7 @@ namespace LayoutFarm.DrawingGL
         }
         public unsafe void FillTriangleFan(float* polygon2dVertices, int nelements, LayoutFarm.Drawing.Color color)
         {
+            u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadV2f(polygon2dVertices, 2, 0);
@@ -174,6 +180,7 @@ namespace LayoutFarm.DrawingGL
         }
         public unsafe void FillTriangles(float* polygon2dVertices, int nelements, LayoutFarm.Drawing.Color color)
         {
+            u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadV2f(polygon2dVertices, 2, 0);

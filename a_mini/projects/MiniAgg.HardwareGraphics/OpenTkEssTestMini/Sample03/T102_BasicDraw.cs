@@ -41,19 +41,19 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-
+            canvas2d.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             canvas2d.StrokeColor = LayoutFarm.Drawing.Color.Blue;
-
+             
             //line
             canvas2d.DrawLine(50, 50, 200, 200);
             //--------------------------------------------
             //rect
-            canvas2d.DrawRect(2, 1, 50, 50);
+            canvas2d.DrawRect(2.5f, 1.5f, 50, 50);
             canvas2d.FillRect(LayoutFarm.Drawing.Color.Green, 50, 50, 50, 50);
             //--------------------------------------------
 
