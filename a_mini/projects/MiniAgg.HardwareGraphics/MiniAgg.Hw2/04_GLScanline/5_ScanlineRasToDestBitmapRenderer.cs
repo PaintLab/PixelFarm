@@ -35,8 +35,8 @@ namespace PixelFarm.Agg
     {
 
         BasicShader scanlineShader;
-        // CoordList3f mySinglePixelBuffer = new CoordList3f();
-        CoordList3f myLineBuffer = new CoordList3f();
+
+        AggCoordList3f myLineBuffer = new AggCoordList3f();
 
         public GLScanlineRasToDestBitmapRenderer(BasicShader scanlineShader)
         {
@@ -68,12 +68,13 @@ namespace PixelFarm.Agg
             //-----------------------------------------------  
 
 
-            //this.mySinglePixelBuffer.Clear();
-            this.myLineBuffer.Clear();
+            var lineBuff = this.myLineBuffer;
+            lineBuff.Clear();
 
             while (sclineRas.SweepScanline(scline))
             {
                 int y = scline.Y;
+                lineBuff.BeginNewLine(y); 
                 int num_spans = scline.SpanCount;
                 byte[] covers = scline.GetCovers();
                 for (int i = 1; i <= num_spans; ++i)
@@ -82,16 +83,18 @@ namespace PixelFarm.Agg
                     if (span.len > 0)
                     {
                         //outline
-                        GLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                        GLBlendSolidHSpan(span.x, y, span.len, lineBuff, color.A, covers, span.cover_index);
                     }
                     else
                     {
                         //fill
                         int x = span.x;
                         int x2 = (x - span.len - 1);
-                        GLBlendHL(x, y, x2, color, covers[span.cover_index]);
+                        GLBlendHL(x, y, x2, lineBuff, color.A, covers[span.cover_index]);
                     }
                 }
+
+                lineBuff.CloseLine();
             }
 
             //----------------------------------------
@@ -111,72 +114,6 @@ namespace PixelFarm.Agg
             }
 
         }
-        ///// <summary>
-        ///// for lines
-        ///// </summary>
-        ///// <param name="sclineRas"></param>
-        ///// <param name="scline"></param>
-        ///// <param name="color"></param>
-        ///// <param name="shapeHint"></param>
-        //public void DrawWithColor(GLScanlineRasterizer sclineRas,
-        //        GLScanline scline,
-        //        LayoutFarm.Drawing.Color color)
-        //{
-
-        //    //early exit
-        //    if (color.A == 0) { return; }
-        //    if (!sclineRas.RewindScanlines()) { return; }
-        //    //-----------------------------------------------  
-        //    scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
-        //    //-----------------------------------------------   
-        //    this.mySinglePixelBuffer.Clear();
-        //    this.myLineBuffer.Clear();
-
-        //    while (sclineRas.SweepScanline(scline))
-        //    {
-        //        int y = scline.Y;
-        //        int num_spans = scline.SpanCount;
-        //        byte[] covers = scline.GetCovers();
-        //        for (int i = 1; i <= num_spans; ++i)
-        //        {
-        //            ScanlineSpan span = scline.GetSpan(i);
-        //            if (span.len > 0)
-        //            {
-        //                //outline
-        //                GLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
-        //            }
-        //            else
-        //            {
-        //                //fill
-        //                int x = span.x;
-        //                int x2 = (x - span.len - 1);
-        //                GLBlendHL(x, y, x2, color, covers[span.cover_index]);
-        //            }
-        //        }
-        //    }
-
-        //    //---------------------------------------------
-        //    //points
-        //    //Angle under d3d9 (shader model=2) not works with PointSize
-        //    //so we use point as a line with length 1
-
-        //    int nelements = mySinglePixelBuffer.Count;
-        //    if (nelements > 0)
-        //    {
-
-        //        this.scanlineShader.DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements, color);
-
-        //    }
-        //    ////---------------------------------------------
-        //    ////lines
-        //    nelements = myLineBuffer.Count;
-        //    if (nelements > 0)
-        //    {
-
-        //        this.scanlineShader.DrawLinesWithVertexBuffer(myLineBuffer, nelements, color);
-
-        //    }
-        //}
 
         /// <summary>
         /// for lines
@@ -195,31 +132,37 @@ namespace PixelFarm.Agg
             if (!sclineRas.RewindScanlines()) { return; }
             //-----------------------------------------------  
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
-            //-----------------------------------------------   
-            //this.mySinglePixelBuffer.Clear();
-            this.myLineBuffer.Clear();
+            //----------------------------------------------- 
 
+            var lineBuff = this.myLineBuffer;
+            lineBuff.Clear();
+            int srcColorA = color.A;
             while (sclineRas.SweepScanline(scline))
             {
                 int y = scline.Y;
+                lineBuff.BeginNewLine(y);
+
                 int num_spans = scline.SpanCount;
                 byte[] covers = scline.GetCovers();
+                //render not overlap pixels 
                 for (int i = 1; i <= num_spans; ++i)
                 {
                     ScanlineSpan span = scline.GetSpan(i);
                     if (span.len > 0)
                     {
                         //outline
-                        GLBlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                        GLBlendSolidHSpan(span.x, y, span.len, lineBuff, srcColorA, covers, span.cover_index);
                     }
                     else
                     {
+                        //negative span
                         //fill
                         int x = span.x;
                         int x2 = (x - span.len - 1);
-                        GLBlendHL(x, y, x2, color, covers[span.cover_index]);
+                        GLBlendHL(x, y, x2, lineBuff, srcColorA, covers[span.cover_index]);
                     }
                 }
+                lineBuff.CloseLine();
             }
 
             //---------------------------------------------
@@ -237,24 +180,17 @@ namespace PixelFarm.Agg
             ////lines
             int nelements = myLineBuffer.Count;
             if (nelements > 0)
-            {   
-                this.scanlineShader.AggDrawLines(myLineBuffer, nelements, color); 
+            {
+                this.scanlineShader.AggDrawLines(myLineBuffer, nelements, color);
             }
         }
-
-
-
-
-
         const int BASE_MASK = 255;
-        void GLBlendHL(int x1, int y, int x2, LayoutFarm.Drawing.Color color, byte cover)
+        static void GLBlendHL(int x1, int y, int x2, AggCoordList3f lineBuffer, int srcColorAlpha, byte cover)
         {
             //if (color.A == 0) { return; }
 
             int len = x2 - x1 + 1;
-            int alpha = (((int)(color.A) * (cover + 1)) >> 8);
-            var singlePxBuff = this.myLineBuffer;// this.mySinglePixelBuffer;
-            var lineBuffer = this.myLineBuffer;
+            int alpha = (((int)(srcColorAlpha) * (cover + 1)) >> 8);
 
             //same alpha...
             if (alpha == BASE_MASK)
@@ -267,38 +203,35 @@ namespace PixelFarm.Agg
                         } break;
                     case 1:
                         {
-                            //singlePxBuff.AddVertex(new VertexV2S1Cvr(
-                            //    LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
-                            //    x1, y));
-
-                            singlePxBuff.AddCoord(x1, y, alpha);
-                            //LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
-                            //x1, y));
+                            //single point
+                            lineBuffer.AddCoord(x1, alpha);
+                            lineBuffer.AddCoord(x1 + 1, alpha);
                         } break;
                     default:
                         {
                             //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
                             //lineBuffer.AddVertex(new VertexV2S1Cvr(x1, y, alpha));
                             //lineBuffer.AddVertex(new VertexV2S1Cvr(x2 + 1, y, alpha));
-                            lineBuffer.AddCoord(x1, y, alpha);
-                            lineBuffer.AddCoord(x2 + 1, y, alpha);
+                            lineBuffer.AddCoord(x1, alpha);
+                            lineBuffer.AddCoord(x2 + 1, alpha);
                         } break;
                 }
             }
             else
             {
+
                 int xpos = x1;
                 do
                 {
                     //singlePxBuff.AddVertex(new VertexV2S1Cvr(xpos, y, alpha));
-                    singlePxBuff.AddCoord(xpos, y, alpha);
+                    lineBuffer.AddCoord(xpos, alpha);
                     xpos++;
                 }
                 while (--len != 0);
             }
         }
-        void GLBlendSolidHSpan(int x, int y, int len,
-            LayoutFarm.Drawing.Color sourceColor,
+        static void GLBlendSolidHSpan(
+            int x, int y, int len, AggCoordList3f lineBuffer, int srcColorAlpha,
             byte[] covers, int coversIndex)
         {
 
@@ -306,20 +239,41 @@ namespace PixelFarm.Agg
             {
 
                 int xpos = x;
-                var pointAndColors = this.myLineBuffer;//this.mySinglePixelBuffer;
-
-                do
+                //var pointAndColors = this.myLineBuffer;//this.mySinglePixelBuffer;
+                switch (len)
                 {
-                    //alpha change ***
-                    int alpha = ((sourceColor.A) * ((covers[coversIndex]) + 1)) >> 8;
-                   
-                    pointAndColors.AddCoord(xpos, y, alpha);
-                    pointAndColors.AddCoord(xpos + 1, y, alpha);
-              
-                    xpos++;
-                    coversIndex++;
-                }
-                while (--len != 0);
+                    case 1:
+                        {
+                            do
+                            {
+                                //alpha change ***
+                                int alpha = ((srcColorAlpha) * ((covers[coversIndex]) + 1)) >> 8; 
+                                //single point
+                                lineBuffer.AddCoord(xpos, alpha);
+                                lineBuffer.AddCoord(xpos + 1, alpha); 
+                                xpos++;
+                                coversIndex++;
+                            }
+                            while (--len != 0);
+                        } break;
+                    default:
+                        {
+                             
+                            do
+                            {
+                                //alpha change ***
+                                int alpha = ((srcColorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
+                                //single point
+                                lineBuffer.AddCoord(xpos, alpha); 
+                                xpos++;
+                                coversIndex++;
+                            }
+                            while (--len != 0);
+                            //close with single px
+                            lineBuffer.AddCoord(xpos, 0); 
+
+                        } break;
+                } 
             }
         }
     }
