@@ -121,8 +121,8 @@ namespace LayoutFarm.DrawingGL
                     } break;
                 default:
                     {
+                        this.basicShader.DrawLine(x1, y1, x2, y2, this.strokeColor);
 
-                        throw new NotSupportedException();
                         //GL.EnableClientState(ArrayCap.ColorArray);
                         //GL.EnableClientState(ArrayCap.VertexArray);
                         //VboC4V3f vbo = GenerateVboC4V3f();
@@ -940,7 +940,7 @@ namespace LayoutFarm.DrawingGL
         {
             CoordList2f coords = new CoordList2f();
             CreateRectCoords(coords, x, y, w, h);
-            this.basicShader.DrawTrianglesWithVertexBuffer(coords, coords.Count, color); 
+            this.basicShader.DrawTrianglesWithVertexBuffer(coords, coords.Count, color);
         }
         public void FillRect(LayoutFarm.Drawing.LinearGradientBrush linearGradientBrush, float x, float y, float w, float h)
         {
@@ -964,7 +964,7 @@ namespace LayoutFarm.DrawingGL
                      points[0].X, points[0].Y,
                      points[1].X, points[1].Y,
                      colors[0],
-                     colors[1]); 
+                     colors[1]);
                 int pcount = vrx.Count;
                 throw new NotSupportedException();
                 //GL.EnableClientState(ArrayCap.ColorArray);
@@ -1011,7 +1011,7 @@ namespace LayoutFarm.DrawingGL
                     } break;
             }
 
-        } 
+        }
         public void FillEllipse(LayoutFarm.Drawing.Color color, float x, float y, float rx, float ry)
         {
             ellipse.Reset(x, y, rx, ry);
@@ -1077,7 +1077,7 @@ namespace LayoutFarm.DrawingGL
                         //    coords[nn++] = coords[3];
                         //    npoints++;
 
-                            
+
                         //    ////fill triangular fan
                         //    //GL.EnableClientState(ArrayCap.VertexArray); //***
                         //    ////vertex 2d
@@ -1085,7 +1085,7 @@ namespace LayoutFarm.DrawingGL
                         //    //GL.DrawArrays(BeginMode.TriangleFan, 0, npoints);
                         //    //GL.DisableClientState(ArrayCap.VertexArray);
                         //}
-                        
+
                     } break;
             }
         }
