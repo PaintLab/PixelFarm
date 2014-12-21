@@ -23,19 +23,12 @@ namespace LayoutFarm.DrawingGL
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
-
+        MyMat4 mymat4;
 
         public BasicShader()
         {
             shaderProgram = new MiniShaderProgram();
         }
-
-        public MyMat4 ViewMatrix
-        {
-            get;
-            set;
-        }
-
         public void InitShader()
         {
             if (isInited) { return; }
@@ -99,11 +92,19 @@ namespace LayoutFarm.DrawingGL
             isInited = true;
         }
 
-
+        public MyMat4 ViewMatrix
+        {
+            get { return this.mymat4; }
+            set
+            {
+                this.mymat4 = value;
+                u_matrix.SetData(this.ViewMatrix.data);
+            }
+        }
         //----------------------------------
         public void DrawPointsWithVertexBuffer(CoordList3f singlePxBuffer, int nelements, LayoutFarm.Drawing.Color color)
         {
-            u_matrix.SetData(this.ViewMatrix.data);
+            //u_matrix.SetData(this.ViewMatrix.data);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
 
@@ -115,12 +116,11 @@ namespace LayoutFarm.DrawingGL
         }
         public void DrawLinesWithVertexBuffer(CoordList3f linesBuffer, int nelements, LayoutFarm.Drawing.Color color)
         {
-            u_matrix.SetData(this.ViewMatrix.data);
+            //u_matrix.SetData(this.ViewMatrix.data);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
 
-            //load v3f for (x,y,alpha)
-
+            //load v3f for (x,y,alpha) 
             //a_position.LoadV2f(onlyCoords, 2, 0); 
             a_position.LoadV3f(linesBuffer.GetInternalArray(), 3, 0);
             GL.DrawArrays(BeginMode.Lines, 0, nelements);
@@ -129,28 +129,20 @@ namespace LayoutFarm.DrawingGL
         //---------------------------------- 
         public void DrawLineStripsWithVertexBuffer(CoordList2f linesBuffer, int nelements, LayoutFarm.Drawing.Color color)
         {
-            u_matrix.SetData(this.ViewMatrix.data);
+        
             u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-
-            //load v3f for (x,y,alpha)
-
-            //a_position.LoadV2f(onlyCoords, 2, 0); 
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f); 
             a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
             GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
         }
 
         public void DrawTrianglesWithVertexBuffer(CoordList2f linesBuffer, int nelements, LayoutFarm.Drawing.Color color)
-        { 
-            u_matrix.SetData(this.ViewMatrix.data);
+        {
+
             u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-
-            //load v3f for (x,y,alpha)
-
-            //a_position.LoadV2f(onlyCoords, 2, 0); 
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f); 
             a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
-            GL.DrawArrays(BeginMode.Triangles , 0, nelements);
+            GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
     }
 

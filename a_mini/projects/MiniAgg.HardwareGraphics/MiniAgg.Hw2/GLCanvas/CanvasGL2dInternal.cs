@@ -56,6 +56,9 @@ namespace LayoutFarm.DrawingGL
             coordList.AddCoord(x, y);
             coordList.AddCoord(x + w, y);
             coordList.AddCoord(x + w, y + h);
+
+            coordList.AddCoord(x + w, y + h);
+            coordList.AddCoord(x, y + h); 
             coordList.AddCoord(x, y); 
         } 
         static unsafe void CreatePolyLineRectCoords(CoordList2f coords,
