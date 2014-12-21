@@ -1027,64 +1027,66 @@ namespace LayoutFarm.DrawingGL
                     } break;
                 default:
                     {
-                        throw new NotSupportedException();
-                        ////other mode
-                        //int n = vxs.Count;
-                        ////make triangular fan*** 
-                        //unsafe
-                        //{
-                        //    float* coords = stackalloc float[(n * 2) + 4];
 
-                        //    int i = 0;
-                        //    int nn = 0;
-                        //    int npoints = 0;
-                        //    double vx, vy;
-                        //    //center
-                        //    coords[nn++] = (float)x;
-                        //    coords[nn++] = (float)y;
-                        //    npoints++;
-                        //    var cmd = vxs.GetVertex(i, out vx, out vy);
+                        //other mode
+                        int n = vxs.Count;
+                        //make triangular fan*** 
+                        unsafe
+                        {
+                            float* coords = stackalloc float[(n * 2) + 4];
 
-                        //    while (i < n)
-                        //    {
-                        //        switch (cmd)
-                        //        {
-                        //            case VertexCmd.MoveTo:
-                        //                {
-                        //                    coords[nn++] = (float)vx;
-                        //                    coords[nn++] = (float)vy;
-                        //                    npoints++;
-                        //                } break;
-                        //            case VertexCmd.LineTo:
-                        //                {
-                        //                    coords[nn++] = (float)vx;
-                        //                    coords[nn++] = (float)vy;
-                        //                    npoints++;
-                        //                } break;
-                        //            case VertexCmd.Stop:
-                        //                {
-                        //                } break;
-                        //            default:
-                        //                {
+                            int i = 0;
+                            int nn = 0;
+                            int npoints = 0;
+                            double vx, vy;
+                            //center
+                            coords[nn++] = (float)x;
+                            coords[nn++] = (float)y;
+                            npoints++;
+                            var cmd = vxs.GetVertex(i, out vx, out vy);
 
-                        //                } break;
-                        //        }
-                        //        i++;
-                        //        cmd = vxs.GetVertex(i, out vx, out vy);
-                        //    }
-                        //    //close circle
-                        //    coords[nn++] = coords[2];
-                        //    coords[nn++] = coords[3];
-                        //    npoints++;
+                            while (i < n)
+                            {
+                                switch (cmd)
+                                {
+                                    case VertexCmd.MoveTo:
+                                        {
+                                            coords[nn++] = (float)vx;
+                                            coords[nn++] = (float)vy;
+                                            npoints++;
+                                        } break;
+                                    case VertexCmd.LineTo:
+                                        {
+                                            coords[nn++] = (float)vx;
+                                            coords[nn++] = (float)vy;
+                                            npoints++;
+                                        } break;
+                                    case VertexCmd.Stop:
+                                        {
+                                        } break;
+                                    default:
+                                        {
+
+                                        } break;
+                                }
+                                i++;
+                                cmd = vxs.GetVertex(i, out vx, out vy);
+                            }
+                            //close circle
+                            coords[nn++] = coords[2];
+                            coords[nn++] = coords[3];
+                            npoints++;
 
 
-                        //    ////fill triangular fan
-                        //    //GL.EnableClientState(ArrayCap.VertexArray); //***
-                        //    ////vertex 2d
-                        //    //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
-                        //    //GL.DrawArrays(BeginMode.TriangleFan, 0, npoints);
-                        //    //GL.DisableClientState(ArrayCap.VertexArray);
-                        //}
+                            ////fill triangular fan
+                            //GL.EnableClientState(ArrayCap.VertexArray); //***
+                            ////vertex 2d
+                            //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
+                            //GL.DrawArrays(BeginMode.TriangleFan, 0, npoints);
+                            //GL.DisableClientState(ArrayCap.VertexArray);
+
+                            this.basicShader.FillTriangleFan(coords, npoints, color);
+                        }
 
                     } break;
             }
@@ -1398,25 +1400,32 @@ namespace LayoutFarm.DrawingGL
                         var vertextList = TessPolygon(vertex2dCoords);
                         //-----------------------------   
                         //switch how to fill polygon
-                        int j = vertextList.Count;
-                        int j2 = j * 2;
-
-                        VboC4V3f vbo = GenerateVboC4V3f();
-                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                        uint color_int = color.ToABGR();
-                        for (int i = 0; i < j; ++i)
+                        int j = vertextList.Count; 
+                        //-----------------------------   
+                        //VboC4V3f vbo = GenerateVboC4V3f();
+                        //ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+                        //uint color_int = color.ToABGR();
+                        unsafe
                         {
-                            var v = vertextList[i];
-                            vrx.AddVertex(new VertexC4V3f(color_int, (float)v.m_X, (float)v.m_Y));
-                        }
-                        //------------------------------------- 
 
+                            float* vtx = stackalloc float[j * 2];
+                            int n = 0;
+                            for (int i = 0; i < j; ++i)
+                            {
+                                var v = vertextList[i];
+                                vtx[n] = (float)v.m_X;
+                                vtx[n + 1] = (float)v.m_Y;
+                                n += 2;
+                            }
+                            //------------------------------------- 
+                            this.basicShader.FillTriangles(vtx, j, color);
+                        }
                         //GL.EnableClientState(ArrayCap.ColorArray);
                         //GL.EnableClientState(ArrayCap.VertexArray);
-                        int pcount = vrx.Count;
-                        vbo.BindBuffer();
-                        DrawTrianglesWithVertexBuffer(vrx, pcount);
-                        vbo.UnbindBuffer();
+                        //int pcount = vrx.Count;
+                        //vbo.BindBuffer();
+                        //DrawTrianglesWithVertexBuffer(vrx, pcount);
+                        //vbo.UnbindBuffer();
 
                         //GL.DisableClientState(ArrayCap.ColorArray);
                         //GL.DisableClientState(ArrayCap.VertexArray);

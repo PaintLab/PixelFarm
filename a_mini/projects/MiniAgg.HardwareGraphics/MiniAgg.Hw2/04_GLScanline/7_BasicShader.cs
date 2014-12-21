@@ -151,17 +151,34 @@ namespace LayoutFarm.DrawingGL
             a_position.LoadV2f(polygon2dVertices, 2, 0);
             GL.DrawArrays(BeginMode.LineLoop, 0, nelements);
         }
-        public unsafe void DrawLine(float x1, float y1, float x2, float y2, LayoutFarm.Drawing.Color color)
+        public void DrawLine(float x1, float y1, float x2, float y2, LayoutFarm.Drawing.Color color)
         {
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
 
-            float* vtx = stackalloc float[4];
-            vtx[0] = x1; vtx[1] = y1;
-            vtx[2] = x2; vtx[3] = y2;
-
-            a_position.LoadV2f(vtx, 2, 0);
+            unsafe
+            {
+                float* vtx = stackalloc float[4];
+                vtx[0] = x1; vtx[1] = y1;
+                vtx[2] = x2; vtx[3] = y2;
+                a_position.LoadV2f(vtx, 2, 0);
+            }
             GL.DrawArrays(BeginMode.Lines, 0, 2);
+        }
+        public unsafe void FillTriangleFan(float* polygon2dVertices, int nelements, LayoutFarm.Drawing.Color color)
+        {
+            u_useSolidColor.SetValue(1);
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            GL.DrawArrays(BeginMode.TriangleFan, 0, nelements);
+        }
+        public unsafe void FillTriangles(float* polygon2dVertices, int nelements, LayoutFarm.Drawing.Color color)
+        {
+            u_useSolidColor.SetValue(1);
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            GL.DrawArrays(BeginMode.Triangles, 0, nelements);
+
         }
     }
 
