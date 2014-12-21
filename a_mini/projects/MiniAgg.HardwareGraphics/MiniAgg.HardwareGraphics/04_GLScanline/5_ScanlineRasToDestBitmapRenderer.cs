@@ -262,7 +262,7 @@ namespace PixelFarm.Agg
                 //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
                 // Fill newly allocated buffer
                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-                // Only draw particles that are alive
+           
                 GL.DrawArrays(BeginMode.Lines, 0, nelements);
             }
         }

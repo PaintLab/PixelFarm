@@ -27,49 +27,21 @@ using LayoutFarm.DrawingGL;
 
 namespace PixelFarm.Agg
 {
-    class CoordList
-    {
-        ArrayList<float> data = new ArrayList<float>();
-        int coordCount = 0;
-        public CoordList()
-        {
-        }
-        public void AddCoord(int x, int y, int cover)
-        {
-            this.data.AddVertex(x);
-            this.data.AddVertex(y);
-            this.data.AddVertex(cover);
-            this.coordCount++;
-        }
-        public void Clear()
-        {
-            this.coordCount = 0;
-            this.data.Clear();
-        }
-        public int Count
-        {
-            get { return this.coordCount; }
-        }
-
-        public float[] GetInternalArray()
-        {
-            return this.data.Array;
-        }
-
-    }
+   
     /// <summary
     /// to bitmap
     /// </summary>  
-    public class GLScanlineRasToDestBitmapRenderer
+    class GLScanlineRasToDestBitmapRenderer
     {
 
-        ScanlineShader scanlineShader = new ScanlineShader();
-        CoordList mySinglePixelBuffer = new CoordList();
-        CoordList myLineBuffer = new CoordList();
+        BasicShader scanlineShader;
+        CoordList3f mySinglePixelBuffer = new CoordList3f();
+        CoordList3f myLineBuffer = new CoordList3f();
 
-        public GLScanlineRasToDestBitmapRenderer()
+        public GLScanlineRasToDestBitmapRenderer(BasicShader scanlineShader)
         {
-            scanlineShader.InitShader();
+            this.scanlineShader = scanlineShader;
+            
         }
         internal void SetViewMatrix(MyMat4 mat)
         {
@@ -95,7 +67,7 @@ namespace PixelFarm.Agg
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------  
 
-            
+
             this.mySinglePixelBuffer.Clear();
             this.myLineBuffer.Clear();
 
@@ -137,7 +109,7 @@ namespace PixelFarm.Agg
             {
                 this.scanlineShader.DrawLinesWithVertexBuffer(myLineBuffer, nelements, color);
             }
-            
+
         }
         /// <summary>
         /// for lines
@@ -157,7 +129,7 @@ namespace PixelFarm.Agg
             //-----------------------------------------------  
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------  
-             
+
 
 
             this.mySinglePixelBuffer.Clear();
@@ -204,12 +176,12 @@ namespace PixelFarm.Agg
 
                 this.scanlineShader.DrawLinesWithVertexBuffer(myLineBuffer, nelements, color);
 
-            } 
+            }
         }
 
-     
 
- 
+
+
         const int BASE_MASK = 255;
 
 
