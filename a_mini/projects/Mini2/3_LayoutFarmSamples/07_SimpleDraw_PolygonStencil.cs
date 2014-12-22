@@ -33,21 +33,15 @@ namespace Mini2
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
+                 
+                //2. fill polygon with gradient brush  
+                canvas.FillPolygon(
+                    tbrush,
+                    new LayoutFarm.Drawing.PointF[]{
+                            new LayoutFarm.Drawing.PointF(60, 50),
+                            new LayoutFarm.Drawing.PointF(100, 50),
+                            new LayoutFarm.Drawing.PointF(70, 100)});
 
-                if (tbrush == null)
-                {
-                    var bitmap = new System.Drawing.Bitmap("../../../SampleImages/plain01.png");
-                    bmp = new LayoutFarm.Drawing.Bitmap(bitmap.Width, bitmap.Height, bitmap);
-                    tbrush = new LayoutFarm.Drawing.TextureBrush(bmp);
-                }
-
-                //fill rectangle is easy
-                //canvas.FillRectangle(linearGrBrush, 0, 0, 150, 150);
-                canvas.FillRectangle(LayoutFarm.Drawing.Color.Black, 0, 0, 150, 150);
-                //---------------------------------------------------- 
-
-                //2. fill polygon with gradient brush 
-               
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     tbrush,
@@ -55,13 +49,6 @@ namespace Mini2
                         new LayoutFarm.Drawing.PointF(0, 50),
                         new LayoutFarm.Drawing.PointF(50, 50),
                         new LayoutFarm.Drawing.PointF(10, 100)});
-                
-                canvas.FillPolygon(
-                    tbrush,
-                    new LayoutFarm.Drawing.PointF[]{
-                            new LayoutFarm.Drawing.PointF(60, 50),
-                            new LayoutFarm.Drawing.PointF(100, 50),
-                            new LayoutFarm.Drawing.PointF(70, 100)});
 
                 canvas.Note1 = 0;
                 //------------------------------------------------------------------------- 

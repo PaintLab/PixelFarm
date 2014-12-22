@@ -1,11 +1,12 @@
 ﻿//MIT 2014, WinterDev
 using System;
 using System.Collections.Generic;
-using System.ComponentModel; 
-using System.Text; 
-using Tesselate;
+using System.ComponentModel;
+using System.Text;
+
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
+using Tesselate;
 
 namespace LayoutFarm.DrawingGL
 {
@@ -64,11 +65,7 @@ namespace LayoutFarm.DrawingGL
                 this.aggStroke.Width = value;
             }
         }
-        public LayoutFarm.Drawing.Color StrokeColor
-        {
-            get { return this.strokeColor; }
-            set { this.strokeColor = value; }
-        }
+
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
 
@@ -88,25 +85,16 @@ namespace LayoutFarm.DrawingGL
                     } break;
                 default:
                     {
+                        //drawline with solid color  
+                        unsafe
+                        {
+                            float* lineCoords = stackalloc float[4];
+                            lineCoords[0] = x1; lineCoords[1] = y1;
+                            lineCoords[2] = x2; lineCoords[3] = y2;
 
-
-                        //VboC4V3f vbo = GenerateVboC4V3f();
-                        ////points 
-                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                        //create line coord  
-                        CreateLineCoords(vrx, this.strokeColor, x1, y1, x2, y2);
-                        //vbo.BindBuffer();
-                        //DrawTrianglesWithVertexBuffer(vrx, pcount);
-                        DrawLinesWithVertexBuffer(vrx, 2);
-                        //vbo.UnbindBuffer();
-
-                        ////vbo.Dispose();
-                        //GL.DisableClientState(ArrayCap.ColorArray);
-                        //GL.DisableClientState(ArrayCap.VertexArray);
-
-
+                            UnsafeDrawV2fList(DrawMode.Lines, lineCoords, 2);
+                        }
                     } break;
-
             }
         }
 
@@ -123,7 +111,7 @@ namespace LayoutFarm.DrawingGL
                 new LayoutFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                 x, y, w, h);
         }
-       
+
 
         //-------------------------------------------------------------------------------
         public void DrawImage(GLBitmapReference bmp, float x, float y)
@@ -134,7 +122,7 @@ namespace LayoutFarm.DrawingGL
         }
         //-------------------------------------------------------------------------------
 
-     
+
         public void FillVxs(LayoutFarm.Drawing.Color color, VertexStore vxs)
         {
             //solid brush
@@ -183,6 +171,7 @@ namespace LayoutFarm.DrawingGL
             {
                 case CanvasSmoothMode.AggSmooth:
                     {
+
                         sclineRas.Reset();
                         sclineRas.AddPath(snap);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
@@ -215,7 +204,7 @@ namespace LayoutFarm.DrawingGL
             }
         }
 
-        public void DrawPolygon(float[] polygon2dVertices, int npoints)
+        public void DrawPolygon(float[] polygon2dVertices, int vertexCount)
         {
             //closed polyline
             //draw polyline
@@ -223,11 +212,10 @@ namespace LayoutFarm.DrawingGL
             {
                 case CanvasSmoothMode.AggSmooth:
                     {
-                        //draw polyon
-
+                        //draw polyon 
                         ps.Clear();
                         //closed polygon
-                        int j = npoints / 2;
+                        int j = vertexCount;//vertexCount / 2;
                         //first point
                         if (j < 2)
                         {
@@ -247,9 +235,7 @@ namespace LayoutFarm.DrawingGL
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
                         sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
-                        //--------------------------------------
-
-
+                        //-------------------------------------- 
                     } break;
                 default:
                     {
@@ -257,7 +243,7 @@ namespace LayoutFarm.DrawingGL
                         {
                             fixed (float* arr = &polygon2dVertices[0])
                             {
-                                DrawPolygonUnsafe(arr, npoints);
+                                UnsafeDrawV2fList(DrawMode.LineLoop, arr, vertexCount);
                             }
                         }
                     } break;
@@ -314,9 +300,8 @@ namespace LayoutFarm.DrawingGL
                                 i++;
                                 cmd = vxs.GetVertex(i, out vx, out vy);
                             }
-                            //-------------------------------------- 
-                            DrawPolygonUnsafe(coords, nn / 2);
-
+                            //--------------------------------------                              
+                            UnsafeDrawV2fList(DrawMode.LineLoop, coords, nn / 2);
                         }
                     } break;
             }
@@ -326,18 +311,116 @@ namespace LayoutFarm.DrawingGL
         {
             DrawEllipse(x, y, radius, radius);
         }
+
+        public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
+        {
+            roundRect.SetRect(x, y, x + w, y + h);
+            roundRect.SetRadius(rx, ry);
+            var vxs = this.aggStroke.MakeVxs(roundRect.MakeVxs());
+
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
+                    } break;
+                default:
+                    {
+
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
+                    } break;
+            }
+        }
+
+        public void FillPolygon(LayoutFarm.Drawing.Color color, float[] vertex2dCoords, int npoints)
+        {
+            //-------------
+            //Tesselate
+            //2d coods lis
+            //n point 
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {
+                        //closed polygon
+
+                        //closed polygon
+                        int j = npoints / 2;
+                        //first point
+                        if (j < 2)
+                        {
+                            return;
+                        }
+                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
+                        int nn = 2;
+                        for (int i = 1; i < j; ++i)
+                        {
+                            ps.LineTo(vertex2dCoords[nn++],
+                                vertex2dCoords[nn++]);
+                        }
+                        //close
+                        ps.CloseFigure();
+                        VertexStore vxs = ps.Vxs;
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
+
+
+                    } break;
+                default:
+                    {
+
+                        List<Vertex> vertextList = TessPolygon(vertex2dCoords);
+                        int j = vertextList.Count;
+                        //-----------------------------   
+                        //fill polygon  with solid color
+                        
+                        unsafe
+                        {
+                            float* vtx = stackalloc float[j * 2];
+                            int n = 0;
+                            for (int i = 0; i < j; ++i)
+                            {
+                                var v = vertextList[i];
+                                vtx[n] = (float)v.m_X;
+                                vtx[n + 1] = (float)v.m_Y;
+                                n += 2;
+                            }
+                            UnsafeDrawV2fList(DrawMode.Triangles, vtx, j, color);
+                        }
+
+                    } break;
+            }
+        }
         public void DrawRect(float x, float y, float w, float h)
         {
+
+            unsafe
+            {
+                //set color
+
+                float* rectCoords = stackalloc float[12];
+                CreateRectCoords(rectCoords, x, y, w, h);
+                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6);
+
+            }
+
+
+
             //early exit
             //GL.EnableClientState(ArrayCap.ColorArray);
             //GL.EnableClientState(ArrayCap.VertexArray);
             //VboC4V3f vbo = GenerateVboC4V3f();
             ////points 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-            CreatePolyLineRectCoords(vrx, this.strokeColor, x, y, w, h);
-            int pcount = vrx.Count;
-            //vbo.BindBuffer();
-            DrawLineStripWithVertexBuffer(vrx, pcount);
+            //ArrayList<VertexC4V2f> vrx = new ArrayList<VertexC4V2f>();
+            //CreatePolyLineRectCoords(vrx, this.strokeColor, x, y, w, h);
+            //int pcount = vrx.Count;
+            ////vbo.BindBuffer();
+            //DrawLineStripWithVertexBuffer(vrx, pcount);
             //vbo.UnbindBuffer();
             //vbo.Dispose();
             //GL.DisableClientState(ArrayCap.ColorArray);
@@ -383,11 +466,22 @@ namespace LayoutFarm.DrawingGL
             //        } break;
             //}
         }
-        public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
+        public void FillRect(LayoutFarm.Drawing.Color color, float x, float y, float w, float h)
         {
-            roundRect.SetRect(x, y, x + w, y + h);
-            roundRect.SetRadius(rx, ry);
-            var vxs = this.aggStroke.MakeVxs(roundRect.MakeVxs());
+            //fill with solid color 
+            unsafe
+            {
+                //set color 
+                float* rectCoords = stackalloc float[12];
+                CreateRectCoords(rectCoords, x, y, w, h);
+                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6);
+            }
+
+        }
+        public void FillEllipse(LayoutFarm.Drawing.Color color, float x, float y, float rx, float ry)
+        {
+            ellipse.Reset(x, y, rx, ry);
+            var vxs = ellipse.MakeVxs();
 
             switch (this.SmoothMode)
             {
@@ -395,20 +489,64 @@ namespace LayoutFarm.DrawingGL
                     {
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
-                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
                     } break;
                 default:
-                    {
+                    {   //other mode
+                        int n = vxs.Count;
+                        //make triangular fan*** 
+                        unsafe
+                        {
+                            float* coords = stackalloc float[(n * 2) + 4];
 
-                        sclineRas.Reset();
-                        sclineRas.AddPath(vxs);
-                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
+                            int i = 0;
+                            int nn = 0;
+                            int npoints = 0;
+                            double vx, vy;
+                            //center
+                            coords[nn++] = (float)x;
+                            coords[nn++] = (float)y;
+                            npoints++;
+                            var cmd = vxs.GetVertex(i, out vx, out vy);
+
+                            while (i < n)
+                            {
+                                switch (cmd)
+                                {
+                                    case VertexCmd.MoveTo:
+                                        {
+                                            coords[nn++] = (float)vx;
+                                            coords[nn++] = (float)vy;
+                                            npoints++;
+                                        } break;
+                                    case VertexCmd.LineTo:
+                                        {
+                                            coords[nn++] = (float)vx;
+                                            coords[nn++] = (float)vy;
+                                            npoints++;
+                                        } break;
+                                    case VertexCmd.Stop:
+                                        {
+                                        } break;
+                                    default:
+                                        {
+
+                                        } break;
+                                }
+                                i++;
+                                cmd = vxs.GetVertex(i, out vx, out vy);
+                            }
+                            //close circle
+                            coords[nn++] = coords[2];
+                            coords[nn++] = coords[3];
+                            npoints++;
+
+
+                            UnsafeDrawV2fList(DrawMode.TriangleFan, coords, npoints);
+                        }
                     } break;
             }
         }
-
-
-
         static double DegToRad(double degree)
         {
             return degree * (Math.PI / 180d);
@@ -761,37 +899,6 @@ namespace LayoutFarm.DrawingGL
 
         }
 
-
-
-        //static VboC4V3f GenerateVboC4V3f()
-        //{
-        //    VboC4V3f vboHandle = new VboC4V3f();
-        //    //must open these ... before call this func
-        //    //GL.EnableClientState(ArrayCap.ColorArray);
-        //    //GL.EnableClientState(ArrayCap.VertexArray); 
-        //    GL.GenBuffers(1, out vboHandle.VboID);
-        //    return vboHandle;
-        //}
-       
-        
-        public void FillRect(LayoutFarm.Drawing.Color color, float x, float y, float w, float h)
-        {
-            //fill with solid color
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray);
-            //VboC4V3f vbo = GenerateVboC4V3f();
-            ////points 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-            CreateRectCoords(vrx, color, x, y, w, h);
-            int pcount = vrx.Count;
-            //vbo.BindBuffer();
-            DrawTrianglesWithVertexBuffer(vrx, pcount);
-            //vbo.UnbindBuffer();
-
-            //vbo.Dispose();
-            //GL.DisableClientState(ArrayCap.ColorArray);
-            //GL.DisableClientState(ArrayCap.VertexArray);
-        }
         public void FillRect(LayoutFarm.Drawing.LinearGradientBrush linearGradientBrush, float x, float y, float w, float h)
         {
 
@@ -810,23 +917,13 @@ namespace LayoutFarm.DrawingGL
                 uint c1 = colors[0].ToABGR();
                 uint c2 = colors[1].ToABGR();
                 //create polygon for graident bg 
-                ArrayList<VertexC4V3f> vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+                ArrayList<VertexC4V2f> vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
                      points[0].X, points[0].Y,
                      points[1].X, points[1].Y,
                      colors[0],
                      colors[1]);
                 int pcount = vrx.Count;
-
-                //GL.EnableClientState(ArrayCap.ColorArray);
-                //GL.EnableClientState(ArrayCap.VertexArray);
-
-                //VboC4V3f vbo = GenerateVboC4V3f();
-                //vbo.BindBuffer();
-                DrawTrianglesWithVertexBuffer(vrx, pcount);
-                //vbo.UnbindBuffer();
-                ////vbo.Dispose();
-                //GL.DisableClientState(ArrayCap.ColorArray);
-                //GL.DisableClientState(ArrayCap.VertexArray); 
+                DrawVertexList(DrawMode.Triangles, vrx, vrx.Count);
                 DisableClipRect();
             }
         }
@@ -860,7 +957,7 @@ namespace LayoutFarm.DrawingGL
                     } break;
             }
 
-        } 
+        }
         public void FillCircle(LayoutFarm.Drawing.Color color, float x, float y, float radius)
         {
             FillEllipse(color, x, y, radius, radius);
@@ -870,73 +967,8 @@ namespace LayoutFarm.DrawingGL
         {
             FillPolygon(color, vertex2dCoords, vertex2dCoords.Length);
         }
-      
-        public void FillPolygon(LayoutFarm.Drawing.Color color, float[] vertex2dCoords, int npoints)
-        {
-            //-------------
-            //Tesselate
-            //2d coods lis
-            //n point 
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.AggSmooth:
-                    {
-                        //closed polygon
-
-                        //closed polygon
-                        int j = npoints / 2;
-                        //first point
-                        if (j < 2)
-                        {
-                            return;
-                        }
-                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
-                        int nn = 2;
-                        for (int i = 1; i < j; ++i)
-                        {
-                            ps.LineTo(vertex2dCoords[nn++],
-                                vertex2dCoords[nn++]);
-                        }
-                        //close
-                        ps.CloseFigure();
-                        VertexStore vxs = ps.Vxs;
-                        sclineRas.Reset();
-                        sclineRas.AddPath(vxs);
-                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
 
 
-                    } break;
-                default:
-                    {
-
-                        var vertextList = TessPolygon(vertex2dCoords);
-                        //-----------------------------   
-                        //switch how to fill polygon
-                        int j = vertextList.Count;
-                        int j2 = j * 2;
-                        //VboC4V3f vbo = GenerateVboC4V3f();
-                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                        uint color_int = color.ToABGR();
-                        for (int i = 0; i < j; ++i)
-                        {
-                            var v = vertextList[i];
-                            vrx.AddVertex(new VertexC4V3f(color_int, (float)v.m_X, (float)v.m_Y));
-                        }
-                        //------------------------------------- 
-
-                        int pcount = vrx.Count;
-                        //vbo.BindBuffer();
-                        DrawTrianglesWithVertexBuffer(vrx, pcount);
-                        //vbo.UnbindBuffer();
-                        //GL.DisableClientState(ArrayCap.ColorArray);
-                        //GL.DisableClientState(ArrayCap.VertexArray);
-                        ////-------------------------------------- 
-
-
-                    } break;
-            }
-
-        }
         //----------------------------------------------------- 
         public int CanvasOriginX
         {

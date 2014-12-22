@@ -33,20 +33,6 @@ namespace Mini2
             {
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
 
-                //try
-                //{ 
-                //    OpenTK.Graphics.OpenGL.GL.BlendFuncSeparate(
-                //         OpenTK.Graphics.OpenGL.BlendingFactorSrc.SrcAlpha,
-                //         OpenTK.Graphics.OpenGL.BlendingFactorDest.SrcAlpha, 
-                //          OpenTK.Graphics.OpenGL.BlendingFactorSrc.SrcAlpha,
-                //          OpenTK.Graphics.OpenGL.BlendingFactorDest.SrcAlpha); 
-                //}
-                //catch (Exception ex)
-                //{
-                //    MessageBox.Show("not support 1.4");
-                //}
-
-
                 var linearGrBrush = new LinearGradientBrush(
                     new LayoutFarm.Drawing.PointF(25, 25),
                     LayoutFarm.Drawing.Color.Black,
@@ -63,7 +49,7 @@ namespace Mini2
                     new LayoutFarm.Drawing.PointF(25, 100),
                     LayoutFarm.Drawing.Color.OrangeRed);
                 //2. fill polygon with gradient brush 
-                 
+
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -76,7 +62,7 @@ namespace Mini2
 
                 //another  ...                
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.Yellow, 200, 0, 150, 150);
-                 
+
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -88,7 +74,7 @@ namespace Mini2
                 //-------------------------------------------------------------------------
 
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 400, 0, 150, 150);
-      
+
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -98,6 +84,9 @@ namespace Mini2
                         new LayoutFarm.Drawing.PointF(410, 100)});
                 canvas.Note1 = 0;
                 //-------------------------------------------------------------------------
+
+
+
             });
             form.Show();
         }
