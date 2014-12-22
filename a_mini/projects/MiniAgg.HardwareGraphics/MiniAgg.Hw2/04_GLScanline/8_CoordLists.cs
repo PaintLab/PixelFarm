@@ -17,8 +17,9 @@ namespace PixelFarm.Agg
         ArrayList<float> data = new ArrayList<float>();
         int coordCount = 0;
         int lineY;
+       
+        
         int lineCount;
-        bool isFirstXOfLine;
         int lastX = 0;
         int lastA = 0;
 
@@ -27,25 +28,19 @@ namespace PixelFarm.Agg
 
         }
         public void BeginNewLine(int lineY)
-        {
-            isFirstXOfLine = true;
+        {             
             lineCount++;
             this.lastA = 0;
             this.lineY = lineY;
         }
         public void CloseLine()
-        {
-            //add transparent px
-            //at close line 
-
+        { 
         }
         public void AddCoord(int x, int alpha)
-        {
-             
+        { 
             this.data.AddVertex(this.lastX = x);
             this.data.AddVertex(this.lineY);
-            this.data.AddVertex(this.lastA = alpha);
-
+            this.data.AddVertex(this.lastA = alpha); 
 
             this.coordCount++;
         }

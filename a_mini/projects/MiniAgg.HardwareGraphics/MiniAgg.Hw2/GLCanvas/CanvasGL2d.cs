@@ -368,7 +368,7 @@ namespace LayoutFarm.DrawingGL
 
                         ps.Clear();
                         //closed polygon
-                        int j = npoints / 2;
+                        int j = npoints;
                         //first point
                         if (j < 2)
                         {

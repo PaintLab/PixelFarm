@@ -58,11 +58,11 @@ namespace LayoutFarm.DrawingGL
              
             void main()
             {
-                
+                float a= a_position[2]; //before matrix op
                 gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);
                 if(u_useAggColor !=0)
-                {
-                    float a= a_position[2];
+                { 
+                     
                     v_color= vec4(u_solidColor.r /255.0,u_solidColor.g /255.0,u_solidColor.b/255.0, a/255.0);
                 }
                 else if(u_useSolidColor !=0)

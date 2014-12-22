@@ -47,7 +47,7 @@ namespace OpenTkEssTest
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            canvas2d.StrokeColor = LayoutFarm.Drawing.Color.Red;   
+            canvas2d.StrokeColor = LayoutFarm.Drawing.Color.Red;
             //line
             canvas2d.SmoothMode = CanvasSmoothMode.No;
             canvas2d.DrawLine(50, 50, 200, 120);
@@ -63,8 +63,8 @@ namespace OpenTkEssTest
 
             //--------------------------------------------
             ////rect
-            //canvas2d.DrawRect(2, 1, 50, 50);
-            //canvas2d.FillRect(LayoutFarm.Drawing.Color.Green, 50, 50, 50, 50);
+            canvas2d.DrawRect(2, 1, 50, 50);
+            // canvas2d.FillRect(LayoutFarm.Drawing.Color.Green, 50, 50, 50, 50);
             ////--------------------------------------------
 
             ////circle & ellipse
@@ -75,18 +75,18 @@ namespace OpenTkEssTest
             //canvas2d.FillEllipse(LayoutFarm.Drawing.Color.OrangeRed, 200, 400, 25, 50);
             ////--------------------------------------------
             ////polygon
-            //float[] polygon1 = new float[]{
-            //    50,200,
-            //    250,200,
-            //    125,350
-            //};
-            //canvas2d.DrawPolygon(polygon1, 3);
+            float[] polygon1 = new float[]{
+                50,200,
+                250,200,
+                125,350
+            };
+            canvas2d.DrawPolygon(polygon1, 3);
 
-            //float[] polygon2 = new float[]{
-            //    250,400,
-            //    450,400,
-            //    325,550
-            //};
+            float[] polygon2 = new float[]{
+                250,400,
+                450,400,
+                325,550
+            };
             //canvas2d.FillPolygon(LayoutFarm.Drawing.Color.Green, polygon2);
             ////--------------------------------------------
             miniGLControl.SwapBuffers();
