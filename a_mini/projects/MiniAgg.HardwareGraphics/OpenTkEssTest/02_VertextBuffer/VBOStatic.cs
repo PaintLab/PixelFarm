@@ -1,4 +1,6 @@
-﻿#region --- License ---
+﻿#if gl2_0
+
+#region --- License ---
 /* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
@@ -122,7 +124,7 @@ namespace OpenTkEssTest
             Matrix4 lookat = Matrix4.LookAt(0, 5, 5, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
-
+            
             angle += rotation_speed * (float)e.Time;
             GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
 
@@ -185,3 +187,4 @@ namespace OpenTkEssTest
 
     }
 }
+#endif
