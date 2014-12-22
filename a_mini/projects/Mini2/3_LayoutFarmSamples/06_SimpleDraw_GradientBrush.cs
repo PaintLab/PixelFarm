@@ -32,6 +32,21 @@ namespace Mini2
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
+
+                //try
+                //{ 
+                //    OpenTK.Graphics.OpenGL.GL.BlendFuncSeparate(
+                //         OpenTK.Graphics.OpenGL.BlendingFactorSrc.SrcAlpha,
+                //         OpenTK.Graphics.OpenGL.BlendingFactorDest.SrcAlpha, 
+                //          OpenTK.Graphics.OpenGL.BlendingFactorSrc.SrcAlpha,
+                //          OpenTK.Graphics.OpenGL.BlendingFactorDest.SrcAlpha); 
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show("not support 1.4");
+                //}
+
+
                 var linearGrBrush = new LinearGradientBrush(
                     new LayoutFarm.Drawing.PointF(25, 25),
                     LayoutFarm.Drawing.Color.Black,

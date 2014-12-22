@@ -1015,7 +1015,7 @@ namespace LayoutFarm.DrawingGL
                     {
                         sclineRas.Reset();
                         sclineRas.AddPath(vxs);
-                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
+                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
                     } break;
                 default:
                     {

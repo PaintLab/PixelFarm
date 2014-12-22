@@ -27,7 +27,7 @@ namespace Mini2
             if (exAndDesc != null)
             {
                 DemoBase demoBaseType = (DemoBase)Activator.CreateInstance(exAndDesc.Type);
-                demoBaseType.Load(); 
+                demoBaseType.Load();
             }
 
         }
@@ -60,7 +60,8 @@ namespace Mini2
                 this.listBox1.Items.Add(exlist[i]);
             }
         }
-         
+ 
+
 
 
     }

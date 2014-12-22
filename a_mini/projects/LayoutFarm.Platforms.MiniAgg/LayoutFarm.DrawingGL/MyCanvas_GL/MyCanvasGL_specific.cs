@@ -338,7 +338,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             set
             {
                 //sample only *** 
-                canvasGL2d.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 10);
+                //canvasGL2d.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 10);
                 base.CurrentFont = value;
             }
         }

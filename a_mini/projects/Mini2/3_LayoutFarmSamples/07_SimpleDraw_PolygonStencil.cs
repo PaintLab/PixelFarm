@@ -9,8 +9,7 @@ using System.Drawing;
 using PixelFarm.Agg;
 using LayoutFarm.DrawingGL;
 using LayoutFarm.Drawing;
-
-using OpenTK.Graphics.OpenGL;
+ 
 
 namespace Mini2
 {
