@@ -2,7 +2,7 @@
 
 using System;
 using System.Text;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.ES20;
 
 namespace LayoutFarm.DrawingGL
 {
@@ -78,7 +78,7 @@ namespace LayoutFarm.DrawingGL
                         {
                             GL.TexImage2D(TextureTarget.Texture2D, 0,
                             PixelInternalFormat.Rgba, this.width, this.height, 0,
-                            PixelFormat.Bgra,
+                            PixelFormat.Rgba,
                             PixelType.UnsignedByte, (IntPtr)bmpScan0);
                         }
                     }
@@ -89,7 +89,7 @@ namespace LayoutFarm.DrawingGL
                     IntPtr bmpScan0 = this.lazyProvider.GetRawBufferHead();
                     GL.TexImage2D(TextureTarget.Texture2D, 0,
                            PixelInternalFormat.Rgba, this.width, this.height, 0,
-                           PixelFormat.Bgra,
+                           PixelFormat.Rgba,
                            PixelType.UnsignedByte, (IntPtr)bmpScan0);
                     this.lazyProvider.ReleaseBufferHead();
                 }

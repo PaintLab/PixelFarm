@@ -60,33 +60,33 @@ namespace PixelFarm.Agg
     }
 
 
-    [StructLayout(LayoutKind.Sequential)]
-    struct VertexC4V3I
-    {
-        public uint color;
-        public int x;
-        public int y;
-        int z;
-        public VertexC4V3I(uint color, int x, int y)
-        {
-            this.color = color;
-            this.x = (short)x;
-            this.y = (short)y;
-            z = 0;
+    //[StructLayout(LayoutKind.Sequential)]
+    //struct VertexC4V3I
+    //{
+    //    public uint color;
+    //    public int x;
+    //    public int y;
+    //    int z;
+    //    public VertexC4V3I(uint color, int x, int y)
+    //    {
+    //        this.color = color;
+    //        this.x = (short)x;
+    //        this.y = (short)y;
+    //        z = 0;
 
-        }
+    //    }
 
-        public override string ToString()
-        {
-            return x + "," + y;
-        }
+    //    public override string ToString()
+    //    {
+    //        return x + "," + y;
+    //    }
 
-        public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(int) * 3;
-        public const int VX_OFFSET = sizeof(uint);
-        public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Int;
-        public const int N_COORDS = 3;
+    //    public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(int) * 3;
+    //    public const int VX_OFFSET = sizeof(uint);
+    //    public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Int;
+    //    public const int N_COORDS = 3;
 
-    }
+    //}
 
     [StructLayout(LayoutKind.Sequential)]
      struct VertexC4V3f

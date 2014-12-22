@@ -17,7 +17,7 @@ namespace Mini2
         {
             //-----------------------------------------------
             FormTestWinGLControl form = new FormTestWinGLControl();
-            CanvasGL2d canvas = new CanvasGL2d();
+            CanvasGL2d canvas = new CanvasGL2d(this.Width, this.Height);
             var lionFill = new LionFillSprite();
             //-----------------------------------------------
 

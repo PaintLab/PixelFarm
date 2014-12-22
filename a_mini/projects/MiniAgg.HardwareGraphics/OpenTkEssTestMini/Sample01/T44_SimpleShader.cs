@@ -25,8 +25,7 @@ using System.Threading;
 using System.Drawing;
 
 using OpenTK;
-using OpenTK.Graphics;
-//using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics; 
 using OpenTK.Graphics.ES20;
 using Examples.Tutorial;
 using Mini;
@@ -35,7 +34,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "44")]
+    [Info(OrderCode = "044")]
     [Info("T44_SimpleVertexShader")]
     public class T44_SimpleVertexShader : PrebuiltGLControlDemoBase
     {
@@ -43,9 +42,7 @@ namespace OpenTkEssTest
         bool isGLInit;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-
-
-
+            
             string vs = @"
                 uniform mat4 u_mvpMatrix;
                 attribute vec4 a_position;
@@ -57,6 +54,7 @@ namespace OpenTkEssTest
                         v_texcoord = a_texcoord;
                 }
             ";
+
             string fs = @"
                   precision mediump float;
                   varying vec2 v_texcoord;

@@ -1,10 +1,8 @@
 ﻿//MIT 2014, WinterDev
 using System.Text;
 using System;
-using System.Runtime.InteropServices;
-
-using Tesselate;
-using OpenTK.Graphics.OpenGL;
+using System.Runtime.InteropServices; 
+using Tesselate; 
 
 namespace LayoutFarm.DrawingGL
 {

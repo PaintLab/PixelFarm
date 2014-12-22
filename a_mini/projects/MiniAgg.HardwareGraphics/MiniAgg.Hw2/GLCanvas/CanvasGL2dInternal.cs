@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 using System.Text;
-using OpenTK.Graphics.OpenGL;
 using Tesselate;
 
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
+
+using OpenTK.Graphics.ES20;
 
 namespace LayoutFarm.DrawingGL
 {
@@ -49,17 +50,25 @@ namespace LayoutFarm.DrawingGL
             vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
 
         }
-        static unsafe void CreatePolyLineRectCoords(ArrayList<VertexC4V3f> vrx,
-                   LayoutFarm.Drawing.Color color,
-                   float x, float y, float w, float h)
+        static unsafe void CreateRectCoords(CoordList2f coordList,
+                  float x, float y, float w, float h)
         {
-            uint color_uint = color.ToABGR();
-            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
-            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y));
-            vrx.AddVertex(new VertexC4V3f(color_uint, x + w, y + h));
-            vrx.AddVertex(new VertexC4V3f(color_uint, x, y + h));
-            vrx.AddVertex(new VertexC4V3f(color_uint, x, y));
+            coordList.AddCoord(x, y);
+            coordList.AddCoord(x + w, y);
+            coordList.AddCoord(x + w, y + h);
 
+            coordList.AddCoord(x + w, y + h);
+            coordList.AddCoord(x, y + h);
+            coordList.AddCoord(x, y);
+        }
+        static unsafe void CreatePolyLineRectCoords(CoordList2f coords,
+                  float x, float y, float w, float h)
+        {
+            coords.AddCoord(x, y);
+            coords.AddCoord(x + w, y);
+            coords.AddCoord(x + w, y + h);
+            coords.AddCoord(x, y + h);
+            coords.AddCoord(x, y);
         }
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
@@ -86,7 +95,7 @@ namespace LayoutFarm.DrawingGL
             tess.EndPolygon();
             return tessListener.resultVertexList;
         }
-        
+
         //---test only ----
         void DrawLineAgg(float x1, float y1, float x2, float y2)
         {
@@ -136,13 +145,13 @@ namespace LayoutFarm.DrawingGL
                     i++;
                     cmd = vxs.GetVertex(i, out vx, out vy);
                 }
-                //--------------------------------------
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex 2d
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
-                GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
-                //GL.DrawElements(BeginMode.LineLoop, num_indices, DrawElementsType.UnsignedInt, (IntPtr)indx);
-                GL.DisableClientState(ArrayCap.VertexArray);
+                throw new NotSupportedException();
+                ////--------------------------------------
+                //GL.EnableClientState(ArrayCap.VertexArray); //***
+                ////vertex 2d
+                //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
+                //GL.DrawArrays(BeginMode.LineLoop, 0, npoints); 
+                //GL.DisableClientState(ArrayCap.VertexArray);
                 //--------------------------------------
             }
         }
@@ -150,11 +159,14 @@ namespace LayoutFarm.DrawingGL
         unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
         {
 
-            GL.EnableClientState(ArrayCap.VertexArray); //***
-            //vertex 2d 
-            GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
-            GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
-            GL.DisableClientState(ArrayCap.VertexArray);
+
+            //GL.EnableClientState(ArrayCap.VertexArray); //***
+            ////vertex 2d 
+            //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
+            //GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
+            //GL.DisableClientState(ArrayCap.VertexArray);
+
+            this.basicShader.DrawLineLoopWithVertexBuffer(polygon2dVertices, npoints, this.strokeColor);
         }
     }
 }

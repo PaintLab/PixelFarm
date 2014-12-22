@@ -25,8 +25,7 @@ using System.Threading;
 using System.Drawing;
 
 using OpenTK;
-using OpenTK.Graphics;
-//using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics; 
 using OpenTK.Graphics.ES20;
 using Examples.Tutorial;
 using Mini;
@@ -35,7 +34,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "45")]
+    [Info(OrderCode = "045")]
     [Info("T45_TextureWrap")]
     public class T45_TextureWrap : PrebuiltGLControlDemoBase
     {
@@ -88,7 +87,7 @@ namespace OpenTkEssTest
             //mOffsetLoc = glGetUniformLocation(mProgram, "u_offset");
             mOffsetLoc = GL.GetUniformLocation(mProgram, "u_offset");
             //// Load the texture
-            mTexture = ES2Utils.CreateMipMappedTexture2D();
+            mTexture = ES2Utils2.CreateMipMappedTexture2D();
             //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.ClearColor(0, 0, 0, 0);
 

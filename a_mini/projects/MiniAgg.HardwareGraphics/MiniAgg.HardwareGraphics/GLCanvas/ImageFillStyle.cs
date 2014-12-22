@@ -1,5 +1,4 @@
-﻿using System.Text;
-using OpenTK.Graphics.OpenGL;
+﻿using System.Text; 
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 

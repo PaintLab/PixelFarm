@@ -33,7 +33,8 @@ namespace PixelFarm.Agg
     public class GLScanlineRasToDestBitmapRenderer
     {
 
-        ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
+        //ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
+
         ArrayList<VertexC4V2S> mySinglePixelBuffer = new ArrayList<VertexC4V2S>();
         ArrayList<VertexC4V2S> myLineBuffer = new ArrayList<VertexC4V2S>();
 
@@ -197,57 +198,7 @@ namespace PixelFarm.Agg
             //------------------------ 
         }
 
-        static void DrawPoint(float x1, float y1)
-        {
-            unsafe
-            {
-                float* arr = stackalloc float[2];
-                arr[0] = x1; arr[1] = y1;
-
-                //byte* indices = stackalloc byte[1];
-                //indices[0] = 0;
-
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                //GL.DrawElements(BeginMode.Points, 1, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                GL.DrawArrays(BeginMode.Points, 0, 1);
-                GL.DisableClientState(ArrayCap.VertexArray);
-            }
-        }
-
-        static void DrawPoints(ArrayList<int> pointsList, ArrayList<uint> colorsList)
-        {
-            unsafe
-            {
-                int n = pointsList.Count / 2;
-                int[] points = pointsList.Array;
-                uint[] cbuff = colorsList.Array;
-
-                fixed (uint* cbuff0 = &cbuff[0])
-                fixed (int* arr = &points[0])
-                {
-
-                    //int* indices = stackalloc int[n];
-                    //for (int i = n - 1; i >= 0; --i)
-                    //{
-                    //    indices[i] = i;
-                    //}
-                    GL.EnableClientState(ArrayCap.ColorArray);
-                    GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, (IntPtr)cbuff0);
-
-
-                    GL.EnableClientState(ArrayCap.VertexArray); //***
-                    //vertex
-                    GL.VertexPointer(2, VertexPointerType.Int, 0, (IntPtr)arr);
-                    //GL.DrawElements(BeginMode.Points, n, DrawElementsType.UnsignedInt, (IntPtr)indices);
-                    GL.DrawArrays(BeginMode.Points, 0, n);
-                    GL.DisableClientState(ArrayCap.VertexArray);
-                    GL.DisableClientState(ArrayCap.ColorArray);
-                }
-            }
-        }
-
+        
         static VboC4V2S GenerateVBOForC4V2I()
         {
             VboC4V2S vboHandle = new VboC4V2S();
@@ -261,25 +212,25 @@ namespace PixelFarm.Agg
             return vboHandle;
         }
 
-        static void DrawLine(float x1, float y1, float x2, float y2)
-        {
-            unsafe
-            {
-                float* arr = stackalloc float[4];
-                arr[0] = x1; arr[1] = y1;
-                arr[2] = x2; arr[3] = y2;
+        //static void DrawLine(float x1, float y1, float x2, float y2)
+        //{
+        //    unsafe
+        //    {
+        //        float* arr = stackalloc float[4];
+        //        arr[0] = x1; arr[1] = y1;
+        //        arr[2] = x2; arr[3] = y2;
 
-                //byte* indices = stackalloc byte[2];
-                //indices[0] = 0; indices[1] = 1;
+        //        //byte* indices = stackalloc byte[2];
+        //        //indices[0] = 0; indices[1] = 1;
 
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                GL.DrawArrays(BeginMode.Lines, 0, 2);
-                GL.DisableClientState(ArrayCap.VertexArray);
-            }
-        }
+        //        GL.EnableClientState(ArrayCap.VertexArray); //***
+        //        //vertex
+        //        GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+        //        //GL.DrawElements(BeginMode.Lines, 2, DrawElementsType.UnsignedByte, (IntPtr)indices);
+        //        GL.DrawArrays(BeginMode.Lines, 0, 2);
+        //        GL.DisableClientState(ArrayCap.VertexArray);
+        //    }
+        //}
         const int BASE_MASK = 255;
 
 
@@ -311,7 +262,7 @@ namespace PixelFarm.Agg
                 //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
                 // Fill newly allocated buffer
                 GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-                // Only draw particles that are alive
+           
                 GL.DrawArrays(BeginMode.Lines, 0, nelements);
             }
         }
@@ -407,56 +358,56 @@ namespace PixelFarm.Agg
         //======================================================================================
 
 
-        public void RenderWithSpan(IImageReaderWriter dest,
-                 GLScanlineRasterizer sclineRas,
-                 GLScanline scline,
-                ISpanGenerator spanGenerator)
-        {
-            if (!sclineRas.RewindScanlines()) { return; } //early exit
-            //-----------------------------------------------
+        //public void RenderWithSpan(IImageReaderWriter dest,
+        //         GLScanlineRasterizer sclineRas,
+        //         GLScanline scline,
+        //        ISpanGenerator spanGenerator)
+        //{
+        //    if (!sclineRas.RewindScanlines()) { return; } //early exit
+        //    //-----------------------------------------------
 
-            scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
+        //    scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
 
-            spanGenerator.Prepare();
+        //    spanGenerator.Prepare();
 
 
-            if (dest.Stride / 4 > (tempSpanColors.AllocatedSize))
-            {
-                //if not enough -> alloc more
-                tempSpanColors.Clear(dest.Stride / 4);
-            }
+        //    if (dest.Stride / 4 > (tempSpanColors.AllocatedSize))
+        //    {
+        //        //if not enough -> alloc more
+        //        tempSpanColors.Clear(dest.Stride / 4);
+        //    }
 
-            ColorRGBA[] colorArray = tempSpanColors.Array;
+        //    ColorRGBA[] colorArray = tempSpanColors.Array;
 
-            while (sclineRas.SweepScanline(scline))
-            {
+        //    while (sclineRas.SweepScanline(scline))
+        //    {
 
-                //render single scanline 
-                int y = scline.Y;
-                int num_spans = scline.SpanCount;
-                byte[] covers = scline.GetCovers();
+        //        //render single scanline 
+        //        int y = scline.Y;
+        //        int num_spans = scline.SpanCount;
+        //        byte[] covers = scline.GetCovers();
 
-                for (int i = 1; i <= num_spans; ++i)
-                {
-                    ScanlineSpan span = scline.GetSpan(i);
-                    int x = span.x;
-                    int span_len = span.len;
-                    bool firstCoverForAll = false;
+        //        for (int i = 1; i <= num_spans; ++i)
+        //        {
+        //            ScanlineSpan span = scline.GetSpan(i);
+        //            int x = span.x;
+        //            int span_len = span.len;
+        //            bool firstCoverForAll = false;
 
-                    if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
+        //            if (span_len < 0) { span_len = -span_len; firstCoverForAll = true; } //make absolute value
 
-                    //1. generate colors -> store in colorArray
-                    spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
+        //            //1. generate colors -> store in colorArray
+        //            spanGenerator.GenerateColors(colorArray, 0, x, y, span_len);
 
-                    //2. blend color in colorArray to destination image
-                    dest.BlendColorHSpan(x, y, span_len,
-                        colorArray, 0,
-                        covers, span.cover_index,
-                        firstCoverForAll);
-                }
+        //            //2. blend color in colorArray to destination image
+        //            dest.BlendColorHSpan(x, y, span_len,
+        //                colorArray, 0,
+        //                covers, span.cover_index,
+        //                firstCoverForAll);
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
 
 

@@ -12,7 +12,7 @@ namespace LayoutFarm.Drawing.DrawingGL
 
     partial class MyCanvasGL : LayoutFarm.Drawing.WinGdi.MyCanvas
     {
-        CanvasGL2d canvasGL2d = new CanvasGL2d();
+        CanvasGL2d canvasGL2d;
 
         //-------
         //platform specific code
@@ -24,6 +24,9 @@ namespace LayoutFarm.Drawing.DrawingGL
         public MyCanvasGL(GraphicsPlatform platform, int hPageNum, int vPageNum, int left, int top, int width, int height)
             : base(platform, hPageNum, vPageNum, left, top, width, height)
         {
+            canvasGL2d = new CanvasGL2d(width, height);
+
+
 
             //------------------------
             //platform specific code

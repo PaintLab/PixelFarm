@@ -42,7 +42,6 @@
     <Compile Include="04_GLScanline\4.1_ScanlineRasterizer.cs" />
     <Compile Include="04_GLScanline\4.2_CellAARasterizer.cs" />
     <Compile Include="04_GLScanline\4.3_VectorClipper.cs" />
-    <Compile Include="04_GLScanline\4.4_FillingRule.cs" />
     <Compile Include="04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="04_GLScanline\6_ClipLiangBarsky.cs" />
     <Compile Include="GLCanvas\GLGradientColorProvider.cs" />

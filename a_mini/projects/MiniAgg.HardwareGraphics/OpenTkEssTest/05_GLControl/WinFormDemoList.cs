@@ -54,7 +54,7 @@ namespace OpenTkEssTest
         public override void Init()
         {
             FormTestWinGLControl2 form = new FormTestWinGLControl2();
-            CanvasGL2d canvas = new CanvasGL2d();
+            CanvasGL2d canvas = new CanvasGL2d(this.Width, this.Height);
 
             form.SetGLPaintHandler((o, s) =>
             {
