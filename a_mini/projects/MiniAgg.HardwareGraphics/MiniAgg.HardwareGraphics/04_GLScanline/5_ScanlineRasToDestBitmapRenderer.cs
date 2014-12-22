@@ -33,7 +33,7 @@ namespace PixelFarm.Agg
     public class GLScanlineRasToDestBitmapRenderer
     {
 
-        //ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
+       
 
         ArrayList<VertexC4V2S> mySinglePixelBuffer = new ArrayList<VertexC4V2S>();
         ArrayList<VertexC4V2S> myLineBuffer = new ArrayList<VertexC4V2S>();
@@ -94,31 +94,22 @@ namespace PixelFarm.Agg
             }
 
 
-            //GL.EnableClientState(ArrayCap.ColorArray);
+            
             GL.EnableClientState(ArrayCap.VertexArray);
             //---------------------------------------------
             //points
-            int nelements = mySinglePixelBuffer.Count;
-            // VboC4V2S vbo = GenerateVBOForC4V2I();
+            int nelements = mySinglePixelBuffer.Count; 
             if (nelements > 0)
-            {
-                //vbo.BindBuffer();
-                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
-                // vbo.UnbindBuffer();
+            { 
+                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements); 
             }
             //---------------------------------------------
             //lines
             nelements = myLineBuffer.Count;
             if (nelements > 0)
-            {
-                //vbo.BindBuffer();
-                DrawLinesWithVertexBuffer(myLineBuffer, nelements);
-                //vbo.UnbindBuffer();
-            }
-            //---------------------------------------------
-
-            //vbo.Dispose();
-            //GL.DisableClientState(ArrayCap.ColorArray);
+            { 
+                DrawLinesWithVertexBuffer(myLineBuffer, nelements); 
+            } 
             GL.DisableClientState(ArrayCap.VertexArray);
             //------------------------ 
         }
@@ -170,32 +161,24 @@ namespace PixelFarm.Agg
 
 
             //single color***
-            GL.Color4(color.R, color.G, color.B, color.A);
-            //GL.EnableClientState(ArrayCap.ColorArray);
+            //GL.Color4(color.R, color.G, color.B, color.A);
+            GL.Color4(color.B, color.G, color.R, color.A); 
             GL.EnableClientState(ArrayCap.VertexArray);
             //---------------------------------------------
             //points
-            int nelements = mySinglePixelBuffer.Count;
-            // VboC4V2S vbo = GenerateVBOForC4V2I();
+            int nelements = mySinglePixelBuffer.Count; 
             if (nelements > 0)
-            {
-                //vbo.BindBuffer();
-                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements);
-                //vbo.UnbindBuffer();
+            { 
+                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements); 
             }
             //---------------------------------------------
             //lines
             nelements = myLineBuffer.Count;
             if (nelements > 0)
-            {
-                //vbo.BindBuffer();
-                DrawLinesWithVertexBuffer(myLineBuffer, nelements);
-                //vbo.UnbindBuffer();
+            { 
+                DrawLinesWithVertexBuffer(myLineBuffer, nelements); 
             }
-            //---------------------------------------------
-
-            //vbo.Dispose();
-            //GL.DisableClientState(ArrayCap.ColorArray);
+            //--------------------------------------------- 
             GL.DisableClientState(ArrayCap.VertexArray);
             //------------------------ 
         } 
@@ -204,66 +187,33 @@ namespace PixelFarm.Agg
         static void DrawPointsWithVertexBuffer(ArrayList<VertexC4V2S> singlePxBuffer, int nelements)
         {
             unsafe
-            {
-
+            {    
                 //--------------------------------------------- 
-                VertexC4V2S[] vpoints = singlePxBuffer.Array;
-                //IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
-                ////GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
-                //// Fill newly allocated buffer                
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-
+                VertexC4V2S[] vpoints = singlePxBuffer.Array; 
                 fixed (VertexC4V2S* vp = &vpoints[0])
                 {
                     GL.VertexPointer(2,
                         VertexPointerType.Short,
                         0,
-                        (IntPtr)(vp));
-
-                    //GL.VertexAttribPointer(0, 3,
-                    //    VertexAttribPointerType.Float,
-                    //    false, VertexC4V2S.SIZE_IN_BYTES * nelements, (IntPtr)vp);
-                }
-                //GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, stride_size, 0);
-                // Only draw particles that are alive
-                GL.DrawArrays(BeginMode.Points, 0, nelements);
-
+                        (IntPtr)(vp)); 
+                } 
+                GL.DrawArrays(BeginMode.Points, 0, nelements); 
                 //--------------------------------------------- 
             }
         }
         static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V2S> linesBuffer, int nelements)
         {
             unsafe
-            {
-                //VertexC4V2S[] vpoints = linesBuffer.Array;
-                //IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
-                ////GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
-                //// Fill newly allocated buffer
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-
-                //GL.DrawArrays(BeginMode.Lines, 0, nelements);
-
-                //--------------------------------------------- 
-                VertexC4V2S[] vpoints = linesBuffer.Array;
-                //IntPtr stride_size = new IntPtr(VertexC4V2S.SIZE_IN_BYTES * nelements);
-                ////GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
-                //// Fill newly allocated buffer                
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-
+            {    
+                VertexC4V2S[] vpoints = linesBuffer.Array; 
                 fixed (VertexC4V2S* vp = &vpoints[0])
                 {
                     GL.VertexPointer(2,
                         VertexPointerType.Short,
                         0,
-                        (IntPtr)(vp));
-                    //GL.VertexAttribPointer(0, 3,
-                    //    VertexAttribPointerType.Float,
-                    //    false, VertexC4V2S.SIZE_IN_BYTES * nelements, (IntPtr)vp);
-                }
-                //GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, stride_size, 0);
-                // Only draw particles that are alive
-                GL.DrawArrays(BeginMode.Lines, 0, nelements);
-
+                        (IntPtr)(vp)); 
+                } 
+                GL.DrawArrays(BeginMode.Lines, 0, nelements); 
             }
         }
         void GLBlendHLine(int x1, int y, int x2, LayoutFarm.Drawing.Color color, byte cover)

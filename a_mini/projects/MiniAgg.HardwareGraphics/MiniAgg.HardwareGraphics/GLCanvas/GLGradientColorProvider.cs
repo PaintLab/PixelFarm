@@ -9,7 +9,7 @@ namespace LayoutFarm.DrawingGL
     {
         static int screenW = 800;
         static int screenH = 600;
-        public static ArrayList<VertexC4V3f> CalculateLinearGradientVxs(
+        public static ArrayList<VertexC4V2f> CalculateLinearGradientVxs(
             float x1, float y1,
             float x2, float y2,
             LayoutFarm.Drawing.Color c1,
@@ -39,7 +39,7 @@ namespace LayoutFarm.DrawingGL
 
             }
 
-            ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+            ArrayList<VertexC4V2f> vrx = new ArrayList<VertexC4V2f>();
             //left solid rect pane 
             AddRect(vrx,
                 c1.ToABGR(), c1.ToABGR(),
@@ -73,28 +73,28 @@ namespace LayoutFarm.DrawingGL
             int j = vrx.Count;
             for (int i = j - 1; i >= 0; --i)
             {
-                VertexC4V3f v = vrx[i];
+                VertexC4V2f v = vrx[i];
                 double v_x = v.x;
                 double v_y = v.y;
                 txMatrix.Transform(ref v_x, ref v_y);
-                vrx[i] = new VertexC4V3f(v.color, (float)v_x, (float)v_y);
+                vrx[i] = new VertexC4V2f(v.color, (float)v_x, (float)v_y);
             }
             return vrx;
 
         }
-        static void AddRect(ArrayList<VertexC4V3f> vrx,
+        static void AddRect(ArrayList<VertexC4V2f> vrx,
             uint c1, uint c2,
             float x, float y,
             float w, float h)
         {
             //horizontal gradient
-            vrx.AddVertex(new VertexC4V3f(c1, x, y));
-            vrx.AddVertex(new VertexC4V3f(c2, x + w, y));
-            vrx.AddVertex(new VertexC4V3f(c2, x + w, y + h));
+            vrx.AddVertex(new VertexC4V2f(c1, x, y));
+            vrx.AddVertex(new VertexC4V2f(c2, x + w, y));
+            vrx.AddVertex(new VertexC4V2f(c2, x + w, y + h));
 
-            vrx.AddVertex(new VertexC4V3f(c2, x + w, y + h));
-            vrx.AddVertex(new VertexC4V3f(c1, x, y + h));
-            vrx.AddVertex(new VertexC4V3f(c1, x, y));
+            vrx.AddVertex(new VertexC4V2f(c2, x + w, y + h));
+            vrx.AddVertex(new VertexC4V2f(c1, x, y + h));
+            vrx.AddVertex(new VertexC4V2f(c1, x, y));
         }
     }
 }

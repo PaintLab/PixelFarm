@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using OpenTK.Graphics.OpenGL;
 using Mini;
-using Tesselate;
+ 
 using LayoutFarm.DrawingGL;
 
 namespace OpenTkEssTest

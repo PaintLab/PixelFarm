@@ -33,10 +33,7 @@ namespace LayoutFarm.DrawingGL
         public bool IsInvert
         {
             get { return this.isInvertImage; }
-        }
-
-
-
+        } 
         public int Width
         {
             get { return this.width; }
@@ -47,7 +44,7 @@ namespace LayoutFarm.DrawingGL
         }
 
 
-        //---------------------------------
+         
         //only after gl context is created
         internal int GetServerTextureId()
         {
@@ -87,8 +84,7 @@ namespace LayoutFarm.DrawingGL
             return this.textureId;
         }
         public void Dispose()
-        {
-
+        {   
             GL.DeleteTextures(1, ref textureId);
         }
 
