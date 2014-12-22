@@ -396,8 +396,157 @@ namespace LayoutFarm.DrawingGL
                     } break;
             }
         }
+        public void DrawRect(float x, float y, float w, float h)
+        {
+
+            unsafe
+            {
+                //set color
+
+                float* rectCoords = stackalloc float[12];
+                CreateRectCoords(rectCoords, x, y, w, h);
+                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6);
+
+            }
 
 
+
+            //early exit
+            //GL.EnableClientState(ArrayCap.ColorArray);
+            //GL.EnableClientState(ArrayCap.VertexArray);
+            //VboC4V3f vbo = GenerateVboC4V3f();
+            ////points 
+            //ArrayList<VertexC4V2f> vrx = new ArrayList<VertexC4V2f>();
+            //CreatePolyLineRectCoords(vrx, this.strokeColor, x, y, w, h);
+            //int pcount = vrx.Count;
+            ////vbo.BindBuffer();
+            //DrawLineStripWithVertexBuffer(vrx, pcount);
+            //vbo.UnbindBuffer();
+            //vbo.Dispose();
+            //GL.DisableClientState(ArrayCap.ColorArray);
+            //GL.DisableClientState(ArrayCap.VertexArray);
+            //------------------------ 
+            //switch (this.SmoothMode)
+            //{
+            //    case CanvasSmoothMode.AggSmooth:
+            //        {
+            //            unsafe
+            //            {
+            //                //early exit
+            //                GL.EnableClientState(ArrayCap.ColorArray);
+            //                GL.EnableClientState(ArrayCap.VertexArray);
+            //                VboC4V3f vbo = GenerateVboC4V3f();
+            //                ////points 
+            //                ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+            //                CreateRectCoords(vrx, this.fillColor, x, y, w, h);
+            //                int pcount = vrx.Count;
+            //                vbo.BindBuffer();
+            //                DrawTrianglesWithVertexBuffer(vrx, pcount);
+            //                vbo.UnbindBuffer();
+
+            //                //vbo.Dispose();
+            //                GL.DisableClientState(ArrayCap.ColorArray);
+            //                GL.DisableClientState(ArrayCap.VertexArray);
+            //                //------------------------ 
+            //            }
+            //        } break;
+            //    default:
+            //        {
+            //            unsafe
+            //            {
+            //                float* arr = stackalloc float[8];
+            //                byte* indices = stackalloc byte[6];
+            //                CreateRectCoords2(arr, indices, x, y, w, h);
+            //                GL.EnableClientState(ArrayCap.VertexArray); //***
+            //                //vertex
+            //                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+            //                GL.DrawElements(BeginMode.Lines, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+            //                GL.DisableClientState(ArrayCap.VertexArray);
+            //            }
+            //        } break;
+            //}
+        }
+        public void FillRect(LayoutFarm.Drawing.Color color, float x, float y, float w, float h)
+        {
+            //fill with solid color 
+            unsafe
+            {
+                //set color 
+                float* rectCoords = stackalloc float[12];
+                CreateRectCoords(rectCoords, x, y, w, h);
+                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6);
+            }
+
+        }
+        public void FillEllipse(LayoutFarm.Drawing.Color color, float x, float y, float rx, float ry)
+        {
+            ellipse.Reset(x, y, rx, ry);
+            var vxs = ellipse.MakeVxs();
+
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.AggSmooth:
+                    {
+                        sclineRas.Reset();
+                        sclineRas.AddPath(vxs);
+                        sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
+                    } break;
+                default:
+                    {   //other mode
+                        int n = vxs.Count;
+                        //make triangular fan*** 
+                        unsafe
+                        {
+                            float* coords = stackalloc float[(n * 2) + 4];
+
+                            int i = 0;
+                            int nn = 0;
+                            int npoints = 0;
+                            double vx, vy;
+                            //center
+                            coords[nn++] = (float)x;
+                            coords[nn++] = (float)y;
+                            npoints++;
+                            var cmd = vxs.GetVertex(i, out vx, out vy);
+
+                            while (i < n)
+                            {
+                                switch (cmd)
+                                {
+                                    case VertexCmd.MoveTo:
+                                        {
+                                            coords[nn++] = (float)vx;
+                                            coords[nn++] = (float)vy;
+                                            npoints++;
+                                        } break;
+                                    case VertexCmd.LineTo:
+                                        {
+                                            coords[nn++] = (float)vx;
+                                            coords[nn++] = (float)vy;
+                                            npoints++;
+                                        } break;
+                                    case VertexCmd.Stop:
+                                        {
+                                        } break;
+                                    default:
+                                        {
+
+                                        } break;
+                                }
+                                i++;
+                                cmd = vxs.GetVertex(i, out vx, out vy);
+                            }
+                            //close circle
+                            coords[nn++] = coords[2];
+                            coords[nn++] = coords[3];
+                            npoints++;
+
+
+                            UnsafeDrawV2fList(DrawMode.TriangleFan, coords, npoints);
+                        }
+                    } break;
+            }
+        }
         static double DegToRad(double degree)
         {
             return degree * (Math.PI / 180d);
