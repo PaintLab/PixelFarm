@@ -12,7 +12,15 @@ namespace LayoutFarm.DrawingGL
 
     public partial class CanvasGL2d
     {
-
+        public LayoutFarm.Drawing.Color StrokeColor
+        {
+            get { return this.strokeColor; }
+            set
+            {
+                this.strokeColor = value;
+                GL.Color4(value.R, value.G, value.B, value.A);
+            }
+        }
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             //set value for clear color buffer
@@ -46,6 +54,85 @@ namespace LayoutFarm.DrawingGL
         public void SetClipRect(int x, int y, int w, int h)
         {
             GL.Scissor(x, y, w, h);
+        }
+        public void DrawRect(float x, float y, float w, float h)
+        {
+
+            unsafe
+            {
+                //set color
+
+                float* rectCoords = stackalloc float[12];
+                CreateRectCoords(rectCoords, x, y, w, h);
+                //render 
+                //1.
+                GL.EnableClientState(ArrayCap.VertexArray);
+                //2. load vertices
+                GL.VertexPointer(2,
+                    VertexPointerType.Float,
+                    0, (IntPtr)rectCoords);
+                //3.draw
+                GL.DrawArrays(BeginMode.Triangles, 0, 6);
+                //4.
+                GL.DisableClientState(ArrayCap.VertexArray);
+            }
+
+
+
+            //early exit
+            //GL.EnableClientState(ArrayCap.ColorArray);
+            //GL.EnableClientState(ArrayCap.VertexArray);
+            //VboC4V3f vbo = GenerateVboC4V3f();
+            ////points 
+            //ArrayList<VertexC4V2f> vrx = new ArrayList<VertexC4V2f>();
+            //CreatePolyLineRectCoords(vrx, this.strokeColor, x, y, w, h);
+            //int pcount = vrx.Count;
+            ////vbo.BindBuffer();
+            //DrawLineStripWithVertexBuffer(vrx, pcount);
+            //vbo.UnbindBuffer();
+            //vbo.Dispose();
+            //GL.DisableClientState(ArrayCap.ColorArray);
+            //GL.DisableClientState(ArrayCap.VertexArray);
+            //------------------------ 
+            //switch (this.SmoothMode)
+            //{
+            //    case CanvasSmoothMode.AggSmooth:
+            //        {
+            //            unsafe
+            //            {
+            //                //early exit
+            //                GL.EnableClientState(ArrayCap.ColorArray);
+            //                GL.EnableClientState(ArrayCap.VertexArray);
+            //                VboC4V3f vbo = GenerateVboC4V3f();
+            //                ////points 
+            //                ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
+            //                CreateRectCoords(vrx, this.fillColor, x, y, w, h);
+            //                int pcount = vrx.Count;
+            //                vbo.BindBuffer();
+            //                DrawTrianglesWithVertexBuffer(vrx, pcount);
+            //                vbo.UnbindBuffer();
+
+            //                //vbo.Dispose();
+            //                GL.DisableClientState(ArrayCap.ColorArray);
+            //                GL.DisableClientState(ArrayCap.VertexArray);
+            //                //------------------------ 
+            //            }
+            //        } break;
+            //    default:
+            //        {
+            //            unsafe
+            //            {
+            //                float* arr = stackalloc float[8];
+            //                byte* indices = stackalloc byte[6];
+            //                CreateRectCoords2(arr, indices, x, y, w, h);
+            //                GL.EnableClientState(ArrayCap.VertexArray); //***
+            //                //vertex
+            //                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
+            //                GL.DrawElements(BeginMode.Lines, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
+            //                GL.DisableClientState(ArrayCap.VertexArray);
+            //            }
+            //        } break;
+            //}
         }
         public void FillRect(LayoutFarm.Drawing.Color color, float x, float y, float w, float h)
         {
@@ -184,14 +271,7 @@ namespace LayoutFarm.DrawingGL
                                             vrx.AddVertex(new VertexC4V2f(color_uint, (float)v.m_X, (float)v.m_Y));
                                         }
 
-                                        //GL.EnableClientState(ArrayCap.ColorArray);
-                                        //GL.EnableClientState(ArrayCap.VertexArray);
-                                        int pcount = vrx.Count;
-                                        //vbo.BindBuffer();
-                                        DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                        //vbo.UnbindBuffer();
-                                        //GL.DisableClientState(ArrayCap.ColorArray);
-                                        //GL.DisableClientState(ArrayCap.VertexArray);
+                                        DrawVertexList(DrawMode.Triangles, vrx, vrx.Count);
                                     }
                                     //-------------------------------------- 
                                     //render color
@@ -246,17 +326,9 @@ namespace LayoutFarm.DrawingGL
                                                      points[1].X, points[1].Y,
                                                      colors[0],
                                                      colors[1]);
-                                                int pcount = vrx.Count;
-                                                //GL.EnableClientState(ArrayCap.ColorArray);
-                                                //GL.EnableClientState(ArrayCap.VertexArray);
-                                                ////--- 
-                                                //VboC4V3f vbo = GenerateVboC4V3f();
-                                                //vbo.BindBuffer();
-                                                DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                                //vbo.UnbindBuffer();
-                                                ////vbo.Dispose();
-                                                //GL.DisableClientState(ArrayCap.ColorArray);
-                                                //GL.DisableClientState(ArrayCap.VertexArray);
+
+                                                DrawVertexList(DrawMode.Triangles, vrx, vrx.Count);
+
                                             }
                                             else if (brush.BrushKind == Drawing.BrushKind.Texture)
                                             {
@@ -289,15 +361,7 @@ namespace LayoutFarm.DrawingGL
                                              points[1].X, points[1].Y,
                                              colors[0],
                                              colors[1]);
-                                        int pcount = vrx.Count;
-                                        //GL.EnableClientState(ArrayCap.ColorArray);
-                                        //GL.EnableClientState(ArrayCap.VertexArray);
-                                        //--- 
-                                        //VboC4V3f vbo = GenerateVboC4V3f();
-                                        //vbo.BindBuffer();
-                                        DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                        //vbo.UnbindBuffer();
-
+                                        DrawVertexList(DrawMode.Triangles, vrx, vrx.Count);
                                     }
                                     GL.Disable(EnableCap.StencilTest);
                                 } break;
@@ -520,41 +584,23 @@ namespace LayoutFarm.DrawingGL
             }
         }
 
-
-        static void DrawTrianglesWithVertexBuffer(ArrayList<VertexC4V2f> buffer, int nelements)
+        enum DrawMode
         {
-
-            GL.Color4(1f, 0f, 0f, 1f);
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            GL.EnableClientState(ArrayCap.VertexArray);
-            unsafe
-            {
-
-                //2. load
-                VertexC4V2f[] vpoints = buffer.Array;//c4 + vector3 
-                fixed (void* h = &vpoints[0])
-                {
-                    //GL.ColorPointer(4, ColorPointerType.Byte, sizeof(float) * 2, (IntPtr)h);
-                    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)(((byte*)h) + 4));
-                }
-                GL.DrawArrays(BeginMode.Triangles, 0, nelements);
-                //IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-                ////GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
-                //// Fill newly allocated buffer
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-                //GL.DrawArrays(BeginMode.Triangles, 0, nelements);
-            }
-            //vbo.Dispose();
-            //GL.DisableClientState(ArrayCap.ColorArray);
-            GL.DisableClientState(ArrayCap.VertexArray);
-
+            Points = OpenTK.Graphics.OpenGL.BeginMode.Points,
+            Lines = OpenTK.Graphics.OpenGL.BeginMode.Lines,
+            LineLoop = OpenTK.Graphics.OpenGL.BeginMode.LineLoop,
+            LineStrips = OpenTK.Graphics.OpenGL.BeginMode.LineStrip,
+            Triangles = OpenTK.Graphics.OpenGL.BeginMode.Triangles,
+            TriangleFan = OpenTK.Graphics.OpenGL.BeginMode.TriangleFan,
         }
-        static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V2f> buffer, int nelements)
+
+        static void DrawVertexList(DrawMode mode, ArrayList<VertexC4V2f> buffer, int nelements)
         {
             GL.EnableClientState(ArrayCap.ColorArray);
             GL.EnableClientState(ArrayCap.VertexArray);
             unsafe
             {
+
                 VertexC4V2f[] vtx = buffer.Array;
                 fixed (void* h = &vtx[0])
                 {
@@ -564,30 +610,15 @@ namespace LayoutFarm.DrawingGL
                         VertexC4V2f.VX_PTR_TYPE,
                         VertexC4V2f.SIZE_IN_BYTES,
                         (IntPtr)(byteH + VertexC4V2f.VX_OFFSET));
-
                 }
-                //VertexC4V3f[] vpoints = buffer.Array;
-                //IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-                GL.DrawArrays(BeginMode.Lines, 0, nelements);
+                GL.DrawArrays((BeginMode)mode, 0, nelements);
+
             }
             GL.DisableClientState(ArrayCap.ColorArray);
             GL.DisableClientState(ArrayCap.VertexArray);
         }
-        static void DrawLineStripWithVertexBuffer(ArrayList<VertexC4V2f> buffer, int nelements)
-        {
-            GL.EnableClientState(ArrayCap.ColorArray);
-            GL.EnableClientState(ArrayCap.VertexArray);
-            unsafe
-            {
-                //VertexC4V3f[] vpoints = buffer.Array;
-                //IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsageHint.StreamDraw);
-                //GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
-            }
-            GL.DisableClientState(ArrayCap.ColorArray);
-            GL.DisableClientState(ArrayCap.VertexArray);
-        }
+
+
         void FillRectWithTexture(float x, float y, float w, float h)
         {
             unsafe
@@ -600,171 +631,65 @@ namespace LayoutFarm.DrawingGL
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
                 GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
                 GL.DisableClientState(ArrayCap.VertexArray);
-
             }
         }
-        public void FillPolygon(LayoutFarm.Drawing.Color color, float[] vertex2dCoords, int npoints)
-        {
-            //-------------
-            //Tesselate
-            //2d coods lis
-            //n point 
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.AggSmooth:
-                    {
-                        //closed polygon
 
-                        //closed polygon
-                        int j = npoints / 2;
-                        //first point
-                        if (j < 2)
-                        {
-                            return;
-                        }
-                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
-                        int nn = 2;
-                        for (int i = 1; i < j; ++i)
-                        {
-                            ps.LineTo(vertex2dCoords[nn++],
-                                vertex2dCoords[nn++]);
-                        }
-                        //close
-                        ps.CloseFigure();
-                        VertexStore vxs = ps.Vxs;
-                        sclineRas.Reset();
-                        sclineRas.AddPath(vxs);
-                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
-
-
-                    } break;
-                default:
-                    {
-
-                        List<Vertex> vertextList = TessPolygon(vertex2dCoords);
-                        int j = vertextList.Count;
-                        //-----------------------------   
-                        //fill polygon  with solid color
-                        GL.Color4(color.R, color.G, color.B, color.A);
-                        unsafe
-                        {
-                            float* vtx = stackalloc float[j * 2];
-                            int n = 0;
-                            for (int i = 0; i < j; ++i)
-                            {
-                                var v = vertextList[i];
-                                vtx[n] = (float)v.m_X;
-                                vtx[n + 1] = (float)v.m_Y;
-                                n += 2;
-                            }
-
-                            UnsafeFillPolygon(vtx, j);
-                        }
-
-                        //ArrayList<VertexC4V2f> vrx = new ArrayList<VertexC4V2f>();
-                        //uint color_int = color.ToABGR();
-                        //for (int i = 0; i < j; ++i)
-                        //{
-                        //    var v = vertextList[i];
-                        //    vrx.AddVertex(new VertexC4V2f(color_int, (float)v.m_X, (float)v.m_Y));
-                        //}
-                        ////------------------------------------- 
-
-                        //int pcount = vrx.Count;
-                        ////vbo.BindBuffer();
-                        //DrawTrianglesWithVertexBuffer(vrx, pcount);
-                        //vbo.UnbindBuffer();
-                        //GL.DisableClientState(ArrayCap.ColorArray);
-                        //GL.DisableClientState(ArrayCap.VertexArray);
-                        ////-------------------------------------- 
-
-
-                    } break;
-            }
-
-        }
-
-
-        //---test only ----
-        void DrawLineAgg(float x1, float y1, float x2, float y2)
-        {
-
-            ps.Clear();
-            ps.MoveTo(x1, y1);
-            ps.LineTo(x2, y2);
-            VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
-            int n = vxs.Count;
-
-            unsafe
-            {
-                float* coords = stackalloc float[(n * 2)];
-                int i = 0;
-                int nn = 0;
-                int npoints = 0;
-                double vx, vy;
-
-                var cmd = vxs.GetVertex(i, out vx, out vy);
-                while (i < n)
-                {
-                    switch (cmd)
-                    {
-                        case VertexCmd.MoveTo:
-                            {
-                                coords[nn] = (float)vx;
-                                coords[nn + 1] = (float)vy;
-                                nn += 2;
-                                npoints++;
-                            } break;
-                        case VertexCmd.LineTo:
-                            {
-                                coords[nn] = (float)vx;
-                                coords[nn + 1] = (float)vy;
-                                nn += 2;
-                                npoints++;
-
-                            } break;
-                        case VertexCmd.Stop:
-                            {
-                            } break;
-                        default:
-                            {
-
-                            } break;
-                    }
-                    i++;
-                    cmd = vxs.GetVertex(i, out vx, out vy);
-                }
-                //--------------------------------------
-                GL.EnableClientState(ArrayCap.VertexArray); //***
-                //vertex 2d
-                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
-                GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
-                //GL.DrawElements(BeginMode.LineLoop, num_indices, DrawElementsType.UnsignedInt, (IntPtr)indx);
-                GL.DisableClientState(ArrayCap.VertexArray);
-                //--------------------------------------
-            }
-        }
-        unsafe void UnsafeDrawPolygon(float* polygon2dVertices, int npoints)
+        static unsafe void UnsafeDrawV2fList(DrawMode mode, float* polygon2dVertices, int vertexCount)
         {
             //1. enable client side memory
             GL.EnableClientState(ArrayCap.VertexArray); //***
             //2. load data from point to vertex array part
             GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
             //3. draw array
-            GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
+            GL.DrawArrays((BeginMode)mode, 0, vertexCount);
             //4. disable client side memory
             GL.DisableClientState(ArrayCap.VertexArray);
         }
-        unsafe void UnsafeFillPolygon(float* polygon2dVertices, int npoints)
+        static unsafe void UnsafeDrawV2fList(DrawMode mode, float* polygon2dVertices, int vertexCount, LayoutFarm.Drawing.Color c)
         {
+            GL.Color4(c.R, c.G, c.B, c.A);
             //1. enable client side memory
             GL.EnableClientState(ArrayCap.VertexArray); //***
             //2. load data from point to vertex array part
             GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
             //3. draw array
-            GL.DrawArrays(BeginMode.Triangles, 0, npoints);
+            GL.DrawArrays((BeginMode)mode, 0, vertexCount);
             //4. disable client side memory
             GL.DisableClientState(ArrayCap.VertexArray);
         }
+        //static unsafe void UnsafeDrawPolygon(float* polygon2dVertices, int vertexCount)
+        //{
+        //    //1. enable client side memory
+        //    GL.EnableClientState(ArrayCap.VertexArray); //***
+        //    //2. load data from point to vertex array part
+        //    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
+        //    //3. draw array
+        //    GL.DrawArrays(BeginMode.LineLoop, 0, vertexCount);
+        //    //4. disable client side memory
+        //    GL.DisableClientState(ArrayCap.VertexArray);
+        //}
+        //static unsafe void UnsafeFillPolygon(float* polygon2dVertices, int vertexCount)
+        //{
+        //    //1. enable client side memory
+        //    GL.EnableClientState(ArrayCap.VertexArray); //***
+        //    //2. load data from point to vertex array part
+        //    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)polygon2dVertices);
+        //    //3. draw array
+        //    GL.DrawArrays(BeginMode.Triangles, 0, vertexCount);
+        //    //4. disable client side memory
+        //    GL.DisableClientState(ArrayCap.VertexArray);
+        //}
+        //static unsafe void UnsafeDrawLines(float* lines, int vertexCount)
+        //{
+
+        //    //1. enable client side memory
+        //    GL.EnableClientState(ArrayCap.VertexArray); //***
+        //    //2. load data from point to vertex array part
+        //    GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)lines);
+        //    //3. draw array
+        //    GL.DrawArrays(BeginMode.Lines, 0, vertexCount);
+        //    //4. disable client side memory
+        //    GL.DisableClientState(ArrayCap.VertexArray);
+        //}
     }
 }

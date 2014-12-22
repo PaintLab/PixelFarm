@@ -33,7 +33,7 @@ namespace PixelFarm.Agg
     public class GLScanlineRasToDestBitmapRenderer
     {
 
-       
+
 
         ArrayList<VertexC4V2S> mySinglePixelBuffer = new ArrayList<VertexC4V2S>();
         ArrayList<VertexC4V2S> myLineBuffer = new ArrayList<VertexC4V2S>();
@@ -94,24 +94,8 @@ namespace PixelFarm.Agg
             }
 
 
-            
-            GL.EnableClientState(ArrayCap.VertexArray);
-            //---------------------------------------------
-            //points
-            int nelements = mySinglePixelBuffer.Count; 
-            if (nelements > 0)
-            { 
-                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements); 
-            }
-            //---------------------------------------------
-            //lines
-            nelements = myLineBuffer.Count;
-            if (nelements > 0)
-            { 
-                DrawLinesWithVertexBuffer(myLineBuffer, nelements); 
-            } 
-            GL.DisableClientState(ArrayCap.VertexArray);
-            //------------------------ 
+            DrawPointAndLineWithVertices();
+
         }
         /// <summary>
         /// for lines
@@ -128,11 +112,9 @@ namespace PixelFarm.Agg
             //early exit
             if (color.A == 0) { return; }
             if (!sclineRas.RewindScanlines()) { return; }
-            //----------------------------------------------- 
-
+            //-----------------------------------------------  
             scline.ResetSpans(sclineRas.MinX, sclineRas.MaxX);
             //-----------------------------------------------   
-
             this.mySinglePixelBuffer.Clear();
             this.myLineBuffer.Clear();
 
@@ -158,64 +140,65 @@ namespace PixelFarm.Agg
                     }
                 }
             }
-
-
-            //single color***
-            //GL.Color4(color.R, color.G, color.B, color.A);
-            GL.Color4(color.B, color.G, color.R, color.A); 
-            GL.EnableClientState(ArrayCap.VertexArray);
             //---------------------------------------------
+            DrawPointAndLineWithVertices();
+
+        }
+        void DrawPointAndLineWithVertices()
+        {
+            GL.EnableClientState(ArrayCap.ColorArray);
+            GL.EnableClientState(ArrayCap.VertexArray);
+            //--------------------------------------------- 
             //points
-            int nelements = mySinglePixelBuffer.Count; 
+            int nelements = mySinglePixelBuffer.Count;
             if (nelements > 0)
-            { 
-                DrawPointsWithVertexBuffer(mySinglePixelBuffer, nelements); 
+            {
+                unsafe
+                {
+                    VertexC4V2S[] vpoints = this.mySinglePixelBuffer.Array;
+                    fixed (VertexC4V2S* h = &vpoints[0])
+                    {
+                        //color and vertices
+                        byte* byteH = (byte*)h;
+                        GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V2S.SIZE_IN_BYTES, (IntPtr)byteH);
+                        GL.VertexPointer(VertexC4V2S.N_COORDS,
+                            VertexC4V2S.VX_PTR_TYPE,
+                            VertexC4V2S.SIZE_IN_BYTES,
+                            (IntPtr)(byteH + VertexC4V2S.VX_OFFSET));
+                    }
+                    GL.DrawArrays(BeginMode.Points, 0, nelements);
+                }
             }
             //---------------------------------------------
             //lines
             nelements = myLineBuffer.Count;
             if (nelements > 0)
-            { 
-                DrawLinesWithVertexBuffer(myLineBuffer, nelements); 
+            {
+                unsafe
+                {  
+                    VertexC4V2S[] vpoints = this.myLineBuffer.Array;
+                    fixed (VertexC4V2S* h = &vpoints[0])
+                    {
+                        //color and vertices
+                        byte* byteH = (byte*)h;
+                        GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V2S.SIZE_IN_BYTES, (IntPtr)byteH);
+                        GL.VertexPointer(VertexC4V2S.N_COORDS,
+                            VertexC4V2S.VX_PTR_TYPE,
+                            VertexC4V2S.SIZE_IN_BYTES,
+                            (IntPtr)(byteH + VertexC4V2S.VX_OFFSET));
+                    }
+                    GL.DrawArrays(BeginMode.Lines, 0, nelements);
+                }
             }
-            //--------------------------------------------- 
+
+            GL.DisableClientState(ArrayCap.ColorArray);
             GL.DisableClientState(ArrayCap.VertexArray);
             //------------------------ 
-        } 
-        const int BASE_MASK = 255; 
+        }
+
+        const int BASE_MASK = 255;
         //======================================================================================
-        static void DrawPointsWithVertexBuffer(ArrayList<VertexC4V2S> singlePxBuffer, int nelements)
-        {
-            unsafe
-            {    
-                //--------------------------------------------- 
-                VertexC4V2S[] vpoints = singlePxBuffer.Array; 
-                fixed (VertexC4V2S* vp = &vpoints[0])
-                {
-                    GL.VertexPointer(2,
-                        VertexPointerType.Short,
-                        0,
-                        (IntPtr)(vp)); 
-                } 
-                GL.DrawArrays(BeginMode.Points, 0, nelements); 
-                //--------------------------------------------- 
-            }
-        }
-        static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V2S> linesBuffer, int nelements)
-        {
-            unsafe
-            {    
-                VertexC4V2S[] vpoints = linesBuffer.Array; 
-                fixed (VertexC4V2S* vp = &vpoints[0])
-                {
-                    GL.VertexPointer(2,
-                        VertexPointerType.Short,
-                        0,
-                        (IntPtr)(vp)); 
-                } 
-                GL.DrawArrays(BeginMode.Lines, 0, nelements); 
-            }
-        }
+
         void GLBlendHLine(int x1, int y, int x2, LayoutFarm.Drawing.Color color, byte cover)
         {
             //if (color.A == 0) { return; }

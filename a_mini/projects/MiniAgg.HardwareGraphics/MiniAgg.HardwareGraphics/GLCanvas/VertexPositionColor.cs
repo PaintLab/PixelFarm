@@ -33,13 +33,13 @@ namespace PixelFarm.Agg
     [StructLayout(LayoutKind.Sequential)]
     struct VertexC4V2S
     {
-        // public uint color;
+        public uint color;
         public short x;
         public short y;
         //int z;
         public VertexC4V2S(uint color, int x, int y)
         {
-            //this.color = color;
+            this.color = color;
             this.x = (short)x;
             this.y = (short)y;
             //z = 0; 
@@ -50,8 +50,8 @@ namespace PixelFarm.Agg
         {
             return x + "," + y;
         }
-        //public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(short) * 2;
-        public const int SIZE_IN_BYTES = sizeof(short) * 2;
+
+        public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(short) * 2;
         public const int VX_OFFSET = sizeof(uint);
         public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Short;
         public const int N_COORDS = 2;
@@ -78,8 +78,8 @@ namespace PixelFarm.Agg
             return x + "," + y;
         }
 
-        public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(float)*2;
-        
+        public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(float) * 2;
+
         public const int COLOR_OFFSET = 0;
         public const int VX_OFFSET = sizeof(uint);
 

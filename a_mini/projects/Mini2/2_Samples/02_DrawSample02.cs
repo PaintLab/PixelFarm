@@ -17,7 +17,7 @@ namespace Mini2
         public override void Load()
         {
             //draw 1
-            
+
             FormTestWinGLControl form = new FormTestWinGLControl();
             CanvasGL2d canvas = new CanvasGL2d(this.Width, this.Height);
             GLBitmap hwBmp = null;
@@ -37,25 +37,21 @@ namespace Mini2
 
                 ////canvas.DrawImage(hwBmp, 10, 10);
                 //canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4); 
-                ////-----------------------------------------------------
-                //canvas.StrokeColor = LayoutFarm.Drawing.Color.Magenta;
-                ////draw line test 
-                //canvas.DrawLine(20, 20, 600, 200);
-                ////-----------------------------------------------------
-              
-                
-                
-                 
-                //var color = new LayoutFarm.Drawing.Color(50, 255, 0, 0);  //  LayoutFarm.Drawing.Color.Red;
-                ////rect polygon
-                //var polygonCoords = new float[]{
-                //        5,300,
-                //        40,300,
-                //        50,340,
-                //        10f,340};
-                ////canvas.DrawPolygon(polygonCoords);
-                ////fill polygon test                
-                //canvas.FillPolygon(color, polygonCoords);
+                //-----------------------------------------------------
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.Magenta;
+                //draw line test 
+                canvas.DrawLine(20, 20, 600, 200);
+                //----------------------------------------------------- 
+                var color = new LayoutFarm.Drawing.Color(50, 255, 0, 0);  //  LayoutFarm.Drawing.Color.Red;
+                //rect polygon
+                var polygonCoords = new float[]{
+                        5,300,
+                        40,300,
+                        50,340,
+                        10f,340};
+                canvas.DrawPolygon(polygonCoords, 4);
+                //fill polygon test                
+                canvas.FillPolygon(color, polygonCoords);
 
                 //var polygonCoords2 = new float[]{
                 //        5+10,300,
@@ -133,7 +129,7 @@ namespace Mini2
                 ////GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(fontGlyph.glyphImage32));
                 ////canvas.DrawImage(bmp, 50, 50);
                 ////bmp.Dispose();
-                 
+
 
             });
             form.Show();
