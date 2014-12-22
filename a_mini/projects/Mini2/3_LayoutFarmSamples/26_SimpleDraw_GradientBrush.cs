@@ -14,7 +14,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Mini2
 {
-    [Info(OrderCode = "06")]
+    [Info(OrderCode = "26")]
     [Info("DrawSample06_GradientBrush")]
     public class DrawSample06_GradientBrush : DemoBase
     {

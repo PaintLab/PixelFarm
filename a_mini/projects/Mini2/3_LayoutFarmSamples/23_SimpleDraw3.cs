@@ -12,8 +12,8 @@ using LayoutFarm.Drawing;
 
 namespace Mini2
 {
-    [Info(OrderCode = "03")]
-    [Info("Drawing3")]
+    [Info(OrderCode = "23")]
+    [Info("DrawSample03")]
     public class DrawSample03 : DemoBase
     {
         static DrawSample03()

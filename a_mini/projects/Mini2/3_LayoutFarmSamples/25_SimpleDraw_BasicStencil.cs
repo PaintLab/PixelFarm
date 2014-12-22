@@ -13,7 +13,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Mini2
 {
-    [Info(OrderCode = "05")]
+    [Info(OrderCode = "25")]
     [Info("DrawSample05_BasicStencil")]
     public class DrawSample05_BasicStencil : DemoBase
     {

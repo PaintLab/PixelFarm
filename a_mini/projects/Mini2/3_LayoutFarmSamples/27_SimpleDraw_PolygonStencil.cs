@@ -13,7 +13,7 @@ using LayoutFarm.Drawing;
 
 namespace Mini2
 {
-    [Info(OrderCode = "07")]
+    [Info(OrderCode = "27")]
     [Info("DrawSample07_GradientBrush")]
     public class DrawSample07_PolygonStencil : DemoBase
     {

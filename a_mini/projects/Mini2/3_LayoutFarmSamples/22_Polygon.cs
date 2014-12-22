@@ -13,11 +13,11 @@ using LayoutFarm.Drawing;
 
 namespace Mini2
 {
-    [Info(OrderCode = "02")]
-    [Info("T02_PolygonTest")]
-    public class T02_PolygonTest : DemoBase
+    [Info(OrderCode = "22")]
+    [Info("T22_PolygonTest")]
+    public class T22_PolygonTest : DemoBase
     {
-        static T02_PolygonTest()
+        static T22_PolygonTest()
         {
             LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 

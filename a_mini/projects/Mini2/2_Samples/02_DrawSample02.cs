@@ -53,61 +53,61 @@ namespace Mini2
                 //fill polygon test                
                 canvas.FillPolygon(color, polygonCoords);
 
-                //var polygonCoords2 = new float[]{
-                //        5+10,300,
-                //        40+10,300,
-                //        50+10,340,
-                //        10f +10,340};
+                var polygonCoords2 = new float[]{
+                        5+10,300,
+                        40+10,300,
+                        50+10,340,
+                        10f +10,340};
 
-                //canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
-                //canvas.StrokeColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
-                //canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
+                canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
+                canvas.StrokeColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
+                canvas.DrawPolygon(polygonCoords2, 4);
 
-                //int strkW = 10;
-                //canvas.StrokeColor = LayoutFarm.Drawing.Color.LightGray;
+                int strkW = 10;
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.LightGray;
 
-                //for (int i = 1; i < 90; i += 10)
-                //{
-                //    canvas.StrokeWidth = strkW;
-                //    double angle = OpenTK.MathHelper.DegreesToRadians(i);
-                //    canvas.DrawLine(20, 400, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
+                for (int i = 1; i < 90; i += 10)
+                {
+                    canvas.StrokeWidth = strkW;
+                    double angle = OpenTK.MathHelper.DegreesToRadians(i);
+                    canvas.DrawLine(20, 400, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
 
-                //    strkW--;
-                //    if (strkW < 1)
-                //    {
-                //        strkW = 1;
-                //    }
-                //}
+                    strkW--;
+                    if (strkW < 1)
+                    {
+                        strkW = 1;
+                    }
+                }
 
 
-                //canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
 
                 //////---------------------------------------------
                 //////draw ellipse and circle
 
-                //canvas.StrokeWidth = 0.75f;
-                //canvas.DrawCircle(400, 500, 50);
-                //canvas.FillCircle(LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green), 450, 550, 25);
+                canvas.StrokeWidth = 0.75f;
+                canvas.DrawCircle(400, 500, 50);
+                canvas.FillCircle(LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green), 450, 550, 25);
 
-                //canvas.StrokeWidth = 3;
-                //canvas.DrawRoundRect(500, 450, 100, 100, 10, 10);
+                canvas.StrokeWidth = 3;
+                canvas.DrawRoundRect(500, 450, 100, 100, 10, 10);
 
 
-                //canvas.StrokeWidth = 3;
-                //canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Blue);
+                canvas.StrokeWidth = 3;
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Blue);
 
-                ////canvas.DrawBezierCurve(0, 0, 500, 500, 0, 250, 500, 250);
-                //canvas.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
-                //canvas.SmoothMode = CanvasSmoothMode.No;
+                //canvas.DrawBezierCurve(0, 0, 500, 500, 0, 250, 500, 250);
+                canvas.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
+                canvas.SmoothMode = CanvasSmoothMode.No;
 
-                ////canvas.DrawArc(150, 200, 300, 50, 0, 150, 150, SvgArcSize.Large, SvgArcSweep.Negative);
-                //canvas.DrawArc(100, 200, 300, 200, 30, 30, 50, SvgArcSize.Large, SvgArcSweep.Negative);
+                //canvas.DrawArc(150, 200, 300, 50, 0, 150, 150, SvgArcSize.Large, SvgArcSweep.Negative);
+                canvas.DrawArc(100, 200, 300, 200, 30, 30, 50, SvgArcSize.Large, SvgArcSweep.Negative);
 
-                //canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
-                //// canvas.DrawArc(100, 200, 300, 200, 0, 100, 100, SvgArcSize.Large, SvgArcSweep.Negative);
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+                // canvas.DrawArc(100, 200, 300, 200, 0, 100, 100, SvgArcSize.Large, SvgArcSweep.Negative);
 
-                //canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
-                //canvas.DrawLine(100, 200, 300, 200);
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
+                canvas.DrawLine(100, 200, 300, 200);
 
 
                 //////load font data
