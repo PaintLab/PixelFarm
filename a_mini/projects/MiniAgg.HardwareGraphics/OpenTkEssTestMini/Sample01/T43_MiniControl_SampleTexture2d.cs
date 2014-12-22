@@ -23,8 +23,7 @@ using System.Threading;
 using System.Drawing;
 
 using OpenTK;
-using OpenTK.Graphics;
-//using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics; 
 using OpenTK.Graphics.ES20;
 using Examples.Tutorial;
 using Mini;
@@ -36,7 +35,7 @@ namespace OpenTkEssTest
 {
 
 
-    [Info(OrderCode = "43")]
+    [Info(OrderCode = "043")]
     [Info("T43_HelloTriangle")]
     public class T43_MiniControl_SampleTexture2dDemo : PrebuiltGLControlDemoBase
     {

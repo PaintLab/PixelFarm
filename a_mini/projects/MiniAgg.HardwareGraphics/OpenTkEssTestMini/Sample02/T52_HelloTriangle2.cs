@@ -1,4 +1,4 @@
-﻿ 
+﻿
 #region Using Directives
 
 using System;
@@ -18,7 +18,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "52")]
+    [Info(OrderCode = "052")]
     [Info("T52_HelloTriangle2")]
     public class T52_HelloTriangle2 : PrebuiltGLControlDemoBase
     {
@@ -27,24 +27,26 @@ namespace OpenTkEssTest
         {
             //----------------
             //vertex shader source
-            string vs = @"        
+            string vs = @"      
+             
             attribute vec2 a_position;
             attribute vec4 a_color;
             
             varying vec4 v_color;
  
             void main()
-            {
-                gl_Position = vec4(a_position[0],a_position[1],0,1);
+            {   
+                
+                gl_Position = vec4(a_position[0],a_position[1],0,1);  
                 v_color = a_color;
             }
             ";
             //fragment source
             string fs = @"
                 precision mediump float;
-                varying vec4 v_color; 
+                varying vec4 v_color;                 
                 void main()
-                {
+                { 
                     gl_FragColor = v_color;
                 }
             ";
@@ -59,7 +61,8 @@ namespace OpenTkEssTest
             a_color = shaderProgram.GetVtxAttrib("a_color");
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.ClearColor(0, 0, 0, 0);
+            //GL.ClearColor(0, 0, 0, 0);
+            GL.ClearColor(1, 1, 1, 1);
         }
         protected override void DemoClosing()
         {
@@ -75,8 +78,10 @@ namespace OpenTkEssTest
             {
                      0.0f,  0.5f, //2d coord
                      1, 0, 0, 0.1f,//r
+
                     -0.5f, -0.5f,  //2d coord
                      0,1,0,0.1f,//g
+
                      0.5f, -0.5f,  //2d corrd
                      0,0,1,0.1f, //b
             };
@@ -90,9 +95,9 @@ namespace OpenTkEssTest
             // Load the vertex data 
             a_position.LoadV2f(vertices, 6, 0);
             a_color.LoadV3f(vertices, 6, 2);
-            GL.DrawArrays(BeginMode.Triangles, 0, 3); 
-
-
+            //GL.DrawArrays(BeginMode.Triangles, 0, 3);
+            GL.DrawArrays(BeginMode.Points , 0, 3);
+             
             miniGLControl.SwapBuffers(); 
         }
         //-------------------------------

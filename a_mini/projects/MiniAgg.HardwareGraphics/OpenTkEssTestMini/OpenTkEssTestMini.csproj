@@ -61,7 +61,6 @@
     <Compile Include="00_DemoBase\MyMiniGLES2Control.Designer.cs">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
-    <Compile Include="01_MiniCanvas\MiniCanvas2d.cs" />
     <Compile Include="Sample01\T42_MiniGLControl_HelloTrinagle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,6 +75,9 @@
     <Compile Include="Sample02\T51_View2d.cs" />
     <Compile Include="Sample02\T53_Viewport.cs" />
     <Compile Include="Sample02\T54_Lines.cs" />
+    <Compile Include="Sample03\T103_BasicAggDraw.cs" />
+    <Compile Include="Sample03\T101_BlankCanvas.cs" />
+    <Compile Include="Sample03\T102_BasicDraw.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />
@@ -158,7 +160,9 @@
       <Name>OpenTK.PlatformMini</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="01_MiniCanvas\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

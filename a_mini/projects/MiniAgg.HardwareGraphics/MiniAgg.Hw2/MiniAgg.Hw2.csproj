@@ -45,6 +45,7 @@
     <Compile Include="04_GLScanline\4.3_VectorClipper.cs" />
     <Compile Include="04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="04_GLScanline\6_ClipLiangBarsky.cs" />
+    <Compile Include="04_GLScanline\8_CoordLists.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\CanvasGL2dInternal.cs" />
     <Compile Include="GLCanvas\CanvasGL2d_TextAndFont.cs" />
@@ -56,7 +57,7 @@
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="04_GLScanline\7_ScanlineShader.cs" />
+    <Compile Include="04_GLScanline\7_BasicShader.cs" />
     <Compile Include="Texture\GLBitmap.cs" />
     <Compile Include="Texture\GLBitmapReference.cs" />
     <Compile Include="Texture\LazyAggBitmapBufferProvider.cs" />

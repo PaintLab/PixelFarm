@@ -25,8 +25,7 @@ using System.Threading;
 using System.Drawing;
 
 using OpenTK;
-using OpenTK.Graphics;
-//using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics; 
 using OpenTK.Graphics.ES20;
 using Examples.Tutorial;
 using Mini;
@@ -35,7 +34,7 @@ using Mini;
 
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "48")]
+    [Info(OrderCode = "048")]
     [Info("T48_MultiTexture")]
     public class T48_MultiTexture : PrebuiltGLControlDemoBase
     {

@@ -25,8 +25,7 @@ using System.Threading;
 using System.Drawing;
 
 using OpenTK;
-using OpenTK.Graphics;
-//using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics; 
 using OpenTK.Graphics.ES20;
 using Examples.Tutorial;
 using Mini;
@@ -43,7 +42,7 @@ namespace OpenTkEssTest
     using EGLSurface = IntPtr;
     using EGLClientBuffer = IntPtr;
 
-    [Info(OrderCode = "49")]
+    [Info(OrderCode = "049")]
     [Info("T49_PostSubBuffer")]
     public class T49_PostSubBuffer : PrebuiltGLControlDemoBase
     {
