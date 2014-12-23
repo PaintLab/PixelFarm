@@ -401,12 +401,10 @@ namespace LayoutFarm.DrawingGL
 
             unsafe
             {
-                //set color
-
+                //set color 
                 float* rectCoords = stackalloc float[12];
                 CreateRectCoords(rectCoords, x, y, w, h);
-                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6);
-
+                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6); 
             }
 
 
@@ -542,7 +540,7 @@ namespace LayoutFarm.DrawingGL
                             npoints++;
 
 
-                            UnsafeDrawV2fList(DrawMode.TriangleFan, coords, npoints);
+                            UnsafeDrawV2fList(DrawMode.TriangleFan, coords, npoints, color);
                         }
                     } break;
             }
@@ -979,9 +977,9 @@ namespace LayoutFarm.DrawingGL
             get { return this.canvasOriginY; }
         }
         //-----------------------------------------------------
-
         void SetupFonts()
         {
+
         }
         public PixelFarm.Agg.Fonts.Font CurrentFont
         {
