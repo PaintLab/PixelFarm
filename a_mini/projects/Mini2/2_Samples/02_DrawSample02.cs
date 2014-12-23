@@ -17,7 +17,7 @@ namespace Mini2
         public override void Load()
         {
             //draw 1
-            
+
             FormTestWinGLControl form = new FormTestWinGLControl();
             CanvasGL2d canvas = new CanvasGL2d(this.Width, this.Height);
             GLBitmap hwBmp = null;
@@ -25,25 +25,23 @@ namespace Mini2
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
-                if (hwBmp == null)
-                {
-                    string app = Application.ExecutablePath;
-                    hwBmp = GLBitmapTextureHelper.CreateBitmapTexture(new Bitmap("../../../Data/Textures/logo-dark.jpg"));
-
-                }
-
-                //canvas.DrawImage(hwBmp, 10, 10);
-                canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
                 canvas.StrokeColor = LayoutFarm.Drawing.Color.DeepPink;
                 canvas.DrawLine(0, 300, 500, 300);
 
+                //if (hwBmp == null)
+                //{
+                //    string app = Application.ExecutablePath;
+                //    hwBmp = GLBitmapTextureHelper.CreateBitmapTexture(new Bitmap("../../../Data/Textures/logo-dark.jpg"));
+
+                //}
+
+                ////canvas.DrawImage(hwBmp, 10, 10);
+                //canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4); 
                 //-----------------------------------------------------
                 canvas.StrokeColor = LayoutFarm.Drawing.Color.Magenta;
                 //draw line test 
                 canvas.DrawLine(20, 20, 600, 200);
-                //-----------------------------------------------------
-                //smooth with agg 
-
+                //----------------------------------------------------- 
                 var color = new LayoutFarm.Drawing.Color(50, 255, 0, 0);  //  LayoutFarm.Drawing.Color.Red;
                 //rect polygon
                 var polygonCoords = new float[]{
@@ -51,7 +49,7 @@ namespace Mini2
                         40,300,
                         50,340,
                         10f,340};
-                //canvas.DrawPolygon(polygonCoords);
+                canvas.DrawPolygon(polygonCoords, 4);
                 //fill polygon test                
                 canvas.FillPolygon(color, polygonCoords);
 
@@ -63,7 +61,7 @@ namespace Mini2
 
                 canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
                 canvas.StrokeColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
-                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
+                canvas.DrawPolygon(polygonCoords2, 4);
 
                 int strkW = 10;
                 canvas.StrokeColor = LayoutFarm.Drawing.Color.LightGray;
@@ -84,8 +82,8 @@ namespace Mini2
 
                 canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
 
-                ////---------------------------------------------
-                ////draw ellipse and circle
+                //////---------------------------------------------
+                //////draw ellipse and circle
 
                 canvas.StrokeWidth = 0.75f;
                 canvas.DrawCircle(400, 500, 50);
@@ -112,28 +110,26 @@ namespace Mini2
                 canvas.DrawLine(100, 200, 300, 200);
 
 
-                //load font data
-                var font = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
-                var fontGlyph = font.GetGlyph('{');
-                //PixelFarm.Font2.MyFonts.SetShapingEngine();
+                //////load font data
+                ////var font = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
+                ////var fontGlyph = font.GetGlyph('{');
+                //////PixelFarm.Font2.MyFonts.SetShapingEngine();
 
-                canvas.FillVxs(LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black), fontGlyph.flattenVxs);
+                ////canvas.FillVxs(LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black), fontGlyph.flattenVxs);
 
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.White;
-                canvas.CurrentFont = font;
+                ////canvas.StrokeColor = LayoutFarm.Drawing.Color.White;
+                ////canvas.CurrentFont = font;
 
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.Black;
-                canvas.DrawLine(0, 200, 500, 200);
+                ////canvas.StrokeColor = LayoutFarm.Drawing.Color.Black;
+                ////canvas.DrawLine(0, 200, 500, 200);
 
-                //test Thai words
-                canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
-                canvas.DrawString("1234567890", 80, 200);
-                GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(fontGlyph.glyphImage32));
-                canvas.DrawImage(bmp, 50, 50);
-                bmp.Dispose();
+                //////test Thai words
+                ////canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
+                ////canvas.DrawString("1234567890", 80, 200);
+                ////GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(fontGlyph.glyphImage32));
+                ////canvas.DrawImage(bmp, 50, 50);
+                ////bmp.Dispose();
 
-                //canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
-                //canvas.FillRect(0, 0, 300, 300);
 
             });
             form.Show();

@@ -69,7 +69,7 @@ namespace OpenTkEssTest
 
             ////circle & ellipse
             //canvas2d.DrawCircle(100, 100, 25);
-            //canvas2d.DrawEllipse(200, 200, 25, 50);
+            //canvas2d.DrawEllipse(200, 200, 25, 50); 
 
             //canvas2d.FillCircle(LayoutFarm.Drawing.Color.OrangeRed, 100, 400, 25);
             //canvas2d.FillEllipse(LayoutFarm.Drawing.Color.OrangeRed, 200, 400, 25, 50);

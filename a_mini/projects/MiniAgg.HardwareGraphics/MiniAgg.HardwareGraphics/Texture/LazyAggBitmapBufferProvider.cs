@@ -3,9 +3,7 @@ using System.Text;
 using System;
 using System.Runtime.InteropServices;
 
-using Tesselate;
-using OpenTK.Graphics.OpenGL;
-
+using Tesselate; 
 namespace LayoutFarm.DrawingGL
 {
     public class LazyAggBitmapBufferProvider : LazyBitmapBufferProvider

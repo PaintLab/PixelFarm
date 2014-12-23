@@ -14,7 +14,7 @@ namespace OpenTK
     public partial class MyGLControl : GLControl
     {
         LayoutFarm.Drawing.Color clearColor;
-        EventHandler glPaintHandler; 
+        EventHandler glPaintHandler;
         public MyGLControl()
         {
             OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
@@ -67,14 +67,20 @@ namespace OpenTK
         public void InitSetup2d(Rectangle screenBound)
         {
             int max = Math.Max(screenBound.Width, screenBound.Height);
+            int min = Math.Min(screenBound.Width, screenBound.Height);
+
             //init
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            //---------------- 
-            GL.Viewport(0, 0, max, max);
+
+            //---------------------------------
+            //-1 temp fix split scanline in some screen
+            GL.Viewport(0, 0, max, max-1);
+            //---------------------------------
+
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Ortho(0, max, 0, max, 0.0, 100.0);
+            GL.Ortho(0, max, 0, max, 0.0, 100);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
         }

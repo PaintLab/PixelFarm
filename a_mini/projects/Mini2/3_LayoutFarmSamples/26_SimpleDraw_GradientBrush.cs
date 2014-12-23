@@ -14,7 +14,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Mini2
 {
-    [Info(OrderCode = "06")]
+    [Info(OrderCode = "26")]
     [Info("DrawSample06_GradientBrush")]
     public class DrawSample06_GradientBrush : DemoBase
     {
@@ -32,6 +32,7 @@ namespace Mini2
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
+
                 var linearGrBrush = new LinearGradientBrush(
                     new LayoutFarm.Drawing.PointF(25, 25),
                     LayoutFarm.Drawing.Color.Black,
@@ -48,7 +49,7 @@ namespace Mini2
                     new LayoutFarm.Drawing.PointF(25, 100),
                     LayoutFarm.Drawing.Color.OrangeRed);
                 //2. fill polygon with gradient brush 
-                 
+
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -61,7 +62,7 @@ namespace Mini2
 
                 //another  ...                
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.Yellow, 200, 0, 150, 150);
-                 
+
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -73,7 +74,7 @@ namespace Mini2
                 //-------------------------------------------------------------------------
 
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 400, 0, 150, 150);
-      
+
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -83,6 +84,9 @@ namespace Mini2
                         new LayoutFarm.Drawing.PointF(410, 100)});
                 canvas.Note1 = 0;
                 //-------------------------------------------------------------------------
+
+
+
             });
             form.Show();
         }

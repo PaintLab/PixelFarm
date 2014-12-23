@@ -5,19 +5,7 @@ using System.Text;
 using OpenTK.Graphics.OpenGL;
 
 namespace LayoutFarm.DrawingGL
-{
-
-
-
-    public abstract class LazyBitmapBufferProvider
-    {
-        public abstract IntPtr GetRawBufferHead();
-        public abstract void ReleaseBufferHead();
-        public abstract int Width { get; }
-        public abstract int Height { get; }
-        public abstract bool IsInvert { get; }
-    }
-
+{   
 
     public class GLBitmap : IDisposable
     {
@@ -45,10 +33,7 @@ namespace LayoutFarm.DrawingGL
         public bool IsInvert
         {
             get { return this.isInvertImage; }
-        }
-
-
-
+        } 
         public int Width
         {
             get { return this.width; }
@@ -59,7 +44,7 @@ namespace LayoutFarm.DrawingGL
         }
 
 
-        //---------------------------------
+         
         //only after gl context is created
         internal int GetServerTextureId()
         {
@@ -99,8 +84,7 @@ namespace LayoutFarm.DrawingGL
             return this.textureId;
         }
         public void Dispose()
-        {
-
+        {   
             GL.DeleteTextures(1, ref textureId);
         }
 

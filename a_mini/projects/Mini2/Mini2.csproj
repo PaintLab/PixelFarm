@@ -56,13 +56,14 @@
     <Compile Include="2_Samples\04_LionFillDirect.cs" />
     <Compile Include="2_Samples\05_LionFillDirectBufferDemo.cs" />
     <Compile Include="2_Samples\06_SetCanvasOriginAndRectClip.cs" />
-    <Compile Include="3_LayoutFarmSamples\03_SimpleDraw3.cs" />
-    <Compile Include="3_LayoutFarmSamples\04_SimpleDraw4.cs" />
-    <Compile Include="3_LayoutFarmSamples\05_SimpleDraw_BasicStencil.cs" />
-    <Compile Include="3_LayoutFarmSamples\06_SimpleDraw_GradientBrush.cs" />
-    <Compile Include="3_LayoutFarmSamples\07_SimpleDraw_PolygonStencil.cs" />
-    <Compile Include="3_LayoutFarmSamples\08_SimpleDraw_DrawText2.cs" />
-    <Compile Include="3_LayoutFarmSamples\09_TestTextureAtlas.cs" />
+    <Compile Include="3_LayoutFarmSamples\23_SimpleDraw3.cs" />
+    <Compile Include="3_LayoutFarmSamples\24_SimpleDraw4.cs" />
+    <Compile Include="3_LayoutFarmSamples\25_SimpleDraw_BasicStencil.cs" />
+    <Compile Include="3_LayoutFarmSamples\26_SimpleDraw_GradientBrush.cs" />
+    <Compile Include="3_LayoutFarmSamples\27_SimpleDraw_PolygonStencil.cs" />
+    <Compile Include="3_LayoutFarmSamples\28_SimpleDraw_DrawText2.cs" />
+    <Compile Include="3_LayoutFarmSamples\29_TestTextureAtlas.cs" />
+    <Compile Include="3_LayoutFarmSamples\22_Polygon.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>

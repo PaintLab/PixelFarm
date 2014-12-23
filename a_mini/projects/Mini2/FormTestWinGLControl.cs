@@ -42,6 +42,9 @@ namespace Mini2
         
         public void SetGLPaintHandler(EventHandler handler)
         {
+
+           
+
             this.derivedGLControl1.SetGLPaintHandler(handler);
         }
         public UserControl GetCanvasControl()

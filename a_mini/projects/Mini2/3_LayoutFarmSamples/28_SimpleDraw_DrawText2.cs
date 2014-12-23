@@ -12,11 +12,11 @@ using LayoutFarm.Drawing;
 
 namespace Mini2
 {
-    [Info(OrderCode = "04")]
-    [Info("Drawing4")]
-    public class DrawSample04 : DemoBase
+    [Info(OrderCode = "28")]
+    [Info("DrawSample08_DrawText2")]
+    public class DrawSample08_DrawText2 : DemoBase
     {
-        static DrawSample04()
+        static DrawSample08_DrawText2()
         {
             LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
@@ -26,9 +26,9 @@ namespace Mini2
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
             var canvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
-            GraphicsPath path = null;
             FontInfo fontinfo = null;
             LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
+
 
             form.SetGLPaintHandler((o, s) =>
             {
@@ -38,28 +38,12 @@ namespace Mini2
                     canvas.CurrentFont = fontinfo.ResolvedFont;
                 }
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
-                canvas.FillRectangle(
-                  LayoutFarm.Drawing.Color.Blue,
-                 100, 10, 200, 200);
-                canvas.DrawRectangle(
-                 LayoutFarm.Drawing.Color.Black,
-                 100, 10, 200, 200);
-
-                //------------
-                //graphics paths
-                if (path == null)
-                {
-                    path = CurrentGraphicsPlatform.CreateGraphicPath();
-                    //path.AddRectangle(new LayoutFarm.Drawing.RectangleF(10, 10, 10, 10));
-                    path.AddEllipse(30, 30, 25, 25);
-
-                }
-                //canvas.FillPath(path);
-                canvas.DrawPath(path);
-                //------------
+                canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 0, 0, 400, 400);
                 //test draw text
-                canvas.DrawText("ABCD".ToCharArray(), 100, 500);
-                //------------
+                canvas.Note1 = 2;
+                canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 0);
+                canvas.Note1 = 0;
+                canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100); 
 
             });
             form.Show();

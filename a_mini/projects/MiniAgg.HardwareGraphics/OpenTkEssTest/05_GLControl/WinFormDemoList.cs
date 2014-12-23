@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using OpenTK.Graphics.OpenGL;
 using Mini;
-using Tesselate;
+
 using LayoutFarm.DrawingGL;
 
 namespace OpenTkEssTest
@@ -97,7 +97,7 @@ namespace OpenTkEssTest
                         50+10,340,
                         10f +10,340};
                 canvas.StrokeColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
-                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
+                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length / 2);
 
                 int strokeW = 10;
                 canvas.StrokeColor = LayoutFarm.Drawing.Color.LightGray;
@@ -141,7 +141,7 @@ namespace OpenTkEssTest
                 //canvas.DrawArc(150, 200, 300, 50, 0, 150, 150, SvgArcSize.Large, SvgArcSweep.Negative);
                 canvas.DrawArc(100, 200, 300, 200, 30, 30, 50, SvgArcSize.Large, SvgArcSweep.Negative);
 
-               
+
                 // canvas.DrawArc(100, 200, 300, 200, 0, 100, 100, SvgArcSize.Large, SvgArcSweep.Negative);
 
                 fillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
@@ -156,7 +156,7 @@ namespace OpenTkEssTest
 
                 canvas.FillVxs(fillColor, fontGlyph.flattenVxs);
 
-                 
+
                 canvas.CurrentFont = font;
 
                 canvas.StrokeColor = LayoutFarm.Drawing.Color.Black;

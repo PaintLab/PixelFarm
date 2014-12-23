@@ -73,10 +73,15 @@
     <Compile Include="Graphics\IGraphicsMode.cs" />
     <Compile Include="Graphics\OpenGL\ErrorHelper.cs" />
     <Compile Include="Graphics\OpenGL\GL.cs" />
+    <Compile Include="Graphics\OpenGL\GL_1_1_Ext.cs" />
+    <Compile Include="Graphics\OpenGL\GL_1_2.cs" />
+    <Compile Include="Graphics\OpenGL\GL_2_up.cs" />
     <Compile Include="Graphics\OpenGL\GLCore.cs" />
     <Compile Include="Graphics\OpenGL\GLDelegates.cs" />
     <Compile Include="Graphics\OpenGL\GLEnums.cs" />
     <Compile Include="Graphics\OpenGL\GLHelper.cs" />
+    <Compile Include="Graphics\OpenGL\GL_1_3up.cs" />
+    <Compile Include="Graphics\OpenGL\GL_Venders.cs" />
     <Compile Include="IWindowInfo.cs" />
     <Compile Include="Math\BezierCurve.cs" />
     <Compile Include="Math\BezierCurveCubic.cs" />
