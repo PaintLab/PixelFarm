@@ -70,6 +70,6 @@ namespace LayoutFarm.Drawing
         {
             return new LayoutFarm.Drawing.Color(c.A, c.R, c.G, c.B);
         }
-        
+
     }
 }

@@ -58,6 +58,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="00_DemoBase\Conv.cs" />
     <Compile Include="00_DemoBase\DemoBase.cs" />
     <Compile Include="00_DemoBase\FormDev.cs">
       <SubType>Form</SubType>

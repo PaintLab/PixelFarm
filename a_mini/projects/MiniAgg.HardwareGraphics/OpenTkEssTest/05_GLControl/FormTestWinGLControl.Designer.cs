@@ -34,7 +34,7 @@
             // derivedGLControl1
             // 
             this.derivedGLControl1.BackColor = System.Drawing.Color.Black;
-            this.derivedGLControl1.ClearColor = LayoutFarm.Drawing.Color.Empty;
+            this.derivedGLControl1.ClearColor = new OpenTK.Graphics.Color4(1f, 1f, 1f, 1f);
             this.derivedGLControl1.Location = new System.Drawing.Point(31, 12);
             this.derivedGLControl1.Name = "derivedGLControl1";
             this.derivedGLControl1.Size = new System.Drawing.Size(576, 416);

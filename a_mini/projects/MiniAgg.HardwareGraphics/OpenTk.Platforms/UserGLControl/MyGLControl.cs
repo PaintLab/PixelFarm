@@ -13,7 +13,7 @@ namespace OpenTK
 {
     public partial class MyGLControl : GLControl
     {
-        LayoutFarm.Drawing.Color clearColor;
+        OpenTK.Graphics.Color4 clearColor;
         EventHandler glPaintHandler;
         public MyGLControl()
         {
@@ -34,7 +34,7 @@ namespace OpenTK
         {
             this.glPaintHandler = glPaintHandler;
         }
-        public LayoutFarm.Drawing.Color ClearColor
+        public OpenTK.Graphics.Color4 ClearColor
         {
             get { return clearColor; }
             set
