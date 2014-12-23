@@ -46,7 +46,7 @@ namespace LayoutFarm.DrawingGL
 
             SetupDefaultFonts();
             textPrinter = new GLTextPrinter(this);
-          
+
         }
         public CanvasSmoothMode SmoothMode
         {
@@ -406,7 +406,7 @@ namespace LayoutFarm.DrawingGL
                 //set color 
                 float* rectCoords = stackalloc float[12];
                 CreateRectCoords(rectCoords, x, y, w, h);
-                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6); 
+                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6);
             }
 
 
@@ -982,8 +982,8 @@ namespace LayoutFarm.DrawingGL
         void SetupDefaultFonts()
         {
             //test
-            this.textPrinter.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 10);
-             
+            //this.textPrinter.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 10);
+
         }
         public PixelFarm.Agg.Fonts.Font CurrentFont
         {

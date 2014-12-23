@@ -28,7 +28,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using OpenTK.Graphics;
+//using OpenTK.Graphics;
 using OpenTK.Input;
 using OpenTK.Platform;
 
@@ -56,7 +56,7 @@ namespace OpenTK
 
         /// <summary>Constructs a new NativeWindow with default attributes without enabling events.</summary>
         public NativeWindow()
-            : this(640, 480, "OpenTK Native Window", GameWindowFlags.Default, GraphicsMode.Default, DisplayDevice.Default) { }
+            : this(640, 480, "OpenTK Native Window", GameWindowFlags.Default, OpenTK.Graphics.GraphicsMode.Default, DisplayDevice.Default) { }
 
         // TODO: Remaining constructors.
 
@@ -69,7 +69,7 @@ namespace OpenTK
         /// <param name="device">The OpenTK.Graphics.DisplayDevice to construct the NativeWindow in.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">If width or height is less than 1.</exception>
         /// <exception cref="System.ArgumentNullException">If mode or device is null.</exception>
-        public NativeWindow(int width, int height, string title, GameWindowFlags options, GraphicsMode mode, DisplayDevice device)
+        public NativeWindow(int width, int height, string title, GameWindowFlags options, OpenTK.Graphics.GraphicsMode mode, DisplayDevice device)
             : this(device.Bounds.Left + (device.Bounds.Width - width) / 2,
                    device.Bounds.Top + (device.Bounds.Height - height) / 2,
                    width, height, title, options, mode, device) { }
@@ -85,7 +85,7 @@ namespace OpenTK
         /// <param name="device">The OpenTK.Graphics.DisplayDevice to construct the NativeWindow in.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">If width or height is less than 1.</exception>
         /// <exception cref="System.ArgumentNullException">If mode or device is null.</exception>
-        public NativeWindow(int x, int y, int width, int height, string title, GameWindowFlags options, GraphicsMode mode, DisplayDevice device)
+        public NativeWindow(int x, int y, int width, int height, string title, GameWindowFlags options, OpenTK.Graphics.GraphicsMode mode, DisplayDevice device)
         {
             // TODO: Should a constraint be added for the position?
             if (width < 1)

@@ -16,7 +16,8 @@ namespace OpenTK
 {
     public partial class MyGLControl : GLControl
     {
-        LayoutFarm.Drawing.Color clearColor;
+
+        OpenTK.Graphics.Color4 clearColor;
         EventHandler glPaintHandler;
         public MyGLControl()
         {
@@ -37,7 +38,7 @@ namespace OpenTK
         {
             this.glPaintHandler = glPaintHandler;
         }
-        public LayoutFarm.Drawing.Color ClearColor
+        public OpenTK.Graphics.Color4 ClearColor
         {
             get { return clearColor; }
             set
@@ -75,10 +76,10 @@ namespace OpenTK
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             //---------------- 
             GL.Viewport(0, 0, max, max);
-            
+
             //set up graphics
 
-            throw new NotSupportedException(); 
+            throw new NotSupportedException();
             //GL.MatrixMode(MatrixMode.Projection);
             //GL.LoadIdentity();
             //GL.Ortho(0, max, 0, max, 0.0, 100.0);

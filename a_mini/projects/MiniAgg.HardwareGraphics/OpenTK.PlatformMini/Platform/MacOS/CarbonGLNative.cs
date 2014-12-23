@@ -262,7 +262,15 @@ namespace OpenTK.Platform.MacOS
             Debug.Print("New Size: {0}, {1}", Width, Height);
 
             // TODO: if we go full screen we need to make this use the device specified.
-            bounds = LayoutFarm.Drawing.Conv.ToRect(mDisplayDevice.Bounds);
+            var displayBounds = mDisplayDevice.Bounds;
+            bounds = new Rectangle(
+                displayBounds.X,
+                displayBounds.Y,
+                displayBounds.Width,
+                displayBounds.Height);
+
+
+            //LayoutFarm.Drawing.Conv.ToRect(mDisplayDevice.Bounds);
 
 
             windowState = WindowState.Fullscreen;
@@ -542,7 +550,7 @@ namespace OpenTK.Platform.MacOS
                         if (mousePosInClient.X != InputDriver.Mouse[0].X ||
                             mousePosInClient.Y != InputDriver.Mouse[0].Y)
                         {
-                            InputDriver.Mouse[0].Position = mousePosInClient;
+                            InputDriver.Mouse[0].Position = new System.Drawing.Point(mousePosInClient.X, mousePosInClient.Y);
                         }
                     }
                     else
@@ -554,7 +562,7 @@ namespace OpenTK.Platform.MacOS
                         if (mousePosInClient.X != InputDriver.Mouse[0].X ||
                             mousePosInClient.Y != InputDriver.Mouse[0].Y)
                         {
-                            InputDriver.Mouse[0].Position = mousePosInClient;
+                            InputDriver.Mouse[0].Position = new System.Drawing.Point(mousePosInClient.X, mousePosInClient.Y);
                         }
                     }
 

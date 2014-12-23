@@ -50,6 +50,7 @@
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\CanvasGL2d_OpenGL.cs" />
     <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
+    <Compile Include="GLHelper\GLHelper.cs" />
     <Compile Include="Texture\GLBitmap.cs" />
     <Compile Include="GLCanvas\GLTextPrinter.cs" />
     <Compile Include="GLCanvas\SvgArc.cs" />
@@ -81,10 +82,6 @@
     <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
       <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
       <Name>OpenTk.CoreGraphics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenTk.Platforms\OpenTk.Platforms.csproj">
-      <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>
-      <Name>OpenTk.Platforms</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

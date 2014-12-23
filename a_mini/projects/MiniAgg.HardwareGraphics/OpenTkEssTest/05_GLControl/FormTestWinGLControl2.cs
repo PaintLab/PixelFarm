@@ -31,7 +31,7 @@ namespace OpenTkEssTest
         void FormTestWinGLControl_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
-            this.myGLControl1.ClearColor = LayoutFarm.Drawing.Color.White;
+            this.myGLControl1.ClearColor = new OpenTK.Graphics.Color4(1f, 1f, 1f, 1f);
 
             if (!this.DesignMode)
             {   

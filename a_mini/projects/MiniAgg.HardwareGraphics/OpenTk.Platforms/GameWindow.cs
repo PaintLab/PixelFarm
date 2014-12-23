@@ -1070,7 +1070,11 @@ namespace OpenTK
 
         protected void GLClearColor(System.Drawing.Color c)
         {
-            OpenTK.Graphics.OpenGL.GL.ClearColor(LayoutFarm.Drawing.Conv.ToColor(c));
+            OpenTK.Graphics.OpenGL.GL.ClearColor(
+                (float)c.R / 255f,
+                 (float)c.G / 255f,
+                 (float)c.B / 255f,
+                (float)c.A / 255f);
         }
 
     }

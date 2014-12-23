@@ -11,7 +11,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Threading;
-using LayoutFarm.Drawing;
+using OpenTK.Graphics;
+
 
 namespace OpenTK
 {
@@ -34,7 +35,7 @@ namespace OpenTK
         IList<DisplayResolution> available_resolutions_readonly;
         bool primary;
 
-        Rectangle bounds;
+        OpenTK.Graphics.Rectangle bounds;
 
         static readonly List<DisplayDevice> available_displays = new List<DisplayDevice>();
         static readonly IList<DisplayDevice> available_displays_readonly;
