@@ -133,8 +133,12 @@ namespace OpenTkEssTest
 
         protected override void OnResize(EventArgs e)
         {
-            GL.Viewport(LayoutFarm.Drawing.Conv.ToRect(ClientRectangle));
-
+            var clientRect = this.ClientRectangle;
+            GL.Viewport(new OpenTK.Graphics.Rectangle(
+                clientRect.X,
+                clientRect.Y,
+                clientRect.Width,
+                clientRect.Height));
             float aspect = this.ClientSize.Width / (float)this.ClientSize.Height;
 
             Matrix4 projection_matrix;

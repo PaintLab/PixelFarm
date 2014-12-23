@@ -22,7 +22,7 @@ namespace OpenTkEssTest
 
         void FormTestWinGLControl_Load(object sender, EventArgs e)
         {
-            this.derivedGLControl1.ClearColor = LayoutFarm.Drawing.Color.White;
+            this.derivedGLControl1.ClearColor = new OpenTK.Graphics.Color4(1f, 1f, 1f, 1f);
         }
 
     }

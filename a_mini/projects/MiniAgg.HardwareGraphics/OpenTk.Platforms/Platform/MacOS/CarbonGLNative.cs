@@ -35,7 +35,7 @@ using System.Text;
 namespace OpenTK.Platform.MacOS
 {
     using Carbon;
-    using Graphics;
+    //using Graphics;
 
     class CarbonGLNative : INativeWindow
     {
@@ -102,7 +102,7 @@ namespace OpenTK.Platform.MacOS
             mWindowAttrib = attrib;
         }
 
-        public CarbonGLNative(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
+        public CarbonGLNative(int x, int y, int width, int height, string title, OpenTK.Graphics.GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
         {
             CreateNativeWindow(WindowClass.Document,
                 WindowAttributes.StandardDocument | WindowAttributes.StandardHandler |
@@ -262,7 +262,13 @@ namespace OpenTK.Platform.MacOS
             Debug.Print("New Size: {0}, {1}", Width, Height);
 
             // TODO: if we go full screen we need to make this use the device specified.
-            bounds = LayoutFarm.Drawing.Conv.ToRect(mDisplayDevice.Bounds);
+            var displayBounds = mDisplayDevice.Bounds;
+            bounds = new Rectangle(
+                displayBounds.X,
+                displayBounds.Y,
+                displayBounds.Width,
+                displayBounds.Height);
+            //LayoutFarm.Drawing.Conv.ToRect(mDisplayDevice.Bounds);
 
 
             windowState = WindowState.Fullscreen;

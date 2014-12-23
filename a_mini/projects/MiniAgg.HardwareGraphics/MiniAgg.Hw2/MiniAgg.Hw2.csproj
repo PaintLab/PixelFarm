@@ -33,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="04_GLScanline\0_ScanlineSpan.cs" />
@@ -56,6 +55,7 @@
     <Compile Include="GLCanvas\SvgArc.cs" />
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
+    <Compile Include="GLHelper\GLHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="04_GLScanline\7_BasicShader.cs" />
     <Compile Include="Texture\GLBitmap.cs" />

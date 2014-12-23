@@ -49,12 +49,12 @@ namespace OpenTkEssTest
     public class T01BasicSample : DemoBase
     {
         public override void Init()
-        {   
+        {
             using (var example = new T01_Basic())
-            {   
+            {
                 example.Run(30.0, 0.0);
-            }   
-        } 
+            }
+        }
     }
 
     //[Example("Display Lists", ExampleCategory.OpenGL, "1.x", 2, Documentation = "DisplayLists")]
@@ -114,8 +114,12 @@ namespace OpenTkEssTest
 
         protected override void OnResize(EventArgs e)
         {
-            GL.Viewport(LayoutFarm.Drawing.Conv.ToRect(ClientRectangle));
-
+            var clientRect = this.ClientRectangle;
+            GL.Viewport(new OpenTK.Graphics.Rectangle(
+                clientRect.X,
+                clientRect.Y,
+                clientRect.Width,
+                clientRect.Height));
             float aspect = this.ClientSize.Width / (float)this.ClientSize.Height;
 
             Matrix4 projection_matrix;
