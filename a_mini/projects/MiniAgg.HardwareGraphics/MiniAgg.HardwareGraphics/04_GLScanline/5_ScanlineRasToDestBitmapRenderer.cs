@@ -175,7 +175,7 @@ namespace PixelFarm.Agg
             if (nelements > 0)
             {
                 unsafe
-                {  
+                {
                     VertexC4V2S[] vpoints = this.myLineBuffer.Array;
                     fixed (VertexC4V2S* h = &vpoints[0])
                     {
@@ -204,55 +204,51 @@ namespace PixelFarm.Agg
             //if (color.A == 0) { return; }
 
             int len = x2 - x1 + 1;
-            int alpha = (((int)(color.A) * (cover + 1)) >> 8);
-            var singlePxBuff = this.mySinglePixelBuffer;
-            var lineBuffer = this.myLineBuffer;
+            int alpha = (((int)(color.A) * (cover + 1)) >> 8); 
 
-            if (alpha == BASE_MASK)
+            switch (len)
             {
+                case 0:
+                    {
+                    } break;
+                case 1:
+                    {
+                        this.mySinglePixelBuffer.AddVertex(new VertexC4V2S(
+                            LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
+                            x1, y));
 
-                switch (len)
-                {
-                    case 0:
-                        {
-                        } break;
-                    case 1:
-                        {
-                            singlePxBuff.AddVertex(new VertexC4V2S(
-                                LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
-                                x1, y));
+                    } break;
+                default:
+                    {
+                        var lineBuffer = this.myLineBuffer;
+                        var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
+                        lineBuffer.AddVertex(new VertexC4V2S(c, x1, y));
+                        lineBuffer.AddVertex(new VertexC4V2S(c, x2 + 1, y));
 
-                        } break;
-                    default:
-                        {
-                            var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
-                            lineBuffer.AddVertex(new VertexC4V2S(c, x1, y));
-                            lineBuffer.AddVertex(new VertexC4V2S(c, x2 + 1, y));
+                        //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
 
-                            //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB();
+                        //for (int i = 0; i < len; ++i)
+                        //{
+                        //    //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
+                        //    singlePxBuff.AddVertex(new VertexC4XYZ3I(
+                        //        c, x1 + i, y));
+                        //}
 
-                            //for (int i = 0; i < len; ++i)
-                            //{
-                            //    //var c = LayoutFarm.Drawing.Color.FromArgb(alpha, color);
-                            //    singlePxBuff.AddVertex(new VertexC4XYZ3I(
-                            //        c, x1 + i, y));
-                            //}
-
-                        } break;
-                }
+                    } break;
             }
-            else
-            {
-                int xpos = x1;
-                do
-                {
-                    singlePxBuff.AddVertex(new VertexC4V2S(
-                        LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
-                        xpos, y));
-                    xpos++;
-                }
-                while (--len != 0);
-            }
+            //}
+            //else
+            //{
+            //    int xpos = x1;
+            //    do
+            //    {
+            //        singlePxBuff.AddVertex(new VertexC4V2S(
+            //            LayoutFarm.Drawing.Color.FromArgb(alpha, color).ToARGB(),
+            //            xpos, y));
+            //        xpos++;
+            //    }
+            //    while (--len != 0);
+            //}
         }
         void GLBlendSolidHSpan(int x, int y, int len,
             LayoutFarm.Drawing.Color sourceColor,
