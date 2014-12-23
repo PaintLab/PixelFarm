@@ -41,7 +41,7 @@ namespace OpenTkEssTest
             GL.ClearColor(0f, 0f, 0f, 0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
-      
+
             Texture = LoadTexture("../../Data/Textures/logo-dark.jpg");
 
             GL.Enable(EnableCap.Texture2D);
@@ -88,7 +88,12 @@ namespace OpenTkEssTest
 
         protected override void OnResize(EventArgs e)
         {
-            GL.Viewport(LayoutFarm.Drawing.Conv.ToRect(this.ClientRectangle));
+            var clientRect = this.ClientRectangle;
+            GL.Viewport(
+                clientRect.X,
+                clientRect.Y,
+                clientRect.Width,
+                clientRect.Height);
 
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, Width / (float)Height, 1.0f, 50.0f);
             GL.MatrixMode(MatrixMode.Projection);

@@ -33,7 +33,12 @@ namespace Mini2
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
-                 
+                if (tbrush == null)
+                {
+                    var bitmap = new System.Drawing.Bitmap("../../../SampleImages/plain01.png");
+                    bmp = new LayoutFarm.Drawing.Bitmap(bitmap.Width, bitmap.Height, bitmap);
+                    tbrush = new LayoutFarm.Drawing.TextureBrush(bmp);
+                }
                 //2. fill polygon with gradient brush  
                 canvas.FillPolygon(
                     tbrush,

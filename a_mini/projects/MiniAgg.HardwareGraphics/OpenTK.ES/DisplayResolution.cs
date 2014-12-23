@@ -9,15 +9,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
-using LayoutFarm.Drawing;
+using System.Diagnostics; 
 
 namespace OpenTK
 {
     /// <summary>Contains information regarding a monitor's display resolution.</summary>
     public class DisplayResolution
     {
-        Rectangle bounds;
+        OpenTK.Graphics.Rectangle bounds;
         int bits_per_pixel;
         float refresh_rate;
 
@@ -36,7 +35,7 @@ namespace OpenTK
             if (bitsPerPixel <= 0) throw new ArgumentOutOfRangeException("bitsPerPixel", "Must be greater than zero.");
             if (refreshRate < 0) throw new ArgumentOutOfRangeException("refreshRate", "Must be greater than, or equal to zero.");
 
-            this.bounds = new Rectangle(x, y, width, height);
+            this.bounds = new OpenTK.Graphics.Rectangle(x, y, width, height);
             this.bits_per_pixel = bitsPerPixel;
             this.refresh_rate = refreshRate;
         }
@@ -86,7 +85,7 @@ namespace OpenTK
         /// </summary>
         [Obsolete("This property will return invalid results if a monitor changes resolution. Use DisplayDevice.Bounds instead.")]
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public Rectangle Bounds
+        public OpenTK.Graphics.Rectangle Bounds
         {
             get { return bounds; }
         }

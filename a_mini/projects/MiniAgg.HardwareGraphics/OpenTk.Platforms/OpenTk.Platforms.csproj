@@ -63,7 +63,6 @@
     <Compile Include="Input\MouseDevice.cs" />
     <Compile Include="Input\MouseState.cs" />
     <Compile Include="KeyPressEventArgs.cs" />
-    <Compile Include="LayoutFarm.Drawing\Conv.cs" />
     <Compile Include="LayoutFarm.Drawing\ExtensionAttribute.cs" />
     <Compile Include="Minimal.cs" />
     <Compile Include="NativeWindow.cs" />
@@ -156,10 +155,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
-      <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
-      <Name>LayoutFarm.Drawing</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
       <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
       <Name>OpenTk.CoreGraphics</Name>

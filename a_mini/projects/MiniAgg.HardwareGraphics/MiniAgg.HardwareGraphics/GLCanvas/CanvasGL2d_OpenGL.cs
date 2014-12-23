@@ -25,11 +25,16 @@ namespace LayoutFarm.DrawingGL
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             //set value for clear color buffer
-            GL.ClearColor(c);
+            GL.ClearColor(
+                (float)c.R / 255f,
+                 (float)c.G / 255f,
+                 (float)c.B / 255f,
+                 (float)c.A / 255f);
+
             GL.ClearStencil(0);
             //actual clear here 
             GL.Clear(ClearBufferMask.ColorBufferBit |
-                ClearBufferMask.DepthBufferBit | 
+                ClearBufferMask.DepthBufferBit |
                 ClearBufferMask.StencilBufferBit);
         }
         public void SetCanvasOrigin(int x, int y)
@@ -55,8 +60,8 @@ namespace LayoutFarm.DrawingGL
         {
             GL.Scissor(x, y, w, h);
         }
-       
-       
+
+
         public void FillPolygon(LayoutFarm.Drawing.Brush brush, float[] vertex2dCoords, int npoints)
         {
             //-------------
@@ -294,7 +299,7 @@ namespace LayoutFarm.DrawingGL
                     } break;
             }
         }
-     
+
         public void DrawImages(GLBitmap bmp, LayoutFarm.Drawing.RectangleF[] destAndSrcPairs)
         {
 
@@ -483,6 +488,6 @@ namespace LayoutFarm.DrawingGL
             GL.DrawArrays((BeginMode)mode, 0, vertexCount);
             //4. disable client side memory
             GL.DisableClientState(ArrayCap.VertexArray);
-        } 
+        }
     }
 }
