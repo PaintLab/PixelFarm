@@ -28,7 +28,7 @@ namespace LayoutFarm.DrawingGL
         GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
         CurveFlattener curveFlattener = new CurveFlattener();
-        GLTextPrinter textPriner;
+        GLTextPrinter textPrinter;
 
         int canvasOriginX = 0;
         int canvasOriginY = 0;
@@ -43,8 +43,10 @@ namespace LayoutFarm.DrawingGL
             sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
-            textPriner = new GLTextPrinter(this);
-            SetupFonts();
+
+            SetupDefaultFonts();
+            textPrinter = new GLTextPrinter(this);
+          
         }
         public CanvasSmoothMode SmoothMode
         {
@@ -977,31 +979,33 @@ namespace LayoutFarm.DrawingGL
             get { return this.canvasOriginY; }
         }
         //-----------------------------------------------------
-        void SetupFonts()
+        void SetupDefaultFonts()
         {
-
+            //test
+            this.textPrinter.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 10);
+             
         }
         public PixelFarm.Agg.Fonts.Font CurrentFont
         {
             get
             {
-                return this.textPriner.CurrentFont;
+                return this.textPrinter.CurrentFont;
             }
             set
             {
-                this.textPriner.CurrentFont = value;
+                this.textPrinter.CurrentFont = value;
             }
         }
         public void DrawString(string str, float x, float y)
         {
 
-            this.textPriner.Print(str.ToCharArray(), x, y);
+            this.textPrinter.Print(str.ToCharArray(), x, y);
 
         }
         public void DrawString(char[] buff, float x, float y)
         {
 
-            this.textPriner.Print(buff, x, y);
+            this.textPrinter.Print(buff, x, y);
         }
 
     }

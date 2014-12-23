@@ -75,7 +75,7 @@ namespace OpenTK
 
             //---------------------------------
             //-1 temp fix split scanline in some screen
-            GL.Viewport(0, 0, max, max - 1);
+            GL.Viewport(0, 0, max, max-1);
             //---------------------------------
 
             GL.MatrixMode(MatrixMode.Projection);
