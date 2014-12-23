@@ -12,10 +12,6 @@ using System.Text;
 using System.Diagnostics;
 using OpenTK.Graphics;
 
-namespace LayoutFarm.Drawing
-{
-    class dummy { }
-}
 
 namespace OpenTK
 {

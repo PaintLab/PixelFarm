@@ -84,7 +84,8 @@ namespace LayoutFarm.DrawingGL
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             //set value for clear color buffer
-            GL.ClearColor(c);
+             
+            GLHelper.ClearColor(c);
             GL.ClearStencil(0);
 
             //actual clear here !
