@@ -378,7 +378,7 @@ namespace LayoutFarm.DrawingGL
                         int j = vertextList.Count;
                         //-----------------------------   
                         //fill polygon  with solid color
-                        
+
                         unsafe
                         {
                             float* vtx = stackalloc float[j * 2];
@@ -474,7 +474,7 @@ namespace LayoutFarm.DrawingGL
                 //set color 
                 float* rectCoords = stackalloc float[12];
                 CreateRectCoords(rectCoords, x, y, w, h);
-                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6);
+                UnsafeDrawV2fList(DrawMode.Triangles, rectCoords, 6, color);
             }
 
         }
