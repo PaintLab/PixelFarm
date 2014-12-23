@@ -28,24 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.derivedGLControl1 = new OpenTkEssTest.DerivedGLControl();
+            this.myGLControl1 = new OpenTK.MyGLControl();
             this.SuspendLayout();
             // 
             // derivedGLControl1
             // 
-            this.derivedGLControl1.BackColor = System.Drawing.Color.Black;
-            this.derivedGLControl1.Location = new System.Drawing.Point(43, 12);
-            this.derivedGLControl1.Name = "derivedGLControl1";
-            this.derivedGLControl1.Size = new System.Drawing.Size(745, 469);
-            this.derivedGLControl1.TabIndex = 0;
-            this.derivedGLControl1.VSync = false;
+            this.myGLControl1.BackColor = System.Drawing.Color.Black;
+            this.myGLControl1.Location = new System.Drawing.Point(43, 12);
+            this.myGLControl1.Name = "derivedGLControl1";
+            this.myGLControl1.Size = new System.Drawing.Size(745, 469);
+            this.myGLControl1.TabIndex = 0;
+            this.myGLControl1.VSync = false;
             // 
             // FormTestWinGLControl2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1017, 531);
-            this.Controls.Add(this.derivedGLControl1);
+            this.Controls.Add(this.myGLControl1);
             this.Name = "FormTestWinGLControl2";
             this.Text = "FormTestWinGLControl";
             this.ResumeLayout(false);
@@ -54,7 +54,7 @@
 
         #endregion
 
-        private DerivedGLControl derivedGLControl1;
+        private  OpenTK.MyGLControl myGLControl1;
 
     }
 }

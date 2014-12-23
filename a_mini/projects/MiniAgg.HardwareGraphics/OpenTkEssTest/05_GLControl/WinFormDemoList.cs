@@ -8,8 +8,8 @@ using System.Windows.Forms;
 
 using OpenTK.Graphics.OpenGL;
 using Mini;
-using Tesselate;
 
+using LayoutFarm.DrawingGL;
 
 namespace OpenTkEssTest
 {
@@ -46,44 +46,41 @@ namespace OpenTkEssTest
         }
     }
     [Info(OrderCode = "24")]
-    [Info("T24_FormMultipleGLControlsFormDemo2")]
-    public class T24_FormMultipleGLControlsFormDemo2 : DemoBase
+    [Info("T24_FormTestGLCanvasDemo")]
+    public class T24_FormTestGLCanvasDemo : DemoBase
     {
+
+        GLBitmap hwBmp = null;
         public override void Init()
         {
             FormTestWinGLControl2 form = new FormTestWinGLControl2();
-            CanvasGL2d canvas = new CanvasGL2d();
-            GLBitmapTexture hwBmp = null;
+            CanvasGL2d canvas = new CanvasGL2d(this.Width, this.Height);
 
             form.SetGLPaintHandler((o, s) =>
             {
+
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
-
-
-                //canvas.FillColor = LayoutFarm.Drawing.Color.Blue;
-                //canvas.FillRect(1, 1, 1f, 1f); 
                 if (hwBmp == null)
                 {
-                    using (Bitmap bitmap = new Bitmap("../../Data/Textures/logo-dark.jpg"))
-                    {
-                        hwBmp = new GLBitmapTexture(bitmap);
-                    }
-                }
 
+                    hwBmp = LayoutFarm.DrawingGL.GLBitmapTextureHelper.CreateBitmapTexture(
+                        new Bitmap("../../Data/Textures/logo-dark.jpg"));
+
+                }
                 //canvas.DrawImage(hwBmp, 10, 10);
                 canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4);
-                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.DeepPink;
                 canvas.DrawLine(0, 300, 500, 300);
 
                 //-----------------------------------------------------
-                canvas.FillColor = LayoutFarm.Drawing.Color.Magenta;
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.Magenta;
                 //draw line test 
                 canvas.DrawLine(20, 20, 600, 200);
                 //-----------------------------------------------------
                 //smooth with agg 
 
                 canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
-                canvas.FillColor = new LayoutFarm.Drawing.Color(50, 255, 0, 0);  //  LayoutFarm.Drawing.Color.Red;
+                var fillColor = new LayoutFarm.Drawing.Color(50, 255, 0, 0);  //  LayoutFarm.Drawing.Color.Red;
                 //rect polygon
                 var polygonCoords = new float[]{
                         5,300,
@@ -92,48 +89,50 @@ namespace OpenTkEssTest
                         10f,340};
                 //canvas.DrawPolygon(polygonCoords);
                 //fill polygon test                
-                canvas.FillPolygon(polygonCoords);
+                canvas.FillPolygon(fillColor, polygonCoords);
 
                 var polygonCoords2 = new float[]{
                         5+10,300,
                         40+10,300,
                         50+10,340,
                         10f +10,340};
-                canvas.FillColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
-                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length);
+                canvas.StrokeColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
+                canvas.DrawPolygon(polygonCoords2, polygonCoords2.Length / 2);
 
-                int strkW = 10;
-                canvas.FillColor = LayoutFarm.Drawing.Color.LightGray;
+                int strokeW = 10;
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.LightGray;
 
                 for (int i = 1; i < 90; i += 10)
                 {
-                    canvas.StrokeWidth = strkW;
+                    canvas.StrokeWidth = strokeW;
                     double angle = OpenTK.MathHelper.DegreesToRadians(i);
                     canvas.DrawLine(20, 400, (float)(600 * Math.Cos(angle)), (float)(600 * Math.Sin(angle)));
 
-                    strkW--;
-                    if (strkW < 1)
+                    strokeW--;
+                    if (strokeW < 1)
                     {
-                        strkW = 1;
+                        strokeW = 1;
                     }
                 }
 
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+
+                var color = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+                canvas.StrokeColor = color;
 
                 ////---------------------------------------------
                 ////draw ellipse and circle
 
                 canvas.StrokeWidth = 0.75f;
                 canvas.DrawCircle(400, 500, 50);
-                canvas.FillCircle(450, 550, 25);
+                canvas.FillCircle(color, 450, 550, 25);
 
                 canvas.StrokeWidth = 3;
                 canvas.DrawRoundRect(500, 450, 100, 100, 10, 10);
 
 
                 canvas.StrokeWidth = 3;
-                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Blue);
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Blue);
 
                 //canvas.DrawBezierCurve(0, 0, 500, 500, 0, 250, 500, 250);
                 canvas.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
@@ -142,10 +141,11 @@ namespace OpenTkEssTest
                 //canvas.DrawArc(150, 200, 300, 50, 0, 150, 150, SvgArcSize.Large, SvgArcSweep.Negative);
                 canvas.DrawArc(100, 200, 300, 200, 30, 30, 50, SvgArcSize.Large, SvgArcSweep.Negative);
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+
                 // canvas.DrawArc(100, 200, 300, 200, 0, 100, 100, SvgArcSize.Large, SvgArcSweep.Negative);
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
+                fillColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
+                canvas.StrokeColor = fillColor;
                 canvas.DrawLine(100, 200, 300, 200);
 
 
@@ -154,18 +154,19 @@ namespace OpenTkEssTest
                 var fontGlyph = font.GetGlyph('{');
                 //PixelFarm.Font2.MyFonts.SetShapingEngine();
 
-                canvas.FillVxs(fontGlyph.flattenVxs);
+                canvas.FillVxs(fillColor, fontGlyph.flattenVxs);
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.White;
+
                 canvas.CurrentFont = font;
 
-                canvas.FillColor = LayoutFarm.Drawing.Color.Black;
+                canvas.StrokeColor = LayoutFarm.Drawing.Color.Black;
                 canvas.DrawLine(0, 200, 500, 200);
 
                 //test Thai words
                 canvas.DrawString("ดุดีดำด่าด่ำญญู", 80, 200);
-                //canvas.DrawString("1234567890", 80, 200); 
-                GLBitmapTexture bmp = new GLBitmapTexture(fontGlyph.glyphImage32);
+                canvas.DrawString("1234567890", 80, 200);
+                GLBitmap bmp = GLBitmapTextureHelper.CreateBitmapTexture(fontGlyph.glyphImage32);
+
                 canvas.DrawImage(bmp, 50, 50);
                 bmp.Dispose();
 
