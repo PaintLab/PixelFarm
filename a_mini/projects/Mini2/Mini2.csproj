@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{982CCAEF-0E56-49E3-A421-C81EAE7AED2B}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mini2</RootNamespace>
     <AssemblyName>Mini2</AssemblyName>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,12 +31,94 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="0_Start\DemoBase.cs" />
+    <Compile Include="1_Shared\BasicSprite.cs" />
+    <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
+    <Compile Include="1_Shared\LionDataStore.cs" />
+    <Compile Include="1_Shared\LionFillSprite.cs" />
+    <Compile Include="1_Shared\Point2D.cs" />
+    <Compile Include="1_Shared\SpriteShape.cs" />
+    <Compile Include="1_Shared\Square.cs" />
+    <Compile Include="2_Samples\02_DrawSample02.cs" />
+    <Compile Include="2_Samples\00_WhiteBlank.cs" />
+    <Compile Include="2_Samples\03_LionFillOnGLControl.cs" />
+    <Compile Include="2_Samples\04_LionFillDirect.cs" />
+    <Compile Include="2_Samples\05_LionFillDirectBufferDemo.cs" />
+    <Compile Include="2_Samples\06_SetCanvasOriginAndRectClip.cs" />
+    <Compile Include="3_LayoutFarmSamples\23_SimpleDraw3.cs" />
+    <Compile Include="3_LayoutFarmSamples\24_SimpleDraw4.cs" />
+    <Compile Include="3_LayoutFarmSamples\25_SimpleDraw_BasicStencil.cs" />
+    <Compile Include="3_LayoutFarmSamples\26_SimpleDraw_GradientBrush.cs" />
+    <Compile Include="3_LayoutFarmSamples\27_SimpleDraw_PolygonStencil.cs" />
+    <Compile Include="3_LayoutFarmSamples\28_SimpleDraw_DrawText2.cs" />
+    <Compile Include="3_LayoutFarmSamples\29_TestTextureAtlas.cs" />
+    <Compile Include="3_LayoutFarmSamples\22_Polygon.cs" />
+    <Compile Include="FormDev.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDev.Designer.cs">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTestWinGLControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTestWinGLControl.Designer.cs">
+      <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="1_Shared\SimpleSprite.cs" />
+    <Compile Include="0_Start\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
+      <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
+      <Name>LayoutFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LayoutFarm.Platforms.MiniAgg\LayoutFarm.Platforms.MiniAgg.csproj">
+      <Project>{15285430-FED2-47EA-AF54-F5A3723CE5ED}</Project>
+      <Name>LayoutFarm.Platforms.MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
+      <Name>MiniAgg.Complements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics.csproj">
+      <Project>{2B1F2C53-2F8D-4E0E-94EB-79171C91337B}</Project>
+      <Name>MiniAgg.HardwareGraphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.HardwareGraphics\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
+      <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
+      <Name>OpenTk.CoreGraphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.HardwareGraphics\OpenTk.Platforms\OpenTk.Platforms.csproj">
+      <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>
+      <Name>OpenTk.Platforms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
+      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormDev.resx">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTestWinGLControl.resx">
+      <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG; </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -42,29 +42,44 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="00_DemoBase\DemoBase.cs" />
+    <Compile Include="00_DemoBase\ES2Utils2.cs" />
     <Compile Include="00_DemoBase\FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="00_DemoBase\FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
-    <Compile Include="07_GLES2\ES2Utils.cs" />
-    <Compile Include="07_GLES2\FormTestBed.cs">
+    <Compile Include="00_DemoBase\FormTestBed.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="07_GLES2\FormTestBed.Designer.cs">
+    <Compile Include="00_DemoBase\FormTestBed.Designer.cs">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
-    <Compile Include="07_GLES2\T31_SimpleES20Window.cs" />
-    <Compile Include="07_GLES2\T32_ES2HelloTriangle.cs" />
-    <Compile Include="07_GLES2\T33_ES2SimpleTexture2d.cs" />
-    <Compile Include="07_GLES2\DerivedMiniGLControl.cs" />
-    <Compile Include="07_GLES2\DerivedMiniGLControl.Designer.cs">
-      <DependentUpon>DerivedMiniGLControl.cs</DependentUpon>
+    <Compile Include="00_DemoBase\MyMiniGLES2Control.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="07_GLES2\T42_MiniGLControl_HelloTrinagle.cs" />
+    <Compile Include="00_DemoBase\MyMiniGLES2Control.Designer.cs">
+      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sample01\T42_MiniGLControl_HelloTrinagle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sample01\T43_MiniControl_SampleTexture2d.cs" />
+    <Compile Include="Sample01\T44_SimpleShader.cs" />
+    <Compile Include="Sample01\T45_TextureWrap.cs" />
+    <Compile Include="Sample01\T46_StencilOperations.cs" />
+    <Compile Include="Sample01\T47_Mipmap2d.cs" />
+    <Compile Include="Sample01\T48_MultiTexture.cs" />
+    <Compile Include="Sample01\T49_PostSubBuffer.cs" />
+    <Compile Include="Sample02\T52_HelloTriangle2.cs" />
+    <Compile Include="Sample02\T51_View2d.cs" />
+    <Compile Include="Sample02\T53_Viewport.cs" />
+    <Compile Include="Sample02\T54_Lines.cs" />
+    <Compile Include="Sample03\T103_BasicAggDraw.cs" />
+    <Compile Include="Sample03\T101_BlankCanvas.cs" />
+    <Compile Include="Sample03\T102_BasicDraw.cs" />
+    <Compile Include="Sample03\T104_BasicAggFill.cs" />
+    <Compile Include="Sample03\T105_Stencil.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />
@@ -91,11 +106,11 @@
     <EmbeddedResource Include="00_DemoBase\FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="07_GLES2\FormTestBed.resx">
+    <EmbeddedResource Include="00_DemoBase\FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="07_GLES2\DerivedMiniGLControl.resx">
-      <DependentUpon>DerivedMiniGLControl.cs</DependentUpon>
+    <EmbeddedResource Include="00_DemoBase\MyMiniGLES2Control.resx">
+      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -118,6 +133,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
+      <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
+      <Name>LayoutFarm.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MiniAgg.Complements\MiniAgg.Complements.csproj">
       <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
       <Name>MiniAgg.Complements</Name>
@@ -131,19 +150,21 @@
       <Name>Tesselate</Name>
     </ProjectReference>
     <ProjectReference Include="..\MiniAgg.Hw2\MiniAgg.Hw2.csproj">
-      <Project>{EED04403-8D2A-4A7F-9E46-E1FF8BE89042}</Project>
+      <Project>{eed04403-8d2a-4a7f-9e46-e1ff8be89042}</Project>
       <Name>MiniAgg.Hw2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
-      <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
-      <Name>OpenTk.CoreGraphics</Name>
+    <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
+      <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
+      <Name>OpenTK.ES</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTk.Platforms\OpenTk.Platforms.csproj">
-      <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>
-      <Name>OpenTk.Platforms</Name>
+    <ProjectReference Include="..\OpenTK.PlatformMini\OpenTK.PlatformMini.csproj">
+      <Project>{77870adc-ce4a-423c-b736-a1fa4aa2d697}</Project>
+      <Name>OpenTK.PlatformMini</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="01_MiniCanvas\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

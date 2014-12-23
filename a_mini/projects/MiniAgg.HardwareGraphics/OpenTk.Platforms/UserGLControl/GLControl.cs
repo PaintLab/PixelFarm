@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
- 
+
 using System.Text;
 using System.Windows.Forms;
 
@@ -48,7 +48,6 @@ namespace OpenTK
         static GLControl()
         {
             OpenTK.Toolkit.Init();
-
         }
         IGraphicsContext context;
         IGLControl implementation;
@@ -69,7 +68,9 @@ namespace OpenTK
         /// </summary>
         public GLControl()
             : this(GraphicsMode.Default)
-        { }
+        {
+
+        }
 
         /// <summary>
         /// Constructs a new GLControl with the specified GraphicsMode.
@@ -90,7 +91,7 @@ namespace OpenTK
         {
             if (mode == null)
                 throw new ArgumentNullException("mode");
-            
+
             SetStyle(ControlStyles.Opaque, true);
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -103,7 +104,10 @@ namespace OpenTK
 
             InitializeComponent();
         }
-
+        protected void ChildCtorOnlyResetGraphicMode(GraphicsMode mode)
+        {
+            this.format = mode;
+        }
         #endregion
 
         #region --- Private  Methods ---
@@ -383,7 +387,26 @@ namespace OpenTK
         {
             get { return implementation.WindowInfo; }
         }
-        
+
+        public IntPtr GetEglDisplay()
+        {
+
+            var eglContext = ((IGraphicsContextInternal)this.context).Implementation as OpenTK.Platform.Egl.EglContext; 
+            if(eglContext != null )
+            {
+                return eglContext.MyWindowInfo.Display;
+            }
+            return IntPtr.Zero;
+        }
+        public IntPtr GetEglSurface()
+        {
+            var eglContext = ((IGraphicsContextInternal)this.context).Implementation as OpenTK.Platform.Egl.EglContext;
+            if (eglContext != null)
+            {
+                return eglContext.MyWindowInfo.Surface;
+            }
+            return IntPtr.Zero;
+        }
         #endregion
 
         #region public Bitmap GrabScreenshot()

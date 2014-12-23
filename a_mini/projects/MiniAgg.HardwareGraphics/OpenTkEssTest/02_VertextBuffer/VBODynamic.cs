@@ -1,14 +1,30 @@
-﻿using System;
+﻿#if gl2_0
 
+using System;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
+using Mini;
 namespace OpenTkEssTest
 {
 
-    //[Example("VBO Dynamic", ExampleCategory.OpenGL, "1.x", 4, Documentation = "VBODynamic")]
+
+    [Info(OrderCode = "092")]
+    [Info("T092_VBO_DynamicDemo")]
+    public class T092_VBO_DynamicDemo : DemoBase
+    {
+        public override void Init()
+        {
+            using (var example = new T09_VBO_Dynamic())
+            {
+                example.Run(30.0, 0.0);
+            }
+        }
+    }
+    //---------------------------------------------------------
+
     class T09_VBO_Dynamic : GameWindow
     {
         /// <summary>Creates a 800x600 window with the specified title.</summary>
@@ -18,7 +34,7 @@ namespace OpenTkEssTest
             this.VSync = VSyncMode.Off;
         }
 
-        #region Particles
+#region Particles
         static int MaxParticleCount = 2000;
         int VisibleParticleCount;
         VertexC4ubV3f[] VBO = new VertexC4ubV3f[MaxParticleCount];
@@ -57,8 +73,8 @@ namespace OpenTkEssTest
             GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
 
             // Setup VBO state
-            GL.EnableClientState(EnableCap.ColorArray); 
-            GL.EnableClientState(EnableCap.VertexArray);
+            GL.EnableClientState(ArrayCap.ColorArray);
+            GL.EnableClientState(ArrayCap.VertexArray);
 
             GL.GenBuffers(1, out VBOHandle);
 
@@ -180,3 +196,5 @@ namespace OpenTkEssTest
 
     }
 }
+
+#endif

@@ -1,4 +1,6 @@
-﻿#region --- License ---
+﻿#if gl2_0
+
+#region --- License ---
 /* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
@@ -20,17 +22,33 @@ using System.Drawing;
 
 #endregion
 using Examples.Tutorial;
+using Mini;
 
 namespace OpenTkEssTest
 {
-    //[Example("VBO Static", ExampleCategory.OpenGL, "1.x", 3, Documentation = "VBOStatic")]
+
+
+    [Info(OrderCode = "091")]
+    [Info("T091_VBO_StaticDemo")]
+    public class T091_VBO_StaticDemo : DemoBase
+    {
+        public override void Init()
+        {
+            using (var example = new T08_VBO())
+            {
+                example.Run(30.0, 0.0);
+            }
+        }
+    }
+    //---------------------------------------------------------
+
     public class T08_VBO : GameWindow
     {
         const float rotation_speed = 180.0f;
         float angle;
 
         struct Vbo { public int VboID, EboID, NumElements; }
-        Vbo[] vbo = new Vbo[2];
+        Vbo[] vbo = new Vbo[1];
 
         VertexPositionColor[] CubeVertices = new VertexPositionColor[]
         {
@@ -74,7 +92,7 @@ namespace OpenTkEssTest
             GL.Enable(EnableCap.DepthTest);
 
             vbo[0] = LoadVBO(CubeVertices, CubeElements);
-            vbo[1] = LoadVBO(CubeVertices, CubeElements);
+            //vbo[1] = LoadVBO(CubeVertices, CubeElements);
         }
 
         protected override void OnResize(EventArgs e)
@@ -106,7 +124,7 @@ namespace OpenTkEssTest
             Matrix4 lookat = Matrix4.LookAt(0, 5, 5, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
-
+            
             angle += rotation_speed * (float)e.Time;
             GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
 
@@ -169,3 +187,4 @@ namespace OpenTkEssTest
 
     }
 }
+#endif

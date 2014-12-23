@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.derivedGLControl1 = new OpenTkEssTest.DerivedGLControl();
+            this.derivedGLControl1 = new OpenTK.MyGLControl();
             this.SuspendLayout();
             // 
             // derivedGLControl1
@@ -55,7 +55,7 @@
 
         #endregion
 
-        private DerivedGLControl derivedGLControl1;
+        private OpenTK.MyGLControl derivedGLControl1;
 
     }
 }

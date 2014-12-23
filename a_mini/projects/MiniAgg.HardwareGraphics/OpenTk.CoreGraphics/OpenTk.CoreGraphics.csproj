@@ -73,10 +73,15 @@
     <Compile Include="Graphics\IGraphicsMode.cs" />
     <Compile Include="Graphics\OpenGL\ErrorHelper.cs" />
     <Compile Include="Graphics\OpenGL\GL.cs" />
+    <Compile Include="Graphics\OpenGL\GL_1_1_Ext.cs" />
+    <Compile Include="Graphics\OpenGL\GL_1_2.cs" />
+    <Compile Include="Graphics\OpenGL\GL_2_up.cs" />
     <Compile Include="Graphics\OpenGL\GLCore.cs" />
     <Compile Include="Graphics\OpenGL\GLDelegates.cs" />
     <Compile Include="Graphics\OpenGL\GLEnums.cs" />
     <Compile Include="Graphics\OpenGL\GLHelper.cs" />
+    <Compile Include="Graphics\OpenGL\GL_1_3up.cs" />
+    <Compile Include="Graphics\OpenGL\GL_Venders.cs" />
     <Compile Include="IWindowInfo.cs" />
     <Compile Include="Math\BezierCurve.cs" />
     <Compile Include="Math\BezierCurveCubic.cs" />
@@ -102,10 +107,6 @@
     <Compile Include="Math\Vector4.cs" />
     <Compile Include="Math\Vector4d.cs" />
     <Compile Include="Math\Vector4h.cs" />
-    <Compile Include="Platform.Graphics\Color.cs" />
-    <Compile Include="Platform.Graphics\KnownColors.cs" />
-    <Compile Include="Platform.Graphics\Rectangle.cs" />
-    <Compile Include="Platform.Graphics\SizeAndPoint.cs" />
     <Compile Include="Platform\DesktopBackend.cs" />
     <Compile Include="Platform\DesktopGraphicsContext.cs" />
     <Compile Include="Platform\Dummy\DummyGLContext.cs" />
@@ -117,7 +118,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\XmlIgnoreAttribute.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
+      <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
+      <Name>LayoutFarm.Drawing</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

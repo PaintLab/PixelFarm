@@ -1,4 +1,7 @@
-﻿#region --- License ---
+﻿#if gl2_0
+
+
+#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
@@ -30,7 +33,7 @@ namespace Examples.TextureLoaders
     /// </summary>
     static class ImageDDS
     {
-        #region Constants
+#region Constants
         private const byte HeaderSizeInBytes = 128; // all non-image data together is 128 Bytes
         private const uint BitMask = 0x00000007; // bits = 00 00 01 11
 
@@ -38,7 +41,7 @@ namespace Examples.TextureLoaders
         private static NotImplementedException Unfinished = new NotImplementedException("ERROR: Only 2 Dimensional DXT1/3/5 compressed images for now. 1D/3D Textures may not be compressed according to spec.");
         #endregion Constants
 
-        #region Simplified In-Memory representation of the Image
+#region Simplified In-Memory representation of the Image
         private static bool _IsCompressed;
         private static int _Width, _Height, _Depth, _MipMapCount;
         private static int _BytesForMainSurface; // must be handled with care when implementing uncompressed formats!
@@ -46,7 +49,7 @@ namespace Examples.TextureLoaders
         private static PixelInternalFormat _PixelInternalFormat;
         #endregion Simplified In-Memory representation of the Image
 
-        #region Flag Enums
+#region Flag Enums
         [Flags] // Surface Description
         private enum eDDSD : uint
         {
@@ -148,7 +151,7 @@ namespace Examples.TextureLoaders
         }
         #endregion Flag Enums
 
-        #region Private Members
+#region Private Members
         private static string idString; // 4 bytes, must be "DDS "
         private static UInt32 dwSize; // Size of structure is 124 bytes, 128 including all sub-structs and the header
         private static UInt32 dwFlags; // Flags to indicate valid fields.
@@ -190,7 +193,7 @@ namespace Examples.TextureLoaders
         /// <param name="dimension">0 if invalid, will output what was loaded (typically Texture1D/2D/3D or Cubemap)</param>
         public static void LoadFromDisk(string filename, out uint texturehandle, out TextureTarget dimension)
         {
-            #region Prep data
+#region Prep data
             // invalidate whatever it was before
             dimension = (TextureTarget)0;
             texturehandle = TextureLoaderParameters.OpenGLDefaultTexture;
@@ -207,12 +210,12 @@ namespace Examples.TextureLoaders
             byte[] _RawDataFromFile;
             #endregion
 
-            #region Try
+#region Try
             try // Exceptions will be thrown if any Problem occurs while working on the file. 
             {
                 _RawDataFromFile = File.ReadAllBytes(@filename);
 
-                #region Translate Header to less cryptic representation
+#region Translate Header to less cryptic representation
                 ConvertDX9Header(ref _RawDataFromFile); // The first 128 Bytes of the file is non-image data
 
                 // start by checking if all forced flags are present. Flags indicate valid fields, but aren't written by every tool .....
@@ -225,7 +228,7 @@ namespace Examples.TextureLoaders
                     )
                     throw new ArgumentException("ERROR: File has invalid signature or missing Flags.");
 
-                #region Examine Flags
+#region Examine Flags
                 if (CheckFlag(dwFlags, (uint)eDDSD.WIDTH))
                     _Width = (int)dwWidth;
                 else
@@ -282,7 +285,7 @@ namespace Examples.TextureLoaders
                 }
                 #endregion Examine Flags
 
-                #region Examine Pixel Format, anything but DXTn will fail atm.
+#region Examine Pixel Format, anything but DXTn will fail atm.
                 if (CheckFlag(pfFlags, (uint)eDDPF.FOURCC))
                     switch ((eFOURCC)pfFourCC)
                     {
@@ -323,11 +326,11 @@ namespace Examples.TextureLoaders
                     Trace.WriteLine("\n" + GetDescriptionFromMemory(filename, dimension));
                 #endregion Translate Header to less cryptic representation
 
-                #region send the Texture to GL
-                #region Generate and Bind Handle
+#region send the Texture to GL
+#region Generate and Bind Handle
                 GL.GenTextures(1, out texturehandle);
                 GL.BindTexture(dimension, texturehandle);
-                #endregion Generate and Bind Handle
+#endregion Generate and Bind Handle
 
                 int Cursor = HeaderSizeInBytes;
                 // foreach face in the cubemap, get all it's mipmaps levels. Only one iteration for Texture2D
@@ -338,7 +341,7 @@ namespace Examples.TextureLoaders
                     int Height = _Height;
                     for (int Level = 0; Level < _MipMapCount; Level++) // start at base image
                     {
-                        #region determine Dimensions
+#region determine Dimensions
                         int BlocksPerRow = (Width + 3) >> 2;
                         int BlocksPerColumn = (Height + 3) >> 2;
                         int SurfaceBlockCount = BlocksPerRow * BlocksPerColumn; //   // DXTn stores Texels in 4x4 blocks, a Color block is 8 Bytes, an Alpha block is 8 Bytes for DXT3/5
@@ -352,7 +355,7 @@ namespace Examples.TextureLoaders
                         // skip mipmaps smaller than a 4x4 Pixels block, which is the smallest DXTn unit.
                         if (Width > 2 && Height > 2)
                         { // Note: there could be a potential problem with non-power-of-two cube maps
-                            #region Prepare Array for TexImage
+#region Prepare Array for TexImage
                             byte[] RawDataOfSurface = new byte[SurfaceSizeInBytes];
                             if (!TextureLoaderParameters.FlipImages)
                             { // no changes to the image, copy as is
@@ -367,7 +370,7 @@ namespace Examples.TextureLoaders
                                     {
                                         int target = (targetColumn * BlocksPerRow + row) * _BytesPerBlock;
                                         int source = (sourceColumn * BlocksPerRow + row) * _BytesPerBlock + Cursor;
-                                        #region Swap Bytes
+#region Swap Bytes
                                         switch (_PixelInternalFormat)
                                         {
                                             case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext:
@@ -430,7 +433,7 @@ namespace Examples.TextureLoaders
                             }
                             #endregion Prepare Array for TexImage
 
-                            #region Create TexImage
+#region Create TexImage
                             switch (dimension)
                             {
                                 case TextureTarget.Texture2D:
@@ -461,7 +464,7 @@ namespace Examples.TextureLoaders
                             GL.Finish();
                             #endregion Create TexImage
 
-                            #region Query Success
+#region Query Success
                             int width, height, internalformat, compressed;
                             switch (dimension)
                             {
@@ -498,7 +501,7 @@ namespace Examples.TextureLoaders
                                 trueMipMapCount = Level - 1; // The current Level is invalid
                         }
 
-                        #region Prepare the next MipMap level
+#region Prepare the next MipMap level
                         Width /= 2;
                         if (Width < 1)
                             Width = 1;
@@ -509,7 +512,7 @@ namespace Examples.TextureLoaders
                         #endregion Prepare the next MipMap level
                     }
 
-                    #region Set States properly
+#region Set States properly
                     GL.TexParameter(dimension, (TextureParameterName)All.TextureBaseLevel, 0);
                     GL.TexParameter(dimension, (TextureParameterName)All.TextureMaxLevel, trueMipMapCount);
 
@@ -521,7 +524,7 @@ namespace Examples.TextureLoaders
                     #endregion Set States properly
                 }
 
-                #region Set Texture Parameters
+#region Set Texture Parameters
                 GL.TexParameter(dimension, TextureParameterName.TextureMinFilter, (int)TextureLoaderParameters.MinificationFilter);
                 GL.TexParameter(dimension, TextureParameterName.TextureMagFilter, (int)TextureLoaderParameters.MagnificationFilter);
 
@@ -555,7 +558,7 @@ namespace Examples.TextureLoaders
             #endregion Try
         }
 
-        #region Helpers
+#region Helpers
         private static void ConvertDX9Header(ref byte[] input)
         {
             UInt32 offset = 0;
@@ -676,7 +679,7 @@ namespace Examples.TextureLoaders
         }
         #endregion Helpers
 
-        #region String Representations
+#region String Representations
         private static string GetDescriptionFromFile(string filename)
         {
             return "\n--> Header of " + filename +
@@ -716,3 +719,5 @@ namespace Examples.TextureLoaders
         #endregion String Representations
     }
 }
+
+#endif
