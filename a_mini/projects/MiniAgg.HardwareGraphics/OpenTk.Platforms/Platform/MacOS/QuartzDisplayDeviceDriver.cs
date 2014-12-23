@@ -98,7 +98,13 @@ namespace OpenTK.Platform.MacOS
 
                     DisplayDevice opentk_dev =
                         new DisplayDevice(opentk_dev_current_res,
-                            primary, opentk_dev_available_res, LayoutFarm.Drawing.Conv.ToRect(newRect));
+                            primary, opentk_dev_available_res,
+                            new OpenTK.Graphics.Rectangle(
+                                newRect.X,
+                                newRect.Y,
+                                newRect.Width,
+                                newRect.Height));
+                    ///LayoutFarm.Drawing.Conv.ToRect(newRect));
 
                     displayMap.Add(opentk_dev, currentDisplay);
                 }

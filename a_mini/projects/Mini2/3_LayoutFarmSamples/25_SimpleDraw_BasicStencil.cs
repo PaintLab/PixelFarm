@@ -35,7 +35,8 @@ namespace Mini2
                 //see:  lazyfoo.net/tutorials/OpenGL/26_the_stencil_buffer/index.php
                 //-----------------------------
                 //test gradient brush
-                GL.ClearColor(LayoutFarm.Drawing.Color.White);//set value for clear color
+                //set value for clear color
+                GLHelper.ClearColor(LayoutFarm.Drawing.Color.White);
                 GL.ClearStencil(0); //set value for clearing stencil buffer 
                 //actual clear here
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);

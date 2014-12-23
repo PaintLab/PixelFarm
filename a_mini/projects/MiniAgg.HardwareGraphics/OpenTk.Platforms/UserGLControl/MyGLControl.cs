@@ -44,7 +44,11 @@ namespace OpenTK
                 if (!this.DesignMode)
                 {
                     MakeCurrent();
-                    GL.ClearColor(clearColor);
+                    GL.ClearColor(
+                        (float)clearColor.R / 255f,
+                        (float)clearColor.G / 255f,
+                        (float)clearColor.B / 255f,
+                        (float)clearColor.A / 255f);
                 }
             }
         }
@@ -75,7 +79,7 @@ namespace OpenTK
 
             //---------------------------------
             //-1 temp fix split scanline in some screen
-            GL.Viewport(0, 0, max, max-1);
+            GL.Viewport(0, 0, max, max - 1);
             //---------------------------------
 
             GL.MatrixMode(MatrixMode.Projection);

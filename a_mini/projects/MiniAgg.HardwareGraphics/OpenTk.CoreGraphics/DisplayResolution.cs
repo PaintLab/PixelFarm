@@ -10,7 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using LayoutFarm.Drawing;
+using OpenTK.Graphics;
+
+namespace LayoutFarm.Drawing
+{
+    class dummy { }
+}
 
 namespace OpenTK
 {

@@ -90,15 +90,15 @@ namespace OpenTK.Graphics.OpenGL
         // We work around this issue by doubling the StringBuilder capacity.
 
 
-        //----------------------------------------------------
-        public static void Color3(LayoutFarm.Drawing.Color color)
-        {
-            GL.Color3(color.R, color.G, color.B);
-        }
-        public static void Color4(LayoutFarm.Drawing.Color color)
-        {
-            GL.Color4(color.R, color.G, color.B, color.A);
-        }
+        ////----------------------------------------------------
+        //public static void Color3(LayoutFarm.Drawing.Color color)
+        //{
+        //    GL.Color3(color.R, color.G, color.B);
+        //}
+        //public static void Color4(LayoutFarm.Drawing.Color color)
+        //{
+        //    GL.Color4(color.R, color.G, color.B, color.A);
+        //}
         //----------------------------------------------------
         public static void Color3(Vector3 color)
         {
@@ -116,10 +116,10 @@ namespace OpenTK.Graphics.OpenGL
         }
 
 
-        public static void ClearColor(LayoutFarm.Drawing.Color color)
-        {
-            GL.ClearColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
-        }
+        //public static void ClearColor(LayoutFarm.Drawing.Color color)
+        //{
+        //    GL.ClearColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+        //}
 
         public static void ClearColor(Color4 color)
         {
@@ -130,10 +130,10 @@ namespace OpenTK.Graphics.OpenGL
 
 
 
-        public static void BlendColor(LayoutFarm.Drawing.Color color)
-        {
-            GL.BlendColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
-        }
+        //public static void BlendColor(LayoutFarm.Drawing.Color color)
+        //{
+        //    GL.BlendColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+        //}
 
         public static void BlendColor(Color4 color)
         {
@@ -182,7 +182,7 @@ namespace OpenTK.Graphics.OpenGL
         {
             GL.RasterPos4(pos.X, pos.Y, pos.Z, pos.W);
         }
- 
+
         public static void Vertex2(Vector2 v)
         {
             GL.Vertex2(v.X, v.Y);
@@ -197,7 +197,7 @@ namespace OpenTK.Graphics.OpenGL
         {
             GL.Vertex4(v.X, v.Y, v.Z, v.W);
         }
- 
+
         public static void TexCoord2(Vector2 v)
         {
             GL.TexCoord2(v.X, v.Y);
@@ -217,7 +217,7 @@ namespace OpenTK.Graphics.OpenGL
         {
             GL.Rotate((Single)angle, axis.X, axis.Y, axis.Z);
         }
- 
+
         public static void Scale(Vector3 scale)
         {
             GL.Scale(scale.X, scale.Y, scale.Z);
@@ -227,7 +227,7 @@ namespace OpenTK.Graphics.OpenGL
         {
             GL.Translate(trans.X, trans.Y, trans.Z);
         }
- 
+
         public static void MultMatrix(ref Matrix4 mat)
         {
             unsafe
@@ -659,12 +659,12 @@ namespace OpenTK.Graphics.OpenGL
 
 #endif
 
-        public static void Rect(LayoutFarm.Drawing.RectangleF rect)
-        {
-            GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
-        }
+        //public static void Rect(LayoutFarm.Drawing.RectangleF rect)
+        //{
+        //    GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
+        //}
 
-        public static void Rect(LayoutFarm.Drawing.Rectangle rect)
+        public static void Rect(Rectangle rect)
         {
             GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
@@ -821,17 +821,17 @@ namespace OpenTK.Graphics.OpenGL
         }
 
 
-        public static void Viewport(LayoutFarm.Drawing.Size size)
+        public static void Viewport(Size size)
         {
             GL.Viewport(0, 0, size.Width, size.Height);
         }
 
-        public static void Viewport(LayoutFarm.Drawing.Point location, LayoutFarm.Drawing.Size size)
+        public static void Viewport(Point location, Size size)
         {
             GL.Viewport(location.X, location.Y, size.Width, size.Height);
         }
 
-        public static void Viewport(LayoutFarm.Drawing.Rectangle rectangle)
+        public static void Viewport(Rectangle rectangle)
         {
             GL.Viewport(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
@@ -847,22 +847,22 @@ namespace OpenTK.Graphics.OpenGL
         }
 #endif
 
-        public static void TexEnv(TextureEnvTarget target, TextureEnvParameter pname, LayoutFarm.Drawing.Color color)
+        public static void TexEnv(TextureEnvTarget target, TextureEnvParameter pname, Color4 c)
         {
-            Color4 c = new Color4(color.R, color.G, color.B, color.A);
+
             unsafe
             {
                 TexEnv(target, pname, &c.R);
             }
         }
 
-        public static void TexEnv(TextureEnvTarget target, TextureEnvParameter pname, Color4 color)
-        {
-            unsafe
-            {
-                TexEnv(target, pname, &color.R);
-            }
-        }
+        //public static void TexEnv(TextureEnvTarget target, TextureEnvParameter pname, Color4 color)
+        //{
+        //    unsafe
+        //    {
+        //        TexEnv(target, pname, &color.R);
+        //    }
+        //}
 
 
         [AutoGenerated(Category = "Version11Deprecated", Version = "1.1", EntryPoint = "glDisableClientState")]

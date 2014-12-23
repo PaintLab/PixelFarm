@@ -293,8 +293,8 @@ namespace OpenTkEssTest
             // ---------------------------------
 
             if (ShowDebugWireFrame)
-            {
-                GL.Color3(LayoutFarm.Drawing.Color.LightGray);
+            {   
+                GLHelper.Color3(LayoutFarm.Drawing.Color.LightGray);
                 GL.Disable(EnableCap.StencilTest);
                 GL.Disable(EnableCap.Lighting);
                 //GL.Disable( EnableCap.DepthTest );
