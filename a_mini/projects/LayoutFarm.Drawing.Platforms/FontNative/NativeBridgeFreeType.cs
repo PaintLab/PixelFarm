@@ -119,15 +119,6 @@ namespace PixelFarm.Agg.Fonts
         public void* palette;
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ProperGlyph
-    {
-        public uint codepoint;
-        public int x_advance;
-        public int y_advance;
-        public int x_offset;
-        public int y_offset;
-    }
-
+   
 
 }

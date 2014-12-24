@@ -36,44 +36,27 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="03_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\Canvas2dExtension.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\FilterMan.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\ScanlineRasToDestBitmapRendererExtension.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\VertexSourceIO.cs" />
-    <Compile Include="FontSvg\SvgFont.cs" />
-    <Compile Include="FontSvg\SvgFontStore.cs" />
+    <Compile Include="2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
+    <Compile Include="Image\FilterMan.cs" />
+    <Compile Include="0_CanvasPainter\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="Font\FontFace.cs" />
-    <Compile Include="FontNative\NativeFont.cs" />
-    <Compile Include="FontNative\NativeFontFace.cs" />
     <Compile Include="Font\Font.cs" />
     <Compile Include="Font\FontGlyph.cs" />
-    <Compile Include="FontSvg\NativeFontGlyphBuilder.cs" />
-    <Compile Include="FontNative\NativeFontStore.cs" />
-    <Compile Include="FontNative\NativeBridgeHB.cs" />
-    <Compile Include="FontNative\NativeBridgeMyFonts.cs" />
     <Compile Include="Font\TextPrinter.cs" />
-    <Compile Include="Font\UnsafeMethods.cs" />
-    <Compile Include="FontNative\NativeBridgeFreeType.cs" />
-    <Compile Include="myfonts_dll.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>myfonts_dll.resx</DependentUpon>
-    </Compile>
     <Compile Include="x_notused\KDTree.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\CanvasPainter.cs" />
-    <Compile Include="0_LayoutFarm.Canvas2dExtension\MyTypeFacePrinter.cs" />
-    <Compile Include="01_Base\PixelBlenderRGB.cs" />
-    <Compile Include="01_Base\Queue.cs" />
-    <Compile Include="01_Base\BorderDouble.cs" />
-    <Compile Include="01_Base\GammaFuntions.cs" />
-    <Compile Include="01_Base\ClipProxyImage.cs" />
-    <Compile Include="01_Base\ProxyImage.cs" />
+    <Compile Include="0_CanvasPainter\CanvasPainter.cs" />
+    <Compile Include="Font\MyTypeFacePrinter.cs" />
+    <Compile Include="1_Base\PixelBlenderRGB.cs" />
+    <Compile Include="1_Base\Queue.cs" />
+    <Compile Include="1_Base\BorderDouble.cs" />
+    <Compile Include="1_Base\GammaFuntions.cs" />
+    <Compile Include="1_Base\ClipProxyImage.cs" />
+    <Compile Include="1_Base\ProxyImage.cs" />
     <Compile Include="Filter\ImageFilters.cs" />
     <Compile Include="Filter\PatternFilterBilnearColorRGBA.cs" />
     <Compile Include="x_notused\x_GlyphWithUnderline.cs" />
     <Compile Include="Image\AlphaMask.cs" />
-    <Compile Include="03_SpanGenerators\SpanGradient.cs" />
+    <Compile Include="2_SpanGenerators\SpanGradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
     <Compile Include="x_notused\ImageSequence.cs" />
@@ -83,13 +66,11 @@
     <Compile Include="Image\Transposer.cs" />
     <Compile Include="x_notused\ImageClipProxyFloat.cs" />
     <Compile Include="x_notused\UnitTests2.cs" />
-    <Compile Include="03_SpanGenerators\SpanGenGourand.cs" />
-    <Compile Include="03_SpanGenerators\SpanGenGouraudRGBA.cs" />
+    <Compile Include="2_SpanGenerators\SpanGenGourand.cs" />
+    <Compile Include="2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="x_notused\SpanSubDivAdapter.cs" />
-    <Compile Include="FontSvg\SvgFontFace_LiberationSans.cs" />
     <Compile Include="x_notused\SvgFontFaceWithStyle.cs" />
     <Compile Include="x_notused\TextWrapping.cs" />
-    <Compile Include="FontSvg\SvgFontFace.cs" />
     <Compile Include="x_notused\TypeFacePrinter.cs" />
     <Compile Include="x_notused\x_UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,16 +86,7 @@
       <Name>MiniAgg</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="myfonts_dll.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>myfonts_dll.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <None Include="Resources\myft.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

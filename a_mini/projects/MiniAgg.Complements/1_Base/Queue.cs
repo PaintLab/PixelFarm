@@ -2,7 +2,7 @@
 using System;
 namespace PixelFarm.Agg
 {
-    public class Queue<T>
+    class Queue<T>
     {
         T[] itemArray;
         int size;
