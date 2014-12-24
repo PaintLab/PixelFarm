@@ -79,31 +79,31 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LayoutFarm.Drawing.Platforms\LayoutFarm.Drawing.Platforms.csproj">
+    <ProjectReference Include="..\PixelFarm\LayoutFarm.Drawing.Platforms\LayoutFarm.Drawing.Platforms.csproj">
       <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>
       <Name>LayoutFarm.Drawing.Platforms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
+    <ProjectReference Include="..\PixelFarm\LayoutFarm.Drawing\LayoutFarm.Drawing.csproj">
       <Project>{D90D5974-23FA-4230-8C3C-FAC25256EBE9}</Project>
       <Name>LayoutFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">
+    <ProjectReference Include="..\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj">
       <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
       <Name>MiniAgg.Complements</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics.csproj">
+    <ProjectReference Include="..\PixelFarm\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics\MiniAgg.HardwareGraphics.csproj">
       <Project>{2B1F2C53-2F8D-4E0E-94EB-79171C91337B}</Project>
       <Name>MiniAgg.HardwareGraphics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiniAgg.HardwareGraphics\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
+    <ProjectReference Include="..\PixelFarm\MiniAgg.HardwareGraphics\OpenTk.CoreGraphics\OpenTk.CoreGraphics.csproj">
       <Project>{D9E24F68-37FA-4C11-AC17-0C351681908F}</Project>
       <Name>OpenTk.CoreGraphics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiniAgg.HardwareGraphics\OpenTk.Platforms\OpenTk.Platforms.csproj">
+    <ProjectReference Include="..\PixelFarm\MiniAgg.HardwareGraphics\OpenTk.Platforms\OpenTk.Platforms.csproj">
       <Project>{93D4A59A-D626-41C5-AD66-B8472B7BBD71}</Project>
       <Name>OpenTk.Platforms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
+    <ProjectReference Include="..\PixelFarm\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>
     </ProjectReference>
