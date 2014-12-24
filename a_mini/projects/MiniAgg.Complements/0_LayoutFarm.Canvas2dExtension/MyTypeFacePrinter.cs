@@ -33,7 +33,7 @@ using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.Fonts
 {
 
-    class MyTypeFacePrinter
+    public class MyTypeFacePrinter
     {
 
         Vector2 totalSizeCach;

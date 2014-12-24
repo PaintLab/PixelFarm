@@ -41,6 +41,20 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CanvasExt\Canvas2dExtension.cs" />
+    <Compile Include="CanvasExt\VertexSourceIO.cs" />
+    <Compile Include="FontNative\NativeBridgeFreeType.cs" />
+    <Compile Include="FontNative\NativeBridgeHB.cs" />
+    <Compile Include="FontNative\NativeBridgeMyFonts.cs" />
+    <Compile Include="FontNative\NativeFont.cs" />
+    <Compile Include="FontNative\NativeFontFace.cs" />
+    <Compile Include="FontNative\NativeFontStore.cs" />
+    <Compile Include="FontNative\UnsafeMethods.cs" />
+    <Compile Include="FontSvg\NativeFontGlyphBuilder.cs" />
+    <Compile Include="FontSvg\SvgFont.cs" />
+    <Compile Include="FontSvg\SvgFontFace.cs" />
+    <Compile Include="FontSvg\SvgFontFace_LiberationSans.cs" />
+    <Compile Include="FontSvg\SvgFontStore.cs" />
     <Compile Include="LayoutFarm.Drawing.Gdi\0_Start\Conv.cs" />
     <Compile Include="LayoutFarm.Drawing.Gdi\0_Start\WinGdiPlatform.cs" />
     <Compile Include="LayoutFarm.Drawing.Gdi\0_Start\WinGdiPortal.cs" />
@@ -70,7 +84,17 @@
     <Compile Include="LayoutFarm.DrawingGL\Implementation\MyBitmapGL.cs" />
     <Compile Include="LayoutFarm.DrawingGL\MyCanvas_GL\GdiTextBoard.cs" />
     <Compile Include="LayoutFarm.DrawingGL\MyCanvas_GL\MyCanvasGL_specific.cs" />
+    <Compile Include="myfonts_dll.Designer.cs">
+      <DependentUpon>myfonts_dll.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="myfonts_dll.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>myfonts_dll.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

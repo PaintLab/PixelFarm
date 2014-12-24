@@ -40,4 +40,51 @@ namespace PixelFarm.Agg.Fonts
         public string glyphName;
         public int unicode;
     }
+
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ProperGlyph
+    {
+        public uint codepoint;
+        public int x_advance;
+        public int y_advance;
+        public int x_offset;
+        public int y_offset;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ExportGlyph
+    {
+
+        public short unit_per_em;
+        public short ascender;
+        public short descender;
+        public short height;
+
+        public int advanceX;
+        public int advanceY;
+
+        public int bboxXmin;
+        public int bboxXmax;
+        public int bboxYmin;
+        public int bboxYmax;
+
+        public int img_width;
+        public int img_height;
+        public int img_horiBearingX;
+        public int img_horiBearingY;
+        public int img_horiAdvance;
+        public int img_vertBearingX;
+        public int img_vertBearingY;
+        public int img_vertAdvance;
+
+
+        public int bitmap_left;
+        public int bitmap_top;
+
+        public IntPtr bitmap;
+        public IntPtr outline;
+    }
+
+
 }

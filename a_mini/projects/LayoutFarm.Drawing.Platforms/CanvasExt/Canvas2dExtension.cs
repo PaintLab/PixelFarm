@@ -47,8 +47,10 @@ namespace PixelFarm.Agg
             bool drawFromHintedCache = false,
             ColorRGBA backgroundColor = new ColorRGBA())
         {
+            
+            
 
-            //use svg font 
+            ////use svg font 
             var svgFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, (int)pointSize);
             var stringPrinter = new MyTypeFacePrinter();
 
@@ -59,7 +61,7 @@ namespace PixelFarm.Agg
 
             var vxs = stringPrinter.MakeVxs();
             vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
-             
+
             gx.Render(vxs, ColorRGBA.Black);
         }
          
