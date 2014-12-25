@@ -76,6 +76,12 @@
     </Compile>
     <Compile Include="1_Shared\SimpleSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
+    <Compile Include="GLControl\MyGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GLControl\MyGLControl.Designer.cs">
+      <DependentUpon>MyGLControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTestWinGLControl.resx">
       <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GLControl\MyGLControl.resx">
+      <DependentUpon>MyGLControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
