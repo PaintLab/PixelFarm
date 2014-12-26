@@ -46,8 +46,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             set
             {
                 this.strokeWidth = value;
-                //this.internalPen.Width = this.strokeWidth = value;
-                throw new NotImplementedException();
+            
             }
         }
 
