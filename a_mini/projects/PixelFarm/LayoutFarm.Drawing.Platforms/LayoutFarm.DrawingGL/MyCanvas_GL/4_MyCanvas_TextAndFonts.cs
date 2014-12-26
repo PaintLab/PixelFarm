@@ -21,7 +21,7 @@ using System.Text;
 
 namespace LayoutFarm.Drawing.DrawingGL
 {
-    partial class MyCanvasGLBase
+    partial class MyCanvasGL
     {
         Brush currentBrush;
         Font currentTextFont = null;
@@ -40,6 +40,8 @@ namespace LayoutFarm.Drawing.DrawingGL
 
         public Size MeasureString(char[] buff, int startAt, int len, Font font)
         {
+            throw new NotImplementedException();
+
             //if (_useGdiPlusTextRendering)
             //{
             //    ReleaseHdc();
@@ -56,17 +58,19 @@ namespace LayoutFarm.Drawing.DrawingGL
             //}
             //else
             //{
-            SetFont(font);
-            var size = new System.Drawing.Size();
-            unsafe
-            {
-                fixed (char* startAddr = &buff[0])
-                {
-                    DrawingBridge.Win32Utils.UnsafeGetTextExtentPoint32(_hdc, startAddr + startAt, len, ref size);
-                }
-            }
-            return size.ToSize();
+
             //}
+
+            //SetFont(font);
+            //var size = new System.Drawing.Size();
+            //unsafe
+            //{
+            //    fixed (char* startAddr = &buff[0])
+            //    {
+            //        DrawingBridge.Win32Utils.UnsafeGetTextExtentPoint32(_hdc, startAddr + startAt, len, ref size);
+            //    }
+            //}
+            //return size.ToSize();
         }
         /// <summary>
         /// Measure the width and height of string <paramref name="str"/> when drawn on device context HDC
@@ -82,30 +86,24 @@ namespace LayoutFarm.Drawing.DrawingGL
         /// <returns>the size of the string</returns>
         public Size MeasureString(char[] buff, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth)
         {
-            //if (_useGdiPlusTextRendering)
-            //{
-            //    ReleaseHdc();
-            //    throw new NotSupportedException("Char fit string measuring is not supported for GDI+ text rendering");
-            //}
-            //else
-            //{
-            SetFont(font);
+            throw new NotImplementedException();
+            //SetFont(font);
 
-            var size = new System.Drawing.Size();
-            unsafe
-            {
-                fixed (char* startAddr = &buff[0])
-                {
-                    DrawingBridge.Win32Utils.UnsafeGetTextExtentExPoint(
-                        _hdc, startAddr + startAt, len,
-                        (int)Math.Round(maxWidth), _charFit, _charFitWidth, ref size);
-                }
+            //var size = new System.Drawing.Size();
+            //unsafe
+            //{
+            //    fixed (char* startAddr = &buff[0])
+            //    {
+            //        DrawingBridge.Win32Utils.UnsafeGetTextExtentExPoint(
+            //            _hdc, startAddr + startAt, len,
+            //            (int)Math.Round(maxWidth), _charFit, _charFitWidth, ref size);
+            //    }
 
-            }
-            charFit = _charFit[0];
-            charFitWidth = charFit > 0 ? _charFitWidth[charFit - 1] : 0;
-            return size.ToSize();
             //}
+            //charFit = _charFit[0];
+            //charFitWidth = charFit > 0 ? _charFitWidth[charFit - 1] : 0;
+            //return size.ToSize();
+
         }
         //==============================================
 
@@ -113,71 +111,72 @@ namespace LayoutFarm.Drawing.DrawingGL
 
         public override void DrawText(char[] buffer, int x, int y)
         {
+            throw new NotImplementedException();
+            //if (isFromPrinter)
+            //{
+            //    //gx.DrawString(new string(buffer),
+            //    //        ConvFont(prevFonts.Peek().Font),
+            //    //        internalBrush,
+            //    //        x,
+            //    //        y);
 
-            if (isFromPrinter)
-            {
-                //gx.DrawString(new string(buffer),
-                //        ConvFont(prevFonts.Peek().Font),
-                //        internalBrush,
-                //        x,
-                //        y);
-
-            }
-            else
-            {
-                IntPtr gxdc = gx.GetHdc();
-                MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
-                NativeTextWin32.TextOut(gxdc, x, y, buffer, buffer.Length);
-                MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
-                gx.ReleaseHdc(gxdc);
-            }
+            //}
+            //else
+            //{
+            //    IntPtr gxdc = gx.GetHdc();
+            //    MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
+            //    NativeTextWin32.TextOut(gxdc, x, y, buffer, buffer.Length);
+            //    MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
+            //    gx.ReleaseHdc(gxdc);
+            //}
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
+            throw new NotImplementedException();
+            //if (isFromPrinter)
+            //{
+            //    //gx.DrawString(
+            //    //    new string(buffer),
+            //    //    ConvFont(prevFonts.Peek().Font),
+            //    //    internalBrush,
+            //    //    logicalTextBox.ToRect());
+            //}
+            //else
+            //{
+            //    IntPtr gxdc = gx.GetHdc();
+            //    MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
+            //    System.Drawing.Rectangle clipRect =
+            //        System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
+            //    clipRect.Offset(CanvasOrgX, CanvasOrgY);
+            //    MyWin32.SetRectRgn(hRgn, clipRect.X, clipRect.Y, clipRect.Right, clipRect.Bottom);
+            //    MyWin32.SelectClipRgn(gxdc, hRgn);
+            //    NativeTextWin32.TextOut(gxdc, logicalTextBox.X, logicalTextBox.Y, buffer, buffer.Length);
+            //    MyWin32.SelectClipRgn(gxdc, IntPtr.Zero);
 
-            if (isFromPrinter)
-            {
-                //gx.DrawString(
-                //    new string(buffer),
-                //    ConvFont(prevFonts.Peek().Font),
-                //    internalBrush,
-                //    logicalTextBox.ToRect());
-            }
-            else
-            {
-                IntPtr gxdc = gx.GetHdc();
-                MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
-                System.Drawing.Rectangle clipRect =
-                    System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
-                clipRect.Offset(CanvasOrgX, CanvasOrgY);
-                MyWin32.SetRectRgn(hRgn, clipRect.X, clipRect.Y, clipRect.Right, clipRect.Bottom);
-                MyWin32.SelectClipRgn(gxdc, hRgn);
-                NativeTextWin32.TextOut(gxdc, logicalTextBox.X, logicalTextBox.Y, buffer, buffer.Length);
-                MyWin32.SelectClipRgn(gxdc, IntPtr.Zero);
-
-                MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
-                gx.ReleaseHdc();
-            }
+            //    MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
+            //    gx.ReleaseHdc();
+            //}
         }
-        
-        public override Font CurrentFont
-        {
-            get
-            {
-                return currentTextFont;
-            }
-            set
-            {
-                ReleaseHdc();
-                this.currentTextFont = value;
 
-                MyFont myFont = value as MyFont;
-                IntPtr hdc = gx.GetHdc();
-                MyWin32.SelectObject(hdc, myFont.ToHfont());
+        //public override Font CurrentFont
+        //{
+        //    get
+        //    {
+        //        return currentTextFont;
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException();
+        //        //ReleaseHdc();
+        //        //this.currentTextFont = value;
 
-                gx.ReleaseHdc();
-            }
-        }
+        //        //MyFont myFont = value as MyFont;
+        //        //IntPtr hdc = gx.GetHdc();
+        //        //MyWin32.SelectObject(hdc, myFont.ToHfont());
+
+        //        //gx.ReleaseHdc();
+        //    }
+        //}
         public override Color CurrentTextColor
         {
             get
@@ -187,11 +186,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             set
             {
                 mycurrentTextColor = value;
-                SetTextColor(value);
-                //this.currentTextColor = ConvColor(value);
-                //IntPtr hdc = gx.GetHdc();
-                //MyWin32.SetTextColor(hdc, MyWin32.ColorToWin32(value));
-                //gx.ReleaseHdc();
+            
             }
         }
 
@@ -201,41 +196,42 @@ namespace LayoutFarm.Drawing.DrawingGL
 #if DEBUG
             dbugCounter.dbugDrawStringCount++;
 #endif
-            var color = this.CurrentTextColor;
-            if (color.A == 255)
-            {
-                unsafe
-                {
-                    fixed (char* startAddr = &str[0])
-                    {
-                        //DrawingBridge.Win32Utils.TextOut2(_hdc, 
-                        //    (int)Math.Round(logicalTextBox.X + canvasOriginX),
-                        //    (int)Math.Round(logicalTextBox.Y + canvasOriginY),
-                        //    (startAddr + startAt), len);
-                        DrawingBridge.Win32Utils.TextOut2(_hdc,
-                            (int)logicalTextBox.X + canvasOriginX,
-                            (int)logicalTextBox.Y + canvasOriginY,
-                            (startAddr + startAt), len);
-                    }
-                }
-            }
-            else
-            {
-                //translucent / transparent text
-                InitHdc();
-                unsafe
-                {
-                    fixed (char* startAddr = &str[0])
-                    {
-                        DrawingBridge.Win32Utils.TextOut2(_hdc,
-                             logicalTextBox.X + canvasOriginX,
-                             logicalTextBox.Y + canvasOriginY,
-                            (startAddr + startAt), len);
-                    }
-                }
+            throw new NotImplementedException();
+            //var color = this.CurrentTextColor;
+            //if (color.A == 255)
+            //{
+            //    unsafe
+            //    {
+            //        fixed (char* startAddr = &str[0])
+            //        {
+            //            //DrawingBridge.Win32Utils.TextOut2(_hdc, 
+            //            //    (int)Math.Round(logicalTextBox.X + canvasOriginX),
+            //            //    (int)Math.Round(logicalTextBox.Y + canvasOriginY),
+            //            //    (startAddr + startAt), len);
+            //            DrawingBridge.Win32Utils.TextOut2(_hdc,
+            //                (int)logicalTextBox.X + canvasOriginX,
+            //                (int)logicalTextBox.Y + canvasOriginY,
+            //                (startAddr + startAt), len);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    //translucent / transparent text
+            //    InitHdc();
+            //    unsafe
+            //    {
+            //        fixed (char* startAddr = &str[0])
+            //        {
+            //            DrawingBridge.Win32Utils.TextOut2(_hdc,
+            //                 logicalTextBox.X + canvasOriginX,
+            //                 logicalTextBox.Y + canvasOriginY,
+            //                (startAddr + startAt), len);
+            //        }
+            //    }
 
-                //DrawTransparentText(_hdc, str, font, new Point((int)Math.Round(point.X), (int)Math.Round(point.Y)), Size.Round(size), color);
-            }
+            //    //DrawTransparentText(_hdc, str, font, new Point((int)Math.Round(point.X), (int)Math.Round(point.Y)), Size.Round(size), color);
+            //}
         }
         //====================================================
     }
