@@ -10,24 +10,22 @@ using DrawingBridge;
 namespace LayoutFarm.Drawing.DrawingGL
 {
 
-    partial class MyCanvasGL : LayoutFarm.Drawing.WinGdi.MyCanvas
+    partial class MyCanvasGL : MyCanvasGLBase
     {
-        CanvasGL2d canvasGL2d;
 
+
+        CanvasGL2d canvasGL2d;
         //-------
         //platform specific code
         GdiTextBoard gdiTextBoard;
-
         PixelFarm.Agg.VertexSource.CurveFlattener flattener = new PixelFarm.Agg.VertexSource.CurveFlattener();
         //-------
-
+        Stack<System.Drawing.Rectangle> clipRectStack = new Stack<System.Drawing.Rectangle>();
+        System.Drawing.Rectangle currentClipRect;
         public MyCanvasGL(GraphicsPlatform platform, int hPageNum, int vPageNum, int left, int top, int width, int height)
             : base(platform, hPageNum, vPageNum, left, top, width, height)
         {
             canvasGL2d = new CanvasGL2d(width, height);
-
-
-
             //------------------------
             //platform specific code
             //-------------------------
@@ -462,31 +460,52 @@ namespace LayoutFarm.Drawing.DrawingGL
                 }
             }
         }
+
+
+
+        //---------------------------------------------------
         public override bool PushClipAreaRect(int width, int height, ref Rect updateArea)
         {
-            if (base.PushClipAreaRect(width, height, ref updateArea))
-            {   
-                //result
-                var currentClipRect = this.CurrentClipRect;
+            this.clipRectStack.Push(currentClipRect);
+
+            System.Drawing.Rectangle intersectResult =
+                System.Drawing.Rectangle.Intersect(
+                    currentClipRect,
+                    System.Drawing.Rectangle.Intersect(
+                    updateArea.ToRectangle().ToRect(),
+                    new System.Drawing.Rectangle(0, 0, width, height)));
+
+            currentClipRect = intersectResult;
+            if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
+            {
+                //not intersec?
+                return false;
+            }
+            else
+            {
                 canvasGL2d.EnableClipRect();
                 canvasGL2d.SetClipRect(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
                 return true;
             }
-            else
-            {
-                return false;
-            }
-
         }
         public override void PopClipAreaRect()
         {
-            base.PopClipAreaRect();
-            var currentClipRect = this.CurrentClipRect;
+            if (clipRectStack.Count > 0)
+            {
+                currentClipRect = clipRectStack.Pop();
+            }
+
+
             canvasGL2d.EnableClipRect();
             canvasGL2d.SetClipRect(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
-        }
-        
-        //---------------------------------------------------
 
+        }
+        public override Rectangle CurrentClipRect
+        {
+            get
+            {
+                return currentClipRect.ToRect();
+            }
+        }
     }
 }

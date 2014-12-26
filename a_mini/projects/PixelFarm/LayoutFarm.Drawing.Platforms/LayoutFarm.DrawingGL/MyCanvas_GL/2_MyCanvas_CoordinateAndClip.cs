@@ -19,9 +19,9 @@ using System.Text;
 using LayoutFarm.Drawing;
 
 
-namespace LayoutFarm.Drawing.WinGdi
+namespace LayoutFarm.Drawing.DrawingGL
 {
-    partial class MyCanvas
+    partial class MyCanvasGLBase
     {
         int left;
         int top;

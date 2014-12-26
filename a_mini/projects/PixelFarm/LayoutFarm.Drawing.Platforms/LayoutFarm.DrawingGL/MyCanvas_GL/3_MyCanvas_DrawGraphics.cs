@@ -16,10 +16,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-namespace LayoutFarm.Drawing.WinGdi
+namespace LayoutFarm.Drawing.DrawingGL
 {
 
-    partial class MyCanvas
+    partial class MyCanvasGLBase
     {
         float strokeWidth = 1f;
         Color fillSolidColor = Color.Transparent;
@@ -58,39 +58,40 @@ namespace LayoutFarm.Drawing.WinGdi
         //==========================================================
         public override void CopyFrom(Canvas sourceCanvas, int logicalSrcX, int logicalSrcY, Rectangle destArea)
         {
-            MyCanvas s1 = (MyCanvas)sourceCanvas;
+            throw new NotSupportedException();
+            //MyCanvas s1 = (MyCanvas)sourceCanvas;
 
-            if (s1.gx != null)
-            {
-                int phySrcX = logicalSrcX - s1.left;
-                int phySrcY = logicalSrcY - s1.top;
+            //if (s1.gx != null)
+            //{
+            //    int phySrcX = logicalSrcX - s1.left;
+            //    int phySrcY = logicalSrcY - s1.top;
 
-                System.Drawing.Rectangle postIntersect =
-                    System.Drawing.Rectangle.Intersect(currentClipRect, destArea.ToRect());
-                phySrcX += postIntersect.X - destArea.X;
-                phySrcY += postIntersect.Y - destArea.Y;
-                destArea = postIntersect.ToRect();
+            //    System.Drawing.Rectangle postIntersect =
+            //        System.Drawing.Rectangle.Intersect(currentClipRect, destArea.ToRect());
+            //    phySrcX += postIntersect.X - destArea.X;
+            //    phySrcY += postIntersect.Y - destArea.Y;
+            //    destArea = postIntersect.ToRect();
 
-                IntPtr gxdc = gx.GetHdc();
+            //    IntPtr gxdc = gx.GetHdc();
 
-                MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
-                IntPtr source_gxdc = s1.gx.GetHdc();
-                MyWin32.SetViewportOrgEx(source_gxdc, s1.CanvasOrgX, s1.CanvasOrgY, IntPtr.Zero);
-
-
-                MyWin32.BitBlt(gxdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, source_gxdc, phySrcX, phySrcY, MyWin32.SRCCOPY);
+            //    MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
+            //    IntPtr source_gxdc = s1.gx.GetHdc();
+            //    MyWin32.SetViewportOrgEx(source_gxdc, s1.CanvasOrgX, s1.CanvasOrgY, IntPtr.Zero);
 
 
-                MyWin32.SetViewportOrgEx(source_gxdc, -s1.CanvasOrgX, -s1.CanvasOrgY, IntPtr.Zero);
-
-                s1.gx.ReleaseHdc();
-
-                MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
-                gx.ReleaseHdc();
+            //    MyWin32.BitBlt(gxdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, source_gxdc, phySrcX, phySrcY, MyWin32.SRCCOPY);
 
 
+            //    MyWin32.SetViewportOrgEx(source_gxdc, -s1.CanvasOrgX, -s1.CanvasOrgY, IntPtr.Zero);
 
-            }
+            //    s1.gx.ReleaseHdc();
+
+            //    MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
+            //    gx.ReleaseHdc();
+
+
+
+            //}
         }
         public override void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
         {

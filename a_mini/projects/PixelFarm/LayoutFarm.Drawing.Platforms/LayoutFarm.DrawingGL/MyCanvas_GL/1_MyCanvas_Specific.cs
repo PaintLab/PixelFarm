@@ -19,10 +19,10 @@ using System.Text;
 using LayoutFarm.Drawing;
 using DrawingBridge;
 
-namespace LayoutFarm.Drawing.WinGdi
+namespace LayoutFarm.Drawing.DrawingGL
 {
 
-    partial class MyCanvas : Canvas, IFonts
+    partial class MyCanvasGLBase : Canvas, IFonts
     {
         int pageNumFlags;
         int pageFlags;
@@ -42,7 +42,7 @@ namespace LayoutFarm.Drawing.WinGdi
         //-------------------------------
         bool isFromPrinter = false;
         GraphicsPlatform platform;
-        public MyCanvas(GraphicsPlatform platform,
+        public MyCanvasGLBase(GraphicsPlatform platform,
             int horizontalPageNum,
             int verticalPageNum,
             int left, int top,
@@ -89,7 +89,7 @@ namespace LayoutFarm.Drawing.WinGdi
             this.StrokeWidth = 1;
         }
 
-        ~MyCanvas()
+        ~MyCanvasGLBase()
         {
             ReleaseUnManagedResource();
         }
@@ -332,12 +332,12 @@ namespace LayoutFarm.Drawing.WinGdi
         static Font defaultFontInfo;
 
 
-        static MyCanvas()
+        static MyCanvasGLBase()
         {
             _stringFormat = new System.Drawing.StringFormat(System.Drawing.StringFormat.GenericDefault);
             _stringFormat.FormatFlags = System.Drawing.StringFormatFlags.NoClip | System.Drawing.StringFormatFlags.MeasureTrailingSpaces;
             //---------------------------
-            MyCanvas.SetupDefaultFont(new System.Drawing.Font("Tahoma", 10));
+            MyCanvasGLBase.SetupDefaultFont(new System.Drawing.Font("Tahoma", 10));
         }
         static void SetupDefaultFont(System.Drawing.Font f)
         {
