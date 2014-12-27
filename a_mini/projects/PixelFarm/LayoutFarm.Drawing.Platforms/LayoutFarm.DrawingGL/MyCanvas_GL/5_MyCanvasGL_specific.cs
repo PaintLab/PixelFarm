@@ -40,7 +40,9 @@ namespace LayoutFarm.Drawing.DrawingGL
             debug_canvas_id = dbug_canvasCount + 1;
             dbug_canvasCount += 1;
 #endif
-            this.StrokeWidth = 1; 
+            this.StrokeWidth = 1;
+            this.currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
+
             //------------------------
             //platform specific code
             //-------------------------
