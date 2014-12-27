@@ -40,10 +40,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             debug_canvas_id = dbug_canvasCount + 1;
             dbug_canvasCount += 1;
 #endif
-            this.StrokeWidth = 1;
-             
-
-
+            this.StrokeWidth = 1; 
             //------------------------
             //platform specific code
             //-------------------------
@@ -51,46 +48,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             //----------------------- 
         }
         //-------------------------------------------
-        public override void SetCanvasOrigin(int x, int y)
-        {
-            //    ReleaseHdc();
-            //    //-----------
-            //    //move back to original ?
-            //    //this.gx.TranslateTransform(-this.canvasOriginX, -this.canvasOriginY);
-            //    //this.gx.TranslateTransform(x, y);
-
-            //this.canvasOriginX = x;
-            //this.canvasOriginY = y;
-            canvasGL2d.SetCanvasOrigin(x, y);
-        }
-        public override int CanvasOriginX
-        {
-            get
-            {  
-                
-                return canvasGL2d.CanvasOriginX;
-            }
-        }
-        public override int CanvasOriginY
-        {
-            get
-            {
-                return canvasGL2d.CanvasOriginY;
-            }
-        }
-
-        public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
-        {
-            canvasGL2d.EnableClipRect();
-            //--------------------------
-            canvasGL2d.SetClipRect(
-                 rect.X,
-                 rect.Y,
-                 rect.Width,
-                 rect.Height);
-            //--------------------------
-        }
-        //-------------------------------------------
+        
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
             canvasGL2d.FillRect(color, left, top, width, height);

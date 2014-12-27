@@ -38,8 +38,7 @@ namespace Mini2
                 //for 2d 
                 this.derivedGLControl1.InitSetup2d(Screen.PrimaryScreen.Bounds);
             }
-        }
-
+        } 
         public void SetGLPaintHandler(EventHandler handler)
         {
             this.derivedGLControl1.SetGLPaintHandler(handler);
@@ -48,5 +47,8 @@ namespace Mini2
         {
             return this.derivedGLControl1;
         }
+        
     }
+
+
 }
