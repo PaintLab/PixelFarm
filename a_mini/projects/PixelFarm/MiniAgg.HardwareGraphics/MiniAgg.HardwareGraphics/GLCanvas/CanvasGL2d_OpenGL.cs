@@ -13,6 +13,7 @@ namespace LayoutFarm.DrawingGL
 
     public partial class CanvasGL2d
     {
+
         public LayoutFarm.Drawing.Color StrokeColor
         {
             get { return this.strokeColor; }
@@ -37,16 +38,38 @@ namespace LayoutFarm.DrawingGL
                 ClearBufferMask.DepthBufferBit |
                 ClearBufferMask.StencilBufferBit);
         }
+        public LayoutFarm.Drawing.CanvasOrientation Orientation
+        {
+            get { return this.canvasOrientation; }
+            set
+            {
+                this.canvasOrientation = value;
+                this.SetCanvasOrigin(this.canvasOriginX, this.canvasOriginY);
+            }
+        }
         public void SetCanvasOrigin(int x, int y)
         {
-            int originalW = 800;
-            //set new viewport
-            GL.Viewport(x, y, originalW, originalW);
+            this.canvasOriginX = x;
+            this.canvasOriginY = y;
+            int properW = Math.Min(this.canvasW, this.canvasH);
+
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);
+            switch (this.canvasOrientation)
+            {
+                case Drawing.CanvasOrientation.LeftTop:
+                    {
+                        GL.Ortho(0, properW, properW, 0, 0.0, 100);
+                    } break;
+                default:
+                    {
+                        GL.Ortho(0, properW, 0, properW, 0.0, 100);
+                    } break;
+            }
+
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
+            GL.Translate(x, y, 0);
         }
         public void EnableClipRect()
         {

@@ -25,16 +25,17 @@ namespace Mini2
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
-            var canvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
+            var platform = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P;
+            var canvas = platform.CreateCanvas(0, 0, 800, 600);
             GraphicsPath path = null;
             FontInfo fontinfo = null;
-            LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
+            platform.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
 
             form.SetGLPaintHandler((o, s) =>
             {
                 if (fontinfo == null)
                 {
-                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
+                    fontinfo = platform.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
                     canvas.CurrentFont = fontinfo.ResolvedFont;
                 }
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
@@ -49,7 +50,7 @@ namespace Mini2
                 //graphics paths
                 if (path == null)
                 {
-                    path = CurrentGraphicsPlatform.CreateGraphicPath();
+                    path = platform.CreateGraphicsPath();
                     //path.AddRectangle(new LayoutFarm.Drawing.RectangleF(10, 10, 10, 10));
                     path.AddEllipse(30, 30, 25, 25);
 

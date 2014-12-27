@@ -62,6 +62,7 @@
     <Compile Include="3_LayoutFarmSamples\28_SimpleDraw_DrawText2.cs" />
     <Compile Include="3_LayoutFarmSamples\29_TestTextureAtlas.cs" />
     <Compile Include="3_LayoutFarmSamples\22_Polygon.cs" />
+    <Compile Include="3_LayoutFarmSamples\30_LeftTopWindow_GradientBrush.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +77,12 @@
     </Compile>
     <Compile Include="1_Shared\SimpleSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
+    <Compile Include="GLControl\MyGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GLControl\MyGLControl.Designer.cs">
+      <DependentUpon>MyGLControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTestWinGLControl.resx">
       <DependentUpon>FormTestWinGLControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GLControl\MyGLControl.resx">
+      <DependentUpon>MyGLControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

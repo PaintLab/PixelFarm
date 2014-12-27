@@ -53,6 +53,10 @@ namespace OpenTK
             }
         }
 
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+        }
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -70,21 +74,20 @@ namespace OpenTK
         }
         public void InitSetup2d(Rectangle screenBound)
         {
-            int max = Math.Max(screenBound.Width, screenBound.Height);
-            int min = Math.Min(screenBound.Width, screenBound.Height);
-
+            //int max = Math.Max(screenBound.Width, screenBound.Height);
+            int properW = Math.Min(this.Width, this.Height);
+            //int max = 600;
             //init
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-
             //---------------------------------
             //-1 temp fix split scanline in some screen
-            GL.Viewport(0, 0, max, max - 1);
-            //---------------------------------
-
+            GL.Viewport(0, 0, properW, properW - 1);
+            //--------------------------------- 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Ortho(0, max, 0, max, 0.0, 100);
+            GL.Ortho(0, properW, 0, properW, 0.0, 100);
+            //GL.Ortho(0, properW, properW, 0, 0.0, 100);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
         }
