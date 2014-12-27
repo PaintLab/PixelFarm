@@ -22,7 +22,7 @@ namespace Mini2
             //----------------------------------------------- 
             form.SetGLPaintHandler((o, s) =>
             {
-                canvas.Clear(LayoutFarm.Drawing.Color.White);                 
+                canvas.Clear(LayoutFarm.Drawing.Color.White);
                 canvas.FillRect(LayoutFarm.Drawing.Color.Blue, 0, 0, 400, 400);
                 //draw vxs direct to GL surface 
                 lionFill.Draw(canvas); //before offset

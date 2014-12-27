@@ -13,7 +13,6 @@ namespace LayoutFarm.DrawingGL
 
     public partial class CanvasGL2d
     {
-        LayoutFarm.Drawing.CanvasOrientation orientation;
 
         public LayoutFarm.Drawing.Color StrokeColor
         {
@@ -41,28 +40,22 @@ namespace LayoutFarm.DrawingGL
         }
         public LayoutFarm.Drawing.CanvasOrientation Orientation
         {
-            get { return this.orientation; }
+            get { return this.canvasOrientation; }
             set
             {
-                this.orientation = value;
-                this.SetCanvasOrigin(this.canvasOriginX, this.canvasOriginY); 
+                this.canvasOrientation = value;
+                this.SetCanvasOrigin(this.canvasOriginX, this.canvasOriginY);
             }
         }
         public void SetCanvasOrigin(int x, int y)
         {
             this.canvasOriginX = x;
             this.canvasOriginY = y;
-
             int properW = Math.Min(this.canvasW, this.canvasH);
-            //int max = 600;
-            //init 
-            //---------------------------------
-            //-1 temp fix split scanline in some screen
-            GL.Viewport(x, y, properW, properW - 1);
-            //--------------------------------- 
+
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            switch (this.orientation)
+            switch (this.canvasOrientation)
             {
                 case Drawing.CanvasOrientation.LeftTop:
                     {
@@ -72,10 +65,11 @@ namespace LayoutFarm.DrawingGL
                     {
                         GL.Ortho(0, properW, 0, properW, 0.0, 100);
                     } break;
-            } 
+            }
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
+            GL.Translate(x, y, 0);
         }
         public void EnableClipRect()
         {
