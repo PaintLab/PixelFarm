@@ -468,6 +468,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             }
             else
             {
+                updateArea = LayoutFarm.Drawing.Rect.CreateFromRect(intersectResult.ToRect());
                 canvasGL2d.EnableClipRect();
                 canvasGL2d.SetClipRect(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
                 return true;
