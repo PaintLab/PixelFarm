@@ -100,22 +100,22 @@ namespace PixelFarm.Agg.Fonts
             //myTextBoardBmp.InnerImage = GLBitmapTextureHelper.CreateBitmapTexture(this.textBoardBmp);
 
         }
-        public LayoutFarm.Drawing.RectangleF[] GetGlyphPos(char[] buffer, int x, int y)
+        public LayoutFarm.Drawing.RectangleF[] GetGlyphPos(char[] buffer, int start, int len, int x, int y)
         {
             if (innerGLbmp == null)
             {
                 innerGLbmp = GLBitmapTextureHelper.CreateBitmapTexture(this.textBoardBmp);
             }
 
-            //create reference bmp
-            int len = buffer.Length;
+            //create reference bmp 
             float curX = x;
             float curY = y;
             //create destAndSrcArray
             LayoutFarm.Drawing.RectangleF[] destAndSrcPairs = new LayoutFarm.Drawing.RectangleF[len * 2];
 
             int pp = 0;
-            for (int i = 0; i < len; ++i)
+            int endAt = start + len;
+            for (int i = start; i < endAt; ++i)
             {
                 //find map glyph
                 LayoutFarm.Drawing.RectangleF found;
@@ -141,8 +141,7 @@ namespace PixelFarm.Agg.Fonts
             }
             return destAndSrcPairs;
 
-        }
-         
+        } 
         public GLBitmap BmpBoard
         {
             get { return this.innerGLbmp; }
