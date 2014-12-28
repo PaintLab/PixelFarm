@@ -31,16 +31,16 @@ namespace Mini2
 
             form.SetGLPaintHandler((o, s) =>
             {
+                canvas.Orientation = CanvasOrientation.LeftTop;
                 if (fontinfo == null)
                 {
-                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.GetFont("tahoma", 24);
+                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.GetFontInfo("tahoma", 10, LayoutFarm.Drawing.DrawingGL.FontLoadTechnique.GdiBitmapFont);
                     canvas.CurrentFont = fontinfo.ResolvedFont; 
-                    
                 }
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 0, 0, 400, 400);
                 //test draw text
-                canvas.Note1 = 2;
+                canvas.Note1 = 2; 
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 0);
                 canvas.Note1 = 0;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100);
