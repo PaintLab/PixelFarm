@@ -89,10 +89,9 @@ namespace LayoutFarm.DrawingGL
                     {
                         //convert to left bottom mode 
                         GL.Scissor(this.canvasOriginX + x,
-                            this.canvasOriginY + (this.canvasH - (y + h)), //flip Y --> to bootom 
+                           (this.canvasH - (y + h + this.canvasOriginY)), //flip Y --> to bootom 
                             w,
                             h);
-
                     } break;
                 default:
                     {
