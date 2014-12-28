@@ -26,9 +26,8 @@ namespace Mini2
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
             var canvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
-            FontInfo fontinfo = null;
-            LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
 
+            FontInfo fontinfo = null;
 
             form.SetGLPaintHandler((o, s) =>
             {
@@ -36,6 +35,8 @@ namespace Mini2
                 {
                     fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
                     canvas.CurrentFont = fontinfo.ResolvedFont;
+                    //-----------------------------------------
+                    var font = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
                 }
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 0, 0, 400, 400);
@@ -43,7 +44,7 @@ namespace Mini2
                 canvas.Note1 = 2;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 0);
                 canvas.Note1 = 0;
-                canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100); 
+                canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100);
 
             });
             form.Show();

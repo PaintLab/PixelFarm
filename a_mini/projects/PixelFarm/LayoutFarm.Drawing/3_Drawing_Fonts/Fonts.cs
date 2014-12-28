@@ -11,8 +11,12 @@ namespace LayoutFarm.Drawing
         public abstract void Dispose();
         public abstract int Height { get; }
         public abstract System.IntPtr ToHfont();
-
         public abstract FontInfo FontInfo { get; }
+        //-------------------------------------------
+
+
+
+        //-------------------------------------------
     }
 
     public abstract class FontFamily
