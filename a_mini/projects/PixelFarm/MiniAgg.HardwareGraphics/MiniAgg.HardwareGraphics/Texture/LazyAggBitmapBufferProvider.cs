@@ -2,38 +2,27 @@
 using System.Text;
 using System;
 using System.Runtime.InteropServices;
-using Tesselate;
-using LayoutFarm.Drawing;
 
+using Tesselate; 
 namespace LayoutFarm.DrawingGL
 {
     public class LazyAggBitmapBufferProvider : LazyBitmapBufferProvider
     {
-
-        Image image;
+        PixelFarm.Agg.ActualImage image;
         GCHandle handle;
-        public LazyAggBitmapBufferProvider(Image image)
+        public LazyAggBitmapBufferProvider(PixelFarm.Agg.ActualImage image)
         {
             this.image = image;
         }
         public override bool IsInvert
-        {
+        {   
             get { return false; }
         }
         public override IntPtr GetRawBufferHead()
         {
-            if (image is PixelFarm.Agg.ActualImage)
-            {
-                var img = image as PixelFarm.Agg.ActualImage;
-                byte[] buffer = img.GetBuffer();
-                this.handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-                return this.handle.AddrOfPinnedObject();
-            }
-            else
-            {
-                return IntPtr.Zero;
-            }
-
+            byte[] buffer = image.GetBuffer();
+            this.handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            return this.handle.AddrOfPinnedObject();
         }
         public override void ReleaseBufferHead()
         {

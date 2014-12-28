@@ -54,7 +54,7 @@ namespace PixelFarm.Agg
         Ellipse ellipse = new Ellipse();
         PathWriter lines = new PathWriter();
         RoundedRect roundRect = null;
-
+       
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         CurveFlattener curveFlattener = new CurveFlattener();
 
@@ -255,7 +255,7 @@ namespace PixelFarm.Agg
            double x,
            double y)
         {
-            textPrinter.Print(this, text.ToString(), x, y);
+            textPrinter.Print(this,text.ToString(), x, y); 
         }
         //-------------------------------------------------------
 
@@ -316,24 +316,7 @@ namespace PixelFarm.Agg
             this.sharedImageWriterReader.ReloadImage(actualImage);
             this.gx.Render(sharedImageWriterReader, affinePlans);
         }
-        public void DrawImage(LayoutFarm.Drawing.Image img, double x, double y)
-        {
-            var actualImage = img as ActualImage;
-            if (actualImage != null)
-            {
-                this.sharedImageWriterReader.ReloadImage(actualImage);
-                this.gx.Render(this.sharedImageWriterReader, x, y);
-            }
-        }
-        public void DrawImage(LayoutFarm.Drawing.Image img, params Transform.AffinePlan[] affinePlans)
-        {
-            var actualImage = img as ActualImage;
-            if (actualImage != null)
-            {
-                this.sharedImageWriterReader.ReloadImage(actualImage);
-                this.gx.Render(sharedImageWriterReader, affinePlans);
-            }
-        }
+
         //----------------------
         /// <summary>
         /// do filter at specific area

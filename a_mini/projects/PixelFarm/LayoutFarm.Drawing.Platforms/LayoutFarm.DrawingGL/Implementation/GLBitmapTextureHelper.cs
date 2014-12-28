@@ -48,12 +48,12 @@ namespace LayoutFarm.DrawingGL
     }
     public static class GLBitmapTextureHelper
     {
-
+    
         public static GLBitmap CreateBitmapTexture(int width, int height, System.Drawing.Bitmap bitmap)
         {
             return new GLBitmap(new LazyGdiBitmapBufferProvider(bitmap));
         }
-        public static GLBitmap CreateBitmapTexture(LayoutFarm.Drawing.Image image)
+        public static GLBitmap CreateBitmapTexture(PixelFarm.Agg.ActualImage image)
         {
             return new GLBitmap(new LazyAggBitmapBufferProvider(image));
         }
