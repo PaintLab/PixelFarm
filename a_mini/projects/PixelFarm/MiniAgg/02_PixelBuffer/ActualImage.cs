@@ -18,15 +18,15 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 using System;
-using System.Runtime; 
+using System.Runtime;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Image;
 
-namespace PixelFarm.Agg 
+namespace PixelFarm.Agg
 {
 
-     
-    public class ActualImage
+
+    public class ActualImage : LayoutFarm.Drawing.Image
     {
         int width;
         int height;
@@ -68,20 +68,41 @@ namespace PixelFarm.Agg
                         this.pixelBuffer = new byte[stride * height];
 
 
-                    }break;
+                    } break;
                 default:
-                    throw new NotSupportedException();                 
+                    throw new NotSupportedException();
             }
 
         }
-      
-        
-        
-        public int Width
+
+        public override bool IsReferenceImage
+        {
+            get { return false; }
+        }
+        public override object InnerImage
+        {
+            get
+            {
+                return this;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public override int ReferenceX
+        {
+            get { return 0; }
+        }
+        public override int ReferenceY
+        {
+            get { return 0; }
+        }
+        public override int Width
         {
             get { return this.width; }
         }
-        public int Height
+        public override int Height
         {
             get { return this.height; }
         }
@@ -94,6 +115,10 @@ namespace PixelFarm.Agg
         public int Stride { get { return this.stride; } }
         public int BitDepth { get { return this.bitDepth; } }
         public byte[] GetBuffer() { return this.pixelBuffer; }
+        public override void Dispose()
+        {
+             
+        }
     }
 
 
