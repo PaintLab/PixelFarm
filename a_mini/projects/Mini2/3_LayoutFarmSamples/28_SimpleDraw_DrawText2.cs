@@ -33,10 +33,9 @@ namespace Mini2
             {
                 if (fontinfo == null)
                 {
-                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
-                    canvas.CurrentFont = fontinfo.ResolvedFont;
-                    //-----------------------------------------
-                    var font = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
+                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.GetFont("tahoma", 24);
+                    canvas.CurrentFont = fontinfo.ResolvedFont; 
+                    
                 }
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
                 canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 0, 0, 400, 400);
