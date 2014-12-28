@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Fonts
         /// <summary>
         /// 32 bpp image for render
         /// </summary>
-        public ActualImage glyphImage32;
+        public LayoutFarm.Drawing.Image glyphImage32;
         //----------------------------
         /// <summary>
         /// original glyph outline
