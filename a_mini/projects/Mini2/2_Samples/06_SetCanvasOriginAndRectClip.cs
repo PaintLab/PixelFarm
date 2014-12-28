@@ -22,16 +22,20 @@ namespace Mini2
             //----------------------------------------------- 
             form.SetGLPaintHandler((o, s) =>
             {
+                //canvas.Orientation = LayoutFarm.Drawing.CanvasOrientation.LeftTop;
                 canvas.Clear(LayoutFarm.Drawing.Color.White);
                 canvas.FillRect(LayoutFarm.Drawing.Color.Blue, 0, 0, 400, 400);
                 //draw vxs direct to GL surface 
-                lionFill.Draw(canvas); //before offset
+                //lionFill.Draw(canvas); //before offset
 
-                canvas.SetCanvasOrigin(50, 50);
-
-                //test clipping
                 canvas.EnableClipRect();
-                canvas.SetClipRect(300, 350, 100, 100);
+                canvas.SetClipRectRel(200, 250, 100, 100);
+
+                lionFill.Draw(canvas); 
+                //offset
+                canvas.SetCanvasOrigin(50, 50); 
+                //test clipping                
+                canvas.SetClipRectRel(200, 250, 100, 100);
 
                 lionFill.Draw(canvas);
                 canvas.DisableClipRect();

@@ -78,7 +78,7 @@ namespace LayoutFarm.Drawing.DrawingGL
         {
             canvasGL2d.EnableClipRect();
             //--------------------------
-            canvasGL2d.SetClipRect(
+            canvasGL2d.SetClipRectRel(
                  rect.X,
                  rect.Y,
                  rect.Width,
@@ -116,7 +116,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             {
                 updateArea = LayoutFarm.Drawing.Rect.CreateFromRect(intersectResult.ToRect());
                 canvasGL2d.EnableClipRect();
-                canvasGL2d.SetClipRect(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
+                canvasGL2d.SetClipRectRel(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
                 return true;
             }
         }
@@ -129,7 +129,7 @@ namespace LayoutFarm.Drawing.DrawingGL
 
 
             canvasGL2d.EnableClipRect();
-            canvasGL2d.SetClipRect(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
+            canvasGL2d.SetClipRectRel(currentClipRect.X, currentClipRect.Y, currentClipRect.Width, currentClipRect.Height);
 
         }
         public override Rectangle CurrentClipRect
