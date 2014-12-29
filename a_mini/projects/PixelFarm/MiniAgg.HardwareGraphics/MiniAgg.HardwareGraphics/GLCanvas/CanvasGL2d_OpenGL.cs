@@ -13,7 +13,47 @@ namespace LayoutFarm.DrawingGL
 
     partial class CanvasGL2d
     {
+        Dictionary<GLBitmap, int> registerTextures = new Dictionary<GLBitmap, int>();
+        public void Dispose()
+        {
+            //clear texture
+            foreach (var kp in this.registerTextures)
+            {
+                GL.DeleteTexture(kp.Value);
+            }
+            this.registerTextures.Clear();
 
+        }
+        int GetTextureId(GLBitmap bmp)
+        {
+            //only after gl context is created
+            int foundTextureId;
+            if (!registerTextures.TryGetValue(bmp, out foundTextureId))
+            {
+                //server part
+                //gen texture 
+                GL.GenTextures(1, out foundTextureId);
+                //bind
+                GL.BindTexture(TextureTarget.Texture2D, foundTextureId);
+                bmp.TransientLoadBufferHead((IntPtr bmpScan0) =>
+                {
+                    GL.TexImage2D(TextureTarget.Texture2D, 0,
+                    PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0,
+                    PixelFormat.Bgra,
+                    PixelType.UnsignedByte, (IntPtr)bmpScan0);
+                });
+
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            }
+            else
+            {
+
+            }
+
+            return foundTextureId;
+
+        }
         public LayoutFarm.Drawing.Color StrokeColor
         {
             get { return this.strokeColor; }
@@ -26,7 +66,7 @@ namespace LayoutFarm.DrawingGL
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             //set value for clear color buffer
-          
+
             GL.ClearColor(
                 (float)c.R / 255f,
                  (float)c.G / 255f,
@@ -338,7 +378,7 @@ namespace LayoutFarm.DrawingGL
                     } break;
             }
         }
-        
+
         public void DrawImages(GLBitmap bmp, LayoutFarm.Drawing.RectangleF[] destAndSrcPairs)
         {
             ////------------------------------------------
@@ -406,11 +446,11 @@ namespace LayoutFarm.DrawingGL
             unsafe
             {
                 var prevColor = this.strokeColor;
-                this.StrokeColor = LayoutFarm.Drawing.Color.White; 
+                this.StrokeColor = LayoutFarm.Drawing.Color.White;
 
                 GL.Enable(EnableCap.Texture2D);
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+                    GL.BindTexture(TextureTarget.Texture2D, GetTextureId(bmp));
                     GL.EnableClientState(ArrayCap.TextureCoordArray); //***
 
                     //texture source coord 1= 100% of original width
@@ -506,7 +546,7 @@ namespace LayoutFarm.DrawingGL
                     }
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
                 }
-                GL.Disable(EnableCap.Texture2D); 
+                GL.Disable(EnableCap.Texture2D);
                 this.StrokeColor = prevColor;
             }
         }
@@ -576,7 +616,7 @@ namespace LayoutFarm.DrawingGL
                     }
                 }
                 GL.Enable(EnableCap.Texture2D);
-                GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+                GL.BindTexture(TextureTarget.Texture2D, GetTextureId(bmp));
                 GL.EnableClientState(ArrayCap.TextureCoordArray); //***
                 GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
                 //------------------------------------------ 

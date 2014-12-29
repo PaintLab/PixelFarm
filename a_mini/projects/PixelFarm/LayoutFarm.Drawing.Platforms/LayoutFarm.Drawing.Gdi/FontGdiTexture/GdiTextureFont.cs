@@ -180,7 +180,10 @@ namespace PixelFarm.Agg.Fonts
         }
         public GLBitmap BmpBoard
         {
-            get { return this.innerGLbmp; }
+            get
+            {
+                return this.innerGLbmp;
+            }
         }
         protected override void OnDispose()
         {

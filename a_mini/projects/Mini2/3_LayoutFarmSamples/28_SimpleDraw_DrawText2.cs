@@ -7,11 +7,9 @@ using System.Drawing;
 
 using PixelFarm.Agg;
 using LayoutFarm.DrawingGL;
-using LayoutFarm.Drawing;
-
-
+using LayoutFarm.Drawing; 
 namespace Mini2
-{
+{   
     [Info(OrderCode = "28")]
     [Info("DrawSample08_DrawText2")]
     public class DrawSample08_DrawText2 : DemoBase

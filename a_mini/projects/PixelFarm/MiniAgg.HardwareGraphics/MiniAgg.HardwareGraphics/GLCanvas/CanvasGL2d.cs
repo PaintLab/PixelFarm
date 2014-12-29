@@ -11,12 +11,12 @@ using Tesselate;
 namespace LayoutFarm.DrawingGL
 {
 
-    public partial class CanvasGL2d
+    public partial class CanvasGL2d : IDisposable
     {
 
         LayoutFarm.Drawing.Color strokeColor = LayoutFarm.Drawing.Color.Black;
         LayoutFarm.Drawing.CanvasOrientation canvasOrientation = Drawing.CanvasOrientation.LeftBottom;
-        PixelFarm.Agg.Fonts.Font currentFont;//temp
+
 
 
         int canvasOriginX = 0;
@@ -38,7 +38,7 @@ namespace LayoutFarm.DrawingGL
         GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
         CurveFlattener curveFlattener = new CurveFlattener();
-     
+
 
         public CanvasGL2d(int canvasW, int canvasH)
         {
@@ -48,7 +48,7 @@ namespace LayoutFarm.DrawingGL
             sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
-        
+
         }
         public CanvasSmoothMode SmoothMode
         {
@@ -409,7 +409,7 @@ namespace LayoutFarm.DrawingGL
                 float* rectCoords = stackalloc float[12];
                 CreateRectCoords(rectCoords, x, y, w, h);
                 UnsafeDrawV2fList(DrawMode.LineLoop, rectCoords, 6);
-            } 
+            }
         }
         public void FillRect(LayoutFarm.Drawing.Color color, float x, float y, float w, float h)
         {
@@ -922,7 +922,7 @@ namespace LayoutFarm.DrawingGL
         public int CanvasOriginY
         {
             get { return this.canvasOriginY; }
-        } 
+        }
 
     }
 }
