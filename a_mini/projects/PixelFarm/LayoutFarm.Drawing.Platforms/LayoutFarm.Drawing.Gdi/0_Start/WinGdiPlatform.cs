@@ -24,13 +24,14 @@ namespace LayoutFarm.Drawing.WinGdi
                 sampleIFonts = null;
             }
         }
+
         public override GraphicsPath CreateGraphicsPath()
         {
             return new MyGraphicsPath();
         }
         public override FontInfo GetFont(string fontfaceName, float emsize)
         {
-            System.Drawing.Font nativeFont = new System.Drawing.Font(fontfaceName, emsize); 
+            System.Drawing.Font nativeFont = new System.Drawing.Font(fontfaceName, emsize);
             return FontsUtils.GetCachedFont(nativeFont);
         }
 

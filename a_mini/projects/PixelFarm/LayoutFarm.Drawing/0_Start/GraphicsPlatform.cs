@@ -18,7 +18,6 @@ namespace LayoutFarm.Drawing
             get;
             set;
         }
-
     }
 
 

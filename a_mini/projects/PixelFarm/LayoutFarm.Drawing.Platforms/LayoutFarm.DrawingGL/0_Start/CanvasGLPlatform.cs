@@ -56,7 +56,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                                 "c:\\Windows\\Fonts\\" + fontFaceName + ".ttf", //sample only***
                                 (int)emsize);
                         } break;
-                } 
+                }
             }
             return fontInfo;
         }
