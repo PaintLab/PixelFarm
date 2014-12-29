@@ -52,7 +52,7 @@ namespace Mini2
                     new LayoutFarm.Drawing.PointF(25, 100),
                     LayoutFarm.Drawing.Color.OrangeRed);
                 //2. fill polygon with gradient brush 
-
+                
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,

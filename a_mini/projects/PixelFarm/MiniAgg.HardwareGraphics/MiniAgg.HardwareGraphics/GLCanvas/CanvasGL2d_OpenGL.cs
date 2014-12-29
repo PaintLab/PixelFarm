@@ -266,7 +266,7 @@ namespace LayoutFarm.DrawingGL
                                     //freeze stencill buffer
                                     GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
 
-                                    if (this.Note1 == 1) //temp
+                                    if (this.Note1 == 1)  
                                     {
                                         //------------------------------------------
                                         //we already have valid ps from stencil step
