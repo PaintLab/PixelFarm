@@ -557,6 +557,8 @@ namespace LayoutFarm.DrawingGL
         {
             unsafe
             {
+                var prevColor = this.strokeColor;
+                this.StrokeColor = LayoutFarm.Drawing.Color.White;
 
                 //texture source coord 1= 100% of original width
                 float* arr = stackalloc float[8];
@@ -624,6 +626,8 @@ namespace LayoutFarm.DrawingGL
                 FillRectWithTexture(x, y, w, h);
                 GL.DisableClientState(ArrayCap.TextureCoordArray);
                 GL.Disable(EnableCap.Texture2D);
+                this.StrokeColor = prevColor;
+
             }
         }
 
