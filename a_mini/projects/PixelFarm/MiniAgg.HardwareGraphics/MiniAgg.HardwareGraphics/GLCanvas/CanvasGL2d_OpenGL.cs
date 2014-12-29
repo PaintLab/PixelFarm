@@ -26,6 +26,7 @@ namespace LayoutFarm.DrawingGL
         public void Clear(LayoutFarm.Drawing.Color c)
         {
             //set value for clear color buffer
+          
             GL.ClearColor(
                 (float)c.R / 255f,
                  (float)c.G / 255f,
@@ -337,12 +338,75 @@ namespace LayoutFarm.DrawingGL
                     } break;
             }
         }
-
+        
         public void DrawImages(GLBitmap bmp, LayoutFarm.Drawing.RectangleF[] destAndSrcPairs)
         {
+            ////------------------------------------------
+            ////we already have valid ps from stencil step
+            ////------------------------------------------
+            //VertexStore vxs = ps.Vxs;
+            //sclineRas.Reset();
+            //sclineRas.AddPath(vxs);
+            ////-------------------------------------------------------------------------------------
+            ////1.  we draw only alpha channel of this black color to destination color
+            ////so we use  BlendFuncSeparate  as follow ... 
+            //GL.ColorMask(false, false, false, true);
+            ////GL.BlendFuncSeparate(
+            ////     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
+            ////     BlendingFactorSrc.One, BlendingFactorDest.Zero);
+
+            ////use alpha chanel from source***
+            //GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
+            //sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.Black);
+
+            ////at this point alpha component is fill in to destination 
+            ////-------------------------------------------------------------------------------------
+            ////2. then fill again!, 
+            ////we use alpha information from dest, 
+            ////so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
+            //GL.ColorMask(true, true, true, true);
+            //GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
+            //{
+            //    //draw box of gradient color
+            //    if (brush.BrushKind == Drawing.BrushKind.LinearGradient)
+            //    {
+            //        var colors = linearGradientBrush.GetColors();
+            //        var points = linearGradientBrush.GetStopPoints();
+            //        uint c1 = colors[0].ToABGR();
+            //        uint c2 = colors[1].ToABGR();
+            //        //create polygon for graident bg 
+
+            //        ArrayList<VertexC4V2f>
+            //             vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+            //             points[0].X, points[0].Y,
+            //             points[1].X, points[1].Y,
+            //             colors[0],
+            //             colors[1]);
+
+            //        DrawVertexList(DrawMode.Triangles, vrx, vrx.Count);
+
+            //    }
+            //    else if (brush.BrushKind == Drawing.BrushKind.Texture)
+            //    {
+            //        //draw texture image 
+            //        LayoutFarm.Drawing.TextureBrush tbrush = (LayoutFarm.Drawing.TextureBrush)brush;
+            //        LayoutFarm.Drawing.Image img = tbrush.TextureImage;
+            //        GLBitmap bmpTexture = (GLBitmap)tbrush.InnerImage2;
+            //        this.DrawImage(bmpTexture, 0, 0);
+            //        //GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
+            //        //this.DrawImage(bmp, 0, 0);
+            //        //bmp.Dispose();
+
+            //    }
+            //}
+            ////restore back 
+            ////3. switch to normal blending mode 
+            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             unsafe
             {
+                var prevColor = this.strokeColor;
+                this.StrokeColor = LayoutFarm.Drawing.Color.White; 
 
                 GL.Enable(EnableCap.Texture2D);
                 {
@@ -439,12 +503,11 @@ namespace LayoutFarm.DrawingGL
                                 FillRectWithTexture(destRect.X, destRect.Y, destRect.Width, destRect.Height);
                             }
                         }
-
                     }
-
                     GL.DisableClientState(ArrayCap.TextureCoordArray);
                 }
-                GL.Disable(EnableCap.Texture2D);
+                GL.Disable(EnableCap.Texture2D); 
+                this.StrokeColor = prevColor;
             }
         }
 
@@ -455,15 +518,39 @@ namespace LayoutFarm.DrawingGL
             unsafe
             {
 
-                GL.Enable(EnableCap.Texture2D);
+                //texture source coord 1= 100% of original width
+                float* arr = stackalloc float[8];
+                float fullsrcW = bmp.Width;
+                float fullsrcH = bmp.Height;
+                if (this.canvasOrientation == Drawing.CanvasOrientation.LeftTop)
                 {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
-                    GL.EnableClientState(ArrayCap.TextureCoordArray); //***
+                    if (!bmp.IsInvert)
+                    {
 
-                    //texture source coord 1= 100% of original width
-                    float* arr = stackalloc float[8];
-                    float fullsrcW = bmp.Width;
-                    float fullsrcH = bmp.Height;
+                        ////arr[0] = 0; arr[1] = 0;
+                        arr[0] = srcRect.Left / fullsrcW; arr[1] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                        //arr[2] = 1; arr[3] = 0;
+                        arr[2] = srcRect.Right / fullsrcW; arr[3] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                        //arr[4] = 1; arr[5] = 1;
+                        arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Top / fullsrcH;
+                        //arr[6] = 0; arr[7] = 1;
+                        arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Top / fullsrcH;
+                    }
+                    else
+                    {
+
+                        arr[0] = srcRect.Left / fullsrcW; arr[1] = srcRect.Top / fullsrcH;
+                        //arr[2] = 1; arr[3] = 1;
+                        arr[2] = srcRect.Right / fullsrcW; arr[3] = srcRect.Top / fullsrcH;
+                        //arr[4] = 1; arr[5] = 0;
+                        arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Bottom / fullsrcH;
+                        //arr[6] = 0; arr[7] = 0;
+                        arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Bottom / fullsrcH;
+                    }
+
+                }
+                else
+                {
                     if (bmp.IsInvert)
                     {
 
@@ -487,12 +574,15 @@ namespace LayoutFarm.DrawingGL
                         //arr[6] = 0; arr[7] = 0;
                         arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Bottom / fullsrcH;
                     }
-                    GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
-                    //------------------------------------------ 
-                    //fill rect with texture 
-                    FillRectWithTexture(x, y, w, h);
-                    GL.DisableClientState(ArrayCap.TextureCoordArray);
                 }
+                GL.Enable(EnableCap.Texture2D);
+                GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
+                GL.EnableClientState(ArrayCap.TextureCoordArray); //***
+                GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
+                //------------------------------------------ 
+                //fill rect with texture 
+                FillRectWithTexture(x, y, w, h);
+                GL.DisableClientState(ArrayCap.TextureCoordArray);
                 GL.Disable(EnableCap.Texture2D);
             }
         }
@@ -539,11 +629,13 @@ namespace LayoutFarm.DrawingGL
                 float* arr = stackalloc float[8];
                 byte* indices = stackalloc byte[6];
                 CreateRectCoords(arr, indices, x, y, w, h);
+
                 GL.EnableClientState(ArrayCap.VertexArray);
                 //vertex
                 GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
                 GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
                 GL.DisableClientState(ArrayCap.VertexArray);
+
             }
         }
 
