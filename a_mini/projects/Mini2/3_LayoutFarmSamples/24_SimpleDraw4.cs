@@ -28,7 +28,7 @@ namespace Mini2
             var platform = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P;
             var canvas = platform.CreateCanvas(0, 0, 800, 600);
             GraphicsPath path = null;
-            FontInfo fontinfo = platform.GetFont("tahoma", 24);
+            FontInfo fontinfo = platform.GetFont("tahoma", 24, LayoutFarm.Drawing.FontStyle.Regular);
             canvas.CurrentFont = fontinfo.ResolvedFont;
 
             form.SetGLPaintHandler((o, s) =>
