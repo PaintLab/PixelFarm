@@ -7,11 +7,9 @@ using System.Drawing;
 
 using PixelFarm.Agg;
 using LayoutFarm.DrawingGL;
-using LayoutFarm.Drawing;
-
-
+using LayoutFarm.Drawing; 
 namespace Mini2
-{
+{   
     [Info(OrderCode = "28")]
     [Info("DrawSample08_DrawText2")]
     public class DrawSample08_DrawText2 : DemoBase
@@ -31,19 +29,19 @@ namespace Mini2
 
             form.SetGLPaintHandler((o, s) =>
             {
+                canvas.Orientation = CanvasOrientation.LeftTop;
                 if (fontinfo == null)
                 {
-                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
+                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.GetFontInfo("tahoma", 10, LayoutFarm.Drawing.DrawingGL.FontLoadTechnique.GdiBitmapFont);
                     canvas.CurrentFont = fontinfo.ResolvedFont;
-                    //-----------------------------------------
-                    var font = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 64);
                 }
                 canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
-                canvas.FillRectangle(LayoutFarm.Drawing.Color.White, 0, 0, 400, 400);
+                canvas.FillRectangle(LayoutFarm.Drawing.Color.Yellow, 3, 3, 200, 200);
+                canvas.DrawRectangle(LayoutFarm.Drawing.Color.Red, 0, 0, 400, 400);
                 //test draw text
-                canvas.Note1 = 2;
+
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 0);
-                canvas.Note1 = 0;
+
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100);
 
             });

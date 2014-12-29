@@ -17,14 +17,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-
+using LayoutFarm.DrawingGL;
 
 namespace LayoutFarm.Drawing.DrawingGL
 {
     partial class MyCanvasGL
     {
-        //Brush currentBrush;
-        //Font currentTextFont = null;
+        GLTextPrinter myGLTextPrinter;
         Color mycurrentTextColor = Color.Black;
         //======================================
         //IFonts impl

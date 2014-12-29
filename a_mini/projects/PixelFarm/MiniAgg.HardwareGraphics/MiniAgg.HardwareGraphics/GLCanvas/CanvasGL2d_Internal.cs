@@ -12,6 +12,9 @@ namespace LayoutFarm.DrawingGL
 
     partial class CanvasGL2d
     {
+
+        
+        //-------------
         static unsafe void CreateRectCoords(float* arr, byte* indices,
                   float x, float y, float w, float h)
         {
@@ -38,40 +41,7 @@ namespace LayoutFarm.DrawingGL
 
         }
 
-        static unsafe void CreateLineCoords(ArrayList<VertexC4V2f> vrx,
-                 LayoutFarm.Drawing.Color color,
-                 float x1, float y1, float x2, float y2)
-        {
-            uint color_uint = color.ToABGR();
-            vrx.AddVertex(new VertexC4V2f(color_uint, x1, y1));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x2, y2));
-        }
-        static unsafe void CreateRectCoords(ArrayList<VertexC4V2f> vrx,
-                   LayoutFarm.Drawing.Color color,
-                   float x, float y, float w, float h)
-        {
-            uint color_uint = color.ToABGR();
-            vrx.AddVertex(new VertexC4V2f(color_uint, x, y));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y + h));
 
-            vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y + h));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x, y + h));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x, y));
-
-        }
-        static unsafe void CreatePolyLineRectCoords(ArrayList<VertexC4V2f> vrx,
-                   LayoutFarm.Drawing.Color color,
-                   float x, float y, float w, float h)
-        {
-            uint color_uint = color.ToABGR();
-            vrx.AddVertex(new VertexC4V2f(color_uint, x, y));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y + h));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x, y + h));
-            vrx.AddVertex(new VertexC4V2f(color_uint, x, y));
-
-        }
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
             int ncoords = vertex2dCoords.Length / 2;
@@ -96,6 +66,48 @@ namespace LayoutFarm.DrawingGL
             tess.EndPolygon();
             return tessListener.resultVertexList;
         }
+
+
+
+
+
+
+
+
+        //static unsafe void CreateLineCoords(ArrayList<VertexC4V2f> vrx,
+        //         LayoutFarm.Drawing.Color color,
+        //         float x1, float y1, float x2, float y2)
+        //{
+        //    uint color_uint = color.ToABGR();
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x1, y1));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x2, y2));
+        //}
+        //static unsafe void CreateRectCoords(ArrayList<VertexC4V2f> vrx,
+        //           LayoutFarm.Drawing.Color color,
+        //           float x, float y, float w, float h)
+        //{
+        //    uint color_uint = color.ToABGR();
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x, y));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y + h));
+
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y + h));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x, y + h));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x, y));
+
+        //}
+        //static unsafe void CreatePolyLineRectCoords(ArrayList<VertexC4V2f> vrx,
+        //           LayoutFarm.Drawing.Color color,
+        //           float x, float y, float w, float h)
+        //{
+        //    uint color_uint = color.ToABGR();
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x, y));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x + w, y + h));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x, y + h));
+        //    vrx.AddVertex(new VertexC4V2f(color_uint, x, y));
+
+        //}
 
     }
 }

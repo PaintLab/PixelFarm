@@ -31,7 +31,7 @@ namespace LayoutFarm.Drawing
     }
 
     //------------------------------------------
-  
+
     public struct FontABC
     {
         public int a;
@@ -69,7 +69,7 @@ namespace LayoutFarm.Drawing
         public abstract int GetStringWidth(char[] buffer, int length);
 
         public abstract Font ResolvedFont { get; }
-
+        public object PlatformSpecificFont { get; set; }
     }
     public interface IFonts
     {

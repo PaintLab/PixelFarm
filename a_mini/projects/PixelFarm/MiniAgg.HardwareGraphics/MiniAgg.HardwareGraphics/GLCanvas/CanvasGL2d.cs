@@ -11,10 +11,10 @@ using Tesselate;
 namespace LayoutFarm.DrawingGL
 {
 
-    public partial class CanvasGL2d
+    public partial class CanvasGL2d : IDisposable
     {
 
-        LayoutFarm.Drawing.Color strokeColor = LayoutFarm.Drawing.Color.Black; 
+        LayoutFarm.Drawing.Color strokeColor = LayoutFarm.Drawing.Color.Black;
         LayoutFarm.Drawing.CanvasOrientation canvasOrientation = Drawing.CanvasOrientation.LeftBottom;
 
 
@@ -23,11 +23,11 @@ namespace LayoutFarm.DrawingGL
         int canvasOriginY = 0;
         int canvasW;
         int canvasH;
-       
+
 
         //tools---------------------------------
         Tesselator tess = new Tesselator();
-        TessListener2 tessListener = new TessListener2(); 
+        TessListener2 tessListener = new TessListener2();
 
         RoundedRect roundRect = new RoundedRect();
         Ellipse ellipse = new Ellipse();
@@ -38,8 +38,8 @@ namespace LayoutFarm.DrawingGL
         GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
         CurveFlattener curveFlattener = new CurveFlattener();
-        GLTextPrinter textPrinter;      
-    
+
+
         public CanvasGL2d(int canvasW, int canvasH)
         {
             this.canvasW = canvasW;
@@ -47,9 +47,8 @@ namespace LayoutFarm.DrawingGL
             sclineRas = new GLScanlineRasterizer();
             sclineRasToGL = new GLScanlineRasToDestBitmapRenderer();
             sclinePack8 = new GLScanlinePacked8();
-            tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true); 
-            textPrinter = new GLTextPrinter(this);
-             
+            tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
+
         }
         public CanvasSmoothMode SmoothMode
         {
@@ -411,63 +410,6 @@ namespace LayoutFarm.DrawingGL
                 CreateRectCoords(rectCoords, x, y, w, h);
                 UnsafeDrawV2fList(DrawMode.LineLoop, rectCoords, 6);
             }
-
-
-
-            //early exit
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray);
-            //VboC4V3f vbo = GenerateVboC4V3f();
-            ////points 
-            //ArrayList<VertexC4V2f> vrx = new ArrayList<VertexC4V2f>();
-            //CreatePolyLineRectCoords(vrx, this.strokeColor, x, y, w, h);
-            //int pcount = vrx.Count;
-            ////vbo.BindBuffer();
-            //DrawLineStripWithVertexBuffer(vrx, pcount);
-            //vbo.UnbindBuffer();
-            //vbo.Dispose();
-            //GL.DisableClientState(ArrayCap.ColorArray);
-            //GL.DisableClientState(ArrayCap.VertexArray);
-            //------------------------ 
-            //switch (this.SmoothMode)
-            //{
-            //    case CanvasSmoothMode.AggSmooth:
-            //        {
-            //            unsafe
-            //            {
-            //                //early exit
-            //                GL.EnableClientState(ArrayCap.ColorArray);
-            //                GL.EnableClientState(ArrayCap.VertexArray);
-            //                VboC4V3f vbo = GenerateVboC4V3f();
-            //                ////points 
-            //                ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-            //                CreateRectCoords(vrx, this.fillColor, x, y, w, h);
-            //                int pcount = vrx.Count;
-            //                vbo.BindBuffer();
-            //                DrawTrianglesWithVertexBuffer(vrx, pcount);
-            //                vbo.UnbindBuffer();
-
-            //                //vbo.Dispose();
-            //                GL.DisableClientState(ArrayCap.ColorArray);
-            //                GL.DisableClientState(ArrayCap.VertexArray);
-            //                //------------------------ 
-            //            }
-            //        } break;
-            //    default:
-            //        {
-            //            unsafe
-            //            {
-            //                float* arr = stackalloc float[8];
-            //                byte* indices = stackalloc byte[6];
-            //                CreateRectCoords2(arr, indices, x, y, w, h);
-            //                GL.EnableClientState(ArrayCap.VertexArray); //***
-            //                //vertex
-            //                GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-            //                GL.DrawElements(BeginMode.Lines, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
-            //                GL.DisableClientState(ArrayCap.VertexArray);
-            //            }
-            //        } break;
-            //}
         }
         public void FillRect(LayoutFarm.Drawing.Color color, float x, float y, float w, float h)
         {
@@ -980,35 +922,6 @@ namespace LayoutFarm.DrawingGL
         public int CanvasOriginY
         {
             get { return this.canvasOriginY; }
-        }
-        ////-----------------------------------------------------
-        //void SetupDefaultFonts()
-        //{
-        //    //test
-        //     this.textPrinter.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont("c:\\Windows\\Fonts\\Tahoma.ttf", 10);
-
-        //}
-        public PixelFarm.Agg.Fonts.Font CurrentFont
-        {
-            get
-            {
-                return this.textPrinter.CurrentFont;
-            }
-            set
-            {
-                this.textPrinter.CurrentFont = value;
-            }
-        }
-        public void DrawString(string str, float x, float y)
-        {
-
-            this.textPrinter.Print(str.ToCharArray(), x, y);
-
-        }
-        public void DrawString(char[] buff, float x, float y)
-        {
-
-            this.textPrinter.Print(buff, x, y);
         }
 
     }
