@@ -202,7 +202,7 @@ namespace LayoutFarm
 
                 _fontsUnmanagedCache[newFont] = newFont.ToHfont();
                 //2. line cache
-                _fontHeightCache.Add(newFont, fontHeight);
+                _fontHeightCache[newFont] = fontHeight;
 
                 return fontInfo;
             }
