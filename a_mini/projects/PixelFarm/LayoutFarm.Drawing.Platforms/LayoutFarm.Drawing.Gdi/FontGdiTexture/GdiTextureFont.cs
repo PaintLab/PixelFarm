@@ -28,8 +28,18 @@ namespace PixelFarm.Agg.Fonts
         LayoutFarm.Drawing.FontInfo fontInfo;
         GLBitmap innerGLbmp;
 
-        public GdiTextureFont(int width, int height, System.Drawing.Font font)
+#if DEBUG
+        static int debugTotalId;
+        public readonly int dbugId = debugTotalId++;
+#endif
+
+        public GdiTextureFont(int width, int height, System.Drawing.Font font, LayoutFarm.Drawing.FontInfo fontInfo)
         {
+            //if (this.dbugId == 2)
+            //{
+
+            //}
+
             this.width = width;
             this.height = height;
             this.textureAtlas = new TextureAtlas(width, height);
@@ -39,7 +49,7 @@ namespace PixelFarm.Agg.Fonts
             gx = System.Drawing.Graphics.FromImage(textBoardBmp);
             //draw character map
             //basic eng  
-            fontInfo = FontsUtils.GetCachedFont(font);
+            this.fontInfo = fontInfo;
             char[] chars = new char[255];
             for (int i = 0; i < 255; ++i)
             {
@@ -48,6 +58,15 @@ namespace PixelFarm.Agg.Fonts
             //PrepareCharacterMap("ญู".ToCharArray()); 
             PrepareCharacterMap(chars);
             MakeTransparentBG(textBoardBmp);
+            //------------------
+
+
+#if DEBUG
+            //save bmp for debug
+            //textBoardBmp.Save("d:\\WImageTest\\font_" + dbugId + ".png");
+
+#endif
+            //-------------------
         }
         void PrepareCharacterMap(char[] buffer)
         {
@@ -84,7 +103,7 @@ namespace PixelFarm.Agg.Fonts
                     //start newline
                     curX = 0;
                     curY += maxLineHeight;
-                    maxLineHeight = 0;
+                    maxLineHeight = fontHeight;
                 }
 
                 NativeTextWin32.TextOut(gxdc, curX, curY, new char[] { c }, 1);

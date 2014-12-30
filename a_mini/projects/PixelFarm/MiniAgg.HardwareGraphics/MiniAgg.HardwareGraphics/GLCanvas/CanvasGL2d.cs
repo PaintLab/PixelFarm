@@ -12,13 +12,11 @@ namespace LayoutFarm.DrawingGL
 {
 
     public partial class CanvasGL2d : IDisposable
-    {
+    {   
 
         LayoutFarm.Drawing.Color strokeColor = LayoutFarm.Drawing.Color.Black;
-        LayoutFarm.Drawing.CanvasOrientation canvasOrientation = Drawing.CanvasOrientation.LeftBottom;
-
-
-
+        LayoutFarm.Drawing.CanvasOrientation canvasOrientation = CanvasOptions.DefaultOrientation;
+         
         int canvasOriginX = 0;
         int canvasOriginY = 0;
         int canvasW;
@@ -492,7 +490,7 @@ namespace LayoutFarm.DrawingGL
                     } break;
             }
         }
-       
+
         public void DrawArc(float fromX, float fromY, float endX, float endY,
             float xaxisRotationAngleDec, float rx, float ry,
             SvgArcSize arcSize, SvgArcSweep arcSweep)
@@ -597,7 +595,7 @@ namespace LayoutFarm.DrawingGL
             sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
         }
 
-       
+
 
         public void DrawBezierCurve(float startX, float startY, float endX, float endY,
             float controlX1, float controlY1,
@@ -698,5 +696,12 @@ namespace LayoutFarm.DrawingGL
             get { return this.canvasOriginY; }
         }
 
+        public static bool IsGraphicContexReady
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }

@@ -301,7 +301,7 @@ namespace LayoutFarm.Drawing.DrawingGL
                 if (this.myGLTextPrinter != null)
                 {
                     //assign font        
-
+                    this.myGLTextPrinter.CurrentFont = value.FontInfo.PlatformSpecificFont as PixelFarm.Agg.Fonts.Font;
                 }
                 //sample only ***  
                 //canvasGL2d.CurrentFont = (PixelFarm.Agg.Fonts.Font)defaultFontInfo.PlatformSpecificFont;
@@ -326,7 +326,7 @@ namespace LayoutFarm.Drawing.DrawingGL
             {
                 this.myGLTextPrinter = new GLTextPrinter(canvasGL2d);
                 this.myGLTextPrinter.CurrentFont = this.currentFont.FontInfo.PlatformSpecificFont as PixelFarm.Agg.Fonts.Font;
-                //this.myGLTextPrinter.CurrentFont = this.currentFont;
+
             }
             myGLTextPrinter.Print(buffer, 0, buffer.Length, logicalTextBox.X, logicalTextBox.Y);
         }
@@ -336,7 +336,6 @@ namespace LayoutFarm.Drawing.DrawingGL
             {
                 this.myGLTextPrinter = new GLTextPrinter(canvasGL2d);
                 this.myGLTextPrinter.CurrentFont = this.currentFont.FontInfo.PlatformSpecificFont as PixelFarm.Agg.Fonts.Font;
-                // this.myGLTextPrinter.CurrentFont = this.currentFont;
             }
             myGLTextPrinter.Print(str, startAt, len, logicalTextBox.X, logicalTextBox.Y);
         }
