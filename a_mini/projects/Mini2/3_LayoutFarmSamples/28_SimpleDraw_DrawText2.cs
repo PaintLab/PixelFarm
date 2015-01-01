@@ -25,8 +25,14 @@ namespace Mini2
             FormTestWinGLControl form = new FormTestWinGLControl();
             var canvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
 
-            FontInfo fontinfo = null;
+            form.SetOnDestroyHandler((o, s) =>
+            {
+                canvas.Dispose();
+            });
 
+
+
+            FontInfo fontinfo = null; 
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Orientation = CanvasOrientation.LeftTop;
@@ -54,6 +60,8 @@ namespace Mini2
                 canvas.CurrentTextColor = LayoutFarm.Drawing.Color.Black;
             });
             form.Show();
+            
+            
         }
     }
 }

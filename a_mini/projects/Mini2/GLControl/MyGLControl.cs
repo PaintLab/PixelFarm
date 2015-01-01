@@ -15,6 +15,7 @@ namespace OpenTK
     {
         OpenTK.Graphics.Color4 clearColor;
         EventHandler glPaintHandler;
+        EventHandler handleDestroy;
         public MyGLControl()
         {
             OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
@@ -33,6 +34,10 @@ namespace OpenTK
         public void SetGLPaintHandler(EventHandler glPaintHandler)
         {
             this.glPaintHandler = glPaintHandler;
+        }
+        public void SetHandleDestroyHandler(EventHandler handleDestroy)
+        {
+            this.handleDestroy = handleDestroy;
         }
         public OpenTK.Graphics.Color4 ClearColor
         {
@@ -76,6 +81,7 @@ namespace OpenTK
         {
             //int max = Math.Max(screenBound.Width, screenBound.Height);
             int properW = Math.Min(this.Width, this.Height);
+
             //int max = 600;
             //init
             GL.Enable(EnableCap.Blend);
@@ -91,5 +97,14 @@ namespace OpenTK
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
         }
+
+        public void CloseControl()
+        {
+            if (handleDestroy != null)
+            {
+                this.MakeCurrent();
+                handleDestroy(this, EventArgs.Empty);
+            }
+        } 
     }
 }
