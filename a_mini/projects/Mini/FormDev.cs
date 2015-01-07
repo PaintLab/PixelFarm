@@ -86,18 +86,18 @@ namespace Mini
 
 
                 //1. all coords and commands
-                PixelFarm.Agg.VertexSource.VertexSourceIO.WriteToStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteToStream(
                     writer,
                     lionShape.Path);
 
                 //2. colors
-                PixelFarm.Agg.VertexSource.VertexSourceIO.WriteColorsToStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteColorsToStream(
                    writer, lionShape.Colors
                    );
                 //---------------------------------------
                 //3. num paths, & path index 
                 int npath = lionShape.NumPaths;
-                PixelFarm.Agg.VertexSource.VertexSourceIO.WritePathIndexListToStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WritePathIndexListToStream(
                   writer, lionShape.PathIndexList,
                   npath
                   );
@@ -117,16 +117,16 @@ namespace Mini
                 int[] pathIndexList;
 
                 //1. path and command
-                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathDataFromStream(
                   reader, out path
                   );
                 //2. colors
-                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadColorDataFromStream(
                   reader, out colors
                   );
                 //3. path indice
                 int npaths;
-                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathIndexListFromStream(
                   reader, out npaths, out pathIndexList
                  );
 

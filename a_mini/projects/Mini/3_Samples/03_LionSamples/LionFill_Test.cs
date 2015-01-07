@@ -100,16 +100,16 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
                 //1. path and command
-                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathDataFromStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathDataFromStream(
                   reader, out path
                   );
                 //2. colors
-                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadColorDataFromStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadColorDataFromStream(
                   reader, out colors
                   );
                 //3. path indice
                 int npaths;
-                PixelFarm.Agg.VertexSource.VertexSourceIO.ReadPathIndexListFromStream(
+                PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathIndexListFromStream(
                   reader, out npaths, out pathIndexList
                  );
 
