@@ -205,7 +205,7 @@ namespace Mini
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
                     gfx.UseSubPixelRendering = true;
                     gfx.Render(vxs, ColorRGBA.Black);
-                    BitmapHelper.CopyToWindowsBitmap(
+                    PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmap(
                       actualImage, //src from actual img buffer
                       bufferBmp, //dest to buffer bmp
                      new RectInt(0, 0, bmpW, bmpH));

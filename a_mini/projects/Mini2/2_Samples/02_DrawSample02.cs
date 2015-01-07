@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using PixelFarm.Agg;
-using LayoutFarm.DrawingGL;
+using PixelFarm.DrawingGL;
 namespace Mini2
 {
     [Info(OrderCode = "02")]
@@ -24,8 +24,8 @@ namespace Mini2
 
             form.SetGLPaintHandler((o, s) =>
             {
-                canvas.Clear(LayoutFarm.Drawing.Color.White);
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.DeepPink;
+                canvas.Clear(PixelFarm.Drawing.Color.White);
+                canvas.StrokeColor = PixelFarm.Drawing.Color.DeepPink;
                 canvas.DrawLine(0, 300, 500, 300);
 
                 //if (hwBmp == null)
@@ -38,11 +38,11 @@ namespace Mini2
                 ////canvas.DrawImage(hwBmp, 10, 10);
                 //canvas.DrawImage(hwBmp, 300, 300, hwBmp.Width / 4, hwBmp.Height / 4); 
                 //-----------------------------------------------------
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.Magenta;
+                canvas.StrokeColor = PixelFarm.Drawing.Color.Magenta;
                 //draw line test 
                 canvas.DrawLine(20, 20, 600, 200);
                 //----------------------------------------------------- 
-                var color = new LayoutFarm.Drawing.Color(50, 255, 0, 0);  //  LayoutFarm.Drawing.Color.Red;
+                var color = new PixelFarm.Drawing.Color(50, 255, 0, 0);  //  PixelFarm.Drawing.Color.Red;
                 //rect polygon
                 var polygonCoords = new float[]{
                         5,300,
@@ -60,11 +60,11 @@ namespace Mini2
                         10f +10,340};
 
                 canvas.SmoothMode = CanvasSmoothMode.AggSmooth;
-                canvas.StrokeColor = new LayoutFarm.Drawing.Color(100, 0, 255, 0);  //  L
+                canvas.StrokeColor = new PixelFarm.Drawing.Color(100, 0, 255, 0);  //  L
                 canvas.DrawPolygon(polygonCoords2, 4);
 
                 int strkW = 10;
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.LightGray;
+                canvas.StrokeColor = PixelFarm.Drawing.Color.LightGray;
 
                 for (int i = 1; i < 90; i += 10)
                 {
@@ -80,21 +80,21 @@ namespace Mini2
                 }
 
 
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+                canvas.StrokeColor = PixelFarm.Drawing.Color.FromArgb(150, PixelFarm.Drawing.Color.Green);
 
                 //////---------------------------------------------
                 //////draw ellipse and circle
 
                 canvas.StrokeWidth = 0.75f;
                 canvas.DrawCircle(400, 500, 50);
-                canvas.FillCircle(LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green), 450, 550, 25);
+                canvas.FillCircle(PixelFarm.Drawing.Color.FromArgb(150, PixelFarm.Drawing.Color.Green), 450, 550, 25);
 
                 canvas.StrokeWidth = 3;
                 canvas.DrawRoundRect(500, 450, 100, 100, 10, 10);
 
 
                 canvas.StrokeWidth = 3;
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Blue);
+                canvas.StrokeColor = PixelFarm.Drawing.Color.FromArgb(150, PixelFarm.Drawing.Color.Blue);
 
                 //canvas.DrawBezierCurve(0, 0, 500, 500, 0, 250, 500, 250);
                 canvas.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
@@ -103,10 +103,10 @@ namespace Mini2
                 //canvas.DrawArc(150, 200, 300, 50, 0, 150, 150, SvgArcSize.Large, SvgArcSweep.Negative);
                 canvas.DrawArc(100, 200, 300, 200, 30, 30, 50, SvgArcSize.Large, SvgArcSweep.Negative);
 
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Green);
+                canvas.StrokeColor = PixelFarm.Drawing.Color.FromArgb(150, PixelFarm.Drawing.Color.Green);
                 // canvas.DrawArc(100, 200, 300, 200, 0, 100, 100, SvgArcSize.Large, SvgArcSweep.Negative);
 
-                canvas.StrokeColor = LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black);
+                canvas.StrokeColor = PixelFarm.Drawing.Color.FromArgb(150, PixelFarm.Drawing.Color.Black);
                 canvas.DrawLine(100, 200, 300, 200);
 
 
@@ -115,12 +115,12 @@ namespace Mini2
                 ////var fontGlyph = font.GetGlyph('{');
                 //////PixelFarm.Font2.MyFonts.SetShapingEngine();
 
-                ////canvas.FillVxs(LayoutFarm.Drawing.Color.FromArgb(150, LayoutFarm.Drawing.Color.Black), fontGlyph.flattenVxs);
+                ////canvas.FillVxs(PixelFarm.Drawing.Color.FromArgb(150, PixelFarm.Drawing.Color.Black), fontGlyph.flattenVxs);
 
-                ////canvas.StrokeColor = LayoutFarm.Drawing.Color.White;
+                ////canvas.StrokeColor = PixelFarm.Drawing.Color.White;
                 ////canvas.CurrentFont = font;
 
-                ////canvas.StrokeColor = LayoutFarm.Drawing.Color.Black;
+                ////canvas.StrokeColor = PixelFarm.Drawing.Color.Black;
                 ////canvas.DrawLine(0, 200, 500, 200);
 
                 //////test Thai words

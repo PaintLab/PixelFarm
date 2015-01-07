@@ -6,8 +6,8 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using PixelFarm.Agg;
-using LayoutFarm.DrawingGL;
-using LayoutFarm.Drawing;
+using PixelFarm.DrawingGL;
+using PixelFarm.Drawing;
 namespace Mini2
 {
     [Info(OrderCode = "28")]
@@ -16,14 +16,14 @@ namespace Mini2
     {
         static DrawSample08_DrawText2()
         {
-            LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
+            PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
         }
         public override void Load()
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
-            var canvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
+            var canvas = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
 
             form.SetOnDestroyHandler((o, s) =>
             {
@@ -38,26 +38,26 @@ namespace Mini2
                 canvas.Orientation = CanvasOrientation.LeftTop;
                 if (fontinfo == null)
                 {
-                    fontinfo = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.GetFontInfo("tahoma", 10, LayoutFarm.Drawing.DrawingGL.FontLoadTechnique.GdiBitmapFont);
+                    fontinfo = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.GetFontInfo("tahoma", 10, PixelFarm.Drawing.DrawingGL.FontLoadTechnique.GdiBitmapFont);
                     canvas.CurrentFont = fontinfo.ResolvedFont;
                 }
-                canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
-                canvas.FillRectangle(LayoutFarm.Drawing.Color.Yellow, 3, 3, 200, 200);
-                canvas.DrawRectangle(LayoutFarm.Drawing.Color.Red, 0, 0, 400, 400);
+                canvas.ClearSurface(PixelFarm.Drawing.Color.White);
+                canvas.FillRectangle(PixelFarm.Drawing.Color.Yellow, 3, 3, 200, 200);
+                canvas.DrawRectangle(PixelFarm.Drawing.Color.Red, 0, 0, 400, 400);
                 //test draw text
 
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 0);
 
-                canvas.CurrentTextColor = LayoutFarm.Drawing.Color.Red;
+                canvas.CurrentTextColor = PixelFarm.Drawing.Color.Red;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 50);
 
-                canvas.CurrentTextColor = LayoutFarm.Drawing.Color.Green;
+                canvas.CurrentTextColor = PixelFarm.Drawing.Color.Green;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100);
 
-                canvas.CurrentTextColor = LayoutFarm.Drawing.Color.Blue;
+                canvas.CurrentTextColor = PixelFarm.Drawing.Color.Blue;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 150);
 
-                canvas.CurrentTextColor = LayoutFarm.Drawing.Color.Black;
+                canvas.CurrentTextColor = PixelFarm.Drawing.Color.Black;
             });
             form.Show();
             

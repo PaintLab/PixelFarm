@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using PixelFarm.Agg;
-using LayoutFarm.DrawingGL;
+using PixelFarm.DrawingGL;
 namespace Mini2
 {
     [Info(OrderCode = "00")]
@@ -21,7 +21,7 @@ namespace Mini2
             CanvasGL2d canvas = new CanvasGL2d(this.Width, this.Height);
             form.SetGLPaintHandler((o, s) =>
             {
-                canvas.Clear(LayoutFarm.Drawing.Color.White);
+                canvas.Clear(PixelFarm.Drawing.Color.White);
 
 
             });

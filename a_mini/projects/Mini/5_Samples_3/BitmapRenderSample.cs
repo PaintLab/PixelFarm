@@ -60,7 +60,8 @@ namespace PixelFarm.Agg.Sample_Images
                 int bmpH = bmp.Height;
                 PixelFormat pixFormat = PixelFormat.Rgba32;
                 ActualImage actualImage = new ActualImage(bmpW, bmpH, pixFormat);
-                Mini.BitmapHelper.CopyFromWindowsBitmapSameSize(bmp, actualImage);
+                PixelFarm.Agg.Image.BitmapHelper.CopyFromWindowsBitmapSameSize(bmp, actualImage);
+                
                 return actualImage;
             }
         }

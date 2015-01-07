@@ -48,7 +48,7 @@ namespace PixelFarm.Agg
             myvxs = null;
             return result;
         }
-        public void Draw(LayoutFarm.DrawingGL.CanvasGL2d canvas)
+        public void Draw(PixelFarm.DrawingGL.CanvasGL2d canvas)
         {
             if (myvxs == null)
             {
@@ -73,7 +73,7 @@ namespace PixelFarm.Agg
                     var color = colors[i];
                     //? 
                     canvas.FillVxsSnap(
-                        new LayoutFarm.Drawing.Color(color.alpha, color.blue, color.green, color.red),
+                        new PixelFarm.Drawing.Color(color.alpha, color.blue, color.green, color.red),
                         new VertexStoreSnap(myvxs, pathList[i]));
                 }
             }

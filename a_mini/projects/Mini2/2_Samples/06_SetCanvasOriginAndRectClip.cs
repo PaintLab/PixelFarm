@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using PixelFarm.Agg;
-using LayoutFarm.DrawingGL;
+using PixelFarm.DrawingGL;
 namespace Mini2
 {
     [Info(OrderCode = "06")]
@@ -22,9 +22,9 @@ namespace Mini2
             //----------------------------------------------- 
             form.SetGLPaintHandler((o, s) =>
             {
-                //canvas.Orientation = LayoutFarm.Drawing.CanvasOrientation.LeftTop;
-                canvas.Clear(LayoutFarm.Drawing.Color.White);
-                canvas.FillRect(LayoutFarm.Drawing.Color.Blue, 0, 0, 400, 400);
+                //canvas.Orientation = PixelFarm.Drawing.CanvasOrientation.LeftTop;
+                canvas.Clear(PixelFarm.Drawing.Color.White);
+                canvas.FillRect(PixelFarm.Drawing.Color.Blue, 0, 0, 400, 400);
                 //draw vxs direct to GL surface 
                 //lionFill.Draw(canvas); //before offset
 

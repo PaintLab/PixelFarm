@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using PixelFarm.Agg;
-using LayoutFarm.DrawingGL;
+using PixelFarm.DrawingGL;
 using OpenTK.Graphics.OpenGL;
 
 namespace Mini2
@@ -29,7 +29,7 @@ namespace Mini2
 
             form.SetGLPaintHandler((o, s) =>
             {
-                canvas.Clear(LayoutFarm.Drawing.Color.White);
+                canvas.Clear(PixelFarm.Drawing.Color.White);
 
                 //since OpenGL < 3 dose not have FrameBuffer
                 //so we first draw it to backbuffer 
@@ -58,15 +58,15 @@ namespace Mini2
                     bmp.Save("d:\\WImageTest\\glLion.png");
                     //--------- 
                     //canvas.DrawImage(GLBitmapTexture.CreateBitmapTexture(bmp), 0, 0, bmp.Width, bmp.Height);
-                    bmp1 = GLBitmapTextureHelper.CreateBitmapTexture(bmp);
+                    bmp1 = PixelFarm.Drawing.DrawingGL.GLBitmapTextureHelper.CreateBitmapTexture(bmp);
                     bmpW = bmp.Width;
                     bmpH = bmp.Height;
 
-                    canvas.Clear(LayoutFarm.Drawing.Color.White);                     
+                    canvas.Clear(PixelFarm.Drawing.Color.White);                     
                 }
                 canvas.DrawImage(bmp1, 0, 0, bmpW, bmpH);
 
-                //canvas.Clear(LayoutFarm.Drawing.Color.White);
+                //canvas.Clear(PixelFarm.Drawing.Color.White);
             });
             form.Show();
         }

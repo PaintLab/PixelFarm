@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using PixelFarm.Agg;
-using LayoutFarm.DrawingGL;
+using PixelFarm.DrawingGL;
 namespace Mini2
 {
     [Info(OrderCode = "03")]
@@ -28,7 +28,7 @@ namespace Mini2
 
             form.SetGLPaintHandler((o, s) =>
             {
-                canvas.Clear(LayoutFarm.Drawing.Color.White);
+                canvas.Clear(PixelFarm.Drawing.Color.White);
                 //-------------------------------------
                 // draw lion from bitmap to GL screen
                 if (bmp == null)

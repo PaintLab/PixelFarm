@@ -6,8 +6,8 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using PixelFarm.Agg;
-using LayoutFarm.DrawingGL;
-using LayoutFarm.Drawing;
+using PixelFarm.DrawingGL;
+using PixelFarm.Drawing;
 
 
 namespace Mini2
@@ -18,17 +18,17 @@ namespace Mini2
     {
         static DrawSample04()
         {
-            LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
+            PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
         }
         public override void Load()
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
-            var platform = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P;
+            var platform = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.P;
             var canvas = platform.CreateCanvas(0, 0, 800, 600);
             GraphicsPath path = null;
-            FontInfo fontinfo = platform.GetFont("tahoma", 24, LayoutFarm.Drawing.FontStyle.Regular);
+            FontInfo fontinfo = platform.GetFont("tahoma", 24, PixelFarm.Drawing.FontStyle.Regular);
             canvas.CurrentFont = fontinfo.ResolvedFont;
 
             form.SetGLPaintHandler((o, s) =>
@@ -38,12 +38,12 @@ namespace Mini2
                 //    fontinfo = platform.CreateNativeFontWrapper(new System.Drawing.Font("tahoma", 24));
                 //    canvas.CurrentFont = fontinfo.ResolvedFont;
                 //}
-                canvas.ClearSurface(LayoutFarm.Drawing.Color.White);
+                canvas.ClearSurface(PixelFarm.Drawing.Color.White);
                 canvas.FillRectangle(
-                  LayoutFarm.Drawing.Color.Blue,
+                  PixelFarm.Drawing.Color.Blue,
                  100, 10, 200, 200);
                 canvas.DrawRectangle(
-                 LayoutFarm.Drawing.Color.Black,
+                 PixelFarm.Drawing.Color.Black,
                  100, 10, 200, 200);
 
                 //------------
@@ -51,7 +51,7 @@ namespace Mini2
                 if (path == null)
                 {
                     path = platform.CreateGraphicsPath();
-                    //path.AddRectangle(new LayoutFarm.Drawing.RectangleF(10, 10, 10, 10));
+                    //path.AddRectangle(new PixelFarm.Drawing.RectangleF(10, 10, 10, 10));
                     path.AddEllipse(30, 30, 25, 25);
 
                 }

@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+
+using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 
 using OpenTK.Graphics.OpenGL;
 
-namespace LayoutFarm.DrawingGL
+namespace PixelFarm.DrawingGL
 {
 
     partial class CanvasGL2d
@@ -44,6 +46,10 @@ namespace LayoutFarm.DrawingGL
                     PixelFormat.Bgra,
                     PixelType.UnsignedByte, (IntPtr)bmpScan0);
                 });
+
+
+
+
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
@@ -58,7 +64,7 @@ namespace LayoutFarm.DrawingGL
             return foundTextureId;
 
         }
-        public LayoutFarm.Drawing.Color StrokeColor
+        public PixelFarm.Drawing.Color StrokeColor
         {
             get { return this.strokeColor; }
             set
@@ -67,7 +73,7 @@ namespace LayoutFarm.DrawingGL
                 GL.Color4(value.R, value.G, value.B, value.A);
             }
         }
-        public void Clear(LayoutFarm.Drawing.Color c)
+        public void Clear(PixelFarm.Drawing.Color c)
         {
             //set value for clear color buffer
 
@@ -83,7 +89,7 @@ namespace LayoutFarm.DrawingGL
                 ClearBufferMask.DepthBufferBit |
                 ClearBufferMask.StencilBufferBit);
         }
-        public LayoutFarm.Drawing.CanvasOrientation Orientation
+        public  CanvasOrientation Orientation
         {
             get { return this.canvasOrientation; }
             set
@@ -145,7 +151,7 @@ namespace LayoutFarm.DrawingGL
             }
 
         }
-        public void FillPolygon(LayoutFarm.Drawing.Brush brush, float[] vertex2dCoords, int npoints)
+        public void FillPolygon(PixelFarm.Drawing.Brush brush, float[] vertex2dCoords, int npoints)
         {
             //-------------
             //Tesselate
@@ -181,7 +187,7 @@ namespace LayoutFarm.DrawingGL
                         {
                             case Drawing.BrushKind.Solid:
                                 {
-                                    var color = ((LayoutFarm.Drawing.SolidBrush)brush).Color;
+                                    var color = ((PixelFarm.Drawing.SolidBrush)brush).Color;
                                     sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
 
                                 } break;
@@ -202,7 +208,7 @@ namespace LayoutFarm.DrawingGL
                             case Drawing.BrushKind.LinearGradient:
                             case Drawing.BrushKind.Texture:
                                 {
-                                    var linearGradientBrush = brush as LayoutFarm.Drawing.LinearGradientBrush;
+                                    var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
                                     GL.ClearStencil(0); //set value for clearing stencil buffer 
                                     //actual clear here
                                     GL.Clear(ClearBufferMask.StencilBufferBit);
@@ -241,7 +247,7 @@ namespace LayoutFarm.DrawingGL
                                         VertexStore vxs = ps.Vxs;
                                         sclineRas.Reset();
                                         sclineRas.AddPath(vxs);
-                                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.White);
+                                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, PixelFarm.Drawing.Color.White);
                                         //create stencil with normal OpenGL 
                                     }
                                     else
@@ -251,7 +257,7 @@ namespace LayoutFarm.DrawingGL
                                         int j2 = j * 2;
                                         //VboC4V3f vbo = GenerateVboC4V3f();
                                         ArrayList<VertexC4V2f> vrx = new ArrayList<VertexC4V2f>();
-                                        uint color_uint = LayoutFarm.Drawing.Color.Black.ToABGR();   //color.ToABGR();
+                                        uint color_uint = PixelFarm.Drawing.Color.Black.ToABGR();   //color.ToABGR();
                                         for (int i = 0; i < j; ++i)
                                         {
                                             var v = vertextList[i];
@@ -288,7 +294,7 @@ namespace LayoutFarm.DrawingGL
 
                                         //use alpha chanel from source***
                                         GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
-                                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, LayoutFarm.Drawing.Color.Black);
+                                        sclineRasToGL.FillWithColor(sclineRas, sclinePack8, PixelFarm.Drawing.Color.Black);
 
                                         //at this point alpha component is fill in to destination 
                                         //-------------------------------------------------------------------------------------
@@ -320,8 +326,8 @@ namespace LayoutFarm.DrawingGL
                                             else if (brush.BrushKind == Drawing.BrushKind.Texture)
                                             {
                                                 //draw texture image 
-                                                LayoutFarm.Drawing.TextureBrush tbrush = (LayoutFarm.Drawing.TextureBrush)brush;
-                                                LayoutFarm.Drawing.Image img = tbrush.TextureImage;
+                                                PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
+                                                PixelFarm.Drawing.Image img = tbrush.TextureImage;
                                                 GLBitmap bmpTexture = (GLBitmap)tbrush.InnerImage2;
                                                 this.DrawImage(bmpTexture, 0, 0);
                                                 //GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
@@ -382,8 +388,8 @@ namespace LayoutFarm.DrawingGL
                     } break;
             }
         }
-
-        public void DrawGlyphImages(LayoutFarm.Drawing.Color color, GLBitmap bmp, LayoutFarm.Drawing.RectangleF[] destAndSrcPairs)
+        public void DrawGlyphImages(PixelFarm.Drawing.Color color,
+           GLBitmap bmp, PixelFarm.Drawing.RectangleF[] destAndSrcPairs)
         {
             //TODO: white opaque bg should render in single pass
 
@@ -402,7 +408,7 @@ namespace LayoutFarm.DrawingGL
             unsafe
             {
                 var prevColor = this.strokeColor;
-                this.StrokeColor = LayoutFarm.Drawing.Color.White;
+                this.StrokeColor = PixelFarm.Drawing.Color.White;
 
                 GL.Enable(EnableCap.Texture2D);
                 {
@@ -534,14 +540,158 @@ namespace LayoutFarm.DrawingGL
             //fill with color
         }
 
+        public void DrawGlyphImages3(PixelFarm.Drawing.Color color,
+            GLBitmap bmp, PixelFarm.Drawing.RectangleF[] destAndSrcPairs)
+        {
+
+
+            //GL.Disable(EnableCap.Blend);
+            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            ////GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
+            unsafe
+            {
+                var prevColor = this.strokeColor;
+                this.StrokeColor = PixelFarm.Drawing.Color.White;
+
+                GL.Enable(EnableCap.Texture2D);
+                {
+
+                    GL.BindTexture(TextureTarget.Texture2D, GetTextureId(bmp));
+                   // GL.TexEnv(TextureEnvTarget.TextureEnv, TextureEnvParameter.TextureEnvMode, (int)TextureEnvMode.Combine);
+                    GL.EnableClientState(ArrayCap.TextureCoordArray); //***
+
+                    //texture source coord 1= 100% of original width
+                    float* arr = stackalloc float[8];
+                    float fullsrcW = bmp.Width;
+                    float fullsrcH = bmp.Height;
+
+                    int len = destAndSrcPairs.Length;
+                    if (len > 1)
+                    {
+                        if ((len % 2 != 0))
+                        {
+                            len -= 1;
+                        }
+                        if (this.canvasOrientation == Drawing.CanvasOrientation.LeftTop)
+                        {
+                            for (int i = 0; i < len; )
+                            {
+                                //each 
+
+                                var destRect = destAndSrcPairs[i];
+                                var srcRect = destAndSrcPairs[i + 1];
+                                i += 2;
+
+                                if (!bmp.IsInvert)
+                                {
+
+                                    ////arr[0] = 0; arr[1] = 0;
+                                    arr[0] = srcRect.Left / fullsrcW; arr[1] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                                    //arr[2] = 1; arr[3] = 0;
+                                    arr[2] = srcRect.Right / fullsrcW; arr[3] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                                    //arr[4] = 1; arr[5] = 1;
+                                    arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Top / fullsrcH;
+                                    //arr[6] = 0; arr[7] = 1;
+                                    arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Top / fullsrcH;
+                                }
+                                else
+                                {
+
+                                    arr[0] = srcRect.Left / fullsrcW; arr[1] = srcRect.Top / fullsrcH;
+                                    //arr[2] = 1; arr[3] = 1;
+                                    arr[2] = srcRect.Right / fullsrcW; arr[3] = srcRect.Top / fullsrcH;
+                                    //arr[4] = 1; arr[5] = 0;
+                                    arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Bottom / fullsrcH;
+                                    //arr[6] = 0; arr[7] = 0;
+                                    arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Bottom / fullsrcH;
+                                }
+                                GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
+                                //------------------------------------------ 
+                                //fill rect with texture                             
+                                FillRectWithTexture(destRect.X, destRect.Y, destRect.Width, destRect.Height);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < len; )
+                            {
+                                //each 
+
+                                var destRect = destAndSrcPairs[i];
+                                var srcRect = destAndSrcPairs[i + 1];
+                                i += 2;
+
+                                if (bmp.IsInvert)
+                                {
+
+                                    ////arr[0] = 0; arr[1] = 0;
+                                    arr[0] = srcRect.Left / fullsrcW; arr[1] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                                    //arr[2] = 1; arr[3] = 0;
+                                    arr[2] = srcRect.Right / fullsrcW; arr[3] = (srcRect.Top + srcRect.Height) / fullsrcH;
+                                    //arr[4] = 1; arr[5] = 1;
+                                    arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Top / fullsrcH;
+                                    //arr[6] = 0; arr[7] = 1;
+                                    arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Top / fullsrcH;
+                                }
+                                else
+                                {
+                                    arr[0] = srcRect.Left / fullsrcW; arr[1] = srcRect.Top / fullsrcH;
+                                    //arr[2] = 1; arr[3] = 1;
+                                    arr[2] = srcRect.Right / fullsrcW; arr[3] = srcRect.Top / fullsrcH;
+                                    //arr[4] = 1; arr[5] = 0;
+                                    arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Bottom / fullsrcH;
+                                    //arr[6] = 0; arr[7] = 0;
+                                    arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Bottom / fullsrcH;
+                                }
+                                GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
+                                //------------------------------------------ 
+                                //fill rect with texture                             
+                                FillRectWithTexture(destRect.X, destRect.Y, destRect.Width, destRect.Height);
+                            }
+                        }
+                    }
+                    GL.DisableClientState(ArrayCap.TextureCoordArray);
+                }
+                GL.Disable(EnableCap.Texture2D);
+                this.StrokeColor = prevColor;
+            }
+            ////enable color again
+            //////at this point alpha component is fill in to destination 
+            //////-------------------------------------------------------------------------------------
+            //////2. then fill again!, 
+            //////we use alpha information from dest, 
+            //////so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
+            //GL.ColorMask(true, true, true, true);
+            //GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
+            //{
+            //    int len = destAndSrcPairs.Length;
+            //    if (len > 1)
+            //    {
+            //        for (int i = 0; i < len; )
+            //        {
+            //            //each  
+            //            var destRect = destAndSrcPairs[i];
+            //            var srcRect = destAndSrcPairs[i + 1];
+            //            i += 2;
+            //            FillRect(color, destRect.X, destRect.Y, destRect.Width, destRect.Height);
+            //        }
+            //    }
+            //} 
+            ////3.
+            ////set blend mode back
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            ////fill with color
+        }
+
         public void DrawImage(GLBitmap bmp,
-           LayoutFarm.Drawing.RectangleF srcRect,
+           PixelFarm.Drawing.RectangleF srcRect,
            float x, float y, float w, float h)
         {
             unsafe
             {
                 var prevColor = this.strokeColor;
-                this.StrokeColor = LayoutFarm.Drawing.Color.White;
+                this.StrokeColor = PixelFarm.Drawing.Color.White;
 
                 //texture source coord 1= 100% of original width
                 float* arr = stackalloc float[8];
@@ -677,7 +827,7 @@ namespace LayoutFarm.DrawingGL
             //4. disable client side memory
             GL.DisableClientState(ArrayCap.VertexArray);
         }
-        static unsafe void UnsafeDrawV2fList(DrawMode mode, float* polygon2dVertices, int vertexCount, LayoutFarm.Drawing.Color c)
+        static unsafe void UnsafeDrawV2fList(DrawMode mode, float* polygon2dVertices, int vertexCount, PixelFarm.Drawing.Color c)
         {
             GL.Color4(c.R, c.G, c.B, c.A);
             //1. enable client side memory

@@ -6,8 +6,8 @@ using System.Windows.Forms;
 using System.Drawing;
 
 using PixelFarm.Agg;
-using LayoutFarm.DrawingGL;
-using LayoutFarm.Drawing;
+using PixelFarm.DrawingGL;
+using PixelFarm.Drawing;
 
 using OpenTK.Graphics.OpenGL;
 
@@ -19,14 +19,14 @@ namespace Mini2
     {
         static DrawSample05_BasicStencil()
         {
-            LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
+            PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
 
         }
         public override void Load()
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
-            var canvas = LayoutFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
+            var canvas = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
 
 
             form.SetGLPaintHandler((o, s) =>
@@ -36,7 +36,7 @@ namespace Mini2
                 //-----------------------------
                 //test gradient brush
                 //set value for clear color
-                GLHelper.ClearColor(LayoutFarm.Drawing.Color.White);
+                GLHelper.ClearColor(PixelFarm.Drawing.Color.White);
                 GL.ClearStencil(0); //set value for clearing stencil buffer 
                 //actual clear here
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
