@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-
 using System.Text;
 using System.Windows.Forms;
-
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-
 namespace OpenTK
 {
     public partial class MyGLControl : GLControl
@@ -27,7 +24,6 @@ namespace OpenTK
              2, // n buffer, 2=> double buffer
              false);//sterio
             ChildCtorOnlyResetGraphicMode(gfxmode);
-
             //-----------
             this.InitializeComponent();
         }
@@ -45,7 +41,6 @@ namespace OpenTK
             set
             {
                 clearColor = value;
-
                 if (!this.DesignMode)
                 {
                     MakeCurrent();
@@ -81,14 +76,14 @@ namespace OpenTK
         {
             //int max = Math.Max(screenBound.Width, screenBound.Height);
             int properW = Math.Min(this.Width, this.Height);
-
             //int max = 600;
             //init
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             //---------------------------------
             //-1 temp fix split scanline in some screen
-            GL.Viewport(0, 0, properW, properW - 1);
+            //GL.Viewport(0, 0, properW, properW - 1);
+            GL.Viewport(0, 0, properW, (int)(properW));
             //--------------------------------- 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
@@ -105,6 +100,6 @@ namespace OpenTK
                 this.MakeCurrent();
                 handleDestroy(this, EventArgs.Empty);
             }
-        } 
+        }
     }
 }

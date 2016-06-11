@@ -4,44 +4,33 @@
 #define USE_CLIPPING_ALPHA_MASK
 
 using System;
-
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 using PixelFarm.VectorMath;
-
 using Mini;
-
 namespace PixelFarm.Agg.Sample_LionAlphaMask2
 {
     [Info(OrderCode = "05")]
     [Info(DemoCategory.Bitmap, "Clipping to multiple rectangle regions")]
     public class alpha_mask2_application : DemoBase
     {
-
         int maskAlphaSliderValue = 100;
         ActualImage alphaBitmap;
         SpriteShape lionShape;
-
-
         double angle = 0;
         double lionScale = 1.0;
         double skewX = 0;
         double skewY = 0;
         bool isMaskSliderValueChanged = true;
-
         ChildImage alphaMaskImageBuffer;
         IAlphaMask alphaMask;
-
         public alpha_mask2_application()
         {
             lionShape = new SpriteShape();
             lionShape.ParseLion();
-
             this.Width = 800;
             this.Height = 600;
-
             //AnchorAll();
             //alphaMaskImageBuffer = new ReferenceImage();
 
@@ -63,20 +52,13 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
         public override void Init()
         {
-
-
         }
         void generate_alpha_mask(ScanlineRasToDestBitmapRenderer sclineRasToBmp, ScanlinePacked8 sclnPack, ScanlineRasterizer rasterizer, int width, int height)
         {
-
             alphaBitmap = new ActualImage(width, height, PixelFormat.GrayScale8);
-
             var bmpReaderWrtier = new MyImageReaderWriter(alphaBitmap);
-
             alphaMaskImageBuffer = new ChildImage(bmpReaderWrtier, new PixelBlenderGray(1));
-
             alphaMask = new AlphaMaskByteClipped(alphaMaskImageBuffer, 1, 0);
-
 #if USE_CLIPPING_ALPHA_MASK
             //alphaMaskImageBuffer.AttachBuffer(alphaBitmap.GetBuffer(), 20 * width + 20, width - 40, height - 40, width, 8, 1);
 #else
@@ -84,17 +66,10 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 #endif
 
             var image = new ChildImage(alphaMaskImageBuffer, new PixelBlenderGray(1), 1, 0, 8);
-
             ClipProxyImage clippingProxy = new ClipProxyImage(image);
-
-
             clippingProxy.Clear(ColorRGBA.Black);
-
             VertexSource.Ellipse ellipseForMask = new PixelFarm.Agg.VertexSource.Ellipse();
-
             System.Random randGenerator = new Random(1432);
-
-
             int i;
             int num = (int)maskAlphaSliderValue;
             for (i = 0; i < num; i++)
@@ -104,7 +79,6 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                     sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
-
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                     sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
@@ -124,7 +98,6 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                        ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
-
         }
 
 
@@ -145,27 +118,21 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         {
             var widgetsSubImage = gx.DestImage;
             var scline = gx.ScanlinePacked8;
-
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
-
             //change value ***
             if (isMaskSliderValueChanged)
             {
                 generate_alpha_mask(gx.ScanlineRasToDestBitmap, gx.ScanlinePacked8, gx.ScanlineRasterizer, width, height);
-
                 this.isMaskSliderValueChanged = false;
             }
             var rasterizer = gx.ScanlineRasterizer;
             rasterizer.SetClipBox(0, 0, width, height);
-
-
             //alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
 
             PixelFarm.Agg.Image.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Image.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
             ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
-
             //Affine transform = Affine.NewIdentity();
             //transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
             //transform *= Affine.NewScaling(lionScale, lionScale);
@@ -179,7 +146,6 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                     AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.Clear(ColorRGBA.White);
-
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
             // draw a background to show how the mask is working better
             int rect_w = 30;
@@ -190,7 +156,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     if ((i + j) % 2 != 0)
                     {
                         VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
-                        rect.NormalizeRadius(); 
+                        rect.NormalizeRadius();
                         // Drawing as an outline
                         rasterizer.AddPath(rect.MakeVxs());
                         sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scline, ColorRGBA.Make(.9f, .9f, .9f));
@@ -213,7 +179,6 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                    lionShape.Colors,
                    lionShape.PathIndexList,
                    lionShape.NumPaths);
-
             /*
             // Render random Bresenham lines and markers
             agg::renderer_markers<amask_ren_type> m(r);
@@ -367,8 +332,5 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         //    }
         //    base.OnBoundsChanged(e);
         //}
-
     }
-
-
 }

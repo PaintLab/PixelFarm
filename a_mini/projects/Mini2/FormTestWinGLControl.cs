@@ -1,24 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-
-
 namespace Mini2
 {
-
     public partial class FormTestWinGLControl : Form
     {
-        Button b1; 
+        Button b1;
         public FormTestWinGLControl()
         {
             InitializeComponent();
-
             this.derivedGLControl1.SetBounds(0, 30, 800, 600);
-             
             //------------------------------------------------------
             b1 = new Button();
             this.Controls.Add(b1);
@@ -30,7 +24,6 @@ namespace Mini2
         protected override void OnClosing(CancelEventArgs e)
         {
             this.derivedGLControl1.CloseControl();
-
             base.OnClosing(e);
         }
         void FormTestWinGLControl_Load(object sender, EventArgs e)
@@ -56,10 +49,5 @@ namespace Mini2
         {
             return this.derivedGLControl1;
         }
-
-
-
     }
-
-
 }

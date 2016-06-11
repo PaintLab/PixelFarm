@@ -3,22 +3,17 @@
 
 using System;
 using System.IO;
-
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.UI;
-
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 using Mini;
 namespace PixelFarm.Agg
 {
-
     [Info(OrderCode = "06")]
     [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
     public class ComponentRendering : DemoBase
     {
-
         public ComponentRendering()
         {
             this.AlphaValue = 255;
@@ -35,56 +30,41 @@ namespace PixelFarm.Agg
         {
             get;
             set;
-
         }
 
-      
+
         public override void Draw(Graphics2D graphics2D)
         {
             if (graphics2D.DestImage != null)
             {
-
                 IImageReaderWriter backBuffer = graphics2D.DestImage;
                 IPixelBlender currentPixelBlender = graphics2D.PixelBlender;
-
                 int distBetween = backBuffer.BytesBetweenPixelsInclusive;
-
-
                 //use different pixel blender 
                 var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.R, 8);
                 var greenImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.G, 8);
                 var blueImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.B, 8);
-
-
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
                 ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
                 ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);
                 ClipProxyImage clippingProxyBlue = new ClipProxyImage(blueImageBuffer);
-
                 ScanlineRasterizer sclineRas = graphics2D.ScanlineRasterizer;
                 ScanlinePacked8 scline = graphics2D.ScanlinePacked8;
-
                 ColorRGBA clearColor = this.UseBlackBlackground ? new ColorRGBA(0, 0, 0) : new ColorRGBA(255, 255, 255);
                 clippingProxy.Clear(clearColor);
-
                 ColorRGBA fillColor = this.UseBlackBlackground ?
                     new ColorRGBA(255, 255, 255, (byte)(this.AlphaValue)) :
                     new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
-
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-
                 VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 sclineRas.AddPath(er.MakeVertexSnap());
                 sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
-
                 VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 sclineRas.AddPath(eg.MakeVertexSnap());
                 sclineRasToBmp.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
-
                 VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
                 sclineRas.AddPath(eb.MakeVertexSnap());
                 sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
-
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {
@@ -130,5 +110,4 @@ namespace PixelFarm.Agg
 
         }
     }
-
 }

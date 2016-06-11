@@ -5,13 +5,10 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
-
 using OpenTK.Graphics.OpenGL;
-
 namespace Mini2
 {
     [Info(OrderCode = "26")]
@@ -21,18 +18,15 @@ namespace Mini2
         static DrawSample06_GradientBrush()
         {
             PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
-
         }
         public override void Load()
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
             var canvas = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
-
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.ClearSurface(PixelFarm.Drawing.Color.White);
-
                 var linearGrBrush = new LinearGradientBrush(
                     new PixelFarm.Drawing.PointF(25, 25),
                     PixelFarm.Drawing.Color.Black,
@@ -62,7 +56,6 @@ namespace Mini2
 
                 //another  ...                
                 canvas.FillRectangle(PixelFarm.Drawing.Color.Yellow, 200, 0, 150, 150);
-
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -74,7 +67,6 @@ namespace Mini2
                 //-------------------------------------------------------------------------
 
                 canvas.FillRectangle(PixelFarm.Drawing.Color.White, 400, 0, 150, 150);
-
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,

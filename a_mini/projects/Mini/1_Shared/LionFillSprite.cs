@@ -3,18 +3,14 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 using Mini;
-namespace PixelFarm.Agg 
+namespace PixelFarm.Agg
 {
-
     public class LionFillSprite : BasicSprite
     {
-
         SpriteShape lionShape;
         VertexStore myvxs;
         byte alpha;
-
         public LionFillSprite()
         {
             lionShape = new SpriteShape();
@@ -28,9 +24,7 @@ namespace PixelFarm.Agg
             get { return this.alpha; }
             set
             {
-
                 this.alpha = value;
-
                 //change alpha value
                 int j = lionShape.NumPaths;
                 var colorBuffer = lionShape.Colors;
@@ -44,13 +38,11 @@ namespace PixelFarm.Agg
         public override bool Move(int mouseX, int mouseY)
         {
             bool result = base.Move(mouseX, mouseY);
-
             myvxs = null;
             return result;
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-
             if (myvxs == null)
             {
                 var transform = Affine.NewMatix(
@@ -79,9 +71,5 @@ namespace PixelFarm.Agg
 
 
         }
-
-
-
-
     }
 }

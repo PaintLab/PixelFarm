@@ -55,6 +55,7 @@
     <Compile Include="2_Samples\04_LionFillDirect.cs" />
     <Compile Include="2_Samples\05_LionFillDirectBufferDemo.cs" />
     <Compile Include="2_Samples\06_SetCanvasOriginAndRectClip.cs" />
+    <Compile Include="2_Samples\07_DrawSample03.cs" />
     <Compile Include="3_LayoutFarmSamples\23_SimpleDraw3.cs" />
     <Compile Include="3_LayoutFarmSamples\24_SimpleDraw4.cs" />
     <Compile Include="3_LayoutFarmSamples\25_SimpleDraw_BasicStencil.cs" />

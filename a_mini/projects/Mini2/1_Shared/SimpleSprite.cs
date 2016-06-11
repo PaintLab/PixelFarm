@@ -30,13 +30,11 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 namespace LayoutFarm.MiniCinema
 {
     public abstract class SimpleSprite
@@ -45,7 +43,6 @@ namespace LayoutFarm.MiniCinema
         protected double spriteScale = 1.0;
         protected double skewX = 0;
         protected double skewY = 0;
-
         bool isFreeze;
         public int Width { get; set; }
         public int Height { get; set; }
@@ -63,11 +60,10 @@ namespace LayoutFarm.MiniCinema
         }
         public virtual void OnDraw(Graphics2D graphics2D)
         {
-
         }
 
         protected void UpdateTransform(double width, double height, double x, double y)
-        {    
+        {
             x -= width / 2;
             y -= height / 2;
             angle = Math.Atan2(y, x);
@@ -78,13 +74,10 @@ namespace LayoutFarm.MiniCinema
         {
             double x = mouseX;
             double y = mouseY;
-
             int width = (int)Width;
             int height = (int)Height;
             UpdateTransform(width, height, x, y);
-
             return true;
-
         }
     }
 }

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 namespace Mini2
@@ -13,10 +12,8 @@ namespace Mini2
     [Info("Drawing")]
     public class TestTextureAtlas : DemoBase
     {
-
         public override void Load()
         {
-
             //----------------------------------------------------
             //test only
             TextureAtlas textureAtlas = new TextureAtlas(800, 600);

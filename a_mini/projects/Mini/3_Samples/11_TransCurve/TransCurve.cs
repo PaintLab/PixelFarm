@@ -1,12 +1,10 @@
 ﻿//2014 BSD,WinterDev
 //MatterHackers
 
-using System; 
+using System;
 using PixelFarm.Agg.UI;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
-
 using Mini;
 namespace PixelFarm.Agg.Sample_TransCurve
 {
@@ -14,21 +12,15 @@ namespace PixelFarm.Agg.Sample_TransCurve
     [Info("AGG has a gray-scale renderer that can use any 8-bit color channel of an RGB or RGBA frame buffer. Most likely it will be used to draw gray-scale images directly in the alpha-channel.")]
     public class trans_curve1_application : DemoBase
     {
-        PolygonEditWidget m_poly; 
-
+        PolygonEditWidget m_poly;
         double[] m_dx = new double[6];
         double[] m_dy = new double[6];
-
         public trans_curve1_application()
         {
-
-
             m_poly = new PolygonEditWidget(6, 5);
             on_init();
             m_poly.Changed += NeedsRedraw;
             this.NumPoints = 200;
-
-
             //m_num_points = new MatterHackers.Agg.UI.Slider(5, 5, 340, 12);
 
             //m_num_points.ValueChanged += new EventHandler(NeedsRedraw);
@@ -103,7 +95,6 @@ namespace PixelFarm.Agg.Sample_TransCurve
         }
 
         Random rand = new Random();
-
         void m_animate_CheckedStateChanged(object sender, EventArgs e)
         {
             //if (this.Animate)
@@ -121,13 +112,11 @@ namespace PixelFarm.Agg.Sample_TransCurve
 
         void NeedsRedraw(object sender, EventArgs e)
         {
-
         }
         public override void Draw(Graphics2D g)
         {
             g.Clear(ColorRGBA.White);
             this.m_poly.OnDraw(g);
-
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {
@@ -136,7 +125,6 @@ namespace PixelFarm.Agg.Sample_TransCurve
                     1,
                     x, y,
                     1));
-
             base.MouseDown(x, y, isRightButton);
         }
         public override void MouseUp(int x, int y)
@@ -155,7 +143,6 @@ namespace PixelFarm.Agg.Sample_TransCurve
                      1,
                      x, y,
                      1));
-
             base.MouseDrag(x, y);
         }
 
@@ -181,15 +168,10 @@ namespace PixelFarm.Agg.Sample_TransCurve
                 m_poly.SetYN(i, y);
             }
 
-
             //if (this.Animate)
             //{
             //    UiThread.RunOnIdle(guiSurface_Idle);
             //}
         }
-
-
     }
-
-
 }

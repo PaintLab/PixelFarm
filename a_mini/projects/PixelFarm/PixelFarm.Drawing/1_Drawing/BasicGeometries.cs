@@ -47,6 +47,12 @@ namespace PixelFarm.Drawing
             return base.GetHashCode();
         }
         public static readonly Point Empty = new Point();
+#if DEBUG
+        public override string ToString()
+        {
+            return "(" + this.X + "," + this.Y + ")";
+        }
+#endif
     }
 
     public struct PointF
@@ -117,7 +123,6 @@ namespace PixelFarm.Drawing
         }
 
         public static readonly Size Empty = new Size();
-
     }
 
     public struct SizeF
@@ -140,9 +145,5 @@ namespace PixelFarm.Drawing
         {
             return new SizeF(p.Width, p.Height);
         }
-
     }
-
-
-
 }

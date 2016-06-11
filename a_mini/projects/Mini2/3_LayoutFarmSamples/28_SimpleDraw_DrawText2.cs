@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
@@ -17,22 +16,17 @@ namespace Mini2
         static DrawSample08_DrawText2()
         {
             PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
-
         }
         public override void Load()
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
             var canvas = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
-
             form.SetOnDestroyHandler((o, s) =>
             {
                 canvas.Dispose();
             });
-
-
-
-            FontInfo fontinfo = null; 
+            FontInfo fontinfo = null;
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Orientation = CanvasOrientation.LeftTop;
@@ -47,21 +41,15 @@ namespace Mini2
                 //test draw text
 
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 0);
-
                 canvas.CurrentTextColor = PixelFarm.Drawing.Color.Red;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 50);
-
                 canvas.CurrentTextColor = PixelFarm.Drawing.Color.Green;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 100);
-
                 canvas.CurrentTextColor = PixelFarm.Drawing.Color.Blue;
                 canvas.DrawText("AaBbCc0123 +*/%$".ToCharArray(), 0, 150);
-
                 canvas.CurrentTextColor = PixelFarm.Drawing.Color.Black;
             });
             form.Show();
-            
-            
         }
     }
 }

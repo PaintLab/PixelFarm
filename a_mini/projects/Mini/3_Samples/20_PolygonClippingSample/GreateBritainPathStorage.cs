@@ -3,16 +3,13 @@
 
 using System;
 using System.Collections.Generic;
- 
 using System.Text;
-
 using PixelFarm.Agg.VertexSource;
-
 namespace PixelFarm.Agg.Sample_PolygonClipping
 {
     public static class GreatBritanPathStorage
     {
-        static double[] poly1 = 
+        static double[] poly1 =
         {
             1250.8,1312.4,
             1252.8,1311.6,
@@ -717,9 +714,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             1255.2,1315.6,
             1252,1314
         };
-
-
-        static double[] poly2 = 
+        static double[] poly2 =
         {
             1284,1396.4,
             1284.4,1395.6,
@@ -1877,7 +1872,6 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             1282.4,1393.2,
             1283.6,1393.6
         };
-
         public static void Make(PathWriter ps)
         {
             ps.Clear();
@@ -1887,7 +1881,6 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 ps.LineTo(poly1[i * 2 + 0], poly1[i * 2 + 1]);
             }
             ps.CloseFigure();
-
             ps.MoveTo(poly2[0], poly2[1]);
             for (int i = 1; i < poly2.Length / 2; i++)
             {

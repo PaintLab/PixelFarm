@@ -34,11 +34,9 @@
 using System;
 namespace PixelFarm.Drawing
 {
-
     public struct Rectangle
     {
         private int x, y, width, height;
-
         /// <summary>
         ///	Empty Shared Field
         /// </summary>
@@ -48,8 +46,6 @@ namespace PixelFarm.Drawing
         /// </remarks>
 
         public static readonly Rectangle Empty;
-
-
         /// <summary>
         ///	Ceiling Shared Method
         /// </summary>
@@ -150,7 +146,6 @@ namespace PixelFarm.Drawing
             // touch each other
             if (!a.IntersectsWithInclusive(b))
                 return Empty;
-
             return Rectangle.FromLTRB(
                 Math.Max(a.Left, b.Left),
                 Math.Max(a.Top, b.Top),
@@ -573,7 +568,6 @@ namespace PixelFarm.Drawing
         {
             if (!(obj is Rectangle))
                 return false;
-
             return (this == (Rectangle)obj);
         }
 
@@ -603,7 +597,17 @@ namespace PixelFarm.Drawing
             return !((Left >= rect.Right) || (Right <= rect.Left) ||
                 (Top >= rect.Bottom) || (Bottom <= rect.Top));
         }
-
+        public bool IntersectsWith(int left, int top, int right, int bottom)
+        {
+            if (((this.Left <= left) && (this.Right > left)) || ((this.Left >= left) && (this.Left < right)))
+            {
+                if (((this.Top <= top) && (this.Bottom > top)) || ((this.Top >= top) && (this.Top < bottom)))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private bool IntersectsWithInclusive(Rectangle r)
         {
             return !((Left > r.Right) || (Right < r.Left) ||
@@ -637,7 +641,14 @@ namespace PixelFarm.Drawing
             x += pos.X;
             y += pos.Y;
         }
-
+        public void OffsetX(int dx)
+        {
+            x += dx;
+        }
+        public void OffsetY(int dy)
+        {
+            y += dy;
+        }
         /// <summary>
         ///	ToString Method
         /// </summary>
@@ -651,6 +662,5 @@ namespace PixelFarm.Drawing
             return String.Format("{{X={0},Y={1},Width={2},Height={3}}}",
                          x, y, width, height);
         }
-
     }
 }

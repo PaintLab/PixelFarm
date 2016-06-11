@@ -3,12 +3,9 @@
 
 using System;
 using System.Diagnostics;
-
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.UI;
 using PixelFarm.Agg.VertexSource;
-
-
 using Mini;
 namespace PixelFarm.Agg.Sample_Gouraud
 {
@@ -29,17 +26,13 @@ namespace PixelFarm.Agg.Sample_Gouraud
         double m_dx;
         double m_dy;
         int m_idx;
-
         Stopwatch stopwatch = new Stopwatch();
-
         public GouraudApplication()
         {
-
             m_idx = (-1);
             m_x[0] = 57; m_y[0] = 60;
             m_x[1] = 369; m_y[1] = 170;
             m_x[2] = 143; m_y[2] = 310;
-
             this.DilationValue = 0.175;
             this.LinearGamma = 0.809f;
             this.AlphaValue = 1;
@@ -68,8 +61,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
         public void RenderGourand(Graphics2D gx)
         {
             float alpha = this.AlphaValue;
-            float brc = 1; 
-            
+            float brc = 1;
 #if SourceDepth24
             pixfmt_alpha_blend_rgb pf = new pixfmt_alpha_blend_rgb(backBuffer, new blender_bgr());
 #else
@@ -78,64 +70,49 @@ namespace PixelFarm.Agg.Sample_Gouraud
             var destImage = gx.DestImage;
             //span_allocator span_alloc = new span_allocator();
 
-            CanvasPainter painter = new CanvasPainter(gx); 
+            CanvasPainter painter = new CanvasPainter(gx);
             SpanGenGouraudRGBA gouraudSpanGen = new SpanGenGouraudRGBA();
-            gx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma)); 
+            gx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
             double d = this.DilationValue;
-
             // Six triangles
             double xc = (m_x[0] + m_x[1] + m_x[2]) / 3.0;
             double yc = (m_y[0] + m_y[1] + m_y[2]) / 3.0;
-
             double x1 = (m_x[1] + m_x[0]) / 2 - (xc - (m_x[1] + m_x[0]) / 2);
             double y1 = (m_y[1] + m_y[0]) / 2 - (yc - (m_y[1] + m_y[0]) / 2);
-
             double x2 = (m_x[2] + m_x[1]) / 2 - (xc - (m_x[2] + m_x[1]) / 2);
             double y2 = (m_y[2] + m_y[1]) / 2 - (yc - (m_y[2] + m_y[1]) / 2);
-
             double x3 = (m_x[0] + m_x[2]) / 2 - (xc - (m_x[0] + m_x[2]) / 2);
             double y3 = (m_y[0] + m_y[2]) / 2 - (yc - (m_y[0] + m_y[2]) / 2);
-
-
             gouraudSpanGen.SetColor(ColorRGBA.Make(1, 0, 0, alpha),
                               ColorRGBA.Make(0, 1, 0, alpha),
                               ColorRGBA.Make(brc, brc, brc, alpha));
             gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
-
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen); 
-
-
-
+            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
             gouraudSpanGen.SetColor(ColorRGBA.Make(0, 1, 0, alpha),
                               ColorRGBA.Make(0, 0, 1, alpha),
                               ColorRGBA.Make(brc, brc, brc, alpha));
-
             gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen); 
-
+            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
             gouraudSpanGen.SetColor(ColorRGBA.Make(0, 0, 1, alpha),
                             ColorRGBA.Make(1, 0, 0, alpha),
                             ColorRGBA.Make(brc, brc, brc, alpha));
             gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen); 
-
+            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
             brc = 1 - brc;
             gouraudSpanGen.SetColor(ColorRGBA.Make(1, 0, 0, alpha),
                               ColorRGBA.Make(0, 1, 0, alpha),
                               ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d); 
+            gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
             painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
-
             gouraudSpanGen.SetColor(ColorRGBA.Make(0, 1, 0, alpha),
                            ColorRGBA.Make(0, 0, 1, alpha),
                            ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d); 
+            gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
             painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
-
             gouraudSpanGen.SetColor(ColorRGBA.Make(0, 0, 1, alpha),
                             ColorRGBA.Make(1, 0, 0, alpha),
                             ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d); 
+            gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
             painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
         }
         public override void Draw(Graphics2D g)
@@ -144,8 +121,6 @@ namespace PixelFarm.Agg.Sample_Gouraud
         }
         public void OnDraw(Graphics2D graphics2D)
         {
-
-            
             graphics2D.Clear(ColorRGBA.White);
 #if true
             RenderGourand(graphics2D);
@@ -193,7 +168,6 @@ namespace PixelFarm.Agg.Sample_Gouraud
             {
                 double x = mx;
                 double y = my;
-
                 for (i = 0; i < 3; i++)
                 {
                     if (Math.Sqrt((x - m_x[i]) * (x - m_x[i]) + (y - m_y[i]) * (y - m_y[i])) < 10.0)
@@ -215,7 +189,6 @@ namespace PixelFarm.Agg.Sample_Gouraud
                         m_dy = y - m_y[0];
                         m_idx = 3;
                     }
-
                 }
             }
         }
@@ -224,7 +197,6 @@ namespace PixelFarm.Agg.Sample_Gouraud
         {
             double x = mx;
             double y = my;
-
             if (m_idx == 3)
             {
                 double dx = x - m_dx;
@@ -235,25 +207,18 @@ namespace PixelFarm.Agg.Sample_Gouraud
                 m_y[2] -= m_y[0] - dy;
                 m_x[0] = dx;
                 m_y[0] = dy;
-
             }
             else if (m_idx >= 0)
             {
                 m_x[m_idx] = x - m_dx;
                 m_y[m_idx] = y - m_dy;
             }
-
         }
         public override void MouseUp(int x, int y)
         {
             m_idx = -1;
         }
-
-
-
     }
-
-
 }
 
 

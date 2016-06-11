@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 namespace Mini2
@@ -30,17 +29,13 @@ namespace Mini2
 
                 canvas.EnableClipRect();
                 canvas.SetClipRectRel(200, 250, 100, 100);
-
-                lionFill.Draw(canvas); 
+                lionFill.Draw(canvas);
                 //offset
-                canvas.SetCanvasOrigin(50, 50); 
+                canvas.SetCanvasOrigin(50, 50);
                 //test clipping                
                 canvas.SetClipRectRel(200, 250, 100, 100);
-
                 lionFill.Draw(canvas);
                 canvas.DisableClipRect();
-
-
                 canvas.SetCanvasOrigin(0, 0);
             });
             form.Show();

@@ -64,6 +64,12 @@
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
     <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
+    <Compile Include="3_Samples\21_HandPaint\MyBrushPath.cs" />
+    <Compile Include="3_Samples\21_HandPaint\SmoothBrush2.cs" />
+    <Compile Include="3_Samples\21_HandPaint\SmoothDippingBrush.cs" />
+    <Compile Include="3_Samples\21_HandPaint\DrippingBrush.cs" />
+    <Compile Include="3_Samples\21_HandPaint\HandPaint.cs" />
+    <Compile Include="3_Samples\21_HandPaint\HandPaint_LineSimplify.cs" />
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
     <Compile Include="FormDev.cs">
@@ -146,6 +152,7 @@
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

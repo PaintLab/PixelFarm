@@ -35,11 +35,8 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-
 using PixelFarm.Agg;
 using PixelFarm.Agg.Image;
-
-
 namespace Mini
 {
     public class WindowsFormsBitmapBackBuffer
@@ -49,10 +46,8 @@ namespace Mini
         Graphics bufferGfx;
         int width;
         int height;
-
         public WindowsFormsBitmapBackBuffer()
         {
-
         }
 
         const int SRCCOPY = 0xcc0020;
@@ -73,7 +68,6 @@ namespace Mini
             IntPtr bufferDc = bufferGfx.GetHdc();
             IntPtr hBitmap = bufferBmp.GetHbitmap();
             IntPtr hOldObject = SelectObject(bufferDc, hBitmap);
-
             //------------------------------------------------
             //target dc
             IntPtr displayHdc = dest.GetHdc();
@@ -82,7 +76,6 @@ namespace Mini
                  bufferBmp.Width,
                  bufferBmp.Height,
                 bufferDc, 0, 0, SRCCOPY);
-
             SelectObject(bufferDc, hOldObject);
             //DeleteObject(hBitmap); 
             bufferGfx.ReleaseHdc(bufferDc);
@@ -96,7 +89,6 @@ namespace Mini
         /// <param name="dest"></param>
         public void UpdateToHardwareSurface(Graphics dest)
         {
-
             //-----------------------------------------------
             //copy from actual img buffer (src) 
             BitmapHelper.CopyToWindowsBitmapSameSize(
@@ -115,15 +107,14 @@ namespace Mini
                  bufferBmp.Width,
                  bufferBmp.Height,
                  bufferDc, 0, 0, SRCCOPY);
-
+            //------------------------------------------------
             SelectObject(bufferDc, hOldObject);
-            //DeleteObject(hBitmap); 
+            DeleteObject(hBitmap);//if not delete then mem leak***
             bufferGfx.ReleaseHdc(bufferDc);
             dest.ReleaseHdc(displayHdc);
         }
         public Graphics2D Initialize(int width, int height, int bitDepth)
         {
-
             if (width > 0 && height > 0)
             {
                 this.width = width;
@@ -135,18 +126,15 @@ namespace Mini
                         actualImage = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgb24);
                         bufferGfx = Graphics.FromImage(bufferBmp);
                         return Graphics2D.CreateFromImage(actualImage);
-
                     case 32:
 
                         bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-
                         //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //32bppPArgb                         
                         actualImage = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.Rgba32);
                         bufferGfx = Graphics.FromImage(bufferBmp);
-
                         return Graphics2D.CreateFromImage(actualImage);
                     case 128:
                     //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
@@ -163,7 +151,6 @@ namespace Mini
 
         public Graphics2D CreateNewGraphic2D()
         {
-
             Graphics2D graphics2D;
             if (actualImage != null)
             {
@@ -181,10 +168,8 @@ namespace Mini
 
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         public static extern bool DeleteObject(IntPtr hObject);
-
         [System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
         public static extern System.IntPtr SelectObject(System.IntPtr hdc, System.IntPtr h);
-
         [System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
         private static extern int BitBlt(
             IntPtr hdcDest,     // handle to destination DC (device context)
@@ -197,6 +182,5 @@ namespace Mini
             int nYSrc,          // y-coordinate of source upper-left corner
             System.Int32 dwRop  // raster operation code
             );
-
     }
 }

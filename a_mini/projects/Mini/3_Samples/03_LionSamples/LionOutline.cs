@@ -30,15 +30,12 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Lines;
 using Mini;
-
 namespace PixelFarm.Agg.Sample_LionOutline
 {
     [Info(OrderCode = "03")]
@@ -90,14 +87,11 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 this.lionFill.RenderAccurateJoins = value;
             }
         }
-
     }
     //--------------------------------------------------
     public class LionOutlineSprite : BasicSprite
     {
         private SpriteShape lionShape;
-
-
         //special option 
         public LionOutlineSprite()
         {
@@ -108,7 +102,6 @@ namespace PixelFarm.Agg.Sample_LionOutline
         }
         void NeedsRedraw(object sender, EventArgs e)
         {
-
         }
 
         public bool RenderAsScanline
@@ -127,41 +120,31 @@ namespace PixelFarm.Agg.Sample_LionOutline
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             int width = widgetsSubImage.Width;
             int height = widgetsSubImage.Height;
-
-
             int strokeWidth = 1;
-
             var clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(ColorRGBA.White);
-
             Affine affTx = Affine.NewMatix(
                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                     AffinePlan.Scale(spriteScale, spriteScale),
                     AffinePlan.Rotate(angle + Math.PI),
                     AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                     AffinePlan.Translate(width / 2, height / 2));
-
             //transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
             //transform *= Affine.NewScaling(spriteScale, spriteScale);
             //transform *= Affine.NewRotation(angle + Math.PI);
             //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
             //transform *= Affine.NewTranslation(width / 2, height / 2);
 
-             
+
             if (RenderAsScanline)
             {
-                
                 var rasterizer = graphics2D.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
-
                 Stroke stroke = new Stroke(strokeWidth);
                 stroke.LineJoin = LineJoin.Round;
                 var vxs = affTx.TransformToVxs(lionShape.Path.Vxs);
-
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-
-
                 sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
@@ -174,21 +157,16 @@ namespace PixelFarm.Agg.Sample_LionOutline
             else
             {
                 double w = strokeWidth * affTx.GetScale();
-
                 LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new GammaNone());
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
-
                 rasterizer.LineJoin = (RenderAccurateJoins ?
                     OutlineAARasterizer.OutlineJoin.AccurateJoin
                     : OutlineAARasterizer.OutlineJoin.Round);
                 rasterizer.RoundCap = true;
-
                 //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
                 var vxs = affTx.TransformToVxs(lionShape.Path.Vxs);// trans.DoTransformToNewVxStorage();
-
                 int j = lionShape.NumPaths;
-                
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderVertexSnap(
@@ -196,11 +174,9 @@ namespace PixelFarm.Agg.Sample_LionOutline
                             lionShape.PathIndexList[i]),
                             lionShape.Colors[i]);
                 }
-
             }
 
             base.OnDraw(graphics2D);
         }
-
     }
 }

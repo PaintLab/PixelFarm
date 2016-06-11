@@ -6,25 +6,20 @@
 // and intend to do much more refactoring of these things over the long term.
 
 using System;
-
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Fonts;
-
 using Mini;
 namespace PixelFarm.Agg.Sample_Draw
 {
-
     [Info(OrderCode = "01")]
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample01 : DemoBase
     {
         public override void Init()
         {
-
         }
         public override void Draw(Graphics2D g)
         {
@@ -40,7 +35,6 @@ namespace PixelFarm.Agg.Sample_Draw
             g.UseSubPixelRendering = false;
             g.DrawString(teststr, 300, 422, 22);
         }
-        
     }
 
 
@@ -50,30 +44,23 @@ namespace PixelFarm.Agg.Sample_Draw
     {
         public override void Init()
         {
-
         }
         public override void Draw(Graphics2D g)
         {
             int width = 800;
             int height = 600;
-
             //clear the image to white
             g.Clear(ColorRGBA.White);
             // draw a circle
 
             Ellipse ellipsePro = new Ellipse(0, 0, 100, 50);
-
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
-
                 var mat = Affine.NewMatix(
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
-
                 VertexStore sp1 = mat.TransformToVxs(ellipsePro.MakeVxs());
-
                 g.Render(sp1, ColorRGBA.Yellow);
-
                 //Stroke ellipseOutline = new Stroke(sp1, 3);
                 g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
             }
@@ -86,7 +73,6 @@ namespace PixelFarm.Agg.Sample_Draw
             littlePoly.LineTo(50, 150);
             littlePoly.LineTo(50, 50);
             g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
-
             // draw some text
             // draw some text 
 
@@ -99,18 +85,12 @@ namespace PixelFarm.Agg.Sample_Draw
             VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());
             var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStore s1 = affTx.TransformToVxs(vxs);
-
-
             g.Render(s1, ColorRGBA.Black);
             g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
-
-
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
                 AffinePlan.Translate(40, height / 2));
             g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
-
-
         }
     }
 

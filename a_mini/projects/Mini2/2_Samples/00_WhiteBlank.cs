@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 namespace Mini2
@@ -13,7 +12,6 @@ namespace Mini2
     [Info("Drawing")]
     public class WhiteBlankDemo : DemoBase
     {
-
         public override void Load()
         {
             //draw 1
@@ -22,8 +20,6 @@ namespace Mini2
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Clear(PixelFarm.Drawing.Color.White);
-
-
             });
             form.Show();
         }

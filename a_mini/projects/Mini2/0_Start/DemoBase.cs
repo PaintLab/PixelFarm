@@ -3,12 +3,8 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
-
-
 namespace Mini2
 {
-
-
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class InfoAttribute : Attribute
     {
@@ -39,7 +35,6 @@ namespace Mini2
         Bitmap
     }
     public delegate Graphics2D RequestNewGraphic2DDelegate();
-
     public abstract class DemoBase
     {
         public DemoBase()
@@ -49,12 +44,11 @@ namespace Mini2
         }
 
         public event RequestNewGraphic2DDelegate RequestNewGfx2d;
-         
         public virtual void MouseDrag(int x, int y) { }
         public virtual void MouseDown(int x, int y, bool isRightButton) { }
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
-        public int Height { get; set; } 
+        public int Height { get; set; }
         protected Graphics2D NewGraphics2D()
         {
             if (RequestNewGfx2d == null)
@@ -76,7 +70,6 @@ namespace Mini2
     {
         public DemoConfigAttribute()
         {
-
         }
         public DemoConfigAttribute(string name)
         {
@@ -87,7 +80,6 @@ namespace Mini2
 
         public int MinValue { get; set; }
         public int MaxValue { get; set; }
-
     }
     enum DemoConfigPresentaionHint
     {
@@ -98,7 +90,7 @@ namespace Mini2
         SlideBarContinuous_R4,
         SlideBarContinuous_R8,
     }
-     
+
 
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class NoteAttribute : Attribute
@@ -114,21 +106,16 @@ namespace Mini2
     {
         static Type exConfig = typeof(DemoConfigAttribute);
         static Type exInfoAttrType = typeof(InfoAttribute);
- 
         public ExampleAndDesc(Type t, string name)
         {
             this.Type = t;
             this.Name = name;
             this.OrderCode = "";
             var p1 = t.GetProperties();
-
             InfoAttribute[] exInfoList = t.GetCustomAttributes(exInfoAttrType, false) as InfoAttribute[];
             int m = exInfoList.Length;
-
-
             if (m > 0)
             {
-
                 for (int n = 0; n < m; ++n)
                 {
                     InfoAttribute info = exInfoList[n];
@@ -142,16 +129,11 @@ namespace Mini2
                         this.Description += " " + info.Description;
                     }
                 }
-
             }
             if (string.IsNullOrEmpty(this.Description))
             {
                 this.Description = this.Name;
             }
-
-
-
- 
         }
         public Type Type { get; set; }
         public string Name { get; set; }
@@ -159,7 +141,7 @@ namespace Mini2
         {
             return this.OrderCode + " : " + this.Name;
         }
-         
+
         public string Description
         {
             get;
@@ -171,5 +153,4 @@ namespace Mini2
             set;
         }
     }
-
 }

@@ -32,7 +32,6 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 using Mini;
 using LayoutFarm.MiniCinema;
 namespace PixelFarm.Agg.Sample_LionFill_Test
@@ -45,8 +44,6 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
     public class LionFillExampleTest : DemoBase
     {
         LionFill lionFill;
-
-
         public override void Init()
         {
             lionFill = new LionFill();
@@ -76,7 +73,6 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
     {
         VertexStore vxStorage;
         SpriteShape lionShape;
-         
         byte alpha;
         public LionFill()
         {
@@ -85,17 +81,16 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             this.Width = 500;
             this.Height = 500;
             AlphaValue = 255;
-
         }
         void TestLoadLionFromBinaryFile()
         {
+#if DEBUG
             System.Diagnostics.Debugger.Break();
             //test load raw buffer 
             using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Open))
             {
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new PixelFarm.Agg.SpriteShape();
-
                 PixelFarm.Agg.VertexSource.PathWriter path;
                 PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
@@ -112,7 +107,6 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathIndexListFromStream(
                   reader, out npaths, out pathIndexList
                  );
-
                 //------------------------------ 
                 SpriteShape.UnsafeDirectSetData(lionShape2,
                     npaths,
@@ -120,9 +114,9 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 //---------------------------------
 
                 fs.Close();
-
                 this.lionShape = lionShape2;
             }
+#endif
 
         }
         public byte AlphaValue
@@ -130,9 +124,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             get { return this.alpha; }
             set
             {
-
                 this.alpha = value;
-
                 //change alpha value
                 int j = lionShape.NumPaths;
                 var colorBuffer = lionShape.Colors;
@@ -151,7 +143,6 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
         }
         public override void OnDraw(Graphics2D graphics2D)
         {
-
             //freeze to bitmap ?
 
             if (vxStorage == null)
@@ -163,7 +154,6 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                         AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                         AffinePlan.Translate(Width / 2, Height / 2)
                 );
-
                 //convert
                 //System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
                 vxStorage = transform.TransformToVxs(lionShape.Path.Vxs);
@@ -186,7 +176,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             //-----------------------------------------------------------------------------------
 
 
-            
+
             if (!IsFreezed)
             {
                 //var destImage = graphics2D.DestImage;
@@ -212,12 +202,6 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             }
             base.OnDraw(graphics2D);
         }
-
-
-
-
     }
-
-
 }
 

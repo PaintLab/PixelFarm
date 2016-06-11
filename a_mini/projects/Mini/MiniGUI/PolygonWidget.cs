@@ -16,12 +16,11 @@
 // classes polygon_ctrl_impl, polygon_ctrl
 //
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
-
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 namespace PixelFarm.Agg.UI
 {
     class SimplePolygonVertexSource
@@ -31,7 +30,6 @@ namespace PixelFarm.Agg.UI
         int m_vertex;
         bool m_roundoff;
         bool m_close;
-
         public SimplePolygonVertexSource(double[] polygon, int np)
             : this(polygon, np, false, true)
         {
@@ -63,11 +61,11 @@ namespace PixelFarm.Agg.UI
             if (m_vertex > m_num_points)
             {
                 return VertexCmd.Stop;
-            } 
+            }
             if (m_vertex == m_num_points)
             {
                 ++m_vertex;
-                return m_close ? VertexCmd.EndAndCloseFigure : VertexCmd.EndFigure;                 
+                return m_close ? VertexCmd.EndAndCloseFigure : VertexCmd.EndFigure;
             }
             x = m_polygon[m_vertex * 2];
             y = m_polygon[m_vertex * 2 + 1];
@@ -83,10 +81,9 @@ namespace PixelFarm.Agg.UI
 
         public VertexStore MakeVxs()
         {
-
             VertexStore vxs = new VertexStore();
             m_vertex = 0;
-            for (; ; )
+            for (;;)
             {
                 double x, y;
                 var cmd = this.GetNextVertex(out x, out y);
@@ -119,11 +116,8 @@ namespace PixelFarm.Agg.UI
         double m_dy;
         bool m_in_polygon_check;
         bool needToRecalculateBounds = true;
-
         public delegate void ChangedHandler(object sender, EventArgs e);
         public event ChangedHandler Changed;
-
-       
         public PolygonControl(int np, double point_radius)
             : base(new Vector2())
         {
@@ -139,7 +133,6 @@ namespace PixelFarm.Agg.UI
             m_dx = (0.0);
             m_dy = (0.0);
             m_in_polygon_check = (true);
-
             m_stroke.Width = 1;
         }
 
@@ -170,14 +163,12 @@ namespace PixelFarm.Agg.UI
                 RecalculateBounds();
             }
             m_status = 0;
-
         }
 
         void RecalculateBounds()
         {
             needToRecalculateBounds = false;
             return;
-
 #if false
             double extraForControlPoints = m_point_radius * 1.3;
             RectangleDouble newBounds = new RectangleDouble(double.MaxValue, double.MaxValue, double.MinValue, double.MinValue);
@@ -221,7 +212,6 @@ namespace PixelFarm.Agg.UI
             //------------------------------------------------------------
             //draw each polygon point
             double r = m_point_radius;
-
             if (m_node >= 0 && m_node == (int)(m_status)) { r *= 1.2; }
 
             int n_count = m_polygon.Length / 2;
@@ -273,6 +263,8 @@ namespace PixelFarm.Agg.UI
             ParentToChildTransform.InverseTransform(ref x, ref y);
             for (int i = 0; i < m_num_points; i++)
             {
+                //check if the testpoint is in the area of a control point.
+                //if our control point is circle ... the computation is expansive than square shape control point***
                 if (Math.Sqrt((x - GetXN(i)) * (x - GetXN(i)) + (y - GetYN(i)) * (y - GetYN(i))) < m_point_radius)
                 {
                     m_dx = x - GetXN(i);
@@ -283,6 +275,7 @@ namespace PixelFarm.Agg.UI
                 }
             }
 
+            //check if on edge 
             if (!ret)
             {
                 for (int i = 0; i < m_num_points; i++)
@@ -318,7 +311,6 @@ namespace PixelFarm.Agg.UI
             bool ret = (m_node >= 0) || (m_edge >= 0);
             m_node = -1;
             m_edge = -1;
-
             Invalidate();
             base.OnMouseUp(mouseEvent);
         }
@@ -389,33 +381,26 @@ namespace PixelFarm.Agg.UI
         bool CheckEdge(int i, double x, double y)
         {
             bool ret = false;
-
             int n1 = i;
             int n2 = (i + m_num_points - 1) % m_num_points;
             double x1 = GetXN(n1);
             double y1 = GetYN(n1);
             double x2 = GetXN(n2);
             double y2 = GetYN(n2);
-
             double dx = x2 - x1;
             double dy = y2 - y1;
-
             if (Math.Sqrt(dx * dx + dy * dy) > 0.0000001)
             {
                 double x3 = x;
                 double y3 = y;
                 double x4 = x3 - dy;
                 double y4 = y3 + dx;
-
                 double den = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
                 double u1 = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / den;
-
                 double xi = x1 + u1 * (x2 - x1);
                 double yi = y1 + u1 * (y2 - y1);
-
                 dx = xi - x;
                 dy = yi - y;
-
                 if (u1 > 0.0 && u1 < 1.0 && Math.Sqrt(dx * dx + dy * dy) <= m_point_radius)
                 {
                     ret = true;
@@ -459,20 +444,15 @@ namespace PixelFarm.Agg.UI
         {
             if (m_num_points < 3) return false;
             if (!m_in_polygon_check) return false;
-
             int j;
             bool yflag0, yflag1, inside_flag;
             double vtx0, vty0, vtx1, vty1;
-
             vtx0 = GetXN(m_num_points - 1);
             vty0 = GetYN(m_num_points - 1);
-
             // get test bit for above/below X axis
             yflag0 = (vty0 >= ty);
-
             vtx1 = GetXN(0);
             vty1 = GetYN(0);
-
             inside_flag = false;
             for (j = 1; j <= m_num_points; ++j)
             {
@@ -506,7 +486,6 @@ namespace PixelFarm.Agg.UI
                 yflag0 = yflag1;
                 vtx0 = vtx1;
                 vty0 = vty1;
-
                 int k = (j >= m_num_points) ? j - m_num_points : j;
                 vtx1 = GetXN(k);
                 vty1 = GetYN(k);
@@ -514,13 +493,11 @@ namespace PixelFarm.Agg.UI
             return inside_flag;
         }
     };
-
     //----------------------------------------------------------polygon_ctrl
     //template<class ColorT> 
     public class PolygonEditWidget : PolygonControl
     {
         ColorRGBA m_color;
-
         public PolygonEditWidget(int np) : this(np, 5) { }
 
         public PolygonEditWidget(int np, double point_radius)
@@ -537,7 +514,6 @@ namespace PixelFarm.Agg.UI
         public override void OnDraw(Graphics2D graphics2D)
         {
             graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), LineColor);
-
         }
     }
 }

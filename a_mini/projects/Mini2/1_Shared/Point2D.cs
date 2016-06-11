@@ -32,22 +32,17 @@ either expressed or implied, of the FreeBSD Project.
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using PixelFarm.Agg;
-
 namespace PixelFarm.Agg
 {
     public struct Point2D
     {
         public readonly int x;
         public readonly int y;
-
         public Point2D(int newX, int newY)
         {
             x = newX;
             y = newY;
         }
     }
-
-    
 }

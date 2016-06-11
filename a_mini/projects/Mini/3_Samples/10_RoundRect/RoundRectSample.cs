@@ -6,9 +6,7 @@ using System;
 using PixelFarm.Agg.UI;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 using PixelFarm.VectorMath;
-
 using Mini;
 namespace PixelFarm.Agg.Sample_RoundRect
 {
@@ -30,7 +28,6 @@ namespace PixelFarm.Agg.Sample_RoundRect
         double m_dx;
         double m_dy;
         int m_idx;
-
         //MatterHackers.Agg.UI.Slider m_radius;
         //MatterHackers.Agg.UI.Slider m_gamma;
         //MatterHackers.Agg.UI.Slider m_offset;
@@ -78,7 +75,6 @@ namespace PixelFarm.Agg.Sample_RoundRect
 
             this.Radius = 25;
             this.Gamma = 1.8f;
-
         }
         [DemoConfig]
         public bool FillRoundRect
@@ -113,7 +109,6 @@ namespace PixelFarm.Agg.Sample_RoundRect
         public override void Draw(Graphics2D gx)
         {
             CanvasPainter painter = new CanvasPainter(gx);
-            
             //-----------------------------------------------------------------
             //control
             painter.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
@@ -126,8 +121,6 @@ namespace PixelFarm.Agg.Sample_RoundRect
             var prevBlender = gx.PixelBlender;
             //change gamma blender
             gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
-          
-
             if (this.FillRoundRect)
             {
                 painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
@@ -147,11 +140,9 @@ namespace PixelFarm.Agg.Sample_RoundRect
                     m_x[1] + d,
                     m_y[1] + d,
                     this.Radius);
-
             }
 
             gx.PixelBlender = prevBlender;
-
         }
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
@@ -177,9 +168,6 @@ namespace PixelFarm.Agg.Sample_RoundRect
         public override void MouseUp(int x, int y)
         {
             m_idx = -1;
-
         }
-
     }
-
 }

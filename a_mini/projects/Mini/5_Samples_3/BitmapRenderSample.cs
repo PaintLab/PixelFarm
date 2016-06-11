@@ -34,7 +34,6 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 using Mini;
 namespace PixelFarm.Agg.Sample_Images
 {
@@ -46,12 +45,10 @@ namespace PixelFarm.Agg.Sample_Images
         public override void Init()
         {
             this.actualImage = LoadImage("../../../SampleImages/plain01.png");
-
         }
 
         static ActualImage LoadImage(string filename)
         {
-
             //read sample image
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filename))
             {
@@ -61,37 +58,25 @@ namespace PixelFarm.Agg.Sample_Images
                 PixelFormat pixFormat = PixelFormat.Rgba32;
                 ActualImage actualImage = new ActualImage(bmpW, bmpH, pixFormat);
                 PixelFarm.Agg.Image.BitmapHelper.CopyFromWindowsBitmapSameSize(bmp, actualImage);
-                
                 return actualImage;
             }
         }
         public override void Draw(Graphics2D g)
         {
-
             CanvasPainter painter = new CanvasPainter(g);
-
             painter.DrawImage(actualImage, 0, 0);
-
             painter.DrawImage(actualImage,
-                    AffinePlan.Translate(actualImage.Width *2, actualImage.Height*2),
+                    AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),
                     AffinePlan.Scale(0.5));
-
-
             painter.FillColor = ColorRGBA.Blue;
             painter.FillRectangle(0, 0, 5, 5);
             painter.FillColor = ColorRGBA.Green;
             painter.FillRectangle(actualImage.Width, actualImage.Height,
                 actualImage.Width + 5, actualImage.Height + 5);
-
         }
         public override void MouseDrag(int x, int y)
         {
-
         }
-
-
     }
-
-
 }
 

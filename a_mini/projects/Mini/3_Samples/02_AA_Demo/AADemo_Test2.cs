@@ -2,24 +2,18 @@
 //MatterHackers
 
 using System;
-
 using PixelFarm.Agg.UI;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 using PixelFarm.VectorMath;
-
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest2
 {
-
-
     class CustomScanlineRasToBmp_EnlargedV2 : CustomScanlineRasToDestBitmapRenderer
     {
         double m_size;
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
-
         Graphics2D gfx;
         public CustomScanlineRasToBmp_EnlargedV2(double size, ActualImage destImage)
         {
@@ -32,13 +26,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
-
             byte[] covers = scanline.GetCovers();
-
             int spanCount = scanline.SpanCount;
             var ras = gfx.ScanlineRasterizer;
             var rasToBmp = gfx.ScanlineRasToDestBitmap;
-
             for (int i = 1; i <= num_spans; ++i)
             {
                 var span2 = scanline.GetSpan(i);
@@ -55,11 +46,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                     ++x;
                 }
                 while (--num_pix > 0);
-
             }
-
-             
-
         }
     }
 
@@ -76,15 +63,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         double m_dx;
         double m_dy;
         int m_idx;
-
-
         public aa_demo_test2()
         {
             m_idx = -1;
             m_x[0] = 57; m_y[0] = 100;
             m_x[1] = 369; m_y[1] = 170;
             m_x[2] = 143; m_y[2] = 310;
-
             //init value
             this.PixelSize = 32;
             this.GammaValue = 1;
@@ -109,51 +93,33 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
 
         public void OnDraw(Graphics2D graphics2D)
         {
-
             var childImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-
             //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
             var rasterGamma = new ChildImage(childImage, new PixelBlenderGammaBGRA(this.GammaValue));
-
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(childImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
-
             clippingProxyNormal.Clear(ColorRGBA.White);
-
             var rasterizer = graphics2D.ScanlineRasterizer;
             var sl = new ScanlineUnpacked8();
-
-
             int size_mul = this.PixelSize;
-
             CustomScanlineRasToBmp_EnlargedV2 sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, graphics2D.DestActualImage);
-
             rasterizer.Reset();
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
             rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
-
             sclineToBmpEn2.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
-
-
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            
             sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
-
             //-----------------------------------------------------------------------------------------------------------
             rasterizer.ResetGamma(new GammaNone());
-
             PathWriter ps = new PathWriter();
             ps.Clear();
             ps.MoveTo(m_x[0], m_y[0]);
             ps.LineTo(m_x[1], m_y[1]);
             ps.LineTo(m_x[2], m_y[2]);
             ps.LineTo(m_x[0], m_y[0]);
-
             rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs));
             sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
-
-
         }
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
@@ -197,7 +163,6 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 m_y[2] -= m_y[0] - dy;
                 m_x[0] = dx;
                 m_y[0] = dy;
-
                 return;
             }
 
@@ -205,7 +170,6 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             {
                 m_x[m_idx] = x - m_dx;
                 m_y[m_idx] = y - m_dy;
-
             }
         }
 
@@ -215,6 +179,4 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             base.MouseUp(x, y);
         }
     }
-
-
 }

@@ -5,12 +5,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using PixelFarm.Agg;
-
 namespace Mini
 {
     partial class FormDev : Form
@@ -19,8 +17,8 @@ namespace Mini
         {
             InitializeComponent();
             this.Load += new EventHandler(DevForm_Load);
-            this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick); 
-            this.Text = "DevForm: Double Click The Example!"; 
+            this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick);
+            this.Text = "DevForm: Double Click The Example!";
             //test native font
 
 
@@ -36,7 +34,6 @@ namespace Mini
                 testBed.Show();
                 testBed.LoadExample(exAndDesc);
             }
-
         }
         void DevForm_Load(object sender, EventArgs e)
         {
@@ -59,7 +56,6 @@ namespace Mini
             {
                 return ex1.OrderCode.CompareTo(ex2.OrderCode);
             });
-
             this.listBox1.Items.Clear();
             j = exlist.Count;
             for (int i = 0; i < j; ++i)
@@ -71,25 +67,20 @@ namespace Mini
         private void button1_Click(object sender, EventArgs e)
         {
             //--------------
-
+#if DEBUG
 
             //test01
             var lionShape = new PixelFarm.Agg.SpriteShape();
             lionShape.ParseLion();
-
             //test path serialize to binary stream
             System.Diagnostics.Debugger.Break();
-
             using (var fs = new System.IO.FileStream("..\\lion_stream.bin", System.IO.FileMode.Create))
             {
                 var writer = new System.IO.BinaryWriter(fs);
-
-
                 //1. all coords and commands
                 PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteToStream(
                     writer,
                     lionShape.Path);
-
                 //2. colors
                 PixelFarm.Agg.VertexSource.dbugVertexSourceIO.WriteColorsToStream(
                    writer, lionShape.Colors
@@ -101,7 +92,6 @@ namespace Mini
                   writer, lionShape.PathIndexList,
                   npath
                   );
-
                 writer.Close();
                 fs.Close();
             }
@@ -111,11 +101,9 @@ namespace Mini
             {
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new PixelFarm.Agg.SpriteShape();
-
                 PixelFarm.Agg.VertexSource.PathWriter path;
                 PixelFarm.Agg.ColorRGBA[] colors;
                 int[] pathIndexList;
-
                 //1. path and command
                 PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathDataFromStream(
                   reader, out path
@@ -129,33 +117,29 @@ namespace Mini
                 PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathIndexListFromStream(
                   reader, out npaths, out pathIndexList
                  );
-
                 PixelFarm.Agg.SpriteShape.UnsafeDirectSetData(
                      lionShape2,
                      npaths,
                      path, colors, pathIndexList);
-
                 fs.Close();
             }
             //------------
+#endif
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-
             using (Bitmap bmp = new Bitmap("d:\\WImageTest\\test002.png"))
             {
                 //MatterHackers.StackBlur2.FastBlur32RGBA(bmp, 15);
 
                 var rct = new Rectangle(0, 0, bmp.Width, bmp.Height);
-
                 //assign dimension info and copy buffer 
                 var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                 int bmpStride = bitmapData.Stride;
                 int width = bmp.Width;
                 int height = bmp.Height;
                 int wh = width * height;
-
                 //var dest = new int[wh];
                 //var source = new int[wh];
 
@@ -164,16 +148,13 @@ namespace Mini
                 Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
                 PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
                 Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
-
                 bmp.UnlockBits(bitmapData);
-
                 bmp.Save("d:\\WImageTest\\test002_2.png");
             }
         }
 
         private void cmdTestRasterImage_Click(object sender, EventArgs e)
         {
-
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -182,16 +163,13 @@ namespace Mini
             //1. test gdi+ font path
             char testChar = 'b';
             float fontSize = 20;
-
             using (System.Drawing.Font ff = new Font("tahoma", fontSize))
             using (Graphics g = this.pictureBox1.CreateGraphics())
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 g.Clear(Color.White);
-
                 var winFont = PixelFarm.Agg.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
                 var winFontGlyph = winFont.GetGlyph(testChar);
-
                 //convert Agg vxs to bitmap
                 int bmpW = 50;
                 int bmpH = 50;
@@ -229,6 +207,55 @@ namespace Mini
                 //-------------------------------------------------
                 //Compare with Gdi+ Font
                 g.DrawString(testChar.ToString(), ff, Brushes.Black, new PointF(0, 50));
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //----------------------
+            //1. test gdi+ font path
+            char testChar = 'b';
+            float fontSize = 20;
+            using (Graphics g = this.pictureBox1.CreateGraphics())
+            {
+                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.Clear(Color.White);
+                //convert Agg vxs to bitmap
+                int bmpW = 500;
+                int bmpH = 500;
+                using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
+                {
+                    ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.Rgba32);
+                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
+                    var vxs = new VertexStore();
+                    //vxs.AddMoveTo(0, 0);
+                    ////vxs.AddP3c(100, 0);
+                    ////vxs.AddP3c(100,150);
+                    ////vxs.AddLineTo(0,0);
+                    //vxs.AddLineTo(0, 0);
+                    //vxs.AddP3c(100, 0);
+                    ////vxs.AddLineTo(100, 0);
+                    ////vxs.AddLineTo(100, 150);
+                    //vxs.AddP3c(100, 150);
+                    //vxs.AddLineTo(0, 150);
+                    //vxs.AddCloseFigure();
+
+                    //PixelFarm.Agg.VertexSource.CurveFlattener cflat = new PixelFarm.Agg.VertexSource.CurveFlattener();
+                    //vxs = cflat.MakeVxs(vxs);
+
+                    gfx.Render(vxs, ColorRGBA.Black);
+                    //test subpixel rendering 
+                    vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
+                    gfx.UseSubPixelRendering = true;
+                    gfx.Render(vxs, ColorRGBA.Black);
+                    PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmap(
+                      actualImage, //src from actual img buffer
+                      bufferBmp, //dest to buffer bmp
+                     new RectInt(0, 0, bmpW, bmpH));
+                    //-----------------------------------------
+                    bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                    g.DrawImage(bufferBmp, new Point(0, 30));
+                }
             }
         }
     }

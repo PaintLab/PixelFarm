@@ -10,7 +10,6 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Agg;
 using PixelFarm.VectorMath;
-
 namespace PixelFarm.Agg
 {
     public class Square
@@ -22,8 +21,8 @@ namespace PixelFarm.Agg
         }
 
         public void Draw(
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp, 
-            ScanlineRasterizer ras, 
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp,
+            ScanlineRasterizer ras,
             Scanline sl,
             IImageReaderWriter destImage, ColorRGBA color,
             double x, double y)
@@ -33,7 +32,6 @@ namespace PixelFarm.Agg
             ras.LineTo(x * m_size + m_size, y * m_size);
             ras.LineTo(x * m_size + m_size, y * m_size + m_size);
             ras.LineTo(x * m_size, y * m_size + m_size);
-
             sclineRasToBmp.RenderWithColor(destImage, ras, sl, color);
         }
     }

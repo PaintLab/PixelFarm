@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Compatibility-GLFW2</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DDB6DB6D-E5DE-4BDB-8AC8-26DF800E9FF0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Pencil.Gaming</RootNamespace>
+    <ReleaseVersion>
+    </ReleaseVersion>
+    <SynchReleaseVersion>False</SynchReleaseVersion>
+    <Description>A minimalistic gaming library for C# based on OpenTK.</Description>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>Pencil.Gaming</AssemblyName>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Compatibility-GLFW2|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Compatibility-GLFW2</OutputPath>
+    <DefineConstants>USE_GL_COMPAT; USE_GLFW2;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="rm -r &quot;${TargetDir}/natives32-glfw3&quot;" />
+        <Command type="AfterBuild" command="rm -r &quot;${TargetDir}/natives64-glfw3&quot;" />
+        <Command type="AfterBuild" command="mv &quot;${TargetDir}/natives32-glfw2&quot; &quot;${TargetDir}/natives32&quot;" />
+        <Command type="AfterBuild" command="mv &quot;${TargetDir}/natives64-glfw2&quot; &quot;${TargetDir}/natives64&quot;" />
+      </CustomCommands>
+    </CustomCommands>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Core-GLFW2|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Core-GLFW2</OutputPath>
+    <DefineConstants>USE_GL_CORE; USE_GLFW2;</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="rm -r &quot;${TargetDir}/natives32-glfw3&quot;" />
+        <Command type="AfterBuild" command="rm -r &quot;${TargetDir}/natives64-glfw3&quot;" />
+        <Command type="AfterBuild" command="mv &quot;${TargetDir}/natives32-glfw2&quot; &quot;${TargetDir}/natives32&quot;" />
+        <Command type="AfterBuild" command="mv &quot;${TargetDir}/natives64-glfw2&quot; &quot;${TargetDir}/natives64&quot;" />
+      </CustomCommands>
+    </CustomCommands>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Compatibility-GLFW3|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Compatibility-GLFW3</OutputPath>
+    <DefineConstants>USE_GL_COMPAT; USE_GLFW3;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="rm -r &quot;${TargetDir}/natives32-glfw2&quot;" />
+        <Command type="AfterBuild" command="rm -r &quot;${TargetDir}/natives64-glfw2&quot;" />
+        <Command type="AfterBuild" command="mv &quot;${TargetDir}/natives32-glfw3&quot; &quot;${TargetDir}/natives32&quot;" />
+        <Command type="AfterBuild" command="mv &quot;${TargetDir}/natives64-glfw3&quot; &quot;${TargetDir}/natives64&quot;" />
+      </CustomCommands>
+    </CustomCommands>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Core-GLFW3|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Core-GLFW3</OutputPath>
+    <DefineConstants>USE_GL_CORE; USE_GLFW3;</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="rm -r &quot;${TargetDir}/natives32-glfw2&quot;" />
+        <Command type="AfterBuild" command="rm -r &quot;${TargetDir}/natives64-glfw2&quot;" />
+        <Command type="AfterBuild" command="mv &quot;${TargetDir}/natives32-glfw3&quot; &quot;${TargetDir}/natives32&quot;" />
+        <Command type="AfterBuild" command="mv &quot;${TargetDir}/natives64-glfw3&quot; &quot;${TargetDir}/natives64&quot;" />
+      </CustomCommands>
+    </CustomCommands>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="NVorbis">
+      <HintPath>NVorbis.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="AutoGeneratedAttribute.cs" />
+    <Compile Include="Math\MathHelper.cs" />
+    <Compile Include="Math\Quaternion.cs" />
+    <Compile Include="Math\Vector2.cs" />
+    <Compile Include="Math\Vector3.cs" />
+    <Compile Include="Graphics\Color4.cs" />
+    <Compile Include="Audio\Alc32.cs" />
+    <Compile Include="Audio\Alc64.cs" />
+    <Compile Include="Math\Matrix.cs" />
+    <Compile Include="Graphics\GlEnums.cs" />
+    <Compile Include="Graphics\AssetLoadException.cs" />
+    <Compile Include="Glfw\Glfw2.cs" />
+    <Compile Include="Glfw\Glfw3.cs" />
+    <Compile Include="Glfw\Glfw2_32.cs" />
+    <Compile Include="Glfw\Glfw2_64.cs" />
+    <Compile Include="Glfw\Glfw3_32.cs" />
+    <Compile Include="Glfw\Glfw3_64.cs" />
+    <Compile Include="Glfw\Glfw2Delegates.cs" />
+    <Compile Include="Glfw\Glfw2DelegateTypes.cs" />
+    <Compile Include="Glfw\Glfw2Enum.cs" />
+    <Compile Include="Glfw\Glfw2Structs.cs" />
+    <Compile Include="Glfw\Glfw3Delegates.cs" />
+    <Compile Include="Glfw\Glfw3DelegateTypes.cs" />
+    <Compile Include="Glfw\Glfw3Enum.cs" />
+    <Compile Include="Glfw\Glfw3Structs.cs" />
+    <Compile Include="Audio\AlcManager.cs" />
+    <Compile Include="Scripting\Lua64.cs" />
+    <Compile Include="Scripting\LuaDelegateTypes.cs" />
+    <Compile Include="Scripting\LuaStructs.cs" />
+    <Compile Include="Scripting\LuaDelegates.cs" />
+    <Compile Include="Scripting\Lua32.cs" />
+    <Compile Include="Scripting\LuaEnums.cs" />
+    <Compile Include="Scripting\Lua.cs" />
+    <Compile Include="Scripting\LuaMacroFunctions.cs" />
+    <Compile Include="Scripting\LuaL64.cs" />
+    <Compile Include="Scripting\LuaL32.cs" />
+    <Compile Include="Scripting\LuaLDelegates.cs" />
+    <Compile Include="Scripting\LuaL.cs" />
+    <Compile Include="Scripting\LuaLMacroFunctions.cs" />
+    <Compile Include="Audio\Sound.cs" />
+    <Compile Include="Audio\Listener.cs" />
+    <Compile Include="Glfw\Glfw2KeyboardState.cs" />
+    <Compile Include="Glfw\Glfw2MouseState.cs" />
+    <Compile Include="Glfw\Glfw3KeyboardState.cs" />
+    <Compile Include="Glfw\Glfw3MouseState.cs" />
+    <Compile Include="Math\Vector3i.cs" />
+    <Compile Include="Math\Vector2i.cs" />
+    <Compile Include="Math\Vector4i.cs" />
+    <Compile Include="Math\Vector4.cs" />
+    <Compile Include="Math\Rectanglei.cs" />
+    <Compile Include="Math\Rectangle.cs" />
+    <Compile Include="Audio\ALUtils.cs" />
+    <Compile Include="Audio\AL.cs" />
+    <Compile Include="Audio\ALDelegates.cs" />
+    <Compile Include="Audio\AL32.cs" />
+    <Compile Include="Audio\AL64.cs" />
+    <Compile Include="Audio\ALEnums.cs" />
+    <Compile Include="Graphics\GLHelper.cs" />
+    <Compile Include="Graphics\GLUtils.cs" />
+    <Compile Include="Graphics\GLLoadException.cs" />
+    <Compile Include="Graphics\GLCore.cs" />
+    <Compile Include="Graphics\GLDelegates.cs" />
+    <Compile Include="Graphics\GL.cs" />
+    <Compile Include="Math\DualQuaternion.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Pencil.Gaming.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LICENSE.TXT" />
+    <None Include="natives32-glfw2\openal32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw2\wrap_oal.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw2\libopenal.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw2\glfw.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw2\libglfw.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw2\libglfw.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw2\libopenal.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw2\wrap_oal.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw2\openal32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw2\libglfw.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw3\glfw.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw3\GLFW_LINUX_BROKEN.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw3\libopenal.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw3\openal32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw3\wrap_oal.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw3\glfw.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw3\libglfw.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw3\libopenal.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw3\openal32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw3\wrap_oal.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw2\glfw.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw2\liblua.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw3\liblua.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw2\lua.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw2\liblua.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw2\liblua.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw3\liblua.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw3\liblua.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives32-glfw3\lua.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw2\lua.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="natives64-glfw3\lua.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="NVorbis.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

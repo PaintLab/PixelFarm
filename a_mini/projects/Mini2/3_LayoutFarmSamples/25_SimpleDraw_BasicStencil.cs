@@ -4,13 +4,10 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
-
 using OpenTK.Graphics.OpenGL;
-
 namespace Mini2
 {
     [Info(OrderCode = "25")]
@@ -20,15 +17,12 @@ namespace Mini2
         static DrawSample05_BasicStencil()
         {
             PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
-
         }
         public override void Load()
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
             var canvas = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
-
-
             form.SetGLPaintHandler((o, s) =>
             {
                 //-----------------------------
@@ -52,7 +46,6 @@ namespace Mini2
                 //render  to stencill buffer
                 GL.Begin(BeginMode.Triangles);
                 {
-
                     GL.Vertex2(20, 20);
                     GL.Vertex2(100, 20);
                     GL.Vertex2(60, 80);
@@ -68,16 +61,12 @@ namespace Mini2
                 //draw  
                 GL.Begin(BeginMode.Quads);
                 {
-
                     GL.Color3(1f, 0, 0);
                     GL.Vertex2(5, 5);
-
                     GL.Color3(1f, 1, 0);
                     GL.Vertex2(100, 5);
-
                     GL.Color3(1f, 0, 1);
                     GL.Vertex2(100, 100);
-
                     GL.Color3(1f, 1, 1);
                     GL.Vertex2(5, 100);
                 }

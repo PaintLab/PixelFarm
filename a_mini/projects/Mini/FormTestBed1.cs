@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using System.Drawing;
-
 using System.Text;
 using System.Windows.Forms;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Image;
-
 namespace Mini
 {
     partial class FormTestBed1 : Form
@@ -35,7 +32,6 @@ namespace Mini
             exampleBase.Init();
             this.softAggControl2.LoadExample(exampleBase);
             this.Text = exAndDesc.ToString();
-
             //-------------------------------------------
             //description:
             if (!string.IsNullOrEmpty(exAndDesc.Description))
@@ -48,7 +44,6 @@ namespace Mini
                 tt.Height = 250;
                 tt.BackColor = Color.Gainsboro;
                 tt.Font = new Font("tahoma", 10);
-
                 this.flowLayoutPanel1.Controls.Add(tt);
             }
             //-------------------------------------------
@@ -66,26 +61,21 @@ namespace Mini
                                 CheckBox checkBox = new CheckBox();
                                 checkBox.Text = config.Name;
                                 checkBox.Width = 400;
-
                                 bool currentValue = (bool)config.InvokeGet(exampleBase);
                                 checkBox.Checked = currentValue;
-
                                 checkBox.CheckedChanged += (s, e) =>
                                 {
                                     config.InvokeSet(exBase, checkBox.Checked);
                                     InvalidateSampleViewPort();
                                 };
-
                                 this.flowLayoutPanel1.Controls.Add(checkBox);
-                            } break;
+                            }
+                            break;
                         case DemoConfigPresentaionHint.SlideBarDiscrete:
                             {
-
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
-
                                 this.flowLayoutPanel1.Controls.Add(descLabel);
-
                                 var originalConfig = config.OriginalConfigAttribute;
                                 HScrollBar hscrollBar = new HScrollBar();
                                 hscrollBar.Width = flowLayoutPanel1.Width;
@@ -104,29 +94,25 @@ namespace Mini
                                     InvalidateSampleViewPort();
                                 };
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
-                            } break;
+                            }
+                            break;
                         case DemoConfigPresentaionHint.SlideBarContinuous_R4:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
-
                                 this.flowLayoutPanel1.Controls.Add(descLabel);
-
                                 var originalConfig = config.OriginalConfigAttribute;
                                 HScrollBar hscrollBar = new HScrollBar();
-
                                 //100 => for scale factor 
 
                                 hscrollBar.Width = flowLayoutPanel1.Width;
                                 hscrollBar.Minimum = originalConfig.MinValue * 100;
                                 hscrollBar.Maximum = (originalConfig.MaxValue * 100) + 10;
                                 hscrollBar.SmallChange = 1;
-
                                 //current value
 
                                 float doubleValue = ((float)config.InvokeGet(exampleBase) * 100);
                                 hscrollBar.Value = (int)doubleValue;
-
                                 //-------------
                                 descLabel.Text = config.Name + ":" + ((float)hscrollBar.Value / 100d).ToString();
                                 hscrollBar.ValueChanged += (s, e) =>
@@ -137,30 +123,25 @@ namespace Mini
                                     InvalidateSampleViewPort();
                                 };
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
-
-                            } break;
+                            }
+                            break;
                         case DemoConfigPresentaionHint.SlideBarContinuous_R8:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
-
                                 this.flowLayoutPanel1.Controls.Add(descLabel);
-
                                 var originalConfig = config.OriginalConfigAttribute;
                                 HScrollBar hscrollBar = new HScrollBar();
-
                                 //100 => for scale factor 
 
                                 hscrollBar.Width = flowLayoutPanel1.Width;
                                 hscrollBar.Minimum = originalConfig.MinValue * 100;
                                 hscrollBar.Maximum = (originalConfig.MaxValue * 100) + 10;
                                 hscrollBar.SmallChange = 1;
-
                                 //current value
 
                                 double doubleValue = ((double)config.InvokeGet(exampleBase) * 100);
                                 hscrollBar.Value = (int)doubleValue;
-
                                 //-------------
                                 descLabel.Text = config.Name + ":" + ((double)hscrollBar.Value / 100d).ToString();
                                 hscrollBar.ValueChanged += (s, e) =>
@@ -171,31 +152,24 @@ namespace Mini
                                     InvalidateSampleViewPort();
                                 };
                                 this.flowLayoutPanel1.Controls.Add(hscrollBar);
-
-                            } break;
-
+                            }
+                            break;
                         case DemoConfigPresentaionHint.OptionBoxes:
                             {
-
                                 List<ExampleConfigValue> optionFields = config.GetOptionFields();
                                 FlowLayoutPanel panelOption = new FlowLayoutPanel();
                                 int totalHeight = 0;
                                 int m = optionFields.Count;
-
                                 //current value 
                                 int currentValue = (int)config.InvokeGet(exampleBase);
-
                                 for (int n = 0; n < m; ++n)
                                 {
-
                                     ExampleConfigValue ofield = optionFields[n];
-
                                     RadioButton radio = new RadioButton();
                                     panelOption.Controls.Add(radio);
                                     radio.Text = ofield.Name;
                                     radio.Width = 400;
                                     radio.Checked = ofield.ValueAsInt32 == currentValue;
-
                                     radio.Click += (s, e) =>
                                     {
                                         if (radio.Checked)
@@ -212,26 +186,23 @@ namespace Mini
 
                                 panelOption.Height = totalHeight;
                                 panelOption.FlowDirection = FlowDirection.TopDown;
-
                                 this.flowLayoutPanel1.Controls.Add(panelOption);
-                            } break;
+                            }
+                            break;
                         case DemoConfigPresentaionHint.TextBox:
                             {
                                 Label descLabel = new Label();
                                 descLabel.Width = 400;
                                 descLabel.Text = config.Name;
                                 this.flowLayoutPanel1.Controls.Add(descLabel);
-
                                 TextBox textBox = new TextBox();
                                 textBox.Width = 400;
                                 this.flowLayoutPanel1.Controls.Add(textBox);
-
-                            } break;
+                            }
+                            break;
                     }
                 }
-
             }
         }
-
     }
 }

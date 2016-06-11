@@ -16,18 +16,17 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 namespace PixelFarm.Agg.UI
 {
     abstract public class SimpleVertexSourceWidget : IncompleteWidget
     {
-
         bool localBoundsComeFromPoints = true;
         Vector2 originRelativeParent;
         public SimpleVertexSourceWidget()
@@ -47,20 +46,19 @@ namespace PixelFarm.Agg.UI
             {
                 if (localBoundsComeFromPoints)
                 {
-                    RectD localBounds = this.CalculateLocalBounds(); 
+                    RectD localBounds = this.CalculateLocalBounds();
                     return localBounds;
                 }
                 else
                 {
                     return base.LocalBounds;
                 }
-            } 
+            }
         }
 
-    
-        public abstract void RewindZero(); 
-        protected abstract RectD CalculateLocalBounds(); 
+
+        public abstract void RewindZero();
+        protected abstract RectD CalculateLocalBounds();
         public abstract VertexStore MakeVxs();
-        
     }
 }

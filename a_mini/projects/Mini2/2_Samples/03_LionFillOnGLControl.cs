@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 namespace Mini2
@@ -13,7 +12,6 @@ namespace Mini2
     [Info("LionFill on GL")]
     public class LionFillOnGL : DemoBase
     {
-
         public override void Load()
         {
             //lion fill test 
@@ -25,7 +23,6 @@ namespace Mini2
             ActualImage actualImage = new ActualImage(800, 600, PixelFarm.Agg.Image.PixelFormat.Rgba32);
             Graphics2D g2d = Graphics2D.CreateFromImage(actualImage);
             GLBitmap bmp = null;
-
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Clear(PixelFarm.Drawing.Color.White);
@@ -35,14 +32,12 @@ namespace Mini2
                 {
                     lionFill.OnDraw(g2d);
                     bmp = new GLBitmap(new LazyAggBitmapBufferProvider(actualImage));
-
                 }
                 //lion is inverted from software layer ,
                 //so... we use DrawImageInvert()
                 int xpos = 0;
                 int w = bmp.Width;
                 int h = bmp.Height;
-
                 for (int i = 0; i < 3; ++i)
                 {
                     canvas.DrawImage(bmp, xpos, 50, w, h);
@@ -55,17 +50,13 @@ namespace Mini2
                 xpos = 0;
                 for (int i = 0; i < 2; ++i)
                 {
-
                     w = (int)(w * 0.75);
                     h = (int)(h * 0.75);
                     xpos -= 50;
                     canvas.DrawImage(bmp, xpos, 50, w, h);
-
                 }
             });
-
             form.Show();
-
         }
     }
 }

@@ -34,9 +34,8 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 using Mini;
-namespace PixelFarm.Agg.Sample_LionFill
+namespace PixelFarm.Agg.Samples
 {
     [Info(OrderCode = "03")]
     [Info("Affine transformer, and basic renderers. You can rotate and scale the “Lion” with the"
@@ -71,8 +70,5 @@ namespace PixelFarm.Agg.Sample_LionFill
     }
 
     //--------------------------------------------------
-  
-
-
 }
 

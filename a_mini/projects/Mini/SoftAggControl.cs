@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing; 
+using System.Drawing;
 using System.Text;
-using System.Windows.Forms; 
+using System.Windows.Forms;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Image;
-
-
 namespace Mini
 {
     public partial class SoftAggControl : UserControl
     {
         bool isMouseDown;
         DemoBase exampleBase;
-
         int myWidth = 800;
         int myHeight = 600;
-
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
         Graphics2D gfx;
-
         public SoftAggControl()
         {
             InitializeComponent();
@@ -34,7 +29,6 @@ namespace Mini
         {
             this.gfx = bitmapBackBuffer.Initialize(width, height, 32);
             this.gfx.Clear(ColorRGBA.White);
-
         }
         public void LoadExample(DemoBase exBase)
         {
@@ -45,7 +39,6 @@ namespace Mini
         protected override void OnMouseDown(MouseEventArgs e)
         {
             this.isMouseDown = true;
-
             exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
             base.OnMouseDown(e);
             Invalidate();
@@ -53,7 +46,6 @@ namespace Mini
         protected override void OnMouseUp(MouseEventArgs e)
         {
             this.isMouseDown = false;
-
             exampleBase.MouseUp(e.X, myHeight - e.Y);
             base.OnMouseUp(e);
             Invalidate();
@@ -62,7 +54,6 @@ namespace Mini
         {
             if (this.isMouseDown)
             {
-
                 exampleBase.MouseDrag(e.X, myHeight - e.Y);
                 Invalidate();
             }
@@ -82,6 +73,5 @@ namespace Mini
             //-------------------------------- 
             base.OnPaint(e);
         }
-
     }
 }

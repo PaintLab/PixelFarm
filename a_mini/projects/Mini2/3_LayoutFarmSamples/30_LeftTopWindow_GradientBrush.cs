@@ -5,13 +5,10 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
-
 using OpenTK.Graphics.OpenGL;
-
 namespace Mini2
 {
     [Info(OrderCode = "30")]
@@ -21,26 +18,21 @@ namespace Mini2
         static LeftTopWindowGradientBrush()
         {
             PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
-
         }
         public override void Load()
         {
             //draw 1
             FormTestWinGLControl form = new FormTestWinGLControl();
             var canvas = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
-
             form.SetGLPaintHandler((o, s) =>
             {
                 canvas.Orientation = CanvasOrientation.LeftTop;
                 canvas.ClearSurface(PixelFarm.Drawing.Color.White);
-
-
                 var linearGrBrush = new LinearGradientBrush(
                     new PixelFarm.Drawing.PointF(25, 25),
                     PixelFarm.Drawing.Color.Black,
                     new PixelFarm.Drawing.PointF(100, 100),
                     PixelFarm.Drawing.Color.Blue);
-                 
                 ////fill rectangle is easy
                 ////canvas.FillRectangle(linearGrBrush, 0, 0, 150, 150);
                 canvas.FillRectangle(PixelFarm.Drawing.Color.Black, 0, 0, 150, 150);
@@ -52,7 +44,7 @@ namespace Mini2
                     new PixelFarm.Drawing.PointF(25, 100),
                     PixelFarm.Drawing.Color.OrangeRed);
                 //2. fill polygon with gradient brush 
-                
+
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -65,7 +57,6 @@ namespace Mini2
 
                 ////another  ...                
                 canvas.FillRectangle(PixelFarm.Drawing.Color.Yellow, 200, 0, 150, 150);
-
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,
@@ -77,7 +68,6 @@ namespace Mini2
                 //-------------------------------------------------------------------------
 
                 canvas.FillRectangle(PixelFarm.Drawing.Color.White, 400, 0, 150, 150);
-
                 canvas.Note1 = 1; //temp
                 canvas.FillPolygon(
                     linearGrBrush2,

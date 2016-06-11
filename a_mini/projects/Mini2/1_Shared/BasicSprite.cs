@@ -34,7 +34,6 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-
 namespace PixelFarm.Agg
 {
     public abstract class BasicSprite
@@ -43,12 +42,11 @@ namespace PixelFarm.Agg
         protected double spriteScale = 1.0;
         protected double skewX = 0;
         protected double skewY = 0;
-
         public int Width { get; set; }
         public int Height { get; set; }
 
         public virtual void OnDraw(Graphics2D graphics2D)
-        { 
+        {
         }
         protected void UpdateTransform(double width, double height, double x, double y)
         {
@@ -62,13 +60,10 @@ namespace PixelFarm.Agg
         {
             double x = mouseX;
             double y = mouseY;
-
             int width = (int)Width;
             int height = (int)Height;
             UpdateTransform(width, height, x, y);
-
             return true;
-
         }
     }
 }

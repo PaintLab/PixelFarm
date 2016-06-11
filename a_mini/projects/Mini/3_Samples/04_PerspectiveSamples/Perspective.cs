@@ -2,13 +2,10 @@
 //MatterHackers
 
 using System;
-
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 using PixelFarm.VectorMath;
-
 using Mini;
 namespace PixelFarm.Agg.Sample_Perspective
 {
@@ -21,15 +18,12 @@ namespace PixelFarm.Agg.Sample_Perspective
             + "remain valid with any shape of the destination quadrangle.")]
     public class perspective_application : DemoBase
     {
-
         UI.PolygonEditWidget quadPolygonControl;
         private SpriteShape lionShape;
-
         public perspective_application()
         {
             lionShape = new SpriteShape();
             lionShape.ParseLion();
-
             quadPolygonControl = new PixelFarm.Agg.UI.PolygonEditWidget(4, 5.0);
             quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
             quadPolygonControl.SetYN(0, lionShape.Bounds.Top);
@@ -39,8 +33,6 @@ namespace PixelFarm.Agg.Sample_Perspective
             quadPolygonControl.SetYN(2, lionShape.Bounds.Bottom);
             quadPolygonControl.SetXN(3, lionShape.Bounds.Left);
             quadPolygonControl.SetYN(3, lionShape.Bounds.Bottom);
-
-
         }
         public override void Init()
         {
@@ -75,9 +67,7 @@ namespace PixelFarm.Agg.Sample_Perspective
         public void OnDraw(Graphics2D gx)
         {
             CanvasPainter painter = new CanvasPainter(gx);
-
             IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
-
             if (!didInit)
             {
                 didInit = true;
@@ -85,7 +75,6 @@ namespace PixelFarm.Agg.Sample_Perspective
             }
 
             ChildImage image;
-
             if (backBuffer.BitDepth == 32)
             {
                 image = new ChildImage(backBuffer, new PixelBlenderBGRA());
@@ -100,8 +89,6 @@ namespace PixelFarm.Agg.Sample_Perspective
             }
 
             painter.Clear(ColorRGBA.White);
-
-
             //ClipProxyImage dest = new ClipProxyImage(image);
             //gx.Clear(ColorRGBA.White);
             //gx.SetClippingRect(new RectInt(0, 0, Width, Height)); 
@@ -109,34 +96,27 @@ namespace PixelFarm.Agg.Sample_Perspective
 
             if (this.PerspectiveTransformType == Sample_Perspective.PerspectiveTransformType.Bilinear)
             {
-
                 var bound = lionShape.Bounds;
                 Bilinear txBilinear = Bilinear.RectToQuad(bound.Left,
                     bound.Bottom,
                     bound.Right,
                     bound.Top,
                     quadPolygonControl.GetInnerCoords());
-
                 if (txBilinear.IsValid)
                 {
-
                     painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Path.Vxs),
                         lionShape.Colors,
                         lionShape.PathIndexList,
                         lionShape.NumPaths);
-
                     RectD lionBound = lionShape.Bounds;
-
                     Ellipse ell = new Ellipse((lionBound.Left + lionBound.Right) * 0.5,
                                      (lionBound.Bottom + lionBound.Top) * 0.5,
                                      (lionBound.Right - lionBound.Left) * 0.5,
                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
-
                     VertexStore trans_ell = txBilinear.TransformToVxs(ell.MakeVxs());
                     painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(trans_ell);
-
                     //-------------------------------------------------------------
                     //outline
                     double prevStrokeWidth = painter.StrokeWidth;
@@ -144,7 +124,6 @@ namespace PixelFarm.Agg.Sample_Perspective
                     painter.StrokeColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
-
                 }
             }
             else
@@ -152,11 +131,9 @@ namespace PixelFarm.Agg.Sample_Perspective
                 var txPerspective = new Perspective(
                     lionShape.Bounds,
                     quadPolygonControl.GetInnerCoords());
-
                 if (txPerspective.IsValid)
                 {
-
-                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Path.Vxs ),
+                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Path.Vxs),
                       lionShape.Colors,
                       lionShape.PathIndexList,
                       lionShape.NumPaths);
@@ -169,7 +146,6 @@ namespace PixelFarm.Agg.Sample_Perspective
                                       (lionBound.Right - lionBound.Left) * 0.5,
                                       (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
-
                     VertexStore transformedEll = txPerspective.TransformToVxs(filledEllipse.MakeVxs());
                     painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(transformedEll);
@@ -186,13 +162,11 @@ namespace PixelFarm.Agg.Sample_Perspective
             // Render the "quad" tool and controls
             painter.FillColor = ColorRGBA.Make(0f, 0.3f, 0.5f, 0.6f);
             painter.Fill(quadPolygonControl.MakeVxs());
-
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {
             var mouseEvent = new UI.MouseEventArgs(UI.MouseButtons.Left, 1, x, y, 0);
             quadPolygonControl.OnMouseDown(mouseEvent);
-
         }
         public override void MouseDrag(int x, int y)
         {
@@ -206,46 +180,6 @@ namespace PixelFarm.Agg.Sample_Perspective
             quadPolygonControl.OnMouseUp(mouseEvent);
             base.MouseUp(x, y);
         }
-        //public override void OnMouseDown(MouseEventArgs mouseEvent)
-        //{
-        //    if (mouseEvent.Button == MouseButtons.Left)
-        //    {
-        //        quadPolygonControl.OnMouseDown(mouseEvent);
-        //        if (MouseCaptured)
-        //        {
-        //            Invalidate();
-        //        }
-        //    }
-
-        //    base.OnMouseDown(mouseEvent);
-        //}
-
-        //public override void OnMouseMove(MouseEventArgs mouseEvent)
-        //{
-        //    if (mouseEvent.Button == MouseButtons.Left)
-        //    {
-        //        quadPolygonControl.OnMouseMove(mouseEvent);
-        //        if (MouseCaptured)
-        //        {
-        //            Invalidate();
-        //        }
-        //    }
-
-        //    base.OnMouseMove(mouseEvent);
-        //}
-
-        //public override void OnMouseUp(MouseEventArgs mouseEvent)
-        //{
-        //    quadPolygonControl.OnMouseUp(mouseEvent);
-        //    if (MouseCaptured)
-        //    {
-        //        Invalidate();
-        //    }
-
-        //    base.OnMouseUp(mouseEvent);
-        //}
-
-
     }
 
 

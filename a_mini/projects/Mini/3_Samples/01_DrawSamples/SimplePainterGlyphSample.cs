@@ -6,19 +6,14 @@
 // and intend to do much more refactoring of these things over the long term.
 
 using System;
-
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
-
 using PixelFarm.Agg.Fonts;
 using Mini;
-
 namespace PixelFarm.Agg.SimplePainter
 {
-
     [Info(OrderCode = "01")]
     [Info("SimplePainterGlyph")]
     public class SimplePainterGlyphSample : DemoBase
@@ -31,7 +26,6 @@ namespace PixelFarm.Agg.SimplePainter
             //load font ?
             font1 = NativeFontStore.LoadFont(fontfile, 72);
             font2 = NativeFontStore.LoadFont(fontfile, 10);
-
         }
         public override void Draw(Graphics2D g)
         {
@@ -40,7 +34,6 @@ namespace PixelFarm.Agg.SimplePainter
             CanvasPainter p = new CanvasPainter(g);
             p.Clear(ColorRGBA.White);
             p.FillColor = new ColorRGBA(ColorRGBA.Blue, 80);
-
             //M414 -20q-163 0 -245 86t-82 236z
             //<path d="M414 20q-163 40 -245 126t-82 276z"/> 
             //PathWriter path = new PathWriter();
@@ -64,13 +57,11 @@ namespace PixelFarm.Agg.SimplePainter
             //outline version
             var flat_v = p.FlattenCurves(fontGlyph.flattenVxs);
             p.Fill(flat_v);
-
             //bitmap version
 
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
             p.CurrentFont = font1;
             p.FillColor = ColorRGBA.Black;
-
             // string test_str = "มีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
             string test_str = "บ่ป่มีมี่";
@@ -79,10 +70,8 @@ namespace PixelFarm.Agg.SimplePainter
             //p.DrawString("12345", 50, 200); 
             p.StrokeColor = ColorRGBA.Black;
             p.Line(0, 200, 800, 200);
-
             p.FillColor = ColorRGBA.Black;
             p.CurrentFont = font2;
-
             p.DrawString(test_str, 80, 100);
             p.UseSubPixelRendering = false;
             //--------------------------------------------------- 
@@ -109,6 +98,4 @@ namespace PixelFarm.Agg.SimplePainter
             //p.Fill(p.FlattenCurves(m_pathVxs));
         }
     }
-
-
 }

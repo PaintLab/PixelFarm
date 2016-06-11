@@ -4,21 +4,15 @@
 
 using System;
 using System.Diagnostics;
-
 using PixelFarm.Agg.UI;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
-
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Fonts;
-
 using Mini;
 namespace PixelFarm.Agg.Sample_Blur2
 {
-
-
     [Info(OrderCode = "08")]
     [Info(DemoCategory.Bitmap, @"Now you can blur rendered images rather fast! There two algorithms are used: 
     Stack Blur by Mario Klingemann and Fast Recursive Gaussian Filter, described 
@@ -30,38 +24,26 @@ namespace PixelFarm.Agg.Sample_Blur2
     and the filter produces quite adequate result.")]
     public class BlurWithPainter : DemoBase
     {
-
         PolygonEditWidget m_shadow_ctrl;
         VertexStore m_pathVxs;
         VertexStoreSnap m_path_2;
-
         RectD m_shape_bounds;
-
         Stopwatch stopwatch = new Stopwatch();
-
         public BlurWithPainter()
         {
             //m_rbuf2 = new ReferenceImage();
             m_shape_bounds = new RectD();
             m_shadow_ctrl = new PolygonEditWidget(4);
-
-
             this.FlattenCurveChecked = true;
             this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
-
-
             Font svgFont = SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
             m_pathVxs = svgFont.GetGlyph('a').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
-
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-
             var curveFlattener = new CurveFlattener();
-
             m_path_2 = new VertexStoreSnap(curveFlattener.MakeVxs(m_pathVxs));
             BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
-
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
             m_shadow_ctrl.SetXN(1, m_shape_bounds.Right);
@@ -70,7 +52,6 @@ namespace PixelFarm.Agg.Sample_Blur2
             m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
             m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
-
             m_shadow_ctrl.LineColor = ColorRGBAf.MakeColorRGBA(0f, 0.3f, 0.5f, 0.3f);
         }
 
@@ -142,13 +123,11 @@ namespace PixelFarm.Agg.Sample_Blur2
         {
             //DrawClassic(graphics2D);
             DrawWithPainter(graphics2D);
-
         }
         void DrawWithPainter(Graphics2D graphics2D)
         {
             //create painter
             CanvasPainter painter = new CanvasPainter(graphics2D);
-
             painter.SetClipBox(0, 0, Width, Height);
             painter.Clear(ColorRGBA.White);
             //-----------------------------------------------------------------------
@@ -156,21 +135,17 @@ namespace PixelFarm.Agg.Sample_Blur2
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,
                             m_shadow_ctrl.GetInnerCoords());
-
             VertexStore s2;
             if (FlattenCurveChecked)
             {
                 s2 = shadow_persp.TransformToVxs(m_path_2);
-
             }
             else
             {
                 s2 = shadow_persp.TransformToVxs(m_pathVxs);
-
             }
             painter.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
             painter.Fill(s2);
-
             //---------------------------------------------------------------------------------------------------------
             //shadow 
             //---------------------------------------------------------------------------------------------------------
@@ -178,14 +153,12 @@ namespace PixelFarm.Agg.Sample_Blur2
 
             RectInt boundRect = BoundingRectInt.GetBoundingRect(s2);
             var widgetImg = graphics2D.DestImage;
-
             int m_radius = this.BlurRadius;
             //expand bound rect
             boundRect.Left -= m_radius;
             boundRect.Bottom -= m_radius;
             boundRect.Right += m_radius;
             boundRect.Top += m_radius;
-
             if (BlurMethod == BlurMethod.RecursiveBlur)
             {
                 // The recursive blur method represents the true Gaussian Blur,
@@ -201,7 +174,6 @@ namespace PixelFarm.Agg.Sample_Blur2
             stopwatch.Stop();
             stopwatch.Reset();
             stopwatch.Start();
-
             if (BlurMethod != BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
@@ -219,22 +191,21 @@ namespace PixelFarm.Agg.Sample_Blur2
                     {
                         case BlurMethod.StackBlur:
                             {
-
                                 //------------------  
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
                                 painter.DoFilterBlurStack(boundRect, m_radius);
-
-                            } break;
+                            }
+                            break;
                         default:
                             {   // True Gaussian Blur, 3-5 times slower than Stack Blur,
                                 // but still constant time of radius. Very sensitive
                                 // to precision, doubles are must here.
                                 //------------------
                                 painter.DoFilterBlurRecursive(boundRect, m_radius);
-
-                            } break;
+                            }
+                            break;
                     }
                     //store back
                     painter.ClipBox = prevClip;
@@ -243,7 +214,6 @@ namespace PixelFarm.Agg.Sample_Blur2
 
             double tm = stopwatch.ElapsedMilliseconds;
             painter.FillColor = ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f);
-
             // Render the shape itself
             ////------------------
             if (FlattenCurveChecked)
@@ -259,12 +229,9 @@ namespace PixelFarm.Agg.Sample_Blur2
 
             painter.FillColor = ColorRGBA.Black;
             painter.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
-
             //-------------------------------------------------------------
             //control
             m_shadow_ctrl.OnDraw(graphics2D);
-
         }
     }
-
 }

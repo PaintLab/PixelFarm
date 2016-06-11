@@ -1,16 +1,11 @@
 ﻿//2014 BSD,WinterDev
-//MatterHackers
-
-
+//MatterHackers 
 
 using System;
-
 using PixelFarm.Agg.UI;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 using PixelFarm.VectorMath;
-
 using Mini;
 namespace PixelFarm.Agg.Sample_FloodFill
 {
@@ -20,12 +15,10 @@ namespace PixelFarm.Agg.Sample_FloodFill
     {
         ActualImage imageToFillOn;
         Point2D imageOffset = new Point2D(20, 60);
-
         public FloodFillDemo()
         {
             BackgroundColor = ColorRGBA.White;
             imageToFillOn = new ActualImage(400, 300, PixelFormat.Rgba32);
-
             var imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
             imageToFillGraphics.Clear(ColorRGBA.White);
             imageToFillGraphics.DrawString("Click to fill", 20, 30);
@@ -33,7 +26,6 @@ namespace PixelFarm.Agg.Sample_FloodFill
             imageToFillGraphics.Circle(new Vector2(200, 150), 30, ColorRGBA.Green);
             imageToFillGraphics.Rectangle(20, 50, 210, 280, ColorRGBA.Black);
             imageToFillGraphics.Rectangle(imageToFillOn.Bounds, ColorRGBA.Blue);
-
             Random rand = new Random();
             for (int i = 0; i < 20; i++)
             {
@@ -65,18 +57,14 @@ namespace PixelFarm.Agg.Sample_FloodFill
         {
             CanvasPainter painter = new CanvasPainter(graphics2D);
             painter.DrawImage(imageToFillOn, imageOffset.x, imageOffset.y);
-
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int x = mx - imageOffset.x;
             int y = my - imageOffset.y;
-
             FloodFill filler = new FloodFill(ColorRGBA.Red);
             filler.Fill(imageToFillOn, x, y);
         }
     }
-
-
 }

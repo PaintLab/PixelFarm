@@ -158,6 +158,7 @@ namespace OpenTkEssTest
             GL.LoadIdentity();
             GL.Translate(-1.5f, 0f, -6f);
 
+
             //GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);		// Clear the Screen and the Depth Buffer
             //GL.glMatrixMode(GL.GL_MODELVIEW);				// Modelview Matrix
             // GL.glLoadIdentity();							// reset the current modelview matrix
@@ -177,10 +178,8 @@ namespace OpenTkEssTest
             GL.Translate(1.5f, 0.0f, -6.0f);
             //GL.Rotate(rotate, 1.0f, 0.0f, 0.0f);
             GL.Color3(0.5f, 0.5f, 1.0f);
-
             //-------------------------------
             DrawQuads(-1, 1, .5f, .5f);
-
             //-------------------------------
             float cx = -1;
             float cy = 0;
@@ -191,6 +190,8 @@ namespace OpenTkEssTest
                 cy += 2;
             }
 
+
+            DrawLine(-2, 2, 0, 2);
 
             SwapBuffers();
         }
@@ -204,14 +205,32 @@ namespace OpenTkEssTest
             GL.Vertex3(x, y, 0);//1
             GL.Vertex3(x + w, y, 0);//2
             GL.Vertex3(x + w, y - h, 0);//3
-
+            //-----------------------------------------
             GL.Vertex3(x + w, y - h, 0);//3
             GL.Vertex3(x, y - h, 0);//4
             GL.Vertex3(x, y, 0);//1
 
             GL.End();
         }
+        static void DrawLine(float x1, float y1, float x2, float y2)
+        {
+            float angle = (y2 - y1) / (x2 - x1); //tan(a)
 
+            float lineWidth = 1 / 2f;
+            //clock-wise 
+            GL.Begin(BeginMode.Triangles);
+
+            GL.Vertex3(x1, y1, 0);//1
+            GL.Vertex3(x2, y2, 0);//2
+            GL.Vertex3(x2, y2 - 0.1, 0);//3
+
+            GL.Vertex3(x2, y2 - 0.1, 0);//1
+            GL.Vertex3(x1, y1 - 0.1, 0);//2
+            GL.Vertex3(x1, y1, 0);//3
+
+
+            GL.End();
+        }
 
     }
 

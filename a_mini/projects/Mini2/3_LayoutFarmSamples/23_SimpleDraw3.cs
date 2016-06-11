@@ -4,12 +4,9 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-
 using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
-
-
 namespace Mini2
 {
     [Info(OrderCode = "23")]
@@ -19,7 +16,6 @@ namespace Mini2
         static DrawSample03()
         {
             PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
-
         }
 
         static PixelFarm.Drawing.RectangleF GenRect(float ux, float uy, float uw, float uh)
@@ -39,7 +35,6 @@ namespace Mini2
             //WinGdiPortal.P.CreateCanvas(0, 0, 800, 600); 
 
             var canvas = PixelFarm.Drawing.DrawingGL.CanvasGLPortal.P.CreateCanvas(0, 0, 800, 600);
-
             PixelFarm.Drawing.Bitmap bmp = null;
             form.SetGLPaintHandler((o, s) =>
             {
@@ -47,7 +42,6 @@ namespace Mini2
                 canvas.FillRectangle(
                   PixelFarm.Drawing.Color.Blue,
                   0, 0, 200, 200);
-
                 canvas.SetCanvasOrigin(180, 180);
                 //----------------------
                 canvas.FillRectangle(
@@ -75,12 +69,11 @@ namespace Mini2
                 //    //src
                 //    new PixelFarm.Drawing.RectangleF(0, 0, 100, 100));
                 canvas.DrawImage(bmp,
-                    //dest
-                    //new PixelFarm.Drawing.RectangleF(0, 350, bmp.Width, bmp.Height),
+                   //dest
+                   //new PixelFarm.Drawing.RectangleF(0, 350, bmp.Width, bmp.Height),
                    new PixelFarm.Drawing.RectangleF(0, 350, bmp.Width / 2, bmp.Height / 2),
-                    //src
+                   //src
                    new PixelFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height));
-
                 ////----------------------
                 canvas.DrawImage(bmp,
                     //dest 
@@ -110,7 +103,6 @@ namespace Mini2
                 }
 
                 canvas.StrokeColor = PixelFarm.Drawing.Color.Blue;
-
                 canvas.DrawLine(0, 0, 800, 800);
             });
             form.Show();

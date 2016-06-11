@@ -1,5 +1,5 @@
 ﻿//2014,2015 BSD, WinterDev
-//ArthurHub
+//ArthurHub  , Jose Manuel Menendez Poo
 
 // "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
@@ -18,16 +18,11 @@ using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
 using PixelFarm.DrawingGL;
-
-using Win32; 
-
+using Win32;
 namespace PixelFarm.Drawing.DrawingGL
 {
-
-    partial class MyCanvasGL : Canvas, IFonts
+    partial class MyCanvasGL : Canvas, IFonts, IDisposable
     {
-
-
         GraphicsPlatform platform;
         int pageFlags;
         Font currentFont;
@@ -36,7 +31,6 @@ namespace PixelFarm.Drawing.DrawingGL
         //-------
         Stack<System.Drawing.Rectangle> clipRectStack = new Stack<System.Drawing.Rectangle>();
         System.Drawing.Rectangle currentClipRect;
-
         public MyCanvasGL(GraphicsPlatform platform, int hPageNum, int vPageNum, int left, int top, int width, int height)
         {
             canvasGL2d = new CanvasGL2d(width, height);
@@ -56,20 +50,14 @@ namespace PixelFarm.Drawing.DrawingGL
 #endif
             this.StrokeWidth = 1;
             this.currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
-
-
         }
         //-------------------------------------------
         bool isDisposed;
-
         ~MyCanvasGL()
         {
-            Dispose();
+            CloseCanvas();
         }
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public override void Dispose()
+        public override void CloseCanvas()
         {
             if (isDisposed)
             {
@@ -79,6 +67,25 @@ namespace PixelFarm.Drawing.DrawingGL
             this.canvasGL2d.Dispose();
             ReleaseUnManagedResource();
             this.canvasGL2d = null;
+        }
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        void IDisposable.Dispose()
+        {
+            if (isDisposed)
+            {
+                return;
+            }
+            this.CloseCanvas();
+        }
+        void IFonts.Dispose()
+        {
+            if (isDisposed)
+            {
+                return;
+            }
+            this.CloseCanvas();
         }
 
         void ClearPreviousStoredValues()
@@ -91,7 +98,6 @@ namespace PixelFarm.Drawing.DrawingGL
 
         public void ReleaseUnManagedResource()
         {
-
             //if (hRgn != IntPtr.Zero)
             //{
             //    MyWin32.DeleteObject(hRgn);
@@ -104,7 +110,6 @@ namespace PixelFarm.Drawing.DrawingGL
             //hbmp = IntPtr.Zero;
 
             clipRectStack.Clear();
-
             //currentClipRect = new System.Drawing.Rectangle(0, 0, this.Width, this.Height);
 
 
@@ -118,10 +123,8 @@ namespace PixelFarm.Drawing.DrawingGL
 
         public void Reset(int hPageNum, int vPageNum, int newWidth, int newHeight)
         {
-
             this.ReleaseUnManagedResource();
             this.ClearPreviousStoredValues();
-
             //originalHdc = MyWin32.CreateCompatibleDC(IntPtr.Zero);
             //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(newWidth, newHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             //hbmp = bmp.GetHbitmap();
@@ -190,7 +193,6 @@ namespace PixelFarm.Drawing.DrawingGL
         /// </summary>
         void InitHdc()
         {
-
         }
 
         /// <summary>
@@ -229,28 +231,6 @@ namespace PixelFarm.Drawing.DrawingGL
         static void DrawTransparentText(IntPtr hdc, string str, Font font, Point point, Size size, Color color)
         {
             throw new NotImplementedException();
-            //IntPtr dib;
-            //var memoryHdc = Win32Utils.CreateMemoryHdc(hdc, size.Width, size.Height, out dib);
-
-            //try
-            //{
-            //    // copy target background to memory HDC so when copied back it will have the proper background
-            //    Win32Utils.BitBlt(memoryHdc, 0, 0, size.Width, size.Height, hdc, point.X, point.Y, Win32Utils.BitBltCopy);
-
-            //    // Create and select font
-            //    Win32Utils.SelectObject(memoryHdc, FontsUtils.GetCachedHFont(font.InnerFont as System.Drawing.Font));
-            //    Win32Utils.SetTextColor(memoryHdc, (color.B & 0xFF) << 16 | (color.G & 0xFF) << 8 | color.R);
-
-            //    // Draw text to memory HDC
-            //    Win32Utils.TextOut(memoryHdc, 0, 0, str, str.Length);
-
-            //    // copy from memory HDC to normal HDC with alpha blend so achieve the transparent text
-            //    Win32Utils.AlphaBlend(hdc, point.X, point.Y, size.Width, size.Height, memoryHdc, 0, 0, size.Width, size.Height, new BlendFunction(color.A));
-            //}
-            //finally
-            //{
-            //    Win32Utils.ReleaseMemoryHdc(memoryHdc, dib);
-            //}
         }
 
 
@@ -267,12 +247,9 @@ namespace PixelFarm.Drawing.DrawingGL
         /// The string format to use for measuring strings for GDI+ text rendering
         /// </summary>
         static readonly System.Drawing.StringFormat _stringFormat;
-
         const int CANVAS_UNUSED = 1 << (1 - 1);
         const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);
-
         static FontInfo defaultFontInfo;
-
         static MyCanvasGL()
         {
             _stringFormat = new System.Drawing.StringFormat(System.Drawing.StringFormat.GenericDefault);
@@ -383,6 +360,5 @@ namespace PixelFarm.Drawing.DrawingGL
         //    currentClipRect = intersectResult;
         //    return true;
         //}
-
     }
 }

@@ -1,8 +1,8 @@
 ﻿//MIT 2014, WinterDev
+
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
 namespace Mini
 {
     static class Program

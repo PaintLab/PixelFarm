@@ -3,12 +3,8 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
-
-
 namespace Mini
 {
-
-
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class InfoAttribute : Attribute
     {
@@ -39,7 +35,6 @@ namespace Mini
         Bitmap
     }
     public delegate Graphics2D RequestNewGraphic2DDelegate();
-
     public abstract class DemoBase
     {
         public DemoBase()
@@ -49,7 +44,6 @@ namespace Mini
         }
 
         public event RequestNewGraphic2DDelegate RequestNewGfx2d;
-
         public abstract void Draw(PixelFarm.Agg.Graphics2D gx);
         public virtual void Init() { }
 
@@ -70,14 +64,12 @@ namespace Mini
                 return RequestNewGfx2d();
             }
         }
-
     }
 
     public class DemoConfigAttribute : Attribute
     {
         public DemoConfigAttribute()
         {
-
         }
         public DemoConfigAttribute(string name)
         {
@@ -88,7 +80,6 @@ namespace Mini
 
         public int MinValue { get; set; }
         public int MaxValue { get; set; }
-
     }
     enum DemoConfigPresentaionHint
     {
@@ -117,7 +108,6 @@ namespace Mini
     {
         System.Reflection.PropertyInfo property;
         List<ExampleConfigValue> optionFields;
-
         public ExampleConfigDesc(DemoConfigAttribute config, System.Reflection.PropertyInfo property)
         {
             this.property = property;
@@ -142,7 +132,6 @@ namespace Mini
                 this.PresentaionHint = Mini.DemoConfigPresentaionHint.OptionBoxes;
                 //find option
                 var enumFields = propType.GetFields();
-
                 int j = enumFields.Length;
                 optionFields = new List<ExampleConfigValue>(j);
                 for (int i = 0; i < j; ++i)
@@ -178,7 +167,6 @@ namespace Mini
             {
                 this.PresentaionHint = DemoConfigPresentaionHint.TextBox;
             }
-
         }
         public string Name
         {
@@ -212,23 +200,17 @@ namespace Mini
     {
         static Type exConfig = typeof(DemoConfigAttribute);
         static Type exInfoAttrType = typeof(InfoAttribute);
-
         List<ExampleConfigDesc> configList = new List<ExampleConfigDesc>();
-
         public ExampleAndDesc(Type t, string name)
         {
             this.Type = t;
             this.Name = name;
             this.OrderCode = "";
             var p1 = t.GetProperties();
-
             InfoAttribute[] exInfoList = t.GetCustomAttributes(exInfoAttrType, false) as InfoAttribute[];
             int m = exInfoList.Length;
-
-
             if (m > 0)
             {
-
                 for (int n = 0; n < m; ++n)
                 {
                     InfoAttribute info = exInfoList[n];
@@ -242,7 +224,6 @@ namespace Mini
                         this.Description += " " + info.Description;
                     }
                 }
-
             }
             if (string.IsNullOrEmpty(this.Description))
             {
@@ -262,7 +243,6 @@ namespace Mini
                         configList.Add(new ExampleConfigDesc((DemoConfigAttribute)foundAttrs[0], property));
                     }
                 }
-
             }
         }
         public Type Type { get; set; }
@@ -288,7 +268,6 @@ namespace Mini
     }
     class ExampleConfigValue
     {
-
         System.Reflection.FieldInfo fieldInfo;
         System.Reflection.PropertyInfo property;
         public ExampleConfigValue(System.Reflection.PropertyInfo property, System.Reflection.FieldInfo fieldInfo, string name)
@@ -297,16 +276,13 @@ namespace Mini
             this.fieldInfo = fieldInfo;
             this.Name = name;
             this.ValueAsInt32 = (int)fieldInfo.GetValue(null);
-
         }
         public string Name { get; set; }
         public int ValueAsInt32 { get; private set; }
 
         public void InvokeSet(object target)
         {
-
             this.property.GetSetMethod().Invoke(target, new object[] { ValueAsInt32 });
         }
     }
-
 }

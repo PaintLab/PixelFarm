@@ -16,19 +16,16 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
+
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
-
 namespace PixelFarm.Agg.UI
 {
-
- 
     /// <summary>
     /// incomplete widget, for test Agg Core Only
     /// </summary>
@@ -36,7 +33,8 @@ namespace PixelFarm.Agg.UI
     {
         // this should probably some type of dirty rects with the current invalid set stored.
 
- 
+        Transform.Affine parentToChildTransform = Affine.IdentityMatrix;
+        RectD localBounds;
         public virtual Vector2 OriginRelativeParent
         {
             get
@@ -47,8 +45,6 @@ namespace PixelFarm.Agg.UI
             }
         }
 
-
-        RectD localBounds;
         public virtual RectD LocalBounds
         {
             get
@@ -57,8 +53,6 @@ namespace PixelFarm.Agg.UI
             }
         }
         private IncompleteWidget parentBackingStore = null;
-
-
         public IncompleteWidget Parent
         {
             get
@@ -74,33 +68,28 @@ namespace PixelFarm.Agg.UI
 
         public virtual void Invalidate(RectD rectToInvalidate)
         {
-
             if (Parent != null)
             {
                 rectToInvalidate.Offset(OriginRelativeParent);
                 Parent.Invalidate(rectToInvalidate);
             }
-        } 
+        }
         public virtual void OnDraw(Graphics2D graphics2D)
         {
-
         }
         public virtual void OnMouseDown(MouseEventArgs mouseEvent)
         {
-
         }
 
         public virtual void OnMouseMove(MouseEventArgs mouseEvent)
         {
-
         }
         public virtual void OnMouseUp(MouseEventArgs mouseEvent)
         {
-
         }
 
 
-        Transform.Affine parentToChildTransform = Affine.IdentityMatrix;
+
         public Affine ParentToChildTransform
         {
             get
@@ -112,6 +101,5 @@ namespace PixelFarm.Agg.UI
                 parentToChildTransform = value;
             }
         }
-
     }
 }

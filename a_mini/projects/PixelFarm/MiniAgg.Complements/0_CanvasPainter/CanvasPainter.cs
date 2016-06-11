@@ -345,14 +345,14 @@ namespace PixelFarm.Agg
                 new PixelFarm.VectorMath.Vector2(startX, startY),
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
-                new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
+                new PixelFarm.VectorMath.Vector2(controlX2, controlY2));
 
             vxs = this.stroke.MakeVxs(vxs);
 
             sclineRas.Reset();
             sclineRas.AddPath(vxs);
             //sclineRasToBmp.DrawWithColor(sclineRas, sclinePack8, this.fillColor);
-            sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, this.strokeColor);
         }
         //---------------- 
         public VertexStore FlattenCurves(VertexStore srcVxs)
