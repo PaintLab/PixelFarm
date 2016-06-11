@@ -11,7 +11,7 @@
 
 // TODO: Find app that can build compressed dds cubemaps and verify that the import code works.
 
-using System; 
+using System;
 using OpenTK.Graphics.OpenGL;
 namespace Examples.TextureLoaders
 {
