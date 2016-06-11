@@ -21,15 +21,51 @@ namespace PixelFarm.Agg.Samples
         {
             this.StrokeColor = ColorRGBA.Transparent;
         }
-        public void AddPointLast(int x, int y)
+        public void AddPointAtLast(int x, int y)
         {
             contPoints.Add(new Vector2(x, y));
             isValidSmooth = false;
         }
-        public void AddPointFirst(int x, int y)
+        public void AddPointAtFirst(int x, int y)
         {
             contPoints.Insert(0, new Vector2(x, y));
             isValidSmooth = false;
+        }
+        public Vector2 GetStartPoint()
+        {
+            if (contPoints != null)
+            {
+                if (contPoints.Count > 0)
+                {
+                    return contPoints[0];
+                }
+                else
+                {
+                    return new Vector2();
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public Vector2 GetEndPoint()
+        {
+            if (contPoints != null)
+            {
+                if (contPoints.Count > 0)
+                {
+                    return contPoints[contPoints.Count - 1];
+                }
+                else
+                {
+                    return new Vector2();
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
         public ColorRGBA FillColor
         {
@@ -68,9 +104,7 @@ namespace PixelFarm.Agg.Samples
             {
                 return;
             }
-
-            var firstPoint = contPoints[0];
-            contPoints.Add(firstPoint); //close 
+            return;
             //--------
             //lets smooth it 
             //string str1 = dbugDumpPointsToString(contPoints);

@@ -77,8 +77,6 @@ namespace PixelFarm.Agg.Samples
             var newTopPoint = midPoint + topPoint;
             var newBottomPoint = midPoint + bottomPoint;
             //bottom point
-            currentBrushPath.AddPointFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
-            currentBrushPath.AddPointLast((int)newTopPoint.X, (int)newTopPoint.Y);
             latestMousePoint = new Point(x, y);
         }
         public override void MouseDown(int x, int y, bool isRightButton)
@@ -86,7 +84,6 @@ namespace PixelFarm.Agg.Samples
             latestMousePoint = new Point(x, y);
             currentBrushPath = new MyBrushPath();
             this.myBrushPathList.Add(currentBrushPath);
-            currentBrushPath.AddPointFirst(x, y);
             base.MouseDown(x, y, isRightButton);
         }
     }

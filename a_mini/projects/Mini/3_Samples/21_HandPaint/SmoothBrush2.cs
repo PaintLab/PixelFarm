@@ -76,6 +76,7 @@ namespace PixelFarm.Agg.Samples
                             break;
                         default:
                             {
+                                //TODO: review PixelCache here
                                 p.FillColor = brushPath.FillColor;
                                 p.Fill(brushPath.vxs);
                                 if (brushPath.StrokeColor.alpha > 0)
@@ -89,6 +90,7 @@ namespace PixelFarm.Agg.Samples
                 }
                 else
                 {
+                    //current drawing brush
                     var contPoints = brushPath.contPoints;
                     int pcount = contPoints.Count;
                     for (int i = 1; i < pcount; ++i)
@@ -117,11 +119,12 @@ namespace PixelFarm.Agg.Samples
             {
                 //1. close current path
 
-                currentBrushPath.MakeSmoothPath();
+
                 switch (currentBrushPath.BrushMode)
                 {
                     case SmoothBrushMode.CutBrush:
                         {
+                            currentBrushPath.MakeSmoothPath();
                             if (myBrushPathList.Count > 0)
                             {
                                 //1. remove 
@@ -147,6 +150,17 @@ namespace PixelFarm.Agg.Samples
                                     myBrushPathList.Add(newBrushPath);
                                 }
                             }
+                        }
+                        break;
+                    case SmoothBrushMode.SolidBrush:
+                        {
+                            //var firstPoint = contPoints[0];
+                            //contPoints.Add(firstPoint); //close 
+
+                            //create close point
+                            Vector2 startPoint = currentBrushPath.GetStartPoint();
+                            Vector2 endPoint = currentBrushPath.GetEndPoint();
+                            // currentBrushPath.MakeSmoothPath();
                         }
                         break;
                 }
@@ -179,16 +193,16 @@ namespace PixelFarm.Agg.Samples
                         Vector newPoint = new Vector(x, y);
                         //find distance
                         Vector oldPoint = new Vector(latestMousePoint.x, latestMousePoint.y);
-                        var delta = (newPoint - oldPoint) / 2; // 2,4 etc 
+                        Vector delta = (newPoint - oldPoint) / 2; // 2,4 etc 
                         //midpoint
-                        var midPoint = (newPoint + oldPoint) / 2;
+                        Vector midPoint = (newPoint + oldPoint) / 2;
                         delta = delta.NewLength(5);
                         delta.Rotate(90);
-                        var newTopPoint = midPoint + delta;
-                        var newBottomPoint = midPoint - delta;
+                        Vector newTopPoint = midPoint + delta;
+                        Vector newBottomPoint = midPoint - delta;
                         //bottom point
-                        currentBrushPath.AddPointFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
-                        currentBrushPath.AddPointLast((int)newTopPoint.X, (int)newTopPoint.Y);
+                        currentBrushPath.AddPointAtFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
+                        currentBrushPath.AddPointAtLast((int)newTopPoint.X, (int)newTopPoint.Y);
                         latestMousePoint = new Point(x, y);
                     }
                     break;
@@ -226,7 +240,7 @@ namespace PixelFarm.Agg.Samples
                         }
                         currentBrushPath.BrushMode = this.BrushMode;
                         this.myBrushPathList.Add(currentBrushPath);
-                        currentBrushPath.AddPointFirst(x, y);
+                        currentBrushPath.AddPointAtFirst(x, y);
                     }
                     break;
             }
