@@ -258,5 +258,11 @@ namespace Mini
                 }
             }
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FormGdiTest formGdiTest = new FormGdiTest();
+            formGdiTest.Show();
+        }
     }
 }

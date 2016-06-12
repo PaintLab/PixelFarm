@@ -235,7 +235,7 @@ namespace PixelFarm.Agg
                         LineTo(x, y);
                     }
                     break;
-                case VertexCmd.EndAndCloseFigure:
+                case VertexCmd.CloseAndEndFigure:
                     {
                         ClosePolygon();
                     }
