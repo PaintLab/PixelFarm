@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using PixelFarm.Agg;
 using PixelFarm.Agg.Image;
+using PixelFarm.Agg.VertexSource;
 using System.Text;
+using burningmime.curves; //for curve fit
+using ClipperLib;
+
 namespace Mini.WinForms
 {
     //for test only
@@ -29,6 +34,11 @@ namespace Mini.WinForms
         protected virtual void OnMouseDown(int x, int y) { }
         protected virtual void OnMouseMove(int x, int y) { }
         protected virtual void OnMouseUp(int x, int y) { }
+        public abstract bool IsDrawingTool { get; }
+
+        internal virtual void SetPreviousPixelControllerObjects(List<PixelToolController> prevPixTools) { }
+        internal abstract VertexStore GetVxs();
+        internal abstract void SetVxs(VertexStore vxs);
     }
 
     class MyDrawingBrushController : PixelToolController
@@ -37,9 +47,11 @@ namespace Mini.WinForms
         PixelFarm.Agg.Samples.MyBrushPath _myBrushPath;
         GraphicsPath _latestBrushPathCache = null;
         List<System.Drawing.Point> _points = new List<System.Drawing.Point>();
+
         public MyDrawingBrushController()
         {
         }
+        public override bool IsDrawingTool { get { return true; } }
         public override void Draw(Graphics g)
         {
             DrawLines(g);
@@ -111,6 +123,7 @@ namespace Mini.WinForms
                         case PixelFarm.Agg.VertexCmd.MoveTo:
                             prevMoveToX = prevX = x;
                             prevMoveToY = prevY = y;
+                            brush_path.StartFigure();
                             break;
                         case PixelFarm.Agg.VertexCmd.LineTo:
                             brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
@@ -121,6 +134,7 @@ namespace Mini.WinForms
                             brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                             prevMoveToX = prevX = x;
                             prevMoveToY = prevY = y;
+                            brush_path.CloseFigure();
                             break;
                         case PixelFarm.Agg.VertexCmd.EndFigure:
                             break;
@@ -129,7 +143,9 @@ namespace Mini.WinForms
                         case PixelFarm.Agg.VertexCmd.Stop:
                             i = vcount + 1;//exit from loop
                             break;
+
                         default:
+                            throw new NotSupportedException();
                             break;
                     }
                 }
@@ -187,5 +203,179 @@ namespace Mini.WinForms
             _myBrushPath.AddPointAtLast(x, y);
             _myBrushPath.MakeSmoothPath();
         }
+
+        internal override VertexStore GetVxs()
+        {
+            if (_myBrushPath != null)
+            {
+                return _myBrushPath.vxs;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        internal override void SetVxs(VertexStore vxs)
+        {
+            if (_myBrushPath != null)
+            {
+                //replace
+                _myBrushPath.vxs = vxs;
+            }
+            else
+            {
+
+            }
+            _latestBrushPathCache = null;
+        }
+
+
+    }
+
+
+    class MyCuttingBrushController : MyDrawingBrushController
+    {
+        List<PixelToolController> prevPixTools;
+
+        public override bool IsDrawingTool { get { return false; } }
+        internal override void SetPreviousPixelControllerObjects(List<PixelToolController> prevPixTools)
+        {
+            this.prevPixTools = prevPixTools;
+        }
+        internal override VertexStore GetVxs()
+        {
+            return base.GetVxs();
+        }
+        protected override void OnMouseUp(int x, int y)
+        {
+            base.OnMouseUp(x, y);
+
+            if (prevPixTools.Count > 0)
+            {
+                PixelToolController lastPath = prevPixTools[prevPixTools.Count - 1];
+                //do path clip***
+
+                PathWriter result = CombinePaths(
+                      new VertexStoreSnap(lastPath.GetVxs()),
+                      new VertexStoreSnap(this.GetVxs()),
+                      ClipType.ctDifference);
+                //replace the last one with newBrushPath  
+                lastPath.SetVxs(result.Vxs);
+            }
+        }
+        //for clipping ...
+
+        static PathWriter CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
+        {
+            List<List<IntPoint>> aPolys = CreatePolygons(a);
+            List<List<IntPoint>> bPolys = CreatePolygons(b);
+            Clipper clipper = new Clipper();
+            clipper.AddPaths(aPolys, PolyType.ptSubject, true);
+            clipper.AddPaths(bPolys, PolyType.ptClip, true);
+            List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
+            clipper.Execute(clipType, intersectedPolys); 
+            PathWriter output = new PathWriter();
+            foreach (List<IntPoint> polygon in intersectedPolys)
+            {
+                int j = polygon.Count;
+                if (j > 0)
+                {
+                    //first one
+                    IntPoint point = polygon[0];
+                    output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
+                    //next ...
+                    if (j > 1)
+                    {
+                        for (int i = 1; i < j; ++i)
+                        {
+                            point = polygon[i];
+                            output.LineTo(point.X / 1000.0, point.Y / 1000.0);
+                        }
+                    }
+                }
+                //bool first = true;
+                //foreach (IntPoint point in polygon)
+                //{
+                //    if (first)
+                //    {
+                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
+                //        first = false;
+                //    }
+                //    else
+                //    {
+                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
+                //    }
+                //} 
+                output.CloseFigure();
+            } 
+            output.Stop();
+            return output;
+        }
+        static List<List<IntPoint>> CreatePolygons(VertexStoreSnap a)
+        {
+            List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
+            List<IntPoint> currentPoly = null;
+            VertexData last = new VertexData();
+            VertexData first = new VertexData();
+            bool addedFirst = false;
+            var snapIter = a.GetVertexSnapIter();
+            double x, y;
+            VertexCmd cmd = snapIter.GetNextVertex(out x, out y);
+            do
+            {
+                if (cmd == VertexCmd.LineTo)
+                {
+                    if (!addedFirst)
+                    {
+                        currentPoly.Add(new IntPoint((long)(last.x * 1000), (long)(last.y * 1000)));
+                        addedFirst = true;
+                        first = last;
+                    }
+                    currentPoly.Add(new IntPoint((long)(x * 1000), (long)(y * 1000)));
+                    last = new VertexData(cmd, x, y);
+                }
+                else
+                {
+                    addedFirst = false;
+                    currentPoly = new List<IntPoint>();
+                    allPolys.Add(currentPoly);
+                    if (cmd == VertexCmd.MoveTo)
+                    {
+                        last = new VertexData(cmd, x, y);
+                    }
+                    else
+                    {
+                        last = first;
+                    }
+                }
+                cmd = snapIter.GetNextVertex(out x, out y);
+            } while (cmd != VertexCmd.Stop);
+            return allPolys;
+        }
+    }
+
+
+    abstract class PixelToolControllerFactory
+    {
+        public abstract PixelToolController CreateNewTool();
+
+    }
+    class PixelToolControllerFactory<T> : PixelToolControllerFactory
+        where T : PixelToolController, new()
+    {
+        public override PixelToolController CreateNewTool()
+        {
+            return new T();
+        }
+        public PixelToolControllerFactory(string name)
+        {
+            this.Name = name;
+        }
+        public string Name { get; private set; }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
+

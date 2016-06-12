@@ -28,13 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.cmbPixelTools = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
+            // 
+            // cmbPixelTools
+            // 
+            this.cmbPixelTools.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPixelTools.FormattingEnabled = true;
+            this.cmbPixelTools.Location = new System.Drawing.Point(13, 13);
+            this.cmbPixelTools.Name = "cmbPixelTools";
+            this.cmbPixelTools.Size = new System.Drawing.Size(168, 21);
+            this.cmbPixelTools.TabIndex = 0;
             // 
             // FormGdiTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 623);
+            this.Controls.Add(this.cmbPixelTools);
             this.Name = "FormGdiTest";
             this.Text = "FormGdiTest";
             this.ResumeLayout(false);
@@ -42,5 +53,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.ComboBox cmbPixelTools;
     }
 }
