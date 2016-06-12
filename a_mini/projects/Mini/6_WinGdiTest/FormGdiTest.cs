@@ -49,7 +49,6 @@ namespace Mini
             {
                 _currentTool.Draw(g);
             }
-
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -66,12 +65,11 @@ namespace Mini
             //create new tools
             _currentTool = selectedFactory.CreateNewTool();
             _currentTool.SetPreviousPixelControllerObjects(pixelToolControllers);
-
             if (_currentTool.IsDrawingTool)
             {
                 pixelToolControllers.Add(_currentTool);
             }
-             
+
 
             _currentTool.InvokeMouseDown(e.X, e.Y);
             UpdateOutput(_g);
