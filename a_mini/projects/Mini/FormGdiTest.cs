@@ -103,7 +103,7 @@ namespace Mini
                             prevX = x;
                             prevY = y;
                             break;
-                        case PixelFarm.Agg.VertexCmd.EndAndCloseFigure:
+                        case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
                             brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                             prevMoveToX = prevX = x;
                             prevMoveToY = prevY = y;
