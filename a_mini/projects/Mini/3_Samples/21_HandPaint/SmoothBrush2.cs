@@ -154,13 +154,9 @@ namespace PixelFarm.Agg.Samples
                         break;
                     case SmoothBrushMode.SolidBrush:
                         {
-                            //var firstPoint = contPoints[0];
-                            //contPoints.Add(firstPoint); //close 
-
                             //create close point
-                            Vector2 startPoint = currentBrushPath.GetStartPoint();
-                            Vector2 endPoint = currentBrushPath.GetEndPoint();
-                            // currentBrushPath.MakeSmoothPath();
+                            currentBrushPath.AddPointAtLast(x, y);
+                            currentBrushPath.MakeSmoothPath();
                         }
                         break;
                 }
