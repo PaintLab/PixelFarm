@@ -34,9 +34,9 @@ namespace PixelFarm.Agg.Samples
             p.FillColor = ColorRGBA.Black;
             foreach (var brushPath in this.myBrushPathList)
             {
-                if (brushPath.vxs != null)
+                if (brushPath.Vxs != null)
                 {
-                    p.Fill(brushPath.vxs);
+                    p.Fill(brushPath.Vxs);
                 }
                 else
                 {

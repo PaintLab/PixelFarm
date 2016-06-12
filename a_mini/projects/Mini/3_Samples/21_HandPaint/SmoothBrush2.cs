@@ -66,7 +66,7 @@ namespace PixelFarm.Agg.Samples
             for (int n = 0; n < j; ++n)
             {
                 var brushPath = myBrushPathList[n];
-                if (brushPath.vxs != null)
+                if (brushPath.Vxs != null)
                 {
                     switch (brushPath.BrushMode)
                     {
@@ -78,11 +78,11 @@ namespace PixelFarm.Agg.Samples
                             {
                                 //TODO: review PixelCache here
                                 p.FillColor = brushPath.FillColor;
-                                p.Fill(brushPath.vxs);
+                                p.Fill(brushPath.Vxs);
                                 if (brushPath.StrokeColor.alpha > 0)
                                 {
                                     p.StrokeColor = ColorRGBA.Red;
-                                    p.Draw(brushPath.vxs);
+                                    p.Draw(brushPath.Vxs);
                                 }
                             }
                             break;
@@ -137,8 +137,8 @@ namespace PixelFarm.Agg.Samples
                                     //do path clip***
 
                                     PathWriter result = CombinePaths(
-                                          new VertexStoreSnap(lastPath.vxs),
-                                          new VertexStoreSnap(currentBrushPath.vxs),
+                                          new VertexStoreSnap(lastPath.Vxs),
+                                          new VertexStoreSnap(currentBrushPath.Vxs),
                                           ClipType.ctDifference);
                                     //replace the last one with newBrushPath
                                     myBrushPathList.RemoveAt(myBrushPathList.Count - 1);
@@ -146,7 +146,7 @@ namespace PixelFarm.Agg.Samples
                                     newBrushPath.BrushMode = lastPath.BrushMode;
                                     newBrushPath.StrokeColor = lastPath.StrokeColor;
                                     newBrushPath.FillColor = lastPath.FillColor;
-                                    newBrushPath.vxs = result.Vxs;
+                                    newBrushPath.SetVxs(result.Vxs);
                                     myBrushPathList.Add(newBrushPath);
                                 }
                             }

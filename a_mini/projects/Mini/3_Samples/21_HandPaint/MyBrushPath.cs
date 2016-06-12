@@ -10,7 +10,8 @@ namespace PixelFarm.Agg.Samples
 {
     class MyBrushPath
     {
-        internal VertexStore vxs;
+        bool validBoundingRect;
+        VertexStore vxs;
         internal List<Vector2> contPoints = new List<Vector2>();
         RectD boundingRect = new RectD();
         bool isValidSmooth = false;
@@ -27,6 +28,12 @@ namespace PixelFarm.Agg.Samples
         {
             contPoints.Insert(0, new Vector2(x, y));
             isValidSmooth = false;
+        }
+        public VertexStore Vxs { get { return vxs; } }
+        public void SetVxs(VertexStore vxs)
+        {
+            this.vxs = vxs;
+            validBoundingRect = false;
         }
         public Vector2 GetStartPoint()
         {
@@ -151,7 +158,6 @@ namespace PixelFarm.Agg.Samples
             vxs.AddCloseFigure();
             PixelFarm.Agg.VertexSource.CurveFlattener cflat = new PixelFarm.Agg.VertexSource.CurveFlattener();
             vxs = cflat.MakeVxs(vxs);
-            PixelFarm.Agg.BoundingRect.GetBoundingRect(new Agg.VertexStoreSnap(vxs), ref boundingRect);
         }
         public void Close()
         {
@@ -205,10 +211,18 @@ namespace PixelFarm.Agg.Samples
             return stbuilder.ToString();
         }
 #endif
-
+        public void InvalidateBoundingRect()
+        {
+            validBoundingRect = false;
+        }
         public bool HitTest(int x, int y)
         {
             //check if point in polygon
+            if (!validBoundingRect)
+            {
+                PixelFarm.Agg.BoundingRect.GetBoundingRect(new Agg.VertexStoreSnap(vxs), ref boundingRect);
+                validBoundingRect = true;
+            }
             if (this.boundingRect.Contains(x, y))
             {
                 //fine tune

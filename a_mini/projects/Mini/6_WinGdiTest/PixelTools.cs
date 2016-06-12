@@ -38,6 +38,10 @@ namespace Mini.WinForms
         internal virtual void SetPreviousPixelControllerObjects(List<PixelToolController> prevPixTools) { }
         internal abstract VertexStore GetVxs();
         internal abstract void SetVxs(VertexStore vxs);
+        public virtual bool HitTest(int x, int y)
+        {
+            return false;
+        }
     }
 
     class MyDrawingBrushController : PixelToolController
@@ -66,14 +70,18 @@ namespace Mini.WinForms
         {
             if (_latestBrushPathCache != null)
             {
-                g.FillPath(Brushes.Red, _latestBrushPathCache);
+                ColorRGBA brushColor = _myBrushPath.FillColor;
+                using (SolidBrush br = new SolidBrush(Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
+                {
+                    g.FillPath(br, _latestBrushPathCache);
+                }
                 return;
             }
 
-            if (_myBrushPath.vxs != null)
+            if (_myBrushPath.Vxs != null)
             {
                 //create new path 
-                PixelFarm.Agg.VertexStore vxs = _myBrushPath.vxs;
+                PixelFarm.Agg.VertexStore vxs = _myBrushPath.Vxs;
                 //render vertice in store
                 int vcount = vxs.Count;
                 double prevX = 0;
@@ -148,7 +156,11 @@ namespace Mini.WinForms
                 }
 
                 _latestBrushPathCache = brush_path;
-                g.FillPath(Brushes.Red, _latestBrushPathCache);
+                ColorRGBA brushColor = _myBrushPath.FillColor;
+                using (SolidBrush br = new SolidBrush(Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
+                {
+                    g.FillPath(br, _latestBrushPathCache);
+                }
             }
             else
             {
@@ -162,13 +174,17 @@ namespace Mini.WinForms
                 }
             }
         }
-
+        public override bool HitTest(int x, int y)
+        {
+            return _myBrushPath.HitTest(x, y);
+        }
         protected override void OnMouseDown(int x, int y)
         {
             _latestBrushPathCache = null;
             _latestMousePoint = new PixelFarm.Agg.Image.Point(x, y);
             _points.Clear();
             _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
+            _myBrushPath.FillColor = ColorRGBA.Red;
             _points.Add(new System.Drawing.Point(x, y));
             _myBrushPath.AddPointAtFirst(x, y);
         }
@@ -177,8 +193,7 @@ namespace Mini.WinForms
             _points.Add(new System.Drawing.Point(x, y));
             //dragging
             //---------
-            //find diff 
-
+            //find diff  
             Vector newPoint = new Vector(x, y);
             //find distance
             Vector oldPoint = new Vector(_latestMousePoint.x, _latestMousePoint.y);
@@ -205,7 +220,7 @@ namespace Mini.WinForms
         {
             if (_myBrushPath != null)
             {
-                return _myBrushPath.vxs;
+                return _myBrushPath.Vxs;
             }
             else
             {
@@ -217,13 +232,41 @@ namespace Mini.WinForms
             if (_myBrushPath != null)
             {
                 //replace
-                _myBrushPath.vxs = vxs;
+                _myBrushPath.SetVxs(vxs);
             }
             else
             {
                 _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
-                _myBrushPath.vxs = vxs;
+                _myBrushPath.SetVxs(vxs);
             }
+            _latestBrushPathCache = null;
+        }
+        public Color PathFillColor
+        {
+            get
+            {
+                ColorRGBA color = _myBrushPath.FillColor;
+                return Color.FromArgb(color.alpha, color.red, color.green, color.blue);
+            }
+            set
+            {
+                _myBrushPath.FillColor = new ColorRGBA(
+                    value.R,
+                    value.G,
+                    value.B,
+                    value.A
+                    );
+            }
+        }
+        public void Offset(int dx, int dy)
+        {
+            for (int i = _points.Count - 1; i >= 0; --i)
+            {
+                System.Drawing.Point p = _points[i];
+                p.Offset(dx, dy);
+                _points[i] = p;
+            }
+            _myBrushPath.MoveBy(dx, dy);
             _latestBrushPathCache = null;
         }
     }
@@ -269,12 +312,14 @@ namespace Mini.WinForms
                             break;
                         default:
                             {
-                                //we will replace all with new set***
+                                //we will replace all with new set***                                 
+                                Color fillColor = ((MyDrawingBrushController)prevPixTool).PathFillColor;
                                 prevPixTools.RemoveAt(n);
                                 for (int i = 0; i < count; ++i)
                                 {
                                     var subBrush = new MyDrawingBrushController();
                                     subBrush.SetVxs(resultList[i]);
+                                    subBrush.PathFillColor = fillColor;
                                     prevPixTools.Insert(n, subBrush);
                                 }
                             }
@@ -410,6 +455,75 @@ namespace Mini.WinForms
         }
     }
 
+    class MyShapePickupTool : PixelToolController
+    {
+        List<PixelToolController> prevPixTools;
+        MyDrawingBrushController _lastestSelectedController;
+        Color _latestSelectControllerFillColor;
+        int _latest_mouseX, _latest_mouseY;
+        public override bool IsDrawingTool { get { return false; } }
+        public override void Draw(Graphics g)
+        {
+        }
+        internal override void SetPreviousPixelControllerObjects(List<PixelToolController> prevPixTools)
+        {
+            this.prevPixTools = prevPixTools;
+        }
+        protected override void OnMouseUp(int x, int y)
+        {
+            base.OnMouseUp(x, y);
+        }
+        protected override void OnMouseMove(int x, int y)
+        {
+            if (this.IsMouseDown)
+            {
+                //drag ...
+                if (_lastestSelectedController != null)
+                {
+                    _lastestSelectedController.Offset(x - _latest_mouseX, y - _latest_mouseY);
+                }
+                _latest_mouseX = x;
+                _latest_mouseY = y;
+            }
+            base.OnMouseMove(x, y);
+        }
+        protected override void OnMouseDown(int x, int y)
+        {
+            _latest_mouseX = x;
+            _latest_mouseY = y;
+            if (_lastestSelectedController != null)
+            {
+                _lastestSelectedController.PathFillColor = _latestSelectControllerFillColor;
+            }
+
+            int j = this.prevPixTools.Count;
+            PixelToolController selectedShape = null;
+            for (int i = this.prevPixTools.Count - 1; i >= 0; --i)
+            {
+                PixelToolController p = prevPixTools[i];
+                if (p.HitTest(x, y))
+                {
+                    //found 
+                    //then check fill color
+                    _lastestSelectedController = (MyDrawingBrushController)p;
+                    _latestSelectControllerFillColor = _lastestSelectedController.PathFillColor;
+                    _lastestSelectedController.PathFillColor = Color.Blue;
+                    selectedShape = p;
+                    break;
+                }
+            }
+
+            base.OnMouseDown(x, y);
+        }
+        internal override VertexStore GetVxs()
+        {
+            return null;
+        }
+        internal override void SetVxs(VertexStore vxs)
+        {
+        }
+    }
+
 
     abstract class PixelToolControllerFactory
     {
@@ -418,14 +532,27 @@ namespace Mini.WinForms
     class PixelToolControllerFactory<T> : PixelToolControllerFactory
         where T : PixelToolController, new()
     {
+        T _lastestControl;
         public override PixelToolController CreateNewTool()
         {
-            return new T();
+            if (CreateOnce)
+            {
+                if (_lastestControl == default(T))
+                {
+                    _lastestControl = new T();
+                }
+                return _lastestControl;
+            }
+            else
+            {
+                return new T();
+            }
         }
         public PixelToolControllerFactory(string name)
         {
             this.Name = name;
         }
+        public bool CreateOnce { get; set; }
         public string Name { get; private set; }
         public override string ToString()
         {
