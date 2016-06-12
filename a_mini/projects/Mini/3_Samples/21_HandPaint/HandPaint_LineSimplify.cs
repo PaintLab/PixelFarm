@@ -31,7 +31,18 @@ namespace PixelFarm.Agg.Samples
             //  }
 
             testPoints.AddRange(
-             new Point[] { new Point(305, 397), new Point(305, 394), new Point(302, 387), new Point(301, 364), new Point(283, 335), new Point(270, 296), new Point(268, 215), new Point(206, 174), new Point(201, 163), new Point(200, 157), new Point(198, 154), new Point(198, 154), new Point(197, 154), new Point(195, 157), new Point(194, 163), new Point(190, 175), new Point(166, 252), new Point(225, 319), new Point(253, 354), new Point(274, 383), new Point(296, 392), new Point(301, 396), new Point(304, 398) }
+             new Point[] { new Point(305, 397), new Point(305, 394),
+                 new Point(302, 387), new Point(301, 364),
+                 new Point(283, 335), new Point(270, 296),
+                 new Point(268, 215), new Point(206, 174),
+                 new Point(201, 163), new Point(200, 157),
+                 new Point(198, 154), new Point(198, 154),
+                 new Point(197, 154), new Point(195, 157),
+                 new Point(194, 163), new Point(190, 175),
+                 new Point(166, 252), new Point(225, 319),
+                 new Point(253, 354), new Point(274, 383),
+                 new Point(296, 392), new Point(301, 396),
+                 new Point(304, 398) }
              );
             //new VECTOR(0,0),
             // new VECTOR(50,50),
@@ -68,22 +79,22 @@ namespace PixelFarm.Agg.Samples
                 DrawLineSet(p, contPoints);
             }
 
-            p.StrokeColor = ColorRGBA.Blue;
-            p.FillColor = ColorRGBA.Black;
-            int ccount = cubicCurves.Count;
-            for (int i = 0; i < ccount; ++i)
-            {
-                var cc = cubicCurves[i];
-                FillPoint(cc.p0, p);
-                FillPoint(cc.p1, p);
-                FillPoint(cc.p2, p);
-                FillPoint(cc.p3, p);
-                p.DrawBezierCurve(
-                   (float)cc.p0.x, (float)cc.p0.y,
-                   (float)cc.p3.x, (float)cc.p3.y,
-                   (float)cc.p1.x, (float)cc.p1.y,
-                   (float)cc.p2.x, (float)cc.p2.y);
-            }
+            //p.StrokeColor = ColorRGBA.Blue;
+            //p.FillColor = ColorRGBA.Black;
+            //int ccount = cubicCurves.Count;
+            //for (int i = 0; i < ccount; ++i)
+            //{
+            //    var cc = cubicCurves[i];
+            //    FillPoint(cc.p0, p);
+            //    FillPoint(cc.p1, p);
+            //    FillPoint(cc.p2, p);
+            //    FillPoint(cc.p3, p);
+            //    p.DrawBezierCurve(
+            //       (float)cc.p0.x, (float)cc.p0.y,
+            //       (float)cc.p3.x, (float)cc.p3.y,
+            //       (float)cc.p1.x, (float)cc.p1.y,
+            //       (float)cc.p2.x, (float)cc.p2.y);
+            //}
         }
         static void FillPoint(Vector2 v, CanvasPainter p)
         {
