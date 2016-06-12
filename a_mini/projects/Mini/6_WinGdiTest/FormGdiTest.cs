@@ -29,6 +29,7 @@ namespace Mini
              {
                 new PixelToolControllerFactory<MyDrawingBrushController>("DrawingBrush"),
                 new PixelToolControllerFactory<MyCuttingBrushController>("CuttingBrush"),
+                new PixelToolControllerFactory<MyShapePickupTool>("ShapePickupTool") {CreateOnce= true },
              };
             this.cmbPixelTools.Items.AddRange(tools);
             cmbPixelTools.SelectedIndex = 0;
