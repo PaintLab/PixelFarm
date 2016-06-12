@@ -8,7 +8,6 @@ using PixelFarm.Agg.VertexSource;
 using System.Text;
 using burningmime.curves; //for curve fit
 using ClipperLib;
-
 namespace Mini.WinForms
 {
     //for test only
@@ -47,7 +46,6 @@ namespace Mini.WinForms
         PixelFarm.Agg.Samples.MyBrushPath _myBrushPath;
         GraphicsPath _latestBrushPathCache = null;
         List<System.Drawing.Point> _points = new List<System.Drawing.Point>();
-
         public MyDrawingBrushController()
         {
         }
@@ -143,7 +141,6 @@ namespace Mini.WinForms
                         case PixelFarm.Agg.VertexCmd.Stop:
                             i = vcount + 1;//exit from loop
                             break;
-
                         default:
                             throw new NotSupportedException();
                             break;
@@ -229,15 +226,12 @@ namespace Mini.WinForms
             }
             _latestBrushPathCache = null;
         }
-
-
     }
 
 
     class MyCuttingBrushController : MyDrawingBrushController
     {
         List<PixelToolController> prevPixTools;
-
         public override bool IsDrawingTool { get { return false; } }
         internal override void SetPreviousPixelControllerObjects(List<PixelToolController> prevPixTools)
         {
@@ -250,10 +244,8 @@ namespace Mini.WinForms
         protected override void OnMouseUp(int x, int y)
         {
             base.OnMouseUp(x, y);
-
             if (prevPixTools.Count > 0)
             {
-
                 int prevPixToolCount = prevPixTools.Count;
                 for (int n = prevPixToolCount - 1; n >= 0; --n)
                 {
@@ -265,7 +257,6 @@ namespace Mini.WinForms
                          new VertexStoreSnap(this.GetVxs()),
                          ClipType.ctDifference,
                          true);
-
                     int count;
                     switch (count = resultList.Count)
                     {
@@ -289,14 +280,13 @@ namespace Mini.WinForms
                             }
                             break;
                     }
-                } 
+                }
             }
         }
         //for clipping ...
 
         static List<VertexStore> CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType, bool separateIntoSmallSubPaths)
         {
-
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
             Clipper clipper = new Clipper();
@@ -304,10 +294,8 @@ namespace Mini.WinForms
             clipper.AddPaths(bPolys, PolyType.ptClip, true);
             List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
             clipper.Execute(clipType, intersectedPolys);
-
             List<VertexStore> resultList = new List<VertexStore>();
             PathWriter output = new PathWriter();
-
             if (separateIntoSmallSubPaths)
             {
                 foreach (List<IntPoint> polygon in intersectedPolys)
@@ -426,7 +414,6 @@ namespace Mini.WinForms
     abstract class PixelToolControllerFactory
     {
         public abstract PixelToolController CreateNewTool();
-
     }
     class PixelToolControllerFactory<T> : PixelToolControllerFactory
         where T : PixelToolController, new()
