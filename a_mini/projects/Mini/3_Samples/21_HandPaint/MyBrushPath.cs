@@ -104,7 +104,7 @@ namespace PixelFarm.Agg.Samples
             {
                 return;
             }
-            return;
+            //return;
             //--------
             //lets smooth it 
             //string str1 = dbugDumpPointsToString(contPoints);
