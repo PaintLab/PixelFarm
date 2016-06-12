@@ -74,6 +74,7 @@
     <Compile Include="3_Samples\21_HandPaint\HandPaint_LineSimplify.cs" />
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
+    <Compile Include="6_WinGdiTest\PixelTools.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,10 +87,10 @@
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
     <Compile Include="1_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
-    <Compile Include="FormGdiTest.cs">
+    <Compile Include="6_WinGdiTest\FormGdiTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGdiTest.Designer.cs">
+    <Compile Include="6_WinGdiTest\FormGdiTest.Designer.cs">
       <DependentUpon>FormGdiTest.cs</DependentUpon>
     </Compile>
     <Compile Include="FormTestBed1.cs">
@@ -114,7 +115,7 @@
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormGdiTest.resx">
+    <EmbeddedResource Include="6_WinGdiTest\FormGdiTest.resx">
       <DependentUpon>FormGdiTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormTestBed1.resx">

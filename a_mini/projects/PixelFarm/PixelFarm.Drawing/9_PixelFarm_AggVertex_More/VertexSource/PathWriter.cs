@@ -89,7 +89,11 @@ namespace PixelFarm.Agg.VertexSource
             latestSVGPathCmd = SvgPathCommand.MoveTo;
             figureCount = 0;
         }
-
+        public void ClearAndStartNewVxs()
+        {
+            myvxs = new VertexStore();
+            Clear();
+        }
         //-------------------------------------------------------------------
         public double LastMoveX { get { return this.lastMoveX; } }
         public double LastMoveY { get { return this.lastMoveY; } }
