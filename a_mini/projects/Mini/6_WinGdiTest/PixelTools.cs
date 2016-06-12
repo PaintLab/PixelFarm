@@ -224,7 +224,8 @@ namespace Mini.WinForms
             }
             else
             {
-
+                _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
+                _myBrushPath.vxs = vxs;
             }
             _latestBrushPathCache = null;
         }
@@ -252,64 +253,131 @@ namespace Mini.WinForms
 
             if (prevPixTools.Count > 0)
             {
-                PixelToolController lastPath = prevPixTools[prevPixTools.Count - 1];
-                //do path clip***
 
-                PathWriter result = CombinePaths(
-                      new VertexStoreSnap(lastPath.GetVxs()),
-                      new VertexStoreSnap(this.GetVxs()),
-                      ClipType.ctDifference);
-                //replace the last one with newBrushPath  
-                lastPath.SetVxs(result.Vxs);
+                int prevPixToolCount = prevPixTools.Count;
+                for (int n = prevPixToolCount - 1; n >= 0; --n)
+                {
+                    PixelToolController prevPixTool = prevPixTools[n];
+                    //do path clip***
+
+                    List<VertexStore> resultList = CombinePaths(
+                         new VertexStoreSnap(prevPixTool.GetVxs()),
+                         new VertexStoreSnap(this.GetVxs()),
+                         ClipType.ctDifference,
+                         true);
+
+                    int count;
+                    switch (count = resultList.Count)
+                    {
+                        case 1:
+                            {   //replace the last one with newBrushPath   
+                                prevPixTool.SetVxs(resultList[0]);
+                            }
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            {
+                                //we will replace all with new set***
+                                prevPixTools.RemoveAt(n);
+                                for (int i = 0; i < count; ++i)
+                                {
+                                    var subBrush = new MyDrawingBrushController();
+                                    subBrush.SetVxs(resultList[i]);
+                                    prevPixTools.Insert(n, subBrush);
+                                }
+                            }
+                            break;
+                    }
+                } 
             }
         }
         //for clipping ...
 
-        static PathWriter CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
+        static List<VertexStore> CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType, bool separateIntoSmallSubPaths)
         {
+
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
             Clipper clipper = new Clipper();
             clipper.AddPaths(aPolys, PolyType.ptSubject, true);
             clipper.AddPaths(bPolys, PolyType.ptClip, true);
             List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
-            clipper.Execute(clipType, intersectedPolys); 
+            clipper.Execute(clipType, intersectedPolys);
+
+            List<VertexStore> resultList = new List<VertexStore>();
             PathWriter output = new PathWriter();
-            foreach (List<IntPoint> polygon in intersectedPolys)
+
+            if (separateIntoSmallSubPaths)
             {
-                int j = polygon.Count;
-                if (j > 0)
+                foreach (List<IntPoint> polygon in intersectedPolys)
                 {
-                    //first one
-                    IntPoint point = polygon[0];
-                    output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
-                    //next ...
-                    if (j > 1)
+                    int j = polygon.Count;
+                    if (j > 0)
                     {
-                        for (int i = 1; i < j; ++i)
+                        //first one
+                        IntPoint point = polygon[0];
+                        output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
+                        //next others ...
+                        if (j > 1)
                         {
-                            point = polygon[i];
-                            output.LineTo(point.X / 1000.0, point.Y / 1000.0);
+                            for (int i = 1; i < j; ++i)
+                            {
+                                point = polygon[i];
+                                output.LineTo(point.X / 1000.0, point.Y / 1000.0);
+                            }
                         }
+
+                        output.CloseFigure();
+                        resultList.Add(output.Vxs);
+                        //---
+                        //clear 
+                        output.ClearAndStartNewVxs();
                     }
                 }
-                //bool first = true;
-                //foreach (IntPoint point in polygon)
-                //{
-                //    if (first)
-                //    {
-                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
-                //        first = false;
-                //    }
-                //    else
-                //    {
-                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
-                //    }
-                //} 
-                output.CloseFigure();
-            } 
-            output.Stop();
-            return output;
+            }
+            else
+            {
+                foreach (List<IntPoint> polygon in intersectedPolys)
+                {
+                    int j = polygon.Count;
+                    if (j > 0)
+                    {
+                        //first one
+                        IntPoint point = polygon[0];
+                        output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
+                        //next others ...
+                        if (j > 1)
+                        {
+                            for (int i = 1; i < j; ++i)
+                            {
+                                point = polygon[i];
+                                output.LineTo(point.X / 1000.0, point.Y / 1000.0);
+                            }
+                        }
+                        output.CloseFigure();
+                    }
+
+                    //bool first = true;
+                    //foreach (IntPoint point in polygon)
+                    //{
+                    //    if (first)
+                    //    {
+                    //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
+                    //        first = false;
+                    //    }
+                    //    else
+                    //    {
+                    //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
+                    //    }
+                    //} 
+                }
+
+                output.Stop();
+                resultList.Add(output.Vxs);
+            }
+
+            return resultList;
         }
         static List<List<IntPoint>> CreatePolygons(VertexStoreSnap a)
         {
