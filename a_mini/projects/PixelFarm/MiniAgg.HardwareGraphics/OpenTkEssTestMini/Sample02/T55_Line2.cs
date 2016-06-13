@@ -35,15 +35,16 @@ namespace OpenTkEssTest
             uniform int u_useSolidColor;              
             uniform float u_linewidth;
 
-            varying vec4 v_color;
-            varying vec3 v_distance;
+            varying vec4 v_color; 
+            varying float v_distance;
+
             void main()
             {   
                 vec4 delta = vec4(a_normal * u_linewidth, 0,1); 
                 vec4 pos = vec4(a_position[0],a_position[1],0,0) + delta; 
 
-                gl_Position = u_mvpMatrix* pos;
-                v_distance= a_position;
+                gl_Position = u_mvpMatrix* pos; 
+                v_distance= a_position[2];
 
                 if(u_useSolidColor !=0)
                 {
@@ -58,11 +59,11 @@ namespace OpenTkEssTest
             //fragment source
             string fs = @"
                 precision mediump float;
-                varying vec4 v_color; 
-                varying vec3 v_distance;
+                varying vec4 v_color;  
+                varying float v_distance;
                 void main()
                 {
-                    float d0= v_distance[2];
+                    float d0= v_distance;
                     float p0= 0.1;
                     float p1= 1.0-p0;
                     float factor= 1.0 /p0;
