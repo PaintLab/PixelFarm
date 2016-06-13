@@ -13,7 +13,6 @@ namespace OpenTkEssTest
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_normal;
         ShaderVtxAttrib a_color;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
@@ -22,12 +21,8 @@ namespace OpenTkEssTest
         MyMat4 orthoView;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-            //----------------
-            //vertex shader source
-            string vs = @"        
-           
-            attribute vec3 a_position;
-            attribute vec2 a_normal;
+            string vs = @"                   
+            attribute vec4 a_position; 
             attribute vec4 a_color;            
 
             uniform mat4 u_mvpMatrix;
@@ -40,11 +35,22 @@ namespace OpenTkEssTest
 
             void main()
             {   
-                vec4 delta = vec4(a_normal * u_linewidth, 0,1); 
-                vec4 pos = vec4(a_position[0],a_position[1],0,0) + delta; 
-
-                gl_Position = u_mvpMatrix* pos; 
+                
+                float rad = a_position[3];
                 v_distance= a_position[2];
+
+                float n_x = sin(rad); 
+                float n_y = cos(rad);  
+
+                vec4 delta;
+                if(v_distance <1.0){                                         
+                    delta = vec4(-n_x * u_linewidth,n_y * u_linewidth,0,0);                       
+                }else{                      
+                    delta = vec4(n_x * u_linewidth,-n_y * u_linewidth,0,0);
+                }
+                
+                vec4 pos = vec4(a_position[0],a_position[1],0,1) + delta;                 
+                gl_Position = u_mvpMatrix* pos;                
 
                 if(u_useSolidColor !=0)
                 {
@@ -62,15 +68,16 @@ namespace OpenTkEssTest
                 varying vec4 v_color;  
                 varying float v_distance;
                 void main()
-                {   
+                {
+                    float d0= v_distance;
                     float p0= 0.1;
                     float p1= 1.0-p0;
-                    float factor= 1.0 /p0; 
-                    
-                    if(v_distance < p0){                        
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *(v_distance * factor));
-                    }else if(v_distance> p1){                         
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-v_distance)* factor));
+                    float factor= 1.0 /p0;
+            
+                    if(d0 < p0){                        
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *(d0 * factor));
+                    }else if(d0> p1){                         
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-d0)* factor));
                     }
                     else{
                         gl_FragColor =v_color;
@@ -84,7 +91,6 @@ namespace OpenTkEssTest
 
 
             a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_normal = shaderProgram.GetVtxAttrib("a_normal");
             a_color = shaderProgram.GetVtxAttrib("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
@@ -118,6 +124,7 @@ namespace OpenTkEssTest
             //---------------------------------------------------------  
             //DrawLines(50, 0, 50, 150);
             DrawLines(50, 50, 300, 200);
+            //DrawLines(300, 200, 100, 150);
             //--------------------------------------------------------- 
             miniGLControl.SwapBuffers();
         }
@@ -126,31 +133,21 @@ namespace OpenTkEssTest
             //find normal
             float dx = x2 - x1;
             float dy = y2 - y1;
-            Vector2 n1 = new Vector2(-dy, dx);
-            Vector2 n2 = new Vector2(dy, -dx);
-            n1.Normalize();
-            n2.Normalize();
+            float rad1 = (float)Math.Atan2(
+                   y2 - y1,  //dy
+                   x2 - x1); //dx
             float[] vtxs = new float[] {
-                x1, y1,0,
-                x1, y1,1,
-                x2, y2,1,
+                x1, y1,0,rad1,
+                x1, y1,1,rad1,
+                x2, y2,1,rad1,
                 //-------
-                x2,y2,1,
-                x2,y2,0,
-                x1,y1,0,
-            };
-            float[] normals = new float[] { n1.X,n1.Y,
-               n2.X,n2.Y,
-               n2.X,n2.Y,
-               //---------
-               n2.X,n2.Y,
-               n1.X,n1.Y,
-               n1.X,n1.Y,
+                x2, y2,1,rad1,
+                x2, y2,0,rad1,
+                x1, y1,0,rad1
             };
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
-            a_position.LoadV3f(vtxs, 3, 0);
-            a_normal.LoadV2f(normals, 2, 0);
+            a_position.LoadV4f(vtxs, 4, 0);
             u_linewidth.SetValue(5f);
             GL.DrawArrays(BeginMode.Triangles, 0, 6);
         }
