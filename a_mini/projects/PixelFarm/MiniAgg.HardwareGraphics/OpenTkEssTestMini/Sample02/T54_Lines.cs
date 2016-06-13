@@ -17,7 +17,7 @@ using Mini;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "054")]
-    [Info("T54_Viewport")]
+    [Info("T54_Lines")]
     public class T54_Lines : PrebuiltGLControlDemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
@@ -104,7 +104,7 @@ namespace OpenTkEssTest
             u_matrix.SetData(orthoView.data);
             //---------------------------------------------------------  
 
-            DrawLines(0, 0, 300, 300);
+            DrawLines(0, 0, 300, 150);
             //---------------------------------------------------------
 
             miniGLControl.SwapBuffers();
