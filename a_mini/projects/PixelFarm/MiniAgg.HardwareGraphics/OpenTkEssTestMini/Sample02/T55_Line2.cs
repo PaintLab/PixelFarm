@@ -143,7 +143,6 @@ namespace OpenTkEssTest
         }
         void DrawLines(float x1, float y1, float x2, float y2)
         {
-            //find normal
             float dx = x2 - x1;
             float dy = y2 - y1;
             float rad1 = (float)Math.Atan2(
@@ -152,17 +151,15 @@ namespace OpenTkEssTest
             float[] vtxs = new float[] {
                 x1, y1,0,rad1,
                 x1, y1,1,rad1,
-                x2, y2,1,rad1,
-                //-------
-                x2, y2,1,rad1,
                 x2, y2,0,rad1,
-                x1, y1,0,rad1
+                //-------
+                x2, y2,1,rad1
             };
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
             a_position.LoadV4f(vtxs, 4, 0);
             u_linewidth.SetValue(2.0f);
-            GL.DrawArrays(BeginMode.Triangles, 0, 6);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
     }
 }
