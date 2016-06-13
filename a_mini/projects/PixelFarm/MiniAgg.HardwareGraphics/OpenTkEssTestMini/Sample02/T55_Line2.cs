@@ -32,7 +32,8 @@ namespace OpenTkEssTest
 
             varying vec4 v_color; 
             varying float v_distance;
-
+            varying float p0;
+            
             void main()
             {   
                 
@@ -47,6 +48,17 @@ namespace OpenTkEssTest
                     delta = vec4(-n_x * u_linewidth,n_y * u_linewidth,0,0);                       
                 }else{                      
                     delta = vec4(n_x * u_linewidth,-n_y * u_linewidth,0,0);
+                }
+    
+                if(u_linewidth <= 0.5){
+                    p0 = 0.5;      
+                }else if(u_linewidth <=1.0){
+                    p0 = 0.45;  
+                }else if(u_linewidth>1.0 && u_linewidth<3.0){
+                    
+                    p0 = 0.25;  
+                }else{
+                    p0= 0.1;
                 }
                 
                 vec4 pos = vec4(a_position[0],a_position[1],0,1) + delta;                 
@@ -67,10 +79,10 @@ namespace OpenTkEssTest
                 precision mediump float;
                 varying vec4 v_color;  
                 varying float v_distance;
+                varying float p0;                
                 void main()
                 {
-                    float d0= v_distance;
-                    float p0= 0.1;
+                    float d0= v_distance; 
                     float p1= 1.0-p0;
                     float factor= 1.0 /p0;
             
@@ -124,7 +136,8 @@ namespace OpenTkEssTest
             //---------------------------------------------------------  
             //DrawLines(50, 0, 50, 150);
             DrawLines(50, 50, 300, 200);
-            //DrawLines(300, 200, 100, 150);
+            DrawLines(300, 200, 100, 150);
+            DrawLines(100, 150, 110, 100);
             //--------------------------------------------------------- 
             miniGLControl.SwapBuffers();
         }
@@ -148,7 +161,7 @@ namespace OpenTkEssTest
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
             a_position.LoadV4f(vtxs, 4, 0);
-            u_linewidth.SetValue(5f);
+            u_linewidth.SetValue(2.0f);
             GL.DrawArrays(BeginMode.Triangles, 0, 6);
         }
     }
