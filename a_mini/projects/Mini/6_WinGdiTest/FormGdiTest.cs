@@ -41,6 +41,7 @@ namespace Mini
                 new PixelToolControllerFactory<MyDrawingBrushController>("DrawingBrush"),
                 new PixelToolControllerFactory<MyCuttingBrushController>("CuttingBrush"),
                 new PixelToolControllerFactory<MyShapePickupTool>("ShapePickupTool") {CreateOnce= true },
+                new PixelToolControllerFactory<MyLionSpriteTool>("Lion"){CreateOnce= true }
              };
             this.cmbPixelTools.Items.AddRange(tools);
             cmbPixelTools.SelectedIndex = 0;
@@ -50,8 +51,7 @@ namespace Mini
         {
             g.Clear(Color.White);
             //-------------------
-            //draw to output
-
+            //draw to output 
             int j = pixelToolControllers.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -88,7 +88,6 @@ namespace Mini
             //test
             //switch to high speed
             _g.SmoothingMode = SmoothingMode.HighSpeed;
-
             _currentTool.InvokeMouseDown(e.X, e.Y);
             UpdateOutput(_g);
             base.OnMouseDown(e);
@@ -105,8 +104,6 @@ namespace Mini
             //test
             //switch back to anti alias
             _g.SmoothingMode = SmoothingMode.AntiAlias;
-
-
             UpdateOutput(_g);
             base.OnMouseUp(e);
             _isMouseDown = false;
@@ -117,7 +114,6 @@ namespace Mini
             {
                 _currentTool.InvokeMouseMove(e.X, e.Y);
             }
-
 
             if (_isMouseDown)
             {
