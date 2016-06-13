@@ -1,18 +1,10 @@
-﻿#region Using Directives
+﻿//MIT 2016, WinterDev
+//we use concept from https://www.mapbox.com/blog/drawing-antialiased-lines/
 
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Threading;
-using System.Drawing;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.ES20;
-using Examples.Tutorial;
 using Mini;
-#endregion
-
-
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "055")]
@@ -71,17 +63,17 @@ namespace OpenTkEssTest
                 void main()
                 {
                     float d0= v_distance[2];
-                    float p0= 0.25;
+                    float p0= 0.1;
                     float p1= 1.0-p0;
                     float factor= 1.0 /p0;
             
-                    if(d0 < p0){
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], d0 * factor);
-                    }else if(d0> p1){
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], (1.0-d0)* factor);
+                    if(d0 < p0){                        
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *(d0 * factor));
+                    }else if(d0> p1){                         
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-d0)* factor));
                     }
                     else{
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2],1);
+                        gl_FragColor =v_color;
                     } 
                 }
             ";
@@ -159,11 +151,8 @@ namespace OpenTkEssTest
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
             a_position.LoadV3f(vtxs, 3, 0);
             a_normal.LoadV2f(normals, 2, 0);
-            u_linewidth.SetValue(20f);
+            u_linewidth.SetValue(5f);
             GL.DrawArrays(BeginMode.Triangles, 0, 6);
         }
-        //void DrawImage(float x, float y)
-        //{
-        //}
     }
 }
