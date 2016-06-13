@@ -85,6 +85,9 @@ namespace Mini
                 pixelToolControllers.Add(_currentTool);
             }
 
+            //test
+            //switch to high speed
+            _g.SmoothingMode = SmoothingMode.HighSpeed;
 
             _currentTool.InvokeMouseDown(e.X, e.Y);
             UpdateOutput(_g);
@@ -99,6 +102,11 @@ namespace Mini
                 _currentTool = null;
             }
 
+            //test
+            //switch back to anti alias
+            _g.SmoothingMode = SmoothingMode.AntiAlias;
+
+
             UpdateOutput(_g);
             base.OnMouseUp(e);
             _isMouseDown = false;
@@ -109,6 +117,7 @@ namespace Mini
             {
                 _currentTool.InvokeMouseMove(e.X, e.Y);
             }
+
 
             if (_isMouseDown)
             {
