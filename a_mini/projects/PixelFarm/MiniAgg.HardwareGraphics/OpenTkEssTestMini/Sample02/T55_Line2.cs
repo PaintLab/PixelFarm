@@ -1,5 +1,4 @@
-﻿
-#region Using Directives
+﻿#region Using Directives
 
 using System;
 using System.Collections.Generic;
@@ -35,7 +34,7 @@ namespace OpenTkEssTest
             //vertex shader source
             string vs = @"        
            
-            attribute vec2 a_position;
+            attribute vec3 a_position;
             attribute vec2 a_normal;
             attribute vec4 a_color;            
 
@@ -45,13 +44,14 @@ namespace OpenTkEssTest
             uniform float u_linewidth;
 
             varying vec4 v_color;
-            varying vec2 v_distance;
+            varying vec3 v_distance;
             void main()
             {   
                 vec4 delta = vec4(a_normal * u_linewidth, 0,1); 
-                vec4 pos = vec4(a_position,0,1) + delta; 
+                vec4 pos = vec4(a_position[0],a_position[1],0,0) + delta; 
+
                 gl_Position = u_mvpMatrix* pos;
-                v_distance= a_normal;
+                v_distance= a_position;
 
                 if(u_useSolidColor !=0)
                 {
@@ -67,10 +67,22 @@ namespace OpenTkEssTest
             string fs = @"
                 precision mediump float;
                 varying vec4 v_color; 
-                varying vec2 v_distance;
+                varying vec3 v_distance;
                 void main()
                 {
-                    gl_FragColor =vec4(v_color[0],v_color[1],v_color[2],v_distance[0]) ;
+                    float d0= v_distance[2];
+                    float p0= 0.25;
+                    float p1= 1.0-p0;
+                    float factor= 1.0 /p0;
+            
+                    if(d0 < p0){
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], d0 * factor);
+                    }else if(d0> p1){
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], (1.0-d0)* factor);
+                    }
+                    else{
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2],1);
+                    } 
                 }
             ";
             if (!shaderProgram.Build(vs, fs))
@@ -86,7 +98,6 @@ namespace OpenTkEssTest
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
-
             //--------------------------------------------------------------------------------
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -127,15 +138,14 @@ namespace OpenTkEssTest
             Vector2 n2 = new Vector2(dy, -dx);
             n1.Normalize();
             n2.Normalize();
-
-
-            float[] vtxs = new float[] { x1, y1,
-                x1, y1,
-                x2, y2,
+            float[] vtxs = new float[] {
+                x1, y1,0,
+                x1, y1,1,
+                x2, y2,1,
                 //-------
-                x2,y2,
-                x2,y2,
-                x1,y1
+                x2,y2,1,
+                x2,y2,0,
+                x1,y1,0,
             };
             float[] normals = new float[] { n1.X,n1.Y,
                n2.X,n2.Y,
@@ -145,15 +155,12 @@ namespace OpenTkEssTest
                n1.X,n1.Y,
                n1.X,n1.Y,
             };
-
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
-            a_position.LoadV2f(vtxs, 2, 0);
+            a_position.LoadV3f(vtxs, 3, 0);
             a_normal.LoadV2f(normals, 2, 0);
             u_linewidth.SetValue(20f);
-
-            GL.DrawArrays(BeginMode.Triangles, 0,6);
-
+            GL.DrawArrays(BeginMode.Triangles, 0, 6);
         }
         //void DrawImage(float x, float y)
         //{
