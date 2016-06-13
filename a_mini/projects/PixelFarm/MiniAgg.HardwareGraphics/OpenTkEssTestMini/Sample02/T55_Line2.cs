@@ -135,13 +135,13 @@ namespace OpenTkEssTest
             u_matrix.SetData(orthoView.data);
             //---------------------------------------------------------  
             //DrawLines(50, 0, 50, 150);
-            DrawLines(50, 50, 300, 200);
-            DrawLines(300, 200, 100, 150);
-            DrawLines(100, 150, 110, 100);
+            DrawLine(50, 50, 300, 200);
+            DrawLine(300, 200, 100, 150);
+            DrawLine(100, 150, 110, 100);
             //--------------------------------------------------------- 
             miniGLControl.SwapBuffers();
         }
-        void DrawLines(float x1, float y1, float x2, float y2)
+        void DrawLine(float x1, float y1, float x2, float y2)
         {
             float dx = x2 - x1;
             float dy = y2 - y1;
