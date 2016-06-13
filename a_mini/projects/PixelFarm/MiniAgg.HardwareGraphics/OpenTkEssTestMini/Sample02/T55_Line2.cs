@@ -62,16 +62,15 @@ namespace OpenTkEssTest
                 varying vec4 v_color;  
                 varying float v_distance;
                 void main()
-                {
-                    float d0= v_distance;
+                {   
                     float p0= 0.1;
                     float p1= 1.0-p0;
-                    float factor= 1.0 /p0;
-            
-                    if(d0 < p0){                        
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *(d0 * factor));
-                    }else if(d0> p1){                         
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-d0)* factor));
+                    float factor= 1.0 /p0; 
+                    
+                    if(v_distance < p0){                        
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *(v_distance * factor));
+                    }else if(v_distance> p1){                         
+                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-v_distance)* factor));
                     }
                     else{
                         gl_FragColor =v_color;
