@@ -3,12 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 using Mini;
-using burningmime.curves; //for curve fit
 namespace PixelFarm.Agg.Samples
 {
     [Info(OrderCode = "22")]

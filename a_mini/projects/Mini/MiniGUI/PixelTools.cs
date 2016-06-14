@@ -4,10 +4,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using System.Text;
-using burningmime.curves; //for curve fit
-using ClipperLib;
 namespace Mini.WinForms
 {
     //for test only
@@ -80,82 +76,8 @@ namespace Mini.WinForms
 
             if (_myBrushPath.Vxs != null)
             {
-                //create new path 
-                PixelFarm.Agg.VertexStore vxs = _myBrushPath.Vxs;
-                //render vertice in store
-                int vcount = vxs.Count;
-                double prevX = 0;
-                double prevY = 0;
-                double prevMoveToX = 0;
-                double prevMoveToY = 0;
-                //for (int i = 0; i < vcount; ++i)
-                //{
-                //    double x, y;
-                //    PixelFarm.Agg.VertexCmd cmd = vxs.GetVertex(i, out x, out y);
-                //    switch (cmd)
-                //    {
-                //        case PixelFarm.Agg.VertexCmd.MoveTo:
-                //            prevMoveToX = prevX = x;
-                //            prevMoveToY = prevY = y;
-                //            break;
-                //        case PixelFarm.Agg.VertexCmd.LineTo:
-                //            g.DrawLine(Pens.Red, (float)prevX, (float)prevY, (float)x, (float)y);
-                //            prevX = x;
-                //            prevY = y;
-                //            break;
-                //        case PixelFarm.Agg.VertexCmd.EndAndCloseFigure:
-                //            g.DrawLine(Pens.Red, (float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
-                //            prevMoveToX = prevX = x;
-                //            prevMoveToY = prevY = y;
-                //            break;
-                //        case PixelFarm.Agg.VertexCmd.EndFigure:
-                //            break;
-                //        case PixelFarm.Agg.VertexCmd.HasMore:
-                //            break;
-                //        case PixelFarm.Agg.VertexCmd.Stop:
-                //            i = vcount + 1;//exit from loop
-                //            break;
-                //        default:
-                //            break;
-                //    }
-                //}
-                var brush_path = new GraphicsPath(FillMode.Winding);//*** winding for overlapped path
-                for (int i = 0; i < vcount; ++i)
-                {
-                    double x, y;
-                    PixelFarm.Agg.VertexCmd cmd = vxs.GetVertex(i, out x, out y);
-                    switch (cmd)
-                    {
-                        case PixelFarm.Agg.VertexCmd.MoveTo:
-                            prevMoveToX = prevX = x;
-                            prevMoveToY = prevY = y;
-                            brush_path.StartFigure();
-                            break;
-                        case PixelFarm.Agg.VertexCmd.LineTo:
-                            brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
-                            prevX = x;
-                            prevY = y;
-                            break;
-                        case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
-                            brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
-                            prevMoveToX = prevX = x;
-                            prevMoveToY = prevY = y;
-                            brush_path.CloseFigure();
-                            break;
-                        case PixelFarm.Agg.VertexCmd.EndFigure:
-                            break;
-                        case PixelFarm.Agg.VertexCmd.HasMore:
-                            break;
-                        case PixelFarm.Agg.VertexCmd.Stop:
-                            i = vcount + 1;//exit from loop
-                            break;
-                        default:
-                            throw new NotSupportedException();
-                            break;
-                    }
-                }
-
-                _latestBrushPathCache = brush_path;
+                //create new path  
+                _latestBrushPathCache = PixelFarm.Drawing.WinGdi.VxsHelper.CreateGraphicsPath(_myBrushPath.Vxs);
                 ColorRGBA brushColor = _myBrushPath.FillColor;
                 using (SolidBrush br = new SolidBrush(Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
                 {
@@ -293,12 +215,11 @@ namespace Mini.WinForms
                 for (int n = prevPixToolCount - 1; n >= 0; --n)
                 {
                     PixelToolController prevPixTool = prevPixTools[n];
-                    //do path clip***
-
-                    List<VertexStore> resultList = CombinePaths(
+                    //do path clip*** 
+                    List<VertexStore> resultList = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(
                          new VertexStoreSnap(prevPixTool.GetVxs()),
                          new VertexStoreSnap(this.GetVxs()),
-                         ClipType.ctDifference,
+                         PixelFarm.Agg.VertexSource.VxsClipperType.Difference,
                          true);
                     int count;
                     switch (count = resultList.Count)
@@ -312,146 +233,25 @@ namespace Mini.WinForms
                             break;
                         default:
                             {
-                                //we will replace all with new set***                                 
-                                Color fillColor = ((MyDrawingBrushController)prevPixTool).PathFillColor;
-                                prevPixTools.RemoveAt(n);
-                                for (int i = 0; i < count; ++i)
+                                //we will replace all with new set***            
+                                var brushPath = prevPixTool as MyDrawingBrushController;
+                                if (brushPath != null)
                                 {
-                                    var subBrush = new MyDrawingBrushController();
-                                    subBrush.SetVxs(resultList[i]);
-                                    subBrush.PathFillColor = fillColor;
-                                    prevPixTools.Insert(n, subBrush);
+                                    Color fillColor = brushPath.PathFillColor;
+                                    prevPixTools.RemoveAt(n);
+                                    for (int i = 0; i < count; ++i)
+                                    {
+                                        var subBrush = new MyDrawingBrushController();
+                                        subBrush.SetVxs(resultList[i]);
+                                        subBrush.PathFillColor = fillColor;
+                                        prevPixTools.Insert(n, subBrush);
+                                    }
                                 }
                             }
                             break;
                     }
                 }
             }
-        }
-        //for clipping ...
-
-        static List<VertexStore> CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType, bool separateIntoSmallSubPaths)
-        {
-            List<List<IntPoint>> aPolys = CreatePolygons(a);
-            List<List<IntPoint>> bPolys = CreatePolygons(b);
-            Clipper clipper = new Clipper();
-            clipper.AddPaths(aPolys, PolyType.ptSubject, true);
-            clipper.AddPaths(bPolys, PolyType.ptClip, true);
-            List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
-            clipper.Execute(clipType, intersectedPolys);
-            List<VertexStore> resultList = new List<VertexStore>();
-            PathWriter output = new PathWriter();
-            if (separateIntoSmallSubPaths)
-            {
-                foreach (List<IntPoint> polygon in intersectedPolys)
-                {
-                    int j = polygon.Count;
-                    if (j > 0)
-                    {
-                        //first one
-                        IntPoint point = polygon[0];
-                        output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
-                        //next others ...
-                        if (j > 1)
-                        {
-                            for (int i = 1; i < j; ++i)
-                            {
-                                point = polygon[i];
-                                output.LineTo(point.X / 1000.0, point.Y / 1000.0);
-                            }
-                        }
-
-                        output.CloseFigure();
-                        resultList.Add(output.Vxs);
-                        //---
-                        //clear 
-                        output.ClearAndStartNewVxs();
-                    }
-                }
-            }
-            else
-            {
-                foreach (List<IntPoint> polygon in intersectedPolys)
-                {
-                    int j = polygon.Count;
-                    if (j > 0)
-                    {
-                        //first one
-                        IntPoint point = polygon[0];
-                        output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
-                        //next others ...
-                        if (j > 1)
-                        {
-                            for (int i = 1; i < j; ++i)
-                            {
-                                point = polygon[i];
-                                output.LineTo(point.X / 1000.0, point.Y / 1000.0);
-                            }
-                        }
-                        output.CloseFigure();
-                    }
-
-                    //bool first = true;
-                    //foreach (IntPoint point in polygon)
-                    //{
-                    //    if (first)
-                    //    {
-                    //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
-                    //        first = false;
-                    //    }
-                    //    else
-                    //    {
-                    //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
-                    //    }
-                    //} 
-                }
-
-                output.Stop();
-                resultList.Add(output.Vxs);
-            }
-
-            return resultList;
-        }
-        static List<List<IntPoint>> CreatePolygons(VertexStoreSnap a)
-        {
-            List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
-            List<IntPoint> currentPoly = null;
-            VertexData last = new VertexData();
-            VertexData first = new VertexData();
-            bool addedFirst = false;
-            var snapIter = a.GetVertexSnapIter();
-            double x, y;
-            VertexCmd cmd = snapIter.GetNextVertex(out x, out y);
-            do
-            {
-                if (cmd == VertexCmd.LineTo)
-                {
-                    if (!addedFirst)
-                    {
-                        currentPoly.Add(new IntPoint((long)(last.x * 1000), (long)(last.y * 1000)));
-                        addedFirst = true;
-                        first = last;
-                    }
-                    currentPoly.Add(new IntPoint((long)(x * 1000), (long)(y * 1000)));
-                    last = new VertexData(cmd, x, y);
-                }
-                else
-                {
-                    addedFirst = false;
-                    currentPoly = new List<IntPoint>();
-                    allPolys.Add(currentPoly);
-                    if (cmd == VertexCmd.MoveTo)
-                    {
-                        last = new VertexData(cmd, x, y);
-                    }
-                    else
-                    {
-                        last = first;
-                    }
-                }
-                cmd = snapIter.GetNextVertex(out x, out y);
-            } while (cmd != VertexCmd.Stop);
-            return allPolys;
         }
     }
 

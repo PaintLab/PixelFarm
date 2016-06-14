@@ -14,6 +14,7 @@ namespace Mini
         List<PixelToolController> pixelToolControllers;
         PixelToolController _currentTool;
         bool _isMouseDown;
+        BufferedGraphics myBuffer;
         public FormGdiTest()
         {
             InitializeComponent();
@@ -21,7 +22,17 @@ namespace Mini
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            _g = this.CreateGraphics();
+            // This example assumes the existence of a form called Form1.
+            // Gets a reference to the current BufferedGraphicsContext
+            BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
+            // Creates a BufferedGraphics instance associated with Form1, and with 
+            // dimensions the same size as the drawing surface of Form1.
+            myBuffer = currentContext.Allocate(this.CreateGraphics(),
+               this.DisplayRectangle);
+            _g = myBuffer.Graphics;
+            //
+            //_g.SmoothingMode = SmoothingMode.AntiAlias;
+
             pixelToolControllers = new List<PixelToolController>();
             //create pixel tool controller name list 
 
@@ -30,16 +41,17 @@ namespace Mini
                 new PixelToolControllerFactory<MyDrawingBrushController>("DrawingBrush"),
                 new PixelToolControllerFactory<MyCuttingBrushController>("CuttingBrush"),
                 new PixelToolControllerFactory<MyShapePickupTool>("ShapePickupTool") {CreateOnce= true },
+                new PixelToolControllerFactory<MyLionSpriteTool>("Lion"){CreateOnce= true }
              };
             this.cmbPixelTools.Items.AddRange(tools);
             cmbPixelTools.SelectedIndex = 0;
+            UpdateOutput(_g);
         }
         void UpdateOutput(Graphics g)
         {
             g.Clear(Color.White);
             //-------------------
-            //draw to output
-
+            //draw to output 
             int j = pixelToolControllers.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -50,6 +62,8 @@ namespace Mini
             {
                 _currentTool.Draw(g);
             }
+
+            myBuffer.Render();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -71,7 +85,9 @@ namespace Mini
                 pixelToolControllers.Add(_currentTool);
             }
 
-
+            //test
+            //switch to high speed
+            _g.SmoothingMode = SmoothingMode.HighSpeed;
             _currentTool.InvokeMouseDown(e.X, e.Y);
             UpdateOutput(_g);
             base.OnMouseDown(e);
@@ -85,6 +101,9 @@ namespace Mini
                 _currentTool = null;
             }
 
+            //test
+            //switch back to anti alias
+            _g.SmoothingMode = SmoothingMode.AntiAlias;
             UpdateOutput(_g);
             base.OnMouseUp(e);
             _isMouseDown = false;

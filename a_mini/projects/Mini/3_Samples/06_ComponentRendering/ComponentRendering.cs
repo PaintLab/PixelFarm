@@ -2,11 +2,7 @@
 //MatterHackers
 
 using System;
-using System.IO;
 using PixelFarm.Agg.Image;
-using PixelFarm.Agg.UI;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 using Mini;
 namespace PixelFarm.Agg
 {

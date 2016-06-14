@@ -1,9 +1,5 @@
 ﻿using System;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
-using Mini;
 namespace PixelFarm.Agg
 {
     public class LionFillSprite : BasicSprite
@@ -68,8 +64,10 @@ namespace PixelFarm.Agg
                 }
             }
             //---------------------------------------------------------------------------------------------
-
-
+        }
+        public SpriteShape GetSpriteShape()
+        {
+            return lionShape;
         }
     }
 }

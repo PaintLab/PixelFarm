@@ -2,13 +2,10 @@
 //MatterHackers
 
 
-using System;
 using System.Diagnostics;
 using PixelFarm.Agg.UI;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 using PixelFarm.Agg.Fonts;
 using Mini;
 namespace PixelFarm.Agg.Sample_Blur2
