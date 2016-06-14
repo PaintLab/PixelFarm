@@ -39,99 +39,6 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
     [Info(OrderCode = "20")]
     public class PolygonClippingDemo : DemoBase
     {
-        static PathWriter CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
-        {
-            List<List<IntPoint>> aPolys = CreatePolygons(a);
-            List<List<IntPoint>> bPolys = CreatePolygons(b);
-            Clipper clipper = new Clipper();
-            clipper.AddPaths(aPolys, PolyType.ptSubject, true);
-            clipper.AddPaths(bPolys, PolyType.ptClip, true);
-            List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
-            clipper.Execute(clipType, intersectedPolys);
-            PathWriter output = new PathWriter();
-            foreach (List<IntPoint> polygon in intersectedPolys)
-            {
-                bool first = true;
-                int j = polygon.Count;
-                if (j > 0)
-                {
-                    //first one
-                    IntPoint point = polygon[0];
-                    output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
-                    //next ...
-                    if (j > 1)
-                    {
-                        for (int i = 1; i < j; ++i)
-                        {
-                            point = polygon[i];
-                            output.LineTo(point.X / 1000.0, point.Y / 1000.0);
-                        }
-                    }
-                }
-                //foreach (IntPoint point in polygon)
-                //{
-                //    if (first)
-                //    {
-                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
-                //        first = false;
-                //    }
-                //    else
-                //    {
-                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
-                //    }
-                //}
-
-                output.CloseFigure();
-            }
-
-
-            output.Stop();
-            return output;
-        }
-
-        static List<List<IntPoint>> CreatePolygons(VertexStoreSnap a)
-        {
-            List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
-            List<IntPoint> currentPoly = null;
-            VertexData last = new VertexData();
-            VertexData first = new VertexData();
-            bool addedFirst = false;
-            var snapIter = a.GetVertexSnapIter();
-            VertexCmd cmd;
-            double x, y;
-            cmd = snapIter.GetNextVertex(out x, out y);
-            do
-            {
-                if (cmd == VertexCmd.LineTo)
-                {
-                    if (!addedFirst)
-                    {
-                        currentPoly.Add(new IntPoint((long)(last.x * 1000), (long)(last.y * 1000)));
-                        addedFirst = true;
-                        first = last;
-                    }
-                    currentPoly.Add(new IntPoint((long)(x * 1000), (long)(y * 1000)));
-                    last = new VertexData(cmd, x, y);
-                }
-                else
-                {
-                    addedFirst = false;
-                    currentPoly = new List<IntPoint>();
-                    allPolys.Add(currentPoly);
-                    if (cmd == VertexCmd.MoveTo)
-                    {
-                        last = new VertexData(cmd, x, y);
-                    }
-                    else
-                    {
-                        last = first;
-                    }
-                }
-                cmd = snapIter.GetNextVertex(out x, out y);
-            } while (cmd != VertexCmd.Stop);
-            return allPolys;
-        }
-
         double m_x;
         double m_y;
         ColorRGBA BackgroundColor;
@@ -358,29 +265,32 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
         void CreateAndRenderCombined(Graphics2D graphics2D, VertexStoreSnap ps1, VertexStoreSnap ps2)
         {
-            PathWriter combined = null;
+            List<VertexStore> combined = null;
             switch (this.OpOption)
             {
+                default: throw new NotSupportedException();
+                case OperationOption.None:
+                    return;
                 case OperationOption.OR:
-                    combined = CombinePaths(ps1, ps2, ClipType.ctUnion);
+                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Union, false);
                     break;
                 case OperationOption.AND:
-                    combined = CombinePaths(ps1, ps2, ClipType.ctIntersection);
+                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.InterSect, false);
                     break;
                 case OperationOption.XOR:
-                    combined = CombinePaths(ps1, ps2, ClipType.ctXor);
+                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Xor, false);
                     break;
                 case OperationOption.A_B:
-                    combined = CombinePaths(ps1, ps2, ClipType.ctDifference);
+                    combined = VxsClipper.CombinePaths(ps1, ps2, VxsClipperType.Difference, false);
                     break;
                 case OperationOption.B_A:
-                    combined = CombinePaths(ps2, ps1, ClipType.ctDifference);
+                    combined = VxsClipper.CombinePaths(ps2, ps1, VxsClipperType.Difference, false);
                     break;
             }
 
             if (combined != null)
             {
-                graphics2D.Render(combined.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0.5f, 0.0f, 0f, 0.5f));
+                graphics2D.Render(new VertexStoreSnap(combined[0]), ColorRGBAf.MakeColorRGBA(0.5f, 0.0f, 0f, 0.5f));
             }
         }
         public override void MouseDrag(int x, int y)
