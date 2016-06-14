@@ -102,11 +102,11 @@ namespace PixelFarm.Agg.Sample_RoundRect
             get;
             set;
         }
-        public override void Draw(Graphics2D gx)
+        public override void Draw(CanvasPainter p)
         {
-            CanvasPainter painter = new CanvasPainter(gx);
             //-----------------------------------------------------------------
             //control
+            CanvasPainter painter = p;
             painter.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
             painter.FillColor = new ColorRGBA(127, 127, 127);
             painter.FillCircle(m_x[0], m_y[0], 3); //left-bottom control box
@@ -114,32 +114,34 @@ namespace PixelFarm.Agg.Sample_RoundRect
             //-----------------------------------------------------------------
 
             double d = this.SubPixelOffset;
-            var prevBlender = gx.PixelBlender;
-            //change gamma blender
-            gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
-            if (this.FillRoundRect)
-            {
-                painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
-                painter.FillRoundRectangle(
-                    m_x[0] + d,
-                    m_y[0] + d,
-                    m_x[1] + d,
-                    m_y[1] + d,
-                    this.Radius);
-            }
-            else
-            {
-                painter.StrokeColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
-                painter.DrawRoundRect(
-                    m_x[0] + d,
-                    m_y[0] + d,
-                    m_x[1] + d,
-                    m_y[1] + d,
-                    this.Radius);
-            }
+            throw new NotSupportedException();
+            //var prevBlender = gx.PixelBlender;
+            ////change gamma blender
+            //gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
+            //if (this.FillRoundRect)
+            //{
+            //    painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+            //    painter.FillRoundRectangle(
+            //        m_x[0] + d,
+            //        m_y[0] + d,
+            //        m_x[1] + d,
+            //        m_y[1] + d,
+            //        this.Radius);
+            //}
+            //else
+            //{
+            //    painter.StrokeColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+            //    painter.DrawRoundRect(
+            //        m_x[0] + d,
+            //        m_y[0] + d,
+            //        m_x[1] + d,
+            //        m_y[1] + d,
+            //        this.Radius);
+            //}
 
-            gx.PixelBlender = prevBlender;
+            //gx.PixelBlender = prevBlender;
         }
+
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             for (int i = 0; i < 2; i++)

@@ -8,6 +8,7 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Agg.Fonts;
 using Mini;
+using System;
 namespace PixelFarm.Agg.Sample_Blur2
 {
     [Info(OrderCode = "08")]
@@ -116,15 +117,11 @@ namespace PixelFarm.Agg.Sample_Blur2
                    x, y,
                    1));
         }
-        public override void Draw(Graphics2D graphics2D)
-        {
-            //DrawClassic(graphics2D);
-            DrawWithPainter(graphics2D);
-        }
-        void DrawWithPainter(Graphics2D graphics2D)
+
+        public override void Draw(CanvasPainter p)
         {
             //create painter
-            CanvasPainter painter = new CanvasPainter(graphics2D);
+            CanvasPainter painter = p;
             painter.SetClipBox(0, 0, Width, Height);
             painter.Clear(ColorRGBA.White);
             //-----------------------------------------------------------------------
@@ -149,7 +146,6 @@ namespace PixelFarm.Agg.Sample_Blur2
             // Calculate the bounding box and extend it by the blur radius 
 
             RectInt boundRect = BoundingRectInt.GetBoundingRect(s2);
-            var widgetImg = graphics2D.DestImage;
             int m_radius = this.BlurRadius;
             //expand bound rect
             boundRect.Left -= m_radius;
@@ -178,7 +174,7 @@ namespace PixelFarm.Agg.Sample_Blur2
                 // (bbox) is fully clipped.
                 //------------------ 
 
-                if (boundRect.Clip(new RectInt(0, 0, widgetImg.Width - 1, widgetImg.Height - 1)))
+                if (boundRect.Clip(new RectInt(0, 0, p.Width - 1, p.Height - 1)))
                 {
                     //check if intersect  
                     var prevClip = painter.ClipBox;
@@ -228,7 +224,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             painter.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
             //-------------------------------------------------------------
             //control
-            m_shadow_ctrl.OnDraw(graphics2D);
+            m_shadow_ctrl.OnDraw(p);
         }
     }
 }

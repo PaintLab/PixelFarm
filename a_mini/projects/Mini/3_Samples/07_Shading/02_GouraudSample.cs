@@ -55,7 +55,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void RenderGourand(Graphics2D gx)
+        public void RenderGourand(CanvasPainter p)
         {
             float alpha = this.AlphaValue;
             float brc = 1;
@@ -64,63 +64,60 @@ namespace PixelFarm.Agg.Sample_Gouraud
 #else
 
 #endif
-            var destImage = gx.DestImage;
-            //span_allocator span_alloc = new span_allocator();
+            ////var destImage = gx.DestImage;
+            ////span_allocator span_alloc = new span_allocator(); 
 
-            CanvasPainter painter = new CanvasPainter(gx);
-            SpanGenGouraudRGBA gouraudSpanGen = new SpanGenGouraudRGBA();
-            gx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
-            double d = this.DilationValue;
-            // Six triangles
-            double xc = (m_x[0] + m_x[1] + m_x[2]) / 3.0;
-            double yc = (m_y[0] + m_y[1] + m_y[2]) / 3.0;
-            double x1 = (m_x[1] + m_x[0]) / 2 - (xc - (m_x[1] + m_x[0]) / 2);
-            double y1 = (m_y[1] + m_y[0]) / 2 - (yc - (m_y[1] + m_y[0]) / 2);
-            double x2 = (m_x[2] + m_x[1]) / 2 - (xc - (m_x[2] + m_x[1]) / 2);
-            double y2 = (m_y[2] + m_y[1]) / 2 - (yc - (m_y[2] + m_y[1]) / 2);
-            double x3 = (m_x[0] + m_x[2]) / 2 - (xc - (m_x[0] + m_x[2]) / 2);
-            double y3 = (m_y[0] + m_y[2]) / 2 - (yc - (m_y[0] + m_y[2]) / 2);
-            gouraudSpanGen.SetColor(ColorRGBA.Make(1, 0, 0, alpha),
-                              ColorRGBA.Make(0, 1, 0, alpha),
-                              ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
-            gouraudSpanGen.SetColor(ColorRGBA.Make(0, 1, 0, alpha),
-                              ColorRGBA.Make(0, 0, 1, alpha),
-                              ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
-            gouraudSpanGen.SetColor(ColorRGBA.Make(0, 0, 1, alpha),
-                            ColorRGBA.Make(1, 0, 0, alpha),
-                            ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
-            brc = 1 - brc;
-            gouraudSpanGen.SetColor(ColorRGBA.Make(1, 0, 0, alpha),
-                              ColorRGBA.Make(0, 1, 0, alpha),
-                              ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
-            gouraudSpanGen.SetColor(ColorRGBA.Make(0, 1, 0, alpha),
-                           ColorRGBA.Make(0, 0, 1, alpha),
-                           ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
-            gouraudSpanGen.SetColor(ColorRGBA.Make(0, 0, 1, alpha),
-                            ColorRGBA.Make(1, 0, 0, alpha),
-                            ColorRGBA.Make(brc, brc, brc, alpha));
-            gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
-            painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
+            throw new NotSupportedException();
+            //CanvasPainter painter = p;
+            //SpanGenGouraudRGBA gouraudSpanGen = new SpanGenGouraudRGBA();
+            //gx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
+            //double d = this.DilationValue;
+            //// Six triangles
+            //double xc = (m_x[0] + m_x[1] + m_x[2]) / 3.0;
+            //double yc = (m_y[0] + m_y[1] + m_y[2]) / 3.0;
+            //double x1 = (m_x[1] + m_x[0]) / 2 - (xc - (m_x[1] + m_x[0]) / 2);
+            //double y1 = (m_y[1] + m_y[0]) / 2 - (yc - (m_y[1] + m_y[0]) / 2);
+            //double x2 = (m_x[2] + m_x[1]) / 2 - (xc - (m_x[2] + m_x[1]) / 2);
+            //double y2 = (m_y[2] + m_y[1]) / 2 - (yc - (m_y[2] + m_y[1]) / 2);
+            //double x3 = (m_x[0] + m_x[2]) / 2 - (xc - (m_x[0] + m_x[2]) / 2);
+            //double y3 = (m_y[0] + m_y[2]) / 2 - (yc - (m_y[0] + m_y[2]) / 2);
+            //gouraudSpanGen.SetColor(ColorRGBA.Make(1, 0, 0, alpha),
+            //                  ColorRGBA.Make(0, 1, 0, alpha),
+            //                  ColorRGBA.Make(brc, brc, brc, alpha));
+            //gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], xc, yc, d);
+            //painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
+            //gouraudSpanGen.SetColor(ColorRGBA.Make(0, 1, 0, alpha),
+            //                  ColorRGBA.Make(0, 0, 1, alpha),
+            //                  ColorRGBA.Make(brc, brc, brc, alpha));
+            //gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], xc, yc, d);
+            //painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
+            //gouraudSpanGen.SetColor(ColorRGBA.Make(0, 0, 1, alpha),
+            //                ColorRGBA.Make(1, 0, 0, alpha),
+            //                ColorRGBA.Make(brc, brc, brc, alpha));
+            //gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], xc, yc, d);
+            //painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
+            //brc = 1 - brc;
+            //gouraudSpanGen.SetColor(ColorRGBA.Make(1, 0, 0, alpha),
+            //                  ColorRGBA.Make(0, 1, 0, alpha),
+            //                  ColorRGBA.Make(brc, brc, brc, alpha));
+            //gouraudSpanGen.SetTriangle(m_x[0], m_y[0], m_x[1], m_y[1], x1, y1, d);
+            //painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
+            //gouraudSpanGen.SetColor(ColorRGBA.Make(0, 1, 0, alpha),
+            //               ColorRGBA.Make(0, 0, 1, alpha),
+            //               ColorRGBA.Make(brc, brc, brc, alpha));
+            //gouraudSpanGen.SetTriangle(m_x[1], m_y[1], m_x[2], m_y[2], x2, y2, d);
+            //painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
+            //gouraudSpanGen.SetColor(ColorRGBA.Make(0, 0, 1, alpha),
+            //                ColorRGBA.Make(1, 0, 0, alpha),
+            //                ColorRGBA.Make(brc, brc, brc, alpha));
+            //gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
+            //painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
-            OnDraw(g);
-        }
-        public void OnDraw(Graphics2D graphics2D)
-        {
-            graphics2D.Clear(ColorRGBA.White);
+            p.Clear(ColorRGBA.White);
 #if true
-            RenderGourand(graphics2D);
+            RenderGourand(p);
 #else
             agg.span_allocator span_alloc = new span_allocator();
             span_gouraud_rgba span_gen = new span_gouraud_rgba(new rgba8(255, 0, 0, 255), new rgba8(0, 255, 0, 255), new rgba8(0, 0, 255, 255), 320, 220, 100, 100, 200, 100, 0);
@@ -128,16 +125,12 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ras.add_path(test_sg);
             renderer_scanlines.render_scanlines_aa(ras, sl, ren_base, span_alloc, span_gen);
             //renderer_scanlines.render_scanlines_aa_solid(ras, sl, ren_base, new rgba8(0, 0, 0, 255));
-#endif
-
-
-            graphics2D.ScanlineRasterizer.ResetGamma(new GammaNone());
+#endif 
+            //graphics2D.ScanlineRasterizer.ResetGamma(new GammaNone());***
             //m_dilation.Render(ras, sl, ren_base);
             //m_gamma.Render(ras, sl, ren_base);
             //m_alpha.Render(ras, sl, ren_base);
-
         }
-
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int i;

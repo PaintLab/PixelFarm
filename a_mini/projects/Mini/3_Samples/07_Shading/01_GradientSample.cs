@@ -16,13 +16,10 @@ namespace PixelFarm.Agg.Sample_Gradient
         public GradientDemo()
         {
         }
-        public override void Draw(Graphics2D g)
+
+        public override void Draw(CanvasPainter p)
         {
-            OnDraw(g);
-        }
-        public void OnDraw(Graphics2D graphics2D)
-        {
-            CanvasPainter painter = new CanvasPainter(graphics2D);
+            CanvasPainter painter = p;
             painter.FillColor = ColorRGBA.Blue;
             painter.FillRectangle(0, 70, 150, 120);
             //------------------------------------------- 
@@ -36,6 +33,7 @@ namespace PixelFarm.Agg.Sample_Gradient
             SimpleRect srect = new SimpleRect(0, 0, 150, 50);
             painter.Fill(srect.MakeVxs(), spanGenGradient);
         }
+
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
         }

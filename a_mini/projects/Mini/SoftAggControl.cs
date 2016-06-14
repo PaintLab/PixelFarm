@@ -18,6 +18,7 @@ namespace Mini
         Graphics2D gfx;
         BufferedGraphics myBuffer;
         System.Drawing.Graphics _g;
+        CanvasPainter painter;
         bool useGdiPlusOutput;
         public SoftAggControl()
         {
@@ -43,11 +44,13 @@ namespace Mini
                 _g = myBuffer.Graphics;
                 this.gfx = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g);
                 this.gfx.Clear(ColorRGBA.White);
+                painter = new CanvasPainter(gfx);
             }
             else
             {
                 this.gfx = bitmapBackBuffer.Initialize(width, height, 32);
                 this.gfx.Clear(ColorRGBA.White);
+                painter = new CanvasPainter(gfx);
             }
         }
         public void LoadExample(DemoBase exBase)
@@ -109,7 +112,7 @@ namespace Mini
             }
             if (!useGdiPlusOutput)
             {
-                exampleBase.Draw(gfx);
+                exampleBase.Draw(painter);
                 bitmapBackBuffer.UpdateToHardwareSurface(e.Graphics);
             }
             else
@@ -120,8 +123,7 @@ namespace Mini
         }
         void UpdateOutput()
         {
-            //--------------------------------
-            exampleBase.Draw(gfx);
+            exampleBase.Draw(painter);
             if (useGdiPlusOutput)
             {
                 myBuffer.Render();

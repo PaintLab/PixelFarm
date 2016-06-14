@@ -74,9 +74,10 @@ namespace PixelFarm.Agg.UI
                 Parent.Invalidate(rectToInvalidate);
             }
         }
-        public virtual void OnDraw(Graphics2D graphics2D)
-        {
-        }
+
+
+        public virtual void OnDraw(CanvasPainter p) { }
+
         public virtual void OnMouseDown(MouseEventArgs mouseEvent)
         {
         }

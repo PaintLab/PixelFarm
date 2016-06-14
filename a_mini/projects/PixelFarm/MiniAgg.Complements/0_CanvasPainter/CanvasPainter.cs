@@ -345,6 +345,17 @@ namespace PixelFarm.Agg
             return curveFlattener.MakeVxs(srcVxs);
         }
         //---------------- 
+        public int Width
+        {
+            get
+            {
+                return 800;
+            }
+        }
+        public int Height
+        {
+            get { return 600; }
+        }
 
     }
 }

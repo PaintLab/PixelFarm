@@ -23,11 +23,9 @@ namespace PixelFarm.Agg.SimplePainter
             font1 = NativeFontStore.LoadFont(fontfile, 72);
             font2 = NativeFontStore.LoadFont(fontfile, 10);
         }
-        public override void Draw(Graphics2D g)
-        {
-            //1.
-            // clear the image to white
-            CanvasPainter p = new CanvasPainter(g);
+        public override void Draw(CanvasPainter p)
+        { //1.
+            // clear the image to white 
             p.Clear(ColorRGBA.White);
             p.FillColor = new ColorRGBA(ColorRGBA.Blue, 80);
             //M414 -20q-163 0 -245 86t-82 236z

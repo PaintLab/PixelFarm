@@ -511,9 +511,11 @@ namespace PixelFarm.Agg.UI
             get { return m_color; }
             set { this.m_color = value; }
         }
-        public override void OnDraw(Graphics2D graphics2D)
+
+        public override void OnDraw(CanvasPainter p)
         {
-            graphics2D.Render(new VertexStoreSnap(this.MakeVxs()), LineColor);
+            p.FillColor = LineColor;
+            p.Fill(new VertexStoreSnap(this.MakeVxs()));
         }
     }
 }

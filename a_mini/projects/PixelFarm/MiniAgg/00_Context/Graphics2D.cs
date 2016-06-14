@@ -25,6 +25,7 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {
+
     public abstract class Graphics2D
     {
         protected ActualImage destActualImage;
@@ -102,16 +103,16 @@ namespace PixelFarm.Agg
             return new ImageGraphics2D(actualImage);
         }
 
-        public double RasterOffsetX
-        {
-            get { return this.sclineRas.AddVertexOffsetX; }
-            set { this.sclineRas.AddVertexOffsetX = value; }
-        }
-        public double RasterOffsetY
-        {
-            get { return this.sclineRas.AddVertexOffsetY; }
-            set { this.sclineRas.AddVertexOffsetY = value; }
-        }
+        //public double RasterOffsetX
+        //{
+        //    get { return this.sclineRas.AddVertexOffsetX; }
+        //    set { this.sclineRas.AddVertexOffsetX = value; }
+        //}
+        //public double RasterOffsetY
+        //{
+        //    get { return this.sclineRas.AddVertexOffsetY; }
+        //    set { this.sclineRas.AddVertexOffsetY = value; }
+        //}
         public abstract bool UseSubPixelRendering
         {
             get;

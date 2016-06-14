@@ -59,35 +59,32 @@ namespace PixelFarm.Agg.Sample_Perspective
             quadPolygonControl.AddYN(3, dy);
         }
         bool didInit = false;
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
-            OnDraw(g);
-        }
-        public void OnDraw(Graphics2D gx)
-        {
-            CanvasPainter painter = new CanvasPainter(gx);
-            IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
+            CanvasPainter painter = p;
             if (!didInit)
             {
                 didInit = true;
                 OnInitialize();
             }
 
-            ChildImage image;
-            if (backBuffer.BitDepth == 32)
-            {
-                image = new ChildImage(backBuffer, new PixelBlenderBGRA());
-            }
-            else
-            {
-                if (backBuffer.BitDepth != 24)
-                {
-                    throw new System.NotSupportedException();
-                }
-                image = new ChildImage(backBuffer, new PixelBlenderBGR());
-            }
 
+            //-----------------------------------
             painter.Clear(ColorRGBA.White);
+            //IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
+            //ChildImage image;
+            //if (backBuffer.BitDepth == 32)
+            //{
+            //    image = new ChildImage(backBuffer, new PixelBlenderBGRA());
+            //}
+            //else
+            //{
+            //    if (backBuffer.BitDepth != 24)
+            //    {
+            //        throw new System.NotSupportedException();
+            //    }
+            //    image = new ChildImage(backBuffer, new PixelBlenderBGR());
+            //}
             //ClipProxyImage dest = new ClipProxyImage(image);
             //gx.Clear(ColorRGBA.White);
             //gx.SetClippingRect(new RectInt(0, 0, Width, Height)); 
@@ -162,6 +159,10 @@ namespace PixelFarm.Agg.Sample_Perspective
             painter.FillColor = ColorRGBA.Make(0f, 0.3f, 0.5f, 0.6f);
             painter.Fill(quadPolygonControl.MakeVxs());
         }
+        //public void OnDraw(Graphics2D gx)
+        //{
+
+        //}
         public override void MouseDown(int x, int y, bool isRightButton)
         {
             var mouseEvent = new UI.MouseEventArgs(UI.MouseButtons.Left, 1, x, y, 0);

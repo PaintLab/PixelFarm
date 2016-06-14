@@ -28,80 +28,80 @@ namespace PixelFarm.Agg
             set;
         }
 
-
-        public override void Draw(Graphics2D graphics2D)
+        public override void Draw(CanvasPainter p)
         {
-            if (graphics2D.DestImage != null)
-            {
-                IImageReaderWriter backBuffer = graphics2D.DestImage;
-                IPixelBlender currentPixelBlender = graphics2D.PixelBlender;
-                int distBetween = backBuffer.BytesBetweenPixelsInclusive;
-                //use different pixel blender 
-                var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.R, 8);
-                var greenImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.G, 8);
-                var blueImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.B, 8);
-                ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
-                ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
-                ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);
-                ClipProxyImage clippingProxyBlue = new ClipProxyImage(blueImageBuffer);
-                ScanlineRasterizer sclineRas = graphics2D.ScanlineRasterizer;
-                ScanlinePacked8 scline = graphics2D.ScanlinePacked8;
-                ColorRGBA clearColor = this.UseBlackBlackground ? new ColorRGBA(0, 0, 0) : new ColorRGBA(255, 255, 255);
-                clippingProxy.Clear(clearColor);
-                ColorRGBA fillColor = this.UseBlackBlackground ?
-                    new ColorRGBA(255, 255, 255, (byte)(this.AlphaValue)) :
-                    new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-                VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                sclineRas.AddPath(er.MakeVertexSnap());
-                sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
-                VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                sclineRas.AddPath(eg.MakeVertexSnap());
-                sclineRasToBmp.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
-                VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
-                sclineRas.AddPath(eb.MakeVertexSnap());
-                sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
-            }
-            //            else if (graphics2D.DestImageFloat != null)
-            //            {
-            //#if false
-            //                IImageFloat backBuffer = graphics2D.DestImageFloat;
+            throw new NotSupportedException();
+            //if (graphics2D.DestImage != null)
+            //{
+            //    IImageReaderWriter backBuffer = graphics2D.DestImage;
+            //    IPixelBlender currentPixelBlender = graphics2D.PixelBlender;
+            //    int distBetween = backBuffer.BytesBetweenPixelsInclusive;
+            //    //use different pixel blender 
+            //    var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.R, 8);
+            //    var greenImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.G, 8);
+            //    var blueImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.B, 8);
+            //    ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
+            //    ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
+            //    ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);
+            //    ClipProxyImage clippingProxyBlue = new ClipProxyImage(blueImageBuffer);
+            //    ScanlineRasterizer sclineRas = graphics2D.ScanlineRasterizer;
+            //    ScanlinePacked8 scline = graphics2D.ScanlinePacked8;
+            //    ColorRGBA clearColor = this.UseBlackBlackground ? new ColorRGBA(0, 0, 0) : new ColorRGBA(255, 255, 255);
+            //    clippingProxy.Clear(clearColor);
+            //    ColorRGBA fillColor = this.UseBlackBlackground ?
+            //        new ColorRGBA(255, 255, 255, (byte)(this.AlphaValue)) :
+            //        new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
+            //    ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+            //    VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+            //    sclineRas.AddPath(er.MakeVertexSnap());
+            //    sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
+            //    VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+            //    sclineRas.AddPath(eg.MakeVertexSnap());
+            //    sclineRasToBmp.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
+            //    VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
+            //    sclineRas.AddPath(eb.MakeVertexSnap());
+            //    sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
+            //}
+            ////            else if (graphics2D.DestImageFloat != null)
+            ////            {
+            ////#if false
+            ////                IImageFloat backBuffer = graphics2D.DestImageFloat;
 
-            //                int distBetween = backBuffer.GetFloatsBetweenPixelsInclusive();
-            //                ImageBufferFloat redImageBuffer = new ImageBufferFloat();
-            //                redImageBuffer.Attach(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);
-            //                ImageBufferFloat greenImageBuffer = new ImageBufferFloat();
-            //                greenImageBuffer.Attach(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);
-            //                ImageBufferFloat blueImageBuffer = new ImageBufferFloat();
-            //                blueImageBuffer.Attach(backBuffer, new blender_gray(distBetween), distBetween, 0, 8);
+            ////                int distBetween = backBuffer.GetFloatsBetweenPixelsInclusive();
+            ////                ImageBufferFloat redImageBuffer = new ImageBufferFloat();
+            ////                redImageBuffer.Attach(backBuffer, new blender_gray(distBetween), distBetween, 2, 8);
+            ////                ImageBufferFloat greenImageBuffer = new ImageBufferFloat();
+            ////                greenImageBuffer.Attach(backBuffer, new blender_gray(distBetween), distBetween, 1, 8);
+            ////                ImageBufferFloat blueImageBuffer = new ImageBufferFloat();
+            ////                blueImageBuffer.Attach(backBuffer, new blender_gray(distBetween), distBetween, 0, 8);
 
-            //                ImageClippingProxy clippingProxy = new ImageClippingProxy(backBuffer);
-            //                ImageClippingProxy clippingProxyRed = new ImageClippingProxy(redImageBuffer);
-            //                ImageClippingProxy clippingProxyGreen = new ImageClippingProxy(greenImageBuffer);
-            //                ImageClippingProxy clippingProxyBlue = new ImageClippingProxy(blueImageBuffer);
+            ////                ImageClippingProxy clippingProxy = new ImageClippingProxy(backBuffer);
+            ////                ImageClippingProxy clippingProxyRed = new ImageClippingProxy(redImageBuffer);
+            ////                ImageClippingProxy clippingProxyGreen = new ImageClippingProxy(greenImageBuffer);
+            ////                ImageClippingProxy clippingProxyBlue = new ImageClippingProxy(blueImageBuffer);
 
-            //                ScanlineRasterizer ras = new ScanlineRasterizer();
-            //                ScanlineCachePacked8 sl = new ScanlineCachePacked8();
+            ////                ScanlineRasterizer ras = new ScanlineRasterizer();
+            ////                ScanlineCachePacked8 sl = new ScanlineCachePacked8();
 
-            //                RGBA_Bytes clearColor = useBlackBackgroundCheckbox.Checked ? new RGBA_Bytes(0, 0, 0) : new RGBA_Bytes(255, 255, 255);
-            //                clippingProxy.clear(clearColor);
-            //                alphaSlider.View.BackGroundColor = clearColor;
+            ////                RGBA_Bytes clearColor = useBlackBackgroundCheckbox.Checked ? new RGBA_Bytes(0, 0, 0) : new RGBA_Bytes(255, 255, 255);
+            ////                clippingProxy.clear(clearColor);
+            ////                alphaSlider.View.BackGroundColor = clearColor;
 
-            //                RGBA_Bytes FillColor = useBlackBackgroundCheckbox.Checked ? new RGBA_Bytes(255, 255, 255, (int)(alphaSlider.Value)) : new RGBA_Bytes(0, 0, 0, (int)(alphaSlider.Value));
+            ////                RGBA_Bytes FillColor = useBlackBackgroundCheckbox.Checked ? new RGBA_Bytes(255, 255, 255, (int)(alphaSlider.Value)) : new RGBA_Bytes(0, 0, 0, (int)(alphaSlider.Value));
 
-            //                VertexSource.Ellipse er = new AGG.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-            //                ras.add_path(er);
-            //                agg_renderer_scanline.Default.render_scanlines_aa_solid(clippingProxyRed, ras, sl, FillColor);
+            ////                VertexSource.Ellipse er = new AGG.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+            ////                ras.add_path(er);
+            ////                agg_renderer_scanline.Default.render_scanlines_aa_solid(clippingProxyRed, ras, sl, FillColor);
 
-            //                VertexSource.Ellipse eg = new AGG.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-            //                ras.add_path(eg);
-            //                agg_renderer_scanline.Default.render_scanlines_aa_solid(clippingProxyGreen, ras, sl, FillColor);
+            ////                VertexSource.Ellipse eg = new AGG.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
+            ////                ras.add_path(eg);
+            ////                agg_renderer_scanline.Default.render_scanlines_aa_solid(clippingProxyGreen, ras, sl, FillColor);
 
-            //                VertexSource.Ellipse eb = new AGG.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
-            //                ras.add_path(eb);
-            //                agg_renderer_scanline.Default.render_scanlines_aa_solid(clippingProxyBlue, ras, sl, FillColor);
-            //#endif
-            //            }
+            ////                VertexSource.Ellipse eb = new AGG.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
+            ////                ras.add_path(eb);
+            ////                agg_renderer_scanline.Default.render_scanlines_aa_solid(clippingProxyBlue, ras, sl, FillColor);
+            ////#endif
+            ////            }
 
 
         }

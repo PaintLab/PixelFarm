@@ -45,9 +45,11 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
         {
             lionFill = new LionFill();
         }
-        public override void Draw(Graphics2D g)
+
+        public override void Draw(CanvasPainter p)
         {
-            lionFill.OnDraw(g);
+            lionFill.OnDraw(p);
+            //throw new NotImplementedException();
         }
         public override void MouseDrag(int x, int y)
         {
@@ -138,7 +140,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             vxStorage = null;
             return result;
         }
-        public override void OnDraw(Graphics2D graphics2D)
+        public override void OnDraw(CanvasPainter p)
         {
             //freeze to bitmap ?
 
@@ -167,7 +169,9 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 ColorRGBA[] colors = lionShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
-                    graphics2D.Render(new VertexStoreSnap(vxStorage, pathList[i]), colors[i]);
+                    p.FillColor = colors[i];
+                    p.Fill(new VertexStoreSnap(vxStorage, pathList[i]));
+                    //graphics2D.Render(new VertexStoreSnap(vxStorage, pathList[i]), colors[i]);
                 }
             }
             //-----------------------------------------------------------------------------------
@@ -197,7 +201,6 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 //     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             }
-            base.OnDraw(graphics2D);
         }
     }
 }

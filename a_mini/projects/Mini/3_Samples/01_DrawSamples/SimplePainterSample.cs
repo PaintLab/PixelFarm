@@ -16,11 +16,8 @@ namespace PixelFarm.Agg.SimplePainter
         public override void Init()
         {
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
-            //1.
-            // clear the image to white
-            CanvasPainter p = new CanvasPainter(g);
             p.Clear(ColorRGBA.White);
             // draw a circle  
             p.FillColor = ColorRGBA.Blue;
