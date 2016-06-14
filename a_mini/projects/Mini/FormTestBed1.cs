@@ -12,6 +12,7 @@ namespace Mini
     {
         DemoBase exampleBase;
         List<ExampleConfigDesc> configList;
+        bool _useGdiPlus;
         public FormTestBed1()
         {
             InitializeComponent();
@@ -19,6 +20,15 @@ namespace Mini
         void InvalidateSampleViewPort()
         {
             this.softAggControl2.Invalidate();
+        }
+        public bool UseGdiPlus
+        {
+            get { return _useGdiPlus; }
+            set
+            {
+                _useGdiPlus = value;
+                softAggControl2.UseGdiPlus(_useGdiPlus);
+            }
         }
         public void LoadExample(ExampleAndDesc exAndDesc)
         {

@@ -31,6 +31,7 @@ namespace Mini
             {
                 FormTestBed1 testBed = new FormTestBed1();
                 testBed.WindowState = FormWindowState.Maximized;
+                testBed.UseGdiPlus = chkUseGdiPlus.Checked;
                 testBed.Show();
                 testBed.LoadExample(exAndDesc);
             }

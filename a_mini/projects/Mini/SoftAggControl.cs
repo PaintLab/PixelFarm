@@ -22,15 +22,16 @@ namespace Mini
         bool useGdiPlusOutput;
         public SoftAggControl()
         {
-            useGdiPlusOutput = true;
+            useGdiPlusOutput = false;
             InitializeComponent();
             this.Load += new EventHandler(SoftAggControl_Load);
         }
-        void SoftAggControl_Load(object sender, EventArgs e)
+
+        public void UseGdiPlus(bool useGdiPlusOutput)
         {
-            OnInitialize(myWidth, myHeight);
+            this.useGdiPlusOutput = useGdiPlusOutput;
         }
-        void OnInitialize(int width, int height)
+        void SoftAggControl_Load(object sender, EventArgs e)
         {
             if (useGdiPlusOutput)
             {
@@ -49,11 +50,12 @@ namespace Mini
             }
             else
             {
-                this.gfx = bitmapBackBuffer.Initialize(width, height, 32);
+                this.gfx = bitmapBackBuffer.Initialize(myWidth, myHeight, 32);
                 this.gfx.Clear(ColorRGBA.White);
                 painter = new AggCanvasPainter(gfx);
             }
         }
+
         public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;
