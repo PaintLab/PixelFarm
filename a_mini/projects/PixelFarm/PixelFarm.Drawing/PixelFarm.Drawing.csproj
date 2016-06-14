@@ -104,6 +104,8 @@
     <Compile Include="9_PixelFarm_AggVertex_More\CurveUtils\SplineBuilder.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\CurveUtils\VectorHelper.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\HitTest\VertexHitTester.cs" />
+    <Compile Include="9_PixelFarm_AggVertex_More\VectorClipping\cliper.cs" />
+    <Compile Include="9_PixelFarm_AggVertex_More\VectorClipping\VxsClipping.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\Arc.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\BezireCurve.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\BoundingRect.cs" />

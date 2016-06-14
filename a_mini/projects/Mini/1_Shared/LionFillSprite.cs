@@ -68,8 +68,10 @@ namespace PixelFarm.Agg
                 }
             }
             //---------------------------------------------------------------------------------------------
-
-
+        }
+        public SpriteShape GetSpriteShape()
+        {
+            return lionShape;
         }
     }
 }

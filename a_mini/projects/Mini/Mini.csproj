@@ -61,7 +61,6 @@
     <Compile Include="1_Shared\Point2D.cs" />
     <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
-    <Compile Include="3_Samples\20_PolygonClippingSample\clipping_lib\cliper.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
     <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
@@ -75,7 +74,7 @@
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
     <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
-    <Compile Include="6_WinGdiTest\PixelTools.cs" />
+    <Compile Include="MiniGUI\PixelTools.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>

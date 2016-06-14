@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using PixelFarm.Agg;
+using PixelFarm.Drawing.WinGdi;
 namespace Mini.WinForms
 {
     class MyLionSpriteTool : PixelToolController
@@ -18,8 +19,20 @@ namespace Mini.WinForms
         public override void Draw(Graphics g)
         {
             //draw a lion here
-            g.FillRectangle(Brushes.Blue, 0, 0, 20, 20);
+            var spriteShape = lionFill.GetSpriteShape();
+            //---------------------------------------------------------------------------------------------
+            {
+                int j = spriteShape.NumPaths;
+                var myvxs = spriteShape.Path.Vxs;
+                int[] pathList = spriteShape.PathIndexList;
+                ColorRGBA[] colors = spriteShape.Colors;
+                for (int i = 0; i < j; ++i)
+                {
+                    VxsHelper.DrawVxsSnap(g, new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                }
+            }
         }
+
         internal override void SetPreviousPixelControllerObjects(List<PixelToolController> prevPixTools)
         {
             this.prevPixTools = prevPixTools;
