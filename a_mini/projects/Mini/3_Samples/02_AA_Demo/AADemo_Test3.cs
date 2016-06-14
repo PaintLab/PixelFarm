@@ -2,10 +2,8 @@
 //MatterHackers
 
 using System;
-using PixelFarm.Agg.UI;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest3
 {

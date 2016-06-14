@@ -6,7 +6,6 @@
 // and intend to do much more refactoring of these things over the long term.
 
 using System;
-using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;

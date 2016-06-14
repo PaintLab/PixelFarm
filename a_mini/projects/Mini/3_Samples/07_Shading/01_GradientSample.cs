@@ -3,8 +3,6 @@
 
 using System;
 using System.Diagnostics;
-using PixelFarm.Agg.Image;
-using PixelFarm.Agg.UI;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Agg.Transform;
 using Mini;

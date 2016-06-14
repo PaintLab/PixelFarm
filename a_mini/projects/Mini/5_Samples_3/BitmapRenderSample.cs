@@ -29,11 +29,8 @@ of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 
-using System;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 using Mini;
 namespace PixelFarm.Agg.Sample_Images
 {

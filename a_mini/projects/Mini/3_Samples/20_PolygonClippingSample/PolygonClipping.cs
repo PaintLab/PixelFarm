@@ -3,9 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
 using Mini;
 using ClipperLib;

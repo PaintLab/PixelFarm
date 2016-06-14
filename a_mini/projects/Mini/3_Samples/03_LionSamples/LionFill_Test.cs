@@ -29,9 +29,6 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 using Mini;
 using LayoutFarm.MiniCinema;
 namespace PixelFarm.Agg.Sample_LionFill_Test
