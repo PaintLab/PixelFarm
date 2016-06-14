@@ -72,6 +72,7 @@
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation.Win32\NativeTextWin32.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation\Region.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation.Win32\Win32Utils.cs" />
+    <Compile Include="PixelFarm.Drawing.Gdi\MiniAggGraphics\CanvasGraphics2dGdi.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MiniAggGraphics\MiniAggGraphicsGdi.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\0_CanvasCollection.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\1_MyScreenCanvas_Specific.cs" />

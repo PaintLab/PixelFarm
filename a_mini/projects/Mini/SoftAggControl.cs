@@ -16,8 +16,12 @@ namespace Mini
         int myHeight = 600;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
         Graphics2D gfx;
+        BufferedGraphics myBuffer;
+        System.Drawing.Graphics _g;
+        bool useGdiPlusOutput;
         public SoftAggControl()
         {
+            useGdiPlusOutput = true;
             InitializeComponent();
             this.Load += new EventHandler(SoftAggControl_Load);
         }
@@ -27,8 +31,24 @@ namespace Mini
         }
         void OnInitialize(int width, int height)
         {
-            this.gfx = bitmapBackBuffer.Initialize(width, height, 32);
-            this.gfx.Clear(ColorRGBA.White);
+            if (useGdiPlusOutput)
+            {
+                // This example assumes the existence of a form called Form1.
+                // Gets a reference to the current BufferedGraphicsContext
+                BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
+                // Creates a BufferedGraphics instance associated with Form1, and with 
+                // dimensions the same size as the drawing surface of Form1.
+                myBuffer = currentContext.Allocate(this.CreateGraphics(),
+                   this.DisplayRectangle);
+                _g = myBuffer.Graphics;
+                this.gfx = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g);
+                this.gfx.Clear(ColorRGBA.White);
+            }
+            else
+            {
+                this.gfx = bitmapBackBuffer.Initialize(width, height, 32);
+                this.gfx.Clear(ColorRGBA.White);
+            }
         }
         public void LoadExample(DemoBase exBase)
         {
@@ -41,21 +61,42 @@ namespace Mini
             this.isMouseDown = true;
             exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
             base.OnMouseDown(e);
-            Invalidate();
+            if (!useGdiPlusOutput)
+            {
+                Invalidate();
+            }
+            else
+            {
+                UpdateOutput();
+            }
         }
         protected override void OnMouseUp(MouseEventArgs e)
         {
             this.isMouseDown = false;
             exampleBase.MouseUp(e.X, myHeight - e.Y);
             base.OnMouseUp(e);
-            Invalidate();
+            if (!useGdiPlusOutput)
+            {
+                Invalidate();
+            }
+            else
+            {
+                UpdateOutput();
+            }
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (this.isMouseDown)
             {
                 exampleBase.MouseDrag(e.X, myHeight - e.Y);
-                Invalidate();
+                if (!useGdiPlusOutput)
+                {
+                    Invalidate();
+                }
+                else
+                {
+                    UpdateOutput();
+                }
             }
             base.OnMouseMove(e);
         }
@@ -66,12 +107,25 @@ namespace Mini
                 base.OnPaint(e);
                 return;
             }
+            if (!useGdiPlusOutput)
+            {
+                exampleBase.Draw(gfx);
+                bitmapBackBuffer.UpdateToHardwareSurface(e.Graphics);
+            }
+            else
+            {
+                UpdateOutput();
+            }
+            base.OnPaint(e);
+        }
+        void UpdateOutput()
+        {
             //--------------------------------
             exampleBase.Draw(gfx);
-            //-------------------------------- 
-            bitmapBackBuffer.UpdateToHardwareSurface(e.Graphics);
-            //-------------------------------- 
-            base.OnPaint(e);
+            if (useGdiPlusOutput)
+            {
+                myBuffer.Render();
+            }
         }
     }
 }
