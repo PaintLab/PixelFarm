@@ -10,6 +10,9 @@ namespace Mini.WinForms
         PixelFarm.Agg.LionFillSprite lionFill;
         List<PixelToolController> prevPixTools;
         int _latest_mouseX, _latest_mouseY;
+        bool validBoundingRect;
+        RectD boundingRect = new RectD();
+        int offsetX, offSetY;
         public MyLionSpriteTool()
         {
             lionFill = new LionFillSprite();
@@ -21,6 +24,7 @@ namespace Mini.WinForms
             var spriteShape = lionFill.GetSpriteShape();
             //---------------------------------------------------------------------------------------------
             {
+                g.TranslateTransform(offsetX, offSetY);
                 int j = spriteShape.NumPaths;
                 var myvxs = spriteShape.Path.Vxs;
                 int[] pathList = spriteShape.PathIndexList;
@@ -29,9 +33,15 @@ namespace Mini.WinForms
                 {
                     VxsHelper.DrawVxsSnap(g, new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
                 }
+                g.TranslateTransform(-offsetX, -offSetY);
             }
         }
-
+        public override void Offset(int dx, int dy)
+        {
+            offsetX += dx;
+            offSetY += dy;
+            //lionFill.Move(dx, dy);
+        }
         internal override void SetPreviousPixelControllerObjects(List<PixelToolController> prevPixTools)
         {
             this.prevPixTools = prevPixTools;
@@ -61,6 +71,23 @@ namespace Mini.WinForms
         }
         internal override void SetVxs(VertexStore vxs)
         {
+        }
+        public override bool HitTest(int x, int y)
+        {
+            if (!validBoundingRect)
+            {
+                var spriteShape = lionFill.GetSpriteShape();
+                PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Agg.VertexStoreSnap(spriteShape.Path.Vxs), ref boundingRect);
+                validBoundingRect = true;
+            }
+            if (this.boundingRect.Contains(x, y))
+            {
+                //fine tune
+                //hit test ***
+                var spriteShape = lionFill.GetSpriteShape();
+                return VertexHitTester.IsPointInVxs(spriteShape.Path.Vxs, x, y);
+            }
+            return false;
         }
     }
 }
