@@ -114,70 +114,69 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(CanvasPainter p)
         {
-            throw new NotSupportedException();
-            //var widgetsSubImage = gx.DestImage;
-            //var scline = gx.ScanlinePacked8;
-            //int width = (int)widgetsSubImage.Width;
-            //int height = (int)widgetsSubImage.Height;
-            ////change value ***
-            //if (isMaskSliderValueChanged)
-            //{
-            //    generate_alpha_mask(gx.ScanlineRasToDestBitmap, gx.ScanlinePacked8, gx.ScanlineRasterizer, width, height);
-            //    this.isMaskSliderValueChanged = false;
-            //}
-            //var rasterizer = gx.ScanlineRasterizer;
-            //rasterizer.SetClipBox(0, 0, width, height);
-            ////alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
+            Graphics2D gx = p.Graphics;
+            var widgetsSubImage = gx.DestImage;
+            var scline = gx.ScanlinePacked8;
+            int width = (int)widgetsSubImage.Width;
+            int height = (int)widgetsSubImage.Height;
+            //change value ***
+            if (isMaskSliderValueChanged)
+            {
+                generate_alpha_mask(gx.ScanlineRasToDestBitmap, gx.ScanlinePacked8, gx.ScanlineRasterizer, width, height);
+                this.isMaskSliderValueChanged = false;
+            }
+            var rasterizer = gx.ScanlineRasterizer;
+            rasterizer.SetClipBox(0, 0, width, height);
+            //alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
 
-            //PixelFarm.Agg.Image.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Image.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
-            //ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
-            //ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
+            PixelFarm.Agg.Image.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Image.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
+            ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
+            ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             ////Affine transform = Affine.NewIdentity();
             ////transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
             ////transform *= Affine.NewScaling(lionScale, lionScale);
             ////transform *= Affine.NewRotation(angle + Math.PI);
             ////transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
             ////transform *= Affine.NewTranslation(Width / 2, Height / 2);
-            //Affine transform = Affine.NewMatix(
-            //        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-            //        AffinePlan.Scale(lionScale, lionScale),
-            //        AffinePlan.Rotate(angle + Math.PI),
-            //        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-            //        AffinePlan.Translate(width / 2, height / 2));
-            //clippingProxy.Clear(ColorRGBA.White);
-            //ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
-            //// draw a background to show how the mask is working better
-            //int rect_w = 30;
-            //for (int i = 0; i < 40; i++)
-            //{
-            //    for (int j = 0; j < 40; j++)
-            //    {
-            //        if ((i + j) % 2 != 0)
-            //        {
-            //            VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
-            //            rect.NormalizeRadius();
-            //            // Drawing as an outline
-            //            rasterizer.AddPath(rect.MakeVxs());
-            //            sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scline, ColorRGBA.Make(.9f, .9f, .9f));
-            //        }
-            //    }
-            //}
+            Affine transform = Affine.NewMatix(
+                    AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                    AffinePlan.Scale(lionScale, lionScale),
+                    AffinePlan.Rotate(angle + Math.PI),
+                    AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                    AffinePlan.Translate(width / 2, height / 2));
+            clippingProxy.Clear(ColorRGBA.White);
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
+            // draw a background to show how the mask is working better
+            int rect_w = 30;
+            for (int i = 0; i < 40; i++)
+            {
+                for (int j = 0; j < 40; j++)
+                {
+                    if ((i + j) % 2 != 0)
+                    {
+                        VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
+                        rect.NormalizeRadius();
+                        // Drawing as an outline
+                        rasterizer.AddPath(rect.MakeVxs());
+                        sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scline, ColorRGBA.Make(.9f, .9f, .9f));
+                    }
+                }
+            }
 
             ////int x, y; 
             //// Render the lion
             ////VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
 
             ////var vxlist = new System.Collections.Generic.List<VertexData>();
-            ////trans.DoTransform(vxlist);
+            ////trans.DoTransform(vxlist); 
 
-
-            //sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
-            //       rasterizer,
-            //       scline,
-            //       transform.TransformToVxs(lionShape.Path.Vxs),
-            //       lionShape.Colors,
-            //       lionShape.PathIndexList,
-            //       lionShape.NumPaths);
+            sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
+                   rasterizer,
+                   scline,
+                   transform.TransformToVxs(lionShape.Path.Vxs),
+                   lionShape.Colors,
+                   lionShape.PathIndexList,
+                   lionShape.NumPaths);
             ///*
             //// Render random Bresenham lines and markers
             //agg::renderer_markers<amask_ren_type> m(r);

@@ -114,32 +114,31 @@ namespace PixelFarm.Agg.Sample_RoundRect
             //-----------------------------------------------------------------
 
             double d = this.SubPixelOffset;
-            throw new NotSupportedException();
-            //var prevBlender = gx.PixelBlender;
-            ////change gamma blender
-            //gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
-            //if (this.FillRoundRect)
-            //{
-            //    painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
-            //    painter.FillRoundRectangle(
-            //        m_x[0] + d,
-            //        m_y[0] + d,
-            //        m_x[1] + d,
-            //        m_y[1] + d,
-            //        this.Radius);
-            //}
-            //else
-            //{
-            //    painter.StrokeColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
-            //    painter.DrawRoundRect(
-            //        m_x[0] + d,
-            //        m_y[0] + d,
-            //        m_x[1] + d,
-            //        m_y[1] + d,
-            //        this.Radius);
-            //}
-
-            //gx.PixelBlender = prevBlender;
+            var gx = p.Graphics;
+            var prevBlender = gx.PixelBlender;
+            //change gamma blender
+            gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
+            if (this.FillRoundRect)
+            {
+                painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+                painter.FillRoundRectangle(
+                    m_x[0] + d,
+                    m_y[0] + d,
+                    m_x[1] + d,
+                    m_y[1] + d,
+                    this.Radius);
+            }
+            else
+            {
+                painter.StrokeColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+                painter.DrawRoundRect(
+                    m_x[0] + d,
+                    m_y[0] + d,
+                    m_x[1] + d,
+                    m_y[1] + d,
+                    this.Radius);
+            }
+            gx.PixelBlender = prevBlender;
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)

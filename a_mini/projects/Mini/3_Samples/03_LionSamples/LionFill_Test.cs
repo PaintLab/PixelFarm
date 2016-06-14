@@ -49,7 +49,6 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
         public override void Draw(CanvasPainter p)
         {
             lionFill.OnDraw(p);
-            //throw new NotImplementedException();
         }
         public override void MouseDrag(int x, int y)
         {

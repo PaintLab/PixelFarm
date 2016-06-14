@@ -53,15 +53,21 @@ namespace PixelFarm.Agg
             }
             //---------------------------------------------------------------------------------------------
             {
-                int j = lionShape.NumPaths;
-                int[] pathList = lionShape.PathIndexList;
-                ColorRGBA[] colors = lionShape.Colors;
-                //graphics2D.UseSubPixelRendering = true; 
-                for (int i = 0; i < j; ++i)
+                try
                 {
-                    p.FillColor = colors[i];
-                    p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
-                    //graphics2D.Render(new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                    int j = lionShape.NumPaths;
+                    int[] pathList = lionShape.PathIndexList;
+                    ColorRGBA[] colors = lionShape.Colors;
+                    //graphics2D.UseSubPixelRendering = true; 
+                    for (int i = 0; i < j; ++i)
+                    {
+                        p.FillColor = colors[i];
+                        p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
+                        //graphics2D.Render(new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                    }
+                }
+                catch (Exception ex)
+                {
                 }
             }
         }

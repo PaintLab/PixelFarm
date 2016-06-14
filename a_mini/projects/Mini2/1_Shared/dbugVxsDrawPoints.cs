@@ -8,9 +8,8 @@ namespace Mini
 #if DEBUG
     public static class dbugVxsDrawPoints
     {
-        public static void DrawVxsPoints(VertexStore vxs, Graphics2D g)
+        public static void DrawVxsPoints(VertexStore vxs, CanvasPainter p)
         {
-            CanvasPainter p = new CanvasPainter(g);
             int j = vxs.Count;
             for (int i = 0; i < j; ++i)
             {

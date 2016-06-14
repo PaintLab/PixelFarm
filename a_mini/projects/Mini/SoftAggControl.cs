@@ -42,15 +42,16 @@ namespace Mini
                 myBuffer = currentContext.Allocate(this.CreateGraphics(),
                    this.DisplayRectangle);
                 _g = myBuffer.Graphics;
-                this.gfx = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g);
+                var canvas = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g);
+                this.gfx = canvas;
                 this.gfx.Clear(ColorRGBA.White);
-                painter = new CanvasPainter(gfx);
+                painter = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(canvas);
             }
             else
             {
                 this.gfx = bitmapBackBuffer.Initialize(width, height, 32);
                 this.gfx.Clear(ColorRGBA.White);
-                painter = new CanvasPainter(gfx);
+                painter = new AggCanvasPainter(gfx);
             }
         }
         public void LoadExample(DemoBase exBase)

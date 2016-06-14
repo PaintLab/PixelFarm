@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using PixelFarm.Agg;
+using PixelFarm.Agg.Fonts;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 namespace PixelFarm.Drawing.WinGdi
@@ -16,6 +17,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             this._g = g;
         }
+        public Graphics InternalGraphics { get { return _g; } }
         public override ImageReaderWriterBase DestImage
         {
             get
