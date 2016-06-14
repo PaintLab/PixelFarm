@@ -3,13 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 using Mini;
-using burningmime.curves; //for curve fit
-using ClipperLib;
 namespace PixelFarm.Agg.Samples
 {
     public enum SmoothBrushMode
@@ -136,8 +131,8 @@ namespace PixelFarm.Agg.Samples
                                     var lastPath = myBrushPathList[myBrushPathList.Count - 1];
                                     //do path clip***
                                     var paths = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(new VertexStoreSnap(lastPath.Vxs),
-                                            new VertexStoreSnap(currentBrushPath.Vxs),
-                                            ClipType.ctDifference, false);
+                                            new VertexStoreSnap(currentBrushPath.Vxs), VertexSource.VxsClipperType.Difference,
+                                            false);
                                     myBrushPathList.RemoveAt(myBrushPathList.Count - 1);
                                     MyBrushPath newBrushPath = new MyBrushPath();
                                     newBrushPath.BrushMode = lastPath.BrushMode;

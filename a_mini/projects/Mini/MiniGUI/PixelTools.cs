@@ -4,11 +4,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using System.Text;
-using burningmime.curves; //for curve fit
-using ClipperLib;
-using PixelFarm.Drawing.WinGdi;
 namespace Mini.WinForms
 {
     //for test only
@@ -220,12 +215,11 @@ namespace Mini.WinForms
                 for (int n = prevPixToolCount - 1; n >= 0; --n)
                 {
                     PixelToolController prevPixTool = prevPixTools[n];
-                    //do path clip***
-
+                    //do path clip*** 
                     List<VertexStore> resultList = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(
                          new VertexStoreSnap(prevPixTool.GetVxs()),
                          new VertexStoreSnap(this.GetVxs()),
-                         ClipType.ctDifference,
+                         PixelFarm.Agg.VertexSource.VxsClipperType.Difference,
                          true);
                     int count;
                     switch (count = resultList.Count)
@@ -239,15 +233,19 @@ namespace Mini.WinForms
                             break;
                         default:
                             {
-                                //we will replace all with new set***                                 
-                                Color fillColor = ((MyDrawingBrushController)prevPixTool).PathFillColor;
-                                prevPixTools.RemoveAt(n);
-                                for (int i = 0; i < count; ++i)
+                                //we will replace all with new set***            
+                                var brushPath = prevPixTool as MyDrawingBrushController;
+                                if (brushPath != null)
                                 {
-                                    var subBrush = new MyDrawingBrushController();
-                                    subBrush.SetVxs(resultList[i]);
-                                    subBrush.PathFillColor = fillColor;
-                                    prevPixTools.Insert(n, subBrush);
+                                    Color fillColor = brushPath.PathFillColor;
+                                    prevPixTools.RemoveAt(n);
+                                    for (int i = 0; i < count; ++i)
+                                    {
+                                        var subBrush = new MyDrawingBrushController();
+                                        subBrush.SetVxs(resultList[i]);
+                                        subBrush.PathFillColor = fillColor;
+                                        prevPixTools.Insert(n, subBrush);
+                                    }
                                 }
                             }
                             break;

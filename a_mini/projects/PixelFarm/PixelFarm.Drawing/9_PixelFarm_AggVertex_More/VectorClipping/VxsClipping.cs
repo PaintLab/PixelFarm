@@ -1,13 +1,22 @@
-﻿
+﻿//MIT 2016, WinterDev
+
 using System.Collections.Generic;
-using burningmime.curves; //for curve fit
 using ClipperLib;
 namespace PixelFarm.Agg.VertexSource
 {
+    public enum VxsClipperType : byte
+    {
+        InterSect = ClipType.ctIntersection,
+        Union = ClipType.ctUnion,
+        Difference = ClipType.ctDifference,
+        Xor = ClipType.ctXor,
+    }
+
     public static class VxsClipper
     {
-        public static List<VertexStore> CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType, bool separateIntoSmallSubPaths)
+        public static List<VertexStore> CombinePaths(VertexStoreSnap a, VertexStoreSnap b, VxsClipperType vxsClipType, bool separateIntoSmallSubPaths)
         {
+            ClipType clipType = (ClipType)vxsClipType;
             List<List<IntPoint>> aPolys = CreatePolygons(a);
             List<List<IntPoint>> bPolys = CreatePolygons(b);
             Clipper clipper = new Clipper();
