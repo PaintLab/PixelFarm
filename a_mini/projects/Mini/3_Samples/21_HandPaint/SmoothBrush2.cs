@@ -135,18 +135,15 @@ namespace PixelFarm.Agg.Samples
                                 {
                                     var lastPath = myBrushPathList[myBrushPathList.Count - 1];
                                     //do path clip***
-
-                                    PathWriter result = CombinePaths(
-                                          new VertexStoreSnap(lastPath.Vxs),
-                                          new VertexStoreSnap(currentBrushPath.Vxs),
-                                          ClipType.ctDifference);
-                                    //replace the last one with newBrushPath
+                                    var paths = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(new VertexStoreSnap(lastPath.Vxs),
+                                            new VertexStoreSnap(currentBrushPath.Vxs),
+                                            ClipType.ctDifference, false);
                                     myBrushPathList.RemoveAt(myBrushPathList.Count - 1);
                                     MyBrushPath newBrushPath = new MyBrushPath();
                                     newBrushPath.BrushMode = lastPath.BrushMode;
                                     newBrushPath.StrokeColor = lastPath.StrokeColor;
                                     newBrushPath.FillColor = lastPath.FillColor;
-                                    newBrushPath.SetVxs(result.Vxs);
+                                    newBrushPath.SetVxs(paths[0]);
                                     myBrushPathList.Add(newBrushPath);
                                 }
                             }
@@ -280,104 +277,6 @@ namespace PixelFarm.Agg.Samples
                 this.currentSelectedPath = selectedPath;
             }
         }
-
-        //for clipping ...
-
-        static PathWriter CombinePaths(VertexStoreSnap a, VertexStoreSnap b, ClipType clipType)
-        {
-            List<List<IntPoint>> aPolys = CreatePolygons(a);
-            List<List<IntPoint>> bPolys = CreatePolygons(b);
-            Clipper clipper = new Clipper();
-            clipper.AddPaths(aPolys, PolyType.ptSubject, true);
-            clipper.AddPaths(bPolys, PolyType.ptClip, true);
-            List<List<IntPoint>> intersectedPolys = new List<List<IntPoint>>();
-            clipper.Execute(clipType, intersectedPolys);
-            PathWriter output = new PathWriter();
-            foreach (List<IntPoint> polygon in intersectedPolys)
-            {
-                int j = polygon.Count;
-                if (j > 0)
-                {
-                    //first one
-                    IntPoint point = polygon[0];
-                    output.MoveTo(point.X / 1000.0, point.Y / 1000.0);
-                    //next ...
-                    if (j > 1)
-                    {
-                        for (int i = 1; i < j; ++i)
-                        {
-                            point = polygon[i];
-                            output.LineTo(point.X / 1000.0, point.Y / 1000.0);
-                        }
-                    }
-                }
-
-
-                //bool first = true;
-                //foreach (IntPoint point in polygon)
-                //{
-                //    if (first)
-                //    {
-                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandMoveTo);
-                //        first = false;
-                //    }
-                //    else
-                //    {
-                //        output.AddVertex(point.X / 1000.0, point.Y / 1000.0, ShapePath.FlagsAndCommand.CommandLineTo);
-                //    }
-                //}
-
-                output.CloseFigure();
-            }
-
-
-            output.Stop();
-            return output;
-        }
-
-        static List<List<IntPoint>> CreatePolygons(VertexStoreSnap a)
-        {
-            List<List<IntPoint>> allPolys = new List<List<IntPoint>>();
-            List<IntPoint> currentPoly = null;
-            VertexData last = new VertexData();
-            VertexData first = new VertexData();
-            bool addedFirst = false;
-            var snapIter = a.GetVertexSnapIter();
-            double x, y;
-            VertexCmd cmd = snapIter.GetNextVertex(out x, out y);
-            do
-            {
-                if (cmd == VertexCmd.LineTo)
-                {
-                    if (!addedFirst)
-                    {
-                        currentPoly.Add(new IntPoint((long)(last.x * 1000), (long)(last.y * 1000)));
-                        addedFirst = true;
-                        first = last;
-                    }
-                    currentPoly.Add(new IntPoint((long)(x * 1000), (long)(y * 1000)));
-                    last = new VertexData(cmd, x, y);
-                }
-                else
-                {
-                    addedFirst = false;
-                    currentPoly = new List<IntPoint>();
-                    allPolys.Add(currentPoly);
-                    if (cmd == VertexCmd.MoveTo)
-                    {
-                        last = new VertexData(cmd, x, y);
-                    }
-                    else
-                    {
-                        last = first;
-                    }
-                }
-                cmd = snapIter.GetNextVertex(out x, out y);
-            } while (cmd != VertexCmd.Stop);
-            return allPolys;
-        }
     }
-
-    //--------------------------------------------------
 }
 
