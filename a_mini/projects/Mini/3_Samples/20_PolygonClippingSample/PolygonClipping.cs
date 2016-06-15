@@ -62,6 +62,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
         }
         public override void Draw(CanvasPainter p)
         {
+            p.Clear(ColorRGBA.White);
             if (BackgroundColor.Alpha0To255 > 0)
             {
                 p.FillColor = BackgroundColor;
@@ -88,8 +89,10 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps1.LineTo(x + 225, y + 44);
                         ps1.LineTo(x + 296, y + 219);
                         ps1.CloseFigure();
+                        // 
                         ps1.LineTo(x + 226, y + 289);
                         ps1.LineTo(x + 82, y + 292);
+                        //
                         ps1.MoveTo(x + 220, y + 222);
                         ps1.LineTo(x + 363, y + 249);
                         ps1.LineTo(x + 265, y + 331);
@@ -99,16 +102,17 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps1.MoveTo(x + 259, y + 259);
                         ps1.LineTo(x + 273, y + 288);
                         ps1.LineTo(x + 298, y + 266);
+                        ps1.CloseFigure();
+                        //
                         ps2.MoveTo(100 + 32, 100 + 77);
                         ps2.LineTo(100 + 473, 100 + 263);
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
+                        ps2.CloseFigure();
                         p.FillColor = ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f);
                         p.Fill(ps1.MakeVertexSnap());
                         p.FillColor = ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f);
                         p.Fill(ps2.MakeVertexSnap());
-                        //graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
-                        //graphics2D.Render(ps2.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
                         CreateAndRenderCombined(p, ps1.MakeVertexSnap(), ps2.MakeVertexSnap());
                     }
                     break;

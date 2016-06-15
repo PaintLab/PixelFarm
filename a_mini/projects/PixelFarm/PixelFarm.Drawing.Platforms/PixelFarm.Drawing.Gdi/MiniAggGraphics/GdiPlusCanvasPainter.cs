@@ -171,6 +171,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void DrawString(string text, double x, double y)
         {
+            //use current brush and font
             throw new NotImplementedException();
         }
 
@@ -186,6 +187,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
+            //fill with ispan generator
             throw new NotImplementedException();
         }
 
@@ -206,17 +208,24 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-            throw new NotImplementedException();
+            using (System.Drawing.SolidBrush br = new System.Drawing.SolidBrush(VxsHelper.ToDrawingColor(_fillColor)))
+            {
+                _internalGfx.FillRectangle(br, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            }
         }
-
         public override void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor)
         {
-            throw new NotImplementedException();
+            using (System.Drawing.SolidBrush br = new System.Drawing.SolidBrush(VxsHelper.ToDrawingColor(fillColor)))
+            {
+                _internalGfx.FillRectangle(br, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            }
         }
-
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
-            throw new NotImplementedException();
+            using (System.Drawing.SolidBrush br = new System.Drawing.SolidBrush(VxsHelper.ToDrawingColor(_fillColor)))
+            {
+                _internalGfx.FillRectangle(br, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
+            }
         }
 
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
