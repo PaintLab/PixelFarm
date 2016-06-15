@@ -62,8 +62,6 @@ namespace PixelFarm.Drawing.WinGdi
             double prevMoveToX = 0;
             double prevMoveToY = 0;
             var brush_path = new System.Drawing.Drawing2D.GraphicsPath(FillMode.Winding);//*** winding for overlapped path  
-           
-
             for (;;)
             {
                 double x, y;
@@ -76,7 +74,7 @@ namespace PixelFarm.Drawing.WinGdi
                         brush_path.StartFigure();
                         break;
                     case PixelFarm.Agg.VertexCmd.LineTo:
-                       
+
                         brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
                         prevX = x;
                         prevY = y;
@@ -86,8 +84,8 @@ namespace PixelFarm.Drawing.WinGdi
                         //
                         brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                         prevX = prevMoveToX;
-                        prevY = prevMoveToY; 
-                        brush_path.CloseFigure();  
+                        prevY = prevMoveToY;
+                        brush_path.CloseFigure();
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
                         goto EXIT_LOOP;
@@ -100,7 +98,7 @@ namespace PixelFarm.Drawing.WinGdi
                         throw new NotSupportedException();
                 }
             }
-            EXIT_LOOP:
+        EXIT_LOOP:
             return brush_path;
         }
         public static void DrawVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
