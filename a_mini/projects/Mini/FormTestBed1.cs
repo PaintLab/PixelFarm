@@ -12,7 +12,6 @@ namespace Mini
     {
         DemoBase exampleBase;
         List<ExampleConfigDesc> configList;
-        bool _useGdiPlus;
         public FormTestBed1()
         {
             InitializeComponent();
@@ -23,12 +22,13 @@ namespace Mini
         }
         public bool UseGdiPlus
         {
-            get { return _useGdiPlus; }
-            set
-            {
-                _useGdiPlus = value;
-                softAggControl2.UseGdiPlus(_useGdiPlus);
-            }
+            get { return softAggControl2.UseGdiPlus; }
+            set { softAggControl2.UseGdiPlus = value; }
+        }
+        public bool UseGdiAntiAlias
+        {
+            get { return softAggControl2.UseGdiAntiAlias; }
+            set { softAggControl2.UseGdiAntiAlias = value; }
         }
         public void LoadExample(ExampleAndDesc exAndDesc)
         {

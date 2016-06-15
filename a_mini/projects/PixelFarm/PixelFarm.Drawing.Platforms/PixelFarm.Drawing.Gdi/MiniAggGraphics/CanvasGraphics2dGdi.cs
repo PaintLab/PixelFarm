@@ -108,9 +108,6 @@ namespace PixelFarm.Drawing.WinGdi
         {
         }
 
-        public override void Render(IImageReaderWriter imageSource, double x, double y, double angleRadians, double scaleX, double ScaleY)
-        {
-        }
 
         public override void SetClippingRect(RectInt rect)
         {

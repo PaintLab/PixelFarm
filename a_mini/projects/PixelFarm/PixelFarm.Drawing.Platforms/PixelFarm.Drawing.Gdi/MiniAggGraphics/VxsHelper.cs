@@ -101,10 +101,22 @@ namespace PixelFarm.Drawing.WinGdi
         public static void DrawVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
         {
             System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
-            using (System.Drawing.SolidBrush br = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(c.alpha, c.red, c.green, c.blue)))
+            using (System.Drawing.SolidBrush br = new System.Drawing.SolidBrush(ToDrawingColor(c)))
             {
                 g.FillPath(br, p);
             }
+        }
+        public static void StrokeVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
+        {
+            System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
+            using (System.Drawing.Pen pen = new System.Drawing.Pen(ToDrawingColor(c)))
+            {
+                g.DrawPath(pen, p);
+            }
+        }
+        public static System.Drawing.Color ToDrawingColor(ColorRGBA c)
+        {
+            return System.Drawing.Color.FromArgb(c.alpha, c.red, c.green, c.blue);
         }
     }
 }

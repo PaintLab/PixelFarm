@@ -159,10 +159,7 @@ namespace PixelFarm.Agg.Sample_Perspective
             painter.FillColor = ColorRGBA.Make(0f, 0.3f, 0.5f, 0.6f);
             painter.Fill(quadPolygonControl.MakeVxs());
         }
-        //public void OnDraw(Graphics2D gx)
-        //{
 
-        //}
         public override void MouseDown(int x, int y, bool isRightButton)
         {
             var mouseEvent = new UI.MouseEventArgs(UI.MouseButtons.Left, 1, x, y, 0);

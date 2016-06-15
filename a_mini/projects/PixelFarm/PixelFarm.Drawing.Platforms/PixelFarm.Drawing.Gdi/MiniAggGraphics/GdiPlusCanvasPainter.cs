@@ -19,12 +19,17 @@ namespace PixelFarm.Drawing.WinGdi
         double _strokeWidth;
         bool _useSubPixelRendering;
         Graphics _internalGfx;
+        PixelFarm.Agg.VertexSource.CurveFlattener curveFlattener;
         public GdiPlusCanvasPainter(CanvasGraphics2dGdi gfx)
         {
-            _gfx = gfx;
-            _internalGfx = gfx.InternalGraphics;
             _width = 800;
             _height = 600;
+            _gfx = gfx;
+            _internalGfx = gfx.InternalGraphics;
+            //credit:
+            //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
+            _internalGfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
+            _internalGfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
         }
         public override RectInt ClipBox
         {
@@ -221,32 +226,50 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override VertexStore FlattenCurves(VertexStore srcVxs)
         {
-            throw new NotImplementedException();
+            if (curveFlattener == null)
+            {
+                curveFlattener = new Agg.VertexSource.CurveFlattener();
+            }
+            return curveFlattener.MakeVxs(srcVxs);
         }
 
         public override void Line(double x1, double y1, double x2, double y2)
         {
-            throw new NotImplementedException();
+            using (System.Drawing.Pen p = new System.Drawing.Pen(VxsHelper.ToDrawingColor(_strokeColor)))
+            {
+                _internalGfx.DrawLine(p, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
+            }
         }
 
         public override void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
-            throw new NotImplementedException();
+            using (System.Drawing.Pen p = new System.Drawing.Pen(VxsHelper.ToDrawingColor(color)))
+            {
+                _internalGfx.DrawLine(p, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
+            }
         }
-
         public override void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < numPath; ++i)
+            {
+                VxsHelper.DrawVxsSnap(_internalGfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
+            }
         }
 
         public override void Rectangle(double left, double bottom, double right, double top)
         {
-            throw new NotImplementedException();
+            using (System.Drawing.Pen p = new System.Drawing.Pen(VxsHelper.ToDrawingColor(_strokeColor)))
+            {
+                _internalGfx.DrawRectangle(p, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
+            }
         }
 
         public override void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
         {
-            throw new NotImplementedException();
+            using (System.Drawing.Pen p = new System.Drawing.Pen(VxsHelper.ToDrawingColor(color)))
+            {
+                _internalGfx.DrawRectangle(p, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
+            }
         }
 
         public override void SetClipBox(int x1, int y1, int x2, int y2)

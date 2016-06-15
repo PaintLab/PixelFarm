@@ -43,7 +43,7 @@ namespace PixelFarm.Agg
         PathWriter lines = new PathWriter();
         RoundedRect roundRect = null;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
-        CurveFlattener curveFlattener = new CurveFlattener();
+        CurveFlattener curveFlattener;
         TextPrinter textPrinter;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
         //-------------
@@ -336,6 +336,7 @@ namespace PixelFarm.Agg
         //---------------- 
         public override VertexStore FlattenCurves(VertexStore srcVxs)
         {
+            if (curveFlattener == null) { curveFlattener = new CurveFlattener(); }
             return curveFlattener.MakeVxs(srcVxs);
         }
         //---------------- 
