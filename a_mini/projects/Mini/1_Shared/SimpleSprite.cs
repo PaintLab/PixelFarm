@@ -58,10 +58,10 @@ namespace LayoutFarm.MiniCinema
                 return this.isFreeze;
             }
         }
-        public virtual void OnDraw(Graphics2D graphics2D)
+
+        public virtual void OnDraw(CanvasPainter p)
         {
         }
-
         protected void UpdateTransform(double width, double height, double x, double y)
         {
             x -= width / 2;

@@ -191,36 +191,34 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             get;
             set;
         }
-        public override void Draw(Graphics2D g)
-        {
-            OnDraw(g);
-        }
 
-        public void OnDraw(Graphics2D graphics2D)
+        public override void Draw(CanvasPainter p)
         {
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-            graphics2D.UseSubPixelRendering = false;
+            //specific for agg
+            Graphics2D gx = p.Graphics;
+            var widgetsSubImage = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
+            gx.UseSubPixelRendering = false;
             IPixelBlender NormalBlender = new PixelBlenderBGRA();
             IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
             var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
             ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
             ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
             clippingProxyNormal.Clear(ColorRGBA.White);
-            var rasterizer = graphics2D.ScanlineRasterizer;
+            var rasterizer = gx.ScanlineRasterizer;
             ScanlineUnpacked8 sl = new ScanlineUnpacked8();
             int size_mul = (int)this.PixelSize;
-            CustomScanlineRasToBmp_EnlargedV3 ren_en = new CustomScanlineRasToBmp_EnlargedV3(size_mul, graphics2D.DestActualImage);
+            CustomScanlineRasToBmp_EnlargedV3 ren_en = new CustomScanlineRasToBmp_EnlargedV3(size_mul, gx.DestActualImage);
             rasterizer.Reset();
             rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
             rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
             rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
             ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             //----------------------------------------
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
-            graphics2D.UseSubPixelRendering = true;
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
+            gx.UseSubPixelRendering = true;
             sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
             rasterizer.ResetGamma(new GammaNone());
-            graphics2D.UseSubPixelRendering = false;
+            gx.UseSubPixelRendering = false;
             //----------------------------------------
             PathWriter ps = new PathWriter();
             ps.Clear();
@@ -237,6 +235,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
             sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
         }
+
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             double x = mx;

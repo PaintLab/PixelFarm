@@ -20,6 +20,16 @@ namespace Mini
         {
             this.softAggControl2.Invalidate();
         }
+        public bool UseGdiPlus
+        {
+            get { return softAggControl2.UseGdiPlus; }
+            set { softAggControl2.UseGdiPlus = value; }
+        }
+        public bool UseGdiAntiAlias
+        {
+            get { return softAggControl2.UseGdiAntiAlias; }
+            set { softAggControl2.UseGdiAntiAlias = value; }
+        }
         public void LoadExample(ExampleAndDesc exAndDesc)
         {
             DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;

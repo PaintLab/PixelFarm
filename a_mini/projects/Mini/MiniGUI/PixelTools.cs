@@ -30,16 +30,12 @@ namespace Mini.WinForms
         protected virtual void OnMouseMove(int x, int y) { }
         protected virtual void OnMouseUp(int x, int y) { }
         public abstract bool IsDrawingTool { get; }
-
+        public virtual void Offset(int dx, int dy) { }
         internal virtual void SetPreviousPixelControllerObjects(List<PixelToolController> prevPixTools) { }
         internal abstract VertexStore GetVxs();
         internal abstract void SetVxs(VertexStore vxs);
-        public virtual bool HitTest(int x, int y)
-        {
-            return false;
-        }
+        public virtual bool HitTest(int x, int y) { return false; }
     }
-
     class MyDrawingBrushController : PixelToolController
     {
         PixelFarm.Agg.Image.Point _latestMousePoint;
@@ -180,7 +176,7 @@ namespace Mini.WinForms
                     );
             }
         }
-        public void Offset(int dx, int dy)
+        public override void Offset(int dx, int dy)
         {
             for (int i = _points.Count - 1; i >= 0; --i)
             {
@@ -258,7 +254,7 @@ namespace Mini.WinForms
     class MyShapePickupTool : PixelToolController
     {
         List<PixelToolController> prevPixTools;
-        MyDrawingBrushController _lastestSelectedController;
+        PixelToolController _lastestSelectedController;
         Color _latestSelectControllerFillColor;
         int _latest_mouseX, _latest_mouseY;
         public override bool IsDrawingTool { get { return false; } }
@@ -293,7 +289,10 @@ namespace Mini.WinForms
             _latest_mouseY = y;
             if (_lastestSelectedController != null)
             {
-                _lastestSelectedController.PathFillColor = _latestSelectControllerFillColor;
+                if (_lastestSelectedController is MyDrawingBrushController)
+                {
+                    ((MyDrawingBrushController)_lastestSelectedController).PathFillColor = _latestSelectControllerFillColor;
+                }
             }
 
             int j = this.prevPixTools.Count;
@@ -305,9 +304,14 @@ namespace Mini.WinForms
                 {
                     //found 
                     //then check fill color
-                    _lastestSelectedController = (MyDrawingBrushController)p;
-                    _latestSelectControllerFillColor = _lastestSelectedController.PathFillColor;
-                    _lastestSelectedController.PathFillColor = Color.Blue;
+                    _lastestSelectedController = p;
+                    if (_lastestSelectedController is MyDrawingBrushController)
+                    {
+                        var b = (MyDrawingBrushController)_lastestSelectedController;
+                        _latestSelectControllerFillColor = b.PathFillColor;
+                        b.PathFillColor = Color.Blue;
+                    }
+
                     selectedShape = p;
                     break;
                 }

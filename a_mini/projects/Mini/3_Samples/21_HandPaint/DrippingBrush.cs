@@ -18,15 +18,8 @@ namespace PixelFarm.Agg.Samples
         public override void Init()
         {
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
-            if (p == null)
-            {
-                p = new CanvasPainter(g);
-                p.StrokeColor = ColorRGBA.Black;
-                p.StrokeWidth = 1;
-            }
-
             p.Clear(ColorRGBA.White);
             p.FillColor = ColorRGBA.Black;
             foreach (var brushPath in this.myBrushPathList)
@@ -48,6 +41,7 @@ namespace PixelFarm.Agg.Samples
                 }
             }
         }
+
         public override void MouseUp(int x, int y)
         {
             if (currentBrushPath != null)

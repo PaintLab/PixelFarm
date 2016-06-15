@@ -32,6 +32,7 @@ either expressed or implied, of the FreeBSD Project.
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using Mini;
+using System;
 namespace PixelFarm.Agg.Sample_Images
 {
     [Info(OrderCode = "41")]
@@ -58,9 +59,10 @@ namespace PixelFarm.Agg.Sample_Images
                 return actualImage;
             }
         }
-        public override void Draw(Graphics2D g)
+
+        public override void Draw(CanvasPainter p)
         {
-            CanvasPainter painter = new CanvasPainter(g);
+            CanvasPainter painter = p;
             painter.DrawImage(actualImage, 0, 0);
             painter.DrawImage(actualImage,
                     AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),

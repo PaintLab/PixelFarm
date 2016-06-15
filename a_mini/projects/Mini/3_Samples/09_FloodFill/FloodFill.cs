@@ -52,12 +52,11 @@ namespace PixelFarm.Agg.Sample_FloodFill
             get;
             set;
         }
-        public override void Draw(Graphics2D graphics2D)
-        {
-            CanvasPainter painter = new CanvasPainter(graphics2D);
-            painter.DrawImage(imageToFillOn, imageOffset.x, imageOffset.y);
-        }
 
+        public override void Draw(CanvasPainter p)
+        {
+            p.DrawImage(imageToFillOn, imageOffset.x, imageOffset.y);
+        }
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int x = mx - imageOffset.x;

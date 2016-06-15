@@ -111,10 +111,11 @@ namespace PixelFarm.Agg.Sample_TransCurve
         void NeedsRedraw(object sender, EventArgs e)
         {
         }
-        public override void Draw(Graphics2D g)
+
+        public override void Draw(CanvasPainter p)
         {
-            g.Clear(ColorRGBA.White);
-            this.m_poly.OnDraw(g);
+            p.Clear(ColorRGBA.White);
+            m_poly.OnDraw(p);
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {

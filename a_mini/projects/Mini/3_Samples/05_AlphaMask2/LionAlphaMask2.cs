@@ -112,8 +112,9 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 isMaskSliderValueChanged = true;
             }
         }
-        public override void Draw(Graphics2D gx)
+        public override void Draw(CanvasPainter p)
         {
+            Graphics2D gx = p.Graphics;
             var widgetsSubImage = gx.DestImage;
             var scline = gx.ScanlinePacked8;
             int width = (int)widgetsSubImage.Width;
@@ -131,12 +132,12 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             PixelFarm.Agg.Image.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Image.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
             ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
-            //Affine transform = Affine.NewIdentity();
-            //transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-            //transform *= Affine.NewScaling(lionScale, lionScale);
-            //transform *= Affine.NewRotation(angle + Math.PI);
-            //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-            //transform *= Affine.NewTranslation(Width / 2, Height / 2);
+            ////Affine transform = Affine.NewIdentity();
+            ////transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
+            ////transform *= Affine.NewScaling(lionScale, lionScale);
+            ////transform *= Affine.NewRotation(angle + Math.PI);
+            ////transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
+            ////transform *= Affine.NewTranslation(Width / 2, Height / 2);
             Affine transform = Affine.NewMatix(
                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                     AffinePlan.Scale(lionScale, lionScale),
@@ -162,13 +163,12 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 }
             }
 
-            //int x, y; 
-            // Render the lion
-            //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
+            ////int x, y; 
+            //// Render the lion
+            ////VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
 
-            //var vxlist = new System.Collections.Generic.List<VertexData>();
-            //trans.DoTransform(vxlist);
-
+            ////var vxlist = new System.Collections.Generic.List<VertexData>();
+            ////trans.DoTransform(vxlist); 
 
             sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
                    rasterizer,
@@ -177,95 +177,93 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                    lionShape.Colors,
                    lionShape.PathIndexList,
                    lionShape.NumPaths);
-            /*
-            // Render random Bresenham lines and markers
-            agg::renderer_markers<amask_ren_type> m(r);
-            for(i = 0; i < 50; i++)
-            {
-                m.line_color(agg::rgba8(randGenerator.Next() & 0x7F, 
-                                        randGenerator.Next() & 0x7F, 
-                                        randGenerator.Next() & 0x7F, 
-                                        (randGenerator.Next() & 0x7F) + 0x7F)); 
-                m.fill_color(agg::rgba8(randGenerator.Next() & 0x7F, 
-                                        randGenerator.Next() & 0x7F, 
-                                        randGenerator.Next() & 0x7F, 
-                                        (randGenerator.Next() & 0x7F) + 0x7F));
+            ///*
+            //// Render random Bresenham lines and markers
+            //agg::renderer_markers<amask_ren_type> m(r);
+            //for(i = 0; i < 50; i++)
+            //{
+            //    m.line_color(agg::rgba8(randGenerator.Next() & 0x7F, 
+            //                            randGenerator.Next() & 0x7F, 
+            //                            randGenerator.Next() & 0x7F, 
+            //                            (randGenerator.Next() & 0x7F) + 0x7F)); 
+            //    m.fill_color(agg::rgba8(randGenerator.Next() & 0x7F, 
+            //                            randGenerator.Next() & 0x7F, 
+            //                            randGenerator.Next() & 0x7F, 
+            //                            (randGenerator.Next() & 0x7F) + 0x7F));
 
-                m.line(m.coord(randGenerator.Next() % width), m.coord(randGenerator.Next() % height), 
-                       m.coord(randGenerator.Next() % width), m.coord(randGenerator.Next() % height));
+            //    m.line(m.coord(randGenerator.Next() % width), m.coord(randGenerator.Next() % height), 
+            //           m.coord(randGenerator.Next() % width), m.coord(randGenerator.Next() % height));
 
-                m.marker(randGenerator.Next() % width, randGenerator.Next() % height, randGenerator.Next() % 10 + 5,
-                         agg::marker_e(randGenerator.Next() % agg::end_of_markers));
-            }
-
-
-            // Render random anti-aliased lines
-            double w = 5.0;
-            agg::line_profile_aa profile;
-            profile.width(w);
-
-            typedef agg::renderer_outline_aa<amask_ren_type> renderer_type;
-            renderer_type ren(r, profile);
-
-            typedef agg::rasterizer_outline_aa<renderer_type> rasterizer_type;
-            rasterizer_type ras(ren);
-            ras.round_cap(true);
-
-            for(i = 0; i < 50; i++)
-            {
-                ren.Color = agg::rgba8(randGenerator.Next() & 0x7F, 
-                                     randGenerator.Next() & 0x7F, 
-                                     randGenerator.Next() & 0x7F, 
-                                     //255));
-                                     (randGenerator.Next() & 0x7F) + 0x7F); 
-                ras.move_to_d(randGenerator.Next() % width, randGenerator.Next() % height);
-                ras.line_to_d(randGenerator.Next() % width, randGenerator.Next() % height);
-                ras.render(false);
-            }
+            //    m.marker(randGenerator.Next() % width, randGenerator.Next() % height, randGenerator.Next() % 10 + 5,
+            //             agg::marker_e(randGenerator.Next() % agg::end_of_markers));
+            //}
 
 
-            // Render random circles with gradient
-            typedef agg::gradient_linear_color<color_type> grad_color;
-            typedef agg::gradient_circle grad_func;
-            typedef agg::span_interpolator_linear<> interpolator_type;
-            typedef agg::span_gradient<color_type, 
-                                      interpolator_type, 
-                                      grad_func, 
-                                      grad_color> span_grad_type;
+            //// Render random anti-aliased lines
+            //double w = 5.0;
+            //agg::line_profile_aa profile;
+            //profile.width(w);
 
-            agg::trans_affine grm;
-            grad_func grf;
-            grad_color grc(agg::rgba8(0,0,0), agg::rgba8(0,0,0));
-            agg::ellipse ell;
-            agg::span_allocator<color_type> sa;
-            interpolator_type inter(grm);
-            span_grad_type sg(inter, grf, grc, 0, 10);
-            agg::renderer_scanline_aa<amask_ren_type, 
-                                      agg::span_allocator<color_type>,
-                                      span_grad_type> rg(r, sa, sg);
-            for(i = 0; i < 50; i++)
-            {
-                x = randGenerator.Next() % width;
-                y = randGenerator.Next() % height;
-                double r = randGenerator.Next() % 10 + 5;
-                grm.reset();
-                grm *= agg::trans_affine_scaling(r / 10.0);
-                grm *= agg::trans_affine_translation(x, y);
-                grm.invert();
-                grc.colors(agg::rgba8(255, 255, 255, 0),
-                           agg::rgba8(randGenerator.Next() & 0x7F, 
-                                      randGenerator.Next() & 0x7F, 
-                                      randGenerator.Next() & 0x7F, 
-                                      255));
-                sg.color_function(grc);
-                ell.init(x, y, r, r, 32);
-                g_rasterizer.add_path(ell);
-                agg::render_scanlines(g_rasterizer, g_scanline, rg);
-            }
-             */
-            //m_num_cb.Render(g_rasterizer, g_scanline, clippingProxy);
+            //typedef agg::renderer_outline_aa<amask_ren_type> renderer_type;
+            //renderer_type ren(r, profile);
+
+            //typedef agg::rasterizer_outline_aa<renderer_type> rasterizer_type;
+            //rasterizer_type ras(ren);
+            //ras.round_cap(true);
+
+            //for(i = 0; i < 50; i++)
+            //{
+            //    ren.Color = agg::rgba8(randGenerator.Next() & 0x7F, 
+            //                         randGenerator.Next() & 0x7F, 
+            //                         randGenerator.Next() & 0x7F, 
+            //                         //255));
+            //                         (randGenerator.Next() & 0x7F) + 0x7F); 
+            //    ras.move_to_d(randGenerator.Next() % width, randGenerator.Next() % height);
+            //    ras.line_to_d(randGenerator.Next() % width, randGenerator.Next() % height);
+            //    ras.render(false);
+            //}
 
 
+            //// Render random circles with gradient
+            //typedef agg::gradient_linear_color<color_type> grad_color;
+            //typedef agg::gradient_circle grad_func;
+            //typedef agg::span_interpolator_linear<> interpolator_type;
+            //typedef agg::span_gradient<color_type, 
+            //                          interpolator_type, 
+            //                          grad_func, 
+            //                          grad_color> span_grad_type;
+
+            //agg::trans_affine grm;
+            //grad_func grf;
+            //grad_color grc(agg::rgba8(0,0,0), agg::rgba8(0,0,0));
+            //agg::ellipse ell;
+            //agg::span_allocator<color_type> sa;
+            //interpolator_type inter(grm);
+            //span_grad_type sg(inter, grf, grc, 0, 10);
+            //agg::renderer_scanline_aa<amask_ren_type, 
+            //                          agg::span_allocator<color_type>,
+            //                          span_grad_type> rg(r, sa, sg);
+            //for(i = 0; i < 50; i++)
+            //{
+            //    x = randGenerator.Next() % width;
+            //    y = randGenerator.Next() % height;
+            //    double r = randGenerator.Next() % 10 + 5;
+            //    grm.reset();
+            //    grm *= agg::trans_affine_scaling(r / 10.0);
+            //    grm *= agg::trans_affine_translation(x, y);
+            //    grm.invert();
+            //    grc.colors(agg::rgba8(255, 255, 255, 0),
+            //               agg::rgba8(randGenerator.Next() & 0x7F, 
+            //                          randGenerator.Next() & 0x7F, 
+            //                          randGenerator.Next() & 0x7F, 
+            //                          255));
+            //    sg.color_function(grc);
+            //    ell.init(x, y, r, r, 32);
+            //    g_rasterizer.add_path(ell);
+            //    agg::render_scanlines(g_rasterizer, g_scanline, rg);
+            //}
+            // */
+            ////m_num_cb.Render(g_rasterizer, g_scanline, clippingProxy); 
         }
         public override void MouseDown(int x, int y, bool isRightButton)
         {

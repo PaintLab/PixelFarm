@@ -25,7 +25,7 @@ namespace PixelFarm.Agg.Samples
     {
         Point latestMousePoint;
         List<MyBrushPath> myBrushPathList = new List<MyBrushPath>();
-        CanvasPainter p;
+        //CanvasPainter p;
         MyBrushPath currentBrushPath;
         MyBrushPath currentSelectedPath;
         int lastMousePosX;
@@ -46,15 +46,8 @@ namespace PixelFarm.Agg.Samples
             get;
             set;
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
-            if (p == null)
-            {
-                p = new CanvasPainter(g);
-                p.StrokeColor = ColorRGBA.Black;
-                p.StrokeWidth = 1;
-            }
-
             p.Clear(ColorRGBA.White);
             p.FillColor = ColorRGBA.Black;
             int j = myBrushPathList.Count;
@@ -97,6 +90,7 @@ namespace PixelFarm.Agg.Samples
                 }
             }
         }
+
 
         public override void MouseUp(int x, int y)
         {
