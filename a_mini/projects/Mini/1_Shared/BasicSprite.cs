@@ -44,6 +44,9 @@ namespace PixelFarm.Agg
         public virtual void OnDraw(Graphics2D graphics2D)
         {
         }
+        public virtual void Draw(CanvasPainter p)
+        {
+        }
         protected void UpdateTransform(double width, double height, double x, double y)
         {
             x -= width / 2;

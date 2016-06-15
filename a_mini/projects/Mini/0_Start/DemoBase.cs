@@ -44,7 +44,7 @@ namespace Mini
         }
 
         public event RequestNewGraphic2DDelegate RequestNewGfx2d;
-        public abstract void Draw(PixelFarm.Agg.Graphics2D gx);
+        public abstract void Draw(CanvasPainter p);
         public virtual void Init() { }
 
         public virtual void MouseDrag(int x, int y) { }

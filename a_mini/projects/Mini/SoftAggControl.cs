@@ -1,4 +1,6 @@
-﻿using System;
+﻿//MIT 2016, WinterDev
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -16,40 +18,64 @@ namespace Mini
         int myHeight = 600;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
         Graphics2D gfx;
-        BufferedGraphics myBuffer;
+        BufferedGraphics _myBuffGfx;
         System.Drawing.Graphics _g;
-        bool useGdiPlusOutput;
+        CanvasPainter painter;
+        bool _useGdiPlusOutput;
+        bool _gdiAntiAlias;
         public SoftAggControl()
         {
-            useGdiPlusOutput = true;
+            _useGdiPlusOutput = false;
             InitializeComponent();
             this.Load += new EventHandler(SoftAggControl_Load);
         }
+
+        public bool UseGdiPlus
+        {
+            get { return _useGdiPlusOutput; }
+            set { _useGdiPlusOutput = value; }
+        }
+        public bool UseGdiAntiAlias
+        {
+            get { return _gdiAntiAlias; }
+            set { _gdiAntiAlias = value; }
+        }
+
         void SoftAggControl_Load(object sender, EventArgs e)
         {
-            OnInitialize(myWidth, myHeight);
-        }
-        void OnInitialize(int width, int height)
-        {
-            if (useGdiPlusOutput)
+            if (_useGdiPlusOutput)
             {
                 // This example assumes the existence of a form called Form1.
                 // Gets a reference to the current BufferedGraphicsContext
                 BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
                 // Creates a BufferedGraphics instance associated with Form1, and with 
                 // dimensions the same size as the drawing surface of Form1.
-                myBuffer = currentContext.Allocate(this.CreateGraphics(),
+                _myBuffGfx = currentContext.Allocate(this.CreateGraphics(),
                    this.DisplayRectangle);
-                _g = myBuffer.Graphics;
-                this.gfx = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g);
+                _g = _myBuffGfx.Graphics;
+                if (_gdiAntiAlias)
+                {
+                    _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                }
+                else
+                {
+                    _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                }
+
+
+                var canvas = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g);
+                this.gfx = canvas;
                 this.gfx.Clear(ColorRGBA.White);
+                painter = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(canvas);
             }
             else
             {
-                this.gfx = bitmapBackBuffer.Initialize(width, height, 32);
+                this.gfx = bitmapBackBuffer.Initialize(myWidth, myHeight, 32);
                 this.gfx.Clear(ColorRGBA.White);
+                painter = new AggCanvasPainter(gfx);
             }
         }
+
         public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;
@@ -61,7 +87,7 @@ namespace Mini
             this.isMouseDown = true;
             exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
             base.OnMouseDown(e);
-            if (!useGdiPlusOutput)
+            if (!_useGdiPlusOutput)
             {
                 Invalidate();
             }
@@ -75,7 +101,7 @@ namespace Mini
             this.isMouseDown = false;
             exampleBase.MouseUp(e.X, myHeight - e.Y);
             base.OnMouseUp(e);
-            if (!useGdiPlusOutput)
+            if (!_useGdiPlusOutput)
             {
                 Invalidate();
             }
@@ -89,7 +115,7 @@ namespace Mini
             if (this.isMouseDown)
             {
                 exampleBase.MouseDrag(e.X, myHeight - e.Y);
-                if (!useGdiPlusOutput)
+                if (!_useGdiPlusOutput)
                 {
                     Invalidate();
                 }
@@ -107,9 +133,9 @@ namespace Mini
                 base.OnPaint(e);
                 return;
             }
-            if (!useGdiPlusOutput)
+            if (!_useGdiPlusOutput)
             {
-                exampleBase.Draw(gfx);
+                exampleBase.Draw(painter);
                 bitmapBackBuffer.UpdateToHardwareSurface(e.Graphics);
             }
             else
@@ -120,11 +146,10 @@ namespace Mini
         }
         void UpdateOutput()
         {
-            //--------------------------------
-            exampleBase.Draw(gfx);
-            if (useGdiPlusOutput)
+            exampleBase.Draw(painter);
+            if (_useGdiPlusOutput)
             {
-                myBuffer.Render();
+                _myBuffGfx.Render();
             }
         }
     }

@@ -45,9 +45,10 @@ namespace PixelFarm.Agg.Samples
         {
             lionFill = new LionFillSprite();
         }
-        public override void Draw(Graphics2D g)
+
+        public override void Draw(CanvasPainter p)
         {
-            lionFill.OnDraw(g);
+            lionFill.Draw(p);
         }
         public override void MouseDrag(int x, int y)
         {

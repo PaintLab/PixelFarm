@@ -46,15 +46,8 @@ namespace PixelFarm.Agg.Samples
         public override void Init()
         {
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
-            if (p == null)
-            {
-                p = new CanvasPainter(g);
-                p.StrokeColor = ColorRGBA.Black;
-                p.StrokeWidth = 1;
-            }
-
             p.Clear(ColorRGBA.White);
             var plistCount = pointSets.Count;
             for (int n = 0; n < plistCount; ++n)
@@ -69,6 +62,7 @@ namespace PixelFarm.Agg.Samples
                 }
             }
         }
+
         public override void MouseDrag(int x, int y)
         {
             //add data to draw             

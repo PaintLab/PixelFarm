@@ -42,11 +42,11 @@ namespace PixelFarm.Agg
         //render vertices
         public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
         //------------------------------------------------------------------------
-        //render images ...
-        public abstract void Render(IImageReaderWriter imageSource,
-            double x, double y,
-            double angleRadians,
-            double scaleX, double ScaleY);
+        ////render images ...
+        //public abstract void Render(IImageReaderWriter imageSource,
+        //    double x, double y,
+        //    double angleRadians,
+        //    double scaleX, double ScaleY);
         public abstract void Render(IImageReaderWriter source, double x, double y);
         public abstract void Render(IImageReaderWriter source, AffinePlan[] affinePlans);
         public void Render(VertexStore vxStorage, ColorRGBA c)
@@ -100,17 +100,6 @@ namespace PixelFarm.Agg
         public static Graphics2D CreateFromImage(ActualImage actualImage)
         {
             return new ImageGraphics2D(actualImage);
-        }
-
-        public double RasterOffsetX
-        {
-            get { return this.sclineRas.AddVertexOffsetX; }
-            set { this.sclineRas.AddVertexOffsetX = value; }
-        }
-        public double RasterOffsetY
-        {
-            get { return this.sclineRas.AddVertexOffsetY; }
-            set { this.sclineRas.AddVertexOffsetY = value; }
         }
         public abstract bool UseSubPixelRendering
         {

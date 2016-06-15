@@ -16,15 +16,11 @@ namespace PixelFarm.Agg.Sample_Gradient
         public GradientDemo()
         {
         }
-        public override void Draw(Graphics2D g)
+
+        public override void Draw(CanvasPainter p)
         {
-            OnDraw(g);
-        }
-        public void OnDraw(Graphics2D graphics2D)
-        {
-            CanvasPainter painter = new CanvasPainter(graphics2D);
-            painter.FillColor = ColorRGBA.Blue;
-            painter.FillRectangle(0, 70, 150, 120);
+            p.FillColor = ColorRGBA.Blue;
+            p.FillRectangle(0, 70, 150, 120);
             //------------------------------------------- 
             var innerGradient = new Gradients.GvcRadial();
             SpanInterpolatorLinear linerInterpolator = new SpanInterpolatorLinear(Affine.IdentityMatrix);
@@ -34,8 +30,9 @@ namespace PixelFarm.Agg.Sample_Gradient
                 linearColorProvider,
                 0, 150);
             SimpleRect srect = new SimpleRect(0, 0, 150, 50);
-            painter.Fill(srect.MakeVxs(), spanGenGradient);
+            p.Fill(srect.MakeVxs(), spanGenGradient);
         }
+
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
         }

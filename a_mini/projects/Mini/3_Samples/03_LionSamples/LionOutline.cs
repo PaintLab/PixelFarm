@@ -51,9 +51,10 @@ namespace PixelFarm.Agg.Sample_LionOutline
         {
             lionFill = new LionOutlineSprite();
         }
-        public override void Draw(Graphics2D g)
+
+        public override void Draw(CanvasPainter p)
         {
-            lionFill.OnDraw(g);
+            lionFill.Draw(p);
         }
         public override void MouseDrag(int x, int y)
         {
@@ -111,6 +112,10 @@ namespace PixelFarm.Agg.Sample_LionOutline
         {
             get;
             set;
+        }
+        public override void Draw(CanvasPainter p)
+        {
+            base.Draw(p);
         }
         public override void OnDraw(Graphics2D graphics2D)
         {

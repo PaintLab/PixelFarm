@@ -20,19 +20,15 @@ namespace PixelFarm.Agg.Sample_Draw
         public override void Init()
         {
         }
-        public override void Draw(Graphics2D g)
+
+        public override void Draw(CanvasPainter p)
         {
-            // Draw2(g); 
-            ////1.
-            //// clear the image to white  
-            g.Clear(ColorRGBA.White);
-            //------------------------------------
-            g.UseSubPixelRendering = true;
-            // draw some text
+            p.Clear(ColorRGBA.White);
+            //g.UseSubPixelRendering = true; 
             string teststr = "ABCDE abcd 1230 Hello!";
-            g.DrawString(teststr, 300, 400, 22);
-            g.UseSubPixelRendering = false;
-            g.DrawString(teststr, 300, 422, 22);
+            p.DrawString(teststr, 300, 400);
+            //g.UseSubPixelRendering = false;
+            //g.DrawString(teststr, 300, 422, 22);
         }
     }
 
@@ -44,14 +40,14 @@ namespace PixelFarm.Agg.Sample_Draw
         public override void Init()
         {
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
             int width = 800;
             int height = 600;
             //clear the image to white
-            g.Clear(ColorRGBA.White);
+            //g.Clear(ColorRGBA.White);
             // draw a circle
-
+            p.Clear(ColorRGBA.White);
             Ellipse ellipsePro = new Ellipse(0, 0, 100, 50);
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
@@ -59,9 +55,13 @@ namespace PixelFarm.Agg.Sample_Draw
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
                 VertexStore sp1 = mat.TransformToVxs(ellipsePro.MakeVxs());
-                g.Render(sp1, ColorRGBA.Yellow);
+                p.FillColor = ColorRGBA.Yellow;
+                p.Fill(sp1);
+                //g.Render(sp1, ColorRGBA.Yellow);
                 //Stroke ellipseOutline = new Stroke(sp1, 3);
-                g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
+                p.FillColor = ColorRGBA.Blue;
+                p.Fill(StrokeHelp.MakeVxs(sp1, 3));
+                //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
             }
 
             // and a little polygon
@@ -71,7 +71,9 @@ namespace PixelFarm.Agg.Sample_Draw
             littlePoly.LineTo(200, 200);
             littlePoly.LineTo(50, 150);
             littlePoly.LineTo(50, 50);
-            g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
+            p.FillColor = ColorRGBA.Cyan;
+            p.Fill(littlePoly.MakeVertexSnap());
+            //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
             // draw some text
             // draw some text 
 
@@ -84,12 +86,18 @@ namespace PixelFarm.Agg.Sample_Draw
             VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());
             var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStore s1 = affTx.TransformToVxs(vxs);
-            g.Render(s1, ColorRGBA.Black);
-            g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
+            p.FillColor = ColorRGBA.Black;
+            p.Fill(s1);
+            //g.Render(s1, ColorRGBA.Black);
+            p.FillColor = ColorRGBA.Red;
+            p.Fill(StrokeHelp.MakeVxs(s1, 1));
+            //g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
                 AffinePlan.Translate(40, height / 2));
-            g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
+            p.FillColor = ColorRGBA.Black;
+            p.Fill(aff2.TransformToVertexSnap(vxs));
+            //g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
         }
     }
 

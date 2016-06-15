@@ -37,6 +37,40 @@ namespace PixelFarm.Agg
             myvxs = null;
             return result;
         }
+        public override void Draw(CanvasPainter p)
+        {
+            if (myvxs == null)
+            {
+                var transform = Affine.NewMatix(
+                        AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                        AffinePlan.Scale(spriteScale, spriteScale),
+                        AffinePlan.Rotate(angle + Math.PI),
+                        AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                        AffinePlan.Translate(Width / 2, Height / 2)
+                );
+                //create vertextStore again from origiinal path
+                myvxs = transform.TransformToVxs(lionShape.Path.Vxs);
+            }
+            //---------------------------------------------------------------------------------------------
+            {
+                try
+                {
+                    int j = lionShape.NumPaths;
+                    int[] pathList = lionShape.PathIndexList;
+                    ColorRGBA[] colors = lionShape.Colors;
+                    //graphics2D.UseSubPixelRendering = true; 
+                    for (int i = 0; i < j; ++i)
+                    {
+                        p.FillColor = colors[i];
+                        p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
+                        //graphics2D.Render(new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
         public override void OnDraw(Graphics2D graphics2D)
         {
             if (myvxs == null)

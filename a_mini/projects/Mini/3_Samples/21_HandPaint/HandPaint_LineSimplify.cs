@@ -51,15 +51,8 @@ namespace PixelFarm.Agg.Samples
             currentPointSet = testPoints;
             CreateFitCurves();
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
-            if (p == null)
-            {
-                p = new CanvasPainter(g);
-                p.StrokeColor = ColorRGBA.Black;
-                p.StrokeWidth = 1;
-            }
-
             p.Clear(ColorRGBA.White);
             var plistCount = pointSets.Count;
             p.StrokeColor = ColorRGBA.Black;
@@ -94,6 +87,7 @@ namespace PixelFarm.Agg.Samples
             //       (float)cc.p2.x, (float)cc.p2.y);
             //}
         }
+
         static void FillPoint(Vector2 v, CanvasPainter p)
         {
             p.FillRectangle(

@@ -55,7 +55,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void RenderGourand(Graphics2D gx)
+        public void RenderGourand(CanvasPainter p)
         {
             float alpha = this.AlphaValue;
             float brc = 1;
@@ -64,10 +64,12 @@ namespace PixelFarm.Agg.Sample_Gouraud
 #else
 
 #endif
-            var destImage = gx.DestImage;
-            //span_allocator span_alloc = new span_allocator();
+            ////var destImage = gx.DestImage;
+            ////span_allocator span_alloc = new span_allocator(); 
 
-            CanvasPainter painter = new CanvasPainter(gx);
+            //specific for agg
+            CanvasPainter painter = p;
+            Graphics2D gx = p.Graphics;
             SpanGenGouraudRGBA gouraudSpanGen = new SpanGenGouraudRGBA();
             gx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
             double d = this.DilationValue;
@@ -112,15 +114,11 @@ namespace PixelFarm.Agg.Sample_Gouraud
             gouraudSpanGen.SetTriangle(m_x[2], m_y[2], m_x[0], m_y[0], x3, y3, d);
             painter.Fill(gouraudSpanGen.MakeVxs(), gouraudSpanGen);
         }
-        public override void Draw(Graphics2D g)
+        public override void Draw(CanvasPainter p)
         {
-            OnDraw(g);
-        }
-        public void OnDraw(Graphics2D graphics2D)
-        {
-            graphics2D.Clear(ColorRGBA.White);
+            p.Clear(ColorRGBA.White);
 #if true
-            RenderGourand(graphics2D);
+            RenderGourand(p);
 #else
             agg.span_allocator span_alloc = new span_allocator();
             span_gouraud_rgba span_gen = new span_gouraud_rgba(new rgba8(255, 0, 0, 255), new rgba8(0, 255, 0, 255), new rgba8(0, 0, 255, 255), 320, 220, 100, 100, 200, 100, 0);
@@ -128,16 +126,12 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ras.add_path(test_sg);
             renderer_scanlines.render_scanlines_aa(ras, sl, ren_base, span_alloc, span_gen);
             //renderer_scanlines.render_scanlines_aa_solid(ras, sl, ren_base, new rgba8(0, 0, 0, 255));
-#endif
-
-
-            graphics2D.ScanlineRasterizer.ResetGamma(new GammaNone());
+#endif 
+            //graphics2D.ScanlineRasterizer.ResetGamma(new GammaNone());***
             //m_dilation.Render(ras, sl, ren_base);
             //m_gamma.Render(ras, sl, ren_base);
             //m_alpha.Render(ras, sl, ren_base);
-
         }
-
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
             int i;

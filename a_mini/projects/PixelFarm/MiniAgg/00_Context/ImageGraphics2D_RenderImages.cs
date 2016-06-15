@@ -119,7 +119,7 @@ namespace PixelFarm.Agg
                 spanGen);
         }
 
-        public override void Render(IImageReaderWriter source,
+        public void Render(IImageReaderWriter source,
             double destX, double destY,
             double angleRadians,
             double inScaleX, double inScaleY)
@@ -275,7 +275,6 @@ namespace PixelFarm.Agg
                 //}
                 return;
             }
-
 
             double scaleX = inScaleX;
             double scaleY = inScaleY;

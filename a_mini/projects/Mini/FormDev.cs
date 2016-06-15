@@ -20,8 +20,6 @@ namespace Mini
             this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick);
             this.Text = "DevForm: Double Click The Example!";
             //test native font
-
-
         }
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
@@ -31,6 +29,8 @@ namespace Mini
             {
                 FormTestBed1 testBed = new FormTestBed1();
                 testBed.WindowState = FormWindowState.Maximized;
+                testBed.UseGdiPlus = chkUseGdiPlus.Checked;
+                testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
                 testBed.Show();
                 testBed.LoadExample(exAndDesc);
             }
