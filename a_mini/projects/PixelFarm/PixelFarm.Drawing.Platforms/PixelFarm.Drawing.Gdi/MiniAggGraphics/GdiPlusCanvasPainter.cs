@@ -23,6 +23,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Font _currentFont;
         System.Drawing.SolidBrush _currentFillBrush;
         System.Drawing.Pen _currentPen;
+        PixelFarm.Agg.VertexSource.RoundedRect roundRect;
         public GdiPlusCanvasPainter(CanvasGraphics2dGdi gfx)
         {
             _width = 800;
@@ -202,9 +203,8 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void Draw(VertexStore vxs)
         {
-            VxsHelper.DrawVxsSnap(_internalGfx, new VertexStoreSnap(vxs), _fillColor);
+            VxsHelper.DrawVxsSnap(_internalGfx, new VertexStoreSnap(vxs), _strokeColor);
         }
-
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         {
         }
@@ -223,12 +223,6 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
-
-        public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void DrawString(string text, double x, double y)
         {
             //use current brush and font
@@ -241,12 +235,12 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void Fill(VertexStore vxs)
         {
-            VxsHelper.DrawVxsSnap(_internalGfx, new VertexStoreSnap(vxs), _fillColor);
+            VxsHelper.FillVxsSnap(_internalGfx, new VertexStoreSnap(vxs), _fillColor);
         }
 
         public override void Fill(VertexStoreSnap snap)
         {
-            VxsHelper.DrawVxsSnap(_internalGfx, snap, _fillColor);
+            VxsHelper.FillVxsSnap(_internalGfx, snap, _fillColor);
         }
 
         public override void Fill(VertexStore vxs, ISpanGenerator spanGen)
@@ -257,17 +251,20 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void FillCircle(double x, double y, double radius)
         {
-            throw new NotImplementedException();
+            _internalGfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
         }
 
         public override void FillCircle(double x, double y, double radius, ColorRGBA color)
         {
-            throw new NotImplementedException();
+            var prevColor = _currentFillBrush.Color;
+            _currentFillBrush.Color = VxsHelper.ToDrawingColor(color);
+            _internalGfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+            _currentFillBrush.Color = prevColor;
         }
 
         public override void FillEllipse(double left, double bottom, double right, double top, int nsteps)
         {
-            throw new NotImplementedException();
+            _internalGfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
         }
 
         public override void FillRectangle(double left, double bottom, double right, double top)
@@ -286,9 +283,35 @@ namespace PixelFarm.Drawing.WinGdi
             _internalGfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
         }
 
+        public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
+        {
+            if (roundRect == null)
+            {
+                roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+                roundRect.NormalizeRadius();
+            }
+            else
+            {
+                roundRect.SetRect(left, bottom, right, top);
+                roundRect.SetRadius(radius);
+                roundRect.NormalizeRadius();
+            }
+            this.Draw(roundRect.MakeVxs());
+        }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
-            throw new NotImplementedException();
+            if (roundRect == null)
+            {
+                roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+                roundRect.NormalizeRadius();
+            }
+            else
+            {
+                roundRect.SetRect(left, bottom, right, top);
+                roundRect.SetRadius(radius);
+                roundRect.NormalizeRadius();
+            }
+            this.Fill(roundRect.MakeVxs());
         }
 
         public override VertexStore FlattenCurves(VertexStore srcVxs)
@@ -316,7 +339,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             for (int i = 0; i < numPath; ++i)
             {
-                VxsHelper.DrawVxsSnap(_internalGfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
+                VxsHelper.FillVxsSnap(_internalGfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
             }
         }
 
