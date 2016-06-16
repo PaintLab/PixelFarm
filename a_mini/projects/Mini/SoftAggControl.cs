@@ -76,12 +76,13 @@ namespace Mini
             }
             else
             {
-                this.gfx = bitmapBackBuffer.Initialize(myWidth, myHeight, 32);
+                ImageGraphics2D imgGfx2d = bitmapBackBuffer.Initialize(myWidth, myHeight, 32);
+                this.gfx = imgGfx2d;
                 //-------------
                 string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
                 //-------------
                 this.gfx.Clear(ColorRGBA.White);
-                painter = new AggCanvasPainter(gfx);
+                painter = new AggCanvasPainter(imgGfx2d);
                 painter.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont(fontfile, 10);
             }
         }

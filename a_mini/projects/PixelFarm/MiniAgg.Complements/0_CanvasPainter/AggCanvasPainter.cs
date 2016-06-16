@@ -27,7 +27,7 @@ namespace PixelFarm.Agg
 {
     public class AggCanvasPainter : CanvasPainter
     {
-        Graphics2D gx;
+        ImageGraphics2D gx;
         Stroke stroke;
         ColorRGBA fillColor;
         ColorRGBA strokeColor;
@@ -46,7 +46,7 @@ namespace PixelFarm.Agg
         CurveFlattener curveFlattener;
         TextPrinter textPrinter;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
-        public AggCanvasPainter(Graphics2D graphic2d)
+        public AggCanvasPainter(ImageGraphics2D graphic2d)
         {
             this.gx = graphic2d;
             this.sclineRas = gx.ScanlineRasterizer;

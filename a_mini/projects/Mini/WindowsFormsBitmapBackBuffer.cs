@@ -109,7 +109,7 @@ namespace Mini
             bufferGfx.ReleaseHdc(bufferDc);
             dest.ReleaseHdc(displayHdc);
         }
-        public Graphics2D Initialize(int width, int height, int bitDepth)
+        public ImageGraphics2D Initialize(int width, int height, int bitDepth)
         {
             if (width > 0 && height > 0)
             {

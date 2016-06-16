@@ -24,7 +24,8 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 namespace PixelFarm.Agg
 {
-    partial class ImageGraphics2D : Graphics2D
+
+    public partial class ImageGraphics2D : Graphics2D
     {
         ImageReaderWriterBase destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
@@ -52,6 +53,8 @@ namespace PixelFarm.Agg
             this.sclinePack8 = new ScanlinePacked8();
             this.currentBlender = this.pixBlenderRGBA32 = new PixelBlenderBGRA();
         }
+        //public abstract void Render(IImageReaderWriter source, double x, double y);
+        //public abstract void Render(IImageReaderWriter source, AffinePlan[] affinePlans);
         public override ScanlinePacked8 ScanlinePacked8
         {
             get { return this.sclinePack8; }
