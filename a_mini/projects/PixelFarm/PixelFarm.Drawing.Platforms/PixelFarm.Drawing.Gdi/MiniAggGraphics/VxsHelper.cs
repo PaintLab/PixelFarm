@@ -9,6 +9,8 @@ namespace PixelFarm.Drawing.WinGdi
 {
     public static class VxsHelper
     {
+        static System.Drawing.Pen _pen = new System.Drawing.Pen(System.Drawing.Color.Black);
+        static System.Drawing.SolidBrush _br = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
         public static System.Drawing.Drawing2D.GraphicsPath CreateGraphicsPath(VertexStore vxs)
         {
             //render vertice in store
@@ -101,21 +103,17 @@ namespace PixelFarm.Drawing.WinGdi
         EXIT_LOOP:
             return brush_path;
         }
+        public static void FillVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
+        {
+            System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
+            _br.Color = ToDrawingColor(c);
+            g.FillPath(_br, p);
+        }
         public static void DrawVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
         {
             System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
-            using (System.Drawing.SolidBrush br = new System.Drawing.SolidBrush(ToDrawingColor(c)))
-            {
-                g.FillPath(br, p);
-            }
-        }
-        public static void StrokeVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
-        {
-            System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
-            using (System.Drawing.Pen pen = new System.Drawing.Pen(ToDrawingColor(c)))
-            {
-                g.DrawPath(pen, p);
-            }
+            _pen.Color = ToDrawingColor(c);
+            g.DrawPath(_pen, p);
         }
         public static System.Drawing.Color ToDrawingColor(ColorRGBA c)
         {
