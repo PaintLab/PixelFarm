@@ -207,8 +207,12 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         {
+            _internalGfx.DrawBezier(_currentPen,
+                 startX, startY,
+                 controlX1, controlY1,
+                 controlX2, controlY2,
+                 endX, endY);
         }
-
         public override void DrawEllipse()
         {
             throw new NotImplementedException();
@@ -216,12 +220,49 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
+
+
+
+
             throw new NotImplementedException();
         }
 
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
-            throw new NotImplementedException();
+            //create Gdi bitmap from actual image
+            int w = actualImage.Width;
+            int h = actualImage.Height;
+            switch (actualImage.PixelFormat)
+            {
+                case Agg.Image.PixelFormat.Rgba32:
+                    {
+                        //copy data from acutal buffer to internal representation bitmap
+                        using (var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                        {
+                            //copy data to bitmap
+                            //bgra  
+                            byte[] acutalBuffer = actualImage.GetBuffer();
+                            var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
+                            System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
+                            bmp.UnlockBits(bmpData);
+                            //
+                            this._internalGfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                        }
+                    }
+                    break;
+                case Agg.Image.PixelFormat.Rgb24:
+                    {
+
+                    }
+                    break;
+                case Agg.Image.PixelFormat.GrayScale8:
+                    {
+
+                    }
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
         }
         public override void DrawString(string text, double x, double y)
         {
