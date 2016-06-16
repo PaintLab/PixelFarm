@@ -186,7 +186,8 @@ namespace PixelFarm.Agg.Sample_Blur2
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
-                                p.DoFilterBlurStack(boundRect, m_radius);
+                                //p.DoFilterBlurStack(boundRect, m_radius);
+                                p.DoFilterBlurStack(new RectInt(0, 0, Width, Height), m_radius);
                             }
                             break;
                         default:

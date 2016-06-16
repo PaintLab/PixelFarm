@@ -18,19 +18,22 @@ namespace PixelFarm.Drawing.WinGdi
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
         ScanlineRasterizer sclineRas;
         ImageReaderWriterBase destImageReaderWriter;
-        ActualImage destImage;
-        public CanvasGraphics2dGdi(Graphics g)
+        System.Drawing.Bitmap destImage;
+        public CanvasGraphics2dGdi(Graphics g, System.Drawing.Bitmap destImage)
         {
             //create from actual image
-            destImage = new ActualImage(800, 600, PixelFormat.Rgba32);
-            this.destActualImage = destImage;
-            this.destImageReaderWriter = new MyImageReaderWriter(destImage);
+            //destImage = new ActualImage(800, 600, PixelFormat.Rgba32);
+            //this.destActualImage = destImage;
+            //this.destImageReaderWriter = new MyImageReaderWriter(destImage);
+            this.destImage = destImage;
             this._g = g;
             sclinePack8 = new ScanlinePacked8();
             this.sclineRas = new ScanlineRasterizer();
             this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
         }
+
         public Graphics InternalGraphics { get { return _g; } }
+        public System.Drawing.Bitmap InternalBackBmp { get { return this.destImage; } }
         public override ImageReaderWriterBase DestImage
         {
             get

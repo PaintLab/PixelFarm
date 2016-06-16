@@ -18,11 +18,13 @@ namespace Mini
         int myHeight = 600;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
         Graphics2D gfx;
-        BufferedGraphics _myBuffGfx;
-        System.Drawing.Graphics _g;
+        Graphics _g;
         CanvasPainter painter;
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
+        System.Drawing.Graphics thisGfx;//for output
+        Bitmap bufferBmp = null;
+        Rectangle bufferBmpRect;
         public SoftAggControl()
         {
             _useGdiPlusOutput = false;
@@ -47,12 +49,17 @@ namespace Mini
             {
                 // This example assumes the existence of a form called Form1.
                 // Gets a reference to the current BufferedGraphicsContext
-                BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
+                //BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
+                //_myBuffGfx = currentContext.Allocate(this.CreateGraphics(),
+                //   this.DisplayRectangle);
+
                 // Creates a BufferedGraphics instance associated with Form1, and with 
                 // dimensions the same size as the drawing surface of Form1.
-                _myBuffGfx = currentContext.Allocate(this.CreateGraphics(),
-                   this.DisplayRectangle);
-                _g = _myBuffGfx.Graphics;
+
+                thisGfx = this.CreateGraphics();  //for render to output
+                bufferBmpRect = this.DisplayRectangle;
+                bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
+                _g = Graphics.FromImage(bufferBmp);
                 if (_gdiAntiAlias)
                 {
                     _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -62,8 +69,7 @@ namespace Mini
                     _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
                 }
 
-
-                var canvas = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g);
+                var canvas = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g, bufferBmp);
                 this.gfx = canvas;
                 this.gfx.Clear(ColorRGBA.White);
                 painter = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(canvas);
@@ -149,7 +155,8 @@ namespace Mini
             exampleBase.Draw(painter);
             if (_useGdiPlusOutput)
             {
-                _myBuffGfx.Render();
+                //_myBuffGfx.Render();
+                thisGfx.DrawImageUnscaledAndClipped(bufferBmp, bufferBmpRect);
             }
         }
     }
