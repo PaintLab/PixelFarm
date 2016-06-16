@@ -117,13 +117,11 @@ namespace PixelFarm.Agg.Sample_Blur2
                    x, y,
                    1));
         }
-
         public override void Draw(CanvasPainter p)
         {
-            //create painter
-            CanvasPainter painter = p;
-            painter.SetClipBox(0, 0, Width, Height);
-            painter.Clear(ColorRGBA.White);
+            //create painter             
+            p.SetClipBox(0, 0, Width, Height);
+            p.Clear(ColorRGBA.White);
             //-----------------------------------------------------------------------
             //green glyph
             Perspective shadow_persp = new Perspective(
@@ -138,8 +136,8 @@ namespace PixelFarm.Agg.Sample_Blur2
             {
                 s2 = shadow_persp.TransformToVxs(m_pathVxs);
             }
-            painter.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
-            painter.Fill(s2);
+            p.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
+            p.Fill(s2);
             //---------------------------------------------------------------------------------------------------------
             //shadow 
             //---------------------------------------------------------------------------------------------------------
@@ -177,8 +175,8 @@ namespace PixelFarm.Agg.Sample_Blur2
                 if (boundRect.Clip(new RectInt(0, 0, p.Width - 1, p.Height - 1)))
                 {
                     //check if intersect  
-                    var prevClip = painter.ClipBox;
-                    painter.ClipBox = boundRect;
+                    var prevClip = p.ClipBox;
+                    p.ClipBox = boundRect;
                     // Blur it
                     switch (BlurMethod)
                     {
@@ -188,7 +186,8 @@ namespace PixelFarm.Agg.Sample_Blur2
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
-                                painter.DoFilterBlurStack(boundRect, m_radius);
+                                //p.DoFilterBlurStack(boundRect, m_radius);
+                                p.DoFilterBlurStack(new RectInt(0, 0, Width, Height), m_radius);
                             }
                             break;
                         default:
@@ -196,32 +195,32 @@ namespace PixelFarm.Agg.Sample_Blur2
                                 // but still constant time of radius. Very sensitive
                                 // to precision, doubles are must here.
                                 //------------------
-                                painter.DoFilterBlurRecursive(boundRect, m_radius);
+                                p.DoFilterBlurRecursive(boundRect, m_radius);
                             }
                             break;
                     }
                     //store back
-                    painter.ClipBox = prevClip;
+                    p.ClipBox = prevClip;
                 }
             }
 
             double tm = stopwatch.ElapsedMilliseconds;
-            painter.FillColor = ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f);
+            p.FillColor = ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f);
             // Render the shape itself
             ////------------------
             if (FlattenCurveChecked)
             {
                 //m_ras.AddPath(m_path_2);
-                painter.Fill(m_path_2);
+                p.Fill(m_path_2);
             }
             else
             {
                 //m_ras.AddPath(m_pathVxs);
-                painter.Fill(m_pathVxs);
+                p.Fill(m_pathVxs);
             }
 
-            painter.FillColor = ColorRGBA.Black;
-            painter.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
+            p.FillColor = ColorRGBA.Black;
+            //p.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
             //-------------------------------------------------------------
             //control
             m_shadow_ctrl.OnDraw(p);

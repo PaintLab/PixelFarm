@@ -44,7 +44,7 @@ namespace PixelFarm.Agg
 
     public sealed class ScanlinePacked8 : Scanline
     {
-        internal ScanlinePacked8()
+        public ScanlinePacked8()
         {
         }
         public override void ResetSpans(int min_x, int max_x)

@@ -75,9 +75,7 @@ namespace PixelFarm.Agg.Sample_Draw
             p.Fill(littlePoly.MakeVertexSnap());
             //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
             // draw some text
-            // draw some text 
-
-
+            // draw some text  
 
             var textPrinter = new TextPrinter();
             textPrinter.CurrentFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);

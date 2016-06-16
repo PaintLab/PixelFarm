@@ -140,7 +140,7 @@ namespace PixelFarm.Agg
             while (--num_pix != 0);
 #endif
         }
-    };
+    }
     public sealed class AlphaMaskByteClipped : IAlphaMask
     {
         IImageReaderWriter m_rbuf;

@@ -62,15 +62,14 @@ namespace PixelFarm.Agg.Sample_Images
 
         public override void Draw(CanvasPainter p)
         {
-            CanvasPainter painter = p;
-            painter.DrawImage(actualImage, 0, 0);
-            painter.DrawImage(actualImage,
+            p.DrawImage(actualImage, 0, 0);
+            p.DrawImage(actualImage,
                     AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),
                     AffinePlan.Scale(0.5));
-            painter.FillColor = ColorRGBA.Blue;
-            painter.FillRectangle(0, 0, 5, 5);
-            painter.FillColor = ColorRGBA.Green;
-            painter.FillRectangle(actualImage.Width, actualImage.Height,
+            p.FillColor = ColorRGBA.Blue;
+            p.FillRectangle(0, 0, 5, 5);
+            p.FillColor = ColorRGBA.Green;
+            p.FillRectangle(actualImage.Width, actualImage.Height,
                 actualImage.Width + 5, actualImage.Height + 5);
         }
         public override void MouseDrag(int x, int y)
