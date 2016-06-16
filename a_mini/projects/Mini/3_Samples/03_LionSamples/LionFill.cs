@@ -48,7 +48,9 @@ namespace PixelFarm.Agg.Samples
 
         public override void Draw(CanvasPainter p)
         {
+            p.Clear(ColorRGBA.White);
             lionFill.Draw(p);
+            p.DrawString("hello", 0, 0);
         }
         public override void MouseDrag(int x, int y)
         {
