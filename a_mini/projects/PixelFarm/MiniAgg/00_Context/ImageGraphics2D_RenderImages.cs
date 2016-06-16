@@ -20,7 +20,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;

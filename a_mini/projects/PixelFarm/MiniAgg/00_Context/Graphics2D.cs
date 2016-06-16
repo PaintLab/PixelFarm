@@ -18,11 +18,8 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
-using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {
     public abstract class Graphics2D

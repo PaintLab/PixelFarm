@@ -32,8 +32,6 @@
 // 
 //----------------------------------------------------------------------------
 
-using System;
-using PixelFarm.VectorMath;
 using poly_subpix = PixelFarm.Agg.AggBasics.PolySubPix;
 namespace PixelFarm.Agg
 {

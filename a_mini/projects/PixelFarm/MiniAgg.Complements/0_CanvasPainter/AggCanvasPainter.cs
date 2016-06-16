@@ -46,7 +46,6 @@ namespace PixelFarm.Agg
         CurveFlattener curveFlattener;
         TextPrinter textPrinter;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
- 
         public AggCanvasPainter(Graphics2D graphic2d)
         {
             this.gx = graphic2d;
@@ -55,7 +54,6 @@ namespace PixelFarm.Agg
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
             this.textPrinter = new TextPrinter();
-             
         }
         public override void Clear(ColorRGBA color)
         {
