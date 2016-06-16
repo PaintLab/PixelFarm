@@ -93,8 +93,29 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
+
         public override void Render(IImageReaderWriter source, AffinePlan[] affinePlans)
         {
+            ////this need sclineRas
+            //VertexStore tmpImgBoundVxs = new VertexStore();
+            //Affine destRectTransform = BuildImageBoundsPath(source, tmpImgBoundVxs, affinePlans);
+            //// We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
+            //Affine sourceRectTransform = destRectTransform.CreateInvert();
+            //var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
+            //    source,
+            //    ColorRGBA.Black,
+            //    new SpanInterpolatorLinear(sourceRectTransform)); 
+            //Render(destRectTransform.TransformToVxs(tmpImgBoundVxs), imgSpanGen);
+
+        }
+        void Render(VertexStore vxs, ISpanGenerator spanGen)
+        {
+            sclineRas.AddPath(vxs);
+            sclineRasToBmp.RenderWithSpan(
+                destImageReaderWriter,
+                sclineRas,
+                sclinePack8,
+                spanGen);
         }
         public override void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes)
         {
