@@ -31,7 +31,7 @@ namespace Mini.WinForms
                 ColorRGBA[] colors = spriteShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
-                    VxsHelper.DrawVxsSnap(g, new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                    VxsHelper.FillVxsSnap(g, new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
                 }
                 g.TranslateTransform(-offsetX, -offSetY);
             }

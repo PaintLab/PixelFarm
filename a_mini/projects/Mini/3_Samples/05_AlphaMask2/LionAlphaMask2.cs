@@ -80,18 +80,18 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     //rasterizer.AddPath(ellipseForMask.MakeVxs());
                     //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
                     //   ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                    VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
+                    VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
                 //the last one
                 ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
                 //fill 
-                VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), new ColorRGBA(0, 0, 0, 255));
+                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), new ColorRGBA(0, 0, 0, 255));
                 //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                 //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
                 ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
                 //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                 //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
-                VxsHelper.DrawVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), new ColorRGBA(255, 0, 0, 255));
+                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), new ColorRGBA(255, 0, 0, 255));
                 //for (i = 0; i < num; i++)
                 //{
                 //    if (i == num - 1)
@@ -207,7 +207,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                         VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
                         rect.NormalizeRadius();
                         // Drawing as an outline
-                        VxsHelper.DrawVxsSnap(g, new VertexStoreSnap(rect.MakeVxs()), ColorRGBA.Make(.9f, .9f, .9f));
+                        VxsHelper.FillVxsSnap(g, new VertexStoreSnap(rect.MakeVxs()), ColorRGBA.Make(.9f, .9f, .9f));
                     }
                 }
             }
@@ -247,7 +247,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 var lionVxs = transform.TransformToVxs(lionShape.Path.Vxs);
                 for (int i = 0; i < n; ++i)
                 {
-                    VxsHelper.DrawVxsSnap(lionGfx,
+                    VxsHelper.FillVxsSnap(lionGfx,
                         new VertexStoreSnap(lionVxs, indexList[i]),
                         colors[i]);
                 }
