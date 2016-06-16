@@ -24,6 +24,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.SolidBrush _currentFillBrush;
         System.Drawing.Pen _currentPen;
         PixelFarm.Agg.VertexSource.RoundedRect roundRect;
+        MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         public GdiPlusCanvasPainter(CanvasGraphics2dGdi gfx)
         {
             _width = 800;
@@ -217,16 +218,45 @@ namespace PixelFarm.Drawing.WinGdi
         {
             throw new NotImplementedException();
         }
-
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
-
-
-
-
-            throw new NotImplementedException();
+            //1. create special graphics 
+            using (var srcBmp = CreateBmpBRGA(actualImage))
+            using (var bmp = new System.Drawing.Bitmap(800, 600))
+            using (Graphics g2 = System.Drawing.Graphics.FromImage(bmp))
+            {
+                //we can use recycle tmpVxsStore
+                Affine destRectTransform = Affine.NewMatix(affinePlans);
+                double x0 = 0, y0 = 0, x1 = bmp.Width, y1 = bmp.Height;
+                destRectTransform.Transform(ref x0, ref y0);
+                destRectTransform.Transform(ref x0, ref y1);
+                destRectTransform.Transform(ref x1, ref y1);
+                destRectTransform.Transform(ref x1, ref y0);
+                var matrix = new System.Drawing.Drawing2D.Matrix(
+                   (float)destRectTransform.m11, (float)destRectTransform.m12,
+                   (float)destRectTransform.m21, (float)destRectTransform.m22,
+                   (float)destRectTransform.dx, (float)destRectTransform.dy);
+                g2.Clear(System.Drawing.Color.Transparent);
+                g2.Transform = matrix;
+                //------------------------
+                g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
+                this._internalGfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
+            }
         }
 
+        static System.Drawing.Bitmap CreateBmpBRGA(ActualImage actualImage)
+        {
+            int w = actualImage.Width;
+            int h = actualImage.Height;
+            //copy data to bitmap
+            //bgra  
+            var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            byte[] acutalBuffer = actualImage.GetBuffer();
+            var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
+            System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
+            bmp.UnlockBits(bmpData);
+            return bmp;
+        }
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
             //create Gdi bitmap from actual image
@@ -237,27 +267,18 @@ namespace PixelFarm.Drawing.WinGdi
                 case Agg.Image.PixelFormat.Rgba32:
                     {
                         //copy data from acutal buffer to internal representation bitmap
-                        using (var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                        using (var bmp = CreateBmpBRGA(actualImage))
                         {
-                            //copy data to bitmap
-                            //bgra  
-                            byte[] acutalBuffer = actualImage.GetBuffer();
-                            var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
-                            System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
-                            bmp.UnlockBits(bmpData);
-                            //
                             this._internalGfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
                         }
                     }
                     break;
                 case Agg.Image.PixelFormat.Rgb24:
                     {
-
                     }
                     break;
                 case Agg.Image.PixelFormat.GrayScale8:
                     {
-
                     }
                     break;
                 default:
