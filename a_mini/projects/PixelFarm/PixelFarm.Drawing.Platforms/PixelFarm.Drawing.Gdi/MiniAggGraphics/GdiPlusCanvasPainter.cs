@@ -289,10 +289,12 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //use current brush and font
             _internalGfx.ResetTransform();
+            _internalGfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
             _internalGfx.DrawString(text, _currentFont, _currentFillBrush, new System.Drawing.PointF((float)x, (float)y));
             //restore back
+            _internalGfx.ResetTransform();//again
             _internalGfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-            _internalGfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly  
+            _internalGfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
         }
 
         public override void Fill(VertexStore vxs)
