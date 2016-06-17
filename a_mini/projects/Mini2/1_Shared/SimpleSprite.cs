@@ -31,10 +31,6 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
 namespace LayoutFarm.MiniCinema
 {
     public abstract class SimpleSprite

@@ -2,8 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 using Tesselate;

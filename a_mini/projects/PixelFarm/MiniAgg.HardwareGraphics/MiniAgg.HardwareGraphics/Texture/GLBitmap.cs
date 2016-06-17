@@ -1,8 +1,6 @@
 ﻿// 2015,2014 ,MIT, WinterDev
 
 using System;
-using System.Text;
-using OpenTK.Graphics.OpenGL;
 namespace PixelFarm.DrawingGL
 {
     public delegate void TransientGetBufferHead(IntPtr bufferHead);

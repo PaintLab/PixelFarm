@@ -1,9 +1,7 @@
 ﻿// 2015,2014 ,MIT, WinterDev
 
-using System.Text;
 using System;
 using System.Runtime.InteropServices;
-using Tesselate;
 namespace PixelFarm.DrawingGL
 {
     public class LazyAggBitmapBufferProvider : LazyBitmapBufferProvider
