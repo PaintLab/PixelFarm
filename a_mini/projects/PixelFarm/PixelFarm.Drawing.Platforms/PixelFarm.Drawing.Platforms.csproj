@@ -79,16 +79,6 @@
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\2_MyScreenCanvas_CoordinateAndClip.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\3_MyScreenCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\4_MyScreenCanvas_TextAndFonts.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\0_Start\CanvasGLPlatform.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\0_Start\CanvasGLPortal.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\Implementation\GLBitmapTextureHelper.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\Implementation\GLTextPrinter.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\Implementation\MyBitmapGL.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\MyCanvas_GL\1_MyCanvasGL_Specific.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\MyCanvas_GL\2_MyCanvasGL_CoordinateAndClip.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\MyCanvas_GL\3_MyCanvasGL_DrawGraphics.cs" />
-    <Compile Include="PixelFarm.Drawing.DrawingGL\MyCanvas_GL\4_MyCanvasGL_TextAndFonts.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\FontGdiTexture\GdiTextureFont.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\QuadPages.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\1_MyGdiPlusCanvas_Specific.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
