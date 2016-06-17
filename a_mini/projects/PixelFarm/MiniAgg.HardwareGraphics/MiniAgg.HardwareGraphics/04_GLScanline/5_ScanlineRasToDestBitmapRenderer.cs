@@ -17,11 +17,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
 namespace PixelFarm.Agg
 {

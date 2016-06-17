@@ -2,11 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
 using OpenTK.Graphics.OpenGL;
 namespace PixelFarm.DrawingGL
 {

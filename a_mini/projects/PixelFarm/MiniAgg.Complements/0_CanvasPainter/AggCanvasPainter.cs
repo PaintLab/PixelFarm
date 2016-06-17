@@ -68,7 +68,7 @@ namespace PixelFarm.Agg
         {
             this.gx.SetClippingRect(new RectInt(x1, y1, x2, y2));
         }
- 
+
 
         /// <summary>
         /// draw circle
