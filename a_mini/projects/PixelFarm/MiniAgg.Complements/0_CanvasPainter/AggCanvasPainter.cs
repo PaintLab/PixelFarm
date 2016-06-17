@@ -68,10 +68,7 @@ namespace PixelFarm.Agg
         {
             this.gx.SetClippingRect(new RectInt(x1, y1, x2, y2));
         }
-        public override Graphics2D Graphics
-        {
-            get { return this.gx; }
-        }
+ 
 
         /// <summary>
         /// draw circle
@@ -240,7 +237,10 @@ namespace PixelFarm.Agg
             textPrinter.Print(this, text.ToString(), x, y);
         }
         //-------------------------------------------------------
-
+        public Graphics2D Graphics
+        {
+            get { return this.gx; }
+        }
         /// <summary>
         /// fill vertex store
         /// </summary>

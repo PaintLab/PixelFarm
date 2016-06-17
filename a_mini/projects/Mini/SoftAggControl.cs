@@ -1,13 +1,9 @@
 ﻿//MIT 2016, WinterDev
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using PixelFarm.Agg;
-using PixelFarm.Agg.Image;
 namespace Mini
 {
     public partial class SoftAggControl : UserControl
@@ -17,12 +13,10 @@ namespace Mini
         int myWidth = 800;
         int myHeight = 600;
         WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
-        Graphics2D gfx;
-        Graphics _g;
         CanvasPainter painter;
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
-        System.Drawing.Graphics thisGfx;//for output
+        Graphics thisGfx;//for output
         Bitmap bufferBmp = null;
         Rectangle bufferBmpRect;
         public SoftAggControl()
@@ -59,32 +53,30 @@ namespace Mini
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
                 bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-                _g = Graphics.FromImage(bufferBmp);
-                if (_gdiAntiAlias)
-                {
-                    _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                }
-                else
-                {
-                    _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-                }
+                //_g = Graphics.FromImage(bufferBmp);
+                //if (_gdiAntiAlias)
+                //{
+                //    _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                //}
+                //else
+                //{
+                //    _g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                //}
 
-                var canvas = new PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi(_g, bufferBmp);
-                this.gfx = canvas;
-                this.gfx.Clear(ColorRGBA.White);
-                painter = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(canvas);
+                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
+                painter = p;
+                p.SmoothingMode = _gdiAntiAlias ? System.Drawing.Drawing2D.SmoothingMode.AntiAlias : System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
             }
             else
             {
                 ImageGraphics2D imgGfx2d = bitmapBackBuffer.Initialize(myWidth, myHeight, 32);
-                this.gfx = imgGfx2d;
                 //-------------
                 string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-                //-------------
-                this.gfx.Clear(ColorRGBA.White);
+                //-------------                 
                 painter = new AggCanvasPainter(imgGfx2d);
                 painter.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont(fontfile, 10);
             }
+            painter.Clear(ColorRGBA.White);
         }
 
         public void LoadExample(DemoBase exBase)
