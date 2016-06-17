@@ -1,6 +1,5 @@
 ﻿// 2015,2014 ,MIT, WinterDev
 
-using System;
 using PixelFarm.Drawing;
 namespace OpenTK.Graphics.OpenGL
 {
