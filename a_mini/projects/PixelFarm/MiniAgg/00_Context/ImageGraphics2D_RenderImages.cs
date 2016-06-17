@@ -20,7 +20,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
@@ -240,7 +239,7 @@ namespace PixelFarm.Agg
         }
 
         int destImageChanged = 0;
-        public override void Render(IImageReaderWriter source, AffinePlan[] affinePlans)
+        public void Render(IImageReaderWriter source, AffinePlan[] affinePlans)
         {
             VertexStore tmpImgBoundVxs = GetFreeVxs();
             Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, tmpImgBoundVxs, affinePlans);
@@ -253,7 +252,7 @@ namespace PixelFarm.Agg
             Render(destRectTransform.TransformToVxs(tmpImgBoundVxs), imgSpanGen);
             ReleaseVxs(tmpImgBoundVxs);
         }
-        public override void Render(IImageReaderWriter source, double destX, double destY)
+        public void Render(IImageReaderWriter source, double destX, double destY)
         {
             int inScaleX = 1;
             int inScaleY = 1;

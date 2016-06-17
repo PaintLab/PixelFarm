@@ -68,8 +68,11 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ////span_allocator span_alloc = new span_allocator(); 
 
             //specific for agg
-            CanvasPainter painter = p;
-            Graphics2D gx = p.Graphics;
+            AggCanvasPainter painter = p as AggCanvasPainter;
+            if (painter == null) { return; }
+
+            //
+            Graphics2D gx = painter.Graphics;
             SpanGenGouraudRGBA gouraudSpanGen = new SpanGenGouraudRGBA();
             gx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
             double d = this.DilationValue;

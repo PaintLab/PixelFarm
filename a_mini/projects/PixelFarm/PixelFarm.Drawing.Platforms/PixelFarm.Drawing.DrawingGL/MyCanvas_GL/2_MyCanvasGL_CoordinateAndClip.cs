@@ -13,9 +13,6 @@
 // - Sun Tsu,
 // "The Art of War"
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 namespace PixelFarm.Drawing.DrawingGL
 {
     static class Conv

@@ -1,7 +1,7 @@
 ﻿// 2015,2014 ,Apache2, WinterDev
 
-using System;
-using System.Text;
+
+
 namespace PixelFarm.Drawing.DrawingGL
 {
     public static class CanvasGLPortal

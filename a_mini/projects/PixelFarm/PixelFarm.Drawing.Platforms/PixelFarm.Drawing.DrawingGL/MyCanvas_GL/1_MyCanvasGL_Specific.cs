@@ -15,10 +15,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using PixelFarm.Drawing;
 using PixelFarm.DrawingGL;
-using Win32;
 namespace PixelFarm.Drawing.DrawingGL
 {
     partial class MyCanvasGL : Canvas, IFonts, IDisposable

@@ -111,7 +111,6 @@
     <Compile Include="SoftAggControl.Designer.cs">
       <DependentUpon>SoftAggControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="WindowsFormsBitmapBackBuffer.cs" />
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>

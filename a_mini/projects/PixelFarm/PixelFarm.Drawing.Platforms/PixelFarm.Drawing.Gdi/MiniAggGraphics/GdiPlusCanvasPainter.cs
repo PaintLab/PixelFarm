@@ -1,16 +1,13 @@
 ﻿//2016 MIT, WinterDev
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 namespace PixelFarm.Drawing.WinGdi
 {
     public class GdiPlusCanvasPainter : CanvasPainter
     {
-        CanvasGraphics2dGdi _gfx;
         RectInt _clipBox;
         ColorRGBA _fillColor;
         int _width, _height;
@@ -19,18 +16,19 @@ namespace PixelFarm.Drawing.WinGdi
         double _strokeWidth;
         bool _useSubPixelRendering;
         Graphics _internalGfx;
-        PixelFarm.Agg.VertexSource.CurveFlattener curveFlattener;
+        Agg.VertexSource.CurveFlattener curveFlattener;
         System.Drawing.Font _currentFont;
         System.Drawing.SolidBrush _currentFillBrush;
         System.Drawing.Pen _currentPen;
-        PixelFarm.Agg.VertexSource.RoundedRect roundRect;
+        Agg.VertexSource.RoundedRect roundRect;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
-        public GdiPlusCanvasPainter(CanvasGraphics2dGdi gfx)
+        System.Drawing.Bitmap _bufferBmp;
+        public GdiPlusCanvasPainter(System.Drawing.Bitmap bufferBmp)
         {
             _width = 800;
             _height = 600;
-            _gfx = gfx;
-            _internalGfx = gfx.InternalGraphics;
+            _bufferBmp = bufferBmp;
+            _internalGfx = Graphics.FromImage(bufferBmp);
             //credit:
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
             _internalGfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
@@ -39,6 +37,17 @@ namespace PixelFarm.Drawing.WinGdi
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
         }
+        public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+        {
+            get { return _internalGfx.SmoothingMode; }
+            set { _internalGfx.SmoothingMode = value; }
+        }
+        public System.Drawing.Drawing2D.CompositingMode CompositingMode
+        {
+            get { return _internalGfx.CompositingMode; }
+            set { _internalGfx.CompositingMode = value; }
+        }
+
         public override RectInt ClipBox
         {
             get
@@ -72,14 +81,6 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 _fillColor = value;
                 _currentFillBrush.Color = VxsHelper.ToDrawingColor(value);
-            }
-        }
-
-        public override Graphics2D Graphics
-        {
-            get
-            {
-                return _gfx;
             }
         }
 
@@ -138,7 +139,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void Clear(ColorRGBA color)
         {
-            _gfx.Clear(color);
+            _internalGfx.Clear(VxsHelper.ToDrawingColor(color));
         }
         public override void DoFilterBlurRecursive(RectInt area, int r)
         {
@@ -148,7 +149,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //since area is Windows coord
             //so we need to invert it 
-            System.Drawing.Bitmap backupBmp = _gfx.InternalBackBmp;
+            System.Drawing.Bitmap backupBmp = this._bufferBmp;
             int bmpW = backupBmp.Width;
             int bmpH = backupBmp.Height;
             System.Drawing.Imaging.BitmapData bmpdata = backupBmp.LockBits(
@@ -257,6 +258,10 @@ namespace PixelFarm.Drawing.WinGdi
             bmp.UnlockBits(bmpData);
             return bmp;
         }
+        public void DrawImage(System.Drawing.Bitmap bmp, float x, float y)
+        {
+            _internalGfx.DrawImage(bmp, x, y);
+        }
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
             //create Gdi bitmap from actual image
@@ -289,10 +294,12 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //use current brush and font
             _internalGfx.ResetTransform();
+            _internalGfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
             _internalGfx.DrawString(text, _currentFont, _currentFillBrush, new System.Drawing.PointF((float)x, (float)y));
             //restore back
+            _internalGfx.ResetTransform();//again
             _internalGfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-            _internalGfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly  
+            _internalGfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
         }
 
         public override void Fill(VertexStore vxs)

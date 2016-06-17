@@ -1,11 +1,7 @@
 ﻿// 2015,2014 ,MIT, WinterDev   
 
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Collections.Generic;
-using PixelFarm;
-using PixelFarm.Agg;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing;
 using Win32;
