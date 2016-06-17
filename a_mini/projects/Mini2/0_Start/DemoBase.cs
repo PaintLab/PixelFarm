@@ -1,7 +1,6 @@
 ﻿//MIT 2014, WinterDev
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Agg;
 namespace Mini2
 {

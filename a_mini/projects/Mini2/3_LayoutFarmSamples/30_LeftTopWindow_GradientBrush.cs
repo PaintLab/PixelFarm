@@ -1,14 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.Windows.Forms;
-using System.Drawing;
-using PixelFarm.Agg;
-using PixelFarm.DrawingGL;
-using PixelFarm.Drawing;
-using OpenTK.Graphics.OpenGL;
+﻿using PixelFarm.Drawing;
 namespace Mini2
 {
     [Info(OrderCode = "30")]
