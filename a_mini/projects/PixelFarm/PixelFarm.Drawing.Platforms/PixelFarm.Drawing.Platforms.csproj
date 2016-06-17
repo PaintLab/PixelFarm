@@ -94,6 +94,7 @@
     <Compile Include="PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
+    <Compile Include="PixelFarm.Drawing.Gdi\Implementation.Win32\WindowsFormsBitmapBackBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
