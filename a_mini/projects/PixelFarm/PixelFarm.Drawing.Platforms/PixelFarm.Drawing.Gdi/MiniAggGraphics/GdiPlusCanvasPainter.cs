@@ -8,7 +8,6 @@ namespace PixelFarm.Drawing.WinGdi
 {
     public class GdiPlusCanvasPainter : CanvasPainter
     {
-       
         RectInt _clipBox;
         ColorRGBA _fillColor;
         int _width, _height;
@@ -17,22 +16,19 @@ namespace PixelFarm.Drawing.WinGdi
         double _strokeWidth;
         bool _useSubPixelRendering;
         Graphics _internalGfx;
-        PixelFarm.Agg.VertexSource.CurveFlattener curveFlattener;
+        Agg.VertexSource.CurveFlattener curveFlattener;
         System.Drawing.Font _currentFont;
         System.Drawing.SolidBrush _currentFillBrush;
         System.Drawing.Pen _currentPen;
-        PixelFarm.Agg.VertexSource.RoundedRect roundRect;
+        Agg.VertexSource.RoundedRect roundRect;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         System.Drawing.Bitmap _bufferBmp;
-
         public GdiPlusCanvasPainter(System.Drawing.Bitmap bufferBmp)
         {
             _width = 800;
             _height = 600;
-            
-            
             _bufferBmp = bufferBmp;
-            _internalGfx = System.Drawing.Graphics.FromImage(bufferBmp);
+            _internalGfx = Graphics.FromImage(bufferBmp);
             //credit:
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
             _internalGfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
@@ -45,13 +41,12 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get { return _internalGfx.SmoothingMode; }
             set { _internalGfx.SmoothingMode = value; }
-         
         }
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {
             get { return _internalGfx.CompositingMode; }
             set { _internalGfx.CompositingMode = value; }
-        } 
+        }
 
         public override RectInt ClipBox
         {
