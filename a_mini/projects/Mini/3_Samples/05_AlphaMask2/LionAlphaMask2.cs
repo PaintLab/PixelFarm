@@ -214,18 +214,19 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //----------------------------------------------------
             return bmp;
         }
-        void DrawWithWinGdi(PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi gx)
+        void DrawWithWinGdi(GdiPlusCanvasPainter p)
         {
             int w = 800, h = 600;
-            gx.InternalGraphics.Clear(System.Drawing.Color.White);
-            gx.InternalGraphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+            p.Clear(ColorRGBA.White);
+            p.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
             if (isMaskSliderValueChanged)
             {
                 GenerateMaskWithWinGdiPlus(w, h);
             }
+
             using (System.Drawing.Bitmap background = CreateBackgroundBmp(w, h))
             {
-                gx.InternalGraphics.DrawImage(background, new System.Drawing.PointF(0, 0));
+                p.DrawImage(background, 0, 0);
             }
 
             //draw lion on background
@@ -254,8 +255,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 using (var mergeBmp = MergeAlphaChannel(lionBmp, a_alphaBmp))
                 {
                     //gx.InternalGraphics.DrawImage(this.a_alphaBmp, new System.Drawing.PointF(0, 0));
-                    //gx.InternalGraphics.DrawImage(bmp, new System.Drawing.PointF(0, 0)); 
-                    gx.InternalGraphics.DrawImage(mergeBmp, new System.Drawing.PointF(0, 0));
+                    //gx.InternalGraphics.DrawImage(bmp, new System.Drawing.PointF(0, 0));                      
+                    p.DrawImage(mergeBmp, 0, 0);
                 }
             }
         }
@@ -299,13 +300,13 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(CanvasPainter p)
         {
-            Graphics2D gx = p.Graphics;
-            if (gx is PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi)
+            if (p is GdiPlusCanvasPainter)
             {
-                DrawWithWinGdi((PixelFarm.Drawing.WinGdi.CanvasGraphics2dGdi)gx);
+                DrawWithWinGdi((GdiPlusCanvasPainter)p);
                 return;
             }
-
+            AggCanvasPainter p2 = (AggCanvasPainter)p;
+            Graphics2D gx = p2.Graphics;
             var widgetsSubImage = gx.DestImage;
             var scline = gx.ScanlinePacked8;
             int width = (int)widgetsSubImage.Width;

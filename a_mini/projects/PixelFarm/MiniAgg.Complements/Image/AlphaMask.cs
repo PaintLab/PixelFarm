@@ -23,7 +23,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.Agg.Image;
 namespace PixelFarm.Agg
 {
     public interface IAlphaMask

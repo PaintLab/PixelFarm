@@ -27,7 +27,7 @@ namespace PixelFarm.Agg
 {
     public class AggCanvasPainter : CanvasPainter
     {
-        Graphics2D gx;
+        ImageGraphics2D gx;
         Stroke stroke;
         ColorRGBA fillColor;
         ColorRGBA strokeColor;
@@ -46,8 +46,7 @@ namespace PixelFarm.Agg
         CurveFlattener curveFlattener;
         TextPrinter textPrinter;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
- 
-        public AggCanvasPainter(Graphics2D graphic2d)
+        public AggCanvasPainter(ImageGraphics2D graphic2d)
         {
             this.gx = graphic2d;
             this.sclineRas = gx.ScanlineRasterizer;
@@ -55,7 +54,6 @@ namespace PixelFarm.Agg
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
             this.textPrinter = new TextPrinter();
-             
         }
         public override void Clear(ColorRGBA color)
         {
@@ -70,10 +68,7 @@ namespace PixelFarm.Agg
         {
             this.gx.SetClippingRect(new RectInt(x1, y1, x2, y2));
         }
-        public override Graphics2D Graphics
-        {
-            get { return this.gx; }
-        }
+ 
 
         /// <summary>
         /// draw circle
@@ -242,7 +237,10 @@ namespace PixelFarm.Agg
             textPrinter.Print(this, text.ToString(), x, y);
         }
         //-------------------------------------------------------
-
+        public Graphics2D Graphics
+        {
+            get { return this.gx; }
+        }
         /// <summary>
         /// fill vertex store
         /// </summary>

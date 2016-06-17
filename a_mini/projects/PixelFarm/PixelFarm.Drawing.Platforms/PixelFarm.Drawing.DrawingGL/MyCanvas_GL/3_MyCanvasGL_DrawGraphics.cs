@@ -14,8 +14,6 @@
 // "The Art of War"
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.DrawingGL
 {

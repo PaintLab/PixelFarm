@@ -114,10 +114,18 @@ namespace PixelFarm.Agg.Sample_RoundRect
             //-----------------------------------------------------------------
 
             double d = this.SubPixelOffset;
-            var gx = p.Graphics;
-            var prevBlender = gx.PixelBlender;
-            //change gamma blender
-            gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
+            AggCanvasPainter p2 = p as AggCanvasPainter;
+            IPixelBlender prevBlender = null;
+            Graphics2D gx = null;
+            if (p2 != null)
+            {
+                //for agg only
+                gx = p2.Graphics;
+                prevBlender = gx.PixelBlender;
+                //change gamma blender
+                gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
+            }
+
             if (this.FillRoundRect)
             {
                 painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
@@ -138,7 +146,10 @@ namespace PixelFarm.Agg.Sample_RoundRect
                     m_y[1] + d,
                     this.Radius);
             }
-            gx.PixelBlender = prevBlender;
+            if (gx != null)
+            {
+                gx.PixelBlender = prevBlender;
+            }
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)

@@ -31,7 +31,14 @@ namespace PixelFarm.Agg
         public override void Draw(CanvasPainter p)
         {
             //specific for agg
-            Graphics2D graphics2D = p.Graphics;
+            if (!(p is AggCanvasPainter))
+            {
+                return;
+            }
+
+
+            AggCanvasPainter p2 = (AggCanvasPainter)p;
+            Graphics2D graphics2D = p2.Graphics;
             if (graphics2D.DestImage != null)
             {
                 IImageReaderWriter backBuffer = graphics2D.DestImage;

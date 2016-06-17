@@ -28,7 +28,7 @@ namespace PixelFarm.Agg
         public abstract RectInt ClipBox { get; set; }
 
         public abstract void SetClipBox(int x1, int y1, int x2, int y2);
-        public abstract Graphics2D Graphics { get; }
+        
 
         /// <summary>
         /// draw circle
