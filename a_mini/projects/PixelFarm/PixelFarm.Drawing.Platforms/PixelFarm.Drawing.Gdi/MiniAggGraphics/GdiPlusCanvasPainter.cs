@@ -8,44 +8,46 @@ namespace PixelFarm.Drawing.WinGdi
 {
     public class GdiPlusCanvasPainter : CanvasPainter
     {
-        RectInt _clipBox;
-        ColorRGBA _fillColor;
-        int _width, _height;
-        Agg.Fonts.Font _font;
-        ColorRGBA _strokeColor;
-        double _strokeWidth;
-        bool _useSubPixelRendering;
-        Graphics _internalGfx;
-        Agg.VertexSource.CurveFlattener curveFlattener;
+        System.Drawing.Graphics _gfx;
+        System.Drawing.Bitmap _bufferBmp;
         System.Drawing.Font _currentFont;
         System.Drawing.SolidBrush _currentFillBrush;
         System.Drawing.Pen _currentPen;
+        //
+        RectInt _clipBox;
+        ColorRGBA _fillColor;
+        ColorRGBA _strokeColor;
+        int _width, _height;
+        double _strokeWidth;
+        bool _useSubPixelRendering;
+        //
+        Agg.Fonts.Font _font;
+        //vector generators
         Agg.VertexSource.RoundedRect roundRect;
-        MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
-        System.Drawing.Bitmap _bufferBmp;
+        Agg.VertexSource.CurveFlattener curveFlattener;
         public GdiPlusCanvasPainter(System.Drawing.Bitmap bufferBmp)
         {
             _width = 800;
             _height = 600;
             _bufferBmp = bufferBmp;
-            _internalGfx = Graphics.FromImage(bufferBmp);
+            _gfx = Graphics.FromImage(bufferBmp);
             //credit:
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
-            _internalGfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-            _internalGfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
+            _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
+            _gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
             _currentFont = new System.Drawing.Font("Tahoma", 10);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
         }
         public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
         {
-            get { return _internalGfx.SmoothingMode; }
-            set { _internalGfx.SmoothingMode = value; }
+            get { return _gfx.SmoothingMode; }
+            set { _gfx.SmoothingMode = value; }
         }
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {
-            get { return _internalGfx.CompositingMode; }
-            set { _internalGfx.CompositingMode = value; }
+            get { return _gfx.CompositingMode; }
+            set { _gfx.CompositingMode = value; }
         }
 
         public override RectInt ClipBox
@@ -139,7 +141,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void Clear(ColorRGBA color)
         {
-            _internalGfx.Clear(VxsHelper.ToDrawingColor(color));
+            _gfx.Clear(VxsHelper.ToDrawingColor(color));
         }
         public override void DoFilterBlurRecursive(RectInt area, int r)
         {
@@ -205,11 +207,11 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void Draw(VertexStore vxs)
         {
-            VxsHelper.DrawVxsSnap(_internalGfx, new VertexStoreSnap(vxs), _strokeColor);
+            VxsHelper.DrawVxsSnap(_gfx, new VertexStoreSnap(vxs), _strokeColor);
         }
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         {
-            _internalGfx.DrawBezier(_currentPen,
+            _gfx.DrawBezier(_currentPen,
                  startX, startY,
                  controlX1, controlY1,
                  controlX2, controlY2,
@@ -241,7 +243,7 @@ namespace PixelFarm.Drawing.WinGdi
                 g2.Transform = matrix;
                 //------------------------
                 g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
-                this._internalGfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
+                this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
             }
         }
 
@@ -260,7 +262,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void DrawImage(System.Drawing.Bitmap bmp, float x, float y)
         {
-            _internalGfx.DrawImage(bmp, x, y);
+            _gfx.DrawImage(bmp, x, y);
         }
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
@@ -274,7 +276,7 @@ namespace PixelFarm.Drawing.WinGdi
                         //copy data from acutal buffer to internal representation bitmap
                         using (var bmp = CreateBmpBRGA(actualImage))
                         {
-                            this._internalGfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                            this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
                         }
                     }
                     break;
@@ -293,23 +295,23 @@ namespace PixelFarm.Drawing.WinGdi
         public override void DrawString(string text, double x, double y)
         {
             //use current brush and font
-            _internalGfx.ResetTransform();
-            _internalGfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
-            _internalGfx.DrawString(text, _currentFont, _currentFillBrush, new System.Drawing.PointF((float)x, (float)y));
+            _gfx.ResetTransform();
+            _gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
+            _gfx.DrawString(text, _currentFont, _currentFillBrush, new System.Drawing.PointF((float)x, (float)y));
             //restore back
-            _internalGfx.ResetTransform();//again
-            _internalGfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-            _internalGfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
+            _gfx.ResetTransform();//again
+            _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
+            _gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
         }
 
         public override void Fill(VertexStore vxs)
         {
-            VxsHelper.FillVxsSnap(_internalGfx, new VertexStoreSnap(vxs), _fillColor);
+            VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs), _fillColor);
         }
 
         public override void Fill(VertexStoreSnap snap)
         {
-            VxsHelper.FillVxsSnap(_internalGfx, snap, _fillColor);
+            VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
         }
 
         public override void Fill(VertexStore vxs, ISpanGenerator spanGen)
@@ -320,36 +322,36 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void FillCircle(double x, double y, double radius)
         {
-            _internalGfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+            _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
         }
 
         public override void FillCircle(double x, double y, double radius, ColorRGBA color)
         {
             var prevColor = _currentFillBrush.Color;
             _currentFillBrush.Color = VxsHelper.ToDrawingColor(color);
-            _internalGfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+            _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
             _currentFillBrush.Color = prevColor;
         }
 
         public override void FillEllipse(double left, double bottom, double right, double top, int nsteps)
         {
-            _internalGfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
         }
 
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-            _internalGfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            _gfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
         }
         public override void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor)
         {
             System.Drawing.Color prevColor = _currentFillBrush.Color;
             _currentFillBrush.Color = VxsHelper.ToDrawingColor(fillColor);
-            _internalGfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            _gfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
             _currentFillBrush.Color = prevColor;
         }
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
-            _internalGfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
+            _gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
         }
 
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
@@ -394,35 +396,35 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void Line(double x1, double y1, double x2, double y2)
         {
-            _internalGfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
+            _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
 
         public override void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
         {
             var prevColor = _currentPen.Color;
             _currentPen.Color = VxsHelper.ToDrawingColor(color);
-            _internalGfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
+            _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
             _currentPen.Color = prevColor;
         }
         public override void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath)
         {
             for (int i = 0; i < numPath; ++i)
             {
-                VxsHelper.FillVxsSnap(_internalGfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
+                VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
             }
         }
 
         public override void Rectangle(double left, double bottom, double right, double top)
         {
-            _internalGfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
+            _gfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
         }
         public override void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
         {
-            _internalGfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
+            _gfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
         }
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
-            _internalGfx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
+            _gfx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
         }
     }
 }
