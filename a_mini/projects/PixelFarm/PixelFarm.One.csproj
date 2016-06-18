@@ -1,37 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration>Debug</Configuration>
-    <Platform>x86</Platform>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Library</OutputType>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <AssemblyName>PixelFarm.One</AssemblyName>
-    <OutputPath>bin\Debug\</OutputPath>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineConstants>DEBUG; TRACE</DefineConstants>
-    <ProjectGuid>{1F344651-737A-474C-87BB-85E003C978EF}</ProjectGuid>
   </PropertyGroup>
-  <PropertyGroup>
-    <Configuration>Release</Configuration>
-    <Platform>x86</Platform>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <SchemaVersion>2.0</SchemaVersion>
-    <OutputType>Library</OutputType>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AssemblyName>PixelFarm.One</AssemblyName>
+    <OutputPath>bin\Debug\</OutputPath>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG; TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
     <OutputPath>bin\Release\</OutputPath>
-    <Optimize>True</Optimize>
+    <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants />
+    <DefineConstants> TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -267,15 +262,11 @@
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\Toolkit.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControlFactory.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\IGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\WinGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\X11GLControl.cs" />
