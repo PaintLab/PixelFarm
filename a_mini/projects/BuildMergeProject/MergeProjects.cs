@@ -11,8 +11,10 @@ namespace BuildMergeProject
     class MergeProject
     {
         List<ToMergeProject> subProjects = new List<ToMergeProject>();
-        public MergeProject()
+        bool portable;
+        public MergeProject(bool portable = false)
         {
+            this.portable = portable;
         }
         public void LoadSubProject(string projectFile)
         {
@@ -67,12 +69,36 @@ namespace BuildMergeProject
         public void MergeAndSave(string csprojFilename, string assemblyName, string targetFrameworkVersion, string[] references)
         {
             ProjectRootElement root = ProjectRootElement.Create();
-            root.AddImport(@"$(MSBuildToolsPath)\Microsoft.CSharp.targets");
+            if (portable)
+            {
+                root.ToolsVersion = "14.0";
+                root.DefaultTargets = "Build";
+                var import = root.AddImport(@"$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props");
+                import.Condition = @"Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')";
+            }
+            else
+            {
+                root.AddImport(@"$(MSBuildToolsPath)\Microsoft.CSharp.targets");
+            }
             ProjectPropertyGroupElement one1 = CreatePropertyGroup(root,
                 targetFrameworkVersion,
                 " '$(Configuration)' == '' ",
                 " '$(Platform)' == '' ",
                 "Debug", "AnyCPU", true, assemblyName);
+            if (portable)
+            {
+                one1.AddProperty("MinimumVisualStudioVersion", "10.0");
+                one1.AddProperty("ProjectTypeGuids", "{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}");
+                one1.AddProperty("TargetFrameworkProfile", "Profile111");
+                one1.AddProperty("TargetFrameworkProfile", "Profile111");
+                //                < ProjectTypeGuids >{ 786C830F - 07A1 - 408B - BD7F - 6EE04809D6DB};
+                //                { FAE04EC0 - 301F - 11D3 - BF4B - 00C04F79EFBC}</ ProjectTypeGuids >
+
+                //< TargetFrameworkProfile > Profile111 </ TargetFrameworkProfile >
+
+                //< TargetFrameworkVersion > v4.5 </ TargetFrameworkVersion >
+            }
+
             ProjectPropertyGroupElement debugGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ",
                   true,
@@ -81,7 +107,10 @@ namespace BuildMergeProject
                 " '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ",
                   true,
                 @"bin\Release\", true, false, "pdbonly", " TRACE");
-            AddItems(root, "Reference", references);
+            if (references.Length > 0)
+            {
+                AddItems(root, "Reference", references);
+            }
             List<string> allList = new List<string>();
             string onlyProjPath = Path.GetDirectoryName(csprojFilename) + "\\";
             int onlyProjPathLength = onlyProjPath.Length;
@@ -102,6 +131,11 @@ namespace BuildMergeProject
             }
             // items to compile
             AddItems(root, "Compile", allList.ToArray());
+            if (portable)
+            {
+                root.AddImport(@"$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets");
+            }
+
             root.Save(csprojFilename);
         }
         static void AddItems(ProjectRootElement elem, string groupName, params string[] items)
