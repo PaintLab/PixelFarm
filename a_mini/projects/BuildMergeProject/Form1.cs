@@ -12,10 +12,6 @@ namespace BuildMergeProject
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            Test2();
-        }
-        void Test2()
-        {
             MergeProject mergePro = CreateMergePixelFarmProject();
             mergePro.MergeAndSave(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.One.csproj",
                "PixelFarm.One",
@@ -26,6 +22,7 @@ namespace BuildMergeProject
                   "System.Windows.Forms"
                });
         }
+
         private void cmdBuildMergePixelFarmPortable_Click(object sender, EventArgs e)
         {
             //config as portble library ***
