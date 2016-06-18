@@ -9,7 +9,7 @@ namespace PixelFarm.Drawing.WinGdi
     public class GdiPlusCanvasPainter : CanvasPainter
     {
         System.Drawing.Graphics _gfx;
-        System.Drawing.Bitmap _bufferBmp;
+        System.Drawing.Bitmap _gfxBmp;
         System.Drawing.Font _currentFont;
         System.Drawing.SolidBrush _currentFillBrush;
         System.Drawing.Pen _currentPen;
@@ -20,17 +20,18 @@ namespace PixelFarm.Drawing.WinGdi
         int _width, _height;
         double _strokeWidth;
         bool _useSubPixelRendering;
+        BufferBitmapStore bmpStore = new BufferBitmapStore();
         //
         Agg.Fonts.Font _font;
         //vector generators
         Agg.VertexSource.RoundedRect roundRect;
         Agg.VertexSource.CurveFlattener curveFlattener;
-        public GdiPlusCanvasPainter(System.Drawing.Bitmap bufferBmp)
+        public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
         {
             _width = 800;
             _height = 600;
-            _bufferBmp = bufferBmp;
-            _gfx = Graphics.FromImage(bufferBmp);
+            _gfxBmp = gfxBmp;
+            _gfx = Graphics.FromImage(_gfxBmp);
             //credit:
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
             _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
@@ -151,7 +152,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //since area is Windows coord
             //so we need to invert it 
-            System.Drawing.Bitmap backupBmp = this._bufferBmp;
+            System.Drawing.Bitmap backupBmp = this._gfxBmp;
             int bmpW = backupBmp.Width;
             int bmpH = backupBmp.Height;
             System.Drawing.Imaging.BitmapData bmpdata = backupBmp.LockBits(

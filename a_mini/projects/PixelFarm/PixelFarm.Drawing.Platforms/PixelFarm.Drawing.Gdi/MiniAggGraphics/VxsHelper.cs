@@ -50,7 +50,6 @@ namespace PixelFarm.Drawing.WinGdi
                         break;
                     default:
                         throw new NotSupportedException();
-                        break;
                 }
             }
             return brush_path;
@@ -90,7 +89,6 @@ namespace PixelFarm.Drawing.WinGdi
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
                         goto EXIT_LOOP;
-                        break;
                     case PixelFarm.Agg.VertexCmd.HasMore:
                         break;
                     case PixelFarm.Agg.VertexCmd.Stop:
