@@ -15,6 +15,7 @@
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
     <DefineConstants>DEBUG; TRACE</DefineConstants>
+    <ProjectGuid>{1F344651-737A-474C-87BB-85E003C978EF}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration>Release</Configuration>
@@ -266,11 +267,15 @@
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\Toolkit.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControlFactory.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\IGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\WinGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\X11GLControl.cs" />
