@@ -16,6 +16,7 @@ namespace BuildMergeProject
             mergePro.MergeAndSave(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.One.csproj",
                "PixelFarm.One",
                "v2.0",
+               "",//additional define constant
                new string[] {
                   "System",
                   "System.Drawing",
@@ -30,6 +31,7 @@ namespace BuildMergeProject
             mergePro.MergeAndSave(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.One.Portable.csproj",
             "PixelFarm.One.Portable",
                "v4.5",
+               "",//additional define constant
                new string[0]);
         }
         static MergeProject CreateMergePixelFarmProject()

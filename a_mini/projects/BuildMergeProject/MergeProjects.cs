@@ -66,7 +66,7 @@ namespace BuildMergeProject
             return group;
         }
 
-        public void MergeAndSave(string csprojFilename, string assemblyName, string targetFrameworkVersion, string[] references)
+        public void MergeAndSave(string csprojFilename, string assemblyName, string targetFrameworkVersion, string additonalDefineConst, string[] references)
         {
             ProjectRootElement root = ProjectRootElement.Create();
             if (portable)
@@ -90,23 +90,16 @@ namespace BuildMergeProject
                 one1.AddProperty("MinimumVisualStudioVersion", "10.0");
                 one1.AddProperty("ProjectTypeGuids", "{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}");
                 one1.AddProperty("TargetFrameworkProfile", "Profile111");
-                one1.AddProperty("TargetFrameworkProfile", "Profile111");
-                //                < ProjectTypeGuids >{ 786C830F - 07A1 - 408B - BD7F - 6EE04809D6DB};
-                //                { FAE04EC0 - 301F - 11D3 - BF4B - 00C04F79EFBC}</ ProjectTypeGuids >
-
-                //< TargetFrameworkProfile > Profile111 </ TargetFrameworkProfile >
-
-                //< TargetFrameworkVersion > v4.5 </ TargetFrameworkVersion >
             }
 
             ProjectPropertyGroupElement debugGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ",
                   true,
-                @"bin\Debug\", false, true, "full", "DEBUG; TRACE");
+                @"bin\Debug\", false, true, "full", "DEBUG; TRACE" + additonalDefineConst);
             ProjectPropertyGroupElement releaseGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ",
                   true,
-                @"bin\Release\", true, false, "pdbonly", " TRACE");
+                @"bin\Release\", true, false, "pdbonly", " TRACE" + additonalDefineConst);
             if (references.Length > 0)
             {
                 AddItems(root, "Reference", references);
@@ -114,18 +107,33 @@ namespace BuildMergeProject
             List<string> allList = new List<string>();
             string onlyProjPath = Path.GetDirectoryName(csprojFilename) + "\\";
             int onlyProjPathLength = onlyProjPath.Length;
+            //TODO: review here
+            //special for support .net20
+            bool foundFirstExtensionAttributeFile = false;
             foreach (var toMergePro in subProjects)
             {
                 var allAbsFiles = toMergePro.GetAllAbsoluteFilenames();
-                foreach (var str in allAbsFiles)
+                foreach (var filename in allAbsFiles)
                 {
-                    if (str.StartsWith(onlyProjPath))
+                    string onlyFileName = Path.GetFileName(filename);
+                    if (onlyFileName == "ExtensionAttribute.cs")
                     {
-                        allList.Add(str.Substring(onlyProjPathLength));
+                        if (foundFirstExtensionAttributeFile)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            foundFirstExtensionAttributeFile = true;
+                        }
+                    }
+                    if (filename.StartsWith(onlyProjPath))
+                    {
+                        allList.Add(filename.Substring(onlyProjPathLength));
                     }
                     else
                     {
-                        allList.Add(str);
+                        allList.Add(filename);
                     }
                 }
             }
