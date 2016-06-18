@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using System.IO;
-namespace BuildPixelFarmMerge
+namespace BuildMergeProject
 {
     static class Program
     {

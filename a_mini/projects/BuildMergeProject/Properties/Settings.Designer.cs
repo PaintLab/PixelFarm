@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BuildPixelFarmMerge.Properties
+namespace BuildMergeProject.Properties
 {
 
 

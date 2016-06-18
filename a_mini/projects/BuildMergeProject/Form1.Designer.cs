@@ -1,4 +1,4 @@
-﻿namespace BuildPixelFarmMerge
+﻿namespace BuildMergeProject
 {
     partial class Form1
     {
