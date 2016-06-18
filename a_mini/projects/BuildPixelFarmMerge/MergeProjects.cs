@@ -26,11 +26,9 @@ namespace BuildPixelFarmMerge
             bool debugSymbol, string debugType, string constants
             )
         {
-
             ProjectPropertyGroupElement group = root.AddPropertyGroup();
             group.AddProperty("Configuration", configuration);
             group.AddProperty("Platform", platform);
-
             if (unsafeMode)
             {
                 group.AddProperty("AllowUnsafeBlocks", "true");
@@ -53,23 +51,19 @@ namespace BuildPixelFarmMerge
         public void MergeAndSave(string csprojFilename)
         {
             ProjectRootElement root = ProjectRootElement.Create();
-
             root.AddImport(@"$(MSBuildToolsPath)\Microsoft.CSharp.targets");
-
             ProjectPropertyGroupElement debugGroup = CreatePropertyGroup(root,
                 "Debug", "x86", true, "PixelFarm.One",
                 @"bin\Debug\", false, true, "full", "DEBUG; TRACE");
             ProjectPropertyGroupElement releaseGroup = CreatePropertyGroup(root,
                 "Release", "x86", true, "PixelFarm.One",
                 @"bin\Release\", true, false, "pdbonly", "");
-
             // references, hardcode here :(
             AddItems(root, "Reference",
                   "System",
                   "System.Drawing",
                   "System.Windows.Forms"
                    );
-
             List<string> allList = new List<string>();
             string onlyProjPath = Path.GetDirectoryName(csprojFilename) + "\\";
             int onlyProjPathLength = onlyProjPath.Length;
@@ -87,13 +81,11 @@ namespace BuildPixelFarmMerge
                         allList.Add(str);
                     }
                 }
-
             }
 
 
             // items to compile
             AddItems(root, "Compile", allList.ToArray());
-
             //var target = root.AddTarget("Build");
             //var task = target.AddTask("Csc");
             //task.SetParameter("Sources", "@(Compile)");

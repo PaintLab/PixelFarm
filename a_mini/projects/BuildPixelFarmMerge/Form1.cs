@@ -1,17 +1,11 @@
 ﻿//2016, MIT WinterDev
+
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-
-using Microsoft.Build.Construction;
-using System.IO;
-
 namespace BuildPixelFarmMerge
 {
     public partial class Form1 : Form
     {
-
-
         public Form1()
         {
             InitializeComponent();
@@ -22,9 +16,7 @@ namespace BuildPixelFarmMerge
         }
         void Test2()
         {
-
             MergeProject mergePro = new MergeProject();
-
             mergePro.LoadSubProject(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj");
             //
             mergePro.LoadSubProject(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\MiniAgg\MiniAgg.csproj");
@@ -37,10 +29,7 @@ namespace BuildPixelFarmMerge
             mergePro.LoadSubProject(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\MiniAgg.Hw2\MiniAgg.Hw2.csproj");
             //
             mergePro.LoadSubProject(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Platforms.csproj");
-
             mergePro.MergeAndSave(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.One.csproj");
         }
-
-
     }
 }
