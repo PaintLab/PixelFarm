@@ -19,45 +19,70 @@ namespace BuildPixelFarmMerge
             subProjects.Add(pro);
         }
 
-
         static ProjectPropertyGroupElement CreatePropertyGroup(ProjectRootElement root,
-            string configuration, string platform, bool unsafeMode,
+           string condition, string platform_condition,
+           string configuration, string platform, bool unsafeMode,
+           string assemblyName)
+        {
+            ProjectPropertyGroupElement group = root.AddPropertyGroup();
+            var config = group.AddProperty("Configuration", configuration);
+            config.Condition = condition;
+
+            var platform_ = group.AddProperty("Platform", platform);
+            platform_.Condition = platform_condition;
+            group.AddProperty("SchemaVersion", "2.0");
+            group.AddProperty("OutputType", "Library");
+            group.AddProperty("TargetFrameworkVersion", "v2.0");
+            group.AddProperty("FileAlignment", "512");
+            group.AddProperty("AssemblyName", assemblyName);
+
+            return group;
+        }
+        static ProjectPropertyGroupElement CreatePropertyGroupChoice(ProjectRootElement root,
+            string condition,
+             bool unsafeMode,
             string assemblyName, string outputPath, bool optimize,
             bool debugSymbol, string debugType, string constants
             )
         {
             ProjectPropertyGroupElement group = root.AddPropertyGroup();
-            group.AddProperty("Configuration", configuration);
-            group.AddProperty("Platform", platform);
+            group.Condition = condition;
+
             if (unsafeMode)
             {
                 group.AddProperty("AllowUnsafeBlocks", "true");
             }
-
-            group.AddProperty("SchemaVersion", "2.0");
-            group.AddProperty("OutputType", "Library");
-            group.AddProperty("TargetFrameworkVersion", "v2.0");
-            group.AddProperty("FileAlignment", "512");
             group.AddProperty("ErrorReport", "prompt");
             group.AddProperty("WarningLevel", "4");
-            //
-            group.AddProperty("AssemblyName", assemblyName);
             group.AddProperty("OutputPath", outputPath); //,eg  @"bin\Debug\"
-            group.AddProperty("Optimize", optimize.ToString());
+            group.AddProperty("Optimize", optimize ? "true" : "false");
             group.AddProperty("DebugType", debugType);
+            if (debugSymbol)
+            {
+                group.AddProperty("DebugSymbols", "true");
+            }
             group.AddProperty("DefineConstants", constants); //eg DEBUG; TRACE             
             return group;
         }
+
         public void MergeAndSave(string csprojFilename)
         {
             ProjectRootElement root = ProjectRootElement.Create();
             root.AddImport(@"$(MSBuildToolsPath)\Microsoft.CSharp.targets");
-            ProjectPropertyGroupElement debugGroup = CreatePropertyGroup(root,
-                "Debug", "x86", true, "PixelFarm.One",
+
+            ProjectPropertyGroupElement one1 = CreatePropertyGroup(root,
+                " '$(Configuration)' == '' ",
+                " '$(Platform)' == '' ",
+                "Debug", "AnyCPU", true, "PixelFarm.One");
+
+            ProjectPropertyGroupElement debugGroup = CreatePropertyGroupChoice(root,
+                " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ",
+                  true, "PixelFarm.One",
                 @"bin\Debug\", false, true, "full", "DEBUG; TRACE");
-            ProjectPropertyGroupElement releaseGroup = CreatePropertyGroup(root,
-                "Release", "x86", true, "PixelFarm.One",
-                @"bin\Release\", true, false, "pdbonly", "");
+            ProjectPropertyGroupElement releaseGroup = CreatePropertyGroupChoice(root,
+                " '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ",
+                  true, "PixelFarm.One",
+                @"bin\Release\", true, false, "pdbonly", " TRACE");
             // references, hardcode here :(
             AddItems(root, "Reference",
                   "System",
