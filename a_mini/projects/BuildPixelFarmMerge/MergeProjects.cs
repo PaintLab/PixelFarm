@@ -11,7 +11,9 @@ namespace BuildPixelFarmMerge
     class MergeProject
     {
         List<ToMergeProject> subProjects = new List<ToMergeProject>();
-        public MergeProject() { }
+        public MergeProject()
+        {
+        }
         public void LoadSubProject(string projectFile)
         {
             ToMergeProject pro = new ToMergeProject();
@@ -20,6 +22,7 @@ namespace BuildPixelFarmMerge
         }
 
         static ProjectPropertyGroupElement CreatePropertyGroup(ProjectRootElement root,
+           string targetFrameworkVersion,
            string condition, string platform_condition,
            string configuration, string platform, bool unsafeMode,
            string assemblyName)
@@ -27,27 +30,23 @@ namespace BuildPixelFarmMerge
             ProjectPropertyGroupElement group = root.AddPropertyGroup();
             var config = group.AddProperty("Configuration", configuration);
             config.Condition = condition;
-
             var platform_ = group.AddProperty("Platform", platform);
             platform_.Condition = platform_condition;
             group.AddProperty("SchemaVersion", "2.0");
             group.AddProperty("OutputType", "Library");
-            group.AddProperty("TargetFrameworkVersion", "v2.0");
+            group.AddProperty("TargetFrameworkVersion", targetFrameworkVersion);
             group.AddProperty("FileAlignment", "512");
             group.AddProperty("AssemblyName", assemblyName);
-
             return group;
         }
         static ProjectPropertyGroupElement CreatePropertyGroupChoice(ProjectRootElement root,
             string condition,
-             bool unsafeMode,
-            string assemblyName, string outputPath, bool optimize,
+             bool unsafeMode, string outputPath, bool optimize,
             bool debugSymbol, string debugType, string constants
             )
         {
             ProjectPropertyGroupElement group = root.AddPropertyGroup();
             group.Condition = condition;
-
             if (unsafeMode)
             {
                 group.AddProperty("AllowUnsafeBlocks", "true");
@@ -65,30 +64,24 @@ namespace BuildPixelFarmMerge
             return group;
         }
 
-        public void MergeAndSave(string csprojFilename)
+        public void MergeAndSave(string csprojFilename, string assemblyName, string targetFrameworkVersion, string[] references)
         {
             ProjectRootElement root = ProjectRootElement.Create();
             root.AddImport(@"$(MSBuildToolsPath)\Microsoft.CSharp.targets");
-
             ProjectPropertyGroupElement one1 = CreatePropertyGroup(root,
+                targetFrameworkVersion,
                 " '$(Configuration)' == '' ",
                 " '$(Platform)' == '' ",
-                "Debug", "AnyCPU", true, "PixelFarm.One");
-
+                "Debug", "AnyCPU", true, assemblyName);
             ProjectPropertyGroupElement debugGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ",
-                  true, "PixelFarm.One",
+                  true,
                 @"bin\Debug\", false, true, "full", "DEBUG; TRACE");
             ProjectPropertyGroupElement releaseGroup = CreatePropertyGroupChoice(root,
                 " '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ",
-                  true, "PixelFarm.One",
+                  true,
                 @"bin\Release\", true, false, "pdbonly", " TRACE");
-            // references, hardcode here :(
-            AddItems(root, "Reference",
-                  "System",
-                  "System.Drawing",
-                  "System.Windows.Forms"
-                   );
+            AddItems(root, "Reference", references);
             List<string> allList = new List<string>();
             string onlyProjPath = Path.GetDirectoryName(csprojFilename) + "\\";
             int onlyProjPathLength = onlyProjPath.Length;
@@ -107,15 +100,8 @@ namespace BuildPixelFarmMerge
                     }
                 }
             }
-
-
             // items to compile
             AddItems(root, "Compile", allList.ToArray());
-            //var target = root.AddTarget("Build");
-            //var task = target.AddTask("Csc");
-            //task.SetParameter("Sources", "@(Compile)");
-            //task.SetParameter("OutputAssembly", "PixelFarm.One.dll");
-
             root.Save(csprojFilename);
         }
         static void AddItems(ProjectRootElement elem, string groupName, params string[] items)

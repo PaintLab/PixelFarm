@@ -29,7 +29,15 @@ namespace BuildPixelFarmMerge
             mergePro.LoadSubProject(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\MiniAgg.Hw2\MiniAgg.Hw2.csproj");
             //
             mergePro.LoadSubProject(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Platforms.csproj");
-            mergePro.MergeAndSave(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.One.csproj");
+            //
+            mergePro.MergeAndSave(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\PixelFarm.One.csproj",
+               "PixelFarm.One",
+               "v2.0",
+               new string[] {
+                  "System",
+                  "System.Drawing",
+                  "System.Windows.Forms"
+               });
         }
     }
 }
