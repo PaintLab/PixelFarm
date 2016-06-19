@@ -70,6 +70,24 @@ namespace PixelFarm.DrawingGL
             };
             return vertices;
         }
+        static float[] CreateRectTessCoordsTriStrip(float x, float y, float w, float h)
+        {
+            float x0 = x;
+            float y0 = y + h;
+            float x1 = x;
+            float y1 = y;
+            float x2 = x + w;
+            float y2 = y + h;
+            float x3 = x + w;
+            float y3 = y;
+            float[] vertices = new float[]{
+               x0,y0,
+               x1,y1,
+               x2,y2,
+               x3,y3,
+            };
+            return vertices;
+        }
         static unsafe void CreatePolyLineRectCoords(CoordList2f coords,
                   float x, float y, float w, float h)
         {

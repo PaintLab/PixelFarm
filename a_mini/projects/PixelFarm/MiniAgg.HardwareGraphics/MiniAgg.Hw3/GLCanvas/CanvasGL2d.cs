@@ -919,9 +919,11 @@ namespace PixelFarm.DrawingGL
         }
         public void FillRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h)
         {
+            //float[] coords = CreateRectTessCoords(x, y, w, h);
+            //basicFillShader.FillTrianglesWithVertexBuffer(coords, 6, color);
 
-            var coords = CreateRectTessCoords(x, y, w, h);
-            basicFillShader.FillTrianglesWithVertexBuffer(coords, 6, color);
+            float[] coords = CreateRectTessCoordsTriStrip(x, y, w, h);
+            basicFillShader.FillTriangleStripWithVertexBuffer(coords, 4, color);
         }
         public void FillRect(PixelFarm.Drawing.LinearGradientBrush linearGradientBrush, float x, float y, float w, float h)
         {

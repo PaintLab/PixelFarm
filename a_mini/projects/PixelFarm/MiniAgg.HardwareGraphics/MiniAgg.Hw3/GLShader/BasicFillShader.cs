@@ -76,5 +76,14 @@ namespace PixelFarm.DrawingGL
             a_position.LoadV2f(linesBuffer, 2, 0);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
+        public void FillTriangleStripWithVertexBuffer(float[] linesBuffer, int nelements, PixelFarm.Drawing.Color color)
+        {
+            shaderProgram.UseProgram();
+            u_useSolidColor.SetValue(1);
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            u_matrix.SetData(orthoView.data);
+            a_position.LoadV2f(linesBuffer, 2, 0);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, nelements);
+        }
     }
 }
