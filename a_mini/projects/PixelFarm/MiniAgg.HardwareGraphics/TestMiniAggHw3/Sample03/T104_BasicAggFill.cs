@@ -33,7 +33,7 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            canvas2d.SmoothMode = CanvasSmoothMode.AggSmooth;
+            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.FillCircle(PixelFarm.Drawing.Color.OrangeRed, 100, 400, 25);
             var color = PixelFarm.Drawing.Color.OrangeRed;
             canvas2d.FillEllipse(

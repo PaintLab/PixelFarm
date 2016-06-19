@@ -5,6 +5,6 @@ namespace PixelFarm.DrawingGL
     public enum CanvasSmoothMode
     {
         No,
-        AggSmooth
+        Smooth
     }
 }

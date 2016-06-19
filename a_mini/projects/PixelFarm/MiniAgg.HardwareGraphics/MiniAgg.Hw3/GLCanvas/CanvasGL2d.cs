@@ -97,13 +97,15 @@ namespace PixelFarm.DrawingGL
         {
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //--------------------------------------
                         ps.Clear();
                         ps.MoveTo(x1, y1);
                         ps.LineTo(x2, y2);
+
                         VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
+
                         throw new NotSupportedException();
                         //sclineRas.Reset();
                         //sclineRas.AddPath(vxs);
@@ -262,7 +264,7 @@ namespace PixelFarm.DrawingGL
             //solid brush
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //sclineRas.Reset();
                         //sclineRas.AddPath(vxs);
@@ -285,7 +287,7 @@ namespace PixelFarm.DrawingGL
             throw new NotSupportedException();
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //sclineRas.Reset();
                         //sclineRas.AddPath(vxs);
@@ -308,7 +310,7 @@ namespace PixelFarm.DrawingGL
             throw new NotSupportedException();
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //sclineRas.Reset();
                         //sclineRas.AddPath(snap);
@@ -330,7 +332,7 @@ namespace PixelFarm.DrawingGL
             throw new NotSupportedException();
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //sclineRas.Reset();
                         //sclineRas.AddPath(aggStroke.MakeVxs(vxs));
@@ -353,7 +355,7 @@ namespace PixelFarm.DrawingGL
             //draw polyline
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //draw polyon
 
@@ -401,7 +403,7 @@ namespace PixelFarm.DrawingGL
             ellipse.Reset(x, y, rx, ry);
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         VertexStore vxs = aggStroke.MakeVxs(ellipse.MakeVxs());
                         //sclineRas.Reset();
@@ -489,7 +491,7 @@ namespace PixelFarm.DrawingGL
             var vxs = this.aggStroke.MakeVxs(roundRect.MakeVxs());
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //sclineRas.Reset();
                         //sclineRas.AddPath(vxs);
@@ -947,7 +949,7 @@ namespace PixelFarm.DrawingGL
             var vxs = roundRect.MakeVxs();
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //sclineRas.Reset();
                         //sclineRas.AddPath(vxs);
@@ -970,7 +972,7 @@ namespace PixelFarm.DrawingGL
             var vxs = ellipse.MakeVxs();
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //sclineRas.Reset();
                         //sclineRas.AddPath(vxs);
@@ -1058,7 +1060,7 @@ namespace PixelFarm.DrawingGL
             //n point 
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //closed polygon
 
@@ -1314,7 +1316,7 @@ namespace PixelFarm.DrawingGL
             //n point 
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.AggSmooth:
+                case CanvasSmoothMode.Smooth:
                     {
                         //closed polygon
 
