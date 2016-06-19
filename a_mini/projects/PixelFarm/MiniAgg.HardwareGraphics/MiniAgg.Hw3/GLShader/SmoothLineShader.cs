@@ -15,14 +15,13 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
         MyMat4 orthoView;
-
         Drawing.Color _strokeColor;
         float _strokeWidth;
         public SmoothLineShader()
         {
-
+            InitShader();
         }
-        public bool InitShader()
+        bool InitShader()
         {
             string vs = @"                   
             attribute vec4 a_position; 
@@ -133,7 +132,7 @@ namespace PixelFarm.DrawingGL
             get { return _strokeColor; }
             set
             {
-                _strokeColor = value; 
+                _strokeColor = value;
             }
         }
         public void DrawLine(float x1, float y1, float x2, float y2)
@@ -161,6 +160,24 @@ namespace PixelFarm.DrawingGL
                   _strokeColor.A / 255f);
             a_position.LoadV4f(vtxs, 4, 0);
             u_linewidth.SetValue(_strokeWidth);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
+        }
+        public void DrawLine2(float x1, float y1, float x2, float y2)
+        {
+            //test only ***
+            float dx = x2 - x1;
+            float dy = y2 - y1;
+            float rad1 = (float)Math.Atan2(
+                   y2 - y1,  //dy
+                   x2 - x1); //dx
+            float[] vtxs = new float[] {
+                x1, y1,0,rad1,
+                x1, y1,1,rad1,
+                x2, y2,0,rad1,
+                //-------
+                x2, y2,1,rad1
+            };
+            a_position.LoadV4f(vtxs, 4, 0);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
     }
