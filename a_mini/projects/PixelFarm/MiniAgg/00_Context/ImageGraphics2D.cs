@@ -27,6 +27,8 @@ namespace PixelFarm.Agg
 
     public partial class ImageGraphics2D : Graphics2D
     {
+
+
         ImageReaderWriterBase destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
         VertexStore myTmpImgRectVxs = new VertexStore();
@@ -218,7 +220,7 @@ namespace PixelFarm.Agg
             }
         }
 
-        public override void Render(VertexStoreSnap vertextSnap, ColorRGBA color)
+        public override void Render(VertexStoreSnap vxsSnap, ColorRGBA color)
         {
             //reset rasterizer before render each vertextSnap 
             //-----------------------------
@@ -226,11 +228,11 @@ namespace PixelFarm.Agg
             Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
-                sclineRas.AddPath(transform.TransformToVxs(vertextSnap));
+                sclineRas.AddPath(transform.TransformToVxs(vxsSnap));
             }
             else
             {
-                sclineRas.AddPath(vertextSnap);
+                sclineRas.AddPath(vxsSnap);
             }
             sclineRasToBmp.RenderWithColor(destImageReaderWriter, sclineRas, sclinePack8, color);
             unchecked { destImageChanged++; };
