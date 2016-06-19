@@ -1,6 +1,7 @@
 ﻿//MIT 2014, WinterDev
 
 using System;
+using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 using Tesselate;
 using PixelFarm.Agg;
@@ -348,32 +349,38 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
-                        //draw polyon
-
-                        ps.Clear();
-                        //closed polygon
-                        int j = npoints;
-                        //first point
-                        if (j < 2)
+                        //draw polyon 
+                        //ps.Clear();
+                        ////closed polygon
+                        //int j = npoints;
+                        ////first point
+                        //if (j < 2)
+                        //{
+                        //    return;
+                        //}
+                        //ps.MoveTo(polygon2dVertices[0], polygon2dVertices[1]);
+                        //int nn = 2;
+                        //for (int i = 1; i < j; ++i)
+                        //{
+                        //    ps.LineTo(polygon2dVertices[nn++],
+                        //        polygon2dVertices[nn++]);
+                        //}
+                        ////close
+                        //ps.CloseFigure();
+                        //VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
+                        ////sclineRas.Reset();
+                        ////sclineRas.AddPath(vxs);
+                        ////sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
+                        //////-------------------------------------- 
+                        //throw new NotSupportedException();
+                        //
+                        unsafe
                         {
-                            return;
+                            fixed (float* arr = &polygon2dVertices[0])
+                            {
+                                DrawPolygonUnsafe(arr, npoints);
+                            }
                         }
-                        ps.MoveTo(polygon2dVertices[0], polygon2dVertices[1]);
-                        int nn = 2;
-                        for (int i = 1; i < j; ++i)
-                        {
-                            ps.LineTo(polygon2dVertices[nn++],
-                                polygon2dVertices[nn++]);
-                        }
-                        //close
-                        ps.CloseFigure();
-                        VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
-                        ////--------------------------------------
-
-                        throw new NotSupportedException();
                     }
                     break;
                 default:
@@ -1341,29 +1348,25 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
-                        //closed polygon
-
-                        //closed polygon
-                        int j = npoints / 2;
-                        //first point
-                        if (j < 2)
+                        var vertextList = TessPolygon(vertex2dCoords);
+                        //-----------------------------   
+                        //switch how to fill polygon
+                        int j = vertextList.Count;
+                        //-----------------------------    
+                        unsafe
                         {
-                            return;
-                        }
-                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
-                        int nn = 2;
-                        for (int i = 1; i < j; ++i)
-                        {
-                            ps.LineTo(vertex2dCoords[nn++],
-                                vertex2dCoords[nn++]);
-                        }
-                        //close
-                        ps.CloseFigure();
-                        VertexStore vxs = ps.Vxs;
-                        throw new NotSupportedException();
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
+                            float* vtx = stackalloc float[j * 2];
+                            int n = 0;
+                            for (int i = 0; i < j; ++i)
+                            {
+                                var v = vertextList[i];
+                                vtx[n] = (float)v.m_X;
+                                vtx[n + 1] = (float)v.m_Y;
+                                n += 2;
+                            }
+                            //-------------------------------------                              
+                            this.basicFillShader.FillTriangles(vtx, j, color);
+                        } 
                     }
                     break;
                 default:
@@ -1388,7 +1391,7 @@ namespace PixelFarm.DrawingGL
                                 n += 2;
                             }
                             //------------------------------------- 
-                            this.basicShader.FillTriangles(vtx, j, color);
+                            this.basicFillShader.FillTriangles(vtx, j, color);
                         }
                         //GL.EnableClientState(ArrayCap.ColorArray);
                         //GL.EnableClientState(ArrayCap.VertexArray);

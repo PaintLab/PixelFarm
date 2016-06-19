@@ -177,6 +177,7 @@ namespace PixelFarm.DrawingGL
         }
         public unsafe void FillTriangles(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
         {
+            shaderProgram.UseProgram();
             u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);

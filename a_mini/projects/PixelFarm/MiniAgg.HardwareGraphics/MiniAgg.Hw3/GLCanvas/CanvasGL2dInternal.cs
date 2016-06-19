@@ -189,7 +189,8 @@ namespace PixelFarm.DrawingGL
             //GL.DrawArrays(BeginMode.LineLoop, 0, npoints);
             //GL.DisableClientState(ArrayCap.VertexArray);
 
-            this.basicShader.DrawLineLoopWithVertexBuffer(polygon2dVertices, npoints, this.strokeColor);
+
+            this.basicFillShader.DrawLineLoopWithVertexBuffer(polygon2dVertices, npoints, this.strokeColor);
         }
     }
 }
