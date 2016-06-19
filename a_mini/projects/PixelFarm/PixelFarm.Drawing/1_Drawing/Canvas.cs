@@ -37,9 +37,6 @@ namespace PixelFarm.Drawing
             set
             {
                 this.isContentReady = value;
-                //if (!value)
-                //{
-                //}
             }
         }
         //---------------------------------------------------------------------

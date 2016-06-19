@@ -37,23 +37,15 @@ namespace PixelFarm.Agg
         public abstract void Clear(ColorRGBA color);
         //------------------------------------------------------------------------
         //render vertices
-        public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA colorBytes);
+        public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA c);
         //------------------------------------------------------------------------
-       
-      
-        public void Render(VertexStore vxStorage, ColorRGBA c)
+
+
+        public void Render(VertexStore vxs, ColorRGBA c)
         {
-            Render(new VertexStoreSnap(vxStorage), c);
+            Render(new VertexStoreSnap(vxs), c);
         }
-        public void Render(VertexStoreSnap vertexSource, double x, double y, ColorRGBA color)
-        {
-            var inputVxs = vertexSource.GetInternalVxs();
-            var vxs = Affine.TranslateTransformToVxs(vertexSource, x, y);//Affine.NewTranslation(x, y).TransformToVxs (inputVxs);
-            Render(vxs, color);
-        }
-
-
-
+     
         public Affine CurrentTransformMatrix
         {
             get { return this.currentTxMatrix; }

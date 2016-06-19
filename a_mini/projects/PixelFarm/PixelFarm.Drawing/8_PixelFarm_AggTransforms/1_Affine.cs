@@ -892,12 +892,9 @@ namespace PixelFarm.Agg.Transform
         {
             if (!isIdenHint)
             {
-                return is_equal_eps(sx, 1.0) &&
-                   is_equal_eps(shy, 0.0) &&
-                   is_equal_eps(shx, 0.0) &&
-                   is_equal_eps(sy, 1.0) &&
-                   is_equal_eps(tx, 0.0) &&
-                   is_equal_eps(ty, 0.0);
+                return is_equal_eps(sx, 1.0) && is_equal_eps(shy, 0.0) &&
+                   is_equal_eps(shx, 0.0) && is_equal_eps(sy, 1.0) &&
+                   is_equal_eps(tx, 0.0) && is_equal_eps(ty, 0.0);
             }
             else
             {

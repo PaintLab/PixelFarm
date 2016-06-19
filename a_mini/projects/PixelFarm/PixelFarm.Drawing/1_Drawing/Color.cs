@@ -71,7 +71,19 @@ namespace PixelFarm.Drawing
         {
             return new Color(255, (byte)r, (byte)g, (byte)b);
         }
+        public override bool Equals(object obj)
+        {
+            if (obj is Color)
+            {
+                Color c = (Color)obj;
+                return c.a == this.a &&
+                    c.b == this.b &&
+                    c.r == this.r &&
+                    c.g == this.g;
+            }
+            return false;
 
+        }
 
         public static readonly Color Empty = new Color(0, 0, 0, 0);
         public static readonly Color Transparent = new Color(0, 255, 255, 255);
