@@ -39,7 +39,7 @@ namespace OpenTK.Graphics.ES20
                 2, //float2
                 VertexAttribPointerType.Float,
                 false,
-                totalFieldCount * sizeof(float), //total size
+                0,//totalFieldCount * sizeof(float), //total size
                 (IntPtr)(vertices + startOffset));
             Enable();
         }
@@ -54,7 +54,6 @@ namespace OpenTK.Graphics.ES20
             BindV2f(vertices, totalFieldCount, startOffset);
             Enable();
         }
-
         public void BindV3f(float[] vertices, int totalFieldCount, int startOffset)
         {
             unsafe
@@ -65,7 +64,7 @@ namespace OpenTK.Graphics.ES20
                         3, //float3
                         VertexAttribPointerType.Float,
                         false,
-                        totalFieldCount * sizeof(float), //total size
+                        0,// totalFieldCount * sizeof(float), //total size
                         (IntPtr)(h + startOffset));
                 }
             }
@@ -80,7 +79,7 @@ namespace OpenTK.Graphics.ES20
                         2, //float2
                         VertexAttribPointerType.Float,
                         false,
-                        totalFieldCount * sizeof(float), //total size
+                        0,// totalFieldCount * sizeof(float), //total size
                         (IntPtr)(h + startOffset));
                 }
             }
@@ -96,7 +95,7 @@ namespace OpenTK.Graphics.ES20
                         4, //float4
                         VertexAttribPointerType.Float,
                         false,
-                        totalFieldCount * sizeof(float), //total size
+                        0,//totalFieldCount * sizeof(float), //total size
                         (IntPtr)(h + startOffset));
                 }
             }

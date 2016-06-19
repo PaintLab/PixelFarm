@@ -78,5 +78,6 @@ namespace PixelFarm.Agg
         {
             return this.data.Array;
         }
+        
     }
 }

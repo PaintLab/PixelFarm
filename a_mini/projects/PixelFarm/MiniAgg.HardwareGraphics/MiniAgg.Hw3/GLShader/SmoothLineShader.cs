@@ -1,4 +1,4 @@
-﻿//MIT 2014, WinterDev
+﻿//MIT 2016, WinterDev
 
 using System;
 using PixelFarm.Agg;
@@ -139,7 +139,7 @@ namespace PixelFarm.DrawingGL
         {
             shaderProgram.UseProgram();
             //---------------------------------------------------------  
-            u_matrix.SetData(orthoView.data);
+            
             float dx = x2 - x1;
             float dy = y2 - y1;
             float rad1 = (float)Math.Atan2(
@@ -152,6 +152,7 @@ namespace PixelFarm.DrawingGL
                 //-------
                 x2, y2,1,rad1
             };
+            u_matrix.SetData(orthoView.data);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,

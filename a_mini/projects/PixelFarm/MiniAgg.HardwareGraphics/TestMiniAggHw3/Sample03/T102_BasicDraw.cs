@@ -76,7 +76,8 @@ namespace OpenTkEssTest
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //line
             canvas2d.DrawLine(50, 50, 200, 200);
-             canvas2d.DrawRect(10,10, 50, 50);
+            canvas2d.DrawRect(10, 10, 50, 50);
+            canvas2d.FillRect(PixelFarm.Drawing.Color.Green, 100, 100, 50, 50);
             //--------------------------------------------
             miniGLControl.SwapBuffers();
         }

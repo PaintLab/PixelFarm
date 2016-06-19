@@ -11,6 +11,8 @@ namespace PixelFarm.DrawingGL
     {
         BasicShader basicShader;
         SmoothLineShader smoothLineShader;
+        BasicFillShader basicFillShader;
+
         PixelFarm.Drawing.Color strokeColor = PixelFarm.Drawing.Color.Black;
         Tesselator tess = new Tesselator();
         TessListener2 tessListener = new TessListener2();
@@ -33,7 +35,7 @@ namespace PixelFarm.DrawingGL
             this.canvasH = canvasH;
             basicShader = new BasicShader();
             smoothLineShader = new SmoothLineShader();
-
+            basicFillShader = new BasicFillShader();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             textPriner = new GLTextPrinter(this);
             SetupFonts();
@@ -49,6 +51,7 @@ namespace PixelFarm.DrawingGL
             ////-------------------------------------------------------------------------------
             //sclineRasToGL.SetViewMatrix(orthoView);
             smoothLineShader.OrthoView = orthoView;
+            basicFillShader.OrthoView = orthoView;
         }
         public void Dispose()
         {
@@ -916,9 +919,9 @@ namespace PixelFarm.DrawingGL
         }
         public void FillRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h)
         {
-            CoordList2f coords = new CoordList2f();
-            CreateRectCoords(coords, x, y, w, h);
-            this.basicShader.DrawTrianglesWithVertexBuffer(coords, coords.Count, color);
+
+            var coords = CreateRectTessCoords(x, y, w, h);
+            basicFillShader.FillTrianglesWithVertexBuffer(coords, 6, color);
         }
         public void FillRect(PixelFarm.Drawing.LinearGradientBrush linearGradientBrush, float x, float y, float w, float h)
         {

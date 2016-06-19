@@ -98,6 +98,8 @@ namespace OpenTkEssTest
             //---------------------------------------------------------  
 
             DrawLines(0, 0, 300, 150);
+            float[] rect = CreateRectCoords2(100, 100, 50, 50);
+            FillPolygonWithSolidColor(rect, rect.Length / 2, PixelFarm.Drawing.Color.Black);
             //---------------------------------------------------------
 
             miniGLControl.SwapBuffers();
@@ -134,10 +136,31 @@ namespace OpenTkEssTest
             float[] vertices = new float[]{
                 x, y,
                 x+w,y,
-                x+w,y-h,
-                x+w,y-h,
-                x, y - h,
+                x+w,y+h,
+                x+w,y+h,
+                x, y + h,
                 x, y
+            };
+            return vertices;
+        }
+        static float[] CreateRectCoords2(float x, float y, float w, float h)
+        {
+            float x0 = x;
+            float y0 = y + h;
+            float x1 = x;
+            float y1 = y;
+            float x2 = x + w;
+            float y2 = y + h;
+            float x3 = x + w;
+            float y3 = y;
+            float[] vertices = new float[]{
+               x0,y0,
+               x1,y1,
+               x2,y2,
+
+               x1,y1,
+               x3,y3,
+               x2,y2
             };
             return vertices;
         }
