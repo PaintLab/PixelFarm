@@ -34,16 +34,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="04_GLScanline\0_ScanlineSpan.cs" />
-    <Compile Include="04_GLScanline\1_Scanline.cs" />
-    <Compile Include="04_GLScanline\2_ScanlinePacked8.cs" />
-    <Compile Include="04_GLScanline\3_ScanlineUnpacked8.cs" />
-    <Compile Include="04_GLScanline\4.1_ScanlineRasterizer.cs" />
-    <Compile Include="04_GLScanline\4.2_CellAARasterizer.cs" />
-    <Compile Include="04_GLScanline\4.3_VectorClipper.cs" />
-    <Compile Include="04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
-    <Compile Include="04_GLScanline\7_BasicShader.cs" />
-    <Compile Include="04_GLScanline\8_CoordLists.cs" />
+    <Compile Include="GLCanvas\7_BasicShader.cs" />
+    <Compile Include="GLCanvas\8_CoordLists.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\CanvasGL2dInternal.cs" />
     <Compile Include="GLCanvas\CanvasGL2d_TextAndFont.cs" />
@@ -74,6 +66,9 @@
       <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
       <Name>OpenTK.ES</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GLPainter\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
