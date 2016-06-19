@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.WinGdi
         int _width, _height;
         double _strokeWidth;
         bool _useSubPixelRendering;
-        BufferBitmapStore bmpStore = new BufferBitmapStore();
+        BufferBitmapStore _bmpStore;
         //
         Agg.Fonts.Font _font;
         //vector generators
@@ -28,9 +28,10 @@ namespace PixelFarm.Drawing.WinGdi
         Agg.VertexSource.CurveFlattener curveFlattener;
         public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
         {
-            _width = 800;
-            _height = 600;
+            _width = 800;// gfxBmp.Width;
+            _height = 600;// gfxBmp.Height;
             _gfxBmp = gfxBmp;
+            _bmpStore = new BufferBitmapStore(_width, _height);
             _gfx = Graphics.FromImage(_gfxBmp);
             //credit:
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
@@ -226,25 +227,28 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //1. create special graphics 
             using (var srcBmp = CreateBmpBRGA(actualImage))
-            using (var bmp = new System.Drawing.Bitmap(800, 600))
-            using (Graphics g2 = System.Drawing.Graphics.FromImage(bmp))
             {
-                //we can use recycle tmpVxsStore
-                Affine destRectTransform = Affine.NewMatix(affinePlans);
-                double x0 = 0, y0 = 0, x1 = bmp.Width, y1 = bmp.Height;
-                destRectTransform.Transform(ref x0, ref y0);
-                destRectTransform.Transform(ref x0, ref y1);
-                destRectTransform.Transform(ref x1, ref y1);
-                destRectTransform.Transform(ref x1, ref y0);
-                var matrix = new System.Drawing.Drawing2D.Matrix(
-                   (float)destRectTransform.m11, (float)destRectTransform.m12,
-                   (float)destRectTransform.m21, (float)destRectTransform.m22,
-                   (float)destRectTransform.dx, (float)destRectTransform.dy);
-                g2.Clear(System.Drawing.Color.Transparent);
-                g2.Transform = matrix;
-                //------------------------
-                g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
-                this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
+                var bmp = _bmpStore.GetFreeBmp();
+                using (Graphics g2 = System.Drawing.Graphics.FromImage(bmp))
+                {
+                    //we can use recycle tmpVxsStore
+                    Affine destRectTransform = Affine.NewMatix(affinePlans);
+                    double x0 = 0, y0 = 0, x1 = bmp.Width, y1 = bmp.Height;
+                    destRectTransform.Transform(ref x0, ref y0);
+                    destRectTransform.Transform(ref x0, ref y1);
+                    destRectTransform.Transform(ref x1, ref y1);
+                    destRectTransform.Transform(ref x1, ref y0);
+                    var matrix = new System.Drawing.Drawing2D.Matrix(
+                       (float)destRectTransform.m11, (float)destRectTransform.m12,
+                       (float)destRectTransform.m21, (float)destRectTransform.m22,
+                       (float)destRectTransform.dx, (float)destRectTransform.dy);
+                    g2.Clear(System.Drawing.Color.Transparent);
+                    g2.Transform = matrix;
+                    //------------------------
+                    g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
+                    this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
+                }
+                _bmpStore.RelaseBmp(bmp);
             }
         }
 
