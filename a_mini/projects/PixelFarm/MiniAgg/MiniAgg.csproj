@@ -39,7 +39,6 @@
   <ItemGroup>
     <Compile Include="00_Context\ImageGraphics2D_RenderImages.cs" />
     <Compile Include="01_Base\AggMemMx.cs" />
-    <Compile Include="01_Base\CanvasPainter.cs" />
     <Compile Include="02_PixelBuffer\ChildImage.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\PixelBlenderGray.cs" />

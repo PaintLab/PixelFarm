@@ -93,7 +93,7 @@ namespace PixelFarm.Agg
         public abstract ColorRGBA FillColor { get; set; }
         public abstract ColorRGBA StrokeColor { get; set; }
         public abstract void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath);
-        public abstract void Fill(VertexStore vxs, ISpanGenerator spanGen);
+     
         public abstract void DrawImage(ActualImage actualImage, double x, double y);
         public abstract void DrawImage(ActualImage actualImage, params Transform.AffinePlan[] affinePlans);
         //----------------------

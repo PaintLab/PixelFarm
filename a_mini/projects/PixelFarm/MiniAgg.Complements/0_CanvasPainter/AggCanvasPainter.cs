@@ -281,7 +281,7 @@ namespace PixelFarm.Agg
                 pathIndexs,
                 numPath);
         }
-        public override void Fill(VertexStore vxs, ISpanGenerator spanGen)
+        public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
             this.sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(this.gx.DestImage, sclineRas, scline, spanGen);

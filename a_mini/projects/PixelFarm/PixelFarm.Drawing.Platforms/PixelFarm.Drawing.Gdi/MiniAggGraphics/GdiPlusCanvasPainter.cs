@@ -319,11 +319,7 @@ namespace PixelFarm.Drawing.WinGdi
             VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
         }
 
-        public override void Fill(VertexStore vxs, ISpanGenerator spanGen)
-        {
-            //fill with ispan generator
-            throw new NotImplementedException();
-        }
+         
 
         public override void FillCircle(double x, double y, double radius)
         {
