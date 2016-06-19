@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniAgg.Complements\MiniAgg.Complements.csproj">
-      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
+      <Project>{ae0df71e-9b14-4197-b55a-e1e0ce0683c7}</Project>
       <Name>MiniAgg.Complements</Name>
     </ProjectReference>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">

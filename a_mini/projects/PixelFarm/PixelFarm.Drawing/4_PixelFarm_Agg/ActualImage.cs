@@ -22,7 +22,7 @@ using System;
 using PixelFarm.Agg.Image;
 namespace PixelFarm.Agg
 {
-    public class ActualImage
+    public sealed class ActualImage
     {
         int width;
         int height;
