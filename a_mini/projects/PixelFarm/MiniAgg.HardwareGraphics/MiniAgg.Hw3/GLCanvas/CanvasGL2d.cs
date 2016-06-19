@@ -11,7 +11,6 @@ namespace PixelFarm.DrawingGL
     {
         BasicShader basicShader;
         SmoothLineShader smoothLineShader;
-
         PixelFarm.Drawing.Color strokeColor = PixelFarm.Drawing.Color.Black;
         Tesselator tess = new Tesselator();
         TessListener2 tessListener = new TessListener2();
@@ -20,9 +19,6 @@ namespace PixelFarm.DrawingGL
         Ellipse ellipse = new Ellipse();
         PathWriter ps = new PathWriter();
         Stroke aggStroke = new Stroke(1);
-        //GLScanlineRasterizer sclineRas;
-        //GLScanlineRasToDestBitmapRenderer sclineRasToGL;
-        //GLScanlinePacked8 sclinePack8;
         Arc arcTool = new Arc();
         CurveFlattener curveFlattener = new CurveFlattener();
         GLTextPrinter textPriner;
@@ -35,15 +31,9 @@ namespace PixelFarm.DrawingGL
         {
             this.canvasW = canvasW;
             this.canvasH = canvasH;
-            //sclineRas = new GLScanlineRasterizer();
             basicShader = new BasicShader();
-            basicShader.InitShader();
-
             smoothLineShader = new SmoothLineShader();
-            smoothLineShader.InitShader();
 
-            //sclineRasToGL = new GLScanlineRasToDestBitmapRenderer(basicShader);
-            //sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             textPriner = new GLTextPrinter(this);
             SetupFonts();
@@ -462,6 +452,36 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawRect(float x, float y, float w, float h)
         {
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.Smooth:
+                    {
+                        smoothLineShader.StrokeColor = this.strokeColor;
+                        smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
+                        CoordList2f coords = new CoordList2f();
+                        CreatePolyLineRectCoords(coords, x, y, w, h);
+                        float[] internalArr = coords.GetInternalArray();
+                        int coodCount = (coords.Count - 1) << 1; //=  (coords.Count-1)*2
+                        for (int i = 0; i < coodCount;)
+                        {
+                            if (i == 0)
+                            {
+                                this.smoothLineShader.DrawLine(internalArr[i], internalArr[i + 1], internalArr[i + 2], internalArr[i + 3]);
+                            }
+                            else
+                            {
+                                this.smoothLineShader.DrawLine2(internalArr[i], internalArr[i + 1], internalArr[i + 2], internalArr[i + 3]);
+                            }
+                            i += 2;
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        //this.basicShader.DrawLine(x1, y1, x2, y2, this.strokeColor);
+                    }
+                    break;
+            }
             //GL.EnableClientState(ArrayCap.ColorArray);
             //GL.EnableClientState(ArrayCap.VertexArray);
             //VboC4V3f vbo = GenerateVboC4V3f();
@@ -476,10 +496,10 @@ namespace PixelFarm.DrawingGL
             //GL.DisableClientState(ArrayCap.ColorArray);
             //GL.DisableClientState(ArrayCap.VertexArray);
 
-            CoordList2f coords = new CoordList2f();
-            CreatePolyLineRectCoords(coords, x, y, w, h);
-            //render
-            this.basicShader.DrawLineStripsWithVertexBuffer(coords, coords.Count, this.strokeColor);
+            //CoordList2f coords = new CoordList2f();
+            //CreatePolyLineRectCoords(coords, x, y, w, h);
+            ////render
+            //this.basicShader.DrawLineStripsWithVertexBuffer(coords, coords.Count, this.strokeColor);
         }
         public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
         {
@@ -1336,7 +1356,6 @@ namespace PixelFarm.DrawingGL
                         ps.CloseFigure();
                         VertexStore vxs = ps.Vxs;
                         throw new NotSupportedException();
-
                         //sclineRas.Reset();
                         //sclineRas.AddPath(vxs);
                         //sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);

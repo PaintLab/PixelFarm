@@ -20,13 +20,14 @@ namespace PixelFarm.DrawingGL
         public BasicShader()
         {
             shaderProgram = new MiniShaderProgram();
+            InitShader();
         }
         public void UnloadShader()
         {
             shaderProgram.DeleteMe();
             shaderProgram = null;
         }
-        public void InitShader()
+        void InitShader()
         {
             if (isInited) { return; }
             //----------------
@@ -113,6 +114,7 @@ namespace PixelFarm.DrawingGL
         //---------------------------------- 
         public void DrawLineStripsWithVertexBuffer(CoordList2f linesBuffer, int nelements, PixelFarm.Drawing.Color color)
         {
+            shaderProgram.UseProgram();
             u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
