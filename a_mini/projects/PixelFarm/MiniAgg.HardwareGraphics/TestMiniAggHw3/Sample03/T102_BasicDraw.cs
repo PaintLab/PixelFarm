@@ -32,6 +32,11 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
+            //Test1();
+            Test2();
+        }
+        void Test1()
+        {
             GL.Clear(ClearBufferMask.ColorBufferBit);
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //line
@@ -61,6 +66,16 @@ namespace OpenTkEssTest
                 325,550
             };
             canvas2d.FillPolygon(PixelFarm.Drawing.Color.Green, polygon2);
+            //--------------------------------------------
+            miniGLControl.SwapBuffers();
+        }
+        void Test2()
+        {
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
+            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            //line
+            canvas2d.DrawLine(50, 50, 200, 200);
             //--------------------------------------------
             miniGLControl.SwapBuffers();
         }

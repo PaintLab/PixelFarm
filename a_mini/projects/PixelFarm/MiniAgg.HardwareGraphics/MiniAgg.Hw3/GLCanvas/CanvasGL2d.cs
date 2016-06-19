@@ -10,6 +10,8 @@ namespace PixelFarm.DrawingGL
     public partial class CanvasGL2d
     {
         BasicShader basicShader;
+        SmoothLineShader smoothLineShader;
+
         PixelFarm.Drawing.Color strokeColor = PixelFarm.Drawing.Color.Black;
         Tesselator tess = new Tesselator();
         TessListener2 tessListener = new TessListener2();
@@ -36,6 +38,10 @@ namespace PixelFarm.DrawingGL
             //sclineRas = new GLScanlineRasterizer();
             basicShader = new BasicShader();
             basicShader.InitShader();
+
+            smoothLineShader = new SmoothLineShader();
+            smoothLineShader.InitShader();
+
             //sclineRasToGL = new GLScanlineRasToDestBitmapRenderer(basicShader);
             //sclinePack8 = new GLScanlinePacked8();
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
@@ -52,6 +58,7 @@ namespace PixelFarm.DrawingGL
             orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
             ////-------------------------------------------------------------------------------
             //sclineRasToGL.SetViewMatrix(orthoView);
+            smoothLineShader.OrthoView = orthoView;
         }
         public void Dispose()
         {
@@ -99,18 +106,9 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
-                        //--------------------------------------
-                        ps.Clear();
-                        ps.MoveTo(x1, y1);
-                        ps.LineTo(x2, y2);
-
-                        VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
-
-                        throw new NotSupportedException();
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
-                        //--------------------------------------
+                        smoothLineShader.StrokeColor = this.strokeColor;
+                        smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
+                        this.smoothLineShader.DrawLine(x1, y1, x2, y2);
                     }
                     break;
                 default:
