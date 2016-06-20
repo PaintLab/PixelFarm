@@ -34,16 +34,56 @@ namespace OpenTkEssTest
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.FillCircle(PixelFarm.Drawing.Color.OrangeRed, 100, 400, 25);
-            var color = PixelFarm.Drawing.Color.OrangeRed;
-            canvas2d.FillEllipse(
-                new PixelFarm.Drawing.Color(
-                    100,
-                    color.R,
-                    color.G,
-                    color.B), 200, 400, 25, 50);
-            ////--------------------------------------------
+            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
+
+
+            //-----------------------------
+            //see:  lazyfoo.net/tutorials/OpenGL/26_the_stencil_buffer/index.php
+            //-----------------------------
+            //test gradient brush
+            //set value for clear color
+            GLHelper.ClearColor(PixelFarm.Drawing.Color.White);
+            GL.ClearStencil(0); //set value for clearing stencil buffer 
+                                //actual clear here
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
+            //-------------------
+            //disable rendering to color buffer
+            GL.ColorMask(false, false, false, false);
+            //start using stencil
+            GL.Enable(EnableCap.StencilTest);
+            //place a 1 where rendered
+            GL.StencilFunc(StencilFunction.Always, 1, 1);
+            //replace where rendered
+            GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
+            //render  to stencill buffer
+            float[] stencilPolygon = new float[]
+                {
+                    20,20,
+                    100,20,
+                    60,80
+                };
+            canvas2d.FillPolygon(PixelFarm.Drawing.Color.Black, stencilPolygon);
+            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
+
+            //render color
+            GL.ColorMask(true, true, true, true);
+            //where a 1 was not rendered
+            GL.StencilFunc(StencilFunction.Equal, 1, 1);
+            //keep the pixel
+            GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
+            //draw  
+            canvas2d.FillPolygon(PixelFarm.Drawing.Color.Red,
+              new float[]
+              {
+                    5,5,
+                    100,5,
+                    100,100,
+                    5,100
+              });
+            GL.Disable(EnableCap.StencilTest);
+            //
             miniGLControl.SwapBuffers();
         }
     }
 }
+
