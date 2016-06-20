@@ -1,6 +1,7 @@
-﻿//MIT 2014, WinterDev
+﻿//MIT 2016, WinterDev
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Agg;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
@@ -137,9 +138,6 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
-            shaderProgram.UseProgram();
-            //---------------------------------------------------------  
-            u_matrix.SetData(orthoView.data);
             float dx = x2 - x1;
             float dy = y2 - y1;
             float rad1 = (float)Math.Atan2(
@@ -152,6 +150,8 @@ namespace PixelFarm.DrawingGL
                 //-------
                 x2, y2,1,rad1
             };
+            shaderProgram.UseProgram();
+            u_matrix.SetData(orthoView.data);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,
@@ -161,6 +161,74 @@ namespace PixelFarm.DrawingGL
             a_position.LoadV4f(vtxs, 4, 0);
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
+        }
+
+        public void DrawPolyline(float[] coords, int coordCount)
+        {
+            //from user input coords
+            //expand it
+            List<float> expandCoords = new List<float>();
+            for (int i = 0; i < coordCount;)
+            {
+                CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                i += 2;
+            }
+
+            shaderProgram.UseProgram();
+            u_matrix.SetData(orthoView.data);
+            u_useSolidColor.SetValue(1);
+            u_solidColor.SetValue(
+                  _strokeColor.R / 255f,
+                  _strokeColor.G / 255f,
+                  _strokeColor.B / 255f,
+                  _strokeColor.A / 255f);
+            a_position.LoadV4f(expandCoords.ToArray(), 4, 0);
+            u_linewidth.SetValue(_strokeWidth);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, coordCount * 2);
+        }
+
+
+
+        public void DrawPolygon(float[] coords, int coordCount)
+        {
+            //from user input coords
+            //expand it
+            List<float> expandCoords = new List<float>();
+            int lim = coordCount - 2;
+            for (int i = 0; i < lim;)
+            {
+                CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                i += 2;
+            }
+            //close coord
+            CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
+            //we need exact close the polygon
+            CreateLineSegment(expandCoords, coords[0], coords[1], coords[0], coords[1]);
+            shaderProgram.UseProgram();
+            u_matrix.SetData(orthoView.data);
+            u_useSolidColor.SetValue(1);
+            u_solidColor.SetValue(
+                  _strokeColor.R / 255f,
+                  _strokeColor.G / 255f,
+                  _strokeColor.B / 255f,
+                  _strokeColor.A / 255f);
+            a_position.LoadV4f(expandCoords.ToArray(), 4, 0);
+            u_linewidth.SetValue(_strokeWidth);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, (coordCount + 2) * 2);
+        }
+
+        static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
+        {
+            //create wiht no line join
+            float dx = x2 - x1;
+            float dy = y2 - y1;
+            float rad1 = (float)Math.Atan2(
+                   y2 - y1,  //dy
+                   x2 - x1); //dx
+            coords.Add(x1); coords.Add(y1); coords.Add(0); coords.Add(rad1);
+            coords.Add(x1); coords.Add(y1); coords.Add(1); coords.Add(rad1);
+            coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1);
+            coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
         }
         public void DrawLine2(float x1, float y1, float x2, float y2)
         {
