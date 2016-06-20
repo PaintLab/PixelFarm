@@ -96,6 +96,15 @@ namespace OpenTkEssTest
             //--------------------------------------------
             canvas2d.DrawCircle(100, 100, 25);
             canvas2d.DrawEllipse(200, 200, 25, 50);
+            //
+
+            canvas2d.FillCircle(PixelFarm.Drawing.Color.OrangeRed, 100, 400, 25);
+            canvas2d.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
+            canvas2d.DrawCircle(100, 400, 25);
+            //
+            canvas2d.FillEllipse(PixelFarm.Drawing.Color.OrangeRed, 200, 400, 25, 50);
+            canvas2d.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
+            canvas2d.DrawEllipse(200, 400, 25, 50);
             miniGLControl.SwapBuffers();
         }
     }

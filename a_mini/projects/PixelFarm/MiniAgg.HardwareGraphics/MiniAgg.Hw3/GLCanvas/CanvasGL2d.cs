@@ -405,6 +405,7 @@ namespace PixelFarm.DrawingGL
                             cmd = vxs.GetVertex(i, out vx, out vy);
                         }
                         //--------------------------------------
+                        smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.DrawPolygon(coords, nn);
                     }
                     break;
@@ -494,6 +495,7 @@ namespace PixelFarm.DrawingGL
                             cmd = vxs.GetVertex(i, out vx, out vy);
                         }
                         //--------------------------------------
+                        smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.DrawPolygon(coords, nn);
                     }
                     break;
@@ -1011,20 +1013,13 @@ namespace PixelFarm.DrawingGL
         }
         public void FillEllipse(PixelFarm.Drawing.Color color, float x, float y, float rx, float ry)
         {
-            throw new NotSupportedException();
-            ellipse.Reset(x, y, rx, ry);
-            var vxs = ellipse.MakeVxs();
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
-                    }
-                    break;
+
                 default:
                     {
+                        ellipse.Reset(x, y, rx, ry);
+                        var vxs = ellipse.MakeVxs();
                         //other mode
                         int n = vxs.Count;
                         //make triangular fan*** 
@@ -1074,14 +1069,8 @@ namespace PixelFarm.DrawingGL
                             coords[nn++] = coords[2];
                             coords[nn++] = coords[3];
                             npoints++;
-                            ////fill triangular fan
-                            //GL.EnableClientState(ArrayCap.VertexArray); //***
-                            ////vertex 2d
-                            //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)coords);
-                            //GL.DrawArrays(BeginMode.TriangleFan, 0, npoints);
-                            //GL.DisableClientState(ArrayCap.VertexArray);
-
-                            this.basicShader.FillTriangleFan(coords, npoints, color);
+                            this.basicFillShader.FillTriangleFan(coords, npoints, color);
+                            
                         }
                     }
                     break;
