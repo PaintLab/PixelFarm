@@ -348,38 +348,7 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
-                        //draw polyon 
-                        //ps.Clear();
-                        ////closed polygon
-                        //int j = npoints;
-                        ////first point
-                        //if (j < 2)
-                        //{
-                        //    return;
-                        //}
-                        //ps.MoveTo(polygon2dVertices[0], polygon2dVertices[1]);
-                        //int nn = 2;
-                        //for (int i = 1; i < j; ++i)
-                        //{
-                        //    ps.LineTo(polygon2dVertices[nn++],
-                        //        polygon2dVertices[nn++]);
-                        //}
-                        ////close
-                        //ps.CloseFigure();
-                        //VertexStore vxs = aggStroke.MakeVxs(ps.Vxs);
-                        ////sclineRas.Reset();
-                        ////sclineRas.AddPath(vxs);
-                        ////sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
-                        //////-------------------------------------- 
-                        //throw new NotSupportedException();
-                        //
-                        unsafe
-                        {
-                            fixed (float* arr = &polygon2dVertices[0])
-                            {
-                                DrawPolygonUnsafe(arr, npoints);
-                            }
-                        }
+                        smoothLineShader.DrawPolygon(polygon2dVertices, npoints);
                     }
                     break;
                 default:
@@ -467,11 +436,28 @@ namespace PixelFarm.DrawingGL
                     {
                         smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
-                        //
+
                         CoordList2f coords = new CoordList2f();
-                        CreatePolyLineRectCoords(coords, x, y, w, h);
+                        CreatePolyLineRectCoords2(coords, x, y, w, h);
+
                         float[] internalArr = coords.GetInternalArray();
-                        smoothLineShader.DrawPolyline(internalArr, (coords.Count - 1) << 1);
+                        //smoothLineShader.DrawPolyline(internalArr, (coords.Count - 1) << 1);
+                        smoothLineShader.DrawPolygon(internalArr, coords.Count << 1);
+                        //smoothLineShader.DrawPolygon(new float[]
+                        //{
+                        //    x,y,
+                        //    x+w,y,
+                        //    x+w,y+h,
+                        //    x,y+h
+                        //}, 4);
+                        //smoothLineShader.DrawPolygon(new float[]
+                        //  {
+                        //        x,y+h,
+                        //        x,y,
+                        //        //
+                        //        x+w,y,
+                        //        x+w,y+h, 
+                        //}, 4);
                     }
                     break;
                 default:

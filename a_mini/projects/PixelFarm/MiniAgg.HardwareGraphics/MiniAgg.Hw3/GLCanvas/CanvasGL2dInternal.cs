@@ -66,7 +66,15 @@ namespace PixelFarm.DrawingGL
             coords.AddCoord(x + w, y);
             coords.AddCoord(x + w, y + h);
             coords.AddCoord(x, y + h);
+            coords.AddCoord(x, y); //close
+        }
+        static void CreatePolyLineRectCoords2(CoordList2f coords,
+                float x, float y, float w, float h)
+        {
             coords.AddCoord(x, y);
+            coords.AddCoord(x + w, y);
+            coords.AddCoord(x + w, y + h);
+            coords.AddCoord(x, y + h); 
         }
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
