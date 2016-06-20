@@ -40,9 +40,9 @@ namespace PixelFarm.DrawingGL
             textPriner = new GLTextPrinter(this);
             SetupFonts();
             ////--------------------------------------------------------------------------------
-            //GL.Enable(EnableCap.Blend);
-            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            //GL.ClearColor(1, 1, 1, 1);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.ClearColor(1, 1, 1, 1);
             ////setup viewport size
             int max = Math.Max(canvasW, canvasH);
             ////square viewport
@@ -348,6 +348,7 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
+                        smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.DrawPolygon(polygon2dVertices, npoints);
                     }
                     break;
@@ -1322,6 +1323,7 @@ namespace PixelFarm.DrawingGL
                             }
                             //-------------------------------------                              
                             this.basicFillShader.FillTriangles(vtx, j, color);
+
                         }
                     }
                     break;
@@ -1331,10 +1333,7 @@ namespace PixelFarm.DrawingGL
                         //-----------------------------   
                         //switch how to fill polygon
                         int j = vertextList.Count;
-                        //-----------------------------   
-                        //VboC4V3f vbo = GenerateVboC4V3f();
-                        //ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                        //uint color_int = color.ToABGR();
+                        //-----------------------------  
                         unsafe
                         {
                             float* vtx = stackalloc float[j * 2];
@@ -1349,16 +1348,6 @@ namespace PixelFarm.DrawingGL
                             //------------------------------------- 
                             this.basicFillShader.FillTriangles(vtx, j, color);
                         }
-                        //GL.EnableClientState(ArrayCap.ColorArray);
-                        //GL.EnableClientState(ArrayCap.VertexArray);
-                        //int pcount = vrx.Count;
-                        //vbo.BindBuffer();
-                        //DrawTrianglesWithVertexBuffer(vrx, pcount);
-                        //vbo.UnbindBuffer();
-
-                        //GL.DisableClientState(ArrayCap.ColorArray);
-                        //GL.DisableClientState(ArrayCap.VertexArray);
-                        //--------------------------------------  
                     }
                     break;
             }

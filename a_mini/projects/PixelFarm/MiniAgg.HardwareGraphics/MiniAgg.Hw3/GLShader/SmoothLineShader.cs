@@ -212,9 +212,10 @@ namespace PixelFarm.DrawingGL
                   _strokeColor.B / 255f,
                   _strokeColor.A / 255f);
             a_position.LoadV4f(expandCoords.ToArray(), 4, 0);
-            u_linewidth.SetValue(9f);
+            u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, (coordCount + 2) * 2);
         }
+      
         static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
             //create wiht no line join

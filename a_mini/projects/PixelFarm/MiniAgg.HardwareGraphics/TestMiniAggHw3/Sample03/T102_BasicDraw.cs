@@ -66,6 +66,7 @@ namespace OpenTkEssTest
                 325,550
             };
             canvas2d.FillPolygon(PixelFarm.Drawing.Color.Green, polygon2);
+          
             //--------------------------------------------
             miniGLControl.SwapBuffers();
         }
@@ -75,9 +76,9 @@ namespace OpenTkEssTest
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //line
-            //canvas2d.DrawLine(50, 50, 200, 200);
+            canvas2d.DrawLine(50, 50, 200, 200);
             canvas2d.DrawRect(10, 10, 50, 50);
-            //canvas2d.FillRect(PixelFarm.Drawing.Color.Green, 100, 100, 50, 50);
+            canvas2d.FillRect(PixelFarm.Drawing.Color.Green, 100, 100, 50, 50);
             ////polygon
             float[] polygon1 = new float[]{
                 50,200,
@@ -85,14 +86,15 @@ namespace OpenTkEssTest
                 125,350
             };
             canvas2d.DrawPolygon(polygon1, 3 * 2);
-            //float[] polygon2 = new float[]{
-            //    250,400,
-            //    450,400,
-            //    325,550
-            //};
-            //canvas2d.FillPolygon(PixelFarm.Drawing.Color.Green, polygon2);
-            ////--------------------------------------------
-
+            float[] polygon2 = new float[]{
+                250,400,
+                450,400,
+                325,550
+            };
+            
+            canvas2d.FillPolygon(PixelFarm.Drawing.Color.Green, polygon2);
+            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Green;
+            canvas2d.DrawPolygon(polygon2, 3*2);
             //--------------------------------------------
             miniGLControl.SwapBuffers();
         }
