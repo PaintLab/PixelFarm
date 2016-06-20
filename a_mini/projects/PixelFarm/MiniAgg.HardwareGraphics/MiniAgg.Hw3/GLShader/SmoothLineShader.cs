@@ -186,6 +186,9 @@ namespace PixelFarm.DrawingGL
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, coordCount * 2);
         }
+
+
+
         public void DrawPolygon(float[] coords, int coordCount)
         {
             //from user input coords
@@ -201,8 +204,6 @@ namespace PixelFarm.DrawingGL
             CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
             //we need exact close the polygon
             CreateLineSegment(expandCoords, coords[0], coords[1], coords[0], coords[1]);
-
-
             shaderProgram.UseProgram();
             u_matrix.SetData(orthoView.data);
             u_useSolidColor.SetValue(1);
@@ -215,7 +216,7 @@ namespace PixelFarm.DrawingGL
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, (coordCount + 2) * 2);
         }
-      
+
         static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
             //create wiht no line join

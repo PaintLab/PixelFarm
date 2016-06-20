@@ -372,11 +372,40 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
-                        VertexStore vxs = aggStroke.MakeVxs(ellipse.MakeVxs());
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
-                        throw new NotSupportedException();
+                        VertexStore vxs = ellipse.MakeVxs();
+                        int n = vxs.Count;
+                        float[] coords = new float[n * 2];
+                        int i = 0;
+                        int nn = 0;
+                        double vx, vy;
+                        var cmd = vxs.GetVertex(i, out vx, out vy);
+                        while (i < n)
+                        {
+                            switch (cmd)
+                            {
+                                case VertexCmd.MoveTo:
+                                    {
+                                        coords[nn++] = (float)vx;
+                                        coords[nn++] = (float)vy;
+                                    }
+                                    break;
+                                case VertexCmd.LineTo:
+                                    {
+                                        coords[nn++] = (float)vx;
+                                        coords[nn++] = (float)vy;
+                                    }
+                                    break;
+                                default:
+                                    {
+                                        i = n + 1; //stop
+                                    }
+                                    break;
+                            }
+                            i++;
+                            cmd = vxs.GetVertex(i, out vx, out vy);
+                        }
+                        //--------------------------------------
+                        smoothLineShader.DrawPolygon(coords, nn);
                     }
                     break;
                 default:
@@ -427,7 +456,53 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawCircle(float x, float y, double radius)
         {
-            DrawEllipse(x, y, radius, radius);
+            switch (this.SmoothMode)
+            {
+                case CanvasSmoothMode.Smooth:
+                    {
+                        ellipse.Reset(x, y, radius, radius);
+                        VertexStore vxs = ellipse.MakeVxs();
+                        int n = vxs.Count;
+                        float[] coords = new float[n * 2];
+                        int i = 0;
+                        int nn = 0;
+                        double vx, vy;
+                        var cmd = vxs.GetVertex(i, out vx, out vy);
+                        while (i < n)
+                        {
+                            switch (cmd)
+                            {
+                                case VertexCmd.MoveTo:
+                                    {
+                                        coords[nn++] = (float)vx;
+                                        coords[nn++] = (float)vy;
+                                    }
+                                    break;
+                                case VertexCmd.LineTo:
+                                    {
+                                        coords[nn++] = (float)vx;
+                                        coords[nn++] = (float)vy;
+                                    }
+                                    break;
+                                default:
+                                    {
+                                        i = n + 1; //stop
+                                    }
+                                    break;
+                            }
+                            i++;
+                            cmd = vxs.GetVertex(i, out vx, out vy);
+                        }
+                        //--------------------------------------
+                        smoothLineShader.DrawPolygon(coords, nn);
+                    }
+                    break;
+                default:
+                    {
+                        DrawEllipse(x, y, radius, radius);
+                    }
+                    break;
+            }
         }
         public void DrawRect(float x, float y, float w, float h)
         {
@@ -437,28 +512,10 @@ namespace PixelFarm.DrawingGL
                     {
                         smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
-
                         CoordList2f coords = new CoordList2f();
                         CreatePolyLineRectCoords2(coords, x, y, w, h);
-
                         float[] internalArr = coords.GetInternalArray();
-                        //smoothLineShader.DrawPolyline(internalArr, (coords.Count - 1) << 1);
                         smoothLineShader.DrawPolygon(internalArr, coords.Count << 1);
-                        //smoothLineShader.DrawPolygon(new float[]
-                        //{
-                        //    x,y,
-                        //    x+w,y,
-                        //    x+w,y+h,
-                        //    x,y+h
-                        //}, 4);
-                        //smoothLineShader.DrawPolygon(new float[]
-                        //  {
-                        //        x,y+h,
-                        //        x,y,
-                        //        //
-                        //        x+w,y,
-                        //        x+w,y+h, 
-                        //}, 4);
                     }
                     break;
                 default:
@@ -1323,7 +1380,6 @@ namespace PixelFarm.DrawingGL
                             }
                             //-------------------------------------                              
                             this.basicFillShader.FillTriangles(vtx, j, color);
-
                         }
                     }
                     break;

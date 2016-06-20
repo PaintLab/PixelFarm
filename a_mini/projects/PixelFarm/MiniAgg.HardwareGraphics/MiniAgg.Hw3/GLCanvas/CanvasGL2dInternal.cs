@@ -74,7 +74,7 @@ namespace PixelFarm.DrawingGL
             coords.AddCoord(x, y);
             coords.AddCoord(x + w, y);
             coords.AddCoord(x + w, y + h);
-            coords.AddCoord(x, y + h); 
+            coords.AddCoord(x, y + h);
         }
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {

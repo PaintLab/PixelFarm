@@ -66,7 +66,6 @@ namespace OpenTkEssTest
                 325,550
             };
             canvas2d.FillPolygon(PixelFarm.Drawing.Color.Green, polygon2);
-          
             //--------------------------------------------
             miniGLControl.SwapBuffers();
         }
@@ -91,11 +90,12 @@ namespace OpenTkEssTest
                 450,400,
                 325,550
             };
-            
             canvas2d.FillPolygon(PixelFarm.Drawing.Color.Green, polygon2);
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Green;
-            canvas2d.DrawPolygon(polygon2, 3*2);
+            canvas2d.DrawPolygon(polygon2, 3 * 2);
             //--------------------------------------------
+            canvas2d.DrawCircle(100, 100, 25);
+            canvas2d.DrawEllipse(200, 200, 25, 50);
             miniGLControl.SwapBuffers();
         }
     }
