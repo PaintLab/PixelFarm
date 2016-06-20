@@ -128,8 +128,6 @@ namespace PixelFarm.DrawingGL
             u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-
-
             //a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
             a_position.LoadV2f(linesBuffer.GetInternalArray(), linesBuffer.Count, 0);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
@@ -144,7 +142,7 @@ namespace PixelFarm.DrawingGL
             a_position.LoadV2f(linesBuffer, 2, 0);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
-       
+
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
         {
             u_useAggColor.SetValue(0);

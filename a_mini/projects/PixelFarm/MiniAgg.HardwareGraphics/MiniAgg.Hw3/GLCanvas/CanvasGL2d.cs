@@ -13,7 +13,6 @@ namespace PixelFarm.DrawingGL
         BasicShader basicShader;
         SmoothLineShader smoothLineShader;
         BasicFillShader basicFillShader;
-
         PixelFarm.Drawing.Color strokeColor = PixelFarm.Drawing.Color.Black;
         Tesselator tess = new Tesselator();
         TessListener2 tessListener = new TessListener2();
@@ -468,22 +467,11 @@ namespace PixelFarm.DrawingGL
                     {
                         smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
+                        //
                         CoordList2f coords = new CoordList2f();
                         CreatePolyLineRectCoords(coords, x, y, w, h);
                         float[] internalArr = coords.GetInternalArray();
-                        int coodCount = (coords.Count - 1) << 1; //=  (coords.Count-1)*2
-                        for (int i = 0; i < coodCount;)
-                        {
-                            if (i == 0)
-                            {
-                                this.smoothLineShader.DrawLine(internalArr[i], internalArr[i + 1], internalArr[i + 2], internalArr[i + 3]);
-                            }
-                            else
-                            {
-                                this.smoothLineShader.DrawLine2(internalArr[i], internalArr[i + 1], internalArr[i + 2], internalArr[i + 3]);
-                            }
-                            i += 2;
-                        }
+                        smoothLineShader.DrawPolyline(internalArr, (coords.Count - 1) << 1);
                     }
                     break;
                 default:
@@ -492,24 +480,6 @@ namespace PixelFarm.DrawingGL
                     }
                     break;
             }
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray);
-            //VboC4V3f vbo = GenerateVboC4V3f();
-            //////points 
-            //ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-            //CreatePolyLineRectCoords(vrx, this.strokeColor, x, y, w, h);
-            //int pcount = vrx.Count;
-            //vbo.BindBuffer();
-            //DrawLineStripWithVertexBuffer(vrx, pcount);
-            //vbo.UnbindBuffer();
-            ////vbo.Dispose();
-            //GL.DisableClientState(ArrayCap.ColorArray);
-            //GL.DisableClientState(ArrayCap.VertexArray);
-
-            //CoordList2f coords = new CoordList2f();
-            //CreatePolyLineRectCoords(coords, x, y, w, h);
-            ////render
-            //this.basicShader.DrawLineStripsWithVertexBuffer(coords, coords.Count, this.strokeColor);
         }
         public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
         {
@@ -1366,7 +1336,7 @@ namespace PixelFarm.DrawingGL
                             }
                             //-------------------------------------                              
                             this.basicFillShader.FillTriangles(vtx, j, color);
-                        } 
+                        }
                     }
                     break;
                 default:
