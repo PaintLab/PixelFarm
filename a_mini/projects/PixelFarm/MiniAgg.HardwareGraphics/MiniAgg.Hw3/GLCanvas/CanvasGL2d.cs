@@ -12,7 +12,12 @@ namespace PixelFarm.DrawingGL
     {
         BasicShader basicShader;
         SmoothLineShader smoothLineShader;
+        InvertAlphaFragmentShader invertAlphaFragmentShader;
         BasicFillShader basicFillShader;
+        RectFillShader rectFillShader;
+        SimpleTextureShader textureShader;
+        //-----------------------------------------------------------
+
         PixelFarm.Drawing.Color strokeColor = PixelFarm.Drawing.Color.Black;
         Tesselator tess = new Tesselator();
         TessListener2 tessListener = new TessListener2();
@@ -36,6 +41,9 @@ namespace PixelFarm.DrawingGL
             basicShader = new BasicShader();
             smoothLineShader = new SmoothLineShader();
             basicFillShader = new BasicFillShader();
+            rectFillShader = new RectFillShader();
+            textureShader = new SimpleTextureShader();
+            invertAlphaFragmentShader = new InvertAlphaFragmentShader(); //used with stencil  ***
             tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             textPriner = new GLTextPrinter(this);
             SetupFonts();
@@ -45,13 +53,15 @@ namespace PixelFarm.DrawingGL
             GL.ClearColor(1, 1, 1, 1);
             ////setup viewport size
             int max = Math.Max(canvasW, canvasH);
-            ////square viewport
-            //GL.Viewport(0, 0, max, max);
+            ////square viewport 
             orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
-            ////-------------------------------------------------------------------------------
-            //sclineRasToGL.SetViewMatrix(orthoView);
+            //-------------------------------------------------------------------------------
+
             smoothLineShader.OrthoView = orthoView;
             basicFillShader.OrthoView = orthoView;
+            textureShader.OrthoView = orthoView;
+            basicFillShader.OrthoView = orthoView;
+            invertAlphaFragmentShader.OrthoView = orthoView;
         }
         public void Dispose()
         {
@@ -62,22 +72,21 @@ namespace PixelFarm.DrawingGL
             get;
             set;
         }
-        public int Note1
-        {
-            get;
-            set;
-        }
+
 
         public void Clear(PixelFarm.Drawing.Color c)
         {
-            //set value for clear color buffer
-
+            //set value for clear color buffer 
             GLHelper.ClearColor(c);
             GL.ClearStencil(0);
             //actual clear here !
             GL.Clear(ClearBufferMask.ColorBufferBit |
                 ClearBufferMask.DepthBufferBit |
                 ClearBufferMask.StencilBufferBit);
+        }
+        public void ClearColorBuffer()
+        {
+            GL.Clear(ClearBufferMask.ColorBufferBit);
         }
         public double StrokeWidth
         {
@@ -129,52 +138,8 @@ namespace PixelFarm.DrawingGL
             PixelFarm.Drawing.RectangleF srcRect,
             float x, float y, float w, float h)
         {
-            unsafe
-            {
-                GL.Enable(EnableCap.Texture2D);
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
-                    throw new NotSupportedException();
-                    //GL.EnableClientState(ArrayCap.TextureCoordArray); //***
-
-                    //texture source coord 1= 100% of original width
-                    float* arr = stackalloc float[8];
-                    float fullsrcW = bmp.Width;
-                    float fullsrcH = bmp.Height;
-                    if (bmp.IsInvert)
-                    {
-                        ////arr[0] = 0; arr[1] = 0;
-                        arr[0] = srcRect.Left / fullsrcW; arr[1] = (srcRect.Top + srcRect.Height) / fullsrcH;
-                        //arr[2] = 1; arr[3] = 0;
-                        arr[2] = srcRect.Right / fullsrcW; arr[3] = (srcRect.Top + srcRect.Height) / fullsrcH;
-                        //arr[4] = 1; arr[5] = 1;
-                        arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Top / fullsrcH;
-                        //arr[6] = 0; arr[7] = 1;
-                        arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Top / fullsrcH;
-                    }
-                    else
-                    {
-                        arr[0] = srcRect.Left / fullsrcW; arr[1] = srcRect.Top / fullsrcH;
-                        //arr[2] = 1; arr[3] = 1;
-                        arr[2] = srcRect.Right / fullsrcW; arr[3] = srcRect.Top / fullsrcH;
-                        //arr[4] = 1; arr[5] = 0;
-                        arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Bottom / fullsrcH;
-                        //arr[6] = 0; arr[7] = 0;
-                        arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Bottom / fullsrcH;
-                    }
-
-                    //GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
-                    ////------------------------------------------ 
-                    ////fill rect with texture 
-                    //FillRectWithTexture(x, y, w, h);
-                    //GL.DisableClientState(ArrayCap.TextureCoordArray);
-                }
-                GL.Disable(EnableCap.Texture2D);
-            }
+            this.textureShader.Render(bmp, x, y, w, h);
         }
-
-
-
         //-------------------------------------------------------------------------------
         public void DrawImage(GLBitmapReference bmp, float x, float y)
         {
@@ -182,72 +147,7 @@ namespace PixelFarm.DrawingGL
                  bmp.GetRectF(),
                  x, y, bmp.Width, bmp.Height);
         }
-        //-------------------------------------------------------------------------------
 
-        public void DrawImages(GLBitmap bmp, PixelFarm.Drawing.RectangleF[] destAndSrcPairs)
-        {
-            unsafe
-            {
-                GL.Enable(EnableCap.Texture2D);
-                {
-                    throw new NotSupportedException();
-                    //GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
-                    //GL.EnableClientState(ArrayCap.TextureCoordArray); //***
-
-                    ////texture source coord 1= 100% of original width
-                    //float* arr = stackalloc float[8];
-                    //float fullsrcW = bmp.Width;
-                    //float fullsrcH = bmp.Height;
-
-                    //int len = destAndSrcPairs.Length;
-                    //if (len > 1)
-                    //{
-                    //    if ((len % 2 != 0))
-                    //    {
-                    //        len -= 1;
-                    //    }
-                    //    for (int i = 0; i < len; )
-                    //    {
-                    //        //each 
-
-                    //        var destRect = destAndSrcPairs[i];
-                    //        var srcRect = destAndSrcPairs[i + 1];
-                    //        i += 2;
-
-                    //        if (bmp.IsInvert)
-                    //        {
-
-                    //            ////arr[0] = 0; arr[1] = 0;
-                    //            arr[0] = srcRect.Left / fullsrcW; arr[1] = (srcRect.Top + srcRect.Height) / fullsrcH;
-                    //            //arr[2] = 1; arr[3] = 0;
-                    //            arr[2] = srcRect.Right / fullsrcW; arr[3] = (srcRect.Top + srcRect.Height) / fullsrcH;
-                    //            //arr[4] = 1; arr[5] = 1;
-                    //            arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Top / fullsrcH;
-                    //            //arr[6] = 0; arr[7] = 1;
-                    //            arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Top / fullsrcH;
-                    //        }
-                    //        else
-                    //        {
-
-                    //            arr[0] = srcRect.Left / fullsrcW; arr[1] = srcRect.Top / fullsrcH;
-                    //            //arr[2] = 1; arr[3] = 1;
-                    //            arr[2] = srcRect.Right / fullsrcW; arr[3] = srcRect.Top / fullsrcH;
-                    //            //arr[4] = 1; arr[5] = 0;
-                    //            arr[4] = srcRect.Right / fullsrcW; arr[5] = srcRect.Bottom / fullsrcH;
-                    //            //arr[6] = 0; arr[7] = 0;
-                    //            arr[6] = srcRect.Left / fullsrcW; arr[7] = srcRect.Bottom / fullsrcH;
-                    //        }
-                    //        GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, (IntPtr)arr);
-                    //        //------------------------------------------ 
-                    //        //fill rect with texture                             
-                    //        FillRectWithTexture(destRect.X, destRect.Y, destRect.Width, destRect.Height);
-                    //    }
-                    //} 
-                    // GL.DisableClientState(ArrayCap.TextureCoordArray);
-                }
-                GL.Disable(EnableCap.Texture2D);
-            }
-        }
 
         public void FillVxs(PixelFarm.Drawing.Color color, VertexStore vxs)
         {
@@ -349,6 +249,7 @@ namespace PixelFarm.DrawingGL
                 case CanvasSmoothMode.Smooth:
                     {
                         smoothLineShader.StrokeColor = this.strokeColor;
+                        smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
                         smoothLineShader.DrawPolygon(polygon2dVertices, npoints);
                     }
                     break;
@@ -861,8 +762,6 @@ namespace PixelFarm.DrawingGL
             arc.Init(x, y, rx, ry, -(angleStart), -(angleExtent));
             return arc;
         }
-
-
         public void DrawBezierCurve(float startX, float startY, float endX, float endY,
             float controlX1, float controlY1,
             float controlX2, float controlY2)
@@ -880,66 +779,6 @@ namespace PixelFarm.DrawingGL
             //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
         }
 
-
-
-        static VboC4V3f GenerateVboC4V3f()
-        {
-            VboC4V3f vboHandle = new VboC4V3f();
-            //must open these ... before call this func
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray); 
-            GL.GenBuffers(1, out vboHandle.VboID);
-            return vboHandle;
-        }
-
-        static void DrawTrianglesWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
-        {
-            unsafe
-            {
-                VertexC4V3f[] vpoints = buffer.Array;
-                IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
-                // Fill newly allocated buffer
-                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
-                GL.DrawArrays(BeginMode.Triangles, 0, nelements);
-            }
-        }
-        //static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
-        //{
-        //    unsafe
-        //    {
-        //        VertexC4V3f[] vpoints = buffer.Array;
-        //        IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-        //        GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
-        //        GL.DrawArrays(BeginMode.Lines, 0, nelements);
-        //    }
-        //}
-        //static void DrawLineStripWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
-        //{
-        //    unsafe
-        //    {
-        //        VertexC4V3f[] vpoints = buffer.Array;
-        //        IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-        //        GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
-        //        GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
-        //    }
-        //}
-        void FillRectWithTexture(float x, float y, float w, float h)
-        {
-            unsafe
-            {
-                float* arr = stackalloc float[8];
-                byte* indices = stackalloc byte[6];
-                CreateRectCoords(arr, indices, x, y, w, h);
-                throw new NotSupportedException();
-                //GL.EnableClientState(ArrayCap.VertexArray);
-                ////vertex
-                //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                //GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                //GL.DisableClientState(ArrayCap.VertexArray);
-
-            }
-        }
         public void FillRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h)
         {
             //float[] coords = CreateRectTessCoords(x, y, w, h);
@@ -1015,7 +854,6 @@ namespace PixelFarm.DrawingGL
         {
             switch (this.SmoothMode)
             {
-
                 default:
                     {
                         ellipse.Reset(x, y, rx, ry);
@@ -1070,7 +908,6 @@ namespace PixelFarm.DrawingGL
                             coords[nn++] = coords[3];
                             npoints++;
                             this.basicFillShader.FillTriangleFan(coords, npoints, color);
-                            
                         }
                     }
                     break;
@@ -1090,253 +927,125 @@ namespace PixelFarm.DrawingGL
             //-------------
             //Tesselate
             //2d coods lis
-            //n point 
-            switch (this.SmoothMode)
+            //n point  
+            //-----------------------------   
+            //switch how to fill polygon
+            switch (brush.BrushKind)
             {
-                case CanvasSmoothMode.Smooth:
+                case Drawing.BrushKind.Solid:
                     {
-                        //closed polygon
+                        var solidBrush = brush as PixelFarm.Drawing.SolidBrush;
+                        FillPolygon(solidBrush.Color, vertex2dCoords);
+                    }
+                    break;
+                case Drawing.BrushKind.LinearGradient:
+                case Drawing.BrushKind.Texture:
+                    {
+                        List<Vertex> vertextList = TessPolygon(vertex2dCoords);
+                        var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
+                        GL.ClearStencil(0); //set value for clearing stencil buffer 
+                                            //actual clear here
+                        GL.Clear(ClearBufferMask.StencilBufferBit);
+                        //-------------------
+                        //disable rendering to color buffer
+                        GL.ColorMask(false, false, false, false);
+                        //start using stencil
+                        GL.Enable(EnableCap.StencilTest);
+                        //place a 1 where rendered
+                        GL.StencilFunc(StencilFunction.Always, 1, 1);
+                        //replace where rendered
+                        GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
+                        //render  to stencill buffer
+                        //-----------------
 
-                        //closed polygon
-                        int j = npoints / 2;
-                        //first point
-                        if (j < 2)
+                        //switch how to fill polygon ***
+                        int j = vertextList.Count;
+                        float[] vtx = new float[j * 2];
+                        int n = 0;
+                        for (int i = 0; i < j; ++i)
                         {
-                            return;
+                            var v = vertextList[i];
+                            vtx[n] = (float)v.m_X;
+                            vtx[n + 1] = (float)v.m_Y;
+                            n += 2;
                         }
-                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
-                        int nn = 2;
-                        for (int i = 1; i < j; ++i)
+                        //-------------------------------------   
+                        this.basicFillShader.FillTriangles(vtx, j, PixelFarm.Drawing.Color.Black);
+                        //-------------------------------------- 
+                        //render color
+                        //--------------------------------------  
+                        //reenable color buffer 
+                        GL.ColorMask(true, true, true, true);
+                        //where a 1 was not rendered
+                        GL.StencilFunc(StencilFunction.Equal, 1, 1);
+                        //freeze stencill buffer
+                        GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
+                        //------------------------------------------
+                        //we already have valid ps from stencil step
+                        //------------------------------------------
+
+                        //-------------------------------------------------------------------------------------
+                        //1.  we draw only alpha chanel of this black color to destination color
+                        //so we use  BlendFuncSeparate  as follow ... 
+                        //-------------------------------------------------------------------------------------
+                        //1.  we draw only alpha channel of this black color to destination color
+                        //so we use  BlendFuncSeparate  as follow ... 
+                        GL.ColorMask(false, false, false, true);
+                        //GL.BlendFuncSeparate(
+                        //     BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
+                        //     BlendingFactorSrc.One, BlendingFactorDest.Zero);
+
+                        //use alpha chanel from source***
+                        GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
+                        invertAlphaFragmentShader.OrthoView = orthoView;
+                        invertAlphaFragmentShader.StrokeColor = PixelFarm.Drawing.Color.Black;
+                        invertAlphaFragmentShader.DrawPolygon(vertex2dCoords, vertex2dCoords.Length);
+                        //at this point alpha component is fill in to destination 
+                        //-------------------------------------------------------------------------------------
+                        //2. then fill again!, 
+                        //we use alpha information from dest, 
+                        //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
+                        GL.ColorMask(true, true, true, true);
+                        GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
                         {
-                            ps.LineTo(vertex2dCoords[nn++],
-                                vertex2dCoords[nn++]);
+                            //draw box*** of gradient color
+                            switch (brush.BrushKind)
+                            {
+                                case Drawing.BrushKind.LinearGradient:
+                                    {
+                                        var colors = linearGradientBrush.GetColors();
+                                        var points = linearGradientBrush.GetStopPoints();
+                                        float[] v2f, color4f;
+                                        GLGradientColorProvider.CalculateLinearGradientVxs2(
+                                             points[0].X, points[0].Y,
+                                             points[1].X, points[1].Y,
+                                             colors[0],
+                                             colors[1], out v2f, out color4f);
+                                        rectFillShader.OrthoView = orthoView;
+                                        rectFillShader.Render(v2f, color4f);
+                                    }
+                                    break;
+                                case Drawing.BrushKind.Texture:
+                                    {
+                                        //draw texture image ***
+                                        PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
+                                        GLImage img = tbrush.TextureImage as GLImage;
+                                        GLBitmap bmpTexture = (GLBitmap)img.InnerImage;
+                                        //TODO: review here 
+                                        //where text start?
+                                        this.DrawImage(bmpTexture, 0, 300);
+                                    }
+                                    break;
+                            }
                         }
-                        //close
-                        ps.CloseFigure();
-                        VertexStore vxs = ps.Vxs;
-                        throw new NotSupportedException();
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //switch (brush.BrushKind)
-                        //{
-                        //    case Drawing.BrushKind.Solid:
-                        //        {
-                        //            var color = ((PixelFarm.Drawing.SolidBrush)brush).Color;
-                        //            sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
-                        //        }
-                        //        break;
-                        //    default:
-                        //        {
-                        //        }
-                        //        break;
-                        //}
+                        //restore back 
+                        //3. switch to normal blending mode 
+                        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+                        GL.Disable(EnableCap.StencilTest);
                     }
                     break;
                 default:
                     {
-                        var vertextList = TessPolygon(vertex2dCoords);
-                        //-----------------------------   
-                        //switch how to fill polygon
-                        switch (brush.BrushKind)
-                        {
-                            case Drawing.BrushKind.LinearGradient:
-                            case Drawing.BrushKind.Texture:
-                                {
-                                    var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
-                                    GL.ClearStencil(0); //set value for clearing stencil buffer 
-                                    //actual clear here
-                                    GL.Clear(ClearBufferMask.StencilBufferBit);
-                                    //-------------------
-                                    //disable rendering to color buffer
-                                    GL.ColorMask(false, false, false, false);
-                                    //start using stencil
-                                    GL.Enable(EnableCap.StencilTest);
-                                    //place a 1 where rendered
-                                    GL.StencilFunc(StencilFunction.Always, 1, 1);
-                                    //replace where rendered
-                                    GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
-                                    //render  to stencill buffer
-                                    //-----------------
-                                    if (this.Note1 == 1)
-                                    {
-                                        ////create stencil with Agg shape
-                                        int j = npoints / 2;
-                                        //first point
-                                        if (j < 2)
-                                        {
-                                            return;
-                                        }
-                                        ps.Clear();
-                                        ps.MoveTo(vertex2dCoords[0], vertex2dCoords[1]);
-                                        int nn = 2;
-                                        for (int i = 1; i < j; ++i)
-                                        {
-                                            ps.LineTo(vertex2dCoords[nn++],
-                                                vertex2dCoords[nn++]);
-                                        }
-                                        //close
-                                        ps.CloseFigure();
-                                        VertexStore vxs = ps.Vxs;
-                                        throw new NotSupportedException();
-                                        //sclineRas.Reset();
-                                        //sclineRas.AddPath(vxs);
-                                        //sclineRasToGL.FillWithColor(sclineRas, sclinePack8, PixelFarm.Drawing.Color.White);
-                                        ////create stencil with normal OpenGL 
-                                    }
-                                    else
-                                    {
-                                        //create stencil with normal OpenGL
-                                        int j = vertextList.Count;
-                                        int j2 = j * 2;
-                                        VboC4V3f vbo = GenerateVboC4V3f();
-                                        ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                                        uint color_uint = PixelFarm.Drawing.Color.Black.ToABGR();   //color.ToABGR();
-                                        for (int i = 0; i < j; ++i)
-                                        {
-                                            var v = vertextList[i];
-                                            vrx.AddVertex(new VertexC4V3f(color_uint, (float)v.m_X, (float)v.m_Y));
-                                        }
-                                        throw new NotSupportedException();
-                                        //GL.EnableClientState(ArrayCap.ColorArray);
-                                        //GL.EnableClientState(ArrayCap.VertexArray);
-                                        //int pcount = vrx.Count;
-                                        //vbo.BindBuffer();
-                                        //DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                        //vbo.UnbindBuffer();
-                                        //GL.DisableClientState(ArrayCap.ColorArray);
-                                        //GL.DisableClientState(ArrayCap.VertexArray);
-                                    }
-                                    //-------------------------------------- 
-                                    //render color
-                                    //--------------------------------------  
-                                    //reenable color buffer 
-                                    GL.ColorMask(true, true, true, true);
-                                    //where a 1 was not rendered
-                                    GL.StencilFunc(StencilFunction.Equal, 1, 1);
-                                    //freeze stencill buffer
-                                    GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
-                                    if (this.Note1 == 1) //temp
-                                    {
-                                        //------------------------------------------
-                                        //we already have valid ps from stencil step
-                                        //------------------------------------------
-                                        VertexStore vxs = ps.Vxs;
-                                        //sclineRas.Reset();
-                                        //sclineRas.AddPath(vxs);
-                                        //-------------------------------------------------------------------------------------
-                                        //1.  we draw only alpha chanel of this black color to destination color
-                                        //so we use  BlendFuncSeparate  as follow ... 
-                                        GL.BlendFuncSeparate(
-                                             BlendingFactorSrc.DstColor, BlendingFactorDest.DstColor, //the same
-                                             BlendingFactorSrc.One, BlendingFactorDest.Zero); //use alpha chanel from source
-                                        //sclineRasToGL.FillWithColor(sclineRas, sclinePack8, PixelFarm.Drawing.Color.Black);
-                                        //at this point alpha component is fill in to destination 
-                                        //-------------------------------------------------------------------------------------
-                                        //2. then fill again!, 
-                                        //we use alpha information from dest, 
-                                        //so we set blend func to ... GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha)    
-
-                                        GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
-                                        {
-                                            //draw box of gradient color
-                                            if (brush.BrushKind == Drawing.BrushKind.LinearGradient)
-                                            {
-                                                var colors = linearGradientBrush.GetColors();
-                                                var points = linearGradientBrush.GetStopPoints();
-                                                uint c1 = colors[0].ToABGR();
-                                                uint c2 = colors[1].ToABGR();
-                                                //create polygon for graident bg 
-                                                var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
-                                                     points[0].X, points[0].Y,
-                                                     points[1].X, points[1].Y,
-                                                     colors[0],
-                                                     colors[1]);
-                                                int pcount = vrx.Count;
-                                                throw new NotSupportedException();
-                                                //GL.EnableClientState(ArrayCap.ColorArray);
-                                                //GL.EnableClientState(ArrayCap.VertexArray);
-                                                ////--- 
-                                                //VboC4V3f vbo = GenerateVboC4V3f();
-                                                //vbo.BindBuffer();
-                                                //DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                                //vbo.UnbindBuffer();
-                                                ////vbo.Dispose();
-                                                //GL.DisableClientState(ArrayCap.ColorArray);
-                                                //GL.DisableClientState(ArrayCap.VertexArray);
-                                            }
-                                            else if (brush.BrushKind == Drawing.BrushKind.Texture)
-                                            {
-                                                //draw texture image 
-                                                PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
-                                                PixelFarm.Drawing.Image img = tbrush.TextureImage;
-                                                GLBitmap bmpTexture = (GLBitmap)tbrush.InnerImage2;
-                                                this.DrawImage(bmpTexture, 0, 0);
-                                                //GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
-                                                //this.DrawImage(bmp, 0, 0);
-                                                //bmp.Dispose();
-
-                                            }
-                                        }
-                                        //restore back 
-                                        //3. switch to normal blending mode 
-                                        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-                                    }
-                                    else
-                                    {
-                                        //draw box of gradient color
-                                        var colors = linearGradientBrush.GetColors();
-                                        var points = linearGradientBrush.GetStopPoints();
-                                        uint c1 = colors[0].ToABGR();
-                                        uint c2 = colors[1].ToABGR();
-                                        //create polygon for graident bg 
-                                        var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
-                                             points[0].X, points[0].Y,
-                                             points[1].X, points[1].Y,
-                                             colors[0],
-                                             colors[1]);
-                                        int pcount = vrx.Count;
-                                        throw new NotSupportedException();
-                                        //GL.EnableClientState(ArrayCap.ColorArray);
-                                        //GL.EnableClientState(ArrayCap.VertexArray);
-                                        ////--- 
-                                        //VboC4V3f vbo = GenerateVboC4V3f();
-                                        //vbo.BindBuffer();
-                                        //DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                        //vbo.UnbindBuffer();
-                                        ////vbo.Dispose();
-                                        //GL.DisableClientState(ArrayCap.ColorArray);
-                                        //GL.DisableClientState(ArrayCap.VertexArray);
-
-                                    }
-                                    GL.Disable(EnableCap.StencilTest);
-                                }
-                                break;
-                            default:
-                                {
-                                    //unknown brush
-                                    //int j = vertextList.Count;
-                                    //int j2 = j * 2;
-                                    //VboC4V3f vbo = GenerateVboC4V3f();
-                                    //ArrayList<VertexC4V3f> vrx = new ArrayList<VertexC4V3f>();
-                                    //uint color_int = color.ToABGR();
-                                    //for (int i = 0; i < j; ++i)
-                                    //{
-                                    //    var v = vertextList[i];
-                                    //    vrx.AddVertex(new VertexC4V3f(color_int, (float)v.m_X, (float)v.m_Y));
-                                    //}
-                                    ////------------------------------------- 
-                                    //GL.EnableClientState(ArrayCap.ColorArray);
-                                    //GL.EnableClientState(ArrayCap.VertexArray);
-                                    //int pcount = vrx.Count;
-                                    //vbo.BindBuffer();
-                                    //DrawTrianglesWithVertexBuffer(vrx, pcount);
-                                    //vbo.UnbindBuffer();
-                                    //GL.DisableClientState(ArrayCap.ColorArray);
-                                    //GL.DisableClientState(ArrayCap.VertexArray);
-                                    ////-------------------------------------- 
-                                }
-                                break;
-                        }
                     }
                     break;
             }

@@ -25,7 +25,7 @@ using Mini;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "043")]
-    [Info("T43_HelloTriangle")]
+    [Info("T43_MiniControl_SampleTexture2dDemo")]
     public class T43_MiniControl_SampleTexture2dDemo : PrebuiltGLControlDemoBase
     {
         protected override void OnInitGLProgram(object sender, EventArgs handler)

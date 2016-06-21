@@ -6,7 +6,7 @@ using PixelFarm.Agg;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class SmoothLineShader
+    class InvertAlphaFragmentShader
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib a_position;
@@ -18,7 +18,7 @@ namespace PixelFarm.DrawingGL
         MyMat4 orthoView;
         Drawing.Color _strokeColor;
         float _strokeWidth = 1;
-        public SmoothLineShader()
+        public InvertAlphaFragmentShader()
         {
             InitShader();
         }
@@ -78,6 +78,8 @@ namespace PixelFarm.DrawingGL
             }
             ";
             //fragment source
+            //this is invert fragment shader *** 
+            //so we 
             string fs = @"
                 precision mediump float;
                 varying vec4 v_color;  
@@ -90,12 +92,12 @@ namespace PixelFarm.DrawingGL
                     float factor= 1.0 /p0;
             
                     if(d0 < p0){                        
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *(d0 * factor));
+                        gl_FragColor = vec4(v_color[0],v_color[1],v_color[2], 1.0 -(v_color[3] *(d0 * factor)));
                     }else if(d0> p1){                         
-                        gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-d0)* factor));
+                        gl_FragColor= vec4(v_color[0],v_color[1],v_color[2],1.0-(v_color[3] *((1.0-d0)* factor)));
                     }
-                    else{
-                        gl_FragColor =v_color;
+                    else{ 
+                       gl_FragColor = vec4(0,0,0,0);
                     } 
                 }
             ";

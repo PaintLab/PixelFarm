@@ -72,9 +72,9 @@ namespace PixelFarm.Agg
         }
 
         public const int SIZE_IN_BYTES = sizeof(uint) + sizeof(float) * 3;
-        public const int VX_OFFSET = sizeof(uint);
-        public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Float;
-        public const int N_COORDS = 3;
+        //public const int VX_OFFSET = sizeof(uint);
+        //public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Float;
+        //public const int N_COORDS = 3;
     }
 
 
@@ -110,8 +110,7 @@ namespace PixelFarm.Agg
         }
         public void BindBuffer()
         {
-            throw new NotSupportedException();
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, VboID);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VboID);
             //GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V3f.SIZE_IN_BYTES, (IntPtr)0);
             //GL.VertexPointer(VertexC4V3f.N_COORDS, VertexC4V3f.VX_PTR_TYPE, VertexC4V3f.SIZE_IN_BYTES, VertexC4V3f.VX_OFFSET);
         }

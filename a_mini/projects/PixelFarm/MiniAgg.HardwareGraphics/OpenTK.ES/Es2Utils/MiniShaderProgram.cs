@@ -1,9 +1,6 @@
-﻿//MIT 2014, WinterDev
+﻿//MIT 2014-2016, WinterDev
 
 using System;
-using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics;
 namespace OpenTK.Graphics.ES20
 {
     public struct ShaderVtxAttrib
@@ -13,8 +10,6 @@ namespace OpenTK.Graphics.ES20
         {
             this.location = location;
         }
-
-
 
         /// <summary>
         /// load and enable
@@ -41,6 +36,17 @@ namespace OpenTK.Graphics.ES20
                 false,
                 0,//totalFieldCount * sizeof(float), //total size
                 (IntPtr)(vertices + startOffset));
+            Enable();
+        }
+
+        public unsafe void UnsafeSubLoad3f(float* vertices, int totalFieldCount)
+        {
+            GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (IntPtr)vertices);
+            Enable();
+        }
+        public unsafe void UnsafeSubLoad2f(float* vertices, int totalFieldCount)
+        {
+            GL.VertexAttribPointer(this.location, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (IntPtr)vertices);
             Enable();
         }
         /// <summary>
@@ -104,6 +110,7 @@ namespace OpenTK.Graphics.ES20
         {
             GL.EnableVertexAttribArray(this.location);
         }
+
     }
 
     public struct ShaderUniformMatrix4

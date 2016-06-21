@@ -71,6 +71,8 @@ namespace OpenTkEssTest
             // Load the textures
             mBaseMapTexID = LoadTexture(@"..\..\SampleImages\basemap01.png");
             mLightMapTexID = LoadTexture(@"..\..\SampleImages\lightmap01.png");
+            //mBaseMapTexID = LoadTexture(@"d:\\WImageTest\\test001.jpg");
+            //mLightMapTexID = LoadTexture(@"d:\\WImageTest\\test001.jpg");
             if (mBaseMapTexID == 0 || mLightMapTexID == 0)
             {
                 throw new NotSupportedException();
