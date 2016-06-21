@@ -989,15 +989,21 @@ namespace PixelFarm.DrawingGL
             //-------------
             //Tesselate
             //2d coods lis
-            //n point 
-            var vertextList = TessPolygon(vertex2dCoords);
+            //n point  
             //-----------------------------   
             //switch how to fill polygon
             switch (brush.BrushKind)
             {
+                case Drawing.BrushKind.Solid:
+                    {
+                        var solidBrush = brush as PixelFarm.Drawing.SolidBrush;
+                        FillPolygon(solidBrush.Color, vertex2dCoords);
+                    }
+                    break;
                 case Drawing.BrushKind.LinearGradient:
                 case Drawing.BrushKind.Texture:
                     {
+                        List<Vertex> vertextList = TessPolygon(vertex2dCoords);
                         var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
                         GL.ClearStencil(0); //set value for clearing stencil buffer 
                                             //actual clear here
@@ -1014,10 +1020,8 @@ namespace PixelFarm.DrawingGL
                         //render  to stencill buffer
                         //-----------------
 
-                        //switch how to fill polygon
+                        //switch how to fill polygon ***
                         int j = vertextList.Count;
-                        //-----------------------------    
-
                         float[] vtx = new float[j * 2];
                         int n = 0;
                         for (int i = 0; i < j; ++i)
