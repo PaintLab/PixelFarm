@@ -1,9 +1,6 @@
-﻿//MIT 2014, WinterDev
+﻿//MIT 2014-2016, WinterDev
 
 using System;
-using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics;
 namespace OpenTK.Graphics.ES20
 {
     public struct ShaderVtxAttrib
@@ -13,8 +10,6 @@ namespace OpenTK.Graphics.ES20
         {
             this.location = location;
         }
-
-
 
         /// <summary>
         /// load and enable

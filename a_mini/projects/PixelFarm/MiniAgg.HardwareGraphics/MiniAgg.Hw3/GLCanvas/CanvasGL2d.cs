@@ -762,8 +762,6 @@ namespace PixelFarm.DrawingGL
             arc.Init(x, y, rx, ry, -(angleStart), -(angleExtent));
             return arc;
         }
-
-
         public void DrawBezierCurve(float startX, float startY, float endX, float endY,
             float controlX1, float controlY1,
             float controlX2, float controlY2)
@@ -781,66 +779,6 @@ namespace PixelFarm.DrawingGL
             //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
         }
 
-
-
-        static VboC4V3f GenerateVboC4V3f()
-        {
-            VboC4V3f vboHandle = new VboC4V3f();
-            //must open these ... before call this func
-            //GL.EnableClientState(ArrayCap.ColorArray);
-            //GL.EnableClientState(ArrayCap.VertexArray); 
-            GL.GenBuffers(1, out vboHandle.VboID);
-            return vboHandle;
-        }
-
-        static void DrawTrianglesWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
-        {
-            unsafe
-            {
-                VertexC4V3f[] vpoints = buffer.Array;
-                IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-                //GL.BufferData(BufferTarget.ArrayBuffer, stride_size, IntPtr.Zero, BufferUsageHint.StreamDraw);
-                // Fill newly allocated buffer
-                GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
-                GL.DrawArrays(BeginMode.Triangles, 0, nelements);
-            }
-        }
-        //static void DrawLinesWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
-        //{
-        //    unsafe
-        //    {
-        //        VertexC4V3f[] vpoints = buffer.Array;
-        //        IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-        //        GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
-        //        GL.DrawArrays(BeginMode.Lines, 0, nelements);
-        //    }
-        //}
-        //static void DrawLineStripWithVertexBuffer(ArrayList<VertexC4V3f> buffer, int nelements)
-        //{
-        //    unsafe
-        //    {
-        //        VertexC4V3f[] vpoints = buffer.Array;
-        //        IntPtr stride_size = new IntPtr(VertexC4V3f.SIZE_IN_BYTES * nelements);
-        //        GL.BufferData(BufferTarget.ArrayBuffer, stride_size, vpoints, BufferUsage.StreamDraw);
-        //        GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
-        //    }
-        //}
-        void FillRectWithTexture(float x, float y, float w, float h)
-        {
-            unsafe
-            {
-                float* arr = stackalloc float[8];
-                byte* indices = stackalloc byte[6];
-                CreateRectCoords(arr, indices, x, y, w, h);
-                throw new NotSupportedException();
-                //GL.EnableClientState(ArrayCap.VertexArray);
-                ////vertex
-                //GL.VertexPointer(2, VertexPointerType.Float, 0, (IntPtr)arr);
-                //GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedByte, (IntPtr)indices);
-                //GL.DisableClientState(ArrayCap.VertexArray);
-
-            }
-        }
         public void FillRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h)
         {
             //float[] coords = CreateRectTessCoords(x, y, w, h);
