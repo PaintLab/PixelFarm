@@ -160,7 +160,7 @@ namespace PixelFarm.DrawingGL
                   _strokeColor.G / 255f,
                   _strokeColor.B / 255f,
                   _strokeColor.A / 255f);
-            a_position.LoadV4f(vtxs, 4, 0);
+            a_position.LoadPureV4f(vtxs);
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
@@ -184,7 +184,7 @@ namespace PixelFarm.DrawingGL
                   _strokeColor.G / 255f,
                   _strokeColor.B / 255f,
                   _strokeColor.A / 255f);
-            a_position.LoadV4f(expandCoords.ToArray(), 4, 0);
+            a_position.LoadPureV4f(expandCoords.ToArray());
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, coordCount * 2);
         }
@@ -214,7 +214,7 @@ namespace PixelFarm.DrawingGL
                   _strokeColor.G / 255f,
                   _strokeColor.B / 255f,
                   _strokeColor.A / 255f);
-            a_position.LoadV4f(expandCoords.ToArray(), 4, 0);
+            a_position.LoadPureV4f(expandCoords.ToArray());
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, (coordCount + 2) * 2);
         }
@@ -247,7 +247,7 @@ namespace PixelFarm.DrawingGL
                 //-------
                 x2, y2,1,rad1
             };
-            a_position.LoadV4f(vtxs, 4, 0);
+            a_position.LoadPureV4f(vtxs);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
     }

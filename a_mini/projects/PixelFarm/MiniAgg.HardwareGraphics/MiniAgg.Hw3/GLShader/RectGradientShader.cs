@@ -55,8 +55,8 @@ namespace PixelFarm.DrawingGL
         {
             shaderProgram.UseProgram();
             u_matrix.SetData(orthoView.data);
-            a_position.LoadV2f(v2fArray);
-            a_color.LoadV4f(colors, 4, 0);
+            a_position.LoadPureV2f(v2fArray);
+            a_color.LoadPureV4f(colors);
             GL.DrawArrays(BeginMode.Triangles, 0, 18);
         }
     }

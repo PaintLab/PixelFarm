@@ -118,7 +118,18 @@ namespace OpenTkEssTest
             u_matrix.SetData(orthoView.data);
             //---------------------------------------------------------  
             //triangle shape 
-            FillPolygonWithVertexColor(vertices, 6);
+            //x,y,r,g,b,a 
+
+            u_useSolidColor.SetValue(0);
+            unsafe
+            {
+                fixed (float* head = &vertices[0])
+                {
+                    a_position.UnsafeLoadMixedV2f(head, 5);
+                    a_color.UnsafeLoadMixedV3f(head + 3, 5);
+                }
+            }
+            GL.DrawArrays(BeginMode.Triangles, 0, 6);
             //---------------------------------------------------------
             //rect shape 
 
@@ -152,7 +163,7 @@ namespace OpenTkEssTest
         {
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)c.R / 255f, (float)c.G / 255f, (float)c.B / 255f, (float)c.A / 255f);//use solid color 
-            a_position.LoadV2f(onlyCoords);
+            a_position.LoadPureV2f(onlyCoords);
             GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
         }
 
@@ -161,18 +172,11 @@ namespace OpenTkEssTest
         {
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)c.R / 255f, (float)c.G / 255f, (float)c.B / 255f, (float)c.A / 255f);//use solid color  
-            a_position.LoadV2f(onlyCoords);
-            a_textureCoord.LoadV2f(textureCoords, 2, 0);
+            a_position.LoadPureV2f(onlyCoords);
+            a_textureCoord.LoadPureV2f(textureCoords);
             GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
         }
-        void FillPolygonWithVertexColor(float[] vertices, int numVertices)
-        {
-            //x,y,r,g,b,a 
-            u_useSolidColor.SetValue(0);
-            a_position.LoadV2f(vertices, 6, 0);
-            a_color.LoadV4f(vertices, 6, 2);
-            GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
-        }
+
 
         static float[] CreateRectCoords(float x, float y, float w, float h)
         {
@@ -203,7 +207,7 @@ namespace OpenTkEssTest
             float[] vtxs = new float[] { x1, y1, x2, y2 };
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
-            a_position.LoadV2f(vtxs);
+            a_position.LoadPureV2f(vtxs);
             GL.DrawArrays(BeginMode.Lines, 0, 2);
         }
         void DrawImage(float x, float y)

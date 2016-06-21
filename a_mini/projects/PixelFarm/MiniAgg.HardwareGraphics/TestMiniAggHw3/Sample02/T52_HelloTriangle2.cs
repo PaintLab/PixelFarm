@@ -81,8 +81,8 @@ namespace OpenTkEssTest
             {
                 fixed (float* head = &vertices[0])
                 {
-                    a_position.UnsafeSubLoad2f(head, 5);
-                    a_color.UnsafeSubLoad3f(head + 2, 5);
+                    a_position.UnsafeLoadMixedV2f(head, 5);
+                    a_color.UnsafeLoadMixedV3f(head + 2, 5);
                 }
             }
 

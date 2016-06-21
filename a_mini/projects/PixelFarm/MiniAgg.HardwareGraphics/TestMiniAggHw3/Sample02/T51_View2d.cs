@@ -81,8 +81,15 @@ namespace OpenTkEssTest
             GL.Viewport(0, 0, this.Width, this.Height);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             shaderProgram.UseProgram();
-            a_position.LoadV3f(vertices, 5, 0);
-            a_textCoord.LoadV2f(vertices, 5, 3);
+            unsafe
+            {
+                fixed (float* head = &vertices[0])
+                {
+                    a_position.UnsafeLoadMixedV3f(head, 5);
+                    a_textCoord.UnsafeLoadMixedV2f(head + 3, 5);
+                }
+            }
+
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, mTexture);
             s_texture.SetValue(0);

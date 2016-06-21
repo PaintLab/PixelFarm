@@ -16,7 +16,7 @@ namespace OpenTkEssTest
             OpenTK.Toolkit.Init();
             Application.EnableVisualStyles();
             var formDev = new FormDev();
-            Application.Run(formDev); 
+            Application.Run(formDev);
         }
     }
 }

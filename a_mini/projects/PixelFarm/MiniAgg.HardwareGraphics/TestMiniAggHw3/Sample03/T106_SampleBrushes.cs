@@ -33,7 +33,6 @@ namespace OpenTkEssTest
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 0, 0, 150, 150);
-        
             GLBitmap glBmp = LoadTexture("..\\logo-dark.jpg");
             var textureBrush = new TextureBrush(new GLImage(glBmp));
             canvas2d.FillPolygon(
@@ -61,7 +60,7 @@ namespace OpenTkEssTest
                         210, 100}, 3 * 2);
             canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 400, 0, 150, 150);
             //------------------------------------------------------------------------- 
-           
+
             //another  ...                
             canvas2d.FillPolygon(
                    linearGrBrush2, new float[] {

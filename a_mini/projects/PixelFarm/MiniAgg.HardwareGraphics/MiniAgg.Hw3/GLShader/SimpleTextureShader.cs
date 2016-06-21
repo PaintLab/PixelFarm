@@ -87,8 +87,8 @@ namespace PixelFarm.DrawingGL
             {
                 fixed (float* imgvH = &imgVertices[0])
                 {
-                    a_position.UnsafeSubLoad3f(imgvH, 5);
-                    a_texCoord.UnsafeSubLoad2f((imgvH + 3), 5);
+                    a_position.UnsafeLoadMixedV3f(imgvH, 5);
+                    a_texCoord.UnsafeLoadMixedV2f((imgvH + 3), 5);
                 }
             }
             u_matrix.SetData(orthoView.data);

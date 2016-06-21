@@ -111,7 +111,7 @@ namespace PixelFarm.DrawingGL
                 float* vtx = stackalloc float[4];
                 vtx[0] = x1; vtx[1] = y1;
                 vtx[2] = x2; vtx[3] = y2;
-                a_position.UnsafeLoadV2f(vtx);
+                a_position.UnsafeLoadPureV2f(vtx);
             }
             GL.DrawArrays(BeginMode.Lines, 0, 2);
         }
@@ -120,7 +120,7 @@ namespace PixelFarm.DrawingGL
             u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.UnsafeLoadV2f(polygon2dVertices);
+            a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.TriangleFan, 0, nelements);
         }
         public unsafe void FillTriangles(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
@@ -129,7 +129,7 @@ namespace PixelFarm.DrawingGL
             u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.UnsafeLoadV2f(polygon2dVertices);
+            a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
     }

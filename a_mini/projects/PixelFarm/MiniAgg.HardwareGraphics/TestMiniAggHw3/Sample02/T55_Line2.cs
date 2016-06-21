@@ -157,7 +157,7 @@ namespace OpenTkEssTest
             };
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
-            a_position.LoadV4f(vtxs, 4, 0);
+            a_position.LoadPureV4f(vtxs);
             u_linewidth.SetValue(2.0f);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }

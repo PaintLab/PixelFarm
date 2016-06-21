@@ -111,9 +111,9 @@ namespace OpenTkEssTest
         {
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)c.R / 255f, (float)c.G / 255f, (float)c.B / 255f, (float)c.A / 255f);//use solid color 
-            a_position.LoadV2f(onlyCoords);
+            a_position.LoadPureV2f(onlyCoords);
             GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
-        } 
+        }
         static float[] CreateRectCoords2(float x, float y, float w, float h)
         {
             float x0 = x;
@@ -140,7 +140,7 @@ namespace OpenTkEssTest
             float[] vtxs = new float[] { x1, y1, x2, y2 };
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
-            a_position.LoadV2f(vtxs);
+            a_position.LoadPureV2f(vtxs);
             GL.DrawArrays(BeginMode.Lines, 0, 2);
         }
         void DrawImage(float x, float y)

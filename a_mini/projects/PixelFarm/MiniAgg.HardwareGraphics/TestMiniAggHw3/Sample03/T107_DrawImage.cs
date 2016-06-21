@@ -29,7 +29,6 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
