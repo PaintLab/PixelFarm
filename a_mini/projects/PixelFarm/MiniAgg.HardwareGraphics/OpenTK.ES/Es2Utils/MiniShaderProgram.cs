@@ -3,6 +3,8 @@
 using System;
 namespace OpenTK.Graphics.ES20
 {
+
+
     public struct ShaderVtxAttrib
     {
         internal readonly int location;
@@ -19,49 +21,6 @@ namespace OpenTK.Graphics.ES20
         /// <param name="startOffset"></param>
         public void LoadV3f(float[] vertices, int totalFieldCount, int startOffset)
         {
-            BindV3f(vertices, totalFieldCount, startOffset);
-            Enable();
-        }
-        public void LoadV4f(float[] vertices, int totalFieldCount, int startOffset)
-        {
-            BindV4f(vertices, totalFieldCount, startOffset);
-            Enable();
-        }
-        public unsafe void LoadV2f(float* vertices, int totalFieldCount, int startOffset)
-        {
-            //bind 
-            GL.VertexAttribPointer(location,
-                2, //float2
-                VertexAttribPointerType.Float,
-                false,
-                0,//totalFieldCount * sizeof(float), //total size
-                (IntPtr)(vertices + startOffset));
-            Enable();
-        }
-
-        public unsafe void UnsafeSubLoad3f(float* vertices, int totalFieldCount)
-        {
-            GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (IntPtr)vertices);
-            Enable();
-        }
-        public unsafe void UnsafeSubLoad2f(float* vertices, int totalFieldCount)
-        {
-            GL.VertexAttribPointer(this.location, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (IntPtr)vertices);
-            Enable();
-        }
-        /// <summary>
-        /// load and enable
-        /// </summary>
-        /// <param name="vertices"></param>
-        /// <param name="totalFieldCount"></param>
-        /// <param name="startOffset"></param>
-        public void LoadV2f(float[] vertices, int totalFieldCount, int startOffset)
-        {
-            BindV2f(vertices, totalFieldCount, startOffset);
-            Enable();
-        }
-        public void BindV3f(float[] vertices, int totalFieldCount, int startOffset)
-        {
             unsafe
             {
                 fixed (float* h = &vertices[0])
@@ -70,28 +29,13 @@ namespace OpenTK.Graphics.ES20
                         3, //float3
                         VertexAttribPointerType.Float,
                         false,
-                        0,// totalFieldCount * sizeof(float), //total size
+                        totalFieldCount * sizeof(float), //total size
                         (IntPtr)(h + startOffset));
                 }
             }
+            GL.EnableVertexAttribArray(this.location);
         }
-        public void BindV2f(float[] vertices, int totalFieldCount, int startOffset)
-        {
-            unsafe
-            {
-                fixed (float* h = &vertices[0])
-                {
-                    GL.VertexAttribPointer(location,
-                        2, //float2
-                        VertexAttribPointerType.Float,
-                        false,
-                        0,// totalFieldCount * sizeof(float), //total size
-                        (IntPtr)(h + startOffset));
-                }
-            }
-        }
-
-        public void BindV4f(float[] vertices, int totalFieldCount, int startOffset)
+        public void LoadV4f(float[] vertices, int totalFieldCount, int startOffset)
         {
             unsafe
             {
@@ -101,15 +45,78 @@ namespace OpenTK.Graphics.ES20
                         4, //float4
                         VertexAttribPointerType.Float,
                         false,
-                        0,//totalFieldCount * sizeof(float), //total size
+                        totalFieldCount * sizeof(float), //total size
                         (IntPtr)(h + startOffset));
                 }
             }
-        }
-        public void Enable()
-        {
             GL.EnableVertexAttribArray(this.location);
         }
+        public unsafe void UnsafeSubLoad3f(float* vertexH, int totalFieldCount)
+        {
+            GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
+            GL.EnableVertexAttribArray(this.location);
+        }
+        public unsafe void UnsafeSubLoad2f(float* vertexH, int totalFieldCount)
+        {
+            GL.VertexAttribPointer(this.location, 2, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
+            GL.EnableVertexAttribArray(this.location);
+        }
+        /// <summary>
+        /// load and enable
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="totalFieldCount"></param>
+        /// <param name="startOffset"></param>
+        public void LoadV2f(float[] vertices, int totalFieldCount, int startOffset)
+        {
+            unsafe
+            {
+                fixed (float* h = &vertices[0])
+                {
+                    GL.VertexAttribPointer(location,
+                        2, //float2
+                        VertexAttribPointerType.Float,
+                        false,
+                        totalFieldCount * sizeof(float), //total size
+                        (IntPtr)(h + startOffset));
+                }
+            }
+            GL.EnableVertexAttribArray(this.location);
+        }
+
+        /// <summary>
+        /// load pure vector2f, from start array
+        /// </summary>
+        /// <param name="vertices"></param>
+        public void LoadV2f(float[] vertices)
+        {
+            //bind 
+            GL.VertexAttribPointer(location,
+                2, //float2
+                VertexAttribPointerType.Float,
+                false,
+                2 * sizeof(float), //total size
+                vertices);
+            GL.EnableVertexAttribArray(this.location);
+        }
+        /// <summary>
+        /// load pure vector2f, from start array
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="totalFieldCount"></param>
+        /// <param name="startOffset"></param>
+        public unsafe void UnsafeLoadV2f(float* vertices)
+        {
+            //bind 
+            GL.VertexAttribPointer(location,
+                2, //float2
+                VertexAttribPointerType.Float,
+                false,
+                 2 * sizeof(float), //total size
+                (IntPtr)(vertices));
+            GL.EnableVertexAttribArray(this.location);
+        }
+         
 
     }
 

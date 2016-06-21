@@ -77,10 +77,16 @@ namespace OpenTkEssTest
             GL.Clear(ClearBufferMask.ColorBufferBit);
             shaderProgram.UseProgram();
             // Load the vertex data 
-            a_position.LoadV2f(vertices, 6, 0);
-            a_color.LoadV3f(vertices, 6, 2);
-            //GL.DrawArrays(BeginMode.Triangles, 0, 3);
-            GL.DrawArrays(BeginMode.Points, 0, 3);
+            unsafe
+            {
+                fixed (float* head = &vertices[0])
+                {
+                    a_position.UnsafeSubLoad2f(head, 5);
+                    a_color.UnsafeSubLoad3f(head + 2, 5);
+                }
+            }
+
+            GL.DrawArrays(BeginMode.Triangles, 0, 3);
             miniGLControl.SwapBuffers();
         }
         //-------------------------------
