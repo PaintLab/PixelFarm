@@ -1067,26 +1067,33 @@ namespace PixelFarm.DrawingGL
                         GL.BlendFunc(BlendingFactorSrc.DstAlpha, BlendingFactorDest.OneMinusDstAlpha);
                         {
                             //draw box*** of gradient color
-                            if (brush.BrushKind == Drawing.BrushKind.LinearGradient)
+                            switch (brush.BrushKind)
                             {
-                                var colors = linearGradientBrush.GetColors();
-                                var points = linearGradientBrush.GetStopPoints();
-                                float[] v2f, color4f;
-                                GLGradientColorProvider.CalculateLinearGradientVxs2(
-                                     points[0].X, points[0].Y,
-                                     points[1].X, points[1].Y,
-                                     colors[0],
-                                     colors[1], out v2f, out color4f);
-                                rectFillShader.OrthoView = orthoView;
-                                rectFillShader.Render(v2f, color4f);
-                            }
-                            else if (brush.BrushKind == Drawing.BrushKind.Texture)
-                            {
-                                //draw texture image ***
-                                PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
-                                GLImage img = tbrush.TextureImage as GLImage;
-                                GLBitmap bmpTexture = (GLBitmap)img.InnerImage;
-                                this.DrawImage(bmpTexture, 0, 300);
+                                case Drawing.BrushKind.LinearGradient:
+                                    {
+                                        var colors = linearGradientBrush.GetColors();
+                                        var points = linearGradientBrush.GetStopPoints();
+                                        float[] v2f, color4f;
+                                        GLGradientColorProvider.CalculateLinearGradientVxs2(
+                                             points[0].X, points[0].Y,
+                                             points[1].X, points[1].Y,
+                                             colors[0],
+                                             colors[1], out v2f, out color4f);
+                                        rectFillShader.OrthoView = orthoView;
+                                        rectFillShader.Render(v2f, color4f);
+                                    }
+                                    break;
+                                case Drawing.BrushKind.Texture:
+                                    {
+                                        //draw texture image ***
+                                        PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
+                                        GLImage img = tbrush.TextureImage as GLImage;
+                                        GLBitmap bmpTexture = (GLBitmap)img.InnerImage;
+                                        //TODO: review here 
+                                        //where text start?
+                                        this.DrawImage(bmpTexture, 0, 300);
+                                    }
+                                    break;
                             }
                         }
                         //restore back 
