@@ -76,6 +76,7 @@
     <Compile Include="Sample03\T101_BlankCanvas.cs" />
     <Compile Include="Sample03\T102_BasicDraw.cs" />
     <Compile Include="Sample03\T105_Stencil.cs" />
+    <Compile Include="Sample03\T106_SampleBrushes.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />

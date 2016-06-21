@@ -35,8 +35,6 @@ namespace OpenTkEssTest
             GL.Clear(ClearBufferMask.ColorBufferBit);
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-
-
             //-----------------------------
             //see:  lazyfoo.net/tutorials/OpenGL/26_the_stencil_buffer/index.php
             //-----------------------------
@@ -64,7 +62,6 @@ namespace OpenTkEssTest
                 };
             canvas2d.FillPolygon(PixelFarm.Drawing.Color.Black, stencilPolygon);
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
-
             //render color
             GL.ColorMask(true, true, true, true);
             //where a 1 was not rendered
