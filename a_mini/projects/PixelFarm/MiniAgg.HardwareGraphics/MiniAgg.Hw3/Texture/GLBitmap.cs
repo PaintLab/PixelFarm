@@ -14,6 +14,72 @@ namespace PixelFarm.DrawingGL
     }
 
 
+    public class GLImage : PixelFarm.Drawing.Image
+    {
+        GLBitmap glBitmap;
+        public GLImage(GLBitmap glBitmap)
+        {
+            this.glBitmap = glBitmap;
+        }
+        public override int Height
+        {
+            get
+            {
+                return glBitmap.Height;
+            }
+        }
+
+        public override IDisposable InnerImage
+        {
+            get
+            {
+                return this.glBitmap;
+            }
+
+            set
+            {
+                this.glBitmap = (GLBitmap)value;
+            }
+        }
+
+        public override bool IsReferenceImage
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override int ReferenceX
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public override int ReferenceY
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public override int Width
+        {
+            get
+            {
+                return this.glBitmap.Width;
+            }
+        }
+
+        public override void Dispose()
+        {
+            //nothing
+        }
+    }
+
     public class GLBitmap : IDisposable
     {
         int textureId;

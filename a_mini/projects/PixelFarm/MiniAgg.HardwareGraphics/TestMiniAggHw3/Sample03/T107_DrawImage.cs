@@ -29,14 +29,15 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            canvas2d.ClearColorBuffer();
             //canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 0, 0, 150, 150);
             //load bmp image 
             //------------------------------------------------------------------------- 
             GLBitmap glbmp = LoadTexture(@"..\logo-dark.jpg");
-            canvas2d.DrawImage(glbmp, 100, 300);
+            canvas2d.DrawImage(glbmp, 0, 300);
             miniGLControl.SwapBuffers();
         }
         GLBitmap LoadTexture(string imgFileName)

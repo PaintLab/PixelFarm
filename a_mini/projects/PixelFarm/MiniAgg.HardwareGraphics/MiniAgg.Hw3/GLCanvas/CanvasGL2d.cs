@@ -72,22 +72,21 @@ namespace PixelFarm.DrawingGL
             get;
             set;
         }
-        public int Note1
-        {
-            get;
-            set;
-        }
+
 
         public void Clear(PixelFarm.Drawing.Color c)
         {
-            //set value for clear color buffer
-
+            //set value for clear color buffer 
             GLHelper.ClearColor(c);
             GL.ClearStencil(0);
             //actual clear here !
             GL.Clear(ClearBufferMask.ColorBufferBit |
                 ClearBufferMask.DepthBufferBit |
                 ClearBufferMask.StencilBufferBit);
+        }
+        public void ClearColorBuffer()
+        {
+            GL.Clear(ClearBufferMask.ColorBufferBit);
         }
         public double StrokeWidth
         {
@@ -1085,13 +1084,9 @@ namespace PixelFarm.DrawingGL
                             {
                                 //draw texture image ***
                                 PixelFarm.Drawing.TextureBrush tbrush = (PixelFarm.Drawing.TextureBrush)brush;
-                                PixelFarm.Drawing.Image img = tbrush.TextureImage;
-                                GLBitmap bmpTexture = (GLBitmap)tbrush.InnerImage2;
-                                this.DrawImage(bmpTexture, 0, 0);
-                                //GLBitmapTexture bmp = GLBitmapTexture.CreateBitmapTexture(fontGlyph.glyphImage32);
-                                //this.DrawImage(bmp, 0, 0);
-                                //bmp.Dispose();
-
+                                GLImage img = tbrush.TextureImage as GLImage;
+                                GLBitmap bmpTexture = (GLBitmap)img.InnerImage;
+                                this.DrawImage(bmpTexture, 0, 300);
                             }
                         }
                         //restore back 
