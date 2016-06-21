@@ -36,13 +36,20 @@ namespace PixelFarm.DrawingGL
             this.lazyProvider = lazyProvider;
             this.isInvertImage = lazyProvider.IsInvert;
         }
+
+        public GLBitmap(int textureId, int w, int h)
+        {
+            this.textureId = textureId;
+            this.width = w;
+            this.height = h;
+        }
         public bool IsInvert
         {
             get { return this.isInvertImage; }
         }
 
 
-
+        public int TextureId { get { return textureId; } }
         public int Width
         {
             get { return this.width; }

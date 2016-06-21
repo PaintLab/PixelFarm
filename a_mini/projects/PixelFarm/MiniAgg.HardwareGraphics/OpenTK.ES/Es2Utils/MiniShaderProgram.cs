@@ -43,6 +43,17 @@ namespace OpenTK.Graphics.ES20
                 (IntPtr)(vertices + startOffset));
             Enable();
         }
+
+        public unsafe void UnsafeSubLoad3f(float* vertices, int totalFieldCount)
+        {
+            GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (IntPtr)vertices);
+            Enable();
+        }
+        public unsafe void UnsafeSubLoad2f(float* vertices, int totalFieldCount)
+        {
+            GL.VertexAttribPointer(this.location, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (IntPtr)vertices);
+            Enable();
+        }
         /// <summary>
         /// load and enable
         /// </summary>
@@ -104,6 +115,7 @@ namespace OpenTK.Graphics.ES20
         {
             GL.EnableVertexAttribArray(this.location);
         }
+
     }
 
     public struct ShaderUniformMatrix4

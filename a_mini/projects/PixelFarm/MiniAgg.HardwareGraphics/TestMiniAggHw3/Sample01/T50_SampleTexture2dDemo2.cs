@@ -43,7 +43,6 @@ namespace OpenTkEssTest
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
-
             //in fs, angle on windows 
             //we need to switch color component
             //because we store value in memory as BGRA
@@ -68,17 +67,14 @@ namespace OpenTkEssTest
             mPositionLoc = GL.GetAttribLocation(mProgram, "a_position");
             mTexCoordLoc = GL.GetAttribLocation(mProgram, "a_texCoord");
             u_matrix = GL.GetUniformLocation(mProgram, "u_mvpMatrix");
-
             // Get the sampler location
             mSamplerLoc = GL.GetUniformLocation(mProgram, "s_texture");
-
             //// Load the texture
+            //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
             System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
             int bmpW = bmp.Width;
             int bmpH = bmp.Height;
-
             mTexture = LoadTexture(bmp);
-
             GL.ClearColor(0, 0, 0, 0);
             //================================================================================
 
@@ -90,7 +86,6 @@ namespace OpenTkEssTest
             orthoViewMat = MyMat4.ortho(0, max, 0, max, 0, 1).data;
             //square viewport
             GL.Viewport(0, 0, max, max);
-             
             imgVertices = new float[]
             {
                 0, bmpH,0,
@@ -112,7 +107,6 @@ namespace OpenTkEssTest
         float[] orthoViewMat;
         protected override void OnGLRender(object sender, EventArgs args)
         {
-
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.UseProgram(mProgram);
             unsafe
@@ -143,7 +137,6 @@ namespace OpenTkEssTest
         }
         static int LoadTexture(System.Drawing.Bitmap bmp)
         {
-
             int texture = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, texture);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
