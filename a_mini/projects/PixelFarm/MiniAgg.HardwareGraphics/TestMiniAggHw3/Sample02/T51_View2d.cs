@@ -14,14 +14,10 @@
 //            http://www.opengles-book.com
 
 
-#region Using Directives
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
-
-
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "051")]
@@ -33,7 +29,7 @@ namespace OpenTkEssTest
         {
             shaderProgram = new MiniShaderProgram();
             string vs = @"
-                attribute vec4 a_position;
+                attribute vec3 a_position;
                 attribute vec2 a_texCoord;
                 varying vec2 v_texCoord;
                 void main()
@@ -55,8 +51,8 @@ namespace OpenTkEssTest
             //-------------------------------------------
 
             // Get the attribute locations
-            a_position = shaderProgram.GetVtxAttrib("a_position");// GL.GetAttribLocation(mProgram, "a_position");
-            a_textCoord = shaderProgram.GetVtxAttrib("a_texCoord");
+            a_position = shaderProgram.GetAttrV3f("a_position");// GL.GetAttribLocation(mProgram, "a_position");
+            a_textCoord = shaderProgram.GetAttrV2f("a_texCoord");
             // Get the sampler location
             s_texture = shaderProgram.GetUniform1("s_texture");
             //// Load the texture
@@ -81,8 +77,15 @@ namespace OpenTkEssTest
             GL.Viewport(0, 0, this.Width, this.Height);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             shaderProgram.UseProgram();
-            a_position.LoadV3f(vertices, 5, 0);
-            a_textCoord.LoadV2f(vertices, 5, 3);
+            unsafe
+            {
+                fixed (float* head = &vertices[0])
+                {
+                    a_position.UnsafeLoadMixedV3f(head, 5);
+                    a_textCoord.UnsafeLoadMixedV2f(head + 3, 5);
+                }
+            }
+
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, mTexture);
             s_texture.SetValue(0);
@@ -97,8 +100,8 @@ namespace OpenTkEssTest
         }
 
         // Attribute locations
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_textCoord;
+        ShaderVtxAttrib3f a_position;
+        ShaderVtxAttrib2f a_textCoord;
         // Sampler location
         ShaderUniformVar1 s_texture;
         // Texture handle

@@ -7,17 +7,17 @@ namespace PixelFarm.DrawingGL
 {
     public partial class CanvasGL2d
     {
-        static unsafe void CreateRectCoords(float* arr, byte* indices,
-                  float x, float y, float w, float h)
-        {
-            //cartesian 
-            arr[0] = x; arr[1] = y;
-            arr[2] = x + w; arr[3] = y;
-            arr[4] = x + w; arr[5] = y + h;
-            arr[6] = x; arr[7] = y + h;
-            indices[0] = 0; indices[1] = 1; indices[2] = 2;
-            indices[3] = 2; indices[4] = 3; indices[5] = 0;
-        }
+        //static unsafe void CreateRectCoords(float* arr, byte* indices,
+        //          float x, float y, float w, float h)
+        //{
+        //    //cartesian 
+        //    arr[0] = x; arr[1] = y;
+        //    arr[2] = x + w; arr[3] = y;
+        //    arr[4] = x + w; arr[5] = y + h;
+        //    arr[6] = x; arr[7] = y + h;
+        //    indices[0] = 0; indices[1] = 1; indices[2] = 2;
+        //    indices[3] = 2; indices[4] = 3; indices[5] = 0;
+        //}
         //static unsafe void CreateLineCoords(ArrayList<VertexC4V3f> vrx,
         //         PixelFarm.Drawing.Color color,
         //         float x1, float y1, float x2, float y2)

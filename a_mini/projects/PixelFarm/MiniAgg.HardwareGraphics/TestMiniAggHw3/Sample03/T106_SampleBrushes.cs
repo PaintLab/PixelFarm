@@ -1,4 +1,5 @@
-﻿
+﻿//MIT, 2014-2016,WinterDev
+
 using System;
 using PixelFarm.Drawing;
 using OpenTK.Graphics.ES20;
@@ -13,15 +14,8 @@ namespace OpenTkEssTest
         CanvasGL2d canvas2d;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-            //--------------------------------------------------------------------------------
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.ClearColor(1, 1, 1, 1);
-            //setup viewport size
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
-            //square viewport
-            GL.Viewport(0, 0, max, max);
         }
         protected override void DemoClosing()
         {
@@ -29,11 +23,10 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            canvas2d.ClearColorBuffer();
             canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 0, 0, 150, 150);
-        
             GLBitmap glBmp = LoadTexture("..\\logo-dark.jpg");
             var textureBrush = new TextureBrush(new GLImage(glBmp));
             canvas2d.FillPolygon(
@@ -61,7 +54,7 @@ namespace OpenTkEssTest
                         210, 100}, 3 * 2);
             canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 400, 0, 150, 150);
             //------------------------------------------------------------------------- 
-           
+
             //another  ...                
             canvas2d.FillPolygon(
                    linearGrBrush2, new float[] {

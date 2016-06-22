@@ -1,12 +1,22 @@
-﻿
-#region Using Directives
+﻿//MIT, 2014-2016,WinterDev
+//
+// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+//            Based on Hello_Triangle.c from
+// Book:      OpenGL(R) ES 2.0 Programming Guide
+// Authors:   Aaftab Munshi, Dan Ginsburg, Dave Shreiner
+// ISBN-10:   0321502795
+// ISBN-13:   9780321502797
+// Publisher: Addison-Wesley Professional
+// URLs:      http://safari.informit.com/9780321563835
+//            http://www.opengles-book.com
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
-
-
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "052")]
@@ -47,8 +57,8 @@ namespace OpenTkEssTest
             }
 
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_color = shaderProgram.GetVtxAttrib("a_color");
+            a_position = shaderProgram.GetAttrV2f("a_position");
+            a_color = shaderProgram.GetAttrV3f("a_color");
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             //GL.ClearColor(0, 0, 0, 0);
@@ -77,14 +87,20 @@ namespace OpenTkEssTest
             GL.Clear(ClearBufferMask.ColorBufferBit);
             shaderProgram.UseProgram();
             // Load the vertex data 
-            a_position.LoadV2f(vertices, 6, 0);
-            a_color.LoadV3f(vertices, 6, 2);
-            //GL.DrawArrays(BeginMode.Triangles, 0, 3);
-            GL.DrawArrays(BeginMode.Points, 0, 3);
+            unsafe
+            {
+                fixed (float* head = &vertices[0])
+                {
+                    a_position.UnsafeLoadMixedV2f(head, 5);
+                    a_color.UnsafeLoadMixedV3f(head + 2, 5);
+                }
+            }
+
+            GL.DrawArrays(BeginMode.Triangles, 0, 3);
             miniGLControl.SwapBuffers();
         }
         //-------------------------------
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_color;
+        ShaderVtxAttrib2f a_position;
+        ShaderVtxAttrib3f a_color;
     }
 }

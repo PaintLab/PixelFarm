@@ -1,11 +1,7 @@
-﻿
-#region Using Directives
+﻿//MIT, 2014-2016,WinterDev
 
 using System;
-using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
-
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
@@ -16,15 +12,8 @@ namespace OpenTkEssTest
         CanvasGL2d canvas2d;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-            //--------------------------------------------------------------------------------
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.ClearColor(1, 1, 1, 1);
-            //setup viewport size
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
-            //square viewport
-            GL.Viewport(0, 0, max, max);
         }
         protected override void DemoClosing()
         {
@@ -36,7 +25,7 @@ namespace OpenTkEssTest
         }
         void Test2()
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            canvas2d.ClearColorBuffer();
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             float[] polygon2 = new float[]{

@@ -4,8 +4,8 @@
 
 
 using System;
-using System.Globalization; 
-using PixelFarm.Agg.VertexSource; 
+using System.Globalization;
+using PixelFarm.Agg.VertexSource;
 namespace PixelFarm.Agg
 {
     class LionDataStore

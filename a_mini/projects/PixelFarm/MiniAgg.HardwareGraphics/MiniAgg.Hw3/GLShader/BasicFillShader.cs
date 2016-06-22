@@ -8,8 +8,8 @@ namespace PixelFarm.DrawingGL
     class BasicFillShader
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_color;
+        ShaderVtxAttrib2f a_position;
+        ShaderVtxAttrib4f a_color;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
@@ -56,8 +56,8 @@ namespace PixelFarm.DrawingGL
             }
 
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_color = shaderProgram.GetVtxAttrib("a_color");
+            a_position = shaderProgram.GetAttrV2f("a_position");
+            a_color = shaderProgram.GetAttrV4f("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
@@ -73,7 +73,7 @@ namespace PixelFarm.DrawingGL
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             u_matrix.SetData(orthoView.data);
-            a_position.LoadV2f(linesBuffer, 2, 0);
+            a_position.LoadPureV2f(linesBuffer);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
         public void FillTriangleStripWithVertexBuffer(float[] linesBuffer, int nelements, PixelFarm.Drawing.Color color)
@@ -82,7 +82,7 @@ namespace PixelFarm.DrawingGL
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             u_matrix.SetData(orthoView.data);
-            a_position.LoadV2f(linesBuffer, 2, 0);
+            a_position.LoadPureV2f(linesBuffer);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, nelements);
         }
         public unsafe void FillTriangles(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
@@ -91,7 +91,7 @@ namespace PixelFarm.DrawingGL
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             u_matrix.SetData(orthoView.data);
-            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
         public unsafe void FillTriangles(float[] polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
@@ -100,7 +100,7 @@ namespace PixelFarm.DrawingGL
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             u_matrix.SetData(orthoView.data);
-            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            a_position.LoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
@@ -108,7 +108,7 @@ namespace PixelFarm.DrawingGL
             shaderProgram.UseProgram();
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.LineLoop, 0, nelements);
         }
         public unsafe void FillTriangleFan(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
@@ -116,7 +116,7 @@ namespace PixelFarm.DrawingGL
             shaderProgram.UseProgram();
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.TriangleFan, 0, nelements);
         }
     }

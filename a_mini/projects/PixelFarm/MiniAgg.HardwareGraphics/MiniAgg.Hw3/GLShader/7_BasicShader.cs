@@ -9,9 +9,9 @@ namespace PixelFarm.DrawingGL
     {
         bool isInited;
         MiniShaderProgram shaderProgram;
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_color;
-        ShaderVtxAttrib a_textureCoord;
+        ShaderVtxAttrib2f a_position;
+        ShaderVtxAttrib4f a_color;
+        ShaderVtxAttrib2f a_textureCoord;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar1 u_useAggColor;
@@ -51,8 +51,7 @@ namespace PixelFarm.DrawingGL
                 float a= a_position[2]; //before matrix op
                 gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);
                 if(u_useAggColor !=0)
-                { 
-                     
+                {                      
                     v_color= vec4(u_solidColor.r /255.0,u_solidColor.g /255.0,u_solidColor.b/255.0, a/255.0);
                 }
                 else if(u_useSolidColor !=0)
@@ -81,9 +80,9 @@ namespace PixelFarm.DrawingGL
                 throw new NotSupportedException();
             }
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_color = shaderProgram.GetVtxAttrib("a_color");
-            a_textureCoord = shaderProgram.GetVtxAttrib("a_texcoord");
+            a_position = shaderProgram.GetAttrV2f("a_position");
+            a_color = shaderProgram.GetAttrV4f("a_color");
+            a_textureCoord = shaderProgram.GetAttrV2f("a_texcoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_useAggColor = shaderProgram.GetUniform1("u_useAggColor");
@@ -101,56 +100,6 @@ namespace PixelFarm.DrawingGL
                 u_matrix.SetData(this.ViewMatrix.data);
             }
         }
-
-        public void AggDrawLines(AggCoordList3f linesBuffer, int nelements, PixelFarm.Drawing.Color color)
-        {
-            u_useAggColor.SetValue(1); //***
-            u_useSolidColor.SetValue(1);
-            //put original color, to be normalize on server side
-            u_solidColor.SetValue((float)color.R, (float)color.G, (float)color.B, (float)color.A);
-            a_position.LoadV3f(linesBuffer.GetInternalArray(), 3, 0);
-            GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
-        }
-        //---------------------------------- 
-        public void DrawLineStripsWithVertexBuffer(CoordList2f linesBuffer, int nelements, PixelFarm.Drawing.Color color)
-        {
-            shaderProgram.UseProgram();
-            u_useAggColor.SetValue(0);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
-            GL.DrawArrays(BeginMode.LineStrip, 0, nelements);
-        }
-
-        public void FillTrianglesWithVertexBuffer(CoordList2f linesBuffer, int nelements, PixelFarm.Drawing.Color color)
-        {
-            shaderProgram.UseProgram();
-            u_useAggColor.SetValue(0);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            //a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
-            a_position.LoadV2f(linesBuffer.GetInternalArray(), linesBuffer.Count, 0);
-            GL.DrawArrays(BeginMode.Triangles, 0, nelements);
-        }
-        public void FillTrianglesWithVertexBuffer(float[] linesBuffer, int nelements, PixelFarm.Drawing.Color color)
-        {
-            shaderProgram.UseProgram();
-            u_useAggColor.SetValue(0);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            //a_position.LoadV2f(linesBuffer.GetInternalArray(), 2, 0);
-            a_position.LoadV2f(linesBuffer, 2, 0);
-            GL.DrawArrays(BeginMode.Triangles, 0, nelements);
-        }
-
-        public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
-        {
-            u_useAggColor.SetValue(0);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.LoadV2f(polygon2dVertices, 2, 0);
-            GL.DrawArrays(BeginMode.LineLoop, 0, nelements);
-        }
         public void DrawLine(float x1, float y1, float x2, float y2, PixelFarm.Drawing.Color color)
         {
             u_useAggColor.SetValue(0);
@@ -161,7 +110,7 @@ namespace PixelFarm.DrawingGL
                 float* vtx = stackalloc float[4];
                 vtx[0] = x1; vtx[1] = y1;
                 vtx[2] = x2; vtx[3] = y2;
-                a_position.LoadV2f(vtx, 2, 0);
+                a_position.UnsafeLoadPureV2f(vtx);
             }
             GL.DrawArrays(BeginMode.Lines, 0, 2);
         }
@@ -170,7 +119,7 @@ namespace PixelFarm.DrawingGL
             u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.TriangleFan, 0, nelements);
         }
         public unsafe void FillTriangles(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
@@ -179,7 +128,7 @@ namespace PixelFarm.DrawingGL
             u_useAggColor.SetValue(0);
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.LoadV2f(polygon2dVertices, 2, 0);
+            a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
     }

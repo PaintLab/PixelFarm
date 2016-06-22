@@ -1,12 +1,22 @@
-﻿
-#region Using Directives
+﻿//MIT, 2014-2016,WinterDev
+//
+// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+//            Based on Hello_Triangle.c from
+// Book:      OpenGL(R) ES 2.0 Programming Guide
+// Authors:   Aaftab Munshi, Dan Ginsburg, Dave Shreiner
+// ISBN-10:   0321502795
+// ISBN-13:   9780321502797
+// Publisher: Addison-Wesley Professional
+// URLs:      http://safari.informit.com/9780321563835
+//            http://www.opengles-book.com
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
-
-
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "053")]
@@ -14,9 +24,9 @@ namespace OpenTkEssTest
     public class T53_Viewport : PrebuiltGLControlDemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_color;
-        ShaderVtxAttrib a_textureCoord;
+        ShaderVtxAttrib2f a_position;
+        ShaderVtxAttrib3f a_color;
+        ShaderVtxAttrib2f a_textureCoord;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
@@ -27,7 +37,7 @@ namespace OpenTkEssTest
             //vertex shader source
             string vs = @"        
             attribute vec2 a_position;
-            attribute vec4 a_color; 
+            attribute vec3 a_color; 
             attribute vec2 a_texcoord;
             
             uniform mat4 u_mvpMatrix;
@@ -71,9 +81,9 @@ namespace OpenTkEssTest
             }
 
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_color = shaderProgram.GetVtxAttrib("a_color");
-            a_textureCoord = shaderProgram.GetVtxAttrib("a_texcoord");
+            a_position = shaderProgram.GetAttrV2f("a_position");
+            a_color = shaderProgram.GetAttrV3f("a_color");
+            a_textureCoord = shaderProgram.GetAttrV2f("a_texcoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
@@ -118,7 +128,18 @@ namespace OpenTkEssTest
             u_matrix.SetData(orthoView.data);
             //---------------------------------------------------------  
             //triangle shape 
-            FillPolygonWithVertexColor(vertices, 6);
+            //x,y,r,g,b,a 
+
+            u_useSolidColor.SetValue(0);
+            unsafe
+            {
+                fixed (float* head = &vertices[0])
+                {
+                    a_position.UnsafeLoadMixedV2f(head, 5);
+                    a_color.UnsafeLoadMixedV3f(head + 3, 5);
+                }
+            }
+            GL.DrawArrays(BeginMode.Triangles, 0, 6);
             //---------------------------------------------------------
             //rect shape 
 
@@ -152,7 +173,7 @@ namespace OpenTkEssTest
         {
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)c.R / 255f, (float)c.G / 255f, (float)c.B / 255f, (float)c.A / 255f);//use solid color 
-            a_position.LoadV2f(onlyCoords, 2, 0);
+            a_position.LoadPureV2f(onlyCoords);
             GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
         }
 
@@ -161,18 +182,11 @@ namespace OpenTkEssTest
         {
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)c.R / 255f, (float)c.G / 255f, (float)c.B / 255f, (float)c.A / 255f);//use solid color  
-            a_position.LoadV2f(onlyCoords, 2, 0);
-            a_textureCoord.LoadV2f(textureCoords, 2, 0);
+            a_position.LoadPureV2f(onlyCoords);
+            a_textureCoord.LoadPureV2f(textureCoords);
             GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
         }
-        void FillPolygonWithVertexColor(float[] vertices, int numVertices)
-        {
-            //x,y,r,g,b,a 
-            u_useSolidColor.SetValue(0);
-            a_position.LoadV2f(vertices, 6, 0);
-            a_color.LoadV4f(vertices, 6, 2);
-            GL.DrawArrays(BeginMode.Triangles, 0, numVertices);
-        }
+
 
         static float[] CreateRectCoords(float x, float y, float w, float h)
         {
@@ -203,7 +217,7 @@ namespace OpenTkEssTest
             float[] vtxs = new float[] { x1, y1, x2, y2 };
             u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(0f, 0f, 0f, 1f);//use solid color 
-            a_position.LoadV2f(vtxs, 2, 0);
+            a_position.LoadPureV2f(vtxs);
             GL.DrawArrays(BeginMode.Lines, 0, 2);
         }
         void DrawImage(float x, float y)
