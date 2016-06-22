@@ -226,7 +226,7 @@ namespace PixelFarm.Drawing.WinGdi
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
-            using (var srcBmp = CreateBmpBRGA(actualImage))
+            using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
             {
                 var bmp = _bmpStore.GetFreeBmp();
                 using (Graphics g2 = System.Drawing.Graphics.FromImage(bmp))
@@ -319,7 +319,7 @@ namespace PixelFarm.Drawing.WinGdi
             VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
         }
 
-         
+
 
         public override void FillCircle(double x, double y, double radius)
         {
