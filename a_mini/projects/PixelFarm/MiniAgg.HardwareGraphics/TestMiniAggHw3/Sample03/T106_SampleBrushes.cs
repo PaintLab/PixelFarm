@@ -1,4 +1,4 @@
-﻿
+﻿//MIT, 2014-2016,WinterDev
 using System;
 using PixelFarm.Drawing;
 using OpenTK.Graphics.ES20;
