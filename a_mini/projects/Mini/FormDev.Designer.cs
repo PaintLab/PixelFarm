@@ -38,6 +38,7 @@
             this.chkUseGdiPlus = new System.Windows.Forms.CheckBox();
             this.chkGdiAntiAlias = new System.Windows.Forms.CheckBox();
             this.button6 = new System.Windows.Forms.Button();
+            this.chkUseOpenGLES2 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -81,9 +82,9 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(252, 37);
+            this.pictureBox1.Location = new System.Drawing.Point(252, 56);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(429, 319);
+            this.pictureBox1.Size = new System.Drawing.Size(429, 300);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
@@ -120,7 +121,7 @@
             // chkGdiAntiAlias
             // 
             this.chkGdiAntiAlias.AutoSize = true;
-            this.chkGdiAntiAlias.Location = new System.Drawing.Point(328, 12);
+            this.chkGdiAntiAlias.Location = new System.Drawing.Point(267, 33);
             this.chkGdiAntiAlias.Name = "chkGdiAntiAlias";
             this.chkGdiAntiAlias.Size = new System.Drawing.Size(85, 17);
             this.chkGdiAntiAlias.TabIndex = 8;
@@ -137,11 +138,22 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // chkUseOpenGLES2
+            // 
+            this.chkUseOpenGLES2.AutoSize = true;
+            this.chkUseOpenGLES2.Location = new System.Drawing.Point(372, 12);
+            this.chkUseOpenGLES2.Name = "chkUseOpenGLES2";
+            this.chkUseOpenGLES2.Size = new System.Drawing.Size(108, 17);
+            this.chkUseOpenGLES2.TabIndex = 10;
+            this.chkUseOpenGLES2.Text = "Use OpenGLES2";
+            this.chkUseOpenGLES2.UseVisualStyleBackColor = true;
+            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(728, 463);
+            this.Controls.Add(this.chkUseOpenGLES2);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.chkGdiAntiAlias);
             this.Controls.Add(this.chkUseGdiPlus);
@@ -172,5 +184,6 @@
         private System.Windows.Forms.CheckBox chkUseGdiPlus;
         private System.Windows.Forms.CheckBox chkGdiAntiAlias;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.CheckBox chkUseOpenGLES2;
     }
 }

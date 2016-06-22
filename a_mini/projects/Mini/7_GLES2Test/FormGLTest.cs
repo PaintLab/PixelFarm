@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Windows.Forms;
 using PixelFarm.DrawingGL;
+using PixelFarm.Drawing.HardwareGraphics;
 
 namespace Mini
 {
-    public partial class FormGLTest : Form
+    partial class FormGLTest : Form
     {
         MyMiniGLES2Control miniGLControl;
         IntPtr hh1;
         CanvasGL2d canvas2d;
+        DemoBase exampleBase;
+        GLCanvasPainter canvasPainter;
+
         public FormGLTest()
         {
             InitializeComponent();
@@ -32,7 +36,9 @@ namespace Mini
                 miniGLControl.MakeCurrent();
 
                 int max = Math.Max(this.Width, this.Height);
+
                 canvas2d = new CanvasGL2d(max, max);
+                canvasPainter = new GLCanvasPainter(canvas2d, max, max);
             }
             return miniGLControl;
         }
@@ -43,13 +49,31 @@ namespace Mini
         void HandleGLPaint(object sender, System.EventArgs e)
         {
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
             canvas2d.ClearColorBuffer();
-           canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 20, 20, 150, 150);
+            //example
+            canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 20, 20, 150, 150);
             //load bmp image 
             //------------------------------------------------------------------------- 
-        
+            if (exampleBase != null)
+            {
+                exampleBase.Draw(canvasPainter);
+            }
             miniGLControl.SwapBuffers();
         }
+        public void LoadExample(ExampleAndDesc exAndDesc)
+        {
+            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+            if (exBase == null)
+            {
+                return;
+            }
+
+            this.Text = exAndDesc.ToString();
+            //----------------------------------------------------------------------------
+            this.exampleBase = exBase;
+            exampleBase.Init();
+        }
+
     }
 }

@@ -27,12 +27,23 @@ namespace Mini
             ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
             if (exAndDesc != null)
             {
-                FormTestBed1 testBed = new FormTestBed1();
-                testBed.WindowState = FormWindowState.Maximized;
-                testBed.UseGdiPlus = chkUseGdiPlus.Checked;
-                testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
-                testBed.Show();
-                testBed.LoadExample(exAndDesc);
+                if (chkUseOpenGLES2.Checked)
+                {
+                    FormGLTest formGLTest = new FormGLTest();
+                    formGLTest.InitGLControl();
+                    formGLTest.Show();
+                    formGLTest.WindowState = FormWindowState.Maximized;
+                    formGLTest.LoadExample(exAndDesc);
+                }
+                else
+                {
+                    FormTestBed1 testBed = new FormTestBed1();
+                    testBed.WindowState = FormWindowState.Maximized;
+                    testBed.UseGdiPlus = chkUseGdiPlus.Checked;
+                    testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                    testBed.Show();
+                    testBed.LoadExample(exAndDesc);
+                }
             }
         }
         void DevForm_Load(object sender, EventArgs e)

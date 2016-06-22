@@ -88,7 +88,7 @@ namespace PixelFarm.Drawing.HardwareGraphics
         }
         static Color ToPixelFarmColor(ColorRGBA value)
         {
-            return new Color(value.red, value.green, value.blue, value.alpha);
+            return new Color(value.alpha, value.red, value.green, value.blue);
         }
         public override double StrokeWidth
         {
@@ -251,7 +251,7 @@ namespace PixelFarm.Drawing.HardwareGraphics
         }
         public override void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
         {   //draw rectangle
-            
+
         }
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {

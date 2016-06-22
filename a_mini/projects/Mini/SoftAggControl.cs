@@ -82,7 +82,7 @@ namespace Mini
         public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;
-            exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
+            //exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
