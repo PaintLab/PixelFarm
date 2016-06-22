@@ -783,48 +783,46 @@ namespace PixelFarm.DrawingGL
 
         public void FillRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h)
         {
-            //float[] coords = CreateRectTessCoords(x, y, w, h);
-            //basicFillShader.FillTrianglesWithVertexBuffer(coords, 6, color);
-
+            
             float[] coords = CreateRectTessCoordsTriStrip(x, y, w, h);
             basicFillShader.FillTriangleStripWithVertexBuffer(coords, 4, color);
         }
-        public void FillRect(PixelFarm.Drawing.LinearGradientBrush linearGradientBrush, float x, float y, float w, float h)
-        {
-            if (linearGradientBrush != null)
-            {
-                //use clip rect for fill rect gradient
-                EnableClipRect();
-                SetClipRect((int)x, (int)y, (int)w, (int)h);
-                //early exit
+        //public void FillRect(PixelFarm.Drawing.LinearGradientBrush linearGradientBrush, float x, float y, float w, float h)
+        //{
+        //    if (linearGradientBrush != null)
+        //    {
+        //        //use clip rect for fill rect gradient
+        //        EnableClipRect();
+        //        SetClipRect((int)x, (int)y, (int)w, (int)h);
+        //        //early exit
 
-                ////points 
-                var colors = linearGradientBrush.GetColors();
-                var points = linearGradientBrush.GetStopPoints();
-                uint c1 = colors[0].ToABGR();
-                uint c2 = colors[1].ToABGR();
-                //create polygon for graident bg 
-                var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
-                     points[0].X, points[0].Y,
-                     points[1].X, points[1].Y,
-                     colors[0],
-                     colors[1]);
-                int pcount = vrx.Count;
-                throw new NotSupportedException();
-                //GL.EnableClientState(ArrayCap.ColorArray);
-                //GL.EnableClientState(ArrayCap.VertexArray);
+        //        ////points 
+        //        var colors = linearGradientBrush.GetColors();
+        //        var points = linearGradientBrush.GetStopPoints();
+        //        uint c1 = colors[0].ToABGR();
+        //        uint c2 = colors[1].ToABGR();
+        //        //create polygon for graident bg 
+        //        var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
+        //             points[0].X, points[0].Y,
+        //             points[1].X, points[1].Y,
+        //             colors[0],
+        //             colors[1]);
+        //        int pcount = vrx.Count;
+        //        throw new NotSupportedException();
+        //        //GL.EnableClientState(ArrayCap.ColorArray);
+        //        //GL.EnableClientState(ArrayCap.VertexArray);
 
-                //VboC4V3f vbo = GenerateVboC4V3f();
-                //vbo.BindBuffer();
-                //DrawTrianglesWithVertexBuffer(vrx, pcount);
-                //vbo.UnbindBuffer();
-                //DrawLineStripWithVertexBuffer()
-                //GL.DisableClientState(ArrayCap.ColorArray);
-                //GL.DisableClientState(ArrayCap.VertexArray);
+        //        //VboC4V3f vbo = GenerateVboC4V3f();
+        //        //vbo.BindBuffer();
+        //        //DrawTrianglesWithVertexBuffer(vrx, pcount);
+        //        //vbo.UnbindBuffer();
+        //        //DrawLineStripWithVertexBuffer()
+        //        //GL.DisableClientState(ArrayCap.ColorArray);
+        //        //GL.DisableClientState(ArrayCap.VertexArray);
 
-                DisableClipRect();
-            }
-        }
+        //        DisableClipRect();
+        //    }
+        //}
 
 
         public void FillRoundRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h, float rx, float ry)
