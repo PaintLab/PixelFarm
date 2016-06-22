@@ -14,7 +14,7 @@ namespace OpenTkEssTest
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max); 
+            canvas2d = new CanvasGL2d(max, max);
         }
         protected override void DemoClosing()
         {
@@ -22,9 +22,9 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            canvas2d.ClearColorBuffer();
             canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 0, 0, 150, 150);
             GLBitmap glBmp = LoadTexture("..\\logo-dark.jpg");
             var textureBrush = new TextureBrush(new GLImage(glBmp));

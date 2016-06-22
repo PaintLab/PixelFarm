@@ -15,9 +15,9 @@ namespace OpenTkEssTest
     {
         CanvasGL2d canvas2d;
         protected override void OnInitGLProgram(object sender, EventArgs args)
-        {          
+        {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max); 
+            canvas2d = new CanvasGL2d(max, max);
         }
         protected override void DemoClosing()
         {
@@ -25,18 +25,13 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //-----------------------------
             //see:  lazyfoo.net/tutorials/OpenGL/26_the_stencil_buffer/index.php
             //-----------------------------
-            //test gradient brush
-            //set value for clear color
-            GLHelper.ClearColor(PixelFarm.Drawing.Color.White);
-            GL.ClearStencil(0); //set value for clearing stencil buffer 
-                                //actual clear here
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);
+
+            canvas2d.Clear(PixelFarm.Drawing.Color.White);
             //-------------------
             //disable rendering to color buffer
             GL.ColorMask(false, false, false, false);

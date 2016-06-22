@@ -13,7 +13,6 @@ namespace OpenTkEssTest
         CanvasGL2d canvas2d;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-        
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
         }

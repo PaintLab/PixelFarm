@@ -15,9 +15,9 @@ namespace OpenTkEssTest
     {
         CanvasGL2d canvas2d;
         protected override void OnInitGLProgram(object sender, EventArgs args)
-        { 
+        {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max); 
+            canvas2d = new CanvasGL2d(max, max);
         }
         protected override void DemoClosing()
         {
@@ -29,7 +29,7 @@ namespace OpenTkEssTest
         }
         void Test2()
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            canvas2d.ClearColorBuffer();
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             float[] polygon2 = new float[]{

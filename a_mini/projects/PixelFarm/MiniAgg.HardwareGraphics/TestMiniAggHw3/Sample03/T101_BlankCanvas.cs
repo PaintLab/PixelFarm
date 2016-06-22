@@ -15,16 +15,16 @@ namespace OpenTkEssTest
     {
         CanvasGL2d canvas2d;
         protected override void OnInitGLProgram(object sender, EventArgs args)
-        { 
+        {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max); 
+            canvas2d = new CanvasGL2d(max, max);
         }
         protected override void DemoClosing()
         {
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            canvas2d.ClearColorBuffer();
             miniGLControl.SwapBuffers();
         }
     }
