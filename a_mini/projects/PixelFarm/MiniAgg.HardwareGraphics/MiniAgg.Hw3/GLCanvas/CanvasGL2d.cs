@@ -62,6 +62,8 @@ namespace PixelFarm.DrawingGL
             textureShader.OrthoView = orthoView;
             basicFillShader.OrthoView = orthoView;
             invertAlphaFragmentShader.OrthoView = orthoView;
+
+            GL.Viewport(0, 0, canvasW, canvasH);
         }
         public void Dispose()
         {

@@ -13,15 +13,9 @@ namespace OpenTkEssTest
         CanvasGL2d canvas2d;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-            //--------------------------------------------------------------------------------
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.ClearColor(1, 1, 1, 1);
-            //setup viewport size
+        
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
-            //square viewport
-            GL.Viewport(0, 0, max, max);
         }
         protected override void DemoClosing()
         {
