@@ -73,6 +73,18 @@
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
     <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
+    <Compile Include="7_GLES2Test\FormGLTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="7_GLES2Test\FormGLTest.Designer.cs">
+      <DependentUpon>FormGLTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="7_GLES2Test\MyMiniGLES2Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
+      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
+    </Compile>
     <Compile Include="MiniGUI\PixelTools.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
@@ -110,6 +122,12 @@
     <Compile Include="SoftAggControl.Designer.cs">
       <DependentUpon>SoftAggControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
+      <DependentUpon>FormGLTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="7_GLES2Test\MyMiniGLES2Control.resx">
+      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
@@ -152,6 +170,14 @@
     <ProjectReference Include="..\PixelFarm\MiniAgg.HardwareGraphics\MiniAgg.Hw3\MiniAgg.Hw3.csproj">
       <Project>{e0bc92c3-6936-4d8f-ae7f-54dde27de370}</Project>
       <Name>MiniAgg.Hw3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm\MiniAgg.HardwareGraphics\OpenTK.ES\OpenTK.ES.csproj">
+      <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
+      <Name>OpenTK.ES</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm\MiniAgg.HardwareGraphics\OpenTK.PlatformMini\OpenTK.PlatformMini.csproj">
+      <Project>{77870adc-ce4a-423c-b736-a1fa4aa2d697}</Project>
+      <Name>OpenTK.PlatformMini</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>

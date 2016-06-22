@@ -37,6 +37,7 @@
             this.button5 = new System.Windows.Forms.Button();
             this.chkUseGdiPlus = new System.Windows.Forms.CheckBox();
             this.chkGdiAntiAlias = new System.Windows.Forms.CheckBox();
+            this.button6 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -126,11 +127,22 @@
             this.chkGdiAntiAlias.Text = "Gdi AntiAlias";
             this.chkGdiAntiAlias.UseVisualStyleBackColor = true;
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(573, 413);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(150, 32);
+            this.button6.TabIndex = 9;
+            this.button6.Text = "TestGLES2";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(728, 463);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.chkGdiAntiAlias);
             this.Controls.Add(this.chkUseGdiPlus);
             this.Controls.Add(this.button5);
@@ -159,5 +171,6 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.CheckBox chkUseGdiPlus;
         private System.Windows.Forms.CheckBox chkGdiAntiAlias;
+        private System.Windows.Forms.Button button6;
     }
 }

@@ -251,7 +251,7 @@ namespace PixelFarm.Drawing.HardwareGraphics
         }
         public override void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
         {   //draw rectangle
-
+            
         }
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {

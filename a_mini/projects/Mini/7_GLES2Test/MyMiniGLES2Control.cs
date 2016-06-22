@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using OpenTK;
+
 namespace Mini
 {
     public partial class MyMiniGLES2Control : GLControl

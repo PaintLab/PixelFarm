@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using OpenTK;
-using OpenTkEssTest;
+﻿ 
+using System.Windows.Forms; 
 namespace Mini
 {
     public partial class FormTestBed : Form

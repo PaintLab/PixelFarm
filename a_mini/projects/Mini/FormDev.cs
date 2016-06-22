@@ -258,11 +258,17 @@ namespace Mini
                 }
             }
         }
-
         private void button5_Click(object sender, EventArgs e)
         {
             FormGdiTest formGdiTest = new FormGdiTest();
             formGdiTest.Show();
+        }
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FormGLTest formGLTest = new FormGLTest();
+            formGLTest.InitGLControl();
+            formGLTest.Show();
+            formGLTest.WindowState = FormWindowState.Maximized;
         }
     }
 }

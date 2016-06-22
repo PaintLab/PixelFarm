@@ -91,7 +91,7 @@ namespace Mini
         void TimerTick(object sender, EventArgs e)
         {
             OnTimerTick(sender, e);
-            this.miniGLControl.Refresh();
+            //this.miniGLControl.Refresh();
         }
         protected virtual void OnTimerTick(object sender, EventArgs e)
         {
