@@ -150,98 +150,102 @@ namespace PixelFarm.DrawingGL
                  x, y, bmp.Width, bmp.Height);
         }
 
-
-        public void FillVxs(PixelFarm.Drawing.Color color, VertexStore vxs)
+        public static List<List<float>> CreateGraphicsPath(VertexStoreSnap vxsSnap)
         {
-            throw new NotSupportedException();
-            //solid brush
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
-                    }
-                    break;
-                default:
-                    {
-                        //tess the vxs first
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
-                        //throw new NotSupportedException();
-                    }
-                    break;
-            }
-        }
-        public void FillVxs(PixelFarm.Drawing.LinearGradientBrush brush, VertexStore vxs)
-        {
-            throw new NotSupportedException();
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, brush.Color);
-                    }
-                    break;
-                default:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, brush.Color);
-                    }
-                    break;
-            }
-        }
+            VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
+            double prevX = 0;
+            double prevY = 0;
+            double prevMoveToX = 0;
+            double prevMoveToY = 0;
+
+            List<List<float>> allXYlist = new List<List<float>>(); //all include sub path
+            List<float> xylist = null;
 
 
+            for (;;)
+            {
+                double x, y;
+                VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
+                switch (cmd)
+                {
+                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                        prevMoveToX = prevX = x;
+                        prevMoveToY = prevY = y;
+                        if (xylist != null)
+                        {
+                            allXYlist.Add(xylist);
+                        }
+                        xylist = new List<float>();
+                        xylist.Add((float)x);
+                        xylist.Add((float)y);
+                        allXYlist.Add(xylist);
+
+                        break;
+                    case PixelFarm.Agg.VertexCmd.LineTo:
+                        //brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
+                        xylist.Add((float)x);
+                        xylist.Add((float)y);
+                        prevX = x;
+                        prevY = y;
+                        break;
+                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                        //from current point
+                        //
+                        //brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
+                        xylist.Add((float)prevMoveToX);
+                        xylist.Add((float)prevMoveToY);
+                        prevX = prevMoveToX;
+                        prevY = prevMoveToY;
+                        xylist = null;
+
+                        break;
+                    case PixelFarm.Agg.VertexCmd.EndFigure:
+                        goto EXIT_LOOP;
+                    case PixelFarm.Agg.VertexCmd.HasMore:
+                        break;
+                    case PixelFarm.Agg.VertexCmd.Stop:
+                        goto EXIT_LOOP;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+            EXIT_LOOP:
+            return allXYlist;
+        }
         public void FillVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
         {
-            throw new NotSupportedException();
-            switch (this.SmoothMode)
+
+            List<List<float>> allXYList = CreateGraphicsPath(snap);
+            switch (SmoothMode)
             {
                 case CanvasSmoothMode.Smooth:
                     {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(snap);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
+                        int subPathCount = allXYList.Count;
+                        for (int i = 0; i < subPathCount; ++i)
+                        {
+                            //fill polygon with color
+                            float[] subpathXYList = allXYList[i].ToArray();
+                            FillPolygon(color, subpathXYList);
+                        }
                     }
                     break;
-                default:
+                case CanvasSmoothMode.No:
                     {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(snap);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
+                        int subPathCount = allXYList.Count;
+                        for (int i = 0; i < subPathCount; ++i)
+                        {
+                            //fill polygon with color
+                            float[] subpathXYList = allXYList[i].ToArray();
+                            FillPolygon(color, subpathXYList);
+                            //with anti-alias border
+                            strokeColor = color;
+                            StrokeWidth = 0.5f;
+                            DrawPolygon(subpathXYList, subpathXYList.Length);
+                        }
                     }
                     break;
             }
         }
-
-        public void DrawVxs(VertexStore vxs)
-        {
-            throw new NotSupportedException();
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(aggStroke.MakeVxs(vxs));
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
-                    }
-                    break;
-                default:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(aggStroke.MakeVxs(vxs));
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
-                    }
-                    break;
-            }
-        }
-
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
         {
             //closed polyline
@@ -783,7 +787,7 @@ namespace PixelFarm.DrawingGL
 
         public void FillRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h)
         {
-            
+
             float[] coords = CreateRectTessCoordsTriStrip(x, y, w, h);
             basicFillShader.FillTriangleStripWithVertexBuffer(coords, 4, color);
         }
