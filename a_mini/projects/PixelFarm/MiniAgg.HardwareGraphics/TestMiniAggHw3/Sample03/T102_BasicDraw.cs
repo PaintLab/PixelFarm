@@ -1,10 +1,8 @@
-﻿
-#region Using Directives
-
-using System;
-using OpenTK.Graphics.ES20;
+﻿//MIT, 2014-2016,WinterDev
+ 
+using System; 
 using Mini;
-#endregion
+ 
 
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest

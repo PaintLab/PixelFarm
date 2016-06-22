@@ -1,10 +1,22 @@
-﻿
-#region Using Directives
+﻿//MIT, 2014-2016,WinterDev
+//
+// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
 
+//            Based on Hello_Triangle.c from
+// Book:      OpenGL(R) ES 2.0 Programming Guide
+// Authors:   Aaftab Munshi, Dan Ginsburg, Dave Shreiner
+// ISBN-10:   0321502795
+// ISBN-13:   9780321502797
+// Publisher: Addison-Wesley Professional
+// URLs:      http://safari.informit.com/9780321563835
+//            http://www.opengles-book.com
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
+
 
 
 namespace OpenTkEssTest

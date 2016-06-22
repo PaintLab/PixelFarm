@@ -13,15 +13,11 @@
 // URLs:      http://safari.informit.com/9780321563835
 //            http://www.opengles-book.com
 
-
-#region Using Directives
+ 
 
 using System;
 using OpenTK.Graphics.ES20;
-using Mini;
-#endregion
-
-
+using Mini; 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "051")]

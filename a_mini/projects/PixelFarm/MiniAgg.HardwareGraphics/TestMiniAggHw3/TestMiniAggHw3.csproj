@@ -73,12 +73,15 @@
     <Compile Include="Sample02\T53_Viewport.cs" />
     <Compile Include="Sample02\T54_Lines.cs" />
     <Compile Include="Sample02\T55_Line2.cs" />
+    <Compile Include="Sample03\LionDataStore.cs" />
+    <Compile Include="Sample03\SpriteShape.cs" />
     <Compile Include="Sample03\T101_BlankCanvas.cs" />
     <Compile Include="Sample03\T102_BasicDraw.cs" />
     <Compile Include="Sample03\T105_Stencil.cs" />
     <Compile Include="Sample03\T106_SampleBrushes.cs" />
     <Compile Include="Sample03\T107_DrawImage.cs" />
     <Compile Include="Sample01\T50_SampleTexture2dDemo2.cs" />
+    <Compile Include="Sample03\T108_LionFill.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />
