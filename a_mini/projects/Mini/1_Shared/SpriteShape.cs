@@ -1,15 +1,9 @@
 ﻿
 //BSD 2014, WinterDev
 //MattersHackers
-//AGG 2.4
-
-
-using System;
-using System.Globalization;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg;
+//AGG 2.4 
+using System; 
+using PixelFarm.Agg.VertexSource; 
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {
