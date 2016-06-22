@@ -9,8 +9,8 @@ namespace PixelFarm.DrawingGL
     class SimpleTextureShader
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_texCoord;
+        ShaderVtxAttrib3f a_position;
+        ShaderVtxAttrib2f a_texCoord;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 s_texture;
         MyMat4 orthoView;
@@ -54,8 +54,8 @@ namespace PixelFarm.DrawingGL
             }
             //-----------------------
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_texCoord = shaderProgram.GetVtxAttrib("a_texCoord");
+            a_position = shaderProgram.GetAttrV3f("a_position");
+            a_texCoord = shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             s_texture = shaderProgram.GetUniform1("s_texture");
             return true;

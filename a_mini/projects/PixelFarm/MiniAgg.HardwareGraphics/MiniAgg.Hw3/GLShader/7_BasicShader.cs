@@ -9,9 +9,9 @@ namespace PixelFarm.DrawingGL
     {
         bool isInited;
         MiniShaderProgram shaderProgram;
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_color;
-        ShaderVtxAttrib a_textureCoord;
+        ShaderVtxAttrib2f a_position;
+        ShaderVtxAttrib4f a_color;
+        ShaderVtxAttrib2f a_textureCoord;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar1 u_useAggColor;
@@ -51,8 +51,7 @@ namespace PixelFarm.DrawingGL
                 float a= a_position[2]; //before matrix op
                 gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);
                 if(u_useAggColor !=0)
-                { 
-                     
+                {                      
                     v_color= vec4(u_solidColor.r /255.0,u_solidColor.g /255.0,u_solidColor.b/255.0, a/255.0);
                 }
                 else if(u_useSolidColor !=0)
@@ -81,9 +80,9 @@ namespace PixelFarm.DrawingGL
                 throw new NotSupportedException();
             }
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_color = shaderProgram.GetVtxAttrib("a_color");
-            a_textureCoord = shaderProgram.GetVtxAttrib("a_texcoord");
+            a_position = shaderProgram.GetAttrV2f("a_position");
+            a_color = shaderProgram.GetAttrV4f("a_color");
+            a_textureCoord = shaderProgram.GetAttrV2f("a_texcoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_useAggColor = shaderProgram.GetUniform1("u_useAggColor");
@@ -100,7 +99,7 @@ namespace PixelFarm.DrawingGL
                 this.mymat4 = value;
                 u_matrix.SetData(this.ViewMatrix.data);
             }
-        } 
+        }
         public void DrawLine(float x1, float y1, float x2, float y2, PixelFarm.Drawing.Color color)
         {
             u_useAggColor.SetValue(0);

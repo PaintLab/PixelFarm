@@ -14,8 +14,8 @@ namespace OpenTkEssTest
     public class T54_Lines : PrebuiltGLControlDemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_color;
+        ShaderVtxAttrib2f a_position;
+        ShaderVtxAttrib4f a_color;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
@@ -62,8 +62,8 @@ namespace OpenTkEssTest
             }
 
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_color = shaderProgram.GetVtxAttrib("a_color");
+            a_position = shaderProgram.GetAttrV2f("a_position");
+            a_color = shaderProgram.GetAttrV4f("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");

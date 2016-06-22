@@ -14,9 +14,9 @@ namespace OpenTkEssTest
     public class T53_Viewport : PrebuiltGLControlDemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_color;
-        ShaderVtxAttrib a_textureCoord;
+        ShaderVtxAttrib2f a_position;
+        ShaderVtxAttrib3f a_color;
+        ShaderVtxAttrib2f a_textureCoord;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
@@ -27,7 +27,7 @@ namespace OpenTkEssTest
             //vertex shader source
             string vs = @"        
             attribute vec2 a_position;
-            attribute vec4 a_color; 
+            attribute vec3 a_color; 
             attribute vec2 a_texcoord;
             
             uniform mat4 u_mvpMatrix;
@@ -71,9 +71,9 @@ namespace OpenTkEssTest
             }
 
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_color = shaderProgram.GetVtxAttrib("a_color");
-            a_textureCoord = shaderProgram.GetVtxAttrib("a_texcoord");
+            a_position = shaderProgram.GetAttrV2f("a_position");
+            a_color = shaderProgram.GetAttrV3f("a_color");
+            a_textureCoord = shaderProgram.GetAttrV2f("a_texcoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");

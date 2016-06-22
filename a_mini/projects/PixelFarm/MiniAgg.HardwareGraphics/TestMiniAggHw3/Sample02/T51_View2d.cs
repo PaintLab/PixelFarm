@@ -33,7 +33,7 @@ namespace OpenTkEssTest
         {
             shaderProgram = new MiniShaderProgram();
             string vs = @"
-                attribute vec4 a_position;
+                attribute vec3 a_position;
                 attribute vec2 a_texCoord;
                 varying vec2 v_texCoord;
                 void main()
@@ -55,8 +55,8 @@ namespace OpenTkEssTest
             //-------------------------------------------
 
             // Get the attribute locations
-            a_position = shaderProgram.GetVtxAttrib("a_position");// GL.GetAttribLocation(mProgram, "a_position");
-            a_textCoord = shaderProgram.GetVtxAttrib("a_texCoord");
+            a_position = shaderProgram.GetAttrV3f("a_position");// GL.GetAttribLocation(mProgram, "a_position");
+            a_textCoord = shaderProgram.GetAttrV2f("a_texCoord");
             // Get the sampler location
             s_texture = shaderProgram.GetUniform1("s_texture");
             //// Load the texture
@@ -104,8 +104,8 @@ namespace OpenTkEssTest
         }
 
         // Attribute locations
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_textCoord;
+        ShaderVtxAttrib3f a_position;
+        ShaderVtxAttrib2f a_textCoord;
         // Sampler location
         ShaderUniformVar1 s_texture;
         // Texture handle

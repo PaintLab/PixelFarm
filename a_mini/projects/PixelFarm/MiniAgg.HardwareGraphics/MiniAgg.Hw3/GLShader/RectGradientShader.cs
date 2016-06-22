@@ -8,8 +8,8 @@ namespace PixelFarm.DrawingGL
     class RectFillShader
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        ShaderVtxAttrib a_position;
-        ShaderVtxAttrib a_color;
+        ShaderVtxAttrib2f a_position;
+        ShaderVtxAttrib4f a_color;
         ShaderUniformMatrix4 u_matrix;
         MyMat4 orthoView;
         public RectFillShader()
@@ -42,8 +42,8 @@ namespace PixelFarm.DrawingGL
                 throw new NotSupportedException();
             }
 
-            a_position = shaderProgram.GetVtxAttrib("a_position");
-            a_color = shaderProgram.GetVtxAttrib("a_color");
+            a_position = shaderProgram.GetAttrV2f("a_position");
+            a_color = shaderProgram.GetAttrV4f("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
         }
         public MyMat4 OrthoView

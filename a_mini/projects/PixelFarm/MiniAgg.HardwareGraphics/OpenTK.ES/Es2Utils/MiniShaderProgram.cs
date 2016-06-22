@@ -2,50 +2,19 @@
 
 using System;
 namespace OpenTK.Graphics.ES20
-{
-
-    public struct ShaderVtxAttrib
+{ 
+    public struct ShaderVtxAttrib2f
     {
         internal readonly int location;
-        public ShaderVtxAttrib(int location)
+        public ShaderVtxAttrib2f(int location)
         {
             this.location = location;
-        }
-
-        /// <summary>
-        ///  load pure vector4f, from start array
-        /// </summary>
-        /// <param name="vertices"></param>
-        public void LoadPureV4f(float[] vertices)
-        {
-            unsafe
-            {
-                fixed (float* h = &vertices[0])
-                {
-                    GL.VertexAttribPointer(location,
-                        4, //float4
-                        VertexAttribPointerType.Float,
-                        false,
-                        4 * sizeof(float), //total size
-                        (IntPtr)h);
-                }
-            }
-            GL.EnableVertexAttribArray(this.location);
-        }
-
-
-        public unsafe void UnsafeLoadMixedV3f(float* vertexH, int totalFieldCount)
-        {
-            GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
-            GL.EnableVertexAttribArray(this.location);
         }
         public unsafe void UnsafeLoadMixedV2f(float* vertexH, int totalFieldCount)
         {
             GL.VertexAttribPointer(this.location, 2, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
             GL.EnableVertexAttribArray(this.location);
         }
-
-
         /// <summary>
         /// load pure vector2f, from start array
         /// </summary>
@@ -78,9 +47,51 @@ namespace OpenTK.Graphics.ES20
                 (IntPtr)(vertices));
             GL.EnableVertexAttribArray(this.location);
         }
-
+    }
+    public struct ShaderVtxAttrib3f
+    {
+        internal readonly int location;
+        public ShaderVtxAttrib3f(int location)
+        {
+            this.location = location;
+        }
+        public unsafe void UnsafeLoadMixedV3f(float* vertexH, int totalFieldCount)
+        {
+            GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
+            GL.EnableVertexAttribArray(this.location);
+        }
 
     }
+    public struct ShaderVtxAttrib4f
+    {
+        internal readonly int location;
+        public ShaderVtxAttrib4f(int location)
+        {
+            this.location = location;
+        }
+        /// <summary>
+        ///  load pure vector4f, from start array
+        /// </summary>
+        /// <param name="vertices"></param>
+        public void LoadPureV4f(float[] vertices)
+        {
+            unsafe
+            {
+                fixed (float* h = &vertices[0])
+                {
+                    GL.VertexAttribPointer(location,
+                        4, //float4
+                        VertexAttribPointerType.Float,
+                        false,
+                        4 * sizeof(float), //total size
+                        (IntPtr)h);
+                }
+            }
+            GL.EnableVertexAttribArray(this.location);
+        }
+    }
+
+
 
     public struct ShaderUniformMatrix4
     {
@@ -196,11 +207,18 @@ namespace OpenTK.Graphics.ES20
             }
             return true;
         }
-        public ShaderVtxAttrib GetVtxAttrib(string attrName)
+        public ShaderVtxAttrib2f GetAttrV2f(string attrName)
         {
-            return new ShaderVtxAttrib(GL.GetAttribLocation(mProgram, attrName));
+            return new ShaderVtxAttrib2f(GL.GetAttribLocation(mProgram, attrName));
         }
-
+        public ShaderVtxAttrib3f GetAttrV3f(string attrName)
+        {
+            return new ShaderVtxAttrib3f(GL.GetAttribLocation(mProgram, attrName));
+        }
+        public ShaderVtxAttrib4f GetAttrV4f(string attrName)
+        {
+            return new ShaderVtxAttrib4f(GL.GetAttribLocation(mProgram, attrName));
+        }
         public ShaderUniformVar1 GetUniform1(string uniformVarName)
         {
             return new ShaderUniformVar1(GL.GetUniformLocation(this.mProgram, uniformVarName));
