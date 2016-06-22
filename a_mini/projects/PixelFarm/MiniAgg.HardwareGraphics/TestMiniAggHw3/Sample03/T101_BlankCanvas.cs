@@ -1,9 +1,7 @@
 ﻿//MIT, 2014-2016,WinterDev
 
-using System; 
+using System;
 using Mini;
- 
-
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {

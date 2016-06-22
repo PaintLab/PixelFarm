@@ -2,8 +2,7 @@
 
 using System;
 using OpenTK.Graphics.ES20;
-using Mini; 
-
+using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {

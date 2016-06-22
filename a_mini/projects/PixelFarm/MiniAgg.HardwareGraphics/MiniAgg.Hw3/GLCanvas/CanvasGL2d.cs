@@ -62,7 +62,6 @@ namespace PixelFarm.DrawingGL
             textureShader.OrthoView = orthoView;
             basicFillShader.OrthoView = orthoView;
             invertAlphaFragmentShader.OrthoView = orthoView;
-
             GL.Viewport(0, 0, canvasW, canvasH);
         }
         public void Dispose()
@@ -157,11 +156,8 @@ namespace PixelFarm.DrawingGL
             double prevY = 0;
             double prevMoveToX = 0;
             double prevMoveToY = 0;
-
             List<List<float>> allXYlist = new List<List<float>>(); //all include sub path
             List<float> xylist = null;
-
-
             for (;;)
             {
                 double x, y;
@@ -179,7 +175,6 @@ namespace PixelFarm.DrawingGL
                         xylist.Add((float)x);
                         xylist.Add((float)y);
                         allXYlist.Add(xylist);
-
                         break;
                     case PixelFarm.Agg.VertexCmd.LineTo:
                         //brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
@@ -197,7 +192,6 @@ namespace PixelFarm.DrawingGL
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
                         xylist = null;
-
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
                         goto EXIT_LOOP;
@@ -209,16 +203,15 @@ namespace PixelFarm.DrawingGL
                         throw new NotSupportedException();
                 }
             }
-            EXIT_LOOP:
+        EXIT_LOOP:
             return allXYlist;
         }
         public void FillVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
         {
-
             List<List<float>> allXYList = CreateGraphicsPath(snap);
             switch (SmoothMode)
             {
-                case CanvasSmoothMode.Smooth:
+                case CanvasSmoothMode.No:
                     {
                         int subPathCount = allXYList.Count;
                         for (int i = 0; i < subPathCount; ++i)
@@ -229,7 +222,7 @@ namespace PixelFarm.DrawingGL
                         }
                     }
                     break;
-                case CanvasSmoothMode.No:
+                case CanvasSmoothMode.Smooth:
                     {
                         int subPathCount = allXYList.Count;
                         for (int i = 0; i < subPathCount; ++i)
@@ -240,6 +233,36 @@ namespace PixelFarm.DrawingGL
                             //with anti-alias border
                             strokeColor = color;
                             StrokeWidth = 0.5f;
+                            DrawPolygon(subpathXYList, subpathXYList.Length);
+                        }
+                    }
+                    break;
+            }
+        }
+        public void DrawVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
+        {
+            List<List<float>> allXYList = CreateGraphicsPath(snap);
+            switch (SmoothMode)
+            {
+                case CanvasSmoothMode.No:
+                    {
+                        int subPathCount = allXYList.Count;
+                        for (int i = 0; i < subPathCount; ++i)
+                        {
+                            //fill polygon with color
+                            float[] subpathXYList = allXYList[i].ToArray();
+                            DrawPolygon(subpathXYList, subpathXYList.Length);
+                        }
+                    }
+                    break;
+                case CanvasSmoothMode.Smooth:
+                    {
+                        int subPathCount = allXYList.Count;
+                        for (int i = 0; i < subPathCount; ++i)
+                        {
+                            strokeColor = color;
+                            StrokeWidth = 1f;
+                            float[] subpathXYList = allXYList[i].ToArray();
                             DrawPolygon(subpathXYList, subpathXYList.Length);
                         }
                     }
@@ -561,10 +584,7 @@ namespace PixelFarm.DrawingGL
             }
 
             vxs = aggStroke.MakeVxs(vxs);
-            throw new NotSupportedException();
-            //sclineRas.Reset();
-            //sclineRas.AddPath(vxs);
-            //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
+            FillVxsSnap(this.strokeColor, new VertexStoreSnap(vxs));
         }
 
         struct CenterFormArc
@@ -779,80 +799,22 @@ namespace PixelFarm.DrawingGL
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
                 new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
             vxs = this.aggStroke.MakeVxs(vxs);
-            throw new NotSupportedException();
-            //sclineRas.Reset();
-            //sclineRas.AddPath(vxs);
-            //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
+            DrawVxsSnap(this.strokeColor, new VertexStoreSnap(vxs));
         }
 
         public void FillRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h)
         {
-
             float[] coords = CreateRectTessCoordsTriStrip(x, y, w, h);
             basicFillShader.FillTriangleStripWithVertexBuffer(coords, 4, color);
         }
-        //public void FillRect(PixelFarm.Drawing.LinearGradientBrush linearGradientBrush, float x, float y, float w, float h)
-        //{
-        //    if (linearGradientBrush != null)
-        //    {
-        //        //use clip rect for fill rect gradient
-        //        EnableClipRect();
-        //        SetClipRect((int)x, (int)y, (int)w, (int)h);
-        //        //early exit
-
-        //        ////points 
-        //        var colors = linearGradientBrush.GetColors();
-        //        var points = linearGradientBrush.GetStopPoints();
-        //        uint c1 = colors[0].ToABGR();
-        //        uint c2 = colors[1].ToABGR();
-        //        //create polygon for graident bg 
-        //        var vrx = GLGradientColorProvider.CalculateLinearGradientVxs(
-        //             points[0].X, points[0].Y,
-        //             points[1].X, points[1].Y,
-        //             colors[0],
-        //             colors[1]);
-        //        int pcount = vrx.Count;
-        //        throw new NotSupportedException();
-        //        //GL.EnableClientState(ArrayCap.ColorArray);
-        //        //GL.EnableClientState(ArrayCap.VertexArray);
-
-        //        //VboC4V3f vbo = GenerateVboC4V3f();
-        //        //vbo.BindBuffer();
-        //        //DrawTrianglesWithVertexBuffer(vrx, pcount);
-        //        //vbo.UnbindBuffer();
-        //        //DrawLineStripWithVertexBuffer()
-        //        //GL.DisableClientState(ArrayCap.ColorArray);
-        //        //GL.DisableClientState(ArrayCap.VertexArray);
-
-        //        DisableClipRect();
-        //    }
-        //}
-
 
         public void FillRoundRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h, float rx, float ry)
         {
-            throw new NotSupportedException();
             roundRect.SetRect(x, y, x + w, y + h);
             roundRect.SetRadius(rx, ry);
             //create round rect vxs
             var vxs = roundRect.MakeVxs();
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.FillWithColor(sclineRas, sclinePack8, color);
-                    }
-                    break;
-                default:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, color);
-                    }
-                    break;
-            }
+            DrawVxsSnap(color, new VertexStoreSnap(vxs));
         }
         public void FillEllipse(PixelFarm.Drawing.Color color, float x, float y, float rx, float ry)
         {
@@ -1124,9 +1086,9 @@ namespace PixelFarm.DrawingGL
 
         public void SetCanvasOrigin(int x, int y)
         {
-            int originalW = 800;
+            //int originalW = 800;
             //set new viewport
-            GL.Viewport(x, y, originalW, originalW);
+            GL.Viewport(x, y, canvasW, canvasH);
             //GL.MatrixMode(MatrixMode.Projection);
             //GL.LoadIdentity();
             //GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);

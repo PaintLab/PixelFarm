@@ -16,9 +16,7 @@
 
 using System;
 using OpenTK.Graphics.ES20;
-using Mini; 
-
-
+using Mini;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "052")]
