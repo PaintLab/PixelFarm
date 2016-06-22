@@ -8,6 +8,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One</AssemblyName>
+    <ProjectGuid>{1729442C-18E3-4C31-A86E-E50597E11915}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -35,7 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\AggCanvasPainter.cs" />
-    <Compile Include="MiniAgg.Complements\0_CanvasPainter\CanvasPainter.cs" />
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\BorderDouble.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\ClipProxyImage.cs" />
@@ -51,9 +51,6 @@
     <Compile Include="MiniAgg.Complements\Filter\PatternFilterBilnearColorRGBA.cs" />
     <Compile Include="MiniAgg.Complements\Filter\RecursiveBlur.cs" />
     <Compile Include="MiniAgg.Complements\Filter\StackBlur.cs" />
-    <Compile Include="MiniAgg.Complements\Font\Font.cs" />
-    <Compile Include="MiniAgg.Complements\Font\FontFace.cs" />
-    <Compile Include="MiniAgg.Complements\Font\FontGlyph.cs" />
     <Compile Include="MiniAgg.Complements\Font\MyTypeFacePrinter.cs" />
     <Compile Include="MiniAgg.Complements\Font\TextPrinter.cs" />
     <Compile Include="MiniAgg.Complements\Image\AlphaMask.cs" />
@@ -73,31 +70,25 @@
     <Compile Include="MiniAgg.Complements\x_notused\x_GlyphWithUnderline.cs" />
     <Compile Include="MiniAgg.Complements\x_notused\x_ImageTgaIO.cs" />
     <Compile Include="MiniAgg.Complements\x_notused\x_UnitTests.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\0_ScanlineSpan.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\1_Scanline.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\2_ScanlinePacked8.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\3_ScanlineUnpacked8.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\4.1_ScanlineRasterizer.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\4.2_CellAARasterizer.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\4.3_VectorClipper.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\5_ScanlineRasToDestBitmapRenderer.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\7_BasicShader.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\04_GLScanline\8_CoordLists.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\CanvasGL2d.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\CanvasGL2dInternal.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\CanvasGL2d_TextAndFont.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\CanvasSmoothMode.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\GLGradientColorProvider.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\GLTextPrinter.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\ImageFillStyle.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\SvgArc.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\TessListener.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLCanvas\VertexPositionColor.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\GLHelper\GLHelper.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\Texture\GLBitmap.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\Texture\GLBitmapReference.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\Texture\LazyAggBitmapBufferProvider.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw2\Texture\TextureAtlas.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\8_CoordLists.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\CanvasGL2d.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\CanvasGL2dInternal.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\CanvasGL2d_TextAndFont.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\CanvasSmoothMode.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\GLGradientColorProvider.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\GLTextPrinter.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\ImageFillStyle.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\SvgArc.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\TessListener.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\VertexPositionColor.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLHelper\GLHelper.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\7_BasicShader.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\BasicFillShader.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\SmoothLineShader.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\Texture\GLBitmap.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\Texture\GLBitmapReference.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\Texture\LazyAggBitmapBufferProvider.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\Texture\TextureAtlas.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.ES\AutoGeneratedAttribute.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.ES\BindingsBase.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.ES\BlittableValueType.cs" />
@@ -262,11 +253,15 @@
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\Toolkit.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControlFactory.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\IGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\WinGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\X11GLControl.cs" />
@@ -276,9 +271,7 @@
     <Compile Include="MiniAgg\00_Context\ImageGraphics2D.cs" />
     <Compile Include="MiniAgg\00_Context\ImageGraphics2D_RenderImages.cs" />
     <Compile Include="MiniAgg\01_Base\AggMemMx.cs" />
-    <Compile Include="MiniAgg\01_Base\ColorRGBA.cs" />
     <Compile Include="MiniAgg\01_Base\NativeBufferMan.cs" />
-    <Compile Include="MiniAgg\02_PixelBuffer\ActualImage.cs" />
     <Compile Include="MiniAgg\02_PixelBuffer\ChildImage.cs" />
     <Compile Include="MiniAgg\02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="MiniAgg\02_PixelBuffer\GammaLookUpTable.cs" />
@@ -287,7 +280,6 @@
     <Compile Include="MiniAgg\02_PixelBuffer\ImageReaderWriterBase.cs" />
     <Compile Include="MiniAgg\02_PixelBuffer\PixelBlenderGray.cs" />
     <Compile Include="MiniAgg\02_PixelBuffer\PixelBlenderRGBA.cs" />
-    <Compile Include="MiniAgg\02_PixelBuffer\PixelFormat.cs" />
     <Compile Include="MiniAgg\03_SpanGenerators\0_ISpanGenerator.cs" />
     <Compile Include="MiniAgg\03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="MiniAgg\03_SpanGenerators\2_ImgSpanGenRGB.cs" />
@@ -367,6 +359,7 @@
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\MyFontInfo.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\MyGraphicPath.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\Region.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\BufferBitmapStore.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\GdiPlusCanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\VxsHelper.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\1_MyGdiPlusCanvas_Specific.cs" />
@@ -402,11 +395,18 @@
     <Compile Include="PixelFarm.Drawing\1_Drawing\Region.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\Fonts.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontStyle.cs" />
-    <Compile Include="PixelFarm.Drawing\5_BasicRenderBox\4_Animation\ColorComponentStepup.cs" />
-    <Compile Include="PixelFarm.Drawing\5_BasicRenderBox\4_Animation\GfxProcessorModule.cs" />
-    <Compile Include="PixelFarm.Drawing\5_BasicRenderBox\4_Animation\ParallelTimeline.cs" />
-    <Compile Include="PixelFarm.Drawing\5_BasicRenderBox\4_Animation\Timelines.cs" />
-    <Compile Include="PixelFarm.Drawing\5_BasicRenderBox\IRenderElement.cs" />
+    <Compile Include="PixelFarm.Drawing\4_BasicRenderBox\4_Animation\ColorComponentStepup.cs" />
+    <Compile Include="PixelFarm.Drawing\4_BasicRenderBox\4_Animation\GfxProcessorModule.cs" />
+    <Compile Include="PixelFarm.Drawing\4_BasicRenderBox\4_Animation\ParallelTimeline.cs" />
+    <Compile Include="PixelFarm.Drawing\4_BasicRenderBox\4_Animation\Timelines.cs" />
+    <Compile Include="PixelFarm.Drawing\4_BasicRenderBox\IRenderElement.cs" />
+    <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\ActualImage.cs" />
+    <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\CanvasPainter.cs" />
+    <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\ColorRGBA.cs" />
+    <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\Font.cs" />
+    <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\FontFace.cs" />
+    <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\FontGlyph.cs" />
+    <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\PixelFormat.cs" />
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\AggBasics.cs" />
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\AggMath.cs" />
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\AxisAlignedBoundingBox.cs" />

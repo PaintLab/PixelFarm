@@ -22,8 +22,6 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
-using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {
     public enum LineCap
