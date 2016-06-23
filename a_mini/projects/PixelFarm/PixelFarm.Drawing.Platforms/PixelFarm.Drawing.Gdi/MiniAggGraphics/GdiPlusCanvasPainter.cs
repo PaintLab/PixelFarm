@@ -219,10 +219,7 @@ namespace PixelFarm.Drawing.WinGdi
                  controlX2, controlY2,
                  endX, endY);
         }
-        public override void DrawEllipse()
-        {
-            throw new NotImplementedException();
-        }
+
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
@@ -334,9 +331,13 @@ namespace PixelFarm.Drawing.WinGdi
             _currentFillBrush.Color = prevColor;
         }
 
-        public override void FillEllipse(double left, double bottom, double right, double top, int nsteps)
+        public override void FillEllipse(double left, double bottom, double right, double top)
         {
             _gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+        }
+        public override void DrawEllipse(double left, double bottom, double right, double top)
+        {
+            _gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
         }
 
         public override void FillRectangle(double left, double bottom, double right, double top)

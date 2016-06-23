@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.HardwareGraphics
         ColorRGBA _strokeColor;
         RectInt _rectInt;
         Agg.VertexSource.CurveFlattener curveFlattener;
-
+        PixelFarm.Agg.VertexSource.RoundedRect roundRect;
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;
@@ -43,15 +43,13 @@ namespace PixelFarm.Drawing.HardwareGraphics
         {
             get
             {
-                throw new NotImplementedException();
+                return null;
             }
-
             set
             {
-                throw new NotImplementedException();
+
             }
         }
-
         public override ColorRGBA FillColor
         {
             get
@@ -144,10 +142,7 @@ namespace PixelFarm.Drawing.HardwareGraphics
         {
             _canvas.DrawBezierCurve(startX, startY, endX, endY, controlX1, controlY1, controlY1, controlY2);
         }
-        public override void DrawEllipse()
-        {
 
-        }
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
             //create gl bmp
@@ -163,9 +158,19 @@ namespace PixelFarm.Drawing.HardwareGraphics
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         {
-
+            if (roundRect == null)
+            {
+                roundRect = new Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+                roundRect.NormalizeRadius();
+            }
+            else
+            {
+                roundRect.SetRect(left, bottom, right, top);
+                roundRect.SetRadius(radius);
+                roundRect.NormalizeRadius();
+            }
+            this.Draw(roundRect.MakeVxs());
         }
-
         public override void DrawString(string text, double x, double y)
         {
 
@@ -187,34 +192,46 @@ namespace PixelFarm.Drawing.HardwareGraphics
 
         public override void FillCircle(double x, double y, double radius)
         {
-
+            _canvas.FillCircle(ToPixelFarmColor(_fillColor), (float)x, (float)y, (float)radius);
         }
 
         public override void FillCircle(double x, double y, double radius, ColorRGBA color)
         {
-
+            _canvas.FillCircle(ToPixelFarmColor(color), (float)x, (float)y, (float)radius);
         }
 
-        public override void FillEllipse(double left, double bottom, double right, double top, int nsteps)
+        public override void DrawEllipse(double left, double bottom, double right, double top)
         {
+            double midX = (left + right) / 2;
+            double midY = (bottom + top) / 2;
+            double radiusX = Math.Abs(right - midX);
+            double radiusY = Math.Abs(top - midY);
+
+            _canvas.DrawEllipse((float)midX, (float)midY, radiusX, radiusY);
 
         }
+        public override void FillEllipse(double left, double bottom, double right, double top)
+        {
+            double midX = (left + right) / 2;
+            double midY = (bottom + top) / 2;
+            double radiusX = Math.Abs(right - midX);
+            double radiusY = Math.Abs(top - midY);
 
+            _canvas.FillEllipse(ToPixelFarmColor(_fillColor), (float)midX, (float)midY, (float)radiusX, (float)radiusY);
+
+        }
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-
+            _canvas.FillRect(ToPixelFarmColor(_fillColor), (float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
         }
-
         public override void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor)
         {
-
+            _canvas.FillRect(ToPixelFarmColor(fillColor), (float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
         }
-
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
-
+            _canvas.FillRect(ToPixelFarmColor(_fillColor), (float)left, (float)bottom, (float)width, (float)height);
         }
-
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
 
@@ -243,14 +260,17 @@ namespace PixelFarm.Drawing.HardwareGraphics
         {
 
         }
-
         public override void Rectangle(double left, double bottom, double right, double top)
         {
             //draw rectangle
-
+            _canvas.DrawRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
         }
         public override void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
         {   //draw rectangle
+            var prev = _canvas.StrokeColor;
+            _canvas.StrokeColor = ToPixelFarmColor(color);
+            _canvas.DrawRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
+            _canvas.StrokeColor = prev;
 
         }
         public override void SetClipBox(int x1, int y1, int x2, int y2)

@@ -37,8 +37,8 @@ namespace PixelFarm.Agg
         /// <param name="color"></param>
         public abstract void FillCircle(double x, double y, double radius, ColorRGBA color);
         public abstract void FillCircle(double x, double y, double radius);
-        public abstract void FillEllipse(double left, double bottom, double right, double top, int nsteps);
-        public abstract void DrawEllipse();
+        public abstract void FillEllipse(double left, double bottom, double right, double top);
+        public abstract void DrawEllipse(double left, double bottom, double right, double top);
         /// <summary>
         /// draw line
         /// </summary>

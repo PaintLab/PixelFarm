@@ -46,6 +46,8 @@ namespace PixelFarm.Agg
         CurveFlattener curveFlattener;
         TextPrinter textPrinter;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+        int ellipseGenNSteps = 10;
+
         public AggCanvasPainter(ImageGraphics2D graphic2d)
         {
             this.gx = graphic2d;
@@ -88,19 +90,23 @@ namespace PixelFarm.Agg
             gx.Render(ellipse.MakeVxs(), this.fillColor);
         }
 
-        public override void FillEllipse(double left, double bottom, double right, double top, int nsteps)
+        public override void FillEllipse(double left, double bottom, double right, double top)
         {
             ellipse.Reset((left + right) * 0.5,
                           (bottom + top) * 0.5,
                           (right - left) * 0.5,
                           (top - bottom) * 0.5,
-                           nsteps);
+                           ellipseGenNSteps);
             gx.Render(ellipse.MakeVxs(), this.fillColor);
-            //VertexStoreSnap trans_ell = txBilinear.TransformToVertexSnap(vxs);
         }
-        public override void DrawEllipse()
+        public override void DrawEllipse(double left, double bottom, double right, double top)
         {
-            throw new NotImplementedException();
+            ellipse.Reset((left + right) * 0.5,
+                         (bottom + top) * 0.5,
+                         (right - left) * 0.5,
+                         (top - bottom) * 0.5,
+                          ellipseGenNSteps);
+            gx.Render(stroke.MakeVxs(ellipse.MakeVxs()), this.fillColor);
         }
 
         /// <summary>
