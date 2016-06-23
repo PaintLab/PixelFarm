@@ -44,10 +44,17 @@ namespace PixelFarm.DrawingGL
             rectFillShader = new RectFillShader();
             textureShader = new SimpleTextureShader();
             invertAlphaFragmentShader = new InvertAlphaFragmentShader(); //used with stencil  ***
-            tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
+                                                                         // tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
+            tess.WindingRule = Tesselator.WindingRuleType.Odd;
+            tessListener.Connect(tess, true);
+
             textPriner = new GLTextPrinter(this);
             SetupFonts();
             ////--------------------------------------------------------------------------------
+            //GL.Enable(EnableCap.CullFace);
+            //GL.FrontFace(FrontFaceDirection.Cw);
+            //GL.CullFace(CullFaceMode.Back);
+
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);
@@ -144,6 +151,7 @@ namespace PixelFarm.DrawingGL
         //-------------------------------------------------------------------------------
         public void DrawImage(GLBitmapReference bmp, float x, float y)
         {
+
             this.DrawImage(bmp.OwnerBitmap,
                  bmp.GetRectF(),
                  x, y, bmp.Width, bmp.Height);
@@ -157,7 +165,9 @@ namespace PixelFarm.DrawingGL
             double prevMoveToX = 0;
             double prevMoveToY = 0;
             List<List<float>> allXYlist = new List<List<float>>(); //all include sub path
-            List<float> xylist = null;
+            List<float> xylist = new List<float>();
+            allXYlist.Add(xylist);
+
             for (;;)
             {
                 double x, y;
@@ -167,14 +177,14 @@ namespace PixelFarm.DrawingGL
                     case PixelFarm.Agg.VertexCmd.MoveTo:
                         prevMoveToX = prevX = x;
                         prevMoveToY = prevY = y;
-                        if (xylist != null)
-                        {
-                            allXYlist.Add(xylist);
-                        }
-                        xylist = new List<float>();
+                        //if (xylist != null)
+                        //{
+                        //    allXYlist.Add(xylist);
+                        //}
+                        //xylist = new List<float>();
                         xylist.Add((float)x);
                         xylist.Add((float)y);
-                        allXYlist.Add(xylist);
+                        //allXYlist.Add(xylist);
                         break;
                     case PixelFarm.Agg.VertexCmd.LineTo:
                         //brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
@@ -191,21 +201,22 @@ namespace PixelFarm.DrawingGL
                         xylist.Add((float)prevMoveToY);
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
-                        xylist = null;
+                        //xylist = null;
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
-                        goto EXIT_LOOP;
-                    case PixelFarm.Agg.VertexCmd.HasMore:
+
                         break;
+                    
                     case PixelFarm.Agg.VertexCmd.Stop:
                         goto EXIT_LOOP;
                     default:
                         throw new NotSupportedException();
                 }
             }
-        EXIT_LOOP:
+            EXIT_LOOP:
             return allXYlist;
         }
+
         public void FillVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
         {
             List<List<float>> allXYList = CreateGraphicsPath(snap);
