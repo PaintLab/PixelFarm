@@ -515,7 +515,7 @@ namespace PixelFarm.Agg.UI
         public override void OnDraw(CanvasPainter p)
         {
             p.FillColor = LineColor;
-            p.Fill(new VertexStoreSnap(this.MakeVxs()));
+            p.Draw(new VertexStoreSnap(this.MakeVxs()));
         }
     }
 }
