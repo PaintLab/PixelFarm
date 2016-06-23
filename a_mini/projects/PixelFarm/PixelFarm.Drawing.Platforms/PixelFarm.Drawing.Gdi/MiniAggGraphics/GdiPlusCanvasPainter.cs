@@ -51,7 +51,10 @@ namespace PixelFarm.Drawing.WinGdi
             get { return _gfx.CompositingMode; }
             set { _gfx.CompositingMode = value; }
         }
-
+        public override void Draw(VertexStoreSnap vxs)
+        {
+            this.Fill(vxs);
+        }
         public override RectInt ClipBox
         {
             get

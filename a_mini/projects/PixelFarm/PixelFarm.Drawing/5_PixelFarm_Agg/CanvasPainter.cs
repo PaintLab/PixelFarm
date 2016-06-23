@@ -59,6 +59,7 @@ namespace PixelFarm.Agg
         public abstract void Line(double x1, double y1, double x2, double y2);
         public abstract double StrokeWidth { get; set; }
         public abstract void Draw(VertexStore vxs);
+        public abstract void Draw(VertexStoreSnap vxs);
         /// <summary>
         /// draw rectangle
         /// </summary>

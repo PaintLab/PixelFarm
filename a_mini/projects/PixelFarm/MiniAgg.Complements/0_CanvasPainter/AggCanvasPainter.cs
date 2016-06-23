@@ -99,6 +99,10 @@ namespace PixelFarm.Agg
                            ellipseGenNSteps);
             gx.Render(ellipse.MakeVxs(), this.fillColor);
         }
+        public override void Draw(VertexStoreSnap vxs)
+        {
+            this.Fill(vxs);
+        }
         public override void DrawEllipse(double left, double bottom, double right, double top)
         {
             ellipse.Reset((left + right) * 0.5,

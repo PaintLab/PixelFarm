@@ -189,7 +189,13 @@ namespace PixelFarm.Drawing.HardwareGraphics
               snap
               );
         }
-
+        public override void Draw(VertexStoreSnap snap)
+        {
+            _canvas.DrawVxsSnap(
+             ToPixelFarmColor(this._fillColor),
+             snap
+             );
+        }
         public override void FillCircle(double x, double y, double radius)
         {
             _canvas.FillCircle(ToPixelFarmColor(_fillColor), (float)x, (float)y, (float)radius);
@@ -234,7 +240,18 @@ namespace PixelFarm.Drawing.HardwareGraphics
         }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
-
+            if (roundRect == null)
+            {
+                roundRect = new Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+                roundRect.NormalizeRadius();
+            }
+            else
+            {
+                roundRect.SetRect(left, bottom, right, top);
+                roundRect.SetRadius(radius);
+                roundRect.NormalizeRadius();
+            }
+            this.Fill(roundRect.MakeVxs());
         }
 
         public override VertexStore FlattenCurves(VertexStore srcVxs)
@@ -258,7 +275,10 @@ namespace PixelFarm.Drawing.HardwareGraphics
         }
         public override void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath)
         {
-
+            for (int i = 0; i < numPath; ++i)
+            {
+                _canvas.FillVxsSnap(ToPixelFarmColor(colors[i]), new VertexStoreSnap(vxs, pathIndexs[i]));
+            }
         }
         public override void Rectangle(double left, double bottom, double right, double top)
         {
