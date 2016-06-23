@@ -24,6 +24,7 @@ namespace PixelFarm.Agg.Sample_Blur2
     {
         PolygonEditWidget m_shadow_ctrl;
         VertexStore m_pathVxs;
+        VertexStore m_pathVxs2;
         VertexStoreSnap m_path_2;
         RectD m_shape_bounds;
         Stopwatch stopwatch = new Stopwatch();
@@ -36,11 +37,28 @@ namespace PixelFarm.Agg.Sample_Blur2
             this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
             Font svgFont = SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
+
+            //PathWriter p01 = new PathWriter();           
+            //p01.MoveTo(0, 0);
+            //p01.LineTo(50, 100);
+            //p01.LineTo(100, 0); 
+            ////-
+            //p01.MoveTo(220, 10);
+            //p01.LineTo(50, 75);
+            //p01.LineTo(25, 15);
+            //p01.CloseFigure();
+            //p01.Stop();
+            //m_pathVxs = p01.Vxs;
+
             m_pathVxs = svgFont.GetGlyph('a').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
+
+
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
             var curveFlattener = new CurveFlattener();
-            m_path_2 = new VertexStoreSnap(curveFlattener.MakeVxs(m_pathVxs));
+            m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
+            m_path_2 = new VertexStoreSnap(m_pathVxs2);
+
             BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
             m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
@@ -127,15 +145,16 @@ namespace PixelFarm.Agg.Sample_Blur2
             Perspective shadow_persp = new Perspective(
                             m_shape_bounds,
                             m_shadow_ctrl.GetInnerCoords());
-            VertexStore s2;
-            if (FlattenCurveChecked)
-            {
-                s2 = shadow_persp.TransformToVxs(m_path_2);
-            }
-            else
-            {
-                s2 = shadow_persp.TransformToVxs(m_pathVxs);
-            }
+            VertexStore s2 = this.m_pathVxs2;
+            //if (FlattenCurveChecked)
+            //{
+            //    //s2 = shadow_persp.TransformToVxs(m_path_2);
+            //    s2 = shadow_persp.TransformToVxs(m_pathVxs2);
+            //}
+            //else
+            //{
+            //    s2 = shadow_persp.TransformToVxs(m_pathVxs);
+            //}
             p.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
             p.Fill(s2);
             //---------------------------------------------------------------------------------------------------------
@@ -208,22 +227,22 @@ namespace PixelFarm.Agg.Sample_Blur2
             p.FillColor = ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f);
             // Render the shape itself
             ////------------------
-            if (FlattenCurveChecked)
-            {
-                //m_ras.AddPath(m_path_2);
-                p.Fill(m_path_2);
-            }
-            else
-            {
-                //m_ras.AddPath(m_pathVxs);
-                p.Fill(m_pathVxs);
-            }
+            //if (FlattenCurveChecked)
+            //{
+            //    //m_ras.AddPath(m_path_2);
+            //    p.Fill(m_path_2);
+            //}
+            //else
+            //{
+            //    //m_ras.AddPath(m_pathVxs);
+            //    p.Fill(m_pathVxs);
+            //}
 
             p.FillColor = ColorRGBA.Black;
             //p.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
             //-------------------------------------------------------------
             //control
-            m_shadow_ctrl.OnDraw(p);
+            //m_shadow_ctrl.OnDraw(p);
         }
     }
 }
