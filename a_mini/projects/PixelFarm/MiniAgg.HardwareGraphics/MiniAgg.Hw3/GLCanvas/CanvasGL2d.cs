@@ -47,7 +47,6 @@ namespace PixelFarm.DrawingGL
                                                                          // tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             tess.WindingRule = Tesselator.WindingRuleType.Odd;
             tessListener.Connect(tess, true);
-
             textPriner = new GLTextPrinter(this);
             SetupFonts();
             ////--------------------------------------------------------------------------------
@@ -151,7 +150,6 @@ namespace PixelFarm.DrawingGL
         //-------------------------------------------------------------------------------
         public void DrawImage(GLBitmapReference bmp, float x, float y)
         {
-
             this.DrawImage(bmp.OwnerBitmap,
                  bmp.GetRectF(),
                  x, y, bmp.Width, bmp.Height);
@@ -167,7 +165,7 @@ namespace PixelFarm.DrawingGL
             List<List<float>> allXYlist = new List<List<float>>(); //all include sub path
             List<float> xylist = new List<float>();
             allXYlist.Add(xylist);
-
+            bool isAddToList = true;
             for (;;)
             {
                 double x, y;
@@ -175,45 +173,42 @@ namespace PixelFarm.DrawingGL
                 switch (cmd)
                 {
                     case PixelFarm.Agg.VertexCmd.MoveTo:
+                        if (!isAddToList)
+                        {
+                            allXYlist.Add(xylist);
+                            isAddToList = true;
+                        }
                         prevMoveToX = prevX = x;
                         prevMoveToY = prevY = y;
-                        //if (xylist != null)
-                        //{
-                        //    allXYlist.Add(xylist);
-                        //}
-                        //xylist = new List<float>();
                         xylist.Add((float)x);
                         xylist.Add((float)y);
-                        //allXYlist.Add(xylist);
                         break;
                     case PixelFarm.Agg.VertexCmd.LineTo:
-                        //brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
                         xylist.Add((float)x);
                         xylist.Add((float)y);
                         prevX = x;
                         prevY = y;
                         break;
                     case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
-                        //from current point
-                        //
-                        //brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
+                        //from current point 
                         xylist.Add((float)prevMoveToX);
                         xylist.Add((float)prevMoveToY);
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
-                        //xylist = null;
+                        //start the new one
+                        xylist = new List<float>();
+                        isAddToList = false;
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
 
                         break;
-                    
                     case PixelFarm.Agg.VertexCmd.Stop:
                         goto EXIT_LOOP;
                     default:
                         throw new NotSupportedException();
                 }
             }
-            EXIT_LOOP:
+        EXIT_LOOP:
             return allXYlist;
         }
 
