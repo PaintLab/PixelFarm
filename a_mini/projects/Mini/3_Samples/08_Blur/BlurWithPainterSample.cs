@@ -38,10 +38,10 @@ namespace PixelFarm.Agg.Sample_Blur2
             this.BlurRadius = 15;
             Font svgFont = SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
 
-            //PathWriter p01 = new PathWriter();           
+            //PathWriter p01 = new PathWriter();
             //p01.MoveTo(0, 0);
             //p01.LineTo(50, 100);
-            //p01.LineTo(100, 0); 
+            //p01.LineTo(100, 0);
             ////-
             //p01.MoveTo(220, 10);
             //p01.LineTo(50, 75);

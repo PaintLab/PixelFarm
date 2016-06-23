@@ -1,6 +1,6 @@
 PixelFarm
 =========
-Software and Hardware 2d Rendering Library
+Software and Hardware 2D Rendering Library
 
 1. Software Rendering Technology: Agg-Sharp
 

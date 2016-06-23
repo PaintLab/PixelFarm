@@ -5,7 +5,6 @@ using PixelFarm.Agg;
 using PixelFarm.Agg.Fonts;
 using PixelFarm.Agg.Transform;
 using System;
-
 using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.HardwareGraphics
 {
@@ -47,7 +46,6 @@ namespace PixelFarm.Drawing.HardwareGraphics
             }
             set
             {
-
             }
         }
         public override ColorRGBA FillColor
@@ -131,7 +129,6 @@ namespace PixelFarm.Drawing.HardwareGraphics
         }
         public override void DoFilterBlurStack(RectInt area, int r)
         {
-
         }
         public override void Draw(VertexStore vxs)
         {
@@ -173,7 +170,6 @@ namespace PixelFarm.Drawing.HardwareGraphics
         }
         public override void DrawString(string text, double x, double y)
         {
-
         }
         public override void Fill(VertexStore vxs)
         {
@@ -212,9 +208,7 @@ namespace PixelFarm.Drawing.HardwareGraphics
             double midY = (bottom + top) / 2;
             double radiusX = Math.Abs(right - midX);
             double radiusY = Math.Abs(top - midY);
-
             _canvas.DrawEllipse((float)midX, (float)midY, radiusX, radiusY);
-
         }
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
@@ -222,9 +216,7 @@ namespace PixelFarm.Drawing.HardwareGraphics
             double midY = (bottom + top) / 2;
             double radiusX = Math.Abs(right - midX);
             double radiusY = Math.Abs(top - midY);
-
             _canvas.FillEllipse(ToPixelFarmColor(_fillColor), (float)midX, (float)midY, (float)radiusX, (float)radiusY);
-
         }
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
@@ -291,11 +283,9 @@ namespace PixelFarm.Drawing.HardwareGraphics
             _canvas.StrokeColor = ToPixelFarmColor(color);
             _canvas.DrawRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
             _canvas.StrokeColor = prev;
-
         }
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
-
         }
     }
 }

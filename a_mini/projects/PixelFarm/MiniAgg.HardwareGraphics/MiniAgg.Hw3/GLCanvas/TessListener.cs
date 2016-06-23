@@ -132,7 +132,6 @@ namespace PixelFarm.DrawingGL
             tesselator.callEnd = new Tesselate.Tesselator.CallEndDelegate(EndCallBack);
             tesselator.callVertex = new Tesselate.Tesselator.CallVertexDelegate(VertexCallBack);
             tesselator.callCombine = new Tesselate.Tesselator.CallCombineDelegate(CombineCallBack);
-
             if (setEdgeFlag)
             {
                 tesselator.callEdgeFlag += new Tesselate.Tesselator.CallEdgeFlagDelegate(EdgeFlagCallBack);
