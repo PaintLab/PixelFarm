@@ -94,21 +94,21 @@ namespace PixelFarm.Drawing.WinGdi
             EXIT_LOOP:
             return brush_path;
         }
-        public static void FillVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
+        public static void FillVxsSnap(Graphics g, VertexStoreSnap vxsSnap, Color c)
         {
             System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
             _br.Color = ToDrawingColor(c);
             g.FillPath(_br, p);
         }
-        public static void DrawVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
+        public static void DrawVxsSnap(Graphics g, VertexStoreSnap vxsSnap, Color c)
         {
             System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
             _pen.Color = ToDrawingColor(c);
             g.DrawPath(_pen, p);
         }
-        public static System.Drawing.Color ToDrawingColor(ColorRGBA c)
+        public static System.Drawing.Color ToDrawingColor(Color c)
         {
-            return System.Drawing.Color.FromArgb(c.alpha, c.red, c.green, c.blue);
+            return System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
         }
     }
 }

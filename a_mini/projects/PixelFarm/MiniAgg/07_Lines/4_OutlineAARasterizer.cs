@@ -577,7 +577,7 @@ namespace PixelFarm.Agg.Lines
 
             Render(false);
         }
-        public void RenderVertexSnap(VertexStoreSnap s, ColorRGBA c)
+        public void RenderVertexSnap(VertexStoreSnap s, Drawing.Color c)
         {
             m_ren.Color = c;
             AddPath(s);

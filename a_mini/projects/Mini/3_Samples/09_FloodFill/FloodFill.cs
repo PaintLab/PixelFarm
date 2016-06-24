@@ -2,6 +2,7 @@
 //MatterHackers 
 
 using System;
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
@@ -16,20 +17,20 @@ namespace PixelFarm.Agg.Sample_FloodFill
         Point2D imageOffset = new Point2D(20, 60);
         public FloodFillDemo()
         {
-            BackgroundColor = ColorRGBA.White;
+            BackgroundColor = Color.White;
             imageToFillOn = new ActualImage(400, 300, PixelFormat.Rgba32);
             var imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
-            imageToFillGraphics.Clear(ColorRGBA.White);
+            imageToFillGraphics.Clear(Color.White);
             imageToFillGraphics.DrawString("Click to fill", 20, 30);
-            imageToFillGraphics.Circle(new Vector2(200, 150), 35, ColorRGBA.Black);
-            imageToFillGraphics.Circle(new Vector2(200, 150), 30, ColorRGBA.Green);
-            imageToFillGraphics.Rectangle(20, 50, 210, 280, ColorRGBA.Black);
-            imageToFillGraphics.Rectangle(imageToFillOn.Bounds, ColorRGBA.Blue);
+            imageToFillGraphics.Circle(new Vector2(200, 150), 35, Color.Black);
+            imageToFillGraphics.Circle(new Vector2(200, 150), 30, Color.Green);
+            imageToFillGraphics.Rectangle(20, 50, 210, 280, Color.Black);
+            imageToFillGraphics.Rectangle(imageToFillOn.Bounds, Color.Blue);
             Random rand = new Random();
             for (int i = 0; i < 20; i++)
             {
                 Ellipse elipse = new Ellipse(rand.Next(imageToFillOn.Width), rand.Next(imageToFillOn.Height), rand.Next(10, 60), rand.Next(10, 60));
-                imageToFillGraphics.Render(new Stroke(1).MakeVxs(elipse.MakeVxs()), ColorRGBA.Black);
+                imageToFillGraphics.Render(new Stroke(1).MakeVxs(elipse.MakeVxs()), Color.Black);
             }
 
             this.PixelSize = 32;
@@ -47,7 +48,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
             get;
             set;
         }
-        public ColorRGBA BackgroundColor
+        public Color BackgroundColor
         {
             get;
             set;
@@ -61,7 +62,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
         {
             int x = mx - imageOffset.x;
             int y = my - imageOffset.y;
-            FloodFill filler = new FloodFill(ColorRGBA.Red);
+            FloodFill filler = new FloodFill(Color.Red);
             filler.Fill(imageToFillOn, x, y);
         }
     }

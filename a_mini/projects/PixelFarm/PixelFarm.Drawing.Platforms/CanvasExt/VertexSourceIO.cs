@@ -1,6 +1,7 @@
 ﻿// 2015,2014 ,MIT, WinterDev 
 
 using System.IO;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
 #if DEBUG
@@ -93,14 +94,14 @@ namespace PixelFarm.Agg.VertexSource
             writer.Flush();
             //------------------------------------
         }
-        public static void WriteColorsToStream(BinaryWriter writer, PixelFarm.Agg.ColorRGBA[] colors)
+        public static void WriteColorsToStream(BinaryWriter writer, Color[] colors)
         {
             int len = colors.Length;
             //1.
             writer.Write(len);
             for (int i = 0; i < len; ++i)
             {
-                PixelFarm.Agg.ColorRGBA color = colors[i];
+                Color color = colors[i];
                 writer.Write(color.red);
                 writer.Write(color.green);
                 writer.Write(color.blue);
@@ -155,17 +156,17 @@ namespace PixelFarm.Agg.VertexSource
             int end = reader.ReadInt32();
         }
 
-        public static void ReadColorDataFromStream(BinaryReader reader, out PixelFarm.Agg.ColorRGBA[] colors)
+        public static void ReadColorDataFromStream(BinaryReader reader, out Color[] colors)
         {
             int len = reader.ReadInt32();
-            colors = new ColorRGBA[len];
+            colors = new Color[len];
             for (int i = 0; i < len; ++i)
             {
                 byte r = reader.ReadByte();
                 byte g = reader.ReadByte();
                 byte b = reader.ReadByte();
                 byte a = reader.ReadByte();
-                colors[i] = new ColorRGBA(r, g, b, a);
+                colors[i] = new Color(r, g, b, a);
             }
             int end = reader.ReadInt32();
         }

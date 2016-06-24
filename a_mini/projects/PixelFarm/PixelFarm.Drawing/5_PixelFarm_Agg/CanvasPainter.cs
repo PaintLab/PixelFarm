@@ -18,13 +18,13 @@
 // 
 // Class to output the vertex source of a string as a run of glyphs.
 //----------------------------------------------------------------------------
-
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Fonts;
 namespace PixelFarm.Agg
 {
     public abstract class CanvasPainter
     {
-        public abstract void Clear(ColorRGBA color);
+        public abstract void Clear(Color color);
         public abstract RectInt ClipBox { get; set; }
 
         public abstract void SetClipBox(int x1, int y1, int x2, int y2);
@@ -35,7 +35,7 @@ namespace PixelFarm.Agg
         /// <param name="y"></param>
         /// <param name="radius"></param>
         /// <param name="color"></param>
-        public abstract void FillCircle(double x, double y, double radius, ColorRGBA color);
+        public abstract void FillCircle(double x, double y, double radius, Color color);
         public abstract void FillCircle(double x, double y, double radius);
         public abstract void FillEllipse(double left, double bottom, double right, double top);
         public abstract void DrawEllipse(double left, double bottom, double right, double top);
@@ -47,7 +47,7 @@ namespace PixelFarm.Agg
         /// <param name="x2"></param>
         /// <param name="y2"></param>
         /// <param name="color"></param>
-        public abstract void Line(double x1, double y1, double x2, double y2, ColorRGBA color);
+        public abstract void Line(double x1, double y1, double x2, double y2, Color color);
         /// <summary>
         /// draw line
         /// </summary>
@@ -69,15 +69,15 @@ namespace PixelFarm.Agg
         /// <param name="top"></param>
         /// <param name="color"></param>
         /// <param name="strokeWidth"></param>
-        public abstract void Rectangle(double left, double bottom, double right, double top, ColorRGBA color);
+        public abstract void Rectangle(double left, double bottom, double right, double top, Color color);
         public abstract void Rectangle(double left, double bottom, double right, double top);
-        public abstract void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor);
+        public abstract void FillRectangle(double left, double bottom, double right, double top, Color fillColor);
         public abstract void FillRectangle(double left, double bottom, double right, double top);
         public abstract void FillRectLBWH(double left, double bottom, double width, double height);
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
         public abstract void DrawRoundRect(double left, double bottom, double right, double top, double radius);
         //-------------------------------------------------------
-        public abstract Font CurrentFont { get; set; }
+        public abstract PixelFarm.Agg.Fonts.Font CurrentFont { get; set; }
 
         public abstract void DrawString(
            string text,
@@ -91,10 +91,10 @@ namespace PixelFarm.Agg
         public abstract void Fill(VertexStoreSnap snap);
         public abstract void Fill(VertexStore vxs);
         public abstract bool UseSubPixelRendering { get; set; }
-        public abstract ColorRGBA FillColor { get; set; }
-        public abstract ColorRGBA StrokeColor { get; set; }
-        public abstract void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath);
-     
+        public abstract Color FillColor { get; set; }
+        public abstract Color StrokeColor { get; set; }
+        public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
+
         public abstract void DrawImage(ActualImage actualImage, double x, double y);
         public abstract void DrawImage(ActualImage actualImage, params Transform.AffinePlan[] affinePlans);
         //----------------------

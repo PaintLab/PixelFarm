@@ -62,8 +62,8 @@ namespace Mini.WinForms
         {
             if (_latestBrushPathCache != null)
             {
-                ColorRGBA brushColor = _myBrushPath.FillColor;
-                using (SolidBrush br = new SolidBrush(Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
+                PixelFarm.Drawing.Color brushColor = _myBrushPath.FillColor;
+                using (SolidBrush br = new SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
                 {
                     g.FillPath(br, _latestBrushPathCache);
                 }
@@ -74,8 +74,8 @@ namespace Mini.WinForms
             {
                 //create new path  
                 _latestBrushPathCache = PixelFarm.Drawing.WinGdi.VxsHelper.CreateGraphicsPath(_myBrushPath.Vxs);
-                ColorRGBA brushColor = _myBrushPath.FillColor;
-                using (SolidBrush br = new SolidBrush(Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
+                PixelFarm.Drawing.Color brushColor = _myBrushPath.FillColor;
+                using (SolidBrush br = new SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
                 {
                     g.FillPath(br, _latestBrushPathCache);
                 }
@@ -102,7 +102,7 @@ namespace Mini.WinForms
             _latestMousePoint = new PixelFarm.Agg.Image.Point(x, y);
             _points.Clear();
             _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
-            _myBrushPath.FillColor = ColorRGBA.Red;
+            _myBrushPath.FillColor = PixelFarm.Drawing.Color.Red;
             _points.Add(new System.Drawing.Point(x, y));
             _myBrushPath.AddPointAtFirst(x, y);
         }
@@ -163,16 +163,16 @@ namespace Mini.WinForms
         {
             get
             {
-                ColorRGBA color = _myBrushPath.FillColor;
-                return Color.FromArgb(color.alpha, color.red, color.green, color.blue);
+                PixelFarm.Drawing.Color color = _myBrushPath.FillColor;
+                return System.Drawing.Color.FromArgb(color.alpha, color.red, color.green, color.blue);
             }
             set
             {
-                _myBrushPath.FillColor = new ColorRGBA(
-                    value.R,
-                    value.G,
-                    value.B,
-                    value.A
+                _myBrushPath.FillColor = PixelFarm.Drawing.Color.Make(
+                        (byte)value.R,
+                        (byte)value.G,
+                        (byte)value.B,
+                        (byte)value.A
                     );
             }
         }
@@ -233,7 +233,7 @@ namespace Mini.WinForms
                                 var brushPath = prevPixTool as MyDrawingBrushController;
                                 if (brushPath != null)
                                 {
-                                    Color fillColor = brushPath.PathFillColor;
+                                    System.Drawing.Color fillColor = brushPath.PathFillColor;
                                     prevPixTools.RemoveAt(n);
                                     for (int i = 0; i < count; ++i)
                                     {
@@ -255,7 +255,7 @@ namespace Mini.WinForms
     {
         List<PixelToolController> prevPixTools;
         PixelToolController _lastestSelectedController;
-        Color _latestSelectControllerFillColor;
+        System.Drawing.Color _latestSelectControllerFillColor;
         int _latest_mouseX, _latest_mouseY;
         public override bool IsDrawingTool { get { return false; } }
         public override void Draw(Graphics g)
@@ -309,7 +309,7 @@ namespace Mini.WinForms
                     {
                         var b = (MyDrawingBrushController)_lastestSelectedController;
                         _latestSelectControllerFillColor = b.PathFillColor;
-                        b.PathFillColor = Color.Blue;
+                        b.PathFillColor = System.Drawing.Color.Blue;
                     }
 
                     selectedShape = p;

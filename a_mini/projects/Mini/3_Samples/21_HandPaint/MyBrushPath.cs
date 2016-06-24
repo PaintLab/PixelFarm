@@ -17,7 +17,7 @@ namespace PixelFarm.Agg.Samples
         bool isValidSmooth = false;
         public MyBrushPath()
         {
-            this.StrokeColor = ColorRGBA.Transparent;
+            this.StrokeColor = Drawing.Color.Transparent;
         }
         public void AddPointAtLast(int x, int y)
         {
@@ -71,7 +71,7 @@ namespace PixelFarm.Agg.Samples
                 throw new NotImplementedException();
             }
         }
-        public ColorRGBA FillColor
+        public Drawing.Color FillColor
         {
             get;
             set;
@@ -86,7 +86,7 @@ namespace PixelFarm.Agg.Samples
             this.vxs = Affine.TranslateToVxs(vxs, xdiff, ydiff);
             boundingRect.Offset(xdiff, ydiff);
         }
-        public ColorRGBA StrokeColor
+        public Drawing.Color StrokeColor
         {
             get;
             set;

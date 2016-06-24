@@ -48,7 +48,7 @@ namespace PixelFarm.Agg.Samples
         }
         public override void Draw(CanvasPainter p)
         {
-            p.Clear(ColorRGBA.White);
+            p.Clear(Drawing.Color.White);
             var plistCount = pointSets.Count;
             for (int n = 0; n < plistCount; ++n)
             {

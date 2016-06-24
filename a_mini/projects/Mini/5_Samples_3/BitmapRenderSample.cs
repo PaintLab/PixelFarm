@@ -66,9 +66,9 @@ namespace PixelFarm.Agg.Sample_Images
             p.DrawImage(actualImage,
                     AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),
                     AffinePlan.Scale(0.5));
-            p.FillColor = ColorRGBA.Blue;
+            p.FillColor = Drawing.Color.Blue;
             p.FillRectangle(0, 0, 5, 5);
-            p.FillColor = ColorRGBA.Green;
+            p.FillColor = Drawing.Color.Green;
             p.FillRectangle(actualImage.Width, actualImage.Height,
                 actualImage.Width + 5, actualImage.Height + 5);
         }

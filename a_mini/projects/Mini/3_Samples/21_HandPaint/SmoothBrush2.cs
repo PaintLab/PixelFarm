@@ -48,8 +48,8 @@ namespace PixelFarm.Agg.Samples
         }
         public override void Draw(CanvasPainter p)
         {
-            p.Clear(ColorRGBA.White);
-            p.FillColor = ColorRGBA.Black;
+            p.Clear(Drawing.Color.White);
+            p.FillColor = Drawing.Color.Black;
             int j = myBrushPathList.Count;
             for (int n = 0; n < j; ++n)
             {
@@ -69,7 +69,7 @@ namespace PixelFarm.Agg.Samples
                                 p.Fill(brushPath.Vxs);
                                 if (brushPath.StrokeColor.alpha > 0)
                                 {
-                                    p.StrokeColor = ColorRGBA.Red;
+                                    p.StrokeColor = Drawing.Color.Red;
                                     p.Draw(brushPath.Vxs);
                                 }
                             }
@@ -96,7 +96,7 @@ namespace PixelFarm.Agg.Samples
         {
             if (currentSelectedPath != null)
             {
-                this.currentSelectedPath.FillColor = ColorRGBA.Black;
+                this.currentSelectedPath.FillColor = Drawing.Color.Black;
             }
             this.currentSelectedPath = null;
             if (EditMode == Samples.EditMode.Select)
@@ -209,12 +209,12 @@ namespace PixelFarm.Agg.Samples
                         switch (BrushMode)
                         {
                             case SmoothBrushMode.SolidBrush:
-                                currentBrushPath.FillColor = ColorRGBA.Black;
-                                currentBrushPath.StrokeColor = ColorRGBA.Red;
+                                currentBrushPath.FillColor = Drawing.Color.Black;
+                                currentBrushPath.StrokeColor = Drawing.Color.Red;
                                 break;
                             case SmoothBrushMode.EraseBrush:
-                                currentBrushPath.FillColor = ColorRGBA.White;
-                                currentBrushPath.StrokeColor = ColorRGBA.Transparent;
+                                currentBrushPath.FillColor = Drawing.Color.White;
+                                currentBrushPath.StrokeColor = Drawing.Color.Transparent;
                                 break;
                             case SmoothBrushMode.CutBrush:
 
@@ -257,12 +257,12 @@ namespace PixelFarm.Agg.Samples
             if (this.currentSelectedPath != null && selectedPath != this.currentSelectedPath)
             {
                 //clear prev
-                currentSelectedPath.FillColor = ColorRGBA.Black;
+                currentSelectedPath.FillColor = Drawing.Color.Black;
             }
 
             if (selectedPath != null)
             {
-                selectedPath.FillColor = ColorRGBA.Red;
+                selectedPath.FillColor = Drawing.Color.Red;
                 this.currentSelectedPath = selectedPath;
             }
         }

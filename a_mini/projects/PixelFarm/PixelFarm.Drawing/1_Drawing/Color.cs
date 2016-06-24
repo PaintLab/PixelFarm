@@ -1,4 +1,34 @@
 ﻿// 2015,2014 ,BSD, WinterDev
+ 
+
+//----------------------------------------------------------------------------
+// Anti-Grain Geometry - Version 2.4
+// Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
+//
+// C# Port port by: Lars Brubaker
+//                  larsbrubaker@gmail.com
+// Copyright (C) 2007
+//
+// Permission to copy, use, modify, sell and distribute this software 
+// is granted provided this copyright notice appears in all copies. 
+// This software is provided "as is" without express or implied
+// warranty, and with no claim as to its suitability for any purpose.
+//
+//----------------------------------------------------------------------------
+//
+// Adaptation for high precision colors has been sponsored by 
+// Liberty Technology Systems, Inc., visit http://lib-sys.com
+//
+// Liberty Technology Systems, Inc. is the provider of
+// PostScript and PDF technology for software developers.
+// 
+//----------------------------------------------------------------------------
+// Contact: mcseem@antigrain.com
+//          mcseemagg@yahoo.com
+//          http://www.antigrain.com
+//----------------------------------------------------------------------------
+
+
 
 //
 // System.Drawing.KnownColors
@@ -30,7 +60,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
+using System;
 namespace PixelFarm.Drawing
 {
     public struct Color
@@ -58,7 +88,19 @@ namespace PixelFarm.Drawing
         public byte A
         {
             get { return this.a; }
+            set { a = value; }
         }
+        public byte alpha
+        {
+            get { return this.a; }
+            set { this.a = value; }
+        }
+       
+        public byte red { get { return this.r; } set { this.r = value; } }
+        public byte green { get { return this.g; } set { this.g = value; } }
+        public byte blue { get { return this.b; } set { this.b = value; } }
+
+
         public static Color FromArgb(int a, Color c)
         {
             return new Color((byte)a, c.R, c.G, c.B);
@@ -70,6 +112,10 @@ namespace PixelFarm.Drawing
         public static Color FromArgb(int r, int g, int b)
         {
             return new Color(255, (byte)r, (byte)g, (byte)b);
+        }
+        public static Color FromArgb(float a, float r, float g, float b)
+        {
+            return new Color((byte)a, (byte)r, (byte)g, (byte)b);
         }
         public override bool Equals(object obj)
         {
@@ -98,10 +144,7 @@ namespace PixelFarm.Drawing
         public static readonly Color OrangeRed = new Color(0xFF, 0xFF, 0x45, 0x00);//0xFF FF 45 00
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
         public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
-        //internal static Color ColorFromDrawingColor(System.Drawing.Color c)
-        //{
-        //    return new Color(c.A, c.R, c.G, c.B);
-        //}
+            
         public static Color FromName(string name)
         {
             var color = KnownColors.FromKnownColor(name);
@@ -129,5 +172,282 @@ namespace PixelFarm.Drawing
         {
             return (uint)((this.a << 24) | (this.b << 16) | (this.g << 8) | this.r);
         }
+
+
+
+
+        public const int COVER_SHIFT = 8;
+        public const int COVER_SIZE = 1 << COVER_SHIFT;  //----cover_size 
+        public const int COVER_MASK = COVER_SIZE - 1;    //----cover_mask   
+        public const int BASE_SHIFT = 8;
+        public const int BASE_SCALE = (1 << BASE_SHIFT);
+        public const int BASE_MASK = (BASE_SCALE - 1);
+        //public static readonly Color White = new Color(255, 255, 255, 255);
+        //public static readonly Color LightGray = new Color(225, 225, 225, 255);
+        //public static readonly Color Gray = new Color(125, 125, 125, 235);
+        //public static readonly Color DarkGray = new Color(85, 85, 85, 255);
+        //public static readonly Color Black = new Color(0, 0, 0, 255);
+        //public static readonly Color Red = new Color(255, 0, 0, 255);
+        //public static readonly Color Orange = new Color(255, 127, 0, 255);
+        //public static readonly Color Pink = new Color(255, 192, 203, 255);
+        //public static readonly Color Green = new Color(0, 255, 0, 255);
+        //public static readonly Color Blue = new Color(0, 0, 255, 255);
+        //public static readonly Color Indigo = new Color(75, 0, 130, 255);
+        //public static readonly Color Violet = new Color(143, 0, 255, 255);
+        //public static readonly Color Cyan = new Color(0, 255, 255, 255);
+        //public static readonly Color Magenta = new Color(255, 0, 255, 255);
+        //public static readonly Color Yellow = new Color(255, 255, 0, 255);
+        //public static readonly Color YellowGreen = new Color(154, 205, 50, 255);
+        //public static readonly Color Transparent = new Color(0, 0, 0, 0);
+        public byte Red0To255
+        {
+            get { return r; }
+        }
+        public byte Green0To255
+        {
+            get { return g; }
+        }
+        public byte Blue0To255
+        {
+            get { return b; }
+        }
+        public byte Alpha0To255
+        {
+            get { return a; }
+        }
+        //public Color(byte r_, byte g_, byte b_)
+        //{
+        //    red = r_;
+        //    green = g_;
+        //    blue = b_;
+        //    alpha = 255;// (byte)Math.Min(Math.Max(BASE_MASK, 0), 255);
+        //}
+        //public Color(byte r_, byte g_, byte b_, byte a_)
+        //{
+        //    red = r_;
+        //    green = g_;
+        //    blue = b_;
+        //    alpha = a_;
+        //}
+        //------------------------------------------
+        public static Color Make(double r_, double g_, double b_, double a_)
+        {
+            return new Color(
+               ((byte)Agg.AggBasics.uround(a_ * (double)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround(r_ * (double)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround(g_ * (double)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround(b_ * (double)BASE_MASK))
+               );
+        }
+        public static Color Make(double r_, double g_, double b_)
+        {
+            return new Color(
+               ((byte)Agg.AggBasics.uround(BASE_MASK)),
+               ((byte)Agg.AggBasics.uround(r_ * (double)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround(g_ * (double)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround(b_ * (double)BASE_MASK)));
+
+        }
+        //------------------------------------------
+        public static Color Make(float r_, float g_, float b_)
+        {
+            return new Color(
+               ((byte)Agg.AggBasics.uround_f(BASE_MASK)),
+               ((byte)Agg.AggBasics.uround_f(r_ * (float)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround_f(g_ * (float)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround_f(b_ * (float)BASE_MASK))
+              );
+        }
+        public static Color Make(float r_, float g_, float b_, float a_)
+        {
+            return new Color(
+               ((byte)Agg.AggBasics.uround_f(a_ * (float)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround_f(r_ * (float)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround_f(g_ * (float)BASE_MASK)),
+               ((byte)Agg.AggBasics.uround_f(b_ * (float)BASE_MASK))
+               );
+        }
+        //------------------------------------------
+        public static Color Make(int r_, int g_, int b_, int a_)
+        {
+            return new Color(
+               (byte)Math.Min(Math.Max(a_, 0), 255),
+               (byte)Math.Min(Math.Max(r_, 0), 255),
+               (byte)Math.Min(Math.Max(g_, 0), 255),
+               (byte)Math.Min(Math.Max(b_, 0), 255)
+               );
+        }
+
+        //public Color(Color c)
+        //{
+        //    red = (byte)c.red;
+        //    green = (byte)c.green;
+        //    blue = (byte)c.blue;
+        //    alpha = (byte)c.alpha;
+        //}
+
+        //public Color(Color c, int a_)
+        //{
+        //    red = (byte)c.red;
+        //    green = (byte)c.green;
+        //    blue = (byte)c.blue;
+        //    alpha = (byte)a_;
+        //}
+
+
+        //public Color(XUolorRXBAf c)
+        //{
+        //    red = ((byte)AggBasics.uround(c.red * (double)BASE_MASK));
+        //    green = ((byte)AggBasics.uround(c.green * (double)BASE_MASK));
+        //    blue = ((byte)AggBasics.uround(c.blue * (double)BASE_MASK));
+        //    alpha = ((byte)AggBasics.uround(c.alpha * (double)BASE_MASK));
+        //}
+
+        //public static bool operator ==(Color a, Color b)
+        //{
+        //    //if a.red== bred then
+        //    //a.red ^ b.red =0 
+        //    return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) == 0;
+        //    //if (a.red == b.red && a.green == b.green && a.blue == b.blue && a.alpha == b.alpha)
+        //    //{
+        //    //    return true;
+        //    //} 
+        //    //return false;
+        //}
+
+        //public static bool operator !=(Color a, Color b)
+        //{
+        //    //if a.red !=  b.red then
+        //    //a.red ^ b.red  =1 
+        //    return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) != 0;
+        //    //if (a.red != b.red || a.green != b.green || a.blue != b.blue || a.alpha != b.alpha)
+        //    //{
+        //    //    return true;
+        //    //}
+
+        //    //return false;
+        //}
+
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj.GetType() == typeof(Color))
+        //    {
+        //        return this == (Color)obj;
+        //    }
+        //    return false;
+        //}
+
+        //public override int GetHashCode()
+        //{
+        //    return new { blue, green, red, alpha }.GetHashCode();
+        //}
+
+        //public XUolorRXBAf GetAsRGBA_Floats()
+        //{
+        //    return new XUolorRXBAf((float)red / (float)BASE_MASK,
+        //        (float)green / (float)BASE_MASK,
+        //        (float)blue / (float)BASE_MASK,
+        //        (float)alpha / (float)BASE_MASK);
+        //}
+
+        public Color CreateGradient(Color another, float colorDistanceRatio)
+        {
+            //int ik = AggBasics.uround(colorDistanceRatio * BASE_SCALE); 
+            //byte r = (byte)((int)(Red0To255) + ((((int)(another.Red0To255) - Red0To255) * ik) >> BASE_SHIFT));
+            //byte g = (byte)((int)(Green0To255) + ((((int)(another.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
+            //byte b = (byte)((int)(Blue0To255) + ((((int)(another.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));
+            //byte a = (byte)((int)(Alpha0To255) + ((((int)(another.Alpha0To255) - Alpha0To255) * ik) >> BASE_SHIFT));
+
+
+
+            //from this color to another c color
+            //colorDistance ratio [0-1]
+            //new_color = old_color + diff
+
+            byte r = (byte)(Red0To255 + (another.Red0To255 - this.Red0To255) * colorDistanceRatio);
+            byte g = (byte)(Green0To255 + (another.Green0To255 - this.Green0To255) * colorDistanceRatio);
+            byte b = (byte)(Blue0To255 + (another.Blue0To255 - this.Blue0To255) * colorDistanceRatio);
+            byte a = (byte)(Alpha0To255 + (another.Alpha0To255 - this.Alpha0To255) * colorDistanceRatio);
+            return new Color(r, g, b, a);
+        }
+
+        static public Color operator +(Color A, Color B)
+        {
+            byte r = (byte)((A.r + B.r) > 255 ? 255 : (A.r + B.r));
+            byte g = (byte)((A.g + B.g) > 255 ? 255 : (A.g + B.g));
+            byte b = (byte)((A.b + B.b) > 255 ? 255 : (A.b + B.b));
+            byte a = (byte)((A.a + B.a) > 255 ? 255 : (A.a + B.a));
+            return new Color(a, r, g, b);
+        }
+
+        static public Color operator -(Color A, Color B)
+        {
+            byte red = (byte)((A.r - B.r) < 0 ? 0 : (A.r - B.r));
+            byte green = (byte)((A.g - B.g) < 0 ? 0 : (A.g - B.g));
+            byte blue = (byte)((A.b - B.b) < 0 ? 0 : (A.b - B.b));
+            byte alpha = (byte)((A.a - B.a) < 0 ? 0 : (A.a - B.a));
+            return new Color(alpha, red, green, blue);
+        }
+
+        static public Color operator *(Color A, float b)
+        {
+            float conv = b / 255f;
+            return Make(A.r * conv, A.g * conv, A.b * conv, A.a * conv);
+        }
+
+        //public void AddColor(ColorRGBA c, int cover)
+        //{
+        //    int cr, cg, cb, ca;
+        //    if (cover == COVER_MASK)
+        //    {
+        //        if (c.Alpha0To255 == BASE_MASK)
+        //        {
+        //            this = c;
+        //        }
+        //        else
+        //        {
+        //            cr = Red0To255 + c.Red0To255; Red0To255 = (cr > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cr;
+        //            cg = Green0To255 + c.Green0To255; Green0To255 = (cg > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cg;
+        //            cb = Blue0To255 + c.Blue0To255; Blue0To255 = (cb > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cb;
+        //            ca = Alpha0To255 + c.Alpha0To255; Alpha0To255 = (ca > (int)(BASE_MASK)) ? (int)(BASE_MASK) : ca;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        cr = Red0To255 + ((c.Red0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
+        //        cg = Green0To255 + ((c.Green0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
+        //        cb = Blue0To255 + ((c.Blue0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
+        //        ca = Alpha0To255 + ((c.Alpha0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
+        //        Red0To255 = (cr > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cr;
+        //        Green0To255 = (cg > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cg;
+        //        Blue0To255 = (cb > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cb;
+        //        Alpha0To255 = (ca > (int)(BASE_MASK)) ? (int)(BASE_MASK) : ca;
+        //    }
+        //}
+
+        //public void ApplyGammaDir(GammaLookUpTable gamma)
+        //{
+        //    Red0To255 = gamma.dir((byte)Red0To255);
+        //    Green0To255 = gamma.dir((byte)Green0To255);
+        //    Blue0To255 = gamma.dir((byte)Blue0To255);
+        //}
+
+        //-------------------------------------------------------------rgb8_packed
+        static public Color CreatRGB8Packed(int v)
+        {
+            //argb
+            return new Color(255, (byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
+        }
+
+        public Color Blend(Color other, float weight)
+        {
+            return this * (1 - weight) + other * weight;
+        }
+#if DEBUG
+        public override string ToString()
+        {
+            return "r:" + this.r + ",g:" + this.g + ",b:" + this.b + ",a:" + this.a;
+        }
+#endif
     }
 }

@@ -20,15 +20,15 @@ namespace PixelFarm.Agg.Samples
         }
         public override void Draw(CanvasPainter p)
         {
-            p.Clear(ColorRGBA.White);
-            p.FillColor = ColorRGBA.Black;
+            p.Clear(Drawing.Color.White);
+            p.FillColor = Drawing.Color.Black;
             foreach (var brushPath in this.myBrushPathList)
             {
                 if (brushPath.Vxs != null)
                 {
-                    p.FillColor = ColorRGBA.Black;
+                    p.FillColor = Drawing.Color.Black;
                     p.Fill(brushPath.Vxs);
-                    p.StrokeColor = ColorRGBA.Red;
+                    p.StrokeColor = Drawing.Color.Red;
                     p.Draw(brushPath.Vxs);
                 }
                 else

@@ -2,6 +2,7 @@
 //MatterHackers
 
 using System;
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using Mini;
@@ -20,7 +21,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
         }
-        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
@@ -39,7 +40,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                     int a = (covers[coverIndex++] * color.Alpha0To255) >> 8;
                     m_square.Draw(rasToBmp,
                              ras, m_sl, destImage,
-                             new ColorRGBA(color, a),
+                             Color.FromArgb(a, color),
                             x, y);
                     ++x;
                 }
@@ -97,7 +98,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 var rasterGamma = new ChildImage(childImage, new PixelBlenderGammaBGRA(this.GammaValue));
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(childImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
-                clippingProxyNormal.Clear(ColorRGBA.White);
+                clippingProxyNormal.Clear(Color.White);
                 var rasterizer = gx.ScanlineRasterizer;
                 var sl = new ScanlineUnpacked8();
                 int size_mul = this.PixelSize;
@@ -106,9 +107,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
-                sclineToBmpEn2.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+                sclineToBmpEn2.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
-                sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+                sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //-----------------------------------------------------------------------------------------------------------
                 rasterizer.ResetGamma(new GammaNone());
                 PathWriter ps = new PathWriter();
@@ -118,7 +119,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 ps.LineTo(m_x[2], m_y[2]);
                 ps.LineTo(m_x[0], m_y[0]);
                 rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs));
-                sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+                sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(0, 150, 160, 200));
             }
         }
 

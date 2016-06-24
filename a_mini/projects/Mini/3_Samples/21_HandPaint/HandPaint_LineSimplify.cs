@@ -53,9 +53,9 @@ namespace PixelFarm.Agg.Samples
         }
         public override void Draw(CanvasPainter p)
         {
-            p.Clear(ColorRGBA.White);
+            p.Clear(Drawing.Color.White);
             var plistCount = pointSets.Count;
-            p.StrokeColor = ColorRGBA.Black;
+            p.StrokeColor = Drawing.Color.Black;
             for (int n = 0; n < plistCount; ++n)
             {
                 var contPoints = pointSets[n];
@@ -63,7 +63,7 @@ namespace PixelFarm.Agg.Samples
             }
 
             plistCount = simplifiedPointSets.Count;
-            p.StrokeColor = ColorRGBA.Red;
+            p.StrokeColor = Drawing.Color.Red;
             for (int n = 0; n < plistCount; ++n)
             {
                 var contPoints = simplifiedPointSets[n];

@@ -37,23 +37,17 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             int j = lionShape.NumPaths;
             int[] pathList = lionShape.PathIndexList;
-            ColorRGBA[] colors = lionShape.Colors;
+            Color[] colors = lionShape.Colors;
             //graphics2D.UseSubPixelRendering = true; 
             var myvxs = lionVxs;
             for (int i = 0; i < j; ++i)
             {
-                canvas2d.FillVxsSnap(ToPixelFarmColor(colors[i]), new VertexStoreSnap(myvxs, pathList[i]));
+                canvas2d.FillVxsSnap(colors[i], new VertexStoreSnap(myvxs, pathList[i]));
             }
             //-------------------------------
             miniGLControl.SwapBuffers();
         }
-        static PixelFarm.Drawing.Color ToPixelFarmColor(ColorRGBA c)
-        {
-            return PixelFarm.Drawing.Color.FromArgb(
-                c.alpha,
-                c.red,
-                c.green, c.blue);
-        }
+        
     }
 }
 
