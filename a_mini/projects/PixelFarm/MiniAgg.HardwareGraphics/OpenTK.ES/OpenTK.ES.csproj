@@ -43,6 +43,7 @@
     <Compile Include="DisplayResolution.cs" />
     <Compile Include="Es2Utils\ES2Utils.cs" />
     <Compile Include="Es2Utils\GeometryUtils.cs" />
+    <Compile Include="Es2Utils\MiniShaderProgram.cs" />
     <Compile Include="GameWindowFlags.cs" />
     <Compile Include="Graphics\Color4.cs" />
     <Compile Include="Graphics\ColorFormat.cs" />
