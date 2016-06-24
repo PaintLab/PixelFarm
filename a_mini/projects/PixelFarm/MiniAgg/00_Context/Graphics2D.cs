@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
         {
             Render(new VertexStoreSnap(vxs), c);
         }
-     
+
         public Affine CurrentTransformMatrix
         {
             get { return this.currentTxMatrix; }

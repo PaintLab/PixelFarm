@@ -5,9 +5,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Fonts;
 using PixelFarm.Agg.Transform;
-
 using PixelFarm.DrawingGL;
-
 namespace PixelFarm.Drawing.HardwareGraphics
 {
     public class GLCanvasPainter : CanvasPainter

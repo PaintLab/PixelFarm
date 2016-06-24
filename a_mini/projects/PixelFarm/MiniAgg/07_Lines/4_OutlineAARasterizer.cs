@@ -542,9 +542,8 @@ namespace PixelFarm.Agg.Lines
             {
                 case VertexCmd.Stop:
                     {
-
                     }
-                    break; 
+                    break;
                 case VertexCmd.MoveTo:
                     Render(false);
                     MoveTo(x, y);

@@ -48,7 +48,6 @@ namespace PixelFarm.Agg
         TextPrinter textPrinter;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
         int ellipseGenNSteps = 10;
-
         public AggCanvasPainter(ImageGraphics2D graphic2d)
         {
             this.gx = graphic2d;

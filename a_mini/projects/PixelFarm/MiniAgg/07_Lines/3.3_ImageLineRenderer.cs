@@ -21,7 +21,6 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.Agg.Image;
- 
 namespace PixelFarm.Agg.Lines
 {
     /*

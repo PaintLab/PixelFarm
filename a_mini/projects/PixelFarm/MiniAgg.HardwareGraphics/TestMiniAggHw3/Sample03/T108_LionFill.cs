@@ -47,7 +47,6 @@ namespace OpenTkEssTest
             //-------------------------------
             miniGLControl.SwapBuffers();
         }
-        
     }
 }
 

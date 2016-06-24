@@ -199,7 +199,7 @@ namespace PixelFarm.DrawingGL
                         xylist = new List<float>();
                         isAddToList = false;
                         break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure: 
+                    case PixelFarm.Agg.VertexCmd.EndFigure:
                         break;
                     case PixelFarm.Agg.VertexCmd.Stop:
                         goto EXIT_LOOP;

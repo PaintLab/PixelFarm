@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Drawing;
 namespace PixelFarm.Drawing.WinGdi
 {
-
     class BufferBitmapStore
     {
         Stack<System.Drawing.Bitmap> bmpStack = new Stack<System.Drawing.Bitmap>();

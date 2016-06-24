@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.Drawing; 
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Lines
 {
     public abstract class LineRenderer

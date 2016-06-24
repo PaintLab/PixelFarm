@@ -75,7 +75,6 @@ namespace PixelFarm.Agg.Image
                 buffer[bufferOffset + CO.R] = sourceColor.red;
                 buffer[bufferOffset + CO.G] = sourceColor.green;
                 buffer[bufferOffset + CO.B] = sourceColor.blue;
-
                 bufferOffset += 4;
             }
             while (--count != 0);
