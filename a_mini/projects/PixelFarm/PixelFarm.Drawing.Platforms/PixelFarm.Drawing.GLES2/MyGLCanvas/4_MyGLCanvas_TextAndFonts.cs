@@ -29,6 +29,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
+            return PixelFarm.Drawing.WinGdi.FontStore.MeasureWhitespace(this, f);
         }
         //======================================
 
