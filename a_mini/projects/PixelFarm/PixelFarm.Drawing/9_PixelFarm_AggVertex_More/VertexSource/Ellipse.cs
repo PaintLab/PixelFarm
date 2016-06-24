@@ -24,7 +24,6 @@
 
 using System;
 using System.Collections.Generic;
-using FlagsAndCommand = PixelFarm.Agg.VertexCmd;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.VertexSource
 {
@@ -77,13 +76,13 @@ namespace PixelFarm.Agg.VertexSource
         IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
-            vertexData.command = FlagsAndCommand.MoveTo;
+            vertexData.command = VertexCmd.MoveTo;
             vertexData.x = originX + radiusX;
             vertexData.y = originY;
             yield return vertexData;
             double anglePerStep = MathHelper.Tau / (double)numSteps;
             double angle = 0;
-            vertexData.command = FlagsAndCommand.LineTo;
+            vertexData.command = VertexCmd.LineTo;
             if (m_cw)
             {
                 for (int i = 1; i < numSteps; i++)
@@ -106,9 +105,9 @@ namespace PixelFarm.Agg.VertexSource
             }
             vertexData.x = (int)EndVertexOrientation.CCW;
             vertexData.y = 0;
-            vertexData.command = FlagsAndCommand.CloseAndEndFigure;
+            vertexData.command = VertexCmd.CloseAndEndFigure;
             yield return vertexData;
-            vertexData.command = FlagsAndCommand.Stop;
+            vertexData.command = VertexCmd.Stop;
             yield return vertexData;
         }
 

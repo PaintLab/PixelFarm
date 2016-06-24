@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
-using FlagsAndCommand = PixelFarm.Agg.VertexCmd;
 namespace PixelFarm.Agg.VertexSource
 {
     public static class Curves
@@ -702,17 +701,17 @@ namespace PixelFarm.Agg.VertexSource
         public IEnumerable<VertexData> GetVertexIter()
         {
             VertexData vertexData = new VertexData();
-            vertexData.command = FlagsAndCommand.MoveTo;
+            vertexData.command = VertexCmd.MoveTo;
             vertexData.position = m_points[0];
             yield return vertexData;
-            vertexData.command = FlagsAndCommand.LineTo;
+            vertexData.command = VertexCmd.LineTo;
             for (int i = 1; i < m_points.Count; i++)
             {
                 vertexData.position = m_points[i];
                 yield return vertexData;
             }
 
-            vertexData.command = FlagsAndCommand.Stop;
+            vertexData.command = VertexCmd.Stop;
             vertexData.position = new Vector2();
             yield return vertexData;
         }

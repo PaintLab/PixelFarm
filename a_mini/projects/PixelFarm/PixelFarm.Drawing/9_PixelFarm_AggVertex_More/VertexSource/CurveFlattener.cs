@@ -22,8 +22,6 @@
 //
 //----------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 namespace PixelFarm.Agg.VertexSource
 {
     //---------------------------------------------------------------conv_curve
