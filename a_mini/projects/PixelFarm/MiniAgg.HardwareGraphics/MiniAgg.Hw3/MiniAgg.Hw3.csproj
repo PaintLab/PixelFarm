@@ -53,6 +53,7 @@
     <Compile Include="GLShader\RectGradientShader.cs" />
     <Compile Include="GLShader\SimpleTextureShader.cs" />
     <Compile Include="GLShader\SmoothLineShader.cs" />
+    <Compile Include="0_MiniShaderCore\MiniShaderProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Texture\GLBitmap.cs" />
     <Compile Include="Texture\GLBitmapReference.cs" />
