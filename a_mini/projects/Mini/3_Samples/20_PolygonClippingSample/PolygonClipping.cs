@@ -498,18 +498,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                     ++m_contours;
                 }
             } while (cmd != VertexCmd.Stop);
-            //foreach (VertexData vertexData in src.GetVertexIter())
-            //{
-            //    if (ShapePath.IsVertextCommand(vertexData.command))
-            //    {
-            //        ++m_points;
-            //    }
 
-            //    if (ShapePath.IsMoveTo(vertexData.command))
-            //    {
-            //        ++m_contours;
-            //    }
-            //}
         }
     }
 }

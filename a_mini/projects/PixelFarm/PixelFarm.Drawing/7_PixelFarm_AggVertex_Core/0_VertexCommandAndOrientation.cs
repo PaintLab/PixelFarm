@@ -51,12 +51,13 @@ namespace PixelFarm.Agg
         }
         public static bool IsEndFigure(VertexCmd c)
         {
-            return ((int)c & 0x3) > (int)VertexCmd.EndFigure;
+            //check only 2 lower bit
+            return ((int)c & 0x3) >= (int)VertexCmd.EndFigure;
         }
-        public static bool IsClose(VertexCmd c)
-        {
-            return c == VertexCmd.CloseAndEndFigure;
-        }
+        //public static bool IsClose(VertexCmd c)
+        //{
+        //    return c == VertexCmd.CloseAndEndFigure;
+        //}
         public static bool IsNextPoly(VertexCmd c)
         {
             //?

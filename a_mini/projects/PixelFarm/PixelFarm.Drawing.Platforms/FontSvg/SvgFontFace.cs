@@ -222,7 +222,7 @@ namespace PixelFarm.Agg.Fonts
 
             String dString = GetStringValue(svgGlyphData, "d");
             //if (newGlyph.glyphName == "a")
-            //{ 
+            //{
             //}
             int parseIndex = 0;
             int polyStartVertexSourceIndex = 0;
@@ -345,7 +345,7 @@ namespace PixelFarm.Agg.Fonts
                             //newGlyph.glyphData.ClosePathStorage();
                             gyphPath.CloseFigure();
                             // svg fonts are stored cw and agg expects its shapes to be ccw.  cw shapes are holes.
-                            // We stored the position of the start of this polygon, no we flip it as we colse it.
+                            // We stored the position of the start of this polygon, no we flip it as we close it.
                             //newGlyph.glyphData.InvertPolygon(polyStartVertexSourceIndex);
                             // VertexHelper.InvertPolygon(gyphPath.Vxs, polyStartVertexSourceIndex);
                         }
