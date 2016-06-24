@@ -15,8 +15,8 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Pen _currentPen;
         //
         RectInt _clipBox;
-        ColorRGBA _fillColor;
-        ColorRGBA _strokeColor;
+        Color _fillColor;
+        Color _strokeColor;
         int _width, _height;
         double _strokeWidth;
         bool _useSubPixelRendering;
@@ -51,7 +51,10 @@ namespace PixelFarm.Drawing.WinGdi
             get { return _gfx.CompositingMode; }
             set { _gfx.CompositingMode = value; }
         }
-
+        public override void Draw(VertexStoreSnap vxs)
+        {
+            this.Fill(vxs);
+        }
         public override RectInt ClipBox
         {
             get
@@ -75,7 +78,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _font = value;
             }
         }
-        public override ColorRGBA FillColor
+        public override Color FillColor
         {
             get
             {
@@ -96,7 +99,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override ColorRGBA StrokeColor
+        public override Color StrokeColor
         {
             get
             {
@@ -141,7 +144,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override void Clear(ColorRGBA color)
+        public override void Clear(Color color)
         {
             _gfx.Clear(VxsHelper.ToDrawingColor(color));
         }
@@ -219,14 +222,11 @@ namespace PixelFarm.Drawing.WinGdi
                  controlX2, controlY2,
                  endX, endY);
         }
-        public override void DrawEllipse()
-        {
-            throw new NotImplementedException();
-        }
+
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
-            using (var srcBmp = CreateBmpBRGA(actualImage))
+            using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
             {
                 var bmp = _bmpStore.GetFreeBmp();
                 using (Graphics g2 = System.Drawing.Graphics.FromImage(bmp))
@@ -319,14 +319,14 @@ namespace PixelFarm.Drawing.WinGdi
             VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
         }
 
-         
+
 
         public override void FillCircle(double x, double y, double radius)
         {
             _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
         }
 
-        public override void FillCircle(double x, double y, double radius, ColorRGBA color)
+        public override void FillCircle(double x, double y, double radius, Drawing.Color color)
         {
             var prevColor = _currentFillBrush.Color;
             _currentFillBrush.Color = VxsHelper.ToDrawingColor(color);
@@ -334,16 +334,20 @@ namespace PixelFarm.Drawing.WinGdi
             _currentFillBrush.Color = prevColor;
         }
 
-        public override void FillEllipse(double left, double bottom, double right, double top, int nsteps)
+        public override void FillEllipse(double left, double bottom, double right, double top)
         {
             _gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+        }
+        public override void DrawEllipse(double left, double bottom, double right, double top)
+        {
+            _gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
         }
 
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
             _gfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
         }
-        public override void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor)
+        public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
         {
             System.Drawing.Color prevColor = _currentFillBrush.Color;
             _currentFillBrush.Color = VxsHelper.ToDrawingColor(fillColor);
@@ -400,14 +404,14 @@ namespace PixelFarm.Drawing.WinGdi
             _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
 
-        public override void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
+        public override void Line(double x1, double y1, double x2, double y2, Color color)
         {
             var prevColor = _currentPen.Color;
             _currentPen.Color = VxsHelper.ToDrawingColor(color);
             _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
             _currentPen.Color = prevColor;
         }
-        public override void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath)
+        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
             for (int i = 0; i < numPath; ++i)
             {
@@ -419,7 +423,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _gfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
         }
-        public override void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
+        public override void Rectangle(double left, double bottom, double right, double top, Color color)
         {
             _gfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
         }

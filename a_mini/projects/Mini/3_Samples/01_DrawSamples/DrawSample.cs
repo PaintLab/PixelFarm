@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
         public override void Draw(CanvasPainter p)
         {
-            p.Clear(ColorRGBA.White);
+            p.Clear(Drawing.Color.White);
             //g.UseSubPixelRendering = true; 
             string teststr = "ABCDE abcd 1230 Hello!";
             p.DrawString(teststr, 300, 400);
@@ -47,7 +47,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //clear the image to white
             //g.Clear(ColorRGBA.White);
             // draw a circle
-            p.Clear(ColorRGBA.White);
+            p.Clear(Drawing.Color.White);
             Ellipse ellipsePro = new Ellipse(0, 0, 100, 50);
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
@@ -55,11 +55,11 @@ namespace PixelFarm.Agg.Sample_Draw
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
                 VertexStore sp1 = mat.TransformToVxs(ellipsePro.MakeVxs());
-                p.FillColor = ColorRGBA.Yellow;
+                p.FillColor = Drawing.Color.Yellow;
                 p.Fill(sp1);
                 //g.Render(sp1, ColorRGBA.Yellow);
                 //Stroke ellipseOutline = new Stroke(sp1, 3);
-                p.FillColor = ColorRGBA.Blue;
+                p.FillColor = Drawing.Color.Blue;
                 p.Fill(StrokeHelp.MakeVxs(sp1, 3));
                 //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
             }
@@ -71,7 +71,7 @@ namespace PixelFarm.Agg.Sample_Draw
             littlePoly.LineTo(200, 200);
             littlePoly.LineTo(50, 150);
             littlePoly.LineTo(50, 50);
-            p.FillColor = ColorRGBA.Cyan;
+            p.FillColor = Drawing.Color.Blue;
             p.Fill(littlePoly.MakeVertexSnap());
             //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
             // draw some text
@@ -84,16 +84,16 @@ namespace PixelFarm.Agg.Sample_Draw
             VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());
             var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
             VertexStore s1 = affTx.TransformToVxs(vxs);
-            p.FillColor = ColorRGBA.Black;
+            p.FillColor = Drawing.Color.Black;
             p.Fill(s1);
             //g.Render(s1, ColorRGBA.Black);
-            p.FillColor = ColorRGBA.Red;
+            p.FillColor = Drawing.Color.Red;
             p.Fill(StrokeHelp.MakeVxs(s1, 1));
             //g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
             var aff2 = Affine.NewMatix(
                 AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
                 AffinePlan.Translate(40, height / 2));
-            p.FillColor = ColorRGBA.Black;
+            p.FillColor = Drawing.Color.Black;
             p.Fill(aff2.TransformToVertexSnap(vxs));
             //g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
         }

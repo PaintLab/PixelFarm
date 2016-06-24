@@ -58,7 +58,7 @@ namespace PixelFarm.Agg
                 {
                     int j = lionShape.NumPaths;
                     int[] pathList = lionShape.PathIndexList;
-                    ColorRGBA[] colors = lionShape.Colors;
+                    Drawing.Color[] colors = lionShape.Colors;
                     //graphics2D.UseSubPixelRendering = true; 
                     for (int i = 0; i < j; ++i)
                     {
@@ -90,7 +90,7 @@ namespace PixelFarm.Agg
             {
                 int j = lionShape.NumPaths;
                 int[] pathList = lionShape.PathIndexList;
-                ColorRGBA[] colors = lionShape.Colors;
+                PixelFarm.Drawing.Color[] colors = lionShape.Colors;
                 //graphics2D.UseSubPixelRendering = true;
 
                 for (int i = 0; i < j; ++i)

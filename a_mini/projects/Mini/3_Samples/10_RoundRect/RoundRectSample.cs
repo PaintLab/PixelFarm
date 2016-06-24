@@ -107,8 +107,8 @@ namespace PixelFarm.Agg.Sample_RoundRect
             //-----------------------------------------------------------------
             //control
             CanvasPainter painter = p;
-            painter.Clear(this.WhiteOnBlack ? ColorRGBA.Black : ColorRGBA.White);
-            painter.FillColor = new ColorRGBA(127, 127, 127);
+            painter.Clear(this.WhiteOnBlack ? Drawing.Color.Black : Drawing.Color.White);
+            painter.FillColor = Drawing.Color.FromArgb(127, 127, 127);
             painter.FillCircle(m_x[0], m_y[0], 3); //left-bottom control box
             painter.FillCircle(m_x[1], m_y[1], 3); //right-top control box
             //-----------------------------------------------------------------
@@ -128,7 +128,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
 
             if (this.FillRoundRect)
             {
-                painter.FillColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+                painter.FillColor = this.WhiteOnBlack ? Drawing.Color.White : Drawing.Color.Black;
                 painter.FillRoundRectangle(
                     m_x[0] + d,
                     m_y[0] + d,
@@ -138,7 +138,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
             }
             else
             {
-                painter.StrokeColor = this.WhiteOnBlack ? ColorRGBA.White : ColorRGBA.Black;
+                painter.StrokeColor = this.WhiteOnBlack ? Drawing.Color.White : Drawing.Color.Black;
                 painter.DrawRoundRect(
                     m_x[0] + d,
                     m_y[0] + d,

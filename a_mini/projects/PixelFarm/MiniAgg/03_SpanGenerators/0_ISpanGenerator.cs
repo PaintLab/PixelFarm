@@ -25,7 +25,7 @@ namespace PixelFarm.Agg
     public interface ISpanGenerator
     {
         void Prepare();
-        void GenerateColors(ColorRGBA[] outputColors,
+        void GenerateColors(PixelFarm.Drawing.Color[] outputColors,
             int startIndex,
             int x, int y, int len);
     }

@@ -19,6 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
@@ -34,9 +35,9 @@ namespace PixelFarm.Agg
             double pointSize = 12,
             Justification justification = Justification.Left,
             Baseline baseline = Baseline.Text,
-            ColorRGBA color = new ColorRGBA(),
+            Color color = new Color(),
             bool drawFromHintedCache = false,
-            ColorRGBA backgroundColor = new ColorRGBA())
+            Color backgroundColor = new Color())
         {
             ////use svg font 
             var svgFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, (int)pointSize);
@@ -46,44 +47,44 @@ namespace PixelFarm.Agg
             stringPrinter.LoadText(text);
             var vxs = stringPrinter.MakeVxs();
             vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
-            gx.Render(vxs, ColorRGBA.Black);
+            gx.Render(vxs, Color.Black);
         }
 
 
-        public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, ColorRGBA color, double strokeWidth = 1)
+        public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, Color color, double strokeWidth = 1)
         {
             RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
             gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectD rect, ColorRGBA color, double strokeWidth = 1)
+        public static void Rectangle(this Graphics2D gx, RectD rect, Color color, double strokeWidth = 1)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color, strokeWidth);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectInt rect, ColorRGBA color)
+        public static void Rectangle(this Graphics2D gx, RectInt rect, Color color)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectD rect, ColorRGBA fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectD rect, Color fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectInt rect, ColorRGBA fillColor)
+        public static void FillRectangle(this Graphics2D gx, RectInt rect, Color fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
         public static void FillRectangle(this Graphics2D gx, Vector2 leftBottom,
-            Vector2 rightTop, ColorRGBA fillColor)
+            Vector2 rightTop, Color fillColor)
         {
             gx.FillRectangle(leftBottom.x, leftBottom.y, rightTop.x, rightTop.y, fillColor);
         }
 
         public static void FillRectangle(this Graphics2D gx, double left,
-            double bottom, double right, double top, ColorRGBA fillColor)
+            double bottom, double right, double top, Color fillColor)
         {
             if (right < left || top < bottom)
             {
@@ -92,12 +93,12 @@ namespace PixelFarm.Agg
             RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
             gx.Render(rect.MakeVertexSnap(), fillColor);
         }
-        public static void Circle(this Graphics2D g, double x, double y, double radius, ColorRGBA color)
+        public static void Circle(this Graphics2D g, double x, double y, double radius, Color color)
         {
             Ellipse elipse = new Ellipse(x, y, radius, radius);
             g.Render(elipse.MakeVxs(), color);
         }
-        public static void Circle(this Graphics2D g, Vector2 origin, double radius, ColorRGBA color)
+        public static void Circle(this Graphics2D g, Vector2 origin, double radius, Color color)
         {
             Circle(g, origin.x, origin.y, radius, color);
         }

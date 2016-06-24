@@ -4,6 +4,7 @@
 
 
 using System;
+using PixelFarm.Drawing;
 using System.Globalization;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
@@ -24,7 +25,7 @@ namespace PixelFarm.Agg
             ScanlineRasToDestBitmapRenderer sclineRasToBmp,
             ScanlineRasterizer ras,
             Scanline sl,
-            IImageReaderWriter destImage, ColorRGBA color,
+            IImageReaderWriter destImage, Color color,
             double x, double y)
         {
             ras.Reset();

@@ -42,7 +42,7 @@ namespace PixelFarm.Agg
             m_dy_int = (img_subpix_const.SCALE / 2);
         }
 
-        public abstract void GenerateColors(ColorRGBA[] outputColors, int startIndex, int x, int y, int len);
+        public abstract void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len);
         protected ISpanInterpolator Interpolator
         {
             get { return m_interpolator; }

@@ -20,6 +20,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Agg.Fonts;
@@ -29,8 +30,8 @@ namespace PixelFarm.Agg
     {
         ImageGraphics2D gx;
         Stroke stroke;
-        ColorRGBA fillColor;
-        ColorRGBA strokeColor;
+        Color fillColor;
+        Color strokeColor;
         ScanlinePacked8 scline;
         ScanlineRasterizer sclineRas;
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
@@ -46,6 +47,8 @@ namespace PixelFarm.Agg
         CurveFlattener curveFlattener;
         TextPrinter textPrinter;
         MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+        int ellipseGenNSteps = 10;
+
         public AggCanvasPainter(ImageGraphics2D graphic2d)
         {
             this.gx = graphic2d;
@@ -55,7 +58,7 @@ namespace PixelFarm.Agg
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
             this.textPrinter = new TextPrinter();
         }
-        public override void Clear(ColorRGBA color)
+        public override void Clear(Color color)
         {
             gx.Clear(color);
         }
@@ -77,7 +80,7 @@ namespace PixelFarm.Agg
         /// <param name="y"></param>
         /// <param name="radius"></param>
         /// <param name="color"></param>
-        public override void FillCircle(double x, double y, double radius, ColorRGBA color)
+        public override void FillCircle(double x, double y, double radius, Color color)
         {
             ellipse.Reset(x, y, radius, radius);
             gx.Render(ellipse.MakeVxs(), color);
@@ -88,19 +91,27 @@ namespace PixelFarm.Agg
             gx.Render(ellipse.MakeVxs(), this.fillColor);
         }
 
-        public override void FillEllipse(double left, double bottom, double right, double top, int nsteps)
+        public override void FillEllipse(double left, double bottom, double right, double top)
         {
             ellipse.Reset((left + right) * 0.5,
                           (bottom + top) * 0.5,
                           (right - left) * 0.5,
                           (top - bottom) * 0.5,
-                           nsteps);
+                           ellipseGenNSteps);
             gx.Render(ellipse.MakeVxs(), this.fillColor);
-            //VertexStoreSnap trans_ell = txBilinear.TransformToVertexSnap(vxs);
         }
-        public override void DrawEllipse()
+        public override void Draw(VertexStoreSnap vxs)
         {
-            throw new NotImplementedException();
+            this.Fill(vxs);
+        }
+        public override void DrawEllipse(double left, double bottom, double right, double top)
+        {
+            ellipse.Reset((left + right) * 0.5,
+                         (bottom + top) * 0.5,
+                         (right - left) * 0.5,
+                         (top - bottom) * 0.5,
+                          ellipseGenNSteps);
+            gx.Render(stroke.MakeVxs(ellipse.MakeVxs()), this.fillColor);
         }
 
         /// <summary>
@@ -111,7 +122,7 @@ namespace PixelFarm.Agg
         /// <param name="x2"></param>
         /// <param name="y2"></param>
         /// <param name="color"></param>
-        public override void Line(double x1, double y1, double x2, double y2, ColorRGBA color)
+        public override void Line(double x1, double y1, double x2, double y2, Color color)
         {
             lines.Clear();
             lines.MoveTo(x1, y1);
@@ -152,7 +163,7 @@ namespace PixelFarm.Agg
         /// <param name="top"></param>
         /// <param name="color"></param>
         /// <param name="strokeWidth"></param>
-        public override void Rectangle(double left, double bottom, double right, double top, ColorRGBA color)
+        public override void Rectangle(double left, double bottom, double right, double top, Color color)
         {
             simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
             gx.Render(stroke.MakeVxs(simpleRect.MakeVxs()), color);
@@ -162,7 +173,7 @@ namespace PixelFarm.Agg
             simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
             gx.Render(stroke.MakeVxs(simpleRect.MakeVxs()), this.fillColor);
         }
-        public override void FillRectangle(double left, double bottom, double right, double top, ColorRGBA fillColor)
+        public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
         {
             if (right < left || top < bottom)
             {
@@ -223,7 +234,7 @@ namespace PixelFarm.Agg
         }
 
         //-------------------------------------------------------
-        public override Font CurrentFont
+        public override PixelFarm.Agg.Fonts.Font CurrentFont
         {
             get { return this.textPrinter.CurrentFont; }
             set { this.textPrinter.CurrentFont = value; }
@@ -261,17 +272,17 @@ namespace PixelFarm.Agg
             get { return sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
             set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
         }
-        public override ColorRGBA FillColor
+        public override Color FillColor
         {
             get { return fillColor; }
             set { this.fillColor = value; }
         }
-        public override ColorRGBA StrokeColor
+        public override Color StrokeColor
         {
             get { return strokeColor; }
             set { this.strokeColor = value; }
         }
-        public override void PaintSeries(VertexStore vxs, ColorRGBA[] colors, int[] pathIndexs, int numPath)
+        public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
             sclineRasToBmp.RenderSolidAllPaths(this.gx.DestImage,
                 this.sclineRas,

@@ -90,7 +90,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new PixelFarm.Agg.SpriteShape();
                 PixelFarm.Agg.VertexSource.PathWriter path;
-                PixelFarm.Agg.ColorRGBA[] colors;
+                Drawing.Color[] colors;
                 int[] pathIndexList;
                 //1. path and command
                 PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathDataFromStream(
@@ -165,7 +165,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             {
                 int j = lionShape.NumPaths;
                 int[] pathList = lionShape.PathIndexList;
-                ColorRGBA[] colors = lionShape.Colors;
+                Drawing.Color[] colors = lionShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
                     p.FillColor = colors[i];

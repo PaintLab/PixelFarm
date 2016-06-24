@@ -63,22 +63,6 @@ namespace OpenTK
                 SwapBuffers();
             }
         }
-        public void InitSetup2d(Rectangle screenBound)
-        {
-            int max = Math.Max(screenBound.Width, screenBound.Height);
-            //init
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            //---------------- 
-            GL.Viewport(0, 0, max, max);
-            //set up graphics
 
-            throw new NotSupportedException();
-            //GL.MatrixMode(MatrixMode.Projection);
-            //GL.LoadIdentity();
-            //GL.Ortho(0, max, 0, max, 0.0, 100.0);
-            //GL.MatrixMode(MatrixMode.Modelview);
-            //GL.LoadIdentity();
-        }
     }
 }

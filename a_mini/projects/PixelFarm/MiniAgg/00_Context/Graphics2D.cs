@@ -34,14 +34,14 @@ namespace PixelFarm.Agg
 
         public abstract void SetClippingRect(RectInt rect);
         public abstract RectInt GetClippingRect();
-        public abstract void Clear(ColorRGBA color);
+        public abstract void Clear(Drawing.Color color);
         //------------------------------------------------------------------------
         //render vertices
-        public abstract void Render(VertexStoreSnap vertexSource, ColorRGBA c);
+        public abstract void Render(VertexStoreSnap vertexSource, Drawing.Color c);
         //------------------------------------------------------------------------
 
 
-        public void Render(VertexStore vxs, ColorRGBA c)
+        public void Render(VertexStore vxs, Drawing.Color c)
         {
             Render(new VertexStoreSnap(vxs), c);
         }
@@ -93,7 +93,7 @@ namespace PixelFarm.Agg
 
 
 #if DEBUG
-        public void dbugLine(double x1, double y1, double x2, double y2, ColorRGBA color)
+        public void dbugLine(double x1, double y1, double x2, double y2, Drawing.Color color)
         {
             VertexStore vxs = new VertexStore(8);
             vxs.AddMoveTo(x1, y1);

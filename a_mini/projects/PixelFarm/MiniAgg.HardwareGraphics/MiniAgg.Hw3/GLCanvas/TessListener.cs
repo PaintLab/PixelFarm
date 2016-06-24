@@ -126,13 +126,12 @@ namespace PixelFarm.DrawingGL
             tempVertextList.Add(new Vertex(v0, v1));
             //----------------------------------------
         }
-        public void Connect(Tesselate.Tesselator tesselator, Tesselator.WindingRuleType windingRule, bool setEdgeFlag)
+        public void Connect(Tesselate.Tesselator tesselator, bool setEdgeFlag)
         {
             tesselator.callBegin = new Tesselate.Tesselator.CallBeginDelegate(BeginCallBack);
             tesselator.callEnd = new Tesselate.Tesselator.CallEndDelegate(EndCallBack);
             tesselator.callVertex = new Tesselate.Tesselator.CallVertexDelegate(VertexCallBack);
             tesselator.callCombine = new Tesselate.Tesselator.CallCombineDelegate(CombineCallBack);
-            tesselator.windingRule = windingRule;
             if (setEdgeFlag)
             {
                 tesselator.callEdgeFlag += new Tesselate.Tesselator.CallEdgeFlagDelegate(EdgeFlagCallBack);

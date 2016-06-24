@@ -76,13 +76,13 @@ namespace Mini
                 painter = new AggCanvasPainter(imgGfx2d);
                 painter.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont(fontfile, 10);
             }
-            painter.Clear(ColorRGBA.White);
+            painter.Clear(PixelFarm.Drawing.Color.White);
         }
 
         public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;
-            exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
+            //exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)

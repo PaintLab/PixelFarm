@@ -27,12 +27,23 @@ namespace Mini
             ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
             if (exAndDesc != null)
             {
-                FormTestBed1 testBed = new FormTestBed1();
-                testBed.WindowState = FormWindowState.Maximized;
-                testBed.UseGdiPlus = chkUseGdiPlus.Checked;
-                testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
-                testBed.Show();
-                testBed.LoadExample(exAndDesc);
+                if (chkUseOpenGLES2.Checked)
+                {
+                    FormGLTest formGLTest = new FormGLTest();
+                    formGLTest.InitGLControl();
+                    formGLTest.Show();
+                    formGLTest.WindowState = FormWindowState.Maximized;
+                    formGLTest.LoadExample(exAndDesc);
+                }
+                else
+                {
+                    FormTestBed1 testBed = new FormTestBed1();
+                    testBed.WindowState = FormWindowState.Maximized;
+                    testBed.UseGdiPlus = chkUseGdiPlus.Checked;
+                    testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                    testBed.Show();
+                    testBed.LoadExample(exAndDesc);
+                }
             }
         }
         void DevForm_Load(object sender, EventArgs e)
@@ -102,7 +113,7 @@ namespace Mini
                 var reader = new System.IO.BinaryReader(fs);
                 var lionShape2 = new PixelFarm.Agg.SpriteShape();
                 PixelFarm.Agg.VertexSource.PathWriter path;
-                PixelFarm.Agg.ColorRGBA[] colors;
+                PixelFarm.Drawing.Color[] colors;
                 int[] pathIndexList;
                 //1. path and command
                 PixelFarm.Agg.VertexSource.dbugVertexSourceIO.ReadPathDataFromStream(
@@ -167,7 +178,7 @@ namespace Mini
             using (Graphics g = this.pictureBox1.CreateGraphics())
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
-                g.Clear(Color.White);
+                g.Clear(System.Drawing.Color.White);
                 var winFont = PixelFarm.Agg.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
                 var winFontGlyph = winFont.GetGlyph(testChar);
                 //convert Agg vxs to bitmap
@@ -178,11 +189,11 @@ namespace Mini
                     ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.Rgba32);
                     Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
                     var vxs = winFontGlyph.originalVxs;
-                    gfx.Render(vxs, ColorRGBA.Black);
+                    gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     //test subpixel rendering 
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
                     gfx.UseSubPixelRendering = true;
-                    gfx.Render(vxs, ColorRGBA.Black);
+                    gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmap(
                       actualImage, //src from actual img buffer
                       bufferBmp, //dest to buffer bmp
@@ -219,7 +230,7 @@ namespace Mini
             using (Graphics g = this.pictureBox1.CreateGraphics())
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
-                g.Clear(Color.White);
+                g.Clear(System.Drawing.Color.White);
                 //convert Agg vxs to bitmap
                 int bmpW = 500;
                 int bmpH = 500;
@@ -243,11 +254,11 @@ namespace Mini
                     //PixelFarm.Agg.VertexSource.CurveFlattener cflat = new PixelFarm.Agg.VertexSource.CurveFlattener();
                     //vxs = cflat.MakeVxs(vxs);
 
-                    gfx.Render(vxs, ColorRGBA.Black);
+                    gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     //test subpixel rendering 
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
                     gfx.UseSubPixelRendering = true;
-                    gfx.Render(vxs, ColorRGBA.Black);
+                    gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmap(
                       actualImage, //src from actual img buffer
                       bufferBmp, //dest to buffer bmp
@@ -258,11 +269,17 @@ namespace Mini
                 }
             }
         }
-
         private void button5_Click(object sender, EventArgs e)
         {
             FormGdiTest formGdiTest = new FormGdiTest();
             formGdiTest.Show();
+        }
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FormGLTest formGLTest = new FormGLTest();
+            formGLTest.InitGLControl();
+            formGLTest.Show();
+            formGLTest.WindowState = FormWindowState.Maximized;
         }
     }
 }

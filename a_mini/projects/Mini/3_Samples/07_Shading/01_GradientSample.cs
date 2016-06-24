@@ -22,12 +22,12 @@ namespace PixelFarm.Agg.Sample_Gradient
             if (p is AggCanvasPainter)
             {
                 var p2 = (AggCanvasPainter)p;
-                p.FillColor = ColorRGBA.Blue;
+                p.FillColor = Drawing.Color.Red;
                 p.FillRectangle(0, 70, 150, 120);
                 //------------------------------------------- 
                 var innerGradient = new Gradients.GvcRadial();
                 SpanInterpolatorLinear linerInterpolator = new SpanInterpolatorLinear(Affine.IdentityMatrix);
-                LinearGradientColorsProvider linearColorProvider = new LinearGradientColorsProvider(ColorRGBA.Red, ColorRGBA.Yellow);
+                LinearGradientColorsProvider linearColorProvider = new LinearGradientColorsProvider(Drawing.Color.Red, Drawing.Color.Yellow);
                 SpanGenGradient spanGenGradient = new SpanGenGradient(linerInterpolator,
                     innerGradient,
                     linearColorProvider,

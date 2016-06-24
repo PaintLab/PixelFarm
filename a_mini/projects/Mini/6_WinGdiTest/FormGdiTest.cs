@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using PixelFarm.Agg.Image;
-using System.Text;
 using System.Windows.Forms;
 using Mini.WinForms;
 namespace Mini

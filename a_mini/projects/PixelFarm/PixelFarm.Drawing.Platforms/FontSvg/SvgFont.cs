@@ -39,7 +39,7 @@ namespace PixelFarm.Agg.Fonts
             if (!cachedGlyphs.TryGetValue(c, out glyph))
             {
                 //create font glyph for this font size
-                var originalGlyph = fontface.GetGlyphForCharacter(c);
+                FontGlyph originalGlyph = fontface.GetGlyphForCharacter(c);
                 VertexStore characterGlyph = scaleTx.TransformToVxs(originalGlyph.originalVxs);
                 glyph = new FontGlyph();
                 glyph.originalVxs = characterGlyph;

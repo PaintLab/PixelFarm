@@ -43,7 +43,7 @@ namespace Mini
             this.Height = 600;
         }
 
-        public event RequestNewGraphic2DDelegate RequestNewGfx2d;
+       
         public abstract void Draw(CanvasPainter p);
         public virtual void Init() { }
 
@@ -52,18 +52,7 @@ namespace Mini
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }
-
-        protected Graphics2D NewGraphics2D()
-        {
-            if (RequestNewGfx2d == null)
-            {
-                throw new NotSupportedException();
-            }
-            else
-            {
-                return RequestNewGfx2d();
-            }
-        }
+         
     }
 
     public class DemoConfigAttribute : Attribute

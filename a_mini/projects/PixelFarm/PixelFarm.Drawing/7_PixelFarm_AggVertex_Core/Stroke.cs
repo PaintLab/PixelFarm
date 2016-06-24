@@ -98,9 +98,6 @@ namespace PixelFarm.Agg
                 switch (cmd)
                 {
                     case VertexCmd.Stop:
-                    case VertexCmd.HasMore:
-                        {
-                        }
                         break;
                     case VertexCmd.EndFigure:
                     case VertexCmd.CloseAndEndFigure:

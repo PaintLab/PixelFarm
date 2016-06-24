@@ -70,7 +70,7 @@ namespace PixelFarm.Agg.Sample_Perspective
 
 
             //-----------------------------------
-            painter.Clear(ColorRGBA.White);
+            painter.Clear(Drawing.Color.White);
             //IImageReaderWriter backBuffer = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
             //ChildImage image;
             //if (backBuffer.BitDepth == 32)
@@ -111,13 +111,13 @@ namespace PixelFarm.Agg.Sample_Perspective
                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
                     VertexStore trans_ell = txBilinear.TransformToVxs(ell.MakeVxs());
-                    painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                    painter.FillColor = Drawing.Color.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(trans_ell);
                     //-------------------------------------------------------------
                     //outline
                     double prevStrokeWidth = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.StrokeColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.StrokeColor = Drawing.Color.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
                 }
@@ -143,12 +143,12 @@ namespace PixelFarm.Agg.Sample_Perspective
                                       (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
                     VertexStore transformedEll = txPerspective.TransformToVxs(filledEllipse.MakeVxs());
-                    painter.FillColor = ColorRGBA.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                    painter.FillColor = Drawing.Color.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(transformedEll);
                     //-------------------------------------------------------- 
                     var prevStrokeW = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.StrokeColor = ColorRGBA.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.StrokeColor = Drawing.Color.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(transformedEll);
                     painter.StrokeWidth = prevStrokeW;
                 }
@@ -156,7 +156,7 @@ namespace PixelFarm.Agg.Sample_Perspective
 
             //--------------------------
             // Render the "quad" tool and controls
-            painter.FillColor = ColorRGBA.Make(0f, 0.3f, 0.5f, 0.6f);
+            painter.FillColor = Drawing.Color.Make(0f, 0.3f, 0.5f, 0.6f);
             painter.Fill(quadPolygonControl.MakeVxs());
         }
 

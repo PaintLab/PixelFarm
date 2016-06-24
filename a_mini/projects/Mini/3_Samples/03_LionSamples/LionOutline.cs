@@ -126,7 +126,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             int strokeWidth = 1;
             var clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
-            imageClippingProxy.Clear(ColorRGBA.White);
+            imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
             Affine affTx = Affine.NewMatix(
                     AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
                     AffinePlan.Scale(spriteScale, spriteScale),

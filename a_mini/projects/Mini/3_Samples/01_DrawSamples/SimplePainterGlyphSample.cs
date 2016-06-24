@@ -26,8 +26,9 @@ namespace PixelFarm.Agg.SimplePainter
         public override void Draw(CanvasPainter p)
         { //1.
             // clear the image to white 
-            p.Clear(ColorRGBA.White);
-            p.FillColor = new ColorRGBA(ColorRGBA.Blue, 80);
+            p.Clear(Drawing.Color.White);
+            p.FillColor = Drawing.Color.FromArgb(80, Drawing.Color.Blue);
+
             //M414 -20q-163 0 -245 86t-82 236z
             //<path d="M414 20q-163 40 -245 126t-82 276z"/> 
             //PathWriter path = new PathWriter();
@@ -55,16 +56,16 @@ namespace PixelFarm.Agg.SimplePainter
 
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
             p.CurrentFont = font1;
-            p.FillColor = ColorRGBA.Black;
+            p.FillColor = Drawing.Color.Black;
             // string test_str = "มีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
             string test_str = "บ่ป่มีมี่";
             p.UseSubPixelRendering = true;
             p.DrawString(test_str, 5, 200);
             //p.DrawString("12345", 50, 200); 
-            p.StrokeColor = ColorRGBA.Black;
+            p.StrokeColor = Drawing.Color.Black;
             p.Line(0, 200, 800, 200);
-            p.FillColor = ColorRGBA.Black;
+            p.FillColor = Drawing.Color.Black;
             p.CurrentFont = font2;
             p.DrawString(test_str, 80, 100);
             p.UseSubPixelRendering = false;

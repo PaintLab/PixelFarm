@@ -540,8 +540,11 @@ namespace PixelFarm.Agg.Lines
         {
             switch (cmd)
             {
-                case VertexCmd.HasMore:
-                    break;
+                case VertexCmd.Stop:
+                    {
+
+                    }
+                    break; 
                 case VertexCmd.MoveTo:
                     Render(false);
                     MoveTo(x, y);
@@ -574,7 +577,7 @@ namespace PixelFarm.Agg.Lines
 
             Render(false);
         }
-        public void RenderVertexSnap(VertexStoreSnap s, ColorRGBA c)
+        public void RenderVertexSnap(VertexStoreSnap s, Drawing.Color c)
         {
             m_ren.Color = c;
             AddPath(s);

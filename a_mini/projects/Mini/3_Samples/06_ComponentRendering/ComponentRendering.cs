@@ -54,11 +54,11 @@ namespace PixelFarm.Agg
                 ClipProxyImage clippingProxyBlue = new ClipProxyImage(blueImageBuffer);
                 ScanlineRasterizer sclineRas = graphics2D.ScanlineRasterizer;
                 ScanlinePacked8 scline = graphics2D.ScanlinePacked8;
-                ColorRGBA clearColor = this.UseBlackBlackground ? new ColorRGBA(0, 0, 0) : new ColorRGBA(255, 255, 255);
+                Drawing.Color clearColor = this.UseBlackBlackground ? Drawing.Color.FromArgb(0, 0, 0) : Drawing.Color.FromArgb(255, 255, 255);
                 clippingProxy.Clear(clearColor);
-                ColorRGBA fillColor = this.UseBlackBlackground ?
-                    new ColorRGBA(255, 255, 255, (byte)(this.AlphaValue)) :
-                    new ColorRGBA(0, 0, 0, (byte)(this.AlphaValue));
+                Drawing.Color fillColor = this.UseBlackBlackground ?
+                    new Drawing.Color((byte)(this.AlphaValue), 255, 255, 255) :
+                    new Drawing.Color((byte)(this.AlphaValue), 0, 0, 0);
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
                 VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 sclineRas.AddPath(er.MakeVertexSnap());

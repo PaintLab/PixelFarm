@@ -43,8 +43,6 @@ namespace PixelFarm.Drawing.WinGdi
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
                         break;
-                    case PixelFarm.Agg.VertexCmd.HasMore:
-                        break;
                     case PixelFarm.Agg.VertexCmd.Stop:
                         i = vcount + 1;//exit from loop
                         break;
@@ -74,14 +72,12 @@ namespace PixelFarm.Drawing.WinGdi
                         brush_path.StartFigure();
                         break;
                     case PixelFarm.Agg.VertexCmd.LineTo:
-
                         brush_path.AddLine((float)prevX, (float)prevY, (float)x, (float)y);
                         prevX = x;
                         prevY = y;
                         break;
                     case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
-                        //from current point
-                        //
+                        //from current point                         
                         brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
@@ -89,8 +85,6 @@ namespace PixelFarm.Drawing.WinGdi
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
                         goto EXIT_LOOP;
-                    case PixelFarm.Agg.VertexCmd.HasMore:
-                        break;
                     case PixelFarm.Agg.VertexCmd.Stop:
                         goto EXIT_LOOP;
                     default:
@@ -100,21 +94,21 @@ namespace PixelFarm.Drawing.WinGdi
             EXIT_LOOP:
             return brush_path;
         }
-        public static void FillVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
+        public static void FillVxsSnap(Graphics g, VertexStoreSnap vxsSnap, Color c)
         {
             System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
             _br.Color = ToDrawingColor(c);
             g.FillPath(_br, p);
         }
-        public static void DrawVxsSnap(Graphics g, VertexStoreSnap vxsSnap, ColorRGBA c)
+        public static void DrawVxsSnap(Graphics g, VertexStoreSnap vxsSnap, Color c)
         {
             System.Drawing.Drawing2D.GraphicsPath p = CreateGraphicsPath(vxsSnap);
             _pen.Color = ToDrawingColor(c);
             g.DrawPath(_pen, p);
         }
-        public static System.Drawing.Color ToDrawingColor(ColorRGBA c)
+        public static System.Drawing.Color ToDrawingColor(Color c)
         {
-            return System.Drawing.Color.FromArgb(c.alpha, c.red, c.green, c.blue);
+            return System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
         }
     }
 }
