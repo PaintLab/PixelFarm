@@ -38,19 +38,19 @@ namespace PixelFarm.Agg.VertexSource
         bool m_cw;
         public Ellipse()
         {
-            Init(0, 0, 1, 1, 4, false);
+            Set(0, 0, 1, 1, 4, false);
         }
         public Ellipse(double originX, double originY, double radiusX, double radiusY, int num_steps = 0, bool cw = false)
         {
-            Init(originX, originY, radiusX, radiusY, num_steps, cw);
+            Set(originX, originY, radiusX, radiusY, num_steps, cw);
         }
         public void Reset(double originX, double originY, double radiusX, double radiusY, int num_steps = 0)
         {
-            Init(originX, originY, radiusX, radiusY, num_steps, false);
+            Set(originX, originY, radiusX, radiusY, num_steps, false);
         }
-        void Init(double ox, double oy,
+        public void Set(double ox, double oy,
                  double rx, double ry,
-                 int num_steps, bool cw)
+                 int num_steps = 0, bool cw = false)
         {
             originX = ox;
             originY = oy;
