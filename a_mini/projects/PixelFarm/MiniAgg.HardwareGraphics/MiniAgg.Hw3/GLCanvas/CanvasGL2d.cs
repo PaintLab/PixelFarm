@@ -207,7 +207,7 @@ namespace PixelFarm.DrawingGL
                         throw new NotSupportedException();
                 }
             }
-        EXIT_LOOP:
+            EXIT_LOOP:
             return allXYlist;
         }
 
@@ -449,10 +449,9 @@ namespace PixelFarm.DrawingGL
                     {
                         smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
-                        CoordList2f coords = new CoordList2f();
-                        CreatePolyLineRectCoords2(coords, x, y, w, h);
-                        float[] internalArr = coords.GetInternalArray();
-                        smoothLineShader.DrawPolygon(internalArr, coords.Count << 1);
+
+                        float[] internalArr = CreatePolyLineRectCoords2(x, y, w, h);
+                        smoothLineShader.DrawPolygon(internalArr, 4 << 1);
                     }
                     break;
                 default:
