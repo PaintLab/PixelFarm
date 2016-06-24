@@ -1,4 +1,4 @@
-﻿//MIT 2014, WinterDev
+﻿//MIT 2014-2016, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,6 @@ namespace Mini
         {
             //----------------------------
             OpenTK.Toolkit.Init();
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());

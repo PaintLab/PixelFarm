@@ -1,11 +1,11 @@
-//BSD 2014, WinterDev
+//BSD, 2014-2016, WinterDev
 //MattersHackers
 //AGG 2.4
 
 
 using System;
-using System.Globalization; 
-using PixelFarm.Agg.VertexSource; 
+using System.Globalization;
+using PixelFarm.Agg.VertexSource;
 namespace PixelFarm.Agg
 {
     class LionDataStore

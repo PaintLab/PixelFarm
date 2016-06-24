@@ -1,4 +1,4 @@
-﻿//MIT 2014, WinterDev
+﻿//MIT 2014-2016, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -199,7 +199,7 @@ namespace PixelFarm.DrawingGL
                         xylist = new List<float>();
                         isAddToList = false;
                         break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure: 
+                    case PixelFarm.Agg.VertexCmd.EndFigure:
                         break;
                     case PixelFarm.Agg.VertexCmd.Stop:
                         goto EXIT_LOOP;

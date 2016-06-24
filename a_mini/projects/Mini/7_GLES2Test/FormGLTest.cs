@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.HardwareGraphics;
-
 namespace Mini
 {
     partial class FormGLTest : Form
@@ -12,7 +11,6 @@ namespace Mini
         CanvasGL2d canvas2d;
         DemoBase exampleBase;
         GLCanvasPainter canvasPainter;
-
         public FormGLTest()
         {
             InitializeComponent();
@@ -30,13 +28,10 @@ namespace Mini
                 miniGLControl.Height = h;
                 miniGLControl.ClearColor = PixelFarm.Drawing.Color.Blue;
                 this.Controls.Add(miniGLControl);
-
                 miniGLControl.SetGLPaintHandler(HandleGLPaint);
                 hh1 = miniGLControl.Handle;
                 miniGLControl.MakeCurrent();
-
                 int max = Math.Max(this.Width, this.Height);
-
                 canvas2d = new CanvasGL2d(max, max);
                 canvasPainter = new GLCanvasPainter(canvas2d, max, max);
             }
@@ -74,6 +69,5 @@ namespace Mini
             this.exampleBase = exBase;
             exampleBase.Init();
         }
-
     }
 }

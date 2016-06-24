@@ -1,4 +1,4 @@
-﻿// 2015,2014 ,BSD, WinterDev
+﻿//BSD, 2014-2016, WinterDev
 //BSD August 2009, 2014, WinterDev
 
 using System;

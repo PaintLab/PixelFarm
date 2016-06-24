@@ -1,4 +1,4 @@
-//2014,2015 BSD,WinterDev   
+//BSD, 2014-2016, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -75,7 +75,6 @@ namespace PixelFarm.Agg.Image
                 buffer[bufferOffset + CO.R] = sourceColor.red;
                 buffer[bufferOffset + CO.G] = sourceColor.green;
                 buffer[bufferOffset + CO.B] = sourceColor.blue;
-
                 bufferOffset += 4;
             }
             while (--count != 0);

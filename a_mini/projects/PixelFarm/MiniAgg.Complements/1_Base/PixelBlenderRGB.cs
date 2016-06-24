@@ -1,4 +1,4 @@
-//2014,2015 BSD,WinterDev   
+//BSD, 2014-2016, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -155,7 +155,7 @@ namespace PixelFarm.Agg.Image
     {
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new Color( 
+            return new Color(
                 buffer[bufferOffset + CO.R],
                 buffer[bufferOffset + CO.G],
                 buffer[bufferOffset + CO.B]
@@ -212,7 +212,6 @@ namespace PixelFarm.Agg.Image
                 {
                     do
                     {
-
                         sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
                         BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
                         bufferOffset += 3;
@@ -319,7 +318,7 @@ namespace PixelFarm.Agg.Image
 
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new Color( 
+            return new Color(
                 buffer[bufferOffset + CO.R],
                 buffer[bufferOffset + CO.G],
                 buffer[bufferOffset + CO.B]

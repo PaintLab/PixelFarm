@@ -91,7 +91,7 @@ namespace PixelFarm.Drawing.WinGdi
                         throw new NotSupportedException();
                 }
             }
-            EXIT_LOOP:
+        EXIT_LOOP:
             return brush_path;
         }
         public static void FillVxsSnap(Graphics g, VertexStoreSnap vxsSnap, Color c)

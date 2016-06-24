@@ -1,4 +1,4 @@
-﻿// 2015,2014 ,BSD, WinterDev
+﻿//BSD, 2014-2016, WinterDev
 
 
 //----------------------------------------------------------------------------
@@ -95,7 +95,6 @@ namespace PixelFarm.Drawing
         public byte A
         {
             get { return this.a; }
-
         }
         public byte alpha
         {
@@ -135,7 +134,6 @@ namespace PixelFarm.Drawing
                     c.g == this.g;
             }
             return false;
-
         }
 
         public static readonly Color Empty = new Color(0, 0, 0, 0);
@@ -151,7 +149,6 @@ namespace PixelFarm.Drawing
         public static readonly Color OrangeRed = new Color(0xFF, 0xFF, 0x45, 0x00);//0xFF FF 45 00
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
         public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
-
         public static Color FromName(string name)
         {
             var color = KnownColors.FromKnownColor(name);
@@ -189,7 +186,6 @@ namespace PixelFarm.Drawing
         public const int BASE_SHIFT = 8;
         public const int BASE_SCALE = (1 << BASE_SHIFT);
         public const int BASE_MASK = (BASE_SCALE - 1);
-
         public byte Red0To255
         {
             get { return r; }
@@ -224,7 +220,6 @@ namespace PixelFarm.Drawing
                ((byte)Agg.AggBasics.uround(r_ * (double)BASE_MASK)),
                ((byte)Agg.AggBasics.uround(g_ * (double)BASE_MASK)),
                ((byte)Agg.AggBasics.uround(b_ * (double)BASE_MASK)));
-
         }
         //------------------------------------------
         public static Color Make(float r_, float g_, float b_)

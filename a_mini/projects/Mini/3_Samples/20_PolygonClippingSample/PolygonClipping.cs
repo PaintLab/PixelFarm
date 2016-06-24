@@ -1,4 +1,4 @@
-﻿//2014 BSD, WinterDev
+﻿//2014-2016 BSD, WinterDev
 //MatterHackers
 
 using System;
@@ -498,7 +498,6 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                     ++m_contours;
                 }
             } while (cmd != VertexCmd.Stop);
-
         }
     }
 }

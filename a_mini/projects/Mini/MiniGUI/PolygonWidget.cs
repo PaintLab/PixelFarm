@@ -16,6 +16,7 @@
 // classes polygon_ctrl_impl, polygon_ctrl
 //
 //----------------------------------------------------------------------------
+
 using PixelFarm.Drawing;
 using System;
 using System.Collections.Generic;

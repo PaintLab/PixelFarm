@@ -1,4 +1,4 @@
-//2014,2015 BSD,WinterDev   
+//BSD, 2014-2016, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -476,8 +476,6 @@ namespace PixelFarm.Agg
             float c_green = c_8.G / 255f;
             float c_blue = c_8.B / 255f;
             float c_alpha = c_8.A / 255f;
-
-
             float n_red = (float)(red + (c_red - red) * k);
             float n_green = (float)(green + (c_green - green) * k);
             float n_blue = (float)(blue + (c_blue - blue) * k);
@@ -618,9 +616,5 @@ namespace PixelFarm.Agg
             Clamp0To1(ref blue);
             Clamp0To1(ref alpha);
         }
-
-
     }
-
-
 }

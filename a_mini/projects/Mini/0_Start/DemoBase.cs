@@ -1,4 +1,4 @@
-﻿//MIT 2014, WinterDev
+﻿//MIT 2014-2016, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ namespace Mini
             this.Height = 600;
         }
 
-       
+
         public abstract void Draw(CanvasPainter p);
         public virtual void Init() { }
 
@@ -52,7 +52,6 @@ namespace Mini
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }
-         
     }
 
     public class DemoConfigAttribute : Attribute

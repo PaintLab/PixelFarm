@@ -1,4 +1,4 @@
-//2014,2015 BSD,WinterDev  
+//BSD, 2014-2016, WinterDev
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
@@ -45,7 +45,7 @@ namespace PixelFarm.Agg
         {
             Render(new VertexStoreSnap(vxs), c);
         }
-     
+
         public Affine CurrentTransformMatrix
         {
             get { return this.currentTxMatrix; }

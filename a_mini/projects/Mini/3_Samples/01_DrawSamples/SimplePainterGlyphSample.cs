@@ -1,4 +1,4 @@
-﻿//2014 BSD,WinterDev
+﻿//BSD, 2014-2016, WinterDev
 
 //MatterHackers: BSD
 // Much of the ui to the drawing functions still needs to be C#'ed and cleaned up.  A lot of
@@ -28,7 +28,6 @@ namespace PixelFarm.Agg.SimplePainter
             // clear the image to white 
             p.Clear(Drawing.Color.White);
             p.FillColor = Drawing.Color.FromArgb(80, Drawing.Color.Blue);
-
             //M414 -20q-163 0 -245 86t-82 236z
             //<path d="M414 20q-163 40 -245 126t-82 276z"/> 
             //PathWriter path = new PathWriter();

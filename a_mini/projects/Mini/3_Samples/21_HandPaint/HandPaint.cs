@@ -1,4 +1,4 @@
-﻿//BSD 2014, WinterDev
+﻿//BSD, 2014-2016, WinterDev
 
 /*
 Copyright (c) 2013, Lars Brubaker

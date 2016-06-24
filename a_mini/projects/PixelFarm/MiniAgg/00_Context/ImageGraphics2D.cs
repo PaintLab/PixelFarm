@@ -1,4 +1,4 @@
-//2014,2015 MIT,WinterDev  
+//MIT, 2014-2016, WinterDev
 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
@@ -25,11 +25,8 @@ using PixelFarm.Agg.Image;
 using PixelFarm.Agg.Transform;
 namespace PixelFarm.Agg
 {
-
     public partial class ImageGraphics2D : Graphics2D
     {
-
-
         ImageReaderWriterBase destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
         VertexStore myTmpImgRectVxs = new VertexStore();

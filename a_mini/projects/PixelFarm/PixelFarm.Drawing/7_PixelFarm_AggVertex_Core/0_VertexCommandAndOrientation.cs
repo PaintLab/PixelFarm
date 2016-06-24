@@ -1,4 +1,4 @@
-﻿//2014,2015 BSD,WinterDev   
+﻿//BSD, 2014-2016, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace PixelFarm.Agg
         //the order of these fields are significant!
         //---------------------------------
         //first lower 4 bits compact flags
-        Stop = 0x00, 
+        Stop = 0x00,
         //-----------------------
         //end figure command 2 lower bits 
         //is end command when 2 lower bit > HasMore
