@@ -446,8 +446,8 @@ namespace PixelFarm.Agg
                     {
                         byte oldAlpha = sourceColor.A;
                         //TODO:review here, sourceColor mat not changed
-                        sourceColor.A = (byte)(((int)(sourceColor.A) * ((int)(covers[coversIndex++]) + 1)) >> 8);
-                        if (sourceColor.A == BASE_MASK)
+                        sourceColor.alpha = (byte)(((int)(sourceColor.A) * ((int)(covers[coversIndex++]) + 1)) >> 8);
+                        if (sourceColor.alpha == BASE_MASK)
                         {
                             recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, sourceColor);
                         }
@@ -456,7 +456,7 @@ namespace PixelFarm.Agg
                             recieveBlender.BlendPixel(m_ByteBuffer, bufferOffset, sourceColor);
                         }
                         bufferOffset += scanWidthBytes;
-                        sourceColor.A = oldAlpha;
+                        sourceColor.alpha = oldAlpha;
                     }
                     while (--len != 0);
                 }

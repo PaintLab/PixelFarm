@@ -166,7 +166,7 @@ namespace PixelFarm.Agg.VertexSource
                 byte g = reader.ReadByte();
                 byte b = reader.ReadByte();
                 byte a = reader.ReadByte();
-                colors[i] = new Color(r, g, b, a);
+                colors[i] = new Color(a, r, g, b);
             }
             int end = reader.ReadInt32();
         }

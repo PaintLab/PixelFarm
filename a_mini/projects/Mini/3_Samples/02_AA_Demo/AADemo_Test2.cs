@@ -119,7 +119,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 ps.LineTo(m_x[2], m_y[2]);
                 ps.LineTo(m_x[0], m_y[0]);
                 rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs));
-                sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(0, 150, 160, 200));
+                sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
             }
         }
 

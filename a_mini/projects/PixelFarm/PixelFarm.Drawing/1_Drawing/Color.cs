@@ -1,5 +1,5 @@
 ﻿// 2015,2014 ,BSD, WinterDev
- 
+
 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
@@ -73,6 +73,13 @@ namespace PixelFarm.Drawing
             this.b = b;
             this.a = a;
         }
+        public Color(byte r, byte g, byte b)
+        {
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.a = 255;
+        }
         public byte R
         {
             get { return this.r; }
@@ -88,14 +95,14 @@ namespace PixelFarm.Drawing
         public byte A
         {
             get { return this.a; }
-            set { a = value; }
+
         }
         public byte alpha
         {
             get { return this.a; }
             set { this.a = value; }
         }
-       
+
         public byte red { get { return this.r; } set { this.r = value; } }
         public byte green { get { return this.g; } set { this.g = value; } }
         public byte blue { get { return this.b; } set { this.b = value; } }
@@ -144,7 +151,7 @@ namespace PixelFarm.Drawing
         public static readonly Color OrangeRed = new Color(0xFF, 0xFF, 0x45, 0x00);//0xFF FF 45 00
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
         public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
-            
+
         public static Color FromName(string name)
         {
             var color = KnownColors.FromKnownColor(name);
@@ -182,23 +189,7 @@ namespace PixelFarm.Drawing
         public const int BASE_SHIFT = 8;
         public const int BASE_SCALE = (1 << BASE_SHIFT);
         public const int BASE_MASK = (BASE_SCALE - 1);
-        //public static readonly Color White = new Color(255, 255, 255, 255);
-        //public static readonly Color LightGray = new Color(225, 225, 225, 255);
-        //public static readonly Color Gray = new Color(125, 125, 125, 235);
-        //public static readonly Color DarkGray = new Color(85, 85, 85, 255);
-        //public static readonly Color Black = new Color(0, 0, 0, 255);
-        //public static readonly Color Red = new Color(255, 0, 0, 255);
-        //public static readonly Color Orange = new Color(255, 127, 0, 255);
-        //public static readonly Color Pink = new Color(255, 192, 203, 255);
-        //public static readonly Color Green = new Color(0, 255, 0, 255);
-        //public static readonly Color Blue = new Color(0, 0, 255, 255);
-        //public static readonly Color Indigo = new Color(75, 0, 130, 255);
-        //public static readonly Color Violet = new Color(143, 0, 255, 255);
-        //public static readonly Color Cyan = new Color(0, 255, 255, 255);
-        //public static readonly Color Magenta = new Color(255, 0, 255, 255);
-        //public static readonly Color Yellow = new Color(255, 255, 0, 255);
-        //public static readonly Color YellowGreen = new Color(154, 205, 50, 255);
-        //public static readonly Color Transparent = new Color(0, 0, 0, 0);
+
         public byte Red0To255
         {
             get { return r; }
@@ -215,20 +206,7 @@ namespace PixelFarm.Drawing
         {
             get { return a; }
         }
-        //public Color(byte r_, byte g_, byte b_)
-        //{
-        //    red = r_;
-        //    green = g_;
-        //    blue = b_;
-        //    alpha = 255;// (byte)Math.Min(Math.Max(BASE_MASK, 0), 255);
-        //}
-        //public Color(byte r_, byte g_, byte b_, byte a_)
-        //{
-        //    red = r_;
-        //    green = g_;
-        //    blue = b_;
-        //    alpha = a_;
-        //}
+
         //------------------------------------------
         public static Color Make(double r_, double g_, double b_, double a_)
         {
@@ -278,78 +256,6 @@ namespace PixelFarm.Drawing
                );
         }
 
-        //public Color(Color c)
-        //{
-        //    red = (byte)c.red;
-        //    green = (byte)c.green;
-        //    blue = (byte)c.blue;
-        //    alpha = (byte)c.alpha;
-        //}
-
-        //public Color(Color c, int a_)
-        //{
-        //    red = (byte)c.red;
-        //    green = (byte)c.green;
-        //    blue = (byte)c.blue;
-        //    alpha = (byte)a_;
-        //}
-
-
-        //public Color(XUolorRXBAf c)
-        //{
-        //    red = ((byte)AggBasics.uround(c.red * (double)BASE_MASK));
-        //    green = ((byte)AggBasics.uround(c.green * (double)BASE_MASK));
-        //    blue = ((byte)AggBasics.uround(c.blue * (double)BASE_MASK));
-        //    alpha = ((byte)AggBasics.uround(c.alpha * (double)BASE_MASK));
-        //}
-
-        //public static bool operator ==(Color a, Color b)
-        //{
-        //    //if a.red== bred then
-        //    //a.red ^ b.red =0 
-        //    return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) == 0;
-        //    //if (a.red == b.red && a.green == b.green && a.blue == b.blue && a.alpha == b.alpha)
-        //    //{
-        //    //    return true;
-        //    //} 
-        //    //return false;
-        //}
-
-        //public static bool operator !=(Color a, Color b)
-        //{
-        //    //if a.red !=  b.red then
-        //    //a.red ^ b.red  =1 
-        //    return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) != 0;
-        //    //if (a.red != b.red || a.green != b.green || a.blue != b.blue || a.alpha != b.alpha)
-        //    //{
-        //    //    return true;
-        //    //}
-
-        //    //return false;
-        //}
-
-        //public override bool Equals(object obj)
-        //{
-        //    if (obj.GetType() == typeof(Color))
-        //    {
-        //        return this == (Color)obj;
-        //    }
-        //    return false;
-        //}
-
-        //public override int GetHashCode()
-        //{
-        //    return new { blue, green, red, alpha }.GetHashCode();
-        //}
-
-        //public XUolorRXBAf GetAsRGBA_Floats()
-        //{
-        //    return new XUolorRXBAf((float)red / (float)BASE_MASK,
-        //        (float)green / (float)BASE_MASK,
-        //        (float)blue / (float)BASE_MASK,
-        //        (float)alpha / (float)BASE_MASK);
-        //}
-
         public Color CreateGradient(Color another, float colorDistanceRatio)
         {
             //int ik = AggBasics.uround(colorDistanceRatio * BASE_SCALE); 
@@ -357,8 +263,6 @@ namespace PixelFarm.Drawing
             //byte g = (byte)((int)(Green0To255) + ((((int)(another.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
             //byte b = (byte)((int)(Blue0To255) + ((((int)(another.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));
             //byte a = (byte)((int)(Alpha0To255) + ((((int)(another.Alpha0To255) - Alpha0To255) * ik) >> BASE_SHIFT));
-
-
 
             //from this color to another c color
             //colorDistance ratio [0-1]
@@ -368,7 +272,7 @@ namespace PixelFarm.Drawing
             byte g = (byte)(Green0To255 + (another.Green0To255 - this.Green0To255) * colorDistanceRatio);
             byte b = (byte)(Blue0To255 + (another.Blue0To255 - this.Blue0To255) * colorDistanceRatio);
             byte a = (byte)(Alpha0To255 + (another.Alpha0To255 - this.Alpha0To255) * colorDistanceRatio);
-            return new Color(r, g, b, a);
+            return new Color(a, r, g, b);
         }
 
         static public Color operator +(Color A, Color B)

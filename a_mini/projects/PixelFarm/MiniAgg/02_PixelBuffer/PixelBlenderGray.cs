@@ -53,7 +53,7 @@ namespace PixelFarm.Agg.Image
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
             byte value = buffer[bufferOffset];
-            return new Color(value, value, value, 255);
+            return new Color(value, value, value);
         }
 
         public void CopyPixels(byte[] pDestBuffer, int bufferOffset, Color sourceColor, int count)
@@ -157,7 +157,7 @@ namespace PixelFarm.Agg.Image
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
             byte value = buffer[bufferOffset];
-            return new Color(value, value, value, 255);
+            return new Color(value, value, value);
         }
 
         public void CopyPixels(byte[] pDestBuffer, int bufferOffset, Color sourceColor, int count)
@@ -256,7 +256,7 @@ namespace PixelFarm.Agg.Image
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
             byte value = buffer[bufferOffset];
-            return new Color(value, value, value, 255);
+            return new Color(value, value, value);
         }
 
         public void CopyPixels(byte[] pDestBuffer, int bufferOffset, Color sourceColor, int count)

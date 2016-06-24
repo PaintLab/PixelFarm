@@ -155,11 +155,11 @@ namespace PixelFarm.Agg.Image
     {
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new Color(
+            return new Color( 
                 buffer[bufferOffset + CO.R],
                 buffer[bufferOffset + CO.G],
-                buffer[bufferOffset + CO.B],
-                255);
+                buffer[bufferOffset + CO.B]
+                );
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
@@ -213,7 +213,7 @@ namespace PixelFarm.Agg.Image
                     do
                     {
 
-                        sourceColors[sourceColorsOffset].A = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
+                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
                         BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
                         bufferOffset += 3;
                         ++sourceColorsOffset;
@@ -233,7 +233,7 @@ namespace PixelFarm.Agg.Image
                     else
                     {
                         Color color = sourceColors[sourceColorsOffset];
-                        color.A = (byte)((color.A * (cover) + 255) >> 8);
+                        color.alpha = (byte)((color.A * (cover) + 255) >> 8);
                         BlendPixel(destBuffer, bufferOffset, color);
                     }
                     bufferOffset += 3;
@@ -263,7 +263,7 @@ namespace PixelFarm.Agg.Image
 
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new Color(buffer[bufferOffset + CO.R], buffer[bufferOffset + CO.G], buffer[bufferOffset + CO.B], 255);
+            return new Color(buffer[bufferOffset + CO.R], buffer[bufferOffset + CO.G], buffer[bufferOffset + CO.B]);
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
@@ -319,7 +319,7 @@ namespace PixelFarm.Agg.Image
 
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
-            return new Color(255,
+            return new Color( 
                 buffer[bufferOffset + CO.R],
                 buffer[bufferOffset + CO.G],
                 buffer[bufferOffset + CO.B]
@@ -386,7 +386,7 @@ namespace PixelFarm.Agg.Image
                 {
                     do
                     {
-                        sourceColors[sourceColorsOffset].A = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
+                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
                         BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
                         bufferOffset += 3;
                         ++sourceColorsOffset;
