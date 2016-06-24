@@ -86,6 +86,11 @@
     <Compile Include="PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation.Win32\WindowsFormsBitmapBackBuffer.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\0_Start\GLES2Platform.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\MyGLCanvas\1_MyGLCanvas_Specific.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\MyGLCanvas\2_MyGLCanvas_CoordinateAndClip.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\MyGLCanvas\3_MyGLCanvas_DrawGraphics.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\MyGLCanvas\4_MyGLCanvas_TextAndFonts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -112,9 +117,21 @@
       <Project>{ae0df71e-9b14-4197-b55a-e1e0ce0683c7}</Project>
       <Name>MiniAgg.Complements</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.HardwareGraphics\MiniAgg.Hw3\MiniAgg.Hw3.csproj">
+      <Project>{e0bc92c3-6936-4d8f-ae7f-54dde27de370}</Project>
+      <Name>MiniAgg.Hw3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniAgg.HardwareGraphics\OpenTK.ES\OpenTK.ES.csproj">
+      <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
+      <Name>OpenTK.ES</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniTesselate\Tesselate.csproj">
+      <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
+      <Name>Tesselate</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>

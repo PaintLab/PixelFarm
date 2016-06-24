@@ -1,6 +1,5 @@
 ﻿//BSD, 2014-2016, WinterDev
 
-
 namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiPlatform : GraphicsPlatform
