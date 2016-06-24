@@ -18,7 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System.Collections.Generic;
+
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {

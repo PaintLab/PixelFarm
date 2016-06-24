@@ -20,7 +20,6 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Fonts;
 namespace PixelFarm.Agg
 {
     public abstract class CanvasPainter

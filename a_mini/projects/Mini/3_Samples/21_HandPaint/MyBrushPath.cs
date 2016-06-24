@@ -14,6 +14,8 @@ namespace PixelFarm.Agg.Samples
         VertexStore vxs;
         internal List<Vector2> contPoints = new List<Vector2>();
         RectD boundingRect = new RectD();
+        VertexSource.CurveFlattener cflat = new VertexSource.CurveFlattener();
+
         bool isValidSmooth = false;
         public MyBrushPath()
         {
@@ -156,7 +158,6 @@ namespace PixelFarm.Agg.Samples
                 vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
             }
             vxs.AddCloseFigure();
-            PixelFarm.Agg.VertexSource.CurveFlattener cflat = new PixelFarm.Agg.VertexSource.CurveFlattener();
             vxs = cflat.MakeVxs(vxs);
         }
         public void Close()

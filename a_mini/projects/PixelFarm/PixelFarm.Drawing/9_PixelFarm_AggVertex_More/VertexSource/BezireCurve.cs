@@ -1,10 +1,6 @@
 ﻿//BSD, 2014-2016, WinterDev
 
-using System;
-using System.Collections.Generic;
-using PixelFarm.Agg;
 using PixelFarm.VectorMath;
-using FlagsAndCommand = PixelFarm.Agg.VertexCmd;
 namespace PixelFarm.Agg.VertexSource
 {
     /// <summary>

@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 
-using PixelFarm.Agg.VertexSource;
+
 namespace PixelFarm.Agg
 {
     public static class BoundingRect

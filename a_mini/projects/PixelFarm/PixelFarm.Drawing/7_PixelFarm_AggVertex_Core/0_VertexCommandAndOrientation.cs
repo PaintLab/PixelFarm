@@ -1,8 +1,5 @@
 ﻿//BSD, 2014-2016, WinterDev
-
-using System;
-using System.Collections.Generic;
-using System.Text;
+ 
 namespace PixelFarm.Agg
 {
     /// <summary>

@@ -12,6 +12,7 @@ namespace PixelFarm.Agg.Fonts
         const int PIXEL_PER_INCH = 96;
         int emSizeInPixels;
         double currentEmScalling;
+        Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
         Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
         System.Drawing.Font gdiFont;
         public GdiPathFont(GdiPathFontFace fontface, int emSizeInPoints)
@@ -94,6 +95,6 @@ namespace PixelFarm.Agg.Fonts
         {
             get { return false; }
         }
-        Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
+   
     }
 }

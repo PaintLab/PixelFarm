@@ -28,6 +28,14 @@ namespace PixelFarm.Agg
 {
     public static class Canvas2dExtension
     {
+        //helper tools, run in render thread***
+        //not thread safe ***
+
+        static MyTypeFacePrinter stringPrinter = new MyTypeFacePrinter();
+        static Stroke stroke = new Stroke(1);
+        static RoundedRect roundRect = new RoundedRect();
+        static SimpleRect simpleRect = new SimpleRect();
+        static Ellipse ellipse = new Ellipse();
         public static void DrawString(this Graphics2D gx,
             string text,
             double x,
@@ -41,22 +49,21 @@ namespace PixelFarm.Agg
         {
             ////use svg font 
             var svgFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, (int)pointSize);
-            var stringPrinter = new MyTypeFacePrinter();
+
             stringPrinter.CurrentFont = svgFont;
             stringPrinter.DrawFromHintedCache = false;
             stringPrinter.LoadText(text);
-            var vxs = stringPrinter.MakeVxs();
+            VertexStore vxs = stringPrinter.MakeVxs();
             vxs = Affine.NewTranslation(x, y).TransformToVxs(vxs);
             gx.Render(vxs, Color.Black);
         }
 
-
         public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, Color color, double strokeWidth = 1)
         {
-            RoundedRect rect = new RoundedRect(left + .5, bottom + .5, right - .5, top - .5, 0);
-            gx.Render(new Stroke(strokeWidth).MakeVxs(rect.MakeVxs()), color);
+            stroke.Width = strokeWidth;
+            simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
+            gx.Render(stroke.MakeVxs(simpleRect.MakeVxs()), color);
         }
-
         public static void Rectangle(this Graphics2D gx, RectD rect, Color color, double strokeWidth = 1)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color, strokeWidth);
@@ -77,7 +84,8 @@ namespace PixelFarm.Agg
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, Vector2 leftBottom,
+        public static void FillRectangle(this Graphics2D gx,
+            Vector2 leftBottom,
             Vector2 rightTop, Color fillColor)
         {
             gx.FillRectangle(leftBottom.x, leftBottom.y, rightTop.x, rightTop.y, fillColor);
@@ -90,13 +98,14 @@ namespace PixelFarm.Agg
             {
                 throw new ArgumentException();
             }
-            RoundedRect rect = new RoundedRect(left, bottom, right, top, 0);
-            gx.Render(rect.MakeVertexSnap(), fillColor);
+
+            simpleRect.SetRect(left, bottom, right, top);
+            gx.Render(simpleRect.MakeVertexSnap(), fillColor);
         }
         public static void Circle(this Graphics2D g, double x, double y, double radius, Color color)
         {
-            Ellipse elipse = new Ellipse(x, y, radius, radius);
-            g.Render(elipse.MakeVxs(), color);
+            ellipse.Set(x, y, radius, radius);
+            g.Render(ellipse.MakeVxs(), color);
         }
         public static void Circle(this Graphics2D g, Vector2 origin, double radius, Color color)
         {

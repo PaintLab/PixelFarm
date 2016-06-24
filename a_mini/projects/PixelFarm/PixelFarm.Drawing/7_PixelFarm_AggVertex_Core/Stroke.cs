@@ -21,8 +21,7 @@
 // conv_stroke
 //
 //----------------------------------------------------------------------------
-
-using System.Collections.Generic;
+ 
 namespace PixelFarm.Agg
 {
     public sealed class Stroke

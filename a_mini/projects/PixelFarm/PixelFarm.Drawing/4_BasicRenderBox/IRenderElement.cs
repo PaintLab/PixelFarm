@@ -1,6 +1,6 @@
 ﻿//MIT, 2014-2016, WinterDev
 
-using System;
+
 namespace PixelFarm.Drawing
 {
     public interface IRenderElement
