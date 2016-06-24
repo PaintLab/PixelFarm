@@ -25,7 +25,7 @@ namespace PixelFarm.Agg.Gradients
     public interface IGradientColorsProvider
     {
         int GradientSteps { get; }
-        ColorRGBA GetColor(int v);
+        Drawing.Color GetColor(int v);
     }
 
 

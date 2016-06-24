@@ -28,7 +28,7 @@ namespace Mini.WinForms
                 int j = spriteShape.NumPaths;
                 var myvxs = spriteShape.Path.Vxs;
                 int[] pathList = spriteShape.PathIndexList;
-                ColorRGBA[] colors = spriteShape.Colors;
+                PixelFarm.Drawing.Color[] colors = spriteShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
                     VxsHelper.FillVxsSnap(g, new VertexStoreSnap(myvxs, pathList[i]), colors[i]);

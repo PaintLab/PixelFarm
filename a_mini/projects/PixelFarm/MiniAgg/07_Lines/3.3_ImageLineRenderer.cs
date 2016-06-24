@@ -19,7 +19,9 @@
 //----------------------------------------------------------------------------
 #if true
 using System;
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Image;
+ 
 namespace PixelFarm.Agg.Lines
 {
     /*
@@ -187,7 +189,7 @@ namespace PixelFarm.Agg.Lines
         public double Width { get { return m_height; } }
 
         //--------------------------------------------------------------------
-        public void Pixel(ColorRGBA[] destBuffer, int destBufferOffset, int x, int y)
+        public void Pixel(Color[] destBuffer, int destBufferOffset, int x, int y)
         {
             m_filter.SetPixelHighRes(m_buf, destBuffer, destBufferOffset,
                                      x % m_width_hr + m_dilation_hr,
@@ -637,19 +639,19 @@ namespace PixelFarm.Agg.Lines
 
         public double Width { get { return (double)(SubPixelWidth) / LineAA.SUBPIXEL_SCALE; } }
 
-        public void Pixel(ColorRGBA[] p, int offset, int x, int y)
+        public void Pixel(Color[] p, int offset, int x, int y)
         {
             throw new NotImplementedException();
             //m_pattern.pixel(p, x, y);
         }
 
-        public void BlendColorHSpan(int x, int y, uint len, ColorRGBA[] colors, int colorsOffset)
+        public void BlendColorHSpan(int x, int y, uint len, Color[] colors, int colorsOffset)
         {
             throw new NotImplementedException();
             //            m_ren.blend_color_hspan(x, y, len, colors, null, 0);
         }
 
-        public void BlendColorVSpan(int x, int y, uint len, ColorRGBA[] colors, int colorsOffset)
+        public void BlendColorVSpan(int x, int y, uint len, Color[] colors, int colorsOffset)
         {
             throw new NotImplementedException();
             //            m_ren.blend_color_vspan(x, y, len, colors, null, 0);

@@ -28,7 +28,7 @@ namespace PixelFarm.Agg
               ScanlineRasterizer sclineRas,
               Scanline scline,
               VertexStore vxs,
-              ColorRGBA[] colors,
+              Drawing.Color[] colors,
               int[] path_id,
               int num_paths)
         {

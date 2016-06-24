@@ -38,7 +38,7 @@ namespace PixelFarm.Agg
     //struct order_abgr { enum abgr_e { A = 0, B = 1, G = 2, R = 3, rgba_tag }; }; //----order_abgr
     //struct order_bgra { enum bgra_e { B = 0, G = 1, R = 2, A = 3, rgba_tag }; }; //----order_bgra
 
-    public struct ColorRGBAf //: IColor
+    public struct ColorRGBAf
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
@@ -325,11 +325,6 @@ namespace PixelFarm.Agg
             return new { blue, green, red, alpha }.GetHashCode();
         }
 
-        public ColorRGBA ToColorRGBA()
-        {
-            return ColorRGBA.Make(Red0To255, Green0To255, Blue0To255, Alpha0To255);
-        }
-
 
 
         static public ColorRGBAf operator +(ColorRGBAf A, ColorRGBAf B)
@@ -475,19 +470,23 @@ namespace PixelFarm.Agg
             return this;
         }
 
-        public ColorRGBA gradient(ColorRGBA c_8, double k)
+        public Drawing.Color gradient(Drawing.Color c_8, double k)
         {
-            ColorRGBAf c = c_8.GetAsRGBA_Floats();
-            ColorRGBAf ret;
-            ret.red = (float)(red + (c.red - red) * k);
-            ret.green = (float)(green + (c.green - green) * k);
-            ret.blue = (float)(blue + (c.blue - blue) * k);
-            ret.alpha = (float)(alpha + (c.alpha - alpha) * k);
-            return ret.ToColorRGBA();
+            float c_red = c_8.R / 255f;
+            float c_green = c_8.G / 255f;
+            float c_blue = c_8.B / 255f;
+            float c_alpha = c_8.A / 255f;
+
+
+            float n_red = (float)(red + (c_red - red) * k);
+            float n_green = (float)(green + (c_green - green) * k);
+            float n_blue = (float)(blue + (c_blue - blue) * k);
+            float n_alpha = (float)(alpha + (c_alpha - alpha) * k);
+            return Drawing.Color.FromArgb(c_alpha, c_red, c_green, c_blue);
         }
 
-        static ColorRGBA transparentColor = new ColorRGBAf(0, 0, 0, 0).ToColorRGBA();
-        public static ColorRGBA GetTransparentColor() { return transparentColor; }
+
+        //public static Color GetTransparentColor() { return transparentColor; }
 
         public static ColorRGBAf FromWaveLength(float wl)
         {
@@ -621,292 +620,7 @@ namespace PixelFarm.Agg
         }
 
 
-
-        public static ColorRGBA MakeColorRGBA(float r_, float g_, float b_, float a_)
-        {
-            return new ColorRGBAf(r_, g_, b_, a_).ToColorRGBA();
-        }
-        public static ColorRGBA MakeColorRGBA(float r_, float g_, float b_)
-        {
-            return new ColorRGBAf(r_, g_, b_, 1.0f).ToColorRGBA();
-        }
     }
 
-    public struct ColorRGBA
-    {
-        //--------------
-        //BGRA *** 
-        public byte blue;
-        public byte green;
-        public byte red;
-        public byte alpha;
-        public const int COVER_SHIFT = 8;
-        public const int COVER_SIZE = 1 << COVER_SHIFT;  //----cover_size 
-        public const int COVER_MASK = COVER_SIZE - 1;    //----cover_mask   
-        public const int BASE_SHIFT = 8;
-        public const int BASE_SCALE = (1 << BASE_SHIFT);
-        public const int BASE_MASK = (BASE_SCALE - 1);
-        public static readonly ColorRGBA White = new ColorRGBA(255, 255, 255, 255);
-        public static readonly ColorRGBA LightGray = new ColorRGBA(225, 225, 225, 255);
-        public static readonly ColorRGBA Gray = new ColorRGBA(125, 125, 125, 235);
-        public static readonly ColorRGBA DarkGray = new ColorRGBA(85, 85, 85, 255);
-        public static readonly ColorRGBA Black = new ColorRGBA(0, 0, 0, 255);
-        public static readonly ColorRGBA Red = new ColorRGBA(255, 0, 0, 255);
-        public static readonly ColorRGBA Orange = new ColorRGBA(255, 127, 0, 255);
-        public static readonly ColorRGBA Pink = new ColorRGBA(255, 192, 203, 255);
-        public static readonly ColorRGBA Green = new ColorRGBA(0, 255, 0, 255);
-        public static readonly ColorRGBA Blue = new ColorRGBA(0, 0, 255, 255);
-        public static readonly ColorRGBA Indigo = new ColorRGBA(75, 0, 130, 255);
-        public static readonly ColorRGBA Violet = new ColorRGBA(143, 0, 255, 255);
-        public static readonly ColorRGBA Cyan = new ColorRGBA(0, 255, 255, 255);
-        public static readonly ColorRGBA Magenta = new ColorRGBA(255, 0, 255, 255);
-        public static readonly ColorRGBA Yellow = new ColorRGBA(255, 255, 0, 255);
-        public static readonly ColorRGBA YellowGreen = new ColorRGBA(154, 205, 50, 255);
-        public static readonly ColorRGBA Transparent = new ColorRGBA(0, 0, 0, 0);
-        public byte Red0To255
-        {
-            get { return red; }
-        }
-        public byte Green0To255
-        {
-            get { return green; }
-        }
-        public byte Blue0To255
-        {
-            get { return blue; }
-        }
-        public byte Alpha0To255
-        {
-            get { return alpha; }
-        }
-        public ColorRGBA(byte r_, byte g_, byte b_)
-        {
-            red = r_;
-            green = g_;
-            blue = b_;
-            alpha = 255;// (byte)Math.Min(Math.Max(BASE_MASK, 0), 255);
-        }
-        public ColorRGBA(byte r_, byte g_, byte b_, byte a_)
-        {
-            red = r_;
-            green = g_;
-            blue = b_;
-            alpha = a_;
-        }
-        //------------------------------------------
-        public static ColorRGBA Make(double r_, double g_, double b_, double a_)
-        {
-            return new ColorRGBA(
-               ((byte)AggBasics.uround(r_ * (double)BASE_MASK)),
-               ((byte)AggBasics.uround(g_ * (double)BASE_MASK)),
-               ((byte)AggBasics.uround(b_ * (double)BASE_MASK)),
-               ((byte)AggBasics.uround(a_ * (double)BASE_MASK)));
-        }
-        public static ColorRGBA Make(double r_, double g_, double b_)
-        {
-            return new ColorRGBA(
-               ((byte)AggBasics.uround(r_ * (double)BASE_MASK)),
-               ((byte)AggBasics.uround(g_ * (double)BASE_MASK)),
-               ((byte)AggBasics.uround(b_ * (double)BASE_MASK)),
-               ((byte)AggBasics.uround(BASE_MASK)));
-        }
-        //------------------------------------------
-        public static ColorRGBA Make(float r_, float g_, float b_)
-        {
-            return new ColorRGBA(
-               ((byte)AggBasics.uround_f(r_ * (float)BASE_MASK)),
-               ((byte)AggBasics.uround_f(g_ * (float)BASE_MASK)),
-               ((byte)AggBasics.uround_f(b_ * (float)BASE_MASK)),
-               ((byte)AggBasics.uround_f(BASE_MASK)));
-        }
-        public static ColorRGBA Make(float r_, float g_, float b_, float a_)
-        {
-            return new ColorRGBA(
-               ((byte)AggBasics.uround_f(r_ * (float)BASE_MASK)),
-               ((byte)AggBasics.uround_f(g_ * (float)BASE_MASK)),
-               ((byte)AggBasics.uround_f(b_ * (float)BASE_MASK)),
-               ((byte)AggBasics.uround_f(a_ * (float)BASE_MASK)));
-        }
-        //------------------------------------------
-        public static ColorRGBA Make(int r_, int g_, int b_, int a_)
-        {
-            return new ColorRGBA(
-               (byte)Math.Min(Math.Max(r_, 0), 255),
-               (byte)Math.Min(Math.Max(g_, 0), 255),
-               (byte)Math.Min(Math.Max(b_, 0), 255),
-               (byte)Math.Min(Math.Max(a_, 0), 255));
-        }
 
-        public ColorRGBA(ColorRGBA c)
-        {
-            red = (byte)c.red;
-            green = (byte)c.green;
-            blue = (byte)c.blue;
-            alpha = (byte)c.alpha;
-        }
-
-        public ColorRGBA(ColorRGBA c, int a_)
-        {
-            red = (byte)c.red;
-            green = (byte)c.green;
-            blue = (byte)c.blue;
-            alpha = (byte)a_;
-        }
-
-
-        public ColorRGBA(ColorRGBAf c)
-        {
-            red = ((byte)AggBasics.uround(c.red * (double)BASE_MASK));
-            green = ((byte)AggBasics.uround(c.green * (double)BASE_MASK));
-            blue = ((byte)AggBasics.uround(c.blue * (double)BASE_MASK));
-            alpha = ((byte)AggBasics.uround(c.alpha * (double)BASE_MASK));
-        }
-
-        public static bool operator ==(ColorRGBA a, ColorRGBA b)
-        {
-            //if a.red== bred then
-            //a.red ^ b.red =0 
-            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) == 0;
-            //if (a.red == b.red && a.green == b.green && a.blue == b.blue && a.alpha == b.alpha)
-            //{
-            //    return true;
-            //} 
-            //return false;
-        }
-
-        public static bool operator !=(ColorRGBA a, ColorRGBA b)
-        {
-            //if a.red !=  b.red then
-            //a.red ^ b.red  =1 
-            return ((a.red ^ b.red) ^ (a.green ^ b.green) ^ (b.blue ^ a.blue) ^ (a.alpha ^ b.alpha)) != 0;
-            //if (a.red != b.red || a.green != b.green || a.blue != b.blue || a.alpha != b.alpha)
-            //{
-            //    return true;
-            //}
-
-            //return false;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() == typeof(ColorRGBA))
-            {
-                return this == (ColorRGBA)obj;
-            }
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return new { blue, green, red, alpha }.GetHashCode();
-        }
-
-        public ColorRGBAf GetAsRGBA_Floats()
-        {
-            return new ColorRGBAf((float)red / (float)BASE_MASK,
-                (float)green / (float)BASE_MASK,
-                (float)blue / (float)BASE_MASK,
-                (float)alpha / (float)BASE_MASK);
-        }
-
-        public ColorRGBA CreateGradient(ColorRGBA another, float colorDistanceRatio)
-        {
-            //int ik = AggBasics.uround(colorDistanceRatio * BASE_SCALE); 
-            //byte r = (byte)((int)(Red0To255) + ((((int)(another.Red0To255) - Red0To255) * ik) >> BASE_SHIFT));
-            //byte g = (byte)((int)(Green0To255) + ((((int)(another.Green0To255) - Green0To255) * ik) >> BASE_SHIFT));
-            //byte b = (byte)((int)(Blue0To255) + ((((int)(another.Blue0To255) - Blue0To255) * ik) >> BASE_SHIFT));
-            //byte a = (byte)((int)(Alpha0To255) + ((((int)(another.Alpha0To255) - Alpha0To255) * ik) >> BASE_SHIFT));
-
-
-
-            //from this color to another c color
-            //colorDistance ratio [0-1]
-            //new_color = old_color + diff
-
-            byte r = (byte)(Red0To255 + (another.Red0To255 - this.Red0To255) * colorDistanceRatio);
-            byte g = (byte)(Green0To255 + (another.Green0To255 - this.Green0To255) * colorDistanceRatio);
-            byte b = (byte)(Blue0To255 + (another.Blue0To255 - this.Blue0To255) * colorDistanceRatio);
-            byte a = (byte)(Alpha0To255 + (another.Alpha0To255 - this.Alpha0To255) * colorDistanceRatio);
-            return new ColorRGBA(r, g, b, a);
-        }
-
-        static public ColorRGBA operator +(ColorRGBA A, ColorRGBA B)
-        {
-            byte r = (byte)((A.red + B.red) > 255 ? 255 : (A.red + B.red));
-            byte g = (byte)((A.green + B.green) > 255 ? 255 : (A.green + B.green));
-            byte b = (byte)((A.blue + B.blue) > 255 ? 255 : (A.blue + B.blue));
-            byte a = (byte)((A.alpha + B.alpha) > 255 ? 255 : (A.alpha + B.alpha));
-            return new ColorRGBA(r, g, b, a);
-        }
-
-        static public ColorRGBA operator -(ColorRGBA A, ColorRGBA B)
-        {
-            byte red = (byte)((A.red - B.red) < 0 ? 0 : (A.red - B.red));
-            byte green = (byte)((A.green - B.green) < 0 ? 0 : (A.green - B.green));
-            byte blue = (byte)((A.blue - B.blue) < 0 ? 0 : (A.blue - B.blue));
-            byte alpha = (byte)((A.alpha - B.alpha) < 0 ? 0 : (A.alpha - B.alpha));
-            return new ColorRGBA(red, green, blue, alpha);
-        }
-
-        static public ColorRGBA operator *(ColorRGBA A, float b)
-        {
-            float conv = b / 255f;
-            return Make(A.red * conv, A.green * conv, A.blue * conv, A.alpha * conv);
-        }
-
-        //public void AddColor(ColorRGBA c, int cover)
-        //{
-        //    int cr, cg, cb, ca;
-        //    if (cover == COVER_MASK)
-        //    {
-        //        if (c.Alpha0To255 == BASE_MASK)
-        //        {
-        //            this = c;
-        //        }
-        //        else
-        //        {
-        //            cr = Red0To255 + c.Red0To255; Red0To255 = (cr > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cr;
-        //            cg = Green0To255 + c.Green0To255; Green0To255 = (cg > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cg;
-        //            cb = Blue0To255 + c.Blue0To255; Blue0To255 = (cb > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cb;
-        //            ca = Alpha0To255 + c.Alpha0To255; Alpha0To255 = (ca > (int)(BASE_MASK)) ? (int)(BASE_MASK) : ca;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        cr = Red0To255 + ((c.Red0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
-        //        cg = Green0To255 + ((c.Green0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
-        //        cb = Blue0To255 + ((c.Blue0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
-        //        ca = Alpha0To255 + ((c.Alpha0To255 * cover + COVER_MASK / 2) >> COVER_SHIFT);
-        //        Red0To255 = (cr > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cr;
-        //        Green0To255 = (cg > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cg;
-        //        Blue0To255 = (cb > (int)(BASE_MASK)) ? (int)(BASE_MASK) : cb;
-        //        Alpha0To255 = (ca > (int)(BASE_MASK)) ? (int)(BASE_MASK) : ca;
-        //    }
-        //}
-
-        //public void ApplyGammaDir(GammaLookUpTable gamma)
-        //{
-        //    Red0To255 = gamma.dir((byte)Red0To255);
-        //    Green0To255 = gamma.dir((byte)Green0To255);
-        //    Blue0To255 = gamma.dir((byte)Blue0To255);
-        //}
-
-        //-------------------------------------------------------------rgb8_packed
-        static public ColorRGBA CreatRGB8Packed(int v)
-        {
-            return new ColorRGBA((byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
-        }
-
-        public ColorRGBA Blend(ColorRGBA other, float weight)
-        {
-            return this * (1 - weight) + other * weight;
-        }
-#if DEBUG
-        public override string ToString()
-        {
-            return "r:" + this.red + ",g:" + this.green + ",b:" + this.blue + ",a:" + this.alpha;
-        }
-#endif
-
-    }
 }

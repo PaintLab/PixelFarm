@@ -114,7 +114,7 @@ namespace PixelFarm.Agg.Sample_TransCurve
 
         public override void Draw(CanvasPainter p)
         {
-            p.Clear(ColorRGBA.White);
+            p.Clear(Drawing.Color.White);
             m_poly.OnDraw(p);
         }
         public override void MouseDown(int x, int y, bool isRightButton)

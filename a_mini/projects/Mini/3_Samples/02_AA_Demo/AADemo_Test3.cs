@@ -2,6 +2,7 @@
 //MatterHackers
 
 using System;
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using Mini;
@@ -29,19 +30,19 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
         const float cover_1_3 = 255f / 3f;
         const float cover_2_3 = cover_1_3 * 2f;
-        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
         {
             SubPixRender(destImage, scanline, color);
         }
 
-        void SubPixRender(IImageReaderWriter destImage, Scanline scanline, ColorRGBA color)
+        void SubPixRender(IImageReaderWriter destImage, Scanline scanline, Color color)
         {
             int y = scanline.Y;
             int num_spans = scanline.SpanCount;
             byte[] covers = scanline.GetCovers();
             ScanlineRasterizer ras = gfx.ScanlineRasterizer;
             var rasToBmp = gfx.ScanlineRasToDestBitmap;
-            ColorRGBA prevColor = ColorRGBA.White;
+            Color prevColor = Color.White;
             for (int i = 0; i <= num_spans; ++i)
             {
                 //render span by span 
@@ -59,12 +60,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                     if (coverageValue >= 255)
                     {
                         //100% cover
-                        ColorRGBA newc = new ColorRGBA(color.red, color.green, color.blue);
+                        Color newc = Color.FromArgb(color.red, color.green, color.blue);
                         prevColor = newc;
                         int a = (coverageValue * color.Alpha0To255) >> 8;
                         m_square.Draw(rasToBmp,
                                ras, m_sl, destImage,
-                                new ColorRGBA(newc, a),
+                               Color.FromArgb(a, newc),
                                x, y);
                         prev_cover = 255;//full
                     }
@@ -90,34 +91,34 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                                 c_b = 255;
                             }
 
-                            ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+                            Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
                             int a = (coverageValue * color.Alpha0To255) >> 8;
                             m_square.Draw(rasToBmp,
                                    ras, m_sl, destImage,
-                                    new ColorRGBA(newc, a),
+                                    Color.FromArgb(a, newc),
                                    x, y);
                         }
                         else if (coverageValue < cover_2_3)
                         {
                             if (isLeftToRight)
                             {
-                                c_r = prevColor.blue;
+                                c_r = prevColor.B;
                                 c_g = (byte)(255 - (255f * (subpix_percent)));
-                                c_b = color.blue;// (byte)(255 - (255f * (subpix_percent)));// color.blue;
+                                c_b = color.B;// (byte)(255 - (255f * (subpix_percent)));// color.blue;
                             }
                             else
                             {
-                                c_r = color.blue;// (byte)(255 - (255f * (subpix_percent))); //color.blue;
+                                c_r = color.B;// (byte)(255 - (255f * (subpix_percent))); //color.blue;
                                 c_g = (byte)(255 - (255f * (subpix_percent)));
                                 c_b = 255;
                             }
 
 
-                            ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+                            Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
                             int a = (coverageValue * color.Alpha0To255) >> 8;
                             m_square.Draw(rasToBmp,
                                    ras, m_sl, destImage,
-                                   new ColorRGBA(newc, a),
+                                   Color.FromArgb(a, newc),
                                    x, y);
                         }
                         else
@@ -126,21 +127,21 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                             if (isLeftToRight)
                             {
                                 c_r = (byte)(255 - (255f * (subpix_percent)));
-                                c_g = color.green;
-                                c_b = color.blue;
+                                c_g = color.G;
+                                c_b = color.B;
                             }
                             else
                             {
-                                c_r = prevColor.green;
-                                c_g = prevColor.blue;
+                                c_r = prevColor.G;
+                                c_g = prevColor.B;
                                 c_b = (byte)(255 - (255f * (subpix_percent)));
                             }
 
-                            ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+                            Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
                             int a = (coverageValue * color.Alpha0To255) >> 8;
                             m_square.Draw(rasToBmp,
                                    ras, m_sl, destImage,
-                                   new ColorRGBA(newc, a),
+                                   Color.FromArgb(a, newc),
                                    x, y);
                         }
                     }
@@ -206,7 +207,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
-                clippingProxyNormal.Clear(ColorRGBA.White);
+                clippingProxyNormal.Clear(Color.White);
                 var rasterizer = gx.ScanlineRasterizer;
                 ScanlineUnpacked8 sl = new ScanlineUnpacked8();
                 int size_mul = (int)this.PixelSize;
@@ -215,11 +216,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
-                ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+                ren_en.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //----------------------------------------
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
                 gx.UseSubPixelRendering = true;
-                sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, ColorRGBA.Black);
+                sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 rasterizer.ResetGamma(new GammaNone());
                 gx.UseSubPixelRendering = false;
                 //----------------------------------------
@@ -236,7 +237,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 rasterizer.AddPath(StrokeHelp.MakeVxs(ps.Vxs, 2));
                 //----------------------------------------
 
-                sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new ColorRGBA(0, 150, 160, 200));
+                sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
             }
         }
 

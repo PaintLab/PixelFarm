@@ -16,7 +16,7 @@
 // classes polygon_ctrl_impl, polygon_ctrl
 //
 //----------------------------------------------------------------------------
-
+using PixelFarm.Drawing;
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg.VertexSource;
@@ -497,16 +497,16 @@ namespace PixelFarm.Agg.UI
     //template<class ColorT> 
     public class PolygonEditWidget : PolygonControl
     {
-        ColorRGBA m_color;
+        Color m_color;
         public PolygonEditWidget(int np) : this(np, 5) { }
 
         public PolygonEditWidget(int np, double point_radius)
             : base(np, point_radius)
         {
             //m_color = new ColorRGBAf(0.0, 0.0, 0.0);
-            m_color = ColorRGBA.Black;
+            m_color = Color.Black;
         }
-        public ColorRGBA LineColor
+        public Color LineColor
         {
             get { return m_color; }
             set { this.m_color = value; }

@@ -26,7 +26,7 @@ namespace PixelFarm.Agg.Lines
     {
         int Dilation { get; }
         void SetPixelHighRes(ImageReaderWriterBase sourceImage,
-            ColorRGBA[] destBuffer,
+            Drawing.Color[] destBuffer,
             int destBufferOffset,
             int x, int y);
     }

@@ -16,7 +16,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Image;
 namespace PixelFarm.Agg
 {
@@ -32,7 +32,7 @@ namespace PixelFarm.Agg
     /// </summary>  
     public class ScanlineRasToDestBitmapRenderer
     {
-        ArrayList<ColorRGBA> tempSpanColors = new ArrayList<ColorRGBA>();
+        ArrayList<Color> tempSpanColors = new ArrayList<Color>();
         public ScanlineRasToDestBitmapRenderer()
         {
         }
@@ -43,7 +43,7 @@ namespace PixelFarm.Agg
         }
         const float cover_1_3 = 255f / 3f;
         const float cover_2_3 = cover_1_3 * 2f;
-        void SubPixRender(IImageReaderWriter dest, Scanline scanline, ColorRGBA color)
+        void SubPixRender(IImageReaderWriter dest, Scanline scanline, Color color)
         {
             byte[] covers = scanline.GetCovers();
             int num_spans = scanline.SpanCount;
@@ -53,7 +53,7 @@ namespace PixelFarm.Agg
             int last_x = int.MinValue;
             int prev_cover = 0;
             int bufferOffset = 0;
-            ColorRGBA prevColor = ColorRGBA.White;
+            Color prevColor = Color.White;
             for (int i = 1; i <= num_spans; ++i)
             {
                 //render span by span 
@@ -64,7 +64,7 @@ namespace PixelFarm.Agg
                     bufferOffset = dest.GetBufferOffsetXY(span.x, y);
                     //when skip  then reset                     
                     prev_cover = 0;
-                    prevColor = ColorRGBA.White;
+                    prevColor = Color.White;
                 }
 
                 last_x = span.x;
@@ -81,8 +81,8 @@ namespace PixelFarm.Agg
                     {
                         //100% cover
                         int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                        ColorRGBA newc = prevColor = new ColorRGBA(color.red, color.green, color.blue);
-                        ColorRGBA todrawColor = new ColorRGBA(newc, a);
+                        Color newc = prevColor = Color.FromArgb(color.R, color.G, color.B);
+                        Color todrawColor = Color.FromArgb(a, newc);
                         prev_cover = 255;//full
                         while (num_pix > 0)
                         {
@@ -95,8 +95,8 @@ namespace PixelFarm.Agg
                     {
                         prev_cover = coverageValue;
                         int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                        ColorRGBA newc = prevColor = new ColorRGBA(color.red, color.green, color.blue);
-                        ColorRGBA todrawColor = new ColorRGBA(newc, a);
+                        Color newc = prevColor = Color.FromArgb(color.R, color.G, color.B);
+                        Color todrawColor = Color.FromArgb(a, newc);
                         while (num_pix > 0)
                         {
                             blender.BlendPixel(buffer, bufferOffset, todrawColor);
@@ -115,10 +115,10 @@ namespace PixelFarm.Agg
                         if (coverageValue >= 255)
                         {
                             //100% cover
-                            ColorRGBA newc = new ColorRGBA(color.red, color.green, color.blue);
+                            Color newc = Color.FromArgb(color.R, color.G, color.B);
                             prevColor = newc;
                             int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                            blender.BlendPixel(buffer, bufferOffset, new ColorRGBA(newc, a));
+                            blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
                             prev_cover = 255;//full
                         }
                         else
@@ -145,27 +145,27 @@ namespace PixelFarm.Agg
                                     c_b = 255;
                                 }
 
-                                ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+                                Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
                                 int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, new ColorRGBA(newc, a));
+                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
                             }
                             else if (coverageValue < cover_2_3)
                             {
                                 if (isLeftToRight)
                                 {
-                                    c_r = prevColor.blue;
+                                    c_r = prevColor.B;
                                     c_g = (byte)(255 - (255f * (subpix_percent)));
-                                    c_b = color.blue;
+                                    c_b = color.B;
                                 }
                                 else
                                 {
-                                    c_r = color.blue;
+                                    c_r = color.B;
                                     c_g = (byte)(255 - (255f * (subpix_percent)));
                                     c_b = 255;
                                 }
-                                ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+                                Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
                                 int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, new ColorRGBA(newc, a));
+                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
                             }
                             else
                             {
@@ -173,19 +173,19 @@ namespace PixelFarm.Agg
                                 if (isLeftToRight)
                                 {
                                     c_r = (byte)(255 - (255f * (subpix_percent)));
-                                    c_g = color.green;
-                                    c_b = color.blue;
+                                    c_g = color.G;
+                                    c_b = color.B;
                                 }
                                 else
                                 {
-                                    c_r = prevColor.green;
-                                    c_g = prevColor.blue;
+                                    c_r = prevColor.G;
+                                    c_g = prevColor.B;
                                     c_b = (byte)(255 - (255f * (subpix_percent)));
                                 }
 
-                                ColorRGBA newc = prevColor = new ColorRGBA(c_r, c_g, c_b);
+                                Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
                                 int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, new ColorRGBA(newc, a));
+                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
                             }
                         }
                         bufferOffset += 4; //1 pixel 4 bits 
@@ -198,7 +198,7 @@ namespace PixelFarm.Agg
         public void RenderWithColor(IImageReaderWriter dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
-                ColorRGBA color)
+                Color color)
         {
             if (!sclineRas.RewindScanlines()) { return; } //early exit
             //----------------------------------------------- 
@@ -285,7 +285,7 @@ namespace PixelFarm.Agg
                 tempSpanColors.Clear(dest.Stride / 4);
             }
 
-            ColorRGBA[] colorArray = tempSpanColors.Array;
+            Color[] colorArray = tempSpanColors.Array;
             while (sclineRas.SweepScanline(scline))
             {
                 //render single scanline 
@@ -317,7 +317,7 @@ namespace PixelFarm.Agg
         protected virtual void CustomRenderSingleScanLine(
             IImageReaderWriter dest,
             Scanline scline,
-            ColorRGBA color)
+            Color color)
         {
             //implement
         }

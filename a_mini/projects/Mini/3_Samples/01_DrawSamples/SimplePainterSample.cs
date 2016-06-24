@@ -18,16 +18,16 @@ namespace PixelFarm.Agg.SimplePainter
         }
         public override void Draw(CanvasPainter p)
         {
-            p.Clear(ColorRGBA.White);
+            p.Clear(Drawing.Color.White);
             // draw a circle  
-            p.FillColor = ColorRGBA.Blue;
+            p.FillColor = Drawing.Color.Blue;
             p.FillCircle(50, 50, 30);
-            p.StrokeColor = new ColorRGBA(20, 200, 200);
+            p.StrokeColor = Drawing.Color.FromArgb(20, 200, 200);
             p.Line(10, 100, 520, 50);
             // draw a filled box
-            p.FillRectangle(60, 260, 200, 280, ColorRGBA.Yellow);
+            p.FillRectangle(60, 260, 200, 280, Drawing.Color.Yellow);
             // and an outline around it
-            p.Rectangle(60, 260, 200, 280, ColorRGBA.Magenta);
+            p.Rectangle(60, 260, 200, 280, Drawing.Color.Magenta);
             p.DrawString("A Simple Example", 300, 400);
             p.DrawString("A Simple Example2", 300, 350);
             p.DrawString("A Simple Example3", 300, 300);

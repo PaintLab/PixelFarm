@@ -68,7 +68,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
             m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
             m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
-            m_shadow_ctrl.LineColor = ColorRGBAf.MakeColorRGBA(0f, 0.3f, 0.5f, 0.3f);
+            m_shadow_ctrl.LineColor = PixelFarm.Drawing.Color.FromArgb(0.3f, 0f, 0.3f, 0.5f);
         }
 
         [DemoConfig]
@@ -139,7 +139,7 @@ namespace PixelFarm.Agg.Sample_Blur2
         {
             //create painter             
             p.SetClipBox(0, 0, Width, Height);
-            p.Clear(ColorRGBA.White);
+            p.Clear(Drawing.Color.White);
             //-----------------------------------------------------------------------
             //green glyph
             Perspective shadow_persp = new Perspective(
@@ -155,7 +155,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             //{
             //    s2 = shadow_persp.TransformToVxs(m_pathVxs);
             //}
-            p.FillColor = new ColorRGBAf(0.2f, 0.3f, 0f).ToColorRGBA();
+            p.FillColor = PixelFarm.Drawing.Color.Make(0.2f, 0.3f, 0f);
             p.Fill(s2);
             //---------------------------------------------------------------------------------------------------------
             //shadow 
@@ -224,7 +224,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             }
 
             double tm = stopwatch.ElapsedMilliseconds;
-            p.FillColor = ColorRGBAf.MakeColorRGBA(0.6f, 0.9f, 0.7f, 0.8f);
+            p.FillColor = Drawing.Color.FromArgb(0.8f, 0.6f, 0.9f, 0.7f);
             // Render the shape itself
             ////------------------
             //if (FlattenCurveChecked)
@@ -238,7 +238,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             //    p.Fill(m_pathVxs);
             //}
 
-            p.FillColor = ColorRGBA.Black;
+            p.FillColor = Drawing.Color.Black;
             //p.DrawString(string.Format("{0:F2} ms", tm), 140, 30);
             //-------------------------------------------------------------
             //control
