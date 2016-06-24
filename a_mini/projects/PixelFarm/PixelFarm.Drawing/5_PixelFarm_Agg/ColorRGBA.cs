@@ -25,7 +25,7 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-
+#if DEBUG
 using System;
 namespace PixelFarm.Agg
 {
@@ -618,3 +618,4 @@ namespace PixelFarm.Agg
         }
     }
 }
+#endif

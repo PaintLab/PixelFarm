@@ -18,10 +18,10 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
- 
+
 namespace PixelFarm.Agg
 {
-    public class VertexStore
+    public sealed class VertexStore
     {
         int m_num_vertices;
         int m_allocated_vertices;
@@ -71,7 +71,7 @@ namespace PixelFarm.Agg
             y = 0;
             return VertexCmd.Stop;
         }
-         
+
         public VertexCmd GetVertex(int index, out double x, out double y)
         {
             int i = index << 1;
