@@ -12,8 +12,7 @@ namespace PixelFarm.Drawing
         public int debug_releaseCount = 0;
         public int debug_canvas_id = 0;
 #endif
-        //const int CANVAS_UNUSED = 1 << (1 - 1);
-        //const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);
+        
         public Canvas()
         {
         }
