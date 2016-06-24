@@ -36,7 +36,6 @@
   <ItemGroup>
     <Compile Include="GLPainter\GLCanvasPainter.cs" />
     <Compile Include="GLShader\7_BasicShader.cs" />
-    <Compile Include="GLCanvas\8_CoordLists.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\CanvasGL2dInternal.cs" />
     <Compile Include="GLCanvas\CanvasGL2d_TextAndFont.cs" />
