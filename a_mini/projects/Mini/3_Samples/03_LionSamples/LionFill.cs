@@ -50,7 +50,7 @@ namespace PixelFarm.Agg.Samples
         {
             p.Clear(Drawing.Color.White);
             lionFill.Draw(p);
-           // p.DrawString("hello", 0, 0);
+            // p.DrawString("hello", 0, 0);
         }
         public override void MouseDrag(int x, int y)
         {

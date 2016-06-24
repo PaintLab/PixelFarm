@@ -2,9 +2,10 @@
 //BSD 2014, WinterDev
 //MattersHackers
 //AGG 2.4 
+
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.VertexSource; 
+using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {

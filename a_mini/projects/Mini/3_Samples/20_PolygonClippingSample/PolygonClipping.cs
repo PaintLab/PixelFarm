@@ -498,7 +498,6 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                     ++m_contours;
                 }
             } while (cmd != VertexCmd.Stop);
-
         }
     }
 }

@@ -15,7 +15,6 @@ namespace Mini
         {
             //----------------------------
             OpenTK.Toolkit.Init();
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDev());

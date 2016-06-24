@@ -35,8 +35,6 @@ namespace PixelFarm.Agg.Sample_Gradient
                 SimpleRect srect = new SimpleRect(0, 0, 150, 50);
                 p2.Fill(srect.MakeVxs(), spanGenGradient);
             }
-
-
         }
 
         public override void MouseDown(int mx, int my, bool isRightButton)
