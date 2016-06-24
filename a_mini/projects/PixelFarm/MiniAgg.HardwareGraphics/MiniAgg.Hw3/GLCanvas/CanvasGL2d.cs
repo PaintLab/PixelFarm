@@ -200,7 +200,9 @@ namespace PixelFarm.DrawingGL
                         isAddToList = false;
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
+                        {
 
+                        }
                         break;
                     case PixelFarm.Agg.VertexCmd.Stop:
                         goto EXIT_LOOP;
