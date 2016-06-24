@@ -283,10 +283,14 @@ namespace PixelFarm.Agg
             {
                 VertexSnapIter snapIter = snap.GetVertexSnapIter();
                 VertexCmd cmd;
+#if DEBUG
                 int dbugVertexCount = 0;
+#endif
                 while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
                 {
+#if DEBUG
                     dbugVertexCount++;
+#endif
                     AddVertex(cmd, x, y);
                 }
             }
