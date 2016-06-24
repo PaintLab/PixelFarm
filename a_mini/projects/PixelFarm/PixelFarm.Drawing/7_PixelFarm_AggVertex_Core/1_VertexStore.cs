@@ -71,17 +71,7 @@ namespace PixelFarm.Agg
             y = 0;
             return VertexCmd.Stop;
         }
-        public VertexCmd GetBeforeLastVetex(out double x, out double y)
-        {
-            if (m_num_vertices > 1)
-            {
-                return GetVertex((int)(m_num_vertices - 2), out x, out y);
-            }
-            x = 0;
-            y = 0;
-            return VertexCmd.Stop;
-        }
-
+         
         public VertexCmd GetVertex(int index, out double x, out double y)
         {
             int i = index << 1;

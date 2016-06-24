@@ -43,6 +43,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
         double m_x;
         double m_y;
         Color BackgroundColor;
+        CurveFlattener curveFlattener = new CurveFlattener();
         public PolygonClippingDemo()
         {
             BackgroundColor = Color.White;
@@ -278,7 +279,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                             AffinePlan.Scale(4),
                             AffinePlan.Translate(220, 200));
                         var t_glyph = mtx.TransformToVertexSnap(glyph.Vxs);
-                        CurveFlattener curveFlattener = new CurveFlattener();
+                        
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
                         var curveVxs = curveFlattener.MakeVxs(t_glyph);
                         CreateAndRenderCombined(p, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
