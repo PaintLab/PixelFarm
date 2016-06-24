@@ -52,27 +52,19 @@
     <Compile Include="1_Base\ProxyImage.cs" />
     <Compile Include="Filter\ImageFilters.cs" />
     <Compile Include="Filter\PatternFilterBilnearColorRGBA.cs" />
-    <Compile Include="x_notused\x_GlyphWithUnderline.cs" />
     <Compile Include="Image\AlphaMask.cs" />
     <Compile Include="2_SpanGenerators\SpanGradient.cs" />
     <Compile Include="Image\AlphaMaskAdaptor.cs" />
     <Compile Include="Image\FloodFiller.cs" />
-    <Compile Include="x_notused\ImageSequence.cs" />
     <Compile Include="x_notused\x_ImageTgaIO.cs" />
     <Compile Include="Filter\RecursiveBlur.cs" />
     <Compile Include="Filter\StackBlur.cs" />
     <Compile Include="Image\Transposer.cs" />
     <Compile Include="x_notused\ImageClipProxyFloat.cs" />
-    <Compile Include="x_notused\UnitTests2.cs" />
     <Compile Include="2_SpanGenerators\SpanGenGourand.cs" />
     <Compile Include="2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="x_notused\SpanSubDivAdapter.cs" />
-    <Compile Include="x_notused\SvgFontFaceWithStyle.cs" />
-    <Compile Include="x_notused\TextWrapping.cs" />
-    <Compile Include="x_notused\TypeFacePrinter.cs" />
-    <Compile Include="x_notused\x_UnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="x_notused\UnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiniAgg\MiniAgg.csproj">
