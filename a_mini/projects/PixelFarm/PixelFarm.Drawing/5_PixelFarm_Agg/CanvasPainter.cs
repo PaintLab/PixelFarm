@@ -18,6 +18,7 @@
 // 
 // Class to output the vertex source of a string as a run of glyphs.
 //----------------------------------------------------------------------------
+
 using PixelFarm.Drawing;
 using PixelFarm.Agg.Fonts;
 namespace PixelFarm.Agg
@@ -94,7 +95,6 @@ namespace PixelFarm.Agg
         public abstract Color FillColor { get; set; }
         public abstract Color StrokeColor { get; set; }
         public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
-
         public abstract void DrawImage(ActualImage actualImage, double x, double y);
         public abstract void DrawImage(ActualImage actualImage, params Transform.AffinePlan[] affinePlans);
         //----------------------

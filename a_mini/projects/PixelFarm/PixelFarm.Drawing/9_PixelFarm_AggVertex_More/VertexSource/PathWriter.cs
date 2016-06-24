@@ -70,7 +70,6 @@ namespace PixelFarm.Agg.VertexSource
         Vector2 c4p3;
         SvgPathCommand latestSVGPathCmd;
         int figureCount = 0;
-
         VertexStore myvxs = new VertexStore();
         public PathWriter()
         {

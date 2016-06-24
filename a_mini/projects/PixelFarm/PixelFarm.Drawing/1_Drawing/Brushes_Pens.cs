@@ -69,7 +69,7 @@ namespace PixelFarm.Drawing
         {
             get { return this.textureImage; }
         }
-       
+
 
         public override object InnerBrush
         {
