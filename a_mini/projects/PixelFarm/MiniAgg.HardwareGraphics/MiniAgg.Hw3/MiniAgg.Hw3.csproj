@@ -34,6 +34,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="GLPainter\GLCanvasPainter.cs" />
     <Compile Include="GLShader\7_BasicShader.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />

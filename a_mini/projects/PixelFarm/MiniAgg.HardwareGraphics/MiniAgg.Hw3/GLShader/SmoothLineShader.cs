@@ -187,7 +187,20 @@ namespace PixelFarm.DrawingGL
             GL.DrawArrays(BeginMode.TriangleStrip, 0, coordCount * 2);
         }
 
-
+        internal void DrawTriangleStrips(float[] coords, int ncount)
+        {
+            shaderProgram.UseProgram();
+            u_matrix.SetData(orthoView.data);
+            u_useSolidColor.SetValue(1);
+            u_solidColor.SetValue(
+                  _strokeColor.R / 255f,
+                  _strokeColor.G / 255f,
+                  _strokeColor.B / 255f,
+                  _strokeColor.A / 255f);
+            a_position.LoadPureV4f(coords);
+            u_linewidth.SetValue(_strokeWidth);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
+        }
 
         public void DrawPolygon(float[] coords, int coordCount)
         {
@@ -230,23 +243,23 @@ namespace PixelFarm.DrawingGL
             coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1);
             coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
         }
-        public void DrawLine2(float x1, float y1, float x2, float y2)
-        {
-            //test only ***
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float rad1 = (float)Math.Atan2(
-                   y2 - y1,  //dy
-                   x2 - x1); //dx
-            float[] vtxs = new float[] {
-                x1, y1,0,rad1,
-                x1, y1,1,rad1,
-                x2, y2,0,rad1,
-                //-------
-                x2, y2,1,rad1
-            };
-            a_position.LoadPureV4f(vtxs);
-            GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
-        }
+        //public void DrawLine2(float x1, float y1, float x2, float y2)
+        //{
+        //    //test only ***
+        //    float dx = x2 - x1;
+        //    float dy = y2 - y1;
+        //    float rad1 = (float)Math.Atan2(
+        //           y2 - y1,  //dy
+        //           x2 - x1); //dx
+        //    float[] vtxs = new float[] {
+        //        x1, y1,0,rad1,
+        //        x1, y1,1,rad1,
+        //        x2, y2,0,rad1,
+        //        //-------
+        //        x2, y2,1,rad1
+        //    };
+        //    a_position.LoadPureV4f(vtxs);
+        //    GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
+        //}
     }
 }

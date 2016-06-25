@@ -34,6 +34,7 @@ namespace PixelFarm.DrawingGL
         int canvasW;
         int canvasH;
         MyMat4 orthoView;
+        TessTool tessTool;
         public CanvasGL2d(int canvasW, int canvasH)
         {
             this.canvasW = canvasW;
@@ -47,6 +48,8 @@ namespace PixelFarm.DrawingGL
                                                                          // tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             tess.WindingRule = Tesselator.WindingRuleType.Odd;
             tessListener.Connect(tess, true);
+
+            tessTool = new TessTool(this.tess, this.tessListener);
             textPriner = new GLTextPrinter(this);
             SetupFonts();
             ////--------------------------------------------------------------------------------
@@ -154,8 +157,7 @@ namespace PixelFarm.DrawingGL
                  bmp.GetRectF(),
                  x, y, bmp.Width, bmp.Height);
         }
-
-        public static List<List<float>> CreateGraphicsPath(VertexStoreSnap vxsSnap)
+        internal static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
         {
             VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
             double prevX = 0;
@@ -208,67 +210,91 @@ namespace PixelFarm.DrawingGL
                 }
             }
             EXIT_LOOP:
-            return allXYlist;
-        }
 
+            InternalGraphicsPath gfxPath = new InternalGraphicsPath();
+            List<Figure> figures = new List<Figure>();
+            int j = allXYlist.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                figures.Add(new Figure(allXYlist[i].ToArray()));
+            }
+            gfxPath.figures = figures;
+            return gfxPath;
+        }
+         
         public void FillVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
         {
-            List<List<float>> allXYList = CreateGraphicsPath(snap);
+
+            InternalGraphicsPath igpth = CreateGraphicsPath(snap);
+
             switch (SmoothMode)
             {
                 case CanvasSmoothMode.No:
                     {
-                        int subPathCount = allXYList.Count;
+                        List<Figure> figures = igpth.figures;
+                        int subPathCount = figures.Count;
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            //fill polygon with color
-                            float[] subpathXYList = allXYList[i].ToArray();
-                            FillPolygon(color, subpathXYList);
+                            Figure f = figures[i];
+                            this.basicFillShader.FillTriangles(f.GetAreaTess(ref this.tessTool), f.TessAreaTriangleCount, color);
                         }
                     }
                     break;
                 case CanvasSmoothMode.Smooth:
                     {
-                        int subPathCount = allXYList.Count;
+                        List<Figure> figures = igpth.figures;
+                        int subPathCount = figures.Count;
+                        strokeColor = color;
+                        StrokeWidth = 0.5f;
+
+                        smoothLineShader.StrokeColor = this.strokeColor;
+                        smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
+
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            //fill polygon with color
-                            float[] subpathXYList = allXYList[i].ToArray();
-                            FillPolygon(color, subpathXYList);
-                            //with anti-alias border
-                            strokeColor = color;
-                            StrokeWidth = 0.5f;
-                            DrawPolygon(subpathXYList, subpathXYList.Length);
+                            Figure f = figures[i];
+                            this.basicFillShader.FillTriangles(f.GetAreaTess(ref this.tessTool), f.TessAreaTriangleCount, color);
+                            smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
                         }
                     }
                     break;
             }
-        }
+        } 
         public void DrawVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
         {
-            List<List<float>> allXYList = CreateGraphicsPath(snap);
+            InternalGraphicsPath igpth = CreateGraphicsPath(snap);
             switch (SmoothMode)
             {
                 case CanvasSmoothMode.No:
                     {
-                        int subPathCount = allXYList.Count;
+                        List<Figure> figures = igpth.figures;
+                        int subPathCount = figures.Count;
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            //fill polygon with color
-                            float[] subpathXYList = allXYList[i].ToArray();
-                            DrawPolygon(subpathXYList, subpathXYList.Length);
+                            Figure f = figures[i];
+                            float[] coordXYs = f.coordXYs;
+                            unsafe
+                            {
+                                fixed (float* head = &coordXYs[0])
+                                {
+                                    DrawPolygonUnsafe(head, coordXYs.Length / 2);
+                                }
+                            }
                         }
                     }
                     break;
                 case CanvasSmoothMode.Smooth:
                     {
-                        int subPathCount = allXYList.Count;
+                        strokeColor = color;
+                        StrokeWidth = 1f;
+                        List<Figure> figures = igpth.figures;
+                        int subPathCount = figures.Count;
+                        strokeColor = color;
+                        StrokeWidth = 1f; 
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            strokeColor = color;
-                            StrokeWidth = 1f;
-                            float[] subpathXYList = allXYList[i].ToArray();
-                            DrawPolygon(subpathXYList, subpathXYList.Length);
+                            Figure f = figures[i]; 
+                            smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
                         }
                     }
                     break;
@@ -1022,58 +1048,25 @@ namespace PixelFarm.DrawingGL
         }
         public void FillPolygon(PixelFarm.Drawing.Color color, float[] vertex2dCoords, int npoints)
         {
-            //-------------
-            //Tesselate
-            //2d coods lis
-            //n point 
-            switch (this.SmoothMode)
+
+            var vertextList = TessPolygon(vertex2dCoords);
+            //-----------------------------   
+            //switch how to fill polygon
+            int j = vertextList.Count;
+            //-----------------------------    
+            unsafe
             {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        var vertextList = TessPolygon(vertex2dCoords);
-                        //-----------------------------   
-                        //switch how to fill polygon
-                        int j = vertextList.Count;
-                        //-----------------------------    
-                        unsafe
-                        {
-                            float* vtx = stackalloc float[j * 2];
-                            int n = 0;
-                            for (int i = 0; i < j; ++i)
-                            {
-                                var v = vertextList[i];
-                                vtx[n] = (float)v.m_X;
-                                vtx[n + 1] = (float)v.m_Y;
-                                n += 2;
-                            }
-                            //-------------------------------------                              
-                            this.basicFillShader.FillTriangles(vtx, j, color);
-                        }
-                    }
-                    break;
-                default:
-                    {
-                        var vertextList = TessPolygon(vertex2dCoords);
-                        //-----------------------------   
-                        //switch how to fill polygon
-                        int j = vertextList.Count;
-                        //-----------------------------  
-                        unsafe
-                        {
-                            float* vtx = stackalloc float[j * 2];
-                            int n = 0;
-                            for (int i = 0; i < j; ++i)
-                            {
-                                var v = vertextList[i];
-                                vtx[n] = (float)v.m_X;
-                                vtx[n + 1] = (float)v.m_Y;
-                                n += 2;
-                            }
-                            //------------------------------------- 
-                            this.basicFillShader.FillTriangles(vtx, j, color);
-                        }
-                    }
-                    break;
+                float* vtx = stackalloc float[j * 2];
+                int n = 0;
+                for (int i = 0; i < j; ++i)
+                {
+                    var v = vertextList[i];
+                    vtx[n] = (float)v.m_X;
+                    vtx[n + 1] = (float)v.m_Y;
+                    n += 2;
+                }
+                //-------------------------------------                              
+                this.basicFillShader.FillTriangles(vtx, j, color);
             }
         }
         //-----------------------------------------------------
