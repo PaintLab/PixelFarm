@@ -366,5 +366,32 @@ namespace PixelFarm.Agg
         {
             return new AggRenderVx(snap);
         }
+        public override void DrawRenderVx(RenderVx renderVx)
+        {
+            AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
+            Draw(aggRenderVx.snap);
+        }
+        public override void FillRenderVx(Brush brush, RenderVx renderVx)
+        {
+            AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
+            //fill with brush 
+            if (brush is SolidBrush)
+            {
+                SolidBrush solidBrush = (SolidBrush)brush;
+                var prevColor = this.fillColor;
+                this.fillColor = solidBrush.Color;
+                Fill(aggRenderVx.snap);
+                this.fillColor = prevColor;
+            }
+            else
+            {
+                Fill(aggRenderVx.snap);
+            }
+        }
+        public override void FillRenderVx(RenderVx renderVx)
+        {
+            AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
+            Fill(aggRenderVx.snap);
+        }
     }
 }

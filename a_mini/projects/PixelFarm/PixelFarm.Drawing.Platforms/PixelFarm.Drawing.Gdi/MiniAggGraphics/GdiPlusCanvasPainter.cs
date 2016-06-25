@@ -433,8 +433,25 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
-            WinGdiRenderVx renderVx = new WinGdiRenderVx(snap);
+            var renderVx = new WinGdiRenderVx(snap);
+            renderVx.path = VxsHelper.CreateGraphicsPath(snap);
             return renderVx;
+        }
+        public override void FillRenderVx(Brush brush, RenderVx renderVx)
+        {
+            //TODO: review brush implementation here
+            WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
+            VxsHelper.FillPath(_gfx, wRenderVx.path, this.FillColor);
+        }
+        public override void DrawRenderVx(RenderVx renderVx)
+        {
+            WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
+            VxsHelper.DrawPath(_gfx, wRenderVx.path, this._strokeColor);
+        }
+        public override void FillRenderVx(RenderVx renderVx)
+        {
+            WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
+            VxsHelper.FillPath(_gfx, wRenderVx.path, this.FillColor);
         }
     }
 }

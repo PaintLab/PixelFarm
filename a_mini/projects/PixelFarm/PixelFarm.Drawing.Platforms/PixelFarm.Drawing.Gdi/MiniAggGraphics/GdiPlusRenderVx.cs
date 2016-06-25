@@ -5,7 +5,8 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiRenderVx : RenderVx
     {
-        VertexStoreSnap snap;
+        internal VertexStoreSnap snap;
+        internal System.Drawing.Drawing2D.GraphicsPath path;
         public WinGdiRenderVx(VertexStoreSnap snap)
         {
             this.snap = snap;

@@ -116,5 +116,8 @@ namespace PixelFarm.Agg
         //------------
         //RenderVx
         public abstract RenderVx CreateRenderVx(VertexStoreSnap snap);
+        public abstract void FillRenderVx(Brush brush, RenderVx renderVx);
+        public abstract void FillRenderVx(RenderVx renderVx);
+        public abstract void DrawRenderVx(RenderVx renderVx);
     }
 }

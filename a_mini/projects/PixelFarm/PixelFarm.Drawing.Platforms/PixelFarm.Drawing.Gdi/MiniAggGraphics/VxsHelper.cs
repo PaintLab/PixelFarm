@@ -106,6 +106,16 @@ namespace PixelFarm.Drawing.WinGdi
             _pen.Color = ToDrawingColor(c);
             g.DrawPath(_pen, p);
         }
+        public static void FillPath(Graphics g, System.Drawing.Drawing2D.GraphicsPath p, Color c)
+        {
+            _br.Color = ToDrawingColor(c);
+            g.FillPath(_br, p);
+        }
+        public static void DrawPath(Graphics g, System.Drawing.Drawing2D.GraphicsPath p, Color c)
+        {
+            _pen.Color = ToDrawingColor(c);
+            g.DrawPath(_pen, p);
+        }
         public static System.Drawing.Color ToDrawingColor(Color c)
         {
             return System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
