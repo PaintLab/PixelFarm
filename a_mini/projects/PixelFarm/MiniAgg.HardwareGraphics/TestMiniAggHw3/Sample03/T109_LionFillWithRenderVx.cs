@@ -1,20 +1,22 @@
 ﻿//MIT, 2014-2016,WinterDev
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Agg;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "108")]
-    [Info("T108_LionFill")]
-    public class T108_LionFill : PrebuiltGLControlDemoBase
+    [Info(OrderCode = "109")]
+    [Info("T109_LionFillWithRenderVx")]
+    public class T109_LionFillWithRenderVx : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
         SpriteShape lionShape;
         VertexStore lionVxs;
         GLCanvasPainter painter;
+        List<RenderVx> lionRenderVxList = new List<RenderVx>();
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
@@ -27,6 +29,14 @@ namespace OpenTkEssTest
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
             lionVxs = aff.TransformToVxs(lionShape.Path.Vxs);
             painter = new GLCanvasPainter(canvas2d, max, max);
+            //convert lion vxs to renderVx
+
+            int j = lionShape.NumPaths;
+            int[] pathList = lionShape.PathIndexList;
+            for (int i = 0; i < j; ++i)
+            {
+                lionRenderVxList.Add(painter.CreateRenderVx(new VertexStoreSnap(lionVxs, pathList[i])));
+            }
         }
         protected override void DemoClosing()
         {
@@ -39,14 +49,11 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             //-------------------------------
 
-            int j = lionShape.NumPaths;
-            int[] pathList = lionShape.PathIndexList;
+            int j = lionRenderVxList.Count;
             Color[] colors = lionShape.Colors;
-            VertexStore myvxs = lionVxs;
             for (int i = 0; i < j; ++i)
             {
-                painter.FillColor = colors[i];
-                painter.Fill(new VertexStoreSnap(myvxs, pathList[i]));
+                canvas2d.FillRenderVx(colors[i], lionRenderVxList[i]);
             }
             //-------------------------------
             miniGLControl.SwapBuffers();
