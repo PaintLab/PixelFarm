@@ -234,8 +234,15 @@ namespace PixelFarm.DrawingGL
         }
         public void FillRenderVx(Brush brush, RenderVx renderVx)
         {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
-            _canvas.FillRenderVx(brush, glRenderVx);
+            _canvas.FillRenderVx(brush, renderVx);
+        }
+        public void FillRenderVx(RenderVx renderVx)
+        {
+            _canvas.FillRenderVx(_fillColor, renderVx);
+        }
+        public void DrawRenderVx(RenderVx renderVx)
+        {
+            _canvas.DrawRenderVx(_strokeColor, renderVx);
         }
         void FillRect(float x, float y, float w, float h)
         {

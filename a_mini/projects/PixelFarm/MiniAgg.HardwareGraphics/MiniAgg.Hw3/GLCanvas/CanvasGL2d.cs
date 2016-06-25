@@ -385,33 +385,7 @@ namespace PixelFarm.DrawingGL
             GLRenderVx glRenderVx = (GLRenderVx)renderVx;
             FillGfxPath(brush, glRenderVx.gxpth);
         }
-        //-------------------------------------------------------------------------------
-        public void DrawPolygon(float[] polygon2dVertices, int npoints)
-        {
-            //closed polyline
-            //draw polyline
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        smoothLineShader.StrokeColor = this.strokeColor;
-                        smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
-                        smoothLineShader.DrawPolygon(polygon2dVertices, npoints);
-                    }
-                    break;
-                default:
-                    {
-                        unsafe
-                        {
-                            fixed (float* arr = &polygon2dVertices[0])
-                            {
-                                DrawPolygonUnsafe(arr, npoints);
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
+
         public void DrawEllipse(float x, float y, double rx, double ry)
         {
             ellipse.Reset(x, y, rx, ry);

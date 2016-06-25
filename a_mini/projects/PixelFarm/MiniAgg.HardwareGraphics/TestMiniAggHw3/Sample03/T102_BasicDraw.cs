@@ -11,11 +11,25 @@ namespace OpenTkEssTest
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
+        PixelFarm.Drawing.RenderVx polygon1;
+        PixelFarm.Drawing.RenderVx polygon2;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
+            polygon1 = painter.CreatePolygonRenderVx(new float[]
+            {
+                50,200,
+                250,200,
+                125,350
+            });
+            polygon2 = painter.CreatePolygonRenderVx(new float[]
+            {
+                250,400,
+                450,400,
+                325,550
+});
         }
         protected override void DemoClosing()
         {
@@ -30,26 +44,17 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            float[] polygon2 = new float[]{
-                250,400,
-                450,400,
-                325,550
-            };
             ////line
             painter.FillColor = PixelFarm.Drawing.Color.Green;
             painter.FillRectLBWH(100, 100, 50, 50);
             //canvas2d.FillRect(PixelFarm.Drawing.Color.Green, 100, 100, 50, 50);
             canvas2d.DrawLine(50, 50, 200, 200);
             canvas2d.DrawRect(10, 10, 50, 50);
-            canvas2d.FillPolygon(PixelFarm.Drawing.Color.Green, polygon2);
-            canvas2d.DrawPolygon(polygon2, 3 * 2);
-            ////polygon
-            float[] polygon1 = new float[]{
-                50,200,
-                250,200,
-                125,350
-            };
-            canvas2d.DrawPolygon(polygon1, 3 * 2);
+            painter.FillRenderVx(polygon2);
+            painter.DrawRenderVx(polygon2);
+            //-------------------------------------------
+            ////polygon 
+            painter.DrawRenderVx(polygon1);
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Green;
             //--------------------------------------------
             canvas2d.DrawCircle(100, 100, 25);
