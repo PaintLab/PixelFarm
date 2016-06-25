@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\ExtensionAttribute.cs" />
+    <Compile Include="1_Drawing\RenderVx.cs" />
     <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="5_PixelFarm_Agg\CanvasPainter.cs" />
     <Compile Include="5_PixelFarm_Agg\ColorRGBA.cs" />

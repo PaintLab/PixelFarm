@@ -25,32 +25,10 @@
 //
 #endregion
 
-using System;
+
 using System.Runtime.InteropServices;
-using OpenTK.Graphics.ES20;
-namespace PixelFarm.Agg
+namespace PixelFarm.DrawingGL
 {
-    //[StructLayout(LayoutKind.Sequential)]
-    //struct VertexV2S1Cvr
-    //{
-    //    public int x;
-    //    public int y;
-    //    public int alpha;
-    //    public VertexV2S1Cvr(int x, int y, int alpha)
-    //    {
-    //        this.x = x;
-    //        this.y = y;
-    //        this.alpha = alpha;
-    //    }
-    //    public override string ToString()
-    //    {
-    //        return x + "," + y + " alpha=" + alpha;
-    //    }
-    //    public const int VX_OFFSET = 0;
-    //    public const int N_COORDS = 2;
-    //}
-
-
     [StructLayout(LayoutKind.Sequential)]
     struct VertexC4V3f
     {
@@ -76,9 +54,25 @@ namespace PixelFarm.Agg
         //public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Float;
         //public const int N_COORDS = 3;
     }
-
-
-
+    //[StructLayout(LayoutKind.Sequential)]
+    //struct VertexV2S1Cvr
+    //{
+    //    public int x;
+    //    public int y;
+    //    public int alpha;
+    //    public VertexV2S1Cvr(int x, int y, int alpha)
+    //    {
+    //        this.x = x;
+    //        this.y = y;
+    //        this.alpha = alpha;
+    //    }
+    //    public override string ToString()
+    //    {
+    //        return x + "," + y + " alpha=" + alpha;
+    //    }
+    //    public const int VX_OFFSET = 0;
+    //    public const int N_COORDS = 2;
+    //}
     ///// <summary>
     ///// vertex buffer object
     ///// </summary>
