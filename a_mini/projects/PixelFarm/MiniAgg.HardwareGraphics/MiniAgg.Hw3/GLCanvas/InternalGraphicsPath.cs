@@ -19,32 +19,13 @@ namespace PixelFarm.DrawingGL
         }
         public int BorderTriangleStripCount { get { return borderTriangleStripCount; } }
         public int TessAreaTriangleCount { get { return tessAreaTriangleCount; } }
-        public void BuildSmoothBorders()
-        {
-            float[] coords = this.coordXYs;
-            int coordCount = coordXYs.Length;
-            //from user input coords
-            //expand it
-            List<float> expandCoords = new List<float>();
-            int lim = coordCount - 2;
-            for (int i = 0; i < lim;)
-            {
-                CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
-                i += 2;
-            }
-            //close coord
-            CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
-            //we need exact close the polygon
-            CreateLineSegment(expandCoords, coords[0], coords[1], coords[0], coords[1]);
-            borderTriangleStripCount = (coordCount + 2) * 2;
-            this.smoothBorderTess = expandCoords.ToArray();
-        }
+
 
         public float[] GetSmoothBorders()
         {
             if (smoothBorderTess == null)
             {
-                BuildSmoothBorders();
+                return smoothBorderTess = InternalGraphicsPath.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
             }
             return smoothBorderTess;
         }
@@ -73,19 +54,7 @@ namespace PixelFarm.DrawingGL
             }
             return areaTess;
         }
-        static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
-        {
-            //create wiht no line join
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float rad1 = (float)System.Math.Atan2(
-                   y2 - y1,  //dy
-                   x2 - x1); //dx
-            coords.Add(x1); coords.Add(y1); coords.Add(0); coords.Add(rad1);
-            coords.Add(x1); coords.Add(y1); coords.Add(1); coords.Add(rad1);
-            coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1);
-            coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
-        }
+
     }
     struct TessTool
     {
@@ -189,7 +158,7 @@ namespace PixelFarm.DrawingGL
                         throw new System.NotSupportedException();
                 }
             }
-        EXIT_LOOP:
+            EXIT_LOOP:
 
             InternalGraphicsPath gfxPath = new InternalGraphicsPath();
             List<Figure> figures = new List<Figure>();
@@ -200,6 +169,42 @@ namespace PixelFarm.DrawingGL
             }
             gfxPath.figures = figures;
             return gfxPath;
+        }
+
+
+        public static float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
+        {
+            float[] coords = coordXYs;
+            int coordCount = coordXYs.Length;
+            //from user input coords
+            //expand it
+            List<float> expandCoords = new List<float>();
+            int lim = coordCount - 2;
+            for (int i = 0; i < lim;)
+            {
+                CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                i += 2;
+            }
+            //close coord
+            CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
+            //we need exact close the polygon
+            CreateLineSegment(expandCoords, coords[0], coords[1], coords[0], coords[1]);
+            borderTriangleStripCount = (coordCount + 2) * 2;
+
+            return expandCoords.ToArray();
+        }
+        static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
+        {
+            //create wiht no line join
+            float dx = x2 - x1;
+            float dy = y2 - y1;
+            float rad1 = (float)System.Math.Atan2(
+                   y2 - y1,  //dy
+                   x2 - x1); //dx
+            coords.Add(x1); coords.Add(y1); coords.Add(0); coords.Add(rad1);
+            coords.Add(x1); coords.Add(y1); coords.Add(1); coords.Add(rad1);
+            coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1);
+            coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
         }
     }
 

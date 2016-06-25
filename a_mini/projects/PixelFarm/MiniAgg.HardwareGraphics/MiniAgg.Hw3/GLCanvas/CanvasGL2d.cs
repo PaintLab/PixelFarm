@@ -401,8 +401,10 @@ namespace PixelFarm.DrawingGL
                     {
                         smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
-                        float[] internalArr = CreatePolyLineRectCoords2(x, y, w, h);
-                        smoothLineShader.DrawPolygon(internalArr, 4 << 1);
+                        int borderTriAngleCount;
+                        float[] triangles = InternalGraphicsPath.BuildSmoothBorders(
+                            CreatePolyLineRectCoords(x, y, w, h), out borderTriAngleCount);
+                        smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
                     }
                     break;
                 default:

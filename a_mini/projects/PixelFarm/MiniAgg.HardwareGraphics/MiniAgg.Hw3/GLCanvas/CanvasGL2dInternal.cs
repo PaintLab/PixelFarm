@@ -4,7 +4,7 @@ namespace PixelFarm.DrawingGL
 {
     public partial class CanvasGL2d
     {
-        static float[] CreatePolyLineRectCoords2(
+        static float[] CreatePolyLineRectCoords(
                 float x, float y, float w, float h)
         {
             return new float[]
