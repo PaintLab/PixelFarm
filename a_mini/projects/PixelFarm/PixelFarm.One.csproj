@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One</AssemblyName>
-    <ProjectGuid>{1729442C-18E3-4C31-A86E-E50597E11915}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -36,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\AggCanvasPainter.cs" />
+    <Compile Include="MiniAgg.Complements\0_CanvasPainter\AggRenderVx.cs" />
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\BorderDouble.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\ClipProxyImage.cs" />
@@ -59,18 +59,9 @@
     <Compile Include="MiniAgg.Complements\Image\FloodFiller.cs" />
     <Compile Include="MiniAgg.Complements\Image\Transposer.cs" />
     <Compile Include="MiniAgg.Complements\x_notused\ImageClipProxyFloat.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\ImageSequence.cs" />
     <Compile Include="MiniAgg.Complements\x_notused\KDTree.cs" />
     <Compile Include="MiniAgg.Complements\x_notused\SpanSubDivAdapter.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\SvgFontFaceWithStyle.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\TextWrapping.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\TypeFacePrinter.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\UnitTests.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\UnitTests2.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\x_GlyphWithUnderline.cs" />
     <Compile Include="MiniAgg.Complements\x_notused\x_ImageTgaIO.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\x_UnitTests.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\8_CoordLists.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\CanvasGL2d.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\CanvasGL2dInternal.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\CanvasGL2d_TextAndFont.cs" />
@@ -78,12 +69,16 @@
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\GLGradientColorProvider.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\GLTextPrinter.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\ImageFillStyle.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\SvgArc.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\TessListener.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLCanvas\VertexPositionColor.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLHelper\GLHelper.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLPainter\GLCanvasPainter.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\7_BasicShader.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\BasicFillShader.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\InvertLineSmoothShader.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\RectGradientShader.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\SimpleTextureShader.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\GLShader\SmoothLineShader.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\Texture\GLBitmap.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\MiniAgg.Hw3\Texture\GLBitmapReference.cs" />
@@ -253,15 +248,11 @@
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\Toolkit.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\GLControlFactory.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\IGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\WinGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\OpenTK.PlatformMini\UserGLControl\X11GLControl.cs" />
@@ -361,6 +352,7 @@
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\Region.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\BufferBitmapStore.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\GdiPlusCanvasPainter.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\GdiPlusRenderVx.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\VxsHelper.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\1_MyGdiPlusCanvas_Specific.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MyGdiPlusCanvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
@@ -372,6 +364,11 @@
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MyScreenCanvas\3_MyScreenCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MyScreenCanvas\4_MyScreenCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MyScreenCanvas\QuadPages.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2\0_Start\GLES2Platform.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2\MyGLCanvas\1_MyGLCanvas_Specific.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2\MyGLCanvas\2_MyGLCanvas_CoordinateAndClip.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2\MyGLCanvas\3_MyGLCanvas_DrawGraphics.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2\MyGLCanvas\4_MyGLCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\Properties\Resources.Designer.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\Properties\Settings.Designer.cs" />
     <Compile Include="PixelFarm.Drawing\0_Start\ExtensionAttribute.cs" />
@@ -388,11 +385,10 @@
     <Compile Include="PixelFarm.Drawing\1_Drawing\GraphicsPath.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\Image.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\KnownColors.cs" />
-    <Compile Include="PixelFarm.Drawing\1_Drawing\Matrix.cs" />
-    <Compile Include="PixelFarm.Drawing\1_Drawing\Rect.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\Rectangle.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\RectangleF.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\Region.cs" />
+    <Compile Include="PixelFarm.Drawing\1_Drawing\RenderVx.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\Fonts.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontStyle.cs" />
     <Compile Include="PixelFarm.Drawing\4_BasicRenderBox\4_Animation\ColorComponentStepup.cs" />
@@ -417,7 +413,6 @@
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\Matrix4x4.cs" />
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\Quaternion.cs" />
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\Ray.cs" />
-    <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\TrackBallController.cs" />
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\Vector2.cs" />
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\Vector3.cs" />
     <Compile Include="PixelFarm.Drawing\6_PixelFarm_AggVectorMath\Vector3Float.cs" />
