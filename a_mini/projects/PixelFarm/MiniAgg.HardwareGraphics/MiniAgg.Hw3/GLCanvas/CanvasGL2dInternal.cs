@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingGL
                x + w, y + h,
                x + w, y,
             };
-            //return vertices;
+             
         }
         static float[] CreatePolyLineRectCoords2(
                 float x, float y, float w, float h)
@@ -35,31 +35,7 @@ namespace PixelFarm.DrawingGL
                 x,x+h
             };
         }
-        List<Vertex> TessPolygon(float[] vertex2dCoords)
-        {
-            int ncoords = vertex2dCoords.Length / 2;
-            List<Vertex> vertexts = new List<Vertex>(ncoords);
-            int nn = 0;
-            for (int i = 0; i < ncoords; ++i)
-            {
-                vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
-            }
-            //-----------------------
-            tessListener.Reset(vertexts);
-            //-----------------------
-            tess.BeginPolygon();
-            tess.BeginContour();
-            int j = vertexts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                Vertex v = vertexts[i];
-                tess.AddVertex(v.m_X, v.m_Y, 0, i);
-            }
-            tess.EndContour();
-            tess.EndPolygon();
-            return tessListener.resultVertexList;
-        }
-
+         
         unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
         {
             this.basicFillShader.DrawLineLoopWithVertexBuffer(polygon2dVertices, npoints, this.strokeColor);

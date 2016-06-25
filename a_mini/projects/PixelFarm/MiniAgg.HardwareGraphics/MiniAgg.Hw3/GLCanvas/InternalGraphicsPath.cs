@@ -91,10 +91,11 @@ namespace PixelFarm.DrawingGL
     {
         internal readonly Tesselate.Tesselator tess;
         internal readonly TessListener2 tessListener;
-        public TessTool(Tesselate.Tesselator tess, TessListener2 tessListener)
+        public TessTool(Tesselate.Tesselator tess)
         {
             this.tess = tess;
-            this.tessListener = tessListener;
+            this.tessListener = new TessListener2();
+            tessListener.Connect(tess, true);
         }
         public List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
@@ -121,13 +122,14 @@ namespace PixelFarm.DrawingGL
             return tessListener.resultVertexList;
         }
     }
+
     class InternalGraphicsPath
     {
         internal List<Figure> figures = new List<Figure>();
-        public InternalGraphicsPath()
+        private InternalGraphicsPath()
         {
         }
-        internal static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
+        public static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
         {
             VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
             double prevX = 0;
@@ -179,7 +181,7 @@ namespace PixelFarm.DrawingGL
                         throw new System.NotSupportedException();
                 }
             }
-        EXIT_LOOP:
+            EXIT_LOOP:
 
             InternalGraphicsPath gfxPath = new InternalGraphicsPath();
             List<Figure> figures = new List<Figure>();
