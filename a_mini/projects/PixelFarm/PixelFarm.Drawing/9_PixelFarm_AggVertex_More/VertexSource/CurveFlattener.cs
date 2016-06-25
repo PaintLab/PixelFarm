@@ -56,7 +56,6 @@ namespace PixelFarm.Agg.VertexSource
         readonly Curve4 m_curve4 = new Curve4();
         public CurveFlattener()
         {
-
         }
         public double ApproximationScale
         {
@@ -282,6 +281,5 @@ namespace PixelFarm.Agg.VertexSource
         {
             return MakeVxs(new VertexStoreSnap(srcVxs));
         }
-
     }
 }

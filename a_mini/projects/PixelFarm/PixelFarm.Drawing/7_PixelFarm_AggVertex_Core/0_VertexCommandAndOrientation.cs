@@ -1,5 +1,5 @@
 ﻿//BSD, 2014-2016, WinterDev
- 
+
 namespace PixelFarm.Agg
 {
     /// <summary>

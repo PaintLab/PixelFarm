@@ -95,6 +95,5 @@ namespace PixelFarm.Agg.Fonts
         {
             get { return false; }
         }
-   
     }
 }

@@ -431,5 +431,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _gfx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
         }
+        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        {
+            WinGdiRenderVx renderVx = new WinGdiRenderVx(snap);
+            return renderVx;
+        }
     }
 }

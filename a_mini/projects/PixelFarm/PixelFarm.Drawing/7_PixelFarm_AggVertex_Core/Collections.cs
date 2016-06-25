@@ -19,7 +19,7 @@
 //---------------------------------------------------------------------------- 
 
 namespace PixelFarm.Agg
-{     
+{
     public class ArrayList<T>
     {
         int currentSize;

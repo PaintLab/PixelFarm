@@ -1,7 +1,7 @@
 ﻿//2016 MIT, WinterDev
 
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 namespace PixelFarm.Drawing.WinGdi
 {
     class BufferBitmapStore

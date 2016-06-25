@@ -313,6 +313,7 @@ namespace PixelFarm.DrawingGL
         {
             FillRect((float)left, (float)bottom, (float)width, (float)height);
         }
+
         public void FillRenderVx(Brush brush, RenderVx renderVx)
         {
             _canvas.FillRenderVx(brush, renderVx);
@@ -412,7 +413,7 @@ namespace PixelFarm.DrawingGL
             DrawEllipse(x - radius, y - radius, x + radius, y + radius);
         }
         //-----------------------------------------------------------------------------------------------------------------
-        public RenderVx CreateRenderVx(VertexStoreSnap snap)
+        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             return new GLRenderVx(InternalGraphicsPath.CreateGraphicsPath(snap));
         }

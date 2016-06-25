@@ -18,7 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-using System.Collections.Generic; 
+using System.Collections.Generic;
 namespace PixelFarm.Agg
 {
     public static class VertexStoreBuilder

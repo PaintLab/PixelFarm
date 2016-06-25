@@ -61,6 +61,8 @@ namespace PixelFarm.Agg
         {
             gx.Clear(color);
         }
+
+
         public override RectInt ClipBox
         {
             get { return this.gx.GetClippingRect(); }
@@ -359,6 +361,10 @@ namespace PixelFarm.Agg
         public override int Height
         {
             get { return 600; }
+        }
+        public override RenderVx CreateRenderVx(VertexStoreSnap snap)
+        {
+            return new AggRenderVx(snap);
         }
     }
 }

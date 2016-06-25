@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing
         public int debug_releaseCount = 0;
         public int debug_canvas_id = 0;
 #endif
-        
+
         public Canvas()
         {
         }

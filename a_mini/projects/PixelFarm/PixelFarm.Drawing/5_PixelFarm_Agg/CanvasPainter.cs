@@ -113,5 +113,8 @@ namespace PixelFarm.Agg
         //---------------- 
         public abstract int Width { get; }
         public abstract int Height { get; }
+        //------------
+        //RenderVx
+        public abstract RenderVx CreateRenderVx(VertexStoreSnap snap);
     }
 }

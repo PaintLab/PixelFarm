@@ -21,7 +21,7 @@
 // conv_stroke
 //
 //----------------------------------------------------------------------------
- 
+
 namespace PixelFarm.Agg
 {
     public sealed class Stroke

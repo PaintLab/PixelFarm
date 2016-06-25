@@ -27,7 +27,7 @@
 //#include <math.h>
 //#include "agg_basics.h"
 
-using System; 
+using System;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.Transform
 {

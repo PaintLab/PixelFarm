@@ -49,7 +49,6 @@ namespace PixelFarm.Agg
         {
             ////use svg font 
             var svgFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, (int)pointSize);
-
             stringPrinter.CurrentFont = svgFont;
             stringPrinter.DrawFromHintedCache = false;
             stringPrinter.LoadText(text);

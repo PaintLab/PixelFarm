@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-2016, WinterDev
 
-using System; 
+using System;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {

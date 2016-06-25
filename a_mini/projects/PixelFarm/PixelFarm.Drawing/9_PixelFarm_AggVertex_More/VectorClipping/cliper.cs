@@ -55,7 +55,6 @@
 
 using System;
 using System.Collections.Generic;
-
 namespace ClipperLib
 {
 #if use_int32
