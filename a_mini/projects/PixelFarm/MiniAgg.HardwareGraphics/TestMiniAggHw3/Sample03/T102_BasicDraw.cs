@@ -46,14 +46,11 @@ namespace OpenTkEssTest
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.StrokeWidth = 1;
             painter.StrokeWidth = 1;
-
             ////line
             painter.FillColor = PixelFarm.Drawing.Color.Green;
             painter.FillRectLBWH(100, 100, 50, 50);
-        
             canvas2d.DrawLine(50, 50, 200, 200);
             canvas2d.DrawRect(10, 10, 50, 50);
-
             painter.FillRenderVx(polygon2);
             painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
             painter.DrawRenderVx(polygon2);

@@ -137,13 +137,13 @@ namespace PixelFarm.DrawingGL
         public void DrawImage(GLBitmap bmp, float x, float y)
         {
             DrawImage(bmp,
-                   new PixelFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
+                   new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                    x, y, bmp.Width, bmp.Height);
         }
         public void DrawImage(GLBitmap bmp, float x, float y, float w, float h)
         {
             DrawImage(bmp,
-                new PixelFarm.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
+                new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                 x, y, w, h);
         }
         public void DrawImage(GLBitmap bmp,
@@ -163,10 +163,7 @@ namespace PixelFarm.DrawingGL
         {
             FillGfxPath(color, InternalGraphicsPath.CreateGraphicsPath(snap));
         }
-        public void DrawVxsSnap(Drawing.Color color, VertexStoreSnap snap)
-        {
-            DrawGfxPath(color, InternalGraphicsPath.CreateGraphicsPath(snap));
-        }
+
         internal void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {
             switch (SmoothMode)
@@ -252,11 +249,11 @@ namespace PixelFarm.DrawingGL
             GLRenderVx glRenderVx = (GLRenderVx)renderVx;
             DrawGfxPath(color, glRenderVx.gxpth);
         }
-        public void FillTriangleStrip(PixelFarm.Drawing.Color color, float[] coords, int n)
+        public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
             basicFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
         }
-        public void FillTriangleFan(PixelFarm.Drawing.Color color, float[] coords, int n)
+        public void FillTriangleFan(Drawing.Color color, float[] coords, int n)
         {
             unsafe
             {
@@ -410,62 +407,10 @@ namespace PixelFarm.DrawingGL
                     break;
                 default:
                     {
-                        //this.basicShader.DrawLine(x1, y1, x2, y2, this.strokeColor);
                     }
                     break;
             }
         }
-
-
-
-
-        public void DrawBezierCurve(float startX, float startY, float endX, float endY,
-            float controlX1, float controlY1,
-            float controlX2, float controlY2)
-        {
-            VertexStore vxs = new VertexStore();
-            BezierCurve.CreateBezierVxs4(vxs,
-                new PixelFarm.VectorMath.Vector2(startX, startY),
-                new PixelFarm.VectorMath.Vector2(endX, endY),
-                new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
-                new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
-            vxs = this.aggStroke.MakeVxs(vxs);
-            DrawVxsSnap(this.strokeColor, new VertexStoreSnap(vxs));
-        }
-
-
-
-
-
-        public void FillPolygon(PixelFarm.Drawing.Color color, float[] vertex2dCoords)
-        {
-            FillPolygon(color, vertex2dCoords, vertex2dCoords.Length);
-        }
-
-        public void FillPolygon(PixelFarm.Drawing.Color color, float[] vertex2dCoords, int npoints)
-        {
-            var vertextList = tessTool.TessPolygon(vertex2dCoords);
-            //-----------------------------   
-            //switch how to fill polygon
-            int j = vertextList.Count;
-            //-----------------------------    
-            unsafe
-            {
-                float* vtx = stackalloc float[j * 2];
-                int n = 0;
-                for (int i = 0; i < j; ++i)
-                {
-                    var v = vertextList[i];
-                    vtx[n] = (float)v.m_X;
-                    vtx[n + 1] = (float)v.m_Y;
-                    n += 2;
-                }
-                //-------------------------------------                              
-                this.basicFillShader.FillTriangles(vtx, j, color);
-            }
-        }
-        //-----------------------------------------------------
-
 
         public int CanvasOriginX
         {

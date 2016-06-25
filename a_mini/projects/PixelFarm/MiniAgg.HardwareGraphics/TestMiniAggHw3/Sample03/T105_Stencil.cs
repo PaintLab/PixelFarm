@@ -11,10 +11,27 @@ namespace OpenTkEssTest
     public class T105_Stencil : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
+        GLCanvasPainter painter;
+        PixelFarm.Drawing.RenderVx stencilPolygon;
+        PixelFarm.Drawing.RenderVx rectPolygon;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
+            painter = new GLCanvasPainter(canvas2d, max, max);
+            stencilPolygon = painter.CreatePolygonRenderVx(new float[]
+                {
+                    20,20,
+                    100,20,
+                    60,80
+                });
+            rectPolygon = painter.CreatePolygonRenderVx(new float[]
+            {
+                    5,5,
+                    100,5,
+                    100,100,
+                    5,100
+            });
         }
         protected override void DemoClosing()
         {
@@ -39,14 +56,10 @@ namespace OpenTkEssTest
             //replace where rendered
             GL.StencilOp(StencilOp.Replace, StencilOp.Replace, StencilOp.Replace);
             //render  to stencill buffer
-            float[] stencilPolygon = new float[]
-                {
-                    20,20,
-                    100,20,
-                    60,80
-                };
-            canvas2d.FillPolygon(PixelFarm.Drawing.Color.Black, stencilPolygon);
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
+
+            painter.FillColor = PixelFarm.Drawing.Color.Black;
+            painter.FillRenderVx(stencilPolygon);
+            painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             //render color
             GL.ColorMask(true, true, true, true);
             //where a 1 was not rendered
@@ -54,16 +67,10 @@ namespace OpenTkEssTest
             //keep the pixel
             GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Keep);
             //draw  
-            canvas2d.FillPolygon(PixelFarm.Drawing.Color.Red,
-              new float[]
-              {
-                    5,5,
-                    100,5,
-                    100,100,
-                    5,100
-              });
+            painter.FillColor = PixelFarm.Drawing.Color.Red;
+            painter.FillRenderVx(rectPolygon);
             GL.Disable(EnableCap.StencilTest);
-            //
+            //-----------------------------------------------------------
             miniGLControl.SwapBuffers();
         }
     }

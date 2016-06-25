@@ -45,7 +45,8 @@ namespace OpenTkEssTest
             VertexStore myvxs = lionVxs;
             for (int i = 0; i < j; ++i)
             {
-                canvas2d.FillVxsSnap(colors[i], new VertexStoreSnap(myvxs, pathList[i]));
+                painter.FillColor = colors[i];
+                painter.Fill(new VertexStoreSnap(myvxs, pathList[i]));
             }
             //-------------------------------
             miniGLControl.SwapBuffers();

@@ -133,12 +133,20 @@ namespace PixelFarm.DrawingGL
         }
         public override void Draw(VertexStore vxs)
         {
-            _canvas.DrawVxsSnap(this._strokeColor, new VertexStoreSnap(vxs));
+            _canvas.DrawGfxPath(this._strokeColor,
+                InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
 
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         {
-            _canvas.DrawBezierCurve(startX, startY, endX, endY, controlX1, controlY1, controlY1, controlY2);
+            VertexStore vxs = new VertexStore();
+            BezierCurve.CreateBezierVxs4(vxs,
+                new PixelFarm.VectorMath.Vector2(startX, startY),
+                new PixelFarm.VectorMath.Vector2(endX, endY),
+                new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
+                new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
+            vxs = _canvas.StrokeGen.MakeVxs(vxs);
+            _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
 
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
@@ -174,24 +182,23 @@ namespace PixelFarm.DrawingGL
         }
         public override void Fill(VertexStore vxs)
         {
-            _canvas.FillVxsSnap(
+            _canvas.FillGfxPath(
                 _fillColor,
-                new VertexStoreSnap(vxs)
+                InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs))
                 );
         }
 
         public override void Fill(VertexStoreSnap snap)
         {
-            _canvas.FillVxsSnap(
-              _fillColor,
-              snap
-              );
+            _canvas.FillGfxPath(
+                _fillColor,
+               InternalGraphicsPath.CreateGraphicsPath(snap));
         }
         public override void Draw(VertexStoreSnap snap)
         {
-            _canvas.DrawVxsSnap(
+            _canvas.DrawGfxPath(
              this._fillColor,
-             snap
+             InternalGraphicsPath.CreateGraphicsPath(snap)
              );
         }
 
@@ -213,14 +220,14 @@ namespace PixelFarm.DrawingGL
             roundRect.SetRadius(rx, ry);
             //create round rect vxs
             var vxs = roundRect.MakeVxs();
-            _canvas.FillVxsSnap(_fillColor, new VertexStoreSnap(vxs));
+            _canvas.FillGfxPath(_fillColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
         public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
         {
             roundRect.SetRect(x, y, x + w, y + h);
             roundRect.SetRadius(rx, ry);
             var vxs = _canvas.StrokeGen.MakeVxs(roundRect.MakeVxs());
-            _canvas.DrawVxsSnap(_strokeColor, new VertexStoreSnap(vxs));
+            _canvas.DrawGfxPath(_strokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
 
         public override void DrawEllipse(double left, double bottom, double right, double top)
@@ -231,7 +238,7 @@ namespace PixelFarm.DrawingGL
             double ry = Math.Abs(top - y);
             ellipse.Reset(x, y, rx, ry);
             VertexStore vxs = ellipse.MakeVxs();
-            _canvas.DrawVxsSnap(_strokeColor, new VertexStoreSnap(vxs));
+            _canvas.DrawGfxPath(_strokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
@@ -318,6 +325,9 @@ namespace PixelFarm.DrawingGL
         {
             _canvas.DrawRenderVx(_strokeColor, renderVx);
         }
+
+
+
         void FillRect(float x, float y, float w, float h)
         {
             float[] coords = CreateRectTessCoordsTriStrip(x, y, w, h);
@@ -379,7 +389,7 @@ namespace PixelFarm.DrawingGL
         {
             for (int i = 0; i < numPath; ++i)
             {
-                _canvas.FillVxsSnap(colors[i], new VertexStoreSnap(vxs, pathIndexs[i]));
+                _canvas.FillGfxPath(colors[i], InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs, pathIndexs[i])));
             }
         }
         public override void Rectangle(double left, double bottom, double right, double top)
@@ -509,9 +519,8 @@ namespace PixelFarm.DrawingGL
                     vxs = mat.TransformToVxs(vxs);
                 }
             }
-
             vxs = this._canvas.StrokeGen.MakeVxs(vxs);
-            _canvas.DrawVxsSnap(_canvas.StrokeColor, new VertexStoreSnap(vxs));
+            _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
         static double DegToRad(double degree)
         {
