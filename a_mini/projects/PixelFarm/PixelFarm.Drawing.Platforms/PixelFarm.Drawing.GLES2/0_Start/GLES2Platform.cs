@@ -5,11 +5,23 @@ namespace PixelFarm.Drawing.GLES2
 {
     class GLES2Platform : GraphicsPlatform
     {
+        IFonts sampleIFonts;
+        System.Drawing.Bitmap sampleBmp;
         public override IFonts SampleIFonts
         {
             get
             {
-                throw new NotImplementedException();
+                if (sampleIFonts == null)
+                {
+                    if (sampleBmp == null)
+                    {
+                        sampleBmp = new System.Drawing.Bitmap(2, 2);
+                    }
+                    //System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(sampleBmp);
+                    //TODO: review here, we need some platform-specific func
+                    sampleIFonts = new PixelFarm.Drawing.WinGdi.MyScreenCanvas(this, 0, 0, 0, 0, 2, 2);
+                }
+                return this.sampleIFonts;
             }
         }
 

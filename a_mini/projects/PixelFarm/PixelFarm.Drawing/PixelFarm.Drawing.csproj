@@ -40,7 +40,6 @@
     <Compile Include="1_Drawing\RenderVx.cs" />
     <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="5_PixelFarm_Agg\CanvasPainter.cs" />
-    <Compile Include="5_PixelFarm_Agg\ColorRGBA.cs" />
     <Compile Include="5_PixelFarm_Agg\Font.cs" />
     <Compile Include="5_PixelFarm_Agg\FontFace.cs" />
     <Compile Include="5_PixelFarm_Agg\FontGlyph.cs" />
@@ -96,7 +95,6 @@
     <Compile Include="8_PixelFarm_AggTransforms\2_Bilinear.cs" />
     <Compile Include="8_PixelFarm_AggTransforms\3_Perspective.cs" />
     <Compile Include="8_PixelFarm_AggTransforms\4_SimulEqGeneral.cs" />
-    <Compile Include="8_PixelFarm_AggTransforms\LineInterpolators.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\RectD.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\RectInt.cs" />
     <Compile Include="8_PixelFarm_AggTransforms\Viewport.cs" />

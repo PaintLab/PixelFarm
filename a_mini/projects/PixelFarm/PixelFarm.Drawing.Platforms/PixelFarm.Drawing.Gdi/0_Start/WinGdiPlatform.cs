@@ -59,7 +59,7 @@ namespace PixelFarm.Drawing.WinGdi
                         sampleBmp = new System.Drawing.Bitmap(2, 2);
                     }
 
-                    System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(sampleBmp);
+                    //System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(sampleBmp);
                     sampleIFonts = new MyScreenCanvas(this, 0, 0, 0, 0, 2, 2);
                 }
                 return this.sampleIFonts;

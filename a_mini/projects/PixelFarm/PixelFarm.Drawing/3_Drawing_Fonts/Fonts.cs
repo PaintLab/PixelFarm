@@ -3,7 +3,7 @@
 using System;
 namespace PixelFarm.Drawing
 {
-    public abstract class Font : System.IDisposable
+    public abstract class Font : IDisposable
     {
         public abstract string Name { get; }
         public abstract float Size { get; }
