@@ -6,7 +6,6 @@ namespace PixelFarm.DrawingGL
 {
     public partial class CanvasGL2d
     {
-
         static float[] CreateRectTessCoordsTriStrip(float x, float y, float w, float h)
         {
             //float x0 = x;
@@ -35,7 +34,6 @@ namespace PixelFarm.DrawingGL
                 x+w,y+h,
                 x,x+h
             };
-
         }
         List<Vertex> TessPolygon(float[] vertex2dCoords)
         {

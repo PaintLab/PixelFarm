@@ -77,8 +77,6 @@ namespace PixelFarm.Agg
         //public const int N_COORDS = 3;
     }
 
-
-
     ///// <summary>
     ///// vertex buffer object
     ///// </summary>

@@ -1,11 +1,12 @@
 ﻿//MIT 2016, WinterDev
+
 using System.Collections.Generic;
+using PixelFarm.Agg;
 namespace PixelFarm.DrawingGL
 {
     class Figure
     {
         public float[] coordXYs; //this is user provide coord
-
         //---------
         //system tess ...
         public float[] areaTess;
@@ -125,7 +126,70 @@ namespace PixelFarm.DrawingGL
         internal List<Figure> figures = new List<Figure>();
         public InternalGraphicsPath()
         {
+        }
+        internal static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
+        {
+            VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
+            double prevX = 0;
+            double prevY = 0;
+            double prevMoveToX = 0;
+            double prevMoveToY = 0;
+            List<List<float>> allXYlist = new List<List<float>>(); //all include sub path
+            List<float> xylist = new List<float>();
+            allXYlist.Add(xylist);
+            bool isAddToList = true;
+            for (;;)
+            {
+                double x, y;
+                VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
+                switch (cmd)
+                {
+                    case PixelFarm.Agg.VertexCmd.MoveTo:
+                        if (!isAddToList)
+                        {
+                            allXYlist.Add(xylist);
+                            isAddToList = true;
+                        }
+                        prevMoveToX = prevX = x;
+                        prevMoveToY = prevY = y;
+                        xylist.Add((float)x);
+                        xylist.Add((float)y);
+                        break;
+                    case PixelFarm.Agg.VertexCmd.LineTo:
+                        xylist.Add((float)x);
+                        xylist.Add((float)y);
+                        prevX = x;
+                        prevY = y;
+                        break;
+                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                        //from current point 
+                        xylist.Add((float)prevMoveToX);
+                        xylist.Add((float)prevMoveToY);
+                        prevX = prevMoveToX;
+                        prevY = prevMoveToY;
+                        //start the new one
+                        xylist = new List<float>();
+                        isAddToList = false;
+                        break;
+                    case PixelFarm.Agg.VertexCmd.EndFigure:
+                        break;
+                    case PixelFarm.Agg.VertexCmd.Stop:
+                        goto EXIT_LOOP;
+                    default:
+                        throw new System.NotSupportedException();
+                }
+            }
+        EXIT_LOOP:
 
+            InternalGraphicsPath gfxPath = new InternalGraphicsPath();
+            List<Figure> figures = new List<Figure>();
+            int j = allXYlist.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                figures.Add(new Figure(allXYlist[i].ToArray()));
+            }
+            gfxPath.figures = figures;
+            return gfxPath;
         }
     }
 }

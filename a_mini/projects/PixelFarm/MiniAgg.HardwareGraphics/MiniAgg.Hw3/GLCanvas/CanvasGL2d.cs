@@ -48,7 +48,6 @@ namespace PixelFarm.DrawingGL
                                                                          // tessListener.Connect(tess, Tesselate.Tesselator.WindingRuleType.Odd, true);
             tess.WindingRule = Tesselator.WindingRuleType.Odd;
             tessListener.Connect(tess, true);
-
             tessTool = new TessTool(this.tess, this.tessListener);
             textPriner = new GLTextPrinter(this);
             SetupFonts();
@@ -157,76 +156,16 @@ namespace PixelFarm.DrawingGL
                  bmp.GetRectF(),
                  x, y, bmp.Width, bmp.Height);
         }
-        internal static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
-        {
-            VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
-            double prevX = 0;
-            double prevY = 0;
-            double prevMoveToX = 0;
-            double prevMoveToY = 0;
-            List<List<float>> allXYlist = new List<List<float>>(); //all include sub path
-            List<float> xylist = new List<float>();
-            allXYlist.Add(xylist);
-            bool isAddToList = true;
-            for (;;)
-            {
-                double x, y;
-                VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
-                switch (cmd)
-                {
-                    case PixelFarm.Agg.VertexCmd.MoveTo:
-                        if (!isAddToList)
-                        {
-                            allXYlist.Add(xylist);
-                            isAddToList = true;
-                        }
-                        prevMoveToX = prevX = x;
-                        prevMoveToY = prevY = y;
-                        xylist.Add((float)x);
-                        xylist.Add((float)y);
-                        break;
-                    case PixelFarm.Agg.VertexCmd.LineTo:
-                        xylist.Add((float)x);
-                        xylist.Add((float)y);
-                        prevX = x;
-                        prevY = y;
-                        break;
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
-                        //from current point 
-                        xylist.Add((float)prevMoveToX);
-                        xylist.Add((float)prevMoveToY);
-                        prevX = prevMoveToX;
-                        prevY = prevMoveToY;
-                        //start the new one
-                        xylist = new List<float>();
-                        isAddToList = false;
-                        break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure:
-                        break;
-                    case PixelFarm.Agg.VertexCmd.Stop:
-                        goto EXIT_LOOP;
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-            EXIT_LOOP:
-
-            InternalGraphicsPath gfxPath = new InternalGraphicsPath();
-            List<Figure> figures = new List<Figure>();
-            int j = allXYlist.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                figures.Add(new Figure(allXYlist[i].ToArray()));
-            }
-            gfxPath.figures = figures;
-            return gfxPath;
-        }
-         
         public void FillVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
         {
-
-            InternalGraphicsPath igpth = CreateGraphicsPath(snap);
-
+            FillGfxPath(color, InternalGraphicsPath.CreateGraphicsPath(snap));
+        }
+        public void DrawVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
+        {
+            DrawGfxPath(color, InternalGraphicsPath.CreateGraphicsPath(snap));
+        }
+        internal void FillGfxPath(PixelFarm.Drawing.Color color, InternalGraphicsPath igpth)
+        {
             switch (SmoothMode)
             {
                 case CanvasSmoothMode.No:
@@ -246,10 +185,8 @@ namespace PixelFarm.DrawingGL
                         int subPathCount = figures.Count;
                         strokeColor = color;
                         StrokeWidth = 0.5f;
-
                         smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
-
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
@@ -259,10 +196,9 @@ namespace PixelFarm.DrawingGL
                     }
                     break;
             }
-        } 
-        public void DrawVxsSnap(PixelFarm.Drawing.Color color, VertexStoreSnap snap)
+        }
+        internal void DrawGfxPath(PixelFarm.Drawing.Color color, InternalGraphicsPath igpth)
         {
-            InternalGraphicsPath igpth = CreateGraphicsPath(snap);
             switch (SmoothMode)
             {
                 case CanvasSmoothMode.No:
@@ -290,16 +226,17 @@ namespace PixelFarm.DrawingGL
                         List<Figure> figures = igpth.figures;
                         int subPathCount = figures.Count;
                         strokeColor = color;
-                        StrokeWidth = 1f; 
+                        StrokeWidth = 1f;
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            Figure f = figures[i]; 
+                            Figure f = figures[i];
                             smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
                         }
                     }
                     break;
             }
         }
+
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
         {
             //closed polyline
@@ -475,7 +412,6 @@ namespace PixelFarm.DrawingGL
                     {
                         smoothLineShader.StrokeColor = this.strokeColor;
                         smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
-
                         float[] internalArr = CreatePolyLineRectCoords2(x, y, w, h);
                         smoothLineShader.DrawPolygon(internalArr, 4 << 1);
                     }
@@ -1048,7 +984,6 @@ namespace PixelFarm.DrawingGL
         }
         public void FillPolygon(PixelFarm.Drawing.Color color, float[] vertex2dCoords, int npoints)
         {
-
             var vertextList = TessPolygon(vertex2dCoords);
             //-----------------------------   
             //switch how to fill polygon
