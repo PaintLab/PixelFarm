@@ -294,6 +294,13 @@ namespace PixelFarm.Drawing.HardwareGraphics
 
 
 
+        //-----------------------------------------------------------------------------------------------------------------
+        public RenderVx CreateRenderVx(VertexStoreSnap snap)
+        {
+            GLRenderVx renderVx = new GLRenderVx(InternalGraphicsPath.CreateGraphicsPath(snap));
+            return renderVx;
+        }
+
         struct CenterFormArc
         {
             public double cx;

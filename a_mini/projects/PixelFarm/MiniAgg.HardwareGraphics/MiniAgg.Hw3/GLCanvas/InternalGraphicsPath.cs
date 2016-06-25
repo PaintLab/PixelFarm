@@ -194,4 +194,17 @@ namespace PixelFarm.DrawingGL
             return gfxPath;
         }
     }
+
+
+
+    class GLRenderVx : PixelFarm.Drawing.RenderVx
+    {
+        internal InternalGraphicsPath gxpth;
+        public GLRenderVx(InternalGraphicsPath gxpth)
+        {
+            this.gxpth = gxpth;
+        }
+    }
+
+
 }

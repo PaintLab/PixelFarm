@@ -239,7 +239,16 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-
+        public void FillRenderVx(PixelFarm.Drawing.Color color, PixelFarm.Drawing.RenderVx renderVx)
+        {
+            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            FillGfxPath(color, glRenderVx.gxpth);
+        }
+        public void DrawRenderVx(PixelFarm.Drawing.Color color, PixelFarm.Drawing.RenderVx renderVx)
+        {
+            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            DrawGfxPath(color, glRenderVx.gxpth);
+        }
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
         {
             //closed polyline
