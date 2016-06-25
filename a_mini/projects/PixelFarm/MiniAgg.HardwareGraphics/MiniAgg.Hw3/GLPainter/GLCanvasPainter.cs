@@ -18,6 +18,7 @@ namespace PixelFarm.DrawingGL
         CurveFlattener curveFlattener;
         RoundedRect roundRect;
         Arc arcTool;
+        Ellipse ellipse = new Ellipse();
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;
@@ -196,29 +197,102 @@ namespace PixelFarm.DrawingGL
 
         public override void FillCircle(double x, double y, double radius)
         {
-            _canvas.FillCircle(_fillColor, (float)x, (float)y, (float)radius);
+            FillEllipse(x - radius, y - radius, x + radius, y + radius);
         }
 
         public override void FillCircle(double x, double y, double radius, Color color)
         {
-            _canvas.FillCircle(color, (float)x, (float)y, (float)radius);
+            Color prevColor = _fillColor;
+            _fillColor = color;
+            FillEllipse(x - radius, y - radius, x + radius, y + radius);
+            _fillColor = prevColor; //reset
+        }
+        public void FillRoundRect(Color color, float x, float y, float w, float h, float rx, float ry)
+        {
+            roundRect.SetRect(x, y, x + w, y + h);
+            roundRect.SetRadius(rx, ry);
+            //create round rect vxs
+            var vxs = roundRect.MakeVxs();
+            _canvas.FillVxsSnap(_fillColor, new VertexStoreSnap(vxs));
+        }
+        public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
+        {
+            roundRect.SetRect(x, y, x + w, y + h);
+            roundRect.SetRadius(rx, ry);
+            var vxs = _canvas.StrokeGen.MakeVxs(roundRect.MakeVxs());
+            _canvas.DrawVxsSnap(_strokeColor, new VertexStoreSnap(vxs));
         }
 
         public override void DrawEllipse(double left, double bottom, double right, double top)
         {
-            double midX = (left + right) / 2;
-            double midY = (bottom + top) / 2;
-            double radiusX = Math.Abs(right - midX);
-            double radiusY = Math.Abs(top - midY);
-            _canvas.DrawEllipse((float)midX, (float)midY, radiusX, radiusY);
+            double x = (left + right) / 2;
+            double y = (bottom + top) / 2;
+            double rx = Math.Abs(right - x);
+            double ry = Math.Abs(top - y);
+            ellipse.Reset(x, y, rx, ry);
+            VertexStore vxs = ellipse.MakeVxs();
+            _canvas.DrawVxsSnap(_strokeColor, new VertexStoreSnap(vxs));
         }
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
-            double midX = (left + right) / 2;
-            double midY = (bottom + top) / 2;
-            double radiusX = Math.Abs(right - midX);
-            double radiusY = Math.Abs(top - midY);
-            _canvas.FillEllipse(_fillColor, (float)midX, (float)midY, (float)radiusX, (float)radiusY);
+            double x = (left + right) / 2;
+            double y = (bottom + top) / 2;
+            double rx = Math.Abs(right - x);
+            double ry = Math.Abs(top - y);
+            ellipse.Reset(x, y, rx, ry);
+            var vxs = ellipse.MakeVxs();
+            //other mode
+            int n = vxs.Count;
+            //make triangular fan*** 
+
+            float[] coords = new float[(n * 2) + 4];
+            int i = 0;
+            int nn = 0;
+            int npoints = 0;
+            double vx, vy;
+            //center
+            coords[nn++] = (float)x;
+            coords[nn++] = (float)y;
+            npoints++;
+            var cmd = vxs.GetVertex(i, out vx, out vy);
+            while (i < n)
+            {
+                switch (cmd)
+                {
+                    case VertexCmd.MoveTo:
+                        {
+                            coords[nn++] = (float)vx;
+                            coords[nn++] = (float)vy;
+                            npoints++;
+                        }
+                        break;
+                    case VertexCmd.LineTo:
+                        {
+                            coords[nn++] = (float)vx;
+                            coords[nn++] = (float)vy;
+                            npoints++;
+                        }
+                        break;
+                    case VertexCmd.Stop:
+                        {
+                        }
+                        break;
+                    default:
+                        {
+                        }
+                        break;
+                }
+                i++;
+                cmd = vxs.GetVertex(i, out vx, out vy);
+            }
+
+
+            //close circle
+            coords[nn++] = coords[2];
+            coords[nn++] = coords[3];
+            npoints++;
+            //----------------------------------------------
+            _canvas.FillTriangleFan(_fillColor, coords, npoints);
         }
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
@@ -323,9 +397,10 @@ namespace PixelFarm.DrawingGL
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
         }
-
-
-
+        public void DrawCircle(float x, float y, double radius)
+        {
+            DrawEllipse(x - radius, y - radius, x + radius, y + radius);
+        }
         //-----------------------------------------------------------------------------------------------------------------
         public RenderVx CreateRenderVx(VertexStoreSnap snap)
         {

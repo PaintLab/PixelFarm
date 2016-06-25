@@ -20,8 +20,6 @@ namespace PixelFarm.DrawingGL
 
         PixelFarm.Drawing.Color strokeColor = PixelFarm.Drawing.Color.Black;
         //tools---------------------------------
-        RoundedRect roundRect = new RoundedRect();
-        Ellipse ellipse = new Ellipse();
         PathWriter ps = new PathWriter();
         Stroke aggStroke = new Stroke(1);
         Arc arcTool = new Arc();
@@ -233,6 +231,8 @@ namespace PixelFarm.DrawingGL
                         int subPathCount = figures.Count;
                         strokeColor = color;
                         StrokeWidth = 1f;
+                        smoothLineShader.StrokeWidth = 1;
+                        smoothLineShader.StrokeColor = color;
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
@@ -255,6 +255,16 @@ namespace PixelFarm.DrawingGL
         public void FillTriangleStrip(PixelFarm.Drawing.Color color, float[] coords, int n)
         {
             basicFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
+        }
+        public void FillTriangleFan(PixelFarm.Drawing.Color color, float[] coords, int n)
+        {
+            unsafe
+            {
+                fixed (float* head = &coords[0])
+                {
+                    basicFillShader.FillTriangleFan(head, n, color);
+                }
+            }
         }
         internal void FillGfxPath(Drawing.Brush brush, InternalGraphicsPath igpth)
         {
@@ -386,149 +396,6 @@ namespace PixelFarm.DrawingGL
             FillGfxPath(brush, glRenderVx.gxpth);
         }
 
-        public void DrawEllipse(float x, float y, double rx, double ry)
-        {
-            ellipse.Reset(x, y, rx, ry);
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        VertexStore vxs = ellipse.MakeVxs();
-                        int n = vxs.Count;
-                        float[] coords = new float[n * 2];
-                        int i = 0;
-                        int nn = 0;
-                        double vx, vy;
-                        var cmd = vxs.GetVertex(i, out vx, out vy);
-                        while (i < n)
-                        {
-                            switch (cmd)
-                            {
-                                case VertexCmd.MoveTo:
-                                    {
-                                        coords[nn++] = (float)vx;
-                                        coords[nn++] = (float)vy;
-                                    }
-                                    break;
-                                case VertexCmd.LineTo:
-                                    {
-                                        coords[nn++] = (float)vx;
-                                        coords[nn++] = (float)vy;
-                                    }
-                                    break;
-                                default:
-                                    {
-                                        i = n + 1; //stop
-                                    }
-                                    break;
-                            }
-                            i++;
-                            cmd = vxs.GetVertex(i, out vx, out vy);
-                        }
-                        //--------------------------------------
-                        smoothLineShader.StrokeColor = this.strokeColor;
-                        smoothLineShader.DrawPolygon(coords, nn);
-                    }
-                    break;
-                default:
-                    {
-                        VertexStore vxs = ellipse.MakeVxs();
-                        int n = vxs.Count;
-                        unsafe
-                        {
-                            float* coords = stackalloc float[n * 2];
-                            int i = 0;
-                            int nn = 0;
-                            double vx, vy;
-                            var cmd = vxs.GetVertex(i, out vx, out vy);
-                            while (i < n)
-                            {
-                                switch (cmd)
-                                {
-                                    case VertexCmd.MoveTo:
-                                        {
-                                            coords[nn++] = (float)vx;
-                                            coords[nn++] = (float)vy;
-                                        }
-                                        break;
-                                    case VertexCmd.LineTo:
-                                        {
-                                            coords[nn++] = (float)vx;
-                                            coords[nn++] = (float)vy;
-                                        }
-                                        break;
-                                    case VertexCmd.Stop:
-                                        {
-                                        }
-                                        break;
-                                    default:
-                                        {
-                                        }
-                                        break;
-                                }
-                                i++;
-                                cmd = vxs.GetVertex(i, out vx, out vy);
-                            }
-                            //-------------------------------------- 
-                            DrawPolygonUnsafe(coords, nn / 2);
-                        }
-                    }
-                    break;
-            }
-        }
-        public void DrawCircle(float x, float y, double radius)
-        {
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        ellipse.Reset(x, y, radius, radius);
-                        VertexStore vxs = ellipse.MakeVxs();
-                        int n = vxs.Count;
-                        float[] coords = new float[n * 2];
-                        int i = 0;
-                        int nn = 0;
-                        double vx, vy;
-                        var cmd = vxs.GetVertex(i, out vx, out vy);
-                        while (i < n)
-                        {
-                            switch (cmd)
-                            {
-                                case VertexCmd.MoveTo:
-                                    {
-                                        coords[nn++] = (float)vx;
-                                        coords[nn++] = (float)vy;
-                                    }
-                                    break;
-                                case VertexCmd.LineTo:
-                                    {
-                                        coords[nn++] = (float)vx;
-                                        coords[nn++] = (float)vy;
-                                    }
-                                    break;
-                                default:
-                                    {
-                                        i = n + 1; //stop
-                                    }
-                                    break;
-                            }
-                            i++;
-                            cmd = vxs.GetVertex(i, out vx, out vy);
-                        }
-                        //--------------------------------------
-                        smoothLineShader.StrokeColor = this.strokeColor;
-                        smoothLineShader.DrawPolygon(coords, nn);
-                    }
-                    break;
-                default:
-                    {
-                        DrawEllipse(x, y, radius, radius);
-                    }
-                    break;
-            }
-        }
-
-
         public void DrawRect(float x, float y, float w, float h)
         {
             switch (this.SmoothMode)
@@ -544,30 +411,6 @@ namespace PixelFarm.DrawingGL
                 default:
                     {
                         //this.basicShader.DrawLine(x1, y1, x2, y2, this.strokeColor);
-                    }
-                    break;
-            }
-        }
-        public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
-        {
-            throw new NotSupportedException();
-            roundRect.SetRect(x, y, x + w, y + h);
-            roundRect.SetRadius(rx, ry);
-            var vxs = this.aggStroke.MakeVxs(roundRect.MakeVxs());
-            switch (this.SmoothMode)
-            {
-                case CanvasSmoothMode.Smooth:
-                    {
-                        //sclineRas.Reset();
-                        //sclineRas.AddPath(vxs);
-                        //sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
-                    }
-                    break;
-                default:
-                    {
-                        //    sclineRas.Reset();
-                        //    sclineRas.AddPath(vxs);
-                        //    sclineRasToGL.DrawWithColor(sclineRas, sclinePack8, this.strokeColor);
                     }
                     break;
             }
@@ -592,81 +435,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-        public void FillRoundRect(PixelFarm.Drawing.Color color, float x, float y, float w, float h, float rx, float ry)
-        {
-            roundRect.SetRect(x, y, x + w, y + h);
-            roundRect.SetRadius(rx, ry);
-            //create round rect vxs
-            var vxs = roundRect.MakeVxs();
-            DrawVxsSnap(color, new VertexStoreSnap(vxs));
-        }
-        public void FillEllipse(PixelFarm.Drawing.Color color, float x, float y, float rx, float ry)
-        {
-            switch (this.SmoothMode)
-            {
-                default:
-                    {
-                        ellipse.Reset(x, y, rx, ry);
-                        var vxs = ellipse.MakeVxs();
-                        //other mode
-                        int n = vxs.Count;
-                        //make triangular fan*** 
-                        unsafe
-                        {
-                            float* coords = stackalloc float[(n * 2) + 4];
-                            int i = 0;
-                            int nn = 0;
-                            int npoints = 0;
-                            double vx, vy;
-                            //center
-                            coords[nn++] = (float)x;
-                            coords[nn++] = (float)y;
-                            npoints++;
-                            var cmd = vxs.GetVertex(i, out vx, out vy);
-                            while (i < n)
-                            {
-                                switch (cmd)
-                                {
-                                    case VertexCmd.MoveTo:
-                                        {
-                                            coords[nn++] = (float)vx;
-                                            coords[nn++] = (float)vy;
-                                            npoints++;
-                                        }
-                                        break;
-                                    case VertexCmd.LineTo:
-                                        {
-                                            coords[nn++] = (float)vx;
-                                            coords[nn++] = (float)vy;
-                                            npoints++;
-                                        }
-                                        break;
-                                    case VertexCmd.Stop:
-                                        {
-                                        }
-                                        break;
-                                    default:
-                                        {
-                                        }
-                                        break;
-                                }
-                                i++;
-                                cmd = vxs.GetVertex(i, out vx, out vy);
-                            }
-                            //close circle
-                            coords[nn++] = coords[2];
-                            coords[nn++] = coords[3];
-                            npoints++;
-                            this.basicFillShader.FillTriangleFan(coords, npoints, color);
-                        }
-                    }
-                    break;
-            }
-        }
-        public void FillCircle(PixelFarm.Drawing.Color color, float x, float y, float radius)
-        {
-            FillEllipse(color, x, y, radius, radius);
-        }
+
 
         public void FillPolygon(PixelFarm.Drawing.Color color, float[] vertex2dCoords)
         {
