@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing.WinGdi
     {
         System.Drawing.Graphics _gfx;
         System.Drawing.Bitmap _gfxBmp;
-        System.Drawing.Font _currentFont;
+        System.Drawing.Font _currentGdiFont;
         System.Drawing.SolidBrush _currentFillBrush;
         System.Drawing.Pen _currentPen;
         //
@@ -22,7 +22,7 @@ namespace PixelFarm.Drawing.WinGdi
         bool _useSubPixelRendering;
         BufferBitmapStore _bmpStore;
         //
-        Agg.Fonts.Font _font;
+        PixelFarm.Drawing.Font _currentFont;
         //vector generators
         Agg.VertexSource.RoundedRect roundRect;
         Agg.VertexSource.CurveFlattener curveFlattener;
@@ -37,9 +37,10 @@ namespace PixelFarm.Drawing.WinGdi
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
             _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
             _gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
-            _currentFont = new System.Drawing.Font("Tahoma", 10);
+            _currentGdiFont = new System.Drawing.Font("Tahoma", 10);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
+            _currentFont = new WinGdiFont(_currentGdiFont);
         }
         public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
         {
@@ -67,15 +68,16 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override Agg.Fonts.Font CurrentFont
+        public override Font CurrentFont
         {
             get
             {
-                return _font;
+                return _currentFont;
             }
+
             set
             {
-                _font = value;
+                _currentFont = value;
             }
         }
         public override Color FillColor
@@ -302,7 +304,7 @@ namespace PixelFarm.Drawing.WinGdi
             //use current brush and font
             _gfx.ResetTransform();
             _gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
-            _gfx.DrawString(text, _currentFont, _currentFillBrush, new System.Drawing.PointF((float)x, (float)y));
+            _gfx.DrawString(text, _currentGdiFont, _currentFillBrush, new System.Drawing.PointF((float)x, (float)y));
             //restore back
             _gfx.ResetTransform();//again
             _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis

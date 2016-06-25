@@ -2,12 +2,12 @@
 
 namespace PixelFarm.Drawing.WinGdi
 {
-    class MyFont : Font
+    class WinGdiFont : Font
     {
         System.Drawing.Font myFont;
         System.IntPtr hFont;
         FontInfo fontInfo;
-        public MyFont(System.Drawing.Font f)
+        public WinGdiFont(System.Drawing.Font f)
         {
             this.myFont = f;
             this.hFont = f.ToHfont();

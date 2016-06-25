@@ -19,6 +19,7 @@ namespace PixelFarm.DrawingGL
         RoundedRect roundRect;
         Arc arcTool;
         Ellipse ellipse = new Ellipse();
+        PixelFarm.Drawing.Font _currentFont;
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;
@@ -40,14 +41,15 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public override Agg.Fonts.Font CurrentFont
+        public override Font CurrentFont
         {
             get
             {
-                return null;
+                return _currentFont;
             }
             set
             {
+                _currentFont = value;
             }
         }
         public override Color FillColor

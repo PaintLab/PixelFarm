@@ -145,7 +145,7 @@ namespace PixelFarm.Drawing.WinGdi
                 int fontEmHeight = newFont.FontFamily.GetEmHeight(newFont.Style);
                 int fontAscent = newFont.FontFamily.GetCellAscent(newFont.Style);
                 float descent = newFont.FontFamily.GetCellDescent(newFont.Style);
-                var myFont = new PixelFarm.Drawing.WinGdi.MyFont(newFont);
+                var myFont = new PixelFarm.Drawing.WinGdi.WinGdiFont(newFont);
                 fontInfo = new PixelFarm.Drawing.WinGdi.MyFontInfo(
                     myFont,
                     fontHeight,

@@ -1,6 +1,76 @@
 ﻿//----------------------------------- 
-
 using System;
+using PixelFarm.Drawing;
+
+namespace PixelFarm.Agg
+{
+    public class AggFont : Drawing.Font
+    {
+        internal PixelFarm.Agg.Fonts.Font font;
+        public AggFont(PixelFarm.Agg.Fonts.Font font)
+        {
+            this.font = font;
+        }
+        public override FontInfo FontInfo
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override object InnerFont
+        {
+            get
+            {
+                return font;
+            }
+        }
+
+        public override string Name
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float Size
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override FontStyle Style
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IntPtr ToHfont()
+        {
+            throw new NotImplementedException();
+        }
+         
+    }
+}
 namespace PixelFarm.Agg.Fonts
 {
     public abstract class Font : IDisposable
@@ -32,4 +102,6 @@ namespace PixelFarm.Agg.Fonts
 
         public abstract bool IsAtlasFont { get; }
     }
+
+
 }
