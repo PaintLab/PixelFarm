@@ -47,7 +47,6 @@
     <Compile Include="GLCanvas\SvgArc.cs" />
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
-    <Compile Include="GLHelper\GLHelper.cs" />
     <Compile Include="GLShader\BasicFillShader.cs" />
     <Compile Include="GLShader\InvertLineSmoothShader.cs" />
     <Compile Include="GLShader\RectGradientShader.cs" />

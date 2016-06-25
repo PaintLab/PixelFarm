@@ -3,12 +3,9 @@
 using System;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
-using PixelFarm.Agg.Fonts;
 using PixelFarm.Agg.Transform;
-using PixelFarm.DrawingGL;
 using PixelFarm.Agg.VertexSource;
-
-namespace PixelFarm.Drawing.HardwareGraphics
+namespace PixelFarm.DrawingGL
 {
     public class GLCanvasPainter : CanvasPainter
     {
@@ -28,7 +25,6 @@ namespace PixelFarm.Drawing.HardwareGraphics
             _height = h;
             _rectInt = new RectInt(0, 0, w, h);
             arcTool = new Arc();
-
         }
         public override RectInt ClipBox
         {
@@ -402,7 +398,6 @@ namespace PixelFarm.Drawing.HardwareGraphics
 
             vxs = this._canvas.StrokeGen.MakeVxs(vxs);
             _canvas.DrawVxsSnap(_canvas.StrokeColor, new VertexStoreSnap(vxs));
-
         }
         static double DegToRad(double degree)
         {

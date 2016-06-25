@@ -19,7 +19,6 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------
 
         PixelFarm.Drawing.Color strokeColor = PixelFarm.Drawing.Color.Black;
-
         //tools---------------------------------
         RoundedRect roundRect = new RoundedRect();
         Ellipse ellipse = new Ellipse();
@@ -88,8 +87,11 @@ namespace PixelFarm.DrawingGL
         internal Stroke StrokeGen { get { return this.aggStroke; } }
         public void Clear(PixelFarm.Drawing.Color c)
         {
-            //set value for clear color buffer 
-            GLHelper.ClearColor(c);
+            GL.ClearColor(
+               (float)c.R / 255f,
+               (float)c.G / 255f,
+               (float)c.B / 255f,
+               (float)c.A / 255f);
             GL.ClearStencil(0);
             //actual clear here !
             GL.Clear(ClearBufferMask.ColorBufferBit |
@@ -249,6 +251,7 @@ namespace PixelFarm.DrawingGL
             GLRenderVx glRenderVx = (GLRenderVx)renderVx;
             DrawGfxPath(color, glRenderVx.gxpth);
         }
+        //-------------------------------------------------------------------------------
         public void DrawPolygon(float[] polygon2dVertices, int npoints)
         {
             //closed polyline

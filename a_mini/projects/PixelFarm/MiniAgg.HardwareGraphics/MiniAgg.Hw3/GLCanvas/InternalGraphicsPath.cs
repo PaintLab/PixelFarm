@@ -181,7 +181,7 @@ namespace PixelFarm.DrawingGL
                         throw new System.NotSupportedException();
                 }
             }
-            EXIT_LOOP:
+        EXIT_LOOP:
 
             InternalGraphicsPath gfxPath = new InternalGraphicsPath();
             List<Figure> figures = new List<Figure>();
@@ -205,6 +205,4 @@ namespace PixelFarm.DrawingGL
             this.gxpth = gxpth;
         }
     }
-
-
 }

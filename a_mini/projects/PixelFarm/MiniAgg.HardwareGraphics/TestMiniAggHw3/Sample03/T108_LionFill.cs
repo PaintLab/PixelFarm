@@ -14,7 +14,7 @@ namespace OpenTkEssTest
         CanvasGL2d canvas2d;
         SpriteShape lionShape;
         VertexStore lionVxs;
-        PixelFarm.Drawing.HardwareGraphics.GLCanvasPainter painter;
+        GLCanvasPainter painter;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
@@ -26,7 +26,7 @@ namespace OpenTkEssTest
                  PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
             lionVxs = aff.TransformToVxs(lionShape.Path.Vxs);
-            painter = new PixelFarm.Drawing.HardwareGraphics.GLCanvasPainter(canvas2d, max, max);
+            painter = new GLCanvasPainter(canvas2d, max, max);
 
 
         }

@@ -10,10 +10,13 @@ namespace OpenTkEssTest
     public class T102_BasicDraw : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
+        GLCanvasPainter painter;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
+            painter = new GLCanvasPainter(canvas2d, max, max);
+
         }
         protected override void DemoClosing()
         {

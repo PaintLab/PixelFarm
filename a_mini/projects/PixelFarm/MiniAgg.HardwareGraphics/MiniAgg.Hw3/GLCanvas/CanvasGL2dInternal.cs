@@ -22,7 +22,6 @@ namespace PixelFarm.DrawingGL
                x + w, y + h,
                x + w, y,
             };
-             
         }
         static float[] CreatePolyLineRectCoords2(
                 float x, float y, float w, float h)
@@ -35,7 +34,7 @@ namespace PixelFarm.DrawingGL
                 x,x+h
             };
         }
-         
+
         unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
         {
             this.basicFillShader.DrawLineLoopWithVertexBuffer(polygon2dVertices, npoints, this.strokeColor);
