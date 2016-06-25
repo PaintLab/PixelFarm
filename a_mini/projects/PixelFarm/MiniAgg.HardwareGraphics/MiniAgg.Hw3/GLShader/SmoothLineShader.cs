@@ -8,9 +8,7 @@ namespace PixelFarm.DrawingGL
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib4f a_position;
-        ShaderVtxAttrib4f a_color;
         ShaderUniformMatrix4 u_matrix;
-        ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
         MyMat4 orthoView;
@@ -23,12 +21,11 @@ namespace PixelFarm.DrawingGL
         bool InitShader()
         {
             string vs = @"                   
-            attribute vec4 a_position; 
-            attribute vec4 a_color;            
+            attribute vec4 a_position;  
 
             uniform mat4 u_mvpMatrix;
             uniform vec4 u_solidColor;
-            uniform int u_useSolidColor;              
+                
             uniform float u_linewidth;
 
             varying vec4 v_color; 
@@ -55,8 +52,7 @@ namespace PixelFarm.DrawingGL
                     p0 = 0.5;      
                 }else if(u_linewidth <=1.0){
                     p0 = 0.45;  
-                }else if(u_linewidth>1.0 && u_linewidth<3.0){
-                    
+                }else if(u_linewidth>1.0 && u_linewidth<3.0){                    
                     p0 = 0.25;  
                 }else{
                     p0= 0.1;
@@ -64,15 +60,7 @@ namespace PixelFarm.DrawingGL
                 
                 vec4 pos = vec4(a_position[0],a_position[1],0,1) + delta;                 
                 gl_Position = u_mvpMatrix* pos;                
-
-                if(u_useSolidColor !=0)
-                {
-                    v_color= u_solidColor;
-                }
-                else
-                {
-                    v_color = a_color;
-                }
+                v_color= u_solidColor;
             }
             ";
             //fragment source
@@ -105,9 +93,7 @@ namespace PixelFarm.DrawingGL
             //-----------------------
 
             a_position = shaderProgram.GetAttrV4f("a_position");
-            a_color = shaderProgram.GetAttrV4f("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
             return true;
@@ -150,7 +136,6 @@ namespace PixelFarm.DrawingGL
             };
             shaderProgram.UseProgram();
             u_matrix.SetData(orthoView.data);
-            u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,
                   _strokeColor.G / 255f,
@@ -160,13 +145,10 @@ namespace PixelFarm.DrawingGL
             u_linewidth.SetValue(_strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
-
-
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
             shaderProgram.UseProgram();
             u_matrix.SetData(orthoView.data);
-            u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,
                   _strokeColor.G / 255f,

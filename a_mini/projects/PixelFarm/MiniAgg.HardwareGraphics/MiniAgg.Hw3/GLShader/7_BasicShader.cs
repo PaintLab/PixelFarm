@@ -1,7 +1,6 @@
 ﻿//MIT 2014-2016, WinterDev
 
 using System;
-using PixelFarm.Agg;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
@@ -10,11 +9,7 @@ namespace PixelFarm.DrawingGL
         bool isInited;
         MiniShaderProgram shaderProgram;
         ShaderVtxAttrib2f a_position;
-        ShaderVtxAttrib4f a_color;
-        ShaderVtxAttrib2f a_textureCoord;
         ShaderUniformMatrix4 u_matrix;
-        ShaderUniformVar1 u_useSolidColor;
-        ShaderUniformVar1 u_useAggColor;
         ShaderUniformVar4 u_solidColor;
         MyMat4 mymat4;
         public BasicShader()
@@ -34,42 +29,21 @@ namespace PixelFarm.DrawingGL
 
             //vertex shader source
             string vs = @"        
-            attribute vec3 a_position;
-            attribute vec4 a_color; 
-            attribute vec2 a_texcoord;
-            
+            attribute vec3 a_position;  
             uniform mat4 u_mvpMatrix;
-            uniform vec4 u_solidColor;
-            uniform int u_useSolidColor;            
-            uniform int u_useAggColor;             
-
-            varying vec4 v_color;
-            varying vec2 v_texcoord;
-             
+            uniform vec4 u_solidColor;    
+            varying vec4 v_color;              
             void main()
             {
                 float a= a_position[2]; //before matrix op
                 gl_Position = u_mvpMatrix* vec4(a_position[0],a_position[1],0,1);
-                if(u_useAggColor !=0)
-                {                      
-                    v_color= vec4(u_solidColor.r /255.0,u_solidColor.g /255.0,u_solidColor.b/255.0, a/255.0);
-                }
-                else if(u_useSolidColor !=0)
-                {   
-                    v_color= u_solidColor;                         
-                }
-                else
-                {
-                    v_color = a_color;
-                } 
-                v_texcoord= a_texcoord;
+                v_color= u_solidColor;   
             }
             ";
             //fragment source
             string fs = @"
                 precision mediump float;
-                varying vec4 v_color; 
-                varying vec2 v_texcoord;                 
+                varying vec4 v_color;                   
                 void main()
                 {       
                     gl_FragColor= v_color;
@@ -81,16 +55,11 @@ namespace PixelFarm.DrawingGL
             }
 
             a_position = shaderProgram.GetAttrV2f("a_position");
-            a_color = shaderProgram.GetAttrV4f("a_color");
-            a_textureCoord = shaderProgram.GetAttrV2f("a_texcoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
-            u_useAggColor = shaderProgram.GetUniform1("u_useAggColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             shaderProgram.UseProgram();
             isInited = true;
         }
-
         public MyMat4 ViewMatrix
         {
             get { return this.mymat4; }
@@ -102,8 +71,6 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawLine(float x1, float y1, float x2, float y2, PixelFarm.Drawing.Color color)
         {
-            u_useAggColor.SetValue(0);
-            u_useSolidColor.SetValue(1);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             unsafe
             {
@@ -113,23 +80,6 @@ namespace PixelFarm.DrawingGL
                 a_position.UnsafeLoadPureV2f(vtx);
             }
             GL.DrawArrays(BeginMode.Lines, 0, 2);
-        }
-        public unsafe void FillTriangleFan(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
-        {
-            u_useAggColor.SetValue(0);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.UnsafeLoadPureV2f(polygon2dVertices);
-            GL.DrawArrays(BeginMode.TriangleFan, 0, nelements);
-        }
-        public unsafe void FillTriangles(float* polygon2dVertices, int nelements, PixelFarm.Drawing.Color color)
-        {
-            shaderProgram.UseProgram();
-            u_useAggColor.SetValue(0);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.UnsafeLoadPureV2f(polygon2dVertices);
-            GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
     }
 }
