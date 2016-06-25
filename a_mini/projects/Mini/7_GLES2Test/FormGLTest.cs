@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using PixelFarm.DrawingGL;
- 
+
 namespace Mini
 {
     partial class FormGLTest : Form
@@ -47,7 +47,8 @@ namespace Mini
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
             canvas2d.ClearColorBuffer();
             //example
-            canvas2d.FillRect(PixelFarm.Drawing.Color.Black, 20, 20, 150, 150);
+            canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            canvasPainter.FillRectLBWH(20, 20, 150, 150);
             //load bmp image 
             //------------------------------------------------------------------------- 
             if (exampleBase != null)

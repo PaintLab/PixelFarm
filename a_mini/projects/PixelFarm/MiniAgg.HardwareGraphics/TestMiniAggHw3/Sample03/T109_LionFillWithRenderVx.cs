@@ -44,7 +44,6 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
@@ -52,7 +51,6 @@ namespace OpenTkEssTest
 
             int j = lionRenderVxList.Count;
             Color[] colors = lionShape.Colors;
-
             for (int i = 0; i < j; ++i)
             {
                 canvas2d.FillRenderVx(colors[i], lionRenderVxList[i]);

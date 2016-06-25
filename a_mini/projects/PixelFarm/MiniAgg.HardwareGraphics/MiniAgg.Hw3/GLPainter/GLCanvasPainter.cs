@@ -178,6 +178,7 @@ namespace PixelFarm.DrawingGL
                 new VertexStoreSnap(vxs)
                 );
         }
+
         public override void Fill(VertexStoreSnap snap)
         {
             _canvas.FillVxsSnap(
@@ -192,6 +193,7 @@ namespace PixelFarm.DrawingGL
              snap
              );
         }
+
         public override void FillCircle(double x, double y, double radius)
         {
             _canvas.FillCircle(_fillColor, (float)x, (float)y, (float)radius);
@@ -220,15 +222,42 @@ namespace PixelFarm.DrawingGL
         }
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-            _canvas.FillRect(_fillColor, (float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
+            FillRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
         }
         public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
         {
-            _canvas.FillRect(fillColor, (float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
+            FillRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
         }
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
-            _canvas.FillRect(_fillColor, (float)left, (float)bottom, (float)width, (float)height);
+            FillRect((float)left, (float)bottom, (float)width, (float)height);
+        }
+        public void FillRenderVx(Brush brush, RenderVx renderVx)
+        {
+            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            _canvas.FillRenderVx(brush, glRenderVx);
+        }
+        void FillRect(float x, float y, float w, float h)
+        {
+            float[] coords = CreateRectTessCoordsTriStrip(x, y, w, h);
+            _canvas.FillTriangleStrip(_fillColor, coords, 4);
+        }
+        static float[] CreateRectTessCoordsTriStrip(float x, float y, float w, float h)
+        {
+            //float x0 = x;
+            //float y0 = y + h;
+            //float x1 = x;
+            //float y1 = y;
+            //float x2 = x + w;
+            //float y2 = y + h;
+            //float x3 = x + w;
+            //float y3 = y;
+            return new float[]{
+               x,y + h,
+               x,y,
+               x + w, y + h,
+               x + w, y,
+            };
         }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
@@ -293,8 +322,11 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------------------------------------------------------------
         public RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
-            GLRenderVx renderVx = new GLRenderVx(InternalGraphicsPath.CreateGraphicsPath(snap));
-            return renderVx;
+            return new GLRenderVx(InternalGraphicsPath.CreateGraphicsPath(snap));
+        }
+        public RenderVx CreatePolygonRenderVx(float[] xycoords)
+        {
+            return new GLRenderVx(InternalGraphicsPath.CreatePolygonGraphicsPath(xycoords));
         }
 
         struct CenterFormArc

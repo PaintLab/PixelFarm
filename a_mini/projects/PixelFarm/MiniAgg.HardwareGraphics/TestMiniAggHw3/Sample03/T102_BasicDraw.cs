@@ -16,7 +16,6 @@ namespace OpenTkEssTest
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
-
         }
         protected override void DemoClosing()
         {
@@ -37,7 +36,9 @@ namespace OpenTkEssTest
                 325,550
             };
             ////line
-            canvas2d.FillRect(PixelFarm.Drawing.Color.Green, 100, 100, 50, 50);
+            painter.FillColor = PixelFarm.Drawing.Color.Green;
+            painter.FillRectLBWH(100, 100, 50, 50);
+            //canvas2d.FillRect(PixelFarm.Drawing.Color.Green, 100, 100, 50, 50);
             canvas2d.DrawLine(50, 50, 200, 200);
             canvas2d.DrawRect(10, 10, 50, 50);
             canvas2d.FillPolygon(PixelFarm.Drawing.Color.Green, polygon2);

@@ -129,6 +129,14 @@ namespace PixelFarm.DrawingGL
         private InternalGraphicsPath()
         {
         }
+        public static InternalGraphicsPath CreatePolygonGraphicsPath(float[] xycoords)
+        {
+            InternalGraphicsPath gfxPath = new InternalGraphicsPath();
+            List<Figure> figures = new List<Figure>();
+            figures.Add(new Figure(xycoords));
+            gfxPath.figures = figures;
+            return gfxPath;
+        }
         public static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
         {
             VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();

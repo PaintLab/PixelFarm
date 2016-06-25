@@ -27,8 +27,6 @@ namespace OpenTkEssTest
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
             lionVxs = aff.TransformToVxs(lionShape.Path.Vxs);
             painter = new GLCanvasPainter(canvas2d, max, max);
-
-
         }
         protected override void DemoClosing()
         {
@@ -36,7 +34,6 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
@@ -45,7 +42,6 @@ namespace OpenTkEssTest
             int j = lionShape.NumPaths;
             int[] pathList = lionShape.PathIndexList;
             Color[] colors = lionShape.Colors;
-
             VertexStore myvxs = lionVxs;
             for (int i = 0; i < j; ++i)
             {
