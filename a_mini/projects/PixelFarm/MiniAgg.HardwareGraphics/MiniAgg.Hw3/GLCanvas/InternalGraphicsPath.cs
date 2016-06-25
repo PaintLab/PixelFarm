@@ -54,7 +54,6 @@ namespace PixelFarm.DrawingGL
             }
             return areaTess;
         }
-
     }
     struct TessTool
     {
@@ -158,7 +157,7 @@ namespace PixelFarm.DrawingGL
                         throw new System.NotSupportedException();
                 }
             }
-            EXIT_LOOP:
+        EXIT_LOOP:
 
             InternalGraphicsPath gfxPath = new InternalGraphicsPath();
             List<Figure> figures = new List<Figure>();
@@ -190,7 +189,6 @@ namespace PixelFarm.DrawingGL
             //we need exact close the polygon
             CreateLineSegment(expandCoords, coords[0], coords[1], coords[0], coords[1]);
             borderTriangleStripCount = (coordCount + 2) * 2;
-
             return expandCoords.ToArray();
         }
         static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)

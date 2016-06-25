@@ -297,17 +297,6 @@ namespace PixelFarm.DrawingGL
                             //render  to stencill buffer
                             //-----------------
 
-                            //switch how to fill polygon ***
-                            //int j = vertextList.Count;
-                            //float[] vtx = new float[j * 2];
-                            //int n = 0;
-                            //for (int i = 0; i < j; ++i)
-                            //{
-                            //    var v = vertextList[i];
-                            //    vtx[n] = (float)v.m_X;
-                            //    vtx[n + 1] = (float)v.m_Y;
-                            //    n += 2;
-                            //}
                             float[] tessArea = fig.GetAreaTess(ref this.tessTool);
                             //-------------------------------------   
                             this.basicFillShader.FillTriangles(tessArea, fig.TessAreaTriangleCount, PixelFarm.Drawing.Color.Black);
@@ -338,8 +327,9 @@ namespace PixelFarm.DrawingGL
                             //use alpha chanel from source***
                             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
                             invertAlphaFragmentShader.OrthoView = orthoView;
-                            invertAlphaFragmentShader.StrokeColor = PixelFarm.Drawing.Color.Black;
-                            invertAlphaFragmentShader.DrawPolygon(fig.coordXYs, fig.coordXYs.Length);
+                            invertAlphaFragmentShader.StrokeColor = Drawing.Color.Black;
+                            float[] smoothBorder = fig.GetSmoothBorders();
+                            invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
                             //at this point alpha component is fill in to destination 
                             //-------------------------------------------------------------------------------------
                             //2. then fill again!, 

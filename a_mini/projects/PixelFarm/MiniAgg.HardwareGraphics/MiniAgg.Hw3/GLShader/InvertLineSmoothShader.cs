@@ -1,18 +1,14 @@
 ﻿//MIT 2016, WinterDev
 
-using System;
-using System.Collections.Generic;
-using PixelFarm.Agg;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
     class InvertAlphaFragmentShader
     {
+        //for stencil buffer ***
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib4f a_position;
-        ShaderVtxAttrib4f a_color;
         ShaderUniformMatrix4 u_matrix;
-        ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
         MyMat4 orthoView;
@@ -25,12 +21,10 @@ namespace PixelFarm.DrawingGL
         bool InitShader()
         {
             string vs = @"                   
-            attribute vec4 a_position; 
-            attribute vec4 a_color;            
+            attribute vec4 a_position;    
 
             uniform mat4 u_mvpMatrix;
-            uniform vec4 u_solidColor;
-            uniform int u_useSolidColor;              
+            uniform vec4 u_solidColor; 
             uniform float u_linewidth;
 
             varying vec4 v_color; 
@@ -67,14 +61,7 @@ namespace PixelFarm.DrawingGL
                 vec4 pos = vec4(a_position[0],a_position[1],0,1) + delta;                 
                 gl_Position = u_mvpMatrix* pos;                
 
-                if(u_useSolidColor !=0)
-                {
-                    v_color= u_solidColor;
-                }
-                else
-                {
-                    v_color = a_color;
-                }
+                v_color= u_solidColor;
             }
             ";
             //fragment source
@@ -109,9 +96,7 @@ namespace PixelFarm.DrawingGL
             //-----------------------
 
             a_position = shaderProgram.GetAttrV4f("a_position");
-            a_color = shaderProgram.GetAttrV4f("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
-            u_useSolidColor = shaderProgram.GetUniform1("u_useSolidColor");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
             return true;
@@ -138,117 +123,18 @@ namespace PixelFarm.DrawingGL
                 _strokeColor = value;
             }
         }
-        public void DrawLine(float x1, float y1, float x2, float y2)
+        public void DrawTriangleStrips(float[] coords, int ncount)
         {
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float rad1 = (float)Math.Atan2(
-                   y2 - y1,  //dy
-                   x2 - x1); //dx
-            float[] vtxs = new float[] {
-                x1, y1,0,rad1,
-                x1, y1,1,rad1,
-                x2, y2,0,rad1,
-                //-------
-                x2, y2,1,rad1
-            };
             shaderProgram.UseProgram();
             u_matrix.SetData(orthoView.data);
-            u_useSolidColor.SetValue(1);
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,
                   _strokeColor.G / 255f,
                   _strokeColor.B / 255f,
                   _strokeColor.A / 255f);
-            a_position.LoadPureV4f(vtxs);
+            a_position.LoadPureV4f(coords);
             u_linewidth.SetValue(_strokeWidth);
-            GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
-        }
-
-        public void DrawPolyline(float[] coords, int coordCount)
-        {
-            //from user input coords
-            //expand it
-            List<float> expandCoords = new List<float>();
-            for (int i = 0; i < coordCount;)
-            {
-                CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
-                i += 2;
-            }
-
-            shaderProgram.UseProgram();
-            u_matrix.SetData(orthoView.data);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue(
-                  _strokeColor.R / 255f,
-                  _strokeColor.G / 255f,
-                  _strokeColor.B / 255f,
-                  _strokeColor.A / 255f);
-            a_position.LoadPureV4f(expandCoords.ToArray());
-            u_linewidth.SetValue(_strokeWidth);
-            GL.DrawArrays(BeginMode.TriangleStrip, 0, coordCount * 2);
-        }
-
-
-
-        public void DrawPolygon(float[] coords, int coordCount)
-        {
-            //from user input coords
-            //expand it
-            List<float> expandCoords = new List<float>();
-            int lim = coordCount - 2;
-            for (int i = 0; i < lim;)
-            {
-                CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
-                i += 2;
-            }
-            //close coord
-            CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
-            //we need exact close the polygon
-            CreateLineSegment(expandCoords, coords[0], coords[1], coords[0], coords[1]);
-            shaderProgram.UseProgram();
-            u_matrix.SetData(orthoView.data);
-            u_useSolidColor.SetValue(1);
-            u_solidColor.SetValue(
-                  _strokeColor.R / 255f,
-                  _strokeColor.G / 255f,
-                  _strokeColor.B / 255f,
-                  _strokeColor.A / 255f);
-            a_position.LoadPureV4f(expandCoords.ToArray());
-            u_linewidth.SetValue(_strokeWidth);
-            GL.DrawArrays(BeginMode.TriangleStrip, 0, (coordCount + 2) * 2);
-        }
-
-        static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
-        {
-            //create wiht no line join
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float rad1 = (float)Math.Atan2(
-                   y2 - y1,  //dy
-                   x2 - x1); //dx
-            coords.Add(x1); coords.Add(y1); coords.Add(0); coords.Add(rad1);
-            coords.Add(x1); coords.Add(y1); coords.Add(1); coords.Add(rad1);
-            coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1);
-            coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
-        }
-        public void DrawLine2(float x1, float y1, float x2, float y2)
-        {
-            //test only ***
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float rad1 = (float)Math.Atan2(
-                   y2 - y1,  //dy
-                   x2 - x1); //dx
-            float[] vtxs = new float[] {
-                x1, y1,0,rad1,
-                x1, y1,1,rad1,
-                x2, y2,0,rad1,
-                //-------
-                x2, y2,1,rad1
-            };
-            a_position.LoadPureV4f(vtxs);
-            GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
         }
     }
 }
