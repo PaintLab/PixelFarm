@@ -25,32 +25,10 @@
 //
 #endregion
 
-using System;
+
 using System.Runtime.InteropServices;
-using OpenTK.Graphics.ES20;
-namespace PixelFarm.Agg
+namespace PixelFarm.DrawingGL
 {
-    [StructLayout(LayoutKind.Sequential)]
-    struct VertexV2S1Cvr
-    {
-        public int x;
-        public int y;
-        public int alpha;
-        public VertexV2S1Cvr(int x, int y, int alpha)
-        {
-            this.x = x;
-            this.y = y;
-            this.alpha = alpha;
-        }
-        public override string ToString()
-        {
-            return x + "," + y + " alpha=" + alpha;
-        }
-        public const int VX_OFFSET = 0;
-        public const int N_COORDS = 2;
-    }
-
-
     [StructLayout(LayoutKind.Sequential)]
     struct VertexC4V3f
     {
@@ -76,47 +54,63 @@ namespace PixelFarm.Agg
         //public const OpenTK.Graphics.OpenGL.VertexPointerType VX_PTR_TYPE = OpenTK.Graphics.OpenGL.VertexPointerType.Float;
         //public const int N_COORDS = 3;
     }
-
-
-
-    /// <summary>
-    /// vertex buffer object
-    /// </summary>
-    public struct VboC4V2S
-    {
-        public int VboID;
-        public void Dispose()
-        {
-            GL.DeleteBuffers(1, ref this.VboID);
-        }
-        public void BindBuffer()
-        {
-            throw new NotSupportedException();
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, VboID);
-            //GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V2S.SIZE_IN_BYTES, (IntPtr)0);
-            //GL.VertexPointer(VertexC4V2S.N_COORDS, VertexC4V2S.VX_PTR_TYPE, VertexC4V2S.SIZE_IN_BYTES, VertexC4V2S.VX_OFFSET);
-        }
-        public void UnbindBuffer()
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-        }
-    }
-    public struct VboC4V3f
-    {
-        public int VboID;
-        public void Dispose()
-        {
-            GL.DeleteBuffers(1, ref this.VboID);
-        }
-        public void BindBuffer()
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VboID);
-            //GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V3f.SIZE_IN_BYTES, (IntPtr)0);
-            //GL.VertexPointer(VertexC4V3f.N_COORDS, VertexC4V3f.VX_PTR_TYPE, VertexC4V3f.SIZE_IN_BYTES, VertexC4V3f.VX_OFFSET);
-        }
-        public void UnbindBuffer()
-        {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-        }
-    }
+    //[StructLayout(LayoutKind.Sequential)]
+    //struct VertexV2S1Cvr
+    //{
+    //    public int x;
+    //    public int y;
+    //    public int alpha;
+    //    public VertexV2S1Cvr(int x, int y, int alpha)
+    //    {
+    //        this.x = x;
+    //        this.y = y;
+    //        this.alpha = alpha;
+    //    }
+    //    public override string ToString()
+    //    {
+    //        return x + "," + y + " alpha=" + alpha;
+    //    }
+    //    public const int VX_OFFSET = 0;
+    //    public const int N_COORDS = 2;
+    //}
+    ///// <summary>
+    ///// vertex buffer object
+    ///// </summary>
+    //public struct VboC4V2S
+    //{
+    //    public int VboID;
+    //    public void Dispose()
+    //    {
+    //        GL.DeleteBuffers(1, ref this.VboID);
+    //    }
+    //    public void BindBuffer()
+    //    {
+    //        throw new NotSupportedException();
+    //        //GL.BindBuffer(BufferTarget.ArrayBuffer, VboID);
+    //        //GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V2S.SIZE_IN_BYTES, (IntPtr)0);
+    //        //GL.VertexPointer(VertexC4V2S.N_COORDS, VertexC4V2S.VX_PTR_TYPE, VertexC4V2S.SIZE_IN_BYTES, VertexC4V2S.VX_OFFSET);
+    //    }
+    //    public void UnbindBuffer()
+    //    {
+    //        GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+    //    }
+    //}
+    //public struct VboC4V3f
+    //{
+    //    public int VboID;
+    //    public void Dispose()
+    //    {
+    //        GL.DeleteBuffers(1, ref this.VboID);
+    //    }
+    //    public void BindBuffer()
+    //    {
+    //        GL.BindBuffer(BufferTarget.ArrayBuffer, VboID);
+    //        //GL.ColorPointer(4, ColorPointerType.UnsignedByte, VertexC4V3f.SIZE_IN_BYTES, (IntPtr)0);
+    //        //GL.VertexPointer(VertexC4V3f.N_COORDS, VertexC4V3f.VX_PTR_TYPE, VertexC4V3f.SIZE_IN_BYTES, VertexC4V3f.VX_OFFSET);
+    //    }
+    //    public void UnbindBuffer()
+    //    {
+    //        GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+    //    }
+    //}
 }

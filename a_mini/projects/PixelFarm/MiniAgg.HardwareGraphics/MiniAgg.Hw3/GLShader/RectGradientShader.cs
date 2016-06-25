@@ -1,7 +1,6 @@
 ﻿//MIT 2016, WinterDev 
 
 using System;
-using PixelFarm.Agg;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
