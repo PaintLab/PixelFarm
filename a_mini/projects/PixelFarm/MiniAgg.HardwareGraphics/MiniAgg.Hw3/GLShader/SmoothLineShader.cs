@@ -6,17 +6,13 @@ namespace PixelFarm.DrawingGL
 {
     class SmoothLineShader : ShaderBase
     {
-        MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib4f a_position;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
-
-        CanvasToShaderSharedResource _canvasShareResource;
         public SmoothLineShader(CanvasToShaderSharedResource canvasShareResource)
+            : base(canvasShareResource)
         {
-            this._canvasShareResource = canvasShareResource;
-
             string vs = @"                   
             attribute vec4 a_position;  
 
@@ -110,7 +106,8 @@ namespace PixelFarm.DrawingGL
                 //-------
                 x2, y2,1,rad1
             };
-            shaderProgram.UseProgram();
+            //--------------------
+            SetCurrent();
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             var strokeColor = _canvasShareResource._strokeColor;
             u_solidColor.SetValue(
@@ -124,7 +121,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             var strokeColor = _canvasShareResource._strokeColor;
             u_solidColor.SetValue(

@@ -6,17 +6,14 @@ namespace PixelFarm.DrawingGL
 {
     class SimpleTextureShader : ShaderBase
     {
-        MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib3f a_position;
         ShaderVtxAttrib2f a_texCoord;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 s_texture;
-
         static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
-        CanvasToShaderSharedResource _canvasShareResource;
         public SimpleTextureShader(CanvasToShaderSharedResource canvasShareResource)
+            : base(canvasShareResource)
         {
-            this._canvasShareResource = canvasShareResource;
             //--------------------------------------------------------------------------
             string vs = @"
                 attribute vec4 a_position;
@@ -74,7 +71,6 @@ namespace PixelFarm.DrawingGL
                 left+w, top -h,0, //corrd3
                 1,1
             };
-
             unsafe
             {
                 fixed (float* imgvH = &imgVertices[0])
@@ -84,7 +80,7 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
-            shaderProgram.UseProgram();
+            SetCurrent();
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             // Bind the texture...
             GL.ActiveTexture(TextureUnit.Texture0);

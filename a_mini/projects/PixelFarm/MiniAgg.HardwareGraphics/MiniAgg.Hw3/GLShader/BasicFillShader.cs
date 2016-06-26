@@ -4,17 +4,14 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class BasicFillShader: ShaderBase
+    class BasicFillShader : ShaderBase
     {
-        MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib2f a_position;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
-
-        CanvasToShaderSharedResource _canvasShareResource;
         public BasicFillShader(CanvasToShaderSharedResource canvasShareResource)
+            : base(canvasShareResource)
         {
-            this._canvasShareResource = canvasShareResource;
             //----------------
             //vertex shader source
             string vs = @"        
@@ -48,11 +45,10 @@ namespace PixelFarm.DrawingGL
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
         }
-
         public void FillTrianglesWithVertexBuffer(float[] linesBuffer, int nelements, Drawing.Color color)
         {
-
-            shaderProgram.UseProgram();
+            SetCurrent();
+            //--------------------------------------------
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue(
                  color.R / 255f,
@@ -64,7 +60,8 @@ namespace PixelFarm.DrawingGL
         }
         public void FillTriangleStripWithVertexBuffer(float[] linesBuffer, int nelements, Drawing.Color color)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
+            //--------------------------------------------
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadPureV2f(linesBuffer);
@@ -72,7 +69,8 @@ namespace PixelFarm.DrawingGL
         }
         public unsafe void FillTriangles(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
+            //--------------------------------------------
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.UnsafeLoadPureV2f(polygon2dVertices);
@@ -80,7 +78,8 @@ namespace PixelFarm.DrawingGL
         }
         public unsafe void FillTriangles(float[] polygon2dVertices, int nelements, Drawing.Color color)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
+            //--------------------------------------------  
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.LoadPureV2f(polygon2dVertices);
@@ -88,14 +87,16 @@ namespace PixelFarm.DrawingGL
         }
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
+            //--------------------------------------------
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.LineLoop, 0, nelements);
         }
         public unsafe void FillTriangleFan(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
+            //--------------------------------------------
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.UnsafeLoadPureV2f(polygon2dVertices);
@@ -103,7 +104,8 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawLine(float x1, float y1, float x2, float y2, PixelFarm.Drawing.Color color)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
+            //--------------------------------------------
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             unsafe

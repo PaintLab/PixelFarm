@@ -20,9 +20,7 @@ namespace PixelFarm.DrawingGL
         Arc arcTool;
         Ellipse ellipse = new Ellipse();
         PixelFarm.Drawing.Font _currentFont;
-
         Stroke _aggStroke = new Stroke(1);
-
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;

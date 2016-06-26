@@ -3,21 +3,19 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class InvertAlphaLineSmoothShader: ShaderBase
+    class InvertAlphaLineSmoothShader : ShaderBase
     {
         //for stencil buffer ***
-        MiniShaderProgram shaderProgram = new MiniShaderProgram();
+
         ShaderVtxAttrib4f a_position;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
-      
         Drawing.Color _strokeColor;
         float _strokeWidth = 0.5f;
-        CanvasToShaderSharedResource _canvasShareResource;
         public InvertAlphaLineSmoothShader(CanvasToShaderSharedResource canvasShareResource)
+             : base(canvasShareResource)
         {
-            this._canvasShareResource = canvasShareResource;
             //-------------------------------------------------------------------------------
             string vs = @"                   
             attribute vec4 a_position;    
@@ -98,15 +96,13 @@ namespace PixelFarm.DrawingGL
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
-
             _strokeColor = Drawing.Color.Black;
-
         }
 
-    
+
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,

@@ -4,17 +4,14 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class RectFillShader: ShaderBase
+    class RectFillShader : ShaderBase
     {
-        MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib2f a_position;
         ShaderVtxAttrib4f a_color;
         ShaderUniformMatrix4 u_matrix;
-      
-        CanvasToShaderSharedResource _canvasShareResource;
         public RectFillShader(CanvasToShaderSharedResource canvasShareResource)
+            : base(canvasShareResource)
         {
-            this._canvasShareResource = canvasShareResource;
             //----------------
             //vertex shader source
             string vs = @"        
@@ -47,10 +44,10 @@ namespace PixelFarm.DrawingGL
             a_color = shaderProgram.GetAttrV4f("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
         }
-        
+
         public void Render(float[] v2fArray, float[] colors)
         {
-            shaderProgram.UseProgram();
+            SetCurrent();
             u_matrix.SetData(_canvasShareResource._orthoView.data);
             a_position.LoadPureV2f(v2fArray);
             a_color.LoadPureV4f(colors);

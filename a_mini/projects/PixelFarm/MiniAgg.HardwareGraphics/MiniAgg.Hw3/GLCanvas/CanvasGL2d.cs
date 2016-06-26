@@ -8,7 +8,6 @@ namespace PixelFarm.DrawingGL
 {
     public class CanvasGL2d
     {
-
         SmoothLineShader smoothLineShader;
         InvertAlphaLineSmoothShader invertAlphaFragmentShader;
         BasicFillShader basicFillShader;
@@ -16,8 +15,6 @@ namespace PixelFarm.DrawingGL
         SimpleTextureShader textureShader;
         //-----------------------------------------------------------
         CanvasToShaderSharedResource shaderRes;
-
-
         //tools---------------------------------
 
         int canvasOriginX = 0;
@@ -34,7 +31,6 @@ namespace PixelFarm.DrawingGL
             int max = Math.Max(canvasW, canvasH);
             ////square viewport 
             orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
-
             //-----------------------------------------------------------------------
             shaderRes = new CanvasToShaderSharedResource();
             shaderRes._orthoView = orthoView;
@@ -62,7 +58,7 @@ namespace PixelFarm.DrawingGL
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);
             //-------------------------------------------------------------------------------
- 
+
             GL.Viewport(0, 0, canvasW, canvasH);
         }
         public void Dispose()
@@ -111,7 +107,6 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
-
                         this.smoothLineShader.DrawLine(x1, y1, x2, y2);
                     }
                     break;
@@ -202,11 +197,9 @@ namespace PixelFarm.DrawingGL
                     {
                         List<Figure> figures = igpth.figures;
                         int subPathCount = figures.Count;
-
                         float prevWidth = StrokeWidth;
                         StrokeColor = color;
                         StrokeWidth = 0.5f;
-
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
@@ -281,7 +274,6 @@ namespace PixelFarm.DrawingGL
 
                             //use alpha chanel from source***
                             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
-                            
                             float[] smoothBorder = fig.GetSmoothBorders();
                             invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
                             //at this point alpha component is fill in to destination 
@@ -305,7 +297,6 @@ namespace PixelFarm.DrawingGL
                                                  points[1].X, points[1].Y,
                                                  colors[0],
                                                  colors[1], out v2f, out color4f);
-
                                             rectFillShader.Render(v2f, color4f);
                                         }
                                         break;
@@ -359,7 +350,6 @@ namespace PixelFarm.DrawingGL
                         StrokeWidth = 1f;
                         List<Figure> figures = igpth.figures;
                         int subPathCount = figures.Count;
-
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
@@ -434,7 +424,5 @@ namespace PixelFarm.DrawingGL
                 x,x+h
             };
         }
-
-
     }
 }
