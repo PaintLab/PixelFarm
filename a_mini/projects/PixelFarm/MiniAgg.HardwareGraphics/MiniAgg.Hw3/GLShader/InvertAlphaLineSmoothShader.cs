@@ -3,7 +3,7 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class InvertAlphaFragmentShader
+    class InvertAlphaLineSmoothShader
     {
         //for stencil buffer ***
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
@@ -14,7 +14,7 @@ namespace PixelFarm.DrawingGL
         MyMat4 orthoView;
         Drawing.Color _strokeColor;
         float _strokeWidth = 1;
-        public InvertAlphaFragmentShader()
+        public InvertAlphaLineSmoothShader()
         {
             InitShader();
         }

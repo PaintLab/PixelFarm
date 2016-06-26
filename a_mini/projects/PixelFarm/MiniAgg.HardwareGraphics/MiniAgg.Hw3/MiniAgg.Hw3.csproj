@@ -36,10 +36,7 @@
   <ItemGroup>
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="GLPainter\GLCanvasPainter.cs" />
-    <Compile Include="GLShader\7_BasicShader.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
-    <Compile Include="GLCanvas\CanvasGL2dInternal.cs" />
-    <Compile Include="GLCanvas\CanvasGL2d_TextAndFont.cs" />
     <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="GLCanvas\GLGradientColorProvider.cs" />
     <Compile Include="GLCanvas\GLTextPrinter.cs" />
@@ -48,7 +45,7 @@
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="GLShader\BasicFillShader.cs" />
-    <Compile Include="GLShader\InvertLineSmoothShader.cs" />
+    <Compile Include="GLShader\InvertAlphaLineSmoothShader.cs" />
     <Compile Include="GLShader\RectGradientShader.cs" />
     <Compile Include="GLShader\SimpleTextureShader.cs" />
     <Compile Include="GLShader\SmoothLineShader.cs" />

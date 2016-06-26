@@ -101,5 +101,18 @@ namespace PixelFarm.DrawingGL
             a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.TriangleFan, 0, nelements);
         }
+        public void DrawLine(float x1, float y1, float x2, float y2, PixelFarm.Drawing.Color color)
+        {
+            shaderProgram.UseProgram();
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+            unsafe
+            {
+                float* vtx = stackalloc float[4];
+                vtx[0] = x1; vtx[1] = y1;
+                vtx[2] = x2; vtx[3] = y2;
+                a_position.UnsafeLoadPureV2f(vtx);
+            }
+            GL.DrawArrays(BeginMode.Lines, 0, 2);
+        }
     }
 }

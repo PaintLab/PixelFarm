@@ -9,9 +9,9 @@ namespace PixelFarm.DrawingGL
 {
     public class CanvasGL2d
     {
-        BasicShader basicShader;
+
         SmoothLineShader smoothLineShader;
-        InvertAlphaFragmentShader invertAlphaFragmentShader;
+        InvertAlphaLineSmoothShader invertAlphaFragmentShader;
         BasicFillShader basicFillShader;
         RectFillShader rectFillShader;
         SimpleTextureShader textureShader;
@@ -31,12 +31,12 @@ namespace PixelFarm.DrawingGL
         {
             this.canvasW = canvasW;
             this.canvasH = canvasH;
-            basicShader = new BasicShader();
+
             smoothLineShader = new SmoothLineShader();
             basicFillShader = new BasicFillShader();
             rectFillShader = new RectFillShader();
             textureShader = new SimpleTextureShader();
-            invertAlphaFragmentShader = new InvertAlphaFragmentShader(); //used with stencil  ***
+            invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(); //used with stencil  ***
                                                                          // tessListener.Connect(tess,          
                                                                          //Tesselate.Tesselator.WindingRuleType.Odd, true);
 
@@ -122,7 +122,8 @@ namespace PixelFarm.DrawingGL
                     break;
                 default:
                     {
-                        this.basicShader.DrawLine(x1, y1, x2, y2, this.strokeColor);
+
+                        this.basicFillShader.DrawLine(x1, y1, x2, y2, this.strokeColor);
                     }
                     break;
             }
@@ -154,11 +155,40 @@ namespace PixelFarm.DrawingGL
                  bmp.GetRectF(),
                  x, y, bmp.Width, bmp.Height);
         }
-        public void FillVxsSnap(Drawing.Color color, VertexStoreSnap snap)
+        //-------------------------------------------------------------------------------
+        public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
-            FillGfxPath(color, InternalGraphicsPath.CreateGraphicsPath(snap));
+            basicFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
         }
-
+        public void FillTriangleFan(Drawing.Color color, float[] coords, int n)
+        {
+            unsafe
+            {
+                fixed (float* head = &coords[0])
+                {
+                    basicFillShader.FillTriangleFan(head, n, color);
+                }
+            }
+        }
+        //-------------------------------------------------------------------------------
+        //RenderVx
+        public void FillRenderVx(Drawing.Brush brush, Drawing.RenderVx renderVx)
+        {
+            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            FillGfxPath(brush, glRenderVx.gxpth);
+        }
+        public void FillRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
+        {
+            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            FillGfxPath(color, glRenderVx.gxpth);
+        }
+        public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
+        {
+            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
+            DrawGfxPath(color, glRenderVx.gxpth);
+        }
+        //-------------------------------------------------------------------------------
+        //InternalGraphicsPath
         internal void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {
             switch (SmoothMode)
@@ -190,72 +220,6 @@ namespace PixelFarm.DrawingGL
                         }
                     }
                     break;
-            }
-        }
-
-        internal void DrawGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
-        {
-            switch (SmoothMode)
-            {
-                case CanvasSmoothMode.No:
-                    {
-                        List<Figure> figures = igpth.figures;
-                        int subPathCount = figures.Count;
-                        for (int i = 0; i < subPathCount; ++i)
-                        {
-                            Figure f = figures[i];
-                            float[] coordXYs = f.coordXYs;
-                            unsafe
-                            {
-                                fixed (float* head = &coordXYs[0])
-                                {
-                                    DrawPolygonUnsafe(head, coordXYs.Length / 2);
-                                }
-                            }
-                        }
-                    }
-                    break;
-                case CanvasSmoothMode.Smooth:
-                    {
-                        strokeColor = color;
-                        StrokeWidth = 1f;
-                        List<Figure> figures = igpth.figures;
-                        int subPathCount = figures.Count;
-                        strokeColor = color;
-                        StrokeWidth = 1f;
-                        smoothLineShader.StrokeWidth = 1;
-                        smoothLineShader.StrokeColor = color;
-                        for (int i = 0; i < subPathCount; ++i)
-                        {
-                            Figure f = figures[i];
-                            smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
-                        }
-                    }
-                    break;
-            }
-        }
-        public void FillRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
-        {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
-            FillGfxPath(color, glRenderVx.gxpth);
-        }
-        public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
-        {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
-            DrawGfxPath(color, glRenderVx.gxpth);
-        }
-        public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
-        {
-            basicFillShader.FillTriangleStripWithVertexBuffer(coords, n, color);
-        }
-        public void FillTriangleFan(Drawing.Color color, float[] coords, int n)
-        {
-            unsafe
-            {
-                fixed (float* head = &coords[0])
-                {
-                    basicFillShader.FillTriangleFan(head, n, color);
-                }
             }
         }
         internal void FillGfxPath(Drawing.Brush brush, InternalGraphicsPath igpth)
@@ -372,11 +336,48 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        public void FillRenderVx(Drawing.Brush brush, Drawing.RenderVx renderVx)
+        internal void DrawGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {
-            GLRenderVx glRenderVx = (GLRenderVx)renderVx;
-            FillGfxPath(brush, glRenderVx.gxpth);
+            switch (SmoothMode)
+            {
+                case CanvasSmoothMode.No:
+                    {
+                        List<Figure> figures = igpth.figures;
+                        int subPathCount = figures.Count;
+                        for (int i = 0; i < subPathCount; ++i)
+                        {
+                            Figure f = figures[i];
+                            float[] coordXYs = f.coordXYs;
+                            unsafe
+                            {
+                                fixed (float* head = &coordXYs[0])
+                                {
+                                    DrawPolygonUnsafe(head, coordXYs.Length / 2);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case CanvasSmoothMode.Smooth:
+                    {
+                        strokeColor = color;
+                        StrokeWidth = 1f;
+                        List<Figure> figures = igpth.figures;
+                        int subPathCount = figures.Count;
+                        strokeColor = color;
+                        StrokeWidth = 1f;
+                        smoothLineShader.StrokeWidth = 1;
+                        smoothLineShader.StrokeColor = color;
+                        for (int i = 0; i < subPathCount; ++i)
+                        {
+                            Figure f = figures[i];
+                            smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
+                        }
+                    }
+                    break;
+            }
         }
+        //-------------------------------------------------------------------------------
 
         public void DrawRect(float x, float y, float w, float h)
         {
