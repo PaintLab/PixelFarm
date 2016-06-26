@@ -76,12 +76,7 @@ namespace PixelFarm.DrawingGL
         {
             get
             {
-                return new Color(
-                    _strokeColor.A,
-                    _strokeColor.R,
-                    _strokeColor.G,
-                    _strokeColor.B
-                   );
+                return _strokeColor;
             }
             set
             {
@@ -163,7 +158,7 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
             GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, actualImage.GetBuffer(), false);
-            _canvas.DrawImage(glBmp, 0, 0);
+            _canvas.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
@@ -183,6 +178,8 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawString(string text, double x, double y)
         {
+            
+
         }
         public override void Fill(VertexStore vxs)
         {
