@@ -92,6 +92,7 @@
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\2_MyGLCanvas_CoordinateAndClip.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\3_MyGLCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\4_MyGLCanvas_TextAndFonts.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLCanvasPainter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -139,9 +140,7 @@
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PixelFarm.Drawing.GLES2\Implementation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

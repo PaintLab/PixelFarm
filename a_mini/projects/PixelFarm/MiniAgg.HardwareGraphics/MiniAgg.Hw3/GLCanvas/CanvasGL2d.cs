@@ -178,7 +178,7 @@ namespace PixelFarm.DrawingGL
         }
         //-------------------------------------------------------------------------------
         //InternalGraphicsPath
-        internal void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
+        public void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {
             switch (SmoothMode)
             {
@@ -211,7 +211,7 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        internal void FillGfxPath(Drawing.Brush brush, InternalGraphicsPath igpth)
+        public void FillGfxPath(Drawing.Brush brush, InternalGraphicsPath igpth)
         {
             switch (brush.BrushKind)
             {
@@ -322,7 +322,7 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-        internal void DrawGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
+        public void DrawGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {
             switch (SmoothMode)
             {

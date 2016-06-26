@@ -91,7 +91,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class InternalGraphicsPath
+    public class InternalGraphicsPath
     {
         internal List<Figure> figures = new List<Figure>();
         private InternalGraphicsPath()
@@ -157,7 +157,7 @@ namespace PixelFarm.DrawingGL
                         throw new System.NotSupportedException();
                 }
             }
-        EXIT_LOOP:
+            EXIT_LOOP:
 
             InternalGraphicsPath gfxPath = new InternalGraphicsPath();
             List<Figure> figures = new List<Figure>();
@@ -208,7 +208,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-    class GLRenderVx : PixelFarm.Drawing.RenderVx
+    public class GLRenderVx : PixelFarm.Drawing.RenderVx
     {
         internal InternalGraphicsPath gxpth;
         public GLRenderVx(InternalGraphicsPath gxpth)

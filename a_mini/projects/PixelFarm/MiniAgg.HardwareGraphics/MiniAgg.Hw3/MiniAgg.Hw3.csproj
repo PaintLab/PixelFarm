@@ -36,7 +36,6 @@
   <ItemGroup>
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="GLCanvas\CanvasToShaderSharedResource.cs" />
-    <Compile Include="GLPainter\GLCanvasPainter.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="GLCanvas\GLGradientColorProvider.cs" />

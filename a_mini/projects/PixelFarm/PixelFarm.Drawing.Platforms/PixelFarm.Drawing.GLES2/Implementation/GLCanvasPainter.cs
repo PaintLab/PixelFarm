@@ -19,7 +19,7 @@ namespace PixelFarm.DrawingGL
         RoundedRect roundRect;
         Arc arcTool;
         Ellipse ellipse = new Ellipse();
-        PixelFarm.Drawing.Font _currentFont;
+        Font _currentFont;
         Stroke _aggStroke = new Stroke(1);
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
         {
@@ -118,7 +118,7 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public override void Clear(Drawing.Color color)
+        public override void Clear(Color color)
         {
             _canvas.Clear(color);
         }
@@ -178,7 +178,8 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawString(string text, double x, double y)
         {
-            
+            //in this version we draw string to image
+            //and the write the image back to gl surface
 
         }
         public override void Fill(VertexStore vxs)
