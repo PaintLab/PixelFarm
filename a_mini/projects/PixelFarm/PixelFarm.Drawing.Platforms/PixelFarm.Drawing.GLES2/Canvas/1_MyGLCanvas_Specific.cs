@@ -15,10 +15,12 @@
 
 using System;
 using System.Collections.Generic;
+using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.GLES2
 {
     partial class MyGLCanvas : Canvas, IFonts, IDisposable
     {
+        CanvasGL2d canvasGL2;
         bool isDisposed;
         System.Drawing.Graphics gx;
         Stack<System.Drawing.Rectangle> clipRectStack = new Stack<System.Drawing.Rectangle>();
@@ -31,12 +33,15 @@ namespace PixelFarm.Drawing.GLES2
         //-------------------------------
         System.Drawing.Graphics targetGfx;
         GraphicsPlatform platform;
-        public MyGLCanvas(GraphicsPlatform platform,
+        public MyGLCanvas(
+            GraphicsPlatform platform,
+            CanvasGL2d canvasGL2d,
             System.Drawing.Graphics targetGfx,
             int left, int top,
             int width,
             int height)
         {
+            this.canvasGL2 = canvasGL2d;
             //platform specific Win32
             //1.
             this.platform = platform;
@@ -114,42 +119,6 @@ namespace PixelFarm.Drawing.GLES2
 
         int CanvasOrgX { get { return (int)this.canvasOriginX; } }
         int CanvasOrgY { get { return (int)this.canvasOriginY; } }
-
-
-
-        ///// <summary>
-        ///// Special draw logic to draw transparent text using GDI.<br/>
-        ///// 1. Create in-memory DC<br/>
-        ///// 2. Copy background to in-memory DC<br/>
-        ///// 3. Draw the text to in-memory DC<br/>
-        ///// 4. Copy the in-memory DC to the proper location with alpha blend<br/>
-        ///// </summary>
-        //static void DrawTransparentText(IntPtr hdc, string str, Font font, Point point, Size size, Color color)
-        //{
-        //    IntPtr dib;
-        //    var memoryHdc = Win32Utils.CreateMemoryHdc(hdc, size.Width, size.Height, out dib);
-
-        //    try
-        //    {
-        //        // copy target background to memory HDC so when copied back it will have the proper background
-        //        Win32Utils.BitBlt(memoryHdc, 0, 0, size.Width, size.Height, hdc, point.X, point.Y, Win32Utils.BitBltCopy);
-
-        //        // Create and select font
-        //        Win32Utils.SelectObject(memoryHdc, FontStore.GetCachedHFont(font.InnerFont as System.Drawing.Font));
-        //        Win32Utils.SetTextColor(memoryHdc, (color.B & 0xFF) << 16 | (color.G & 0xFF) << 8 | color.R);
-
-        //        // Draw text to memory HDC
-        //        Win32Utils.TextOut(memoryHdc, 0, 0, str, str.Length);
-
-        //        // copy from memory HDC to normal HDC with alpha blend so achieve the transparent text
-        //        Win32Utils.AlphaBlend(hdc, point.X, point.Y, size.Width, size.Height, memoryHdc, 0, 0, size.Width, size.Height, new BlendFunction(color.A));
-        //    }
-        //    finally
-        //    {
-        //        Win32Utils.ReleaseMemoryHdc(memoryHdc, dib);
-        //    }
-        //}
-
 
 
         //=====================================

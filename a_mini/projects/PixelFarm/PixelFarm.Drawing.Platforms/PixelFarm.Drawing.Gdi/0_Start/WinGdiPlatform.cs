@@ -27,7 +27,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override GraphicsPath CreateGraphicsPath()
         {
-            return new MyGraphicsPath();
+            return new WinGdiGraphicsPath();
         }
         public override FontInfo GetFont(string fontfaceName, float emsize, FontStyle fontStyle)
         {

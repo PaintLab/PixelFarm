@@ -7,17 +7,7 @@ namespace PixelFarm.DrawingGL
         void SetupFonts()
         {
         }
-        public PixelFarm.Agg.Fonts.Font CurrentFont
-        {
-            get
-            {
-                return this.textPriner.CurrentFont;
-            }
-            set
-            {
-                this.textPriner.CurrentFont = value;
-            }
-        }
+       
         public void DrawString(string str, float x, float y)
         {
             this.textPriner.Print(str.ToCharArray(), x, y);
