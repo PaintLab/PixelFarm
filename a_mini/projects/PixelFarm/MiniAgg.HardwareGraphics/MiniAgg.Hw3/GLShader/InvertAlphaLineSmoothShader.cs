@@ -98,12 +98,21 @@ namespace PixelFarm.DrawingGL
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
             _strokeColor = Drawing.Color.Black;
         }
-
+        int orthoviewVersion = -1;
+        void CheckViewMatrix()
+        {
+            if (orthoviewVersion != _canvasShareResource.OrthoViewVersion)
+            {
+                orthoviewVersion = _canvasShareResource.OrthoViewVersion;
+                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+            }
+        }
 
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
             SetCurrent();
-            u_matrix.SetData(_canvasShareResource._orthoView.data);
+            CheckViewMatrix();
+            //-----------------------------------
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,
                   _strokeColor.G / 255f,

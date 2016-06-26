@@ -44,11 +44,20 @@ namespace PixelFarm.DrawingGL
             a_color = shaderProgram.GetAttrV4f("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
         }
-
+        int orthoviewVersion = -1;
+        void CheckViewMatrix()
+        {
+            if (orthoviewVersion != _canvasShareResource.OrthoViewVersion)
+            {
+                orthoviewVersion = _canvasShareResource.OrthoViewVersion;
+                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+            }
+        }
         public void Render(float[] v2fArray, float[] colors)
         {
             SetCurrent();
-            u_matrix.SetData(_canvasShareResource._orthoView.data);
+            CheckViewMatrix();
+            //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
             a_color.LoadPureV4f(colors);
             GL.DrawArrays(BeginMode.Triangles, 0, 18);

@@ -88,10 +88,16 @@ namespace PixelFarm.DrawingGL
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
-            //-----------------------
-
         }
-
+        int orthoviewVersion = -1;
+        void CheckViewMatrix()
+        {
+            if (orthoviewVersion != _canvasShareResource.OrthoViewVersion)
+            {
+                orthoviewVersion = _canvasShareResource.OrthoViewVersion;
+                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+            }
+        }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
             float dx = x2 - x1;
@@ -108,7 +114,8 @@ namespace PixelFarm.DrawingGL
             };
             //--------------------
             SetCurrent();
-            u_matrix.SetData(_canvasShareResource._orthoView.data);
+            CheckViewMatrix();
+            //--------------------
             var strokeColor = _canvasShareResource._strokeColor;
             u_solidColor.SetValue(
                   strokeColor.R / 255f,
@@ -122,7 +129,8 @@ namespace PixelFarm.DrawingGL
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
             SetCurrent();
-            u_matrix.SetData(_canvasShareResource._orthoView.data);
+            CheckViewMatrix();
+            //--------------------
             var strokeColor = _canvasShareResource._strokeColor;
             u_solidColor.SetValue(
                   strokeColor.R / 255f,
