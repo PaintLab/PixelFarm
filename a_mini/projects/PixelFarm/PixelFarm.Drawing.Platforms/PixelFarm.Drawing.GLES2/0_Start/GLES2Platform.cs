@@ -1,6 +1,7 @@
 ﻿//BSD, 2014-2016, WinterDev
 
 using System;
+using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.GLES2
 {
     class GLES2Platform : GraphicsPlatform
@@ -27,12 +28,22 @@ namespace PixelFarm.Drawing.GLES2
 
         public override Canvas CreateCanvas(int left, int top, int width, int height)
         {
-            throw new NotImplementedException();
+            int max = Math.Max(width, height);
+            System.Drawing.Bitmap backBmp = new System.Drawing.Bitmap(width, height);
+            System.Drawing.Graphics gfx = System.Drawing.Graphics.FromImage(backBmp);
+            CanvasGL2d canvas2d = new CanvasGL2d(max, max);
+            MyGLCanvas myCanvas = new MyGLCanvas(this, canvas2d, gfx, 0, 0, width, height);
+            return myCanvas;
         }
-
         public override Canvas CreateCanvas(object platformCanvas, int left, int top, int width, int height)
         {
-            throw new NotImplementedException();
+            //create 
+            int max = Math.Max(width, height);
+            System.Drawing.Bitmap backBmp = new System.Drawing.Bitmap(width, height);
+            System.Drawing.Graphics gfx = (System.Drawing.Graphics)platformCanvas;
+            CanvasGL2d canvas2d = new CanvasGL2d(max, max);
+            MyGLCanvas myCanvas = new MyGLCanvas(this, canvas2d, gfx, 0, 0, width, height);
+            return myCanvas;
         }
 
         public override GraphicsPath CreateGraphicsPath()

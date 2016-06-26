@@ -232,7 +232,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 ReleaseHdc();
                 this.currentTextFont = value;
-                MyFont myFont = value as MyFont;
+                WinGdiFont myFont = value as WinGdiFont;
                 IntPtr hdc = gx.GetHdc();
                 MyWin32.SelectObject(hdc, myFont.ToHfont());
                 gx.ReleaseHdc();

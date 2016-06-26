@@ -3,14 +3,14 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class SimpleTextureShader : ShaderBase
+    class SimpleTextureWithWhiteTransparentShader : ShaderBase
     {
         ShaderVtxAttrib3f a_position;
         ShaderVtxAttrib2f a_texCoord;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 s_texture;
         static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
-        public SimpleTextureShader(CanvasToShaderSharedResource canvasShareResource)
+        public SimpleTextureWithWhiteTransparentShader(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
             //--------------------------------------------------------------------------
@@ -35,8 +35,12 @@ namespace PixelFarm.DrawingGL
                       uniform sampler2D s_texture;
                       void main()
                       {
-                         vec4 c = texture2D(s_texture, v_texCoord);                            
-                         gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);
+                         vec4 c = texture2D(s_texture, v_texCoord); 
+                         if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
+                            discard;
+                         }else{                                                   
+                            gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);  
+                         }
                       }
                 ";
             //---------------------

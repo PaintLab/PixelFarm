@@ -74,7 +74,7 @@ namespace Mini
                 string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
                 //-------------                 
                 painter = new AggCanvasPainter(imgGfx2d);
-                painter.CurrentFont = PixelFarm.Agg.Fonts.NativeFontStore.LoadFont(fontfile, 10);
+                painter.CurrentFont = new AggFont(PixelFarm.Agg.Fonts.NativeFontStore.LoadFont(fontfile, 10));
             }
             painter.Clear(PixelFarm.Drawing.Color.White);
         }

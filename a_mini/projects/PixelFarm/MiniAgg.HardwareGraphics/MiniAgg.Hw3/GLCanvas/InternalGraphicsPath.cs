@@ -91,7 +91,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class InternalGraphicsPath
+    public class InternalGraphicsPath
     {
         internal List<Figure> figures = new List<Figure>();
         private InternalGraphicsPath()
@@ -208,7 +208,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-    class GLRenderVx : PixelFarm.Drawing.RenderVx
+    public class GLRenderVx : PixelFarm.Drawing.RenderVx
     {
         internal InternalGraphicsPath gxpth;
         public GLRenderVx(InternalGraphicsPath gxpth)

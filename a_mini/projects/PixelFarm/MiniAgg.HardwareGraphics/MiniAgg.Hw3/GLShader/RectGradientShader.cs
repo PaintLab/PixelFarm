@@ -4,14 +4,13 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class RectFillShader
+    class RectFillShader : ShaderBase
     {
-        MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib2f a_position;
         ShaderVtxAttrib4f a_color;
         ShaderUniformMatrix4 u_matrix;
-        MyMat4 orthoView;
-        public RectFillShader()
+        public RectFillShader(CanvasToShaderSharedResource canvasShareResource)
+            : base(canvasShareResource)
         {
             //----------------
             //vertex shader source
@@ -45,15 +44,21 @@ namespace PixelFarm.DrawingGL
             a_color = shaderProgram.GetAttrV4f("a_color");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
         }
-        public MyMat4 OrthoView
+        int orthoviewVersion = -1;
+        void CheckViewMatrix()
         {
-            get { return orthoView; }
-            set { orthoView = value; }
+            int version = 0;
+            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
+            {
+                orthoviewVersion = version;
+                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+            }
         }
         public void Render(float[] v2fArray, float[] colors)
         {
-            shaderProgram.UseProgram();
-            u_matrix.SetData(orthoView.data);
+            SetCurrent();
+            CheckViewMatrix();
+            //----------------------------------------------------
             a_position.LoadPureV2f(v2fArray);
             a_color.LoadPureV4f(colors);
             GL.DrawArrays(BeginMode.Triangles, 0, 18);

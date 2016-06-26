@@ -15,13 +15,14 @@ namespace PixelFarm.Agg.SimplePainter
     public class SimplePainterGlyphSample : DemoBase
     {
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-        PixelFarm.Agg.Fonts.Font font1;
-        PixelFarm.Agg.Fonts.Font font2;
+
+        AggFont font1;
+        AggFont font2;
         public override void Init()
         {
             //load font ?
-            font1 = NativeFontStore.LoadFont(fontfile, 72);
-            font2 = NativeFontStore.LoadFont(fontfile, 10);
+            font1 = new AggFont(NativeFontStore.LoadFont(fontfile, 72));
+            font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 10));
         }
         public override void Draw(CanvasPainter p)
         { //1.
@@ -47,7 +48,8 @@ namespace PixelFarm.Agg.SimplePainter
 
             //p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
             //--------------------------------------------------- 
-            var fontGlyph = font1.GetGlyph('{');
+            var f1 = font1.InnerFont as PixelFarm.Agg.Fonts.Font;
+            var fontGlyph = f1.GetGlyph('{');
             //outline version
             var flat_v = p.FlattenCurves(fontGlyph.flattenVxs);
             p.Fill(flat_v);

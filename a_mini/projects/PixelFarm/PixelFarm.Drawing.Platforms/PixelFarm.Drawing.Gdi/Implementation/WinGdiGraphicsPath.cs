@@ -1,12 +1,11 @@
-﻿//BSD, 2014-2016, WinterDev 
+﻿//BSD, 2014-2016, WinterDev  
 
-using System.Drawing;
 namespace PixelFarm.Drawing.WinGdi
 {
-    class MyGraphicsPath : GraphicsPath
+    class WinGdiGraphicsPath : GraphicsPath
     {
         System.Drawing.Drawing2D.GraphicsPath p;
-        public MyGraphicsPath()
+        public WinGdiGraphicsPath()
         {
             p = new System.Drawing.Drawing2D.GraphicsPath();
         }

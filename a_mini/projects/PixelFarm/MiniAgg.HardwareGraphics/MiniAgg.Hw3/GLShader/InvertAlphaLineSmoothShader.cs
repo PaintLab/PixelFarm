@@ -3,23 +3,20 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class InvertAlphaFragmentShader
+    class InvertAlphaLineSmoothShader : ShaderBase
     {
         //for stencil buffer ***
-        MiniShaderProgram shaderProgram = new MiniShaderProgram();
+
         ShaderVtxAttrib4f a_position;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
-        MyMat4 orthoView;
         Drawing.Color _strokeColor;
-        float _strokeWidth = 1;
-        public InvertAlphaFragmentShader()
+        float _strokeWidth = 0.5f;
+        public InvertAlphaLineSmoothShader(CanvasToShaderSharedResource canvasShareResource)
+             : base(canvasShareResource)
         {
-            InitShader();
-        }
-        bool InitShader()
-        {
+            //-------------------------------------------------------------------------------
             string vs = @"                   
             attribute vec4 a_position;    
 
@@ -84,14 +81,14 @@ namespace PixelFarm.DrawingGL
                         gl_FragColor= vec4(v_color[0],v_color[1],v_color[2],1.0-(v_color[3] *((1.0-d0)* factor)));
                     }
                     else{ 
-                       gl_FragColor = vec4(0,0,0,0);
+                       gl_FragColor = vec4(0,0,0,0);                        
                     } 
                 }
             ";
             //---------------------
             if (!shaderProgram.Build(vs, fs))
             {
-                return false;
+                return;
             }
             //-----------------------
 
@@ -99,34 +96,24 @@ namespace PixelFarm.DrawingGL
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
-            return true;
+            _strokeColor = Drawing.Color.Black;
         }
-        public MyMat4 OrthoView
+        int orthoviewVersion = -1;
+        void CheckViewMatrix()
         {
-            get { return orthoView; }
-            set { orthoView = value; }
-        }
-        public float StrokeWidth
-        {
-            get { return _strokeWidth; }
-            set
+            int version = 0;
+            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
             {
-                _strokeWidth = value;
+                orthoviewVersion = version;
+                u_matrix.SetData(_canvasShareResource.OrthoView.data);
             }
         }
 
-        public Drawing.Color StrokeColor
-        {
-            get { return _strokeColor; }
-            set
-            {
-                _strokeColor = value;
-            }
-        }
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
-            shaderProgram.UseProgram();
-            u_matrix.SetData(orthoView.data);
+            SetCurrent();
+            CheckViewMatrix();
+            //-----------------------------------
             u_solidColor.SetValue(
                   _strokeColor.R / 255f,
                   _strokeColor.G / 255f,
