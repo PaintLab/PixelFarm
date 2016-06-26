@@ -116,12 +116,8 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //--------------------
-            var strokeColor = _canvasShareResource._strokeColor;
-            u_solidColor.SetValue(
-                  strokeColor.R / 255f,
-                  strokeColor.G / 255f,
-                  strokeColor.B / 255f,
-                  strokeColor.A / 255f);
+ 
+            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
             a_position.LoadPureV4f(vtxs);
             u_linewidth.SetValue(_canvasShareResource._strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
@@ -131,12 +127,8 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //--------------------
-            var strokeColor = _canvasShareResource._strokeColor;
-            u_solidColor.SetValue(
-                  strokeColor.R / 255f,
-                  strokeColor.G / 255f,
-                  strokeColor.B / 255f,
-                  strokeColor.A / 255f);
+             
+            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
             a_position.LoadPureV4f(coords);
             u_linewidth.SetValue(_canvasShareResource._strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);

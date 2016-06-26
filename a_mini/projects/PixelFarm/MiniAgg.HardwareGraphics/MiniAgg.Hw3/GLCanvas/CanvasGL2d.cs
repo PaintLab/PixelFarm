@@ -98,8 +98,8 @@ namespace PixelFarm.DrawingGL
         }
         public Drawing.Color StrokeColor
         {
-            get { return shaderRes._strokeColor; }
-            set { shaderRes._strokeColor = value; }
+            get { return shaderRes.StrokeColor; }
+            set { shaderRes.StrokeColor = value; }
         }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
@@ -199,6 +199,7 @@ namespace PixelFarm.DrawingGL
                         int subPathCount = figures.Count;
                         float prevWidth = StrokeWidth;
                         StrokeColor = color;
+                         
                         StrokeWidth = 0.5f;
                         for (int i = 0; i < subPathCount; ++i)
                         {
