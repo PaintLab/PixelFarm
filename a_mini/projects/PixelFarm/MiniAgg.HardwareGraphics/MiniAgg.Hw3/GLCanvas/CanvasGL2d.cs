@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 using Tesselate;
 using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
 namespace PixelFarm.DrawingGL
 {
-    public partial class CanvasGL2d
+    public class CanvasGL2d
     {
         BasicShader basicShader;
         SmoothLineShader smoothLineShader;
@@ -18,13 +17,10 @@ namespace PixelFarm.DrawingGL
         SimpleTextureShader textureShader;
         //-----------------------------------------------------------
 
-        PixelFarm.Drawing.Color strokeColor = PixelFarm.Drawing.Color.Black;
+        Drawing.Color strokeColor = Drawing.Color.Black;
         //tools---------------------------------
-        PathWriter ps = new PathWriter();
+
         Stroke aggStroke = new Stroke(1);
-        Arc arcTool = new Arc();
-        CurveFlattener curveFlattener = new CurveFlattener();
-        GLTextPrinter textPriner;
         int canvasOriginX = 0;
         int canvasOriginY = 0;
         int canvasW;
@@ -44,14 +40,13 @@ namespace PixelFarm.DrawingGL
                                                                          // tessListener.Connect(tess,          
                                                                          //Tesselate.Tesselator.WindingRuleType.Odd, true);
 
-            //
+
             Tesselator tess = new Tesselator();
             tess.WindingRule = Tesselator.WindingRuleType.Odd;
             tessTool = new TessTool(tess);
             //-----------------------------------------------------------------------
-            textPriner = new GLTextPrinter(this);
-            SetupFonts();
-            ////--------------------------------------------------------------------------------
+
+
             //GL.Enable(EnableCap.CullFace);
             //GL.FrontFace(FrontFaceDirection.Cw);
             //GL.CullFace(CullFaceMode.Back);
@@ -435,6 +430,23 @@ namespace PixelFarm.DrawingGL
         public void SetClipRect(int x, int y, int w, int h)
         {
             GL.Scissor(x, y, w, h);
+        }
+
+        static float[] CreatePolyLineRectCoords(
+               float x, float y, float w, float h)
+        {
+            return new float[]
+            {
+                x,y,
+                x+w,y,
+                x+w,y+h,
+                x,x+h
+            };
+        }
+
+        unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
+        {
+            this.basicFillShader.DrawLineLoopWithVertexBuffer(polygon2dVertices, npoints, this.strokeColor);
         }
     }
 }
