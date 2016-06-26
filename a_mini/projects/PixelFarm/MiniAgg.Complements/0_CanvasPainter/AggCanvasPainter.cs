@@ -234,13 +234,7 @@ namespace PixelFarm.Agg
             }
             this.Draw(roundRect.MakeVxs());
         }
-
-        ////-------------------------------------------------------
-        //public override PixelFarm.Agg.Fonts.Font CurrentFont
-        //{
-        //    get { return this.textPrinter.CurrentFont; }
-        //    set { this.textPrinter.CurrentFont = value; }
-        //}
+         
         public override Drawing.Font CurrentFont
         {
             get
