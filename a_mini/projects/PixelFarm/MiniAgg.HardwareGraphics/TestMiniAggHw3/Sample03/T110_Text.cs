@@ -29,6 +29,7 @@ namespace OpenTkEssTest
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
+            canvas2d.Clear(PixelFarm.Drawing.Color.Red);
             //-------------------------------
             painter.DrawString("OK", 0, 17);
             painter.DrawString("1234567890", 0, 17 * 3);

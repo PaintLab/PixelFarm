@@ -13,6 +13,7 @@ namespace PixelFarm.DrawingGL
         BasicFillShader basicFillShader;
         RectFillShader rectFillShader;
         SimpleTextureShader textureShader;
+        SimpleTextureWithWhiteTransparentShader textureWithWhiteTransparentShader;
         //-----------------------------------------------------------
         CanvasToShaderSharedResource shaderRes;
         //tools---------------------------------
@@ -39,6 +40,7 @@ namespace PixelFarm.DrawingGL
             basicFillShader = new BasicFillShader(shaderRes);
             rectFillShader = new RectFillShader(shaderRes);
             textureShader = new SimpleTextureShader(shaderRes);
+            textureWithWhiteTransparentShader = new SimpleTextureWithWhiteTransparentShader(shaderRes);
             invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
                                                                                     // tessListener.Connect(tess,          
                                                                                     //Tesselate.Tesselator.WindingRuleType.Odd, true);
@@ -136,6 +138,10 @@ namespace PixelFarm.DrawingGL
             float x, float y, float w, float h)
         {
             this.textureShader.Render(bmp, x, y, w, h);
+        }
+        public void DrawImageWithWhiteTransparent(GLBitmap bmp, float x, float y)
+        {
+            this.textureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         //-------------------------------------------------------------------------------
         public void DrawImage(GLBitmapReference bmp, float x, float y)

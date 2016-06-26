@@ -164,13 +164,13 @@ namespace PixelFarm.DrawingGL
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
             //create gl bmp
-            GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, actualImage.GetBuffer(), false); 
+            GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, actualImage.GetBuffer(), false);
             _canvas.DrawImage(glBmp, 0, 0);
             glBmp.Dispose();
         }
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
-            GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, actualImage.GetBuffer(), false); 
+            GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, actualImage.GetBuffer(), false);
             _canvas.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
         }
@@ -189,13 +189,15 @@ namespace PixelFarm.DrawingGL
             }
             this.Draw(roundRect.MakeVxs());
         }
+
+
         public override void DrawString(string text, double x, double y)
         {
             //in this version we draw string to image
             //and the write the image back to gl surface
             _winGfx.Clear(System.Drawing.Color.White);
             _winGfx.DrawString(text, _winFont, _winGfxBrush, 0, 0);
-            //_winGfxBackBmp.Save("d:\\WImageTest\\a00123.png");
+            //_winGfxBackBmp.Save("d:\\WImageTest\\a00123.png"); 
 
             System.Drawing.SizeF textAreaSize = _winGfx.MeasureString(text, _winFont);
             var bmpData = _winGfxBackBmp.LockBits(new System.Drawing.Rectangle(0, 0, _winGfxBackBmp.Width, _winGfxBackBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, _winGfxBackBmp.PixelFormat);
@@ -238,8 +240,8 @@ namespace PixelFarm.DrawingGL
             }
             _winGfxBackBmp.UnlockBits(bmpData);
             //------------------------------------------------------
-            GLBitmap glBmp = new GLBitmap(width, height, buffer, false); 
-            _canvas.DrawImage(glBmp, (float)x, (float)y);
+            GLBitmap glBmp = new GLBitmap(width, height, buffer, false);
+            _canvas.DrawImageWithWhiteTransparent(glBmp, (float)x, (float)y);
             glBmp.Dispose();
         }
         public override void Fill(VertexStore vxs)
