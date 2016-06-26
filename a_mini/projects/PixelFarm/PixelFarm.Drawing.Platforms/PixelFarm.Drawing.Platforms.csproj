@@ -66,8 +66,8 @@
     <Compile Include="PixelFarm.Drawing.Gdi\FontGdiPath\GdiPathFontStore.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation\Bitmap_Brush_Pen.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation\FontStore.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\Implementation\MyFontInfo.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\Implementation\MyGraphicPath.cs" />
+    <Compile Include="PixelFarm.Drawing.Gdi\Implementation\WinGdiFontInfo.cs" />
+    <Compile Include="PixelFarm.Drawing.Gdi\Implementation\WinGdiGraphicsPath.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation.Win32\MyWin32.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation.Win32\NativeTextWin32.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation\Region.cs" />
@@ -139,7 +139,9 @@
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="PixelFarm.Drawing.GLES2\Implementation\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

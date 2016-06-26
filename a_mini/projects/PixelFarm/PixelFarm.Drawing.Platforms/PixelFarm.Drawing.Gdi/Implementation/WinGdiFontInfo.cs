@@ -72,14 +72,14 @@ namespace PixelFarm.Drawing.WinGdi
     }
 
 
-    class MyFontInfo : FontInfo
+    class WinGdiFontInfo : FontInfo
     {
         int[] charWidths;
         NativeTextWin32.FontABC[] charAbcWidths;
         IntPtr hFont;
         BasicGdi32FontHelper gdiFontHelper;
         Font resolvedFont;
-        public MyFontInfo(Font f,
+        public WinGdiFontInfo(Font f,
             int lineHeight, float ascentPx,
             float descentPx, float baseline,
             BasicGdi32FontHelper gdiFontHelper)
