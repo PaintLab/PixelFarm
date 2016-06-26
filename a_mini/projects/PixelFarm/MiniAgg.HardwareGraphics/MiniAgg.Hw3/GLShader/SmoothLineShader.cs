@@ -4,22 +4,19 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class SmoothLineShader
+    class SmoothLineShader : ShaderBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib4f a_position;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
-        MyMat4 orthoView;
-        Drawing.Color _strokeColor;
-        float _strokeWidth = 1;
-        public SmoothLineShader()
+
+        CanvasToShaderSharedResource _canvasShareResource;
+        public SmoothLineShader(CanvasToShaderSharedResource canvasShareResource)
         {
-            InitShader();
-        }
-        bool InitShader()
-        {
+            this._canvasShareResource = canvasShareResource;
+
             string vs = @"                   
             attribute vec4 a_position;  
 
@@ -88,38 +85,17 @@ namespace PixelFarm.DrawingGL
             //---------------------
             if (!shaderProgram.Build(vs, fs))
             {
-                return false;
+                return;
             }
             //-----------------------
-
             a_position = shaderProgram.GetAttrV4f("a_position");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
-            return true;
-        }
-        public MyMat4 OrthoView
-        {
-            get { return orthoView; }
-            set { orthoView = value; }
-        }
-        public float StrokeWidth
-        {
-            get { return _strokeWidth; }
-            set
-            {
-                _strokeWidth = value;
-            }
+            //-----------------------
+
         }
 
-        public Drawing.Color StrokeColor
-        {
-            get { return _strokeColor; }
-            set
-            {
-                _strokeColor = value;
-            }
-        }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
             float dx = x2 - x1;
@@ -135,27 +111,29 @@ namespace PixelFarm.DrawingGL
                 x2, y2,1,rad1
             };
             shaderProgram.UseProgram();
-            u_matrix.SetData(orthoView.data);
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
+            var strokeColor = _canvasShareResource._strokeColor;
             u_solidColor.SetValue(
-                  _strokeColor.R / 255f,
-                  _strokeColor.G / 255f,
-                  _strokeColor.B / 255f,
-                  _strokeColor.A / 255f);
+                  strokeColor.R / 255f,
+                  strokeColor.G / 255f,
+                  strokeColor.B / 255f,
+                  strokeColor.A / 255f);
             a_position.LoadPureV4f(vtxs);
-            u_linewidth.SetValue(_strokeWidth);
+            u_linewidth.SetValue(_canvasShareResource._strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
             shaderProgram.UseProgram();
-            u_matrix.SetData(orthoView.data);
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
+            var strokeColor = _canvasShareResource._strokeColor;
             u_solidColor.SetValue(
-                  _strokeColor.R / 255f,
-                  _strokeColor.G / 255f,
-                  _strokeColor.B / 255f,
-                  _strokeColor.A / 255f);
+                  strokeColor.R / 255f,
+                  strokeColor.G / 255f,
+                  strokeColor.B / 255f,
+                  strokeColor.A / 255f);
             a_position.LoadPureV4f(coords);
-            u_linewidth.SetValue(_strokeWidth);
+            u_linewidth.SetValue(_canvasShareResource._strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
         }
     }

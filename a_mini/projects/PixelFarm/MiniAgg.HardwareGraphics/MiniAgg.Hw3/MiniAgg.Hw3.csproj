@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
+    <Compile Include="GLCanvas\CanvasToShaderSharedResource.cs" />
     <Compile Include="GLPainter\GLCanvasPainter.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
     <Compile Include="GLCanvas\CanvasSmoothMode.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="GLShader\BasicFillShader.cs" />
     <Compile Include="GLShader\InvertAlphaLineSmoothShader.cs" />
     <Compile Include="GLShader\RectGradientShader.cs" />
+    <Compile Include="GLShader\ShaderBase.cs" />
     <Compile Include="GLShader\SimpleTextureShader.cs" />
     <Compile Include="GLShader\SmoothLineShader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

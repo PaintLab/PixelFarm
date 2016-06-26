@@ -4,21 +4,19 @@
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class SimpleTextureShader
+    class SimpleTextureShader : ShaderBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib3f a_position;
         ShaderVtxAttrib2f a_texCoord;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar1 s_texture;
-        MyMat4 orthoView;
-        ushort[] indices = new ushort[] { 0, 1, 2, 3 };
-        public SimpleTextureShader()
+
+        static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
+        CanvasToShaderSharedResource _canvasShareResource;
+        public SimpleTextureShader(CanvasToShaderSharedResource canvasShareResource)
         {
-            InitShader();
-        }
-        bool InitShader()
-        {
+            this._canvasShareResource = canvasShareResource;
             //--------------------------------------------------------------------------
             string vs = @"
                 attribute vec4 a_position;
@@ -48,7 +46,7 @@ namespace PixelFarm.DrawingGL
             //---------------------
             if (!shaderProgram.Build(vs, fs))
             {
-                return false;
+                return;
             }
             //-----------------------
 
@@ -56,13 +54,9 @@ namespace PixelFarm.DrawingGL
             a_texCoord = shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             s_texture = shaderProgram.GetUniform1("s_texture");
-            return true;
         }
-        public MyMat4 OrthoView
-        {
-            get { return orthoView; }
-            set { orthoView = value; }
-        }
+
+
 
         public void Render(GLBitmap bmp, float left, float top, float w, float h)
         {
@@ -80,7 +74,7 @@ namespace PixelFarm.DrawingGL
                 left+w, top -h,0, //corrd3
                 1,1
             };
-            shaderProgram.UseProgram();
+
             unsafe
             {
                 fixed (float* imgvH = &imgVertices[0])
@@ -89,7 +83,9 @@ namespace PixelFarm.DrawingGL
                     a_texCoord.UnsafeLoadMixedV2f((imgvH + 3), 5);
                 }
             }
-            u_matrix.SetData(orthoView.data);
+
+            shaderProgram.UseProgram();
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
             // Bind the texture...
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);

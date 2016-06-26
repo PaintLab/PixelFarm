@@ -20,6 +20,9 @@ namespace PixelFarm.DrawingGL
         Arc arcTool;
         Ellipse ellipse = new Ellipse();
         PixelFarm.Drawing.Font _currentFont;
+
+        Stroke _aggStroke = new Stroke(1);
+
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;
@@ -147,7 +150,8 @@ namespace PixelFarm.DrawingGL
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
                 new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
-            vxs = _canvas.StrokeGen.MakeVxs(vxs);
+            _aggStroke.Width = this.StrokeWidth;
+            vxs = _aggStroke.MakeVxs(vxs);
             _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
 
@@ -228,7 +232,8 @@ namespace PixelFarm.DrawingGL
         {
             roundRect.SetRect(x, y, x + w, y + h);
             roundRect.SetRadius(rx, ry);
-            var vxs = _canvas.StrokeGen.MakeVxs(roundRect.MakeVxs());
+            _aggStroke.Width = this.StrokeWidth;
+            var vxs = _aggStroke.MakeVxs(roundRect.MakeVxs());
             _canvas.DrawGfxPath(_strokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
 
@@ -522,7 +527,8 @@ namespace PixelFarm.DrawingGL
                     vxs = mat.TransformToVxs(vxs);
                 }
             }
-            vxs = this._canvas.StrokeGen.MakeVxs(vxs);
+            _aggStroke.Width = this.StrokeWidth;
+            vxs = _aggStroke.MakeVxs(vxs);
             _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
         }
         static double DegToRad(double degree)

@@ -4,15 +4,17 @@ using System;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    class BasicFillShader
+    class BasicFillShader: ShaderBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib2f a_position;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
-        MyMat4 orthoView;
-        public BasicFillShader()
+
+        CanvasToShaderSharedResource _canvasShareResource;
+        public BasicFillShader(CanvasToShaderSharedResource canvasShareResource)
         {
+            this._canvasShareResource = canvasShareResource;
             //----------------
             //vertex shader source
             string vs = @"        
@@ -46,44 +48,41 @@ namespace PixelFarm.DrawingGL
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
         }
-        public MyMat4 OrthoView
-        {
-            get { return orthoView; }
-            set { orthoView = value; }
-        }
+
         public void FillTrianglesWithVertexBuffer(float[] linesBuffer, int nelements, Drawing.Color color)
         {
+
             shaderProgram.UseProgram();
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue(
                  color.R / 255f,
                  color.G / 255f,
                  color.B / 255f,
                  color.A / 255f);
-            u_matrix.SetData(orthoView.data);
             a_position.LoadPureV2f(linesBuffer);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
         public void FillTriangleStripWithVertexBuffer(float[] linesBuffer, int nelements, Drawing.Color color)
         {
             shaderProgram.UseProgram();
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            u_matrix.SetData(orthoView.data);
             a_position.LoadPureV2f(linesBuffer);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, nelements);
         }
         public unsafe void FillTriangles(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
             shaderProgram.UseProgram();
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            u_matrix.SetData(orthoView.data);
             a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
         public unsafe void FillTriangles(float[] polygon2dVertices, int nelements, Drawing.Color color)
         {
             shaderProgram.UseProgram();
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            u_matrix.SetData(orthoView.data);
             a_position.LoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
@@ -97,6 +96,7 @@ namespace PixelFarm.DrawingGL
         public unsafe void FillTriangleFan(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
             shaderProgram.UseProgram();
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             a_position.UnsafeLoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.TriangleFan, 0, nelements);
@@ -104,6 +104,7 @@ namespace PixelFarm.DrawingGL
         public void DrawLine(float x1, float y1, float x2, float y2, PixelFarm.Drawing.Color color)
         {
             shaderProgram.UseProgram();
+            u_matrix.SetData(_canvasShareResource._orthoView.data);
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
             unsafe
             {

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 using Tesselate;
-using PixelFarm.Agg;
 namespace PixelFarm.DrawingGL
 {
     public class CanvasGL2d
@@ -16,11 +15,11 @@ namespace PixelFarm.DrawingGL
         RectFillShader rectFillShader;
         SimpleTextureShader textureShader;
         //-----------------------------------------------------------
+        CanvasToShaderSharedResource shaderRes;
 
-        Drawing.Color strokeColor = Drawing.Color.Black;
+
         //tools---------------------------------
 
-        Stroke aggStroke = new Stroke(1);
         int canvasOriginX = 0;
         int canvasOriginY = 0;
         int canvasW;
@@ -31,14 +30,22 @@ namespace PixelFarm.DrawingGL
         {
             this.canvasW = canvasW;
             this.canvasH = canvasH;
+            ////setup viewport size
+            int max = Math.Max(canvasW, canvasH);
+            ////square viewport 
+            orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
 
-            smoothLineShader = new SmoothLineShader();
-            basicFillShader = new BasicFillShader();
-            rectFillShader = new RectFillShader();
-            textureShader = new SimpleTextureShader();
-            invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(); //used with stencil  ***
-                                                                         // tessListener.Connect(tess,          
-                                                                         //Tesselate.Tesselator.WindingRuleType.Odd, true);
+            //-----------------------------------------------------------------------
+            shaderRes = new CanvasToShaderSharedResource();
+            shaderRes._orthoView = orthoView;
+            //-----------------------------------------------------------------------
+            smoothLineShader = new SmoothLineShader(shaderRes);
+            basicFillShader = new BasicFillShader(shaderRes);
+            rectFillShader = new RectFillShader(shaderRes);
+            textureShader = new SimpleTextureShader(shaderRes);
+            invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
+                                                                                    // tessListener.Connect(tess,          
+                                                                                    //Tesselate.Tesselator.WindingRuleType.Odd, true);
 
 
             Tesselator tess = new Tesselator();
@@ -54,17 +61,8 @@ namespace PixelFarm.DrawingGL
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);
-            ////setup viewport size
-            int max = Math.Max(canvasW, canvasH);
-            ////square viewport 
-            orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
             //-------------------------------------------------------------------------------
-
-            smoothLineShader.OrthoView = orthoView;
-            basicFillShader.OrthoView = orthoView;
-            textureShader.OrthoView = orthoView;
-            basicFillShader.OrthoView = orthoView;
-            invertAlphaFragmentShader.OrthoView = orthoView;
+ 
             GL.Viewport(0, 0, canvasW, canvasH);
         }
         public void Dispose()
@@ -77,7 +75,6 @@ namespace PixelFarm.DrawingGL
             set;
         }
 
-        internal Stroke StrokeGen { get { return this.aggStroke; } }
         public void Clear(PixelFarm.Drawing.Color c)
         {
             GL.ClearColor(
@@ -95,19 +92,18 @@ namespace PixelFarm.DrawingGL
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
-        public double StrokeWidth
+        public float StrokeWidth
         {
-            get { return this.aggStroke.Width; }
+            get { return shaderRes._strokeWidth; }
             set
             {
-                //agg stroke
-                this.aggStroke.Width = value;
+                shaderRes._strokeWidth = value;
             }
         }
         public Drawing.Color StrokeColor
         {
-            get { return this.strokeColor; }
-            set { this.strokeColor = value; }
+            get { return shaderRes._strokeColor; }
+            set { shaderRes._strokeColor = value; }
         }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
@@ -115,15 +111,13 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
-                        smoothLineShader.StrokeColor = this.strokeColor;
-                        smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
+
                         this.smoothLineShader.DrawLine(x1, y1, x2, y2);
                     }
                     break;
                 default:
                     {
-
-                        this.basicFillShader.DrawLine(x1, y1, x2, y2, this.strokeColor);
+                        this.basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
                     }
                     break;
             }
@@ -208,16 +202,18 @@ namespace PixelFarm.DrawingGL
                     {
                         List<Figure> figures = igpth.figures;
                         int subPathCount = figures.Count;
-                        strokeColor = color;
+
+                        float prevWidth = StrokeWidth;
+                        StrokeColor = color;
                         StrokeWidth = 0.5f;
-                        smoothLineShader.StrokeColor = this.strokeColor;
-                        smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
+
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
-                            this.basicFillShader.FillTriangles(f.GetAreaTess(ref this.tessTool), f.TessAreaTriangleCount, color);
+                            basicFillShader.FillTriangles(f.GetAreaTess(ref this.tessTool), f.TessAreaTriangleCount, color);
                             smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
                         }
+                        StrokeWidth = prevWidth;
                     }
                     break;
             }
@@ -285,8 +281,7 @@ namespace PixelFarm.DrawingGL
 
                             //use alpha chanel from source***
                             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.Zero);
-                            invertAlphaFragmentShader.OrthoView = orthoView;
-                            invertAlphaFragmentShader.StrokeColor = Drawing.Color.Black;
+                            
                             float[] smoothBorder = fig.GetSmoothBorders();
                             invertAlphaFragmentShader.DrawTriangleStrips(smoothBorder, fig.BorderTriangleStripCount);
                             //at this point alpha component is fill in to destination 
@@ -310,7 +305,7 @@ namespace PixelFarm.DrawingGL
                                                  points[1].X, points[1].Y,
                                                  colors[0],
                                                  colors[1], out v2f, out color4f);
-                                            rectFillShader.OrthoView = orthoView;
+
                                             rectFillShader.Render(v2f, color4f);
                                         }
                                         break;
@@ -352,7 +347,7 @@ namespace PixelFarm.DrawingGL
                             {
                                 fixed (float* head = &coordXYs[0])
                                 {
-                                    DrawPolygonUnsafe(head, coordXYs.Length / 2);
+                                    basicFillShader.DrawLineLoopWithVertexBuffer(head, coordXYs.Length / 2, StrokeColor);
                                 }
                             }
                         }
@@ -360,14 +355,11 @@ namespace PixelFarm.DrawingGL
                     break;
                 case CanvasSmoothMode.Smooth:
                     {
-                        strokeColor = color;
+                        StrokeColor = color;
                         StrokeWidth = 1f;
                         List<Figure> figures = igpth.figures;
                         int subPathCount = figures.Count;
-                        strokeColor = color;
-                        StrokeWidth = 1f;
-                        smoothLineShader.StrokeWidth = 1;
-                        smoothLineShader.StrokeColor = color;
+
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
@@ -385,8 +377,6 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.Smooth:
                     {
-                        smoothLineShader.StrokeColor = this.strokeColor;
-                        smoothLineShader.StrokeWidth = (float)this.StrokeWidth;
                         int borderTriAngleCount;
                         float[] triangles = InternalGraphicsPath.BuildSmoothBorders(
                             CreatePolyLineRectCoords(x, y, w, h), out borderTriAngleCount);
@@ -445,9 +435,6 @@ namespace PixelFarm.DrawingGL
             };
         }
 
-        unsafe void DrawPolygonUnsafe(float* polygon2dVertices, int npoints)
-        {
-            this.basicFillShader.DrawLineLoopWithVertexBuffer(polygon2dVertices, npoints, this.strokeColor);
-        }
+
     }
 }
