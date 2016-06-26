@@ -199,7 +199,6 @@ namespace PixelFarm.DrawingGL
                         int subPathCount = figures.Count;
                         float prevWidth = StrokeWidth;
                         StrokeColor = color;
-                         
                         StrokeWidth = 0.5f;
                         for (int i = 0; i < subPathCount; ++i)
                         {

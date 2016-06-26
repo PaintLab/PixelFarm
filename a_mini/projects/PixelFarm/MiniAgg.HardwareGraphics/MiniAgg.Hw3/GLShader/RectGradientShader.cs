@@ -47,9 +47,10 @@ namespace PixelFarm.DrawingGL
         int orthoviewVersion = -1;
         void CheckViewMatrix()
         {
-            if (orthoviewVersion != _canvasShareResource.OrthoViewVersion)
+            int version = 0;
+            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
             {
-                orthoviewVersion = _canvasShareResource.OrthoViewVersion;
+                orthoviewVersion = version;
                 u_matrix.SetData(_canvasShareResource.OrthoView.data);
             }
         }

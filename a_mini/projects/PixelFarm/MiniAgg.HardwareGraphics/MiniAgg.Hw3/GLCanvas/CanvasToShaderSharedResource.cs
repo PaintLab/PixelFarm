@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
     class CanvasToShaderSharedResource
     {
         internal float _strokeWidth = 1;
-        internal Drawing.Color _strokeColor;
+        Drawing.Color _strokeColor;
         internal float _fillColor;
         OpenTK.Graphics.ES20.MyMat4 _orthoView;
         internal ShaderBase _currentShader;
@@ -43,7 +43,7 @@ namespace PixelFarm.DrawingGL
         float _stroke_r;
         float _stroke_g;
         float _stroke_b;
-        float _stroke_a; 
+        float _stroke_a;
         internal void AssignStrokeColorToVar(OpenTK.Graphics.ES20.ShaderUniformVar4 color)
         {
             color.SetValue(_stroke_r, _stroke_g, _stroke_b, _stroke_a);

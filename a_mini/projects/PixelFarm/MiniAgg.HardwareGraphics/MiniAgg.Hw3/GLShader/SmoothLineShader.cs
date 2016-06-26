@@ -92,9 +92,10 @@ namespace PixelFarm.DrawingGL
         int orthoviewVersion = -1;
         void CheckViewMatrix()
         {
-            if (orthoviewVersion != _canvasShareResource.OrthoViewVersion)
+            int version = 0;
+            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
             {
-                orthoviewVersion = _canvasShareResource.OrthoViewVersion;
+                orthoviewVersion = version;
                 u_matrix.SetData(_canvasShareResource.OrthoView.data);
             }
         }
@@ -116,7 +117,7 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //--------------------
- 
+
             _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
             a_position.LoadPureV4f(vtxs);
             u_linewidth.SetValue(_canvasShareResource._strokeWidth);
@@ -127,7 +128,7 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //--------------------
-             
+
             _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
             a_position.LoadPureV4f(coords);
             u_linewidth.SetValue(_canvasShareResource._strokeWidth);
