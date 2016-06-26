@@ -54,7 +54,16 @@ namespace PixelFarm.DrawingGL
         }
 
 
-
+        int orthoviewVersion = -1;
+        void CheckViewMatrix()
+        {
+            int version = 0;
+            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
+            {
+                orthoviewVersion = version;
+                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+            }
+        }
         public void Render(GLBitmap bmp, float left, float top, float w, float h)
         {
             float[] imgVertices = new float[]
@@ -81,7 +90,8 @@ namespace PixelFarm.DrawingGL
             }
 
             SetCurrent();
-            u_matrix.SetData(_canvasShareResource._orthoView.data);
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
             // Bind the texture...
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);

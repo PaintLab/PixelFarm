@@ -88,10 +88,17 @@ namespace PixelFarm.DrawingGL
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             u_solidColor = shaderProgram.GetUniform4("u_solidColor");
             u_linewidth = shaderProgram.GetUniform1("u_linewidth");
-            //-----------------------
-
         }
-
+        int orthoviewVersion = -1;
+        void CheckViewMatrix()
+        {
+            int version = 0;
+            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
+            {
+                orthoviewVersion = version;
+                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+            }
+        }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
             float dx = x2 - x1;
@@ -108,13 +115,10 @@ namespace PixelFarm.DrawingGL
             };
             //--------------------
             SetCurrent();
-            u_matrix.SetData(_canvasShareResource._orthoView.data);
-            var strokeColor = _canvasShareResource._strokeColor;
-            u_solidColor.SetValue(
-                  strokeColor.R / 255f,
-                  strokeColor.G / 255f,
-                  strokeColor.B / 255f,
-                  strokeColor.A / 255f);
+            CheckViewMatrix();
+            //--------------------
+
+            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
             a_position.LoadPureV4f(vtxs);
             u_linewidth.SetValue(_canvasShareResource._strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
@@ -122,13 +126,10 @@ namespace PixelFarm.DrawingGL
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
             SetCurrent();
-            u_matrix.SetData(_canvasShareResource._orthoView.data);
-            var strokeColor = _canvasShareResource._strokeColor;
-            u_solidColor.SetValue(
-                  strokeColor.R / 255f,
-                  strokeColor.G / 255f,
-                  strokeColor.B / 255f,
-                  strokeColor.A / 255f);
+            CheckViewMatrix();
+            //--------------------
+
+            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
             a_position.LoadPureV4f(coords);
             u_linewidth.SetValue(_canvasShareResource._strokeWidth);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);

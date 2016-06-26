@@ -33,7 +33,7 @@ namespace PixelFarm.DrawingGL
             orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
             //-----------------------------------------------------------------------
             shaderRes = new CanvasToShaderSharedResource();
-            shaderRes._orthoView = orthoView;
+            shaderRes.OrthoView = orthoView;
             //-----------------------------------------------------------------------
             smoothLineShader = new SmoothLineShader(shaderRes);
             basicFillShader = new BasicFillShader(shaderRes);
@@ -98,8 +98,8 @@ namespace PixelFarm.DrawingGL
         }
         public Drawing.Color StrokeColor
         {
-            get { return shaderRes._strokeColor; }
-            set { shaderRes._strokeColor = value; }
+            get { return shaderRes.StrokeColor; }
+            set { shaderRes.StrokeColor = value; }
         }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
@@ -229,7 +229,6 @@ namespace PixelFarm.DrawingGL
                         for (int b = 0; b < m; ++b)
                         {
                             Figure fig = figures[b];
-                            var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
                             GL.ClearStencil(0); //set value for clearing stencil buffer 
                                                 //actual clear here
                             GL.Clear(ClearBufferMask.StencilBufferBit);
@@ -289,6 +288,7 @@ namespace PixelFarm.DrawingGL
                                 {
                                     case Drawing.BrushKind.LinearGradient:
                                         {
+                                            var linearGradientBrush = brush as PixelFarm.Drawing.LinearGradientBrush;
                                             var colors = linearGradientBrush.GetColors();
                                             var points = linearGradientBrush.GetStopPoints();
                                             float[] v2f, color4f;
