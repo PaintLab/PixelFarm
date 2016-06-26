@@ -94,7 +94,7 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------------
             // Bind the texture...
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, bmp.TextureId);
+            GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);

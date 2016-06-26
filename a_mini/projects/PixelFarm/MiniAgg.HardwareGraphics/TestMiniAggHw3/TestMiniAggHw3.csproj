@@ -76,6 +76,7 @@
     <Compile Include="Sample03\LionDataStore.cs" />
     <Compile Include="Sample03\SpriteShape.cs" />
     <Compile Include="Sample03\T109_LionFillWithRenderVx.cs" />
+    <Compile Include="Sample03\T110_Text.cs" />
     <Compile Include="Sample03\T101_BlankCanvas.cs" />
     <Compile Include="Sample03\T102_BasicDraw.cs" />
     <Compile Include="Sample03\T105_Stencil.cs" />
