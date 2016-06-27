@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
         }
 
         int orthoviewVersion = -1;
-        void CheckViewMatrix()
+        protected void CheckViewMatrix()
         {
             int version = 0;
             if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
@@ -55,7 +55,36 @@ namespace PixelFarm.DrawingGL
             s_texture.SetValue(0);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
+        public void Render(int textureId, float left, float top, float w, float h)
+        {
+            unsafe
+            {
+                float* imgVertices = stackalloc float[5 * 4];
+                {
+                    imgVertices[0] = left; imgVertices[1] = top; imgVertices[2] = 0; //coord 0
+                    imgVertices[3] = 0; imgVertices[4] = 0; //texture 0 
+                                                            //---------------------
+                    imgVertices[5] = left; imgVertices[6] = top - h; imgVertices[7] = 0; //coord 1
+                    imgVertices[8] = 0; imgVertices[9] = 1; //texture 1 
+                    imgVertices[10] = left + w; imgVertices[11] = top; imgVertices[12] = 0; //coord 2
+                    imgVertices[13] = 1; imgVertices[14] = 0; //texture 2 
+                    imgVertices[15] = left + w; imgVertices[16] = top - h; imgVertices[17] = 0; //coord 3
+                    imgVertices[18] = 1; imgVertices[19] = 1; //texture 3
+                };
+                a_position.UnsafeLoadMixedV3f(imgVertices, 5);
+                a_texCoord.UnsafeLoadMixedV2f((imgVertices + 3), 5);
+            }
 
+            SetCurrent();
+            CheckViewMatrix();
+            //-------------------------------------------------------------------------------------
+            // Bind the texture...
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, textureId);
+            // Set the texture sampler to texture unit to 0     
+            s_texture.SetValue(0);
+            GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
+        }
         protected bool BuildProgram(string vs, string fs)
         {
             //---------------------

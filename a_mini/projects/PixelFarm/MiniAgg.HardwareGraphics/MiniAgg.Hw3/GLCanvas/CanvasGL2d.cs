@@ -80,7 +80,7 @@ namespace PixelFarm.DrawingGL
 
         public FrameBuffer CreateFrameBuffer(int w, int h)
         {
-            return new FrameBuffer(this, w, h);
+            return new FrameBuffer(w, h);
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {
@@ -128,7 +128,11 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-
+        public void DrawFrameBuffer(FrameBuffer frameBuffer, float x, float y)
+        {
+            //draw frame buffer into specific position
+            glesTextureShader.Render(frameBuffer.TextureId, x, y, frameBuffer.Width, frameBuffer.Height);
+        }
         public void DrawImage(GLBitmap bmp, float x, float y)
         {
             DrawImage(bmp,

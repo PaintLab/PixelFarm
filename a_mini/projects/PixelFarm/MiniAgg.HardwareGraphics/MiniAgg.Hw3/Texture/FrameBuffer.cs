@@ -3,24 +3,40 @@
 //credit : http://learningwebgl.com/lessons/lesson16/index.html
 
 using System;
-using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-    public class FrameBuffer
+    public class FrameBuffer : IDisposable
     {
         int frameBufferId;
         int renderBufferId;
         int textureId;
         int w;
         int h;
-        CanvasGL2d canvas2d;
-        public FrameBuffer(CanvasGL2d canvas2d, int w, int h)
+        public FrameBuffer(int w, int h)
         {
-            this.canvas2d = canvas2d;
-            this.w = 150;
-            this.h = 150;
+            this.w = w;
+            this.h = h;
             InitFrameBuffer();
+        }
+        public void Dispose()
+        {
+            //delete framebuffer,render buffer and texture id
+            if (frameBufferId > 0)
+            {
+                GL.DeleteFramebuffers(1, ref frameBufferId);
+                this.frameBufferId = 0;
+            }
+            if (renderBufferId > 0)
+            {
+                GL.DeleteRenderbuffers(1, ref renderBufferId);
+                renderBufferId = 0;
+            }
+            if (textureId > 0)
+            {
+                GL.DeleteTexture(textureId);
+                textureId = 0;
+            }
         }
         public int TextureId { get { return textureId; } }
         public int FrameBufferId { get { return frameBufferId; } }
@@ -28,9 +44,6 @@ namespace PixelFarm.DrawingGL
         public int Height { get { return h; } }
         void InitFrameBuffer()
         {
-            //test only ****
-
-
             GL.GenFramebuffers(1, out frameBufferId);
             //switch to this (custom) framebuffer
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferId);
@@ -51,18 +64,21 @@ namespace PixelFarm.DrawingGL
             //switch back to default framebuffer (system provider framebuffer) 
             GL.BindTexture(TextureTarget.Texture2D, 0);//unbind
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //unbind
-            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferId); //unbind
-            ////-----------------------------------------             
-            //Drawing.Color c = Drawing.Color.White;
-            //GL.ClearColor(
-            //   (float)c.R / 255f,
-            //   (float)c.G / 255f,
-            //   (float)c.B / 255f,
-            //   (float)c.A / 255f);
-            ////-----------------------------------------
-            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //unbind
-
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //unbind 
+        }
+        public void MakeCurrent()
+        {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.FrameBufferId);
+        }
+        public void UpdateTexture()
+        {
+            GL.BindTexture(TextureTarget.Texture2D, textureId);
+            GL.GenerateMipmap(TextureTarget.Texture2D);
+        }
+        public void ReleaseCurrent()
+        {
+            GL.BindTexture(TextureTarget.Texture2D, 0); //unbind texture 
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //switch back to default -framebuffer
         }
     }
 }

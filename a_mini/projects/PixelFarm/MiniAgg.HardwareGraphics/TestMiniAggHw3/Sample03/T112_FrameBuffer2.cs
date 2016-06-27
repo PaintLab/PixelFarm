@@ -15,15 +15,15 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
         GLBitmap glbmp;
-        GLBitmap frameBufferBmp;
         bool isInit;
-        bool isFrameBufferReady;
+        bool frameBufferNeedUpdate;
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
-            frameBuffer = canvas2d.CreateFrameBuffer(max, max);
+            frameBuffer = canvas2d.CreateFrameBuffer(300, 300);
+            frameBufferNeedUpdate = true;
             //------------ 
         }
         protected override void DemoClosing()
@@ -44,26 +44,23 @@ namespace OpenTkEssTest
             }
             if (frameBuffer.FrameBufferId > 0)
             {
-                if (!isFrameBufferReady)
+                if (frameBufferNeedUpdate)
                 {
-                    //------------------------------------------------------------------------------------
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer.FrameBufferId);
+                    frameBuffer.MakeCurrent();
                     //--------
-                    //do draw to frame buffer here
-                    GL.ClearColor(OpenTK.Graphics.Color4.Red);
-                    GL.Clear(ClearBufferMask.ColorBufferBit);
-                    //------------------------------------------------------------------------------------
+                    //after make the frameBuffer current
+                    //then all drawing command will apply to frameBuffer
+                    //do draw to frame buffer here                                        
+                    canvas2d.Clear(PixelFarm.Drawing.Color.Red);
                     canvas2d.DrawImage(glbmp, 0, 300);
-                    //------------------------------------------------------------------------------------ 
-                    GL.BindTexture(TextureTarget.Texture2D, frameBuffer.TextureId);
-                    GL.GenerateMipmap(TextureTarget.Texture2D);
-                    GL.BindTexture(TextureTarget.Texture2D, 0); //unbind texture
-                    GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //switch back to default -framebuffer
-                    frameBufferBmp = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
-                    frameBufferBmp.DontSwapRedBlueChannel = true;
-                    isFrameBufferReady = true;
+                    //------------------------------------------------------------------------------------  
+                    frameBuffer.UpdateTexture();
+                    frameBuffer.ReleaseCurrent();
+                    //after release current, we move back to default frame buffer again***
+
+                    frameBufferNeedUpdate = false;
                 }
-                canvas2d.DrawImage(frameBufferBmp, 15, 300);
+                canvas2d.DrawFrameBuffer(frameBuffer, 15, 300);
             }
             else
             {
