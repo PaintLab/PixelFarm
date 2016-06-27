@@ -77,7 +77,20 @@ namespace Mini
             //this.aniTimer.Tick += TimerTick;
 
         }
-
+        protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(string imgFileName)
+        {
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(imgFileName))
+            {
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+                    System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                int stride = bmpdata.Stride;
+                byte[] buffer = new byte[stride * bmp.Height];
+                System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
+                bmp.UnlockBits(bmpdata);
+                return new PixelFarm.DrawingGL.GLBitmap(bmp.Width, bmp.Height, buffer, false);
+            }
+        }
         void formTestBed_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
         {
             //stop timer
