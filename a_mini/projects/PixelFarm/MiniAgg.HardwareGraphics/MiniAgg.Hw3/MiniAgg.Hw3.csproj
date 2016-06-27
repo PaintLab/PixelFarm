@@ -34,6 +34,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Texture\CanvasGL2dBackBuffer.cs" />
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="GLCanvas\CanvasToShaderSharedResource.cs" />
     <Compile Include="GLCanvas\CanvasGL2d.cs" />
@@ -45,11 +46,11 @@
     <Compile Include="GLCanvas\TessListener.cs" />
     <Compile Include="GLCanvas\VertexPositionColor.cs" />
     <Compile Include="GLShader\BasicFillShader.cs" />
+    <Compile Include="GLShader\BlurShader.cs" />
     <Compile Include="GLShader\InvertAlphaLineSmoothShader.cs" />
     <Compile Include="GLShader\RectGradientShader.cs" />
     <Compile Include="GLShader\ShaderBase.cs" />
-    <Compile Include="GLShader\SimpleTextureShader.cs" />
-    <Compile Include="GLShader\SimpleTextureWithWhiteTransparentShader.cs" />
+    <Compile Include="GLShader\SimpleRectTextureShader.cs" />
     <Compile Include="GLShader\SmoothLineShader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Texture\GLBitmap.cs" />

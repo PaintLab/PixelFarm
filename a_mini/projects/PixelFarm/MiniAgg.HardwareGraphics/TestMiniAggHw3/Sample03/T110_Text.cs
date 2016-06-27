@@ -3,7 +3,6 @@
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
-
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "110")]
@@ -16,7 +15,6 @@ namespace OpenTkEssTest
         {
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
-
             painter = new GLCanvasPainter(canvas2d, max, max);
             //convert lion vxs to renderVx 
         }

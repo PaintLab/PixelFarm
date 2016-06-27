@@ -12,8 +12,10 @@ namespace PixelFarm.DrawingGL
         InvertAlphaLineSmoothShader invertAlphaFragmentShader;
         BasicFillShader basicFillShader;
         RectFillShader rectFillShader;
-        SimpleTextureShader textureShader;
-        SimpleTextureWithWhiteTransparentShader textureWithWhiteTransparentShader;
+        GdiImageTextureShader gdiImgTextureShader;
+        GdiImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
+        OpenGLESTextureShader glesTextureShader;
+        BlurShader blurShader;
         //-----------------------------------------------------------
         CanvasToShaderSharedResource shaderRes;
         //tools---------------------------------
@@ -39,8 +41,10 @@ namespace PixelFarm.DrawingGL
             smoothLineShader = new SmoothLineShader(shaderRes);
             basicFillShader = new BasicFillShader(shaderRes);
             rectFillShader = new RectFillShader(shaderRes);
-            textureShader = new SimpleTextureShader(shaderRes);
-            textureWithWhiteTransparentShader = new SimpleTextureWithWhiteTransparentShader(shaderRes);
+            gdiImgTextureShader = new GdiImageTextureShader(shaderRes);
+            gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(shaderRes);
+            blurShader = new BlurShader(shaderRes);
+            glesTextureShader = new OpenGLESTextureShader(shaderRes);
             invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
                                                                                     // tessListener.Connect(tess,          
                                                                                     //Tesselate.Tesselator.WindingRuleType.Odd, true);
@@ -54,7 +58,7 @@ namespace PixelFarm.DrawingGL
 
             //GL.Enable(EnableCap.CullFace);
             //GL.FrontFace(FrontFaceDirection.Cw);
-            //GL.CullFace(CullFaceMode.Back);
+            //GL.CullFace(CullFaceMode.Back); 
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -63,6 +67,7 @@ namespace PixelFarm.DrawingGL
 
             GL.Viewport(0, 0, canvasW, canvasH);
         }
+
         public void Dispose()
         {
         }
@@ -73,6 +78,10 @@ namespace PixelFarm.DrawingGL
             set;
         }
 
+        public FrameBuffer CreateFrameBuffer(int w, int h)
+        {
+            return new FrameBuffer(this, w, h);
+        }
         public void Clear(PixelFarm.Drawing.Color c)
         {
             GL.ClearColor(
@@ -120,7 +129,6 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        //-------------------------------------------------------------------------------
         public void DrawImage(GLBitmap bmp, float x, float y)
         {
             DrawImage(bmp,
@@ -136,19 +144,32 @@ namespace PixelFarm.DrawingGL
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)
-        {
-            this.textureShader.Render(bmp, x, y, w, h);
+        {   
+            if (bmp.DontSwapRedBlueChannel)
+            {
+                glesTextureShader.Render(bmp, x, y, w, h);
+            }
+            else
+            {
+                gdiImgTextureShader.Render(bmp, x, y, w, h);
+            }
         }
         public void DrawImageWithWhiteTransparent(GLBitmap bmp, float x, float y)
         {
-            this.textureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            this.gdiImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
-        //-------------------------------------------------------------------------------
         public void DrawImage(GLBitmapReference bmp, float x, float y)
         {
             this.DrawImage(bmp.OwnerBitmap,
                  bmp.GetRectF(),
                  x, y, bmp.Width, bmp.Height);
+        }
+        //-------------------------------------------------------------------------------
+        public void DrawImageWithBlur(GLBitmap bmp, float x, float y)
+        {
+            //TODO: review here
+            //not complete
+            this.blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         //-------------------------------------------------------------------------------
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
