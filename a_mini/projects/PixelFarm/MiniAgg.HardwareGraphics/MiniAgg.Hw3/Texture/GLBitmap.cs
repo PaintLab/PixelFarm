@@ -109,6 +109,10 @@ namespace PixelFarm.DrawingGL
             this.width = w;
             this.height = h;
         }
+        public bool DontSwapRedBlueChannel
+        {
+            get; set;
+        }
         public bool IsInvert
         {
             get { return this.isInvertImage; }
@@ -163,8 +167,13 @@ namespace PixelFarm.DrawingGL
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             }
+
             return this.textureId;
         }
+        //public void Bind()
+        //{
+        //    GL.BindTexture(TextureTarget.Texture2D, this.textureId);
+        //}
         public void Dispose()
         {
             GL.DeleteTextures(1, ref textureId);
