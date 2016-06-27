@@ -6,13 +6,14 @@ using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "112")]
-    [Info("T112_FrameBuffer")]
-    public class T112_FrameBuffer : PrebuiltGLControlDemoBase
+    [Info(OrderCode = "113")]
+    [Info("T113_FrameBuffer")]
+    public class T113_FrameBufferWithBlur : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
+        FrameBuffer frameBuffer2;
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
@@ -24,6 +25,8 @@ namespace OpenTkEssTest
             frameBuffer = canvas2d.CreateFrameBuffer(300, 300);
             frameBufferNeedUpdate = true;
             //------------ 
+            frameBuffer2 = canvas2d.CreateFrameBuffer(300, 300);
+
         }
         protected override void DemoClosing()
         {
@@ -46,20 +49,24 @@ namespace OpenTkEssTest
                 if (frameBufferNeedUpdate)
                 {
                     frameBuffer.MakeCurrent();
-                    //--------
+                    //------------------------------------------------------------------------------------                      
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     canvas2d.Clear(PixelFarm.Drawing.Color.Red);
-                    canvas2d.DrawImage(glbmp, 0, 300);
-                    //------------------------------------------------------------------------------------  
+                    canvas2d.DrawImageWithBlurX(glbmp, 0, 300);
                     frameBuffer.UpdateTexture();
                     frameBuffer.ReleaseCurrent();
+                    //------------------------------------------------------------------------------------  
+                    frameBuffer2.MakeCurrent();
+                    GLBitmap bmp2 = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
+                    canvas2d.DrawImageWithBlurY(bmp2, 0, 300);
+                    frameBuffer2.UpdateTexture();
+                    frameBuffer2.ReleaseCurrent();
                     //after release current, we move back to default frame buffer again***
-
                     frameBufferNeedUpdate = false;
                 }
-                canvas2d.DrawFrameBuffer(frameBuffer, 15, 300);
+                canvas2d.DrawFrameBuffer(frameBuffer2, 15, 300);
             }
             else
             {

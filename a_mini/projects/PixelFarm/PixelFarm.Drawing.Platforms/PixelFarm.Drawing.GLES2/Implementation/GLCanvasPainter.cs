@@ -204,7 +204,7 @@ namespace PixelFarm.DrawingGL
 
             int width = (int)textAreaSize.Width;
             int height = (int)textAreaSize.Height;
-            ActualImage actualImg = new ActualImage(width, height, Agg.Image.PixelFormat.Rgba32);
+            ActualImage actualImg = new ActualImage(width, height, Agg.Image.PixelFormat.ARGB32);
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp  

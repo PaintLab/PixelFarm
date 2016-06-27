@@ -278,7 +278,7 @@ namespace PixelFarm.Drawing.WinGdi
             int h = actualImage.Height;
             switch (actualImage.PixelFormat)
             {
-                case Agg.Image.PixelFormat.Rgba32:
+                case Agg.Image.PixelFormat.ARGB32:
                     {
                         //copy data from acutal buffer to internal representation bitmap
                         using (var bmp = CreateBmpBRGA(actualImage))
@@ -287,7 +287,7 @@ namespace PixelFarm.Drawing.WinGdi
                         }
                     }
                     break;
-                case Agg.Image.PixelFormat.Rgb24:
+                case Agg.Image.PixelFormat.RGB24:
                     {
                     }
                     break;

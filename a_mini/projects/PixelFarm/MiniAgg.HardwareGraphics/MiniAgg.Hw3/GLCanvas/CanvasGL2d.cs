@@ -169,11 +169,19 @@ namespace PixelFarm.DrawingGL
                  x, y, bmp.Width, bmp.Height);
         }
         //-------------------------------------------------------------------------------
-        public void DrawImageWithBlur(GLBitmap bmp, float x, float y)
+        public void DrawImageWithBlurY(GLBitmap bmp, float x, float y)
         {
             //TODO: review here
             //not complete
-            this.blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            blurShader.IsHorizontal = false;
+            blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        }
+        public void DrawImageWithBlurX(GLBitmap bmp, float x, float y)
+        {
+            //TODO: review here
+            //not complete
+            blurShader.IsHorizontal = true;
+            blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         //-------------------------------------------------------------------------------
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)

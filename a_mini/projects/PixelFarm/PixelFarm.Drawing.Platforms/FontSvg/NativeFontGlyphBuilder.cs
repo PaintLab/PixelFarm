@@ -49,7 +49,7 @@ namespace PixelFarm.Agg.Fonts
             fontGlyph.glyImgBuffer8 = buff;
             //convert to 32bpp
             //make gray value as alpha channel color value
-            ActualImage actualImage = new ActualImage(w, h, Agg.Image.PixelFormat.Rgba32);
+            ActualImage actualImage = new ActualImage(w, h, Agg.Image.PixelFormat.ARGB32);
             int newstride = stride * 4;
             byte[] newBmp32Buffer = actualImage.GetBuffer();
             int src_p = 0;

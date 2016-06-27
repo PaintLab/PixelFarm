@@ -35,7 +35,7 @@ namespace OpenTkEssTest
             }
 
             canvas2d.DrawImage(glbmp, 0, 300);
-            canvas2d.DrawImageWithBlur(glbmp, 0, 600);
+            canvas2d.DrawImageWithBlurX(glbmp, 0, 600);
             miniGLControl.SwapBuffers();
         }
     }

@@ -636,7 +636,7 @@ namespace PixelFarm.Agg
             //calculate image stride
             switch (actualImage.PixelFormat)
             {
-                case PixelFormat.Rgba32:
+                case PixelFormat.ARGB32:
                     {
                         Attach(actualImage.Width,
                             actualImage.Height,
@@ -654,7 +654,7 @@ namespace PixelFarm.Agg
                             new PixelFarm.Agg.Image.PixelBlenderGray(1));
                     }
                     break;
-                case PixelFormat.Rgb24:
+                case PixelFormat.RGB24:
                 default:
                     {
                         throw new NotSupportedException();

@@ -39,7 +39,7 @@ namespace PixelFarm.Agg.Image
                       new Rectangle(0, 0,
                           windowsBitmap.Width,
                           windowsBitmap.Height),
-                          System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                          ImageLockMode.ReadWrite,
                           windowsBitmap.PixelFormat);
             int backBufferStrideInInts = sBackBufferStrideInBytes / 4;
             int backBufferHeight = sHeight;
@@ -161,23 +161,10 @@ namespace PixelFarm.Agg.Image
                           windowsBitmap.PixelFormat);
             IntPtr scan0 = bitmapData1.Scan0;
             int stride = bitmapData1.Stride;
-            //unsafe
-            //{
-            //    fixed (byte* bufferH = &buffer[0])
-            //    {
-            //        byte* target = (byte*)scan0;
-            //        for (int y = h; y > 0; --y)
-            //        {
-            //            byte* src = bufferH + ((y - 1) * stride);
-            //            for (int n = stride - 1; n >= 0; --n)
-            //            {
-            //                *target = *src;
-            //                target++;
-            //                src++;
-            //            }
-            //        }
-            //    }
-            //}
+
+            //TODO: review here 
+            //use buffer copy
+
             unsafe
             {
                 //target

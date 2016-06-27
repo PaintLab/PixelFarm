@@ -38,7 +38,7 @@ namespace PixelFarm.Agg
             this.height = height;
             switch (this.pixelFormat = format)
             {
-                case PixelFormat.Rgba32:
+                case PixelFormat.ARGB32:
                     {
                         this.bitDepth = 32;
                         this.stride = width * (32 / 8);
@@ -53,7 +53,7 @@ namespace PixelFarm.Agg
                         this.pixelBuffer = new byte[stride * height];
                     }
                     break;
-                case Image.PixelFormat.Rgb24:
+                case Image.PixelFormat.RGB24:
                     {
                         this.bitDepth = 24; //bit per pixel
                         int bytesPerPixel = (bitDepth + 7) / 8;

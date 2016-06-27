@@ -53,6 +53,7 @@ namespace PixelFarm.DrawingGL
             GL.BindTexture(TextureTarget.Texture2D, bmp.GetServerTextureId());
             // Set the texture sampler to texture unit to 0     
             s_texture.SetValue(0);
+            OnSetVarsBeforeRenderer();
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
         }
         public void Render(int textureId, float left, float top, float w, float h)
@@ -97,7 +98,14 @@ namespace PixelFarm.DrawingGL
             a_texCoord = shaderProgram.GetAttrV2f("a_texCoord");
             u_matrix = shaderProgram.GetUniformMat4("u_mvpMatrix");
             s_texture = shaderProgram.GetUniform1("s_texture");
+            OnProgramBuilt();
             return true;
+        }
+        protected virtual void OnSetVarsBeforeRenderer()
+        {
+        }
+        protected virtual void OnProgramBuilt()
+        {
         }
     }
 
