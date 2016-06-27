@@ -43,8 +43,8 @@ namespace OpenTkEssTest
         {
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(imgFileName))
             {
-                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), 
-                    System.Drawing.Imaging.ImageLockMode.ReadOnly, 
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+                    System.Drawing.Imaging.ImageLockMode.ReadOnly,
                     System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 int stride = bmpdata.Stride;
                 byte[] buffer = new byte[stride * bmp.Height];

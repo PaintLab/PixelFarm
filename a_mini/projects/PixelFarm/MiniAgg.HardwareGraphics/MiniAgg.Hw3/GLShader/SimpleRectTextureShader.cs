@@ -1,8 +1,8 @@
 ﻿//MIT 2016, WinterDev
+
 using OpenTK.Graphics.ES20;
 namespace PixelFarm.DrawingGL
 {
-
     abstract class SimpleRectTextureShader : ShaderBase
     {
         protected ShaderVtxAttrib3f a_position;
@@ -13,7 +13,6 @@ namespace PixelFarm.DrawingGL
         public SimpleRectTextureShader(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
-
         }
 
         int orthoviewVersion = -1;
@@ -71,7 +70,6 @@ namespace PixelFarm.DrawingGL
             s_texture = shaderProgram.GetUniform1("s_texture");
             return true;
         }
-
     }
 
     class GdiImageTextureShader : SimpleRectTextureShader
@@ -126,7 +124,6 @@ namespace PixelFarm.DrawingGL
                     v_texCoord =  a_texCoord;
                  }	 
                 ";
-           
             //this case we not need to swap 
             string fs = @"
                       precision mediump float;

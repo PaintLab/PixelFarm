@@ -1,5 +1,6 @@
 ﻿//MIT, 2014-2016,WinterDev
 //creadit : http://learningwebgl.com/lessons/lesson16/index.html
+
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
@@ -15,7 +16,6 @@ namespace OpenTkEssTest
         FrameBuffer frameBuffer;
         GLBitmap glbmp;
         GLBitmap frameBufferBmp;
-
         bool isInit;
         bool isFrameBufferReady;
         protected override void OnInitGLProgram(object sender, EventArgs args)
@@ -59,15 +59,11 @@ namespace OpenTkEssTest
                     GL.GenerateMipmap(TextureTarget.Texture2D);
                     GL.BindTexture(TextureTarget.Texture2D, 0); //unbind texture
                     GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //switch back to default -framebuffer
-
-
                     frameBufferBmp = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
                     frameBufferBmp.DontSwapRedBlueChannel = true;
-
                     isFrameBufferReady = true;
-                }                
+                }
                 canvas2d.DrawImage(frameBufferBmp, 15, 300);
-
             }
             else
             {

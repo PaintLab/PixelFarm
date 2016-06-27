@@ -1,5 +1,6 @@
 ﻿//MIT, 2014-2016,WinterDev
 //creadit : http://learningwebgl.com/lessons/lesson16/index.html
+
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
@@ -59,7 +60,6 @@ namespace OpenTkEssTest
                 GLBitmap bmp = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
                 bmp.DontSwapRedBlueChannel = true;
                 canvas2d.DrawImage(bmp, 15, 300);
-
             }
             else
             {

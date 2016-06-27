@@ -144,7 +144,7 @@ namespace PixelFarm.DrawingGL
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)
-        {   
+        {
             if (bmp.DontSwapRedBlueChannel)
             {
                 glesTextureShader.Render(bmp, x, y, w, h);

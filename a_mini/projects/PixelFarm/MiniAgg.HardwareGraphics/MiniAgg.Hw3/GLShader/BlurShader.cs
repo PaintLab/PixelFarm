@@ -6,12 +6,11 @@ namespace PixelFarm.DrawingGL
 {
     class BlurShader : SimpleRectTextureShader
     {
-
         public BlurShader(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
             BuildShaderV3();
-        } 
+        }
         void BuildShaderV3()
         {
             //--------------------------------------------------------------------------
@@ -326,6 +325,6 @@ namespace PixelFarm.DrawingGL
                       }
                 ";
             BuildProgram(vs, fs);
-        } 
+        }
     }
 }
