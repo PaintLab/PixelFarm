@@ -66,16 +66,16 @@ namespace PixelFarm.DrawingGL
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);//unbind
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //unbind 
         }
-        public void MakeCurrent()
+        internal void MakeCurrent()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, this.FrameBufferId);
         }
-        public void UpdateTexture()
+        internal void UpdateTexture()
         {
             GL.BindTexture(TextureTarget.Texture2D, textureId);
             GL.GenerateMipmap(TextureTarget.Texture2D);
         }
-        public void ReleaseCurrent()
+        internal void ReleaseCurrent()
         {
             GL.BindTexture(TextureTarget.Texture2D, 0); //unbind texture 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0); //switch back to default -framebuffer

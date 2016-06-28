@@ -45,18 +45,16 @@ namespace OpenTkEssTest
             {
                 if (frameBufferNeedUpdate)
                 {
-                    frameBuffer.MakeCurrent();
-                    //--------
+                    canvas2d.AttachFrameBuffer(frameBuffer);
+                    //------------------------------------------------------------------------------------  
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     canvas2d.Clear(PixelFarm.Drawing.Color.Red);
                     canvas2d.DrawImage(glbmp, 0, 300);
                     //------------------------------------------------------------------------------------  
-                    frameBuffer.UpdateTexture();
-                    frameBuffer.ReleaseCurrent();
+                    canvas2d.DetachFrameBuffer();
                     //after release current, we move back to default frame buffer again***
-
                     frameBufferNeedUpdate = false;
                 }
                 canvas2d.DrawFrameBuffer(frameBuffer, 15, 300);

@@ -26,6 +26,8 @@ namespace PixelFarm.DrawingGL
         int canvasH;
         MyMat4 orthoView;
         TessTool tessTool;
+
+        FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer
         public CanvasGL2d(int canvasW, int canvasH)
         {
             this.canvasW = canvasW;
@@ -81,6 +83,32 @@ namespace PixelFarm.DrawingGL
         public FrameBuffer CreateFrameBuffer(int w, int h)
         {
             return new FrameBuffer(w, h);
+        }
+
+        public FrameBuffer CurrentFrameBuffer
+        {
+            get { return this._currentFrameBuffer; }
+        }
+        public void AttachFrameBuffer(FrameBuffer frameBuffer)
+        {
+            DetachFrameBuffer(true);
+            if (frameBuffer != null)
+            {
+                this._currentFrameBuffer = frameBuffer;
+                frameBuffer.MakeCurrent();
+            }
+        }
+        public void DetachFrameBuffer(bool updateTextureResult = true)
+        {
+            if (_currentFrameBuffer != null)
+            {
+                if (updateTextureResult)
+                {
+                    _currentFrameBuffer.UpdateTexture();
+                }
+                _currentFrameBuffer.ReleaseCurrent();
+            }
+            _currentFrameBuffer = null;
         }
         public void Clear(PixelFarm.Drawing.Color c)
         {

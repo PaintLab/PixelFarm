@@ -26,7 +26,6 @@ namespace OpenTkEssTest
             frameBufferNeedUpdate = true;
             //------------ 
             frameBuffer2 = canvas2d.CreateFrameBuffer(300, 300);
-
         }
         protected override void DemoClosing()
         {
@@ -48,22 +47,21 @@ namespace OpenTkEssTest
             {
                 if (frameBufferNeedUpdate)
                 {
-                    frameBuffer.MakeCurrent();
+                    canvas2d.AttachFrameBuffer(frameBuffer);
                     //------------------------------------------------------------------------------------                      
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
                     canvas2d.Clear(PixelFarm.Drawing.Color.Red);
                     canvas2d.DrawImageWithBlurX(glbmp, 0, 300);
-                    frameBuffer.UpdateTexture();
-                    frameBuffer.ReleaseCurrent();
+                    canvas2d.DetachFrameBuffer();
                     //------------------------------------------------------------------------------------  
-                    frameBuffer2.MakeCurrent();
+
+                    canvas2d.AttachFrameBuffer(frameBuffer2);
                     GLBitmap bmp2 = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
                     bmp2.IsBigEndianPixel = true;
                     canvas2d.DrawImageWithBlurY(bmp2, 0, 300);
-                    frameBuffer2.UpdateTexture();
-                    frameBuffer2.ReleaseCurrent();
+                    canvas2d.DetachFrameBuffer();
                     //after release current, we move back to default frame buffer again***
                     frameBufferNeedUpdate = false;
                 }
