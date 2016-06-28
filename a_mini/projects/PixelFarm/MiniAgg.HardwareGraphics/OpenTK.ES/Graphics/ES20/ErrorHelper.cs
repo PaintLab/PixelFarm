@@ -77,8 +77,7 @@ namespace OpenTK.Graphics.ES20
         {
             if (Context.ErrorChecking)
             {
-                while ((ErrorCode)GL.GetError() != ErrorCode.NoError)
-                { }
+                while ((ErrorCode)GL.GetError() != ErrorCode.NoError) ;
             }
         }
 
@@ -107,7 +106,9 @@ namespace OpenTK.Graphics.ES20
                             sb.Append(", ");
                         }
                         else
+                        {
                             break;
+                        }
                     }
                     sb.Remove(sb.Length - 2, 2); // Remove the last comma
                     throw new GraphicsErrorException(sb.ToString());

@@ -84,6 +84,9 @@
     <Compile Include="Sample03\T107_DrawImage.cs" />
     <Compile Include="Sample01\T50_SampleTexture2dDemo2.cs" />
     <Compile Include="Sample03\T108_LionFill.cs" />
+    <Compile Include="Sample03\T111_FrameBuffer.cs" />
+    <Compile Include="Sample03\T112_FrameBuffer2.cs" />
+    <Compile Include="Sample03\T113_FrameBufferWithBlur.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />

@@ -49,8 +49,7 @@ namespace PixelFarm.Agg.Fonts
             fontGlyph.glyImgBuffer8 = buff;
             //convert to 32bpp
             //make gray value as alpha channel color value
-            ActualImage actualImage = new ActualImage(w, h, Agg.Image.PixelFormat.Rgba32);
-            int newstride = stride * 4;
+            ActualImage actualImage = new ActualImage(w, h, Agg.Image.PixelFormat.ARGB32);
             byte[] newBmp32Buffer = actualImage.GetBuffer();
             int src_p = 0;
             int target_p = 0;
@@ -60,9 +59,9 @@ namespace PixelFarm.Agg.Fonts
                 {
                     byte srcColor = buff[src_p + c];
                     //expand to 4 channel
-                    newBmp32Buffer[target_p] = 0; //R
-                    newBmp32Buffer[target_p + 1] = 0; //G
-                    newBmp32Buffer[target_p + 2] = 0; //B
+                    newBmp32Buffer[target_p] = 0;
+                    newBmp32Buffer[target_p + 1] = 0;
+                    newBmp32Buffer[target_p + 2] = 0;
                     newBmp32Buffer[target_p + 3] = srcColor; //A
                     target_p += 4;
                 }
@@ -84,9 +83,7 @@ namespace PixelFarm.Agg.Fonts
             //    Marshal.Copy(buffer, 0, bmpdata.Scan0, size);
             //    bmp.UnlockBits(bmpdata);
             //    bmp.Save("d:\\WImageTest\\glyph.png");
-            //} 
-
-
+            //}  
         }
 
         static FT_Vector GetMidPoint(FT_Vector v1, FT_Vector v2)

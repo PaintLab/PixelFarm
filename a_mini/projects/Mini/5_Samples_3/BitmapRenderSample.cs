@@ -32,7 +32,7 @@ either expressed or implied, of the FreeBSD Project.
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Image;
 using Mini;
-using System;
+
 namespace PixelFarm.Agg.Sample_Images
 {
     [Info(OrderCode = "41")]
@@ -53,9 +53,8 @@ namespace PixelFarm.Agg.Sample_Images
                 //read to image buffer 
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
-                PixelFormat pixFormat = PixelFormat.Rgba32;
-                ActualImage actualImage = new ActualImage(bmpW, bmpH, pixFormat);
-                PixelFarm.Agg.Image.BitmapHelper.CopyFromWindowsBitmapSameSize(bmp, actualImage);
+                ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFormat.ARGB32);
+                BitmapHelper.CopyFromWindowsBitmapSameSize(bmp, actualImage);
                 return actualImage;
             }
         }

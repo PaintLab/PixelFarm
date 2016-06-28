@@ -32,20 +32,19 @@ namespace PixelFarm.Agg
         byte[] pixelBuffer;
         public ActualImage(int width, int height, PixelFormat format)
         {
-            //width and height must >0
-
+            //width and height must >0 
             this.width = width;
             this.height = height;
             switch (this.pixelFormat = format)
             {
-                case PixelFormat.Rgba32:
+                case PixelFormat.ARGB32:
                     {
                         this.bitDepth = 32;
                         this.stride = width * (32 / 8);
                         this.pixelBuffer = new byte[stride * height];
                     }
                     break;
-                case Image.PixelFormat.GrayScale8:
+                case PixelFormat.GrayScale8:
                     {
                         this.bitDepth = 8; //bit per pixel
                         int bytesPerPixel = (bitDepth + 7) / 8;
@@ -53,7 +52,7 @@ namespace PixelFarm.Agg
                         this.pixelBuffer = new byte[stride * height];
                     }
                     break;
-                case Image.PixelFormat.Rgb24:
+                case PixelFormat.RGB24:
                     {
                         this.bitDepth = 24; //bit per pixel
                         int bytesPerPixel = (bitDepth + 7) / 8;
@@ -65,9 +64,6 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
-
-
-
         public int Width
         {
             get { return this.width; }
@@ -84,6 +80,10 @@ namespace PixelFarm.Agg
         public PixelFormat PixelFormat { get { return this.pixelFormat; } }
         public int Stride { get { return this.stride; } }
         public int BitDepth { get { return this.bitDepth; } }
-        public byte[] GetBuffer() { return this.pixelBuffer; }
+        public byte[] GetBuffer()
+        {
+            return this.pixelBuffer;
+        }
+         
     }
 }

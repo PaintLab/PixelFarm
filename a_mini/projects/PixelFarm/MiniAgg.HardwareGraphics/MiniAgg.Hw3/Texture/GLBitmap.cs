@@ -80,6 +80,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+
     public class GLBitmap : IDisposable
     {
         int textureId;
@@ -88,6 +89,11 @@ namespace PixelFarm.DrawingGL
         byte[] rawBuffer;
         LazyBitmapBufferProvider lazyProvider;
         bool isInvertImage = false;
+        static readonly bool isLittleEndian;
+        static GLBitmap()
+        {
+            isLittleEndian = BitConverter.IsLittleEndian;
+        }
         public GLBitmap(int w, int h, byte[] rawBuffer, bool isInvertImage)
         {
             this.width = w;
@@ -95,26 +101,25 @@ namespace PixelFarm.DrawingGL
             this.rawBuffer = rawBuffer;
             this.isInvertImage = isInvertImage;
         }
-        public GLBitmap(LazyBitmapBufferProvider lazyProvider)
+        internal GLBitmap(LazyBitmapBufferProvider lazyProvider)
         {
             this.width = lazyProvider.Width;
             this.height = lazyProvider.Height;
             this.lazyProvider = lazyProvider;
             this.isInvertImage = lazyProvider.IsInvert;
         }
-
         public GLBitmap(int textureId, int w, int h)
         {
             this.textureId = textureId;
             this.width = w;
             this.height = h;
         }
+        public bool IsBigEndianPixel { get; set; }
+
         public bool IsInvert
         {
             get { return this.isInvertImage; }
         }
-
-
         public int TextureId { get { return textureId; } }
         public int Width
         {
@@ -141,11 +146,13 @@ namespace PixelFarm.DrawingGL
                 {
                     unsafe
                     {
+                        //ES20 dose not have BGRA 
+                        //so in little-endian machine we need to convert 
                         fixed (byte* bmpScan0 = &this.rawBuffer[0])
                         {
                             GL.TexImage2D(TextureTarget.Texture2D, 0,
                             PixelInternalFormat.Rgba, this.width, this.height, 0,
-                            PixelFormat.Rgba,
+                            PixelFormat.Rgba, // 
                             PixelType.UnsignedByte, (IntPtr)bmpScan0);
                         }
                     }
@@ -163,8 +170,10 @@ namespace PixelFarm.DrawingGL
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             }
+
             return this.textureId;
         }
+
         public void Dispose()
         {
             GL.DeleteTextures(1, ref textureId);

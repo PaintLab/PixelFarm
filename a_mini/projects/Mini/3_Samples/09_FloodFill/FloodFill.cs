@@ -18,7 +18,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
         public FloodFillDemo()
         {
             BackgroundColor = Color.White;
-            imageToFillOn = new ActualImage(400, 300, PixelFormat.Rgba32);
+            imageToFillOn = new ActualImage(400, 300, PixelFormat.ARGB32);
             ImageGraphics2D imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
             imageToFillGraphics.Clear(Color.White);
             imageToFillGraphics.DrawString("Click to fill", 20, 30);

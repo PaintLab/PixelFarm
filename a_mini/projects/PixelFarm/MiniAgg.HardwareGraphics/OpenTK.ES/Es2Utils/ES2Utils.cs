@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
- 
+
 namespace OpenTK.Graphics.ES20
 {
     public static class ES2Utils

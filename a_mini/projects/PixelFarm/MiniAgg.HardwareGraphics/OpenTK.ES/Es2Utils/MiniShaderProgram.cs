@@ -2,7 +2,7 @@
 
 using System;
 namespace OpenTK.Graphics.ES20
-{ 
+{
     public struct ShaderVtxAttrib2f
     {
         internal readonly int location;
@@ -60,7 +60,6 @@ namespace OpenTK.Graphics.ES20
             GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
             GL.EnableVertexAttribArray(this.location);
         }
-
     }
     public struct ShaderVtxAttrib4f
     {
@@ -132,6 +131,18 @@ namespace OpenTK.Graphics.ES20
         {
             this.location = location;
         }
+        public void SetValue(int a, int b)
+        {
+            GL.Uniform2(this.location, a, b);
+        }
+        public void SetValue(float a, float b)
+        {
+            GL.Uniform2(this.location, a, b);
+        }
+        public void SetValue(byte a, byte b)
+        {
+            GL.Uniform2(this.location, a, b);
+        }
     }
     public struct ShaderUniformVar3
     {
@@ -139,6 +150,18 @@ namespace OpenTK.Graphics.ES20
         public ShaderUniformVar3(int location)
         {
             this.location = location;
+        }
+        public void SetValue(int a, int b, int c)
+        {
+            GL.Uniform3(this.location, a, b, c);
+        }
+        public void SetValue(float a, float b, float c)
+        {
+            GL.Uniform3(this.location, a, b, c);
+        }
+        public void SetValue(byte a, byte b, byte c)
+        {
+            GL.Uniform3(this.location, a, b, c);
         }
     }
     public struct ShaderUniformVar4

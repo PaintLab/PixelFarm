@@ -23,8 +23,8 @@ namespace PixelFarm.Agg.Image
 {
     public enum PixelFormat
     {
-        Rgba32,
-        Rgb24,
+        ARGB32,
+        RGB24,
         GrayScale8,
     }
 }

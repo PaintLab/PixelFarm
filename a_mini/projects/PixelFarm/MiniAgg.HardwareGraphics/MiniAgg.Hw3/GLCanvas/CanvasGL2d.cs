@@ -12,8 +12,10 @@ namespace PixelFarm.DrawingGL
         InvertAlphaLineSmoothShader invertAlphaFragmentShader;
         BasicFillShader basicFillShader;
         RectFillShader rectFillShader;
-        SimpleTextureShader textureShader;
-        SimpleTextureWithWhiteTransparentShader textureWithWhiteTransparentShader;
+        GdiImageTextureShader gdiImgTextureShader;
+        GdiImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
+        OpenGLESTextureShader glesTextureShader;
+        BlurShader blurShader;
         //-----------------------------------------------------------
         CanvasToShaderSharedResource shaderRes;
         //tools---------------------------------
@@ -24,6 +26,8 @@ namespace PixelFarm.DrawingGL
         int canvasH;
         MyMat4 orthoView;
         TessTool tessTool;
+
+        FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer
         public CanvasGL2d(int canvasW, int canvasH)
         {
             this.canvasW = canvasW;
@@ -39,8 +43,10 @@ namespace PixelFarm.DrawingGL
             smoothLineShader = new SmoothLineShader(shaderRes);
             basicFillShader = new BasicFillShader(shaderRes);
             rectFillShader = new RectFillShader(shaderRes);
-            textureShader = new SimpleTextureShader(shaderRes);
-            textureWithWhiteTransparentShader = new SimpleTextureWithWhiteTransparentShader(shaderRes);
+            gdiImgTextureShader = new GdiImageTextureShader(shaderRes);
+            gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(shaderRes);
+            blurShader = new BlurShader(shaderRes);
+            glesTextureShader = new OpenGLESTextureShader(shaderRes);
             invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
                                                                                     // tessListener.Connect(tess,          
                                                                                     //Tesselate.Tesselator.WindingRuleType.Odd, true);
@@ -54,7 +60,7 @@ namespace PixelFarm.DrawingGL
 
             //GL.Enable(EnableCap.CullFace);
             //GL.FrontFace(FrontFaceDirection.Cw);
-            //GL.CullFace(CullFaceMode.Back);
+            //GL.CullFace(CullFaceMode.Back); 
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -63,6 +69,7 @@ namespace PixelFarm.DrawingGL
 
             GL.Viewport(0, 0, canvasW, canvasH);
         }
+
         public void Dispose()
         {
         }
@@ -73,6 +80,36 @@ namespace PixelFarm.DrawingGL
             set;
         }
 
+        public FrameBuffer CreateFrameBuffer(int w, int h)
+        {
+            return new FrameBuffer(w, h);
+        }
+
+        public FrameBuffer CurrentFrameBuffer
+        {
+            get { return this._currentFrameBuffer; }
+        }
+        public void AttachFrameBuffer(FrameBuffer frameBuffer)
+        {
+            DetachFrameBuffer(true);
+            if (frameBuffer != null)
+            {
+                this._currentFrameBuffer = frameBuffer;
+                frameBuffer.MakeCurrent();
+            }
+        }
+        public void DetachFrameBuffer(bool updateTextureResult = true)
+        {
+            if (_currentFrameBuffer != null)
+            {
+                if (updateTextureResult)
+                {
+                    _currentFrameBuffer.UpdateTexture();
+                }
+                _currentFrameBuffer.ReleaseCurrent();
+            }
+            _currentFrameBuffer = null;
+        }
         public void Clear(PixelFarm.Drawing.Color c)
         {
             GL.ClearColor(
@@ -119,8 +156,11 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-
-        //-------------------------------------------------------------------------------
+        public void DrawFrameBuffer(FrameBuffer frameBuffer, float x, float y)
+        {
+            //draw frame buffer into specific position
+            glesTextureShader.Render(frameBuffer.TextureId, x, y, frameBuffer.Width, frameBuffer.Height);
+        }
         public void DrawImage(GLBitmap bmp, float x, float y)
         {
             DrawImage(bmp,
@@ -137,18 +177,41 @@ namespace PixelFarm.DrawingGL
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)
         {
-            this.textureShader.Render(bmp, x, y, w, h);
+            if (bmp.IsBigEndianPixel)
+            {
+                glesTextureShader.Render(bmp, x, y, w, h);
+            }
+            else
+            {
+                gdiImgTextureShader.Render(bmp, x, y, w, h);
+            }
         }
         public void DrawImageWithWhiteTransparent(GLBitmap bmp, float x, float y)
         {
-            this.textureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            this.gdiImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
-        //-------------------------------------------------------------------------------
         public void DrawImage(GLBitmapReference bmp, float x, float y)
         {
             this.DrawImage(bmp.OwnerBitmap,
                  bmp.GetRectF(),
                  x, y, bmp.Width, bmp.Height);
+        }
+        //-------------------------------------------------------------------------------
+        public void DrawImageWithBlurY(GLBitmap bmp, float x, float y)
+        {
+            //TODO: review here
+            //not complete
+            blurShader.IsBigEndian = bmp.IsBigEndianPixel;
+            blurShader.IsHorizontal = false;
+            blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        }
+        public void DrawImageWithBlurX(GLBitmap bmp, float x, float y)
+        {
+            //TODO: review here
+            //not complete
+            blurShader.IsBigEndian = bmp.IsBigEndianPixel;
+            blurShader.IsHorizontal = true;
+            blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         //-------------------------------------------------------------------------------
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
