@@ -124,12 +124,12 @@ namespace Mini
                         return Graphics2D.CreateFromImage(actualImage);
                     case 32:
 
-                        bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                        bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);//***
                         //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                         //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                         //32bppPArgb                         
-                        actualImage = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.ARGB32);
+                        actualImage = new ActualImage(width, height, PixelFormat.ARGB32);
                         bufferGfx = Graphics.FromImage(bufferBmp);
                         return Graphics2D.CreateFromImage(actualImage);
                     case 128:

@@ -88,6 +88,10 @@ namespace Mini
                 byte[] buffer = new byte[stride * bmp.Height];
                 System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
                 bmp.UnlockBits(bmpdata);
+                //---------------------------
+                //if we are on Little-endian  machine,
+                //
+                //---------------------------
                 return new PixelFarm.DrawingGL.GLBitmap(bmp.Width, bmp.Height, buffer, false);
             }
         }

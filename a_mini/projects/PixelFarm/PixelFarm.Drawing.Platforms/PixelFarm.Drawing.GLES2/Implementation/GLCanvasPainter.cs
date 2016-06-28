@@ -201,9 +201,9 @@ namespace PixelFarm.DrawingGL
 
             System.Drawing.SizeF textAreaSize = _winGfx.MeasureString(text, _winFont);
             var bmpData = _winGfxBackBmp.LockBits(new System.Drawing.Rectangle(0, 0, _winGfxBackBmp.Width, _winGfxBackBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, _winGfxBackBmp.PixelFormat);
-
             int width = (int)textAreaSize.Width;
             int height = (int)textAreaSize.Height;
+
             ActualImage actualImg = new ActualImage(width, height, Agg.Image.PixelFormat.ARGB32);
             //------------------------------------------------------
             //copy bmp from specific bmp area 
@@ -224,8 +224,8 @@ namespace PixelFarm.DrawingGL
                         header = rowHead;
                         for (int n = 0; n < rowLen;)
                         {
-                            *dest = *header;
                             //move next
+                            *(dest + 0) = *(header + 0);
                             *(dest + 1) = *(header + 1);
                             *(dest + 2) = *(header + 2);
                             *(dest + 3) = *(header + 3);

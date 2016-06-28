@@ -60,6 +60,7 @@ namespace OpenTkEssTest
                     //------------------------------------------------------------------------------------  
                     frameBuffer2.MakeCurrent();
                     GLBitmap bmp2 = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
+                    bmp2.IsBigEndianPixel = true;
                     canvas2d.DrawImageWithBlurY(bmp2, 0, 300);
                     frameBuffer2.UpdateTexture();
                     frameBuffer2.ReleaseCurrent();

@@ -58,7 +58,7 @@ namespace OpenTkEssTest
                 //------------------------------------------------------------------------------------
 
                 GLBitmap bmp = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
-                bmp.DontSwapRedBlueChannel = true;
+                bmp.IsBigEndianPixel = true;
                 canvas2d.DrawImage(bmp, 15, 300);
             }
             else

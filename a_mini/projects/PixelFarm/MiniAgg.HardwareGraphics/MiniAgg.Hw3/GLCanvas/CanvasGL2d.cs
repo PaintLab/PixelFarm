@@ -149,7 +149,7 @@ namespace PixelFarm.DrawingGL
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)
         {
-            if (bmp.DontSwapRedBlueChannel)
+            if (bmp.IsBigEndianPixel)
             {
                 glesTextureShader.Render(bmp, x, y, w, h);
             }
@@ -173,6 +173,7 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: review here
             //not complete
+            blurShader.IsBigEndian = bmp.IsBigEndianPixel;
             blurShader.IsHorizontal = false;
             blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
@@ -180,6 +181,7 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: review here
             //not complete
+            blurShader.IsBigEndian = bmp.IsBigEndianPixel;
             blurShader.IsHorizontal = true;
             blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }

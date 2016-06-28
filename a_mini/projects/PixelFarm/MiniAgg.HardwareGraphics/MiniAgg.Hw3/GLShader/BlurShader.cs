@@ -7,6 +7,7 @@ namespace PixelFarm.DrawingGL
     class BlurShader : SimpleRectTextureShader
     {
         ShaderUniformVar1 _horizontal;
+        ShaderUniformVar1 _isBigEndian;
         public BlurShader(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
@@ -34,6 +35,7 @@ namespace PixelFarm.DrawingGL
                       precision mediump float;
                      
                       uniform sampler2D s_texture;
+                      uniform int isBigEndian;
                       uniform int blur_horizontal; 
                       varying vec2 v_texCoord; 
                       void main()
@@ -74,7 +76,11 @@ namespace PixelFarm.DrawingGL
                             c += texture2D(s_texture,vec2(v_texCoord0,v_texCoord1+0.024))*0.00895781211794;
                             c += texture2D(s_texture,vec2(v_texCoord0 ,v_texCoord1+0.028))*0.0044299121055113265; 
                         }
-                        gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);
+                        if(isBigEndian ==1){
+                            gl_FragColor = c;
+                        }else{
+                            gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);
+                        }
                       }
                 ";
             BuildProgram(vs, fs);
@@ -82,18 +88,16 @@ namespace PixelFarm.DrawingGL
         protected override void OnProgramBuilt()
         {
             _horizontal = shaderProgram.GetUniform1("blur_horizontal");
+            //TODO: review here
+            //temp fixed for big vs little-endian
+            _isBigEndian = shaderProgram.GetUniform1("isBigEndian");
         }
         public bool IsHorizontal { get; set; }
+        public bool IsBigEndian { get; set; }
         protected override void OnSetVarsBeforeRenderer()
         {
-            if (IsHorizontal)
-            {
-                _horizontal.SetValue(1);
-            }
-            else
-            {
-                _horizontal.SetValue(0);
-            }
+            _horizontal.SetValue(IsHorizontal ? 1 : 0);
+            _isBigEndian.SetValue(IsBigEndian ? 1 : 0);
         }
     }
 }

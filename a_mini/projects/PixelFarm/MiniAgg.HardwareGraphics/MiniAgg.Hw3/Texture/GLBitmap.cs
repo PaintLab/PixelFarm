@@ -80,6 +80,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+
     public class GLBitmap : IDisposable
     {
         int textureId;
@@ -107,24 +108,18 @@ namespace PixelFarm.DrawingGL
             this.lazyProvider = lazyProvider;
             this.isInvertImage = lazyProvider.IsInvert;
         }
-
         public GLBitmap(int textureId, int w, int h)
         {
-            
             this.textureId = textureId;
             this.width = w;
             this.height = h;
         }
-        public bool DontSwapRedBlueChannel
-        {
-            get; set;
-        }
+        public bool IsBigEndianPixel { get; set; }
+
         public bool IsInvert
         {
             get { return this.isInvertImage; }
         }
-
-
         public int TextureId { get { return textureId; } }
         public int Width
         {
