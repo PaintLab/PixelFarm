@@ -16,6 +16,7 @@ namespace PixelFarm.DrawingGL
         GdiImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
         OpenGLESTextureShader glesTextureShader;
         BlurShader blurShader;
+        Conv3x3TextureShader conv3x3TextureShader;
         //-----------------------------------------------------------
         CanvasToShaderSharedResource shaderRes;
         //tools---------------------------------
@@ -50,8 +51,7 @@ namespace PixelFarm.DrawingGL
             invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
                                                                                     // tessListener.Connect(tess,          
                                                                                     //Tesselate.Tesselator.WindingRuleType.Odd, true);
-
-
+            conv3x3TextureShader = new Conv3x3TextureShader(shaderRes);
             Tesselator tess = new Tesselator();
             tess.WindingRule = Tesselator.WindingRuleType.Odd;
             tessTool = new TessTool(tess);
@@ -213,6 +213,14 @@ namespace PixelFarm.DrawingGL
             blurShader.IsHorizontal = true;
             blurShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
+        public void DrawImageWithConv3x3(GLBitmap bmp, float[] kernel3x3, float x, float y)
+        {
+            conv3x3TextureShader.IsBigEndian = bmp.IsBigEndianPixel;
+            conv3x3TextureShader.SetBitmapSize(bmp.Width, bmp.Height);
+            conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
+            conv3x3TextureShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        }
+
         //-------------------------------------------------------------------------------
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {

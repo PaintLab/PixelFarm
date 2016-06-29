@@ -6,14 +6,14 @@ using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
-    [Info(OrderCode = "113")]
-    [Info("T113_FrameBuffer")]
-    public class T113_FrameBufferWithBlur : PrebuiltGLControlDemoBase
+    [Info(OrderCode = "114")]
+    [Info("T114_FrameBuffer")]
+    public class T114_FrameBufferWithConvFilterEffect : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
-        FrameBuffer frameBuffer2;
+
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
@@ -25,7 +25,7 @@ namespace OpenTkEssTest
             frameBuffer = canvas2d.CreateFrameBuffer(300, 300);
             frameBufferNeedUpdate = true;
             //------------ 
-            frameBuffer2 = canvas2d.CreateFrameBuffer(300, 300);
+
         }
         protected override void DemoClosing()
         {
@@ -40,7 +40,7 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = LoadTexture(@"..\logo-dark.jpg");
+                glbmp = LoadTexture(@"..\leaves.jpg");
                 isInit = true;
             }
             if (frameBuffer.FrameBufferId > 0)
@@ -53,22 +53,15 @@ namespace OpenTkEssTest
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
-                    canvas2d.Clear(PixelFarm.Drawing.Color.Red);
-                    canvas2d.DrawImageWithBlurX(glbmp, 0, 300);
+                    canvas2d.Clear(PixelFarm.Drawing.Color.Red); 
+                    canvas2d.DrawImageWithConv3x3(glbmp, Mat3x3ConvGen.emboss, 0, 300);
                     canvas2d.DetachFrameBuffer();
-                    //------------------------------------------------------------------------------------  
-                    //framebuffer2
-                    canvas2d.AttachFrameBuffer(frameBuffer2);
-                    GLBitmap bmp2 = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
-                    bmp2.IsBigEndianPixel = true;
-                    canvas2d.DrawImageWithBlurY(bmp2, 0, 300);
-                    canvas2d.DetachFrameBuffer();
-                    //------------------------------------------------------------------------------------  
+
                     //after release current, we move back to default frame buffer again***
                     frameBufferNeedUpdate = false;
 
                 }
-                canvas2d.DrawFrameBuffer(frameBuffer2, 15, 300);
+                canvas2d.DrawFrameBuffer(frameBuffer, 15, 300);
             }
             else
             {

@@ -108,6 +108,22 @@ namespace OpenTK.Graphics.ES20
             GL.UniformMatrix4(this.location, 1, false, mat);
         }
     }
+    public struct ShaderUniformMatrix3
+    {
+        readonly int location;
+        public ShaderUniformMatrix3(int location)
+        {
+            this.location = location;
+        }
+        public void SetData(int count, bool transpose, float[] mat)
+        {
+            GL.UniformMatrix3(this.location, count, transpose, mat);
+        }
+        public void SetData(float[] mat)
+        {
+            GL.UniformMatrix3(this.location, 1, false, mat);
+        }
+    }
     public struct ShaderUniformVar1
     {
         readonly int location;
@@ -262,7 +278,10 @@ namespace OpenTK.Graphics.ES20
         {
             return new ShaderUniformMatrix4(GL.GetUniformLocation(this.mProgram, uniformVarName));
         }
-
+        public ShaderUniformMatrix3 GetUniformMat3(string uniformVarName)
+        {
+            return new ShaderUniformMatrix3(GL.GetUniformLocation(this.mProgram, uniformVarName));
+        }
         public void UseProgram()
         {
             GL.UseProgram(mProgram);
