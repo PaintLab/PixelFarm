@@ -22,10 +22,10 @@ namespace OpenTkEssTest
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
-            frameBuffer = canvas2d.CreateFrameBuffer(300, 300);
+            frameBuffer = canvas2d.CreateFrameBuffer(this.Width, this.Height);
             frameBufferNeedUpdate = true;
             //------------ 
-            frameBuffer2 = canvas2d.CreateFrameBuffer(300, 300);
+            frameBuffer2 = canvas2d.CreateFrameBuffer(this.Width, this.Height);
         }
         protected override void DemoClosing()
         {
