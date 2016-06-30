@@ -35,8 +35,15 @@ namespace OpenTK.Platform.Egl
     {
         #region IGraphicsMode Members
 
+        public EglWindowInfo window;
 
-        public GraphicsMode SelectGraphicsMode(ColorFormat color, int depth, int stencil, int samples, ColorFormat accum, int buffers, bool stereo)
+        public GraphicsMode SelectGraphicsMode(
+            ColorFormat color, int depth,
+            int stencil,
+            int samples,
+            ColorFormat accum,
+            int buffers,
+            bool stereo)
         {
             IntPtr[] configs = new IntPtr[1];
             int[] attribList = new int[]
@@ -54,16 +61,14 @@ namespace OpenTK.Platform.Egl
                 //------------
                 Egl.NONE,
             };
-            // Todo: what if we don't wish to use the default display?
-            IntPtr display = Egl.GetDisplay(IntPtr.Zero);
-            int major, minor;
-            if (!Egl.Initialize(display, out major, out minor))
-                throw new GraphicsModeException(String.Format("Failed to initialize display connection, error {0}", Egl.GetError()));
+
+            IntPtr display = window.Display;
             int num_configs;
             if (!Egl.GetConfigs(display, null, 0, out num_configs))
             {
                 throw new GraphicsModeException(String.Format("Failed to retrieve GraphicsMode configurations, error {0}", Egl.GetError()));
             }
+
 
             if (!Egl.ChooseConfig(display, attribList, configs, configs.Length, out num_configs))
             {
@@ -84,6 +89,7 @@ namespace OpenTK.Platform.Egl
             Egl.GetConfigAttrib(display, active_config, Egl.SAMPLES, out sample_buffers);
             Egl.GetConfigAttrib(display, active_config, Egl.SAMPLES, out samples);
             return new GraphicsMode(active_config, new ColorFormat(r, g, b, a), d, s, sample_buffers > 0 ? samples : 0, 0, 2, false);
+
         }
 
         #endregion

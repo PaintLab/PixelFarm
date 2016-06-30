@@ -54,7 +54,12 @@ namespace OpenTK.Platform.Egl
             if (!Egl.Initialize(window.Display, out dummy_major, out dummy_minor))
                 throw new GraphicsContextException(String.Format("Failed to initialize EGL, error {0}.", Egl.GetError()));
             WindowInfo = window;
-            Mode = new EglGraphicsMode().SelectGraphicsMode(mode.ColorFormat, mode.Depth, mode.Stencil, mode.Samples, mode.AccumulatorFormat, mode.Buffers, mode.Stereo);
+
+            Egl.BindAPI(0x30A0); //bind EGL_OPENGL_ES_API
+
+            var eglGfxMode = new EglGraphicsMode();
+            eglGfxMode.window = window;
+            Mode = eglGfxMode.SelectGraphicsMode(mode.ColorFormat, mode.Depth, mode.Stencil, mode.Samples, mode.AccumulatorFormat, mode.Buffers, mode.Stereo);
             if (!Mode.Index.HasValue)
                 throw new GraphicsModeException("Invalid or unsupported GraphicsMode.");
             IntPtr config = Mode.Index.Value;
