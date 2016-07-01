@@ -34,15 +34,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Glfw\Glfw3.cs" />
-    <Compile Include="Glfw\Glfw3Delegates.cs" />
-    <Compile Include="Glfw\Glfw3DelegateTypes.cs" />
-    <Compile Include="Glfw\Glfw3Enum.cs" />
-    <Compile Include="Glfw\Glfw3KeyboardState.cs" />
-    <Compile Include="Glfw\Glfw3MouseState.cs" />
-    <Compile Include="Glfw\Glfw3Structs.cs" />
-    <Compile Include="Glfw\Glfw3_32.cs" />
-    <Compile Include="Glfw\Glfw3_64.cs" />
     <Compile Include="Math\DualQuaternion.cs" />
     <Compile Include="Math\MathHelper.cs" />
     <Compile Include="Math\Matrix.cs" />
@@ -89,9 +80,9 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
-      <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
-      <Name>OpenTK.ES</Name>
+    <ProjectReference Include="..\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj">
+      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
+      <Name>PixelFarm.MiniPlatforms</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
