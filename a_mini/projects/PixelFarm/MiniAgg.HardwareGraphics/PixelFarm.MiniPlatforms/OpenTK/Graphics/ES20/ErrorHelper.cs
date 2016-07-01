@@ -55,7 +55,6 @@ namespace OpenTK.Graphics.ES20
 
         public ErrorHelper(IGraphicsContext context)
         {
-           
             if (context == null)
                 throw new GraphicsContextMissingException();
             Context = (GraphicsContext)context;
@@ -65,7 +64,6 @@ namespace OpenTK.Graphics.ES20
                     ContextErrors.Add(Context, new List<ErrorCode>());
             }
             ResetErrors();
-
         }
 
         #endregion

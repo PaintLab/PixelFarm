@@ -1,12 +1,10 @@
 ﻿using System;
-
 namespace PixelFarm
 {
     public static class GLPlatforms
     {
         public static void Init()
         {
-
         }
     }
     public class GlfwWinInfo : OpenTK.Platform.IWindowInfo

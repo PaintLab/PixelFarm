@@ -21,11 +21,10 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
- 
+
 
 namespace Pencil.Gaming
 {
-
     public enum KeyModifiers
     {
         Shift = 1 << 0, //1
@@ -301,4 +300,3 @@ namespace Pencil.Gaming
     }
 }
 
- 

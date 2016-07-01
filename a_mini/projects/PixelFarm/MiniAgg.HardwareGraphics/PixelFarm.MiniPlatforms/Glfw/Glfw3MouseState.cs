@@ -21,34 +21,35 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 #endregion
 
- 
+
 using System;
+namespace Pencil.Gaming
+{
+    public sealed class MouseState
+    {
+        public bool LeftButton { get; private set; }
+        public bool MiddleButton { get; private set; }
+        public bool RightButton { get; private set; }
+        public int ScrollWheel { get; private set; }
+        public double X { get; private set; }
+        public double Y { get; private set; }
 
-namespace Pencil.Gaming {
-	public sealed class MouseState {
-		public bool LeftButton { get; private set; }
-		public bool MiddleButton { get; private set; }
-		public bool RightButton { get; private set; }
-		public int ScrollWheel { get; private set; }
-		public double X { get; private set; }
-		public double Y { get; private set; }
+        private MouseState()
+        {
+        }
 
-		private MouseState() {
-		}
-
-		public static MouseState GetMouseState(GlfwWindowPtr window) {
-			MouseState result = new MouseState();
-
-			result.LeftButton = Glfw.GetMouseButton(window, MouseButton.LeftButton);
-			result.MiddleButton = Glfw.GetMouseButton(window, MouseButton.MiddleButton);
-			result.RightButton = Glfw.GetMouseButton(window, MouseButton.RightButton);
-			double x, y;
-			Glfw.GetCursorPos(window, out x, out y);
-			result.X = x;
-			result.Y = y;
-
-			return result;
-		}
-	}
+        public static MouseState GetMouseState(GlfwWindowPtr window)
+        {
+            MouseState result = new MouseState();
+            result.LeftButton = Glfw.GetMouseButton(window, MouseButton.LeftButton);
+            result.MiddleButton = Glfw.GetMouseButton(window, MouseButton.MiddleButton);
+            result.RightButton = Glfw.GetMouseButton(window, MouseButton.RightButton);
+            double x, y;
+            Glfw.GetCursorPos(window, out x, out y);
+            result.X = x;
+            result.Y = y;
+            return result;
+        }
+    }
 }
- 
+
