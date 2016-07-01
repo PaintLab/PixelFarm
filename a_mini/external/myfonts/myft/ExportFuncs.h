@@ -90,6 +90,9 @@ extern "C"{
 		int charCount,
 		ProperGlyph* properGlyphs);
 
+	MY_DLL_EXPORT void DeleteUnmanagedObj(void* ptr);
+	 
+
 }
 
 

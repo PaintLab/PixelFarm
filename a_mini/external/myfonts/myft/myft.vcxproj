@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExportFuncs.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
