@@ -27,7 +27,6 @@ namespace PixelFarm.DrawingGL
         int canvasH;
         MyMat4 orthoView;
         TessTool tessTool;
-
         FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer
         public CanvasGL2d(int canvasW, int canvasH)
         {

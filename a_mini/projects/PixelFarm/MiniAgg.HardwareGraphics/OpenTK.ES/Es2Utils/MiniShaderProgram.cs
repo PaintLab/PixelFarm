@@ -60,6 +60,17 @@ namespace OpenTK.Graphics.ES20
             GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
             GL.EnableVertexAttribArray(this.location);
         }
+        public void LoadPureV3f(float[] vertices)
+        {
+            //bind 
+            GL.VertexAttribPointer(location,
+                3, //float3
+                VertexAttribPointerType.Float,
+                false,
+                3 * sizeof(float), //total size
+                vertices);
+            GL.EnableVertexAttribArray(this.location);
+        }
     }
     public struct ShaderVtxAttrib4f
     {

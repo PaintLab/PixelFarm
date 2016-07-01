@@ -49,8 +49,7 @@ namespace OpenTK.Platform
                 default:
                     {
                         throw new NotSupportedException();
-                    }
-                    break;
+                    } 
             }
         }
     }

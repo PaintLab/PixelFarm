@@ -152,7 +152,6 @@ namespace PixelFarm.DrawingGL
               -1,  16, -1,
               -1, -1, -1
           };
-
         public static readonly
           float[] edgeDetect = new float[]
         {
@@ -160,7 +159,6 @@ namespace PixelFarm.DrawingGL
              -0.125f,  1,     -0.125f,
              -0.125f, -0.125f, -0.125f
         };
-
         public static readonly
           float[] edgeDetect2 = new float[]
           {
@@ -258,7 +256,6 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar1 _kernelWeight;
         float[] kernels;
         float kernelWeight;
-
         float toDrawImgW = 1, toDrawImgH = 1;
         public Conv3x3TextureShader(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
@@ -319,7 +316,6 @@ namespace PixelFarm.DrawingGL
                       }
                 ";
             BuildProgram(vs, fs);
-
             SetConvolutionKernel(Mat3x3ConvGen.gaussianBlur);
         }
         public void SetConvolutionKernel(float[] kernels)
@@ -344,7 +340,6 @@ namespace PixelFarm.DrawingGL
             _convKernel = shaderProgram.GetUniformMat3("convKernel");
             _onepix_xy = shaderProgram.GetUniform2("onepix_xy");
             _kernelWeight = shaderProgram.GetUniform1("kernelWeight");
-
         }
         protected override void OnSetVarsBeforeRenderer()
         {
@@ -352,13 +347,11 @@ namespace PixelFarm.DrawingGL
             _convKernel.SetData(kernels);
             _onepix_xy.SetValue(1f / toDrawImgW, 1f / toDrawImgH);
             _kernelWeight.SetValue(kernelWeight);
-
         }
         public void SetBitmapSize(int w, int h)
         {
             this.toDrawImgW = w;
             this.toDrawImgH = h;
-
         }
     }
 }

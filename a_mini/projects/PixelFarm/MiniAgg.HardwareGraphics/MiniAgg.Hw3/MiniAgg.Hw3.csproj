@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;USE_GLFW3</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -34,6 +34,28 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Glfw\Glfw3.cs" />
+    <Compile Include="Glfw\Glfw3Delegates.cs" />
+    <Compile Include="Glfw\Glfw3DelegateTypes.cs" />
+    <Compile Include="Glfw\Glfw3Enum.cs" />
+    <Compile Include="Glfw\Glfw3KeyboardState.cs" />
+    <Compile Include="Glfw\Glfw3MouseState.cs" />
+    <Compile Include="Glfw\Glfw3Structs.cs" />
+    <Compile Include="Glfw\Glfw3_32.cs" />
+    <Compile Include="Glfw\Glfw3_64.cs" />
+    <Compile Include="Math\DualQuaternion.cs" />
+    <Compile Include="Math\MathHelper.cs" />
+    <Compile Include="Math\Matrix.cs" />
+    <Compile Include="Math\Quaternion.cs" />
+    <Compile Include="Math\Rectangle.cs" />
+    <Compile Include="Math\Rectanglei.cs" />
+    <Compile Include="Math\Vector2.cs" />
+    <Compile Include="Math\Vector2i.cs" />
+    <Compile Include="Math\Vector3.cs" />
+    <Compile Include="Math\Vector3i.cs" />
+    <Compile Include="Math\Vector4.cs" />
+    <Compile Include="Math\Vector4i.cs" />
+    <Compile Include="Math\XmlAttributes.cs" />
     <Compile Include="Texture\FrameBuffer.cs" />
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="GLCanvas\CanvasToShaderSharedResource.cs" />
