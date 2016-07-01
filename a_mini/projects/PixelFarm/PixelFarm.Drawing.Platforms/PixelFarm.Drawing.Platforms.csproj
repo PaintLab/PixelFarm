@@ -44,14 +44,7 @@
   <ItemGroup>
     <Compile Include="CanvasExt\Canvas2dExtension.cs" />
     <Compile Include="CanvasExt\VertexSourceIO.cs" />
-    <Compile Include="FontNative\NativeBridgeFreeType.cs" />
-    <Compile Include="FontNative\NativeBridgeHB.cs" />
-    <Compile Include="FontNative\NativeBridgeMyFonts.cs" />
-    <Compile Include="FontNative\NativeFont.cs" />
-    <Compile Include="FontNative\NativeFontFace.cs" />
-    <Compile Include="FontNative\NativeFontStore.cs" />
-    <Compile Include="FontNative\UnsafeMethods.cs" />
-    <Compile Include="FontSvg\NativeFontGlyphBuilder.cs" />
+    <Compile Include="CanvasExt\UnsafeMethods.cs" />
     <Compile Include="FontSvg\SvgFont.cs" />
     <Compile Include="FontSvg\SvgFontFace.cs" />
     <Compile Include="FontSvg\SvgFontFace_LiberationSans.cs" />

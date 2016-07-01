@@ -13,7 +13,7 @@ namespace PixelFarm.Agg.Fonts
     /// <summary>
     /// hb_direction_t;
     /// </summary>
-    enum HBDirection
+    public enum HBDirection
     {
         HB_DIRECTION_INVALID = 0,
         HB_DIRECTION_LTR = 4,

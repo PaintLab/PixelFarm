@@ -81,15 +81,15 @@ namespace PixelFarm.Agg.Fonts
         static bool LoadLib(string dllFilename)
         {
             //dev:
-#if DEBUG
-            ///return true;
-            //location of myft dll
-            //string dev = @"c:\WImageTest\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
-            //string dev = @"D:\projects\myagg_cs\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
-            string dev = @"..\..\..\..\..\a_mini\external\myfonts\Debug\myft.dll";
-            UnsafeMethods.LoadLibrary(dev);
-            return true;
-#endif
+//#if DEBUG
+//            ///return true;
+//            //location of myft dll
+//            //string dev = @"c:\WImageTest\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
+//            //string dev = @"D:\projects\myagg_cs\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
+//            string dev = @"..\..\..\..\..\a_mini\external\myfonts\Debug\myft.dll";
+//            UnsafeMethods.LoadLibrary(dev);
+//            return true;
+//#endif
             //for Windows , dynamic load dll       
             if (isLoaded)
             {

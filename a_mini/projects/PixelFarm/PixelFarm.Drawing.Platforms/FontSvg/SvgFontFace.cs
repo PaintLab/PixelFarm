@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using PixelFarm.Agg.Transform;
+ 
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.Fonts
