@@ -1,100 +1,92 @@
 ﻿//MIT 2014-2016, WinterDev
+
 using System;
-using System.Collections.Generic;
-
 using Pencil.Gaming.Graphics;
-using Pencil.Gaming;
 
-namespace Pencil.Gaming.Graphics
+namespace OpenTK.Graphics.ES20
 {
-    public struct ShaderVtxAttrib
+    public struct ShaderVtxAttrib2f
     {
         internal readonly int location;
-
-        public ShaderVtxAttrib(int location)
+        public ShaderVtxAttrib2f(int location)
         {
             this.location = location;
         }
-
-
-
+        public unsafe void UnsafeLoadMixedV2f(float* vertexH, int totalFieldCount)
+        {
+            GL.VertexAttribPointer(this.location, 2, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
+            GL.EnableVertexAttribArray(this.location);
+        }
         /// <summary>
-        /// load and enable
+        /// load pure vector2f, from start array
         /// </summary>
         /// <param name="vertices"></param>
-        /// <param name="totalFieldCount"></param>
-        /// <param name="startOffset"></param>
-        public void LoadV3f(float[] vertices, int totalFieldCount, int startOffset)
-        {
-            BindV3f(vertices, totalFieldCount, startOffset);
-            Enable();
-        }
-        public void LoadV4f(float[] vertices, int totalFieldCount, int startOffset)
-        {
-            BindV4f(vertices, totalFieldCount, startOffset);
-            Enable();
-        }
-        public unsafe void LoadV2f(float* vertices, int totalFieldCount, int startOffset)
+        public void LoadPureV2f(float[] vertices)
         {
             //bind 
             GL.VertexAttribPointer(location,
                 2, //float2
                 VertexAttribPointerType.Float,
                 false,
-                totalFieldCount * sizeof(float), //total size
-                (IntPtr)(vertices + startOffset));
-            Enable();
+                2 * sizeof(float), //total size
+                vertices);
+            GL.EnableVertexAttribArray(this.location);
         }
         /// <summary>
-        /// load and enable
+        /// load pure vector2f, from start array
         /// </summary>
         /// <param name="vertices"></param>
         /// <param name="totalFieldCount"></param>
         /// <param name="startOffset"></param>
-        public void LoadV2f(float[] vertices, int totalFieldCount, int startOffset)
+        public unsafe void UnsafeLoadPureV2f(float* vertices)
         {
-
-            BindV2f(vertices, totalFieldCount, startOffset);
-            Enable();
+            //bind 
+            GL.VertexAttribPointer(location,
+                2, //float2
+                VertexAttribPointerType.Float,
+                false,
+                 2 * sizeof(float), //total size
+                (IntPtr)(vertices));
+            GL.EnableVertexAttribArray(this.location);
         }
-
-        public void BindV3f(float[] vertices, int totalFieldCount, int startOffset)
+    }
+    public struct ShaderVtxAttrib3f
+    {
+        internal readonly int location;
+        public ShaderVtxAttrib3f(int location)
         {
-
-            unsafe
-            {
-                fixed (float* h = &vertices[0])
-                {
-                    GL.VertexAttribPointer(location,
-                        3, //float3
-                        VertexAttribPointerType.Float,
-                        false,
-                        0, //stride
-                        (IntPtr)(h + startOffset));
-                }
-            }
-
+            this.location = location;
         }
-        public void BindV2f(float[] vertices, int totalFieldCount, int startOffset)
+        public unsafe void UnsafeLoadMixedV3f(float* vertexH, int totalFieldCount)
         {
-
-            unsafe
-            {
-                fixed (float* h = &vertices[0])
-                {
-                    GL.VertexAttribPointer(location,
-                        2, //float2
-                        VertexAttribPointerType.Float,
-                        false,
-                        0, //stride
-                        (IntPtr)(h + startOffset));
-                }
-            }
+            GL.VertexAttribPointer(this.location, 3, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
+            GL.EnableVertexAttribArray(this.location);
         }
-
-        public void BindV4f(float[] vertices, int totalFieldCount, int startOffset)
+        public void LoadPureV3f(float[] vertices)
         {
-
+            //bind 
+            GL.VertexAttribPointer(location,
+                3, //float3
+                VertexAttribPointerType.Float,
+                false,
+                3 * sizeof(float), //total size
+                vertices);
+            GL.EnableVertexAttribArray(this.location);
+        }
+    }
+    public struct ShaderVtxAttrib4f
+    {
+        internal readonly int location;
+        public ShaderVtxAttrib4f(int location)
+        {
+            this.location = location;
+        }
+        /// <summary>
+        ///  load pure vector4f, from start array
+        /// </summary>
+        /// <param name="vertices"></param>
+        public void LoadPureV4f(float[] vertices)
+        {
             unsafe
             {
                 fixed (float* h = &vertices[0])
@@ -103,17 +95,15 @@ namespace Pencil.Gaming.Graphics
                         4, //float4
                         VertexAttribPointerType.Float,
                         false,
-                        0,//totalFieldCount * sizeof(float), //total size
-                        (IntPtr)(h + startOffset));
+                        4 * sizeof(float), //total size
+                        (IntPtr)h);
                 }
             }
-
-        }
-        public void Enable()
-        {
             GL.EnableVertexAttribArray(this.location);
         }
     }
+
+
 
     public struct ShaderUniformMatrix4
     {
@@ -130,8 +120,22 @@ namespace Pencil.Gaming.Graphics
         {
             GL.UniformMatrix4(this.location, 1, false, mat);
         }
-
-
+    }
+    public struct ShaderUniformMatrix3
+    {
+        readonly int location;
+        public ShaderUniformMatrix3(int location)
+        {
+            this.location = location;
+        }
+        public void SetData(int count, bool transpose, float[] mat)
+        {
+            GL.UniformMatrix3(this.location, count, transpose, mat);
+        }
+        public void SetData(float[] mat)
+        {
+            GL.UniformMatrix3(this.location, 1, false, mat);
+        }
     }
     public struct ShaderUniformVar1
     {
@@ -148,8 +152,6 @@ namespace Pencil.Gaming.Graphics
         {
             GL.Uniform1(this.location, value);
         }
-
-
     }
     public struct ShaderUniformVar2
     {
@@ -158,7 +160,18 @@ namespace Pencil.Gaming.Graphics
         {
             this.location = location;
         }
-
+        public void SetValue(int a, int b)
+        {
+            GL.Uniform2(this.location, a, b);
+        }
+        public void SetValue(float a, float b)
+        {
+            GL.Uniform2(this.location, a, b);
+        }
+        public void SetValue(byte a, byte b)
+        {
+            GL.Uniform2(this.location, a, b);
+        }
     }
     public struct ShaderUniformVar3
     {
@@ -167,7 +180,18 @@ namespace Pencil.Gaming.Graphics
         {
             this.location = location;
         }
-
+        public void SetValue(int a, int b, int c)
+        {
+            GL.Uniform3(this.location, a, b, c);
+        }
+        public void SetValue(float a, float b, float c)
+        {
+            GL.Uniform3(this.location, a, b, c);
+        }
+        public void SetValue(byte a, byte b, byte c)
+        {
+            GL.Uniform3(this.location, a, b, c);
+        }
     }
     public struct ShaderUniformVar4
     {
@@ -194,7 +218,6 @@ namespace Pencil.Gaming.Graphics
     public class MiniShaderProgram
     {
         int mProgram;
-
         string vs;
         string fs;
         public void LoadVertexShaderSource(string vs)
@@ -212,8 +235,7 @@ namespace Pencil.Gaming.Graphics
         }
         public bool Build()
         {
-
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            mProgram = OpenTK.Graphics.ES20.ES2Utils.CompileProgram(vs, fs);
             if (mProgram == 0)
             {
                 return false;
@@ -224,18 +246,31 @@ namespace Pencil.Gaming.Graphics
         {
             LoadVertexShaderSource(vs);
             LoadFragmentShaderSource(fs);
-            mProgram = ES2Utils.CompileProgram(vs, fs);
+            try
+            {
+                mProgram = OpenTK.Graphics.ES20.ES2Utils.CompileProgram(vs, fs);
+            }
+            catch (Exception ex)
+            {
+            }
             if (mProgram == 0)
             {
                 return false;
             }
             return true;
         }
-        public ShaderVtxAttrib GetVtxAttrib(string attrName)
+        public ShaderVtxAttrib2f GetAttrV2f(string attrName)
         {
-            return new ShaderVtxAttrib(GL.GetAttribLocation(mProgram, attrName));
+            return new ShaderVtxAttrib2f(GL.GetAttribLocation(mProgram, attrName));
         }
-
+        public ShaderVtxAttrib3f GetAttrV3f(string attrName)
+        {
+            return new ShaderVtxAttrib3f(GL.GetAttribLocation(mProgram, attrName));
+        }
+        public ShaderVtxAttrib4f GetAttrV4f(string attrName)
+        {
+            return new ShaderVtxAttrib4f(GL.GetAttribLocation(mProgram, attrName));
+        }
         public ShaderUniformVar1 GetUniform1(string uniformVarName)
         {
             return new ShaderUniformVar1(GL.GetUniformLocation(this.mProgram, uniformVarName));
@@ -256,7 +291,10 @@ namespace Pencil.Gaming.Graphics
         {
             return new ShaderUniformMatrix4(GL.GetUniformLocation(this.mProgram, uniformVarName));
         }
-
+        public ShaderUniformMatrix3 GetUniformMat3(string uniformVarName)
+        {
+            return new ShaderUniformMatrix3(GL.GetUniformLocation(this.mProgram, uniformVarName));
+        }
         public void UseProgram()
         {
             GL.UseProgram(mProgram);

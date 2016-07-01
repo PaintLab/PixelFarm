@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -42,35 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ES\ES2Utils.cs" />
-    <Compile Include="ES\GeometryUtils.cs" />
-    <Compile Include="ES\MiniShaderProgram.cs" />
-    <Compile Include="Math\BezierCurve.cs" />
-    <Compile Include="Math\BezierCurveCubic.cs" />
-    <Compile Include="Math\BezierCurveQuadric.cs" />
-    <Compile Include="Math\Box2.cs" />
-    <Compile Include="Math\Functions.cs" />
-    <Compile Include="Math\Half.cs" />
-    <Compile Include="Math\MathHelper.cs" />
-    <Compile Include="Math\Matrix3d.cs" />
-    <Compile Include="Math\Matrix4.cs" />
-    <Compile Include="Math\Matrix4d.cs" />
-    <Compile Include="Math\Point.cs" />
-    <Compile Include="Math\Quaternion.cs" />
-    <Compile Include="Math\Quaterniond.cs" />
-    <Compile Include="Math\Rectangle.cs" />
-    <Compile Include="Math\Size.cs" />
-    <Compile Include="Math\Vector2.cs" />
-    <Compile Include="Math\Vector2d.cs" />
-    <Compile Include="Math\Vector2h.cs" />
-    <Compile Include="Math\Vector3.cs" />
-    <Compile Include="Math\Vector3d.cs" />
-    <Compile Include="Math\Vector3h.cs" />
-    <Compile Include="Math\Vector4.cs" />
-    <Compile Include="Math\Vector4d.cs" />
-    <Compile Include="Math\Vector4h.cs" />
+    <Compile Include="Es2Utils\Attributes.cs" />
+    <Compile Include="Es2Utils\ES2Utils.cs" />
+    <Compile Include="Es2Utils\GeometryUtils.cs" />
+    <Compile Include="Es2Utils\MiniShaderProgram.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PureGlfwProgram.cs" />
     <Compile Include="Serialization\XmlIgnoreAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,17 +4,9 @@
 // found in the LICENSE file.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using System.Threading;
-
-using Pencil.Gaming.Graphics;
 using Pencil.Gaming;
-
-
-namespace Pencil.Gaming.Graphics
+using Pencil.Gaming.Graphics;
+namespace OpenTK.Graphics.ES20
 {
     public static class ES2Utils
     {
@@ -23,19 +15,15 @@ namespace Pencil.Gaming.Graphics
             uint shader = GL.CreateShader(type);
             GL.ShaderSource(shader, source);
             GL.CompileShader(shader);
-
             int compileResult;
             GL.GetShader(shader, ShaderParameter.CompileStatus, out compileResult);
-
             if (compileResult == 0)
             {
                 int infoLogLength;
                 GL.GetShader(shader, ShaderParameter.InfoLogLength, out infoLogLength);
-
                 string infolog;
                 GL.GetShaderInfoLog((int)shader, out infolog);
                 GL.DeleteShader(shader);
-
                 //std::vector<GLchar> infoLog(infoLogLength);
                 //glGetShaderInfoLog(shader, infoLog.size(), NULL, &infoLog[0]);
 
@@ -49,10 +37,9 @@ namespace Pencil.Gaming.Graphics
         }
         public static int CompileProgram(string vs_source, string fs_source)
         {
-            int program = (int)GL.CreateProgram(); 
+            int program = (int)GL.CreateProgram();
             int vs = CompileShader(ShaderType.VertexShader, vs_source);
             int fs = CompileShader(ShaderType.FragmentShader, fs_source);
-
             //GLuint program = glCreateProgram();
 
             //GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
@@ -63,7 +50,6 @@ namespace Pencil.Gaming.Graphics
                 GL.DeleteShader(vs);
                 GL.DeleteShader(fs);
                 GL.DeleteProgram(program);
-
                 return 0;
             }
             GL.AttachShader(program, vs);
@@ -80,7 +66,6 @@ namespace Pencil.Gaming.Graphics
 
             int linkStatus;
             GL.GetProgram(program, ProgramParameter.LinkStatus, out linkStatus);
-
             //GLint linkStatus;
             //glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
 
@@ -90,7 +75,6 @@ namespace Pencil.Gaming.Graphics
                 //glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
                 int infoLogLength;
                 GL.GetProgram(program, ProgramParameter.InfoLogLength, out infoLogLength);
-
                 string infoLog;
                 GL.GetProgramInfoLog(program, out infoLog);
                 //std::vector<GLchar> infoLog(infoLogLength);
@@ -104,10 +88,5 @@ namespace Pencil.Gaming.Graphics
 
             return program;
         }
-
     }
-
-
-
-
 }
