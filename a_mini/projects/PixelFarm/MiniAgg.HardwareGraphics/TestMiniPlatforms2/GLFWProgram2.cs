@@ -36,7 +36,9 @@ namespace TestGlfw
             new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
             //-------------------------------------- 
             //var demo = new OpenTkEssTest.T52_HelloTriangle2();
-            var demo = new OpenTkEssTest.T107_SampleDrawImage();
+            //var demo = new OpenTkEssTest.T107_SampleDrawImage();
+            //var demo = new OpenTkEssTest.T107_SampleDrawImage();
+            var demo = new OpenTkEssTest.T108_LionFill();
             demo.Width = 800;
             demo.Height = 600;
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
