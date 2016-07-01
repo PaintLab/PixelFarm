@@ -6,7 +6,7 @@
  */
 #endregion
 
-using System.Drawing;
+
 namespace Examples
 {
     public static class Utilities
@@ -17,7 +17,7 @@ namespace Examples
         /// <param name="c">The System.Drawing.Color to convert.</param>
         /// <returns>A System.Int32 containing the R, G, B, A values of the
         /// given System.Drawing.Color in the Rbga32 format.</returns>
-        public static int ColorToRgba32(Color c)
+        public static int ColorToRgba32(PixelFarm.Drawing.Color c)
         {
             return (int)((c.A << 24) | (c.B << 16) | (c.G << 8) | c.R);
         }

@@ -18,7 +18,7 @@ namespace TestGlfw
 
             GlfwMonitorPtr monitor = new GlfwMonitorPtr();
             GlfwWindowPtr winPtr = new GlfwWindowPtr();
-            GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600, "Test Glfw", monitor, winPtr);
+            GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600, "PixelFarm on GLfw and OpenGLES2", monitor, winPtr);
 
             /* Make the window's context current */
             Glfw.MakeContextCurrent(glWindow);

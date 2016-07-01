@@ -15,9 +15,9 @@ namespace Examples.Shapes
         public TorusKnot(int pathsteps, int shapevertices, double radius, int p, int q, int TexCount, bool useDL)
             : base(useDL)
         {
-            Trace.Assert(pathsteps >= MINPathSteps, "A Path must have at least " + MINPathSteps + " Steps to form a volume.");
-            Trace.Assert(shapevertices >= MINShapeVertices, "A Shape must contain at least " + MINShapeVertices + " Vertices to be considered valid and create a volume.");
-            Trace.Assert(TexCount > 1, "at least 1 Texture set is required.");
+            //Trace.Assert(pathsteps >= MINPathSteps, "A Path must have at least " + MINPathSteps + " Steps to form a volume.");
+            //Trace.Assert(shapevertices >= MINShapeVertices, "A Shape must contain at least " + MINShapeVertices + " Vertices to be considered valid and create a volume.");
+            //Trace.Assert(TexCount > 1, "at least 1 Texture set is required.");
             PrimitiveMode = OpenTK.Graphics.OpenGL.BeginMode.TriangleStrip;
             Vector3d[] PathPositions = new Vector3d[pathsteps];
             #region Find the center Points for each step on the path
@@ -46,7 +46,7 @@ namespace Examples.Shapes
                 Lengths[i] = result.Length;
                 TotalLength += result.Length;
             }
-            Trace.WriteLine("the TorusKnot's length is: " + TotalLength + " ");
+            //Trace.WriteLine("the TorusKnot's length is: " + TotalLength + " ");
             #endregion Find the Torus length
 
             VertexArray = new VertexT2dN3dV3d[pathsteps * shapevertices];

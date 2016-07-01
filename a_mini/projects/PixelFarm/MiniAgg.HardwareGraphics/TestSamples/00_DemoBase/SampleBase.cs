@@ -26,7 +26,6 @@ namespace OpenTkEssTest
 
         protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(string imgFileName)
         {
-
             int imgW, imgH, imgComponent;
             int outputComponent = 4;//note that we want output color component=4
             IntPtr imgData = PixelFarm.Drawing.MyFtImageLib.stbi_load(imgFileName, out imgW, out imgH, out imgComponent, outputComponent);

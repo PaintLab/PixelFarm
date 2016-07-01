@@ -19,15 +19,11 @@ using OpenTK.Graphics.ES20;
 using Mini;
 namespace OpenTkEssTest
 {
-
-
     [Info(OrderCode = "052")]
     [Info("T52_HelloTriangle2")]
     public class T52_HelloTriangle2 : SampleBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-
-
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             //----------------
@@ -101,7 +97,6 @@ namespace OpenTkEssTest
             }
 
             GL.DrawArrays(BeginMode.Triangles, 0, 3);
-
             SwapBuffer();
         }
         //-------------------------------

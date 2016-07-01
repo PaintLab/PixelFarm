@@ -88,29 +88,6 @@
     <Compile Include="Sample03\T112_FrameBuffer2.cs" />
     <Compile Include="Sample03\T113_FrameBufferWithBlur.cs" />
     <Compile Include="Sample03\T114_FrameBufferWithConvFilterEffect.cs" />
-    <Compile Include="Shapes\Base\DrawableShape.cs" />
-    <Compile Include="Shapes\Base\VertexStructs.cs" />
-    <Compile Include="Shapes\Capsule.cs" />
-    <Compile Include="Shapes\ChamferCube.cs" />
-    <Compile Include="Shapes\Helpers\Chunk.cs" />
-    <Compile Include="Shapes\Helpers\MengerCube.cs" />
-    <Compile Include="Shapes\Helpers\TetrahedronFace.cs" />
-    <Compile Include="Shapes\Helpers\VboShape.cs" />
-    <Compile Include="Shapes\KochTetrahedron.cs" />
-    <Compile Include="Shapes\MengerSponge.cs" />
-    <Compile Include="Shapes\Old\Cube.cs" />
-    <Compile Include="Shapes\Old\IsoSphere.cs" />
-    <Compile Include="Shapes\Old\Plane.cs" />
-    <Compile Include="Shapes\Old\Shape.cs" />
-    <Compile Include="Shapes\Old\SierpinskiTetrahedron.cs" />
-    <Compile Include="Shapes\SlicedHose.cs" />
-    <Compile Include="Shapes\SlicedSphere.cs" />
-    <Compile Include="Shapes\TorusKnot.cs" />
-    <Compile Include="Shapes\VertexPositionColor.cs" />
-    <Compile Include="Utilities\LoaderDDS.cs" />
-    <Compile Include="Utilities\LoaderGDI.cs" />
-    <Compile Include="Utilities\LoaderStatics.cs" />
-    <Compile Include="Utilities\Utils.cs" />
     <EmbeddedResource Include="00_DemoBase\FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>

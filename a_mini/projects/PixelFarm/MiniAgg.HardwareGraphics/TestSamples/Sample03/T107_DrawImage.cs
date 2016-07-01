@@ -1,8 +1,6 @@
 ﻿//MIT, 2014-2016,WinterDev
 
 using System;
-using PixelFarm.Drawing;
-using OpenTK.Graphics.ES20;
 using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
@@ -37,7 +35,6 @@ namespace OpenTkEssTest
 
             canvas2d.DrawImage(glbmp, 0, 300);
             canvas2d.DrawImageWithBlurX(glbmp, 0, 600);
-            
         }
     }
 }

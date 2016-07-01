@@ -4,11 +4,7 @@
  */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.Runtime.InteropServices;
+
 using OpenTK;
 namespace Examples.Shapes
 {
@@ -55,14 +51,14 @@ namespace Examples.Shapes
             };
             Colors = new int[]
             {
-                Utilities.ColorToRgba32(Color.DarkRed),
-                Utilities.ColorToRgba32(Color.DarkRed),
-                Utilities.ColorToRgba32(Color.Gold),
-                Utilities.ColorToRgba32(Color.Gold),
-                Utilities.ColorToRgba32(Color.DarkRed),
-                Utilities.ColorToRgba32(Color.DarkRed),
-                Utilities.ColorToRgba32(Color.Gold),
-                Utilities.ColorToRgba32(Color.Gold),
+                Utilities.ColorToRgba32(PixelFarm.Drawing.Color.Red),
+                Utilities.ColorToRgba32(PixelFarm.Drawing.Color.Red),
+                Utilities.ColorToRgba32(PixelFarm.Drawing.Color.Blue),
+                Utilities.ColorToRgba32(PixelFarm.Drawing.Color.Blue),
+                Utilities.ColorToRgba32(PixelFarm.Drawing.Color.Green),
+                Utilities.ColorToRgba32(PixelFarm.Drawing.Color.Green),
+                Utilities.ColorToRgba32(PixelFarm.Drawing.Color.Magenta),
+                Utilities.ColorToRgba32(PixelFarm.Drawing.Color.Magenta),
             };
         }
     }
