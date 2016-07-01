@@ -28,31 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.glControl1 = new PixelFarm.MiniPlatforms.WindowsForms.GLControl();
-            this.SuspendLayout();
-            // 
-            // glControl1
-            // 
-            this.glControl1.Location = new System.Drawing.Point(13, 13);
-            this.glControl1.Name = "glControl1";
-            this.glControl1.Size = new System.Drawing.Size(681, 331);
-            this.glControl1.TabIndex = 0;
+
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(732, 394);
-            this.Controls.Add(this.glControl1);
+
             this.Name = "Form1";
             this.Text = "Form1";
-            this.ResumeLayout(false);
-
+            this.ResumeLayout(false); 
         }
 
         #endregion
 
-        private PixelFarm.MiniPlatforms.WindowsForms.GLControl glControl1;
+
     }
 }
 

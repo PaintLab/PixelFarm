@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Mini;
+using Pencil.Gaming;
+
 namespace OpenTkEssTest
 {
     static class Program
@@ -12,9 +14,12 @@ namespace OpenTkEssTest
         [STAThread]
         static void Main()
         {
+            Application.EnableVisualStyles();
             //----------------------------
             OpenTK.Toolkit.Init();
-            Application.EnableVisualStyles();
+
+         
+           
             var formDev = new FormDev();
             Application.Run(formDev);
         }

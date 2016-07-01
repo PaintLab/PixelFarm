@@ -1,4 +1,4 @@
-﻿namespace PixelFarm.MiniPlatforms.WindowsForms
+﻿namespace OpenTK
 {
     partial class GLControl
     {
@@ -30,12 +30,11 @@
         {
             this.SuspendLayout();
             // 
-            // GLControl
+            // NewGLControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "GLControl";
-            this.Size = new System.Drawing.Size(681, 331);
+            this.BackColor = System.Drawing.Color.Black;             
             this.ResumeLayout(false);
 
         }

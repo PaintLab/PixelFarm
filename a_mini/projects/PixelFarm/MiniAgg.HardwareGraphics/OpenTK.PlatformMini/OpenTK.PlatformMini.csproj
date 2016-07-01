@@ -150,12 +150,6 @@
     <Compile Include="WindowState.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
-      <Project>{D8FAE26D-C772-4E86-B9F3-439F0A1718B5}</Project>
-      <Name>OpenTK.ES</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="UserGLControl\MyGLControl.resx">
       <DependentUpon>MyGLControl.cs</DependentUpon>
     </EmbeddedResource>

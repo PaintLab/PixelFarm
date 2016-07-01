@@ -9,6 +9,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 #else
 using OpenTK.Graphics.ES20;
+
 #endif
 namespace OpenTK
 {
@@ -16,6 +17,8 @@ namespace OpenTK
     {
         OpenTK.Graphics.Color4 clearColor;
         EventHandler glPaintHandler;
+       
+         
         public MyGLControl()
         {
             OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(

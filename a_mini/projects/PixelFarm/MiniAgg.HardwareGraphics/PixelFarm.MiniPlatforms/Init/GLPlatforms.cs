@@ -6,8 +6,7 @@ namespace PixelFarm
     public static class GLPlatforms
     {
 
-        static GlfwMonitorPtr defaultMonitor;
-
+     
         public static bool Init()
         {
 

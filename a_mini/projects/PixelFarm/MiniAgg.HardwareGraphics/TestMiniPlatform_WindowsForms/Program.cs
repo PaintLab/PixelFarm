@@ -14,12 +14,8 @@ namespace TestMiniPlatform_WindowsForms
         static void Main()
         {
             //------------------------------------
-            if (!GLPlatforms.Init())
-            {
-                Console.WriteLine("can't init");
-            }
-            //------------------------------------
-
+            OpenTK.Toolkit.Init();
+            //------------------------------------ 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

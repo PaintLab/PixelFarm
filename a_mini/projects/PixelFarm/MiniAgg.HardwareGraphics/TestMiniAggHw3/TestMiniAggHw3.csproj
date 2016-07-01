@@ -157,13 +157,13 @@
       <Project>{e0bc92c3-6936-4d8f-ae7f-54dde27de370}</Project>
       <Name>MiniAgg.Hw3</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTK.ES\OpenTK.ES.csproj">
-      <Project>{d8fae26d-c772-4e86-b9f3-439f0a1718b5}</Project>
-      <Name>OpenTK.ES</Name>
+    <ProjectReference Include="..\PixelFarm.MiniPlatforms.WindowsForms\PixelFarm.MiniPlatforms.WindowsForms.csproj">
+      <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
+      <Name>PixelFarm.MiniPlatforms.WindowsForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTK.PlatformMini\OpenTK.PlatformMini.csproj">
-      <Project>{77870adc-ce4a-423c-b736-a1fa4aa2d697}</Project>
-      <Name>OpenTK.PlatformMini</Name>
+    <ProjectReference Include="..\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj">
+      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
+      <Name>PixelFarm.MiniPlatforms</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
