@@ -1,9 +1,10 @@
 ﻿using System;
-using OpenTK.Graphics.ES20;
 namespace OpenTkEssTest
 {
     public abstract class SampleBase
     {
+        bool _enableAnimationTimer;
+
         public void InitGLProgram()
         {
             OnInitGLProgram(this, EventArgs.Empty);
@@ -39,6 +40,18 @@ namespace OpenTkEssTest
             //its already big-endian
             glbmp.IsBigEndianPixel = true;
             return glbmp;
+        }
+        protected bool EnableAnimationTimer
+        {
+            get { return _enableAnimationTimer; }
+            set
+            {
+                _enableAnimationTimer = value;
+            }
+        }
+        protected virtual void OnTimerTick(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -25,7 +25,7 @@ namespace TestGlfw
             Glfw.SwapInterval(1);
 
             GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
-
+             
             var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
             var context = OpenTK.Graphics.GraphicsContext.CreateDummyContext(contextHandler);
             bool isCurrent = context.IsCurrent;
