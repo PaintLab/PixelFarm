@@ -35,10 +35,13 @@ namespace TestGlfw
             //bind open gl funcs here..
             new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
             //-------------------------------------- 
-            var demo = new OpenTkEssTest.T52_HelloTriangle2();
+            //var demo = new OpenTkEssTest.T52_HelloTriangle2();
+            var demo = new OpenTkEssTest.T107_SampleDrawImage();
             demo.Width = 800;
             demo.Height = 600;
-
+            //var demo = new OpenTkEssTest.T107_SampleDrawImage();
+            //demo.Width = 800;
+            //demo.Height = 600;
             //--------------------------------------------------------------------------------    
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
