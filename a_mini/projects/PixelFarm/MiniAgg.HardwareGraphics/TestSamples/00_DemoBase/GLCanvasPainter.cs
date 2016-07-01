@@ -189,8 +189,6 @@ namespace PixelFarm.DrawingGL
             }
             this.Draw(roundRect.MakeVxs());
         }
-
-
         public override void DrawString(string text, double x, double y)
         {
             ////in this version we draw string to image

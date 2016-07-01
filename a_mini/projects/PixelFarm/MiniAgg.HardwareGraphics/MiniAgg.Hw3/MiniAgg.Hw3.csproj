@@ -34,19 +34,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Math\DualQuaternion.cs" />
-    <Compile Include="Math\MathHelper.cs" />
-    <Compile Include="Math\Matrix.cs" />
-    <Compile Include="Math\Quaternion.cs" />
-    <Compile Include="Math\Rectangle.cs" />
-    <Compile Include="Math\Rectanglei.cs" />
-    <Compile Include="Math\Vector2.cs" />
-    <Compile Include="Math\Vector2i.cs" />
-    <Compile Include="Math\Vector3.cs" />
-    <Compile Include="Math\Vector3i.cs" />
-    <Compile Include="Math\Vector4.cs" />
-    <Compile Include="Math\Vector4i.cs" />
-    <Compile Include="Math\XmlAttributes.cs" />
     <Compile Include="Texture\FrameBuffer.cs" />
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="GLCanvas\CanvasToShaderSharedResource.cs" />
@@ -85,7 +72,9 @@
       <Name>PixelFarm.MiniPlatforms</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="FontNative\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
