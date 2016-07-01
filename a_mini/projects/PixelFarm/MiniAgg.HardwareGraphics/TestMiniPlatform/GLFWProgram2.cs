@@ -1,28 +1,21 @@
 ﻿using System;
 using OpenTK.Graphics.ES20;
 using Pencil.Gaming;
-
+using PixelFarm;
 
 namespace TestGlfw
 {
-    class GLFWProgram
+    class GLFWProgram2
     {
 
         public static void Start()
         {
 
-            if (!Glfw.Init())
+            if (!GLPlatforms.Init())
             {
-                Console.WriteLine("can't init glfw");
-                return;
+                Console.WriteLine("can't init");
             }
-            //---------------------------------------------------
-            //specific OpenGLES
-            Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
-            //---------------------------------------------------
+
             GlfwMonitorPtr monitor = new GlfwMonitorPtr();
             GlfwWindowPtr winPtr = new GlfwWindowPtr();
             GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600, "Test Glfw", monitor, winPtr);
@@ -30,9 +23,8 @@ namespace TestGlfw
             /* Make the window's context current */
             Glfw.MakeContextCurrent(glWindow);
             Glfw.SwapInterval(1);
-            GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
 
-           
+            GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
 
             var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
             var context = OpenTK.Graphics.GraphicsContext.CreateDummyContext(contextHandler);
