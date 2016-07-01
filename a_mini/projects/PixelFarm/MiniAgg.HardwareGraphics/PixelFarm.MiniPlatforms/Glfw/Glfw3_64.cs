@@ -31,7 +31,7 @@ namespace Pencil.Gaming
 {
     internal static unsafe class Glfw64
     {
-        const string NATIVE64_GLFW3 = "natives64/glfw.dll";
+        const string NATIVE64_GLFW3 = "natives64/glfw3.dll";
         [DllImport(NATIVE64_GLFW3), SuppressUnmanagedCodeSecurity]
         internal static extern int glfwInit();
         [DllImport(NATIVE64_GLFW3), SuppressUnmanagedCodeSecurity]
