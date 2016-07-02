@@ -98,7 +98,7 @@ namespace BuildTextureFonts
             {
                 if (testRenderFileName == null)
                 {
-                    testRenderFileName = genMode + "_test_" + "_" + character + ".png";
+                    testRenderFileName = "test_" + genMode + "_" + character + ".png";
                 }
                 args.Add("-testrender"); args.Add(testRenderFileName);
                 args.Add("1024");
