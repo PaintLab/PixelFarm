@@ -17,6 +17,7 @@ namespace PixelFarm.DrawingGL
         OpenGLESTextureShader glesTextureShader;
         BlurShader blurShader;
         Conv3x3TextureShader conv3x3TextureShader;
+        MultiChannelSdf msdfShader;
         //-----------------------------------------------------------
         CanvasToShaderSharedResource shaderRes;
         //tools---------------------------------
@@ -51,6 +52,8 @@ namespace PixelFarm.DrawingGL
                                                                                     // tessListener.Connect(tess,          
                                                                                     //Tesselate.Tesselator.WindingRuleType.Odd, true);
             conv3x3TextureShader = new Conv3x3TextureShader(shaderRes);
+            msdfShader = new DrawingGL.MultiChannelSdf(shaderRes);
+
             Tesselator tess = new Tesselator();
             tess.WindingRule = Tesselator.WindingRuleType.Odd;
             tessTool = new TessTool(tess);
@@ -219,7 +222,12 @@ namespace PixelFarm.DrawingGL
             conv3x3TextureShader.SetConvolutionKernel(kernel3x3);
             conv3x3TextureShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
-
+        public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
+        {
+            msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            msdfShader.BackgroundColor = PixelFarm.Drawing.Color.White;
+            msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        }
         //-------------------------------------------------------------------------------
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {

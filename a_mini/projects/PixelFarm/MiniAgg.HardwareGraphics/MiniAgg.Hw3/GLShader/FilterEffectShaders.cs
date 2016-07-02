@@ -354,4 +354,8 @@ namespace PixelFarm.DrawingGL
             this.toDrawImgH = h;
         }
     }
+
+
+       
+
 }

@@ -41,6 +41,7 @@
     <Compile Include="FontNative\NativeFontFace.cs" />
     <Compile Include="FontNative\NativeFontGlyphBuilder.cs" />
     <Compile Include="FontNative\NativeFontStore.cs" />
+    <Compile Include="GLShader\SignedDistanceFieldShader.cs" />
     <Compile Include="Texture\FrameBuffer.cs" />
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="GLCanvas\CanvasToShaderSharedResource.cs" />
