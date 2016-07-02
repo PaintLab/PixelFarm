@@ -33,6 +33,72 @@
     <ClInclude Include="stb_image.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="arithmetics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Contour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EdgeColor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="edge-coloring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EdgeHolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="edge-segments.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="equation-solver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="import-svg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lodepng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render-sdf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="save-bmp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="save-png.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shape-description.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SignedDistance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="import-font.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="msdfgen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="msdfgen-ext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="msdfgen_main.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +108,66 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExportFuncs.cpp">
+      <Filter>Binders</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Contour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="edge-coloring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EdgeHolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="edge-segments.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="equation-solver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lodepng.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="render-sdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="save-bmp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shape-description.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SignedDistance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="import-font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="import-svg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="save-png.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExportFunc2.cpp">
       <Filter>Binders</Filter>
     </ClCompile>
   </ItemGroup>

@@ -78,18 +78,60 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="arithmetics.hpp" />
+    <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="Contour.h" />
+    <ClInclude Include="edge-coloring.h" />
+    <ClInclude Include="edge-segments.h" />
+    <ClInclude Include="EdgeColor.h" />
+    <ClInclude Include="EdgeHolder.h" />
+    <ClInclude Include="equation-solver.h" />
     <ClInclude Include="ExportFuncs.h" />
+    <ClInclude Include="import-font.h" />
+    <ClInclude Include="import-svg.h" />
+    <ClInclude Include="lodepng.h" />
+    <ClInclude Include="msdfgen-ext.h" />
+    <ClInclude Include="msdfgen.h" />
+    <ClInclude Include="msdfgen_main.h" />
+    <ClInclude Include="render-sdf.h" />
+    <ClInclude Include="save-bmp.h" />
+    <ClInclude Include="save-png.h" />
+    <ClInclude Include="shape-description.h" />
+    <ClInclude Include="Shape.h" />
+    <ClInclude Include="SignedDistance.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="tinyxml2.h" />
+    <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bitmap.cpp" />
+    <ClCompile Include="Contour.cpp" />
+    <ClCompile Include="edge-coloring.cpp" />
+    <ClCompile Include="edge-segments.cpp" />
+    <ClCompile Include="EdgeHolder.cpp" />
+    <ClCompile Include="equation-solver.cpp" />
+    <ClCompile Include="ExportFunc2.cpp" />
     <ClCompile Include="ExportFuncs.cpp" />
+    <ClCompile Include="import-font.cpp" />
+    <ClCompile Include="import-svg.cpp" />
+    <ClCompile Include="lodepng.cpp" />
+    <ClCompile Include="msdfgen.cpp" />
+    <ClCompile Include="msdfgen_main.cpp" />
     <ClCompile Include="myft.cpp" />
+    <ClCompile Include="render-sdf.cpp" />
+    <ClCompile Include="save-bmp.cpp" />
+    <ClCompile Include="save-png.cpp" />
+    <ClCompile Include="shape-description.cpp" />
+    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="SignedDistance.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="tinyxml2.cpp" />
+    <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

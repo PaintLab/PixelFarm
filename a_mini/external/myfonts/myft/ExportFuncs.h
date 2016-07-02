@@ -92,7 +92,8 @@ extern "C"{
 
 	MY_DLL_EXPORT void DeleteUnmanagedObj(void* ptr);
 	 
-
+	//MY_DLL_EXPORT int MyFtMSDFGEN(int argc, const char * const *argv);
+	MY_DLL_EXPORT int MyFtMSDFGEN(int argc, char**argv);
 }
 
 

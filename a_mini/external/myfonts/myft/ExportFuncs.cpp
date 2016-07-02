@@ -263,7 +263,7 @@ void MyFtShutdownLib()
 		ft = 0;
 	}
 };
- 
+
 void DeleteUnmanagedObj(void* ptr) {
 	delete ptr;
 }
