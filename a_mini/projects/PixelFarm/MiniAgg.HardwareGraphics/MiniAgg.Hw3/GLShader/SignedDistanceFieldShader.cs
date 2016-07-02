@@ -5,14 +5,57 @@ namespace PixelFarm.DrawingGL
 {
     class SingleChannelSdf : SimpleRectTextureShader
     {
+        ShaderUniformVar4 _u_color;
+        ShaderUniformVar1 _u_buffer;
+        ShaderUniformVar1 _u_gamma;
+
         public SingleChannelSdf(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
+            //credit: https://www.mapbox.com/blog/text-signed-distance-fields/
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                uniform mat4 u_mvpMatrix;  
+                varying vec2 v_texCoord;  
+                void main()
+                {
+                    gl_Position = u_mvpMatrix* a_position;
+                    v_texCoord =  a_texCoord; 
+                 }	 
+                ";
+            string fs = @"
+                precision mediump float;
+
+                uniform sampler2D s_texture;
+                uniform vec4 u_color;
+                uniform float u_buffer;
+                uniform float u_gamma;
+
+                varying vec2 v_texCoord;
+
+                void main() {
+                    float dist = texture2D(s_texture, v_texCoord).r;
+                    float alpha = smoothstep(u_buffer - u_gamma, u_buffer + u_gamma, dist);
+                    gl_FragColor = vec4(u_color.rgb, alpha * u_color.a);
+                } 
+             ";
+            BuildProgram(vs, fs);
         }
         protected override void OnProgramBuilt()
         {
-            base.OnProgramBuilt();
+            _u_color = shaderProgram.GetUniform4("u_color");
+            _u_buffer = shaderProgram.GetUniform1("u_buffer");
+            _u_gamma = shaderProgram.GetUniform1("u_gamma");
         }
+        protected override void OnSetVarsBeforeRenderer()
+        {
+            PixelFarm.Drawing.Color fgColor = ForegroundColor;
+            _u_color.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
+            _u_buffer.SetValue(192f / 256f);
+            _u_gamma.SetValue(1f);
+        }
+        public PixelFarm.Drawing.Color ForegroundColor;
     }
     class MultiChannelSdf : SimpleRectTextureShader
     {
@@ -61,6 +104,7 @@ namespace PixelFarm.DrawingGL
                             float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
                             float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);
                             gl_FragColor = mix(bgColor, fgColor, opacity);
+                            //gl_FragColor = vec4(0.0,0.0,1.0,1.0);
                         }
              ";
             BuildProgram(vs, fs);
@@ -78,7 +122,7 @@ namespace PixelFarm.DrawingGL
             PixelFarm.Drawing.Color fgColor = ForegroundColor;
 
             _bgColor.SetValue((float)bgColor.R / 255f, (float)bgColor.G / 255f, (float)bgColor.B / 255f, (float)bgColor.A / 255f);
-            _fgColor.SetValue((float)bgColor.R / 255f, (float)bgColor.G / 255f, (float)bgColor.B / 255f, (float)bgColor.A / 255f);
+            _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
         }
     }
 }

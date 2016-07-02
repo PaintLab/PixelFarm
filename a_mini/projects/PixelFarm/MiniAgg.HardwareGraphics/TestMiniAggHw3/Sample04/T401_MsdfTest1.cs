@@ -28,11 +28,13 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                glbmp = LoadTexture(@"..\msdf_A.png");
+                //glbmp = LoadTexture(@"..\msdf_A.png");
+                glbmp = LoadTexture(@"..\sdf_A.png");
                 resInit = true;
-            }            
-            canvas2d.DrawImageWithMsdf(glbmp, 0, 0);
-            //canvas2d.DrawImage(glbmp, 0, 300);
+            }
+            //canvas2d.DrawImageWithMsdf(glbmp, 0, 0);
+            canvas2d.DrawImageWithSdf(glbmp, 0, 0);
+            canvas2d.DrawImage(glbmp, 0, 300);
             miniGLControl.SwapBuffers();
         }
     }
