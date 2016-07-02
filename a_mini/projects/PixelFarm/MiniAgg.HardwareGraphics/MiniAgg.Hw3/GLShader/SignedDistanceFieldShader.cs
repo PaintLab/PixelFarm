@@ -37,7 +37,7 @@ namespace PixelFarm.DrawingGL
                 void main() {
                     float dist = texture2D(s_texture, v_texCoord).r;
                     float alpha = smoothstep(u_buffer - u_gamma, u_buffer + u_gamma, dist);
-                    gl_FragColor = vec4(u_color.rgb, alpha * u_color.a);
+                    gl_FragColor = vec4(u_color.rgb, alpha * u_color.a); 
                 } 
              ";
             BuildProgram(vs, fs);
@@ -103,8 +103,7 @@ namespace PixelFarm.DrawingGL
                             vec4 sample = texture2D(s_texture, v_texCoord);
                             float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
                             float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);
-                            gl_FragColor = mix(bgColor, fgColor, opacity);
-                            //gl_FragColor = vec4(0.0,0.0,1.0,1.0);
+                            gl_FragColor = mix(bgColor, fgColor, opacity); 
                         }
              ";
             BuildProgram(vs, fs);
