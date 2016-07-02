@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "ExportFuncs.h"  
-#include "msdfgen_main.h"
+#include "msdfgen\msdfgen_main.h"
 
 //int MyFtMSDFGEN(int argc, const char * const *argv) {
 int MyFtMSDFGEN(int argc, char **argv){

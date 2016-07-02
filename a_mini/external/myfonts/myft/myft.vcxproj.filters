@@ -16,159 +16,162 @@
     <Filter Include="Binders">
       <UniqueIdentifier>{c0ed706f-9b67-45ae-a108-f25c24ed1d7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="StbImage">
+      <UniqueIdentifier>{12e5b310-d456-49b7-bf19-e121ab39dee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StdAfx">
+      <UniqueIdentifier>{7beef848-95a5-494a-bfce-04cb35308110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="msdfgen">
+      <UniqueIdentifier>{8ca41fb8-214d-41a4-a6d6-b8338c8c3378}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExportFuncs.h">
       <Filter>Binders</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
-      <Filter>Source Files</Filter>
+      <Filter>StbImage</Filter>
     </ClInclude>
-    <ClInclude Include="arithmetics.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="stdafx.h">
+      <Filter>StdAfx</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\arithmetics.hpp">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="Contour.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\Bitmap.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="EdgeColor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\Contour.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="edge-coloring.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\EdgeColor.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="EdgeHolder.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\edge-coloring.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="edge-segments.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\EdgeHolder.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="equation-solver.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\edge-segments.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="import-svg.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\equation-solver.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="lodepng.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\import-font.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="render-sdf.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\import-svg.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="save-bmp.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\lodepng.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="save-png.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\msdfgen.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="Shape.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\msdfgen_main.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="shape-description.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\msdfgen-ext.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="SignedDistance.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\render-sdf.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="tinyxml2.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\save-bmp.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\save-png.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="import-font.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="msdfgen\Shape.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="msdfgen.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\shape-description.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="msdfgen-ext.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="msdfgen\SignedDistance.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
-    <ClInclude Include="msdfgen_main.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="msdfgen\tinyxml2.h">
+      <Filter>msdfgen</Filter>
+    </ClInclude>
+    <ClInclude Include="msdfgen\Vector2.h">
+      <Filter>msdfgen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="myft.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExportFuncs.cpp">
       <Filter>Binders</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Contour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="edge-coloring.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EdgeHolder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="edge-segments.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="equation-solver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lodepng.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="msdfgen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="render-sdf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="save-bmp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="shape-description.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SignedDistance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="import-font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="msdfgen_main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="import-svg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="save-png.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExportFunc2.cpp">
       <Filter>Binders</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>StdAfx</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\Bitmap.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\Contour.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\edge-coloring.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\EdgeHolder.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\edge-segments.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\equation-solver.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\import-font.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\import-svg.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\lodepng.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\msdfgen.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\msdfgen_main.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\render-sdf.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\save-bmp.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\save-png.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\Shape.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\shape-description.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\SignedDistance.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\tinyxml2.cpp">
+      <Filter>msdfgen</Filter>
+    </ClCompile>
+    <ClCompile Include="msdfgen\Vector2.cpp">
+      <Filter>msdfgen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
