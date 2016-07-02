@@ -451,11 +451,24 @@ namespace BuildTextureFonts
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string args = @"msdfgen msdf -font C:\Windows\Fonts\tahoma.ttf 'A' -o msdf.png -size 32 32 -pxrange 4 -autoframe -testrender render.png 1024 1024";
-            string[] splitStr = args.Split(' ');
+            //msdfgen: see more https://github.com/Chlumsky/msdfgen
 
-            MyFtLib.MyFtMSDFGEN(splitStr.Length, splitStr);
+            //sdf – generates a conventional monochrome signed distance field.
+            //psdf – generates a monochrome signed pseudo - distance field.
+            //msdf(default) – generates a multi - channel signed distance field using my new method.
 
+            {
+                //msdf
+                string args = @"msdfgen msdf -font C:\Windows\Fonts\tahoma.ttf 'A' -o msdf.png -size 32 32 -pxrange 4 -autoframe -testrender render_msdf.png 1024 1024";
+                string[] splitStr = args.Split(' ');
+                MyFtLib.MyFtMSDFGEN(splitStr.Length, splitStr);
+            }
+
+            {
+                string args = @"msdfgen sdf -font C:\Windows\Fonts\tahoma.ttf 'A' -o sdf.png -size 32 32 -pxrange 4 -autoframe -testrender render_sdf.png 1024 1024";
+                string[] splitStr = args.Split(' ');
+                MyFtLib.MyFtMSDFGEN(splitStr.Length, splitStr);
+            }
         }
     }
 }
