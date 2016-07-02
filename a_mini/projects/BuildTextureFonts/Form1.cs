@@ -313,141 +313,10 @@ namespace BuildTextureFonts
                         d--;
                     }
                 }
-            }
-            //if (inside)
-            //{
-
-            //    if (uphill)
-            //    {
-            //        int n = count;
-            //        int p = startIndex;
-
-            //        if (count > 5)
-            //        {
-            //            int i = 0;
-            //            for (; i < 5; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (((255 / (i + 2)) & 0xff) << 16);
-            //                p++;
-            //            }
-
-            //            //long distance
-            //            for (; i < count; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (255 << 16); //red
-            //                p++;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            int i = 0;
-            //            for (; i < count; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (((255 / (i + 2)) & 0xff) << 16);
-            //                p++;
-            //            }
-            //        }
-
-            //    }
-            //    else
-            //    {
-
-            //        //downhill
-            //        int n = count;
-            //        int p = startIndex;
-
-            //        if (count > 5)
-            //        {
-            //            //long distance
-            //            int lim = count - 5;
-            //            for (int i = 0; i < lim; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (255 << 16);
-            //                p++;
-            //            }
-            //            count = 5;
-            //        }
-            //        //-----------------
-            //        {
-            //            int startAt = 7;//5+2
-            //            for (int i = 0; i < count; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (((255 / (startAt)) & 0xff) << 16);
-            //                p++;
-            //                startAt--;
-            //            }
-            //        }
-            //        //-----------------
-            //    }
-            //}
-            //else
-            //{
-            //    //outside 
-
-            //    if (uphill)
-            //    {
-            //        int n = count;
-            //        int p = startIndex;
-
-            //        if (count > 5)
-            //        {
-            //            int i = 0;
-            //            for (; i < 5; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (((255 / (i + 2)) & 0xff) << 8);
-            //                p++;
-            //            }
-
-            //            //long distance
-            //            for (; i < count; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (255 << 8);
-            //                p++;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            int i = 0;
-            //            for (; i < count; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (((255 / (i + 2)) & 0xff) << 8);
-            //                p++;
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-
-            //        //downhill
-
-            //        int n = count;
-            //        int p = startIndex;
-
-            //        if (count > 5)
-            //        {
-            //            //long distance
-            //            int lim = count - 5;
-            //            for (int i = 0; i < lim; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | ((255) << 8);
-            //                p++;
-            //            }
-            //            count = 5;
-            //        }
-            //        //-----------------
-            //        {
-            //            int startAt = 7;//5+2
-            //            for (int i = 0; i < count; ++i)
-            //            {
-            //                outputPixels[p] = (255 << 24) | (((255 / (startAt)) & 0xff) << 8);
-            //                p++;
-            //                startAt--;
-            //            }
-            //        }
-            //        //-----------------
-            //    }
-            //}
+            } 
         }
+
+        
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -459,15 +328,19 @@ namespace BuildTextureFonts
 
             {
                 //msdf
-                string args = @"msdfgen msdf -font C:\Windows\Fonts\tahoma.ttf 'A' -o msdf.png -size 32 32 -pxrange 4 -autoframe -testrender render_msdf.png 1024 1024";
-                string[] splitStr = args.Split(' ');
+                //string args = @"msdfgen msdf -font C:\Windows\Fonts\tahoma.ttf 'A' -o msdf.png -size 32 32 -pxrange 4 -autoframe -testrender render_msdf.png 1024 1024";
+
+
+                MsdfParameters pars = new MsdfParameters(@"C:\Windows\Fonts\tahoma.ttf", 'A');
+                string[] splitStr = pars.GetArgs();
                 MyFtLib.MyFtMSDFGEN(splitStr.Length, splitStr);
             }
 
             {
-                string args = @"msdfgen sdf -font C:\Windows\Fonts\tahoma.ttf 'A' -o sdf.png -size 32 32 -pxrange 4 -autoframe -testrender render_sdf.png 1024 1024";
-                string[] splitStr = args.Split(' ');
-                MyFtLib.MyFtMSDFGEN(splitStr.Length, splitStr);
+                MsdfParameters pars = new MsdfParameters(@"C:\Windows\Fonts\tahoma.ttf", 'A');
+                pars.useClassicSdf = true;
+                string[] splitStr = pars.GetArgs();
+                MyFtLib.MyFtMSDFGEN(splitStr.Length, pars.GetArgs());
             }
         }
     }
