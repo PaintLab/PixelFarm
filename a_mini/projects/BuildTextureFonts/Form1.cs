@@ -326,7 +326,7 @@ namespace BuildTextureFonts
             //psdf – generates a monochrome signed pseudo - distance field.
             //msdf(default) – generates a multi - channel signed distance field using my new method.
 
-            char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz".ToCharArray();
+            char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
             int j = fontChars.Length;
             for (int i = 0; i < j; ++i)
             {

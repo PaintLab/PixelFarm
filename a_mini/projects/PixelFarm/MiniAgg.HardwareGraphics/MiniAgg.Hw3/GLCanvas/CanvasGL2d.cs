@@ -230,10 +230,21 @@ namespace PixelFarm.DrawingGL
             msdfShader.BackgroundColor = PixelFarm.Drawing.Color.White;
             msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
-        public void DrawImageWithSdf(GLBitmap bmp, float x, float y)
+        //public void DrawImageWithSdf(GLBitmap bmp, float x, float y)
+        //{
+        //    sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+        //    sdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        //}
+        public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
+        {
+            msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            msdfShader.BackgroundColor = PixelFarm.Drawing.Color.White;
+            msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+        }
+        public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
             sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            sdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+            sdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
         //-------------------------------------------------------------------------------
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)

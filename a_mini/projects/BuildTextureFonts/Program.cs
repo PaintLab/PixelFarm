@@ -84,7 +84,7 @@ namespace BuildTextureFonts
             if (outputFile == null)
             {
                 //use default
-                outputFile = genMode + "_" + character + ".png";
+                outputFile = genMode + "_" + ((int)character).ToString() + ".png";
             }
             args.Add("-o"); args.Add(outputFile);
             //4.

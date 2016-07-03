@@ -5,6 +5,9 @@ namespace PixelFarm.DrawingGL
 {
     class SingleChannelSdf : SimpleRectTextureShader
     {
+        //note not correct
+        //TODO: fix 
+
         ShaderUniformVar4 _u_color;
         ShaderUniformVar1 _u_buffer;
         ShaderUniformVar1 _u_gamma;
