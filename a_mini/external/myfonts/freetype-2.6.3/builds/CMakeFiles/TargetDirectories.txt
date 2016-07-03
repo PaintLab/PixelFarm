@@ -1,0 +1,4 @@
+D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.6.3/builds/CMakeFiles/ALL_BUILD.dir
+D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.6.3/builds/CMakeFiles/ZERO_CHECK.dir
+D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.6.3/builds/CMakeFiles/freetype.dir
+D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.6.3/builds/CMakeFiles/dist.dir

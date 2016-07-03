@@ -267,12 +267,13 @@ namespace PixelFarm.Agg.Fonts
             }
 
             fontGlyph.flattenVxs = curveFlattener.MakeVxs(fontGlyph.originalVxs);
+            //var mat = Agg.Transform.Affine.NewMatix(
+            //      Agg.Transform.AffinePlan.Scale(0.20));
+            //fontGlyph.flattenVxs = mat.TransformToVxs(fontGlyph.flattenVxs);
         }
-
         unsafe internal static void BuildGlyphOutline2(FontGlyph fontGlyph, ExportGlyph* exportTypeFace)
         {
-            //------------------------------
-
+            //------------------------------ 
 
             FT_Outline outline = (*(FT_Outline*)exportTypeFace->outline);
             //outline version

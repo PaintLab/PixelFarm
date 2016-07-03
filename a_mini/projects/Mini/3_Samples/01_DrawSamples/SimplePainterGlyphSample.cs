@@ -21,8 +21,9 @@ namespace PixelFarm.Agg.SimplePainter
         public override void Init()
         {
             //load font ?
-            font1 = new AggFont(NativeFontStore.LoadFont(fontfile, 24));
-            font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 8));
+            Font nativeFont = NativeFontStore.LoadFont(fontfile, 48);
+            font1 = new AggFont(nativeFont);             
+            font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 24));
         }
         public override void Draw(CanvasPainter p)
         {
@@ -59,18 +60,23 @@ namespace PixelFarm.Agg.SimplePainter
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
             p.CurrentFont = font1;
             p.FillColor = Drawing.Color.Black;
-            // string test_str = "มีมี่ญูดุญคำค่าค่ำป่บ่";
+            string test_str = "มีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
-            string test_str = "บ่ป่มีมี่";
+            //string test_str = "บ่ป่มีมี่";
             p.UseSubPixelRendering = true;
             p.DrawString(test_str, 5, 200);
             //p.DrawString("12345", 50, 200); 
+            p.UseSubPixelRendering = false;
+            p.DrawString(test_str, 5, 300);
+            //--------------------------------------------------- 
             p.StrokeColor = Drawing.Color.Black;
             p.Line(0, 200, 800, 200);
             p.FillColor = Drawing.Color.Black;
             p.CurrentFont = font2; //small font
             p.DrawString(test_str, 80, 100);
+            //---------------------------------------------------              
             p.UseSubPixelRendering = false;
+            p.DrawString(test_str, 80, 150);
             //--------------------------------------------------- 
             //p.Fill(fontGlyph.vxs);
 #if DEBUG
