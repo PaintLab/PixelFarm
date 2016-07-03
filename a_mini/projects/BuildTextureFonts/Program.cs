@@ -79,7 +79,8 @@ namespace BuildTextureFonts
             args.Add(genMode);
             //2.
             if (fontName == null) { throw new Exception(); }
-            args.Add("-font"); args.Add(fontName); args.Add("'" + character + "'");
+            args.Add("-font"); args.Add(fontName);
+            args.Add("0x" + ((int)character).ToString("X")); //accept unicode char
             //3.
             if (outputFile == null)
             {
