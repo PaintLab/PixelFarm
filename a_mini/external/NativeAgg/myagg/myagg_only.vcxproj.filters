@@ -10,7 +10,7 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
     <Filter Include="platform_win32">
-      <UniqueIdentifier>{66a65c9a-8f34-43a6-bc91-465525d8f9b1}</UniqueIdentifier>
+      <UniqueIdentifier>{2119b4ab-bcd3-40a6-949d-4df5a11be522}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

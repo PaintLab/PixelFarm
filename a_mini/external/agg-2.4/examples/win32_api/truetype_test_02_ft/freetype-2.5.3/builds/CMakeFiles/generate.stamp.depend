@@ -1,0 +1,58 @@
+# CMake generation dependency list for this directory.
+D:/zzshare/zz2/myfonts/freetype-2.5.3/CMakeLists.txt
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeVS10FindMake.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineSystem.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeSystem.cmake.in
+D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/CMakeFiles/2.8.11.1/CMakeSystem.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompilerId.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CompilerId/VS-10.vcxproj.in
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeClDeps.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeFindBinUtils.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCCompiler.cmake.in
+D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/CMakeFiles/2.8.11.1/CMakeCCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCXXCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-CXX.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompilerId.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CompilerId/VS-10.vcxproj.in
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeClDeps.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeFindBinUtils.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCXXCompiler.cmake.in
+D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/CMakeFiles/2.8.11.1/CMakeCXXCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/Platform/WindowsPaths.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCInformation.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-MSVC-C.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineRCCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeRCCompiler.cmake.in
+D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/CMakeFiles/2.8.11.1/CMakeRCCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeTestRCCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeTestCCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeTestCompilerCommon.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompilerABI.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeParseImplicitLinkInfo.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCCompilerABI.c
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCCompiler.cmake.in
+D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/CMakeFiles/2.8.11.1/CMakeCCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCXXInformation.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeTestCXXCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeTestCompilerCommon.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeDetermineCompilerABI.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeParseImplicitLinkInfo.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCXXCompilerABI.cpp
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CMakeCXXCompiler.cmake.in
+D:/zzshare/zz2/myfonts/freetype-2.5.3/builds/CMakeFiles/2.8.11.1/CMakeCXXCompiler.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CPack.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Modules/CPackComponent.cmake
+C:/Program Files/CMake 2.8/share/cmake-2.8/Templates/CPackConfig.cmake.in
+C:/Program Files/CMake 2.8/share/cmake-2.8/Templates/CPackConfig.cmake.in

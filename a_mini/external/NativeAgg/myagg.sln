@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "myagg", "myagg\myagg_only.vcproj", "{4B575F9E-9A05-4C50-93F1-2E1886FAD856}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "myagg", "myagg\myagg_only.vcxproj", "{4B575F9E-9A05-4C50-93F1-2E1886FAD856}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
