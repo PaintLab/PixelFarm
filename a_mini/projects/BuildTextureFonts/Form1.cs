@@ -334,6 +334,7 @@ namespace BuildTextureFonts
                 //msdf
                 //string args = @"msdfgen msdf -font C:\Windows\Fonts\tahoma.ttf 'A' -o msdf.png -size 32 32 -pxrange 4 -autoframe -testrender render_msdf.png 1024 1024";
                 MsdfParameters pars = new MsdfParameters(@"C:\Windows\Fonts\tahoma.ttf", c);
+                pars.enableRenderTestFile = false;
                 string[] splitStr = pars.GetArgs();
                 MyFtLib.MyFtMSDFGEN(splitStr.Length, splitStr);
             }
@@ -341,6 +342,7 @@ namespace BuildTextureFonts
             {
                 char c = fontChars[i];
                 MsdfParameters pars = new MsdfParameters(@"C:\Windows\Fonts\tahoma.ttf", c);
+                pars.enableRenderTestFile = false;
                 pars.useClassicSdf = true;
                 string[] splitStr = pars.GetArgs();
                 MyFtLib.MyFtMSDFGEN(splitStr.Length, pars.GetArgs());
