@@ -22,6 +22,22 @@ namespace PixelFarm.Agg.Fonts
         }
     }
 
+    struct FtVec2
+    {
+        public double x;
+        public double y;
+        public FtVec2(double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+        public FtVec2(FT_Vector v)
+        {
+            this.x = v.x;
+            this.y = v.y;
+        }
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     unsafe struct FT_Outline
     {

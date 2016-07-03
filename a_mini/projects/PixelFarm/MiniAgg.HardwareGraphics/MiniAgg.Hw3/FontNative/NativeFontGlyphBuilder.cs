@@ -86,17 +86,193 @@ namespace PixelFarm.Agg.Fonts
             //}  
         }
 
-        static FT_Vector GetMidPoint(FT_Vector v1, FT_Vector v2)
+        static FtVec2 GetMidPoint(FT_Vector v1, FT_Vector v2)
         {
-            return new FT_Vector(
-                (v1.x + v2.x) / 2,
-                (v1.y + v2.y) / 2);
+            return new FtVec2(
+                ((double)v1.x + (double)v2.x) / 2d,
+                ((double)v1.y + (double)v2.y) / 2d);
         }
 
-
+        static FtVec2 GetMidPoint(FtVec2 v1, FT_Vector v2)
+        {
+            return new FtVec2(
+                (v1.x + (double)v2.x) / 2d,
+                (v1.y + (double)v2.y) / 2d);
+        }
 
         unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph, ExportGlyph* exportTypeFace)
         {
+            FT_Outline outline = (*(FT_Outline*)exportTypeFace->outline);
+            //outline version
+            //------------------------------
+            int npoints = outline.n_points;
+            List<PixelFarm.VectorMath.Vector2> points = new List<PixelFarm.VectorMath.Vector2>(npoints);
+            int startContour = 0;
+            int cpoint_index = 0;
+            int todoContourCount = outline.n_contours;
+            PixelFarm.Agg.VertexSource.PathWriter ps = new Agg.VertexSource.PathWriter();
+            fontGlyph.originalVxs = ps.Vxs;
+            const int resize = 64;
+            int controlPointCount = 0;
+            while (todoContourCount > 0)
+            {
+                int nextContour = outline.contours[startContour] + 1;
+                bool isFirstPoint = true;
+                FtVec2 secondControlPoint = new FtVec2();
+                FtVec2 thirdControlPoint = new FtVec2();
+                bool justFromCurveMode = false;
+                //FT_Vector vpoint = new FT_Vector();
+                for (; cpoint_index < nextContour; ++cpoint_index)
+                {
+                    FT_Vector vpoint = outline.points[cpoint_index];
+                    byte vtag = outline.tags[cpoint_index];
+                    bool has_dropout = (((vtag >> 2) & 0x1) != 0);
+                    int dropoutMode = vtag >> 3;
+                    if ((vtag & 0x1) != 0)
+                    {
+                        //on curve
+                        if (justFromCurveMode)
+                        {
+                            switch (controlPointCount)
+                            {
+                                case 1:
+                                    {
+                                        ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                            vpoint.x / resize, vpoint.y / resize);
+                                    }
+                                    break;
+                                case 2:
+                                    {
+                                        ps.Curve4(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                           thirdControlPoint.x / resize, thirdControlPoint.y / resize,
+                                           vpoint.x / resize, vpoint.y / resize);
+                                    }
+                                    break;
+                                default:
+                                    {
+                                        throw new NotSupportedException();
+                                    }
+                            }
+                            controlPointCount = 0;
+                            justFromCurveMode = false;
+                        }
+                        else
+                        {
+                            if (isFirstPoint)
+                            {
+                                isFirstPoint = false;
+                                ps.MoveTo(vpoint.x / resize, vpoint.y / resize);
+                            }
+                            else
+                            {
+                                ps.LineTo(vpoint.x / resize, vpoint.y / resize);
+                            }
+                            if (has_dropout)
+                            {
+                                //printf("[%d] on,dropoutMode=%d: %d,y:%d \n", mm, dropoutMode, vpoint.x, vpoint.y);
+                            }
+                            else
+                            {
+                                //printf("[%d] on,x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        switch (controlPointCount)
+                        {
+                            case 0:
+                                {   //bit 1 set=> off curve, this is a control point
+                                    //if this is a 2nd order or 3rd order control point
+                                    if (((vtag >> 1) & 0x1) != 0)
+                                    {
+                                        //printf("[%d] bzc3rd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                        thirdControlPoint = new FtVec2(vpoint);
+                                    }
+                                    else
+                                    {
+                                        //printf("[%d] bzc2nd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                        secondControlPoint = new FtVec2(vpoint);
+                                    }
+                                }
+                                break;
+                            case 1:
+                                {
+                                    if (((vtag >> 1) & 0x1) != 0)
+                                    {
+                                        //printf("[%d] bzc3rd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                        thirdControlPoint = new FtVec2(vpoint);
+                                    }
+                                    else
+                                    {
+                                        //we already have prev second control point
+                                        //so auto calculate line to 
+                                        //between 2 point
+                                        FtVec2 mid = GetMidPoint(secondControlPoint, vpoint);
+                                        //----------
+                                        //generate curve3
+                                        ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                            mid.x / resize, mid.y / resize);
+                                        //------------------------
+                                        controlPointCount--;
+                                        //------------------------
+                                        //printf("[%d] bzc2nd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                        secondControlPoint = new FtVec2(vpoint);
+                                    }
+                                }
+                                break;
+                            default:
+                                {
+                                    throw new NotSupportedException();
+                                }
+                                break;
+                        }
+
+                        controlPointCount++;
+                        justFromCurveMode = true;
+                    }
+                }
+                //--------
+                //close figure
+                //if in curve mode
+                if (justFromCurveMode)
+                {
+                    switch (controlPointCount)
+                    {
+                        case 0: break;
+                        case 1:
+                            {
+                                ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                    ps.LastMoveX, ps.LastMoveY);
+                            }
+                            break;
+                        case 2:
+                            {
+                                ps.Curve4(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                   thirdControlPoint.x / resize, thirdControlPoint.y / resize,
+                                   ps.LastMoveX, ps.LastMoveY);
+                            }
+                            break;
+                        default:
+                            { throw new NotSupportedException(); }
+                    }
+                    justFromCurveMode = false;
+                    controlPointCount = 0;
+                }
+                ps.CloseFigure();
+                //--------                   
+                startContour++;
+                todoContourCount--;
+            }
+
+            fontGlyph.flattenVxs = curveFlattener.MakeVxs(fontGlyph.originalVxs);
+        }
+
+        unsafe internal static void BuildGlyphOutline2(FontGlyph fontGlyph, ExportGlyph* exportTypeFace)
+        {
+            //------------------------------
+
+
             FT_Outline outline = (*(FT_Outline*)exportTypeFace->outline);
             //outline version
             //------------------------------
@@ -203,7 +379,7 @@ namespace PixelFarm.Agg.Fonts
                                         //we already have prev second control point
                                         //so auto calculate line to 
                                         //between 2 point
-                                        var mid = GetMidPoint(secondControlPoint, vpoint);
+                                        FtVec2 mid = GetMidPoint(secondControlPoint, vpoint);
                                         //----------
                                         //generate curve3
                                         ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
