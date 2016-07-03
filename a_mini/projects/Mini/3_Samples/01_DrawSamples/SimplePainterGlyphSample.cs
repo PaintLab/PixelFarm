@@ -21,11 +21,12 @@ namespace PixelFarm.Agg.SimplePainter
         public override void Init()
         {
             //load font ?
-            font1 = new AggFont(NativeFontStore.LoadFont(fontfile, 72));
+            font1 = new AggFont(NativeFontStore.LoadFont(fontfile, 24));
             font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 10));
         }
         public override void Draw(CanvasPainter p)
-        { //1.
+        {
+            //1.
             // clear the image to white 
             p.Clear(Drawing.Color.White);
             p.FillColor = Drawing.Color.FromArgb(80, Drawing.Color.Blue);
@@ -67,7 +68,7 @@ namespace PixelFarm.Agg.SimplePainter
             p.StrokeColor = Drawing.Color.Black;
             p.Line(0, 200, 800, 200);
             p.FillColor = Drawing.Color.Black;
-            p.CurrentFont = font2;
+            p.CurrentFont = font2; //small font
             p.DrawString(test_str, 80, 100);
             p.UseSubPixelRendering = false;
             //--------------------------------------------------- 

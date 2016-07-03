@@ -11,7 +11,6 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar4 _u_color;
         ShaderUniformVar1 _u_buffer;
         ShaderUniformVar1 _u_gamma;
-
         public SingleChannelSdf(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
@@ -80,8 +79,6 @@ namespace PixelFarm.DrawingGL
                     v_texCoord =  a_texCoord; 
                  }	 
                 ";
-
-
             //enable derivative extension  for fwidth() function
             //see 
             //https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
@@ -122,7 +119,6 @@ namespace PixelFarm.DrawingGL
         {
             PixelFarm.Drawing.Color bgColor = BackgroundColor;
             PixelFarm.Drawing.Color fgColor = ForegroundColor;
-
             _bgColor.SetValue((float)bgColor.R / 255f, (float)bgColor.G / 255f, (float)bgColor.B / 255f, (float)bgColor.A / 255f);
             _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
         }

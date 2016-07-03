@@ -8,7 +8,7 @@ namespace PixelFarm.Agg.Fonts
     class NativeFont : Font
     {
         NativeFontFace ownerFace;
-        float fontSizeInPoint;
+        //float fontSizeInPoint;
         int fontSizeInPixelUnit;
         /// <summary>
         /// glyph
@@ -27,10 +27,10 @@ namespace PixelFarm.Agg.Fonts
 
         }
 
-        public float SizeInPoint
-        {
-            get { return this.fontSizeInPoint; }
-        }
+        //public float SizeInPoint
+        //{
+        //    get { return this.fontSizeInPoint; }
+        //}
         public override FontGlyph GetGlyph(char c)
         {
             FontGlyph found;
