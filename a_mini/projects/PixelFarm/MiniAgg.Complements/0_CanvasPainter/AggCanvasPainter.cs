@@ -234,7 +234,7 @@ namespace PixelFarm.Agg
             }
             this.Draw(roundRect.MakeVxs());
         }
-         
+
         public override Drawing.Font CurrentFont
         {
             get
@@ -244,6 +244,7 @@ namespace PixelFarm.Agg
             set
             {
                 this.currentFont = value;
+                textPrinter.CurrentFont = value.InnerFont as PixelFarm.Agg.Fonts.Font;
             }
         }
         public override void DrawString(
