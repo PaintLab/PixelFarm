@@ -125,7 +125,7 @@ void MyFtGetFaceInfo(FT_Face face, ExportTypeFaceInfo* exportTypeFaceInfo)
 
 int MyFtLoadGlyph(FT_Face myface, unsigned int glyphIndex, ExportGlyph *expGlyph)
 {
-	if (!FT_Load_Glyph(myface, glyphIndex, FT_LOAD_RENDER))
+	if (!FT_Load_Glyph(myface, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_HINTING))
 	{
 		//1. bounding box		 
 		FT_BBox bbox;

@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.SimplePainter
             //load font ?
             Font nativeFont = NativeFontStore.LoadFont(fontfile, 48);
             font1 = new AggFont(nativeFont);             
-            font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 24));
+            font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 32));
         }
         public override void Draw(CanvasPainter p)
         {
