@@ -112,7 +112,7 @@ namespace PixelFarm.Agg.Fonts
             int todoContourCount = outline.n_contours;
             PixelFarm.Agg.VertexSource.PathWriter ps = new Agg.VertexSource.PathWriter();
             fontGlyph.originalVxs = ps.Vxs;
-            const int resize = 64;
+            const double resize = 64; //essential to be floating point
             int controlPointCount = 0;
             while (todoContourCount > 0)
             {
@@ -167,6 +167,7 @@ namespace PixelFarm.Agg.Fonts
                             {
                                 ps.LineTo(vpoint.x / resize, vpoint.y / resize);
                             }
+
                             if (has_dropout)
                             {
                                 //printf("[%d] on,dropoutMode=%d: %d,y:%d \n", mm, dropoutMode, vpoint.x, vpoint.y);
