@@ -3,14 +3,7 @@
 //AGG 2.4
 
 
-using System;
 using PixelFarm.Drawing;
-using System.Globalization;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg;
-using PixelFarm.VectorMath;
 namespace PixelFarm.Agg
 {
     public class Square

@@ -279,7 +279,6 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                             AffinePlan.Scale(4),
                             AffinePlan.Translate(220, 200));
                         var t_glyph = mtx.TransformToVertexSnap(glyph.Vxs);
-                        
                         var sp1 = stroke.MakeVxs(sp.MakeVxs());
                         var curveVxs = curveFlattener.MakeVxs(t_glyph);
                         CreateAndRenderCombined(p, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));

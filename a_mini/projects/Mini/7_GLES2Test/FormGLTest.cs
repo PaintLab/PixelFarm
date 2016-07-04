@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using PixelFarm.DrawingGL;
-
 namespace Mini
 {
     partial class FormGLTest : Form

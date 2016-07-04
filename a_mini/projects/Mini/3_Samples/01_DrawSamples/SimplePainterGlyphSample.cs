@@ -15,14 +15,13 @@ namespace PixelFarm.Agg.SimplePainter
     public class SimplePainterGlyphSample : DemoBase
     {
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-
         AggFont font1;
         AggFont font2;
         public override void Init()
         {
             //load font ?
             Font nativeFont = NativeFontStore.LoadFont(fontfile, 48);
-            font1 = new AggFont(nativeFont);             
+            font1 = new AggFont(nativeFont);
             font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 32));
         }
         public override void Draw(CanvasPainter p)
@@ -60,7 +59,7 @@ namespace PixelFarm.Agg.SimplePainter
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
             p.CurrentFont = font1;
             p.FillColor = Drawing.Color.Black;
-            string test_str = "มีมี่ญูดุญคำค่าค่ำป่บ่";
+            string test_str = "fมีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
             //string test_str = "บ่ป่มีมี่";
             p.UseSubPixelRendering = true;
@@ -69,6 +68,7 @@ namespace PixelFarm.Agg.SimplePainter
             p.UseSubPixelRendering = false;
             p.DrawString(test_str, 5, 300);
             //--------------------------------------------------- 
+            p.UseSubPixelRendering = true;
             p.StrokeColor = Drawing.Color.Black;
             p.Line(0, 200, 800, 200);
             p.FillColor = Drawing.Color.Black;

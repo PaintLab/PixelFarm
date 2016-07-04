@@ -15,7 +15,6 @@ namespace PixelFarm.Agg.Samples
         internal List<Vector2> contPoints = new List<Vector2>();
         RectD boundingRect = new RectD();
         VertexSource.CurveFlattener cflat = new VertexSource.CurveFlattener();
-
         bool isValidSmooth = false;
         public MyBrushPath()
         {
