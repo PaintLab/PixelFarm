@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 
+using System;
 namespace PixelFarm.Agg
 {
     //=============================================================scanline_p8
@@ -44,8 +45,14 @@ namespace PixelFarm.Agg
 
     public sealed class ScanlinePacked8 : Scanline
     {
+        int prevCover = -1; //my extension *** for subpixel rendering hillup,hilldown encode
+        bool isStart;
         public ScanlinePacked8()
         {
+        }
+        public override void EnterWhiteSpace()
+        {
+            prevCover = -1;
         }
         public override void ResetSpans(int min_x, int max_x)
         {
@@ -55,52 +62,99 @@ namespace PixelFarm.Agg
                 m_spans = new ScanlineSpan[max_len];
                 m_covers = new byte[max_len];
             }
+
             last_x = 0x7FFFFFF0;
-            m_cover_index = 0;
+            m_cover_index = 0; //make it ready for next add
             last_span_index = 0;
             m_spans[last_span_index].len = 0;
+            //------------------
+            prevCover = -1; //my extension ***
+            isStart = false;
         }
         public override void AddCell(int x, int cover)
         {
+            int backupCover = cover;
+            //-------------------------------------------
+            //this is my extension ***
+            if ((cover <= prevCover) && (isStart))
+            {
+                //downhill
+                if (cover > 1)
+                {
+                    int r = cover % 2;
+                    cover += r; //make it even number
+                    if (cover > 255)
+                    {  //clamp
+                        cover = 255;
+                    }
+                }
+            }
+            else
+            {
+                //uphill
+                if (cover >= 1 && cover <= 254)
+                {
+                    int r = cover % 2;
+                    if (r == 0)
+                    {
+                        //254-> 255
+                        cover += 1;//make it odd number
+                    }
+                }
+            }
+            //-------------------------------------------
+
             m_covers[m_cover_index] = (byte)cover;
             if (x == last_x + 1 && m_spans[last_span_index].len > 0)
             {
+                //append to last cell
                 m_spans[last_span_index].len++;
             }
             else
             {
+                //start new  
                 last_span_index++;
                 m_spans[last_span_index] = new ScanlineSpan((short)x, m_cover_index);
             }
             last_x = x;
-            m_cover_index++;
+            m_cover_index++; //make it ready for next add
+            //------------------
+            prevCover = backupCover; //my extension ***
+            isStart = true;
         }
-
         public override void AddSpan(int x, int len, int cover)
         {
+            int backupCover = cover;
             if (x == last_x + 1
                 && m_spans[last_span_index].len < 0
                 && cover == m_spans[last_span_index].cover_index)
             {
+                //just append data to latest span ***
                 m_spans[last_span_index].len -= (short)len;
             }
             else
             {
                 m_covers[m_cover_index] = (byte)cover;
                 last_span_index++;
-                m_spans[last_span_index] = new ScanlineSpan((short)x, (short)(-len), m_cover_index++);
-                //m_spans[last_span_index].cover_index = m_cover_index++;
-                //m_spans[last_span_index].x = (short)x;
-                //m_spans[last_span_index].len = (short)(-len);
+                //---------------------------------------------------
+                //start new  
+                m_spans[last_span_index] = new ScanlineSpan((short)x, (short)(-len), m_cover_index);
+                m_cover_index++; //make it ready for next add
             }
             last_x = x + len - 1;
+            //------------------
+            prevCover = backupCover;//my extension
+            isStart = true;
         }
         public override void ResetSpans()
         {
             last_x = 0x7FFFFFF0;
             last_span_index = 0;
-            m_cover_index = 0;
+            m_cover_index = 0; //make it ready for next add
             m_spans[last_span_index].len = 0;
+            //------------------
+            prevCover = -1; //my extension ***
+            isStart = false;
         }
     }
 }

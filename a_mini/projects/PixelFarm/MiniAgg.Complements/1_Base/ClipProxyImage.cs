@@ -298,10 +298,7 @@ namespace PixelFarm.Agg.Image
             base.BlendColorHSpan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-        //public void copy_from(IImage src)
-        //{
-        //    CopyFrom(src, new RectangleInt(0, 0, (int)src.Width, (int)src.Height), 0, 0);
-        //}
+       
 
         public override void SetPixel(int x, int y, Color color)
         {

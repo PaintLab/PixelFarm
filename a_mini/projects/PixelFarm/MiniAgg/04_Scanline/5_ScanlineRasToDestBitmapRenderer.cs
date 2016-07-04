@@ -32,6 +32,8 @@ namespace PixelFarm.Agg
     /// </summary>  
     public class ScanlineRasToDestBitmapRenderer
     {
+        const float cover_1_3 = 255f / 3f;
+        const float cover_2_3 = cover_1_3 * 2f;
         ArrayList<Color> tempSpanColors = new ArrayList<Color>();
         public ScanlineRasToDestBitmapRenderer()
         {
@@ -41,8 +43,14 @@ namespace PixelFarm.Agg
             get;
             set;
         }
-        const float cover_1_3 = 255f / 3f;
-        const float cover_2_3 = cover_1_3 * 2f;
+
+
+        static float mix(float farColor, float nearColor, float weight)
+        {
+            //from ...
+            //opengl es2 mix function              
+            return farColor * (1f - weight) + (nearColor * weight);
+        }
         void SubPixRender(IImageReaderWriter dest, Scanline scanline, Color color)
         {
             byte[] covers = scanline.GetCovers();
@@ -51,9 +59,16 @@ namespace PixelFarm.Agg
             byte[] buffer = dest.GetBuffer();
             IPixelBlender blender = dest.GetRecieveBlender();
             int last_x = int.MinValue;
-            int prev_cover = 0;
             int bufferOffset = 0;
-            Color prevColor = Color.White;
+            //------------------------------------------
+            Color bgColor = Color.White;
+            float cb_R = bgColor.R / 255f;
+            float cb_G = bgColor.G / 255f;
+            float cb_B = bgColor.B / 255f;
+            float cf_R = color.R / 255f;
+            float cf_G = color.G / 255f;
+            float cf_B = color.B / 255f;
+            //------------------------------------------
             for (int i = 1; i <= num_spans; ++i)
             {
                 //render span by span 
@@ -62,9 +77,6 @@ namespace PixelFarm.Agg
                 if (span.x != last_x + 1)
                 {
                     bufferOffset = dest.GetBufferOffsetXY(span.x, y);
-                    //when skip  then reset                     
-                    prev_cover = 0;
-                    prevColor = Color.White;
                 }
 
                 last_x = span.x;
@@ -81,9 +93,7 @@ namespace PixelFarm.Agg
                     {
                         //100% cover
                         int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                        Color newc = prevColor = Color.FromArgb(color.R, color.G, color.B);
-                        Color todrawColor = Color.FromArgb(a, newc);
-                        prev_cover = 255;//full
+                        Color todrawColor = Color.FromArgb(a, Color.FromArgb(color.R, color.G, color.B));
                         while (num_pix > 0)
                         {
                             blender.BlendPixel(buffer, bufferOffset, todrawColor);
@@ -93,9 +103,8 @@ namespace PixelFarm.Agg
                     }
                     else
                     {
-                        prev_cover = coverageValue;
                         int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                        Color newc = prevColor = Color.FromArgb(color.R, color.G, color.B);
+                        Color newc = Color.FromArgb(color.R, color.G, color.B);
                         Color todrawColor = Color.FromArgb(a, newc);
                         while (num_pix > 0)
                         {
@@ -116,76 +125,77 @@ namespace PixelFarm.Agg
                         {
                             //100% cover
                             Color newc = Color.FromArgb(color.R, color.G, color.B);
-                            prevColor = newc;
                             int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
                             blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
-                            prev_cover = 255;//full
                         }
                         else
                         {
                             //check direction : 
-
-
-                            bool isLeftToRight = coverageValue >= prev_cover;
-                            prev_cover = coverageValue;
-                            byte c_r, c_g, c_b;
+                            bool isUpHill = (coverageValue % 2) > 0;
+                            //bool isUpHill = coverageValue >= prev_cover;
+                            //if (isUpHill != ((coverageValue % 2) > 0))
+                            //{
+                            //}
+                            //---------------------------- 
+                            byte c_r = 0, c_g = 0, c_b = 0;
+                            //----------------------------
+                            //assume lcd screen is RGB
                             float subpix_percent = ((float)(coverageValue) / 256f);
                             if (coverageValue < cover_1_3)
                             {
-                                if (isLeftToRight)
+                                //assume LCD color arrangement is BGR                            
+                                if (isUpHill)
                                 {
-                                    c_r = 255;
-                                    c_g = 255;
-                                    c_b = (byte)(255 - (255f * (subpix_percent)));
+                                    c_r = bgColor.R;
+                                    c_g = bgColor.G;
+                                    c_b = (byte)(mix(cb_B, cf_B, 1) * 255);
                                 }
                                 else
                                 {
-                                    c_r = (byte)(255 - (255f * (subpix_percent)));
-                                    c_g = 255;
-                                    c_b = 255;
+                                    c_r = (byte)(mix(cb_R, cf_R, 1) * 255);
+                                    c_g = bgColor.G;
+                                    c_b = bgColor.B;
                                 }
 
-                                Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
                                 int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
+                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)));
                             }
                             else if (coverageValue < cover_2_3)
                             {
-                                if (isLeftToRight)
+                                if (isUpHill)
                                 {
-                                    c_r = prevColor.B;
-                                    c_g = (byte)(255 - (255f * (subpix_percent)));
-                                    c_b = color.B;
+                                    c_r = bgColor.R;
+                                    c_g = (byte)(mix(cb_G, cf_G, subpix_percent) * 255);
+                                    c_b = (byte)(mix(cb_B, cf_B, 1) * 255);
                                 }
                                 else
                                 {
-                                    c_r = color.B;
-                                    c_g = (byte)(255 - (255f * (subpix_percent)));
-                                    c_b = 255;
+                                    c_r = (byte)(mix(cb_R, cf_R, 1) * 255);
+                                    c_g = (byte)(mix(cb_G, cf_G, subpix_percent) * 255);
+                                    c_b = bgColor.B;
                                 }
-                                Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
+
                                 int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
+                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)));
                             }
                             else
                             {
                                 //cover > 2/3 but not full 
-                                if (isLeftToRight)
+                                if (isUpHill)
                                 {
-                                    c_r = (byte)(255 - (255f * (subpix_percent)));
-                                    c_g = color.G;
-                                    c_b = color.B;
+                                    c_r = (byte)(mix(cb_R, cf_R, subpix_percent) * 255);
+                                    c_g = (byte)(mix(cb_G, cf_G, 1) * 255);
+                                    c_b = (byte)(mix(cb_B, cf_B, 1) * 255);
                                 }
                                 else
                                 {
-                                    c_r = prevColor.G;
-                                    c_g = prevColor.B;
-                                    c_b = (byte)(255 - (255f * (subpix_percent)));
+                                    c_r = (byte)(mix(cb_R, cf_R, 1) * 255);
+                                    c_g = (byte)(mix(cb_G, cf_G, 1) * 255);
+                                    c_b = (byte)(mix(cb_B, cf_B, subpix_percent) * 255);
                                 }
 
-                                Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
                                 int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
-                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
+                                blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)));
                             }
                         }
                         bufferOffset += 4; //1 pixel 4 bits 
@@ -194,7 +204,6 @@ namespace PixelFarm.Agg
                 }
             }
         }
-
         public void RenderWithColor(IImageReaderWriter dest,
                 ScanlineRasterizer sclineRas,
                 Scanline scline,
