@@ -18,6 +18,7 @@ namespace PixelFarm.DrawingGL
         BlurShader blurShader;
         Conv3x3TextureShader conv3x3TextureShader;
         MultiChannelSdf msdfShader;
+        MultiChannelSubPixelRenderingSdf msdfSubPixelRenderingShader;
         SingleChannelSdf sdfShader;
         //-----------------------------------------------------------
         CanvasToShaderSharedResource shaderRes;
@@ -54,6 +55,7 @@ namespace PixelFarm.DrawingGL
                                                                                     //Tesselate.Tesselator.WindingRuleType.Odd, true);
             conv3x3TextureShader = new Conv3x3TextureShader(shaderRes);
             msdfShader = new DrawingGL.MultiChannelSdf(shaderRes);
+            msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(shaderRes);
             sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
             //----
             Tesselator tess = new Tesselator();
@@ -226,26 +228,45 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
         {
+           
             msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             msdfShader.BackgroundColor = PixelFarm.Drawing.Color.White;
             msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        }
-        //public void DrawImageWithSdf(GLBitmap bmp, float x, float y)
-        //{
-        //    sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-        //    sdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        //}
+        }        
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
         {
             msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             msdfShader.BackgroundColor = PixelFarm.Drawing.Color.White;
             msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
+        public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
+        {
+
+            msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;
+            msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        }
+        public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
+        {
+            msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+            msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;
+            msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
+        }
+
+
+
+
+
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
             sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             sdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
+        //public void DrawImageWithSdf(GLBitmap bmp, float x, float y)
+        //{
+        //    sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
+        //    sdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        //}
         //-------------------------------------------------------------------------------
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
