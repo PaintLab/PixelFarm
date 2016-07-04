@@ -14,12 +14,15 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
         Graphics2D gfx;
+        AggLcdDistributionLookupTable lcdLut;
+        double primary = 1;
         public CustomScanlineRasToBmp_EnlargedV3(double size, ActualImage destImage)
         {
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
             gfx = Graphics2D.CreateFromImage(destImage);
+            lcdLut = new Sample_AADemoTest3.AggLcdDistributionLookupTable(primary, 2.0 / 9, 1.0 / 9);
         }
         static float mix(float farColor, float nearColor, float weight)
         {
@@ -42,7 +45,16 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             byte[] covers = scanline.GetCovers();
             ScanlineRasterizer ras = gfx.ScanlineRasterizer;
             var rasToBmp = gfx.ScanlineRasToDestBitmap;
-            Color prevColor = Color.White;
+            //------------------------------------------
+            Color bgColor = Color.White;
+            float cb_R = bgColor.R / 255f;
+            float cb_G = bgColor.G / 255f;
+            float cb_B = bgColor.B / 255f;
+            float cf_R = color.R / 255f;
+            float cf_G = color.G / 255f;
+            float cf_B = color.B / 255f;
+            //------------------------------------------
+
             for (int i = 0; i <= num_spans; ++i)
             {
                 //render span by span 
@@ -56,102 +68,131 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 int prev_cover = 0;
                 while (num_pix > 0)
                 {
-                    int coverageValue = covers[coverIndex++];
+                    byte coverageValue = covers[coverIndex++];
                     if (coverageValue >= 255)
                     {
-                        //100% cover
-                        Color newc = Color.FromArgb(color.red, color.green, color.blue);
-                        prevColor = newc;
+                        //100% cover 
                         int a = (coverageValue * color.Alpha0To255) >> 8;
                         m_square.Draw(rasToBmp,
                                ras, m_sl, destImage,
-                               Color.FromArgb(a, newc),
+                               Color.FromArgb(a, Color.FromArgb(color.red, color.green, color.blue)),
                                x, y);
                         prev_cover = 255;//full
                     }
                     else
                     {
                         //check direction : 
-                        bool isLeftToRight = coverageValue >= prev_cover;
+                        bool isUpHill = (coverageValue % 2) > 0;
+                        //--------------------------------------------------------------------
+                        //TODO: review here
+                        //in somecase, demo3, isUpHill2 != isUpHill
+                        //but we skip it, because we don't want context color around the point
+                        //so when we use in fragment shader we can pick up a single color
+                        //and determine what color it should be    
+                        bool isUpHill2 = coverageValue > prev_cover;
+                        if (isUpHill != isUpHill2)
+                        {
+                        }
+                        //--------------------------------------------------------------------
                         prev_cover = coverageValue;
                         byte c_r, c_g, c_b;
                         float subpix_percent = ((float)(coverageValue) / 256f);
                         if (coverageValue < cover_1_3)
                         {
-                            if (isLeftToRight)
+                            //assume LCD color arrangement is RGB        
+                            if (isUpHill)
                             {
-                                c_r = 255;
-                                c_g = 255;
-                                c_b = (byte)(255 - (255f * (subpix_percent)));
+                                c_r = bgColor.R;
+                                c_g = bgColor.G;
+                                c_b = (byte)(mix(cb_B, cf_B, 1) * 255);
                             }
                             else
                             {
-                                c_r = (byte)(255 - (255f * (subpix_percent)));
-                                c_g = 255;
-                                c_b = 255;
+                                c_r = (byte)(mix(cb_R, cf_R, 1) * 255);
+                                c_g = bgColor.G;
+                                c_b = bgColor.B;
                             }
 
-                            Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
+
                             int a = (coverageValue * color.Alpha0To255) >> 8;
                             m_square.Draw(rasToBmp,
                                    ras, m_sl, destImage,
-                                    Color.FromArgb(a, newc),
+                                    Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
                                    x, y);
                         }
                         else if (coverageValue < cover_2_3)
                         {
-                            if (isLeftToRight)
+                            if (isUpHill)
                             {
-                                c_r = prevColor.B;
-                                c_g = (byte)(255 - (255f * (subpix_percent)));
-                                c_b = color.B;// (byte)(255 - (255f * (subpix_percent)));// color.blue;
+                                c_r = bgColor.R;
+                                c_g = (byte)(mix(cb_G, cf_G, subpix_percent) * 255);
+                                c_b = (byte)(mix(cb_B, cf_B, 1) * 255);
                             }
                             else
                             {
-                                c_r = color.B;// (byte)(255 - (255f * (subpix_percent))); //color.blue;
-                                c_g = (byte)(255 - (255f * (subpix_percent)));
-                                c_b = 255;
+                                c_r = (byte)(mix(cb_R, cf_R, 1) * 255);
+                                c_g = (byte)(mix(cb_G, cf_G, subpix_percent) * 255);
+                                c_b = bgColor.B;
                             }
 
 
-                            Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
+
                             int a = (coverageValue * color.Alpha0To255) >> 8;
                             m_square.Draw(rasToBmp,
                                    ras, m_sl, destImage,
-                                   Color.FromArgb(a, newc),
+                                   Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
                                    x, y);
                         }
                         else
                         {
                             //cover > 2/3 but not full 
-                            if (isLeftToRight)
+                            if (isUpHill)
                             {
-                                c_r = (byte)(255 - (255f * (subpix_percent)));
-                                c_g = color.G;
-                                c_b = color.B;
+                                c_r = (byte)(mix(cb_R, cf_R, subpix_percent) * 255);
+                                c_g = (byte)(mix(cb_G, cf_G, 1) * 255);
+                                c_b = (byte)(mix(cb_B, cf_B, 1) * 255);
                             }
                             else
                             {
-                                c_r = prevColor.G;
-                                c_g = prevColor.B;
-                                c_b = (byte)(255 - (255f * (subpix_percent)));
+                                c_r = (byte)(mix(cb_R, cf_R, 1) * 255);
+                                c_g = (byte)(mix(cb_G, cf_G, 1) * 255);
+                                c_b = (byte)(mix(cb_B, cf_B, subpix_percent) * 255);
                             }
 
-                            Color newc = prevColor = Color.FromArgb(c_r, c_g, c_b);
+
                             int a = (coverageValue * color.Alpha0To255) >> 8;
                             m_square.Draw(rasToBmp,
                                    ras, m_sl, destImage,
-                                   Color.FromArgb(a, newc),
+                                   Color.FromArgb(a, Color.FromArgb(c_r, c_g, c_b)),
                                    x, y);
                         }
                     }
 
 
-
-
                     ++x;
                     --num_pix;
                 }
+            }
+        }
+    }
+
+    class AggLcdDistributionLookupTable
+    {
+        //from agg-2.4,lcd_distribution_lut
+        public readonly byte[] m_primary = new byte[256];
+        public readonly byte[] m_secondary = new byte[256];
+        public readonly byte[] m_tertiary = new byte[256];
+        public AggLcdDistributionLookupTable(double prim, double second, double tert)
+        {
+            double norm = 1.0 / (prim + second * 2 + tert * 2);
+            prim *= norm;
+            second *= norm;
+            tert *= norm;
+            for (int i = 0; i < 256; ++i)
+            {
+                m_primary[i] = (byte)Math.Floor(prim * i);
+                m_secondary[i] = (byte)Math.Floor(second * i);
+                m_tertiary[i] = (byte)Math.Floor(tert * i);
             }
         }
     }
