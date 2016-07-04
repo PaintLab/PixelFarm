@@ -8,7 +8,7 @@ using PixelFarm.Agg.VertexSource;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest3
 {
-    class CustomScanlineRasToBmp_EnlargedV3 : CustomScanlineRasToDestBitmapRenderer
+    class CustomScanlineRasToBmp_EnlargedSubPixelRendering : CustomScanlineRasToDestBitmapRenderer
     {
         double m_size;
         Square m_square;
@@ -16,7 +16,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         Graphics2D gfx;
         AggLcdDistributionLookupTable lcdLut;
         double primary = 1;
-        public CustomScanlineRasToBmp_EnlargedV3(double size, ActualImage destImage)
+        public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualImage destImage)
         {
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
@@ -252,7 +252,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 var rasterizer = gx.ScanlineRasterizer;
                 ScanlineUnpacked8 sl = new ScanlineUnpacked8();
                 int size_mul = (int)this.PixelSize;
-                CustomScanlineRasToBmp_EnlargedV3 ren_en = new CustomScanlineRasToBmp_EnlargedV3(size_mul, gx.DestActualImage);
+                CustomScanlineRasToBmp_EnlargedSubPixelRendering ren_en = new CustomScanlineRasToBmp_EnlargedSubPixelRendering(size_mul, gx.DestActualImage);
                 rasterizer.Reset();
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
