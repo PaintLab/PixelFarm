@@ -72,6 +72,5 @@ namespace PixelFarm.Agg
         public abstract void AddSpan(int x, int len, int cover);
         public abstract void ResetSpans(int min_x, int max_x);
         public abstract void ResetSpans();
-        public abstract void EnterWhiteSpace();
     }
 }

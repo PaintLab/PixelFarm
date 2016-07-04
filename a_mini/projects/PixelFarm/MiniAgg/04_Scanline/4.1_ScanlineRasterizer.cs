@@ -365,7 +365,6 @@ namespace PixelFarm.Agg
                 int num_cells;
                 m_cellAARas.GetCells(m_scan_y, out cells, out offset, out num_cells);
                 int cover = 0;
-                bool enterWhitespace = false;
                 while (num_cells != 0)
                 {
                     unsafe
@@ -397,17 +396,9 @@ namespace PixelFarm.Agg
                                 int alpha = CalculateAlpha((cover << (poly_subpix.SHIFT + 1)) - area);
                                 if (alpha != 0)
                                 {
-                                    enterWhitespace = false;
                                     scline.AddCell(x, alpha);
                                 }
-                                else
-                                {
-                                    if (!enterWhitespace)
-                                    {
-                                        scline.EnterWhiteSpace();
-                                        enterWhitespace = true;
-                                    }
-                                }
+
                                 x++;
                             }
 
@@ -419,16 +410,7 @@ namespace PixelFarm.Agg
                                 int alpha = CalculateAlpha(cover << (poly_subpix.SHIFT + 1));
                                 if (alpha != 0)
                                 {
-                                    enterWhitespace = false;
                                     scline.AddSpan(x, (cur_cell_ptr->x - x), alpha);
-                                }
-                                else
-                                {
-                                    if (!enterWhitespace)
-                                    {
-                                        scline.EnterWhiteSpace();
-                                        enterWhitespace = true;
-                                    }
                                 }
                             }
                         }
@@ -438,7 +420,6 @@ namespace PixelFarm.Agg
                 if (scline.SpanCount != 0) { break; }
 
                 ++m_scan_y;
-                enterWhitespace = false;
             }
 
             scline.CloseLine(m_scan_y);

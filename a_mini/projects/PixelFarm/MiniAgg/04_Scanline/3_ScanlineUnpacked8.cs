@@ -110,15 +110,10 @@ namespace PixelFarm.Agg
     public sealed class ScanlineUnpacked8 : Scanline
     {
         int minX;
-        int prevCover = -1;
-        bool isFirst;
         public ScanlineUnpacked8()
         {
         }
-        public override void EnterWhiteSpace()
-        {
-            prevCover = -1;
-        }
+
         public override void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 2;
@@ -130,37 +125,9 @@ namespace PixelFarm.Agg
             last_x = 0x7FFFFFF0;
             minX = min_x;
             last_span_index = 0;
-            //------------------
-            prevCover = -1;
-            isFirst = true;
         }
         public override void AddCell(int x, int cover)
         {
-            //-------------------------------------------
-            //this is my extension ***
-            int backupCover = cover;
-            if ((cover <= prevCover) && (!isFirst))
-            {
-                //downhill
-                if (cover > 0)
-                {
-                    int r = cover % 2;
-                    cover -= r; //make it even number
-                }
-            }
-            else
-            {
-                //uphill
-                if (cover >= 1 && cover <= 254)
-                {
-                    int r = cover % 2;
-                    if (r == 0)
-                    {
-                        cover -= 1;//make it odd number
-                    }
-                }
-            }
-            //-------------------------------------------
             x -= minX;
             m_covers[x] = (byte)cover;
             if (x == last_x + 1)
@@ -173,14 +140,9 @@ namespace PixelFarm.Agg
                 m_spans[last_span_index] = new ScanlineSpan(x + minX, x);
             }
             last_x = x;
-            prevCover = backupCover;//my extension
-            isFirst = false;
         }
         public override void AddSpan(int x, int len, int cover)
         {
-            //-------------------------------------------
-            //this is my extension ***
-
             x -= minX;
             for (int i = 0; i < len; i++)
             {
@@ -197,120 +159,11 @@ namespace PixelFarm.Agg
                 m_spans[last_span_index] = new ScanlineSpan(x + minX, len, x);
             }
             last_x = x + (int)len - 1;
-            prevCover = cover;//my extension
-            isFirst = false;
         }
         public override void ResetSpans()
         {
             last_x = 0x7FFFFFF0;
             last_span_index = 0;
-            //------------------
-            prevCover = -1;
-            isFirst = true;
-        }
-    }
-
-    //experiment only
-    public sealed class ScanlineUnpacked8Sdf : Scanline
-    {
-        int minX;
-        int prevCover = -1;
-        bool isFirst;
-        public ScanlineUnpacked8Sdf()
-        {
-        }
-        public override void EnterWhiteSpace()
-        {
-            prevCover = -1;
-        }
-        public override void ResetSpans(int min_x, int max_x)
-        {
-            int max_len = max_x - min_x + 2;
-            if (max_len > m_spans.Length)
-            {
-                m_spans = new ScanlineSpan[max_len];
-                m_covers = new byte[max_len];
-            }
-            last_x = 0x7FFFFFF0;
-            minX = min_x;
-            last_span_index = 0;
-            //------------------
-            prevCover = -1;
-            isFirst = true;
-        }
-        public override void AddCell(int x, int cover)
-        {
-            //-------------------------------------------
-            //this is my extension ***
-            int backupCover = cover;
-            if ((cover <= prevCover) && (!isFirst))
-            {
-                //downhill
-                if (cover > 0)
-                {
-                    int r = cover % 2;
-                    cover -= r; //make it even number
-                }
-            }
-            else
-            {
-                //uphill
-                if (cover >= 1 && cover <= 254)
-                {
-                    int r = cover % 2;
-                    if (r == 0)
-                    {
-                        cover -= 1;//make it odd number
-                    }
-                }
-            }
-            //-------------------------------------------
-            x -= minX;
-            m_covers[x] = (byte)cover;
-            if (x == last_x + 1)
-            {
-                m_spans[last_span_index].len++;
-            }
-            else
-            {
-                last_span_index++;
-                m_spans[last_span_index] = new ScanlineSpan(x + minX, x);
-            }
-            last_x = x;
-            prevCover = backupCover;//my extension
-            isFirst = false;
-        }
-        public override void AddSpan(int x, int len, int cover)
-        {
-            //-------------------------------------------
-            //this is my extension ***
-
-            x -= minX;
-            for (int i = 0; i < len; i++)
-            {
-                m_covers[x + i] = (byte)cover;
-            }
-
-            if (x == last_x + 1)
-            {
-                m_spans[last_span_index].len += (short)len;
-            }
-            else
-            {
-                last_span_index++;
-                m_spans[last_span_index] = new ScanlineSpan(x + minX, len, x);
-            }
-            last_x = x + (int)len - 1;
-            prevCover = cover;//my extension
-            isFirst = false;
-        }
-        public override void ResetSpans()
-        {
-            last_x = 0x7FFFFFF0;
-            last_span_index = 0;
-            //------------------
-            prevCover = -1;
-            isFirst = true;
         }
     }
 }

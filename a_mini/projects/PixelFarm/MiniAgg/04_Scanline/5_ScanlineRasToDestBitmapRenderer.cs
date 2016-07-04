@@ -69,10 +69,10 @@ namespace PixelFarm.Agg
             float cf_G = color.G / 255f;
             float cf_B = color.B / 255f;
             //------------------------------------------
+            int prevCover = -1;
             for (int i = 1; i <= num_spans; ++i)
             {
-                //render span by span 
-
+                //render span by span  
                 ScanlineSpan span = scanline.GetSpan(i);
                 if (span.x != last_x + 1)
                 {
@@ -113,6 +113,7 @@ namespace PixelFarm.Agg
                             --num_pix;
                         }
                     }
+                    prevCover = coverageValue;
                 }
                 else
                 {
@@ -127,12 +128,13 @@ namespace PixelFarm.Agg
                             Color newc = Color.FromArgb(color.R, color.G, color.B);
                             int a = ((coverageValue + 1) * color.Alpha0To255) >> 8;
                             blender.BlendPixel(buffer, bufferOffset, Color.FromArgb(a, newc));
+                            prevCover = coverageValue;
                         }
                         else
                         {
                             //check direction : 
-                            bool isUpHill = (coverageValue % 2) > 0;
-                            //bool isUpHill = coverageValue >= prev_cover;
+
+                            bool isUpHill = coverageValue >= prevCover;
                             //if (isUpHill != ((coverageValue % 2) > 0))
                             //{
                             //}
@@ -200,6 +202,7 @@ namespace PixelFarm.Agg
                         }
                         bufferOffset += 4; //1 pixel 4 bits 
                         --num_pix;
+                        prevCover = coverageValue;
                     }
                 }
             }

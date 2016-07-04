@@ -45,15 +45,10 @@ namespace PixelFarm.Agg
 
     public sealed class ScanlinePacked8 : Scanline
     {
-        int prevCover = -1; //my extension *** for subpixel rendering hillup,hilldown encode
-        bool isStart;
         public ScanlinePacked8()
         {
         }
-        public override void EnterWhiteSpace()
-        {
-            prevCover = -1;
-        }
+
         public override void ResetSpans(int min_x, int max_x)
         {
             int max_len = max_x - min_x + 3;
@@ -67,43 +62,9 @@ namespace PixelFarm.Agg
             m_cover_index = 0; //make it ready for next add
             last_span_index = 0;
             m_spans[last_span_index].len = 0;
-            //------------------
-            prevCover = -1; //my extension ***
-            isStart = false;
         }
         public override void AddCell(int x, int cover)
         {
-            int backupCover = cover;
-            //-------------------------------------------
-            //this is my extension ***
-            if ((cover <= prevCover) && (isStart))
-            {
-                //downhill
-                if (cover > 1)
-                {
-                    int r = cover % 2;
-                    cover += r; //make it even number
-                    if (cover > 255)
-                    {  //clamp
-                        cover = 255;
-                    }
-                }
-            }
-            else
-            {
-                //uphill
-                if (cover >= 1 && cover <= 254)
-                {
-                    int r = cover % 2;
-                    if (r == 0)
-                    {
-                        //254-> 255
-                        cover += 1;//make it odd number
-                    }
-                }
-            }
-            //-------------------------------------------
-
             m_covers[m_cover_index] = (byte)cover;
             if (x == last_x + 1 && m_spans[last_span_index].len > 0)
             {
@@ -118,9 +79,6 @@ namespace PixelFarm.Agg
             }
             last_x = x;
             m_cover_index++; //make it ready for next add
-            //------------------
-            prevCover = backupCover; //my extension ***
-            isStart = true;
         }
         public override void AddSpan(int x, int len, int cover)
         {
@@ -142,9 +100,6 @@ namespace PixelFarm.Agg
                 m_cover_index++; //make it ready for next add
             }
             last_x = x + len - 1;
-            //------------------
-            prevCover = backupCover;//my extension
-            isStart = true;
         }
         public override void ResetSpans()
         {
@@ -152,9 +107,6 @@ namespace PixelFarm.Agg
             last_span_index = 0;
             m_cover_index = 0; //make it ready for next add
             m_spans[last_span_index].len = 0;
-            //------------------
-            prevCover = -1; //my extension ***
-            isStart = false;
         }
     }
 }
