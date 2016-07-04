@@ -102,6 +102,7 @@ namespace PixelFarm.Agg
             int cCell_y;
             int cCell_cover;
             int cCell_area;
+            //------------------
             int cCell_left;
             int cCell_right;
             //------------------
