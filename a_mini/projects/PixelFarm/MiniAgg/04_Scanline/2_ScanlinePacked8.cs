@@ -71,9 +71,6 @@ namespace PixelFarm.Agg
             {
                 last_span_index++;
                 m_spans[last_span_index] = new ScanlineSpan((short)x, m_cover_index);
-                //m_spans[last_span_index].cover_index = m_cover_index;
-                //m_spans[last_span_index].x = (short)x;
-                //m_spans[last_span_index].len = 1;
             }
             last_x = x;
             m_cover_index++;
