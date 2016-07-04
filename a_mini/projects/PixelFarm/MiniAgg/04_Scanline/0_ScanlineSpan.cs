@@ -5,9 +5,9 @@ namespace PixelFarm.Agg
 {
     public struct ScanlineSpan
     {
-        public short x;
+        public readonly short x;
         public short len;
-        public short cover_index;
+        public readonly short cover_index;
         public ScanlineSpan(int x, int cover_index)
         {
             this.x = (short)x;
