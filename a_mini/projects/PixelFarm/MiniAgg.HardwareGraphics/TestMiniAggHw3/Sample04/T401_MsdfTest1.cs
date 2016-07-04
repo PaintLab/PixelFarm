@@ -29,8 +29,8 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                msdf_bmp = LoadTexture(@"..\msdf_65.png");
-                sdf_bmp = LoadTexture(@"..\sdf_65.png");
+                msdf_bmp = LoadTexture(@"..\msdf_75.png");
+                sdf_bmp = LoadTexture(@"..\sdf_75.png");
                 resInit = true;
             }
             canvas2d.DrawImageWithMsdf(msdf_bmp, 0, 400, 6);
