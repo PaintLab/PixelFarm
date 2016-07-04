@@ -37,21 +37,19 @@ namespace PixelFarm.Agg
     {
         public readonly short x;
         public short len; //+ or - 
-        public readonly short cover_index;
-        public bool isDownHill;
+        public readonly short cover_index; 
         public ScanlineSpan(int x, int cover_index)
         {
             this.x = (short)x;
             this.len = 1;
             this.cover_index = (short)cover_index;
-            this.isDownHill = false;
+
         }
         public ScanlineSpan(int x, int len, int cover_index)
         {
             this.x = (short)x;
             this.len = (short)len;
             this.cover_index = (short)cover_index;
-            this.isDownHill = false;
         }
 #if DEBUG
         public override string ToString()
