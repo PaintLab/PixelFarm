@@ -38,6 +38,7 @@ namespace PixelFarm.Agg.Fonts
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
             currentFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
+            //-----------------------------------------------------------
             VertexStore resultVxs = new VertexStore();
             double xpos = x;
             for (int i = 0; i < buffsize; ++i)
@@ -97,13 +98,18 @@ namespace PixelFarm.Agg.Fonts
                     glyph.flattenVxs,
                     (float)(xpos),
                     (float)(y));
-                painter.Fill(vxs1);
+                 painter.Fill(vxs1);
                 //--------------------------------------------------------
                 ////render with bitmap
-                //this.painter.DrawImage(glyph.glyphImage32,
-                //    (float)(xpos + (left >> 6)),
-                //    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
-
+                //if (glyph.glyphImage32 != null)
+                //{
+                //    if (glyph.glyphImage32.Width > 0 && glyph.glyphImage32.Height > 0)
+                //    {
+                //        painter.DrawImage(glyph.glyphImage32,
+                //            (float)(xpos + (left >> 6)),
+                //            (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
+                //    }
+                //}
                 int w = (glyph.exportGlyph.advanceX) >> 6;
                 xpos += (w);
                 //-------------------------------------------------------------                

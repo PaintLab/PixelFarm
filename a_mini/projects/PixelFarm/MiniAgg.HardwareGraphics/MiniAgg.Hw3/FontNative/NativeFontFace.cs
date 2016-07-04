@@ -26,16 +26,12 @@ namespace PixelFarm.Agg.Fonts
         /// </summary>
         Dictionary<int, Font> fonts = new Dictionary<int, Font>();
         IntPtr hb_font;
-        Font px64Font;
+
         internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
             this.unmanagedMem = unmanagedMem;
             this.ftFaceHandle = ftFaceHandle;
-            //---------------------------------
-            //for master font at 64px
-            px64Font = GetFontAtPixelSize(64);
         }
-
 
         ~NativeFontFace()
         {
@@ -118,7 +114,7 @@ namespace PixelFarm.Agg.Fonts
                 ExportGlyph exportTypeFace = new ExportGlyph();
                 NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
                 FontGlyph fontGlyph = new FontGlyph();
-                BuildGlyph(fontGlyph, &exportTypeFace, pixelSize);
+                BuildOutlineGlyph(fontGlyph, ref exportTypeFace, pixelSize);
                 return fontGlyph;
             }
         }
@@ -135,36 +131,28 @@ namespace PixelFarm.Agg.Fonts
                 ExportGlyph exportTypeFace = new ExportGlyph();
                 NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
                 FontGlyph fontGlyph = new FontGlyph();
-                BuildGlyph(fontGlyph, &exportTypeFace, pixelSize);
+                BuildOutlineGlyph(fontGlyph, ref exportTypeFace, pixelSize);
                 return fontGlyph;
             }
         }
-
-        unsafe void BuildGlyph(FontGlyph fontGlyph, ExportGlyph* exportTypeFace, int pxsize)
+        void BuildBitmapGlyph(FontGlyph fontGlyph, ref ExportGlyph exportTypeFace, int pxsize)
+        {  //------------------------------------------
+            //copy font metrics
+            fontGlyph.exportGlyph = exportTypeFace;
+            //------------------------------------------
+            unsafe
+            {
+                NativeFontGlyphBuilder.CopyGlyphBitmap(fontGlyph, ref exportTypeFace);
+            }
+            //------------------------------------------
+        }
+        void BuildOutlineGlyph(FontGlyph fontGlyph, ref ExportGlyph exportTypeFace, int pxsize)
         {
             //------------------------------------------
             //copy font metrics
-            fontGlyph.exportGlyph = *(exportTypeFace);
-            //------------------------------------------
-            //copy raw image 
-            NativeFontGlyphBuilder.CopyGlyphBitmap(fontGlyph, exportTypeFace);
-            //outline version
-            //------------------------------------------
-            if (px64Font != null)
-            {
-                if (pxsize < 64)
-                {
-                    NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
-                }
-                else
-                {
-                    NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
-                }
-            }
-            else
-            {
-                NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph, exportTypeFace);
-            }
+            fontGlyph.exportGlyph = exportTypeFace;
+            //------------------------------------------ 
+            NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph, ref exportTypeFace);
         }
     }
 }

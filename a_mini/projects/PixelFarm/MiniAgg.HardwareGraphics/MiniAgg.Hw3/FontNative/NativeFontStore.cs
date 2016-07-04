@@ -88,7 +88,8 @@ namespace PixelFarm.Agg.Fonts
         {
             //from FreeType Documenetation
             //pixel_size = (pointsize * (resolution/72);
-            return (int)(point * 96 / 72);
+            return (int)(point * 96f / 72f);
         }
+
     }
 }

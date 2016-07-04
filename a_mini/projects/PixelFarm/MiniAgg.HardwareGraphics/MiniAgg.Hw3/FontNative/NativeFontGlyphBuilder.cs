@@ -12,9 +12,9 @@ namespace PixelFarm.Agg.Fonts
     static class NativeFontGlyphBuilder
     {
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
-        unsafe internal static void CopyGlyphBitmap(FontGlyph fontGlyph, ExportGlyph* exportTypeFace)
+        unsafe internal static void CopyGlyphBitmap(FontGlyph fontGlyph, ref ExportGlyph exportTypeFace)
         {
-            FT_Bitmap* ftBmp = (FT_Bitmap*)exportTypeFace->bitmap;
+            FT_Bitmap* ftBmp = (FT_Bitmap*)exportTypeFace.bitmap;
             //image is 8 bits grayscale
             int h = ftBmp->rows;
             int w = ftBmp->width;
@@ -100,9 +100,9 @@ namespace PixelFarm.Agg.Fonts
                 (v1.y + (double)v2.y) / 2d);
         }
 
-        unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph, ExportGlyph* exportTypeFace)
+        unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph, ref ExportGlyph exportTypeFace)
         {
-            FT_Outline outline = (*(FT_Outline*)exportTypeFace->outline);
+            FT_Outline outline = (*(FT_Outline*)exportTypeFace.outline);
             //outline version
             //------------------------------
             int npoints = outline.n_points;

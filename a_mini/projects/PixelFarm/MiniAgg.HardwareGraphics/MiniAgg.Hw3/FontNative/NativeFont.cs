@@ -26,11 +26,6 @@ namespace PixelFarm.Agg.Fonts
             //TODO: clear resource here 
 
         }
-
-        //public float SizeInPoint
-        //{
-        //    get { return this.fontSizeInPoint; }
-        //}
         public override FontGlyph GetGlyph(char c)
         {
             FontGlyph found;
@@ -46,6 +41,7 @@ namespace PixelFarm.Agg.Fonts
             FontGlyph found;
             if (!dicGlyphs2.TryGetValue(glyphIndex, out found))
             {
+                //not found glyph 
                 found = ownerFace.ReloadGlyphFromIndex(glyphIndex, fontSizeInPixelUnit);
                 this.dicGlyphs2.Add(glyphIndex, found);
             }
@@ -70,6 +66,7 @@ namespace PixelFarm.Agg.Fonts
                 fixed (ProperGlyph* propGlyphH = &properGlyphs[0])
                 fixed (char* head = &buffer[0])
                 {
+                    //we use font shaping engine here
                     NativeMyFontsLib.MyFtShaping(
                         this.NativeFontFace.HBFont,
                         head,

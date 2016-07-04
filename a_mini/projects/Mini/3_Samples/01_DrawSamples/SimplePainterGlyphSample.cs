@@ -22,7 +22,7 @@ namespace PixelFarm.Agg.SimplePainter
             //load font ?
             Font nativeFont = NativeFontStore.LoadFont(fontfile, 48);
             font1 = new AggFont(nativeFont);
-            font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 32));
+            font2 = new AggFont(NativeFontStore.LoadFont(fontfile, 10));
         }
         public override void Draw(CanvasPainter p)
         {
@@ -59,8 +59,11 @@ namespace PixelFarm.Agg.SimplePainter
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
             p.CurrentFont = font1;
             p.FillColor = Drawing.Color.Black;
-            string test_str = "fมีมี่ญูดุญคำค่าค่ำป่บ่";
+            //string test_str = "fมีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
+            //string test_str = "I...A Quick Brown Fox Jumps Over The Lazy Dog...I";
+            string test_str = "A single pixel on a color LCD";
+
             //string test_str = "บ่ป่มีมี่";
             p.UseSubPixelRendering = true;
             p.DrawString(test_str, 5, 200);
