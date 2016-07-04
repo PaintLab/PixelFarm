@@ -246,24 +246,16 @@ namespace PixelFarm.Agg
                     break;
                 case Agg.ScanlineRenderMode.SubPixelRendering:
                     {
+#if DEBUG
                         int dbugMinScanlineCount = 0;
+#endif
+
                         while (sclineRas.SweepScanline(scline))
                         {
-                            //render solid single scanline
-                            //if (dbugMinScanlineCount == 8)
-                            //{
-
-                            //}
                             SubPixRender(dest, scline, color);
-                            //if (dbugMinScanlineCount == 8)
-                            //{
-                            //    break;
-                            //}
+#if DEBUG
                             dbugMinScanlineCount++;
-                            //if (dbugMinScanlineCount > 2)
-                            //{
-                            //    break;
-                            //}
+#endif
                         }
                     }
                     break;
