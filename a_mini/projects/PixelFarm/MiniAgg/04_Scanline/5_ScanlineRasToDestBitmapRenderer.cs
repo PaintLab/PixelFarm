@@ -148,11 +148,11 @@ namespace PixelFarm.Agg
                                 {
                                     c_r = bgColor.R;
                                     c_g = bgColor.G;
-                                    c_b = (byte)(mix(cb_B, cf_B, 1) * 255);
+                                    c_b = (byte)(mix(cb_B, cf_B, subpix_percent) * 255);
                                 }
                                 else
                                 {
-                                    c_r = (byte)(mix(cb_R, cf_R, 1) * 255);
+                                    c_r = (byte)(mix(cb_R, cf_R, subpix_percent) * 255);
                                     c_g = bgColor.G;
                                     c_b = bgColor.B;
                                 }
