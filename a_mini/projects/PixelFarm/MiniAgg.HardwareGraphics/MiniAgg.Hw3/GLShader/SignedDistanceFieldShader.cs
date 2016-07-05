@@ -169,24 +169,22 @@ namespace PixelFarm.DrawingGL
                             vec4 sample = texture2D(s_texture, v_texCoord);
                             float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
                             float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);
-                            
+                            float ddx= dFdx(sigDist);
                             //gl_FragColor = mix(bgColor, fgColor, opacity);//original
-
-                           
-                                
+ 
                             //for study ***
-                            /*if(ddx>0.0){
+                           /* if(ddx>0.0){
                                 //uphill
-                                gl_FragColor = mix(bgColor, vec4(1.0,0,0,1.0), opacity);
+                                gl_FragColor = mix(bgColor, vec4(1.0,0,0,opacity), opacity);
                             } else if(ddx<0.0){
                                 //downhill
-                                gl_FragColor = mix(bgColor, vec4(0.0,0,1.0,1.0), opacity);                                
+                                gl_FragColor = mix(bgColor, vec4(0.0,0,1.0,opacity), opacity);                                
                             }else{
                                 //stable
                                 gl_FragColor = mix(bgColor, fgColor, opacity);
-                            }*/
+                            } */
                                 
-                             float ddx= dFdx(sigDist);
+                            
                             if(opacity == 1.0){
                                 //100%
                                 gl_FragColor = mix(bgColor, fgColor, opacity);//original
@@ -230,7 +228,7 @@ namespace PixelFarm.DrawingGL
                                      float  c_b = (mix(bgColor[2],fgColor[2], opacity));                                    
                                      gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
                                   }
-                            } 
+                            }
                         }
              ";
             BuildProgram(vs, fs);
