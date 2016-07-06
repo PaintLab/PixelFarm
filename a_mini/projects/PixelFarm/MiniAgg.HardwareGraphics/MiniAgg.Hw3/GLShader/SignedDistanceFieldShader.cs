@@ -188,7 +188,7 @@ namespace PixelFarm.DrawingGL
                             if(opacity == 1.0){
                                 //100%
                                 gl_FragColor = mix(bgColor, fgColor, opacity);//original
-                            }else if(opacity< (1.0/3.0)){
+                            }else if(opacity<= (1.0/3.0)){
                                   if(ddx>0.0){
                                      //uphill
                                      float  c_r = bgColor[0];
@@ -201,7 +201,7 @@ namespace PixelFarm.DrawingGL
                                      float  c_b = bgColor[2];
                                      gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
                                   }
-                            }else if(opacity< (2.0/3.0)){
+                            }else if(opacity<= (2.0/3.0)){
                                   if(ddx>0.0){
                                      //uphill
                                      float  c_r = bgColor[0];
