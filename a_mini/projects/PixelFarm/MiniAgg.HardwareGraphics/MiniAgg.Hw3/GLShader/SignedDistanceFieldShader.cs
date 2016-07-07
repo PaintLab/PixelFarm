@@ -192,19 +192,19 @@ namespace PixelFarm.DrawingGL
                                   if(ddx>0.0){
                                      //uphill
                                      float  c_r = bgColor[0];
-                                     float  c_g = bgColor[1];
+                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity/2.0)); //*
                                      float  c_b = (mix(bgColor[2],fgColor[2], opacity));                                    
                                      gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
                                   }else{
                                      float  c_r = (mix(bgColor[0],fgColor[0], opacity));
-                                     float  c_g = bgColor[1];
+                                     float  c_g = (mix(bgColor[1],fgColor[1], opacity/2.0)); //***
                                      float  c_b = bgColor[2];
                                      gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
                                   }
                             }else if(opacity<= (2.0/3.0)){
                                   if(ddx>0.0){
                                      //uphill
-                                     float  c_r = bgColor[0];
+                                     float  c_r = (mix(bgColor[0],fgColor[0], opacity/2.0));
                                      float  c_g = (mix(bgColor[1],fgColor[1], opacity));
                                      float  c_b = (mix(bgColor[2],fgColor[2], 1.0));
                                     
@@ -212,7 +212,7 @@ namespace PixelFarm.DrawingGL
                                   }else{
                                      float  c_r = (mix(bgColor[0],fgColor[0], 1.0));
                                      float  c_g = (mix(bgColor[1],fgColor[1], opacity));
-                                     float  c_b = bgColor[2];
+                                     float  c_b = (mix(bgColor[1],fgColor[1], opacity/2.0));
                                      gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
                                   }
                             }else{
