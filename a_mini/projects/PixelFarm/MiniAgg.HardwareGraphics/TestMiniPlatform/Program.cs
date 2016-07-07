@@ -11,8 +11,8 @@ namespace TestGlfw
         [STAThread]
         static void Main()
         {
-            dbugTestStbImages();
-            GLFWProgram2.Start();
+            //dbugTestStbImages();
+            GLFWProgram.Start();
         }
 
 #if DEBUG 
