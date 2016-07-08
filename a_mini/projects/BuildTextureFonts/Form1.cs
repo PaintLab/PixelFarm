@@ -58,9 +58,7 @@ namespace BuildTextureFonts
 
             int[] distanceBuffer = new int[bmpWidth * bmpHeight];//distance count
             DepthAnalysisXAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);
-            //                                                    //1st pass horizontal scanline
-
-
+            //                                                    //1st pass horizontal scanline 
             //--------
             //test output
             var outputBmp = new Bitmap(bmpWidth, bmpHeight);
@@ -71,6 +69,7 @@ namespace BuildTextureFonts
             outputBmp.Save("d:\\WImageTest\\a001_x.png");
             //--------
         }
+
         static void DepthAnalysisXAxis(int[] intBuffer, int bmpWidth, int bmpHeight, int[] distanceBuffer)
         {
             int i = 0;
@@ -101,7 +100,7 @@ namespace BuildTextureFonts
                         if (currentStripLen > 0)
                         {
                             //fill data
-                            FillData(distanceBuffer, p, currentStripLen, (cut % 2) != 0);
+                            FillDataXAxis(distanceBuffer, p, currentStripLen, (cut % 2) != 0);
                             cut++;
                         }
                         else
@@ -124,13 +123,14 @@ namespace BuildTextureFonts
                 //fill remaining databack
                 if (currentStripLen > 0)
                 {
-                    FillData(distanceBuffer, p, currentStripLen, (cut % 2) != 0);
+                    FillDataXAxis(distanceBuffer, p, currentStripLen, (cut % 2) != 0);
                     p = i;
                 }
             }
         }
         const int SCALE = 20;
-        static void FillData(int[] outputPixels, int startIndex, int count, bool inside)
+        const int MAX_LEVEL = 5;
+        static void FillDataXAxis(int[] outputPixels, int startIndex, int count, bool inside)
         {
 
             if (inside)
@@ -143,13 +143,13 @@ namespace BuildTextureFonts
                     //odd number
                     int eachSide = ((count - 1) / 2);
                     //start(left side)
-                    FillStrip(outputPixels, startIndex, eachSide, 5, true, true);
+                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, true, true);
                     //middle
                     //-----------------
                     startIndex += eachSide;
-                    if (eachSide > 5)
+                    if (eachSide > MAX_LEVEL)
                     {
-                        outputPixels[startIndex] = (255 << 24) | ((6 * SCALE) << INSIDE_SHIFT);
+                        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << INSIDE_SHIFT);
                     }
                     else
                     {
@@ -158,17 +158,17 @@ namespace BuildTextureFonts
                     startIndex += 1;
                     //-----------------
                     //right side 
-                    FillStrip(outputPixels, startIndex, eachSide, 5, true, false);
+                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, true, false);
                 }
                 else
                 {
                     //even number
                     int eachSide = count / 2;
                     //start(left side)
-                    FillStrip(outputPixels, startIndex, eachSide, 5, true, true);
+                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, true, true);
                     startIndex += eachSide;
                     //right side
-                    FillStrip(outputPixels, startIndex, eachSide, 5, true, false);
+                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, true, false);
                 }
             }
             else
@@ -182,13 +182,13 @@ namespace BuildTextureFonts
                     //odd number
                     int eachSide = ((count - 1) / 2);
                     //start(left side)
-                    FillStrip(outputPixels, startIndex, eachSide, 5, false, true);
+                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, false, true);
                     //-----------------
                     //middle
                     startIndex += eachSide;
-                    if (eachSide > 5)
+                    if (eachSide > MAX_LEVEL)
                     {
-                        outputPixels[startIndex] = (255 << 24) | ((6 * SCALE) << OUTSIDE_SHIFT);
+                        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << OUTSIDE_SHIFT);
                     }
                     else
                     {
@@ -197,17 +197,17 @@ namespace BuildTextureFonts
                     startIndex += 1;
                     //-----------------
                     //right side                    
-                    FillStrip(outputPixels, startIndex, eachSide, 5, false, false);
+                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, false, false);
                 }
                 else
                 {
                     //even number
                     int eachSide = count / 2;
                     //start(left side)
-                    FillStrip(outputPixels, startIndex, eachSide, 5, false, true);
+                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, false, true);
                     startIndex += eachSide;
                     //right side
-                    FillStrip(outputPixels, startIndex, eachSide, 5, false, false);
+                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, false, false);
                 }
             }
         }
