@@ -144,6 +144,90 @@ namespace BuildTextureFonts
         {
             int i = 0;
             int p = 0;
+
+            List<int> pxCollection = new List<int>();
+            bool glyphArea = false;
+            for (int row = 0; row < bmpHeight; ++row)
+            {
+                glyphArea = false;
+                pxCollection.Clear();
+                //int prevLevel = 0;
+                //int currentStripLen = 0;
+                //row   
+                for (int c = 0; c < bmpWidth; ++c)
+                {
+                    int pixel = intBuffer[i];
+                    int a = (pixel >> 24) & 0xff;
+                    int b = (pixel >> 16) & 0xff;
+                    int g = (pixel >> 8) & 0xff;
+                    int r = (pixel >> 8) & 0xff;
+                    //convert to grey scale
+                    int level = (int)((0.2126 * r) + (0.7152 * g) + (0.0722) * b);
+                    //int luminosity method;
+                    // R' = G' = B' = 0.2126R + 0.7152G + 0.0722B 
+
+                    if (level > 0)
+                    {
+                        //this enter glyph area
+                        if (!glyphArea)
+                        {
+                            //just  enter the glyph area
+                            //clear existing data in collection strip
+                            if (pxCollection.Count > 0)
+                            {
+                                FillDataXAxis(distanceBuffer, p, pxCollection.Count, false);
+                            }
+                            pxCollection.Clear();
+                            pxCollection.Add(level);
+                            glyphArea = true;
+                            p = i;
+                        }
+                        else
+                        {
+                            //we alreary in glyph area
+                            //so collect strip len
+                            pxCollection.Add(level);
+                        }
+
+                    }
+                    else
+                    {
+                        //now we are not in glyph area
+                        if (!glyphArea)
+                        {
+                            //already not in glyph area
+                            pxCollection.Add(level);
+                        }
+                        else
+                        {
+
+                            //just exit glyph area
+                            if (pxCollection.Count > 0)
+                            {
+                                FillDataXAxis(distanceBuffer, p, pxCollection.Count, true);
+                            }
+                            pxCollection.Clear();
+                            pxCollection.Add(level);
+                            glyphArea = false;
+                            p = i;
+                        } 
+                    } 
+                    ++i;
+                }
+                //---------------------------
+                //exit
+                //fill remaining databack
+                if (pxCollection.Count > 0)
+                {
+                    FillDataXAxis(distanceBuffer, p, pxCollection.Count, glyphArea);
+                    p = i;
+                }
+            }
+        }
+        static void DepthAnalysisXAxis2(int[] intBuffer, int bmpWidth, int bmpHeight, int[] distanceBuffer)
+        {
+            int i = 0;
+            int p = 0;
             for (int row = 0; row < bmpHeight; ++row)
             {
                 int prevLevel = 0;
