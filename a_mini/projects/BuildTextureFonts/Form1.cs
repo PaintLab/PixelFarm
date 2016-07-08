@@ -57,8 +57,8 @@ namespace BuildTextureFonts
             //process each scanline pixel***
 
             int[] distanceBuffer = new int[bmpWidth * bmpHeight];//distance count
-            //DepthAnalysisXAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);   //1st pass horizontal scanline 
-            DepthAnalysisYAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);
+            DepthAnalysisXAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);   //1st pass horizontal scanline 
+            //DepthAnalysisYAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);
 
             {
                 //test output
@@ -160,9 +160,9 @@ namespace BuildTextureFonts
                     int a = (pixel >> 24) & 0xff;
                     int b = (pixel >> 16) & 0xff;
                     int g = (pixel >> 8) & 0xff;
-                    int r = (pixel >> 8) & 0xff;
+                    int r = (pixel) & 0xff;
                     //convert to grey scale
-                    int level = (int)((0.2126 * r) + (0.7152 * g) + (0.0722) * b);
+                    double level = ((0.2126 * r) + (0.7152 * g) + (0.0722) * b);
                     //int luminosity method;
                     // R' = G' = B' = 0.2126R + 0.7152G + 0.0722B 
 
@@ -175,10 +175,10 @@ namespace BuildTextureFonts
                             //clear existing data in collection strip
                             if (pxCollection.Count > 0)
                             {
-                                FillDataXAxis(distanceBuffer, p, pxCollection.Count, false);
+                                FillDataXAxis(distanceBuffer, p, pxCollection, false);
                             }
                             pxCollection.Clear();
-                            pxCollection.Add(level);
+                            pxCollection.Add((int)level);
                             glyphArea = true;
                             p = i;
                         }
@@ -186,7 +186,7 @@ namespace BuildTextureFonts
                         {
                             //we alreary in glyph area
                             //so collect strip len
-                            pxCollection.Add(level);
+                            pxCollection.Add((int)level);
                         }
 
                     }
@@ -196,7 +196,7 @@ namespace BuildTextureFonts
                         if (!glyphArea)
                         {
                             //already not in glyph area
-                            pxCollection.Add(level);
+                            pxCollection.Add((int)level);
                         }
                         else
                         {
@@ -204,14 +204,14 @@ namespace BuildTextureFonts
                             //just exit glyph area
                             if (pxCollection.Count > 0)
                             {
-                                FillDataXAxis(distanceBuffer, p, pxCollection.Count, true);
+                                FillDataXAxis(distanceBuffer, p, pxCollection, true);
                             }
                             pxCollection.Clear();
-                            pxCollection.Add(level);
+                            pxCollection.Add((int)level);
                             glyphArea = false;
                             p = i;
-                        } 
-                    } 
+                        }
+                    }
                     ++i;
                 }
                 //---------------------------
@@ -219,74 +219,75 @@ namespace BuildTextureFonts
                 //fill remaining databack
                 if (pxCollection.Count > 0)
                 {
-                    FillDataXAxis(distanceBuffer, p, pxCollection.Count, glyphArea);
+                    FillDataXAxis(distanceBuffer, p, pxCollection, glyphArea);
                     p = i;
                 }
             }
         }
-        static void DepthAnalysisXAxis2(int[] intBuffer, int bmpWidth, int bmpHeight, int[] distanceBuffer)
-        {
-            int i = 0;
-            int p = 0;
-            for (int row = 0; row < bmpHeight; ++row)
-            {
-                int prevLevel = 0;
-                int currentStripLen = 0;
-                //row 
-                int cut = 0;
-                for (int c = 0; c < bmpWidth; ++c)
-                {
-                    int pixel = intBuffer[i];
-                    int a = (pixel >> 24) & 0xff;
-                    int b = (pixel >> 16) & 0xff;
-                    int g = (pixel >> 8) & 0xff;
-                    int r = (pixel >> 8) & 0xff;
-                    //convert to grey scale
-                    int level = (int)((0.2126 * r) + (0.7152 * g) + (0.0722) * b);
-                    //int luminosity method;
-                    // R' = G' = B' = 0.2126R + 0.7152G + 0.0722B 
-                    if (level > 0)
-                    {
-                        level = 255;
-                    }
-                    if (level != prevLevel)
-                    {
-                        if (currentStripLen > 0)
-                        {
-                            //fill data
-                            FillDataXAxis(distanceBuffer, p, currentStripLen, (cut % 2) != 0);
-                            cut++;
-                        }
-                        else
-                        {
+        //static void DepthAnalysisXAxis2(int[] intBuffer, int bmpWidth, int bmpHeight, int[] distanceBuffer)
+        //{
+        //    int i = 0;
+        //    int p = 0;
+        //    for (int row = 0; row < bmpHeight; ++row)
+        //    {
+        //        int prevLevel = 0;
+        //        int currentStripLen = 0;
+        //        //row 
+        //        int cut = 0;
+        //        for (int c = 0; c < bmpWidth; ++c)
+        //        {
+        //            int pixel = intBuffer[i];
+        //            int a = (pixel >> 24) & 0xff;
+        //            int b = (pixel >> 16) & 0xff;
+        //            int g = (pixel >> 8) & 0xff;
+        //            int r = (pixel >> 8) & 0xff;
+        //            //convert to grey scale
+        //            int level = (int)((0.2126 * r) + (0.7152 * g) + (0.0722) * b);
+        //            //int luminosity method;
+        //            // R' = G' = B' = 0.2126R + 0.7152G + 0.0722B 
+        //            if (level > 0)
+        //            {
+        //                level = 255;
+        //            }
+        //            if (level != prevLevel)
+        //            {
+        //                if (currentStripLen > 0)
+        //                {
+        //                    //fill data
+        //                    FillDataXAxis(distanceBuffer, p, currentStripLen, (cut % 2) != 0);
+        //                    cut++;
+        //                }
+        //                else
+        //                {
 
-                        }
-                        currentStripLen = 1;
-                        p = i;
-                        prevLevel = level;
-                    }
-                    else
-                    {
-                        //same level
-                        currentStripLen++;
-                    }
-                    ++i;
-                }
-                //---------------------------
-                //exit
-                //fill remaining databack
-                if (currentStripLen > 0)
-                {
-                    FillDataXAxis(distanceBuffer, p, currentStripLen, (cut % 2) != 0);
-                    p = i;
-                }
-            }
-        }
+        //                }
+        //                currentStripLen = 1;
+        //                p = i;
+        //                prevLevel = level;
+        //            }
+        //            else
+        //            {
+        //                //same level
+        //                currentStripLen++;
+        //            }
+        //            ++i;
+        //        }
+        //        //---------------------------
+        //        //exit
+        //        //fill remaining databack
+        //        if (currentStripLen > 0)
+        //        {
+        //            FillDataXAxis(distanceBuffer, p, currentStripLen, (cut % 2) != 0);
+        //            p = i;
+        //        }
+        //    }
+        //}
         const int SCALE = 20;
         const int MAX_LEVEL = 5;
-        static void FillDataXAxis(int[] outputPixels, int startIndex, int count, bool inside)
+        static void FillDataXAxis(int[] outputPixels, int startIndex, List<int> levelCollection, bool inside)
         {
 
+            int count = levelCollection.Count;
             if (inside)
             {
                 //inside polygon
@@ -297,32 +298,36 @@ namespace BuildTextureFonts
                     //odd number
                     int eachSide = ((count - 1) / 2);
                     //start(left side)
-                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, true, true);
+                    FillStrip(levelCollection, 0, outputPixels, startIndex, eachSide, MAX_LEVEL, true, true);
                     //middle
                     //-----------------
                     startIndex += eachSide;
                     if (eachSide > MAX_LEVEL)
                     {
-                        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << Current_INSIDE_SHIFT);
+                        // outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << Current_INSIDE_SHIFT);
+
+                        outputPixels[startIndex] = (255 << 24) | levelCollection[eachSide];
                     }
                     else
                     {
-                        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << Current_INSIDE_SHIFT);
+
+                        //  outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << Current_INSIDE_SHIFT);
+                        outputPixels[startIndex] = (255 << 24) | levelCollection[eachSide];
                     }
                     startIndex += 1;
                     //-----------------
                     //right side 
-                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, true, false);
+                    FillStrip(levelCollection, eachSide + 1, outputPixels, startIndex, eachSide, MAX_LEVEL, true, false);
                 }
                 else
                 {
                     //even number
                     int eachSide = count / 2;
                     //start(left side)
-                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, true, true);
+                    FillStrip(levelCollection, 0, outputPixels, startIndex, eachSide, MAX_LEVEL, true, true);
                     startIndex += eachSide;
                     //right side
-                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, true, false);
+                    FillStrip(levelCollection, eachSide, outputPixels, startIndex, eachSide, MAX_LEVEL, true, false);
                 }
             }
             else
@@ -331,38 +336,39 @@ namespace BuildTextureFonts
                 int n = count;
                 int p = startIndex;
 
-                if ((count % 2) != 0)
-                {
-                    //odd number
-                    int eachSide = ((count - 1) / 2);
-                    //start(left side)
-                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, false, true);
-                    //-----------------
-                    //middle
-                    startIndex += eachSide;
-                    if (eachSide > MAX_LEVEL)
-                    {
-                        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << Current_OUTSIDE_SHIFT);
-                    }
-                    else
-                    {
-                        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << Current_OUTSIDE_SHIFT);
-                    }
-                    startIndex += 1;
-                    //-----------------
-                    //right side                    
-                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, false, false);
-                }
-                else
-                {
-                    //even number
-                    int eachSide = count / 2;
-                    //start(left side)
-                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, false, true);
-                    startIndex += eachSide;
-                    //right side
-                    FillStrip(outputPixels, startIndex, eachSide, MAX_LEVEL, false, false);
-                }
+                //if ((count % 2) != 0)
+                //{
+                //    //odd number
+                //    int eachSide = ((count - 1) / 2);
+                //    //start(left side)
+
+                //    FillStrip(levelCollection, 0, outputPixels, startIndex, eachSide, MAX_LEVEL, false, true);
+                //    //-----------------
+                //    //middle
+                //    startIndex += eachSide;
+                //    if (eachSide > MAX_LEVEL)
+                //    {
+                //        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << Current_OUTSIDE_SHIFT);
+                //    }
+                //    else
+                //    {
+                //        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << Current_OUTSIDE_SHIFT);
+                //    }
+                //    startIndex += 1;
+                //    //-----------------
+                //    //right side                    
+                //    FillStrip(levelCollection, eachSide + 1, outputPixels, startIndex, eachSide, MAX_LEVEL, false, false);
+                //}
+                //else
+                //{
+                //    //even number
+                //    int eachSide = count / 2;
+                //    //start(left side)
+                //    FillStrip(levelCollection, 0, outputPixels, startIndex, eachSide, MAX_LEVEL, false, true);
+                //    startIndex += eachSide;
+                //    //right side
+                //    FillStrip(levelCollection, eachSide, outputPixels, startIndex, eachSide, MAX_LEVEL, false, false);
+                //}
             }
         }
 
@@ -370,13 +376,13 @@ namespace BuildTextureFonts
         //16 : red
         //8 : green
         //0: blue
-        static int Current_INSIDE_SHIFT = 16; 
-        static int Current_OUTSIDE_SHIFT = 0; 
+        static int Current_INSIDE_SHIFT = 16;
+        static int Current_OUTSIDE_SHIFT = 0;
 
-        static void FillStrip(int[] outputPixels, int startIndex, int count, int maxLevel, bool inside, bool uphill)
+        static void FillStrip(List<int> srcLevels, int srcLevelStart, int[] outputPixels, int startIndex, int count, int maxLevel, bool inside, bool uphill)
         {
             int compoShift = inside ? Current_INSIDE_SHIFT : Current_OUTSIDE_SHIFT;
-
+            int ss = srcLevelStart;
             if (uphill)
             {
                 //from dark to bright
@@ -388,29 +394,39 @@ namespace BuildTextureFonts
                     //gradient up 
                     int value = 0;
                     int c = 1;
+
                     for (; i < maxLevel; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        // outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | srcLevels[ss];
                         p++;
                         c++;
+                        ss++;
+
                     }
                     //long distance                    
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        //outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | srcLevels[ss];
                         p++;
+                        ss++;
                     }
+
                 }
                 else
-                {  //gradient up
+                {
+                    //gradient up
                     int i = 0;
                     int value = 0;
                     int c = 1;
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        //outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | srcLevels[ss];
                         p++;
                         c++;
+                        ss++;
                     }
                 }
             }
@@ -428,17 +444,21 @@ namespace BuildTextureFonts
                     int c = maxLevel + 1;
                     for (; i < lim; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        //  outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | srcLevels[ss];
                         p++;
+                        ss++;
                     }
 
                     //gradient down
                     c = maxLevel;
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        //  outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | srcLevels[ss];
                         p++;
                         c--;
+                        ss++;
                     }
                 }
                 else
@@ -448,9 +468,11 @@ namespace BuildTextureFonts
                     int c = count;
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        // outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | srcLevels[ss];
                         p++;
                         c--;
+                        ss++;
                     }
                 }
             }

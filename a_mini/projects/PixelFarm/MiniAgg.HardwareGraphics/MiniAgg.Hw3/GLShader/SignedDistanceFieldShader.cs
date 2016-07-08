@@ -116,12 +116,12 @@ namespace PixelFarm.DrawingGL
 
             _fgColor = shaderProgram.GetUniform4("fgColor");
         }
-   
+
         public PixelFarm.Drawing.Color ForegroundColor;
         protected override void OnSetVarsBeforeRenderer()
-        { 
-             
-            PixelFarm.Drawing.Color fgColor = ForegroundColor; 
+        {
+
+            PixelFarm.Drawing.Color fgColor = ForegroundColor;
             _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
         }
     }
@@ -132,6 +132,12 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar4 _fgColor;
         public MultiChannelSubPixelRenderingSdf(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
+        {
+            BuildProgramV1();
+            //BuildProgramV2();
+        }
+
+        void BuildProgramV1()
         {
             //credit: https://github.com/Chlumsky/msdfgen 
 
@@ -242,6 +248,54 @@ namespace PixelFarm.DrawingGL
              ";
             BuildProgram(vs, fs);
         }
+
+        void BuildProgramV2()
+        {
+            //credit: https://github.com/Chlumsky/msdfgen 
+
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                uniform mat4 u_mvpMatrix;  
+                varying vec2 v_texCoord;  
+                void main()
+                {
+                    gl_Position = u_mvpMatrix* a_position;
+                    v_texCoord =  a_texCoord; 
+                 }	 
+                ";
+            //enable derivative extension  for fwidth() function
+            //see 
+            //https://www.khronos.org/registry/gles/extensions/OES/OES_standard_derivatives.txt
+            //https://github.com/AnalyticalGraphicsInc/cesium/issues/745
+            //https://developer.mozilla.org/en-US/docs/Web/API/OES_standard_derivatives
+            //https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Using_Extensions
+            string fs = @"
+                        #ifdef GL_OES_standard_derivatives
+                            #extension GL_OES_standard_derivatives : enable
+                        #endif  
+                        precision mediump float; 
+                        varying vec2 v_texCoord;                
+                        uniform sampler2D s_texture; //msdf texture
+                        //uniform vec4 bgColor;
+                        uniform vec4 fgColor;
+
+                        float median(float r, float g, float b) {
+                            return max(min(r, g), min(max(r, g), b));
+                        }
+                        void main() {
+                            vec4 sample = texture2D(s_texture, v_texCoord);
+                            float dist = texture2D(s_texture, v_texCoord).r;
+                            //float alpha = smoothstep(u_buffer - u_gamma, u_buffer + u_gamma, dist);
+                            //float alpha = smoothstep(1.0 - 0.5, 1.0 + 0.5, dist);
+                            float opacity = smoothstep(0.1, 1.0, dist);
+                            //gl_FragColor = vec4(u_color.rgb, alpha * u_color.a); 
+                            //float opacity = clamp(dist + 0.5, 0.0, 1.0);
+                            gl_FragColor = vec4(0.0,0.0,0.0,opacity);
+                        }
+             ";
+            BuildProgram(vs, fs);
+        }
         protected override void OnProgramBuilt()
         {
             _bgColor = shaderProgram.GetUniform4("bgColor");
@@ -253,7 +307,7 @@ namespace PixelFarm.DrawingGL
         {
             PixelFarm.Drawing.Color bgColor = BackgroundColor;
             PixelFarm.Drawing.Color fgColor = ForegroundColor;
-            _bgColor.SetValue((float)bgColor.R / 255f, (float)bgColor.G / 255f, (float)bgColor.B / 255f, (float)bgColor.A / 255f);
+           // _bgColor.SetValue((float)bgColor.R / 255f, (float)bgColor.G / 255f, (float)bgColor.B / 255f, (float)bgColor.A / 255f);
             _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
         }
     }
