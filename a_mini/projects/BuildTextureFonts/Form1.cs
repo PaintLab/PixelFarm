@@ -519,6 +519,10 @@ namespace BuildTextureFonts
             MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
             MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
             MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
+
+            double s_left, s_bottom, s_right, s_top;
+            MyFtLib.ShapeFindBounds(shape, out s_left, out s_bottom, out s_right, out s_top);
+
             //then create msdf texture
             if (!MyFtLib.ShapeValidate(shape))
             {

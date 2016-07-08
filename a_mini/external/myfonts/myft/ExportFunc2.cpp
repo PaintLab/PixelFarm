@@ -99,7 +99,7 @@ void MyFtGenerateMsdf(msdfgen::Shape* shape, int width, int height, double range
 			//a b g r
 			*outputH = (255 << 24) |
 				(msdfgen::clamp(int(pixel.b * 0x100), 0xff) << 16) |
-				(msdfgen::clamp(int(pixel.g * 0x100), 0xff) <<8) |
+				(msdfgen::clamp(int(pixel.g * 0x100), 0xff) << 8) |
 				msdfgen::clamp(int(pixel.r * 0x100), 0xff);
 
 			outputH += 1;
@@ -119,4 +119,9 @@ MY_DLL_EXPORT void ShapeNormalize(msdfgen::Shape* shape) {
 };
 MY_DLL_EXPORT void SetInverseYAxis(msdfgen::Shape* shape, bool inverseYAxis) {
 	shape->inverseYAxis = inverseYAxis;
+};
+MY_DLL_EXPORT  void ShapeFindBounds(msdfgen::Shape* shape,
+	double* left, double* bottom,
+	double* right, double*top) {
+	shape->bounds(*left, *bottom, *right, *top);
 };

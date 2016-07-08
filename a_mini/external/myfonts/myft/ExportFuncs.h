@@ -109,6 +109,9 @@ extern "C" {
 	MY_DLL_EXPORT bool ShapeValidate(msdfgen::Shape* shape);
 	MY_DLL_EXPORT void ShapeNormalize(msdfgen::Shape* shape);
 	MY_DLL_EXPORT void SetInverseYAxis(msdfgen::Shape* shape,bool inverseYAxis);
+	MY_DLL_EXPORT void ShapeFindBounds(msdfgen::Shape* shape,
+		double* left, double* bottom,
+		double* right, double* top);
 
 	MY_DLL_EXPORT  void ContourAddLinearSegment(msdfgen::Contour* cnt,
 		double x0, double y0,
@@ -124,6 +127,7 @@ extern "C" {
 		double ctrl0X, double ctrl0Y,
 		double ctrl1X, double ctrl1Y,
 		double x1, double y1); 
+	
 
 	MY_DLL_EXPORT void MyFtGenerateMsdf(msdfgen::Shape* shape, int width, int height, double range,
 		double scale, double tx, double ty,

@@ -19,17 +19,7 @@ namespace BuildTextureFonts
             Application.Run(new Form1());
         }
     }
-    class ScanLine
-    {
-        public List<ScanStrip> scanStrip = new List<ScanStrip>();
-
-    }
-    struct ScanStrip
-    {
-        public bool black;
-        public int x;
-        public int width;
-    }
+    
     static class MyFtLib
     {
         const string MYFT = "myft.dll";
@@ -43,6 +33,12 @@ namespace BuildTextureFonts
         public static extern IntPtr CreateShape();
         [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern IntPtr ShapeAddBlankContour(IntPtr shape);
+
+        [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ShapeFindBounds(IntPtr shape,
+         out double left, out double bottom,
+         out double right, out double top);
+
         [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
         public static extern void ContourAddLinearSegment(IntPtr cnt,
             double x0, double y0,
