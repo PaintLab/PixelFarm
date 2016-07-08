@@ -29,8 +29,8 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                msdf_bmp = LoadTexture(@"..\msdf_75.png");
-                //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x.png");
+                //msdf_bmp = LoadTexture(@"..\msdf_75.png");
+                msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
                 resInit = true;
             }
             canvas2d.Clear(PixelFarm.Drawing.Color.White);

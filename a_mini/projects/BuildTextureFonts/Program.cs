@@ -32,8 +32,46 @@ namespace BuildTextureFonts
     }
     static class MyFtLib
     {
-        [System.Runtime.InteropServices.DllImport("myft.dll", CharSet = System.Runtime.InteropServices.CharSet.Ansi, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        public static unsafe extern int MyFtMSDFGEN(int argc, string[] argv);
+        const string MYFT = "myft.dll";
+        [System.Runtime.InteropServices.DllImport(MYFT, CharSet = System.Runtime.InteropServices.CharSet.Ansi, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern int MyFtMSDFGEN(int argc, string[] argv);
+
+        [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void DeleteUnmanagedObj(IntPtr unmanagedPtr);
+
+        [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern IntPtr CreateShape();
+        [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern IntPtr ShapeAddBlankContour(IntPtr shape);
+        [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ContourAddLinearSegment(IntPtr cnt,
+            double x0, double y0,
+            double x1, double y1);
+        [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ContourAddQuadraticSegment(IntPtr cnt,
+            double x0, double y0,
+            double ctrl0X, double ctrl0Y,
+            double x1, double y1);
+        [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern void ContourAddCubicSegment(IntPtr cnt,
+            double x0, double y0,
+            double ctrl0X, double ctrl0Y,
+            double ctrl1X, double ctrl1Y,
+            double x1, double y1);
+        [System.Runtime.InteropServices.DllImport(MYFT, CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        public static extern unsafe void MyFtGenerateMsdf(IntPtr shape, int width, int height, double range,
+            double scale, double tx, double ty, double edgeThreshold, double angleThreshold, int* outputBitmap);
+
+        [System.Runtime.InteropServices.DllImport(MYFT)]
+        public static extern bool ShapeValidate(IntPtr shape);
+        [System.Runtime.InteropServices.DllImport(MYFT)]
+        public static extern void ShapeNormalize(IntPtr shape);
+        [System.Runtime.InteropServices.DllImport(MYFT)]
+        public static extern void SetInverseYAxis(IntPtr shape, bool inverseYAxis);
+
+
+        [System.Runtime.InteropServices.DllImport(MYFT)]
+        public static extern int MyFtLibGetVersion();
     }
     class MsdfParameters
     {
@@ -81,7 +119,7 @@ namespace BuildTextureFonts
             if (fontName == null) { throw new Exception(); }
             args.Add("-font"); args.Add(fontName);
             args.Add("0x" + ((int)character).ToString("X")); //accept unicode char
-            //3.
+                                                             //3.
             if (outputFile == null)
             {
                 //use default

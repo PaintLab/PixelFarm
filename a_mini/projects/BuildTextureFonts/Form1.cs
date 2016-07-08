@@ -510,5 +510,40 @@ namespace BuildTextureFonts
                 MyFtLib.MyFtMSDFGEN(splitStr.Length, pars.GetArgs());
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int version = MyFtLib.MyFtLibGetVersion();
+            IntPtr shape = MyFtLib.CreateShape();
+            IntPtr cnt = MyFtLib.ShapeAddBlankContour(shape);
+            MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
+            MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
+            MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
+            //then create msdf texture
+            if (!MyFtLib.ShapeValidate(shape))
+            {
+                throw new NotSupportedException();
+            }
+            MyFtLib.ShapeNormalize(shape);
+
+            unsafe
+            {
+                int w = 32, h = 32;
+                int[] output = new int[w * h];
+                fixed (int* output_h = &output[0])
+                {
+                    MyFtLib.MyFtGenerateMsdf(shape, w, h, 2, 1, 1, 1, -1, 3, output_h);
+                }
+                //save to bmp
+                using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    System.Runtime.InteropServices.Marshal.Copy(output, 0, bmpdata.Scan0, output.Length);
+                    bmp.UnlockBits(bmpdata);
+                    bmp.Save("d:\\WImageTest\\a001_x1.png");
+                }
+            }
+            MyFtLib.DeleteUnmanagedObj(shape);
+        }
     }
 }

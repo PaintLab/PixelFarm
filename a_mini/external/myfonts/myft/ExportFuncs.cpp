@@ -28,11 +28,10 @@ int force_ucs2_charmap2(FT_Face ftf)
 	}
 	return -1;
 }
-//------------------------------------------------------------
-
+//------------------------------------------------------------ 
 int MyFtLibGetVersion()
 {
-	return 2;
+	return 3;
 };
 int MyFtInitLib()
 {
