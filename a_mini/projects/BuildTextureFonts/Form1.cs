@@ -57,19 +57,89 @@ namespace BuildTextureFonts
             //process each scanline pixel***
 
             int[] distanceBuffer = new int[bmpWidth * bmpHeight];//distance count
-            DepthAnalysisXAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);
-            //                                                    //1st pass horizontal scanline 
-            //--------
-            //test output
-            var outputBmp = new Bitmap(bmpWidth, bmpHeight);
-            var outputBmpData = outputBmp.LockBits(new Rectangle(0, 0, (int)size.Width, (int)size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                bmp1.PixelFormat);
-            System.Runtime.InteropServices.Marshal.Copy(distanceBuffer, 0, outputBmpData.Scan0, distanceBuffer.Length);
-            outputBmp.UnlockBits(outputBmpData);
-            outputBmp.Save("d:\\WImageTest\\a001_x.png");
-            //--------
-        }
+            //DepthAnalysisXAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);   //1st pass horizontal scanline 
+            DepthAnalysisYAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);
 
+            {
+                //test output
+                var outputBmp = new Bitmap(bmpWidth, bmpHeight);
+                var outputBmpData = outputBmp.LockBits(new Rectangle(0, 0, (int)size.Width, (int)size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                    bmp1.PixelFormat);
+                System.Runtime.InteropServices.Marshal.Copy(distanceBuffer, 0, outputBmpData.Scan0, distanceBuffer.Length);
+                outputBmp.UnlockBits(outputBmpData);
+                outputBmp.Save("d:\\WImageTest\\a001_x.png");
+                //--------
+            }
+        }
+        static void RotateLeft90(int[] intBuffer, int bmpWidth, int bmpHeight, int[] outputBuffer)
+        {
+            int targetPos = 0;
+            for (int c = 0; c < bmpWidth; ++c)
+            {
+                int startSrcPos = bmpWidth - (c + 1);
+                for (int row = 0; row < bmpHeight; ++row)
+                {
+                    outputBuffer[targetPos] = intBuffer[startSrcPos];
+                    targetPos++;
+                    startSrcPos += bmpWidth;
+                }
+            }
+        }
+        static void RotateRight90(int[] intBuffer, int bmpWidth, int bmpHeight, int[] outputBuffer)
+        {
+            //int targetPos = 0;
+            //for (int row = bmpHeight - 1; row >= 0; --row)
+            //{
+            //    int startSrcPos = row * bmpWidth;
+            //    for (int c = 0; c < bmpWidth; ++c)
+            //    {
+            //        outputBuffer[targetPos] = intBuffer[startSrcPos];
+            //        targetPos++;
+            //        startSrcPos++;
+            //    }
+            //}
+            int targetPos = 0;
+            for (int c = 0; c < bmpWidth; ++c)
+            {
+                for (int row = bmpHeight - 1; row >= 0; --row)
+                {
+                    int startSrcPos = (row * bmpWidth) + c;
+                    outputBuffer[targetPos] = intBuffer[startSrcPos];
+                    targetPos++;
+                }
+            }
+        }
+        static void DepthAnalysisYAxis(int[] intBuffer, int bmpWidth, int bmpHeight, int[] distanceBuffer)
+        {
+            //rotate left 90
+            int r90W = bmpHeight;
+            int r90H = bmpWidth;
+            int[] rotateLeft90 = new int[r90W * r90H];
+            int[] r90DistanceBuffer = new int[r90W * r90H];
+            RotateLeft90(intBuffer, bmpWidth, bmpHeight, rotateLeft90);
+            //{
+            //    //test output
+            //    var outputBmp = new Bitmap(bmpHeight, bmpWidth);
+            //    var outputBmpData = outputBmp.LockBits(new Rectangle(0, 0, (int)bmpHeight, (int)bmpWidth), System.Drawing.Imaging.ImageLockMode.ReadOnly,
+            //       System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //    System.Runtime.InteropServices.Marshal.Copy(rotateLeft90, 0, outputBmpData.Scan0, distanceBuffer.Length);
+            //    outputBmp.UnlockBits(outputBmpData);
+            //    outputBmp.Save("d:\\WImageTest\\a001_x.png");
+            //}
+
+            DepthAnalysisXAxis(rotateLeft90, r90W, r90H, r90DistanceBuffer);
+            //{
+            //    var outputBmp = new Bitmap(r90W, r90H);
+            //    var outputBmpData = outputBmp.LockBits(new Rectangle(0, 0, (int)r90W, (int)r90H), System.Drawing.Imaging.ImageLockMode.ReadOnly,
+            //       System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //    System.Runtime.InteropServices.Marshal.Copy(r90DistanceBuffer, 0, outputBmpData.Scan0, r90DistanceBuffer.Length);
+            //    outputBmp.UnlockBits(outputBmpData);
+            //    outputBmp.Save("d:\\WImageTest\\a001_x.png");
+            //} 
+
+            RotateRight90(r90DistanceBuffer, r90W, r90H, distanceBuffer);
+
+        }
         static void DepthAnalysisXAxis(int[] intBuffer, int bmpWidth, int bmpHeight, int[] distanceBuffer)
         {
             int i = 0;
@@ -149,11 +219,11 @@ namespace BuildTextureFonts
                     startIndex += eachSide;
                     if (eachSide > MAX_LEVEL)
                     {
-                        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << INSIDE_SHIFT);
+                        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << Current_INSIDE_SHIFT);
                     }
                     else
                     {
-                        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << INSIDE_SHIFT);
+                        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << Current_INSIDE_SHIFT);
                     }
                     startIndex += 1;
                     //-----------------
@@ -188,11 +258,11 @@ namespace BuildTextureFonts
                     startIndex += eachSide;
                     if (eachSide > MAX_LEVEL)
                     {
-                        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << OUTSIDE_SHIFT);
+                        outputPixels[startIndex] = (255 << 24) | (((MAX_LEVEL + 1) * SCALE) << Current_OUTSIDE_SHIFT);
                     }
                     else
                     {
-                        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << OUTSIDE_SHIFT);
+                        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << Current_OUTSIDE_SHIFT);
                     }
                     startIndex += 1;
                     //-----------------
@@ -211,11 +281,17 @@ namespace BuildTextureFonts
                 }
             }
         }
-        const int INSIDE_SHIFT = 16;
-        const int OUTSIDE_SHIFT = 8;
+
+
+        //16 : red
+        //8 : green
+        //0: blue
+        static int Current_INSIDE_SHIFT = 16; 
+        static int Current_OUTSIDE_SHIFT = 0; 
+
         static void FillStrip(int[] outputPixels, int startIndex, int count, int maxLevel, bool inside, bool uphill)
         {
-            int compoShift = inside ? INSIDE_SHIFT : OUTSIDE_SHIFT;
+            int compoShift = inside ? Current_INSIDE_SHIFT : Current_OUTSIDE_SHIFT;
 
             if (uphill)
             {
@@ -237,7 +313,7 @@ namespace BuildTextureFonts
                     //long distance                    
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift); //red
+                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
                         p++;
                     }
                 }
