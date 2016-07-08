@@ -64,7 +64,7 @@ namespace PixelFarm.DrawingGL
 
     class MultiChannelSdf : SimpleRectTextureShader
     {
-        ShaderUniformVar4 _bgColor;
+
         ShaderUniformVar4 _fgColor;
         public MultiChannelSdf(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
@@ -94,8 +94,7 @@ namespace PixelFarm.DrawingGL
                         #endif  
                         precision mediump float; 
                         varying vec2 v_texCoord;                
-                        uniform sampler2D s_texture; //msdf texture
-                        uniform vec4 bgColor;
+                        uniform sampler2D s_texture; //msdf texture 
                         uniform vec4 fgColor;
 
                         float median(float r, float g, float b) {
@@ -105,23 +104,24 @@ namespace PixelFarm.DrawingGL
                             vec4 sample = texture2D(s_texture, v_texCoord);
                             float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
                             float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0); 
-                            gl_FragColor = mix(bgColor, fgColor, opacity); 
+                            vec4 finalColor=vec4(fgColor[0],fgColor[1],fgColor[2],opacity);
+                            //mix(bgColor, fgColor, opacity);  
+                            gl_FragColor= finalColor;
                         }
              ";
             BuildProgram(vs, fs);
         }
         protected override void OnProgramBuilt()
         {
-            _bgColor = shaderProgram.GetUniform4("bgColor");
+
             _fgColor = shaderProgram.GetUniform4("fgColor");
         }
-        public PixelFarm.Drawing.Color BackgroundColor;
+   
         public PixelFarm.Drawing.Color ForegroundColor;
         protected override void OnSetVarsBeforeRenderer()
-        {
-            PixelFarm.Drawing.Color bgColor = BackgroundColor;
-            PixelFarm.Drawing.Color fgColor = ForegroundColor;
-            _bgColor.SetValue((float)bgColor.R / 255f, (float)bgColor.G / 255f, (float)bgColor.B / 255f, (float)bgColor.A / 255f);
+        { 
+             
+            PixelFarm.Drawing.Color fgColor = ForegroundColor; 
             _fgColor.SetValue((float)fgColor.R / 255f, (float)fgColor.G / 255f, (float)fgColor.B / 255f, (float)fgColor.A / 255f);
         }
     }
@@ -170,10 +170,11 @@ namespace PixelFarm.DrawingGL
                             float sigDist = median(sample[0], sample[1], sample[2]) - 0.5;
                             float opacity = clamp(sigDist/fwidth(sigDist) + 0.5, 0.0, 1.0);
                             float ddx= dFdx(sigDist);
+                            float ddy= dFdy(sigDist);
                             //gl_FragColor = mix(bgColor, fgColor, opacity);//original
  
                             //for study ***
-                            if(ddx>0.0){
+                            /*if(ddx>0.0){
                                 //uphill
                                 gl_FragColor = mix(bgColor, vec4(1.0,0,0,opacity), opacity);
                             } else if(ddx<0.0){
@@ -182,24 +183,28 @@ namespace PixelFarm.DrawingGL
                             }else{
                                 //stable
                                 gl_FragColor = mix(bgColor, fgColor, opacity);
-                            }  
+                            }  */
                                 
-                            /*
+                            
                             if(opacity == 1.0){
                                 //100%
-                                gl_FragColor = mix(bgColor, fgColor, opacity);//original
+                                //gl_FragColor = mix(bgColor, fgColor, opacity);//original
+                                //gl_FragColor = mix(bgColor, fgColor, opacity);//original        
+                                gl_FragColor = vec4(fgColor[0],fgColor[1],fgColor[2],opacity);//original            
                             }else if(opacity<= (1.0/3.0)){
                                   if(ddx>0.0){
                                      //uphill
                                      float  c_r = bgColor[0];
                                      float  c_g = (mix(bgColor[1],fgColor[1], opacity/2.0)); //*
                                      float  c_b = (mix(bgColor[2],fgColor[2], opacity));                                    
-                                     gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
                                   }else{
                                      float  c_r = (mix(bgColor[0],fgColor[0], opacity));
                                      float  c_g = (mix(bgColor[1],fgColor[1], opacity/2.0)); //***
                                      float  c_b = bgColor[2];
-                                     gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
                                   }
                             }else if(opacity<= (2.0/3.0)){
                                   if(ddx>0.0){
@@ -208,12 +213,14 @@ namespace PixelFarm.DrawingGL
                                      float  c_g = (mix(bgColor[1],fgColor[1], opacity));
                                      float  c_b = (mix(bgColor[2],fgColor[2], 1.0));
                                     
-                                     gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity);   
+                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity);   
+                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity);    
                                   }else{
                                      float  c_r = (mix(bgColor[0],fgColor[0], 1.0));
                                      float  c_g = (mix(bgColor[1],fgColor[1], opacity));
                                      float  c_b = (mix(bgColor[1],fgColor[1], opacity/2.0));
-                                     gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
                                   }
                             }else{
                                   if(ddx>0.0){
@@ -221,14 +228,16 @@ namespace PixelFarm.DrawingGL
                                      float  c_r = (mix(bgColor[0],fgColor[0], opacity));
                                      float  c_g = (mix(bgColor[1],fgColor[1], 1.0));
                                      float  c_b = (mix(bgColor[2],fgColor[2], 1.0));                                    
-                                     gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                    gl_FragColor = vec4(c_r,c_g,c_b, opacity);
                                   }else{
                                      float  c_r = (mix(bgColor[0],fgColor[0], 1.0));
                                      float  c_g = (mix(bgColor[1],fgColor[1], 1.0));
                                      float  c_b = (mix(bgColor[2],fgColor[2], opacity));                                    
-                                     gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     //gl_FragColor = mix(bgColor, vec4(c_r,c_g,c_b,1.0), opacity); 
+                                     gl_FragColor =  vec4(c_r,c_g,c_b, opacity); 
                                   }
-                            }*/
+                            }
                         }
              ";
             BuildProgram(vs, fs);

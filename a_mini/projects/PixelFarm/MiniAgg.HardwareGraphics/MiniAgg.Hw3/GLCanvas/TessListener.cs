@@ -128,13 +128,13 @@ namespace PixelFarm.DrawingGL
         }
         public void Connect(Tesselate.Tesselator tesselator, bool setEdgeFlag)
         {
-            tesselator.callBegin = new Tesselate.Tesselator.CallBeginDelegate(BeginCallBack);
-            tesselator.callEnd = new Tesselate.Tesselator.CallEndDelegate(EndCallBack);
-            tesselator.callVertex = new Tesselate.Tesselator.CallVertexDelegate(VertexCallBack);
-            tesselator.callCombine = new Tesselate.Tesselator.CallCombineDelegate(CombineCallBack);
+            tesselator.callBegin = BeginCallBack;
+            tesselator.callEnd = EndCallBack;
+            tesselator.callVertex = VertexCallBack;
+            tesselator.callCombine = CombineCallBack;
             if (setEdgeFlag)
             {
-                tesselator.callEdgeFlag += new Tesselate.Tesselator.CallEdgeFlagDelegate(EdgeFlagCallBack);
+                tesselator.callEdgeFlag = EdgeFlagCallBack;
             }
         }
         public void Reset(List<Vertex> vertextList)

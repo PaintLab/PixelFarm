@@ -33,6 +33,8 @@ namespace OpenTkEssTest
                 sdf_bmp = LoadTexture(@"..\sdf_75.png");
                 resInit = true;
             }
+            canvas2d.Clear(PixelFarm.Drawing.Color.White);
+
             canvas2d.DrawImageWithMsdf(msdf_bmp, 0, 400, 6);
             canvas2d.DrawImageWithMsdf(msdf_bmp, 100, 500, 0.5f);
             canvas2d.DrawImageWithMsdf(msdf_bmp, 100, 520, 0.4f);

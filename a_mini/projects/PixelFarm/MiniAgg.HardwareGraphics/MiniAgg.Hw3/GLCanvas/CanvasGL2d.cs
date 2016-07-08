@@ -55,6 +55,8 @@ namespace PixelFarm.DrawingGL
                                                                                     //Tesselate.Tesselator.WindingRuleType.Odd, true);
             conv3x3TextureShader = new Conv3x3TextureShader(shaderRes);
             msdfShader = new DrawingGL.MultiChannelSdf(shaderRes);
+          
+
             msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(shaderRes);
             sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
             //----
@@ -228,28 +230,29 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
         {
-           
-            msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            msdfShader.BackgroundColor = PixelFarm.Drawing.Color.White;
+
+            msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black; 
             msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        }        
+        }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
         {
             msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            msdfShader.BackgroundColor = PixelFarm.Drawing.Color.White;
+             
             msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
         {
 
             msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;
+            //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+            msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
             msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y, float scale)
         {
             msdfSubPixelRenderingShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-            msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;
+            //msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.Blue;//blue is suite for transparent bg
+            msdfSubPixelRenderingShader.BackgroundColor = PixelFarm.Drawing.Color.White;//opaque white
             msdfSubPixelRenderingShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
 
@@ -318,6 +321,7 @@ namespace PixelFarm.DrawingGL
                     break;
                 case CanvasSmoothMode.Smooth:
                     {
+
                         List<Figure> figures = igpth.figures;
                         int subPathCount = figures.Count;
                         float prevWidth = StrokeWidth;
@@ -491,7 +495,7 @@ namespace PixelFarm.DrawingGL
                 case CanvasSmoothMode.Smooth:
                     {
                         int borderTriAngleCount;
-                        float[] triangles = InternalGraphicsPath.BuildSmoothBorders(
+                        float[] triangles = SmoothBorderBuilder.BuildSmoothBorders(
                             CreatePolyLineRectCoords(x, y, w, h), out borderTriAngleCount);
                         smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
                     }

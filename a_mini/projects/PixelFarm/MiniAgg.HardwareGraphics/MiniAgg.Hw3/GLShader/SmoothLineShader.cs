@@ -73,8 +73,8 @@ namespace PixelFarm.DrawingGL
                     }else if(d0> p1){                         
                         gl_FragColor =vec4(v_color[0],v_color[1],v_color[2], v_color[3] *((1.0-d0)* factor));
                     }
-                    else{
-                        gl_FragColor =v_color;
+                    else{ 
+                        gl_FragColor =v_color; 
                     } 
                 }
             ";
