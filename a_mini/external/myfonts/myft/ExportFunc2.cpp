@@ -99,7 +99,7 @@ void MyFtGenerateMsdf(msdfgen::Shape* shape, int width, int height, double range
 			//a b g r
 			*outputH = (255 << 24) |
 				(msdfgen::clamp(int(pixel.b * 0x100), 0xff) << 16) |
-				(msdfgen::clamp(int(pixel.g * 0x100), 0xff) << 16) |
+				(msdfgen::clamp(int(pixel.g * 0x100), 0xff) <<8) |
 				msdfgen::clamp(int(pixel.r * 0x100), 0xff);
 
 			outputH += 1;
