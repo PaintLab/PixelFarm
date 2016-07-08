@@ -117,7 +117,6 @@ namespace BuildTextureFonts
                     p = i;
                 }
             }
-
             //--------
             //test output
             var outputBmp = new Bitmap(bmpWidth, bmpHeight);
@@ -128,6 +127,7 @@ namespace BuildTextureFonts
             outputBmp.Save("d:\\WImageTest\\a001_x.png");
             //--------
         }
+        const int SCALE = 20;
         static void FillData(int[] outputPixels, int startIndex, int count, bool inside)
         {
 
@@ -136,18 +136,37 @@ namespace BuildTextureFonts
                 //inside polygon
                 int n = count;
                 int p = startIndex;
-                if (count == 1)
+                if ((count % 2) != 0)
                 {
-                    //single px
-                    outputPixels[p] = (255 << 24) | (((255 / (1 + 2)) & 0xff) << 16);
+                    //odd number
+                    int eachSide = ((count - 1) / 2);
+                    //start(left side)
+                    FillStrip(outputPixels, startIndex, eachSide, 5, true, true);
+                    //middle
+                    //-----------------
+                    startIndex += eachSide;
+                    if (eachSide > 5)
+                    {
+                        outputPixels[startIndex] = (255 << 24) | ((6 * SCALE) << INSIDE_SHIFT);
+                    }
+                    else
+                    {
+                        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << INSIDE_SHIFT);
+                    }
+                    startIndex += 1;
+                    //-----------------
+                    //right side 
+                    FillStrip(outputPixels, startIndex, eachSide, 5, true, false);
                 }
                 else
                 {
-                    int half = count / 2;
-                    //start
-                    FillData3(outputPixels, startIndex, half, true, true);
-                    startIndex += half;
-                    FillData3(outputPixels, startIndex, count - half, true, false);
+                    //even number
+                    int eachSide = count / 2;
+                    //start(left side)
+                    FillStrip(outputPixels, startIndex, eachSide, 5, true, true);
+                    startIndex += eachSide;
+                    //right side
+                    FillStrip(outputPixels, startIndex, eachSide, 5, true, false);
                 }
             }
             else
@@ -155,111 +174,68 @@ namespace BuildTextureFonts
                 //outside polygon
                 int n = count;
                 int p = startIndex;
-                if (count == 1)
+
+                if ((count % 2) != 0)
                 {
-                    //single px
-                    outputPixels[p] = (255 << 24) | ((255 & 0xff) << 8);
+                    //odd number
+                    int eachSide = ((count - 1) / 2);
+                    //start(left side)
+                    FillStrip(outputPixels, startIndex, eachSide, 5, false, true);
+                    //-----------------
+                    //middle
+                    startIndex += eachSide;
+                    if (eachSide > 5)
+                    {
+                        outputPixels[startIndex] = (255 << 24) | ((6 * SCALE) << OUTSIDE_SHIFT);
+                    }
+                    else
+                    {
+                        outputPixels[startIndex] = (255 << 24) | (((eachSide + 1) * SCALE) << OUTSIDE_SHIFT);
+                    }
+                    startIndex += 1;
+                    //-----------------
+                    //right side                    
+                    FillStrip(outputPixels, startIndex, eachSide, 5, false, false);
                 }
                 else
                 {
-                    if (count == 8)
-                    {
-
-                    }
-                    int half = count / 2;
-                    //start
-                    FillData3(outputPixels, startIndex, half, false, true);
-                    startIndex += half;
-                    FillData3(outputPixels, startIndex, count - half, false, false);
+                    //even number
+                    int eachSide = count / 2;
+                    //start(left side)
+                    FillStrip(outputPixels, startIndex, eachSide, 5, false, true);
+                    startIndex += eachSide;
+                    //right side
+                    FillStrip(outputPixels, startIndex, eachSide, 5, false, false);
                 }
-            }
-
-        }
-        static void FillData2(int[] outputPixels, int startIndex, int count, bool inside)
-        {
-
-            if (inside)
-            {
-                //inside polygon
-                int n = count;
-                int p = startIndex;
-
-                if (count > 5)
-                {
-                    //long distance
-                    int lim = count - 5;
-                    for (int i = 0; i < lim; ++i)
-                    {
-                        outputPixels[p] = (255 << 24) | (255 << 16); //red
-                        p++;
-                    }
-
-                    count = 5;
-                }
-                //-----------------
-                {
-                    for (int i = 0; i < count; ++i)
-                    {
-                        outputPixels[p] = (255 << 24) | (((255 / (i + 2)) & 0xff) << 16);
-                        p++;
-                    }
-                }
-                //-----------------
-            }
-            else
-            {
-                //outside polygon
-                int n = count;
-                int p = startIndex;
-
-                if (count > 5)
-                {
-                    //long distance
-                    int lim = count - 5;
-                    for (int i = 0; i < lim; ++i)
-                    {
-                        outputPixels[p] = (255 << 24) | (255 << 16) | ((255) << 8);
-                        p++;
-                    }
-                    count = 5;
-                }
-                //-----------------
-                {
-                    for (int i = 0; i < count; ++i)
-                    {
-                        outputPixels[p] = (255 << 24) | (255 << 16) | (((255 / (i + 2)) & 0xff) << 8);
-                        p++;
-                    }
-                }
-                //-----------------
             }
         }
-        static void FillData3(int[] outputPixels, int startIndex, int count, bool inside, bool uphill)
+        const int INSIDE_SHIFT = 16;
+        const int OUTSIDE_SHIFT = 8;
+        static void FillStrip(int[] outputPixels, int startIndex, int count, int maxLevel, bool inside, bool uphill)
         {
-            int compoShift = 8;
-            if (inside)
-            {
-                compoShift = 16;
-            }
+            int compoShift = inside ? INSIDE_SHIFT : OUTSIDE_SHIFT;
+
             if (uphill)
             {
                 //from dark to bright
                 int n = count;
                 int p = startIndex;
-                if (count > 5)
+                if (count > maxLevel)
                 {
                     int i = 0;
                     //gradient up 
                     int value = 0;
-                    for (; i < 5; ++i)
+                    int c = 1;
+                    for (; i < maxLevel; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | (((255 / (i + 1)) & 0xff) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
                         p++;
+                        c++;
                     }
                     //long distance                    
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((255 / 6) << compoShift); //red
+                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift); //red
                         p++;
                     }
                 }
@@ -267,10 +243,12 @@ namespace BuildTextureFonts
                 {  //gradient up
                     int i = 0;
                     int value = 0;
+                    int c = 1;
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | (((255 / (i + 1)) & 0xff) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
                         p++;
+                        c++;
                     }
                 }
             }
@@ -280,37 +258,37 @@ namespace BuildTextureFonts
                 int n = count;
                 int p = startIndex;
                 int value = 0;
-                if (count > 5)
+                if (count > maxLevel)
                 {
                     //long distance
-                    int lim = count - 5;
+                    int lim = count - maxLevel;
                     int i = 0;
-
+                    int c = maxLevel + 1;
                     for (; i < lim; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | ((255 / 6) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
                         p++;
                     }
 
                     //gradient down
-                    int d = 5;
+                    c = maxLevel;
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | (((255 / (d)) & 0xff) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
                         p++;
-                        d--;
+                        c--;
                     }
                 }
                 else
                 {
                     //gradient down
-                    int d = 5;
                     int i = 0;
+                    int c = count;
                     for (; i < count; ++i)
                     {
-                        outputPixels[p] = value = (255 << 24) | (((255 / (d)) & 0xff) << compoShift);
+                        outputPixels[p] = value = (255 << 24) | ((c * SCALE) << compoShift);
                         p++;
-                        d--;
+                        c--;
                     }
                 }
             }
