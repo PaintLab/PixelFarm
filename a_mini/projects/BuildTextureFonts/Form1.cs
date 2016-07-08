@@ -57,16 +57,29 @@ namespace BuildTextureFonts
             //process each scanline pixel***
 
             int[] distanceBuffer = new int[bmpWidth * bmpHeight];//distance count
+            DepthAnalysisXAxis(intBuffer, bmpWidth, bmpHeight, distanceBuffer);
             //                                                    //1st pass horizontal scanline
 
+
+            //--------
+            //test output
+            var outputBmp = new Bitmap(bmpWidth, bmpHeight);
+            var outputBmpData = outputBmp.LockBits(new Rectangle(0, 0, (int)size.Width, (int)size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                bmp1.PixelFormat);
+            System.Runtime.InteropServices.Marshal.Copy(distanceBuffer, 0, outputBmpData.Scan0, distanceBuffer.Length);
+            outputBmp.UnlockBits(outputBmpData);
+            outputBmp.Save("d:\\WImageTest\\a001_x.png");
+            //--------
+        }
+        static void DepthAnalysisXAxis(int[] intBuffer, int bmpWidth, int bmpHeight, int[] distanceBuffer)
+        {
             int i = 0;
             int p = 0;
             for (int row = 0; row < bmpHeight; ++row)
             {
                 int prevLevel = 0;
                 int currentStripLen = 0;
-                //row
-
+                //row 
                 int cut = 0;
                 for (int c = 0; c < bmpWidth; ++c)
                 {
@@ -78,13 +91,11 @@ namespace BuildTextureFonts
                     //convert to grey scale
                     int level = (int)((0.2126 * r) + (0.7152 * g) + (0.0722) * b);
                     //int luminosity method;
-                    // R' = G' = B' = 0.2126R + 0.7152G + 0.0722B
-
+                    // R' = G' = B' = 0.2126R + 0.7152G + 0.0722B 
                     if (level > 0)
                     {
                         level = 255;
                     }
-
                     if (level != prevLevel)
                     {
                         if (currentStripLen > 0)
@@ -117,15 +128,6 @@ namespace BuildTextureFonts
                     p = i;
                 }
             }
-            //--------
-            //test output
-            var outputBmp = new Bitmap(bmpWidth, bmpHeight);
-            var outputBmpData = outputBmp.LockBits(new Rectangle(0, 0, (int)size.Width, (int)size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                bmp1.PixelFormat);
-            System.Runtime.InteropServices.Marshal.Copy(distanceBuffer, 0, outputBmpData.Scan0, distanceBuffer.Length);
-            outputBmp.UnlockBits(outputBmpData);
-            outputBmp.Save("d:\\WImageTest\\a001_x.png");
-            //--------
         }
         const int SCALE = 20;
         static void FillData(int[] outputPixels, int startIndex, int count, bool inside)
