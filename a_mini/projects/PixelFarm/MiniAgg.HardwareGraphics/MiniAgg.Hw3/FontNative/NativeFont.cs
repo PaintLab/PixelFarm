@@ -3,9 +3,11 @@
 
 using System;
 using System.Collections.Generic;
+using PixelFarm.Drawing;
+
 namespace PixelFarm.Agg.Fonts
 {
-    class NativeFont : Font
+    class NativeFont : Drawing.Font
     {
         NativeFontFace ownerFace;
         //float fontSizeInPoint;
@@ -110,6 +112,54 @@ namespace PixelFarm.Agg.Fonts
         public override bool IsAtlasFont
         {
             get { return false; }
+        }
+
+        public override FontInfo FontInfo
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override string Name
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float EmSize
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override FontStyle Style
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override object InnerFont
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

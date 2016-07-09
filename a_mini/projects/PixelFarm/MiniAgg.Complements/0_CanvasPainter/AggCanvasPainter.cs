@@ -244,7 +244,7 @@ namespace PixelFarm.Agg
             set
             {
                 this.currentFont = value;
-                textPrinter.CurrentFont = value.InnerFont as PixelFarm.Agg.Fonts.Font;
+                textPrinter.CurrentFont = value;
             }
         }
         public override void DrawString(

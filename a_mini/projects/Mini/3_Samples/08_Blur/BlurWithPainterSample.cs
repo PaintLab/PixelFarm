@@ -36,7 +36,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             this.FlattenCurveChecked = true;
             this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
-            Font svgFont = SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
+            Drawing.Font svgFont = SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
             //PathWriter p01 = new PathWriter();
             //p01.MoveTo(0, 0);
             //p01.LineTo(50, 100);

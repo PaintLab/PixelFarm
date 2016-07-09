@@ -20,11 +20,11 @@ namespace PixelFarm.Agg.Fonts
 
     public class TextPrinter
     {
-        Font currentFont;
+        Drawing.Font currentFont;
         public TextPrinter()
         {
         }
-        public Font CurrentFont
+        public Drawing.Font CurrentFont
         {
             get { return this.currentFont; }
             set { this.currentFont = value; }

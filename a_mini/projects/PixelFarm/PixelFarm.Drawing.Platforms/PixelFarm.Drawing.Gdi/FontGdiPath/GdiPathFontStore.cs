@@ -7,7 +7,7 @@ namespace PixelFarm.Agg.Fonts
     public static class GdiPathFontStore
     {
         static Dictionary<string, GdiPathFontFace> fontFaces = new Dictionary<string, GdiPathFontFace>();
-        public static Font LoadFont(string filename, int fontPointSize)
+        public static Drawing.Font LoadFont(string filename, int fontPointSize)
         {
             //load font from specific file 
             GdiPathFontFace fontFace;

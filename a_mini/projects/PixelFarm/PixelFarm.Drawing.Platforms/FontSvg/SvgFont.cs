@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing;
+
 namespace PixelFarm.Agg.Fonts
 {
     class SvgFont : Font
@@ -129,6 +131,54 @@ namespace PixelFarm.Agg.Fonts
         public override bool IsAtlasFont
         {
             get { return false; }
+        }
+
+        public override FontInfo FontInfo
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override string Name
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float EmSize
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override FontStyle Style
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override object InnerFont
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

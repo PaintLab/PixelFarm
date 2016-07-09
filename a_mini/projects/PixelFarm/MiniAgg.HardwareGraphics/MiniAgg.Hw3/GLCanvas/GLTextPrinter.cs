@@ -5,14 +5,15 @@ namespace PixelFarm.DrawingGL
 {
     class GLTextPrinter
     {
-        Font currentFont;
+
+        Drawing.Font currentFont;
         CanvasGL2d canvas2d;
         ProperGlyph[] properGlyphs = null;
         public GLTextPrinter(CanvasGL2d canvas2d)
         {
             this.canvas2d = canvas2d;
         }
-        public Font CurrentFont
+        public Drawing.Font CurrentFont
         {
             get { return this.currentFont; }
             set { this.currentFont = value; }

@@ -32,7 +32,7 @@ namespace PixelFarm.Agg.Fonts
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
 
-        public static Font LoadFont(string filename, int fontPointSize)
+        public static Drawing.Font LoadFont(string filename, int fontPointSize)
         {
             //load font from specific file 
             NativeFontFace fontFace;
