@@ -6,7 +6,7 @@ using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "403")]
-    [Info("T403_T401_MsdfGenTest2")]
+    [Info("T403_MsdfGenTest2")]
     public class T403_MsdfGenTest2 : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
@@ -29,9 +29,9 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                //msdf_bmp = LoadTexture(@"..\msdf_75.png");
+                msdf_bmp = LoadTexture(@"..\msdf_75.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
-                msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png");
+                //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png");
                 resInit = true;
             }
             canvas2d.Clear(PixelFarm.Drawing.Color.White);

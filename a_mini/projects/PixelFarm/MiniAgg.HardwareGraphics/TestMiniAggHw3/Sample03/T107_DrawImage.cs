@@ -30,10 +30,12 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                glbmp = LoadTexture(@"..\logo-dark.jpg");
+                //glbmp = LoadTexture(@"..\logo-dark.jpg");
+                glbmp = LoadTexture(@"..\plain01.png");
                 resInit = true;
             }
 
+            canvas2d.DrawSubImage(glbmp, 10, 10, 100, 100, 200, 400);
             canvas2d.DrawImage(glbmp, 0, 300);
             canvas2d.DrawImageWithBlurX(glbmp, 0, 600);
             miniGLControl.SwapBuffers();

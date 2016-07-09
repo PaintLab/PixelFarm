@@ -55,7 +55,7 @@ namespace PixelFarm.DrawingGL
                                                                                     //Tesselate.Tesselator.WindingRuleType.Odd, true);
             conv3x3TextureShader = new Conv3x3TextureShader(shaderRes);
             msdfShader = new DrawingGL.MultiChannelSdf(shaderRes);
-          
+
 
             msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(shaderRes);
             sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
@@ -181,6 +181,17 @@ namespace PixelFarm.DrawingGL
                 new Drawing.RectangleF(0, 0, bmp.Width, bmp.Height),
                 x, y, w, h);
         }
+        public void DrawSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
+            if (bmp.IsBigEndianPixel)
+            {
+                glesTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
+            }
+            else
+            {
+                gdiImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop); 
+            }
+        }
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)
@@ -231,13 +242,13 @@ namespace PixelFarm.DrawingGL
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y)
         {
 
-            msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black; 
+            msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             msdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
         }
         public void DrawImageWithMsdf(GLBitmap bmp, float x, float y, float scale)
         {
             msdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-             
+
             msdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
         public void DrawImageWithSubPixelRenderingMsdf(GLBitmap bmp, float x, float y)
