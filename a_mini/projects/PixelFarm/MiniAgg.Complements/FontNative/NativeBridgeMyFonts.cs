@@ -9,8 +9,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.IO;
-using PixelFarm.Drawing;
- 
+
 namespace PixelFarm.Drawing.Fonts
 {
     [StructLayout(LayoutKind.Sequential)]
@@ -82,17 +81,7 @@ namespace PixelFarm.Drawing.Fonts
         static bool isLoaded = false;
         static bool LoadLib(string dllFilename)
         {
-            //dev:
-            //#if DEBUG
-            //            ///return true;
-            //            //location of myft dll
-            //            //string dev = @"c:\WImageTest\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
-            //            //string dev = @"D:\projects\myagg_cs\agg-sharp\a_mini\external\myfonts\Debug\myft.dll";
-            //            string dev = @"..\..\..\..\..\a_mini\external\myfonts\Debug\myft.dll";
-            //            UnsafeMethods.LoadLibrary(dev);
-            //            return true;
-            //#endif
-            //for Windows , dynamic load dll       
+                 
             if (isLoaded)
             {
                 return true;
@@ -107,6 +96,12 @@ namespace PixelFarm.Drawing.Fonts
             isLoaded = true;
             return true;
         }
+
+
+        [DllImport(myfontLib)]
+        public static extern void DeleteUnmanagedObj(IntPtr unmanagedObject);
+        [DllImport(myfontLib)]
+        public static extern IntPtr stbi_load(string filename, out int w, out int h, out int comp, int requestOutputComponent);
 
 
         class NativeModuleHolder : IDisposable
