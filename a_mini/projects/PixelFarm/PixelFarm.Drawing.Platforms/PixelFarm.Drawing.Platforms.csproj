@@ -42,9 +42,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CanvasExt\Canvas2dExtension.cs" />
-    <Compile Include="CanvasExt\VertexSourceIO.cs" />
-    <Compile Include="CanvasExt\UnsafeMethods.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\0_Start\Conv.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\0_Start\WinGdiPlatform.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\0_Start\WinGdiPortal.cs" />
