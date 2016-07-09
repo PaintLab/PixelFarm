@@ -142,9 +142,9 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiniAgg.Hw3\MiniAgg.Hw3.csproj">
+    <ProjectReference Include="..\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj">
       <Project>{e0bc92c3-6936-4d8f-ae7f-54dde27de370}</Project>
-      <Name>MiniAgg.Hw3</Name>
+      <Name>PixelFarm.Drawing.Hw</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.MiniPlatforms.WindowsForms\PixelFarm.MiniPlatforms.WindowsForms.csproj">
       <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>

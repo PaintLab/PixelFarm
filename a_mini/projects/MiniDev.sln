@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Tools", "5_Tools", "{A056
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildMergeProject", "BuildMergeProject\BuildMergeProject.csproj", "{FA071D34-6C87-425D-8110-9C3595A01106}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg.Hw3", "PixelFarm\MiniAgg.HardwareGraphics\MiniAgg.Hw3\MiniAgg.Hw3.csproj", "{E0BC92C3-6936-4D8F-AE7F-54DDE27DE370}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.Hw", "PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj", "{E0BC92C3-6936-4D8F-AE7F-54DDE27DE370}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniAggHw3", "PixelFarm\MiniAgg.HardwareGraphics\TestMiniAggHw3\TestMiniAggHw3.csproj", "{FD1C32F3-24ED-467D-9535-1737A0DFA02A}"
 EndProject
