@@ -139,13 +139,6 @@ namespace PixelFarm.Drawing.WinGdi
                 throw new NotImplementedException();
             }
         }
-
-        public override bool IsAtlasFont
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+ 
     }
 }

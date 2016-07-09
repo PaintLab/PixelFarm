@@ -93,10 +93,7 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose()
         {
         }
-        public override bool IsAtlasFont
-        {
-            get { return false; }
-        }
+       
 
         public override FontInfo FontInfo
         {

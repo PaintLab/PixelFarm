@@ -49,8 +49,7 @@ namespace PixelFarm.Drawing
             Dispose();
         }
 
-        public abstract bool IsAtlasFont { get; }
-        //-------------------------------------------
+        
     }
 
 

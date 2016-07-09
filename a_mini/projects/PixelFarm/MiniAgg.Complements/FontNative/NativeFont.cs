@@ -2,13 +2,12 @@
 //----------------------------------- 
 
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
     class NativeFont : Font
     {
         NativeFontFace ownerFace;
-        //float fontSizeInPoint;
         int fontSizeInPixelUnit;
         /// <summary>
         /// glyph
@@ -107,10 +106,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             throw new NotImplementedException();
         }
-        public override bool IsAtlasFont
-        {
-            get { return false; }
-        }
+
 
         public override FontInfo FontInfo
         {
