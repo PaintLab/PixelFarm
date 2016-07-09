@@ -5,8 +5,8 @@
 //plan?: port  them to C#  :)
 //-----------------------------------
 
-
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing.Fonts
 {
     public enum Justification { Left, Center, Right }
     public enum Baseline
@@ -20,11 +20,11 @@ namespace PixelFarm.Agg.Fonts
 
     public class TextPrinter
     {
-        Font currentFont;
+        Drawing.Font currentFont;
         public TextPrinter()
         {
         }
-        public Font CurrentFont
+        public Drawing.Font CurrentFont
         {
             get { return this.currentFont; }
             set { this.currentFont = value; }

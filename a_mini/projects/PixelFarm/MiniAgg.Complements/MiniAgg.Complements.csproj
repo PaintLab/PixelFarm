@@ -34,12 +34,23 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="0_CanvasPainter\AggCanvasPainter.cs" />
     <Compile Include="0_CanvasPainter\AggRenderVx.cs" />
+    <Compile Include="0_CanvasPainter\Canvas2dExtension.cs" />
+    <Compile Include="0_CanvasPainter\dbugVertexSourceIO.cs" />
     <Compile Include="2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
+    <Compile Include="FontNative\NativeBridgeFreeType.cs" />
+    <Compile Include="FontNative\NativeBridgeHB.cs" />
+    <Compile Include="FontNative\NativeBridgeMyFonts.cs" />
+    <Compile Include="FontNative\NativeFont.cs" />
+    <Compile Include="FontNative\NativeFontFace.cs" />
+    <Compile Include="FontNative\NativeFontGlyphBuilder.cs" />
+    <Compile Include="FontNative\NativeFontStore.cs" />
+    <Compile Include="FontSvg\SvgFont.cs" />
+    <Compile Include="FontSvg\SvgFontFace.cs" />
+    <Compile Include="FontSvg\SvgFontFace_LiberationSans.cs" />
+    <Compile Include="FontSvg\SvgFontStore.cs" />
+    <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="Image\FilterMan.cs" />
     <Compile Include="0_CanvasPainter\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="Font\TextPrinter.cs" />
@@ -76,6 +87,9 @@
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

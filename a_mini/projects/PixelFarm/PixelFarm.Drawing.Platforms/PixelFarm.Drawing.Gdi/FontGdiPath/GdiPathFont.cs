@@ -2,7 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-namespace PixelFarm.Agg.Fonts
+
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing.Fonts
 {
     class GdiPathFont : Font
     {
@@ -11,7 +13,7 @@ namespace PixelFarm.Agg.Fonts
         const int POINTS_PER_INCH = 72;
         const int PIXEL_PER_INCH = 96;
         int emSizeInPixels;
-        double currentEmScalling;
+
         Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
         Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
         System.Drawing.Font gdiFont;
@@ -91,9 +93,54 @@ namespace PixelFarm.Agg.Fonts
         protected override void OnDispose()
         {
         }
-        public override bool IsAtlasFont
+       
+
+        public override FontInfo FontInfo
         {
-            get { return false; }
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override string Name
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float EmSize
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override FontStyle Style
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override object InnerFont
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

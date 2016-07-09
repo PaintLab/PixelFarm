@@ -2,6 +2,7 @@
 
 using System;
 using Win32;
+using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
     class BasicGdi32FontHelper

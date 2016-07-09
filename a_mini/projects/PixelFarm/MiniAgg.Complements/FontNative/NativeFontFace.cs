@@ -8,7 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-namespace PixelFarm.Agg.Fonts
+ 
+namespace PixelFarm.Drawing.Fonts
 {
     class NativeFontFace : FontFace
     {
@@ -24,7 +25,7 @@ namespace PixelFarm.Agg.Fonts
         /// <summary>
         /// store font glyph for each px size
         /// </summary>
-        Dictionary<int, Font> fonts = new Dictionary<int, Font>();
+        Dictionary<int, Drawing.Font> fonts = new Dictionary<int, Drawing.Font>();
         IntPtr hb_font;
 
         internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
@@ -77,9 +78,9 @@ namespace PixelFarm.Agg.Fonts
         }
 
 
-        internal Font GetFontAtPixelSize(int pixelSize)
+        internal Drawing.Font GetFontAtPixelSize(int pixelSize)
         {
-            Font found;
+            Drawing.Font found;
             if (!fonts.TryGetValue(pixelSize, out found))
             {
                 //----------------------------------
@@ -94,7 +95,7 @@ namespace PixelFarm.Agg.Fonts
             }
             return found;
         }
-        internal Font GetFontAtPointSize(float fontPointSize)
+        internal Drawing.Font GetFontAtPointSize(float fontPointSize)
         {
             //convert from point size to pixelsize ***              
             return GetFontAtPixelSize(NativeFontStore.ConvertFromPointUnitToPixelUnit(fontPointSize));

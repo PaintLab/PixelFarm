@@ -4,7 +4,11 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg.Transform;
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Drawing;
+
+using PixelFarm.Agg;
+
+namespace PixelFarm.Drawing.Fonts
 {
     class SvgFont : Font
     {
@@ -16,7 +20,7 @@ namespace PixelFarm.Agg.Fonts
         double currentEmScalling;
         Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
         Affine scaleTx;
-        PixelFarm.Agg.VertexSource.CurveFlattener curveFlattner = new VertexSource.CurveFlattener();
+        PixelFarm.Agg.VertexSource.CurveFlattener curveFlattner = new PixelFarm.Agg.VertexSource.CurveFlattener();
         public SvgFont(SvgFontFace fontface, int emSizeInPoints)
         {
             this.fontface = fontface;
@@ -126,9 +130,54 @@ namespace PixelFarm.Agg.Fonts
                 return fontface.Cap_height * currentEmScalling;
             }
         }
-        public override bool IsAtlasFont
+       
+
+        public override FontInfo FontInfo
         {
-            get { return false; }
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override string Name
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override float EmSize
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override FontStyle Style
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override object InnerFont
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

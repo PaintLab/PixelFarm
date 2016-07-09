@@ -1,5 +1,6 @@
 ﻿//BSD, 2014-2016, WinterDev
 
+using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiPlatform : GraphicsPlatform

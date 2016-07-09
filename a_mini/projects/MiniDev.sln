@@ -23,13 +23,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing", "PixelF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.Platforms", "PixelFarm\PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Platforms.csproj", "{1AA171E3-523C-4DD5-A169-DE6322991FF5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Platforms", "4_Platforms", "{DE1D5991-F322-453E-BDED-D2A443FBE1BF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_MixedPlatforms", "4_MixedPlatforms", "{DE1D5991-F322-453E-BDED-D2A443FBE1BF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Tools", "5_Tools", "{A0563F0C-443D-4C97-9878-77496145DD55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildMergeProject", "BuildMergeProject\BuildMergeProject.csproj", "{FA071D34-6C87-425D-8110-9C3595A01106}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg.Hw3", "PixelFarm\MiniAgg.HardwareGraphics\MiniAgg.Hw3\MiniAgg.Hw3.csproj", "{E0BC92C3-6936-4D8F-AE7F-54DDE27DE370}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.Hw", "PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj", "{E0BC92C3-6936-4D8F-AE7F-54DDE27DE370}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniAggHw3", "PixelFarm\MiniAgg.HardwareGraphics\TestMiniAggHw3\TestMiniAggHw3.csproj", "{FD1C32F3-24ED-467D-9535-1737A0DFA02A}"
 EndProject
@@ -45,9 +45,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSamples", "PixelFarm\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTextureFonts", "BuildTextureFonts\BuildTextureFonts.csproj", "{04EB6955-801A-452F-9DFC-3AC96BC29DD9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.1_Hw_dep_WinForms", "3.1_Hw_dep_WinForms", "{C7999C94-4C93-4AFB-9576-2C15414A1625}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.2_Hw_dep_WinForms", "3.2_Hw_dep_WinForms", "{C7999C94-4C93-4AFB-9576-2C15414A1625}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.2_Hw_NoWinForms", "3.2_Hw_NoWinForms", "{6A57FF07-3195-4C5C-9358-5AAEDDA55F74}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.1_Hw_NoWinForms", "3.1_Hw_NoWinForms", "{6A57FF07-3195-4C5C-9358-5AAEDDA55F74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

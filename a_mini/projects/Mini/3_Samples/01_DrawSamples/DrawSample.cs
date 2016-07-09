@@ -9,8 +9,10 @@ using System;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Fonts;
+
 using Mini;
+using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.Agg.Sample_Draw
 {
     [Info(OrderCode = "01")]

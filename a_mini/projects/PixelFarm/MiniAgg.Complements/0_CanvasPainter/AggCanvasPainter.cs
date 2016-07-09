@@ -21,9 +21,10 @@
 
 using System;
 using PixelFarm.Drawing;
+using PixelFarm.Drawing.Fonts;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Fonts;
+
 namespace PixelFarm.Agg
 {
     public class AggCanvasPainter : CanvasPainter
@@ -244,7 +245,7 @@ namespace PixelFarm.Agg
             set
             {
                 this.currentFont = value;
-                textPrinter.CurrentFont = value.InnerFont as PixelFarm.Agg.Fonts.Font;
+                textPrinter.CurrentFont = value;
             }
         }
         public override void DrawString(

@@ -1,7 +1,7 @@
 ﻿//BSD, 2014-2016, WinterDev
 
 using System;
-namespace PixelFarm.Agg.Fonts
+namespace PixelFarm.Drawing.Fonts
 {
     class SvgFontFace_LiberationSans
     {

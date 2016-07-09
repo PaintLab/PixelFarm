@@ -5,10 +5,8 @@
 //plan?: port  them to C#  :)
 //-----------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-namespace PixelFarm.Agg.Fonts
+ 
+namespace PixelFarm.Drawing.Fonts
 {
     /// <summary>
     /// hb_direction_t;

@@ -2,11 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using System.Text;
+
 using System.Windows.Forms;
 using PixelFarm.Agg;
 namespace Mini
@@ -179,7 +178,7 @@ namespace Mini
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 g.Clear(System.Drawing.Color.White);
-                var winFont = PixelFarm.Agg.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
+                var winFont = PixelFarm.Drawing.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
                 var winFontGlyph = winFont.GetGlyph(testChar);
                 //convert Agg vxs to bitmap
                 int bmpW = 50;

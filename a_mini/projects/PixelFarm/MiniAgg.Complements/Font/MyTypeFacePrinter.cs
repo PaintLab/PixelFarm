@@ -22,19 +22,20 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing.Fonts
 {
     public class MyTypeFacePrinter
     {
         Vector2 totalSizeCach;
         string textToPrint;
-        Font currentFont;
+        PixelFarm.Drawing.Font currentFont;
         public MyTypeFacePrinter()
         {
             this.Baseline = Baseline.Text;
             this.Justification = Justification.Left;
         }
-        public Font CurrentFont
+        public PixelFarm.Drawing.Font CurrentFont
         {
             get { return this.currentFont; }
             set

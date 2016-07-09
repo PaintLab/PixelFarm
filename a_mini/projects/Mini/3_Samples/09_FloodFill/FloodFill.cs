@@ -6,7 +6,9 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
+using PixelFarm.Drawing.Fonts;
 using Mini;
+
 namespace PixelFarm.Agg.Sample_FloodFill
 {
     [Info(OrderCode = "09")]

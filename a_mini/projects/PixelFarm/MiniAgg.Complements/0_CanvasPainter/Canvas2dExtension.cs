@@ -23,7 +23,9 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
-using PixelFarm.Agg.Fonts;
+
+using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.Agg
 {
     public static class Canvas2dExtension
