@@ -45,10 +45,6 @@
     <Compile Include="CanvasExt\Canvas2dExtension.cs" />
     <Compile Include="CanvasExt\VertexSourceIO.cs" />
     <Compile Include="CanvasExt\UnsafeMethods.cs" />
-    <Compile Include="FontSvg\SvgFont.cs" />
-    <Compile Include="FontSvg\SvgFontFace.cs" />
-    <Compile Include="FontSvg\SvgFontFace_LiberationSans.cs" />
-    <Compile Include="FontSvg\SvgFontStore.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\0_Start\Conv.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\0_Start\WinGdiPlatform.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\0_Start\WinGdiPortal.cs" />

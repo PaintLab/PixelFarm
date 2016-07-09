@@ -2,12 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Drawing;
 
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
-    class GdiPathFont : Drawing.Font
+    class GdiPathFont : Font
     {
         GdiPathFontFace fontface;
         int emSizeInPoints;

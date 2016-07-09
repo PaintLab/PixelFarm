@@ -122,6 +122,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{ae0df71e-9b14-4197-b55a-e1e0ce0683c7}</Project>
+      <Name>MiniAgg.Complements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MiniAgg\MiniAgg.csproj">
+      <Project>{4d5ce655-58fa-4523-8e46-738b941e9e47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MiniTesselate\Tesselate.csproj">
       <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
       <Name>Tesselate</Name>

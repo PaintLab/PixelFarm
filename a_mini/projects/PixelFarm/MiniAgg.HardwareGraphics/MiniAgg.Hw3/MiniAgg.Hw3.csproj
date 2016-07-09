@@ -34,13 +34,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FontNative\NativeBridgeFreeType.cs" />
-    <Compile Include="FontNative\NativeBridgeHB.cs" />
-    <Compile Include="FontNative\NativeBridgeMyFonts.cs" />
-    <Compile Include="FontNative\NativeFont.cs" />
-    <Compile Include="FontNative\NativeFontFace.cs" />
-    <Compile Include="FontNative\NativeFontGlyphBuilder.cs" />
-    <Compile Include="FontNative\NativeFontStore.cs" />
     <Compile Include="GLShader\SignedDistanceFieldShader.cs" />
     <Compile Include="Texture\FrameBuffer.cs" />
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />
