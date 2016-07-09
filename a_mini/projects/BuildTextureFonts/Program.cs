@@ -75,8 +75,8 @@ namespace BuildTextureFonts
         public bool useClassicSdf;
         public char character;
         public string outputFile;
-        public int sizeW = 32;
-        public int sizeH = 32;
+        public int sizeW = 24;
+        public int sizeH = 24;
         public int pixelRange = 4;
         public string testRenderFileName;
         public bool enableRenderTestFile = true;
