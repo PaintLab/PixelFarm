@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Agg;
+
+namespace PixelFarm.Drawing.Fonts
 {
     class SvgFont : Font
     {
@@ -18,7 +20,7 @@ namespace PixelFarm.Agg.Fonts
         double currentEmScalling;
         Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
         Affine scaleTx;
-        PixelFarm.Agg.VertexSource.CurveFlattener curveFlattner = new VertexSource.CurveFlattener();
+        PixelFarm.Agg.VertexSource.CurveFlattener curveFlattner = new PixelFarm.Agg.VertexSource.CurveFlattener();
         public SvgFont(SvgFontFace fontface, int emSizeInPoints)
         {
             this.fontface = fontface;

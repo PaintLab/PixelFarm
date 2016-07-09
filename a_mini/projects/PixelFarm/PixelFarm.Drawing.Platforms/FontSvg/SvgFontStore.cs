@@ -6,7 +6,7 @@
 //-----------------------------------
 
 using System.Collections.Generic;
-namespace PixelFarm.Agg.Fonts
+namespace PixelFarm.Drawing.Fonts
 {
     public static class SvgFontStore
     {

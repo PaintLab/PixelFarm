@@ -7,7 +7,8 @@
 
 using System;
 using System.Collections.Generic;
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing.Fonts
 {
     static class NativeFontGlyphBuilder
     {

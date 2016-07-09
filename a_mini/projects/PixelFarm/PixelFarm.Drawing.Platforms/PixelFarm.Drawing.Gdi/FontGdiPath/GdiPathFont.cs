@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing.Fonts
 {
     class GdiPathFont : Drawing.Font
     {

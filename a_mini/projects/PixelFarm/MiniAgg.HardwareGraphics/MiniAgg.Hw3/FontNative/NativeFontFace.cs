@@ -8,7 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-namespace PixelFarm.Agg.Fonts
+ 
+namespace PixelFarm.Drawing.Fonts
 {
     class NativeFontFace : FontFace
     {

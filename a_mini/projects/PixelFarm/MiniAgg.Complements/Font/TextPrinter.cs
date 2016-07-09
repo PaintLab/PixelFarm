@@ -5,8 +5,8 @@
 //plan?: port  them to C#  :)
 //-----------------------------------
 
-
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing.Fonts
 {
     public enum Justification { Left, Center, Right }
     public enum Baseline

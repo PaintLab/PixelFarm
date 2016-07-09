@@ -9,7 +9,9 @@
 using System;
 using System.Runtime.InteropServices;
 using System.IO;
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Drawing;
+ 
+namespace PixelFarm.Drawing.Fonts
 {
     [StructLayout(LayoutKind.Sequential)]
     struct ExportTypeFaceInfo

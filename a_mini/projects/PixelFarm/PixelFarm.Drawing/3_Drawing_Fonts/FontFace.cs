@@ -6,7 +6,7 @@
 //----------------------------------- 
 
 using System;
-namespace PixelFarm.Agg.Fonts
+namespace PixelFarm.Drawing.Fonts
 {
     public abstract class FontFace : IDisposable
     {

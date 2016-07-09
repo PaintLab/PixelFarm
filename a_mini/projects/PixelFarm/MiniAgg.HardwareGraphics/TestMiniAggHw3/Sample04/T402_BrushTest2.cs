@@ -2,11 +2,11 @@
 
 using System;
 using PixelFarm.Drawing;
-using OpenTK.Graphics.ES20;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
+
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "402")]
@@ -23,7 +23,7 @@ namespace OpenTkEssTest
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
-            var svgFont = PixelFarm.Agg.Fonts.SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
+            var svgFont = PixelFarm.Drawing.Fonts.SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
             //PathWriter p01 = new PathWriter();
             //p01.MoveTo(0, 0);
             //p01.LineTo(50, 100);
@@ -35,7 +35,7 @@ namespace OpenTkEssTest
             //p01.CloseFigure();
             //p01.Stop();
             //m_pathVxs = p01.Vxs;
-      
+
             var m_pathVxs = svgFont.GetGlyph('K').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
             //m_pathVxs = MergeFontSubFigures(m_pathVxs);
 

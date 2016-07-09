@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
-namespace PixelFarm.Agg.Fonts
+namespace PixelFarm.Drawing.Fonts
 {
     public static class NativeFontStore
     {

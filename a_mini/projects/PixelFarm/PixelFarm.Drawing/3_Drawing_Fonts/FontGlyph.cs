@@ -7,7 +7,8 @@
 
 using System;
 using System.Runtime.InteropServices;
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing.Fonts
 {
     public class FontGlyph
     {

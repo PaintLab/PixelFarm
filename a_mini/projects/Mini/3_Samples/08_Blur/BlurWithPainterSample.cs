@@ -6,9 +6,11 @@ using System.Diagnostics;
 using PixelFarm.Agg.UI;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.Agg.Fonts;
+
 using Mini;
 using System;
+using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.Agg.Sample_Blur2
 {
     [Info(OrderCode = "08")]

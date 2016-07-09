@@ -2,12 +2,10 @@
 //----------------------------------- 
 
 using System;
-using System.Collections.Generic;
-using PixelFarm.Drawing;
-
-namespace PixelFarm.Agg.Fonts
+using System.Collections.Generic; 
+namespace PixelFarm.Drawing.Fonts
 {
-    class NativeFont : Drawing.Font
+    class NativeFont : Font
     {
         NativeFontFace ownerFace;
         //float fontSizeInPoint;

@@ -8,7 +8,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-namespace PixelFarm.Agg.Fonts
+namespace PixelFarm.Drawing.Fonts
 {
     [StructLayout(LayoutKind.Sequential)]
     struct FT_Vector

@@ -22,7 +22,8 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.Fonts
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing.Fonts
 {
     public class MyTypeFacePrinter
     {

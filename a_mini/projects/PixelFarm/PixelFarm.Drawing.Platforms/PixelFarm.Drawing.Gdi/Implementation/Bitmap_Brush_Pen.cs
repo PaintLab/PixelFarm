@@ -1,8 +1,8 @@
 ﻿//MIT, 2014-2016, WinterDev   
 
 using System;
-using PixelFarm.Agg.Fonts;
 
+using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiFont : Font
