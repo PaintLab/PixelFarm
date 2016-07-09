@@ -50,6 +50,7 @@
     <Compile Include="FontSvg\SvgFontFace.cs" />
     <Compile Include="FontSvg\SvgFontFace_LiberationSans.cs" />
     <Compile Include="FontSvg\SvgFontStore.cs" />
+    <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="Image\FilterMan.cs" />
     <Compile Include="0_CanvasPainter\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="Font\TextPrinter.cs" />
