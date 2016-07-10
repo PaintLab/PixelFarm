@@ -9,6 +9,6 @@ namespace PixelFarm.Drawing.Fonts
     class SimpleFontAtlas
     {
         ActualImage fontActualImage;
-
+        Dictionary<char, RectangleF> charLocations = new Dictionary<char, RectangleF>();
     }
 }

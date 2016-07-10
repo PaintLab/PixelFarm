@@ -38,10 +38,10 @@
   <ItemGroup>
     <Compile Include="0_Start\ExtensionAttribute.cs" />
     <Compile Include="1_Drawing\RenderVx.cs" />
+    <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="5_PixelFarm_Agg\CanvasPainter.cs" />
     <Compile Include="3_Drawing_Fonts\FontFace.cs" />
-    <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="5_PixelFarm_Agg\PixelFormat.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\AggBasics.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\AggMath.cs" />

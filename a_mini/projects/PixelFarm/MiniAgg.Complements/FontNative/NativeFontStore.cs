@@ -11,6 +11,51 @@ using System.Runtime.InteropServices;
 using System.IO;
 namespace PixelFarm.Drawing.Fonts
 {
+    public class GlyphImage
+    {
+        int[] pixelBuffer;
+        public GlyphImage(int w, int h)
+        {
+            this.Width = w;
+            this.Height = h;
+        }
+        public RectangleF OriginalGlyphBounds
+        {
+            get;
+            internal set;
+        }
+
+        public int BorderXY
+        {
+            get;
+            internal set;
+        }
+        public int Width
+        {
+            get;
+            private set;
+        }
+        public int Height
+        {
+            get;
+            private set;
+        }
+        public bool IsBigEndian
+        {
+            get;
+            private set;
+        }
+
+        public int[] GetBuffer()
+        {
+            return pixelBuffer;
+        }
+        public void SetBuffer(int[] pixelBuffer, bool isBigEndian)
+        {
+            this.pixelBuffer = pixelBuffer;
+            this.IsBigEndian = isBigEndian;
+        }
+    }
     public static class NativeFontStore
     {
         static Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
@@ -32,7 +77,7 @@ namespace PixelFarm.Drawing.Fonts
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
 
-        public static Drawing.Font LoadFont(string filename, int fontPointSize)
+        public static Font LoadFont(string filename, int fontPointSize)
         {
             //load font from specific file 
             NativeFontFace fontFace;
@@ -91,5 +136,31 @@ namespace PixelFarm.Drawing.Fonts
             return (int)(point * 96f / 72f);
         }
 
+
+        public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
+        {
+            return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);
+        }
+        public static void SwapColorComponentFromBigEndianToWinGdi(int[] bitbuffer)
+        {
+            unsafe
+            {
+                int j = bitbuffer.Length;
+                fixed (int* p0 = &(bitbuffer[j - 1]))
+                {
+                    int* p = p0;
+                    for (int i = j - 1; i >= 0; --i)
+                    {
+                        int color = *p;
+                        int a = color >> 24;
+                        int b = (color >> 16) & 0xff;
+                        int g = (color >> 8) & 0xff;
+                        int r = color & 0xff;
+                        *p = (a << 24) | (r << 16) | (g << 8) | b;
+                        p--;
+                    }
+                }
+            }
+        }
     }
 }
