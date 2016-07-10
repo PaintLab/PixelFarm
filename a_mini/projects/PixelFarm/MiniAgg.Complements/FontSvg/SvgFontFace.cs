@@ -449,72 +449,72 @@ namespace PixelFarm.Drawing.Fonts
             return 0;
         }
 #if DEBUG
-        public void dbugShowDebugInfo(Graphics2D graphics2D)
-        {
-            //StyledTypeFace typeFaceNameStyle = new StyledTypeFace(this, 30);
+        //public void dbugShowDebugInfo(Graphics2D graphics2D)
+        //{
+        //    //StyledTypeFace typeFaceNameStyle = new StyledTypeFace(this, 30);
 
-            //TypeFacePrinter fontNamePrinter = new TypeFacePrinter(this.fontFamily + " - 30 point", typeFaceNameStyle);
-            //TextPrinter printer = new TextPrinter(graphics2D);
-            //var svgFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
+        //    //TypeFacePrinter fontNamePrinter = new TypeFacePrinter(this.fontFamily + " - 30 point", typeFaceNameStyle);
+        //    //TextPrinter printer = new TextPrinter(graphics2D);
+        //    //var svgFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
 
-            //RectD bounds = typeFaceNameStyle.BoundingBoxInPixels;
-            //double origX = 10 - bounds.Left;
-            //double x = origX;
-            //double y = 10 - typeFaceNameStyle.DescentInPixels;
-            //int width = 50;
-            //ColorRGBA boundingBoxColor = new ColorRGBA(0, 0, 0);
-            //ColorRGBA originColor = new ColorRGBA(0, 0, 0);
-            //ColorRGBA ascentColor = new ColorRGBA(255, 0, 0);
-            //ColorRGBA descentColor = new ColorRGBA(255, 0, 0);
-            //ColorRGBA xHeightColor = new ColorRGBA(12, 25, 200);
-            //ColorRGBA capHeightColor = new ColorRGBA(12, 25, 200);
-            //ColorRGBA underlineColor = new ColorRGBA(0, 150, 55);
+        //    //RectD bounds = typeFaceNameStyle.BoundingBoxInPixels;
+        //    //double origX = 10 - bounds.Left;
+        //    //double x = origX;
+        //    //double y = 10 - typeFaceNameStyle.DescentInPixels;
+        //    //int width = 50;
+        //    //ColorRGBA boundingBoxColor = new ColorRGBA(0, 0, 0);
+        //    //ColorRGBA originColor = new ColorRGBA(0, 0, 0);
+        //    //ColorRGBA ascentColor = new ColorRGBA(255, 0, 0);
+        //    //ColorRGBA descentColor = new ColorRGBA(255, 0, 0);
+        //    //ColorRGBA xHeightColor = new ColorRGBA(12, 25, 200);
+        //    //ColorRGBA capHeightColor = new ColorRGBA(12, 25, 200);
+        //    //ColorRGBA underlineColor = new ColorRGBA(0, 150, 55);
 
-            //// the origin
-            //graphics2D.dbugLine(x, y, x + width, y, originColor);
+        //    //// the origin
+        //    //graphics2D.dbugLine(x, y, x + width, y, originColor);
 
-            //graphics2D.Rectangle(x + bounds.Left, y + bounds.Bottom, x + bounds.Right, y + bounds.Top, boundingBoxColor);
+        //    //graphics2D.Rectangle(x + bounds.Left, y + bounds.Bottom, x + bounds.Right, y + bounds.Top, boundingBoxColor);
 
-            //x += typeFaceNameStyle.BoundingBoxInPixels.Width * 1.5;
+        //    //x += typeFaceNameStyle.BoundingBoxInPixels.Width * 1.5;
 
-            //width = width * 3;
+        //    //width = width * 3;
 
-            //double temp = typeFaceNameStyle.AscentInPixels;
-            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, ascentColor);
+        //    //double temp = typeFaceNameStyle.AscentInPixels;
+        //    //graphics2D.dbugLine(x, y + temp, x + width, y + temp, ascentColor);
 
-            //temp = typeFaceNameStyle.DescentInPixels;
-            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, descentColor);
+        //    //temp = typeFaceNameStyle.DescentInPixels;
+        //    //graphics2D.dbugLine(x, y + temp, x + width, y + temp, descentColor);
 
-            //temp = typeFaceNameStyle.XHeightInPixels;
-            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, xHeightColor);
+        //    //temp = typeFaceNameStyle.XHeightInPixels;
+        //    //graphics2D.dbugLine(x, y + temp, x + width, y + temp, xHeightColor);
 
-            //temp = typeFaceNameStyle.CapHeightInPixels;
-            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, capHeightColor);
+        //    //temp = typeFaceNameStyle.CapHeightInPixels;
+        //    //graphics2D.dbugLine(x, y + temp, x + width, y + temp, capHeightColor);
 
-            //temp = typeFaceNameStyle.UnderlinePositionInPixels;
-            //graphics2D.dbugLine(x, y + temp, x + width, y + temp, underlineColor);
+        //    //temp = typeFaceNameStyle.UnderlinePositionInPixels;
+        //    //graphics2D.dbugLine(x, y + temp, x + width, y + temp, underlineColor);
 
-            //Affine textTransform = Affine.NewMatix(AffinePlan.Translate(10, origX));
-            ////textTransform = Affine.NewIdentity();
-            ////textTransform *= Affine.NewTranslation(10, origX);
+        //    //Affine textTransform = Affine.NewMatix(AffinePlan.Translate(10, origX));
+        //    ////textTransform = Affine.NewIdentity();
+        //    ////textTransform *= Affine.NewTranslation(10, origX);
 
-            ////VertexSourceApplyTransform transformedText = new VertexSourceApplyTransform(textTransform);
-            ////fontNamePrinter.Render(graphics2D, ColorRGBA.Black, transformedText);
-            ////graphics2D.Render(transformedText, ColorRGBA.Black);
+        //    ////VertexSourceApplyTransform transformedText = new VertexSourceApplyTransform(textTransform);
+        //    ////fontNamePrinter.Render(graphics2D, ColorRGBA.Black, transformedText);
+        //    ////graphics2D.Render(transformedText, ColorRGBA.Black);
 
-            //// render the legend
-            //StyledTypeFace legendFont = new StyledTypeFace(this, 12);
-            //double newx = x + width / 2;
-            //double newy = y + typeFaceNameStyle.EmSizeInPixels * 1.5;
+        //    //// render the legend
+        //    //StyledTypeFace legendFont = new StyledTypeFace(this, 12);
+        //    //double newx = x + width / 2;
+        //    //double newy = y + typeFaceNameStyle.EmSizeInPixels * 1.5;
 
-            //graphics2D.Render(new TypeFacePrinter("Descent").MakeVertexSnap(), newx, newy, descentColor); newy += legendFont.EmSizeInPixels;
-            //graphics2D.Render(new TypeFacePrinter("Underline").MakeVertexSnap(), newx, newy, underlineColor); newy += legendFont.EmSizeInPixels;
-            //graphics2D.Render(new TypeFacePrinter("X Height").MakeVertexSnap(), newx, newy, xHeightColor); newy += legendFont.EmSizeInPixels;
-            //graphics2D.Render(new TypeFacePrinter("CapHeight").MakeVertexSnap(), newx, newy, capHeightColor); newy += legendFont.EmSizeInPixels;
-            //graphics2D.Render(new TypeFacePrinter("Ascent").MakeVertexSnap(), newx, newy, ascentColor); newy += legendFont.EmSizeInPixels;
-            //graphics2D.Render(new TypeFacePrinter("Origin").MakeVertexSnap(), newx, newy, originColor); newy += legendFont.EmSizeInPixels;
-            //graphics2D.Render(new TypeFacePrinter("Bounding Box").MakeVertexSnap(), newx, newy, boundingBoxColor);
-        }
+        //    //graphics2D.Render(new TypeFacePrinter("Descent").MakeVertexSnap(), newx, newy, descentColor); newy += legendFont.EmSizeInPixels;
+        //    //graphics2D.Render(new TypeFacePrinter("Underline").MakeVertexSnap(), newx, newy, underlineColor); newy += legendFont.EmSizeInPixels;
+        //    //graphics2D.Render(new TypeFacePrinter("X Height").MakeVertexSnap(), newx, newy, xHeightColor); newy += legendFont.EmSizeInPixels;
+        //    //graphics2D.Render(new TypeFacePrinter("CapHeight").MakeVertexSnap(), newx, newy, capHeightColor); newy += legendFont.EmSizeInPixels;
+        //    //graphics2D.Render(new TypeFacePrinter("Ascent").MakeVertexSnap(), newx, newy, ascentColor); newy += legendFont.EmSizeInPixels;
+        //    //graphics2D.Render(new TypeFacePrinter("Origin").MakeVertexSnap(), newx, newy, originColor); newy += legendFont.EmSizeInPixels;
+        //    //graphics2D.Render(new TypeFacePrinter("Bounding Box").MakeVertexSnap(), newx, newy, boundingBoxColor);
+        //}
 #endif
     }
 }

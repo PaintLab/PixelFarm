@@ -100,8 +100,7 @@ namespace PixelFarm.Drawing.Fonts
 
         [DllImport(myfontLib)]
         public static extern void DeleteUnmanagedObj(IntPtr unmanagedObject);
-        [DllImport(myfontLib)]
-        public static extern IntPtr stbi_load(string filename, out int w, out int h, out int comp, int requestOutputComponent);
+       
         class NativeModuleHolder : IDisposable
         {
             ~NativeModuleHolder()
@@ -114,8 +113,7 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
     }
-
-
+     
     public static class MyFtLib
     {
         const string MYFT = "myft.dll";
