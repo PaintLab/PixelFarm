@@ -87,6 +87,8 @@ namespace PixelFarm.DrawingGL
         int width;
         int height;
         byte[] rawBuffer;
+        PixelFarm.Drawing.Bitmap bmp;
+
         LazyBitmapBufferProvider lazyProvider;
         bool isInvertImage = false;
         static readonly bool isLittleEndian;
@@ -99,6 +101,13 @@ namespace PixelFarm.DrawingGL
             this.width = w;
             this.height = h;
             this.rawBuffer = rawBuffer;
+            this.isInvertImage = isInvertImage;
+        }
+        public GLBitmap(PixelFarm.Drawing.Bitmap bmp, bool isInvertImage)
+        {
+            this.width = bmp.Width;
+            this.height = bmp.Height;
+            this.bmp = bmp;
             this.isInvertImage = isInvertImage;
         }
         internal GLBitmap(LazyBitmapBufferProvider lazyProvider)
@@ -156,6 +165,13 @@ namespace PixelFarm.DrawingGL
                             PixelType.UnsignedByte, (IntPtr)bmpScan0);
                         }
                     }
+                }
+                else if (this.bmp != null)
+                {
+                    GL.TexImage2D(TextureTarget.Texture2D, 0,
+                           PixelInternalFormat.Rgba, this.width, this.height, 0,
+                           PixelFormat.Rgba, // 
+                           PixelType.UnsignedByte, bmp.GetNativeHImage());
                 }
                 else
                 {

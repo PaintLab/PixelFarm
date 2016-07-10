@@ -91,7 +91,8 @@
     <Compile Include="Sample03\T112_FrameBuffer2.cs" />
     <Compile Include="Sample03\T113_FrameBufferWithBlur.cs" />
     <Compile Include="Sample03\T114_FrameBufferWithConvFilterEffect.cs" />
-    <Compile Include="Sample04\T404_DrawString.cs" />
+    <Compile Include="Sample04\T404_FontAtlas.cs" />
+    <Compile Include="Sample04\T405_DrawString.cs" />
     <EmbeddedResource Include="00_DemoBase\FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
