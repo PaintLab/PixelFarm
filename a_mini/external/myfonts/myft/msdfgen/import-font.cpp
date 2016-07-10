@@ -87,121 +87,125 @@ bool getFontWhitespaceWidth(double &spaceAdvance, double &tabAdvance, FontHandle
     return true;
 }
 
+
 bool loadGlyph(Shape &output, FontHandle *font, int unicode, double *advance) {
-    enum PointType {
-        NONE = 0,
-        PATH_POINT,
-        QUADRATIC_POINT,
-        CUBIC_POINT,
-        CUBIC_POINT2
-    };
+	enum PointType {
+		NONE = 0,
+		PATH_POINT,
+		QUADRATIC_POINT,
+		CUBIC_POINT,
+		CUBIC_POINT2
+	};
 
-    if (!font)
-        return false;
-    FT_Error error = FT_Load_Char(font->face, unicode, FT_LOAD_NO_SCALE);
-    if (error)
-        return false;
-    output.contours.clear();
-    output.inverseYAxis = false;
-    if (advance)
-        *advance = font->face->glyph->advance.x/64.;
+	if (!font)
+		return false;
+	FT_Error error = FT_Load_Char(font->face, unicode, FT_LOAD_NO_SCALE);
+	if (error)
+		return false;
+	output.contours.clear();
+	output.inverseYAxis = false;
+	if (advance)
+		*advance = font->face->glyph->advance.x / 64.;
 
-    int last = -1;
-    // For each contour
-    for (int i = 0; i < font->face->glyph->outline.n_contours; ++i) {
+	int last = -1;
+	// For each contour
+	for (int i = 0; i < font->face->glyph->outline.n_contours; ++i) {
 
-        Contour &contour = output.addContour();
-        int first = last+1;
-        last = font->face->glyph->outline.contours[i];
+		Contour &contour = output.addContour();
+		int first = last + 1;
+		last = font->face->glyph->outline.contours[i];
 
-        PointType state = NONE;
-        Point2 startPoint;
-        Point2 controlPoint[2];
+		PointType state = NONE;
+		Point2 startPoint;
+		Point2 controlPoint[2];
 
-        // For each point on the contour
+		// For each point on the contour
 		bool closeContour = false;
-        for (int round = 0, index = first; round == 0; ++index) {
-            // Close contour
-            if (index > last) {
-                index = first;
-                round++;
+		for (int round = 0, index = first; round == 0; ++index) {
+			// Close contour
+			if (index > last) {
+				index = first;
+				round++;
 				closeContour = true;
-            }
+			}
 
-			FT_Vector o_point = font->face->glyph->outline.points[index];
-            Point2 point(font->face->glyph->outline.points[index].x/64., font->face->glyph->outline.points[index].y/64.);
-            PointType pointType = font->face->glyph->outline.tags[index]&1 ? PATH_POINT : font->face->glyph->outline.tags[index]&2 ? CUBIC_POINT : QUADRATIC_POINT;
+			Point2 point(font->face->glyph->outline.points[index].x / 64., font->face->glyph->outline.points[index].y / 64.);
+			PointType pointType = font->face->glyph->outline.tags[index] & 1 ? PATH_POINT : font->face->glyph->outline.tags[index] & 2 ? CUBIC_POINT : QUADRATIC_POINT;
 
-            switch (state) {
-                case NONE:
-					if (pointType == PATH_POINT) {
+			switch (state) {
+			case NONE:
+				if (pointType == PATH_POINT) {
+					startPoint = point;
+					state = PATH_POINT;
+				}
+				else if (pointType == QUADRATIC_POINT)
+				{
+					//eg. Windows Tahoma unicode 197
+					startPoint = point;
+					controlPoint[0] = point;
+					state = QUADRATIC_POINT;
+				}
+				else {
+					//err?
+					return false;
+				}
+				break;
+			case PATH_POINT:
+				if (pointType == PATH_POINT) {
+					contour.addEdge(new LinearSegment(startPoint, point));
+					startPoint = point;
+				}
+				else {
+					if (closeContour) {
+						//close contour mode
+						contour.addEdge(new LinearSegment(startPoint, point));
 						startPoint = point;
-						state = PATH_POINT;
-					}
-					else if (pointType == QUADRATIC_POINT)
-					{
-						//eg. Windows Tahoma unicode 197
-						startPoint = point;
-						controlPoint[0] = point;
-						state = QUADRATIC_POINT;
+						closeContour = false;
 					}
 					else {
-						//err?
-						return false;
+						controlPoint[0] = point;
+						state = pointType;
 					}
-                case PATH_POINT:
-                    if (pointType == PATH_POINT) {
-                        contour.addEdge(new LinearSegment(startPoint, point));
-                        startPoint = point;
-                    } else {
-						if (closeContour) {
-							//close contour mode
-							contour.addEdge(new LinearSegment(startPoint, point));
-							startPoint = point;
-							closeContour = false;
-						}
-						else {
-							controlPoint[0] = point;
-							state = pointType;
-						}
-                    }
-                    break;
-                case QUADRATIC_POINT:
-                    REQUIRE(pointType != CUBIC_POINT);
-                    if (pointType == PATH_POINT) {
-                        contour.addEdge(new QuadraticSegment(startPoint, controlPoint[0], point));
-                        startPoint = point;
-                        state = PATH_POINT;
-                    } else {
-                        Point2 midPoint = .5*controlPoint[0]+.5*point;
-                        contour.addEdge(new QuadraticSegment(startPoint, controlPoint[0], midPoint));
-                        startPoint = midPoint;
-                        controlPoint[0] = point;
-                    }
-                    break;
-                case CUBIC_POINT:
-                    REQUIRE(pointType == CUBIC_POINT);
-                    controlPoint[1] = point;
-                    state = CUBIC_POINT2;
-                    break;
-                case CUBIC_POINT2:
-                    REQUIRE(pointType != QUADRATIC_POINT);
-                    if (pointType == PATH_POINT) {
-                        contour.addEdge(new CubicSegment(startPoint, controlPoint[0], controlPoint[1], point));
-                        startPoint = point;
-                    } else {
-                        Point2 midPoint = .5*controlPoint[1]+.5*point;
-                        contour.addEdge(new CubicSegment(startPoint, controlPoint[0], controlPoint[1], midPoint));
-                        startPoint = midPoint;
-                        controlPoint[0] = point;
-                    }
-                    state = pointType;
-                    break;
-            }
+				}
+				break;
+			case QUADRATIC_POINT:
+				REQUIRE(pointType != CUBIC_POINT);
+				if (pointType == PATH_POINT) {
+					contour.addEdge(new QuadraticSegment(startPoint, controlPoint[0], point));
+					startPoint = point;
+					state = PATH_POINT;
+				}
+				else {
+					Point2 midPoint = .5*controlPoint[0] + .5*point;
+					contour.addEdge(new QuadraticSegment(startPoint, controlPoint[0], midPoint));
+					startPoint = midPoint;
+					controlPoint[0] = point;
+				}
+				break;
+			case CUBIC_POINT:
+				REQUIRE(pointType == CUBIC_POINT);
+				controlPoint[1] = point;
+				state = CUBIC_POINT2;
+				break;
+			case CUBIC_POINT2:
+				REQUIRE(pointType != QUADRATIC_POINT);
+				if (pointType == PATH_POINT) {
+					contour.addEdge(new CubicSegment(startPoint, controlPoint[0], controlPoint[1], point));
+					startPoint = point;
+				}
+				else {
+					Point2 midPoint = .5*controlPoint[1] + .5*point;
+					contour.addEdge(new CubicSegment(startPoint, controlPoint[0], controlPoint[1], midPoint));
+					startPoint = midPoint;
+					controlPoint[0] = point;
+				}
+				state = pointType;
+				break;
+			}
 
-        }
-    }
-    return true;
+		}
+	}
+	return true;
 }
 
 bool getKerning(double &output, FontHandle *font, int unicode1, int unicode2) {
