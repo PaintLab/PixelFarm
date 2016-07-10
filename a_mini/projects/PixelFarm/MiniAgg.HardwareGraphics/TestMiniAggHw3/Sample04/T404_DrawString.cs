@@ -72,7 +72,7 @@ namespace OpenTkEssTest
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             PixelFarm.Drawing.Rectangle r2;
             fontAtlas.GetRect('B', out r2);
-            canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width, 500);
+            canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width -10, 500);
 
             //full image
             canvas2d.DrawImage(msdf_bmp, 100, 300);
