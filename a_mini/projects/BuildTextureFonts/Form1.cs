@@ -560,6 +560,9 @@ namespace BuildTextureFonts
 
             char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
             int j = fontChars.Length;
+
+
+            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             for (int i = 0; i < j; ++i)
             {
                 char c = fontChars[i];
@@ -571,17 +574,59 @@ namespace BuildTextureFonts
                 int[] buffer = glyphImg.GetImageBuffer();
                 NativeFontStore.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
+                atlasBuilder.AddGlyph(c, fontGlyph, glyphImg);
 
-                using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-                {
-                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
-                    bmp.UnlockBits(bmpdata);
-                    bmp.Save("d:\\WImageTest\\a001_x1_" + (int)c + ".png");
-                }
+                //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                //{
+                //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                //    bmp.UnlockBits(bmpdata);
+                //    bmp.Save("d:\\WImageTest\\a001_x1_" + (int)c + ".png");
+
+                //}
             }
+            //----------------------------------------------------
+            GlyphImage totalImg = atlasBuilder.BuildSingleImage();
+            using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+
+                int[] buffer = totalImg.GetImageBuffer();
+                if (totalImg.IsBigEndian)
+                {
+                    NativeFontStore.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                    totalImg.SetImageBuffer(buffer, false);
+                }
+
+                var bmpdata = bmp.LockBits(new Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                bmp.UnlockBits(bmpdata);
+                bmp.Save("d:\\WImageTest\\a_total.png");
+            }
+
+            string fontfilename = "d:\\WImageTest\\a_total.xml";
+            atlasBuilder.SaveFontInfo(fontfilename);
+            //----------------------------------
+
 
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string fontfilename = "d:\\WImageTest\\a_total.xml";
+            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
+            GlyphImage glyImage = null;
+            using (Bitmap totalImg = new Bitmap("d:\\WImageTest\\a_total.png"))
+            {
+                var bmpdata = totalImg.LockBits(new Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
+                var buffer = new int[totalImg.Width * totalImg.Height];
+                System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
+                totalImg.UnlockBits(bmpdata);
+                glyImage = new GlyphImage(totalImg.Width, totalImg.Height);
+                glyImage.SetImageBuffer(buffer, false);
+            }
+            fontAtlas.SetImage(glyImage);
+
+        }
     }
 }
