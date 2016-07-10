@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
- 
 namespace PixelFarm.Drawing.Fonts
 {
     class NativeFontFace : FontFace
@@ -27,7 +26,6 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         Dictionary<int, Drawing.Font> fonts = new Dictionary<int, Drawing.Font>();
         IntPtr hb_font;
-
         internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
             this.unmanagedMem = unmanagedMem;
@@ -110,14 +108,11 @@ namespace PixelFarm.Drawing.Fonts
             }
 
             //--------------------------------------------------
-            unsafe
-            {
-                ExportGlyph exportTypeFace = new ExportGlyph();
-                NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, ref exportTypeFace);
-                FontGlyph fontGlyph = new FontGlyph();
-                BuildOutlineGlyph(fontGlyph, ref exportTypeFace, pixelSize);
-                return fontGlyph;
-            }
+
+            var fontGlyph = new FontGlyph();
+            NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, out fontGlyph.glyphMatrix);
+            BuildOutlineGlyph(fontGlyph, pixelSize);
+            return fontGlyph;
         }
         internal FontGlyph ReloadGlyphFromChar(char unicodeChar, int pixelSize)
         {
@@ -126,34 +121,20 @@ namespace PixelFarm.Drawing.Fonts
                 currentFacePixelSize = pixelSize;
                 NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
             }
-            //--------------------------------------------------
-            unsafe
-            {
-                ExportGlyph exportTypeFace = new ExportGlyph();
-                NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, ref exportTypeFace);
-                FontGlyph fontGlyph = new FontGlyph();
-                BuildOutlineGlyph(fontGlyph, ref exportTypeFace, pixelSize);
-                return fontGlyph;
-            }
+            //-------------------------------------------------- 
+            var fontGlyph = new FontGlyph();
+            NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, out fontGlyph.glyphMatrix);
+            BuildOutlineGlyph(fontGlyph, pixelSize);
+            return fontGlyph;
         }
-        void BuildBitmapGlyph(FontGlyph fontGlyph, ref ExportGlyph exportTypeFace, int pxsize)
-        {  //------------------------------------------
-            //copy font metrics
-            fontGlyph.exportGlyph = exportTypeFace;
-            //------------------------------------------
-            unsafe
-            {
-                NativeFontGlyphBuilder.CopyGlyphBitmap(fontGlyph, ref exportTypeFace);
-            }
-            //------------------------------------------
-        }
-        void BuildOutlineGlyph(FontGlyph fontGlyph, ref ExportGlyph exportTypeFace, int pxsize)
+        void BuildBitmapGlyph(FontGlyph fontGlyph, int pxsize)
         {
-            //------------------------------------------
-            //copy font metrics
-            fontGlyph.exportGlyph = exportTypeFace;
-            //------------------------------------------ 
-            NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph, ref exportTypeFace);
+            NativeFontGlyphBuilder.CopyGlyphBitmap(fontGlyph);
+        }
+        void BuildOutlineGlyph(FontGlyph fontGlyph, int pxsize)
+        {
+            NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph);
+            fontGlyph.flattenVxs = NativeFontGlyphBuilder.FlattenVxs(fontGlyph.originalVxs);
         }
     }
 }

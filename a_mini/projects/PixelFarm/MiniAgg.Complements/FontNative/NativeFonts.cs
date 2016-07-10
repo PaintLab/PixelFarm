@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
-
 namespace PixelFarm.Drawing.Fonts
 {
     [StructLayout(LayoutKind.Sequential)]
@@ -67,9 +66,9 @@ namespace PixelFarm.Drawing.Fonts
             int h_device_resolution,
             int v_device_resolution);
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, ref ExportGlyph ftOutline);
+        public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, out GlyphMatrix ftOutline);
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MyFtLoadGlyph(IntPtr faceHandle, uint codepoint, ref ExportGlyph ftOutline);
+        public static extern int MyFtLoadGlyph(IntPtr faceHandle, uint codepoint, out GlyphMatrix ftOutline);
         //============================================================================
         //HB shaping ....
         [DllImport(myfontLib, CharSet = CharSet.Ansi)]
@@ -83,7 +82,6 @@ namespace PixelFarm.Drawing.Fonts
         static bool isLoaded = false;
         static bool LoadLib(string dllFilename)
         {
-
             if (isLoaded)
             {
                 return true;
@@ -104,8 +102,6 @@ namespace PixelFarm.Drawing.Fonts
         public static extern void DeleteUnmanagedObj(IntPtr unmanagedObject);
         [DllImport(myfontLib)]
         public static extern IntPtr stbi_load(string filename, out int w, out int h, out int comp, int requestOutputComponent);
-
-
         class NativeModuleHolder : IDisposable
         {
             ~NativeModuleHolder()
@@ -125,20 +121,16 @@ namespace PixelFarm.Drawing.Fonts
         const string MYFT = "myft.dll";
         [DllImport(MYFT, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         public static extern int MyFtMSDFGEN(int argc, string[] argv);
-
         [DllImport(MYFT, CallingConvention = CallingConvention.Cdecl)]
         public static extern void DeleteUnmanagedObj(IntPtr unmanagedPtr);
-
         [DllImport(MYFT, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr CreateShape();
         [DllImport(MYFT, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr ShapeAddBlankContour(IntPtr shape);
-
         [DllImport(MYFT, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ShapeFindBounds(IntPtr shape,
          out double left, out double bottom,
          out double right, out double top);
-
         [DllImport(MYFT, CallingConvention = CallingConvention.Cdecl)]
         public static extern void ContourAddLinearSegment(IntPtr cnt,
             double x0, double y0,
@@ -157,15 +149,12 @@ namespace PixelFarm.Drawing.Fonts
         [DllImport(MYFT, CallingConvention = CallingConvention.Cdecl)]
         public static extern unsafe void MyFtGenerateMsdf(IntPtr shape, int width, int height, double range,
             double scale, double tx, double ty, double edgeThreshold, double angleThreshold, int* outputBitmap);
-
         [DllImport(MYFT)]
         public static extern bool ShapeValidate(IntPtr shape);
         [DllImport(MYFT)]
         public static extern void ShapeNormalize(IntPtr shape);
         [DllImport(MYFT)]
         public static extern void SetInverseYAxis(IntPtr shape, bool inverseYAxis);
-
-
         [DllImport(MYFT)]
         public static extern int MyFtLibGetVersion();
     }
@@ -175,8 +164,8 @@ namespace PixelFarm.Drawing.Fonts
         public bool useClassicSdf;
         public char character;
         public string outputFile;
-        public int sizeW = 24;
-        public int sizeH = 24;
+        public int sizeW = 32;
+        public int sizeH = 32;
         public int pixelRange = 4;
         public string testRenderFileName;
         public bool enableRenderTestFile = true;
@@ -197,7 +186,6 @@ namespace PixelFarm.Drawing.Fonts
                 stbulder.Append(args[i]);
             }
             return stbulder.ToString();
-
         }
         public string[] GetArgs()
         {
@@ -225,7 +213,7 @@ namespace PixelFarm.Drawing.Fonts
             //4.
             args.Add("-size"); args.Add(sizeW.ToString()); args.Add(sizeH.ToString());
             //5.
-            args.Add("pxrange"); args.Add(pixelRange.ToString());
+            args.Add("-pxrange"); args.Add(pixelRange.ToString());
             //6.
             args.Add("-autoframe");//default
                                    //7.
@@ -242,6 +230,4 @@ namespace PixelFarm.Drawing.Fonts
             return args.ToArray();
         }
     }
-
-
 }

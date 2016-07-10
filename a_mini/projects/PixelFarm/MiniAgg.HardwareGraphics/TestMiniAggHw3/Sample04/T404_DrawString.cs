@@ -30,7 +30,9 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                msdf_bmp = LoadTexture(@"..\msdf_75.png");
+               // msdf_bmp = LoadTexture(@"..\msdf_75.png");
+                msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1_66.png");
+                
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png");
                 resInit = true;
@@ -39,11 +41,11 @@ namespace OpenTkEssTest
             painter.Clear(PixelFarm.Drawing.Color.White);
             var f = painter.CurrentFont;
 
-            painter.DrawString("hello!", 0, 20);
+            //painter.DrawString("hello!", 0, 20);
 
 
-            //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
-            //canvas2d.DrawImage(msdf_bmp, 100, 300);
+            canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
+            canvas2d.DrawImage(msdf_bmp, 100, 300);
 
             miniGLControl.SwapBuffers();
         }

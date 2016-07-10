@@ -47,11 +47,11 @@ namespace PixelFarm.DrawingGL
                 //glyph image32 
                 //-------------------------------------------------------------
                 GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(glyph.glyphImage32));
-                var left = glyph.exportGlyph.img_horiBearingX;
+                var left = glyph.glyphMatrix.img_horiBearingX;
                 this.canvas2d.DrawImage(bmp,
                     (float)(xpos + (left >> 6)),
-                    (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
-                int w = (glyph.exportGlyph.advanceX) >> 6;
+                    (float)(y + (glyph.glyphMatrix.bboxYmin >> 6)));
+                int w = (glyph.glyphMatrix.advanceX) >> 6;
                 xpos += (w);
                 bmp.Dispose(); //temp here 
                 //-------------------------------------------------------------                

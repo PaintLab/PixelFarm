@@ -63,6 +63,4 @@ namespace PixelFarm.Drawing.Fonts
         public abstract Font ResolvedFont { get; }
         public object PlatformSpecificFont { get; set; }
     }
-
-
 }

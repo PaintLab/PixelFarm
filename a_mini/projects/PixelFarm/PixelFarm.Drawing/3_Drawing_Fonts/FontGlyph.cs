@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing.Fonts
 {
     public class FontGlyph
     {
-        public ExportGlyph exportGlyph;
+        public GlyphMatrix glyphMatrix;
         /// <summary>
         /// original 8bpp image buffer
         /// </summary>
@@ -49,7 +49,7 @@ namespace PixelFarm.Drawing.Fonts
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct ExportGlyph
+    public struct GlyphMatrix
     {
         public short unit_per_em;
         public short ascender;

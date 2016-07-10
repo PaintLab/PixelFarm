@@ -50,7 +50,7 @@ namespace PixelFarm.Drawing.Fonts
                 }
                 //-------------------------------------------------------------
                 FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
-                var left = glyph.exportGlyph.img_horiBearingX;
+                var left = glyph.glyphMatrix.img_horiBearingX;
                 //-------------------------------------------------------- 
                 VertexStore vxs1 = Agg.Transform.Affine.TranslateToVxs(
                     glyph.flattenVxs,
@@ -58,7 +58,7 @@ namespace PixelFarm.Drawing.Fonts
                     (float)(y));
                 //-------------------------------------------------------- 
                 resultVxs.AddSubVertices(vxs1);
-                int w = (glyph.exportGlyph.advanceX) >> 6;
+                int w = (glyph.glyphMatrix.advanceX) >> 6;
                 xpos += (w);
                 //-------------------------------------------------------------                
             }
@@ -86,7 +86,7 @@ namespace PixelFarm.Drawing.Fonts
                 }
                 //-------------------------------------------------------------
                 FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
-                var left = glyph.exportGlyph.img_horiBearingX;
+                var left = glyph.glyphMatrix.img_horiBearingX;
                 //--------------------------------------------------------
                 //render with vector
                 //var mat = Agg.Transform.Affine.NewMatix(
@@ -98,7 +98,7 @@ namespace PixelFarm.Drawing.Fonts
                     glyph.flattenVxs,
                     (float)(xpos),
                     (float)(y));
-                 painter.Fill(vxs1);
+                painter.Fill(vxs1);
                 //--------------------------------------------------------
                 ////render with bitmap
                 //if (glyph.glyphImage32 != null)
@@ -110,7 +110,7 @@ namespace PixelFarm.Drawing.Fonts
                 //            (float)(y + (glyph.exportGlyph.bboxYmin >> 6)));
                 //    }
                 //}
-                int w = (glyph.exportGlyph.advanceX) >> 6;
+                int w = (glyph.glyphMatrix.advanceX) >> 6;
                 xpos += (w);
                 //-------------------------------------------------------------                
             }

@@ -13,9 +13,9 @@ namespace PixelFarm.Drawing.Fonts
     static class NativeFontGlyphBuilder
     {
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
-        unsafe internal static void CopyGlyphBitmap(FontGlyph fontGlyph, ref ExportGlyph exportTypeFace)
+        unsafe internal static void CopyGlyphBitmap(FontGlyph fontGlyph)
         {
-            FT_Bitmap* ftBmp = (FT_Bitmap*)exportTypeFace.bitmap;
+            FT_Bitmap* ftBmp = (FT_Bitmap*)fontGlyph.glyphMatrix.bitmap;
             //image is 8 bits grayscale
             int h = ftBmp->rows;
             int w = ftBmp->width;
@@ -69,22 +69,6 @@ namespace PixelFarm.Drawing.Fonts
                 src_p += stride;
             }
             fontGlyph.glyphImage32 = actualImage;
-            ////------------------------------------------------
-            //{
-            //      //add System.Drawing to references 
-            //      //save image for debug***
-            //    
-            //    byte[] buffer = new byte[size];
-            //    Marshal.Copy((IntPtr)ftBmp->buffer, buffer, 0, size);
-            //    ////save to 
-            //    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-            //    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h),
-            //        System.Drawing.Imaging.ImageLockMode.ReadWrite,
-            //        bmp.PixelFormat);
-            //    Marshal.Copy(buffer, 0, bmpdata.Scan0, size);
-            //    bmp.UnlockBits(bmpdata);
-            //    bmp.Save("d:\\WImageTest\\glyph.png");
-            //}  
         }
 
         static FtVec2 GetMidPoint(FT_Vector v1, FT_Vector v2)
@@ -93,7 +77,12 @@ namespace PixelFarm.Drawing.Fonts
                 ((double)v1.x + (double)v2.x) / 2d,
                 ((double)v1.y + (double)v2.y) / 2d);
         }
-
+        static FtVec2 GetMidPoint(FtVec2 v1, FtVec2 v2)
+        {
+            return new FtVec2(
+                ((double)v1.x + (double)v2.x) / 2d,
+                ((double)v1.y + (double)v2.y) / 2d);
+        }
         static FtVec2 GetMidPoint(FtVec2 v1, FT_Vector v2)
         {
             return new FtVec2(
@@ -101,9 +90,9 @@ namespace PixelFarm.Drawing.Fonts
                 (v1.y + (double)v2.y) / 2d);
         }
 
-        unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph, ref ExportGlyph exportTypeFace)
+        unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph)
         {
-            FT_Outline outline = (*(FT_Outline*)exportTypeFace.outline);
+            FT_Outline outline = (*(FT_Outline*)fontGlyph.glyphMatrix.outline);
             //outline version
             //------------------------------
             int npoints = outline.n_points;
@@ -113,7 +102,6 @@ namespace PixelFarm.Drawing.Fonts
             int todoContourCount = outline.n_contours;
             PixelFarm.Agg.VertexSource.PathWriter ps = new Agg.VertexSource.PathWriter();
             fontGlyph.originalVxs = ps.Vxs;
-            const double resize = 64; //essential to be floating point
             int controlPointCount = 0;
             while (todoContourCount > 0)
             {
@@ -138,15 +126,15 @@ namespace PixelFarm.Drawing.Fonts
                             {
                                 case 1:
                                     {
-                                        ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
-                                            vpoint.x / resize, vpoint.y / resize);
+                                        ps.Curve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                            vpoint.x / FT_RESIZE, vpoint.y / FT_RESIZE);
                                     }
                                     break;
                                 case 2:
                                     {
-                                        ps.Curve4(secondControlPoint.x / resize, secondControlPoint.y / resize,
-                                           thirdControlPoint.x / resize, thirdControlPoint.y / resize,
-                                           vpoint.x / resize, vpoint.y / resize);
+                                        ps.Curve4(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                           thirdControlPoint.x / FT_RESIZE, thirdControlPoint.y / FT_RESIZE,
+                                           vpoint.x / FT_RESIZE, vpoint.y / FT_RESIZE);
                                     }
                                     break;
                                 default:
@@ -162,11 +150,11 @@ namespace PixelFarm.Drawing.Fonts
                             if (isFirstPoint)
                             {
                                 isFirstPoint = false;
-                                ps.MoveTo(vpoint.x / resize, vpoint.y / resize);
+                                ps.MoveTo(vpoint.x / FT_RESIZE, vpoint.y / FT_RESIZE);
                             }
                             else
                             {
-                                ps.LineTo(vpoint.x / resize, vpoint.y / resize);
+                                ps.LineTo(vpoint.x / FT_RESIZE, vpoint.y / FT_RESIZE);
                             }
 
                             if (has_dropout)
@@ -213,8 +201,8 @@ namespace PixelFarm.Drawing.Fonts
                                         FtVec2 mid = GetMidPoint(secondControlPoint, vpoint);
                                         //----------
                                         //generate curve3
-                                        ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
-                                            mid.x / resize, mid.y / resize);
+                                        ps.Curve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                            mid.x / FT_RESIZE, mid.y / FT_RESIZE);
                                         //------------------------
                                         controlPointCount--;
                                         //------------------------
@@ -244,14 +232,14 @@ namespace PixelFarm.Drawing.Fonts
                         case 0: break;
                         case 1:
                             {
-                                ps.Curve3(secondControlPoint.x / resize, secondControlPoint.y / resize,
+                                ps.Curve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
                                     ps.LastMoveX, ps.LastMoveY);
                             }
                             break;
                         case 2:
                             {
-                                ps.Curve4(secondControlPoint.x / resize, secondControlPoint.y / resize,
-                                   thirdControlPoint.x / resize, thirdControlPoint.y / resize,
+                                ps.Curve4(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                   thirdControlPoint.x / FT_RESIZE, thirdControlPoint.y / FT_RESIZE,
                                    ps.LastMoveX, ps.LastMoveY);
                             }
                             break;
@@ -266,9 +254,239 @@ namespace PixelFarm.Drawing.Fonts
                 startContour++;
                 todoContourCount--;
             }
+        }
+        internal static VertexStore FlattenVxs(VertexStore input)
+        {
+            return curveFlattener.MakeVxs(input);
+        }
 
-            fontGlyph.flattenVxs = curveFlattener.MakeVxs(fontGlyph.originalVxs);
 
+
+        const double FT_RESIZE = 64; //essential to be floating point
+        internal unsafe static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
+        {
+            IntPtr shape = MyFtLib.CreateShape();
+            FT_Outline outline = (*(FT_Outline*)fontGlyph.glyphMatrix.outline);            //outline version
+            //------------------------------
+            int npoints = outline.n_points;
+            List<PixelFarm.VectorMath.Vector2> points = new List<PixelFarm.VectorMath.Vector2>(npoints);
+            int startContour = 0;
+            int cpoint_index = 0;
+            int todoContourCount = outline.n_contours;
+            int controlPointCount = 0;
+            while (todoContourCount > 0)
+            {
+                int nextContour = outline.contours[startContour] + 1;
+                bool isFirstPoint = true;
+                //---------------
+                //create contour 
+
+                IntPtr cnt = MyFtLib.ShapeAddBlankContour(shape);
+                FtVec2 secondControlPoint = new FtVec2();
+                FtVec2 thirdControlPoint = new FtVec2();
+                bool justFromCurveMode = false;
+                FtVec2 lastMoveTo = new FtVec2();
+                FtVec2 lastPoint = new FtVec2();
+                FtVec2 current_point = new Fonts.FtVec2();
+                for (; cpoint_index < nextContour; ++cpoint_index)
+                {
+                    FT_Vector xvpoint = outline.points[cpoint_index];
+                    current_point = new FtVec2(xvpoint.x / FT_RESIZE, xvpoint.y / FT_RESIZE);
+                    //Console.WriteLine(xvpoint.x.ToString() + "," + xvpoint.y);
+                    byte vtag = outline.tags[cpoint_index];
+                    bool has_dropout = (((vtag >> 2) & 0x1) != 0);
+                    int dropoutMode = vtag >> 3;
+                    if ((vtag & 0x1) != 0)
+                    {
+                        if (justFromCurveMode)
+                        {
+                            switch (controlPointCount)
+                            {
+                                case 1:
+                                    {
+                                        MyFtLib.ContourAddQuadraticSegment(cnt,
+                                           lastPoint.x, lastPoint.y,
+                                           secondControlPoint.x, secondControlPoint.y,
+                                           current_point.x, current_point.y);
+                                        lastPoint = current_point;
+                                    }
+                                    break;
+                                case 2:
+                                    {
+                                        MyFtLib.ContourAddCubicSegment(cnt,
+                                            lastPoint.x, lastPoint.y,
+                                            secondControlPoint.x, secondControlPoint.y,
+                                            thirdControlPoint.x, thirdControlPoint.y,
+                                            current_point.x, current_point.y);
+                                        lastPoint = current_point;
+                                    }
+                                    break;
+                                default:
+                                    {
+                                        throw new NotSupportedException();
+                                    }
+                            }
+                            controlPointCount = 0;
+                            justFromCurveMode = false;
+                        }
+                        else
+                        {
+                            //line mode
+                            if (isFirstPoint)
+                            {
+                                isFirstPoint = false;
+                                lastMoveTo = lastPoint = current_point;
+                            }
+                            else
+                            {
+                                MyFtLib.ContourAddLinearSegment(cnt,
+                                    lastPoint.x, lastPoint.y,
+                                    current_point.x, current_point.y);
+                                lastPoint = current_point;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        switch (controlPointCount)
+                        {
+                            case 0:
+                                {   //bit 1 set=> off curve, this is a control point
+                                    //if this is a 2nd order or 3rd order control point
+                                    if (((vtag >> 1) & 0x1) != 0)
+                                    {
+                                        ////printf("[%d] bzc3rd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                        thirdControlPoint = new FtVec2(current_point.x, current_point.y);
+                                    }
+                                    else
+                                    {
+                                        ////printf("[%d] bzc2nd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                        secondControlPoint = new FtVec2(current_point.x, current_point.y);
+                                    }
+                                }
+                                break;
+                            case 1:
+                                {
+                                    if (((vtag >> 1) & 0x1) != 0)
+                                    {
+                                        ////printf("[%d] bzc3rd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                        thirdControlPoint = new FtVec2(current_point.x, current_point.y);
+                                    }
+                                    else
+                                    {
+                                        //we already have prev second control point
+                                        //so auto calculate line to 
+                                        //between 2 point
+                                        FtVec2 mid = GetMidPoint(secondControlPoint, current_point);
+                                        MyFtLib.ContourAddQuadraticSegment(cnt,
+                                            lastPoint.x, lastPoint.y,
+                                            secondControlPoint.x, secondControlPoint.y,
+                                            mid.x, mid.y);
+                                        lastPoint = mid;
+                                        //------------------------
+                                        controlPointCount--;
+                                        //------------------------
+                                        //printf("[%d] bzc2nd,  x: %d,y:%d \n", mm, vpoint.x, vpoint.y);
+                                        secondControlPoint = current_point;
+                                    }
+                                }
+                                break;
+                            default:
+                                {
+                                    throw new NotSupportedException();
+                                }
+                        }
+
+                        controlPointCount++;
+                        justFromCurveMode = true;
+                    }
+                }
+                //--------
+                //close figure
+                //if in curve mode
+                if (justFromCurveMode)
+                {
+                    switch (controlPointCount)
+                    {
+                        case 0: break;
+                        case 1:
+                            {
+                                MyFtLib.ContourAddQuadraticSegment(cnt,
+                                          lastPoint.x, lastPoint.y,
+                                          secondControlPoint.x, secondControlPoint.y,
+                                          lastMoveTo.x, lastMoveTo.y);
+                                lastPoint = current_point;
+                            }
+                            break;
+                        case 2:
+                            {
+                                MyFtLib.ContourAddCubicSegment(cnt,
+                                          lastPoint.x, lastPoint.y,
+                                          secondControlPoint.x, secondControlPoint.y,
+                                          thirdControlPoint.x, thirdControlPoint.y,
+                                          lastMoveTo.x, lastMoveTo.y);
+                                lastPoint = current_point;
+                            }
+                            break;
+                        default:
+                            { throw new NotSupportedException(); }
+                    }
+                    justFromCurveMode = false;
+                    controlPointCount = 0;
+                }
+                else
+                {
+                    MyFtLib.ContourAddLinearSegment(cnt,
+                                    current_point.x, current_point.y,
+                                    lastMoveTo.x, lastMoveTo.y);
+                    lastPoint = current_point;
+                }
+
+                //ps.CloseFigure();
+                //--------                   
+                startContour++;
+                todoContourCount--;
+            }
+            //------------
+
+            double s_left, s_bottom, s_right, s_top;
+            MyFtLib.ShapeFindBounds(shape, out s_left, out s_bottom, out s_right, out s_top);
+            RectangleF glyphBounds = new RectangleF((float)s_left, (float)s_top, (float)(s_right - s_left), (float)(s_top - s_bottom));
+            //then create msdf texture
+            if (!MyFtLib.ShapeValidate(shape))
+            {
+                throw new NotSupportedException();
+            }
+            MyFtLib.ShapeNormalize(shape);
+            int borderXY = 5;
+            int w = (int)Math.Ceiling(glyphBounds.Width) + (borderXY + borderXY);
+            int h = (int)(Math.Ceiling(glyphBounds.Height)) + (borderXY + borderXY);
+            int[] output = new int[w * h];
+            GlyphImage glyphImage = new GlyphImage(w, h);
+            glyphImage.BorderXY = borderXY;
+            glyphImage.OriginalGlyphBounds = glyphBounds;
+            unsafe
+            {
+                fixed (int* output_h = &output[0])
+                {
+                    float dx = 0;
+                    float dy = 0;
+                    if (s_left < 0)
+                    {
+                        //must translate the left to
+                        dx = (float)-s_left;
+                    }
+                    if (s_bottom < 0)
+                    {
+                        dy = (float)-s_bottom;
+                    }
+
+                    MyFtLib.MyFtGenerateMsdf(shape, w, h, 4, 1, dx + borderXY, dy + borderXY, -1, 3, output_h);
+                    MyFtLib.DeleteUnmanagedObj(shape);
+                }
+                glyphImage.SetBuffer(output, true);
+            }
+            return glyphImage;
         }
     }
 }
