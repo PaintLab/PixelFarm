@@ -605,9 +605,7 @@ namespace BuildTextureFonts
 
             string fontfilename = "d:\\WImageTest\\a_total.xml";
             atlasBuilder.SaveFontInfo(fontfilename);
-            //----------------------------------
-
-
+            //---------------------------------- 
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -627,6 +625,60 @@ namespace BuildTextureFonts
             }
             fontAtlas.SetImage(glyImage);
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //1. load font
+            string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
+            PixelFarm.Drawing.Font font = NativeFontStore.LoadFont(fontfile, 28);
+            //2. get glyph
+
+
+            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            for (int i = 0; i < 197; ++i)
+            {
+                char c = (char)i;
+                FontGlyph fontGlyph = font.GetGlyph(c);
+
+                GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
+                int w = glyphImg.Width;
+                int h = glyphImg.Height;
+                int[] buffer = glyphImg.GetImageBuffer();
+                NativeFontStore.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                glyphImg.SetImageBuffer(buffer, false);
+                atlasBuilder.AddGlyph(c, fontGlyph, glyphImg);
+
+                //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                //{
+                //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                //    bmp.UnlockBits(bmpdata);
+                //    bmp.Save("d:\\WImageTest\\a001_x1_" + (int)c + ".png");
+
+                //}
+            }
+            //----------------------------------------------------
+            GlyphImage totalImg = atlasBuilder.BuildSingleImage();
+            using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+
+                int[] buffer = totalImg.GetImageBuffer();
+                if (totalImg.IsBigEndian)
+                {
+                    NativeFontStore.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                    totalImg.SetImageBuffer(buffer, false);
+                }
+
+                var bmpdata = bmp.LockBits(new Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                bmp.UnlockBits(bmpdata);
+                bmp.Save("d:\\WImageTest\\a_total.png");
+            }
+
+            string fontfilename = "d:\\WImageTest\\a_total.xml";
+            atlasBuilder.SaveFontInfo(fontfilename);
+            //---------------------------------- 
         }
     }
 }
