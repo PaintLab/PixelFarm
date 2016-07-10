@@ -3,13 +3,12 @@
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Drawing.Fonts;
-using System.Drawing.Imaging;
+using PixelFarm.Drawing.Fonts; 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
-    [Info("T404_DrawString")]
-    public class T404_DrawString : PrebuiltGLControlDemoBase
+    [Info("T404_FontAtlas")]
+    public class T404_FontAtlas : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
         bool resInit;
@@ -57,6 +56,7 @@ namespace OpenTkEssTest
                 msdf_bmp = LoadTexture(totalImg);
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png");
+                
                 resInit = true;
             }
 
