@@ -32,13 +32,17 @@ namespace PixelFarm.Drawing.Fonts
     public class SimpleFontAtlasBuilder
     {
         Dictionary<char, GlyphData> glyphs = new Dictionary<char, GlyphData>();
-
+        GlyphImage latestGenGlyphImage;
         public void AddGlyph(char c, FontGlyph fontGlyph, GlyphImage glyphImage)
         {
             var glyphData = new GlyphData(c, fontGlyph, glyphImage);
             glyphs[c] = glyphData;
         }
 
+        public GlyphImage GetLatestGenGlyphImage()
+        {
+            return latestGenGlyphImage;
+        }
         public GlyphImage BuildSingleImage()
         {
             //1. add to list 
@@ -54,7 +58,7 @@ namespace PixelFarm.Drawing.Fonts
                 return a.glyphImage.Width.CompareTo(b.glyphImage.Width);
             });
             //3. layout
-        
+
             int totalMaxLim = 800;
             int maxRowHeight = 0;
             int currentY = 0;
@@ -74,7 +78,7 @@ namespace PixelFarm.Drawing.Fonts
                 }
                 //-------------------
                 g.area = new Rectangle(currentX, currentY, g.glyphImage.Width, g.glyphImage.Height);
-                currentX += g.glyphImage.Width; 
+                currentX += g.glyphImage.Width;
             }
             currentY += maxRowHeight;
             //------------------
@@ -90,7 +94,7 @@ namespace PixelFarm.Drawing.Fonts
             //------------------
             GlyphImage glyphImage = new Fonts.GlyphImage(totalMaxLim, currentY);
             glyphImage.SetImageBuffer(totalBuffer, true);
-            return glyphImage;
+            return latestGenGlyphImage = glyphImage;
         }
         static void CopyToDest(int[] srcPixels, int srcW, int srcH, int[] targetPixels, int targetX, int targetY, int totalTargetWidth)
         {
@@ -117,13 +121,19 @@ namespace PixelFarm.Drawing.Fonts
         /// save font info into xml document
         /// </summary>
         /// <param name="filename"></param>
-        public void SaveFontInfo(string filename)
+        public void SaveFontInfo(string filename, bool embededGlyphsImage = false)
         {
             //save font info as xml 
             //save position of each font
             XmlDocument xmldoc = new XmlDocument();
             XmlElement root = xmldoc.CreateElement("font");
             xmldoc.AppendChild(root);
+
+            if (latestGenGlyphImage == null)
+            {
+                BuildSingleImage();
+            }
+
 
             foreach (GlyphData g in glyphs.Values)
             {
@@ -140,8 +150,39 @@ namespace PixelFarm.Drawing.Fonts
                     );
                 root.AppendChild(gElem);
             }
+
+            if (embededGlyphsImage)
+            {
+                XmlElement glyphImgElem = xmldoc.CreateElement("msdf_img");
+                glyphImgElem.SetAttribute("w", latestGenGlyphImage.Width.ToString());
+                glyphImgElem.SetAttribute("h", latestGenGlyphImage.Height.ToString());
+                int[] imgBuffer = latestGenGlyphImage.GetImageBuffer();
+                glyphImgElem.SetAttribute("buff_len", (imgBuffer.Length * 4).ToString());
+                //----------------------------------------------------------------------
+                glyphImgElem.AppendChild(
+                    xmldoc.CreateTextNode(ConvertToBase64(imgBuffer)));
+                //----------------------------------------------------------------------
+                root.AppendChild(glyphImgElem);
+                latestGenGlyphImage.GetImageBuffer();
+            }
             xmldoc.Save(filename);
         }
+        static string ConvertToBase64(int[] buffer)
+        {
+            byte[] copy1 = new byte[buffer.Length * 4];
+            unsafe
+            {
+                fixed (void* buff_h = &buffer[0])
+                {
+                    System.Runtime.InteropServices.Marshal.Copy(
+                         new IntPtr(buff_h), copy1, 0, copy1.Length);
+                }
+            }
+            return Convert.ToBase64String(copy1);
+        }
+
+
+
         //read font info from xml document
         public SimpleFontAtlas LoadFontInfo(string filename)
         {
