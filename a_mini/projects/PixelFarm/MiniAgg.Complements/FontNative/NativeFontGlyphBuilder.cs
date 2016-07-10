@@ -348,6 +348,12 @@ namespace PixelFarm.Drawing.Fonts
                     }
                     else
                     {
+                        if (isFirstPoint)
+                        {
+                            isFirstPoint = false;
+                            lastMoveTo = lastPoint = current_point;
+                        }
+
                         switch (controlPointCount)
                         {
                             case 0:
