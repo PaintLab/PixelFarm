@@ -39,8 +39,6 @@
     <Compile Include="0_CanvasPainter\Canvas2dExtension.cs" />
     <Compile Include="0_CanvasPainter\dbugVertexSourceIO.cs" />
     <Compile Include="2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
-    <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
-    <Compile Include="FontAtlas\TextureFont.cs" />
     <Compile Include="FontSvg\SvgFont.cs" />
     <Compile Include="FontSvg\SvgFontFace.cs" />
     <Compile Include="FontSvg\SvgFontFace_LiberationSans.cs" />
@@ -84,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

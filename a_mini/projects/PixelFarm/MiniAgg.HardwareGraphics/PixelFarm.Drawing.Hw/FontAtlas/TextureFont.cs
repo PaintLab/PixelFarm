@@ -10,8 +10,13 @@ namespace PixelFarm.Drawing.Fonts
         public static TextureFont CreateFont(string xmlFontInfo, string imgAtlas)
         {
             string fontfilename = "d:\\WImageTest\\a_total.xml";
+
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+
             SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
+            //2. load glyph image
+
+
             //GlyphImage glyImage = null;
             // MyFtLib.st
             //totalImg = new System.Drawing.Bitmap("d:\\WImageTest\\a_total.png");
