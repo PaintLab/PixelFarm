@@ -489,7 +489,8 @@ namespace BuildTextureFonts
             //psdf – generates a monochrome signed pseudo - distance field.
             //msdf(default) – generates a multi - channel signed distance field using my new method.
 
-            char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+            //char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+            char[] fontChars = new char[] { (char)197 };
             int j = fontChars.Length;
             for (int i = 0; i < j; ++i)
             {
@@ -636,7 +637,7 @@ namespace BuildTextureFonts
 
 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-            for (int i = 0; i < 197; ++i)
+            for (int i = 0; i < 256; ++i)
             {
                 char c = (char)i;
                 FontGlyph fontGlyph = font.GetGlyph(c);
