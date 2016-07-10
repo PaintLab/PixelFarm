@@ -162,7 +162,7 @@ int MyFtLoadGlyph(FT_Face myface, unsigned int glyphIndex, ExportGlyph *expGlyph
 };
 int MyFtLoadChar(FT_Face myface, unsigned int charcode, ExportGlyph *expGlyph)
 {
-	if (!FT_Load_Char(myface, charcode, FT_LOAD_RENDER))
+	if (!FT_Load_Char(myface, charcode, FT_LOAD_RENDER | FT_LOAD_NO_SCALE))
 	{
 
 		//1. bounding box		 

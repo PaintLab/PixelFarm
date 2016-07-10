@@ -126,6 +126,7 @@ bool loadGlyph(Shape &output, FontHandle *font, int unicode, double *advance) {
                 round++;
             }
 
+			FT_Vector o_point = font->face->glyph->outline.points[index];
             Point2 point(font->face->glyph->outline.points[index].x/64., font->face->glyph->outline.points[index].y/64.);
             PointType pointType = font->face->glyph->outline.tags[index]&1 ? PATH_POINT : font->face->glyph->outline.tags[index]&2 ? CUBIC_POINT : QUADRATIC_POINT;
 
