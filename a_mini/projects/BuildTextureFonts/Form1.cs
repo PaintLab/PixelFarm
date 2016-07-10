@@ -568,9 +568,9 @@ namespace BuildTextureFonts
                 GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
-                int[] buffer = glyphImg.GetBuffer();
+                int[] buffer = glyphImg.GetImageBuffer();
                 NativeFontStore.SwapColorComponentFromBigEndianToWinGdi(buffer);
-                glyphImg.SetBuffer(buffer, false);
+                glyphImg.SetImageBuffer(buffer, false);
 
                 using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {

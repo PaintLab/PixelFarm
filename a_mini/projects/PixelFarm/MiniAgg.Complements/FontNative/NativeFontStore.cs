@@ -45,12 +45,13 @@ namespace PixelFarm.Drawing.Fonts
             get;
             private set;
         }
-
-        public int[] GetBuffer()
+        public float OffsetX { get; set; }
+        public float OffsetY { get; set; }
+        public int[] GetImageBuffer()
         {
             return pixelBuffer;
         }
-        public void SetBuffer(int[] pixelBuffer, bool isBigEndian)
+        public void SetImageBuffer(int[] pixelBuffer, bool isBigEndian)
         {
             this.pixelBuffer = pixelBuffer;
             this.IsBigEndian = isBigEndian;

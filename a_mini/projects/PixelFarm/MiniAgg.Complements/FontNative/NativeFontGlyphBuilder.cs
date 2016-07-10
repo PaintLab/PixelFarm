@@ -484,7 +484,7 @@ namespace PixelFarm.Drawing.Fonts
                     MyFtLib.MyFtGenerateMsdf(shape, w, h, 4, 1, dx + borderXY, dy + borderXY, -1, 3, output_h);
                     MyFtLib.DeleteUnmanagedObj(shape);
                 }
-                glyphImage.SetBuffer(output, true);
+                glyphImage.SetImageBuffer(output, true);
             }
             return glyphImage;
         }
