@@ -54,7 +54,7 @@ namespace PixelFarm.Drawing.Fonts
                 return a.glyphImage.Width.CompareTo(b.glyphImage.Width);
             });
             //3. layout
-            int totalWidth = 0;
+        
             int totalMaxLim = 800;
             int maxRowHeight = 0;
             int currentY = 0;
@@ -66,7 +66,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     maxRowHeight = g.glyphImage.Height;
                 }
-                if (totalWidth + g.glyphImage.Width > totalMaxLim)
+                if (currentX + g.glyphImage.Width > totalMaxLim)
                 {
                     //start new row
                     currentY += maxRowHeight;
@@ -74,7 +74,7 @@ namespace PixelFarm.Drawing.Fonts
                 }
                 //-------------------
                 g.area = new Rectangle(currentX, currentY, g.glyphImage.Width, g.glyphImage.Height);
-                currentX += g.glyphImage.Width;
+                currentX += g.glyphImage.Width; 
             }
             currentY += maxRowHeight;
             //------------------
