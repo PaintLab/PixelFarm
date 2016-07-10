@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using PixelFarm.Drawing.Fonts;
 
 namespace BuildTextureFonts
 {
@@ -549,5 +550,38 @@ namespace BuildTextureFonts
             }
             MyFtLib.DeleteUnmanagedObj(shape);
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //1. load font
+            string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
+            PixelFarm.Drawing.Font font = NativeFontStore.LoadFont(fontfile, 28);
+            //2. get glyph
+
+            char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+            int j = fontChars.Length;
+            for (int i = 0; i < j; ++i)
+            {
+                char c = fontChars[i];
+                FontGlyph fontGlyph = font.GetGlyph(c);
+
+                GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
+                int w = glyphImg.Width;
+                int h = glyphImg.Height;
+                int[] buffer = glyphImg.GetBuffer();
+                NativeFontStore.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                glyphImg.SetBuffer(buffer, false);
+
+                using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                    bmp.UnlockBits(bmpdata);
+                    bmp.Save("d:\\WImageTest\\a001_x1_" + (int)c + ".png");
+                }
+            }
+
+        }
+
     }
 }
