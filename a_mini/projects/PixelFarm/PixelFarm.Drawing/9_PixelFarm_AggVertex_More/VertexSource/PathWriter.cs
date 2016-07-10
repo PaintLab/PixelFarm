@@ -307,7 +307,7 @@ namespace PixelFarm.Agg.VertexSource
                                bool large_arc_flag,
                                bool sweep_flag,
                                double x, double y)
-    {
+        {
         if(m_vertices.total_vertices() && is_vertex(m_vertices.last_command()))
         {
             double epsilon = 1e-30;

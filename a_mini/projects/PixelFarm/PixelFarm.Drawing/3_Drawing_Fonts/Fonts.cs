@@ -48,12 +48,10 @@ namespace PixelFarm.Drawing
         {
             Dispose();
         }
-
-        
     }
 
 
-  
+
 
     public interface IFonts
     {
@@ -69,6 +67,4 @@ namespace PixelFarm.Drawing
     {
         public abstract object InnerFormat { get; }
     }
-
-
 }

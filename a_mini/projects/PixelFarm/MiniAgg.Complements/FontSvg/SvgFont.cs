@@ -5,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Drawing;
-
 using PixelFarm.Agg;
-
 namespace PixelFarm.Drawing.Fonts
 {
     class SvgFont : Font
@@ -130,7 +128,7 @@ namespace PixelFarm.Drawing.Fonts
                 return fontface.Cap_height * currentEmScalling;
             }
         }
-       
+
 
         public override FontInfo FontInfo
         {

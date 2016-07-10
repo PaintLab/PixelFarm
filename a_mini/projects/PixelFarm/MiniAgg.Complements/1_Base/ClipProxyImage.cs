@@ -298,7 +298,7 @@ namespace PixelFarm.Agg.Image
             base.BlendColorHSpan(x, y, len, colors, colorsIndex, covers, coversIndex, firstCoverForAll);
         }
 
-       
+
 
         public override void SetPixel(int x, int y, Color color)
         {

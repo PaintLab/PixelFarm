@@ -84,6 +84,5 @@ namespace PixelFarm.Agg
         {
             return this.pixelBuffer;
         }
-         
     }
 }

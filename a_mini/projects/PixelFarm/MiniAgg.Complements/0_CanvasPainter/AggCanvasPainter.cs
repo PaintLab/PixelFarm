@@ -24,7 +24,6 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.Agg.Image;
 using PixelFarm.Agg.VertexSource;
-
 namespace PixelFarm.Agg
 {
     public class AggCanvasPainter : CanvasPainter

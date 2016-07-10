@@ -11,7 +11,6 @@ namespace PixelFarm.Agg.Image
         const int R_SHIFT = 16;
         const int G_SHIFT = 8;
         const int B_SHIFT = 0;
-
         //------------------------------------------------
         static byte[] PrepareLookupTable(int radius)
         {
