@@ -119,11 +119,13 @@ bool loadGlyph(Shape &output, FontHandle *font, int unicode, double *advance) {
         Point2 controlPoint[2];
 
         // For each point on the contour
+		bool closeContour = false;
         for (int round = 0, index = first; round == 0; ++index) {
             // Close contour
             if (index > last) {
                 index = first;
                 round++;
+				closeContour = true;
             }
 
 			FT_Vector o_point = font->face->glyph->outline.points[index];
@@ -132,17 +134,36 @@ bool loadGlyph(Shape &output, FontHandle *font, int unicode, double *advance) {
 
             switch (state) {
                 case NONE:
-                    REQUIRE(pointType == PATH_POINT);
-                    startPoint = point;
-                    state = PATH_POINT;
-                    break;
+					if (pointType == PATH_POINT) {
+						startPoint = point;
+						state = PATH_POINT;
+					}
+					else if (pointType == QUADRATIC_POINT)
+					{
+						//eg. Windows Tahoma unicode 197
+						startPoint = point;
+						controlPoint[0] = point;
+						state = QUADRATIC_POINT;
+					}
+					else {
+						//err?
+						return false;
+					}
                 case PATH_POINT:
                     if (pointType == PATH_POINT) {
                         contour.addEdge(new LinearSegment(startPoint, point));
                         startPoint = point;
                     } else {
-                        controlPoint[0] = point;
-                        state = pointType;
+						if (closeContour) {
+							//close contour mode
+							contour.addEdge(new LinearSegment(startPoint, point));
+							startPoint = point;
+							closeContour = false;
+						}
+						else {
+							controlPoint[0] = point;
+							state = pointType;
+						}
                     }
                     break;
                 case QUADRATIC_POINT:
