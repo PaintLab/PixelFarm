@@ -11,8 +11,7 @@ namespace OpenTkEssTest
     {
         CanvasGL2d canvas2d;
         bool resInit;
-        GLBitmap msdf_bmp;
-        GLBitmap sdf_bmp;
+        GLBitmap msdf_bmp; 
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);

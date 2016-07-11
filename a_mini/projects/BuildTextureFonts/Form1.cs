@@ -614,17 +614,18 @@ namespace BuildTextureFonts
             string fontfilename = "d:\\WImageTest\\a_total.xml";
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
-            GlyphImage glyImage = null;
+
             using (Bitmap totalImg = new Bitmap("d:\\WImageTest\\a_total.png"))
             {
                 var bmpdata = totalImg.LockBits(new Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
                 var buffer = new int[totalImg.Width * totalImg.Height];
                 System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
                 totalImg.UnlockBits(bmpdata);
-                glyImage = new GlyphImage(totalImg.Width, totalImg.Height);
+                var glyImage = new GlyphImage(totalImg.Width, totalImg.Height);
                 glyImage.SetImageBuffer(buffer, false);
+                fontAtlas.TotalGlyph = glyImage;
             }
-            fontAtlas.SetImage(glyImage);
+
 
         }
 

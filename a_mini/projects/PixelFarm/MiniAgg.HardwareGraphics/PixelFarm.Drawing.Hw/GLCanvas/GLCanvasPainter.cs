@@ -5,6 +5,8 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.DrawingGL
 {
     public abstract class GLCanvasPainterBase : CanvasPainter
@@ -178,8 +180,46 @@ namespace PixelFarm.DrawingGL
             }
             this.Draw(roundRect.MakeVxs());
         }
-
-
+        public override void DrawString(string text, double x, double y)
+        {
+            //draw string with current font
+            char[] chars = text.ToCharArray();
+            //find proper position of each char 
+            TextureFont currentFont = this.CurrentFont as TextureFont;
+            SimpleFontAtlas fontAtlas = currentFont.FontAtlas;
+            GLBitmap glBmp = currentFont.GLBmp;
+            if (glBmp == null)
+            {
+                //create glbmp
+                GlyphImage glyphImage = fontAtlas.TotalGlyph;
+                int[] buffer = glyphImage.GetImageBuffer();
+                glBmp = new GLBitmap(glyphImage.Width, glyphImage.Height, buffer, false);
+            }
+            int j = chars.Length;
+            //
+            float c_x = (float)x;
+            float c_y = (float)y;
+            float baseline = c_y - 24;//eg line height= 24
+            for (int i = 0; i < j; ++i)
+            {
+                char c = chars[i];
+                if (c == ' ')
+                {
+                    //whitespace
+                    c_x += 10; //eg 
+                }
+                else
+                {
+                    Rectangle r;
+                    if (fontAtlas.GetRect(c, out r))
+                    {
+                        //draw each glyph           
+                        _canvas.DrawSubImageWithMsdf(glBmp, ref r, c_x, (float)(baseline + r.Height));
+                        c_x += r.Width - 10;
+                    }
+                }
+            }
+        }
         public override void Fill(VertexStore vxs)
         {
             _canvas.FillGfxPath(

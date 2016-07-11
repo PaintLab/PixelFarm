@@ -1,48 +1,40 @@
 ﻿//MIT,2016, WinterDev
 //----------------------------------- 
 using System;
-using System.Xml;
+using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.Fonts
 {
 
     public static class TextureFontBuilder
     {
-        public static TextureFont CreateFont(string xmlFontInfo, string imgAtlas)
+        public static TextureFont CreateFont(string fontName, string xmlFontInfo, string imgAtlas)
         {
-            string fontfilename = "d:\\WImageTest\\a_total.xml";
-
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-
-            SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
+            SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
             //2. load glyph image
+            using (Bitmap bmp = new Bitmap(imgAtlas))
+            {
+                var glyImage = new GlyphImage(bmp.Width, bmp.Height);
+                var buffer = new int[bmp.Width * bmp.Height];
+                System.Runtime.InteropServices.Marshal.Copy(bmp.GetNativeHImage(), buffer, 0, buffer.Length);
+                glyImage.SetImageBuffer(buffer, true);
+                fontAtlas.TotalGlyph = glyImage;
+            }
 
-
-            //GlyphImage glyImage = null;
-            // MyFtLib.st
-            //totalImg = new System.Drawing.Bitmap("d:\\WImageTest\\a_total.png");
-            //{
-            //    var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
-            //    var buffer = new int[totalImg.Width * totalImg.Height];
-            //    System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
-            //    totalImg.UnlockBits(bmpdata);
-            //    glyImage = new GlyphImage(totalImg.Width, totalImg.Height);
-            //    glyImage.SetImageBuffer(buffer, false);
-            //}
-            //fontAtlas.SetImage(glyImage);
-            return null;
-        }
-        public static TextureFont CreateFont(XmlDocument xmlFontInfo, int[] imgBuffer)
-        {
-
-            return null;
+            return new TextureFont(fontName, fontAtlas);
         }
     }
     public class TextureFont : Font
     {
-        internal TextureFont()
+        SimpleFontAtlas fontAtlas;
+        string name;
+        GLBitmap glBmp;
+        internal TextureFont(string name, SimpleFontAtlas fontAtlas)
         {
-
+            this.fontAtlas = fontAtlas;
+            this.name = name;
         }
+
         public override double AscentInPixels
         {
             get
@@ -59,6 +51,15 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
+        internal GLBitmap GLBmp
+        {
+            get { return glBmp; }
+            set { glBmp = value; }
+        }
+        internal SimpleFontAtlas FontAtlas
+        {
+            get { return fontAtlas; }
+        }
         public override double DescentInPixels
         {
             get
@@ -119,7 +120,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                throw new NotImplementedException();
+                return this.name;
             }
         }
 
@@ -166,7 +167,11 @@ namespace PixelFarm.Drawing.Fonts
 
         protected override void OnDispose()
         {
-            throw new NotImplementedException();
+            if(glBmp != null )
+            {
+                glBmp.Dispose();
+                glBmp = null;
+            }
         }
     }
 }

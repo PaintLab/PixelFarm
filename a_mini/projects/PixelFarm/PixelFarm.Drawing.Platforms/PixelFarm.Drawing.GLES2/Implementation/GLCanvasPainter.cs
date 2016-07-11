@@ -24,8 +24,12 @@ namespace PixelFarm.DrawingGL
         {
             //in this version we draw string to image
             //and the write the image back to gl surface
-
-
+            if (CurrentFont != null)
+            {
+                base.DrawString(text, x, y);
+                return;
+            }
+            //------------------------------------------------------
             _winGfx.Clear(System.Drawing.Color.White);
             _winGfx.DrawString(text, _winFont, _winGfxBrush, 0, 0);
             //_winGfxBackBmp.Save("d:\\WImageTest\\a00123.png"); 

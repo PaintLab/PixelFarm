@@ -25,11 +25,7 @@ namespace PixelFarm.Drawing.Fonts
             internal set;
         }
 
-        public int BorderXY
-        {
-            get;
-            internal set;
-        }
+
         public int Width
         {
             get;
@@ -44,6 +40,12 @@ namespace PixelFarm.Drawing.Fonts
         {
             get;
             private set;
+        }
+
+        public int BorderXY
+        {
+            get;
+            internal set;
         }
         public float OffsetX { get; set; }
         public float OffsetY { get; set; }

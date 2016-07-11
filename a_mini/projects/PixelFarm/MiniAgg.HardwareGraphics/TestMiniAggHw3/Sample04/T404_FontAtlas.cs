@@ -3,7 +3,7 @@
 using System;
 using Mini;
 using PixelFarm.DrawingGL;
-using PixelFarm.Drawing.Fonts; 
+using PixelFarm.Drawing.Fonts;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
@@ -26,17 +26,19 @@ namespace OpenTkEssTest
             string fontfilename = "d:\\WImageTest\\a_total.xml";
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
-            GlyphImage glyImage = null;
+
             totalImg = new System.Drawing.Bitmap("d:\\WImageTest\\a_total.png");
-            {
-                var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
-                var buffer = new int[totalImg.Width * totalImg.Height];
-                System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
-                totalImg.UnlockBits(bmpdata);
-                glyImage = new GlyphImage(totalImg.Width, totalImg.Height);
-                glyImage.SetImageBuffer(buffer, false);
-            }
-            fontAtlas.SetImage(glyImage);
+
+            var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
+            var buffer = new int[totalImg.Width * totalImg.Height];
+            System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
+            totalImg.UnlockBits(bmpdata);
+            var glyph = new GlyphImage(totalImg.Width, totalImg.Height);
+            glyph.SetImageBuffer(buffer, false);
+            fontAtlas.TotalGlyph = glyph;
+
+
+
 
             //---------------------
         }
@@ -56,7 +58,7 @@ namespace OpenTkEssTest
                 msdf_bmp = LoadTexture(totalImg);
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png");
-                
+
                 resInit = true;
             }
 
@@ -64,15 +66,15 @@ namespace OpenTkEssTest
             //var f = painter.CurrentFont;
 
             //painter.DrawString("hello!", 0, 20);
-
-            canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
+            //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
 
             PixelFarm.Drawing.Rectangle r;
             fontAtlas.GetRect('A', out r);
+            //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             PixelFarm.Drawing.Rectangle r2;
             fontAtlas.GetRect('B', out r2);
-            canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width -10, 500);
+            canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width - 10, 500);
 
             //full image
             canvas2d.DrawImage(msdf_bmp, 100, 300);
