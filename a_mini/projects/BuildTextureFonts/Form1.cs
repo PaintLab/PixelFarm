@@ -638,7 +638,8 @@ namespace BuildTextureFonts
 
 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-            for (int i = 0; i < 256; ++i)
+            //for (int i = 0; i < 256; ++i)
+            for (int i = 0x0e00; i < 0x0e5b; ++i)
             {
                 char c = (char)i;
                 FontGlyph fontGlyph = font.GetGlyph(c);
