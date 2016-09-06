@@ -1,4 +1,5 @@
-﻿using System;
+﻿//MIT 2016, WinterDev
+using System;
 using Pencil.Gaming;
 
 namespace PixelFarm
@@ -6,7 +7,6 @@ namespace PixelFarm
     public static class GLPlatforms
     {
 
-     
         public static bool Init()
         {
 
@@ -15,7 +15,7 @@ namespace PixelFarm
                 return false;
             }
             //---------------------------------------------------
-            //specific OpenGLES
+            //specific OpenGLES ***
             Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);

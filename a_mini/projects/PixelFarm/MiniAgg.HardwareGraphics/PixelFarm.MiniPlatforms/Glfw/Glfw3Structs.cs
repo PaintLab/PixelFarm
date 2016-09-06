@@ -98,6 +98,10 @@ namespace Pencil.Gaming
         public IntPtr
             inner_ptr;
         public readonly static GlfwWindowPtr Null = new GlfwWindowPtr(IntPtr.Zero);
+        public bool IsEmpty
+        {
+            get { return inner_ptr == IntPtr.Zero; }
+        }
     }
 
 #pragma warning restore 0414
