@@ -196,6 +196,10 @@ namespace Pencil.Gaming
         internal delegate void GetFramebufferSize(GlfwWindowPtr window, out int width, out int height);
         [SuppressUnmanagedCodeSecurity]
         internal delegate GlfwFramebufferSizeFun SetFramebufferSizeCallback(GlfwWindowPtr window, GlfwFramebufferSizeFun cbfun);
+
+        [SuppressUnmanagedCodeSecurity]
+        internal delegate IntPtr GetNativeWinHwnd(GlfwWindowPtr window);
+
         internal static Init glfwInit;
         internal static Terminate glfwTerminate;
         internal static GetVersion glfwGetVersion;
@@ -266,6 +270,8 @@ namespace Pencil.Gaming
         internal static GetProcAddress glfwGetProcAddress;
         internal static GetFramebufferSize glfwGetFramebufferSize;
         internal static SetFramebufferSizeCallback glfwSetFramebufferSizeCallback;
+        internal static GetNativeWinHwnd glfwGetWin32Window;
+
     }
 }
 

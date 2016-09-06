@@ -234,7 +234,7 @@ namespace PixelFarm.Forms
             base.Width = w;
             base.Height = h;
             _nativeGlFwWindowPtr = glWindowPtr;
-            _nativePlatformHwnd = glWindowPtr.inner_ptr;
+            _nativePlatformHwnd = Glfw.GetNativePlatformWinHwnd(glWindowPtr);
         }
         public GlfwWindowPtr GlfwWindowPtr
         {
@@ -396,7 +396,7 @@ namespace PixelFarm.Forms
                     this.Title,
                     new GlfwMonitorPtr(),//default monitor
                     new GlfwWindowPtr()); //default top window 
-                _nativePlatformHwnd = _nativeGlFwWindowPtr.inner_ptr;
+                
             }
         }
         public override void Show()
@@ -440,7 +440,7 @@ namespace PixelFarm.Forms
             var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
             var context = OpenTK.Graphics.GraphicsContext.CreateDummyContext(contextHandler);
             bool isCurrent = context.IsCurrent;
-            PixelFarm.GlfwWinInfo winInfo = new PixelFarm.GlfwWinInfo(this._nativePlatformHwnd);
+            PixelFarm.GlfwWinInfo winInfo = new PixelFarm.GlfwWinInfo(currentContext.inner_ptr);
             context.MakeCurrent(winInfo);
 
         }

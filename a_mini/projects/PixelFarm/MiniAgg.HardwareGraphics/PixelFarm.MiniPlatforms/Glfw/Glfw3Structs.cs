@@ -95,8 +95,7 @@ namespace Pencil.Gaming
         }
 
         [FieldOffsetAttribute(0)]
-        public IntPtr
-            inner_ptr;
+        public IntPtr inner_ptr;
         public readonly static GlfwWindowPtr Null = new GlfwWindowPtr(IntPtr.Zero);
         public bool IsEmpty
         {
@@ -104,7 +103,7 @@ namespace Pencil.Gaming
         }
         public static bool IsEqual(GlfwWindowPtr ptr1, GlfwWindowPtr ptr2)
         {
-            return ptr1.inner_ptr == ptr2.inner_ptr;                 
+            return ptr1.inner_ptr == ptr2.inner_ptr;
         }
     }
 

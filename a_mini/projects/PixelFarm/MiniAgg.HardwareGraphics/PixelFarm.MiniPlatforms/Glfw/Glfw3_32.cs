@@ -172,6 +172,10 @@ namespace Pencil.Gaming
         internal static extern void glfwGetFramebufferSize(GlfwWindowPtr window, out int width, out int height);
         [DllImport(NATIVE32_GLFW3), SuppressUnmanagedCodeSecurity]
         internal static extern GlfwFramebufferSizeFun glfwSetFramebufferSizeCallback(GlfwWindowPtr window, GlfwFramebufferSizeFun cbfun);
+        //-------------
+        [DllImport(NATIVE32_GLFW3), SuppressUnmanagedCodeSecurity]
+        internal static extern IntPtr glfwGetWin32Window(GlfwWindowPtr window);
+        //--------------------------------------------------------------
     }
 }
 
