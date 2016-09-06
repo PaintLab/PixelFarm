@@ -28,7 +28,10 @@ using System.Runtime.InteropServices;
 
 namespace Pencil.Gaming {
 	internal static unsafe class Glfw64 {
-		[DllImport("natives64/glfw.dll"), SuppressUnmanagedCodeSecurity] 
+        [DllImport("natives64/glfw.dll"), SuppressUnmanagedCodeSecurity]
+        internal static extern IntPtr glfwGetWin32Window(GlfwWindowPtr window);
+        //--------------------------------------------------------------
+        [DllImport("natives64/glfw.dll"), SuppressUnmanagedCodeSecurity] 
 		internal static extern int glfwInit();
 		[DllImport("natives64/glfw.dll"), SuppressUnmanagedCodeSecurity] 
 		internal static extern void glfwTerminate();

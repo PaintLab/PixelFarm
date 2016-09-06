@@ -50,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PureGlfwProgram.cs" />
     <Compile Include="Serialization\XmlIgnoreAttribute.cs" />
+    <Compile Include="SimpleWindowProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -13,7 +13,8 @@ namespace TestGlfw
         [STAThread]
         static void Main()
         {
-            PureGLFWProgram.Start();
+            //PureGLFWProgram.Start();
+            SimpleWindowProgram.Start();
         }
     }
 }
