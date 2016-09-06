@@ -1,4 +1,5 @@
-﻿using System;
+﻿//MIT, 2016, WinterDev
+using System;
 using System.Runtime.InteropServices;
 
 namespace TestGlfw

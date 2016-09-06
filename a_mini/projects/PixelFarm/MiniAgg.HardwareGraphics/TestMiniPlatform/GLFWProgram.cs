@@ -1,7 +1,7 @@
-﻿using System;
+﻿//MIT, 2016, WinterDev
+using System;
 using OpenTK.Graphics.ES20;
 using Pencil.Gaming;
-
 
 namespace TestGlfw
 {
@@ -32,7 +32,7 @@ namespace TestGlfw
             Glfw.SwapInterval(1);
             GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
 
-           
+
 
             var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
             var context = OpenTK.Graphics.GraphicsContext.CreateDummyContext(contextHandler);

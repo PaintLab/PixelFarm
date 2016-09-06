@@ -1,4 +1,5 @@
-﻿using System;
+﻿//MIT, 2016, WinterDev
+using System;
 using OpenTK.Graphics.ES20;
 using Pencil.Gaming;
 using PixelFarm;
