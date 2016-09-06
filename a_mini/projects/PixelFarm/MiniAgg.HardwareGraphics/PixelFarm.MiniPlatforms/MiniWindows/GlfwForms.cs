@@ -243,6 +243,12 @@ namespace PixelFarm.Forms
                 return _nativeGlFwWindowPtr;
             }
         }
+        public override void Close()
+        {
+            Glfw.HideWindow(this._nativeGlFwWindowPtr);
+            Glfw.DestroyWindow(this._nativeGlFwWindowPtr);
+        }
+
         internal void SetFocusState(bool focus)
         {
             if (focus)
@@ -396,7 +402,7 @@ namespace PixelFarm.Forms
                     this.Title,
                     new GlfwMonitorPtr(),//default monitor
                     new GlfwWindowPtr()); //default top window 
-                
+
             }
         }
         public override void Show()
