@@ -20,7 +20,8 @@ namespace BuildMergeProject
                new string[] {
                   "System",
                   "System.Drawing",
-                  "System.Windows.Forms"
+                  "System.Windows.Forms",
+                  "System.Xml",
                });
         }
 
@@ -42,11 +43,11 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg\MiniAgg.csproj");
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj");
             //
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\OpenTK.ES\OpenTK.ES.csproj");
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\OpenTK.PlatformMini\OpenTK.PlatformMini.csproj");
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj");
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj");
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniTesselate\Tesselate.csproj");
             // 
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\MiniAgg.Hw3\MiniAgg.Hw3.csproj");
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\PixelFarm.MiniPlatforms.WindowsForms.csproj");
             //
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Platforms.csproj");
             //

@@ -53,7 +53,7 @@ namespace PixelFarm.Forms
 
         }
         public void Invoke(Delegate ac) { }
-        public void Close() { }
+        public virtual void Close() { }
         public event EventHandler<FormClosingEventArgs> FormClosing;
         public event EventHandler<FormClosedEventArgs> FormClosed;
 

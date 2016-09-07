@@ -145,6 +145,10 @@ namespace Pencil.Gaming
         {
             return GlfwDelegates.glfwCreateWindow(width, height, title, monitor, share);
         }
+        public static IntPtr GetNativePlatformWinHwnd(GlfwWindowPtr wnd)
+        {
+            return GlfwDelegates.glfwGetWin32Window(wnd);
+        }
         public static void DestroyWindow(GlfwWindowPtr window)
         {
             GlfwDelegates.glfwDestroyWindow(window);

@@ -6,14 +6,15 @@ namespace PixelFarm
 {
     public static class GLPlatforms
     {
-
+       
         public static bool Init()
         {
-
+          
             if (!Glfw.Init())
             {
                 return false;
             }
+
             //---------------------------------------------------
             //specific OpenGLES ***
             Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
