@@ -41,7 +41,7 @@ namespace OpenTkEssTest
                 resInit = true;
             }
             painter.Clear(PixelFarm.Drawing.Color.White);
-           // painter.DrawString("hello world!", 100, 100);
+            // painter.DrawString("hello world!", 100, 100);
             painter.DrawString("กิ่น", 100, 100);
             miniGLControl.SwapBuffers();
         }
