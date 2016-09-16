@@ -131,7 +131,7 @@ int MyFtLoadGlyph(FT_Face myface, unsigned int glyphIndex, ExportGlyph *expGlyph
 		FT_Glyph glyph;
 		FT_Get_Glyph(myface->glyph, &glyph);
 		FT_Glyph_Get_CBox(glyph, FT_LOAD_NO_SCALE, &bbox);
-
+		
 		expGlyph->bboxXmin = bbox.xMin;
 		expGlyph->bboxXmax = bbox.xMax;
 		expGlyph->bboxYmin = bbox.yMin;
