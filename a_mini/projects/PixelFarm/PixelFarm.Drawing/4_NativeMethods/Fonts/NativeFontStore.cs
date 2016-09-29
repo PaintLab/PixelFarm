@@ -72,10 +72,9 @@ namespace PixelFarm.Drawing.Fonts
                ref exportTypeInfo);
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
-        public static Font LoadFont(string filename, float fontSizeInPoint)
+        public static Font LoadFont(string fontName, string filename, float fontSizeInPoint)
         {
-            Font font = new Font();
-            font.EmSize = fontSizeInPoint;
+            Font font = new Font(fontName, fontSizeInPoint); 
             LoadFont(font, filename);
             return font;
         }

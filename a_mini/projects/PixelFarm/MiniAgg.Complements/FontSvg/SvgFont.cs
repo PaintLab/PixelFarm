@@ -12,8 +12,6 @@ namespace PixelFarm.Drawing.Fonts
     {
         SvgFontFace fontface;
         int emSizeInPoints;
-        const int POINTS_PER_INCH = 72;
-        const int PIXEL_PER_INCH = 96;
         int emSizeInPixels;
         double currentEmScalling;
         Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
@@ -25,7 +23,7 @@ namespace PixelFarm.Drawing.Fonts
             this.fontface = fontface;
             this.emSizeInPoints = emSizeInPoints;
             //------------------------------------
-            emSizeInPixels = (int)(((float)emSizeInPoints / (float)POINTS_PER_INCH) * (float)PIXEL_PER_INCH);
+            emSizeInPixels = (int)Font.ConvEmSizeInPointsToPixels(emSizeInPoints);
             currentEmScalling = (float)emSizeInPixels / (float)fontface.UnitsPerEm;
             scaleTx = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
         }
@@ -170,6 +168,6 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        
+
     }
 }

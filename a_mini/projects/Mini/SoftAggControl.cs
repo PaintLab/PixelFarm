@@ -71,10 +71,11 @@ namespace Mini
             {
                 ImageGraphics2D imgGfx2d = bitmapBackBuffer.Initialize(myWidth, myHeight, 32);
                 //-------------
+                string fontName = "tahoma";
                 string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
                 //-------------                 
                 painter = new AggCanvasPainter(imgGfx2d);
-                painter.CurrentFont = PixelFarm.Drawing.Fonts.NativeFontStore.LoadFont(fontfile, 10);
+                painter.CurrentFont = PixelFarm.Drawing.Fonts.NativeFontStore.LoadFont(fontName, fontfile, 10);
             }
             painter.Clear(PixelFarm.Drawing.Color.White);
         }

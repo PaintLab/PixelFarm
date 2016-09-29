@@ -26,9 +26,7 @@ namespace OpenTkEssTest
                 "d:\\WImageTest\\a_total.xml",
                 "d:\\WImageTest\\a_total.png");
 
-            PixelFarm.Drawing.Font f = new PixelFarm.Drawing.Font();
-            f.Name = "tahoma";
-            f.EmSize = 24;
+            PixelFarm.Drawing.Font f = new PixelFarm.Drawing.Font("tahoma", 24);
             f.SetTextureFont(textureFont);
             painter.CurrentFont = f;
         }

@@ -36,8 +36,7 @@ namespace PixelFarm.Drawing.Fonts
             this.name = name;
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
             string fontfile = @"C:\Windows\Fonts\Tahoma.ttf";
-            nativeFont = new Font();             
-            nativeFont.EmSize = 28;
+            nativeFont = new Font("tahoma",28);                          
             NativeFontStore.LoadFont(nativeFont, fontfile);
         }
         public override double AscentInPixels

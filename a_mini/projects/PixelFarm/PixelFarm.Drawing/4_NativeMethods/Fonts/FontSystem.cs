@@ -14,9 +14,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             //find font and create it
             //check if we have created this font 
-            Font f = new Font();
-            f.Name = fontname;
-            f.EmSize = fsize;
+            Font f = new Font(fontname, fsize);             
             throw new NotSupportedException();
             string filename = "";
             NativeFontStore.LoadFont(f, filename);

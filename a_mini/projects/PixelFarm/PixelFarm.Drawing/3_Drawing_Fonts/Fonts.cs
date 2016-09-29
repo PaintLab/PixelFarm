@@ -26,8 +26,11 @@ namespace PixelFarm.Drawing
         /// </summary>
         float emSize;
         //--------------------------
+        /// <summary>
+        /// font's face name
+        /// </summary>
+        public string Name { get; private set; }
 
-        public string Name { get; set; }
         public int Height { get; set; }
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace PixelFarm.Drawing
         public float EmSize
         {
             get { return emSize; }
-            set
+            private set
             {
                 emSize = value;
                 emSizeInPixels = ConvEmSizeInPointsToPixels(value);
@@ -69,13 +72,6 @@ namespace PixelFarm.Drawing
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
         }
 
-        ///// <summary>
-        ///// font face
-        ///// </summary>
-        //public FontFace FontFace { get; set; }
-        /// <summary>
-        /// request font style from font face
-        /// </summary>
         public FontStyle Style { get; set; }
         //--------------------------
         //font shaping info (for native font/shaping engine)
@@ -144,11 +140,14 @@ namespace PixelFarm.Drawing
         {
         }
 
-        public Font()
+
+        public Font(string facename, float emSizeInPoints)
         {
             HBDirection = Fonts.HBDirection.HB_DIRECTION_LTR;//default
             ScriptCode = HBScriptCode.HB_SCRIPT_LATIN;//default 
             ForLang = "en";//default
+            Name = facename;
+            EmSize = emSizeInPoints;
         }
 
     }

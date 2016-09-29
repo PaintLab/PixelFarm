@@ -37,11 +37,15 @@ namespace PixelFarm.Drawing.WinGdi
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
             _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
             _gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
-            _currentGdiFont = new System.Drawing.Font("Tahoma", 10);
+
+            //
+            string fontName = "tahoma";
+            int fontSizeInPoint = 10;
+            _currentGdiFont = new System.Drawing.Font(fontName, fontSizeInPoint);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
-            Font f = new Font();
-            var winGdiFont = new WinGdiPlusFont(_currentGdiFont); 
+            Font f = new Font(fontName, fontSizeInPoint);
+            var winGdiFont = new WinGdiPlusFont(_currentGdiFont);
             f.SetPlatformFont(winGdiFont);
             _currentFont = f;
 

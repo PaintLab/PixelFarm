@@ -555,9 +555,9 @@ namespace BuildTextureFonts
         private void button3_Click(object sender, EventArgs e)
         {
             //1. load font
+            string fontName = "tahoma";
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-            var font = new PixelFarm.Drawing.Font();             
-            font.EmSize = 28;
+            var font = new PixelFarm.Drawing.Font(fontName, 28);
             NativeFontStore.LoadFont(font, fontfile);
             //2. get glyph 
             char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
@@ -684,9 +684,10 @@ namespace BuildTextureFonts
         private void button5_Click(object sender, EventArgs e)
         {
             //1. load font
+            string fontName = "tahoma";
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
-            PixelFarm.Drawing.Font font = NativeFontStore.LoadFont(fontfile, 28);
+            PixelFarm.Drawing.Font font = NativeFontStore.LoadFont(fontName, fontfile, 28);
             //2. get glyph 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
@@ -722,7 +723,7 @@ namespace BuildTextureFonts
         {
             //1. load font
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-            PixelFarm.Drawing.Font font = NativeFontStore.LoadFont(fontfile, 28);
+            PixelFarm.Drawing.Font font = NativeFontStore.LoadFont("tahoma", fontfile, 28);
             //2. get glyph
 
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };

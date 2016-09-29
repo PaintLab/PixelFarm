@@ -14,14 +14,15 @@ namespace PixelFarm.Agg.SimplePainter
     [Info("SimplePainterGlyph")]
     public class SimplePainterGlyphSample : DemoBase
     {
+        string fontName = "tahoma";
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
         PixelFarm.Drawing.Font font1;
         PixelFarm.Drawing.Font font2;
         public override void Init()
         {
             //load font ? 
-            font1 = NativeFontStore.LoadFont(fontfile, 48);
-            font2 = NativeFontStore.LoadFont(fontfile, 10);
+            font1 = NativeFontStore.LoadFont(fontName, fontfile, 48);
+            font2 = NativeFontStore.LoadFont(fontName, fontfile, 10);
         }
         public override void Draw(CanvasPainter p)
         {
