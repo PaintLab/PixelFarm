@@ -20,14 +20,54 @@ namespace PixelFarm.Drawing
         TextureFont _textureFont;
         //--------------------------
 
+        float emSizeInPixels;
+        /// <summary>
+        /// emsize in point
+        /// </summary>
+        float emSize;
+        //--------------------------
 
         public string Name { get; set; }
         public int Height { get; set; }
+
         /// <summary>
         /// emheight in point unit
         /// </summary>
-        public float EmSize { get; set; }
-        //public float EmSizeInPixels { get; set; }
+        public float EmSize
+        {
+            get { return emSize; }
+            set
+            {
+                emSize = value;
+                emSizeInPixels = ConvEmSizeInPointsToPixels(value);
+            }
+        }
+        public float EmSizeInPixels
+        {
+            get
+            {
+                return emSizeInPixels;
+            }
+        }
+
+        static int s_POINTS_PER_INCH = 72; //default value
+        static int s_PIXELS_PER_INCH = 96; //default value
+
+
+        public static int PointsPerInch
+        {
+            get { return s_POINTS_PER_INCH; }
+            set { s_POINTS_PER_INCH = value; }
+        }
+        public static int PixelsPerInch
+        {
+            get { return s_PIXELS_PER_INCH; }
+            set { s_PIXELS_PER_INCH = value; }
+        }
+        public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
+        {
+            return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
+        }
 
         ///// <summary>
         ///// font face
@@ -36,7 +76,7 @@ namespace PixelFarm.Drawing
         /// <summary>
         /// request font style from font face
         /// </summary>
-        public FontStyle Style { get; set; } 
+        public FontStyle Style { get; set; }
         //--------------------------
         //font shaping info (for native font/shaping engine)
         public HBDirection HBDirection { get; set; }
