@@ -27,7 +27,7 @@ namespace PixelFarm.Drawing.Fonts
             //measure in horizontal alignment ***
             //use native method to measure string
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];
-            ActualFont fontImpl = (ActualFont)font.InnerFont;
+            ActualFont fontImpl = font.ActualFont;
             fontImpl.GetGlyphPos(str, startAt, len, properGlyphs);
             int j = properGlyphs.Length;
             float total_width = 0;
@@ -52,7 +52,7 @@ namespace PixelFarm.Drawing.Fonts
         public Size MeasureString(char[] str, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth)
         {
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];
-            ActualFont fontImpl = (ActualFont)font.InnerFont;
+            ActualFont fontImpl = font.ActualFont;
             fontImpl.GetGlyphPos(str, startAt, len, properGlyphs);
             int j = properGlyphs.Length;
             float total_width = 0;
@@ -64,7 +64,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     break;
                 }
-                
+
                 FontGlyph g2 = fontImpl.GetGlyphByIndex(glyph.codepoint);
                 //TODO: review here
                 //char may not map 1:1 to glyphindex 
@@ -87,7 +87,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public float MeasureWhitespace(Font f)
         {
-            ActualFont fontImpl =  f.InnerFont;
+            ActualFont fontImpl = f.ActualFont;
             FontGlyph whitespaceGlyph = fontImpl.GetGlyph(' ');
             return whitespaceGlyph.horiz_adv_x;
         }

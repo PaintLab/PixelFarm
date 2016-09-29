@@ -37,7 +37,7 @@ namespace PixelFarm.Drawing.Fonts
             //get kerning list 
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
-            ActualFont implFont = currentFont.InnerFont;
+            ActualFont implFont = currentFont.ActualFont;
             implFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
             //-----------------------------------------------------------
             VertexStore resultVxs = new VertexStore();
@@ -76,7 +76,7 @@ namespace PixelFarm.Drawing.Fonts
             //get kerning list 
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
-            ActualFont implFont = currentFont.InnerFont;
+            ActualFont implFont = currentFont.ActualFont;
             implFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
             double xpos = x;
             for (int i = 0; i < buffsize; ++i)

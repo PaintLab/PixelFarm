@@ -37,7 +37,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _characterRanges[0] = new System.Drawing.CharacterRange(0, len);
             _stringFormat.SetMeasurableCharacterRanges(_characterRanges);
-            WinGdiPlusFont winGdiFont = (WinGdiPlusFont)font.InnerFont;
+            WinGdiPlusFont winGdiFont = (WinGdiPlusFont)font.PlatformFont;
             System.Drawing.Font font2 = (System.Drawing.Font)winGdiFont.InnerFont;
             var size = gx.MeasureCharacterRanges(
                 new string(buff, startAt, len),
@@ -116,7 +116,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            WinGdiPlusFont winGdiFont = (WinGdiPlusFont)this.currentTextFont.InnerFont;
+            WinGdiPlusFont winGdiFont = (WinGdiPlusFont)this.currentTextFont.PlatformFont;
             System.Drawing.Font font2 = (System.Drawing.Font)winGdiFont.InnerFont;
 
             gx.DrawString(new string(buffer),
@@ -128,7 +128,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            WinGdiPlusFont winGdiFont = (WinGdiPlusFont)this.currentTextFont.InnerFont;
+            WinGdiPlusFont winGdiFont = (WinGdiPlusFont)this.currentTextFont.PlatformFont;
             System.Drawing.Font font2 = (System.Drawing.Font)winGdiFont.InnerFont;
 
 
@@ -161,8 +161,8 @@ namespace PixelFarm.Drawing.WinGdi
 
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            
-            WinGdiPlusFont winGdiFont = (WinGdiPlusFont)this.currentTextFont.InnerFont;
+
+            WinGdiPlusFont winGdiFont = (WinGdiPlusFont)this.currentTextFont.PlatformFont;
             System.Drawing.Font font2 = (System.Drawing.Font)winGdiFont.InnerFont;
 
 

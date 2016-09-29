@@ -163,12 +163,12 @@ namespace PixelFarm.Drawing.Fonts
 
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            return nativeFont.InnerFont.GetGlyphByIndex(glyphIndex);
+            return nativeFont.ActualFont.GetGlyphByIndex(glyphIndex);
         }
 
         public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
         {
-            nativeFont.InnerFont.GetGlyphPos(buffer, start, len, properGlyphs);
+            nativeFont.ActualFont.GetGlyphPos(buffer, start, len, properGlyphs);
         }
 
         protected override void OnDispose()

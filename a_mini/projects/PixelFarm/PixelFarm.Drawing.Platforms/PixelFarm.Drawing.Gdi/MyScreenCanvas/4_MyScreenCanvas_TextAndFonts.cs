@@ -231,7 +231,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 ReleaseHdc();
                 this.currentTextFont = value;
-                WinGdiPlusFont myFont = value.InnerFont as WinGdiPlusFont;
+                WinGdiPlusFont myFont = (WinGdiPlusFont)value.PlatformFont;
                 IntPtr hdc = gx.GetHdc();
                 MyWin32.SelectObject(hdc, myFont.ToHfont());
                 gx.ReleaseHdc();

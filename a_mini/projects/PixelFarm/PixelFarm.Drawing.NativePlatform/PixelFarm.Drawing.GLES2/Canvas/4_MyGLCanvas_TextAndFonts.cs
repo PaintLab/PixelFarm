@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing.GLES2
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
             //TODO: review here ***
-            return f.InnerFont.GetGlyph(' ').horiz_adv_x;
+            return f.ActualFont.GetGlyph(' ').horiz_adv_x;
         }
         //======================================
 

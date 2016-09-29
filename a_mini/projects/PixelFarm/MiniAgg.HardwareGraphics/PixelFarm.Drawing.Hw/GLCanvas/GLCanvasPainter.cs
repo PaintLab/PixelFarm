@@ -188,7 +188,7 @@ namespace PixelFarm.DrawingGL
             int j = chars.Length;
             int buffsize = j * 2;
             //get kerning list 
-            TextureFont currentFont = this.CurrentFont.InnerFont as TextureFont;
+            TextureFont currentFont = this.CurrentFont.TextureFont;
             SimpleFontAtlas fontAtlas = currentFont.FontAtlas;
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
             currentFont.GetGlyphPos(chars, 0, buffsize, properGlyphs);

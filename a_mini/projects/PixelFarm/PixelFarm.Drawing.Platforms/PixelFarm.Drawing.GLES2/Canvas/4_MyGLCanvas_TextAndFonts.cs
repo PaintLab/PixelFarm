@@ -37,7 +37,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             _characterRanges[0] = new System.Drawing.CharacterRange(0, len);
             _stringFormat.SetMeasurableCharacterRanges(_characterRanges);
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)font.InnerFont;
+            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)font.PlatformFont;
             System.Drawing.Font font2 = (System.Drawing.Font)winFont.InnerFont;
             var size = gx.MeasureCharacterRanges(
                 new string(buff, startAt, len),
@@ -116,7 +116,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.InnerFont;
+            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.PlatformFont;
 
             gx.DrawString(new string(buffer),
                 (System.Drawing.Font)winFont.InnerFont,
@@ -127,11 +127,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.InnerFont;
+            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.PlatformFont;
 
 
             gx.DrawString(new string(buffer),
-                (System.Drawing.Font)winFont.InnerFont ,
+                (System.Drawing.Font)winFont.InnerFont,
                 internalSolidBrush,
                 new System.Drawing.RectangleF(
                     logicalTextBox.X,
@@ -159,7 +159,7 @@ namespace PixelFarm.Drawing.GLES2
 
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.InnerFont;
+            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.PlatformFont;
 
             gx.DrawString(new string(str, startAt, len),
                 (System.Drawing.Font)winFont.InnerFont,

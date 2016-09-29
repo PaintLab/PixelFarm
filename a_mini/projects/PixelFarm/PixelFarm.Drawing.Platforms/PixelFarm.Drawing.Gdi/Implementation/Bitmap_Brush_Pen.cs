@@ -5,15 +5,16 @@ using System;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
+    //*** this class need System.Drawing , because 
     class WinGdiPlusFont : PlatformFont
     {
         System.Drawing.Font myFont;
-        System.IntPtr hFont; 
+        System.IntPtr hFont;
         public WinGdiPlusFont(System.Drawing.Font f)
         {
             this.myFont = f;
             this.hFont = f.ToHfont();
-        } 
+        }
         public override string Name
         {
             get { return this.myFont.Name; }

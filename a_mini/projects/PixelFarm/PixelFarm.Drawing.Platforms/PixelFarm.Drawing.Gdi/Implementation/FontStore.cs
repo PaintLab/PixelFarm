@@ -232,7 +232,7 @@ namespace PixelFarm.Drawing.WinGdi
             PixelFarm.Drawing.IFonts gfx, PixelFarm.Drawing.Font f)
         {
             float ws;
-            WinGdiPlusFont winFont = (WinGdiPlusFont)f.InnerFont;
+            WinGdiPlusFont winFont = (WinGdiPlusFont)f.PlatformFont;
             if (!_fontWsCache.TryGetValue(winFont, out ws))
             {
                 ws = gfx.MeasureString(new char[] { ' ' }, 0, 1, f).Width;

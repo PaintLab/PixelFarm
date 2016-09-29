@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
-    class NativeFont : ActualFont
+    public class NativeFont : ActualFont
     {
         NativeFontFace ownerFace;
         int fontSizeInPixelUnit;

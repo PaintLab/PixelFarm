@@ -67,7 +67,7 @@ namespace PixelFarm.Drawing.Fonts
             {
 
                 Vector2 currentOffset = new Vector2(0, 0);
-                ActualFont font = currentFont.InnerFont;
+                ActualFont font = currentFont.ActualFont;
                 currentOffset = GetBaseline(currentOffset);
                 string[] lines = text.Split('\n');
                 foreach (string line in lines)
@@ -143,13 +143,13 @@ namespace PixelFarm.Drawing.Fonts
                     break;
                 case Baseline.BoundsTop:
                     {
-                        ActualFont font = (ActualFont)currentFont.InnerFont;
+                        ActualFont font = currentFont.ActualFont;
                         currentOffset.y = -font.AscentInPixels;
                     }
                     break;
                 case Baseline.BoundsCenter:
                     {
-                        ActualFont font = (ActualFont)currentFont.InnerFont;
+                        ActualFont font = currentFont.ActualFont;
                         currentOffset.y = -font.AscentInPixels / 2;
                     }
 
@@ -193,7 +193,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 text = this.textToPrint;
             }
-            ActualFont implFont = (ActualFont)currentFont.InnerFont;
+            ActualFont implFont = currentFont.ActualFont;
             offset.x = 0;
             offset.y = implFont.EmSizeInPixels;
             double currentLineX = 0;

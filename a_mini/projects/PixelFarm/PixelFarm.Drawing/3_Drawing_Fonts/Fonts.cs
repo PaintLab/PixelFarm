@@ -4,9 +4,13 @@ using System;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing
 {
+
     public sealed class Font : IDisposable
     {
-        
+        //--------------------------
+        //in our lib
+        //1 font may has more than 1 actual impl
+        //--------------------------
         ActualFont _actualFont;
         //--------------------------
         NativeFont _nativeFont;
@@ -30,51 +34,59 @@ namespace PixelFarm.Drawing
         /// <summary>
         /// canvas specific presentation
         /// </summary>
-        public ActualFont InnerFont
+        public ActualFont ActualFont
         {
             get { return _actualFont; }
         }
-        public ActualFont NativeFont
+        public NativeFont NativeFont
         {
             get { return _nativeFont; }
         }
-        public ActualFont OutlineFont
+        public OutlineFont OutlineFont
         {
             get { return _outlineFont; }
         }
-
-        public void SetOutlineFont(OutlineFont outlineFont)
+        public PlatformFont PlatformFont
+        {
+            get { return _platformFont; }
+        }
+        public TextureFont TextureFont
+        {
+            get { return _textureFont; }
+        }
+        //--------------------------
+        public void SetOutlineFont(OutlineFont outlineFont, bool forceSetToPrimaryActualFont = false)
         {
             _outlineFont = outlineFont;
-            if (_actualFont == null)
+            if (_actualFont == null || forceSetToPrimaryActualFont)
             {
                 _actualFont = outlineFont;
             }
+
         }
-        public void SetTextureFont(TextureFont textureFont)
+        public void SetTextureFont(TextureFont textureFont, bool forceSetToPrimaryActualFont = false)
         {
             _textureFont = textureFont;
-            if (_actualFont == null)
+            if (_actualFont == null || forceSetToPrimaryActualFont)
             {
                 _actualFont = textureFont;
             }
         }
-        public void SetPlatformFont(PlatformFont platformFont)
+        public void SetPlatformFont(PlatformFont platformFont, bool forceSetToPrimaryActualFont = false)
         {
             _platformFont = platformFont;
-            if (_actualFont == null)
+            if (_actualFont == null || forceSetToPrimaryActualFont)
             {
                 _actualFont = platformFont;
             }
         }
-        internal void SetNativeFont(NativeFont nativeFont)
+        public void SetNativeFont(NativeFont nativeFont, bool forceSetToPrimaryActualFont = false)
         {
             _nativeFont = nativeFont;
-            if (_actualFont == null)
+            if (_actualFont == null || forceSetToPrimaryActualFont)
             {
                 _actualFont = nativeFont;
             }
-
         }
         public void Dispose()
         {
