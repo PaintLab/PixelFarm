@@ -6,8 +6,6 @@ namespace PixelFarm.Drawing.Fonts
 
     public class FontSystem : IFonts
     {
-
-
         public void Dispose()
         {
 
@@ -19,11 +17,16 @@ namespace PixelFarm.Drawing.Fonts
             Font f = new Font();
             f.Name = fontname;
             f.EmSize = fsize;
-            NativeFontStore.LoadFont(f);
+            throw new NotSupportedException();
+            string filename = "";
+            NativeFontStore.LoadFont(f, filename);
             return f;
         }
         public Size MeasureString(char[] str, int startAt, int len, Font font)
         {
+
+
+
             //measure in horizontal alignment ***
             //use native method to measure string
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];

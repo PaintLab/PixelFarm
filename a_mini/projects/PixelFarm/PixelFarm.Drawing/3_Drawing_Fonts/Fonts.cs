@@ -8,8 +8,9 @@ namespace PixelFarm.Drawing
     public sealed class Font : IDisposable
     {
         //--------------------------
-        //in our lib
-        //1 font may has more than 1 actual impl
+        //this is request font specification from user
+        //in our lib 1 font may has more than 1 actual impl
+
         //--------------------------
         ActualFont _actualFont;
         //--------------------------
@@ -20,17 +21,28 @@ namespace PixelFarm.Drawing
         //--------------------------
 
 
-        public string FileName { get; set; }
         public string Name { get; set; }
         public int Height { get; set; }
         /// <summary>
         /// emheight in point unit
         /// </summary>
         public float EmSize { get; set; }
-        public float EmSizeInPixels { get; set; }
-        public FontStyle Style { get; set; }
-        public FontFace FontFace { get; set; }
+        //public float EmSizeInPixels { get; set; }
 
+        ///// <summary>
+        ///// font face
+        ///// </summary>
+        //public FontFace FontFace { get; set; }
+        /// <summary>
+        /// request font style from font face
+        /// </summary>
+        public FontStyle Style { get; set; } 
+        //--------------------------
+        //font shaping info (for native font/shaping engine)
+        public HBDirection HBDirection { get; set; }
+        public int ScriptCode { get; set; }
+        public string ForLang { get; set; }
+        //--------------------------
         /// <summary>
         /// canvas specific presentation
         /// </summary>
@@ -91,11 +103,15 @@ namespace PixelFarm.Drawing
         public void Dispose()
         {
         }
+
+        public Font()
+        {
+            HBDirection = Fonts.HBDirection.HB_DIRECTION_LTR;//default
+            ScriptCode = HBScriptCode.HB_SCRIPT_LATIN;//default 
+            ForLang = "en";//default
+        }
+
     }
-
-
-
-
 
     public interface IFonts
     {
@@ -106,11 +122,6 @@ namespace PixelFarm.Drawing
         void Dispose();
     }
 
-
-    public abstract class StringFormat
-    {
-        public abstract object InnerFormat { get; }
-    }
 
 
 }

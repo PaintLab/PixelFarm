@@ -75,20 +75,19 @@ namespace PixelFarm.Drawing.Fonts
         public static Font LoadFont(string filename, float fontSizeInPoint)
         {
             Font font = new Font();
-            font.FileName = filename;
             font.EmSize = fontSizeInPoint;
-            LoadFont(font);
+            LoadFont(font, filename);
             return font;
         }
-        public static void LoadFont(Font font)
+        public static void LoadFont(Font font, string filename)
         {
             //load font from specific file 
             NativeFontFace fontFace;
-            if (!fonts.TryGetValue(font.FileName, out fontFace))
+            if (!fonts.TryGetValue(filename, out fontFace))
             {
                 //if not found
                 //then load it
-                byte[] fontFileContent = File.ReadAllBytes(font.FileName);
+                byte[] fontFileContent = File.ReadAllBytes(filename);
                 int filelen = fontFileContent.Length;
                 IntPtr unmanagedMem = Marshal.AllocHGlobal(filelen);
                 Marshal.Copy(fontFileContent, 0, unmanagedMem, filelen);
@@ -109,14 +108,16 @@ namespace PixelFarm.Drawing.Fonts
                     //    96);// vertical device resolution  
                     //------------------- 
                     fontFace = new NativeFontFace(unmanagedMem, faceHandle);
+                    fontFace.LoadFromFilename = filename;
                     ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
                     NativeMyFontsLib.MyFtGetFaceInfo(faceHandle, ref exportTypeInfo);
                     fontFace.HasKerning = exportTypeInfo.hasKerning;
                     //for shaping engine***
-                    SetShapingEngine(fontFace, "th",
-                        HBDirection.HB_DIRECTION_LTR,
-                        HBScriptCode.HB_SCRIPT_THAI);
-                    fonts.Add(font.FileName, fontFace);
+                    SetShapingEngine(fontFace,
+                        font.ForLang,
+                        font.HBDirection,
+                        font.ScriptCode);
+                    fonts.Add(filename, fontFace);
                 }
                 else
                 {

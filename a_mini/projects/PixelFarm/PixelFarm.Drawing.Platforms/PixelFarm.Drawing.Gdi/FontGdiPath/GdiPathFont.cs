@@ -135,12 +135,6 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        public override object InnerFont
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        
     }
 }

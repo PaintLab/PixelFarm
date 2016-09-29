@@ -556,10 +556,9 @@ namespace BuildTextureFonts
         {
             //1. load font
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-            var font = new PixelFarm.Drawing.Font();
-            font.FileName = fontfile;
+            var font = new PixelFarm.Drawing.Font();             
             font.EmSize = 28;
-            NativeFontStore.LoadFont(font); 
+            NativeFontStore.LoadFont(font, fontfile);
             //2. get glyph 
             char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
             int j = fontChars.Length;
@@ -570,7 +569,7 @@ namespace BuildTextureFonts
             {
                 char c = fontChars[i];
 
-                FontGlyph fontGlyph = font.NativeFont.GetGlyph(c); 
+                FontGlyph fontGlyph = font.NativeFont.GetGlyph(c);
                 GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
 
                 int w = glyphImg.Width;
@@ -637,7 +636,7 @@ namespace BuildTextureFonts
             for (int i = startAt; i <= endAt; ++i)
             {
                 char c = (char)i;
-                FontGlyph fontGlyph = font.NativeFont.GetGlyph(c); 
+                FontGlyph fontGlyph = font.NativeFont.GetGlyph(c);
                 //-------------------
                 GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
 

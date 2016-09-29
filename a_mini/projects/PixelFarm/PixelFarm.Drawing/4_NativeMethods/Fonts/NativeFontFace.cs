@@ -44,7 +44,11 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return this.ftFaceHandle; }
         }
-
+        public string LoadFromFilename
+        {
+            get;
+            set;
+        }
 
         protected override void OnDispose()
         {

@@ -19,10 +19,6 @@ namespace PixelFarm.Drawing.Fonts
         public abstract FontStyle Style { get; }
 
 
-        /// <summary>
-        /// canvas specific presentation
-        /// </summary>
-        public abstract object InnerFont { get; }
         public void Dispose()
         {
             OnDispose();

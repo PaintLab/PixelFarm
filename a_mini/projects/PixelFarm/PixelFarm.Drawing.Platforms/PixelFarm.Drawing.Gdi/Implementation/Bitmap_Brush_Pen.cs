@@ -74,7 +74,7 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
-        public override object InnerFont
+        public object InnerFont
         {
             get { return this.myFont; }
         }

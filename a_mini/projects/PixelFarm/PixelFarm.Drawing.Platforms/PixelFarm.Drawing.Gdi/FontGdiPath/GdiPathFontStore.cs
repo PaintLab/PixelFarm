@@ -19,8 +19,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 return null;
             }
-            Font font = new Drawing.Font();
-            font.FileName = filename;
+            Font font = new Drawing.Font(); 
             font.EmSize = fontPointSize;
 
             GdiPathFont gdiPathFont = fontFace.GetFontAtSpecificSize(fontPointSize);             

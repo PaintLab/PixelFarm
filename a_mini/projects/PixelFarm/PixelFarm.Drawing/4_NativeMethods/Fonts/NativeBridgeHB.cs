@@ -9,7 +9,7 @@
 namespace PixelFarm.Drawing.Fonts
 {
     /// <summary>
-    /// hb_direction_t;
+    /// HarfBuzz,  hb_direction_t;
     /// </summary>
     public enum HBDirection
     {
@@ -20,7 +20,9 @@ namespace PixelFarm.Drawing.Fonts
         HB_DIRECTION_BTT
     }
     //--------------------------------------
-
+    /// <summary>
+    /// HarfBuzz , script code
+    /// </summary>
     public static class HBScriptCode
     {
         //from HarfBuzz's hb-common.h
