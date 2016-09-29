@@ -4,25 +4,23 @@ namespace PixelFarm.DrawingGL
 {
     public class GLCanvasPainter : GLCanvasPainterBase
     {
-        WinGdiFontPrinterBase _win32GdiPrinter;
+        PlatformFontPrinterBase _win32GdiPrinter;
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
             : base(canvas, w, h)
         {
-            _win32GdiPrinter = new WinGdiFontPrinter2(w, h);
+            _win32GdiPrinter = new WinGdiFontPrinter(w, h);
 
         }
         public override void DrawString(string text, double x, double y)
         {
             _win32GdiPrinter.DrawString(_canvas, text, (float)x, (float)y);
             //base.DrawString(text, x, y);
-        } 
-    }
-
-    abstract class WinGdiFontPrinterBase
-    {
-        public abstract void DrawString(CanvasGL2d canvas, string text, float x, float y);
-    }
-    class WinGdiFontPrinter2 : WinGdiFontPrinterBase
+        }
+    } 
+    /// <summary>
+    /// this use win gdi only
+    /// </summary>
+    class WinGdiFontPrinter : PlatformFontPrinterBase
     {
 
         int _width;
@@ -34,7 +32,7 @@ namespace PixelFarm.DrawingGL
         IntPtr hfont;
         int bmpWidth = 200;
         int bmpHeight = 50;
-        public WinGdiFontPrinter2(int w, int h)
+        public WinGdiFontPrinter(int w, int h)
         {
             _width = w;
             _height = h;
@@ -109,7 +107,7 @@ namespace PixelFarm.DrawingGL
                     {
 
                         header = rowHead;
-                        for (int n = 0; n < rowLen;)
+                        for (int n = 0; n < rowLen; )
                         {
                             //move next
                             *(dest + 0) = *(header + 0);
@@ -135,7 +133,7 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class Win32GdiFontPrinter : WinGdiFontPrinterBase
+    class Win32GdiPlusFontPrinter : PlatformFontPrinterBase
     {
 
         //for small font on windows platform 
@@ -147,7 +145,7 @@ namespace PixelFarm.DrawingGL
         int _width;
         int _height;
 
-        public Win32GdiFontPrinter(int w, int h)
+        public Win32GdiPlusFontPrinter(int w, int h)
         {
 
 
@@ -189,7 +187,7 @@ namespace PixelFarm.DrawingGL
                     {
 
                         header = rowHead;
-                        for (int n = 0; n < rowLen;)
+                        for (int n = 0; n < rowLen; )
                         {
                             //move next
                             *(dest + 0) = *(header + 0);

@@ -8,14 +8,12 @@ namespace PixelFarm.Drawing.WinGdi
     class WinGdiPlusFont : PlatformFont
     {
         System.Drawing.Font myFont;
-        System.IntPtr hFont;
-        //FontSpec fontInfo;
+        System.IntPtr hFont; 
         public WinGdiPlusFont(System.Drawing.Font f)
         {
             this.myFont = f;
             this.hFont = f.ToHfont();
-        }
-
+        } 
         public override string Name
         {
             get { return this.myFont.Name; }
