@@ -40,7 +40,11 @@ namespace PixelFarm.Drawing.WinGdi
             _currentGdiFont = new System.Drawing.Font("Tahoma", 10);
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
-            _currentFont = new WinGdiFont(_currentGdiFont);
+            Font f = new Font();
+            var winGdiFont = new WinGdiPlusFont(_currentGdiFont); 
+            f.SetPlatformFont(winGdiFont);
+            _currentFont = f;
+
         }
         public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
         {

@@ -27,10 +27,11 @@ namespace PixelFarm.DrawingGL
             int j = buffer.Length;
             int buffsize = j * 2;
             //get kerning list
+            ActualFont fontImp = (ActualFont)currentFont.InnerFont;
             if (properGlyphs == null)
             {
                 properGlyphs = new ProperGlyph[buffsize];
-                currentFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
+                fontImp.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
             }
 
             double xpos = x;
@@ -43,7 +44,7 @@ namespace PixelFarm.DrawingGL
                 }
 
                 //-------------------------------------------------------------
-                FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
+                FontGlyph glyph = fontImp.GetGlyphByIndex(codepoint);
                 //glyph image32 
                 //-------------------------------------------------------------
                 GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(glyph.glyphImage32));

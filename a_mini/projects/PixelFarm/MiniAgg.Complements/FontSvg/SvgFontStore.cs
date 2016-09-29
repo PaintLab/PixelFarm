@@ -54,14 +54,16 @@ namespace PixelFarm.Drawing.Fonts
 
                 }
             }
+
             if (fontFace == null)
             {
                 return null;
             }
 
-
-
-            return fontFace.GetFontAtSpecificSize(fontPointSize);
+            Font font = new Font();
+            SvgFont svgFont = fontFace.GetFontAtSpecificSize(fontPointSize);             
+            font.SetOutlineFont(svgFont);
+            return font;
         }
 
 

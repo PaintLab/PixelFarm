@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.GLES2
         Color mycurrentTextColor = Color.Black;
         //======================================
         //IFonts impl
-        PixelFarm.Drawing.Fonts.FontInfo IFonts.GetFontInfo(string fontname, float fsize, FontStyle st)
+        Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
         {
             return this.platform.GetFont(fontname, fsize, st);
         }
@@ -37,7 +37,8 @@ namespace PixelFarm.Drawing.GLES2
         {
             _characterRanges[0] = new System.Drawing.CharacterRange(0, len);
             _stringFormat.SetMeasurableCharacterRanges(_characterRanges);
-            System.Drawing.Font font2 = (System.Drawing.Font)font.InnerFont;
+            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)font.InnerFont;
+            System.Drawing.Font font2 = (System.Drawing.Font)winFont.InnerFont;
             var size = gx.MeasureCharacterRanges(
                 new string(buff, startAt, len),
                 font2,
@@ -115,8 +116,10 @@ namespace PixelFarm.Drawing.GLES2
         {
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
+            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.InnerFont;
+
             gx.DrawString(new string(buffer),
-                (System.Drawing.Font)this.currentTextFont.InnerFont,
+                (System.Drawing.Font)winFont.InnerFont,
                 internalSolidBrush, new System.Drawing.PointF(x, y));
             internalSolidBrush.Color = tmpColor;
         }
@@ -124,8 +127,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
+            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.InnerFont;
+
+
             gx.DrawString(new string(buffer),
-                (System.Drawing.Font)this.currentTextFont.InnerFont,
+                (System.Drawing.Font)winFont.InnerFont ,
                 internalSolidBrush,
                 new System.Drawing.RectangleF(
                     logicalTextBox.X,
@@ -153,8 +159,10 @@ namespace PixelFarm.Drawing.GLES2
 
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
+            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.InnerFont;
+
             gx.DrawString(new string(str, startAt, len),
-                (System.Drawing.Font)this.currentTextFont.InnerFont,
+                (System.Drawing.Font)winFont.InnerFont,
                 internalSolidBrush,
                 logicalTextBox.X,
                 logicalTextBox.Y);

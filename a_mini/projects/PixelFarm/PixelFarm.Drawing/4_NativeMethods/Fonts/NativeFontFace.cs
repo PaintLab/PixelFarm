@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// store font glyph for each px size
         /// </summary>
-        Dictionary<int, Drawing.Font> fonts = new Dictionary<int, Drawing.Font>();
+        Dictionary<int, NativeFont> fonts = new Dictionary<int, NativeFont>();
         IntPtr hb_font;
         internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
@@ -40,7 +40,7 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// free typpe handler
         /// </summary>
-        internal IntPtr Handle
+        public IntPtr Handle
         {
             get { return this.ftFaceHandle; }
         }
@@ -76,16 +76,16 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        internal Drawing.Font GetFontAtPixelSize(int pixelSize)
+        internal NativeFont GetFontAtPixelSize(int pixelSize)
         {
-            Drawing.Font found;
+            NativeFont found;
             if (!fonts.TryGetValue(pixelSize, out found))
             {
                 //----------------------------------
                 //set current fontface size
                 currentFacePixelSize = pixelSize;
                 NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
-                //create font size
+                //create font size 
                 NativeFont f = new NativeFont(this, pixelSize);
                 fonts.Add(pixelSize, f);
                 //------------------------------------
@@ -93,7 +93,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             return found;
         }
-        internal Drawing.Font GetFontAtPointSize(float fontPointSize)
+        internal NativeFont GetFontAtPointSize(float fontPointSize)
         {
             //convert from point size to pixelsize ***              
             return GetFontAtPixelSize(NativeFontStore.ConvertFromPointUnitToPixelUnit(fontPointSize));

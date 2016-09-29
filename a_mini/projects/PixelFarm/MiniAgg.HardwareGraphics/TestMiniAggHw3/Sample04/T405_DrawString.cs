@@ -15,6 +15,7 @@ namespace OpenTkEssTest
 
         GLCanvasPainter painter;
         TextureFont textureFont;
+
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
@@ -25,7 +26,11 @@ namespace OpenTkEssTest
                 "d:\\WImageTest\\a_total.xml",
                 "d:\\WImageTest\\a_total.png");
 
-            painter.CurrentFont = textureFont;
+            PixelFarm.Drawing.Font f = new PixelFarm.Drawing.Font();
+            f.Name = "tahoma";
+            f.EmSize = 24;
+            f.SetTextureFont(textureFont);
+            painter.CurrentFont = f;
         }
         protected override void DemoClosing()
         {
@@ -41,8 +46,12 @@ namespace OpenTkEssTest
                 resInit = true;
             }
             painter.Clear(PixelFarm.Drawing.Color.White);
-            painter.DrawString("hello world!", 100, 100);
+            //painter.DrawString("hello world!", 100, 100);            
             //painter.DrawString("กิ่น", 100, 100);
+            string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
+            //string test_str = "กิน";
+            painter.DrawString(test_str, 100, 100);
+            //painter.DrawString("hello world! กิ่น", 100, 100);
             miniGLControl.SwapBuffers();
         }
     }

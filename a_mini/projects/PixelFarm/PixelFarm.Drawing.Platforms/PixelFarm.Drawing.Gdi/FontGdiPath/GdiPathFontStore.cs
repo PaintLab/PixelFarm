@@ -5,7 +5,7 @@ namespace PixelFarm.Drawing.Fonts
     public static class GdiPathFontStore
     {
         static Dictionary<string, GdiPathFontFace> fontFaces = new Dictionary<string, GdiPathFontFace>();
-        public static Drawing.Font LoadFont(string filename, int fontPointSize)
+        public static Font LoadFont(string filename, int fontPointSize)
         {
             //load font from specific file 
             GdiPathFontFace fontFace;
@@ -19,7 +19,13 @@ namespace PixelFarm.Drawing.Fonts
             {
                 return null;
             }
-            return fontFace.GetFontAtSpecificSize(fontPointSize);
+            Font font = new Drawing.Font();
+            font.FileName = filename;
+            font.EmSize = fontPointSize;
+
+            GdiPathFont gdiPathFont = fontFace.GetFontAtSpecificSize(fontPointSize);             
+            font.SetOutlineFont(gdiPathFont);
+            return font;
         }
 
 

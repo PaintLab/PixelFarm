@@ -35,6 +35,10 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuild
@@ -86,7 +90,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(386, 13);
+            this.button4.Location = new System.Drawing.Point(501, 14);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(85, 34);
             this.button4.TabIndex = 5;
@@ -96,7 +100,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(477, 12);
+            this.button5.Location = new System.Drawing.Point(592, 13);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(85, 34);
             this.button5.TabIndex = 6;
@@ -104,11 +108,52 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(386, 12);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(115, 34);
+            this.button6.TabIndex = 7;
+            this.button6.Text = "BuildAtlasGlyphIndex";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Location = new System.Drawing.Point(616, 53);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(588, 555);
+            this.panel2.TabIndex = 2;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(683, 14);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(85, 34);
+            this.button7.TabIndex = 8;
+            this.button7.Text = "GdiTextOut";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(774, 14);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(85, 34);
+            this.button8.TabIndex = 9;
+            this.button8.Text = "GdiTextOut2";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(662, 655);
+            this.ClientSize = new System.Drawing.Size(1280, 655);
+            this.Controls.Add(this.button8);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -131,6 +176,10 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
     }
 }
 

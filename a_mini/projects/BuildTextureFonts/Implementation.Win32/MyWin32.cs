@@ -205,27 +205,6 @@ namespace Win32
         public static extern IntPtr CreateSolidBrush(int crColor);
         [DllImport("gdi32.dll")]
         public extern static int SetTextColor(IntPtr hdc, int newcolorRef);
-
-        [DllImport("gdi32.dll")]
-        public extern static IntPtr CreateFontIndirect(ref LOGFONT logFont);
-
-        public static unsafe void SetFontName(ref LOGFONT logFont, string fontName)
-        {
-            //font name not longer than 32 chars
-            char[] fontNameChars = fontName.ToCharArray();
-            int j = Math.Min(fontNameChars.Length, 31);
-            fixed (char* c = logFont.lfFaceName)
-            {
-                char* c1 = c;
-                for (int i = 0; i < j; ++i)
-                {
-                    *c1 = fontNameChars[i];
-                    c1++;
-                }
-            }
-
-        }
-
         public const int TA_LEFT = 0;
         public const int TA_RIGHT = 2;
         public const int TA_CENTER = 6;
@@ -344,25 +323,6 @@ namespace Win32
             public float abcfC;
         }
 
-
-        [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct LOGFONT
-        {
-            public int lfHeight;
-            public int lfWidth;
-            public int lfEscapement;
-            public int lfOrientation;
-            public int lfWeight;
-            public byte lfItalic;
-            public byte lfUnderline;
-            public byte lfStrikeOut;
-            public byte lfCharSet;
-            public byte lfOutPrecision;
-            public byte lfClipPrecision;
-            public byte lfQuality;
-            public byte lfPitchAndFamily;
-            public fixed char lfFaceName[32];//[LF_FACESIZE = 32];
-        }
 
 
         /*       BOOL GetCharABCWidths(

@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.Fonts
     }
     //--------------------------------------
 
-    static class HBScriptCode
+    public static class HBScriptCode
     {
         //from HarfBuzz's hb-common.h
         /*1.1*/

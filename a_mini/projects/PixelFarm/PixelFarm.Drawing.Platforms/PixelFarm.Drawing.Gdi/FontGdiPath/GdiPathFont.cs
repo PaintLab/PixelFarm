@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
-    class GdiPathFont : Font
+    class GdiPathFont : OutlineFont
     {
         GdiPathFontFace fontface;
         int emSizeInPoints;
@@ -93,15 +93,15 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose()
         {
         }
-       
 
-        public override FontInfo FontInfo
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+
+        //public override FontSpec FontInfo
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
         public override string Name
         {

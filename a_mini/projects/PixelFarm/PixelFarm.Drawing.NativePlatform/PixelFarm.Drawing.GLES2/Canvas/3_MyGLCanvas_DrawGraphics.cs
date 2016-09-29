@@ -13,7 +13,7 @@
 // - Sun Tsu,
 // "The Art of War"
 
-using System; 
+using System;
 namespace PixelFarm.Drawing.GLES2
 {
     partial class MyGLCanvas
@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                painter1.StrokeColor = value;                 
+                painter1.StrokeColor = this.strokeColor = value;
             }
         }
         public override float StrokeWidth
@@ -41,7 +41,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                painter1.StrokeWidth = value;
+                painter1.StrokeWidth = this.strokeWidth = value;
             }
         }
 
@@ -67,7 +67,7 @@ namespace PixelFarm.Drawing.GLES2
             //    c.R,
             //    c.G,
             //    c.B));
-        } 
+        }
         public override void DrawPath(GraphicsPath gfxPath)
         {
 
@@ -123,7 +123,7 @@ namespace PixelFarm.Drawing.GLES2
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
             painter1.FillColor = color;
-            painter1.FillRectangle(left, top + height, left + width, top);            
+            painter1.FillRectangle(left, top + height, left + width, top);
         }
 
 

@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-2016, WinterDev
 
-using PixelFarm.Drawing.Fonts;
+ 
 namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiPlatform : GraphicsPlatform
@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return new WinGdiGraphicsPath();
         }
-        public override FontInfo GetFont(string fontfaceName, float emsize, FontStyle fontStyle)
+        public override Font GetFont(string fontfaceName, float emsize, FontStyle fontStyle)
         {
             //System.Drawing.Font nativeFont = new System.Drawing.Font(fontfaceName, emsize,fonts);
             return fontStore.GetCachedFont(fontfaceName, emsize, (System.Drawing.FontStyle)fontStyle);

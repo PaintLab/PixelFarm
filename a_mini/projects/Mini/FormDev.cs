@@ -178,8 +178,11 @@ namespace Mini
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 g.Clear(System.Drawing.Color.White);
-                var winFont = PixelFarm.Drawing.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
-                var winFontGlyph = winFont.GetGlyph(testChar);
+
+
+                PixelFarm.Drawing.Font winFont = PixelFarm.Drawing.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
+
+                var winFontGlyph = winFont.OutlineFont.GetGlyph(testChar);
                 //convert Agg vxs to bitmap
                 int bmpW = 50;
                 int bmpH = 50;

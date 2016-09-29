@@ -4,58 +4,90 @@ using System;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing
 {
-    public abstract class Font : IDisposable
+    public sealed class Font : IDisposable
     {
-        public abstract FontInfo FontInfo { get; }
-        public abstract string Name { get; }
-        public abstract int Height { get; }
-        public abstract float EmSize { get; }
-        public abstract FontStyle Style { get; }
+        
+        ActualFont _actualFont;
+        //--------------------------
+        NativeFont _nativeFont;
+        OutlineFont _outlineFont;
+        PlatformFont _platformFont;
+        TextureFont _textureFont;
+        //--------------------------
 
-        //TODO:platform specific font object,
-        //TODO: review here
-        public abstract object InnerFont { get; }
+
+        public string FileName { get; set; }
+        public string Name { get; set; }
+        public int Height { get; set; }
+        /// <summary>
+        /// emheight in point unit
+        /// </summary>
+        public float EmSize { get; set; }
+        public float EmSizeInPixels { get; set; }
+        public FontStyle Style { get; set; }
+        public FontFace FontFace { get; set; }
+
+        /// <summary>
+        /// canvas specific presentation
+        /// </summary>
+        public ActualFont InnerFont
+        {
+            get { return _actualFont; }
+        }
+        public ActualFont NativeFont
+        {
+            get { return _nativeFont; }
+        }
+        public ActualFont OutlineFont
+        {
+            get { return _outlineFont; }
+        }
+
+        public void SetOutlineFont(OutlineFont outlineFont)
+        {
+            _outlineFont = outlineFont;
+            if (_actualFont == null)
+            {
+                _actualFont = outlineFont;
+            }
+        }
+        public void SetTextureFont(TextureFont textureFont)
+        {
+            _textureFont = textureFont;
+            if (_actualFont == null)
+            {
+                _actualFont = textureFont;
+            }
+        }
+        public void SetPlatformFont(PlatformFont platformFont)
+        {
+            _platformFont = platformFont;
+            if (_actualFont == null)
+            {
+                _actualFont = platformFont;
+            }
+        }
+        internal void SetNativeFont(NativeFont nativeFont)
+        {
+            _nativeFont = nativeFont;
+            if (_actualFont == null)
+            {
+                _actualFont = nativeFont;
+            }
+
+        }
         public void Dispose()
         {
-            OnDispose();
-        }
-#if DEBUG
-        static int dbugTotalId = 0;
-        public readonly int dbugId = dbugTotalId++;
-        public Font()
-        {
-            //if (this.dbugId == 2)
-            //{ 
-            //}
-
-        }
-#endif
-        protected abstract void OnDispose();
-        public abstract FontGlyph GetGlyphByIndex(uint glyphIndex);
-        public abstract FontGlyph GetGlyph(char c);
-        public abstract FontFace FontFace { get; }
-        public abstract void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs);
-        public abstract int EmSizeInPixels { get; }
-
-        public abstract int GetAdvanceForCharacter(char c);
-        public abstract int GetAdvanceForCharacter(char c, char next_c);
-        public abstract double AscentInPixels { get; }
-        public abstract double DescentInPixels { get; }
-        public abstract double XHeightInPixels { get; }
-        public abstract double CapHeightInPixels { get; }
-
-        ~Font()
-        {
-            Dispose();
         }
     }
 
 
 
 
+
     public interface IFonts
     {
-        FontInfo GetFontInfo(string fontname, float fsize, FontStyle st);
+        Font GetFont(string fontname, float fsize, FontStyle st);
         float MeasureWhitespace(Font f);
         Size MeasureString(char[] str, int startAt, int len, Font font);
         Size MeasureString(char[] str, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth);
@@ -67,4 +99,6 @@ namespace PixelFarm.Drawing
     {
         public abstract object InnerFormat { get; }
     }
+
+
 }

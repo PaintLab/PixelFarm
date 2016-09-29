@@ -5,23 +5,15 @@ using System;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
-    class WinGdiFont : Font
+    class WinGdiPlusFont : PlatformFont
     {
         System.Drawing.Font myFont;
         System.IntPtr hFont;
-        FontInfo fontInfo;
-        public WinGdiFont(System.Drawing.Font f)
+        //FontSpec fontInfo;
+        public WinGdiPlusFont(System.Drawing.Font f)
         {
             this.myFont = f;
             this.hFont = f.ToHfont();
-        }
-        public override FontInfo FontInfo
-        {
-            get { return this.fontInfo; }
-        }
-        public void SetFontInfo(FontInfo fontInfo)
-        {
-            this.fontInfo = fontInfo;
         }
 
         public override string Name
@@ -50,9 +42,6 @@ namespace PixelFarm.Drawing.WinGdi
                 return (FontStyle)this.myFont.Style;
             }
         }
-        
-         
-
         protected override void OnDispose()
         {
             if (myFont != null)
@@ -61,7 +50,6 @@ namespace PixelFarm.Drawing.WinGdi
                 myFont = null;
             }
         }
-
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             throw new NotImplementedException();
@@ -139,6 +127,6 @@ namespace PixelFarm.Drawing.WinGdi
                 throw new NotImplementedException();
             }
         }
- 
+
     }
 }
