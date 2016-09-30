@@ -4,9 +4,9 @@ using System;
 namespace PixelFarm.Drawing.Fonts
 {
 
-    public class FontSystem : IFonts
+    class FontSystem : IFonts
     {
-        NativeFontStore fontStore = new NativeFontStore();
+        internal NativeFontStore fontStore = new NativeFontStore();
         public void Dispose()
         {
 
@@ -21,6 +21,7 @@ namespace PixelFarm.Drawing.Fonts
             fontStore.LoadFont(f, filename);
             return f;
         }
+
         public Size MeasureString(char[] str, int startAt, int len, Font font)
         {
             //measure in horizontal alignment ***

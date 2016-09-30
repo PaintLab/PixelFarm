@@ -35,7 +35,10 @@ namespace PixelFarm.Drawing.WinGdi
             //System.Drawing.Font nativeFont = new System.Drawing.Font(fontfaceName, emsize,fonts);
             return fontStore.GetCachedFont(fontfaceName, emsize, (System.Drawing.FontStyle)fontStyle);
         }
-
+        public override Fonts.ActualFont GetActualFont(Font f)
+        {
+            return fontStore.GetResolvedFont(f);
+        }
         public override Canvas CreateCanvas(int left, int top, int width, int height)
         {
             return new MyScreenCanvas(this, 0, 0, left, top, width, height);

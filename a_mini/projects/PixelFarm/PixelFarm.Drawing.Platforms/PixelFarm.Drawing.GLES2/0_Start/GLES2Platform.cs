@@ -60,5 +60,9 @@ namespace PixelFarm.Drawing.GLES2
         {
             throw new NotImplementedException();
         }
+        public override Fonts.ActualFont GetActualFont(Font f)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

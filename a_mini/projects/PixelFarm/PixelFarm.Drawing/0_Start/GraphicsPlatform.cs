@@ -6,6 +6,7 @@ namespace PixelFarm.Drawing
     public abstract class GraphicsPlatform
     {
         public abstract Font GetFont(string fontfaceName, float emsize, FontStyle st);
+        public abstract ActualFont GetActualFont(Font f);
         public abstract GraphicsPath CreateGraphicsPath();
         public abstract Canvas CreateCanvas(
             int left,
