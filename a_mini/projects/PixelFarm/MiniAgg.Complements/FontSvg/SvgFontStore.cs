@@ -8,10 +8,10 @@
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
-    public static class SvgFontStore
+    public class SvgFontStore
     {
         public const string DEFAULT_SVG_FONTNAME = "svg-LiberationSansFont";
-        static Dictionary<string, SvgFontFace> fontFaces = new Dictionary<string, SvgFontFace>();
+        Dictionary<string, SvgFontFace> fontFaces = new Dictionary<string, SvgFontFace>();
         internal static void SetShapingEngine(SvgFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
             ////string lang = "en";
@@ -29,8 +29,8 @@ namespace PixelFarm.Drawing.Fonts
             //    ref exportTypeInfo);
             //fontFace.HBFont = exportTypeInfo.hb_font;
         }
-        static Dictionary<Font, SvgFont> registerSvgFonts = new Dictionary<Font, SvgFont>();
-        public static Drawing.Font LoadFont(string facename, int fontPointSize)
+        Dictionary<Font, SvgFont> registerSvgFonts = new Dictionary<Font, SvgFont>();
+        public Drawing.Font LoadFont(string facename, int fontPointSize)
         {
             //load font from specific file 
             SvgFontFace fontFace;
@@ -65,7 +65,7 @@ namespace PixelFarm.Drawing.Fonts
             registerSvgFonts.Add(font, svgFont);
             return font;
         }
-        public static OutlineFont GetResolvedFont(Font f)
+        public OutlineFont GetResolvedFont(Font f)
         {
             SvgFont found;
             registerSvgFonts.TryGetValue(f, out found);

@@ -4,59 +4,24 @@ using System;
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
-
-    public static class TextureFontBuilder
-    {
-        /// <summary>
-        /// this method always create new TextureFont, 
-        /// user should do caching by themself 
-        /// </summary>
-        /// <param name="fontName"></param>
-        /// <param name="xmlFontInfo"></param>
-        /// <param name="imgAtlas"></param>
-        /// <returns></returns>
-        public static TextureFont CreateFont(string fontName, string xmlFontInfo, string imgAtlas)
-        {
-            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-            SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
-            //2. load glyph image
-            using (Bitmap bmp = new Bitmap(imgAtlas))
-            {
-                var glyImage = new GlyphImage(bmp.Width, bmp.Height);
-                var buffer = new int[bmp.Width * bmp.Height];
-                System.Runtime.InteropServices.Marshal.Copy(bmp.GetNativeHImage(), buffer, 0, buffer.Length);
-                glyImage.SetImageBuffer(buffer, true);
-                fontAtlas.TotalGlyph = glyImage;
-            }
-
-            return new TextureFont(fontName, fontAtlas);
-        }
-    }
-    public class TextureFonts
+    /// <summary>
+    /// cache texture font
+    /// </summary>
+    public class TextureFontStore
     {
         Dictionary<Font, TextureFont> registerFonts = new Dictionary<Font, TextureFont>();
-        Font latestFont;
-        TextureFont latestResolvedFont;
-        public TextureFont GetTextureFont(Font f)
+        public void RegisterFont(Font f, TextureFont textureFont)
         {
-            if (f == null)
-            {
-                throw new NotSupportedException();
-            }
-            if (f == latestFont)
-            {
-                return latestResolvedFont;
-            }
-            //----
-            //resolve this font from register fonts
-            //if not found then create new one 
-            latestFont = f;
+            registerFonts.Add(f, textureFont);
+        }
+        public TextureFont GetResolvedFont(Font f)
+        {
             TextureFont found;
             registerFonts.TryGetValue(f, out found);
-            return latestResolvedFont = found;
+            return found;
         }
-
     }
+
     public class TextureFont : ActualFont
     {
         SimpleFontAtlas fontAtlas;
@@ -199,6 +164,30 @@ namespace PixelFarm.Drawing.Fonts
                 glBmp.Dispose();
                 glBmp = null;
             }
+        }
+        //----------------------------------------------------
+        /// <summary>
+        /// this method always create new TextureFont, 
+        /// user should do caching by themself 
+        /// </summary>
+        /// <param name="fontName"></param>
+        /// <param name="xmlFontInfo"></param>
+        /// <param name="imgAtlas"></param>
+        /// <returns></returns>
+        public static TextureFont CreateFont(string fontName, string xmlFontInfo, string imgAtlas)
+        {
+            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
+            //2. load glyph image
+            using (Bitmap bmp = new Bitmap(imgAtlas))
+            {
+                var glyImage = new GlyphImage(bmp.Width, bmp.Height);
+                var buffer = new int[bmp.Width * bmp.Height];
+                System.Runtime.InteropServices.Marshal.Copy(bmp.GetNativeHImage(), buffer, 0, buffer.Length);
+                glyImage.SetImageBuffer(buffer, true);
+                fontAtlas.TotalGlyph = glyImage;
+            }
+            return new TextureFont(fontName, fontAtlas);
         }
     }
 }

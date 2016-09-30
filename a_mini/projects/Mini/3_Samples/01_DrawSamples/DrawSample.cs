@@ -39,6 +39,8 @@ namespace PixelFarm.Agg.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample02 : DemoBase
     {
+        SvgFontStore svgFontStore = new SvgFontStore();
+
         public override void Init()
         {
         }
@@ -80,7 +82,7 @@ namespace PixelFarm.Agg.Sample_Draw
             // draw some text  
 
             var textPrinter = new TextPrinter();
-            textPrinter.CurrentFont = SvgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
+            textPrinter.CurrentFont = svgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
             //new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
 
             VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());

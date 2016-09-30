@@ -21,14 +21,14 @@ namespace PixelFarm.Drawing.WinGdi
     {
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
-        FontStore fontStore = new FontStore();
+        WinGdiFontStore fontStore = new WinGdiFontStore();
         Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
         {
             return this.platform.GetFont(fontname, fsize, st);
         }
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
-            return FontStore.MeasureWhitespace(this, f);
+            return WinGdiFontStore.MeasureWhitespace(this, f);
         }
 
         public Size MeasureString(char[] buff, int startAt, int len, Font font)

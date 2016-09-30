@@ -5,7 +5,7 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiPlatform : GraphicsPlatform
     {
-        static FontStore fontStore = new FontStore();
+        static WinGdiFontStore fontStore = new WinGdiFontStore();
         System.Drawing.Bitmap sampleBmp;
         IFonts sampleIFonts;
         public WinGdiPlatform()

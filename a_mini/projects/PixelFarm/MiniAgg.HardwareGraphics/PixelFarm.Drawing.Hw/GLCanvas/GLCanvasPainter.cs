@@ -24,7 +24,9 @@ namespace PixelFarm.DrawingGL
         Ellipse ellipse = new Ellipse();
         Font _currentFont;
         Stroke _aggStroke = new Stroke(1);
-        TextureFonts textureFonts;
+
+        static TextureFontStore textureFontBuilder = new TextureFontStore();
+
         public GLCanvasPainterBase(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;
@@ -32,12 +34,7 @@ namespace PixelFarm.DrawingGL
             _height = h;
             _rectInt = new RectInt(0, 0, w, h);
             arcTool = new Arc();
-            textureFonts = new TextureFonts();
-        }
-        internal TextureFonts FontSystem
-        {
-            get { return textureFonts; }
-            set { textureFonts = value; }
+
         }
         public override RectInt ClipBox
         {
@@ -62,7 +59,7 @@ namespace PixelFarm.DrawingGL
             {
                 _currentFont = value;
                 //resolve texture font
-                
+
             }
         }
         public override Color FillColor
@@ -190,10 +187,48 @@ namespace PixelFarm.DrawingGL
         }
 
         //font system for this canvas
+
+
+        Font _latestFont;
+        TextureFont _latestResolvedFont;
+
         TextureFont GetFont(Font f)
         {
-            return textureFonts.GetTextureFont(f);
+            if (_latestFont == f)
+            {
+                return _latestResolvedFont;
+            }
+            _latestFont = f;
+            return _latestResolvedFont = _canvas.TextureFontStore.GetResolvedFont(f);
+
         }
+
+        //public class TextureFonts
+        //{
+        //    Dictionary<Font, TextureFont> registerFonts = new Dictionary<Font, TextureFont>();
+        //    Font latestFont;
+        //    TextureFont latestResolvedFont;
+        //    public TextureFont GetTextureFont(Font f)
+        //    {
+        //        if (f == null)
+        //        {
+        //            throw new NotSupportedException();
+        //        }
+        //        if (f == latestFont)
+        //        {
+        //            return latestResolvedFont;
+        //        }
+        //        //----
+        //        //resolve this font from register fonts
+        //        //if not found then create new one 
+        //        latestFont = f;
+        //        TextureFont found;
+        //        registerFonts.TryGetValue(f, out found);
+        //        return latestResolvedFont = found;
+        //    }
+
+        //}
+
         public override void DrawString(string text, double x, double y)
         {
 

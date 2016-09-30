@@ -167,6 +167,7 @@ namespace Mini
         {
         }
 
+        PixelFarm.Drawing.Fonts.GdiPathFontStore gdiPathFontStore = new PixelFarm.Drawing.Fonts.GdiPathFontStore();
         private void button3_Click(object sender, EventArgs e)
         {
             //----------------------
@@ -181,9 +182,9 @@ namespace Mini
                 g.Clear(System.Drawing.Color.White);
 
 
-                PixelFarm.Drawing.Font winFont = PixelFarm.Drawing.Fonts.GdiPathFontStore.LoadFont(fontName, fontSize);
+                PixelFarm.Drawing.Font winFont = gdiPathFontStore.LoadFont(fontName, fontSize);
 
-                var winFontGlyph =  PixelFarm.Drawing.Fonts.GdiPathFontStore.GetResolvedFont(winFont).GetGlyph(testChar);
+                var winFontGlyph = gdiPathFontStore.GetResolvedFont(winFont).GetGlyph(testChar);
                 //convert Agg vxs to bitmap
                 int bmpW = 50;
                 int bmpH = 50;

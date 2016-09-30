@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.GLES2
     {
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
-        PixelFarm.Drawing.WinGdi.FontStore fontStore = new WinGdi.FontStore();
+        PixelFarm.Drawing.WinGdi.WinGdiFontStore fontStore = new WinGdi.WinGdiFontStore();
 
         //======================================
         //IFonts impl
@@ -31,7 +31,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
-            return PixelFarm.Drawing.WinGdi.FontStore.MeasureWhitespace(this, f);
+            return PixelFarm.Drawing.WinGdi.WinGdiFontStore.MeasureWhitespace(this, f);
         }
         //======================================
 

@@ -31,7 +31,7 @@ namespace PixelFarm.Drawing.WinGdi
     }
 
 
-    class FontStore
+    class WinGdiFontStore
     {
         // static PixelFarm.Drawing.WinGdi.BasicGdi32FontHelper gdiFontHelper = new PixelFarm.Drawing.WinGdi.BasicGdi32FontHelper();
         /// <summary>
@@ -46,7 +46,7 @@ namespace PixelFarm.Drawing.WinGdi
         readonly Dictionary<FontKey, Font> _fontInfoCacheByFontKey = new Dictionary<FontKey, Font>();
         static Dictionary<Font, WinGdiPlusFont> resolvedWinGdiFont = new Dictionary<Font, WinGdiPlusFont>();
 
-        public FontStore()
+        public WinGdiFontStore()
         {
 
         }
@@ -187,7 +187,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// <summary>
         /// Init the system installed fonts.
         /// </summary>
-        static FontStore()
+        static WinGdiFontStore()
         {
             _fontsMapping["monospace"] = "Courier New";
             _fontsMapping["Helvetica"] = "Arial";

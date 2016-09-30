@@ -58,10 +58,18 @@ namespace PixelFarm.Drawing.Fonts
     }
 
 
+    /// <summary>
+    /// to load and cache native font 
+    /// </summary>
     public class NativeFontStore
     {
         Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
         Dictionary<Font, NativeFont> registerFonts = new Dictionary<Font, NativeFont>();
+
+        public NativeFontStore()
+        {
+
+        }
 
         static void SetShapingEngine(NativeFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {

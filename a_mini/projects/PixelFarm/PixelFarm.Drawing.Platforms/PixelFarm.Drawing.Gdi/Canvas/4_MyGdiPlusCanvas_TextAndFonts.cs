@@ -19,7 +19,7 @@ namespace PixelFarm.Drawing.WinGdi
 {
     partial class MyGdiPlusCanvas
     {
-        FontStore fontStore = new FontStore();
+        WinGdiFontStore fontStore = new WinGdiFontStore();
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
         //======================================
@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
-            return FontStore.MeasureWhitespace(this, f);
+            return WinGdiFontStore.MeasureWhitespace(this, f);
         }
         //======================================
 
@@ -39,7 +39,7 @@ namespace PixelFarm.Drawing.WinGdi
             _characterRanges[0] = new System.Drawing.CharacterRange(0, len);
             _stringFormat.SetMeasurableCharacterRanges(_characterRanges);
 
-            WinGdiPlusFont winGdiFont = FontStore.GetResolvedFont(font);
+            WinGdiPlusFont winGdiFont = WinGdiFontStore.GetResolvedFont(font);
             System.Drawing.Font font2 = winGdiFont.InnerFont;
             var size = gx.MeasureCharacterRanges(
                 new string(buff, startAt, len),
