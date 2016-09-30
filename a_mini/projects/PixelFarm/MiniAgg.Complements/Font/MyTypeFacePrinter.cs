@@ -25,7 +25,7 @@ using PixelFarm.VectorMath;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
-    public class MyTypeFacePrinter
+    class MyTypeFacePrinter
     {
         Vector2 totalSizeCach;
         string textToPrint;
@@ -195,6 +195,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 text = this.textToPrint;
             }
+
             ActualFont implFont = fontStore.GetResolvedNativeFont(currentFont);
 
             offset.x = 0;

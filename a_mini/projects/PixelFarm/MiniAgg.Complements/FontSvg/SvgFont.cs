@@ -31,7 +31,6 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return fontface; }
         }
-
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             FontGlyph glyph;
@@ -83,6 +82,14 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose()
         {
         }
+
+        public override float EmSize
+        {
+            get
+            {
+                return emSizeInPoints;
+            }
+        }
         public override float EmSizeInPixels
         {
             get { return emSizeInPixels; }
@@ -109,55 +116,5 @@ namespace PixelFarm.Drawing.Fonts
                 return fontface.Descent * currentEmScalling;
             }
         }
-
-
-        //public override double CapHeightInPixels
-        //{
-        //    get
-        //    {
-        //        return fontface.Cap_height * currentEmScalling;
-        //    }
-        //} 
-        //public override FontSpec FontInfo
-        //{
-        //    get
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
-        public override string Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override float EmSize
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override FontStyle Style
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-
     }
 }

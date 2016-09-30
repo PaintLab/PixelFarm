@@ -84,47 +84,14 @@ namespace PixelFarm.Drawing.Fonts
         {
         }
 
-
-        //public override FontSpec FontInfo
-        //{
-        //    get
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
-        public override string Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+ 
+        
         public override float EmSize
         {
             get
             {
                 throw new NotImplementedException();
             }
-        }
-
-        public override FontStyle Style
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-
+        } 
     }
 }

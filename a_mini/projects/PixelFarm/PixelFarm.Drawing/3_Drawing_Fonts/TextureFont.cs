@@ -29,6 +29,7 @@ namespace PixelFarm.Drawing.Fonts
         IDisposable glBmp;
         Font nativeFont;
         static NativeFontStore s_nativeFontStore = new NativeFontStore();
+
         internal TextureFont(string name, SimpleFontAtlas fontAtlas)
         {
             this.fontAtlas = fontAtlas;
@@ -83,36 +84,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 throw new NotImplementedException();
             }
-        }
-
-
-        public override int Height
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-
-
-        public override string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
-
-        public override FontStyle Style
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-
+        } 
         public override float GetAdvanceForCharacter(char c)
         {
             throw new NotImplementedException();

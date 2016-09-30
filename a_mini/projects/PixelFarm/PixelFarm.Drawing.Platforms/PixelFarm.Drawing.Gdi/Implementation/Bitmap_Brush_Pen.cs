@@ -30,14 +30,8 @@ namespace PixelFarm.Drawing.WinGdi
             basGdi32FontHelper.MeasureCharWidths(hFont, out charWidths, out charAbcWidths);
             //--------------
         }
-        public override string Name
-        {
-            get { return this.myFont.Name; }
-        }
-        public override int Height
-        {
-            get { return this.myFont.Height; }
-        }
+      
+         
         public System.IntPtr ToHfont()
         {   /// <summary>
             /// Set a resource (e.g. a font) for the specified device context.
@@ -54,13 +48,7 @@ namespace PixelFarm.Drawing.WinGdi
             get { return emSizeInPixels; }
         }
 
-        public override FontStyle Style
-        {
-            get
-            {
-                return (FontStyle)this.myFont.Style;
-            }
-        }
+         
         protected override void OnDispose()
         {
             if (myFont != null)

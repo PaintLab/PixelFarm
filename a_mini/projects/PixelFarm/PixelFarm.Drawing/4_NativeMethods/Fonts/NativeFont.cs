@@ -11,6 +11,7 @@ namespace PixelFarm.Drawing.Fonts
     public class NativeFont : ActualFont
     {
         NativeFontFace ownerFace;
+        float emSizeInPoints;
         int fontSizeInPixelUnit;
         /// <summary>
         /// glyph
@@ -49,7 +50,10 @@ namespace PixelFarm.Drawing.Fonts
             }
             return found;
         }
-
+        internal void SetEmSizeInPoint(float emSizeInPoints)
+        {
+            this.emSizeInPoints = emSizeInPoints;
+        }
         /// <summary>
         /// owner font face
         /// </summary>
@@ -86,10 +90,8 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { throw new NotImplementedException(); }
         }
-        public override float EmSizeInPixels
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override float EmSize { get { return this.emSizeInPoints; } }
+        public override float EmSizeInPixels { get { return fontSizeInPixelUnit; } }
 
 
         public override float GetAdvanceForCharacter(char c)
@@ -99,40 +101,7 @@ namespace PixelFarm.Drawing.Fonts
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
             throw new NotImplementedException();
-        }
-
-        public override string Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override float EmSize
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override FontStyle Style
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        } 
 
         //---------------------------------------------------------------------------
         public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
