@@ -36,7 +36,7 @@ namespace PixelFarm.Drawing.Fonts
     {
         Dictionary<Font, TextureFont> registerFonts = new Dictionary<Font, TextureFont>();
         Font latestFont;
-        TextureFont lastestResolvedFont;
+        TextureFont latestResolvedFont;
         public TextureFont GetTextureFont(Font f)
         {
             if (f == null)
@@ -45,14 +45,15 @@ namespace PixelFarm.Drawing.Fonts
             }
             if (f == latestFont)
             {
-                return lastestResolvedFont;
+                return latestResolvedFont;
             }
             //----
             //resolve this font from register fonts
             //if not found then create new one 
+            latestFont = f;
             TextureFont found;
             registerFonts.TryGetValue(f, out found);
-            return found;
+            return latestResolvedFont = found;
         }
 
     }
@@ -62,6 +63,7 @@ namespace PixelFarm.Drawing.Fonts
         string name;
         IDisposable glBmp;
         Font nativeFont;
+        static NativeFontStore s_nativeFontStore = new NativeFontStore();
         internal TextureFont(string name, SimpleFontAtlas fontAtlas)
         {
             this.fontAtlas = fontAtlas;
@@ -69,7 +71,7 @@ namespace PixelFarm.Drawing.Fonts
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
             string fontfile = @"C:\Windows\Fonts\Tahoma.ttf";
             nativeFont = new Font("tahoma", 28);
-            NativeFontStore.LoadFont(nativeFont, fontfile);
+            s_nativeFontStore.LoadFont(nativeFont, fontfile);
         }
         public override double AscentInPixels
         {

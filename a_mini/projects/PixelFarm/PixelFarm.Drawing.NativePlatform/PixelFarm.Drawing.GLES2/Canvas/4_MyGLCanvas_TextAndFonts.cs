@@ -18,10 +18,11 @@ using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.GLES2
 {
     partial class MyGLCanvas
-    { 
-        
+    {
+
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
+        NativeFontStore nativeFontStore = new NativeFontStore();
         //======================================
         //IFonts impl
         Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
@@ -31,7 +32,8 @@ namespace PixelFarm.Drawing.GLES2
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
             //TODO: review here ***
-            NativeFont nativeFont = NativeFontStore.GetResolvedNativeFont(f);
+
+            NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(f);
             return nativeFont.GetGlyph(' ').horiz_adv_x;
         }
         //======================================

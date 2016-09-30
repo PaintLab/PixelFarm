@@ -24,8 +24,6 @@ namespace PixelFarm.Drawing.Fonts
             get;
             internal set;
         }
-
-
         public int Width
         {
             get;
@@ -58,12 +56,14 @@ namespace PixelFarm.Drawing.Fonts
             this.IsBigEndian = isBigEndian;
         }
     }
-    public static class NativeFontStore
-    {
-        static Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
-        static Dictionary<Font, NativeFont> registerFonts = new Dictionary<Font, NativeFont>();
 
-        internal static void SetShapingEngine(NativeFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
+
+    public class NativeFontStore
+    {
+        Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
+        Dictionary<Font, NativeFont> registerFonts = new Dictionary<Font, NativeFont>();
+
+        static void SetShapingEngine(NativeFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
             ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
             NativeMyFontsLib.MyFtSetupShapingEngine(fontFace.Handle,
@@ -74,13 +74,13 @@ namespace PixelFarm.Drawing.Fonts
                ref exportTypeInfo);
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
-        public static Font LoadFont(string fontName, string filename, float fontSizeInPoint)
+        public Font LoadFont(string fontName, string filename, float fontSizeInPoint)
         {
             Font font = new Font(fontName, fontSizeInPoint);
             LoadFont(font, filename);
             return font;
         }
-        public static void LoadFont(Font font, string filename)
+        public void LoadFont(Font font, string filename)
         {
             //load font from specific file 
             NativeFontFace fontFace;
@@ -131,47 +131,13 @@ namespace PixelFarm.Drawing.Fonts
             //-------------------------------------------------
             NativeFont nativeFont = fontFace.GetFontAtPointSize(font.EmSize);
             registerFonts.Add(font, nativeFont);
-             
-        }
 
-        public static NativeFont GetResolvedNativeFont(Font f)
+        }
+        public NativeFont GetResolvedNativeFont(Font f)
         {
             NativeFont found;
             registerFonts.TryGetValue(f, out found);
             return found;
-        }
-        //---------------------------------------------------
-        //helper function
-        public static int ConvertFromPointUnitToPixelUnit(float point)
-        {
-            //from FreeType Documenetation
-            //pixel_size = (pointsize * (resolution/72);
-            return (int)(point * 96f / 72f);
-        }
-        public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
-        {
-            return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);
-        }
-        public static void SwapColorComponentFromBigEndianToWinGdi(int[] bitbuffer)
-        {
-            unsafe
-            {
-                int j = bitbuffer.Length;
-                fixed (int* p0 = &(bitbuffer[j - 1]))
-                {
-                    int* p = p0;
-                    for (int i = j - 1; i >= 0; --i)
-                    {
-                        int color = *p;
-                        int a = color >> 24;
-                        int b = (color >> 16) & 0xff;
-                        int g = (color >> 8) & 0xff;
-                        int r = color & 0xff;
-                        *p = (a << 24) | (r << 16) | (g << 8) | b;
-                        p--;
-                    }
-                }
-            }
         }
     }
 }

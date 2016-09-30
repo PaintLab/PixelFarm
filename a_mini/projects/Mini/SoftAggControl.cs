@@ -4,6 +4,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using PixelFarm.Agg;
+using PixelFarm.Drawing.Fonts;
+
 namespace Mini
 {
     public partial class SoftAggControl : UserControl
@@ -19,6 +21,8 @@ namespace Mini
         Graphics thisGfx;//for output
         Bitmap bufferBmp = null;
         Rectangle bufferBmpRect;
+        NativeFontStore fontStore = new NativeFontStore();
+
         public SoftAggControl()
         {
             _useGdiPlusOutput = false;
@@ -75,7 +79,7 @@ namespace Mini
                 string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
                 //-------------                 
                 painter = new AggCanvasPainter(imgGfx2d);
-                painter.CurrentFont = PixelFarm.Drawing.Fonts.NativeFontStore.LoadFont(fontName, fontfile, 10);
+                painter.CurrentFont = fontStore.LoadFont(fontName, fontfile, 10);
             }
             painter.Clear(PixelFarm.Drawing.Color.White);
         }

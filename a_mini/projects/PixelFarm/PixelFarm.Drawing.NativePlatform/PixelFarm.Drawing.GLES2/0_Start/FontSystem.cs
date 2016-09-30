@@ -6,6 +6,7 @@ namespace PixelFarm.Drawing.Fonts
 
     public class FontSystem : IFonts
     {
+        NativeFontStore fontStore = new NativeFontStore();
         public void Dispose()
         {
 
@@ -17,7 +18,7 @@ namespace PixelFarm.Drawing.Fonts
             Font f = new Font(fontname, fsize);
             throw new NotSupportedException();
             string filename = "";
-            NativeFontStore.LoadFont(f, filename);
+            fontStore.LoadFont(f, filename);
             return f;
         }
         public Size MeasureString(char[] str, int startAt, int len, Font font)
@@ -25,7 +26,7 @@ namespace PixelFarm.Drawing.Fonts
             //measure in horizontal alignment ***
             //use native method to measure string
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];
-            ActualFont fontImpl = NativeFontStore.GetResolvedNativeFont(font);
+            ActualFont fontImpl = fontStore.GetResolvedNativeFont(font);
             fontImpl.GetGlyphPos(str, startAt, len, properGlyphs);
             int j = properGlyphs.Length;
             float total_width = 0;
@@ -50,7 +51,7 @@ namespace PixelFarm.Drawing.Fonts
         public Size MeasureString(char[] str, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth)
         {
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];
-            ActualFont fontImpl = NativeFontStore.GetResolvedNativeFont(font);
+            ActualFont fontImpl = fontStore.GetResolvedNativeFont(font);
             fontImpl.GetGlyphPos(str, startAt, len, properGlyphs);
             int j = properGlyphs.Length;
             float total_width = 0;
@@ -85,7 +86,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public float MeasureWhitespace(Font f)
         {
-            ActualFont fontImpl = NativeFontStore.GetResolvedNativeFont(f);
+            ActualFont fontImpl = fontStore.GetResolvedNativeFont(f);
             FontGlyph whitespaceGlyph = fontImpl.GetGlyph(' ');
             return whitespaceGlyph.horiz_adv_x;
         }
