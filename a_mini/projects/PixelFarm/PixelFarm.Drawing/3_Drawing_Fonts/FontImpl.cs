@@ -8,8 +8,8 @@ namespace PixelFarm.Drawing.Fonts
     /// </summary>
     public abstract class ActualFont : IDisposable
     {
-     
-         
+
+
         /// <summary>
         /// emheight
         /// </summary>
@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing.Fonts
         //we support subpix rendering
         public abstract float EmSizeInPixels { get; }
 
-      
+
         public void Dispose()
         {
             OnDispose();
@@ -51,6 +51,6 @@ namespace PixelFarm.Drawing.Fonts
         }
     }
 
-    public abstract class PlatformFont : ActualFont { }
-    public abstract class OutlineFont : ActualFont { }
+
+
 }

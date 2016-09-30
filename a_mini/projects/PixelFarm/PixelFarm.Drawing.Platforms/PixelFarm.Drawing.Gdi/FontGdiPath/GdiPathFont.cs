@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
-    class GdiPathFont : OutlineFont
+    class GdiPathFont : ActualFont
     {
         GdiPathFontFace fontface;
         int emSizeInPoints;

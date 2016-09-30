@@ -61,7 +61,7 @@ namespace PixelFarm.Drawing.Fonts
         public SimpleFontAtlas FontAtlas
         {
             get { return fontAtlas; }
-        } 
+        }
         public override float EmSize
         {
             get
@@ -84,7 +84,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 throw new NotImplementedException();
             }
-        } 
+        }
         public override float GetAdvanceForCharacter(char c)
         {
             throw new NotImplementedException();

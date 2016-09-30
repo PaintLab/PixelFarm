@@ -6,7 +6,7 @@ using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
     //*** this class need System.Drawing , because 
-    class WinGdiPlusFont : PlatformFont
+    class WinGdiPlusFont : ActualFont
     {
         System.Drawing.Font myFont;
         System.IntPtr hFont;

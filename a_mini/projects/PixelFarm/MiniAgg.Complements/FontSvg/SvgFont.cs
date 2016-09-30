@@ -8,7 +8,7 @@ using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    class SvgFont : OutlineFont
+    class SvgFont : ActualFont
     {
         SvgFontFace fontface;
         int emSizeInPoints;
