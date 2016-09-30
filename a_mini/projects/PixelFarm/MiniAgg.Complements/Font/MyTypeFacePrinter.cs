@@ -215,6 +215,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     if (i + 1 < text.Length)
                     {
+                        //some font has kerning ...
                         currentLineX += implFont.GetAdvanceForCharacter(text[i], text[i + 1]);
                     }
                     else

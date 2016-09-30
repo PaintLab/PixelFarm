@@ -13,7 +13,7 @@ namespace PixelFarm.Drawing.Fonts
         SvgFontFace fontface;
         int emSizeInPoints;
         int emSizeInPixels;
-        double currentEmScalling;
+        float currentEmScalling;
         Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
         Dictionary<uint, FontGlyph> cachedGlyphsByIndex = new Dictionary<uint, FontGlyph>();
         Affine scaleTx;
@@ -83,27 +83,26 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose()
         {
         }
-        public override int EmSizeInPixels
+        public override float EmSizeInPixels
         {
             get { return emSizeInPixels; }
         }
-        public override int GetAdvanceForCharacter(char c)
+        public override float GetAdvanceForCharacter(char c)
         {
             return this.GetGlyph(c).horiz_adv_x >> 6;//64
         }
-        public override int GetAdvanceForCharacter(char c, char next_c)
+        public override float GetAdvanceForCharacter(char c, char next_c)
         {
             return this.GetGlyph(c).horiz_adv_x >> 6;//64
         }
-        public override double AscentInPixels
+        public override float AscentInPixels
         {
             get
             {
                 return fontface.Ascent * currentEmScalling;
             }
         }
-
-        public override double DescentInPixels
+        public override float DescentInPixels
         {
             get
             {
@@ -111,23 +110,14 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        public override double XHeightInPixels
-        {
-            get
-            {
-                return fontface.X_height * currentEmScalling;
-            }
-        }
 
-        public override double CapHeightInPixels
-        {
-            get
-            {
-                return fontface.Cap_height * currentEmScalling;
-            }
-        }
-
-
+        //public override double CapHeightInPixels
+        //{
+        //    get
+        //    {
+        //        return fontface.Cap_height * currentEmScalling;
+        //    }
+        //} 
         //public override FontSpec FontInfo
         //{
         //    get

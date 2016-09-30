@@ -38,22 +38,20 @@ namespace PixelFarm.Drawing.Fonts
             nativeFont = new Font("tahoma", 28);
             s_nativeFontStore.LoadFont(nativeFont, fontfile);
         }
-        public override double AscentInPixels
+        public override float AscentInPixels
         {
             get
             {
                 throw new NotImplementedException();
             }
         }
-
-        public override double CapHeightInPixels
+        public override float DescentInPixels
         {
             get
             {
                 throw new NotImplementedException();
             }
         }
-
         public IDisposable GLBmp
         {
             get { return glBmp; }
@@ -62,15 +60,7 @@ namespace PixelFarm.Drawing.Fonts
         public SimpleFontAtlas FontAtlas
         {
             get { return fontAtlas; }
-        }
-        public override double DescentInPixels
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        } 
         public override float EmSize
         {
             get
@@ -79,7 +69,7 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        public override int EmSizeInPixels
+        public override float EmSizeInPixels
         {
             get
             {
@@ -122,20 +112,13 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        public override double XHeightInPixels
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
 
-        public override int GetAdvanceForCharacter(char c)
+        public override float GetAdvanceForCharacter(char c)
         {
             throw new NotImplementedException();
         }
 
-        public override int GetAdvanceForCharacter(char c, char next_c)
+        public override float GetAdvanceForCharacter(char c, char next_c)
         {
             throw new NotImplementedException();
         }

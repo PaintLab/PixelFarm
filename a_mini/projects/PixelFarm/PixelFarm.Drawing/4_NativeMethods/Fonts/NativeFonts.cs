@@ -28,8 +28,8 @@ namespace PixelFarm.Drawing.Fonts
         static NativeModuleHolder nativeModuleHolder;
         static NativeMyFontsLib()
         {
-            //dynamic load dll
 
+            //dynamic load dll from current directory??
             string appBaseDir = AppDomain.CurrentDomain.BaseDirectory;
             LoadLib(appBaseDir + "\\" + myfontLib);
             //---------------
@@ -88,10 +88,8 @@ namespace PixelFarm.Drawing.Fonts
             }
             if (!File.Exists(dllFilename))
             {
-                //extract to it 
-                //File.WriteAllBytes(dllFilename, global::project_resources.myfonts_dll.myft);
-                //UnsafeMethods.LoadLibrary(dllFilename);
-
+                //TODO review here
+                //load from specific folder 
             }
             isLoaded = true;
             return true;
@@ -100,7 +98,7 @@ namespace PixelFarm.Drawing.Fonts
 
         [DllImport(myfontLib)]
         public static extern void DeleteUnmanagedObj(IntPtr unmanagedObject);
-       
+
         class NativeModuleHolder : IDisposable
         {
             ~NativeModuleHolder()
@@ -113,7 +111,7 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
     }
-     
+
     public static class MyFtLib
     {
         const string MYFT = "myft.dll";
@@ -201,7 +199,7 @@ namespace PixelFarm.Drawing.Fonts
             if (fontName == null) { throw new Exception(); }
             args.Add("-font"); args.Add(fontName);
             args.Add("0x" + ((int)character).ToString("X")); //accept unicode char
-                                                             //3.
+            //3.
             if (outputFile == null)
             {
                 //use default
@@ -214,7 +212,7 @@ namespace PixelFarm.Drawing.Fonts
             args.Add("-pxrange"); args.Add(pixelRange.ToString());
             //6.
             args.Add("-autoframe");//default
-                                   //7.
+            //7.
             if (enableRenderTestFile)
             {
                 if (testRenderFileName == null)

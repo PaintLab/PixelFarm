@@ -10,10 +10,25 @@ namespace PixelFarm.Drawing.WinGdi
     {
         System.Drawing.Font myFont;
         System.IntPtr hFont;
+        float emSize;
+        float emSizeInPixels;
+        static BasicGdi32FontHelper basGdi32FontHelper = new BasicGdi32FontHelper();
+
+        int[] charWidths;
+        Win32.NativeTextWin32.FontABC[] charAbcWidths;
+
+
         public WinGdiPlusFont(System.Drawing.Font f)
         {
             this.myFont = f;
             this.hFont = f.ToHfont();
+            //
+            this.emSize = f.SizeInPoints;
+            this.emSizeInPixels = Font.ConvEmSizeInPointsToPixels(this.emSize);
+            //
+            //build font matrix
+            basGdi32FontHelper.MeasureCharWidths(hFont, out charWidths, out charAbcWidths);
+            //--------------
         }
         public override string Name
         {
@@ -32,8 +47,13 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override float EmSize
         {
-            get { return this.myFont.Size; }
+            get { return emSize; }
         }
+        public override float EmSizeInPixels
+        {
+            get { return emSizeInPixels; }
+        }
+
         public override FontStyle Style
         {
             get
@@ -49,6 +69,8 @@ namespace PixelFarm.Drawing.WinGdi
                 myFont = null;
             }
         }
+
+
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             throw new NotImplementedException();
@@ -64,12 +86,12 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
-        public override int GetAdvanceForCharacter(char c)
+        public override float GetAdvanceForCharacter(char c)
         {
             throw new NotImplementedException();
         }
 
-        public override int GetAdvanceForCharacter(char c, char next_c)
+        public override float GetAdvanceForCharacter(char c, char next_c)
         {
             throw new NotImplementedException();
         }
@@ -87,7 +109,9 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override int EmSizeInPixels
+
+
+        public override float AscentInPixels
         {
             get
             {
@@ -95,7 +119,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override double AscentInPixels
+        public override float DescentInPixels
         {
             get
             {
@@ -103,29 +127,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override double DescentInPixels
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
 
-        public override double XHeightInPixels
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override double CapHeightInPixels
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
 
     }
 }

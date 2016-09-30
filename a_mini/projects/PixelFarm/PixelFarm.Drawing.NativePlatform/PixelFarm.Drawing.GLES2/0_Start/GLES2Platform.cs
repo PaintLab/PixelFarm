@@ -6,7 +6,6 @@ using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.GLES2
 {
 
-
     class GLES2Platform : GraphicsPlatform
     {
 
@@ -19,7 +18,7 @@ namespace PixelFarm.Drawing.GLES2
             }
         }
         public override Canvas CreateCanvas(int left, int top, int width, int height)
-        {   
+        {
             int max = Math.Max(width, height);
             CanvasGL2d canvas2d = new CanvasGL2d(max, max);
             MyGLCanvas myCanvas = new MyGLCanvas(this, canvas2d, 0, 0, width, height);
