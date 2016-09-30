@@ -199,11 +199,11 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
-        public WinGdiPlusFont IGetResolvedFont(PixelFarm.Drawing.Font f)
+        public WinGdiPlusFont GetResolvedFont(PixelFarm.Drawing.Font f)
         {
-            return GetResolvedFont(f);
+            return S_GetResolvedFont(f);
         }
-        public static WinGdiPlusFont GetResolvedFont(PixelFarm.Drawing.Font f)
+        public static WinGdiPlusFont S_GetResolvedFont(PixelFarm.Drawing.Font f)
         {
             WinGdiPlusFont found;
             resolvedWinGdiFont.TryGetValue(f, out found);
@@ -243,7 +243,7 @@ namespace PixelFarm.Drawing.WinGdi
             return exists;
         }
 
-        public static float MeasureWhitespace(
+        public float MeasureWhitespace(
             PixelFarm.Drawing.IFonts gfx, PixelFarm.Drawing.Font f)
         {
             float ws;

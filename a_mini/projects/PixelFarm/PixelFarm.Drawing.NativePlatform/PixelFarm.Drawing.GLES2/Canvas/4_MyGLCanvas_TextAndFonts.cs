@@ -36,8 +36,16 @@ namespace PixelFarm.Drawing.GLES2
             NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(f);
             return nativeFont.GetGlyph(' ').horiz_adv_x;
         }
+        public override float GetCharWidth(Font f, char c)
+        {
+            NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
+            return font.GetGlyph(c).horiz_adv_x >> 6;
+        }
         //======================================
-
+        public override ActualFont GetActualFont(Font f)
+        {
+            return nativeFontStore.GetResolvedNativeFont(f); 
+        }
         public Size MeasureString(char[] buff, int startAt, int len, Font font)
         {
             throw new NotSupportedException();
