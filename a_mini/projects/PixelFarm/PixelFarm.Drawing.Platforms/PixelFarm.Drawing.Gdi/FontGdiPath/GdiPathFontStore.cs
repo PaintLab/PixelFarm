@@ -5,6 +5,8 @@ namespace PixelFarm.Drawing.Fonts
     public static class GdiPathFontStore
     {
         static Dictionary<string, GdiPathFontFace> fontFaces = new Dictionary<string, GdiPathFontFace>();
+        static Dictionary<Font, GdiPathFont> registerFonts = new Dictionary<Font, GdiPathFont>();
+
         public static Font LoadFont(string fontName, float fontPointSize)
         {
             //load font from specific file 
@@ -22,11 +24,16 @@ namespace PixelFarm.Drawing.Fonts
 
             Font font = new Drawing.Font(fontName, fontPointSize);
             GdiPathFont gdiPathFont = fontFace.GetFontAtSpecificSize((int)fontPointSize);
-            font.SetOutlineFont(gdiPathFont);
+            registerFonts.Add(font, gdiPathFont);
             return font;
         }
 
-
+        public static OutlineFont GetResolvedFont(Font f)
+        {
+            GdiPathFont found;
+            registerFonts.TryGetValue(f, out found);
+            return found;
+        }
         //---------------------------------------------------
         //helper function
         public static int ConvertFromPointUnitToPixelUnit(float point)

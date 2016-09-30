@@ -24,7 +24,7 @@ namespace PixelFarm.DrawingGL
         Ellipse ellipse = new Ellipse();
         Font _currentFont;
         Stroke _aggStroke = new Stroke(1);
-
+        TextureFonts textureFonts;
         public GLCanvasPainterBase(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;
@@ -32,7 +32,12 @@ namespace PixelFarm.DrawingGL
             _height = h;
             _rectInt = new RectInt(0, 0, w, h);
             arcTool = new Arc();
-
+            textureFonts = new TextureFonts();
+        }
+        internal TextureFonts FontSystem
+        {
+            get { return textureFonts; }
+            set { textureFonts = value; }
         }
         public override RectInt ClipBox
         {
@@ -56,6 +61,8 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _currentFont = value;
+                //resolve texture font
+                
             }
         }
         public override Color FillColor
@@ -181,6 +188,12 @@ namespace PixelFarm.DrawingGL
             }
             this.Draw(roundRect.MakeVxs());
         }
+
+        //font system for this canvas
+        TextureFont GetFont(Font f)
+        {
+            return textureFonts.GetTextureFont(f);
+        }
         public override void DrawString(string text, double x, double y)
         {
 
@@ -188,7 +201,9 @@ namespace PixelFarm.DrawingGL
             int j = chars.Length;
             int buffsize = j * 2;
             //get kerning list 
-            TextureFont currentFont = this.CurrentFont.TextureFont;
+
+            //get actual font for this canvas 
+            TextureFont currentFont = GetFont(this._currentFont);
             SimpleFontAtlas fontAtlas = currentFont.FontAtlas;
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
             currentFont.GetGlyphPos(chars, 0, buffsize, properGlyphs);

@@ -1,11 +1,20 @@
 ﻿//MIT,2016, WinterDev
 //----------------------------------- 
 using System;
+using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
 
     public static class TextureFontBuilder
     {
+        /// <summary>
+        /// this method always create new TextureFont, 
+        /// user should do caching by themself 
+        /// </summary>
+        /// <param name="fontName"></param>
+        /// <param name="xmlFontInfo"></param>
+        /// <param name="imgAtlas"></param>
+        /// <returns></returns>
         public static TextureFont CreateFont(string fontName, string xmlFontInfo, string imgAtlas)
         {
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
@@ -23,7 +32,30 @@ namespace PixelFarm.Drawing.Fonts
             return new TextureFont(fontName, fontAtlas);
         }
     }
+    public class TextureFonts
+    {
+        Dictionary<Font, TextureFont> registerFonts = new Dictionary<Font, TextureFont>();
+        Font latestFont;
+        TextureFont lastestResolvedFont;
+        public TextureFont GetTextureFont(Font f)
+        {
+            if (f == null)
+            {
+                throw new NotSupportedException();
+            }
+            if (f == latestFont)
+            {
+                return lastestResolvedFont;
+            }
+            //----
+            //resolve this font from register fonts
+            //if not found then create new one 
+            TextureFont found;
+            registerFonts.TryGetValue(f, out found);
+            return found;
+        }
 
+    }
     public class TextureFont : ActualFont
     {
         SimpleFontAtlas fontAtlas;
@@ -36,7 +68,7 @@ namespace PixelFarm.Drawing.Fonts
             this.name = name;
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
             string fontfile = @"C:\Windows\Fonts\Tahoma.ttf";
-            nativeFont = new Font("tahoma",28);                          
+            nativeFont = new Font("tahoma", 28);
             NativeFontStore.LoadFont(nativeFont, fontfile);
         }
         public override double AscentInPixels
@@ -96,13 +128,6 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        //public override FontSpec FontInfo
-        //{
-        //    get
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
 
         public override int Height
         {
@@ -112,7 +137,7 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        
+
 
         public override string Name
         {
@@ -155,12 +180,14 @@ namespace PixelFarm.Drawing.Fonts
 
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            return nativeFont.ActualFont.GetGlyphByIndex(glyphIndex);
+            throw new NotImplementedException();
+            //return nativeFont.ActualFont.GetGlyphByIndex(glyphIndex);
         }
 
         public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
         {
-            nativeFont.ActualFont.GetGlyphPos(buffer, start, len, properGlyphs);
+            throw new NotImplementedException();
+            //nativeFont.ActualFont.GetGlyphPos(buffer, start, len, properGlyphs);
         }
 
         protected override void OnDispose()

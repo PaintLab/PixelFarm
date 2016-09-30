@@ -21,6 +21,8 @@ namespace PixelFarm.Drawing.GLES2
     {
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
+        PixelFarm.Drawing.WinGdi.FontStore fontStore = new WinGdi.FontStore();
+
         //======================================
         //IFonts impl
         Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
@@ -37,8 +39,10 @@ namespace PixelFarm.Drawing.GLES2
         {
             _characterRanges[0] = new System.Drawing.CharacterRange(0, len);
             _stringFormat.SetMeasurableCharacterRanges(_characterRanges);
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)font.PlatformFont;
-            System.Drawing.Font font2 = (System.Drawing.Font)winFont.InnerFont;
+
+
+            WinGdi.WinGdiPlusFont winFont = fontStore.IGetResolvedFont(font);
+            System.Drawing.Font font2 = winFont.InnerFont;
             var size = gx.MeasureCharacterRanges(
                 new string(buff, startAt, len),
                 font2,
@@ -116,7 +120,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.PlatformFont;
+            WinGdi.WinGdiPlusFont winFont = fontStore.IGetResolvedFont(this.currentTextFont);
 
             gx.DrawString(new string(buffer),
                 (System.Drawing.Font)winFont.InnerFont,
@@ -127,7 +131,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.PlatformFont;
+            WinGdi.WinGdiPlusFont winFont = fontStore.IGetResolvedFont(this.currentTextFont);
 
 
             gx.DrawString(new string(buffer),
@@ -159,7 +163,7 @@ namespace PixelFarm.Drawing.GLES2
 
             var tmpColor = this.internalSolidBrush.Color;
             internalSolidBrush.Color = this.currentTextColor;
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)currentTextFont.PlatformFont;
+            WinGdi.WinGdiPlusFont winFont = fontStore.IGetResolvedFont(currentTextFont); 
 
             gx.DrawString(new string(str, startAt, len),
                 (System.Drawing.Font)winFont.InnerFont,

@@ -50,8 +50,8 @@ namespace PixelFarm.Agg.Sample_Blur2
             //p01.CloseFigure();
             //p01.Stop();
             //m_pathVxs = p01.Vxs;
-
-            m_pathVxs = svgFont.OutlineFont.GetGlyph('a').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
+            var winFontGlyph = PixelFarm.Drawing.Fonts.GdiPathFontStore.GetResolvedFont(svgFont).GetGlyph('a');
+            m_pathVxs = winFontGlyph.originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
             var curveFlattener = new CurveFlattener();

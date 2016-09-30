@@ -50,7 +50,8 @@ namespace PixelFarm.Agg.SimplePainter
             //p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
             //--------------------------------------------------- 
             var f1 = font1;
-            var fontGlyph = f1.NativeFont.GetGlyph('{');
+            NativeFont nativeFont = NativeFontStore.GetResolvedNativeFont(f1);
+            var fontGlyph = nativeFont.GetGlyph('{');
             //outline version
             var flat_v = fontGlyph.flattenVxs;
             p.Fill(flat_v);

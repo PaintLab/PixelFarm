@@ -24,11 +24,8 @@ namespace OpenTkEssTest
 
             textureFont = TextureFontBuilder.CreateFont("tahoma",
                 "d:\\WImageTest\\a_total.xml",
-                "d:\\WImageTest\\a_total.png");
-
-            PixelFarm.Drawing.Font f = new PixelFarm.Drawing.Font("tahoma", 24);
-            f.SetTextureFont(textureFont);
-            painter.CurrentFont = f;
+                "d:\\WImageTest\\a_total.png"); 
+            painter.CurrentFont = new PixelFarm.Drawing.Font("tahoma", 24);
         }
         protected override void DemoClosing()
         {

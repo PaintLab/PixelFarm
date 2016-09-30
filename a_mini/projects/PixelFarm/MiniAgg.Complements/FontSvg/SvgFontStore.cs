@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.Fonts
             //    ref exportTypeInfo);
             //fontFace.HBFont = exportTypeInfo.hb_font;
         }
-
+        static Dictionary<Font, SvgFont> registerSvgFonts = new Dictionary<Font, SvgFont>();
         public static Drawing.Font LoadFont(string facename, int fontPointSize)
         {
             //load font from specific file 
@@ -62,10 +62,15 @@ namespace PixelFarm.Drawing.Fonts
 
             Font font = new Font(facename, fontPointSize);
             SvgFont svgFont = fontFace.GetFontAtSpecificSize(fontPointSize);
-            font.SetOutlineFont(svgFont);
+            registerSvgFonts.Add(font, svgFont);
             return font;
         }
-
+        public static OutlineFont GetResolvedFont(Font f)
+        {
+            SvgFont found;
+            registerSvgFonts.TryGetValue(f, out found);
+            return found;
+        }
 
         //---------------------------------------------------
         //helper function

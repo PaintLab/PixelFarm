@@ -21,6 +21,7 @@ namespace PixelFarm.Drawing.WinGdi
     {
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
+        FontStore fontStore = new FontStore();
         Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
         {
             return this.platform.GetFont(fontname, fsize, st);
@@ -231,7 +232,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 ReleaseHdc();
                 this.currentTextFont = value;
-                WinGdiPlusFont myFont = (WinGdiPlusFont)value.PlatformFont;
+                WinGdiPlusFont myFont = fontStore.IGetResolvedFont(value);
                 IntPtr hdc = gx.GetHdc();
                 MyWin32.SelectObject(hdc, myFont.ToHfont());
                 gx.ReleaseHdc();

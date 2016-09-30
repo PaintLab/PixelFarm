@@ -6,19 +6,8 @@ namespace PixelFarm.Drawing
 {
 
     public sealed class Font : IDisposable
-    {
-        //--------------------------
-        //this is request font specification from user
-        //in our lib 1 font may has more than 1 actual impl
-
-        //--------------------------
-        ActualFont _actualFont;
-        //--------------------------
-        NativeFont _nativeFont;
-        OutlineFont _outlineFont;
-        PlatformFont _platformFont;
-        TextureFont _textureFont;
-        //--------------------------
+    { 
+    
 
         float emSizeInPixels;
         /// <summary>
@@ -67,75 +56,75 @@ namespace PixelFarm.Drawing
             get { return s_PIXELS_PER_INCH; }
             set { s_PIXELS_PER_INCH = value; }
         }
-        public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
-        {
-            return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
-        }
 
         public FontStyle Style { get; set; }
         //--------------------------
         //font shaping info (for native font/shaping engine)
         public HBDirection HBDirection { get; set; }
         public int ScriptCode { get; set; }
-        public string ForLang { get; set; }
-        //--------------------------
-        /// <summary>
-        /// canvas specific presentation
-        /// </summary>
-        public ActualFont ActualFont
-        {
-            get { return _actualFont; }
-        }
-        public NativeFont NativeFont
-        {
-            get { return _nativeFont; }
-        }
-        public OutlineFont OutlineFont
-        {
-            get { return _outlineFont; }
-        }
-        public PlatformFont PlatformFont
-        {
-            get { return _platformFont; }
-        }
-        public TextureFont TextureFont
-        {
-            get { return _textureFont; }
-        }
-        //--------------------------
-        public void SetOutlineFont(OutlineFont outlineFont, bool forceSetToPrimaryActualFont = false)
-        {
-            _outlineFont = outlineFont;
-            if (_actualFont == null || forceSetToPrimaryActualFont)
-            {
-                _actualFont = outlineFont;
-            }
+        public string Lang { get; set; }
 
-        }
-        public void SetTextureFont(TextureFont textureFont, bool forceSetToPrimaryActualFont = false)
-        {
-            _textureFont = textureFont;
-            if (_actualFont == null || forceSetToPrimaryActualFont)
-            {
-                _actualFont = textureFont;
-            }
-        }
-        public void SetPlatformFont(PlatformFont platformFont, bool forceSetToPrimaryActualFont = false)
-        {
-            _platformFont = platformFont;
-            if (_actualFont == null || forceSetToPrimaryActualFont)
-            {
-                _actualFont = platformFont;
-            }
-        }
-        public void SetNativeFont(NativeFont nativeFont, bool forceSetToPrimaryActualFont = false)
-        {
-            _nativeFont = nativeFont;
-            if (_actualFont == null || forceSetToPrimaryActualFont)
-            {
-                _actualFont = nativeFont;
-            }
-        }
+
+        ////--------------------------
+        ///// <summary>
+        ///// canvas specific presentation
+        ///// </summary>
+        //ActualFont ActualFont
+        //{
+        //    get { return _actualFont; }
+        //}
+        //NativeFont NativeFont
+        //{
+        //    get { return _nativeFont; }
+        //}
+        //OutlineFont OutlineFont
+        //{
+        //    get { return _outlineFont; }
+        //}
+        //PlatformFont PlatformFont
+        //{
+        //    get { return _platformFont; }
+        //}
+        //TextureFont TextureFont
+        //{
+        //    get { return _textureFont; }
+        //}
+        //--------------------------
+        //public void SetOutlineFont(OutlineFont outlineFont, bool forceSetToPrimaryActualFont = false)
+        //{
+        //    _outlineFont = outlineFont;
+        //    if (_actualFont == null || forceSetToPrimaryActualFont)
+        //    {
+        //        _actualFont = outlineFont;
+        //    }
+
+        //}
+        //public void SetTextureFont(TextureFont textureFont, bool forceSetToPrimaryActualFont = false)
+        //{
+        //    _textureFont = textureFont;
+        //    if (_actualFont == null || forceSetToPrimaryActualFont)
+        //    {
+        //        _actualFont = textureFont;
+        //    }
+        //}
+        //public void SetPlatformFont(PlatformFont platformFont, bool forceSetToPrimaryActualFont = false)
+        //{
+        //    _platformFont = platformFont;
+        //    if (_actualFont == null || forceSetToPrimaryActualFont)
+        //    {
+        //        _actualFont = platformFont;
+        //    }
+        //}
+        //public void SetNativeFont(NativeFont nativeFont, bool forceSetToPrimaryActualFont = false)
+        //{
+        //    _nativeFont = nativeFont;
+        //    if (_actualFont == null || forceSetToPrimaryActualFont)
+        //    {
+        //        _actualFont = nativeFont;
+        //    }
+        //}
+    
+        
         public void Dispose()
         {
         }
@@ -145,9 +134,13 @@ namespace PixelFarm.Drawing
         {
             HBDirection = Fonts.HBDirection.HB_DIRECTION_LTR;//default
             ScriptCode = HBScriptCode.HB_SCRIPT_LATIN;//default 
-            ForLang = "en";//default
+            Lang = "en";//default
             Name = facename;
             EmSize = emSizeInPoints;
+        }
+        public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
+        {
+            return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
         }
 
     }

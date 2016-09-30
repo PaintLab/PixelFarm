@@ -565,11 +565,13 @@ namespace BuildTextureFonts
 
 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            NativeFont nativeFont = NativeFontStore.GetResolvedNativeFont(font);
+
             for (int i = 0; i < j; ++i)
             {
                 char c = fontChars[i];
 
-                FontGlyph fontGlyph = font.NativeFont.GetGlyph(c);
+                FontGlyph fontGlyph = nativeFont.GetGlyph(c);
                 GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
 
                 int w = glyphImg.Width;
@@ -633,10 +635,11 @@ namespace BuildTextureFonts
         static void BuildFontGlyphs(PixelFarm.Drawing.Font font, SimpleFontAtlasBuilder atlasBuilder, int startAt, int endAt)
         {
             //font glyph for specific font face
+            NativeFont nativeFont = NativeFontStore.GetResolvedNativeFont(font);
             for (int i = startAt; i <= endAt; ++i)
             {
                 char c = (char)i;
-                FontGlyph fontGlyph = font.NativeFont.GetGlyph(c);
+                FontGlyph fontGlyph = nativeFont.GetGlyph(c);
                 //-------------------
                 GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
 
@@ -660,10 +663,11 @@ namespace BuildTextureFonts
         static void BuildFontGlyphsByIndex(PixelFarm.Drawing.Font font, SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
         {
             //font glyph for specific font face
+            ActualFont nativefont = NativeFontStore.GetResolvedNativeFont(font);
             for (int i = startAtGlyphIndex; i <= endAtGlyphIndex; ++i)
             {
 
-                FontGlyph fontGlyph = font.NativeFont.GetGlyphByIndex((uint)i);
+                FontGlyph fontGlyph = nativefont.GetGlyphByIndex((uint)i);
                 GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
 
                 int w = glyphImg.Width;
@@ -730,11 +734,12 @@ namespace BuildTextureFonts
             int j = glyphIndice.Length;
 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            NativeFont nativeFont = NativeFontStore.GetResolvedNativeFont(font);
             for (int i = 0; i < j; ++i)
             {
 
                 int codepoint = glyphIndice[i];
-                FontGlyph fontGlyph = font.NativeFont.GetGlyphByIndex((uint)codepoint);
+                FontGlyph fontGlyph = nativeFont.GetGlyphByIndex((uint)codepoint);
 
                 GlyphImage glyphImg = NativeFontStore.BuildMsdfFontImage(fontGlyph);
                 int w = glyphImg.Width;

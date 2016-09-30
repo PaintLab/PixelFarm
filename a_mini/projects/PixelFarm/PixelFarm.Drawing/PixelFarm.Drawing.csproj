@@ -44,7 +44,6 @@
     <Compile Include="3_Drawing_Fonts\FontSet.cs" />
     <Compile Include="3_Drawing_Fonts\SimpleFontAtlas.cs" />
     <Compile Include="3_Drawing_Fonts\TextureFont.cs" />
-    <Compile Include="4_NativeMethods\Fonts\FontSystem.cs" />
     <Compile Include="4_NativeMethods\Images\NativeImage.cs" />
     <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="5_PixelFarm_Agg\CanvasPainter.cs" />

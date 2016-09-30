@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.DrawingGL;
+using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.GLES2
 {
 
@@ -15,6 +16,7 @@ namespace PixelFarm.Drawing.GLES2
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         //-------------------------------
         GLCanvasPainter painter1;
+        TextureFonts textureFonts = new TextureFonts();
 
         Rectangle currentClipRect;
         Color currentTextColor;

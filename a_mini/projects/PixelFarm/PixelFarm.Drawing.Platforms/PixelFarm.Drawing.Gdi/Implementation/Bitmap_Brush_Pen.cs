@@ -74,7 +74,7 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
-        public object InnerFont
+        public System.Drawing.Font InnerFont
         {
             get { return this.myFont; }
         }

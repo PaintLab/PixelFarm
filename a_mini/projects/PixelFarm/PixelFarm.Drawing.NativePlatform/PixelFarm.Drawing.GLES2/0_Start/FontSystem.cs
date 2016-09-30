@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             //find font and create it
             //check if we have created this font 
-            Font f = new Font(fontname, fsize);             
+            Font f = new Font(fontname, fsize);
             throw new NotSupportedException();
             string filename = "";
             NativeFontStore.LoadFont(f, filename);
@@ -22,13 +22,10 @@ namespace PixelFarm.Drawing.Fonts
         }
         public Size MeasureString(char[] str, int startAt, int len, Font font)
         {
-
-
-
             //measure in horizontal alignment ***
             //use native method to measure string
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];
-            ActualFont fontImpl = font.ActualFont;
+            ActualFont fontImpl = NativeFontStore.GetResolvedNativeFont(font);
             fontImpl.GetGlyphPos(str, startAt, len, properGlyphs);
             int j = properGlyphs.Length;
             float total_width = 0;
@@ -53,7 +50,7 @@ namespace PixelFarm.Drawing.Fonts
         public Size MeasureString(char[] str, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth)
         {
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];
-            ActualFont fontImpl = font.ActualFont;
+            ActualFont fontImpl = NativeFontStore.GetResolvedNativeFont(font);
             fontImpl.GetGlyphPos(str, startAt, len, properGlyphs);
             int j = properGlyphs.Length;
             float total_width = 0;
@@ -88,7 +85,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public float MeasureWhitespace(Font f)
         {
-            ActualFont fontImpl = f.ActualFont;
+            ActualFont fontImpl = NativeFontStore.GetResolvedNativeFont(f);
             FontGlyph whitespaceGlyph = fontImpl.GetGlyph(' ');
             return whitespaceGlyph.horiz_adv_x;
         }

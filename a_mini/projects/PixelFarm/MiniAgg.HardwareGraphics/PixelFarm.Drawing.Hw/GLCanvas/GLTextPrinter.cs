@@ -32,7 +32,8 @@ namespace PixelFarm.DrawingGL
             int j = buffer.Length;
             int buffsize = j * 2;
             //get kerning list
-            ActualFont fontImp = currentFont.ActualFont;
+            ActualFont fontImp = NativeFontStore.GetResolvedNativeFont(currentFont); 
+             
             if (properGlyphs == null)
             {
                 properGlyphs = new ProperGlyph[buffsize];

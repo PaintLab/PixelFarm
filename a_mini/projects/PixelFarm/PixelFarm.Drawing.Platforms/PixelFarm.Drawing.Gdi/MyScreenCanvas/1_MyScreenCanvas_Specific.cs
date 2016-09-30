@@ -270,7 +270,7 @@ namespace PixelFarm.Drawing.WinGdi
         void SetFont(Font font)
         {
             InitHdc();
-            WinGdi.WinGdiPlusFont winFont = (WinGdi.WinGdiPlusFont)font.PlatformFont;
+            WinGdi.WinGdiPlusFont winFont = fontStore.IGetResolvedFont(font);
             Win32Utils.SelectObject(tempDc, winFont.ToHfont());
         }
 
@@ -301,7 +301,8 @@ namespace PixelFarm.Drawing.WinGdi
                 // copy target background to memory HDC so when copied back it will have the proper background
                 Win32Utils.BitBlt(memoryHdc, 0, 0, size.Width, size.Height, hdc, point.X, point.Y, Win32Utils.BitBltCopy);
                 // Create and select font
-                WinGdiPlusFont winfont = (WinGdiPlusFont)font.PlatformFont;
+                WinGdiPlusFont winfont = FontStore.GetResolvedFont(font);
+
                 Win32Utils.SelectObject(memoryHdc, winfont.ToHfont());
                 Win32Utils.SetTextColor(memoryHdc, (color.B & 0xFF) << 16 | (color.G & 0xFF) << 8 | color.R);
                 // Draw text to memory HDC

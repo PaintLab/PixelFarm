@@ -33,6 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PixelFarm.Drawing.GLES2\0_Start\FontSystem.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\0_Start\GLES2Platform.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\1_MyGLCanvas_Specific.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\2_MyGLCanvas_CoordinateAndClip.cs" />

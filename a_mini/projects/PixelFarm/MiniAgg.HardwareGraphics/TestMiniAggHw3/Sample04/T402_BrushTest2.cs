@@ -36,7 +36,7 @@ namespace OpenTkEssTest
             //p01.Stop();
             //m_pathVxs = p01.Vxs;
 
-            var m_pathVxs = svgFont.OutlineFont.GetGlyph('K').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
+            var m_pathVxs = PixelFarm.Drawing.Fonts.SvgFontStore.GetResolvedFont(svgFont).GetGlyph('K').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
             //m_pathVxs = MergeFontSubFigures(m_pathVxs);
 
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));

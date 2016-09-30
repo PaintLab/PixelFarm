@@ -61,6 +61,8 @@ namespace PixelFarm.Drawing.Fonts
     public static class NativeFontStore
     {
         static Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
+        static Dictionary<Font, NativeFont> registerFonts = new Dictionary<Font, NativeFont>();
+
         internal static void SetShapingEngine(NativeFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
             ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
@@ -74,7 +76,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public static Font LoadFont(string fontName, string filename, float fontSizeInPoint)
         {
-            Font font = new Font(fontName, fontSizeInPoint); 
+            Font font = new Font(fontName, fontSizeInPoint);
             LoadFont(font, filename);
             return font;
         }
@@ -113,7 +115,7 @@ namespace PixelFarm.Drawing.Fonts
                     fontFace.HasKerning = exportTypeInfo.hasKerning;
                     //for shaping engine***
                     SetShapingEngine(fontFace,
-                        font.ForLang,
+                        font.Lang,
                         font.HBDirection,
                         font.ScriptCode);
                     fonts.Add(filename, fontFace);
@@ -128,9 +130,16 @@ namespace PixelFarm.Drawing.Fonts
             //get font that specific size from found font face
             //-------------------------------------------------
             NativeFont nativeFont = fontFace.GetFontAtPointSize(font.EmSize);
-            font.SetNativeFont(nativeFont);
+            registerFonts.Add(font, nativeFont);
+             
         }
 
+        public static NativeFont GetResolvedNativeFont(Font f)
+        {
+            NativeFont found;
+            registerFonts.TryGetValue(f, out found);
+            return found;
+        }
         //---------------------------------------------------
         //helper function
         public static int ConvertFromPointUnitToPixelUnit(float point)
