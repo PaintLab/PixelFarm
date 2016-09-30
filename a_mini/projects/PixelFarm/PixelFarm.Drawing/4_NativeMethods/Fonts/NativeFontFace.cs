@@ -26,10 +26,19 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         Dictionary<int, NativeFont> fonts = new Dictionary<int, NativeFont>();
         IntPtr hb_font;
+        ExportFace exportFace = new ExportFace();
         internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
         {
             this.unmanagedMem = unmanagedMem;
             this.ftFaceHandle = ftFaceHandle;
+            //get face information             
+            unsafe
+            {
+                fixed (ExportFace* face_h = &this.exportFace)
+                {
+                    NativeMyFontsLib.MyFtGetFaceData(unmanagedMem, face_h);
+                }
+            }
         }
 
         ~NativeFontFace()

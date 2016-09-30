@@ -22,7 +22,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             this.myFont = f;
             this.hFont = f.ToHfont();
-            //
+
             this.emSize = f.SizeInPoints;
             this.emSizeInPixels = Font.ConvEmSizeInPointsToPixels(this.emSize);
             //
@@ -30,8 +30,8 @@ namespace PixelFarm.Drawing.WinGdi
             basGdi32FontHelper.MeasureCharWidths(hFont, out charWidths, out charAbcWidths);
             //--------------
         }
-      
-         
+
+
         public System.IntPtr ToHfont()
         {   /// <summary>
             /// Set a resource (e.g. a font) for the specified device context.
@@ -48,7 +48,7 @@ namespace PixelFarm.Drawing.WinGdi
             get { return emSizeInPixels; }
         }
 
-         
+
         protected override void OnDispose()
         {
             if (myFont != null)

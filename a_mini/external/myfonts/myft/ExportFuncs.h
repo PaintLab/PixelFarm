@@ -15,6 +15,33 @@
 #include "msdfgen\edge-segments.h"
 //-----------------------------
 
+struct ExportFace{
+	int32_t          ascender;
+    int32_t          descender;
+    int32_t          height;
+
+    int32_t          max_advance_width;
+    int32_t          max_advance_height;
+
+    int32_t          underline_position;
+    int32_t          underline_thickness;  
+
+	FT_Long           num_faces;
+    FT_Long           face_index;
+
+    FT_Long           face_flags;
+    FT_Long           style_flags;
+
+    FT_Long           num_glyphs;
+
+    FT_String*        family_name;
+    FT_String*        style_name;
+	
+	FT_BBox           bbox;
+
+    FT_UShort         units_per_EM;
+   
+};
 
 struct ExportGlyph
 {
@@ -83,6 +110,8 @@ extern "C" {
 
 	MY_DLL_EXPORT int MyFtLoadChar(FT_Face myface, unsigned int charcode, ExportGlyph *expGlyph);
 	MY_DLL_EXPORT int MyFtLoadGlyph(FT_Face myface, unsigned int glyphIndex, ExportGlyph *expGlyph);
+	MY_DLL_EXPORT void MyFtGetFaceData(FT_Face myface, ExportFace *expFace);
+
 
 	MY_DLL_EXPORT int MyFtSetupShapingEngine(FT_Face myface,
 		const char* langName, int langNameLen,

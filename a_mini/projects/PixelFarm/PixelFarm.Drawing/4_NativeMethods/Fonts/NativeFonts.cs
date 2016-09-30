@@ -69,6 +69,10 @@ namespace PixelFarm.Drawing.Fonts
         public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, out GlyphMatrix ftOutline);
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
         public static extern int MyFtLoadGlyph(IntPtr faceHandle, uint codepoint, out GlyphMatrix ftOutline);
+
+        [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
+        //public static extern void MyFtGetFaceData(IntPtr faceHandle, ref ExportFace exportFace);
+        public static unsafe extern void MyFtGetFaceData(IntPtr faceHandle, ExportFace* exportFace);
         //============================================================================
         //HB shaping ....
         [DllImport(myfontLib, CharSet = CharSet.Ansi)]
@@ -110,6 +114,41 @@ namespace PixelFarm.Drawing.Fonts
                 NativeMyFontsLib.MyFtShutdownLib();
             }
         }
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    unsafe struct ExportFace
+    {
+        public int ascender;
+        public int descender;
+        public int height;
+
+        public int max_advance_width;
+        public int max_advance_height;
+
+        public int underline_position;
+        public int underline_thickness;
+
+        public int num_faces;
+        public int face_index;
+
+        public int face_flags;
+        public int style_flags;
+
+        public int num_glyphs;
+
+        public char* family_name; //ascii
+        public char* style_name; //ascii
+
+        public FTBBox bbox;
+
+        public ushort units_per_EM;
+        
+    };
+    [StructLayout(LayoutKind.Sequential)]
+    struct FTBBox
+    {
+        public int xMin, yMin, xMax, yMax;
     }
 
     public static class MyFtLib
@@ -154,6 +193,9 @@ namespace PixelFarm.Drawing.Fonts
         [DllImport(MYFT)]
         public static extern int MyFtLibGetVersion();
     }
+
+
+
     public class MsdfParameters
     {
         public string fontName;

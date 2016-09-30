@@ -107,6 +107,7 @@ namespace PixelFarm.Drawing.Fonts
                 IntPtr faceHandle = NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen);
                 if (faceHandle != IntPtr.Zero)
                 {
+
                     //ok pass 
                     //-------------------
                     //test change font size
