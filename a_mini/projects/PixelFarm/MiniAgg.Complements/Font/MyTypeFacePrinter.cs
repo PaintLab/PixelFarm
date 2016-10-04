@@ -25,11 +25,12 @@ using PixelFarm.VectorMath;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
-    public class MyTypeFacePrinter
+    class MyTypeFacePrinter
     {
         Vector2 totalSizeCach;
         string textToPrint;
         Font currentFont;
+        NativeFontStore fontStore = new NativeFontStore();
         public MyTypeFacePrinter()
         {
             this.Baseline = Baseline.Text;
@@ -67,7 +68,7 @@ namespace PixelFarm.Drawing.Fonts
             {
 
                 Vector2 currentOffset = new Vector2(0, 0);
-                ActualFont font = currentFont.ActualFont;
+                ActualFont font = fontStore.GetResolvedNativeFont(currentFont);
                 currentOffset = GetBaseline(currentOffset);
                 string[] lines = text.Split('\n');
                 foreach (string line in lines)
@@ -143,13 +144,14 @@ namespace PixelFarm.Drawing.Fonts
                     break;
                 case Baseline.BoundsTop:
                     {
-                        ActualFont font = currentFont.ActualFont;
+
+                        ActualFont font = fontStore.GetResolvedNativeFont(currentFont);
                         currentOffset.y = -font.AscentInPixels;
                     }
                     break;
                 case Baseline.BoundsCenter:
                     {
-                        ActualFont font = currentFont.ActualFont;
+                        ActualFont font = fontStore.GetResolvedNativeFont(currentFont);
                         currentOffset.y = -font.AscentInPixels / 2;
                     }
 
@@ -193,7 +195,9 @@ namespace PixelFarm.Drawing.Fonts
             {
                 text = this.textToPrint;
             }
-            ActualFont implFont = currentFont.ActualFont;
+
+            ActualFont implFont = fontStore.GetResolvedNativeFont(currentFont);
+
             offset.x = 0;
             offset.y = implFont.EmSizeInPixels;
             double currentLineX = 0;
@@ -212,6 +216,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     if (i + 1 < text.Length)
                     {
+                        //some font has kerning ...
                         currentLineX += implFont.GetAdvanceForCharacter(text[i], text[i + 1]);
                     }
                     else

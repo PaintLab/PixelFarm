@@ -1,11 +1,13 @@
 ﻿//MIT, 2014-2016, WinterDev
-
+using System.Collections.Generic;
 using PixelFarm.Drawing.Fonts;
+
 namespace PixelFarm.Drawing
 {
     public abstract class GraphicsPlatform
     {
         public abstract Font GetFont(string fontfaceName, float emsize, FontStyle st);
+        public abstract ActualFont GetActualFont(Font f);
         public abstract GraphicsPath CreateGraphicsPath();
         public abstract Canvas CreateCanvas(
             int left,
@@ -26,7 +28,7 @@ namespace PixelFarm.Drawing
             get;
             set;
         }
-
         public abstract Bitmap CreatePlatformBitmap(int w, int h, byte[] rawBuffer, bool isBottomUp);
+        
     }
 }

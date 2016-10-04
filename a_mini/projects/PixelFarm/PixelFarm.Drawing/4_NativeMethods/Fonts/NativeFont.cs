@@ -5,10 +5,16 @@ using System;
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
+    /// <summary>
+    /// cross platform font
+    /// </summary>
     public class NativeFont : ActualFont
     {
         NativeFontFace ownerFace;
+        float emSizeInPoints;
         int fontSizeInPixelUnit;
+        float fontFaceAscentInPx;
+        float fontFaceDescentInPx;
         /// <summary>
         /// glyph
         /// </summary>
@@ -19,6 +25,13 @@ namespace PixelFarm.Drawing.Fonts
             //store unmanage font file information
             this.ownerFace = ownerFace;
             this.fontSizeInPixelUnit = pixelSize;
+
+            int ascentEmSize = ownerFace.Ascent / ownerFace.UnitPerEm;
+            fontFaceAscentInPx = Font.ConvEmSizeInPointsToPixels(ascentEmSize);
+
+            int descentEmSize = ownerFace.Descent / ownerFace.UnitPerEm;
+            fontFaceDescentInPx = Font.ConvEmSizeInPointsToPixels(descentEmSize);
+
         }
         protected override void OnDispose()
         {
@@ -46,7 +59,10 @@ namespace PixelFarm.Drawing.Fonts
             }
             return found;
         }
-
+        internal void SetEmSizeInPoint(float emSizeInPoints)
+        {
+            this.emSizeInPoints = emSizeInPoints;
+        }
         /// <summary>
         /// owner font face
         /// </summary>
@@ -74,79 +90,53 @@ namespace PixelFarm.Drawing.Fonts
                 }
             }
         }
-        public override double AscentInPixels
+        public override float AscentInPixels
         {
-            get { throw new NotImplementedException(); }
+            get { return fontFaceAscentInPx; }
         }
-        public override double CapHeightInPixels
+
+        public override float DescentInPixels
         {
-            get
+            get { return fontFaceDescentInPx; }
+        }
+        public override float EmSize { get { return this.emSizeInPoints; } }
+        public override float EmSizeInPixels { get { return fontSizeInPixelUnit; } }
+        public override float GetAdvanceForCharacter(char c)
+        {
+            return this.GetGlyph(c).horiz_adv_x >> 6;
+        }
+        public override float GetAdvanceForCharacter(char c, char next_c)
+        {
+            //TODO: review here
+            return this.GetGlyph(c).horiz_adv_x >> 6;
+        }
+
+        //---------------------------------------------------------------------------
+        public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
+        {
+            return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);
+        }
+
+        public static void SwapColorComponentFromBigEndianToWinGdi(int[] bitbuffer)
+        {
+            unsafe
             {
-                throw new NotImplementedException();
+                int j = bitbuffer.Length;
+                fixed (int* p0 = &(bitbuffer[j - 1]))
+                {
+                    int* p = p0;
+                    for (int i = j - 1; i >= 0; --i)
+                    {
+                        int color = *p;
+                        int a = color >> 24;
+                        int b = (color >> 16) & 0xff;
+                        int g = (color >> 8) & 0xff;
+                        int r = color & 0xff;
+                        *p = (a << 24) | (r << 16) | (g << 8) | b;
+                        p--;
+                    }
+                }
             }
         }
-        public override double DescentInPixels
-        {
-            get { throw new NotImplementedException(); }
-        }
-        public override int EmSizeInPixels
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public override double XHeightInPixels
-        {
-            get { throw new NotImplementedException(); }
-        }
-        public override int GetAdvanceForCharacter(char c)
-        {
-            throw new NotImplementedException();
-        }
-        public override int GetAdvanceForCharacter(char c, char next_c)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        //public override FontSpec FontInfo
-        //{
-        //    get
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
-        public override string Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override float EmSize
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override FontStyle Style
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
- 
     }
 }

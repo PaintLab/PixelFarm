@@ -30,6 +30,9 @@ namespace PixelFarm.Agg.Sample_Blur2
         VertexStoreSnap m_path_2;
         RectD m_shape_bounds;
         Stopwatch stopwatch = new Stopwatch();
+        SvgFontStore svgFontStore = new SvgFontStore();
+        GdiPathFontStore gdiPathFontStore = new GdiPathFontStore();
+
         public BlurWithPainter()
         {
             //m_rbuf2 = new ReferenceImage();
@@ -38,7 +41,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             this.FlattenCurveChecked = true;
             this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
-            Drawing.Font svgFont = SvgFontStore.LoadFont("svg-LiberationSansFont", 300);
+            Drawing.Font svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
             //PathWriter p01 = new PathWriter();
             //p01.MoveTo(0, 0);
             //p01.LineTo(50, 100);
@@ -50,8 +53,8 @@ namespace PixelFarm.Agg.Sample_Blur2
             //p01.CloseFigure();
             //p01.Stop();
             //m_pathVxs = p01.Vxs;
-
-            m_pathVxs = svgFont.OutlineFont.GetGlyph('a').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
+            var winFontGlyph = gdiPathFontStore.GetResolvedFont(svgFont).GetGlyph('a');
+            m_pathVxs = winFontGlyph.originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
             var curveFlattener = new CurveFlattener();

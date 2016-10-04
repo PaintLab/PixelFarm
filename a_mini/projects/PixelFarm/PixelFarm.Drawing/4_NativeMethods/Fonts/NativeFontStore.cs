@@ -24,8 +24,6 @@ namespace PixelFarm.Drawing.Fonts
             get;
             internal set;
         }
-
-
         public int Width
         {
             get;
@@ -58,10 +56,75 @@ namespace PixelFarm.Drawing.Fonts
             this.IsBigEndian = isBigEndian;
         }
     }
-    public static class NativeFontStore
+
+
+    /// <summary>
+    /// to load and cache native font 
+    /// </summary>
+    public class NativeFontStore
     {
-        static Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
-        internal static void SetShapingEngine(NativeFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
+        Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
+        Dictionary<Font, NativeFont> registerFonts = new Dictionary<Font, NativeFont>();
+        //--------------------------------------------------
+
+        static Dictionary<string, InstalledFont> regular_Fonts = new Dictionary<string, InstalledFont>();
+        static Dictionary<string, InstalledFont> bold_Fonts = new Dictionary<string, InstalledFont>();
+        static Dictionary<string, InstalledFont> italic_Fonts = new Dictionary<string, InstalledFont>();
+        static Dictionary<string, InstalledFont> boldItalic_Fonts = new Dictionary<string, InstalledFont>();
+        static Dictionary<string, InstalledFont> gras_Fonts = new Dictionary<string, InstalledFont>();
+        static Dictionary<string, InstalledFont> grasItalic_Fonts = new Dictionary<string, InstalledFont>();
+        //--------------------------------------------------
+
+        static NativeFontStore()
+        {
+            List<InstalledFont> installedFonts = InstalledFontCollection.ReadInstallFonts();
+            //do 
+            int j = installedFonts.Count;
+
+            for (int i = 0; i < j; ++i)
+            {
+                InstalledFont f = installedFonts[i];
+                if (f == null || f.FontName == "" || f.FontName.StartsWith("\0"))
+                {
+                    //no font name?
+                    continue;
+                }
+                switch (f.FontSubFamily)
+                {
+                    case "Normal":
+                    case "Regular":
+                        {
+                            regular_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Italic":
+                    case "Italique":
+                        {
+                            italic_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Bold":
+                        {
+                            bold_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Bold Italic":
+                        {
+                            boldItalic_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Gras":
+                        {
+                            gras_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Gras Italique":
+                        {
+                            grasItalic_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+
+        }
+        static void SetShapingEngine(NativeFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
             ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
             NativeMyFontsLib.MyFtSetupShapingEngine(fontFace.Handle,
@@ -72,13 +135,73 @@ namespace PixelFarm.Drawing.Fonts
                ref exportTypeInfo);
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
-        public static Font LoadFont(string fontName, string filename, float fontSizeInPoint)
+        public Font LoadFont(string fontName, string filename, float fontSizeInPoint)
         {
-            Font font = new Font(fontName, fontSizeInPoint); 
+            Font font = new Font(fontName, fontSizeInPoint);
             LoadFont(font, filename);
             return font;
         }
-        public static void LoadFont(Font font, string filename)
+        public Font LoadFont(string fontName, float fontSizeInPoint)
+        {
+            Font font = new Font(fontName, fontSizeInPoint);
+            LoadFont(font);
+            return font;
+        }
+        public void LoadFont(Font font)
+        {
+            //request font from installed font
+            InstalledFont found;
+            switch (font.Style)
+            {
+                case (FontStyle.Bold | FontStyle.Italic):
+                    {
+                        //check if we have bold & italic 
+                        //version of this font ?
+
+
+                        if (!boldItalic_Fonts.TryGetValue(font.Name.ToUpper(), out found))
+                        {
+                            //if not found then goto italic 
+                            goto case FontStyle.Italic;
+                        }
+
+                        LoadFont(font, found.FontPath);
+                    } break;
+                case FontStyle.Bold:
+                    {
+
+                        if (!bold_Fonts.TryGetValue(font.Name.ToUpper(), out found))
+                        {
+                            //goto regular
+                            goto default;
+                        }
+                        LoadFont(font, found.FontPath);
+                    } break;
+                case FontStyle.Italic:
+                    {
+                        //if not found then choose regular
+                        if (!italic_Fonts.TryGetValue(font.Name.ToUpper(), out found))
+                        {
+                            goto default;
+                        }
+                        LoadFont(font, found.FontPath);
+                    } break;
+                default:
+                    {
+                        //we skip gras style ?
+                        if (!regular_Fonts.TryGetValue(font.Name.ToUpper(), out found))
+                        {
+                            //if not found this font 
+                            //the choose other ?
+                            throw new NotSupportedException();
+                        }
+                        LoadFont(font, found.FontPath);
+
+                    } break;
+            }
+
+        }
+        public void LoadFont(Font font, string filename)
         {
             //load font from specific file 
             NativeFontFace fontFace;
@@ -97,6 +220,7 @@ namespace PixelFarm.Drawing.Fonts
                 IntPtr faceHandle = NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen);
                 if (faceHandle != IntPtr.Zero)
                 {
+
                     //ok pass 
                     //-------------------
                     //test change font size
@@ -113,7 +237,7 @@ namespace PixelFarm.Drawing.Fonts
                     fontFace.HasKerning = exportTypeInfo.hasKerning;
                     //for shaping engine***
                     SetShapingEngine(fontFace,
-                        font.ForLang,
+                        font.Lang,
                         font.HBDirection,
                         font.ScriptCode);
                     fonts.Add(filename, fontFace);
@@ -128,41 +252,14 @@ namespace PixelFarm.Drawing.Fonts
             //get font that specific size from found font face
             //-------------------------------------------------
             NativeFont nativeFont = fontFace.GetFontAtPointSize(font.EmSize);
-            font.SetNativeFont(nativeFont);
-        }
+            registerFonts.Add(font, nativeFont);
 
-        //---------------------------------------------------
-        //helper function
-        public static int ConvertFromPointUnitToPixelUnit(float point)
-        {
-            //from FreeType Documenetation
-            //pixel_size = (pointsize * (resolution/72);
-            return (int)(point * 96f / 72f);
         }
-        public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
+        public NativeFont GetResolvedNativeFont(Font f)
         {
-            return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);
-        }
-        public static void SwapColorComponentFromBigEndianToWinGdi(int[] bitbuffer)
-        {
-            unsafe
-            {
-                int j = bitbuffer.Length;
-                fixed (int* p0 = &(bitbuffer[j - 1]))
-                {
-                    int* p = p0;
-                    for (int i = j - 1; i >= 0; --i)
-                    {
-                        int color = *p;
-                        int a = color >> 24;
-                        int b = (color >> 16) & 0xff;
-                        int g = (color >> 8) & 0xff;
-                        int r = color & 0xff;
-                        *p = (a << 24) | (r << 16) | (g << 8) | b;
-                        p--;
-                    }
-                }
-            }
+            NativeFont found;
+            registerFonts.TryGetValue(f, out found);
+            return found;
         }
     }
 }

@@ -60,8 +60,7 @@ int MyFtInitLib()
 FT_Face MyFtNewMemoryFace(const void* membuffer, int sizeInBytes)
 {
 	int code = 0;
-	//create on heap
-
+	//create on heap***
 	FT_Face myface = new FT_FaceRec_();
 
 	if (code = FT_New_Memory_Face(ft, (FT_Byte*)membuffer, sizeInBytes, 0, &myface))
@@ -162,6 +161,28 @@ int MyFtLoadGlyph(FT_Face myface, unsigned int glyphIndex, ExportGlyph *expGlyph
 	}
 	return 0;
 };
+
+void MyFtGetFaceData(FT_Face myface,ExportFace *expFace)
+{ 
+	expFace->ascender= 0;
+	expFace->ascender=myface->ascender;
+	expFace->descender = myface->descender;
+	expFace->bbox = myface->bbox;
+	expFace->units_per_EM = myface->units_per_EM;
+	expFace->face_flags  = myface->face_flags;
+	expFace->face_index = myface->face_index;
+	expFace->family_name = myface->family_name;
+	expFace->height = myface->height;
+	expFace->num_faces= myface->num_faces;
+	expFace->height = myface->height;
+	expFace->max_advance_height=myface->max_advance_height;
+	expFace->max_advance_width =myface->max_advance_width;
+	 
+	expFace->style_name = myface->style_name;
+	expFace->underline_position= myface->underline_position;
+	expFace->underline_thickness = myface->underline_thickness;
+};
+
 int MyFtLoadChar(FT_Face myface, unsigned int charcode, ExportGlyph *expGlyph)
 {
 	if (!FT_Load_Char(myface, charcode, FT_LOAD_RENDER | FT_LOAD_NO_SCALE))

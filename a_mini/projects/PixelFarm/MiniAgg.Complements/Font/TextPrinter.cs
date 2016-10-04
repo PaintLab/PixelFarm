@@ -21,6 +21,7 @@ namespace PixelFarm.Drawing.Fonts
     public class TextPrinter
     {
         Drawing.Font currentFont;
+        NativeFontStore fontStore = new NativeFontStore();
         public TextPrinter()
         {
         }
@@ -37,7 +38,7 @@ namespace PixelFarm.Drawing.Fonts
             //get kerning list 
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
-            ActualFont implFont = currentFont.ActualFont;
+            ActualFont implFont = fontStore.GetResolvedNativeFont(currentFont);
             implFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
             //-----------------------------------------------------------
             VertexStore resultVxs = new VertexStore();
@@ -76,7 +77,7 @@ namespace PixelFarm.Drawing.Fonts
             //get kerning list 
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
-            ActualFont implFont = currentFont.ActualFont;
+            ActualFont implFont = fontStore.GetResolvedNativeFont(currentFont);
             implFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
             double xpos = x;
             for (int i = 0; i < buffsize; ++i)

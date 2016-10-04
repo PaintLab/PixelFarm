@@ -14,6 +14,7 @@ namespace PixelFarm.DrawingGL
         Drawing.Font currentFont;
         CanvasGL2d canvas2d;
         ProperGlyph[] properGlyphs = null;
+        NativeFontStore nativeFontStore = new NativeFontStore();
         public GLTextPrinter(CanvasGL2d canvas2d)
         {
             this.canvas2d = canvas2d;
@@ -32,7 +33,8 @@ namespace PixelFarm.DrawingGL
             int j = buffer.Length;
             int buffsize = j * 2;
             //get kerning list
-            ActualFont fontImp = currentFont.ActualFont;
+            ActualFont fontImp = nativeFontStore.GetResolvedNativeFont(currentFont);
+
             if (properGlyphs == null)
             {
                 properGlyphs = new ProperGlyph[buffsize];

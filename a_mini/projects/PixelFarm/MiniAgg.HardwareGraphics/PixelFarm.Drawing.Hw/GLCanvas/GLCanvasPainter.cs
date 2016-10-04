@@ -25,6 +25,8 @@ namespace PixelFarm.DrawingGL
         Font _currentFont;
         Stroke _aggStroke = new Stroke(1);
 
+        static TextureFontStore textureFontBuilder = new TextureFontStore();
+
         public GLCanvasPainterBase(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;
@@ -56,6 +58,8 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _currentFont = value;
+                //resolve texture font
+
             }
         }
         public override Color FillColor
@@ -181,6 +185,19 @@ namespace PixelFarm.DrawingGL
             }
             this.Draw(roundRect.MakeVxs());
         }
+        //font system for this canvas 
+        Font _latestFont;
+        TextureFont _latestResolvedFont;
+        TextureFont GetFont(Font f)
+        {
+            if (_latestFont == f)
+            {
+                return _latestResolvedFont;
+            }
+            _latestFont = f;
+            return _latestResolvedFont = _canvas.TextureFontStore.GetResolvedFont(f);
+
+        }
         public override void DrawString(string text, double x, double y)
         {
 
@@ -188,7 +205,9 @@ namespace PixelFarm.DrawingGL
             int j = chars.Length;
             int buffsize = j * 2;
             //get kerning list 
-            TextureFont currentFont = this.CurrentFont.TextureFont;
+
+            //get actual font for this canvas 
+            TextureFont currentFont = GetFont(this._currentFont);
             SimpleFontAtlas fontAtlas = currentFont.FontAtlas;
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
             currentFont.GetGlyphPos(chars, 0, buffsize, properGlyphs);

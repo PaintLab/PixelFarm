@@ -18,11 +18,12 @@ namespace PixelFarm.Agg.SimplePainter
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
         PixelFarm.Drawing.Font font1;
         PixelFarm.Drawing.Font font2;
+        NativeFontStore nativeFontStore = new NativeFontStore();
         public override void Init()
         {
             //load font ? 
-            font1 = NativeFontStore.LoadFont(fontName, fontfile, 48);
-            font2 = NativeFontStore.LoadFont(fontName, fontfile, 10);
+            font1 = nativeFontStore.LoadFont(fontName, fontfile, 48);
+            font2 = nativeFontStore.LoadFont(fontName, fontfile, 10);
         }
         public override void Draw(CanvasPainter p)
         {
@@ -50,7 +51,8 @@ namespace PixelFarm.Agg.SimplePainter
             //p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
             //--------------------------------------------------- 
             var f1 = font1;
-            var fontGlyph = f1.NativeFont.GetGlyph('{');
+            NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(f1);
+            var fontGlyph = nativeFont.GetGlyph('{');
             //outline version
             var flat_v = fontGlyph.flattenVxs;
             p.Fill(flat_v);

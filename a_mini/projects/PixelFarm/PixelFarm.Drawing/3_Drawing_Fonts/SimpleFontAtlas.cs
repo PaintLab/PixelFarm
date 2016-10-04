@@ -3,7 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Xml;
+using System.Xml; 
+
 namespace PixelFarm.Drawing.Fonts
 {
     public class SimpleFontAtlas
@@ -21,7 +22,7 @@ namespace PixelFarm.Drawing.Fonts
         public GlyphImage TotalGlyph
         {
             get { return totalGlyphImage; }
-            set { totalGlyphImage = value; } 
+            set { totalGlyphImage = value; }
         }
         public bool GetRect(int c, out TextureFontGlyphData glyphdata)
         {

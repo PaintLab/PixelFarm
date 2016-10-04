@@ -14,13 +14,15 @@
 // "The Art of War"
 
 using System;
+using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.GLES2
 {
     partial class MyGLCanvas
-    { 
+    {
 
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
+        NativeFontStore nativeFontStore = new NativeFontStore();
         //======================================
         //IFonts impl
         Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
@@ -30,10 +32,20 @@ namespace PixelFarm.Drawing.GLES2
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
             //TODO: review here ***
-            return f.ActualFont.GetGlyph(' ').horiz_adv_x;
+
+            NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(f);
+            return nativeFont.GetGlyph(' ').horiz_adv_x;
+        }
+        public override float GetCharWidth(Font f, char c)
+        {
+            NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
+            return font.GetGlyph(c).horiz_adv_x >> 6;
         }
         //======================================
-
+        public override ActualFont GetActualFont(Font f)
+        {
+            return nativeFontStore.GetResolvedNativeFont(f); 
+        }
         public Size MeasureString(char[] buff, int startAt, int len, Font font)
         {
             throw new NotSupportedException();

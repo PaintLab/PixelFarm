@@ -31,7 +31,7 @@ namespace PixelFarm.Drawing.WinGdi
     }
 
 
-    class FontStore
+    class WinGdiFontStore
     {
         // static PixelFarm.Drawing.WinGdi.BasicGdi32FontHelper gdiFontHelper = new PixelFarm.Drawing.WinGdi.BasicGdi32FontHelper();
         /// <summary>
@@ -44,6 +44,12 @@ namespace PixelFarm.Drawing.WinGdi
         static readonly Dictionary<string, System.Drawing.FontFamily> _existingFontFamilies = new Dictionary<string, System.Drawing.FontFamily>(StringComparer.InvariantCultureIgnoreCase);
         readonly Dictionary<System.Drawing.Font, Font> _fontInfoCache = new Dictionary<System.Drawing.Font, Font>();
         readonly Dictionary<FontKey, Font> _fontInfoCacheByFontKey = new Dictionary<FontKey, Font>();
+        static Dictionary<Font, WinGdiPlusFont> resolvedWinGdiFont = new Dictionary<Font, WinGdiPlusFont>();
+
+        public WinGdiFontStore()
+        {
+
+        }
         /// <summary>
         /// Get cached font instance for the given font properties.<br/>
         /// Improve performance not to create same font multiple times.
@@ -147,7 +153,7 @@ namespace PixelFarm.Drawing.WinGdi
                 float descent = newFont.FontFamily.GetCellDescent(newFont.Style);
 
                 font = new Font(newFont.Name, newFont.SizeInPoints);
-                font.SetPlatformFont(new WinGdiPlusFont(newFont));
+                resolvedWinGdiFont.Add(font, new WinGdiPlusFont(newFont));
                 //myFont,
                 //fontHeight,
                 //(fontAscent * fontSize / fontEmHeight),
@@ -181,7 +187,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// <summary>
         /// Init the system installed fonts.
         /// </summary>
-        static FontStore()
+        static WinGdiFontStore()
         {
             _fontsMapping["monospace"] = "Courier New";
             _fontsMapping["Helvetica"] = "Arial";
@@ -193,7 +199,16 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
-
+        public WinGdiPlusFont GetResolvedFont(PixelFarm.Drawing.Font f)
+        {
+            return S_GetResolvedFont(f);
+        }
+        public static WinGdiPlusFont S_GetResolvedFont(PixelFarm.Drawing.Font f)
+        {
+            WinGdiPlusFont found;
+            resolvedWinGdiFont.TryGetValue(f, out found);
+            return found;
+        }
 
         /// <summary>
         /// Gets the line spacing of the font
@@ -228,11 +243,16 @@ namespace PixelFarm.Drawing.WinGdi
             return exists;
         }
 
-        public static float MeasureWhitespace(
+        public float MeasureWhitespace(
             PixelFarm.Drawing.IFonts gfx, PixelFarm.Drawing.Font f)
         {
             float ws;
-            WinGdiPlusFont winFont = (WinGdiPlusFont)f.PlatformFont;
+            WinGdiPlusFont winFont;
+            if (!resolvedWinGdiFont.TryGetValue(f, out winFont))
+            {
+                throw new NotSupportedException();
+            }
+
             if (!_fontWsCache.TryGetValue(winFont, out ws))
             {
                 ws = gfx.MeasureString(new char[] { ' ' }, 0, 1, f).Width;

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
-    public static class GdiPathFontStore
+    public class GdiPathFontStore
     {
-        static Dictionary<string, GdiPathFontFace> fontFaces = new Dictionary<string, GdiPathFontFace>();
-        public static Font LoadFont(string fontName, float fontPointSize)
+        Dictionary<string, GdiPathFontFace> fontFaces = new Dictionary<string, GdiPathFontFace>();
+        Dictionary<Font, GdiPathFont> registerFonts = new Dictionary<Font, GdiPathFont>();
+
+        public Font LoadFont(string fontName, float fontPointSize)
         {
             //load font from specific file 
             GdiPathFontFace fontFace;
@@ -22,18 +24,15 @@ namespace PixelFarm.Drawing.Fonts
 
             Font font = new Drawing.Font(fontName, fontPointSize);
             GdiPathFont gdiPathFont = fontFace.GetFontAtSpecificSize((int)fontPointSize);
-            font.SetOutlineFont(gdiPathFont);
+            registerFonts.Add(font, gdiPathFont);
             return font;
         }
-
-
-        //---------------------------------------------------
-        //helper function
-        public static int ConvertFromPointUnitToPixelUnit(float point)
+        public ActualFont GetResolvedFont(Font f)
         {
-            //from FreeType Documenetation
-            //pixel_size = (pointsize * (resolution/72);
-            return (int)(point * 96 / 72);
+            GdiPathFont found;
+            registerFonts.TryGetValue(f, out found);
+            return found;
         }
+       
     }
 }

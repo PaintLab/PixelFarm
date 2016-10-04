@@ -122,18 +122,49 @@ namespace PixelFarm.Agg.Samples
 
                                 if (myBrushPathList.Count > 0)
                                 {
-                                    var lastPath = myBrushPathList[myBrushPathList.Count - 1];
-                                    //do path clip***
-                                    var paths = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(new VertexStoreSnap(lastPath.Vxs),
-                                            new VertexStoreSnap(currentBrushPath.Vxs), VertexSource.VxsClipperType.Difference,
-                                            false);
-                                    myBrushPathList.RemoveAt(myBrushPathList.Count - 1);
-                                    MyBrushPath newBrushPath = new MyBrushPath();
-                                    newBrushPath.BrushMode = lastPath.BrushMode;
-                                    newBrushPath.StrokeColor = lastPath.StrokeColor;
-                                    newBrushPath.FillColor = lastPath.FillColor;
-                                    newBrushPath.SetVxs(paths[0]);
-                                    myBrushPathList.Add(newBrushPath);
+
+                                    int j = myBrushPathList.Count - 1;
+                                    for (int i = j; i >= 0; --i)
+                                    {
+                                        //cut each path
+                                        var lastPath = myBrushPathList[i];
+                                        //do path clip***
+                                        List<VertexStore> paths = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(new VertexStoreSnap(lastPath.Vxs),
+                                                new VertexStoreSnap(currentBrushPath.Vxs), VertexSource.VxsClipperType.Difference,
+                                                true);
+
+                                        myBrushPathList.RemoveAt(i);
+
+                                        if (i == j)
+                                        {
+                                            //the last one                                              
+                                            for (int s = paths.Count - 1; s >= 0; --s)
+                                            {
+                                                MyBrushPath newBrushPath = new MyBrushPath();
+                                                newBrushPath.BrushMode = lastPath.BrushMode;
+                                                newBrushPath.StrokeColor = lastPath.StrokeColor;
+                                                newBrushPath.FillColor = lastPath.FillColor;
+                                                newBrushPath.SetVxs(paths[s]);
+                                                myBrushPathList.Add(newBrushPath); //add last
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int s = paths.Count - 1; s >= 0; --s)
+                                            {
+                                                MyBrushPath newBrushPath = new MyBrushPath();
+                                                newBrushPath.BrushMode = lastPath.BrushMode;
+                                                newBrushPath.StrokeColor = lastPath.StrokeColor;
+                                                newBrushPath.FillColor = lastPath.FillColor;
+                                                newBrushPath.SetVxs(paths[s]);
+                                                myBrushPathList.Insert(i, newBrushPath);
+                                            }
+
+
+                                        }
+                                    }
+
+
                                 }
                             }
                         }
