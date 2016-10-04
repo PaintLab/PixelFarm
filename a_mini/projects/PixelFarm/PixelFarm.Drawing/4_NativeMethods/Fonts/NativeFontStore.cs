@@ -75,7 +75,7 @@ namespace PixelFarm.Drawing.Fonts
         static Dictionary<string, InstalledFont> grasItalic_Fonts = new Dictionary<string, InstalledFont>();
         //--------------------------------------------------
 
-        public NativeFontStore()
+        static NativeFontStore()
         {
             List<InstalledFont> installedFonts = InstalledFontCollection.ReadInstallFonts();
             //do 
