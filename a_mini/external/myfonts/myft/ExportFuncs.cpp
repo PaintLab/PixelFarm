@@ -5,6 +5,7 @@
 #include <hb.h>
 #include <hb-ft.h>
 #include "stb_image.h"
+#include <Windows.h>
 
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
@@ -16,6 +17,7 @@ FT_Library ft;
 //------------------------------------------------------------
 int force_ucs2_charmap2(FT_Face ftf)
 {
+	 
 	for (int i = 0; i < ftf->num_charmaps; ++i)
 	{
 		if (((ftf->charmaps[i]->platform_id == 0) &&
@@ -124,7 +126,7 @@ void MyFtGetFaceInfo(FT_Face face, ExportTypeFaceInfo* exportTypeFaceInfo)
 
 int MyFtLoadGlyph(FT_Face myface, unsigned int glyphIndex, ExportGlyph *expGlyph)
 {
-	if (!FT_Load_Glyph(myface, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_HINTING))
+	if (!FT_Load_Glyph(myface, glyphIndex, FT_LOAD_RENDER | FT_LOAD_DEFAULT))
 	{
 		//1. bounding box		 
 		FT_BBox bbox;

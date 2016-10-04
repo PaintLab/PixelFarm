@@ -1,7 +1,6 @@
 ﻿//MIT,2016, WinterDev
 //----------------------------------- 
 using System;
-using PixelFarm.DrawingGL;
 namespace PixelFarm.Drawing.Fonts
 {
 
@@ -24,17 +23,22 @@ namespace PixelFarm.Drawing.Fonts
             return new TextureFont(fontName, fontAtlas);
         }
     }
-    public class TextureFont : Font
+
+    public class TextureFont : ActualFont
     {
         SimpleFontAtlas fontAtlas;
         string name;
-        GLBitmap glBmp;
+        IDisposable glBmp;
+        Font nativeFont;
         internal TextureFont(string name, SimpleFontAtlas fontAtlas)
         {
             this.fontAtlas = fontAtlas;
             this.name = name;
+            //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
+            string fontfile = @"C:\Windows\Fonts\Tahoma.ttf";
+            nativeFont = new Font("tahoma",28);                          
+            NativeFontStore.LoadFont(nativeFont, fontfile);
         }
-
         public override double AscentInPixels
         {
             get
@@ -51,12 +55,12 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        internal GLBitmap GLBmp
+        public IDisposable GLBmp
         {
             get { return glBmp; }
             set { glBmp = value; }
         }
-        internal SimpleFontAtlas FontAtlas
+        public SimpleFontAtlas FontAtlas
         {
             get { return fontAtlas; }
         }
@@ -92,13 +96,13 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        public override FontInfo FontInfo
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //public override FontSpec FontInfo
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
         public override int Height
         {
@@ -108,13 +112,7 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        public override object InnerFont
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        
 
         public override string Name
         {
@@ -157,17 +155,17 @@ namespace PixelFarm.Drawing.Fonts
 
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            throw new NotImplementedException();
+            return nativeFont.ActualFont.GetGlyphByIndex(glyphIndex);
         }
 
         public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
         {
-            throw new NotImplementedException();
+            nativeFont.ActualFont.GetGlyphPos(buffer, start, len, properGlyphs);
         }
 
         protected override void OnDispose()
         {
-            if(glBmp != null )
+            if (glBmp != null)
             {
                 glBmp.Dispose();
                 glBmp = null;

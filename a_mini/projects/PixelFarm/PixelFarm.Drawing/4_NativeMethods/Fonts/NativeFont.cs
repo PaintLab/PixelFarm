@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
-    class NativeFont : Font
+    public class NativeFont : ActualFont
     {
         NativeFontFace ownerFace;
         int fontSizeInPixelUnit;
@@ -108,13 +108,13 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        public override FontInfo FontInfo
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //public override FontSpec FontInfo
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
         public override string Name
         {
@@ -147,13 +147,6 @@ namespace PixelFarm.Drawing.Fonts
                 throw new NotImplementedException();
             }
         }
-
-        public override object InnerFont
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+ 
     }
 }

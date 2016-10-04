@@ -56,7 +56,7 @@ namespace PixelFarm.Drawing.GLES2
             throw new NotImplementedException();
         }
 
-        public override PixelFarm.Drawing.Fonts.FontInfo GetFont(string fontfaceName, float emsize, FontStyle st)
+        public override Font GetFont(string fontfaceName, float emsize, FontStyle st)
         {
             throw new NotImplementedException();
         }

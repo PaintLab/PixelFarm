@@ -44,6 +44,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Implementation.Win32\MyWin32.cs" />
+    <Compile Include="Implementation.Win32\NativeTextWin32.cs" />
+    <Compile Include="Implementation.Win32\Win32Utils.cs" />
+    <Compile Include="Implementation.Win32\WindowsFormsBitmapBackBuffer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

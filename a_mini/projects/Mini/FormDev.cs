@@ -173,13 +173,17 @@ namespace Mini
             //1. test gdi+ font path
             char testChar = 'b';
             float fontSize = 20;
-            using (System.Drawing.Font ff = new Font("tahoma", fontSize))
+            string fontName = "tahoma";
+            using (System.Drawing.Font ff = new Font(fontName, fontSize))
             using (Graphics g = this.pictureBox1.CreateGraphics())
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 g.Clear(System.Drawing.Color.White);
-                var winFont = PixelFarm.Drawing.Fonts.GdiPathFontStore.LoadFont("tahoma", (int)fontSize);
-                var winFontGlyph = winFont.GetGlyph(testChar);
+
+
+                PixelFarm.Drawing.Font winFont = PixelFarm.Drawing.Fonts.GdiPathFontStore.LoadFont(fontName, fontSize);
+
+                var winFontGlyph = winFont.OutlineFont.GetGlyph(testChar);
                 //convert Agg vxs to bitmap
                 int bmpW = 50;
                 int bmpH = 50;

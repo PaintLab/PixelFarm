@@ -214,6 +214,28 @@ namespace PixelFarm.DrawingGL
                 msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
             }
         }
+        public void DrawSubImageWithMsdf(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        {
+            if (bmp.IsBigEndianPixel)
+            {
+                msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+            }
+            else
+            {
+                msdfShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop, scale);
+            }
+        }
+        public void DrawSubImageWithMsdf(GLBitmap bmp, float[] coords, float scale)
+        {
+            if (bmp.IsBigEndianPixel)
+            {
+                msdfShader.RenderSubImage(bmp, coords, scale);
+            }
+            else
+            {
+                msdfShader.RenderSubImage(bmp, coords, scale);
+            }
+        }
         public void DrawImage(GLBitmap bmp,
             Drawing.RectangleF srcRect,
             float x, float y, float w, float h)

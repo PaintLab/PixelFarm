@@ -6,13 +6,11 @@ using System.Collections.Generic;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
-    class GdiPathFont : Font
+    class GdiPathFont : OutlineFont
     {
         GdiPathFontFace fontface;
-        int emSizeInPoints;
-        const int POINTS_PER_INCH = 72;
-        const int PIXEL_PER_INCH = 96;
-        int emSizeInPixels;
+        int emSizeInPoints; 
+        float emSizeInPixels;
 
         Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
         Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
@@ -22,7 +20,8 @@ namespace PixelFarm.Drawing.Fonts
             this.fontface = fontface;
             this.emSizeInPoints = emSizeInPoints;
             //--------------------------------------
-            emSizeInPixels = (int)(((float)emSizeInPoints / (float)POINTS_PER_INCH) * (float)PIXEL_PER_INCH);
+            emSizeInPixels = Font.ConvEmSizeInPointsToPixels(emSizeInPoints);
+            //(int)(((float)emSizeInPoints / (float)POINTS_PER_INCH) * (float)PIXEL_PER_INCH);
             //currentEmScalling = (float)emSizeInPixels / (float)fontface.UnitsPerEm;
 
             //-----------------
@@ -93,15 +92,15 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose()
         {
         }
-       
 
-        public override FontInfo FontInfo
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+
+        //public override FontSpec FontInfo
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
 
         public override string Name
         {
@@ -135,12 +134,6 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        public override object InnerFont
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+
     }
 }

@@ -14,15 +14,15 @@ namespace PixelFarm.Agg.SimplePainter
     [Info("SimplePainterGlyph")]
     public class SimplePainterGlyphSample : DemoBase
     {
+        string fontName = "tahoma";
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
         PixelFarm.Drawing.Font font1;
         PixelFarm.Drawing.Font font2;
         public override void Init()
         {
-            //load font ?
-
-            font1 = NativeFontStore.LoadFont(fontfile, 48);
-            font2 = NativeFontStore.LoadFont(fontfile, 10);
+            //load font ? 
+            font1 = NativeFontStore.LoadFont(fontName, fontfile, 48);
+            font2 = NativeFontStore.LoadFont(fontName, fontfile, 10);
         }
         public override void Draw(CanvasPainter p)
         {
@@ -50,9 +50,9 @@ namespace PixelFarm.Agg.SimplePainter
             //p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
             //--------------------------------------------------- 
             var f1 = font1;
-            var fontGlyph = f1.GetGlyph('{');
+            var fontGlyph = f1.NativeFont.GetGlyph('{');
             //outline version
-            var flat_v = p.FlattenCurves(fontGlyph.flattenVxs);
+            var flat_v = fontGlyph.flattenVxs;
             p.Fill(flat_v);
             //bitmap version
 
@@ -62,9 +62,10 @@ namespace PixelFarm.Agg.SimplePainter
             //string test_str = "fมีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
             //string test_str = "I...A Quick Brown Fox Jumps Over The Lazy Dog...I";
-            string test_str = "A single pixel on a color LCD";
+            //string test_str = "A single pixel on a color LCD";
+            //string test_str = "กิน กิ่น";
 
-            //string test_str = "บ่ป่มีมี่";
+            string test_str = "บ่ป่มีมี่อุอูญญูกินกิ่นก็โก้";
             p.UseSubPixelRendering = true;
             p.DrawString(test_str, 5, 200);
             //p.DrawString("12345", 50, 200); 

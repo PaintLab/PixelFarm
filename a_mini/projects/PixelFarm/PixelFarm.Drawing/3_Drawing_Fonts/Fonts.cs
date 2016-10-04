@@ -4,58 +4,157 @@ using System;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing
 {
-    public abstract class Font : IDisposable
-    {
-        public abstract FontInfo FontInfo { get; }
-        public abstract string Name { get; }
-        public abstract int Height { get; }
-        public abstract float EmSize { get; }
-        public abstract FontStyle Style { get; }
 
-        //TODO:platform specific font object,
-        //TODO: review here
-        public abstract object InnerFont { get; }
+    public sealed class Font : IDisposable
+    {
+        //--------------------------
+        //this is request font specification from user
+        //in our lib 1 font may has more than 1 actual impl
+
+        //--------------------------
+        ActualFont _actualFont;
+        //--------------------------
+        NativeFont _nativeFont;
+        OutlineFont _outlineFont;
+        PlatformFont _platformFont;
+        TextureFont _textureFont;
+        //--------------------------
+
+        float emSizeInPixels;
+        /// <summary>
+        /// emsize in point
+        /// </summary>
+        float emSize;
+        //--------------------------
+        /// <summary>
+        /// font's face name
+        /// </summary>
+        public string Name { get; private set; }
+
+        public int Height { get; set; }
+
+        /// <summary>
+        /// emheight in point unit
+        /// </summary>
+        public float EmSize
+        {
+            get { return emSize; }
+            private set
+            {
+                emSize = value;
+                emSizeInPixels = ConvEmSizeInPointsToPixels(value);
+            }
+        }
+        public float EmSizeInPixels
+        {
+            get
+            {
+                return emSizeInPixels;
+            }
+        }
+
+        static int s_POINTS_PER_INCH = 72; //default value
+        static int s_PIXELS_PER_INCH = 96; //default value
+
+
+        public static int PointsPerInch
+        {
+            get { return s_POINTS_PER_INCH; }
+            set { s_POINTS_PER_INCH = value; }
+        }
+        public static int PixelsPerInch
+        {
+            get { return s_PIXELS_PER_INCH; }
+            set { s_PIXELS_PER_INCH = value; }
+        }
+        public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
+        {
+            return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
+        }
+
+        public FontStyle Style { get; set; }
+        //--------------------------
+        //font shaping info (for native font/shaping engine)
+        public HBDirection HBDirection { get; set; }
+        public int ScriptCode { get; set; }
+        public string ForLang { get; set; }
+        //--------------------------
+        /// <summary>
+        /// canvas specific presentation
+        /// </summary>
+        public ActualFont ActualFont
+        {
+            get { return _actualFont; }
+        }
+        public NativeFont NativeFont
+        {
+            get { return _nativeFont; }
+        }
+        public OutlineFont OutlineFont
+        {
+            get { return _outlineFont; }
+        }
+        public PlatformFont PlatformFont
+        {
+            get { return _platformFont; }
+        }
+        public TextureFont TextureFont
+        {
+            get { return _textureFont; }
+        }
+        //--------------------------
+        public void SetOutlineFont(OutlineFont outlineFont, bool forceSetToPrimaryActualFont = false)
+        {
+            _outlineFont = outlineFont;
+            if (_actualFont == null || forceSetToPrimaryActualFont)
+            {
+                _actualFont = outlineFont;
+            }
+
+        }
+        public void SetTextureFont(TextureFont textureFont, bool forceSetToPrimaryActualFont = false)
+        {
+            _textureFont = textureFont;
+            if (_actualFont == null || forceSetToPrimaryActualFont)
+            {
+                _actualFont = textureFont;
+            }
+        }
+        public void SetPlatformFont(PlatformFont platformFont, bool forceSetToPrimaryActualFont = false)
+        {
+            _platformFont = platformFont;
+            if (_actualFont == null || forceSetToPrimaryActualFont)
+            {
+                _actualFont = platformFont;
+            }
+        }
+        public void SetNativeFont(NativeFont nativeFont, bool forceSetToPrimaryActualFont = false)
+        {
+            _nativeFont = nativeFont;
+            if (_actualFont == null || forceSetToPrimaryActualFont)
+            {
+                _actualFont = nativeFont;
+            }
+        }
         public void Dispose()
         {
-            OnDispose();
         }
-#if DEBUG
-        static int dbugTotalId = 0;
-        public readonly int dbugId = dbugTotalId++;
-        public Font()
+
+
+        public Font(string facename, float emSizeInPoints)
         {
-            //if (this.dbugId == 2)
-            //{ 
-            //}
-
+            HBDirection = Fonts.HBDirection.HB_DIRECTION_LTR;//default
+            ScriptCode = HBScriptCode.HB_SCRIPT_LATIN;//default 
+            ForLang = "en";//default
+            Name = facename;
+            EmSize = emSizeInPoints;
         }
-#endif
-        protected abstract void OnDispose();
-        public abstract FontGlyph GetGlyphByIndex(uint glyphIndex);
-        public abstract FontGlyph GetGlyph(char c);
-        public abstract FontFace FontFace { get; }
-        public abstract void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs);
-        public abstract int EmSizeInPixels { get; }
 
-        public abstract int GetAdvanceForCharacter(char c);
-        public abstract int GetAdvanceForCharacter(char c, char next_c);
-        public abstract double AscentInPixels { get; }
-        public abstract double DescentInPixels { get; }
-        public abstract double XHeightInPixels { get; }
-        public abstract double CapHeightInPixels { get; }
-
-        ~Font()
-        {
-            Dispose();
-        }
     }
-
-
-
 
     public interface IFonts
     {
-        FontInfo GetFontInfo(string fontname, float fsize, FontStyle st);
+        Font GetFont(string fontname, float fsize, FontStyle st);
         float MeasureWhitespace(Font f);
         Size MeasureString(char[] str, int startAt, int len, Font font);
         Size MeasureString(char[] str, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth);
@@ -63,8 +162,5 @@ namespace PixelFarm.Drawing
     }
 
 
-    public abstract class StringFormat
-    {
-        public abstract object InnerFormat { get; }
-    }
+
 }

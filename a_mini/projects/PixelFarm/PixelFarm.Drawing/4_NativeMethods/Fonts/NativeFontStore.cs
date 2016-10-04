@@ -47,8 +47,7 @@ namespace PixelFarm.Drawing.Fonts
             get;
             internal set;
         }
-        public float OffsetX { get; set; }
-        public float OffsetY { get; set; }
+
         public int[] GetImageBuffer()
         {
             return pixelBuffer;
@@ -64,12 +63,6 @@ namespace PixelFarm.Drawing.Fonts
         static Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
         internal static void SetShapingEngine(NativeFontFace fontFace, string lang, HBDirection hb_direction, int hb_scriptcode)
         {
-            //string lang = "en";
-            //PixelFarm.Font2.NativeMyFontsLib.MyFtSetupShapingEngine(ftFaceHandle,
-            //    lang,
-            //    lang.Length,
-            //    HBDirection.HB_DIRECTION_LTR,
-            //    HBScriptCode.HB_SCRIPT_LATIN); 
             ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
             NativeMyFontsLib.MyFtSetupShapingEngine(fontFace.Handle,
                lang,
@@ -79,8 +72,13 @@ namespace PixelFarm.Drawing.Fonts
                ref exportTypeInfo);
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
-
-        public static Font LoadFont(string filename, int fontPointSize)
+        public static Font LoadFont(string fontName, string filename, float fontSizeInPoint)
+        {
+            Font font = new Font(fontName, fontSizeInPoint); 
+            LoadFont(font, filename);
+            return font;
+        }
+        public static void LoadFont(Font font, string filename)
         {
             //load font from specific file 
             NativeFontFace fontFace;
@@ -95,6 +93,7 @@ namespace PixelFarm.Drawing.Fonts
                 //---------------------------------------------------
                 //convert font point size to pixel size 
                 //---------------------------------------------------
+                //load font from memory
                 IntPtr faceHandle = NativeMyFontsLib.MyFtNewMemoryFace(unmanagedMem, filelen);
                 if (faceHandle != IntPtr.Zero)
                 {
@@ -105,15 +104,18 @@ namespace PixelFarm.Drawing.Fonts
                     //    0, //char_width in 1/64th of points, value 0 => same as height
                     //    16 * 64,//16 pt //char_height in 1*64 of ppoints
                     //    96,//horizontal device resolution (eg screen resolution 96 dpi)
-                    //    96);// vertical device resolution 
-
+                    //    96);// vertical device resolution  
                     //------------------- 
                     fontFace = new NativeFontFace(unmanagedMem, faceHandle);
+                    fontFace.LoadFromFilename = filename;
                     ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
                     NativeMyFontsLib.MyFtGetFaceInfo(faceHandle, ref exportTypeInfo);
                     fontFace.HasKerning = exportTypeInfo.hasKerning;
                     //for shaping engine***
-                    SetShapingEngine(fontFace, "th", HBDirection.HB_DIRECTION_LTR, HBScriptCode.HB_SCRIPT_THAI);
+                    SetShapingEngine(fontFace,
+                        font.ForLang,
+                        font.HBDirection,
+                        font.ScriptCode);
                     fonts.Add(filename, fontFace);
                 }
                 else
@@ -125,10 +127,9 @@ namespace PixelFarm.Drawing.Fonts
             //-------------------------------------------------
             //get font that specific size from found font face
             //-------------------------------------------------
-
-            return fontFace.GetFontAtPointSize(fontPointSize);
+            NativeFont nativeFont = fontFace.GetFontAtPointSize(font.EmSize);
+            font.SetNativeFont(nativeFont);
         }
-
 
         //---------------------------------------------------
         //helper function
@@ -138,8 +139,6 @@ namespace PixelFarm.Drawing.Fonts
             //pixel_size = (pointsize * (resolution/72);
             return (int)(point * 96f / 72f);
         }
-
-
         public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
         {
             return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);

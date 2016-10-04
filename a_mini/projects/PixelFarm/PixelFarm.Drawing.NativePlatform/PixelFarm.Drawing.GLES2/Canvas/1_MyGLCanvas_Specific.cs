@@ -1,17 +1,4 @@
-﻿//BSD, 2014-2016, WinterDev
-//ArthurHub  , Jose Manuel Menendez Poo
-
-// "Therefore those skilled at the unorthodox
-// are infinite as heaven and earth,
-// inexhaustible as the great rivers.
-// When they come to an end,
-// they begin again,
-// like the days and months;
-// they die and are reborn,
-// like the four seasons."
-// 
-// - Sun Tsu,
-// "The Art of War"
+﻿//BSD, 2014-2016, WinterDev 
 
 using System;
 using System.Collections.Generic;
@@ -20,22 +7,7 @@ namespace PixelFarm.Drawing.GLES2
 {
 
 
-    class InternalPen
-    {
-        Color color;
-        public InternalPen(Color color)
-        {
-            this.color = color;
-        }
-    }
-    class InternalBrush
-    {
-        Color color;
-        public InternalBrush(Color color)
-        {
-            this.color = color;
-        }
-    }
+
     partial class MyGLCanvas : Canvas, IFonts, IDisposable
     {
         CanvasGL2d canvasGL2;
@@ -48,19 +20,18 @@ namespace PixelFarm.Drawing.GLES2
         Color currentTextColor;
         InternalPen internalPen;
         InternalBrush internalBrush;
-        ////-------------------------------
+        //-------------------------------
 
         GraphicsPlatform platform;
         public MyGLCanvas(
             GraphicsPlatform platform,
             CanvasGL2d canvasGL2d,
-            //System.Drawing.Graphics targetGfx,
             int left, int top,
             int width,
             int height)
         {
             this.canvasGL2 = canvasGL2d;
-            painter1 = new DrawingGL.GLCanvasPainter(canvasGL2d, width, height);
+            painter1 = new GLCanvasPainter(canvasGL2d, width, height);
 
             //platform specific Win32
             //1.
@@ -72,7 +43,9 @@ namespace PixelFarm.Drawing.GLES2
             this.right = left + width;
             this.bottom = top + height;
             currentClipRect = new Rectangle(0, 0, width, height);
-            var fontInfo = platform.GetFont("tahoma", 10, FontStyle.Regular);
+
+            Font font = platform.GetFont("tahoma", 10, FontStyle.Regular);
+
             //this.CurrentFont = defaultFont = fontInfo.ResolvedFont;
             this.CurrentTextColor = Color.Black;
 
@@ -148,40 +121,6 @@ namespace PixelFarm.Drawing.GLES2
         static readonly int[] _charFit = new int[1];
         static readonly int[] _charFitWidth = new int[1000];
 
-        ///// <summary>
-        ///// Used for GDI+ measure string.
-        ///// </summary>
-        //static readonly System.Drawing.CharacterRange[] _characterRanges = new System.Drawing.CharacterRange[1];
-        ///// <summary>
-        ///// The string format to use for measuring strings for GDI+ text rendering
-        ///// </summary>
-        //static readonly System.Drawing.StringFormat _stringFormat;
-        //const int CANVAS_UNUSED = 1 << (1 - 1);
-        //const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);
-        //static System.Drawing.Font defaultGdiFont;
-        //static IntPtr defaultHFont;
-        //Font defaultFont;
-        //static MyGLCanvas()
-        //{
-        //    _stringFormat = new System.Drawing.StringFormat(System.Drawing.StringFormat.GenericDefault);
-        //    _stringFormat.FormatFlags = System.Drawing.StringFormatFlags.NoClip | System.Drawing.StringFormatFlags.MeasureTrailingSpaces;
-        //    //---------------------------
-        //    defaultGdiFont = new System.Drawing.Font("tahoma", 10);
-        //    defaultHFont = defaultGdiFont.ToHfont();
-        //}
-
-        //static System.Drawing.PointF[] ConvPointFArray(PointF[] points)
-        //{
-        //    int j = points.Length;
-        //    System.Drawing.PointF[] outputPoints = new System.Drawing.PointF[j];
-        //    for (int i = j - 1; i >= 0; --i)
-        //    {
-        //        outputPoints[i] = points[i].ToPointF();
-        //    }
-        //    return outputPoints;
-        //}
- 
-
         //debug
 #if DEBUG
         static class dbugCounter
@@ -209,6 +148,6 @@ namespace PixelFarm.Drawing.GLES2
         }
 
 #endif
-         
+
     }
 }

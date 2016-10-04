@@ -17,19 +17,20 @@ using System;
 namespace PixelFarm.Drawing.GLES2
 {
     partial class MyGLCanvas
-    {
+    { 
+
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
         //======================================
         //IFonts impl
-        PixelFarm.Drawing.Fonts.FontInfo IFonts.GetFontInfo(string fontname, float fsize, FontStyle st)
+        Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
         {
             return this.platform.GetFont(fontname, fsize, st);
         }
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
-            throw new NotSupportedException();
-            //return PixelFarm.Drawing.WinGdi.FontStore.MeasureWhitespace(this, f);
+            //TODO: review here ***
+            return f.ActualFont.GetGlyph(' ').horiz_adv_x;
         }
         //======================================
 
