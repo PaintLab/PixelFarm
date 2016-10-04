@@ -19,6 +19,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         int[] charWidths;
         Win32.NativeTextWin32.FontABC[] charAbcWidths;
+        Dictionary<char, int> win32GlyphWidths = new Dictionary<char, int>();
 
         FontGlyph[] fontGlyphs;
         public WinGdiPlusFont(System.Drawing.Font f)
@@ -31,6 +32,10 @@ namespace PixelFarm.Drawing.WinGdi
             //
             //build font matrix
             basGdi32FontHelper.MeasureCharWidths(hFont, out charWidths, out charAbcWidths);
+            int emHeightInDzUnit = f.FontFamily.GetEmHeight(f.Style);
+
+            this.ascendInPixels = Font.ConvEmSizeInPointsToPixels((f.FontFamily.GetCellAscent(f.Style) / emHeightInDzUnit));
+            this.descentInPixels = Font.ConvEmSizeInPointsToPixels((f.FontFamily.GetCellDescent(f.Style) / emHeightInDzUnit));
 
             //--------------
             //we build font glyph, this is just win32 glyph
@@ -43,8 +48,6 @@ namespace PixelFarm.Drawing.WinGdi
                 glyph.horiz_adv_x = charWidths[i] << 6;
                 fontGlyphs[i] = glyph;
             }
-
-
         }
 
 
@@ -76,7 +79,6 @@ namespace PixelFarm.Drawing.WinGdi
 
             throw new NotImplementedException();
         }
-
         public override FontGlyph GetGlyph(char c)
         {
             //convert c to glyph index
@@ -92,7 +94,16 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override float GetAdvanceForCharacter(char c)
         {
-            throw new NotImplementedException();
+            //check if we have width got this char or not
+            //temp fix
+            //TODO: review here again ***
+            int foundW;
+            if (!win32GlyphWidths.TryGetValue(c, out foundW))
+            {
+                //not found                 
+                return win32GlyphWidths[c] = basGdi32FontHelper.MeasureStringWidth(this.ToHfont(), new char[] { c });
+            }
+            return foundW;
         }
 
         public override float GetAdvanceForCharacter(char c, char next_c)
