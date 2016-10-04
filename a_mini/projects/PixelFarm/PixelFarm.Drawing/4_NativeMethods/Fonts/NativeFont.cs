@@ -13,6 +13,8 @@ namespace PixelFarm.Drawing.Fonts
         NativeFontFace ownerFace;
         float emSizeInPoints;
         int fontSizeInPixelUnit;
+        float fontFaceAscentInPx;
+        float fontFaceDescentInPx;
         /// <summary>
         /// glyph
         /// </summary>
@@ -23,6 +25,13 @@ namespace PixelFarm.Drawing.Fonts
             //store unmanage font file information
             this.ownerFace = ownerFace;
             this.fontSizeInPixelUnit = pixelSize;
+
+            int ascentEmSize = ownerFace.Ascent / ownerFace.UnitPerEm;
+            fontFaceAscentInPx = Font.ConvEmSizeInPointsToPixels(ascentEmSize);
+
+            int descentEmSize = ownerFace.Descent / ownerFace.UnitPerEm;
+            fontFaceDescentInPx = Font.ConvEmSizeInPointsToPixels(descentEmSize);
+
         }
         protected override void OnDispose()
         {
@@ -83,25 +92,24 @@ namespace PixelFarm.Drawing.Fonts
         }
         public override float AscentInPixels
         {
-            get { throw new NotImplementedException(); }
+            get { return fontFaceAscentInPx; }
         }
 
         public override float DescentInPixels
         {
-            get { throw new NotImplementedException(); }
+            get { return fontFaceDescentInPx; }
         }
         public override float EmSize { get { return this.emSizeInPoints; } }
-        public override float EmSizeInPixels { get { return fontSizeInPixelUnit; } }
-
-
+        public override float EmSizeInPixels { get { return fontSizeInPixelUnit; } } 
         public override float GetAdvanceForCharacter(char c)
         {
+             
             throw new NotImplementedException();
         }
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
             throw new NotImplementedException();
-        } 
+        }
 
         //---------------------------------------------------------------------------
         public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)

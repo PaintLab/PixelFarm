@@ -78,8 +78,30 @@ namespace PixelFarm.Drawing.Fonts
                 fonts = null;
             }
         }
-
-
+        /// <summary>
+        /// ascent in font unit
+        /// </summary>
+        public int Ascent
+        {
+            get
+            {
+                return exportFace.ascender;
+            }
+        }
+        /// <summary>
+        /// descent in font unit
+        /// </summary>
+        public int Descent
+        {
+            get
+            {
+                return exportFace.descender;
+            }
+        }
+        public int UnitPerEm
+        {
+            get { return exportFace.units_per_EM; }
+        }
         //---------------------------
         //for font shaping engine
         //--------------------------- 
