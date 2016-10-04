@@ -107,7 +107,8 @@ namespace PixelFarm.Drawing.Fonts
         }
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
-            throw new NotImplementedException();
+            //TODO: review here
+            return this.GetGlyph(c).horiz_adv_x >> 6;
         }
 
         //---------------------------------------------------------------------------

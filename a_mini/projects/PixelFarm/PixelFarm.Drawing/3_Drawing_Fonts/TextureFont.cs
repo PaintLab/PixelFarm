@@ -27,36 +27,39 @@ namespace PixelFarm.Drawing.Fonts
         SimpleFontAtlas fontAtlas;
         string name;
         IDisposable glBmp;
-        Font nativeFont;
+
+        NativeFont nativeFont;
         static NativeFontStore s_nativeFontStore = new NativeFontStore();
 
         internal TextureFont(string fontName, float fontSizeInPts, string fontfile, SimpleFontAtlas fontAtlas)
         {
             this.fontAtlas = fontAtlas;
             this.name = fontName;
-            nativeFont = new Font(fontName, fontSizeInPts);
-            s_nativeFontStore.LoadFont(nativeFont, fontfile);
+            var font = new Font(fontName, fontSizeInPts);
+            s_nativeFontStore.LoadFont(font, fontfile);
+            nativeFont = s_nativeFontStore.GetResolvedNativeFont(font);
         }
         internal TextureFont(string fontName, float fontSizeInPts, SimpleFontAtlas fontAtlas)
         {
             //not support font 
             this.fontAtlas = fontAtlas;
             this.name = fontName;
-            nativeFont = new Font(fontName, fontSizeInPts);
-            s_nativeFontStore.LoadFont(nativeFont);
+            var font = new Font(fontName, fontSizeInPts);
+            s_nativeFontStore.LoadFont(font);
+            nativeFont = s_nativeFontStore.GetResolvedNativeFont(font);
         }
         public override float AscentInPixels
         {
             get
             {
-                throw new NotImplementedException();
+                return nativeFont.AscentInPixels;
             }
         }
         public override float DescentInPixels
         {
             get
             {
-                throw new NotImplementedException();
+                return nativeFont.DescentInPixels;
             }
         }
         public IDisposable GLBmp
@@ -72,7 +75,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                throw new NotImplementedException();
+                return nativeFont.EmSize;
             }
         }
 
@@ -80,7 +83,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                throw new NotImplementedException();
+                return nativeFont.EmSizeInPixels;
             }
         }
 
@@ -88,34 +91,32 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                throw new NotImplementedException();
+                return nativeFont.FontFace;
             }
         }
         public override float GetAdvanceForCharacter(char c)
         {
-            throw new NotImplementedException();
+            return nativeFont.GetAdvanceForCharacter(c);
         }
 
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
-            throw new NotImplementedException();
+            return nativeFont.GetAdvanceForCharacter(c, next_c);
         }
 
         public override FontGlyph GetGlyph(char c)
         {
-            throw new NotImplementedException();
+            return nativeFont.GetGlyph(c);
         }
 
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            throw new NotImplementedException();
-            //return nativeFont.ActualFont.GetGlyphByIndex(glyphIndex);
+            return nativeFont.GetGlyphByIndex(glyphIndex);
         }
 
         public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
         {
-            throw new NotImplementedException();
-            //nativeFont.ActualFont.GetGlyphPos(buffer, start, len, properGlyphs);
+            nativeFont.GetGlyphPos(buffer, start, len, properGlyphs);
         }
 
         protected override void OnDispose()

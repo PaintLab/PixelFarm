@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
+    //this is experiment only***
     class GdiPathFont : ActualFont
     {
         GdiPathFontFace fontface;
