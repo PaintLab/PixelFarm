@@ -30,10 +30,18 @@ namespace PixelFarm.Drawing.Fonts
         Font nativeFont;
         static NativeFontStore s_nativeFontStore = new NativeFontStore();
 
-        internal TextureFont(string name, SimpleFontAtlas fontAtlas)
+        internal TextureFont(string fontName, string fontfile, SimpleFontAtlas fontAtlas)
         {
             this.fontAtlas = fontAtlas;
-            this.name = name;
+            this.name = fontName;
+            nativeFont = new Font("tahoma", 28);
+            s_nativeFontStore.LoadFont(nativeFont, fontfile);
+        }
+        internal TextureFont(string fontName, SimpleFontAtlas fontAtlas)
+        {
+            //not support font 
+            this.fontAtlas = fontAtlas;
+            this.name = fontName;
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
             string fontfile = @"C:\Windows\Fonts\Tahoma.ttf";
             nativeFont = new Font("tahoma", 28);

@@ -5,9 +5,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-
 using System.Windows.Forms;
+using System.Text;
+
 using PixelFarm.Agg;
+using System.IO;
+using Microsoft.Win32;
+
 namespace Mini
 {
     partial class FormDev : Form
@@ -285,5 +289,13 @@ namespace Mini
             formGLTest.Show();
             formGLTest.WindowState = FormWindowState.Maximized;
         }
+        private void button7_Click(object sender, EventArgs e)
+        {
+
+            List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadInstallFonts();
+
+
+        }
+
     }
 }

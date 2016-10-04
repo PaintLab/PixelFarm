@@ -1,8 +1,12 @@
 ﻿//BSD, 2014-2016, WinterDev
 
 using System;
+using System.IO;
+using System.Collections.Generic;
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.DrawingGL;
+using Microsoft.Win32;
+using System.Text;
 namespace PixelFarm.Drawing.GLES2
 {
 
@@ -10,6 +14,10 @@ namespace PixelFarm.Drawing.GLES2
     {
 
         FontSystem fontSystem = new FontSystem();
+        public GLES2Platform()
+        {
+        }
+
         public override IFonts SampleIFonts
         {
             get
@@ -46,12 +54,13 @@ namespace PixelFarm.Drawing.GLES2
             return bmp;
         }
         public override Font GetFont(string fontfaceName, float emsize, FontStyle st)
-        {
-            return this.SampleIFonts.GetFont(fontfaceName, emsize, st);
+        {   
+            return fontSystem.GetFont(fontfaceName, emsize, st);
         }
         public override ActualFont GetActualFont(Font f)
         {
             return fontSystem.fontStore.GetResolvedNativeFont(f);
         }
+
     }
 }

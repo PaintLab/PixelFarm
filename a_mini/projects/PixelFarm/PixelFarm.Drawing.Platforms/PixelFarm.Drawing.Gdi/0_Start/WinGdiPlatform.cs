@@ -94,9 +94,6 @@ namespace PixelFarm.Drawing.WinGdi
                 bmpdata.Scan0, rawBuffer.Length);
             bitmap.UnlockBits(bmpdata);
         }
-
-        //internal static Fonts.NativeFont GetNativeFont(string fontname)
-        //{          
-        //}
+         
     }
 }

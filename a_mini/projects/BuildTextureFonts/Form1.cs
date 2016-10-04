@@ -731,8 +731,8 @@ namespace BuildTextureFonts
         private void button6_Click(object sender, EventArgs e)
         {
             //1. load font
-            string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-            PixelFarm.Drawing.Font font = nativeFontStore.LoadFont("tahoma", fontfile, 28);
+
+            PixelFarm.Drawing.Font font = nativeFontStore.LoadFont("tahoma", 28);
             //2. get glyph
 
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };
