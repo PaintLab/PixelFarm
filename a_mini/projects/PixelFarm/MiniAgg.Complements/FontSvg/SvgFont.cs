@@ -100,6 +100,8 @@ namespace PixelFarm.Drawing.Fonts
         }
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
+            //TODO: review here 
+            //this should check kerning info 
             return this.GetGlyph(c).horiz_adv_x >> 6;//64
         }
         public override float AscentInPixels

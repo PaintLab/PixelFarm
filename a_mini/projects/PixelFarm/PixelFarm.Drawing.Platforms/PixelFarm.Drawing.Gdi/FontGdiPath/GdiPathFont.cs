@@ -83,15 +83,12 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose()
         {
         }
-
- 
-        
         public override float EmSize
         {
             get
             {
                 throw new NotImplementedException();
             }
-        } 
+        }
     }
 }

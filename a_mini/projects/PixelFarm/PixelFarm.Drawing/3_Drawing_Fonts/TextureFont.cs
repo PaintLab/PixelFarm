@@ -30,22 +30,20 @@ namespace PixelFarm.Drawing.Fonts
         Font nativeFont;
         static NativeFontStore s_nativeFontStore = new NativeFontStore();
 
-        internal TextureFont(string fontName, string fontfile, SimpleFontAtlas fontAtlas)
+        internal TextureFont(string fontName, float fontSizeInPts, string fontfile, SimpleFontAtlas fontAtlas)
         {
             this.fontAtlas = fontAtlas;
             this.name = fontName;
-            nativeFont = new Font("tahoma", 28);
+            nativeFont = new Font(fontName, fontSizeInPts);
             s_nativeFontStore.LoadFont(nativeFont, fontfile);
         }
-        internal TextureFont(string fontName, SimpleFontAtlas fontAtlas)
+        internal TextureFont(string fontName, float fontSizeInPts, SimpleFontAtlas fontAtlas)
         {
             //not support font 
             this.fontAtlas = fontAtlas;
             this.name = fontName;
-            //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
-            string fontfile = @"C:\Windows\Fonts\Tahoma.ttf";
-            nativeFont = new Font("tahoma", 28);
-            s_nativeFontStore.LoadFont(nativeFont, fontfile);
+            nativeFont = new Font(fontName, fontSizeInPts);
+            s_nativeFontStore.LoadFont(nativeFont);
         }
         public override float AscentInPixels
         {
@@ -137,8 +135,10 @@ namespace PixelFarm.Drawing.Fonts
         /// <param name="xmlFontInfo"></param>
         /// <param name="imgAtlas"></param>
         /// <returns></returns>
-        public static TextureFont CreateFont(string fontName, string xmlFontInfo, string imgAtlas)
+        public static TextureFont CreateFont(string fontName, float fontSizeInPoints, string xmlFontInfo, string imgAtlas)
         {
+            //for msdf font
+            //1 font atlas may support mutliple font size 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
             //2. load glyph image
@@ -150,7 +150,7 @@ namespace PixelFarm.Drawing.Fonts
                 glyImage.SetImageBuffer(buffer, true);
                 fontAtlas.TotalGlyph = glyImage;
             }
-            return new TextureFont(fontName, fontAtlas);
+            return new TextureFont(fontName, fontSizeInPoints, fontAtlas);
         }
     }
 }

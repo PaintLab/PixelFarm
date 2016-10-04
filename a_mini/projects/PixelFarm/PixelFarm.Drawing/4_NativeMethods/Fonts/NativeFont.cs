@@ -100,11 +100,10 @@ namespace PixelFarm.Drawing.Fonts
             get { return fontFaceDescentInPx; }
         }
         public override float EmSize { get { return this.emSizeInPoints; } }
-        public override float EmSizeInPixels { get { return fontSizeInPixelUnit; } } 
+        public override float EmSizeInPixels { get { return fontSizeInPixelUnit; } }
         public override float GetAdvanceForCharacter(char c)
         {
-             
-            throw new NotImplementedException();
+            return this.GetGlyph(c).horiz_adv_x >> 6;
         }
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
