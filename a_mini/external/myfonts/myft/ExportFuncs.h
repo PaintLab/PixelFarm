@@ -115,8 +115,8 @@ extern "C" {
 	
 	//get glyph index from charcode
 	MY_DLL_EXPORT int MyFtGetCharIndex(FT_Face myface, char charcode);
-	MY_DLL_EXPORT long MyFtGetFirstChar(FT_Face myface,  unsigned int* glyphIndex);
-	MY_DLL_EXPORT long MyFtGetNextChar(FT_Face myface,long charcode, unsigned int glyphIndex);
+	MY_DLL_EXPORT int MyFtGetFirstChar(FT_Face myface,  unsigned int* glyphIndex);
+	MY_DLL_EXPORT int MyFtGetNextChar(FT_Face myface,int charcode, unsigned int* glyphIndex);
 
 	//------------------------------------------------------------------------------
 	MY_DLL_EXPORT int MyFtSetupShapingEngine(FT_Face myface,
@@ -167,6 +167,8 @@ extern "C" {
 	MY_DLL_EXPORT void MyFtGenerateMsdf(msdfgen::Shape* shape, int width, int height, double range,
 		double scale, double tx, double ty,
 		double edgeThreshold, double angleThreshold, int* outputBitmap);
+	
+	 
 }
 
 

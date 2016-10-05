@@ -4,7 +4,7 @@
 #include <ft2build.h>
 #include <hb.h>
 #include <hb-ft.h>
-#include "stb_image.h"
+#include "stb_image.h" 
 #include <Windows.h>
 
 #include FT_FREETYPE_H
@@ -235,10 +235,10 @@ int MyFtGetCharIndex(FT_Face myface, char charcode){
 	
    return FT_Get_Char_Index(myface,charcode);
 };
-long MyFtGetFirstChar(FT_Face myface, unsigned int* glyphIndex){
+int MyFtGetFirstChar(FT_Face myface, unsigned int* glyphIndex){
   return FT_Get_First_Char( myface, glyphIndex);
 };
-long MyFtGetNextChar(FT_Face myface, long charcode,unsigned int*  glyphIndex){
+int MyFtGetNextChar(FT_Face myface, int charcode,unsigned int*  glyphIndex){
   return FT_Get_Next_Char(myface,
                      charcode,
                      glyphIndex);
@@ -306,8 +306,8 @@ void MyFtShutdownLib()
 		FT_Done_FreeType(ft);
 		ft = 0;
 	}
-};
-
+}; 
 void DeleteUnmanagedObj(void* ptr) {
 	delete ptr;
-}
+};
+ 
