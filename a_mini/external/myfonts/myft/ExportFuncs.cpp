@@ -35,6 +35,13 @@ int MyFtLibGetVersion()
 {
 	return 3;
 };
+void MyFtLibGetFullVersion(int* major,int* minor,int* revision)
+{
+	 *major= 3;
+	 *minor=1;
+	 *revision=1;
+};
+
 int MyFtInitLib()
 {
 	return FT_Init_FreeType(&ft);
@@ -222,6 +229,21 @@ int MyFtLoadChar(FT_Face myface, unsigned int charcode, ExportGlyph *expGlyph)
 	}
 	return 0;
 };
+
+
+int MyFtGetCharIndex(FT_Face myface, char charcode){
+	
+   return FT_Get_Char_Index(myface,charcode);
+};
+long MyFtGetFirstChar(FT_Face myface, unsigned int* glyphIndex){
+  return FT_Get_First_Char( myface, glyphIndex);
+};
+long MyFtGetNextChar(FT_Face myface, long charcode,unsigned int*  glyphIndex){
+  return FT_Get_Next_Char(myface,
+                     charcode,
+                     glyphIndex);
+};
+
 
 hb_direction_t current_direction;
 hb_script_t current_script;

@@ -70,8 +70,7 @@ namespace PixelFarm.Drawing.Fonts
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
         public static extern int MyFtLoadGlyph(IntPtr faceHandle, uint codepoint, out GlyphMatrix ftOutline);
 
-        [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
-        //public static extern void MyFtGetFaceData(IntPtr faceHandle, ref ExportFace exportFace);
+        [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)] 
         public static unsafe extern void MyFtGetFaceData(IntPtr faceHandle, ExportFace* exportFace);
         //============================================================================
         //HB shaping ....

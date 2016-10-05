@@ -96,6 +96,7 @@ struct ProperGlyph
 
 extern "C" {
 	MY_DLL_EXPORT int MyFtLibGetVersion();
+	MY_DLL_EXPORT void MyFtLibGetFullVersion(int* major,int* minor,int* revision);
 	MY_DLL_EXPORT int MyFtInitLib();
 	MY_DLL_EXPORT void MyFtShutdownLib();
 
@@ -111,8 +112,13 @@ extern "C" {
 	MY_DLL_EXPORT int MyFtLoadChar(FT_Face myface, unsigned int charcode, ExportGlyph *expGlyph);
 	MY_DLL_EXPORT int MyFtLoadGlyph(FT_Face myface, unsigned int glyphIndex, ExportGlyph *expGlyph);
 	MY_DLL_EXPORT void MyFtGetFaceData(FT_Face myface, ExportFace *expFace);
+	
+	//get glyph index from charcode
+	MY_DLL_EXPORT int MyFtGetCharIndex(FT_Face myface, char charcode);
+	MY_DLL_EXPORT long MyFtGetFirstChar(FT_Face myface,  unsigned int* glyphIndex);
+	MY_DLL_EXPORT long MyFtGetNextChar(FT_Face myface,long charcode, unsigned int glyphIndex);
 
-
+	//------------------------------------------------------------------------------
 	MY_DLL_EXPORT int MyFtSetupShapingEngine(FT_Face myface,
 		const char* langName, int langNameLen,
 		int direction, int scriptCode, ExportTypeFaceInfo* exportTypeInfo);
