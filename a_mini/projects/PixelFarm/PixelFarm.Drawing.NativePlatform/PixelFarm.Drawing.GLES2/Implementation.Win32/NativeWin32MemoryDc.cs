@@ -44,9 +44,7 @@ namespace Win32
             {
                 return;
             }
-
-            Win32.Win32Utils.DeleteObject(dib);
-            Win32.Win32Utils.DeleteDC(memHdc);
+            Win32.Win32Utils.ReleaseMemoryHdc(memHdc, dib); 
             dib = IntPtr.Zero;
             memHdc = IntPtr.Zero;
             isDisposed = true;

@@ -58,11 +58,6 @@ namespace Win32
             SelectObject(memoryHdc, dib);
             return memoryHdc;
         }
-
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern IntPtr GetDC(IntPtr hWnd);
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hdc);
         /// <summary>
         /// Release the given memory HDC and dib section created from <see cref="CreateMemoryHdc"/>.
         /// </summary>
@@ -106,8 +101,8 @@ namespace Win32
         //    return new Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
         //}
 
-        [DllImport("User32.dll")]
-        public static extern bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
+        //[DllImport("User32.dll")]
+        //public static extern bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
         [DllImport("gdi32.dll")]
         public static extern int SetBkMode(IntPtr hdc, int mode);
         [DllImport("gdi32.dll")]
@@ -116,8 +111,7 @@ namespace Win32
         public static extern int SetTextColor(IntPtr hdc, int color);
         [DllImport("gdi32.dll")]
         public static extern IntPtr CreateRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
-        //[DllImport("gdi32.dll")]
-        //public static extern int GetClipBox(IntPtr hdc, out Rectangle lprc);
+
         [DllImport("gdi32.dll")]
         public static extern int SelectClipRgn(IntPtr hdc, IntPtr hrgn);
         [DllImport("gdi32.dll")]

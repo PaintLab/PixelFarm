@@ -9,7 +9,7 @@ namespace PixelFarm.DrawingGL
     {
 
         int _width;
-        int _height; 
+        int _height;
         Win32.NativeWin32MemoryDc memdc;
         IntPtr hfont;
         int bmpWidth = 200;
@@ -20,19 +20,19 @@ namespace PixelFarm.DrawingGL
             _height = h;
             bmpWidth = w;
             bmpHeight = h;
-            memdc = new Win32.NativeWin32MemoryDc(bmpWidth, bmpHeight); 
+
+            memdc = new Win32.NativeWin32MemoryDc(bmpWidth, bmpHeight);
+            //TODO: review here
+            //use default font from current platform
             InitFont("tahoma", 14);
-            memdc.SetTextColor(0); 
+            memdc.SetTextColor(0);
         }
         public void Dispose()
         {
             //TODO: review here 
             Win32.Win32Utils.DeleteObject(hfont);
             hfont = IntPtr.Zero;
-
             memdc.Dispose();
-
-
         }
         void InitFont(string fontName, int emHeight)
         {
