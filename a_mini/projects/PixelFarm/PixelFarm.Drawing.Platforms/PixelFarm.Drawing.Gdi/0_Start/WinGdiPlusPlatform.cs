@@ -1,9 +1,7 @@
-﻿//BSD, 2014-2016, WinterDev
-
-
+﻿//BSD, 2014-2016, WinterDev 
 namespace PixelFarm.Drawing.WinGdi
 {
-    class WinGdiPlatform : GraphicsPlatform
+    class WinGdiPlusPlatform : GraphicsPlatform
     {
         static WinGdiFontStore winGdiFontStore = new WinGdiFontStore();
         static Fonts.NativeFontStore nativeFonts = new Fonts.NativeFontStore();
@@ -11,11 +9,11 @@ namespace PixelFarm.Drawing.WinGdi
 
         System.Drawing.Bitmap sampleBmp;
         IFonts sampleIFonts;
-        public WinGdiPlatform()
+        public WinGdiPlusPlatform()
         {
         }
 
-        ~WinGdiPlatform()
+        ~WinGdiPlusPlatform()
         {
             if (sampleBmp != null)
             {
@@ -94,6 +92,6 @@ namespace PixelFarm.Drawing.WinGdi
                 bmpdata.Scan0, rawBuffer.Length);
             bitmap.UnlockBits(bmpdata);
         }
-         
+
     }
 }

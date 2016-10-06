@@ -14,9 +14,10 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Drawing;
+
 namespace Win32
 {
+
     /// <summary>
     /// Utility for Win32 API.
     /// </summary>
@@ -40,7 +41,7 @@ namespace Win32
         /// <param name="height">the height of the memory HDC to create</param>
         /// <param name="dib">returns used bitmap memory section that must be released when done with memory HDC</param>
         /// <returns>memory HDC</returns>
-        public static IntPtr CreateMemoryHdc(IntPtr hdc, int width, int height, out IntPtr dib,out IntPtr ppvBits)
+        public static IntPtr CreateMemoryHdc(IntPtr hdc, int width, int height, out IntPtr dib, out IntPtr ppvBits)
         {
             // Create a memory DC so we can work off-screen
             IntPtr memoryHdc = CreateCompatibleDC(hdc);
@@ -57,11 +58,6 @@ namespace Win32
             SelectObject(memoryHdc, dib);
             return memoryHdc;
         }
-
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern IntPtr GetDC(IntPtr hWnd);
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hdc);
         /// <summary>
         /// Release the given memory HDC and dib section created from <see cref="CreateMemoryHdc"/>.
         /// </summary>
@@ -73,40 +69,40 @@ namespace Win32
             DeleteDC(memoryHdc);
         }
 
-        [DllImport("user32.dll")]
-        public static extern bool IsWindowVisible(IntPtr hWnd);
-        [DllImport("user32.dll")]
-        public static extern IntPtr WindowFromDC(IntPtr hdc);
-        /// <summary>
-        /// Retrieves the dimensions of the bounding rectangle of the specified window. The dimensions are given in screen coordinates that are relative to the upper-left corner of the screen.
-        /// </summary>
-        /// <remarks>
-        /// In conformance with conventions for the RECT structure, the bottom-right coordinates of the returned rectangle are exclusive. In other words, 
-        /// the pixel at (right, bottom) lies immediately outside the rectangle.
-        /// </remarks>
-        /// <param name="hWnd">A handle to the window.</param>
-        /// <param name="lpRect">A pointer to a RECT structure that receives the screen coordinates of the upper-left and lower-right corners of the window.</param>
-        /// <returns>If the function succeeds, the return value is nonzero.</returns>
-        [DllImport("User32", SetLastError = true)]
-        public static extern int GetWindowRect(IntPtr hWnd, out Rectangle lpRect);
-        /// <summary>
-        /// Retrieves the dimensions of the bounding rectangle of the specified window. The dimensions are given in screen coordinates that are relative to the upper-left corner of the screen.
-        /// </summary>
-        /// <remarks>
-        /// In conformance with conventions for the RECT structure, the bottom-right coordinates of the returned rectangle are exclusive. In other words, 
-        /// the pixel at (right, bottom) lies immediately outside the rectangle.
-        /// </remarks>
-        /// <param name="handle">A handle to the window.</param>
-        /// <returns>RECT structure that receives the screen coordinates of the upper-left and lower-right corners of the window.</returns>
-        public static Rectangle GetWindowRectangle(IntPtr handle)
-        {
-            Rectangle rect;
-            GetWindowRect(handle, out rect);
-            return new Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
-        }
+        //[DllImport("user32.dll")]
+        //public static extern bool IsWindowVisible(IntPtr hWnd);
+        //[DllImport("user32.dll")]
+        //public static extern IntPtr WindowFromDC(IntPtr hdc);
+        ///// <summary>
+        ///// Retrieves the dimensions of the bounding rectangle of the specified window. The dimensions are given in screen coordinates that are relative to the upper-left corner of the screen.
+        ///// </summary>
+        ///// <remarks>
+        ///// In conformance with conventions for the RECT structure, the bottom-right coordinates of the returned rectangle are exclusive. In other words, 
+        ///// the pixel at (right, bottom) lies immediately outside the rectangle.
+        ///// </remarks>
+        ///// <param name="hWnd">A handle to the window.</param>
+        ///// <param name="lpRect">A pointer to a RECT structure that receives the screen coordinates of the upper-left and lower-right corners of the window.</param>
+        ///// <returns>If the function succeeds, the return value is nonzero.</returns>
+        //[DllImport("User32", SetLastError = true)]
+        //public static extern int GetWindowRect(IntPtr hWnd, out Rectangle lpRect);
+        ///// <summary>
+        ///// Retrieves the dimensions of the bounding rectangle of the specified window. The dimensions are given in screen coordinates that are relative to the upper-left corner of the screen.
+        ///// </summary>
+        ///// <remarks>
+        ///// In conformance with conventions for the RECT structure, the bottom-right coordinates of the returned rectangle are exclusive. In other words, 
+        ///// the pixel at (right, bottom) lies immediately outside the rectangle.
+        ///// </remarks>
+        ///// <param name="handle">A handle to the window.</param>
+        ///// <returns>RECT structure that receives the screen coordinates of the upper-left and lower-right corners of the window.</returns>
+        //public static Rectangle GetWindowRectangle(IntPtr handle)
+        //{
+        //    Rectangle rect;
+        //    GetWindowRect(handle, out rect);
+        //    return new Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
+        //}
 
-        [DllImport("User32.dll")]
-        public static extern bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
+        //[DllImport("User32.dll")]
+        //public static extern bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
         [DllImport("gdi32.dll")]
         public static extern int SetBkMode(IntPtr hdc, int mode);
         [DllImport("gdi32.dll")]
@@ -115,8 +111,7 @@ namespace Win32
         public static extern int SetTextColor(IntPtr hdc, int color);
         [DllImport("gdi32.dll")]
         public static extern IntPtr CreateRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
-        [DllImport("gdi32.dll")]
-        public static extern int GetClipBox(IntPtr hdc, out Rectangle lprc);
+
         [DllImport("gdi32.dll")]
         public static extern int SelectClipRgn(IntPtr hdc, IntPtr hrgn);
         [DllImport("gdi32.dll")]

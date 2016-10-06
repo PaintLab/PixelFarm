@@ -5,7 +5,7 @@ namespace PixelFarm.Drawing.WinGdi
     public static class WinGdiPortal
     {
         static bool isInit;
-        static WinGdiPlatform platform;
+        static WinGdiPlusPlatform platform;
         public static void Start()
         {
             if (isInit)
@@ -13,11 +13,13 @@ namespace PixelFarm.Drawing.WinGdi
                 return;
             }
             isInit = true;
-            WinGdiPortal.platform = new WinGdiPlatform();
+            //we have only 1 WinGdiPlusPlatform per process
+            WinGdiPortal.platform = new WinGdiPlusPlatform();
             GraphicsPlatform.GenericSerifFontName = System.Drawing.FontFamily.GenericSerif.Name;
         }
         public static void End()
         {
+
         }
         public static GraphicsPlatform P
         {
