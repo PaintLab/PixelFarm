@@ -3,9 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
+using Win32;
 
-namespace Win32
+namespace PixelFarm.Drawing.WinGdi
 {
 
     class WinGdiFont : ActualFont
@@ -19,8 +21,7 @@ namespace Win32
 
         int[] charWidths;
         Win32.NativeTextWin32.FontABC[] charAbcWidths;
-        FontGlyph[] fontGlyphs; 
-
+        //FontGlyph[] fontGlyphs;  
         IntPtr memHdc;
         IntPtr dib;
         IntPtr ppvBits;
@@ -33,7 +34,7 @@ namespace Win32
         PixelFarm.Drawing.Font f;
         public WinGdiFont(PixelFarm.Drawing.Font f)
         {
-            this.f = f; 
+            this.f = f;
             bmpWidth = 10;
             bmpHeight = 10;
             memHdc = Win32.Win32Utils.CreateMemoryHdc(
@@ -172,5 +173,34 @@ namespace Win32
 
 
 
+    }
+
+
+    class WinGdiFontSystem
+    {
+        Font latestFont;
+        WinGdiFont latestWinFont;
+        Dictionary<Font, WinGdiFont> registerFonts = new Dictionary<Font, WinGdiFont>();
+        public WinGdiFont GetWinGdiFont(Font f)
+        {
+            if (f == null)
+            {
+                throw new NotSupportedException();
+            }
+            if (f == latestFont)
+            {
+                return latestWinFont;
+            }
+            //-----
+            //get register font or create the new one
+            WinGdiFont found;
+            if (!registerFonts.TryGetValue(f, out found))
+            {
+                //create the new one and register                  
+                found = new WinGdiFont(f);
+            }
+            latestFont = f;
+            return latestWinFont = found;
+        }
     }
 }

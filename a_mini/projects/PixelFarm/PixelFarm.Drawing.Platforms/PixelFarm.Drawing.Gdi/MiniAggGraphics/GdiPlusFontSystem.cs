@@ -2,9 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
+ 
 namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiPlusFontSystem
