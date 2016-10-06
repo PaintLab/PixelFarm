@@ -1,9 +1,9 @@
 ﻿//2016 MIT, WinterDev
 
 using System;
-using System.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
+
 namespace PixelFarm.Drawing.WinGdi
 {
     public class GdiPlusCanvasPainter : CanvasPainter
@@ -21,21 +21,20 @@ namespace PixelFarm.Drawing.WinGdi
         double _strokeWidth;
         bool _useSubPixelRendering;
         BufferBitmapStore _bmpStore;
-        //
-        PixelFarm.Drawing.Font _currentFont;
+        Font _currentFont;
         //vector generators
         Agg.VertexSource.RoundedRect roundRect;
         Agg.VertexSource.CurveFlattener curveFlattener;
 
         WinGdiPlusFontSystem wingdiPlusFonts = new WinGdiPlusFontSystem();
-
+        SmoothingMode _smoothingMode;
         public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
         {
             _width = 800;// gfxBmp.Width;
             _height = 600;// gfxBmp.Height;
             _gfxBmp = gfxBmp;
             _bmpStore = new BufferBitmapStore(_width, _height);
-            _gfx = Graphics.FromImage(_gfxBmp);
+            _gfx = System.Drawing.Graphics.FromImage(_gfxBmp);
             //credit:
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
             _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
@@ -52,10 +51,33 @@ namespace PixelFarm.Drawing.WinGdi
 
 
         }
-        public System.Drawing.Drawing2D.SmoothingMode SmoothingMode
+
+       
+        public override SmoothingMode SmoothingMode
         {
-            get { return _gfx.SmoothingMode; }
-            set { _gfx.SmoothingMode = value; }
+            get
+            {
+                return _smoothingMode;
+            }
+            set
+            {
+                switch (_smoothingMode = value)
+                { 
+                    case Drawing.SmoothingMode.AntiAlias:
+                        _gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                        break;
+                    case Drawing.SmoothingMode.HighSpeed:
+                        _gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                        break;
+                    case Drawing.SmoothingMode.HighQuality:
+                        _gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                        break;
+                    case Drawing.SmoothingMode.Default:
+                    default:
+                        _gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+                        break;
+                }
+            }
         }
         public System.Drawing.Drawing2D.CompositingMode CompositingMode
         {
@@ -241,7 +263,7 @@ namespace PixelFarm.Drawing.WinGdi
             using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
             {
                 var bmp = _bmpStore.GetFreeBmp();
-                using (Graphics g2 = System.Drawing.Graphics.FromImage(bmp))
+                using (var g2 = System.Drawing.Graphics.FromImage(bmp))
                 {
                     //we can use recycle tmpVxsStore
                     Affine destRectTransform = Affine.NewMatix(affinePlans);
@@ -314,9 +336,9 @@ namespace PixelFarm.Drawing.WinGdi
             //use current brush and font
             _gfx.ResetTransform();
             _gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
-            _gfx.DrawString(text, 
-                _latestWinGdiPlusFont.InnerFont, 
-                _currentFillBrush, 
+            _gfx.DrawString(text,
+                _latestWinGdiPlusFont.InnerFont,
+                _currentFillBrush,
                 new System.Drawing.PointF((float)x, (float)y));
             //restore back
             _gfx.ResetTransform();//again

@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One</AssemblyName>
-    <ProjectGuid>{E71BD6D1-211F-4778-9632-77AB9B155BCB}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -77,7 +76,7 @@
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\GLCanvas\CanvasGL2d.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\GLCanvas\CanvasToShaderSharedResource.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\GLCanvas\GLCanvasPainter.cs" />
+    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\GLCanvas\GLCanvasPainterBase.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\GLCanvas\GLGradientColorProvider.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\GLCanvas\GLTextPrinter.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\GLCanvas\ImageFillStyle.cs" />
@@ -190,15 +189,11 @@
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\Toolkit.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControlFactory.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\IGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\WinGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\X11GLControl.cs" />
