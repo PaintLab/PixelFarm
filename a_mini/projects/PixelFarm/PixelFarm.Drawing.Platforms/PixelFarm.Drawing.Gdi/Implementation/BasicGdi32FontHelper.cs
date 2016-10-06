@@ -1,11 +1,9 @@
 ﻿//MIT, 2014-2016, WinterDev
 
 using System;
-using Win32;
 using System.Collections.Generic;
-
 using PixelFarm.Drawing.Fonts;
-namespace PixelFarm.Drawing.WinGdi
+namespace Win32
 {
     class BasicGdi32FontHelper
     {

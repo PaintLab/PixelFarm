@@ -4,14 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing.Fonts;
-using Win32;
-namespace PixelFarm.Drawing.WinGdi
+
+namespace Win32
 {
-    //*** this class need System.Drawing  
-    class WinGdiPlusFont : ActualFont
+
+    class WinGdiFont : ActualFont
     {
-        System.Drawing.Font myFont;
-        System.IntPtr hFont;
         float emSize;
         float emSizeInPixels;
         float ascendInPixels;
@@ -21,44 +19,76 @@ namespace PixelFarm.Drawing.WinGdi
 
         int[] charWidths;
         Win32.NativeTextWin32.FontABC[] charAbcWidths;
-        FontGlyph[] fontGlyphs;
+        FontGlyph[] fontGlyphs; 
+
+        IntPtr memHdc;
+        IntPtr dib;
+        IntPtr ppvBits;
+        IntPtr hfont;
+        int bmpWidth = 200;
+        int bmpHeight = 50;
 
         //eg.
         Encoding fontEncoding = Encoding.GetEncoding(874);
-        public WinGdiPlusFont(System.Drawing.Font f)
+        PixelFarm.Drawing.Font f;
+        public WinGdiFont(PixelFarm.Drawing.Font f)
         {
-            this.myFont = f;
-            this.hFont = f.ToHfont();
+            this.f = f; 
+            bmpWidth = 10;
+            bmpHeight = 10;
+            memHdc = Win32.Win32Utils.CreateMemoryHdc(
+                IntPtr.Zero,
+                bmpWidth,
+                bmpHeight,
+                out dib,
+                out ppvBits);
 
-            this.emSize = f.SizeInPoints;
-            this.emSizeInPixels = Font.ConvEmSizeInPointsToPixels(this.emSize);
-            //
-            //build font matrix
-            basGdi32FontHelper.MeasureCharWidths(hFont, out charWidths, out charAbcWidths);
-            int emHeightInDzUnit = f.FontFamily.GetEmHeight(f.Style);
+            //this will create 
+            InitFont(f.Name, (int)f.EmSize);
+            Win32.MyWin32.SetTextColor(memHdc, 0);
 
-            this.ascendInPixels = Font.ConvEmSizeInPointsToPixels((f.FontFamily.GetCellAscent(f.Style) / emHeightInDzUnit));
-            this.descentInPixels = Font.ConvEmSizeInPointsToPixels((f.FontFamily.GetCellDescent(f.Style) / emHeightInDzUnit));
 
-            //--------------
-            //we build font glyph, this is just win32 glyph
-            //
-            int j = charAbcWidths.Length;
-            fontGlyphs = new FontGlyph[j];
-            for (int i = 0; i < j; ++i)
-            {
-                FontGlyph glyph = new FontGlyph();
-                glyph.horiz_adv_x = charWidths[i] << 6;
-                fontGlyphs[i] = glyph;
-            }
+            //create gdi font from font data
+            this.emSize = f.EmSize;
+            this.emSizeInPixels = PixelFarm.Drawing.Font.ConvEmSizeInPointsToPixels(this.emSize);
+            ////
+            ////build font matrix
+            basGdi32FontHelper.MeasureCharWidths(hfont, out charWidths, out charAbcWidths);
+            //int emHeightInDzUnit = f.FontFamily.GetEmHeight(f.Style);
+
+            //this.ascendInPixels = Font.ConvEmSizeInPointsToPixels((f.FontFamily.GetCellAscent(f.Style) / emHeightInDzUnit));
+            //this.descentInPixels = Font.ConvEmSizeInPointsToPixels((f.FontFamily.GetCellDescent(f.Style) / emHeightInDzUnit));
+
+            ////--------------
+            ////we build font glyph, this is just win32 glyph
+            ////
+            //int j = charAbcWidths.Length;
+            //fontGlyphs = new FontGlyph[j];
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    FontGlyph glyph = new FontGlyph();
+            //    glyph.horiz_adv_x = charWidths[i] << 6;
+            //    fontGlyphs[i] = glyph;
+            //}
 
         }
+        void InitFont(string fontName, int emHeight)
+        {
+            Win32.MyWin32.LOGFONT logFont = new Win32.MyWin32.LOGFONT();
+            Win32.MyWin32.SetFontName(ref logFont, fontName);
+            logFont.lfHeight = emHeight;
+            logFont.lfCharSet = 1;//default
+            logFont.lfQuality = 0;//default
+            hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
+            Win32.MyWin32.SelectObject(memHdc, hfont);
+        }
+
         public System.IntPtr ToHfont()
         {   /// <summary>
             /// Set a resource (e.g. a font) for the specified device context.
             /// WARNING: Calling Font.ToHfont() many times without releasing the font handle crashes the app.
             /// </summary>
-            return this.hFont;
+            return this.hfont;
         }
         public override float EmSize
         {
@@ -70,22 +100,24 @@ namespace PixelFarm.Drawing.WinGdi
         }
         protected override void OnDispose()
         {
-            if (myFont != null)
-            {
-                myFont.Dispose();
-                myFont = null;
-            }
+
+            //TODO: review here 
+            Win32.Win32Utils.DeleteObject(dib);
+            Win32.Win32Utils.DeleteObject(hfont);
+            Win32.Win32Utils.DeleteDC(memHdc);
+            dib = IntPtr.Zero;
+            hfont = IntPtr.Zero;
+            memHdc = IntPtr.Zero;
+
         }
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-
             throw new NotImplementedException();
         }
         public override FontGlyph GetGlyph(char c)
         {
             //convert c to glyph index
-            //temp fix 
-
+            //temp fix  
             throw new NotImplementedException();
         }
 
@@ -113,10 +145,7 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
-        public System.Drawing.Font InnerFont
-        {
-            get { return this.myFont; }
-        }
+
 
         public override FontFace FontFace
         {

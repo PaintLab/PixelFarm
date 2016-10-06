@@ -16,11 +16,12 @@ namespace PixelFarm.DrawingGL
             _win32GdiPrinter.DrawString(_canvas, text, (float)x, (float)y);
             //base.DrawString(text, x, y);
         }
-    } 
+    }
+
     /// <summary>
     /// this use win gdi only
     /// </summary>
-    class WinGdiFontPrinter : PlatformFontPrinterBase
+    class WinGdiFontPrinter : PlatformFontPrinterBase, IDisposable
     {
 
         int _width;
@@ -41,6 +42,16 @@ namespace PixelFarm.DrawingGL
             memHdc = Win32.Win32Utils.CreateMemoryHdc(IntPtr.Zero, bmpWidth, bmpHeight, out dib, out ppvBits);
             InitFont("tahoma", 14);
             Win32.MyWin32.SetTextColor(memHdc, 0);
+        }
+        public void Dispose()
+        {
+            //TODO: review here 
+            Win32.Win32Utils.DeleteObject(dib);
+            Win32.Win32Utils.DeleteObject(hfont);
+            Win32.Win32Utils.DeleteDC(memHdc);
+            dib = IntPtr.Zero;
+            hfont = IntPtr.Zero;
+            memHdc = IntPtr.Zero;
 
         }
         void InitFont(string fontName, int emHeight)
