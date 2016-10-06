@@ -7,7 +7,7 @@ using Tesselate;
 
 namespace PixelFarm.DrawingGL
 {
-    public class CanvasGL2d
+    public sealed class CanvasGL2d
     {
         SmoothLineShader smoothLineShader;
         InvertAlphaLineSmoothShader invertAlphaFragmentShader;

@@ -10,6 +10,7 @@ using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
 
+
     class WinGdiFont : ActualFont
     {
         float emSize;
@@ -21,10 +22,13 @@ namespace PixelFarm.Drawing.WinGdi
 
         int[] charWidths;
         Win32.NativeTextWin32.FontABC[] charAbcWidths;
-        //FontGlyph[] fontGlyphs;  
-        IntPtr memHdc;
-        IntPtr dib;
-        IntPtr ppvBits;
+
+        //IntPtr memHdc;
+        //IntPtr dib;
+        //IntPtr ppvBits;
+        NativeWin32MemoryDc nativeWin32MemDc;
+
+        //
         IntPtr hfont;
         int bmpWidth = 200;
         int bmpHeight = 50;
@@ -34,21 +38,15 @@ namespace PixelFarm.Drawing.WinGdi
         PixelFarm.Drawing.Font f;
         public WinGdiFont(PixelFarm.Drawing.Font f)
         {
+
             this.f = f;
             bmpWidth = 10;
             bmpHeight = 10;
-            memHdc = Win32.Win32Utils.CreateMemoryHdc(
-                IntPtr.Zero,
-                bmpWidth,
-                bmpHeight,
-                out dib,
-                out ppvBits);
-
+            nativeWin32MemDc = new NativeWin32MemoryDc(bmpWidth, bmpHeight);
             //this will create 
             InitFont(f.Name, (int)f.EmSize);
-            Win32.MyWin32.SetTextColor(memHdc, 0);
-
-
+            nativeWin32MemDc.SetTextColor(0);
+            //------------------------------------------------------------------
             //create gdi font from font data
             this.emSize = f.EmSize;
             this.emSizeInPixels = PixelFarm.Drawing.Font.ConvEmSizeInPointsToPixels(this.emSize);
@@ -81,7 +79,7 @@ namespace PixelFarm.Drawing.WinGdi
             logFont.lfCharSet = 1;//default
             logFont.lfQuality = 0;//default
             hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
-            Win32.MyWin32.SelectObject(memHdc, hfont);
+            Win32.MyWin32.SelectObject(this.nativeWin32MemDc.DC, hfont);
         }
 
         public System.IntPtr ToHfont()
@@ -103,13 +101,9 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
             //TODO: review here 
-            Win32.Win32Utils.DeleteObject(dib);
             Win32.Win32Utils.DeleteObject(hfont);
-            Win32.Win32Utils.DeleteDC(memHdc);
-            dib = IntPtr.Zero;
             hfont = IntPtr.Zero;
-            memHdc = IntPtr.Zero;
-
+            nativeWin32MemDc.Dispose();           
         }
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {

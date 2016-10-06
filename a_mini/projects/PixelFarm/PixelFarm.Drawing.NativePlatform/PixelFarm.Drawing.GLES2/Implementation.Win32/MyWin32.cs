@@ -1,8 +1,8 @@
 //MIT, 2014-2016, WinterDev
-
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+
 namespace Win32
 {
     [StructLayout(LayoutKind.Sequential)]
