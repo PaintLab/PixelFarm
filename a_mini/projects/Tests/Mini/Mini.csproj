@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mini</RootNamespace>
+    <AssemblyName>Mini</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="0_Start\DemoBase.cs" />
+    <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
+    <Compile Include="1_Shared\Square.cs" />
+    <Compile Include="1_Shared\SpriteShape.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
+    <Compile Include="1_Shared\LionFillSprite.cs" />
+    <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
+    <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
+    <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
+    <Compile Include="3_Samples\08_Blur\BlurWithPainterSample.cs" />
+    <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
+    <Compile Include="1_Shared\Point2D.cs" />
+    <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
+    <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
+    <Compile Include="3_Samples\20_PolygonClippingSample\PolygonClipping.cs" />
+    <Compile Include="3_Samples\05_AlphaMask2\LionAlphaMask2.cs" />
+    <Compile Include="3_Samples\07_Shading\02_GouraudSample.cs" />
+    <Compile Include="3_Samples\21_HandPaint\MyBrushPath.cs" />
+    <Compile Include="3_Samples\21_HandPaint\SmoothBrush2.cs" />
+    <Compile Include="3_Samples\21_HandPaint\SmoothDippingBrush.cs" />
+    <Compile Include="3_Samples\21_HandPaint\DrippingBrush.cs" />
+    <Compile Include="3_Samples\21_HandPaint\HandPaint.cs" />
+    <Compile Include="3_Samples\21_HandPaint\HandPaint_LineSimplify.cs" />
+    <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
+    <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
+    <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
+    <Compile Include="7_GLES2Test\FormGLTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="7_GLES2Test\FormGLTest.Designer.cs">
+      <DependentUpon>FormGLTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="7_GLES2Test\MyMiniGLES2Control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
+      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Experiment\GdiPathFont.cs" />
+    <Compile Include="Experiment\GdiPathFontFace.cs" />
+    <Compile Include="Experiment\GdiPathFontStore.cs" />
+    <Compile Include="MiniGUI\PixelTools.cs" />
+    <Compile Include="FormDev.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDev.Designer.cs">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </Compile>
+    <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
+    <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
+    <Compile Include="1_Shared\LionDataStore.cs" />
+    <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
+    <Compile Include="1_Shared\BasicSprite.cs" />
+    <Compile Include="0_Start\Program.cs" />
+    <Compile Include="6_WinGdiTest\FormGdiTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="6_WinGdiTest\FormGdiTest.Designer.cs">
+      <DependentUpon>FormGdiTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTestBed1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTestBed1.designer.cs">
+      <DependentUpon>FormTestBed1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="1_Shared\SimpleSprite.cs" />
+    <Compile Include="MiniGUI\IncompleteWidget.cs" />
+    <Compile Include="MiniGUI\MouseEventArgs.cs" />
+    <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
+    <Compile Include="MiniGUI\PolygonWidget.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoftAggControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SoftAggControl.Designer.cs">
+      <DependentUpon>SoftAggControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
+      <DependentUpon>FormGLTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="7_GLES2Test\MyMiniGLES2Control.resx">
+      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDev.resx">
+      <DependentUpon>FormDev.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="6_WinGdiTest\FormGdiTest.resx">
+      <DependentUpon>FormGdiTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTestBed1.resx">
+      <DependentUpon>FormTestBed1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="SoftAggControl.resx">
+      <DependentUpon>SoftAggControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
+      <Name>MiniAgg.Complements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj">
+      <Project>{e0bc92c3-6936-4d8f-ae7f-54dde27de370}</Project>
+      <Name>PixelFarm.Drawing.Hw</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\PixelFarm.MiniPlatforms.WindowsForms.csproj">
+      <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
+      <Name>PixelFarm.MiniPlatforms.WindowsForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj">
+      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
+      <Name>PixelFarm.MiniPlatforms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\MiniAgg\MiniAgg.csproj">
+      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.NativePlatform.csproj">
+      <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
+      <Name>PixelFarm.Drawing.NativePlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Platforms.csproj">
+      <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>
+      <Name>PixelFarm.Drawing.Platforms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
