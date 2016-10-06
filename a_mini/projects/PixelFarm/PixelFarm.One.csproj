@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One</AssemblyName>
-    <ProjectGuid>{E71BD6D1-211F-4778-9632-77AB9B155BCB}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -190,15 +189,11 @@
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\Toolkit.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControlFactory.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\IGLControl.cs" />
-    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\WinGLControl.cs" />
     <Compile Include="MiniAgg.HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\X11GLControl.cs" />
@@ -360,10 +355,7 @@
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
-    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\FontGdiPath\GdiPathConverter.cs" />
-    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\FontGdiPath\GdiPathFont.cs" />
-    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\FontGdiPath\GdiPathFontFace.cs" />
-    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\FontGdiPath\GdiPathFontStore.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Canvas\GdiPathConverter.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation.Win32\MyWin32.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation.Win32\NativeTextWin32.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation.Win32\Win32Utils.cs" />
