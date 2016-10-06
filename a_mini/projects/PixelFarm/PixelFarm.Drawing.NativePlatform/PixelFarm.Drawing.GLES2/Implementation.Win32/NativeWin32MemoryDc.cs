@@ -30,6 +30,10 @@ namespace Win32
         {
             get { return this.memHdc; }
         }
+        public IntPtr PPVBits
+        {
+            get { return this.ppvBits; }
+        }
         public void SetTextColor(int win32Color)
         {
             Win32.MyWin32.SetTextColor(memHdc, win32Color);

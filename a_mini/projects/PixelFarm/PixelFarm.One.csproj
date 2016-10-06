@@ -389,7 +389,6 @@
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2_x\Canvas\2_MyGLCanvas_CoordinateAndClip.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2_x\Canvas\3_MyGLCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2_x\Canvas\4_MyGLCanvas_TextAndFonts.cs" />
-    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.GLES2_x\Implementation\GLCanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\Properties\Resources.Designer.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\Properties\Settings.Designer.cs" />
     <Compile Include="PixelFarm.Drawing\0_Start\ExtensionAttribute.cs" />

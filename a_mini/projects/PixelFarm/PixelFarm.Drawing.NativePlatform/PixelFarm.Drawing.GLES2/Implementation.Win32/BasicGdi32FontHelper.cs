@@ -7,23 +7,24 @@ namespace Win32
 {
     class BasicGdi32FontHelper
     {
-         
-        IntPtr hdc;
+
+        NativeWin32MemoryDc nativeWinDc;
         bool isInit;
         public BasicGdi32FontHelper()
         {
+            Init();
         }
         ~BasicGdi32FontHelper()
-        {
-            MyWin32.DeleteDC(hdc);
-             
+        { 
+            nativeWinDc.Dispose(); 
         }
         void Init()
         {
             //bmp = new System.Drawing.Bitmap(2, 2);
             //System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp);
             //hdc = g.GetHdc();
-            //isInit = true;
+            nativeWinDc = new NativeWin32MemoryDc(2, 2);
+            isInit = true;
         }
         const int MAX_CODEPOINT_NO = 255;
         public void MeasureCharWidths(IntPtr hFont, out int[] charWidths, out NativeTextWin32.FontABC[] abcSizes)
@@ -32,7 +33,7 @@ namespace Win32
             //only in ascii range
             //current version
             charWidths = new int[MAX_CODEPOINT_NO + 1]; // 
-            MyWin32.SelectObject(hdc, hFont);
+            MyWin32.SelectObject(nativeWinDc.DC, hFont);
             unsafe
             {
                 //see: https://msdn.microsoft.com/en-us/library/ms404377(v=vs.110).aspx
@@ -42,7 +43,7 @@ namespace Win32
                 abcSizes = new NativeTextWin32.FontABC[MAX_CODEPOINT_NO + 1];
                 fixed (NativeTextWin32.FontABC* abc = abcSizes)
                 {
-                    NativeTextWin32.GetCharABCWidths(hdc, (uint)0, (uint)MAX_CODEPOINT_NO, abc);
+                    NativeTextWin32.GetCharABCWidths(nativeWinDc.DC, (uint)0, (uint)MAX_CODEPOINT_NO, abc);
                 }
                 for (int i = 0; i < (MAX_CODEPOINT_NO + 1); ++i)
                 {
@@ -53,17 +54,17 @@ namespace Win32
         public int MeasureStringWidth(IntPtr hFont, char[] buffer)
         {
             if (!isInit) Init();
-            MyWin32.SelectObject(this.hdc, hFont);
+            MyWin32.SelectObject(nativeWinDc.DC, hFont);
             NativeTextWin32.WIN32SIZE size;
-            NativeTextWin32.GetTextExtentPoint32(hdc, buffer, buffer.Length, out size);
+            NativeTextWin32.GetTextExtentPoint32(nativeWinDc.DC, buffer, buffer.Length, out size);
             return size.Width;
         }
         public int MeasureStringWidth(IntPtr hFont, char[] buffer, int length)
         {
             if (!isInit) Init();
-            MyWin32.SelectObject(this.hdc, hFont);
+            MyWin32.SelectObject(nativeWinDc.DC, hFont);
             NativeTextWin32.WIN32SIZE size;
-            NativeTextWin32.GetTextExtentPoint32(hdc, buffer, length, out size);
+            NativeTextWin32.GetTextExtentPoint32(nativeWinDc.DC, buffer, length, out size);
             return size.Width;
         }
     }
