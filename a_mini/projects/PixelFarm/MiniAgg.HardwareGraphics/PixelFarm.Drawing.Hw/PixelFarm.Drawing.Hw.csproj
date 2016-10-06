@@ -36,7 +36,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GLCanvas\GLCanvasPainter.cs" />
+    <Compile Include="GLCanvas\GLCanvasPainterBase.cs" />
     <Compile Include="GLShader\SignedDistanceFieldShader.cs" />
     <Compile Include="Texture\FrameBuffer.cs" />
     <Compile Include="GLCanvas\InternalGraphicsPath.cs" />

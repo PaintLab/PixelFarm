@@ -52,7 +52,9 @@ namespace Win32
         public static unsafe extern int GetGlyphIndices(IntPtr hdc, string text, int c, char* buffer, int fl);
 
         [DllImport(GDI32)]
-        public static unsafe extern bool GetCharABCWidths(IntPtr hdc, uint uFirstChar, uint uLastChar, void* lpabc);
+        public static unsafe extern int GetCharABCWidths(IntPtr hdc, uint uFirstChar, uint uLastChar, void* lpabc);
+        [DllImport(GDI32)]
+        public static unsafe extern int GetCharABCWidthsFloat(IntPtr hdc, uint uFirstChar, uint uLastChar, void* lpabc);
         [DllImport(GDI32)]
         public static unsafe extern int GetOutlineTextMetrics(IntPtr hdc, uint cbData, uint uLastChar, void* lp_outlineTextMatrix);
 
@@ -71,6 +73,19 @@ namespace Win32
                     return abcA + (int)abcB + abcC;
                 }
             }
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct ABCFloat
+        {
+            /// <summary>Specifies the A spacing of the character. The A spacing is the distance to add to the current
+            /// position before drawing the character glyph.</summary>
+            public float abcfA;
+            /// <summary>Specifies the B spacing of the character. The B spacing is the width of the drawn portion of
+            /// the character glyph.</summary>
+            public float abcfB;
+            /// <summary>Specifies the C spacing of the character. The C spacing is the distance to add to the current
+            /// position to provide white space to the right of the character glyph.</summary>
+            public float abcfC;
         }
         [DllImport(GDI32, CharSet = CharSet.Unicode)]
         public static unsafe extern int
