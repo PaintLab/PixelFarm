@@ -7,7 +7,7 @@ namespace Win32
 {
     class BasicGdi32FontHelper
     {
-        System.Drawing.Bitmap bmp;
+         
         IntPtr hdc;
         bool isInit;
         public BasicGdi32FontHelper()
@@ -16,18 +16,14 @@ namespace Win32
         ~BasicGdi32FontHelper()
         {
             MyWin32.DeleteDC(hdc);
-            if (bmp != null)
-            {
-                bmp.Dispose();
-                bmp = null;
-            }
+             
         }
         void Init()
         {
-            bmp = new System.Drawing.Bitmap(2, 2);
-            System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp);
-            hdc = g.GetHdc();
-            isInit = true;
+            //bmp = new System.Drawing.Bitmap(2, 2);
+            //System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp);
+            //hdc = g.GetHdc();
+            //isInit = true;
         }
         const int MAX_CODEPOINT_NO = 255;
         public void MeasureCharWidths(IntPtr hFont, out int[] charWidths, out NativeTextWin32.FontABC[] abcSizes)
