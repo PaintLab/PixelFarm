@@ -360,12 +360,12 @@
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation.Win32\NativeTextWin32.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation.Win32\Win32Utils.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation.Win32\WindowsFormsBitmapBackBuffer.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\BasicGdi32FontHelper.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\BitmapHelper.cs" />
-    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\Bitmap_Brush_Pen.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\FontStore.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\Region.cs" />
-    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\WinGdiFontInfo.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\WinGdiGraphicsPath.cs" />
+    <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\Implementation\WinGdiPlusFont.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\BufferBitmapStore.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\GdiPlusCanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing.Platforms\PixelFarm.Drawing.Gdi\MiniAggGraphics\GdiPlusFontSystem.cs" />

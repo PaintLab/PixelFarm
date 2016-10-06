@@ -51,9 +51,9 @@
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation.Win32\WindowsFormsBitmapBackBuffer.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation\BitmapHelper.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Canvas\GdiPathConverter.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\Implementation\Bitmap_Brush_Pen.cs" />
+    <Compile Include="PixelFarm.Drawing.Gdi\Implementation\WinGdiPlusFont.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation\FontStore.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\Implementation\WinGdiFontInfo.cs" />
+    <Compile Include="PixelFarm.Drawing.Gdi\Implementation\BasicGdi32FontHelper.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation\WinGdiGraphicsPath.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\Implementation\Region.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MiniAggGraphics\BufferBitmapStore.cs" />
