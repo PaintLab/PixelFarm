@@ -16,7 +16,7 @@ namespace PixelFarm.Drawing.GLES2
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         //-------------------------------
         GLCanvasPainter painter1;
-      
+
 
         Rectangle currentClipRect;
         Color currentTextColor;
