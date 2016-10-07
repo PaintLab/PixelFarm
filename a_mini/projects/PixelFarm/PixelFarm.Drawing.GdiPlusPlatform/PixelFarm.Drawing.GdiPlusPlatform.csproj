@@ -81,10 +81,6 @@
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\3_MyScreenCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\4_MyScreenCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.Gdi\MyScreenCanvas\QuadPages.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\Canvas\1_MyGdiPlusCanvas_Specific.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
-    <Compile Include="PixelFarm.Drawing.Gdi\Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

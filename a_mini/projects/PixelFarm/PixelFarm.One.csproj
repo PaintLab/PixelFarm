@@ -361,10 +361,6 @@
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\..\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\WinGdiFont.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\0_Start\WinGdiPlusPlatform.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\0_Start\WinGdiPortal.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\1_MyGdiPlusCanvas_Specific.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\Conv.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\GdiPathConverter.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation\BitmapHelper.cs" />
