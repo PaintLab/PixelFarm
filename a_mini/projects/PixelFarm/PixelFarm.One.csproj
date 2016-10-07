@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One</AssemblyName>
-    <ProjectGuid>{E71BD6D1-211F-4778-9632-77AB9B155BCB}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -40,13 +39,13 @@
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\AggRenderVx.cs" />
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\Canvas2dExtension.cs" />
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\dbugVertexSourceIO.cs" />
-    <Compile Include="MiniAgg.Complements\0_CanvasPainter\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\BorderDouble.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\ClipProxyImage.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\GammaFuntions.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\PixelBlenderRGB.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\ProxyImage.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\Queue.cs" />
+    <Compile Include="MiniAgg.Complements\1_Base\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGenGourand.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient.cs" />
@@ -376,15 +375,11 @@
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\Toolkit.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControlFactory.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\IGLControl.cs" />
-    <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\WinGLControl.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\X11GLControl.cs" />
