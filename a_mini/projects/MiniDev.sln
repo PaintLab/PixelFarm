@@ -25,15 +25,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Tools", "4_Tools", "{A056
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildMergeProject", "Tools\BuildMergeProject\BuildMergeProject.csproj", "{FA071D34-6C87-425D-8110-9C3595A01106}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.Hw", "PixelFarm\HardwareGraphics\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj", "{E0BC92C3-6936-4D8F-AE7F-54DDE27DE370}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.Hw", "PixelFarm\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj", "{E0BC92C3-6936-4D8F-AE7F-54DDE27DE370}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniAggHw3", "Tests\TestMiniAggHw3\TestMiniAggHw3.csproj", "{FD1C32F3-24ED-467D-9535-1737A0DFA02A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniPlatforms", "PixelFarm\HardwareGraphics\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj", "{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniPlatforms", "PixelFarm\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj", "{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniPlatform", "Tests\TestMiniPlatform\TestMiniPlatform.csproj", "{908071D8-60E4-4BB2-8490-FB2DAA46D6B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniPlatforms.WindowsForms", "PixelFarm\HardwareGraphics\PixelFarm.MiniPlatforms.WindowsForms\PixelFarm.MiniPlatforms.WindowsForms.csproj", "{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniPlatforms.WindowsForms", "PixelFarm\PixelFarm.MiniPlatforms.WindowsForms\PixelFarm.MiniPlatforms.WindowsForms.csproj", "{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniPlatforms2", "Tests\TestMiniPlatforms2\TestMiniPlatforms2.csproj", "{8072FC36-EBC4-4E59-A092-1B9AE9EE4F9C}"
 EndProject
@@ -942,9 +942,9 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7} = {4E282417-77BB-480C-84A1-72A44F229AC1}
+		{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9} = {4E282417-77BB-480C-84A1-72A44F229AC1}
 		{4D5CE655-58FA-4523-8E46-738B941E9E47} = {4E282417-77BB-480C-84A1-72A44F229AC1}
 		{1AA171E3-523C-4DD5-A169-DE6322991FF5} = {4E282417-77BB-480C-84A1-72A44F229AC1}
-		{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9} = {4E282417-77BB-480C-84A1-72A44F229AC1}
 		{E0BC92C3-6936-4D8F-AE7F-54DDE27DE370} = {578B46E7-824A-460F-8E70-7B168EA399F2}
 		{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43} = {578B46E7-824A-460F-8E70-7B168EA399F2}
 		{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB} = {578B46E7-824A-460F-8E70-7B168EA399F2}
