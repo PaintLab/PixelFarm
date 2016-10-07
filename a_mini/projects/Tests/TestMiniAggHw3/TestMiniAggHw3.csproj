@@ -153,7 +153,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.GdiPlusPlatform.csproj">
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
-      <Name>PixelFarm.Drawing.GdiPlus</Name>
+      <Name>PixelFarm.Drawing.GdiPlusPlatform</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
