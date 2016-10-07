@@ -21,14 +21,8 @@ namespace PixelFarm.Drawing
             int width,
             int height
          );
-        public abstract IFonts SampleIFonts { get; }
-        public Font TextEditFontInfo { get; set; }
-        public static string GenericSerifFontName
-        {
-            get;
-            set;
-        }
-        public abstract Bitmap CreatePlatformBitmap(int w, int h, byte[] rawBuffer, bool isBottomUp);
-        
+        public abstract IFonts SampleIFonts { get; }  
+        public abstract Bitmap CreatePlatformBitmap(int w, int h, byte[] rawBuffer, bool isBottomUp);        
     }
+
 }

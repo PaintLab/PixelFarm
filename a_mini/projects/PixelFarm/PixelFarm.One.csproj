@@ -145,7 +145,13 @@
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\..\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\WinGdiFont.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\0_Start\WinGdiPlusPlatform.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\0_Start\WinGdiPortal.cs" />
+    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\0_CanvasCollection.cs" />
+    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\1_MyGdiPlusCanvas_Specific.cs" />
+    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
+    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
+    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\Conv.cs" />
+    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Canvas\QuadPages.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation\BitmapHelper.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation\FontStore.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation\Region.cs" />
@@ -157,12 +163,6 @@
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MiniAggGraphics\GdiPlusFontSystem.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MiniAggGraphics\GdiPlusRenderVx.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MiniAggGraphics\VxsHelper.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MyScreenCanvas\0_CanvasCollection.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MyScreenCanvas\1_MyScreenCanvas_Specific.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MyScreenCanvas\2_MyScreenCanvas_CoordinateAndClip.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MyScreenCanvas\3_MyScreenCanvas_DrawGraphics.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MyScreenCanvas\4_MyScreenCanvas_TextAndFonts.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\MyScreenCanvas\QuadPages.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\Properties\Resources.Designer.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlusPlatform\Properties\Settings.Designer.cs" />
     <Compile Include="PixelFarm.Drawing.Hw\GLCanvas\CanvasGL2d.cs" />

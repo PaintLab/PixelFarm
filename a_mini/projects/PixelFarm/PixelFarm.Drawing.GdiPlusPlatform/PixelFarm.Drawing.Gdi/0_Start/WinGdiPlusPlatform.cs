@@ -42,7 +42,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override Canvas CreateCanvas(int left, int top, int width, int height)
         {
-            return new MyScreenCanvas(this, 0, 0, left, top, width, height);
+            return new MyGdiPlusCanvas(this, 0, 0, left, top, width, height);
         }
         public override Canvas CreateCanvas(object platformCanvas, int left, int top, int width, int height)
         {
@@ -61,7 +61,7 @@ namespace PixelFarm.Drawing.WinGdi
                     }
 
                     //System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(sampleBmp);
-                    sampleIFonts = new MyScreenCanvas(this, 0, 0, 0, 0, 2, 2);
+                    sampleIFonts = new MyGdiPlusCanvas(this, 0, 0, 0, 0, 2, 2);
                 }
                 return this.sampleIFonts;
             }
