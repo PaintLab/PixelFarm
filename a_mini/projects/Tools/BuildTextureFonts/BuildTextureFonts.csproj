@@ -38,16 +38,30 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\BasicGdi32FontHelper.cs">
+      <Link>Implementation.Win32\BasicGdi32FontHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\MyWin32.cs">
+      <Link>Implementation.Win32\MyWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\NativeTextWin32.cs">
+      <Link>Implementation.Win32\NativeTextWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\NativeWin32MemoryDc.cs">
+      <Link>Implementation.Win32\NativeWin32MemoryDc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\Win32Utils.cs">
+      <Link>Implementation.Win32\Win32Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\WinGdiFont.cs">
+      <Link>Implementation.Win32\WinGdiFont.cs</Link>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Implementation.Win32\MyWin32.cs" />
-    <Compile Include="Implementation.Win32\NativeTextWin32.cs" />
-    <Compile Include="Implementation.Win32\Win32Utils.cs" />
-    <Compile Include="Implementation.Win32\WindowsFormsBitmapBackBuffer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -77,7 +91,7 @@
       <Project>{ae0df71e-9b14-4197-b55a-e1e0ce0683c7}</Project>
       <Name>MiniAgg.Complements</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\MiniAgg.HardwareGraphics\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj">
+    <ProjectReference Include="..\..\PixelFarm\HardwareGraphics\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj">
       <Project>{e0bc92c3-6936-4d8f-ae7f-54dde27de370}</Project>
       <Name>PixelFarm.Drawing.Hw</Name>
     </ProjectReference>
