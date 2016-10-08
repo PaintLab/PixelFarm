@@ -14,17 +14,16 @@ namespace Mini
         DemoBase exampleBase;
         int myWidth = 800;
         int myHeight = 600;
-        WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
+        WindowsFormsBitmapBackBuffer bitmapBackBuffer;
         CanvasPainter painter;
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
         Graphics thisGfx;//for output
         Bitmap bufferBmp = null;
-        Rectangle bufferBmpRect;
-       
-
+        Rectangle bufferBmpRect; 
         public SoftAggControl()
         {
+            bitmapBackBuffer = new WindowsFormsBitmapBackBuffer(Program._winGdiPlatForm);
             _useGdiPlusOutput = false;
             InitializeComponent();
             this.Load += new EventHandler(SoftAggControl_Load);

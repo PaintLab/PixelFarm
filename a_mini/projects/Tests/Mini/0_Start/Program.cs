@@ -7,6 +7,7 @@ namespace Mini
 {
     static class Program
     {
+        internal static PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform _winGdiPlatForm;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,8 +18,10 @@ namespace Mini
             OpenTK.Toolkit.Init();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            PixelFarm.Drawing.WinGdi.WinGdiPortal.Start();
+
+            _winGdiPlatForm = new PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform();
             Application.Run(new FormDev());
         }
+
     }
 }
