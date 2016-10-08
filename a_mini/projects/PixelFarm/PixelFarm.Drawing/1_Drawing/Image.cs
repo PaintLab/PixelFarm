@@ -32,7 +32,7 @@ namespace PixelFarm.Drawing
 
         public Bitmap(string filename)
         {
-            //load bmp from filename
+            //load bmp from filename            
             var img = new Imaging.NativeImage(filename);
             this.width = img.Width;
             this.height = img.Height;

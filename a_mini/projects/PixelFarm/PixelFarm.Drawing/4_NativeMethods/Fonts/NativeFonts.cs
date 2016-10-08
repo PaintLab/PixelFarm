@@ -22,7 +22,7 @@ namespace PixelFarm.Drawing.Fonts
 
     static class NativeMyFontsLib
     {
-        const string myfontLib = "myft.dll";
+        const string myfontLib = NativeDLL.MyFtLibName;
         static object syncObj = new object();
         static bool isInitLib = false;
         static NativeModuleHolder nativeModuleHolder;
@@ -165,7 +165,7 @@ namespace PixelFarm.Drawing.Fonts
 
     public static class MyFtLib
     {
-        const string MYFT = "myft.dll";
+        const string MYFT = NativeDLL.MyFtLibName;
         [DllImport(MYFT, CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
         public static extern int MyFtMSDFGEN(int argc, string[] argv);
         [DllImport(MYFT, CallingConvention = CallingConvention.Cdecl)]

@@ -5,7 +5,7 @@ namespace PixelFarm.Drawing.Imaging
 {
     static class NativeImageMethods
     {
-        const string myfontLib = @"myft.dll";
+        const string myfontLib = NativeDLL.MyFtLibName;
 
         [DllImport(myfontLib)]
         public static extern int MyFtLibGetVersion();

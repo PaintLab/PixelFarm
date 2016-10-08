@@ -21,7 +21,7 @@ namespace Mini
         Graphics thisGfx;//for output
         Bitmap bufferBmp = null;
         Rectangle bufferBmpRect;
-        NativeFontStore fontStore = new NativeFontStore();
+       
 
         public SoftAggControl()
         {
@@ -52,23 +52,22 @@ namespace Mini
                 //   this.DisplayRectangle);
 
                 // Creates a BufferedGraphics instance associated with Form1, and with 
-                // dimensions the same size as the drawing surface of Form1.
-
+                // dimensions the same size as the drawing surface of Form1. 
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
                 bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
                 var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
-                painter = p;
                 p.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
+               
+                painter = p;
+
             }
             else
-            {
-                ImageGraphics2D imgGfx2d = bitmapBackBuffer.Initialize(myWidth, myHeight, 32);
-                //-------------
-                string fontName = "tahoma";
-                painter = new AggCanvasPainter(imgGfx2d);
-                painter.CurrentFont = fontStore.LoadFont(fontName, 10);
+            { 
+                painter = new AggCanvasPainter(bitmapBackBuffer.Initialize(myWidth, myHeight, 32));                
             }
+
+            painter.CurrentFont = new PixelFarm.Drawing.Font("tahoma", 10);
             painter.Clear(PixelFarm.Drawing.Color.White);
         }
 

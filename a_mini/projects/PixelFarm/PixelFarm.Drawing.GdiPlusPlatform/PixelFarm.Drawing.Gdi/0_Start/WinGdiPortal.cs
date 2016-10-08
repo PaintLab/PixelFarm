@@ -15,7 +15,7 @@ namespace PixelFarm.Drawing.WinGdi
             isInit = true;
             //we have only 1 WinGdiPlusPlatform per process
             WinGdiPortal.platform = new WinGdiPlusPlatform();
-            GraphicsPlatform.GenericSerifFontName = System.Drawing.FontFamily.GenericSerif.Name;
+             
         }
         public static void End()
         {
