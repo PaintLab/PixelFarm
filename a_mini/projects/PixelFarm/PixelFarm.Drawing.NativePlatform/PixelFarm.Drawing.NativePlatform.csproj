@@ -106,6 +106,27 @@
     <Compile Include="..\PixelFarm.Drawing.Hw\GLTexture\TextureAtlas.cs">
       <Link>GLTexture\TextureAtlas.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Drawing.Hw\NativeFonts\NativeBridgeFreeType.cs">
+      <Link>NativeFonts\NativeBridgeFreeType.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Drawing.Hw\NativeFonts\NativeFont.cs">
+      <Link>NativeFonts\NativeFont.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Drawing.Hw\NativeFonts\NativeFontFace.cs">
+      <Link>NativeFonts\NativeFontFace.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Drawing.Hw\NativeFonts\NativeFontGlyphBuilder.cs">
+      <Link>NativeFonts\NativeFontGlyphBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Drawing.Hw\NativeFonts\NativeFonts.cs">
+      <Link>NativeFonts\NativeFonts.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Drawing.Hw\NativeFonts\NativeFontStore.cs">
+      <Link>NativeFonts\NativeFontStore.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Drawing.Hw\NativeFonts\TextureFont.cs">
+      <Link>NativeFonts\TextureFont.cs</Link>
+    </Compile>
     <Compile Include="PixelFarm.Drawing.GLES2\0_Start\FontSystem.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\0_Start\GLES2Platform.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\1_MyGLCanvas_Specific.cs" />

@@ -17,6 +17,7 @@ namespace Mini
             OpenTK.Toolkit.Init();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            PixelFarm.Drawing.WinGdi.WinGdiPortal.Start();
             Application.Run(new FormDev());
         }
     }

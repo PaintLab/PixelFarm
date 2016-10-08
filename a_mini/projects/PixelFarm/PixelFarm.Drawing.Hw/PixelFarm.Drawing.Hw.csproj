@@ -55,6 +55,13 @@
     <Compile Include="GLShader\ShaderBase.cs" />
     <Compile Include="GLShader\SimpleRectTextureShader.cs" />
     <Compile Include="GLShader\SmoothLineShader.cs" />
+    <Compile Include="NativeFonts\NativeBridgeFreeType.cs" />
+    <Compile Include="NativeFonts\NativeFont.cs" />
+    <Compile Include="NativeFonts\NativeFontFace.cs" />
+    <Compile Include="NativeFonts\NativeFontGlyphBuilder.cs" />
+    <Compile Include="NativeFonts\NativeFonts.cs" />
+    <Compile Include="NativeFonts\NativeFontStore.cs" />
+    <Compile Include="NativeFonts\TextureFont.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GLTexture\GLBitmap.cs" />
     <Compile Include="GLTexture\GLBitmapReference.cs" />

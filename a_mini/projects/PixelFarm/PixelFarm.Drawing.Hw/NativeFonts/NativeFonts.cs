@@ -19,6 +19,10 @@ namespace PixelFarm.Drawing.Fonts
         public bool hasKerning;
         public IntPtr hb_font;
     }
+    static class NativeDLL
+    {
+        public const string MyFtLibName = "myft.dll";
+    }
 
     static class NativeMyFontsLib
     {
@@ -205,8 +209,6 @@ namespace PixelFarm.Drawing.Fonts
         [DllImport(MYFT)]
         public static extern int MyFtLibGetVersion();
     }
-
-
 
     public class MsdfParameters
     {
