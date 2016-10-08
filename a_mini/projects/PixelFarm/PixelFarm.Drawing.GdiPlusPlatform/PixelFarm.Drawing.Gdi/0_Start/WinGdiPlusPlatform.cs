@@ -6,24 +6,14 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class WinGdiPlusPlatform : GraphicsPlatform
     {
-        //System.Drawing.Bitmap sampleBmp;
-        GdiPlusIFonts ifonts = new GdiPlusIFonts();
 
+        GdiPlusIFonts ifonts = new GdiPlusIFonts();
         public WinGdiPlusPlatform()
         {
         }
         ~WinGdiPlusPlatform()
         {
-            //if (sampleBmp != null)
-            //{
-            //    sampleBmp.Dispose();
-            //    sampleBmp = null;
-            //}
-            //if (sampleIFonts != null)
-            //{
-            //    sampleIFonts.Dispose();
-            //    sampleIFonts = null;
-            //}
+
         }
         public override Canvas CreateCanvas(int left, int top, int width, int height)
         {
@@ -92,6 +82,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             WinGdiPlusFont winFont = fontStore.GetResolvedFont(font);
             Win32Utils.SelectObject(win32MemDc.DC, winFont.ToHfont());
+        }
+        public PixelFarm.Drawing.Fonts.ActualFont ResolveActualFont(Font f)
+        {
+            return fontStore.ResolveFont(f);
         }
         public Size MeasureString(char[] buff, int startAt, int len, Font font)
         {

@@ -195,7 +195,7 @@ namespace Mini
                 using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
                 {
                     ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.ARGB32);
-                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
+                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage, PixelFarm.Drawing.WinGdi.WinGdiPortal.P);
                     var vxs = winFontGlyph.originalVxs;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     //test subpixel rendering 
@@ -235,6 +235,7 @@ namespace Mini
             //1. test gdi+ font path
             char testChar = 'b';
             float fontSize = 20;
+            ;
             using (Graphics g = this.pictureBox1.CreateGraphics())
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
@@ -245,7 +246,7 @@ namespace Mini
                 using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
                 {
                     ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.ARGB32);
-                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
+                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage, PixelFarm.Drawing.WinGdi.WinGdiPortal.P);
                     var vxs = new VertexStore();
                     //vxs.AddMoveTo(0, 0);
                     ////vxs.AddP3c(100, 0);

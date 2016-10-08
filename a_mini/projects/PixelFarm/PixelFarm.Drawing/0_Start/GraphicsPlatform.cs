@@ -26,9 +26,5 @@ namespace PixelFarm.Drawing
         public abstract IFonts Fonts { get; }
         public abstract Bitmap CreatePlatformBitmap(int w, int h, byte[] rawBuffer, bool isBottomUp);
     }
-    static class NativeDLL
-    {
-        public const string MyFtLibName = "myft.dll";
-    }
-
+  
 }

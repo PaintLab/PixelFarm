@@ -21,7 +21,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
-            gfx = Graphics2D.CreateFromImage(destImage);
+            gfx = Graphics2D.CreateFromImage(destImage, PixelFarm.Drawing.WinGdi.WinGdiPortal.P);
             lcdLut = new Sample_AADemoTest3.AggLcdDistributionLookupTable(primary, 2.0 / 9, 1.0 / 9);
         }
         static float mix(float farColor, float nearColor, float weight)

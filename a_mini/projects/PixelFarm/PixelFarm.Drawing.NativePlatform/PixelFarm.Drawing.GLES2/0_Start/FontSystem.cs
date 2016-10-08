@@ -7,7 +7,7 @@ namespace PixelFarm.Drawing.Fonts
 
     class FontSystem : IFonts
     {
-        internal NativeFontStore fontStore = new NativeFontStore();
+        NativeFontStore fontStore = new NativeFontStore();
         static FontSystem()
         {
 
@@ -16,6 +16,10 @@ namespace PixelFarm.Drawing.Fonts
         {
 
 
+        }
+        public ActualFont ResolveActualFont(Font f)
+        {
+            return fontStore.GetResolvedNativeFont(f);
         }
         public ActualFont GetActualFont(Font f)
         {

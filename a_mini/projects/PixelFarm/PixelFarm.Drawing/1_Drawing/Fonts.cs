@@ -4,6 +4,7 @@ using System;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing
 {
+    
     /// <summary>
     /// font specification
     /// </summary>
@@ -89,6 +90,7 @@ namespace PixelFarm.Drawing
         float MeasureWhitespace(Font f);
         Size MeasureString(char[] str, int startAt, int len, Font font);
         Size MeasureString(char[] str, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth);
+        ActualFont ResolveActualFont(Font f);
         void Dispose();
     }
 

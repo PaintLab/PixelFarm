@@ -43,6 +43,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
         public override void Init()
         {
+           
         }
         public override void Draw(CanvasPainter p)
         {
@@ -81,7 +82,7 @@ namespace PixelFarm.Agg.Sample_Draw
             // draw some text
             // draw some text  
 
-            var textPrinter = new TextPrinter();
+            var textPrinter = new TextPrinter(PixelFarm.Drawing.WinGdi.WinGdiPortal.P);
             textPrinter.CurrentFont = svgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
             //new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
 
