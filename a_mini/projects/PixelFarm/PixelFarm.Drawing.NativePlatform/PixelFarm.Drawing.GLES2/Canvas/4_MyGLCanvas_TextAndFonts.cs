@@ -25,20 +25,10 @@ namespace PixelFarm.Drawing.GLES2
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
         NativeFontStore nativeFontStore = new NativeFontStore();
-
-
-
-        //======================================
-        //IFonts impl
-        Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
+        public ActualFont ResolveActualFont(Font f)
         {
-            return this.platform.GetFont(fontname, fsize, st);
-        }
-        float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
-        {
-            //TODO: review here ***            
-            NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(f);
-            return nativeFont.GetGlyph(' ').horiz_adv_x;
+            //TODO: review here
+            return nativeFontStore.GetResolvedNativeFont(f);
         }
         public override float GetCharWidth(Font f, char c)
         {

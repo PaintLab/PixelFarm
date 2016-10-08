@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing.GLES2
 
 
 
-    partial class MyGLCanvas : Canvas, IFonts, IDisposable
+    partial class MyGLCanvas : Canvas, IDisposable
     {
         CanvasGL2d canvasGL2;
         bool isDisposed;
@@ -51,10 +51,9 @@ namespace PixelFarm.Drawing.GLES2
             this.right = left + width;
             this.bottom = top + height;
             currentClipRect = new Rectangle(0, 0, width, height);
-            Font font = platform.GetFont("tahoma", 10, FontStyle.Regular);
-            win32MemDc = new NativeWin32MemoryDc(10, 10);
 
-            //this.CurrentFont = defaultFont = fontInfo.ResolvedFont;
+            win32MemDc = new NativeWin32MemoryDc(10, 10);
+            this.CurrentFont = new Font("tahoma", 10);
             this.CurrentTextColor = Color.Black;
 
             internalPen = new InternalPen(Color.Black);
@@ -70,7 +69,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             return "visible_clip?";
         }
-        
+
         public override void CloseCanvas()
         {
             if (isDisposed)
@@ -94,15 +93,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             this.CloseCanvas();
         }
-        void IFonts.Dispose()
-        {
-            if (isDisposed)
-            {
-                return;
-            }
-            this.CloseCanvas();
-        }
-
+        
         void ClearPreviousStoredValues()
         {
 
