@@ -41,8 +41,6 @@
     <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="3_Drawing_Fonts\ActualFont.cs" />
     <Compile Include="3_Drawing_Fonts\FontKey.cs" />
-    <Compile Include="3_Drawing_Fonts\FontSet.cs" />
-    <Compile Include="3_Drawing_Fonts\InstalledFont.cs" />
     <Compile Include="3_Drawing_Fonts\NativeBridgeHB.cs" />
     <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="5_PixelFarm_Agg\CanvasPainter.cs" />
