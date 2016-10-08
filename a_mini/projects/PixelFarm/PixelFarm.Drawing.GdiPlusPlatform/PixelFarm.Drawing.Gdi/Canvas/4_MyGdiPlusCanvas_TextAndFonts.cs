@@ -22,10 +22,10 @@ namespace PixelFarm.Drawing.WinGdi
         Font currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
         WinGdiFontStore fontStore = new WinGdiFontStore();
-        Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
-        {
-            return this.platform.GetFont(fontname, fsize, st);
-        }
+        //Font IFonts.GetFont(string fontname, float fsize, FontStyle st)
+        //{
+        //    return new Font(fontname, fsize);
+        //}
         float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
         {
             return fontStore.MeasureWhitespace(this, f);
@@ -61,7 +61,7 @@ namespace PixelFarm.Drawing.WinGdi
             //{
             SetFont(font);
             PixelFarm.Drawing.Size size = new Size();
-            if (buff.Length >0)
+            if (buff.Length > 0)
             {
                 unsafe
                 {
@@ -71,7 +71,7 @@ namespace PixelFarm.Drawing.WinGdi
                     }
                 }
             }
-            
+
             return size;
             //}
         }

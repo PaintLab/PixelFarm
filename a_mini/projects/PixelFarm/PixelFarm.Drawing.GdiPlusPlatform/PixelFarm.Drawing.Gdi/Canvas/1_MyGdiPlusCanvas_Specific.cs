@@ -58,8 +58,8 @@ namespace PixelFarm.Drawing.WinGdi
             CreateGraphicsFromNativeHdc(width, height);
             //-------------------------------------------------------
             currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
-            Font font = platform.GetFont("tahoma", 14, FontStyle.Regular);
-            this.CurrentFont = defaultFont = font;
+             
+            this.CurrentFont = defaultFont = new Font("tahoma", 14);
             this.CurrentTextColor = Color.Black;
             internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
