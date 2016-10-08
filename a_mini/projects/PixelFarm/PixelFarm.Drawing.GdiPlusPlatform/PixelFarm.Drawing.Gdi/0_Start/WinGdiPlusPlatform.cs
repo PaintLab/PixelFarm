@@ -80,7 +80,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         void SetFont(Font font)
         {
-            WinGdiPlusFont winFont = fontStore.GetResolvedFont(font);
+            WinGdiPlusFont winFont = fontStore.ResolveFont(font);
             Win32Utils.SelectObject(win32MemDc.DC, winFont.ToHfont());
         }
         public PixelFarm.Drawing.Fonts.ActualFont ResolveActualFont(Font f)
