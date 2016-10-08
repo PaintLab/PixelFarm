@@ -343,7 +343,9 @@
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\Toolkit.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs" />
+    <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControlFactory.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\IGLControl.cs" />
