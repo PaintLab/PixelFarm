@@ -26,10 +26,10 @@ namespace PixelFarm.Drawing.WinGdi
         //{
         //    return new Font(fontname, fsize);
         //}
-        float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
-        {
-            return fontStore.MeasureWhitespace(this, f);
-        }
+        //float IFonts.MeasureWhitespace(PixelFarm.Drawing.Font f)
+        //{
+        //    return fontStore.MeasureWhitespace(this, f);
+        //}
         public override float GetCharWidth(Font f, char c)
         {
             WinGdiPlusFont winFont = fontStore.GetResolvedFont(f);

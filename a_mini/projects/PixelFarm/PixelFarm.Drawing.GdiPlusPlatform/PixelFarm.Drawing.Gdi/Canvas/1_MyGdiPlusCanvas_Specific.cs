@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
-    partial class MyGdiPlusCanvas : Canvas, IFonts, IDisposable
+    partial class MyGdiPlusCanvas : Canvas, IDisposable
     {
         int pageNumFlags;
         int pageFlags;
@@ -58,7 +58,7 @@ namespace PixelFarm.Drawing.WinGdi
             CreateGraphicsFromNativeHdc(width, height);
             //-------------------------------------------------------
             currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
-             
+
             this.CurrentFont = defaultFont = new Font("tahoma", 14);
             this.CurrentTextColor = Color.Black;
             internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
@@ -115,14 +115,14 @@ namespace PixelFarm.Drawing.WinGdi
             }
             this.CloseCanvas();
         }
-        void IFonts.Dispose()
-        {
-            if (isDisposed)
-            {
-                return;
-            }
-            this.CloseCanvas();
-        }
+        //void IFonts.Dispose()
+        //{
+        //    if (isDisposed)
+        //    {
+        //        return;
+        //    }
+        //    this.CloseCanvas();
+        //}
 
         void ClearPreviousStoredValues()
         {
