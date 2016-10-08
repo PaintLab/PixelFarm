@@ -18,7 +18,7 @@ using System.Collections.Generic;
 namespace PixelFarm.Drawing.WinGdi
 {
 
-    class WinGdiFontStore
+    class WinGdiPlusFontStore
     {
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace PixelFarm.Drawing.WinGdi
         readonly Dictionary<PixelFarm.Drawing.Fonts.FontKey, Font> _fontInfoCacheByFontKey = new Dictionary<PixelFarm.Drawing.Fonts.FontKey, Font>();
         static Dictionary<Font, WinGdiPlusFont> resolvedWinGdiFont = new Dictionary<Font, WinGdiPlusFont>();
 
-        public WinGdiFontStore()
+        public WinGdiPlusFontStore()
         {
 
         }
@@ -171,7 +171,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// <summary>
         /// Init the system installed fonts.
         /// </summary>
-        static WinGdiFontStore()
+        static WinGdiPlusFontStore()
         {
             _fontsMapping["monospace"] = "Courier New";
             _fontsMapping["Helvetica"] = "Arial";

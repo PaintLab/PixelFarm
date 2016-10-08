@@ -19,7 +19,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
-            gfx = Graphics2D.CreateFromImage(destImage, PixelFarm.Drawing.WinGdi.WinGdiPortal.P);
+            gfx = Graphics2D.CreateFromImage(destImage, Program._winGdiPlatForm);
         }
         protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
         {

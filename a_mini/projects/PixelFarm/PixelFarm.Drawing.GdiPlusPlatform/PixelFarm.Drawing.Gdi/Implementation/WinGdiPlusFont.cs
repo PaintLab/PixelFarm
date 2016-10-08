@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing.Fonts;
+using PixelFarm.Agg;
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -16,15 +17,12 @@ namespace PixelFarm.Drawing.WinGdi
         float emSizeInPixels;
         float ascendInPixels;
         float descentInPixels;
-
-        static BasicGdi32FontHelper basGdi32FontHelper = new BasicGdi32FontHelper();
-
+         
         int[] charWidths;
         Win32.NativeTextWin32.FontABC[] charAbcWidths;
         FontGlyph[] fontGlyphs;
-
-        //eg.
         Encoding fontEncoding = Encoding.GetEncoding(874);
+
         public WinGdiPlusFont(System.Drawing.Font f)
         {
             this.myFont = f;
@@ -44,15 +42,26 @@ namespace PixelFarm.Drawing.WinGdi
             //we build font glyph, this is just win32 glyph
             //
             int j = charAbcWidths.Length;
+#if DEBUG
+            if (j > 256)
+            {
+                throw new NotSupportedException();
+            }
+#endif
             fontGlyphs = new FontGlyph[j];
             for (int i = 0; i < j; ++i)
             {
                 FontGlyph glyph = new FontGlyph();
+                glyph.codePoint = i;
+
+                codePoints[0] = (byte)i;
+                fontEncoding.GetChars(codePoints, 0, 1, singleCharArray, 0);
+                glyph.unicode = singleCharArray[0];
                 glyph.horiz_adv_x = charWidths[i] << 6;
                 fontGlyphs[i] = glyph;
             }
-
         }
+
         public System.IntPtr ToHfont()
         {   /// <summary>
             /// Set a resource (e.g. a font) for the specified device context.
@@ -78,26 +87,65 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
+            FontGlyph glyph = fontGlyphs[glyphIndex];
+            //build glyph vertex
+            if (glyph.flattenVxs == null)
+            {
+                BuildVxs(glyph, (char)glyph.unicode);
+            }
 
-            throw new NotImplementedException();
+            return glyph;
         }
         public override FontGlyph GetGlyph(char c)
         {
             //convert c to glyph index
-            //temp fix 
-
-            throw new NotImplementedException();
+            //temp fix  
+            singleCharArray[0] = c;
+            fontEncoding.GetBytes(singleCharArray, 0, 1, codePoints, 0);
+            FontGlyph glyph = fontGlyphs[codePoints[0]];
+            //build glyph vertex
+            if (glyph.flattenVxs == null)
+            {
+                BuildVxs(glyph, c);
+            }
+            return glyph;
         }
-
+        void BuildVxs(FontGlyph glyph, char c)
+        {
+            //------------------------
+            //create vector version, using Path
+            VertexStore vxs = new VertexStore();
+            PixelFarm.Agg.GdiPathConverter.ConvertCharToVertexGlyph(this.myFont, c, vxs);
+            glyph.originalVxs = vxs;
+            //create flatten version 
+            glyph.flattenVxs = curveFlattener.MakeVxs(vxs);//?
+            //-------------------------
+        }
+        FontGlyph InternalGetGlyph(char c)
+        {
+            singleCharArray[0] = c;
+            fontEncoding.GetBytes(singleCharArray, 0, 1, codePoints, 0);
+            return fontGlyphs[codePoints[0]];
+        }
         public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
         {
-            //get gyph pos
-            throw new NotImplementedException();
+            //simple 
+            //TODO: review here again ***
+            int j = buffer.Length;
+            int offset = 0;
+            for (int i = 0; i < j; ++i)
+            {
+                FontGlyph glyph = InternalGetGlyph(buffer[i]);
+                var propGlyph = new ProperGlyph();
+                propGlyph.codepoint = (uint)glyph.codePoint;
+                propGlyph.x_offset = offset;
+                propGlyph.x_advance = glyph.horiz_adv_x >> 6;
+                offset += propGlyph.x_advance;
+                properGlyphs[i] = propGlyph;
+            }
         }
-
         char[] singleCharArray = new char[1];
         byte[] codePoints = new byte[2];
-
         public override float GetAdvanceForCharacter(char c)
         {
             //check if we have width got this char or not
@@ -110,7 +158,9 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
-            throw new NotImplementedException();
+            //TODO: review here
+            return GetAdvanceForCharacter(c);
+            //throw new NotImplementedException();
         }
 
         public System.Drawing.Font InnerFont
@@ -141,6 +191,8 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
+        static BasicGdi32FontHelper basGdi32FontHelper = new BasicGdi32FontHelper();
+        static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
 
 
     }

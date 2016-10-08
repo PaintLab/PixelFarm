@@ -14,17 +14,16 @@ namespace Mini
         DemoBase exampleBase;
         int myWidth = 800;
         int myHeight = 600;
-        WindowsFormsBitmapBackBuffer bitmapBackBuffer = new WindowsFormsBitmapBackBuffer();
+        WindowsFormsBitmapBackBuffer bitmapBackBuffer;
         CanvasPainter painter;
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
         Graphics thisGfx;//for output
         Bitmap bufferBmp = null;
         Rectangle bufferBmpRect;
-       
-
         public SoftAggControl()
         {
+            bitmapBackBuffer = new WindowsFormsBitmapBackBuffer(Program._winGdiPlatForm);
             _useGdiPlusOutput = false;
             InitializeComponent();
             this.Load += new EventHandler(SoftAggControl_Load);
@@ -56,15 +55,15 @@ namespace Mini
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
                 bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
+                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(Program._winGdiPlatForm, bufferBmp);
                 p.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
-               
+
                 painter = p;
 
             }
             else
-            { 
-                painter = new AggCanvasPainter(bitmapBackBuffer.Initialize(myWidth, myHeight, 32));                
+            {
+                painter = new AggCanvasPainter(bitmapBackBuffer.Initialize(myWidth, myHeight, 32));
             }
 
             painter.CurrentFont = new PixelFarm.Drawing.Font("tahoma", 10);

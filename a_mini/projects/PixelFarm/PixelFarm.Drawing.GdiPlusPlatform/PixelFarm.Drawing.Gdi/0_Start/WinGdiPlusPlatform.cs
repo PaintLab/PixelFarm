@@ -4,7 +4,7 @@ using Win32;
 
 namespace PixelFarm.Drawing.WinGdi
 {
-    class WinGdiPlusPlatform : GraphicsPlatform
+    public class WinGdiPlusPlatform : GraphicsPlatform
     {
 
         GdiPlusIFonts ifonts = new GdiPlusIFonts();
@@ -63,7 +63,7 @@ namespace PixelFarm.Drawing.WinGdi
     {
         System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(2, 2);
         NativeWin32MemoryDc win32MemDc;
-        WinGdiFontStore fontStore = new WinGdiFontStore();
+        WinGdiPlusFontStore fontStore = new WinGdiPlusFontStore();
 
         //=====================================
         //static 

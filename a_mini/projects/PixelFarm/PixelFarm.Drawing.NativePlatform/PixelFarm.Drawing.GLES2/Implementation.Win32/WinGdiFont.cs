@@ -163,10 +163,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 return descentInPixels;
             }
-        }
-
-
-
+        } 
     }
 
 
