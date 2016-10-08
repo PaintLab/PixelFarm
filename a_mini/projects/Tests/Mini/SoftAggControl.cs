@@ -20,7 +20,7 @@ namespace Mini
         bool _gdiAntiAlias;
         Graphics thisGfx;//for output
         Bitmap bufferBmp = null;
-        Rectangle bufferBmpRect; 
+        Rectangle bufferBmpRect;
         public SoftAggControl()
         {
             bitmapBackBuffer = new WindowsFormsBitmapBackBuffer(Program._winGdiPlatForm);
@@ -55,15 +55,15 @@ namespace Mini
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
                 bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
+                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(Program._winGdiPlatForm, bufferBmp);
                 p.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
-               
+
                 painter = p;
 
             }
             else
-            { 
-                painter = new AggCanvasPainter(bitmapBackBuffer.Initialize(myWidth, myHeight, 32));                
+            {
+                painter = new AggCanvasPainter(bitmapBackBuffer.Initialize(myWidth, myHeight, 32));
             }
 
             painter.CurrentFont = new PixelFarm.Drawing.Font("tahoma", 10);

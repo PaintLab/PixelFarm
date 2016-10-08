@@ -235,7 +235,7 @@ namespace Mini
             //1. test gdi+ font path
             char testChar = 'b';
             float fontSize = 20;
-            
+
             using (Graphics g = this.pictureBox1.CreateGraphics())
             {
                 g.SmoothingMode = SmoothingMode.HighQuality;
@@ -295,8 +295,7 @@ namespace Mini
 
             List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadInstallFonts();
             System.Drawing.Bitmap bmp1 = new Bitmap(800, 600, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bmp1);
-
+            PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(Program._winGdiPlatForm, bmp1);
 
         }
 
