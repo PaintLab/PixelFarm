@@ -191,7 +191,6 @@
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontStyle.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\InstallFonts.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\NativeBridgeHB.cs" />
-    <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\SimpleFontAtlas.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\CanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\PixelFormat.cs" />
@@ -344,9 +343,7 @@
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\Toolkit.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\GLControlFactory.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\UserGLControl\IGLControl.cs" />

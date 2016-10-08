@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\PixelFarm.Drawing.Hw\GLCanvas\CanvasGL2d.cs">
@@ -102,6 +103,9 @@
     </Compile>
     <Compile Include="..\PixelFarm.Drawing.Hw\GLTexture\LazyAggBitmapBufferProvider.cs">
       <Link>GLTexture\LazyAggBitmapBufferProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Drawing.Hw\GLTexture\SimpleFontAtlas.cs">
+      <Link>GLTexture\SimpleFontAtlas.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Drawing.Hw\GLTexture\TextureAtlas.cs">
       <Link>GLTexture\TextureAtlas.cs</Link>
