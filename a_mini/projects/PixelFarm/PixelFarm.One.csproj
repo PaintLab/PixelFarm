@@ -176,6 +176,8 @@
     <Compile Include="PixelFarm.Drawing\1_Drawing\CombineMode.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\CustomRenderSurface.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\DashStyle.cs" />
+    <Compile Include="PixelFarm.Drawing\1_Drawing\Fonts.cs" />
+    <Compile Include="PixelFarm.Drawing\1_Drawing\FontStyle.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\GraphicsPath.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\Image_Bitmap.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\KnownColors.cs" />
@@ -186,9 +188,8 @@
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\ActualFont.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontFace.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontGlyph.cs" />
-    <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\Fonts.cs" />
+    <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontSet.cs" />
-    <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontStyle.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\InstallFonts.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\NativeBridgeHB.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\ActualImage.cs" />
