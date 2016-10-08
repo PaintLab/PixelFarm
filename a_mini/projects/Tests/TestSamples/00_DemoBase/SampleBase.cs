@@ -27,9 +27,9 @@ namespace OpenTkEssTest
 
         protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(string imgFileName)
         {
-
-            var bmp = new PixelFarm.Drawing.Bitmap(imgFileName);
-            var glbmp = new PixelFarm.DrawingGL.GLBitmap(bmp, false);
+            //1. create native image
+            var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage(imgFileName); 
+            var glbmp = new PixelFarm.DrawingGL.GLBitmap(nativeImg, false);
             //we load image from myft's image module
             //its already big-endian
             glbmp.IsBigEndianPixel = true;

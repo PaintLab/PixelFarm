@@ -177,7 +177,7 @@
     <Compile Include="PixelFarm.Drawing\1_Drawing\CustomRenderSurface.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\DashStyle.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\GraphicsPath.cs" />
-    <Compile Include="PixelFarm.Drawing\1_Drawing\Image.cs" />
+    <Compile Include="PixelFarm.Drawing\1_Drawing\Image_Bitmap.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\KnownColors.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\Rectangle.cs" />
     <Compile Include="PixelFarm.Drawing\1_Drawing\RectangleF.cs" />
@@ -199,7 +199,6 @@
     <Compile Include="PixelFarm.Drawing\4_NativeMethods\Fonts\NativeFontGlyphBuilder.cs" />
     <Compile Include="PixelFarm.Drawing\4_NativeMethods\Fonts\NativeFonts.cs" />
     <Compile Include="PixelFarm.Drawing\4_NativeMethods\Fonts\NativeFontStore.cs" />
-    <Compile Include="PixelFarm.Drawing\4_NativeMethods\Images\NativeImage.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\CanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\PixelFormat.cs" />
@@ -367,6 +366,7 @@
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\WindowBorder.cs" />
     <Compile Include="PixelFarm.MiniPlatforms.WindowsForms\WindowState.cs" />
     <Compile Include="PixelFarm.MiniPlatforms\0_Init\GLPlatforms.cs" />
+    <Compile Include="PixelFarm.MiniPlatforms\Bitmap\NativeImage.cs" />
     <Compile Include="PixelFarm.MiniPlatforms\Glfw\Glfw3.cs" />
     <Compile Include="PixelFarm.MiniPlatforms\Glfw\Glfw3Delegates.cs" />
     <Compile Include="PixelFarm.MiniPlatforms\Glfw\Glfw3DelegateTypes.cs" />

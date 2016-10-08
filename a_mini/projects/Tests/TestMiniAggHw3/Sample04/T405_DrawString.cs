@@ -26,9 +26,20 @@ namespace OpenTkEssTest
             painter = new GLCanvasPainter(canvas2d, max, max);
             string fontName = "tahoma";
             float fontSize = 24;
+            GlyphImage glypImage = null;
+            using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage("d:\\WImageTest\\a_total.png"))
+            {
+                glypImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
+                var buffer = new int[nativeImg.Width * nativeImg.Height];
+                System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
+                glypImage.SetImageBuffer(buffer, true);
+            }
+
+
+
             textureFont = TextureFont.CreateFont(fontName, fontSize,
                 "d:\\WImageTest\\a_total.xml",
-                "d:\\WImageTest\\a_total.png");
+                glypImage);
             PixelFarm.Drawing.Font f = new PixelFarm.Drawing.Font(fontName, fontSize);
             textureFonts.RegisterFont(f, textureFont);
             canvas2d.TextureFontStore = textureFonts;
