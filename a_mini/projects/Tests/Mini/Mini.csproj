@@ -47,6 +47,8 @@
     <Compile Include="1_Shared\Square.cs" />
     <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\GlyphVertexBuilder.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
@@ -173,6 +175,10 @@
     <ProjectReference Include="..\..\PixelFarm\MiniAgg\MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\OpenTypeReader\OpenTypeReader.csproj">
+      <Project>{2DDA36CC-9A17-44C8-B26B-1472BB48C0F4}</Project>
+      <Name>OpenTypeReader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.GdiPlusPlatform.csproj">
       <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>
