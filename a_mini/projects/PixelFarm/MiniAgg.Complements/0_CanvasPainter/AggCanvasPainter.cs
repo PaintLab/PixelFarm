@@ -57,7 +57,12 @@ namespace PixelFarm.Agg
             this.stroke = new Stroke(1);//default
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
-            this.textPrinter = new TextPrinter(graphic2d.GfxPlatform);
+
+            //tmp1:
+            if (graphic2d.GfxPlatform != null)
+            {
+                this.textPrinter = new TextPrinter(graphic2d.GfxPlatform);
+            }
         }
         public override void Clear(Color color)
         {

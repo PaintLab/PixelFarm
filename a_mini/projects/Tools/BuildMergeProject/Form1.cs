@@ -24,7 +24,21 @@ namespace BuildMergeProject
                   "System.Xml",
                });
         }
+        private void cmdMergePixelFarmMiniAgg_Click(object sender, EventArgs e)
+        {
+            //-----------
+            //PixelFarm's MiniAgg
+            //-----------
+            MergeProject mergePro = CreateMergePixelFarmMiniAggProject();
+            mergePro.MergeAndSave(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.MiniAgg.One.csproj",
+               "PixelFarm.MiniAgg.One",
+               "v2.0",
+               "",//additional define constant
+               new string[] {
+                  "System" ,
+               });
 
+        }
         private void cmdBuildMergePixelFarmPortable_Click(object sender, EventArgs e)
         {
             //config as portble library ***
@@ -43,7 +57,7 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg\MiniAgg.csproj");
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj");
             //
-           //mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj");
+            //mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj");
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj");
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniTesselate\Tesselate.csproj");
             // 
@@ -51,6 +65,16 @@ namespace BuildMergeProject
             //
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.GdiPlusPlatform.csproj");
             //
+            return mergePro;
+        }
+        static MergeProject CreateMergePixelFarmMiniAggProject()
+        {
+            MergeProject mergePro = new MergeProject();
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj");
+            //
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg\MiniAgg.csproj");
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj");
+
             return mergePro;
         }
         static MergeProject CreateMergePixelFarmPortableProject()
@@ -69,5 +93,7 @@ namespace BuildMergeProject
 
             return mergePro;
         }
+
+
     }
 }
