@@ -730,10 +730,11 @@ namespace BuildTextureFonts
 
         private void button6_Click(object sender, EventArgs e)
         {
-            //1. load font
-
+            //1. load font 
             PixelFarm.Drawing.Font font = nativeFontStore.LoadFont("tahoma", 28);
             //2. get glyph
+            NativeFont n = nativeFontStore.GetResolvedNativeFont(font);
+            var g1 = n.GetGlyph('C');
 
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };
             int j = glyphIndice.Length;
