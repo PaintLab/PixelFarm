@@ -31,31 +31,25 @@ namespace OpenTkEssTest
         VertexStore lionVxs;
         GLCanvasPainter painter;
 
-
+        GLBitmap glBmp;
 
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-            //-------------
-            aggImage = new ActualImage(200, 100, PixelFarm.Agg.Image.PixelFormat.ARGB32);
-            imgGfx2d = new ImageGraphics2D(aggImage, null);
-            aggPainter = new AggCanvasPainter(imgGfx2d);
-            //lion
             lionShape = new SpriteShape();
             lionShape.ParseLion();
-            //flip this lion vertically before use with openGL
-            PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
-                 PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
-                 PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
-            lionVxs = aff.TransformToVxs(lionShape.Path.Vxs);
-            DrawLion(aggPainter, lionShape, lionVxs);
-
+            RectD lionBounds = lionShape.Bounds;
+            //-------------
+            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.Image.PixelFormat.ARGB32);
+            imgGfx2d = new ImageGraphics2D(aggImage, null);
+            aggPainter = new AggCanvasPainter(imgGfx2d);
+             
+            DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
+            //convert affImage to texture 
+            glBmp = LoadTexture(aggImage);
 
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
-            //-------------------------
-
-            //-------------------------
-
+            //------------------------- 
             painter = new GLCanvasPainter(canvas2d, max, max);
         }
         protected override void DemoClosing()
@@ -79,7 +73,7 @@ namespace OpenTkEssTest
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
             //-------------------------------
-
+            canvas2d.DrawImage(glBmp, 0, 600);
             //int j = lionShape.NumPaths;
             //int[] pathList = lionShape.PathIndexList;
             //Color[] colors = lionShape.Colors;
