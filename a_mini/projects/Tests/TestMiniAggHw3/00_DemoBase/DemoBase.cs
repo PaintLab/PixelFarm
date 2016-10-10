@@ -84,6 +84,10 @@ namespace Mini
                 return LoadTexture(bmp);
             }
         }
+        protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.Agg.ActualImage actualImg)
+        {
+            return new PixelFarm.DrawingGL.GLBitmap(actualImg.Width, actualImg.Height, actualImg.GetBuffer(), false);
+        }
         protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(System.Drawing.Bitmap bmp)
         {
             var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
