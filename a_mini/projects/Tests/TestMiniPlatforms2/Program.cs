@@ -12,6 +12,7 @@ namespace TestGlfw
         static void Main()
         {
            // GLFWProgram2.Start();
+            Mini.RootDemoPath.Path = @"..\Data";
             GLFWProgram3.Start();
         }
     }
