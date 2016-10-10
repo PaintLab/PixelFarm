@@ -73,6 +73,7 @@
     <Compile Include="Sample02\T53_Viewport.cs" />
     <Compile Include="Sample02\T54_Lines.cs" />
     <Compile Include="Sample02\T55_Line2.cs" />
+    <Compile Include="Sample03\T1081_LionFill.cs" />
     <Compile Include="Sample03\LionDataStore.cs" />
     <Compile Include="Sample03\SpriteShape.cs" />
     <Compile Include="Sample04\T403_MsdfGenTest2.cs" />
