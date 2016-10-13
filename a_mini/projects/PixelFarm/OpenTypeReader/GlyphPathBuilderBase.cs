@@ -1,24 +1,27 @@
-﻿//MIT, 2016,  WinterDev
+﻿//Apache2, 2014-2016,   WinterDev
 using System;
 using System.Collections.Generic;
-using NRasterizer;
 
-using System.Drawing;
-using System.Drawing.Imaging;
-
-namespace PixelFarm.Agg
+namespace NRasterizer
 {
-    public class GlyphVxsBuilder
+    public abstract class GlyphPathBuilderBase
     {
         readonly Typeface _typeface;
         const int pointsPerInch = 72;
 
-        public GlyphVxsBuilder(Typeface typeface)
+        public GlyphPathBuilderBase(Typeface typeface)
         {
             _typeface = typeface;
         }
         const double FT_RESIZE = 64; //essential to be floating point
-        PixelFarm.Agg.VertexSource.PathWriter ps = new PixelFarm.Agg.VertexSource.PathWriter();
+
+        protected abstract void OnBeginRead(int countourCount);
+        protected abstract void OnEndRead();
+        protected abstract void OnCloseFigure();
+        protected abstract void OnCurve3(double p2x, double p2y, double x, double y);
+        protected abstract void OnCurve4(double p2x, double p2y, double p3x, double p3y, double x, double y);
+        protected abstract void OnMoveTo(double x, double y);
+        protected abstract void OnLineTo(double x, double y);
 
 
         void RenderGlyph(ushort[] contours, FtPoint[] ftpoints, Flag[] flags)
@@ -27,11 +30,14 @@ namespace PixelFarm.Agg
             //outline version
             //-----------------------------
             int npoints = ftpoints.Length;
-            List<PixelFarm.VectorMath.Vector2> points = new List<PixelFarm.VectorMath.Vector2>(npoints);
             int startContour = 0;
             int cpoint_index = 0;
             int todoContourCount = contours.Length;
-            ps.Clear();
+            //-----------------------------------
+            OnBeginRead(todoContourCount);
+            //-----------------------------------
+            double lastMoveX = 0;
+            double lastMoveY = 0;
 
             int controlPointCount = 0;
             while (todoContourCount > 0)
@@ -57,13 +63,13 @@ namespace PixelFarm.Agg
                             {
                                 case 1:
                                     {
-                                        ps.Curve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                        OnCurve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
                                             vpoint.X / FT_RESIZE, vpoint.Y / FT_RESIZE);
                                     }
                                     break;
                                 case 2:
                                     {
-                                        ps.Curve4(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                        OnCurve4(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
                                            thirdControlPoint.x / FT_RESIZE, thirdControlPoint.y / FT_RESIZE,
                                            vpoint.X / FT_RESIZE, vpoint.Y / FT_RESIZE);
                                     }
@@ -81,11 +87,11 @@ namespace PixelFarm.Agg
                             if (isFirstPoint)
                             {
                                 isFirstPoint = false;
-                                ps.MoveTo(vpoint.X / FT_RESIZE, vpoint.Y / FT_RESIZE);
+                                OnMoveTo(lastMoveX = (vpoint.X / FT_RESIZE), lastMoveY = (vpoint.Y / FT_RESIZE));
                             }
                             else
                             {
-                                ps.LineTo(vpoint.X / FT_RESIZE, vpoint.Y / FT_RESIZE);
+                                OnLineTo(vpoint.X / FT_RESIZE, vpoint.Y / FT_RESIZE);
                             }
 
                             //if (has_dropout)
@@ -132,7 +138,7 @@ namespace PixelFarm.Agg
                                         FtPointD mid = GetMidPoint(secondControlPoint, vpoint);
                                         //----------
                                         //generate curve3
-                                        ps.Curve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                        OnCurve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
                                             mid.x / FT_RESIZE, mid.y / FT_RESIZE);
                                         //------------------------
                                         controlPointCount--;
@@ -163,15 +169,15 @@ namespace PixelFarm.Agg
                         case 0: break;
                         case 1:
                             {
-                                ps.Curve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
-                                    ps.LastMoveX, ps.LastMoveY);
+                                OnCurve3(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                  lastMoveX, lastMoveY);
                             }
                             break;
                         case 2:
                             {
-                                ps.Curve4(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
+                                OnCurve4(secondControlPoint.x / FT_RESIZE, secondControlPoint.y / FT_RESIZE,
                                    thirdControlPoint.x / FT_RESIZE, thirdControlPoint.y / FT_RESIZE,
-                                   ps.LastMoveX, ps.LastMoveY);
+                                  lastMoveX, lastMoveY);
                             }
                             break;
                         default:
@@ -180,11 +186,12 @@ namespace PixelFarm.Agg
                     justFromCurveMode = false;
                     controlPointCount = 0;
                 }
-                ps.CloseFigure();
+                OnCloseFigure();
                 //--------                   
                 startContour++;
                 todoContourCount--;
             }
+            OnEndRead();
         }
         static FtPointD GetMidPoint(FtPoint v1, FtPoint v2)
         {
@@ -212,19 +219,12 @@ namespace PixelFarm.Agg
             FtPoint[] ftpoints = glyph.GetPoints(out endPoints, out flags);
             RenderGlyph(endPoints, ftpoints, flags);
         }
-        /// <summary>
-        /// create vertex store 
-        /// </summary>
-        /// <param name="c"></param>
-        /// <param name="size"></param>
-        /// <param name="resolution"></param>
-        /// <param name="toFlags"></param>
-        /// <returns></returns>
-        public VertexStore CreateVxs(char c, int size, int resolution)
+
+        public void Build(char c, int size, int resolution)
         {
             float scale = (float)(size * resolution) / (pointsPerInch * _typeface.UnitsPerEm);
             RenderGlyph(_typeface.Lookup(c));
-            return ps.Vxs;
         }
     }
+
 }

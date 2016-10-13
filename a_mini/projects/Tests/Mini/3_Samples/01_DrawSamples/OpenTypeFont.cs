@@ -27,19 +27,23 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             var fontfile = "tahoma.ttf";
             var reader = new OpenTypeReader();
-            char testChar = 'B';
+
             this.FillBG = true;
 
             int size = 72;
             int resolution = 72;
+            char testChar = 'B';
 
             using (var fs = new FileStream(fontfile, FileMode.Open))
             {
                 //1. read typeface from font file
                 Typeface typeFace = reader.Read(fs);
+
                 //2. glyph-to-vxs builder
-                var builder = new GlyphVxsBuilder(typeFace);
-                VertexStore vxs1 = builder.CreateVxs(testChar, size, resolution);
+                var builder = new GlyphPathBuilderVxs(typeFace);
+
+                builder.Build(testChar, size, resolution);
+                VertexStore vxs1 = builder.GetVxs(); 
                 //----------------
                 //3. do mini translate, scale
                 var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
@@ -93,7 +97,7 @@ namespace PixelFarm.Agg.Sample_Draw
                 //p.StrokeWidth = 2;
                 //5.5 
                 p.Draw(vxs);
-            } 
+            }
         }
     }
 
