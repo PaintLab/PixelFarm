@@ -1,14 +1,12 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+
 using System.Collections.Generic;
 using System.IO;
-
 namespace NRasterizer.Tables
 {
-
     class Glyf : TableEntry
     {
         List<Glyph> _glyphs;
-
         public Glyf(GlyphLocations glyphLocations)
         {
             this.GlyphLocations = glyphLocations;
@@ -36,7 +34,6 @@ namespace NRasterizer.Tables
             {
                 reader.BaseStream.Seek(tableOffset, SeekOrigin.Begin);//reset 
                 reader.BaseStream.Seek(locations.Offsets[i], SeekOrigin.Current);
-
                 uint length = locations.Offsets[i + 1] - locations.Offsets[i];
                 if (length > 0)
                 {
@@ -125,14 +122,11 @@ namespace NRasterizer.Tables
 
             ushort instructionSize = input.ReadUInt16();
             byte[] instructions = input.ReadBytes(instructionSize);
-
             // TODO: should this take the max points rather?
             int pointCount = endPoints[count - 1] + 1; // TODO: count can be zero?
-
             Flag[] flags = ReadFlags(input, pointCount);
             short[] xs = ReadCoordinates(input, pointCount, flags, Flag.XByte, Flag.XSignOrSame);
             short[] ys = ReadCoordinates(input, pointCount, flags, Flag.YByte, Flag.YSignOrSame);
-
             //List<bool> list = new List<bool>();
             //foreach (Flag f in flags)
             //{
@@ -147,6 +141,5 @@ namespace NRasterizer.Tables
             // TODO: Parse composite glyphs
             return Glyph.Empty;
         }
-
     }
 }

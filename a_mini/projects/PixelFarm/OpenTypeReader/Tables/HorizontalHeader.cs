@@ -1,16 +1,14 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+
 using System;
 using System.IO;
-
 namespace NRasterizer.Tables
 {
     class HorizontalHeader : TableEntry
     {
         UInt16 _numerOfHorizontalMetrics;
-
         public HorizontalHeader()
         {
-
         }
         public override string Name
         {
@@ -22,7 +20,6 @@ namespace NRasterizer.Tables
             short ascender = input.ReadInt16();
             short descent = input.ReadInt16();
             short lineGap = input.ReadInt16();
-
             ushort advanceWidthMax = input.ReadUInt16();
             short minLeftSideBearing = input.ReadInt16();
             short minRightSideBearing = input.ReadInt16();
@@ -46,7 +43,5 @@ namespace NRasterizer.Tables
         {
             // should be zero
         }
-
-       
     }
 }

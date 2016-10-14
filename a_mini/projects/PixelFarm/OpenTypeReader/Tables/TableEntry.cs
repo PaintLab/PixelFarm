@@ -1,11 +1,9 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+
 using System;
 using System.IO;
-using System.Text;
-
 namespace NRasterizer.Tables
 {
-
     abstract class TableEntry
     {
         public TableEntry()
@@ -35,6 +33,5 @@ namespace NRasterizer.Tables
             //intend ***
             throw new NotImplementedException();
         }
-
     }
 }

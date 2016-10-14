@@ -1,18 +1,16 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+
 using System;
 using System.IO;
 using System.Text;
-
 namespace NRasterizer.Tables
 {
     struct TableHeader
     {
-
         readonly uint _tag;
         readonly uint _checkSum;
         readonly uint _offset;
         readonly uint _length;
-
         public TableHeader(uint tag, uint checkSum, uint offset, uint len)
         {
             _tag = tag;
@@ -54,7 +52,4 @@ namespace NRasterizer.Tables
                 input.ReadUInt32());
         }
     }
-
-
-
 }

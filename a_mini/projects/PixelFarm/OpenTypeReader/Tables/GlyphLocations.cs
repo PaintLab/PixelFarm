@@ -1,4 +1,5 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+
 using System.IO;
 namespace NRasterizer.Tables
 {
@@ -7,7 +8,6 @@ namespace NRasterizer.Tables
         uint[] _offsets;
         public GlyphLocations(int glyphCount, bool wideLocations)
         {
-
             _offsets = new uint[glyphCount + 1];
             this.WideLocations = wideLocations;
         }

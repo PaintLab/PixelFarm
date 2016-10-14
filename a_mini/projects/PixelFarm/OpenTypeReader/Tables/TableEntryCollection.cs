@@ -1,9 +1,6 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
 
+using System.Collections.Generic;
 namespace NRasterizer.Tables
 {
     class TableEntryCollection
@@ -27,10 +24,10 @@ namespace NRasterizer.Tables
 
         public bool TryGetTable(string tableName, out TableEntry entry)
         {
-            return _tables.TryGetValue(tableName, out  entry);
+            return _tables.TryGetValue(tableName, out entry);
         }
 
-     
+
         public void ReplaceTable(TableEntry table)
         {
             _tables[table.Name] = table;

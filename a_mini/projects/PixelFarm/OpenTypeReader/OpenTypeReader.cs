@@ -1,28 +1,24 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+
 using System;
-using System.Collections.Generic;
 using System.IO;
 using NRasterizer.IO;
 using NRasterizer.Tables;
-
 namespace NRasterizer
 {
     public class OpenTypeReader
     {
-
         public Typeface Read(Stream stream)
         {
             var little = BitConverter.IsLittleEndian;
             using (var input = new ByteOrderSwappingBinaryReader(stream))
             {
-
                 ushort majorVersion = input.ReadUInt16();
                 ushort minorVersion = input.ReadUInt16();
                 ushort tableCount = input.ReadUInt16();
                 ushort searchRange = input.ReadUInt16();
                 ushort entrySelector = input.ReadUInt16();
                 ushort rangeShift = input.ReadUInt16();
-
                 var tables = new TableEntryCollection();
                 for (int i = 0; i < tableCount; i++)
                 {
@@ -37,7 +33,6 @@ namespace NRasterizer
                 Cmap cmaps = ReadTableIfExists(tables, input, new Cmap());
                 HorizontalHeader horizontalHeader = ReadTableIfExists(tables, input, new HorizontalHeader());
                 HorizontalMetrics horizontalMetrics = ReadTableIfExists(tables, input, new HorizontalMetrics(horizontalHeader.HorizontalMetricsCount, maximumProfile.GlyphCount));
-
                 return new Typeface(header.Bounds, header.UnitsPerEm, glyf.Glyphs, cmaps.CharMaps, horizontalMetrics);
             }
         }
@@ -67,6 +62,5 @@ namespace NRasterizer
             //not found
             return null;
         }
-
     }
 }

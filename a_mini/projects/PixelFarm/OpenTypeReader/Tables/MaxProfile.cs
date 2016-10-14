@@ -1,19 +1,20 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+
 using System.IO;
 namespace NRasterizer.Tables
 {
     class MaxProfile : TableEntry
     {
-        ushort _gylphCount;      
+        ushort _glyphCount;
         public override string Name
         {
             get { return "maxp"; }
         }
-        public ushort GlyphCount { get { return _gylphCount; } }
+        public ushort GlyphCount { get { return _glyphCount; } }
         protected override void ReadContentFrom(BinaryReader input)
         {
             uint version = input.ReadUInt32(); // 0x00010000 == 1.0
-            _gylphCount = input.ReadUInt16();
+            _glyphCount = input.ReadUInt16();
             ushort maxPointsPerGlyph = input.ReadUInt16();
             ushort maxContoursPerGlyph = input.ReadUInt16();
             ushort maxPointsPerCompositeGlyph = input.ReadUInt16();
@@ -28,6 +29,5 @@ namespace NRasterizer.Tables
             ushort maxComponentElements = input.ReadUInt16();
             ushort maxComponentDepth = input.ReadUInt16();
         }
-
     }
 }
