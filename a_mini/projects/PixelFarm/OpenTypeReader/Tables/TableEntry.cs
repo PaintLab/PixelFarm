@@ -5,48 +5,36 @@ using System.Text;
 
 namespace NRasterizer.Tables
 {
-    class TableEntry
+
+    abstract class TableEntry
     {
-        readonly BinaryReader _input;
-        readonly uint _tag;
-        readonly uint _checkSum;
-        readonly uint _offset;
-        readonly uint _length;
-
-        public string Tag { get { return TagToString(_tag); } }
-
-        private TableEntry(BinaryReader input)
+        public TableEntry()
         {
-            _input = input;
-            _tag = _input.ReadUInt32();
-            _checkSum = _input.ReadUInt32();
-            _offset = _input.ReadUInt32();
-            _length = _input.ReadUInt32();
+        }
+        public TableHeader Header { get; set; }
+        protected abstract void ReadContentFrom(BinaryReader reader);
+        public abstract string Name { get; }
+        public void LoadDataFrom(BinaryReader reader)
+        {
+            reader.BaseStream.Seek(this.Header.Offset, SeekOrigin.Begin);
+            ReadContentFrom(reader);
+        }
+    }
+    class UnreadTableEntry : TableEntry
+    {
+        public UnreadTableEntry(TableHeader header)
+        {
+            this.Header = header;
+        }
+        public override string Name
+        {
+            get { return this.Header.Tag; }
+        }
+        protected override void ReadContentFrom(BinaryReader reader)
+        {
+            //intend ***
+            throw new NotImplementedException();
         }
 
-        public static TableEntry ReadFrom(BinaryReader input)
-        {
-            return new TableEntry(input);
-        }
-
-        // TODO: Take offset parameter as commonly two seeks are made in a row
-        public BinaryReader GetDataReader()
-        {
-            _input.BaseStream.Seek(_offset, SeekOrigin.Begin);
-            // TODO: Limit reading to _length by wrapping BinaryReader (or Stream)?
-            return _input;
-        }
-
-        private String TagToString(uint tag)
-        {
-            byte[] bytes = BitConverter.GetBytes(tag);
-            Array.Reverse(bytes);
-            return Encoding.ASCII.GetString(bytes);
-        }
-
-        public override string ToString()
-        {
-            return "{" + Tag + "}";
-        }
     }
 }

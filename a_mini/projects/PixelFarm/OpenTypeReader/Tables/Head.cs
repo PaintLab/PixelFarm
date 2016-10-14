@@ -4,17 +4,25 @@ using System.IO;
 
 namespace NRasterizer.Tables
 {
-    class Head
+    class Head : TableEntry
     {
-        readonly short _indexToLocFormat;
-        readonly Bounds _bounds;
-        readonly ushort _unitsPerEm;
-
+        short _indexToLocFormat;
+        Bounds _bounds;
+        ushort _unitsPerEm;
         public Bounds Bounds { get { return _bounds; } }
         public bool WideGlyphLocations { get { return _indexToLocFormat > 0; } }
 
-        private Head(BinaryReader input)
+        public Head()
         {
+
+        }
+        public override string Name
+        {
+            get { return "head"; }
+        }
+        protected override void ReadContentFrom(BinaryReader input)
+        {
+
             uint version = input.ReadUInt32(); // 0x00010000 for version 1.0.
             uint fontRevision = input.ReadUInt32();
             uint checkSumAdjustment = input.ReadUInt32();
@@ -34,12 +42,7 @@ namespace NRasterizer.Tables
             short fontDirectionHint = input.ReadInt16();
             _indexToLocFormat = input.ReadInt16(); // 0 for 16-bit offsets, 1 for 32-bit.
             short glyphDataFormat = input.ReadInt16(); // 0
-        }
-
-        internal static Head From(TableEntry table)
-        {
-            return new Head(table.GetDataReader());
-        }
+        }       
 
         public ushort UnitsPerEm { get { return _unitsPerEm; } }
     }

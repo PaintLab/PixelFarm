@@ -2,11 +2,15 @@
 using System.IO;
 namespace NRasterizer.Tables
 {
-    public class MaxProfile
+    class MaxProfile : TableEntry
     {
-        ushort _gylphCount;
-
-        private MaxProfile(BinaryReader input)
+        ushort _gylphCount;      
+        public override string Name
+        {
+            get { return "maxp"; }
+        }
+        public ushort GlyphCount { get { return _gylphCount; } }
+        protected override void ReadContentFrom(BinaryReader input)
         {
             uint version = input.ReadUInt32(); // 0x00010000 == 1.0
             _gylphCount = input.ReadUInt16();
@@ -23,13 +27,6 @@ namespace NRasterizer.Tables
             ushort maxSizeOfInstructions = input.ReadUInt16();
             ushort maxComponentElements = input.ReadUInt16();
             ushort maxComponentDepth = input.ReadUInt16();
-        }
-
-        public ushort GlyphCount { get { return _gylphCount; } }
-
-        internal static MaxProfile From(TableEntry table)
-        {
-            return new MaxProfile(table.GetDataReader());
         }
 
     }

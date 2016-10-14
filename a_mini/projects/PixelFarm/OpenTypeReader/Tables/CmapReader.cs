@@ -6,9 +6,44 @@ using System.IO;
 
 namespace NRasterizer.Tables
 {
-    class CmapReader
+    class Cmap : TableEntry
     {
-        private static UInt16[] ReadUInt16Array(BinaryReader input, int length)
+        List<CharacterMap> charMaps;
+        public override string Name
+        {
+            get { return "cmap"; }
+        }
+        public List<CharacterMap> CharMaps
+        {
+            get { return charMaps; }
+        }
+        protected override void ReadContentFrom(BinaryReader input)
+        {
+            ushort version = input.ReadUInt16(); // 0
+            ushort tableCount = input.ReadUInt16();
+
+            var entries = new List<CMapEntry>(tableCount);
+            for (int i = 0; i < tableCount; i++)
+            {
+                ushort platformId = input.ReadUInt16();
+                ushort encodingId = input.ReadUInt16();
+                uint offset = input.ReadUInt32();
+                entries.Add(new CMapEntry(platformId, encodingId, offset));
+            }
+
+
+            charMaps = new List<CharacterMap>(tableCount);
+            uint tableOffset = this.Header.Offset;
+            foreach (CMapEntry entry in entries)
+            {
+                //TODO: review here
+                input.BaseStream.Seek(tableOffset, SeekOrigin.Begin);//reset
+                input.BaseStream.Seek(entry.Offset, SeekOrigin.Current);
+                charMaps.Add(ReadCharacterMap(entry, input));
+            }
+
+        }
+        static UInt16[] ReadUInt16Array(BinaryReader input, int length)
         {
             var result = new UInt16[length];
             for (int i = 0; i < length; i++)
@@ -18,7 +53,7 @@ namespace NRasterizer.Tables
             return result;
         }
 
-        private static CharacterMap ReadCharacterMap(CMapEntry entry, BinaryReader input)
+        static CharacterMap ReadCharacterMap(CMapEntry entry, BinaryReader input)
         {
             // I want to thank Microsoft for not giving a simple count on the glyphIdArray
             long tableStart = input.BaseStream.Position;
@@ -69,31 +104,8 @@ namespace NRasterizer.Tables
             public UInt32 Offset { get { return _offset; } }
         }
 
-        internal static List<CharacterMap> From(TableEntry table)
-        {
-            BinaryReader input = table.GetDataReader();
 
-            ushort version = input.ReadUInt16(); // 0
-            ushort tableCount = input.ReadUInt16();
 
-            var entries = new List<CMapEntry>(tableCount);
-            for (int i = 0; i < tableCount; i++)
-            {
-                ushort platformId = input.ReadUInt16();
-                ushort encodingId = input.ReadUInt16();
-                uint offset = input.ReadUInt32();
-                entries.Add(new CMapEntry(platformId, encodingId, offset));
-            }
 
-            var result = new List<CharacterMap>(tableCount);
-            foreach (var entry in entries)
-            {
-                BinaryReader subtable = table.GetDataReader();
-                subtable.BaseStream.Seek(entry.Offset, SeekOrigin.Current);
-                result.Add(ReadCharacterMap(entry, subtable));
-            }
-
-            return result;
-        }
     }
 }

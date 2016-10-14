@@ -41,5 +41,11 @@ namespace NRasterizer
         public Bounds Bounds { get { return _bounds; } }
         public ushort UnitsPerEm { get { return _unitsPerEm; } }
         public List<Glyph> Glyphs { get { return _glyphs; } }
+        
+        
+        //-------------------------------------------------------
+
+
+
     }
 }

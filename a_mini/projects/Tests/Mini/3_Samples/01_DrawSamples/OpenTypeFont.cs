@@ -40,8 +40,7 @@ namespace PixelFarm.Agg.Sample_Draw
                 Typeface typeFace = reader.Read(fs);
 
                 //2. glyph-to-vxs builder
-                var builder = new GlyphPathBuilderVxs(typeFace);
-
+                var builder = new GlyphPathBuilderVxs(typeFace); 
                 builder.Build(testChar, size, resolution);
                 VertexStore vxs1 = builder.GetVxs(); 
                 //----------------

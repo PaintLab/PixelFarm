@@ -4,11 +4,19 @@ using System.IO;
 
 namespace NRasterizer.Tables
 {
-    class HorizontalHeader
+    class HorizontalHeader : TableEntry
     {
-        readonly UInt16 _numerOfHorizontalMetrics;
+        UInt16 _numerOfHorizontalMetrics;
 
-        public HorizontalHeader(BinaryReader input)
+        public HorizontalHeader()
+        {
+
+        }
+        public override string Name
+        {
+            get { return "hhea"; }
+        }
+        protected override void ReadContentFrom(BinaryReader input)
         {
             uint version = input.ReadUInt32();
             short ascender = input.ReadInt16();
@@ -29,7 +37,6 @@ namespace NRasterizer.Tables
             short metricDataFormat = input.ReadInt16(); // 0
             _numerOfHorizontalMetrics = input.ReadUInt16();
         }
-
         public UInt16 HorizontalMetricsCount
         {
             get { return _numerOfHorizontalMetrics; }
@@ -40,9 +47,6 @@ namespace NRasterizer.Tables
             // should be zero
         }
 
-        public static HorizontalHeader From(TableEntry table)
-        {
-            return new HorizontalHeader(table.GetDataReader());
-        }
+       
     }
 }
