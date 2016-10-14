@@ -39,10 +39,15 @@ namespace PixelFarm.Agg.Sample_Draw
                 //1. read typeface from font file
                 Typeface typeFace = reader.Read(fs);
 
+                //test left & right that has kern distance
+                ushort left_g_index = (ushort)typeFace.LookupIndex('A');
+                ushort right_g_index = (ushort)typeFace.LookupIndex('Y');
+                short kern_distance = typeFace.GetKernDistance(left_g_index, right_g_index);
+
                 //2. glyph-to-vxs builder
-                var builder = new GlyphPathBuilderVxs(typeFace); 
+                var builder = new GlyphPathBuilderVxs(typeFace);
                 builder.Build(testChar, size, resolution);
-                VertexStore vxs1 = builder.GetVxs(); 
+                VertexStore vxs1 = builder.GetVxs();
                 //----------------
                 //3. do mini translate, scale
                 var mat = PixelFarm.Agg.Transform.Affine.NewMatix(

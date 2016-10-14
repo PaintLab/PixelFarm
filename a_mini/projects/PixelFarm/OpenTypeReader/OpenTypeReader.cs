@@ -69,13 +69,16 @@ namespace NRasterizer
                 Cmap cmaps = ReadTableIfExists(tables, input, new Cmap());
                 HorizontalHeader horizontalHeader = ReadTableIfExists(tables, input, new HorizontalHeader());
                 HorizontalMetrics horizontalMetrics = ReadTableIfExists(tables, input, new HorizontalMetrics(horizontalHeader.HorizontalMetricsCount, maximumProfile.GlyphCount));
+                Kern kern = ReadTableIfExists(tables, input, new Kern());
+
                 return new Typeface(
                     nameEntry,
                     header.Bounds,
                     header.UnitsPerEm,
                     glyf.Glyphs,
                     cmaps.CharMaps,
-                    horizontalMetrics);
+                    horizontalMetrics,
+                    kern);
             }
         }
         static TableHeader ReadTableHeader(BinaryReader input)
