@@ -28,7 +28,6 @@ namespace NRasterizer
             _glyphs = glyphs;
             _cmaps = cmaps;
             _horizontalMetrics = horizontalMetrics;
-
             _kern = kern;
         }
         public string Name
