@@ -47,7 +47,6 @@
     <Compile Include="1_Shared\Square.cs" />
     <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\GlyphPathBuilderGdiPlus.cs" />
     <Compile Include="3_Samples\01_DrawSamples\GlyphPathBuilderVxs.cs" />
     <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />

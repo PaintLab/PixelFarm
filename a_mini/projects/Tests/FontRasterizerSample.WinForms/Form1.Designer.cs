@@ -34,6 +34,9 @@
             this.chkBorder = new System.Windows.Forms.CheckBox();
             this.chkFillBackground = new System.Windows.Forms.CheckBox();
             this.cmbRenderChoices = new System.Windows.Forms.ComboBox();
+            this.lstFontSizes = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.chkKern = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -95,11 +98,45 @@
             this.cmbRenderChoices.Size = new System.Drawing.Size(224, 21);
             this.cmbRenderChoices.TabIndex = 7;
             // 
+            // lstFontSizes
+            // 
+            this.lstFontSizes.FormattingEnabled = true;
+            this.lstFontSizes.Location = new System.Drawing.Point(653, 26);
+            this.lstFontSizes.Name = "lstFontSizes";
+            this.lstFontSizes.Size = new System.Drawing.Size(100, 212);
+            this.lstFontSizes.TabIndex = 8;
+            this.lstFontSizes.SelectedIndexChanged += new System.EventHandler(this.lstFontSizes_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(650, 10);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(70, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Size in Points";
+            // 
+            // chkKern
+            // 
+            this.chkKern.AutoSize = true;
+            this.chkKern.Checked = true;
+            this.chkKern.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkKern.Location = new System.Drawing.Point(237, 59);
+            this.chkKern.Name = "chkKern";
+            this.chkKern.Size = new System.Drawing.Size(85, 17);
+            this.chkKern.TabIndex = 10;
+            this.chkKern.Text = "Do Kerning1";
+            this.chkKern.UseVisualStyleBackColor = true;
+            this.chkKern.CheckedChanged += new System.EventHandler(this.chkKern_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(814, 427);
+            this.Controls.Add(this.chkKern);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lstFontSizes);
             this.Controls.Add(this.cmbRenderChoices);
             this.Controls.Add(this.chkFillBackground);
             this.Controls.Add(this.chkBorder);
@@ -121,6 +158,9 @@
         private System.Windows.Forms.CheckBox chkBorder;
         private System.Windows.Forms.CheckBox chkFillBackground;
         private System.Windows.Forms.ComboBox cmbRenderChoices;
+        private System.Windows.Forms.ListBox lstFontSizes;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chkKern;
     }
 }
 
