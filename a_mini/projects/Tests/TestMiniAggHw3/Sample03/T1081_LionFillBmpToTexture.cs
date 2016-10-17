@@ -28,7 +28,6 @@ namespace OpenTkEssTest
         //---------------------------
         CanvasGL2d canvas2d;
         SpriteShape lionShape;
-        VertexStore lionVxs;
         GLCanvasPainter painter;
 
         GLBitmap glBmp;
@@ -42,7 +41,7 @@ namespace OpenTkEssTest
             aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.Image.PixelFormat.ARGB32);
             imgGfx2d = new ImageGraphics2D(aggImage, null);
             aggPainter = new AggCanvasPainter(imgGfx2d);
-             
+
             DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
             //convert affImage to texture 
             glBmp = LoadTexture(aggImage);
@@ -74,16 +73,6 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             //-------------------------------
             canvas2d.DrawImage(glBmp, 0, 600);
-            //int j = lionShape.NumPaths;
-            //int[] pathList = lionShape.PathIndexList;
-            //Color[] colors = lionShape.Colors;
-            //VertexStore myvxs = lionVxs;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    painter.FillColor = colors[i];
-            //    painter.Fill(new VertexStoreSnap(myvxs, pathList[i]));
-            //}
-            //-------------------------------
             miniGLControl.SwapBuffers();
         }
     }
