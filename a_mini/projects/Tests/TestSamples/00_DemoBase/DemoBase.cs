@@ -33,6 +33,10 @@ namespace Mini
         Vector,
         Bitmap
     }
+    public static class RootDemoPath
+    {
+        public static string Path = "";
+    }
 
     public abstract class DemoBase
     {

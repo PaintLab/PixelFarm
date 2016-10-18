@@ -23,39 +23,70 @@ namespace PixelFarm.Agg.Sample_Draw
     {
         VertexStore vxs;
         CurveFlattener curveFlattener = new CurveFlattener();
+        VertexStore left_vxs;
+        VertexStore right_vxs;
         public override void Init()
         {
             var fontfile = "tahoma.ttf";
             var reader = new OpenTypeReader();
-            char testChar = 'B';
+
             this.FillBG = true;
 
             int size = 72;
             int resolution = 72;
+            char testChar = 'B';
 
             using (var fs = new FileStream(fontfile, FileMode.Open))
             {
                 //1. read typeface from font file
                 Typeface typeFace = reader.Read(fs);
-                //2. glyph-to-vxs builder
-                var builder = new GlyphVxsBuilder(typeFace);
-                VertexStore vxs1 = builder.CreateVxs(testChar, size, resolution);
-                //----------------
-                //3. do mini translate, scale
-                var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                    //translate
-                     new PixelFarm.Agg.Transform.AffinePlan(
-                         PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 10, 10),
-                    //scale
-                     new PixelFarm.Agg.Transform.AffinePlan(
-                         PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 4, 4)
-                         );
 
-                vxs1 = mat.TransformToVxs(vxs1);
-                //----------------
-                //4. flatten all curves 
-                vxs = curveFlattener.MakeVxs(vxs1);
+                //test left & right that has kern distance
+                ushort left_g_index = (ushort)typeFace.LookupIndex('A');
+                ushort right_g_index = (ushort)typeFace.LookupIndex('Y');
+                short kern_distance = typeFace.GetKernDistance(left_g_index, right_g_index);
+
+                //2. glyph-to-vxs builder
+                var builder = new GlyphPathBuilderVxs(typeFace);
+                left_vxs = BuildVxsForGlyph(builder, 'A', size, resolution);
+                right_vxs = BuildVxsForGlyph(builder, 'Y', size, resolution);
+
+                //builder.Build('A', size, resolution);
+                //VertexStore vxs1 = builder.GetVxs();
+                //builder.Build('Y', size, resolution);
+                //VertexStore vxs2 = builder.GetVxs();
+                //---------------- 
+
+                ////3. do mini translate, scale
+                //var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+                //    //translate
+                //     new PixelFarm.Agg.Transform.AffinePlan(
+                //         PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 10, 10),
+                //    //scale
+                //     new PixelFarm.Agg.Transform.AffinePlan(
+                //         PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 4, 4)
+                //         );
+
+                //vxs1 = mat.TransformToVxs(vxs1);
+                ////----------------
+                ////4. flatten all curves 
+                //vxs = curveFlattener.MakeVxs(vxs1);
             }
+        }
+        VertexStore BuildVxsForGlyph(GlyphPathBuilderVxs builder, char character, int size, int resolution)
+        {
+            builder.Build(character, size);
+            VertexStore vxs1 = builder.GetVxs();
+            var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+                //translate
+                 new PixelFarm.Agg.Transform.AffinePlan(
+                     PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 10, 10),
+                //scale
+                 new PixelFarm.Agg.Transform.AffinePlan(
+                     PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 1, 1)
+                     );
+            vxs1 = mat.TransformToVxs(vxs1);
+            return curveFlattener.MakeVxs(vxs1);
         }
         [DemoConfig]
         public bool FillBG
@@ -82,7 +113,9 @@ namespace PixelFarm.Agg.Sample_Draw
                 //5.2 
                 p.FillColor = PixelFarm.Drawing.Color.Black;
                 //5.3
-                p.Fill(vxs);
+                //p.Fill(vxs);
+                p.Fill(left_vxs);                
+                p.Fill(right_vxs);
             }
 
             if (FillBorder)
@@ -92,8 +125,10 @@ namespace PixelFarm.Agg.Sample_Draw
                 //user can specific border width here...
                 //p.StrokeWidth = 2;
                 //5.5 
-                p.Draw(vxs);
-            } 
+                //p.Draw(vxs);
+                p.Draw(left_vxs);
+                p.Draw(right_vxs);
+            }
         }
     }
 

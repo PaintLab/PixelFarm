@@ -173,5 +173,8 @@
     <ClCompile Include="msdfgen\Vector2.cpp">
       <Filter>msdfgen</Filter>
     </ClCompile>
+    <ClCompile Include="ExportFunc3_Icu.cpp">
+      <Filter>Binders</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

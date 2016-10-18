@@ -1,48 +1,54 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+
 using System;
 using System.IO;
-
 namespace NRasterizer.Tables
 {
-    class HorizontalHeader
+    class HorizontalHeader : TableEntry
     {
-        readonly UInt16 _numerOfHorizontalMetrics;
 
-        public HorizontalHeader(BinaryReader input)
+        public HorizontalHeader()
         {
-            uint version = input.ReadUInt32();
-            short ascender = input.ReadInt16();
-            short descent = input.ReadInt16();
-            short lineGap = input.ReadInt16();
-
-            ushort advanceWidthMax = input.ReadUInt16();
-            short minLeftSideBearing = input.ReadInt16();
-            short minRightSideBearing = input.ReadInt16();
-            short maxXExtent = input.ReadInt16();
-            short caretSlopeRise = input.ReadInt16();
-            short caretSlopeRun = input.ReadInt16();
-            Reserved(input.ReadInt16());
-            Reserved(input.ReadInt16());
-            Reserved(input.ReadInt16());
-            Reserved(input.ReadInt16());
-            Reserved(input.ReadInt16());
-            short metricDataFormat = input.ReadInt16(); // 0
-            _numerOfHorizontalMetrics = input.ReadUInt16();
         }
-
-        public UInt16 HorizontalMetricsCount
+        public override string Name
         {
-            get { return _numerOfHorizontalMetrics; }
+            get { return "hhea"; }
         }
-
+        protected override void ReadContentFrom(BinaryReader input)
+        {
+            Version = input.ReadUInt32();
+            Ascent = input.ReadInt16();
+            Descent = input.ReadInt16();
+            LineGap = input.ReadInt16();
+            AdvancedWidthMax = input.ReadUInt16();
+            MinLeftSideBearing = input.ReadInt16();
+            MinRightSideBearing = input.ReadInt16();
+            MaxXExtent = input.ReadInt16();
+            CaretSlopRise = input.ReadInt16();
+            CaretSlopRun = input.ReadInt16();
+            Reserved(input.ReadInt16());
+            Reserved(input.ReadInt16());
+            Reserved(input.ReadInt16());
+            Reserved(input.ReadInt16());
+            Reserved(input.ReadInt16());
+            MatricDataFormat = input.ReadInt16(); // 0
+            HorizontalMetricsCount = input.ReadUInt16();
+        }
+        public uint Version { get; private set; }
+        public short Ascent { get; private set; }
+        public short Descent { get; private set; }
+        public short LineGap { get; private set; }
+        public ushort AdvancedWidthMax { get; private set; }
+        public short MinLeftSideBearing { get; private set; }
+        public short MinRightSideBearing { get; private set; }
+        public short MaxXExtent { get; private set; }
+        public short CaretSlopRise { get; private set; }
+        public short CaretSlopRun { get; private set; }
+        public short MatricDataFormat { get; private set; }
+        public ushort HorizontalMetricsCount { get; private set; }
         void Reserved(short zero)
         {
             // should be zero
-        }
-
-        public static HorizontalHeader From(TableEntry table)
-        {
-            return new HorizontalHeader(table.GetDataReader());
         }
     }
 }

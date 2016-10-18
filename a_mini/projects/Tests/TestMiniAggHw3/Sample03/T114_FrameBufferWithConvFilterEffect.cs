@@ -40,7 +40,7 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = LoadTexture(@"..\leaves.jpg");
+                glbmp = LoadTexture(RootDemoPath.Path + @"\leaves.jpg");
                 isInit = true;
             }
             if (frameBuffer.FrameBufferId > 0)
@@ -53,7 +53,7 @@ namespace OpenTkEssTest
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
-                    canvas2d.Clear(PixelFarm.Drawing.Color.Red); 
+                    canvas2d.Clear(PixelFarm.Drawing.Color.Red);
                     canvas2d.DrawImageWithConv3x3(glbmp, Mat3x3ConvGen.emboss, 0, 300);
                     canvas2d.DetachFrameBuffer();
 

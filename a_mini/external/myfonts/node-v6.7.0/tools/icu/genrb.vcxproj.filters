@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb">
+      <UniqueIdentifier>{22267014-2725-A791-BFE4-561F224E168D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\genrb\_excluded_files">
+      <UniqueIdentifier>{158E591E-B6EA-0C85-8F5A-18EAFA09B4CE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\errmsg.c">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\errmsg.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\genrb.cpp">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\genrb.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\parse.cpp">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\parse.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\prscmnts.cpp">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\prscmnts.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\rbutil.c">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\rbutil.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\read.c">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\read.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\reslist.cpp">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\reslist.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\rle.c">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\rle.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\ustr.c">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\deps\icu-small\source\tools\genrb\ustr.h">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\wrtjava.cpp">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\wrtxml.cpp">
+      <Filter>..\..\deps\icu-small\source\tools\genrb</Filter>
+    </ClCompile>
+    <None Include="icu-generic.gyp"/>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\genrb\derb.cpp">
+      <Filter>..\..\deps\icu-small\source\tools\genrb\_excluded_files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

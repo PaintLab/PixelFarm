@@ -40,6 +40,7 @@
             this.button6 = new System.Windows.Forms.Button();
             this.chkUseOpenGLES2 = new System.Windows.Forms.CheckBox();
             this.button7 = new System.Windows.Forms.Button();
+            this.cmdTestNativeLib = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -159,11 +160,22 @@
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
+            // cmdTestNativeLib
+            // 
+            this.cmdTestNativeLib.Location = new System.Drawing.Point(252, 489);
+            this.cmdTestNativeLib.Name = "cmdTestNativeLib";
+            this.cmdTestNativeLib.Size = new System.Drawing.Size(150, 32);
+            this.cmdTestNativeLib.TabIndex = 12;
+            this.cmdTestNativeLib.Text = "Test FtLib";
+            this.cmdTestNativeLib.UseVisualStyleBackColor = true;
+            this.cmdTestNativeLib.Click += new System.EventHandler(this.cmdTestNativeLib_Click);
+            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(738, 588);
+            this.Controls.Add(this.cmdTestNativeLib);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.chkUseOpenGLES2);
             this.Controls.Add(this.button6);
@@ -198,5 +210,6 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.CheckBox chkUseOpenGLES2;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button cmdTestNativeLib;
     }
 }

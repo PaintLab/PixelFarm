@@ -1,12 +1,59 @@
 ﻿//Apache2, 2014-2016, Samuel Carlsson, WinterDev
+using System;
 using System.Collections.Generic;
 using System.IO;
-
 namespace NRasterizer.Tables
 {
-
-    static class Glyf
+    class Glyf : TableEntry
     {
+        List<Glyph> _glyphs;
+        public Glyf(GlyphLocations glyphLocations)
+        {
+            this.GlyphLocations = glyphLocations;
+        }
+        public List<Glyph> Glyphs
+        {
+            get { return _glyphs; }
+        }
+        public override string Name
+        {
+            get { return "glyf"; }
+        }
+        public GlyphLocations GlyphLocations
+        {
+            get;
+            private set;
+        }
+        protected override void ReadContentFrom(BinaryReader reader)
+        {
+            _glyphs = new List<Glyph>();
+            GlyphLocations locations = this.GlyphLocations;
+            int glyphCount = locations.GlyphCount;
+            uint tableOffset = this.Header.Offset;
+            for (int i = 0; i < glyphCount; i++)
+            {
+                reader.BaseStream.Seek(tableOffset, SeekOrigin.Begin);//reset 
+                reader.BaseStream.Seek(locations.Offsets[i], SeekOrigin.Current);
+                uint length = locations.Offsets[i + 1] - locations.Offsets[i];
+                if (length > 0)
+                {
+                    short contoursCount = reader.ReadInt16();
+                    Bounds bounds = BoundsReader.ReadFrom(reader);
+                    if (contoursCount >= 0)
+                    {
+                        _glyphs.Add(ReadSimpleGlyph(reader, contoursCount, bounds));
+                    }
+                    else
+                    {
+                        _glyphs.Add(ReadCompositeGlyph(reader, -contoursCount, bounds));
+                    }
+                }
+                else
+                {
+                    _glyphs.Add(Glyph.Empty);
+                }
+            }
+        }
         static bool HasFlag(Flag target, Flag test)
         {
             return (target & test) == test;
@@ -75,21 +122,19 @@ namespace NRasterizer.Tables
 
             ushort instructionSize = input.ReadUInt16();
             byte[] instructions = input.ReadBytes(instructionSize);
-
             // TODO: should this take the max points rather?
             int pointCount = endPoints[count - 1] + 1; // TODO: count can be zero?
-
             Flag[] flags = ReadFlags(input, pointCount);
             short[] xs = ReadCoordinates(input, pointCount, flags, Flag.XByte, Flag.XSignOrSame);
             short[] ys = ReadCoordinates(input, pointCount, flags, Flag.YByte, Flag.YSignOrSame);
 
-            //List<bool> list = new List<bool>();
-            //foreach (Flag f in flags)
-            //{
-            //    list.Add(HasFlag(f, Flag.OnCurve));
-            //}
+            bool[] onCurves = new bool[flags.Length];
+            for (int i = onCurves.Length - 1; i >= 0; --i)
+            {
+                onCurves[i] = HasFlag(flags[i], Flag.OnCurve);
+            }
 
-            return new Glyph(xs, ys, flags, endPoints, bounds);
+            return new Glyph(xs, ys, onCurves, endPoints, bounds);
         }
 
         static Glyph ReadCompositeGlyph(BinaryReader input, int count, Bounds bounds)
@@ -98,36 +143,16 @@ namespace NRasterizer.Tables
             return Glyph.Empty;
         }
 
-        public static List<Glyph> From(TableEntry table, GlyphLocations locations)
+        [Flags]
+        enum Flag : byte
         {
-            int glyphCount = locations.GlyphCount;
-
-            var glyphs = new List<Glyph>(glyphCount);
-            for (int i = 0; i < glyphCount; i++)
-            {
-                BinaryReader input = table.GetDataReader();
-                input.BaseStream.Seek(locations.Offsets[i], SeekOrigin.Current);
-
-                uint length = locations.Offsets[i + 1] - locations.Offsets[i];
-                if (length > 0)
-                {
-                    short contoursCount = input.ReadInt16();
-                    Bounds bounds = BoundsReader.ReadFrom(input);
-                    if (contoursCount >= 0)
-                    {
-                        glyphs.Add(ReadSimpleGlyph(input, contoursCount, bounds));
-                    }
-                    else
-                    {
-                        glyphs.Add(ReadCompositeGlyph(input, -contoursCount, bounds));
-                    }
-                }
-                else
-                {
-                    glyphs.Add(Glyph.Empty);
-                }
-            }
-            return glyphs;
+            OnCurve = 1,
+            XByte = 1 << 1,
+            YByte = 1 << 2,
+            Repeat = 1 << 3,
+            XSignOrSame = 1 << 4,
+            YSignOrSame = 1 << 5
         }
+
     }
 }

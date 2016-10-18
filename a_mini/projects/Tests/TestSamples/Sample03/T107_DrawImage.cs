@@ -29,7 +29,7 @@ namespace OpenTkEssTest
             if (!resInit)
             {
                 //glbmp = LoadTexture(@"..\a00124.png");
-                glbmp = LoadTexture(@"..\logo-dark.jpg");
+                glbmp = LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
                 resInit = true;
             }
 

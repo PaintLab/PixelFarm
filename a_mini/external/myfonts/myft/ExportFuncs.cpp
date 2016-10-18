@@ -39,7 +39,7 @@ void MyFtLibGetFullVersion(int* major,int* minor,int* revision)
 {
 	 *major= 3;
 	 *minor=1;
-	 *revision=1;
+	 *revision=2;
 };
 
 int MyFtInitLib()

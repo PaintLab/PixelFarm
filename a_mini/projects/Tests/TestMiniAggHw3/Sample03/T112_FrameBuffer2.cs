@@ -38,7 +38,7 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = LoadTexture(@"..\logo-dark.jpg");
+                glbmp = LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
                 isInit = true;
             }
             if (frameBuffer.FrameBufferId > 0)

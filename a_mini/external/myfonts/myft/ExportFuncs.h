@@ -14,6 +14,9 @@
 #include "msdfgen\Shape.h"
 #include "msdfgen\edge-segments.h"
 //-----------------------------
+#include <unicode/brkiter.h>
+#include <unicode/urename.h>
+//-----------------------------
 
 struct ExportFace{
 	int32_t          ascender;
@@ -168,7 +171,28 @@ extern "C" {
 		double scale, double tx, double ty,
 		double edgeThreshold, double angleThreshold, int* outputBitmap);
 	
-	 
+	//------------------------------------------------------------------------------
+	//icu 
+	MY_DLL_EXPORT void MyFt_IcuSetDataDir(const char* datadir);
+	MY_DLL_EXPORT void MyFt_IcuSetData(const void* dataBuffer, UErrorCode* errCode);
+	MY_DLL_EXPORT UBreakIterator* MtFt_UbrkOpen(UBreakIteratorType iterType,const char* locale, const wchar_t* startChar, int len,UErrorCode* errCode);
+	MY_DLL_EXPORT void MtFt_UbrkClose(UBreakIterator* brkIter);
+	//
+	MY_DLL_EXPORT int MtFt_UbrkFirst(UBreakIterator* brkIter);
+	MY_DLL_EXPORT int MtFt_UbrkNext(UBreakIterator* brkIter);
+	MY_DLL_EXPORT int MtFt_UbrkGetRuleStatus(UBreakIterator* brkIter);
+
+
+	  /* int cur = NativeMethods.ubrk_first(bi);
+                    while (cur != DONE)
+                    {
+                        int next = NativeMethods.ubrk_next(bi);
+                        int status = NativeMethods.ubrk_getRuleStatus(bi);
+                        if (next != DONE && AddToken(type, status))
+                            tokens.Add(new SplitBound(cur, next - cur));
+                        cur = next;
+                    }*/
+
 }
 
 

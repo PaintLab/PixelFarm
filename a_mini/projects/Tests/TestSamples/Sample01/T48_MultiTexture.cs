@@ -23,6 +23,7 @@ using OpenTK.Graphics.ES20;
 using Mini;
 #endregion
 
+
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "048")]
@@ -71,8 +72,8 @@ namespace OpenTkEssTest
             mBaseMapLoc = GL.GetUniformLocation(mProgram, "s_baseMap");
             mLightMapLoc = GL.GetUniformLocation(mProgram, "s_lightMap");
             // Load the textures
-            baseMapBmp = LoadTexture(@"..\SampleImages\basemap01.png");
-            lightMapBmp = LoadTexture(@"..\SampleImages\lightmap01.png");
+            baseMapBmp = LoadTexture(RootDemoPath.Path + @"\SampleImages\basemap01.png");
+            lightMapBmp = LoadTexture(RootDemoPath.Path + @"\SampleImages\lightmap01.png");
             if (mBaseMapTexID == 0 || mLightMapTexID == 0)
             {
                 throw new NotSupportedException();

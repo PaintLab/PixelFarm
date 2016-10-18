@@ -29,8 +29,9 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                msdf_bmp = LoadTexture(@"..\msdf_75.png");
-                sdf_bmp = LoadTexture(@"..\sdf_75.png");
+
+                msdf_bmp = LoadTexture(RootDemoPath.Path + @"\msdf_75.png");
+                sdf_bmp = LoadTexture(RootDemoPath.Path + @"\sdf_75.png");
                 resInit = true;
             }
             canvas2d.Clear(PixelFarm.Drawing.Color.White);
@@ -45,14 +46,14 @@ namespace OpenTkEssTest
             canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 500, 0.5f);
             canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 520, 0.4f);
             canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 300, 550, 0.3f);
-         
+
             //
             canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 400, 6);
             canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 500, 0.5f);
             canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 520, 0.4f);
             canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 550, 0.3f);
             canvas2d.DrawImage(sdf_bmp, 400, 300);
-             
+
             miniGLControl.SwapBuffers();
         }
     }

@@ -28,6 +28,11 @@ namespace Mini
         public string OrderCode { get; set; }
     }
 
+    public static class RootDemoPath
+    {
+        public static string Path = "";
+    }
+
     public enum DemoCategory
     {
         Vector,
