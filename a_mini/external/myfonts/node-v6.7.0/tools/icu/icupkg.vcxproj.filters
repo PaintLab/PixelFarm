@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{739DB09A-CC57-A953-A6CF-F64FA08E4FA7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps">
+      <UniqueIdentifier>{D8C1C9B5-38B1-FC5D-54EB-0CB99232FA56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small">
+      <UniqueIdentifier>{970C9EAC-8EC6-D29D-634C-63C684623EEB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source">
+      <UniqueIdentifier>{8A6F5E6E-316F-22D4-1547-253B04CB32E7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools">
+      <UniqueIdentifier>{A0946190-5491-4D66-7E51-19400E36F078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\deps\icu-small\source\tools\icupkg">
+      <UniqueIdentifier>{5EC0FCAC-F1C5-47B9-E8D6-AFD5CD4FF6E0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\deps\icu-small\source\tools\icupkg\icupkg.cpp">
+      <Filter>..\..\deps\icu-small\source\tools\icupkg</Filter>
+    </ClCompile>
+    <ClCompile Include="no-op.cc"/>
+    <None Include="icu-generic.gyp"/>
+  </ItemGroup>
+</Project>
