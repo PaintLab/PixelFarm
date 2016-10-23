@@ -13,7 +13,7 @@ using System.IO;
 
 using Mini;
 using PixelFarm.Drawing.Fonts;
-using NRasterizer; //for read 
+using NOpenType; //for read 
 
 namespace PixelFarm.Agg.Sample_Draw
 {

@@ -27,6 +27,7 @@ namespace OpenTkEssTest
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
             lionVxs = aff.TransformToVxs(lionShape.Path.Vxs);
             painter = new GLCanvasPainter(canvas2d, max, max);
+
         }
         protected override void DemoClosing()
         {
@@ -48,6 +49,7 @@ namespace OpenTkEssTest
                 painter.FillColor = colors[i];
                 painter.Fill(new VertexStoreSnap(myvxs, pathList[i]));
             }
+       
             //-------------------------------
             SwapBuffer();
         }

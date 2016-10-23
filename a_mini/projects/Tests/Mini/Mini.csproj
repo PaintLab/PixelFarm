@@ -34,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -176,9 +177,9 @@
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\OpenTypeReader\OpenTypeReader.csproj">
-      <Project>{2DDA36CC-9A17-44C8-B26B-1472BB48C0F4}</Project>
-      <Name>OpenTypeReader</Name>
+    <ProjectReference Include="..\..\PixelFarm\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
+      <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
+      <Name>PixelFarm.OpenType</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.GdiPlusPlatform.csproj">
       <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>

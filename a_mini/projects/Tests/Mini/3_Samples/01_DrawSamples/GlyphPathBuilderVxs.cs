@@ -1,7 +1,7 @@
 ﻿//MIT, 2016,  WinterDev
 using System;
 using System.Collections.Generic;
-using NRasterizer;
+using NOpenType;
 using PixelFarm.Agg.VertexSource;
 namespace PixelFarm.Agg
 {
@@ -48,7 +48,7 @@ namespace PixelFarm.Agg
     //        return ps.Vxs;
     //    }
     //}
-    public class GlyphPathBuilderVxs : NRasterizer.GlyphPathBuilderBase
+    public class GlyphPathBuilderVxs : NOpenType.GlyphPathBuilderBase
     {
         PixelFarm.Agg.VertexSource.PathWriter ps = new PixelFarm.Agg.VertexSource.PathWriter();
         public GlyphPathBuilderVxs(Typeface typeface)
@@ -91,7 +91,7 @@ namespace PixelFarm.Agg
         /// <returns></returns>
         public VertexStore GetVxs()
         {
-            float scale = (float)(SizeInPoints * Resolution) / (pointsPerInch * TypeFaceUnitPerEm);
+            float scale = this.TypeFace.CalculateScale(SizeInPoints); 
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                 //scale
              new PixelFarm.Agg.Transform.AffinePlan(

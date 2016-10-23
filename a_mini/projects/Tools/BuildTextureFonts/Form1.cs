@@ -735,6 +735,8 @@ namespace BuildTextureFonts
             //2. get glyph
             NativeFont n = nativeFontStore.GetResolvedNativeFont(font);
             var g1 = n.GetGlyph('C');
+             ProperGlyph[] pps = new ProperGlyph[3];
+             n.GetGlyphPos("ABC".ToCharArray(), 0, 3, pps);
 
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };
             int j = glyphIndice.Length;

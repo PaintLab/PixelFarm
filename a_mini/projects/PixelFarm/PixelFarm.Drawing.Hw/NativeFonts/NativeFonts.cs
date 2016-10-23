@@ -19,10 +19,7 @@ namespace PixelFarm.Drawing.Fonts
         public bool hasKerning;
         public IntPtr hb_font;
     }
-    static class NativeDLL
-    {
-        public const string MyFtLibName = "myft.dll";
-    }
+
 
     static class NativeMyFontsLib
     {
@@ -56,6 +53,7 @@ namespace PixelFarm.Drawing.Fonts
 
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
         public static extern void MyFtLibGetFullVersion(out int major, out int minor, out int revision);
+        
         [DllImport(myfontLib)]
         public static extern int MyFtInitLib();
         [DllImport(myfontLib)]
@@ -102,25 +100,6 @@ namespace PixelFarm.Drawing.Fonts
             ProperGlyph* properGlyphs);
         //============================================================================
 
-        [DllImport(myfontLib, CharSet = CharSet.Ansi)]
-        public static extern void MyFt_IcuSetDataDir(string datadir);
-
-        [DllImport(myfontLib)]
-        public static unsafe extern void MyFt_IcuSetData(void* data, out int err);
-
-        [DllImport(myfontLib, CharSet = CharSet.Unicode)]
-        public static extern IntPtr MtFt_UbrkOpen(UBreakIteratorType iterType, byte[] locale, string startChar, int len, out int err);
-
-        [DllImport(myfontLib)]
-        public static extern void MtFt_UbrkClose(IntPtr naitveBreakIter);
-        [DllImport(myfontLib)]
-        public static extern int MtFt_UbrkFirst(IntPtr nativeBreakIter);
-        [DllImport(myfontLib)]
-        public static extern int MtFt_UbrkNext(IntPtr nativeBreakIter);
-        [DllImport(myfontLib)]
-        public static extern int MtFt_UbrkGetRuleStatus(IntPtr nativeBreakIter);
-
-        //============================================================================
 
         static bool isLoaded = false;
         static bool LoadLib(string dllFilename)
@@ -155,168 +134,10 @@ namespace PixelFarm.Drawing.Fonts
         }
     }
 
-    //------
-    /// <summary>
-    /// The possible types of text boundaries.
-    /// </summary>
-    public enum UBreakIteratorType
-    {
-        /// <summary>Character breaks.</summary>
-        CHARACTER = 0,
-        /// <summary>Word breaks.</summary>
-        WORD,
-        /// <summary>Line breaks.</summary>
-        LINE,
-        /// <summary>Sentence breaks.</summary>
-        SENTENCE,
-        // <summary>Title Case breaks.</summary>
-        // obsolete. Use WORD instead.
-        //TITLE
-    }
-    //------
-    class InMemoryIcuDataHolder : IDisposable
-    {
-        IntPtr unmanagedICUMemData;
-        public InMemoryIcuDataHolder(string loadIcuDataFromFile)
-        {
-            byte[] inMemoryICUData = System.IO.File.ReadAllBytes(loadIcuDataFromFile);
-            unmanagedICUMemData = System.Runtime.InteropServices.Marshal.AllocHGlobal(inMemoryICUData.Length);
-            System.Runtime.InteropServices.Marshal.Copy(inMemoryICUData, 0, unmanagedICUMemData, inMemoryICUData.Length);
-        }
-        public void Use()
-        {
-            int errCode;
-            unsafe
-            {
-                NativeMyFontsLib.MyFt_IcuSetData((void*)unmanagedICUMemData, out errCode);
-            }
-        }
-        public void Dispose()
-        {
-            if (unmanagedICUMemData != IntPtr.Zero)
-            {
-                System.Runtime.InteropServices.Marshal.FreeHGlobal(unmanagedICUMemData);
-                unmanagedICUMemData = IntPtr.Zero;
-            }
-        }
-    }
-#if DEBUG
-    public static class dbugTestMyFtLib
-    {
-        static InMemoryIcuDataHolder dataHolder;
-
-        public static void Test1()
-        {
 
 
-            int major, minor, revision;
-            NativeMyFontsLib.MyFtLibGetFullVersion(out major, out minor, out revision);
-            if (dataHolder == null)
-            {
-                dataHolder = new InMemoryIcuDataHolder(@"d:\WImageTest\icudt57l\icudt57l.dat");
-                dataHolder.Use();
-            }
 
 
-            string str = "ABCD EFGH IJKL\0";
-            //string str = "ผู้ใหญ่หาผ้าใหม่";
-            string locale = "en-US";
-            int errCode = 0;
-            //byte[] buffer = File.ReadAllBytes(@"d:\WImageTest\icudt57l\icudt57l.dat");
-            //unsafe
-            //{
-            //    fixed (byte* h = &buffer[0])
-            //    {
-            //        NativeMyFontsLib.MyFt_IcuSetData(h, out errCode);
-            //    }
-            //}
-            var type = UBreakIteratorType.WORD;
-            byte[] localbuff = System.Text.Encoding.ASCII.GetBytes(locale);
-            IntPtr nativeIter = NativeMyFontsLib.MtFt_UbrkOpen(UBreakIteratorType.WORD, localbuff, str, str.Length, out errCode);
-            int cur = NativeMyFontsLib.MtFt_UbrkFirst(nativeIter);
-            List<SplitBound> tokens = new List<SplitBound>();
-            while (cur != DONE)
-            {
-                int next = NativeMyFontsLib.MtFt_UbrkNext(nativeIter);
-                int status = NativeMyFontsLib.MtFt_UbrkGetRuleStatus(nativeIter);
-                if (next != DONE && AddToken(type, status))
-                {
-                    tokens.Add(new SplitBound(cur, next - cur));
-                }
-                cur = next;
-            }
-            NativeMyFontsLib.MtFt_UbrkClose(nativeIter);
-
-        }
-        const int DONE = -1;
-        private static bool AddToken(UBreakIteratorType type, int status)
-        {
-            switch (type)
-            {
-                case UBreakIteratorType.CHARACTER:
-                    return true;
-                case UBreakIteratorType.LINE:
-                case UBreakIteratorType.SENTENCE:
-                    return true;
-                case UBreakIteratorType.WORD:
-                    return status < (int)UWordBreak.NONE || status >= (int)UWordBreak.NONE_LIMIT;
-            }
-            return false;
-        }
-        public struct SplitBound
-        {
-            public readonly int startIndex;
-            public readonly int length;
-            public SplitBound(int startIndex, int length)
-            {
-                this.startIndex = startIndex;
-                this.length = length;
-            }
-#if DEBUG
-            public override string ToString()
-            {
-                return startIndex + ":" + length;
-            }
-#endif
-        }
-        public enum UWordBreak
-        {
-            /// <summary>
-            /// Tag value for "words" that do not fit into any of other categories.
-            /// Includes spaces and most punctuation.
-            /// </summary>
-            NONE = 0,
-            /// <summary>
-            /// Upper bound for tags for uncategorized words.
-            /// </summary>
-            NONE_LIMIT = 100,
-            NUMBER = 100,
-            NUMBER_LIMIT = 200,
-            LETTER = 200,
-            LETTER_LIMIT = 300,
-            KANA = 300,
-            KANA_LIMIT = 400,
-            IDEO = 400,
-            IDEO_LIMIT = 500,
-        }
-
-        public enum ULineBreakTag
-        {
-            SOFT = 0,
-            SOFT_LIMIT = 100,
-            HARD = 100,
-            HARD_LIMIT = 200,
-        }
-
-        public enum USentenceBreakTag
-        {
-            TERM = 0,
-            TERM_LIMIT = 100,
-            SEP = 100,
-            SEP_LIMIT = 200,
-        }
-    }
-#endif
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     unsafe struct ExportFace
     {

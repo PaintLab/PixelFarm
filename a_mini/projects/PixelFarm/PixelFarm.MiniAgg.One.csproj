@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.MiniAgg.One</AssemblyName>
-    <ProjectGuid>{CCE391D5-F166-4ECA-B99F-CE56B058CB58}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -151,6 +150,7 @@
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="PixelFarm.Drawing\3_Drawing_Fonts\NativeBridgeHB.cs" />
+    <Compile Include="PixelFarm.Drawing\4_Drawing_Text\TextBreaker.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\CanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing\5_PixelFarm_Agg\PixelFormat.cs" />
