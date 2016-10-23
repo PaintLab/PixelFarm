@@ -49,13 +49,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\harfbuzz-1.2.7\src;..\freetype-2.7\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\node-v6.7.0\deps\icu-small\source\common;..\harfbuzz-1.2.7\src;..\freetype-2.7\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\builds\Debug\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>..\builds\$(Configuration)\freetype.lib;..\builds\$(Configuration)\harfbuzz.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\builds\$(Configuration)\freetype.lib;..\builds\$(Configuration)\harfbuzz.lib;..\node-v6.7.0\tools\icu\$(Configuration)\lib\icuucx.lib;..\node-v6.7.0\tools\icu\$(Configuration)\lib\icui18n.lib;..\node-v6.7.0\tools\icu\$(Configuration)\lib\icustubdata.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -66,7 +66,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\projects\PixelFarm-dev\a_mini\external\myfonts\node-v6.7.0\deps\icu-small\source\common;..\harfbuzz-1.2.7\src;..\freetype-2.7\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\node-v6.7.0\deps\icu-small\source\common;..\harfbuzz-1.2.7\src;..\freetype-2.7\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
