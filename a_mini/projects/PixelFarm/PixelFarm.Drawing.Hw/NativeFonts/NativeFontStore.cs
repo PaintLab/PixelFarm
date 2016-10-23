@@ -221,7 +221,7 @@ namespace PixelFarm.Drawing.Fonts
             //-------------------------------------------------
             //get font that specific size from found font face
             //-------------------------------------------------
-            NativeFont nativeFont = fontFace.GetFontAtPointSize(font.EmSize);
+            NativeFont nativeFont = fontFace.GetFontAtPointSize(font.SizeInPoints);
             registerFonts.Add(font, nativeFont);
 
         }

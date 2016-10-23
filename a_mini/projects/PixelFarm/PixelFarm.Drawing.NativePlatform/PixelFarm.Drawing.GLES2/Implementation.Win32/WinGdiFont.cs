@@ -38,14 +38,14 @@ namespace PixelFarm.Drawing.WinGdi
             bmpHeight = 10;
             nativeWin32MemDc = new NativeWin32MemoryDc(bmpWidth, bmpHeight);
             //this will create 
-            InitFont(f.Name, (int)f.EmSize);
+            InitFont(f.Name, (int)f.SizeInPoints);
             nativeWin32MemDc.SetTextColor(0);
             //------------------------------------------------------------------
             //create gdi font from font data
-            this.emSize = f.EmSize;
+            this.emSize = f.SizeInPoints;
             this.emSizeInPixels = PixelFarm.Drawing.Font.ConvEmSizeInPointsToPixels(this.emSize);
-            ////
-            ////build font matrix
+            //
+            //build font matrix
             basGdi32FontHelper.MeasureCharWidths(hfont, out charWidths, out charAbcWidths);
             //int emHeightInDzUnit = f.FontFamily.GetEmHeight(f.Style);
 

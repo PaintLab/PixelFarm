@@ -6,27 +6,33 @@ namespace PixelFarm.Drawing
 {
 
     /// <summary>
-    /// font specification
+    ///font specification     
     /// </summary>
     public sealed class Font
     {
-        //each platform/canvas has its own representation of this Font
 
-        float emSizeInPixels;
+        //each platform/canvas has its own representation of this Font
+        //actual font will be resolved by the platform.
+
+        float fontSizeInPixels;
         /// <summary>
-        /// emsize in point
+        /// font size in points unit
         /// </summary>
-        float emSize;
-        Fonts.FontKey fontKey;
-        public Font(string facename, float emSizeInPoints, FontStyle style = FontStyle.Regular)
+        float sizeInPoints;
+        FontKey fontKey;
+
+        public Font(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular)
         {
             HBDirection = Fonts.HBDirection.HB_DIRECTION_LTR;//default
             ScriptCode = HBScriptCode.HB_SCRIPT_LATIN;//default 
             Lang = "en";//default
             Name = facename;
-            EmSize = emSizeInPoints;
+            SizeInPoints = fontSizeInPts;
             Style = style;
-            fontKey = new FontKey(facename, emSizeInPoints, style);
+            fontKey = new FontKey(facename, fontSizeInPts, style);
+            //temp fix 
+            //we need font height*** 
+            this.Height = SizeInPixels;
         }
         public FontKey FontKey
         {
@@ -38,25 +44,25 @@ namespace PixelFarm.Drawing
         /// </summary>
         public string Name { get; private set; }
         public float Height { get; set; } //TODO: review here
-        public FontStyle Style { get; set; } //TODO: review here
+        public FontStyle Style { get; private set; }
 
         /// <summary>
         /// emheight in point unit
         /// </summary>
-        public float EmSize
+        public float SizeInPoints
         {
-            get { return emSize; }
+            get { return sizeInPoints; }
             private set
             {
-                emSize = value;
-                emSizeInPixels = ConvEmSizeInPointsToPixels(value);
+                sizeInPoints = value;
+                fontSizeInPixels = ConvEmSizeInPointsToPixels(value);
             }
         }
-        public float EmSizeInPixels
+        public float SizeInPixels
         {
             get
             {
-                return emSizeInPixels;
+                return fontSizeInPixels;
             }
         }
 
@@ -64,16 +70,16 @@ namespace PixelFarm.Drawing
         static int s_PIXELS_PER_INCH = 96; //default value
 
 
-        public static int PointsPerInch
-        {
-            get { return s_POINTS_PER_INCH; }
-            set { s_POINTS_PER_INCH = value; }
-        }
-        public static int PixelsPerInch
-        {
-            get { return s_PIXELS_PER_INCH; }
-            set { s_PIXELS_PER_INCH = value; }
-        }
+        //public static int PointsPerInch
+        //{
+        //    get { return s_POINTS_PER_INCH; }
+        //    set { s_POINTS_PER_INCH = value; }
+        //}
+        //public static int PixelsPerInch
+        //{
+        //    get { return s_PIXELS_PER_INCH; }
+        //    set { s_PIXELS_PER_INCH = value; }
+        //}
 
 
         //--------------------------

@@ -44,13 +44,13 @@ namespace PixelFarm.Drawing.WinGdi
             //check if we have cache this font 
             //if not then try create it
             //1. create font key
-            FontKey fk = new FontKey(f.Name, f.EmSize, f.Style);
+            FontKey fk = new FontKey(f.Name, f.SizeInPoints, f.Style);
             WinGdiPlusFont found;
             if (!resolvedWinGdiFont.TryGetValue(fk, out found))
             {
                 //not found 
                 //then create it
-                CreateFont(f.Name, f.EmSize, (System.Drawing.FontStyle)f.Style);
+                return found = CreateFont(f.Name, f.SizeInPoints, (System.Drawing.FontStyle)f.Style);
             }
             return found;
 
@@ -102,7 +102,7 @@ namespace PixelFarm.Drawing.WinGdi
 
                 found = new WinGdiPlusFont(newFont);
                 found.GdiPlusFontHeight = fontHeight;
-
+                resolvedWinGdiFont.Add(fontKey, found);
                 //myFont,
                 //fontHeight,
                 //(fontAscent * fontSize / fontEmHeight),
