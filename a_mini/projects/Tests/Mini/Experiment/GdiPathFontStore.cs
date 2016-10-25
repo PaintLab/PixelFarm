@@ -5,9 +5,9 @@ namespace PixelFarm.Drawing.Fonts
     public class GdiPathFontStore
     {
         Dictionary<string, GdiPathFontFace> fontFaces = new Dictionary<string, GdiPathFontFace>();
-        Dictionary<Font, GdiPathFont> registerFonts = new Dictionary<Font, GdiPathFont>();
+        Dictionary<FontKey, GdiPathFont> registerFonts = new Dictionary<FontKey, GdiPathFont>();
 
-        public Font LoadFont(string fontName, float fontPointSize)
+        public ActualFont LoadFont(string fontName, float fontPointSize)
         {
             //load font from specific file 
             GdiPathFontFace fontFace;
@@ -22,17 +22,21 @@ namespace PixelFarm.Drawing.Fonts
                 return null;
             }
 
-            Font font = new Drawing.Font(fontName, fontPointSize);
+
+             
+
+
             GdiPathFont gdiPathFont = fontFace.GetFontAtSpecificSize((int)fontPointSize);
-            registerFonts.Add(font, gdiPathFont);
-            return font;
+            FontKey f = new FontKey(fontName, fontPointSize, FontStyle.Regular);
+            registerFonts.Add(f, gdiPathFont);
+            return gdiPathFont;
         }
-        public ActualFont GetResolvedFont(Font f)
+        public ActualFont GetResolvedFont(RequestFont f)
         {
             GdiPathFont found;
-            registerFonts.TryGetValue(f, out found);
+            registerFonts.TryGetValue(f.FontKey, out found);
             return found;
         }
-       
+
     }
 }

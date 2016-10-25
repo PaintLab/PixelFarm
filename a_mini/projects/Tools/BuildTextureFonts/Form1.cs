@@ -559,7 +559,7 @@ namespace BuildTextureFonts
             //1. load font
             string fontName = "tahoma";
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-            var font = new PixelFarm.Drawing.Font(fontName, 28);
+            var font = new PixelFarm.Drawing.RequestFont(fontName, 28);
             nativeFontStore.LoadFont(font, fontfile);
 
             //2. get glyph 
@@ -635,7 +635,7 @@ namespace BuildTextureFonts
         }
 
 
-        static void BuildFontGlyphs(PixelFarm.Drawing.Font font,
+        static void BuildFontGlyphs(PixelFarm.Drawing.RequestFont font,
             SimpleFontAtlasBuilder atlasBuilder,
             int startAt, int endAt)
         {
@@ -665,7 +665,7 @@ namespace BuildTextureFonts
                 //}
             }
         }
-        static void BuildFontGlyphsByIndex(PixelFarm.Drawing.Font font, SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
+        static void BuildFontGlyphsByIndex(PixelFarm.Drawing.RequestFont font, SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
         {
             //font glyph for specific font face
             ActualFont nativefont = nativeFontStore.GetResolvedNativeFont(font);
@@ -696,7 +696,7 @@ namespace BuildTextureFonts
             string fontName = "tahoma";
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
-            PixelFarm.Drawing.Font font = nativeFontStore.LoadFont(fontName, fontfile, 28);
+            PixelFarm.Drawing.RequestFont font = nativeFontStore.LoadFont(fontName, fontfile, 28);
             //2. get glyph 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
@@ -731,7 +731,7 @@ namespace BuildTextureFonts
         private void button6_Click(object sender, EventArgs e)
         {
             //1. load font 
-            PixelFarm.Drawing.Font font = nativeFontStore.LoadFont("tahoma", 28);
+            PixelFarm.Drawing.RequestFont font = nativeFontStore.LoadFont("tahoma", 28);
             //2. get glyph
             NativeFont n = nativeFontStore.GetResolvedNativeFont(font);
             var g1 = n.GetGlyph('C');

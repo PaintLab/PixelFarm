@@ -6,27 +6,32 @@ namespace PixelFarm.Drawing
 {
 
     /// <summary>
-    /// font specification
+    ///font specification     
     /// </summary>
-    public sealed class Font
+    public sealed class RequestFont
     {
-        //each platform/canvas has its own representation of this Font
 
-        float emSizeInPixels;
+        //each platform/canvas has its own representation of this Font
+        //actual font will be resolved by the platform.
+
+        
         /// <summary>
-        /// emsize in point
+        /// font size in points unit
         /// </summary>
-        float emSize;
-        Fonts.FontKey fontKey;
-        public Font(string facename, float emSizeInPoints, FontStyle style = FontStyle.Regular)
+        float sizeInPoints;
+        FontKey fontKey;
+        public RequestFont(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular)
         {
             HBDirection = Fonts.HBDirection.HB_DIRECTION_LTR;//default
             ScriptCode = HBScriptCode.HB_SCRIPT_LATIN;//default 
             Lang = "en";//default
             Name = facename;
-            EmSize = emSizeInPoints;
+            SizeInPoints = fontSizeInPts;
             Style = style;
-            fontKey = new FontKey(facename, emSizeInPoints, style);
+            fontKey = new FontKey(facename, fontSizeInPts, style);
+            //temp fix 
+            //we need font height*** 
+            //this.Height = SizeInPixels;
         }
         public FontKey FontKey
         {
@@ -37,52 +42,35 @@ namespace PixelFarm.Drawing
         /// font's face name
         /// </summary>
         public string Name { get; private set; }
-        public float Height { get; set; } //TODO: review here
-        public FontStyle Style { get; set; } //TODO: review here
+        public FontStyle Style { get; private set; }
 
         /// <summary>
         /// emheight in point unit
         /// </summary>
-        public float EmSize
+        public float SizeInPoints
         {
-            get { return emSize; }
+            get { return sizeInPoints; }
             private set
             {
-                emSize = value;
-                emSizeInPixels = ConvEmSizeInPointsToPixels(value);
+                sizeInPoints = value;
+                
             }
         }
-        public float EmSizeInPixels
-        {
-            get
-            {
-                return emSizeInPixels;
-            }
-        }
+       
 
         static int s_POINTS_PER_INCH = 72; //default value
         static int s_PIXELS_PER_INCH = 96; //default value
 
-
-        public static int PointsPerInch
+        public ActualFont ActualFont
         {
-            get { return s_POINTS_PER_INCH; }
-            set { s_POINTS_PER_INCH = value; }
+            get;
+            set;
         }
-        public static int PixelsPerInch
-        {
-            get { return s_PIXELS_PER_INCH; }
-            set { s_PIXELS_PER_INCH = value; }
-        }
-
-
         //--------------------------
         //font shaping info (for native font/shaping engine)
         public HBDirection HBDirection { get; set; }
         public int ScriptCode { get; set; }
         public string Lang { get; set; }
-
-
         public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
         {
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
@@ -93,10 +81,10 @@ namespace PixelFarm.Drawing
     public interface IFonts
     {
 
-        float MeasureWhitespace(Font f);
-        Size MeasureString(char[] str, int startAt, int len, Font font);
-        Size MeasureString(char[] str, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth);
-        ActualFont ResolveActualFont(Font f);
+        float MeasureWhitespace(RequestFont f);
+        Size MeasureString(char[] str, int startAt, int len, RequestFont font);
+        Size MeasureString(char[] str, int startAt, int len, RequestFont font, float maxWidth, out int charFit, out int charFitWidth);
+        ActualFont ResolveActualFont(RequestFont f);
         void Dispose();
     }
 

@@ -40,7 +40,7 @@ namespace OpenTkEssTest
             textureFont = TextureFont.CreateFont(fontName, fontSize,
                 "d:\\WImageTest\\a_total.xml",
                 glypImage);
-            PixelFarm.Drawing.Font f = new PixelFarm.Drawing.Font(fontName, fontSize);
+            PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize);
             textureFonts.RegisterFont(f, textureFont);
             canvas2d.TextureFontStore = textureFonts;
             painter.CurrentFont = f;

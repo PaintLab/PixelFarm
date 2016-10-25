@@ -39,20 +39,27 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
         }
-        public WinGdiPlusFont ResolveFont(PixelFarm.Drawing.Font f)
+        public WinGdiPlusFont ResolveFont(PixelFarm.Drawing.RequestFont f)
         {
+            WinGdiPlusFont currentFont = f.ActualFont as WinGdiPlusFont;
+            if (currentFont != null)
+            {
+                return currentFont;
+            }
             //check if we have cache this font 
             //if not then try create it
             //1. create font key
-            FontKey fk = new FontKey(f.Name, f.EmSize, f.Style);
-            WinGdiPlusFont found;
-            if (!resolvedWinGdiFont.TryGetValue(fk, out found))
+            FontKey fk = new FontKey(f.Name, f.SizeInPoints, f.Style);
+
+            if (!resolvedWinGdiFont.TryGetValue(fk, out currentFont))
             {
                 //not found 
                 //then create it
-                CreateFont(f.Name, f.EmSize, (System.Drawing.FontStyle)f.Style);
+                currentFont = CreateFont(f.Name, f.SizeInPoints, (System.Drawing.FontStyle)f.Style);
+
             }
-            return found;
+            f.ActualFont = currentFont;
+            return currentFont;
 
         }
         WinGdiPlusFont CreateFont(string family,
@@ -102,7 +109,7 @@ namespace PixelFarm.Drawing.WinGdi
 
                 found = new WinGdiPlusFont(newFont);
                 found.GdiPlusFontHeight = fontHeight;
-
+                resolvedWinGdiFont.Add(fontKey, found);
                 //myFont,
                 //fontHeight,
                 //(fontAscent * fontSize / fontEmHeight),
@@ -137,7 +144,7 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
-     
+
 
         /// <summary>
         /// Gets the line spacing of the font
@@ -173,7 +180,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         public float MeasureWhitespace(
-           PixelFarm.Drawing.IFonts gfx, PixelFarm.Drawing.Font f)
+           PixelFarm.Drawing.IFonts gfx, PixelFarm.Drawing.RequestFont f)
         {
 
             WinGdiPlusFont winFont;

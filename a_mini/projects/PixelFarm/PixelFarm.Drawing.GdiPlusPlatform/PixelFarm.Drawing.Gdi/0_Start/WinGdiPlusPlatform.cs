@@ -1,6 +1,7 @@
 ﻿//BSD, 2014-2016, WinterDev 
 using System;
 using Win32;
+using System.Runtime.InteropServices;
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -10,6 +11,8 @@ namespace PixelFarm.Drawing.WinGdi
         GdiPlusIFonts ifonts = new GdiPlusIFonts();
         public WinGdiPlusPlatform()
         {
+            PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
+
         }
         ~WinGdiPlusPlatform()
         {
@@ -74,20 +77,20 @@ namespace PixelFarm.Drawing.WinGdi
         {
             win32MemDc = new NativeWin32MemoryDc(2, 2);
         }
-        public float MeasureWhitespace(Font f)
+        public float MeasureWhitespace(RequestFont f)
         {
             return fontStore.MeasureWhitespace(this, f);
         }
-        void SetFont(Font font)
+        void SetFont(RequestFont font)
         {
             WinGdiPlusFont winFont = fontStore.ResolveFont(font);
             Win32Utils.SelectObject(win32MemDc.DC, winFont.ToHfont());
         }
-        public PixelFarm.Drawing.Fonts.ActualFont ResolveActualFont(Font f)
+        public PixelFarm.Drawing.Fonts.ActualFont ResolveActualFont(RequestFont f)
         {
             return fontStore.ResolveFont(f);
         }
-        public Size MeasureString(char[] buff, int startAt, int len, Font font)
+        public Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
         {
             //if (_useGdiPlusTextRendering)
             //{
@@ -133,7 +136,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// <param name="charFit">the number of characters that will fit under <see cref="maxWidth"/> restriction</param>
         /// <param name="charFitWidth"></param>
         /// <returns>the size of the string</returns>
-        public Size MeasureString(char[] buff, int startAt, int len, Font font, float maxWidth, out int charFit, out int charFitWidth)
+        public Size MeasureString(char[] buff, int startAt, int len, RequestFont font, float maxWidth, out int charFit, out int charFitWidth)
         {
             //if (_useGdiPlusTextRendering)
             //{
@@ -178,5 +181,39 @@ namespace PixelFarm.Drawing.WinGdi
             win32MemDc.Dispose();
             win32MemDc = null;
         }
+    }
+
+
+    class Win32AggBuffMx : PixelFarm.Agg.AggBuffMx
+    {
+
+        protected override void InnerMemCopy(byte[] dest_buffer, int dest_startAt, byte[] src_buffer, int src_StartAt, int len)
+        {
+            unsafe
+            {
+                fixed (byte* head_dest = &dest_buffer[dest_startAt])
+                fixed (byte* head_src = &src_buffer[src_StartAt])
+                {
+                    memcpy(head_dest, head_src, len);
+                }
+            }
+        }
+        protected override void InnerMemSet(byte[] dest, int startAt, byte value, int count)
+        {
+            unsafe
+            {
+                fixed (byte* head = &dest[0])
+                {
+                    memset(head, 0, 100);
+                }
+            }
+        }
+        //this is platform specific ***
+        [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
+        static unsafe extern void memset(byte* dest, byte c, int byteCount);
+        [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
+        static unsafe extern void memcpy(byte* dest, byte* src, int byteCount);
+        [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
+        static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
     }
 }

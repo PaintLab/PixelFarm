@@ -41,7 +41,8 @@ namespace PixelFarm.Agg.Sample_Blur2
             this.FlattenCurveChecked = true;
             this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
-            Drawing.Font svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
+
+            ActualFont svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
             //PathWriter p01 = new PathWriter();
             //p01.MoveTo(0, 0);
             //p01.LineTo(50, 100);
@@ -53,7 +54,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             //p01.CloseFigure();
             //p01.Stop();
             //m_pathVxs = p01.Vxs;
-            var winFontGlyph = gdiPathFontStore.GetResolvedFont(svgFont).GetGlyph('a');
+            var winFontGlyph = svgFont.GetGlyph('a');
             m_pathVxs = winFontGlyph.originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
             Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
             m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);

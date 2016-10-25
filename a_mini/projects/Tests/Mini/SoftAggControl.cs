@@ -66,7 +66,7 @@ namespace Mini
                 painter = new AggCanvasPainter(bitmapBackBuffer.Initialize(myWidth, myHeight, 32));
             }
 
-            painter.CurrentFont = new PixelFarm.Drawing.Font("tahoma", 10);
+            painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             painter.Clear(PixelFarm.Drawing.Color.White);
         }
 
