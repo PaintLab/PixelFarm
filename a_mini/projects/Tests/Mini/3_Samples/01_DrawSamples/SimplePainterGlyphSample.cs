@@ -16,8 +16,8 @@ namespace PixelFarm.Agg.SimplePainter
     {
         string fontName = "tahoma";
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-        PixelFarm.Drawing.Font font1;
-        PixelFarm.Drawing.Font font2;
+        PixelFarm.Drawing.RequestFont font1;
+        PixelFarm.Drawing.RequestFont font2;
         NativeFontStore nativeFontStore = new NativeFontStore();
         public override void Init()
         {

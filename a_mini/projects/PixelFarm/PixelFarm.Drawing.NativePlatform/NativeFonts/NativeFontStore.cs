@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.Fonts
     public class NativeFontStore
     {
         Dictionary<string, NativeFontFace> fonts = new Dictionary<string, NativeFontFace>();
-        Dictionary<Font, NativeFont> registerFonts = new Dictionary<Font, NativeFont>();
+        Dictionary<RequestFont, NativeFont> registerFonts = new Dictionary<RequestFont, NativeFont>();
         //--------------------------------------------------
 
         static Dictionary<string, InstalledFont> regular_Fonts = new Dictionary<string, InstalledFont>();
@@ -90,19 +90,19 @@ namespace PixelFarm.Drawing.Fonts
                ref exportTypeInfo);
             fontFace.HBFont = exportTypeInfo.hb_font;
         }
-        public Font LoadFont(string fontName, string filename, float fontSizeInPoint)
+        public RequestFont LoadFont(string fontName, string filename, float fontSizeInPoint)
         {
-            Font font = new Font(fontName, fontSizeInPoint);
+            RequestFont font = new RequestFont(fontName, fontSizeInPoint);
             LoadFont(font, filename);
             return font;
         }
-        public Font LoadFont(string fontName, float fontSizeInPoint)
+        public RequestFont LoadFont(string fontName, float fontSizeInPoint)
         {
-            Font font = new Font(fontName, fontSizeInPoint);
+            RequestFont font = new RequestFont(fontName, fontSizeInPoint);
             LoadFont(font);
             return font;
         }
-        public void LoadFont(Font font)
+        public void LoadFont(RequestFont font)
         {
             //request font from installed font
             InstalledFont found;
@@ -155,7 +155,7 @@ namespace PixelFarm.Drawing.Fonts
                     } break;
             }
         }
-        public void LoadFont(Font font, string filename)
+        public void LoadFont(RequestFont font, string filename)
         {
             //load font from specific file 
             int major, minor, revision;
@@ -225,7 +225,7 @@ namespace PixelFarm.Drawing.Fonts
             registerFonts.Add(font, nativeFont);
 
         }
-        public NativeFont GetResolvedNativeFont(Font f)
+        public NativeFont GetResolvedNativeFont(RequestFont f)
         {
             NativeFont found;
             registerFonts.TryGetValue(f, out found);

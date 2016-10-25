@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.Fonts
             this.fontface = fontface;
             this.emSizeInPoints = emSizeInPoints;
             //--------------------------------------
-            emSizeInPixels = Font.ConvEmSizeInPointsToPixels(emSizeInPoints);
+            emSizeInPixels = RequestFont.ConvEmSizeInPointsToPixels(emSizeInPoints);
             //--------------------------------------
             //implementation
             gdiFont = new System.Drawing.Font(fontface.FaceName, emSizeInPoints);
@@ -51,7 +51,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return this.fontface; }
         }
-        public override float EmSizeInPixels
+        public override float SizeInPixels
         {
             get { return emSizeInPixels; }
         }
@@ -84,7 +84,7 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose()
         {
         }
-        public override float EmSize
+        public override float SizeInPoints
         {
             get
             {

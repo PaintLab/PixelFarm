@@ -186,9 +186,9 @@ namespace Mini
                 g.Clear(System.Drawing.Color.White);
 
 
-                PixelFarm.Drawing.Font winFont = gdiPathFontStore.LoadFont(fontName, fontSize);
+                PixelFarm.Drawing.Fonts.ActualFont winFont = gdiPathFontStore.LoadFont(fontName, fontSize);
 
-                var winFontGlyph = gdiPathFontStore.GetResolvedFont(winFont).GetGlyph(testChar);
+                var winFontGlyph = winFont.GetGlyph(testChar);
                 //convert Agg vxs to bitmap
                 int bmpW = 50;
                 int bmpH = 50;

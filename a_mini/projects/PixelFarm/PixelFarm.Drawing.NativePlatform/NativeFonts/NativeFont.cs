@@ -27,10 +27,10 @@ namespace PixelFarm.Drawing.Fonts
             this.fontSizeInPixelUnit = pixelSize;
 
             int ascentEmSize = ownerFace.Ascent / ownerFace.UnitPerEm;
-            fontFaceAscentInPx = Font.ConvEmSizeInPointsToPixels(ascentEmSize);
+            fontFaceAscentInPx = RequestFont.ConvEmSizeInPointsToPixels(ascentEmSize);
 
             int descentEmSize = ownerFace.Descent / ownerFace.UnitPerEm;
-            fontFaceDescentInPx = Font.ConvEmSizeInPointsToPixels(descentEmSize);
+            fontFaceDescentInPx = RequestFont.ConvEmSizeInPointsToPixels(descentEmSize);
 
         }
         protected override void OnDispose()
@@ -99,8 +99,8 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return fontFaceDescentInPx; }
         }
-        public override float EmSize { get { return this.emSizeInPoints; } }
-        public override float EmSizeInPixels { get { return fontSizeInPixelUnit; } }
+        public override float SizeInPoints { get { return this.emSizeInPoints; } }
+        public override float SizeInPixels { get { return fontSizeInPixelUnit; } }
         public override float GetAdvanceForCharacter(char c)
         {
             return this.GetGlyph(c).horiz_adv_x >> 6;

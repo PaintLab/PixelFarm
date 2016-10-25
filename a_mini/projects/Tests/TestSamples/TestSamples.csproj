@@ -90,9 +90,9 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Hw\PixelFarm.Drawing.Hw.csproj">
-      <Project>{E0BC92C3-6936-4D8F-AE7F-54DDE27DE370}</Project>
-      <Name>PixelFarm.Drawing.Hw</Name>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.NativePlatform.csproj">
+      <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
+      <Name>PixelFarm.Drawing.NativePlatform</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>

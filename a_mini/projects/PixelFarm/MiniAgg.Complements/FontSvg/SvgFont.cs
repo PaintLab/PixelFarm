@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.Fonts
             this.fontface = fontface;
             this.emSizeInPoints = emSizeInPoints;
             //------------------------------------
-            emSizeInPixels = (int)Font.ConvEmSizeInPointsToPixels(emSizeInPoints);
+            emSizeInPixels = (int)RequestFont.ConvEmSizeInPointsToPixels(emSizeInPoints);
             currentEmScalling = (float)emSizeInPixels / (float)fontface.UnitsPerEm;
             scaleTx = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
         }
@@ -83,14 +83,14 @@ namespace PixelFarm.Drawing.Fonts
         {
         }
 
-        public override float EmSize
+        public override float SizeInPoints
         {
             get
             {
                 return emSizeInPoints;
             }
         }
-        public override float EmSizeInPixels
+        public override float SizeInPixels
         {
             get { return emSizeInPixels; }
         }
