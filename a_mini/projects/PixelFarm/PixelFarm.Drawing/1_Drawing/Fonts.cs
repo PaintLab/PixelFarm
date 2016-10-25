@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing
         //each platform/canvas has its own representation of this Font
         //actual font will be resolved by the platform.
 
-        float fontSizeInPixels;
+        
         /// <summary>
         /// font size in points unit
         /// </summary>
@@ -53,16 +53,10 @@ namespace PixelFarm.Drawing
             private set
             {
                 sizeInPoints = value;
-                fontSizeInPixels = ConvEmSizeInPointsToPixels(value);
+                
             }
         }
-        public float SizeInPixels
-        {
-            get
-            {
-                return fontSizeInPixels;
-            }
-        }
+       
 
         static int s_POINTS_PER_INCH = 72; //default value
         static int s_PIXELS_PER_INCH = 96; //default value
