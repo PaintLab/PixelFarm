@@ -36,22 +36,22 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\BasicGdi32FontHelper.cs">
+    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\Implementation.Win32\BasicGdi32FontHelper.cs">
       <Link>PixelFarm.Drawing.GLES2\Implementation.Win32\BasicGdi32FontHelper.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\MyWin32.cs">
+    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\Implementation.Win32\MyWin32.cs">
       <Link>PixelFarm.Drawing.GLES2\Implementation.Win32\MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\NativeTextWin32.cs">
+    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\Implementation.Win32\NativeTextWin32.cs">
       <Link>PixelFarm.Drawing.GLES2\Implementation.Win32\NativeTextWin32.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\NativeWin32MemoryDc.cs">
+    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\Implementation.Win32\NativeWin32MemoryDc.cs">
       <Link>PixelFarm.Drawing.GLES2\Implementation.Win32\NativeWin32MemoryDc.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\Win32Utils.cs">
+    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\Implementation.Win32\Win32Utils.cs">
       <Link>PixelFarm.Drawing.GLES2\Implementation.Win32\Win32Utils.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\WinGdiFont.cs">
+    <Compile Include="..\PixelFarm.Drawing.GdiPlusPlatform\Implementation.Win32\WinGdiFont.cs">
       <Link>PixelFarm.Drawing.GLES2\Implementation.Win32\WinGdiFont.cs</Link>
     </Compile>
     <Compile Include="0_Start\NativeDll.cs" />
