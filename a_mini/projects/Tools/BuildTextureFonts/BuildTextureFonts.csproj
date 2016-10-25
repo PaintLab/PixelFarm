@@ -100,9 +100,9 @@
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.NativeWindows\PixelFarm.Drawing.NativeWindows.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.NativeWindows\PixelFarm.Drawing.GLES2.csproj">
       <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
-      <Name>PixelFarm.Drawing.NativeWindows</Name>
+      <Name>PixelFarm.Drawing.GLES2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

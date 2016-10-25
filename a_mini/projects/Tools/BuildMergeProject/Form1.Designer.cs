@@ -31,7 +31,6 @@
             this.cmdBuildMergePixelFarm = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmPortable = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmMiniAgg = new System.Windows.Forms.Button();
-            this.cmdMergePixelFarm_Drawing = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuildMergePixelFarm
@@ -64,22 +63,11 @@
             this.cmdBuildMergePixelFarmMiniAgg.UseVisualStyleBackColor = true;
             this.cmdBuildMergePixelFarmMiniAgg.Click += new System.EventHandler(this.cmdMergePixelFarmMiniAgg_Click);
             // 
-            // cmdMergePixelFarm_Drawing
-            // 
-            this.cmdMergePixelFarm_Drawing.Location = new System.Drawing.Point(25, 74);
-            this.cmdMergePixelFarm_Drawing.Name = "cmdMergePixelFarm_Drawing";
-            this.cmdMergePixelFarm_Drawing.Size = new System.Drawing.Size(167, 57);
-            this.cmdMergePixelFarm_Drawing.TabIndex = 3;
-            this.cmdMergePixelFarm_Drawing.Text = "BuildMerge PixelFarm.Drawing";
-            this.cmdMergePixelFarm_Drawing.UseVisualStyleBackColor = true;
-            this.cmdMergePixelFarm_Drawing.Click += new System.EventHandler(this.cmdMergePixelFarm_Drawing_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(872, 378);
-            this.Controls.Add(this.cmdMergePixelFarm_Drawing);
             this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
             this.Controls.Add(this.cmdBuildMergePixelFarmPortable);
             this.Controls.Add(this.cmdBuildMergePixelFarm);
@@ -94,7 +82,6 @@
         private System.Windows.Forms.Button cmdBuildMergePixelFarm;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmPortable;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAgg;
-        private System.Windows.Forms.Button cmdMergePixelFarm_Drawing;
     }
 }
 

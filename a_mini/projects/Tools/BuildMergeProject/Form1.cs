@@ -62,7 +62,7 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.GdiPlusPlatform.csproj");
             //
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.NativeWindows\PixelFarm.Drawing.NativeWindows.csproj");
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.NativeWindows.WinForms\PixelFarm.NativeWindows.WinForms.csproj"); 
              
@@ -96,34 +96,34 @@ namespace BuildMergeProject
 
             return mergePro;
         }
-        //---------------------------------------------------------------------------------------------------------------------------------------
-        static MergeProject CreateMergePixelFarmDrawingProject()
-        {
+        ////---------------------------------------------------------------------------------------------------------------------------------------
+        //static MergeProject CreateMergePixelFarmDrawingProject()
+        //{
 
-            MergeProject mergePro = new MergeProject();
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
-            //
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg\MiniAgg.csproj");
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj");
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
+        //    MergeProject mergePro = new MergeProject();
+        //    mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
+        //    //
+        //    mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg\MiniAgg.csproj");
+        //    mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj");
+        //    mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
 
-            return mergePro;
-        }
-        private void cmdMergePixelFarm_Drawing_Click(object sender, EventArgs e)
-        {
-            //-----------
-            //PixelFarm's MiniAgg
-            //-----------
-            MergeProject mergePro = CreateMergePixelFarmDrawingProject();
-            mergePro.MergeAndSave(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.csproj",
-               "PixelFarm.Drawing",
-               "v2.0",
-               "",//additional define constant
-               new string[] {
-                  "System" ,
-               });
+        //    return mergePro;
+        //}
+        //private void cmdMergePixelFarm_Drawing_Click(object sender, EventArgs e)
+        //{
+        //    //-----------
+        //    //PixelFarm's MiniAgg
+        //    //-----------
+        //    MergeProject mergePro = CreateMergePixelFarmDrawingProject();
+        //    mergePro.MergeAndSave(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.csproj",
+        //       "PixelFarm.Drawing",
+        //       "v2.0",
+        //       "",//additional define constant
+        //       new string[] {
+        //          "System" ,
+        //       });
 
-        }
+        //}
 
 
     }
