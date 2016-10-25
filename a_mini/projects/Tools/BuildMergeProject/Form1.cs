@@ -12,7 +12,7 @@ namespace BuildMergeProject
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            MergeProject mergePro = CreateMergePixelFarmProject();
+            MergeProject mergePro = CreateMergePixelFarmOneProject();
             mergePro.MergeAndSave(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.One.csproj",
                "PixelFarm.One",
                "v2.0",
@@ -49,7 +49,7 @@ namespace BuildMergeProject
                "",//additional define constant
                new string[0]);
         }
-        static MergeProject CreateMergePixelFarmProject()
+        static MergeProject CreateMergePixelFarmOneProject()
         {
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
@@ -77,6 +77,7 @@ namespace BuildMergeProject
 
             return mergePro;
         }
+
         static MergeProject CreateMergePixelFarmPortableProject()
         {
             //*** portable project for html renderer ***
@@ -92,6 +93,34 @@ namespace BuildMergeProject
             //mergePro.LoadSubProject(@"D:\projects\agg-sharp\a_mini\projects\PixelFarm\MiniAgg.HardwareGraphics\MiniAgg.Hw2\MiniAgg.Hw2.csproj");
 
             return mergePro;
+        }
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        static MergeProject CreateMergePixelFarmDrawingProject()
+        {
+
+            MergeProject mergePro = new MergeProject();
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
+            //
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg\MiniAgg.csproj");
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
+
+            return mergePro;
+        }
+        private void cmdMergePixelFarm_Drawing_Click(object sender, EventArgs e)
+        {
+            //-----------
+            //PixelFarm's MiniAgg
+            //-----------
+            MergeProject mergePro = CreateMergePixelFarmDrawingProject();
+            mergePro.MergeAndSave(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.csproj",
+               "PixelFarm.Drawing",
+               "v2.0",
+               "",//additional define constant
+               new string[] {
+                  "System" ,
+               });
+
         }
 
 

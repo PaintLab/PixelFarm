@@ -31,15 +31,16 @@
             this.cmdBuildMergePixelFarm = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmPortable = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmMiniAgg = new System.Windows.Forms.Button();
+            this.cmdMergePixelFarm_Drawing = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuildMergePixelFarm
             // 
-            this.cmdBuildMergePixelFarm.Location = new System.Drawing.Point(25, 22);
+            this.cmdBuildMergePixelFarm.Location = new System.Drawing.Point(25, 251);
             this.cmdBuildMergePixelFarm.Name = "cmdBuildMergePixelFarm";
             this.cmdBuildMergePixelFarm.Size = new System.Drawing.Size(167, 57);
             this.cmdBuildMergePixelFarm.TabIndex = 0;
-            this.cmdBuildMergePixelFarm.Text = "BuildMerge PixelFarm";
+            this.cmdBuildMergePixelFarm.Text = "BuildMerge PixelFarm.One";
             this.cmdBuildMergePixelFarm.UseVisualStyleBackColor = true;
             this.cmdBuildMergePixelFarm.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -55,7 +56,7 @@
             // 
             // cmdBuildMergePixelFarmMiniAgg
             // 
-            this.cmdBuildMergePixelFarmMiniAgg.Location = new System.Drawing.Point(25, 94);
+            this.cmdBuildMergePixelFarmMiniAgg.Location = new System.Drawing.Point(25, 156);
             this.cmdBuildMergePixelFarmMiniAgg.Name = "cmdBuildMergePixelFarmMiniAgg";
             this.cmdBuildMergePixelFarmMiniAgg.Size = new System.Drawing.Size(167, 57);
             this.cmdBuildMergePixelFarmMiniAgg.TabIndex = 2;
@@ -63,11 +64,22 @@
             this.cmdBuildMergePixelFarmMiniAgg.UseVisualStyleBackColor = true;
             this.cmdBuildMergePixelFarmMiniAgg.Click += new System.EventHandler(this.cmdMergePixelFarmMiniAgg_Click);
             // 
+            // cmdMergePixelFarm_Drawing
+            // 
+            this.cmdMergePixelFarm_Drawing.Location = new System.Drawing.Point(25, 74);
+            this.cmdMergePixelFarm_Drawing.Name = "cmdMergePixelFarm_Drawing";
+            this.cmdMergePixelFarm_Drawing.Size = new System.Drawing.Size(167, 57);
+            this.cmdMergePixelFarm_Drawing.TabIndex = 3;
+            this.cmdMergePixelFarm_Drawing.Text = "BuildMerge PixelFarm.Drawing";
+            this.cmdMergePixelFarm_Drawing.UseVisualStyleBackColor = true;
+            this.cmdMergePixelFarm_Drawing.Click += new System.EventHandler(this.cmdMergePixelFarm_Drawing_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(872, 378);
+            this.Controls.Add(this.cmdMergePixelFarm_Drawing);
             this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
             this.Controls.Add(this.cmdBuildMergePixelFarmPortable);
             this.Controls.Add(this.cmdBuildMergePixelFarm);
@@ -82,6 +94,7 @@
         private System.Windows.Forms.Button cmdBuildMergePixelFarm;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmPortable;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAgg;
+        private System.Windows.Forms.Button cmdMergePixelFarm_Drawing;
     }
 }
 
