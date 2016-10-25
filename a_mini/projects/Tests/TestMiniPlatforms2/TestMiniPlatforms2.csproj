@@ -60,9 +60,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniPlatforms\PixelFarm.NativeWindows.csproj">
       <Project>{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}</Project>
-      <Name>PixelFarm.MiniPlatforms</Name>
+      <Name>PixelFarm.NativeWindows</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>

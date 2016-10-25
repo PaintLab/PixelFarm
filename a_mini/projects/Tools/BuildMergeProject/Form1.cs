@@ -61,13 +61,10 @@ namespace BuildMergeProject
             //
             mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.GdiPlusPlatform.csproj");
             //
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj");
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.MiniPlatforms.csproj");
-            
-            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.MiniPlatforms.WindowsForms\PixelFarm.MiniPlatforms.WindowsForms.csproj");
-            
-                      
-            
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.Drawing.NativeWindows\PixelFarm.Drawing.NativeWindows.csproj");
+
+            mergePro.LoadSubProject(@"D:\projects\PixelFarm-dev\a_mini\projects\PixelFarm\PixelFarm.NativeWindows.WinForms\PixelFarm.NativeWindows.WinForms.csproj"); 
              
             
             return mergePro;
