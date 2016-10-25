@@ -92,21 +92,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MiniTesselate\Tesselate.csproj">
-      <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
-      <Name>Tesselate</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
       <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
       <Name>PixelFarm.OpenType</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+    <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing</Name>
+      <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj">
       <Project>{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}</Project>
       <Name>PixelFarm.MiniPlatforms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tesselate\Tesselate.csproj">
+      <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
+      <Name>Tesselate</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
