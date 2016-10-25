@@ -39,22 +39,22 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\BasicGdi32FontHelper.cs">
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\BasicGdi32FontHelper.cs">
       <Link>Implementation.Win32\BasicGdi32FontHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\MyWin32.cs">
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\MyWin32.cs">
       <Link>Implementation.Win32\MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\NativeTextWin32.cs">
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\NativeTextWin32.cs">
       <Link>Implementation.Win32\NativeTextWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\NativeWin32MemoryDc.cs">
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\NativeWin32MemoryDc.cs">
       <Link>Implementation.Win32\NativeWin32MemoryDc.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\Win32Utils.cs">
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\Win32Utils.cs">
       <Link>Implementation.Win32\Win32Utils.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.GLES2\Implementation.Win32\WinGdiFont.cs">
+    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlusPlatform\PixelFarm.Drawing.Gdi\Implementation.Win32\WinGdiFont.cs">
       <Link>Implementation.Win32\WinGdiFont.cs</Link>
     </Compile>
     <Compile Include="Form1.cs">
@@ -88,9 +88,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.csproj">
-      <Project>{56751940-B896-4AC9-AC2B-ABC48A1B20D6}</Project>
-      <Name>PixelFarm.Drawing</Name>
+    <ProjectReference Include="..\..\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
+      <Name>MiniAgg.Complements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\MiniAgg\MiniAgg.csproj">
+      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
+      <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.NativeWindows\PixelFarm.Drawing.NativeWindows.csproj">
       <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
