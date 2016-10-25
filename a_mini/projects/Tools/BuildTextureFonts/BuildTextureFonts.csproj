@@ -92,7 +92,7 @@
       <Project>{56751940-B896-4AC9-AC2B-ABC48A1B20D6}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.NativePlatform\PixelFarm.Drawing.NativeWindows.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.NativeWindows\PixelFarm.Drawing.NativeWindows.csproj">
       <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
       <Name>PixelFarm.Drawing.NativeWindows</Name>
     </ProjectReference>
