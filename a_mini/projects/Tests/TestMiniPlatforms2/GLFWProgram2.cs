@@ -17,7 +17,13 @@ namespace TestGlfw
             {
                 Console.WriteLine("can't init");
             }
-
+            //---------------------------------------------------
+            //specific OpenGLES
+            Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
+            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
+            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
+            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
+            //---------------------------------------------------
             GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600,
                 "PixelFarm on GLfw and OpenGLES2",
                 new GlfwMonitorPtr(),//default monitor
@@ -25,8 +31,7 @@ namespace TestGlfw
 
             /* Make the window's context current */
             Glfw.MakeContextCurrent(glWindow);
-            Glfw.SwapInterval(1);
-
+            Glfw.SwapInterval(1); 
             GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
 
             var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
@@ -57,7 +62,7 @@ namespace TestGlfw
             int ww_w = 800;
             int ww_h = 600;
             int max = Math.Max(ww_w, ww_h);
-            GL.Viewport(0, 0, 800, 600);
+            GL.Viewport(0, 0, max, max);
             demo.InitGLProgram();
 
             while (!Glfw.WindowShouldClose(glWindow))

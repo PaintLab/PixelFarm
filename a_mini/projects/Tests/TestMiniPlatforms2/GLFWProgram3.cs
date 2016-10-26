@@ -17,16 +17,25 @@ namespace TestGlfw
             {
                 Console.WriteLine("can't init");
             }
+            //---------------------------------------------------
+            //specific OpenGLES
+            Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
+            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
+            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
+            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
+            //---------------------------------------------------
+
             GlFwForm form1 = GlfwApp.CreateGlfwForm(
                 800,
                 600,
                 "PixelFarm on GLfw and OpenGLES2");
-            form1.Show();
-            Glfw.SwapInterval(1);
-            //---------------------------------------
+
             form1.MakeCurrent();
+            Glfw.SwapInterval(1);
+            ////--------------------------------------- 
+
             form1.CreateOpenGLEsContext();
-            //-------------------------------------- 
+
             //bind open gl funcs here.. ***
             new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
             //-------------------------------------- 
@@ -37,6 +46,7 @@ namespace TestGlfw
             var demo = new OpenTkEssTest.T108_LionFill();
             demo.Width = 800;
             demo.Height = 600;
+            demo.InitGLProgram();
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
             //demo.Width = 800;
             //demo.Height = 600;
@@ -50,8 +60,8 @@ namespace TestGlfw
             int ww_w = 800;
             int ww_h = 600;
             int max = Math.Max(ww_w, ww_h);
-            GL.Viewport(0, 0, 800, 600);
-            demo.InitGLProgram();
+            //GL.Viewport(0, 0, 800, 600);
+            GL.Viewport(0, 0, max, max);
             //--------------------------------------------------------------------------------
             form1.SetDrawFrameDelegate(() =>
             {
@@ -68,8 +78,9 @@ namespace TestGlfw
             f2.CreateOpenGLEsContext();
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.ClearColor(1, 1, 1, 1);             
-            GL.Viewport(0, 0, 800, 600);
+            GL.ClearColor(1, 1, 1, 1);
+            //GL.Viewport(0, 0, 800, 600);
+            GL.Viewport(0, 0, max, max);
             //---------------------------------
             f2.SetDrawFrameDelegate(() =>
             {
@@ -79,7 +90,7 @@ namespace TestGlfw
             {
                 //---------------
                 //render phase and swap
-                GlfwApp.UpdateWindowsFrame(); 
+                GlfwApp.UpdateWindowsFrame();
                 /* Poll for and process events */
                 Glfw.PollEvents();
             }
