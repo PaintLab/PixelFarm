@@ -32,15 +32,6 @@ namespace PixelFarm.Drawing.GLES2
             MyGLCanvas myCanvas = new MyGLCanvas(this, canvas2d, 0, 0, width, height);
             return myCanvas;
         }
-    
-        public override Bitmap CreatePlatformBitmap(int w, int h, byte[] rawBuffer, bool isBottomUp)
-        {
-            GLESBitmap innerBmp = new GLESBitmap(w, h);
-            innerBmp.Buffer = rawBuffer;
-            innerBmp.IsBottomUp = isBottomUp;
-
-            Bitmap bmp = new Bitmap(w, h, innerBmp);
-            return bmp;
-        }
+     
     }
 }

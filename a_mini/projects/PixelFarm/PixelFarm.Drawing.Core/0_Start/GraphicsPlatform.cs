@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing
         /// font management system for this graphics platform
         /// </summary>
         public abstract IFonts Fonts { get; }
-        public abstract Bitmap CreatePlatformBitmap(int w, int h, byte[] rawBuffer, bool isBottomUp);
+        //public abstract Bitmap CreatePlatformBitmap(int w, int h, byte[] rawBuffer, bool isBottomUp);
 
     }
     public struct CanvasInitParameters
