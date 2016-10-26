@@ -99,7 +99,6 @@
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\4_MyGLCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLCanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLESBitmap.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GraphicsPath.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\PensAndBrushes.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\WinGdiFontPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

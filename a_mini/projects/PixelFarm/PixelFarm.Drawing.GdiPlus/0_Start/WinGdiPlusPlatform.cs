@@ -22,11 +22,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return new MyGdiPlusCanvas(this, 0, 0, left, top, width, height);
         }
-        
-        public override GraphicsPath CreateGraphicsPath()
-        {
-            return new WinGdiGraphicsPath();
-        }
+ 
 
         public override IFonts Fonts
         {

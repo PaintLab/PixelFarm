@@ -55,7 +55,6 @@
     <Compile Include="Implementation\BitmapHelper.cs" />
     <Compile Include="Implementation\WinGdiPlusFont.cs" />
     <Compile Include="Implementation\WinGdiPlusFontStore.cs" />
-    <Compile Include="Implementation\WinGdiGraphicsPath.cs" />
     <Compile Include="Implementation\Region.cs" />
     <Compile Include="MiniAggGraphics\BufferBitmapStore.cs" />
     <Compile Include="MiniAggGraphics\GdiPlusCanvasPainter.cs" />
