@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing
             int top,
             int width,
             int height,
-            CanvasInitParameters canvasInitPars);
+            CanvasInitParameters canvasInitPars= new CanvasInitParameters());
 
        
         /// <summary>
