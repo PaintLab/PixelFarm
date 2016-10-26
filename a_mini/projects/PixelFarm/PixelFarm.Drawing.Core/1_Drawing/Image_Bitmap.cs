@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing
         int height;
         System.IDisposable innerImage;
         byte[] rawImageBuffer;
-        public Bitmap(int w, int h, byte[] rawImageBuffer)
+        public Bitmap(int w, int h, byte[] rawImageBuffer, bool isInvertedImg = false)
         {
             this.width = w;
             this.height = h;
