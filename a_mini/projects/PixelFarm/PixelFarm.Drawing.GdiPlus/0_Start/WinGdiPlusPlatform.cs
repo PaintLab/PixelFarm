@@ -18,19 +18,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
         }
-        public override Canvas CreateCanvas(int left, int top, int width, int height)
+        public override Canvas CreateCanvas(int left, int top, int width, int height, CanvasInitParameters canvasInitPars= new CanvasInitParameters())
         {
             return new MyGdiPlusCanvas(this, 0, 0, left, top, width, height);
-        }
-        public override Canvas CreateCanvas(object platformCanvas, int left, int top, int width, int height)
-        {
-            throw new System.NotSupportedException();
-        }
-        public override GraphicsPath CreateGraphicsPath()
-        {
-            return new WinGdiGraphicsPath();
-        }
-
+        } 
         public override IFonts Fonts
         {
             get
@@ -38,18 +29,7 @@ namespace PixelFarm.Drawing.WinGdi
                 return ifonts;
             }
         }
-        public override Bitmap CreatePlatformBitmap(int w, int h, byte[] rawBuffer, bool isBottomUp)
-        {
-            //create platform bitmap
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            CopyFromAggActualImageToGdiPlusBitmap(rawBuffer, bmp);
-            if (isBottomUp)
-            {
-                bmp.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
-            }
-            return new Bitmap(w, h, bmp);
-        }
+      
         static void CopyFromAggActualImageToGdiPlusBitmap(byte[] rawBuffer, System.Drawing.Bitmap bitmap)
         {
             //platform specific

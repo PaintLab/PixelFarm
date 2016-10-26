@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.NativeWindows", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniPlatform", "Tests\TestMiniPlatform\TestMiniPlatform.csproj", "{908071D8-60E4-4BB2-8490-FB2DAA46D6B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.NativeWindows.WinForms", "PixelFarm\PixelFarm.NativeWindows.WinForms\PixelFarm.NativeWindows.WinForms.csproj", "{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.OpenTKWinForms", "PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj", "{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniPlatforms2", "Tests\TestMiniPlatforms2\TestMiniPlatforms2.csproj", "{8072FC36-EBC4-4E59-A092-1B9AE9EE4F9C}"
 EndProject
@@ -49,7 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7_AutoGen", "7_AutoGen", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniOpenTK", "PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj", "{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_NativeWindows", "2_NativeWindows", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_WindowsSystem", "2_WindowsSystem", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_WelcomeChoices", "4_WelcomeChoices", "{32F6BF2F-65CE-4A04-BAE5-6B4EB9867171}"
 EndProject
