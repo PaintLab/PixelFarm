@@ -7,8 +7,8 @@
     <ProjectGuid>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.Drawing.NativePlatform</RootNamespace>
-    <AssemblyName>PixelFarm.Drawing.NativePlatform</AssemblyName>
+    <RootNamespace>PixelFarm.Drawing.GLES2</RootNamespace>
+    <AssemblyName>PixelFarm.Drawing.GLES2</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
