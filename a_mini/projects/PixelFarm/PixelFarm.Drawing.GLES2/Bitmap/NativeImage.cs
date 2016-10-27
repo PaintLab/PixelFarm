@@ -6,7 +6,6 @@ namespace PixelFarm.Drawing.Imaging
     static class NativeImageMethods
     {
         const string myfontLib = "myft.dll";
-
         [DllImport(myfontLib)]
         public static extern int MyFtLibGetVersion();
         [DllImport(myfontLib)]
@@ -14,6 +13,8 @@ namespace PixelFarm.Drawing.Imaging
         [DllImport(myfontLib)]
         public static extern IntPtr stbi_load(string filename, out int w, out int h, out int comp, int requestOutputComponent);
     }
+
+
 
     public class NativeImage : IDisposable
     {

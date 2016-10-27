@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg.Complements", "Pixe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesselate", "PixelFarm\Tesselate\Tesselate.csproj", "{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_DrawingPlatforms", "3_DrawingPlatforms", "{4E282417-77BB-480C-84A1-72A44F229AC1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_Drawing", "3_Drawing", "{4E282417-77BB-480C-84A1-72A44F229AC1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0_Demo", "0_Demo", "{13F19F93-8CDB-4AC4-BF06-51C144FA54C1}"
 EndProject
@@ -49,9 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7_AutoGen", "7_AutoGen", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniOpenTK", "PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj", "{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_WindowsSystem", "2_WindowsSystem", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_WelcomeChoices", "4_WelcomeChoices", "{32F6BF2F-65CE-4A04-BAE5-6B4EB9867171}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_WindowsSystem", "2.1_WindowsSystem", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -11,7 +11,7 @@ namespace PixelFarm.Drawing.GLES2
 {
 
     public class GLES2Platform : GraphicsPlatform
-    {   
+    {
         FontSystem fontSystem = new FontSystem();
         public GLES2Platform()
         {
@@ -27,7 +27,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             int max = Math.Max(width, height);
             CanvasGL2d canvas2d = new CanvasGL2d(max, max);
-            MyGLCanvas myCanvas = new MyGLCanvas(this, canvas2d, 0, 0, width, height);
+            MyGLCanvas myCanvas = new MyGLCanvas(canvas2d, 0, 0, width, height);
             return myCanvas;
         }
 

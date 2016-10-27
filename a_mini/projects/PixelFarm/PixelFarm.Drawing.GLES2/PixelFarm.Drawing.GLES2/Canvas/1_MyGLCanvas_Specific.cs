@@ -30,9 +30,7 @@ namespace PixelFarm.Drawing.GLES2
         //-------------------------------
         //TODO: review here, 
         NativeWin32MemoryDc win32MemDc;
-        GraphicsPlatform platform;
         public MyGLCanvas(
-            GraphicsPlatform platform,
             CanvasGL2d canvasGL2d,
             int left, int top,
             int width,
@@ -41,11 +39,8 @@ namespace PixelFarm.Drawing.GLES2
             this.canvasGL2 = canvasGL2d;
             painter1 = new GLCanvasPainter(canvasGL2d, width, height);
 
-            //platform specific Win32
-            //1.
-            this.platform = platform;
-            //this.targetGfx = this.gx = targetGfx;
-            //2. dimension
+
+
             this.left = left;
             this.top = top;
             this.right = left + width;
@@ -93,7 +88,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             this.CloseCanvas();
         }
-        
+
         void ClearPreviousStoredValues()
         {
 

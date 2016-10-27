@@ -15,10 +15,7 @@ namespace PixelFarm.Drawing
 
 
         public abstract void CloseCanvas();
-        /// <summary>
-        /// owner platform of this canvas
-        /// </summary>
-        public abstract GraphicsPlatform Platform { get; }
+       
         public abstract SmoothingMode SmoothingMode { get; set; }
         //---------------------------------------------------------------------
         public abstract float StrokeWidth { get; set; }
