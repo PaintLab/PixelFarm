@@ -18,8 +18,7 @@ TestResults
 [Rr]elease/
 .hg/
 .hgignore
-x64/
-*_i.c
+x64/ 
 *.ilk
 *.meta
 *.obj
