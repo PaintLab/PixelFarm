@@ -90,7 +90,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             else
             {
-                return new MyGdiPlusCanvas(gfxPlatform,
+                return new MyGdiPlusCanvas( 
                     hPageNum,
                     vPageNum,
                     hPageNum * eachPageWidth,

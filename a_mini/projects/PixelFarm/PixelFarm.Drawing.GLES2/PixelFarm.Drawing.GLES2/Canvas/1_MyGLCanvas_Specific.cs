@@ -14,15 +14,13 @@ namespace PixelFarm.Drawing.GLES2
 
 
 
-    partial class MyGLCanvas : Canvas, IDisposable
+    public partial class MyGLCanvas : Canvas, IDisposable
     {
         CanvasGL2d canvasGL2;
         bool isDisposed;
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         //-------------------------------
         GLCanvasPainter painter1;
-
-
         Rectangle currentClipRect;
         Color currentTextColor;
         InternalPen internalPen;

@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override Canvas CreateCanvas(int left, int top, int width, int height, CanvasInitParameters canvasInitPars= new CanvasInitParameters())
         {
-            return new MyGdiPlusCanvas(this, 0, 0, left, top, width, height);
+            return new MyGdiPlusCanvas( 0, 0, left, top, width, height);
         } 
         public override IFonts Fonts
         {
