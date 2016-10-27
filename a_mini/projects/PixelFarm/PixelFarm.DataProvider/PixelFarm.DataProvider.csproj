@@ -34,8 +34,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IImageProvider.cs" />
-    <Compile Include="IInstallFontsProvider.cs" />
+    <Compile Include="Providers.cs" />
     <Compile Include="Win32Impl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

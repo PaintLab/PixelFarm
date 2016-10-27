@@ -39,6 +39,10 @@ namespace PixelFarm.Drawing
         {
             s_imgBufferProviderDel = imgBufferProviderDel;
         }
+        internal static IEnumerable<string> GetInstalledFontIter()
+        {
+            return s_installedFontProviderIter;
+        }
 
     }
 

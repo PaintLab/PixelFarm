@@ -9,3 +9,11 @@ namespace PixelFarm.Drawing
         byte[] LoadImageBufferFromFile(string filename);
     }
 }
+namespace PixelFarm.Drawing.Fonts
+{
+    public interface IInstalledFontProvider
+    {
+        IEnumerable<string> GetInstalledFontIter();
+    }
+
+}
