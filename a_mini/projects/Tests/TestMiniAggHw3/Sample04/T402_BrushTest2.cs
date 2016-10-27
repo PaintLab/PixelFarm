@@ -18,38 +18,42 @@ namespace OpenTkEssTest
         RenderVx glyph_vx;
         LinearGradientBrush linearGrBrush2;
         PixelFarm.Agg.VertexStoreSnap tempSnap1;
-        PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
+      //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
+            //temp***
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
-            var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
-            //PathWriter p01 = new PathWriter();
-            //p01.MoveTo(0, 0);
-            //p01.LineTo(50, 100);
-            //p01.LineTo(100, 0);
-            ////-
-            //p01.MoveTo(220, 10);
-            //p01.LineTo(50, 75);
-            //p01.LineTo(25, 15);
-            //p01.CloseFigure();
-            //p01.Stop();
-            //m_pathVxs = p01.Vxs;
 
-            var m_pathVxs = svgFont.GetGlyph('K').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
-            //m_pathVxs = MergeFontSubFigures(m_pathVxs);
+            //----------------------
+            //var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
+            ////PathWriter p01 = new PathWriter();
+            ////p01.MoveTo(0, 0);
+            ////p01.LineTo(50, 100);
+            ////p01.LineTo(100, 0);
+            //////-
+            ////p01.MoveTo(220, 10);
+            ////p01.LineTo(50, 75);
+            ////p01.LineTo(25, 15);
+            ////p01.CloseFigure();
+            ////p01.Stop();
+            ////m_pathVxs = p01.Vxs;
 
-            Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
-            m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            var curveFlattener = new CurveFlattener();
-            var m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
+            //var m_pathVxs = svgFont.GetGlyph('K').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
+            ////m_pathVxs = MergeFontSubFigures(m_pathVxs);
 
-            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Agg.VertexStoreSnap(m_pathVxs2));
+            //Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
+            //m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
+            //var curveFlattener = new CurveFlattener();
+            //var m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
 
-            linearGrBrush2 = new LinearGradientBrush(
-               new PointF(0, 50), Color.Red,
-               new PointF(800, 100), Color.Black);
+            //glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Agg.VertexStoreSnap(m_pathVxs2));
+
+            //linearGrBrush2 = new LinearGradientBrush(
+            //   new PointF(0, 50), Color.Red,
+            //   new PointF(800, 100), Color.Black);
+            //----------------------
         }
         //PixelFarm.Agg.VertexStore MergeFontSubFigures(PixelFarm.Agg.VertexStore vxs)
         //{
