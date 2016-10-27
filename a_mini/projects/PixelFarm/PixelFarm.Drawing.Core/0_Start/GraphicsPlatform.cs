@@ -26,12 +26,7 @@ namespace PixelFarm.Drawing
         //set provider delegates before use it from comment graphics platform
         //----------------------------------------------------------------------
 
-        //1.installed fonts provider
-        static IEnumerable<string> s_installedFontProviderIter;
-        public static void SetInstalledFontProvider(IEnumerable<string> installedFontProviderIter)
-        {
-            s_installedFontProviderIter = installedFontProviderIter;
-        }
+        
         //----------------------
         //2. image buffer provider from filename
         static ImageBufferProviderDelegate s_imgBufferProviderDel;
@@ -39,10 +34,7 @@ namespace PixelFarm.Drawing
         {
             s_imgBufferProviderDel = imgBufferProviderDel;
         }
-        internal static IEnumerable<string> GetInstalledFontIter()
-        {
-            return s_installedFontProviderIter;
-        }
+       
 
     }
 

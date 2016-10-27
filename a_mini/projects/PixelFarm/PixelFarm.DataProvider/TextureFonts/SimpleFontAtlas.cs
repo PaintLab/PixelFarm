@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Xml; 
+using System.Xml;
 
 namespace PixelFarm.Drawing.Fonts
 {
@@ -326,7 +326,6 @@ namespace PixelFarm.Drawing.Fonts
                 int.Parse(ltwh[3]));
         }
     }
-
 
     class GlyphData
     {

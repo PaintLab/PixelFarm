@@ -125,7 +125,7 @@ namespace PixelFarm.Drawing.Fonts
             SvgFont found;
             if (!stockFonts.TryGetValue(emsize, out found))
             {
-                found = new SvgFont(this, emsize);
+                found = new SvgFont(this,"", FontStyle.Regular, emsize);
                 stockFonts.Add(emsize, found);
             }
             return found;
@@ -221,7 +221,7 @@ namespace PixelFarm.Drawing.Fonts
             }
 
             String dString = GetStringValue(svgGlyphData, "d");
-          
+
             int parseIndex = 0;
             int polyStartVertexSourceIndex = 0;
             Vector2 lastXY = new Vector2(0, 0);
@@ -233,7 +233,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 return newGlyph;
             }
-             
+
             while (parseIndex < dString.Length)
             {
                 char command = dString[parseIndex];

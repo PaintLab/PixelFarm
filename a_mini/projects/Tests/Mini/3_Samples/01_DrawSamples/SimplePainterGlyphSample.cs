@@ -16,14 +16,14 @@ namespace PixelFarm.Agg.SimplePainter
     {
         string fontName = "tahoma";
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-        PixelFarm.Drawing.RequestFont font1;
-        PixelFarm.Drawing.RequestFont font2;
+        PixelFarm.Drawing.Fonts.ActualFont font1;
+        PixelFarm.Drawing.Fonts.ActualFont font2;
         NativeFontStore nativeFontStore = new NativeFontStore();
         public override void Init()
         {
             //load font ? 
-            font1 = nativeFontStore.LoadFont(fontName, fontfile, 48);
-            font2 = nativeFontStore.LoadFont(fontName, fontfile, 10);
+            font1 = (NativeFont)nativeFontStore.LoadFont(fontName, fontfile, 48);
+            font2 = (NativeFont)nativeFontStore.LoadFont(fontName, fontfile, 10);
         }
         public override void Draw(CanvasPainter p)
         {
@@ -50,16 +50,15 @@ namespace PixelFarm.Agg.SimplePainter
 
             //p.DrawBezierCurve(120, 500 - 160, 220, 500 - 40, 35, 500 - 200, 220, 500 - 260);
             //--------------------------------------------------- 
-            var f1 = font1;
-            NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(f1);
-            var fontGlyph = nativeFont.GetGlyph('{');
+
+
+            var fontGlyph = font1.GetGlyph('{');
             //outline version
             var flat_v = fontGlyph.flattenVxs;
             p.Fill(flat_v);
             //bitmap version
-
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
-            p.CurrentFont = font1;
+            p.ActualFont = font1;
             p.FillColor = Drawing.Color.Black;
             //string test_str = "fมีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
@@ -78,7 +77,7 @@ namespace PixelFarm.Agg.SimplePainter
             p.StrokeColor = Drawing.Color.Black;
             p.Line(0, 200, 800, 200);
             p.FillColor = Drawing.Color.Black;
-            p.CurrentFont = font2; //small font
+            p.ActualFont = font2; //small font
             p.DrawString(test_str, 80, 100);
             //---------------------------------------------------              
             p.UseSubPixelRendering = false;

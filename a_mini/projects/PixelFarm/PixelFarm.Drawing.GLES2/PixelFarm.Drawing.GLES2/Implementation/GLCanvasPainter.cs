@@ -19,5 +19,6 @@ namespace PixelFarm.DrawingGL
             //for large font size we use msdf font
             //base.DrawString(text, x, y);
         }
+    
     }
 }

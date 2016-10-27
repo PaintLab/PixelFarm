@@ -19,12 +19,12 @@ namespace PixelFarm.Drawing.WinGdi
         float descentInPixels;
 
         int[] charWidths;
-        Win32.NativeTextWin32.FontABC[] charAbcWidths;
+        NativeTextWin32.FontABC[] charAbcWidths;
         FontGlyph[] fontGlyphs;
         Encoding fontEncoding = Encoding.GetEncoding(874);
         bool hasWhitespaceLength;
         float whitespaceLength;
-       
+
 
         public WinGdiPlusFont(System.Drawing.Font f)
         {
@@ -64,6 +64,14 @@ namespace PixelFarm.Drawing.WinGdi
                 fontGlyphs[i] = glyph;
             }
         }
+        public override string FontName
+        {
+            get { return myFont.Name; }
+        }
+        public override FontStyle FontStyle
+        {
+            get { return (Drawing.FontStyle)(myFont.Style); }
+        }
         public bool HasWhiteSpaceLength
         {
             get { return hasWhitespaceLength; }
@@ -85,7 +93,7 @@ namespace PixelFarm.Drawing.WinGdi
             get;
             set;
         }
-            
+
         public System.IntPtr ToHfont()
         {   /// <summary>
             /// Set a resource (e.g. a font) for the specified device context.
@@ -93,9 +101,9 @@ namespace PixelFarm.Drawing.WinGdi
             /// </summary>
             return this.hFont;
         }
-       
-        
-        
+
+
+
         public override float SizeInPoints
         {
             get { return emSize; }
@@ -112,7 +120,7 @@ namespace PixelFarm.Drawing.WinGdi
                 myFont = null;
             }
         }
-      
+
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             FontGlyph glyph = fontGlyphs[glyphIndex];

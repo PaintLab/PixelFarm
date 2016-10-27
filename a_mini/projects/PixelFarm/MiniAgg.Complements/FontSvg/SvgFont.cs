@@ -17,15 +17,27 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
         Dictionary<uint, FontGlyph> cachedGlyphsByIndex = new Dictionary<uint, FontGlyph>();
         Affine scaleTx;
+        string fontName;
+        FontStyle fontStyle;
         PixelFarm.Agg.VertexSource.CurveFlattener curveFlattner = new PixelFarm.Agg.VertexSource.CurveFlattener();
-        public SvgFont(SvgFontFace fontface, int emSizeInPoints)
+        public SvgFont(SvgFontFace fontface, string fontName, FontStyle fontStyle, int emSizeInPoints)
         {
             this.fontface = fontface;
             this.emSizeInPoints = emSizeInPoints;
+            this.fontName = fontName;
+            this.fontStyle = fontStyle;
             //------------------------------------
             emSizeInPixels = (int)RequestFont.ConvEmSizeInPointsToPixels(emSizeInPoints);
             currentEmScalling = (float)emSizeInPixels / (float)fontface.UnitsPerEm;
             scaleTx = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
+        }
+        public override string FontName
+        {
+            get { throw new NotImplementedException(); }
+        }
+        public override FontStyle FontStyle
+        {
+            get { throw new NotImplementedException(); }
         }
         public override FontFace FontFace
         {

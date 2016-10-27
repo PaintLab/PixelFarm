@@ -15,23 +15,35 @@ namespace PixelFarm.Drawing.Fonts
         int fontSizeInPixelUnit;
         float fontFaceAscentInPx;
         float fontFaceDescentInPx;
+        string fontName;
+        FontStyle fontStyle;
         /// <summary>
         /// glyph
         /// </summary>
         Dictionary<char, FontGlyph> dicGlyphs = new Dictionary<char, FontGlyph>();
         Dictionary<uint, FontGlyph> dicGlyphs2 = new Dictionary<uint, FontGlyph>();
-        internal NativeFont(NativeFontFace ownerFace, int pixelSize)
+        internal NativeFont(NativeFontFace ownerFace, string fontName, FontStyle fontStyle, int pixelSize)
         {
+            this.fontName = fontName;
+            this.fontStyle = fontStyle;
             //store unmanage font file information
             this.ownerFace = ownerFace;
             this.fontSizeInPixelUnit = pixelSize;
-
+            this.fontStyle = fontStyle;
             int ascentEmSize = ownerFace.Ascent / ownerFace.UnitPerEm;
             fontFaceAscentInPx = RequestFont.ConvEmSizeInPointsToPixels(ascentEmSize);
 
             int descentEmSize = ownerFace.Descent / ownerFace.UnitPerEm;
             fontFaceDescentInPx = RequestFont.ConvEmSizeInPointsToPixels(descentEmSize);
-
+        }
+        
+        public override string FontName
+        {
+            get { return fontName; }
+        }
+        public override FontStyle FontStyle
+        {
+            get { return fontStyle; }
         }
         protected override void OnDispose()
         {

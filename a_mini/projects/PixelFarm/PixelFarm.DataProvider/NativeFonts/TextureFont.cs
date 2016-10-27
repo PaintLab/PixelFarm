@@ -36,17 +36,26 @@ namespace PixelFarm.Drawing.Fonts
             this.fontAtlas = fontAtlas;
             this.name = fontName;
             var font = new RequestFont(fontName, fontSizeInPts);
-            s_nativeFontStore.LoadFont(font, fontfile);
-            nativeFont = s_nativeFontStore.GetResolvedNativeFont(font);
+            nativeFont = (NativeFont)s_nativeFontStore.LoadFont(fontName, fontSizeInPts);
         }
+
         internal TextureFont(string fontName, float fontSizeInPts, SimpleFontAtlas fontAtlas)
         {
             //not support font 
             this.fontAtlas = fontAtlas;
             this.name = fontName;
-            var font = new RequestFont(fontName, fontSizeInPts);
-            s_nativeFontStore.LoadFont(font);
-            nativeFont = s_nativeFontStore.GetResolvedNativeFont(font);
+            //var font = new RequestFont(fontName, fontSizeInPts);
+            nativeFont = (NativeFont)s_nativeFontStore.LoadFont(fontName, fontSizeInPts);
+            ////var fontKey = new FontKey(fontName, fontSizeInPts, FontStyle.Regular);
+            //nativeFont = (NativeFont)s_nativeFontStore.GetResolvedNativeFont(fontName, fontSizeInPts);
+        }
+        public override string FontName
+        {
+            get { return name; }
+        }
+        public override FontStyle FontStyle
+        {
+            get { return Drawing.FontStyle.Regular; }
         }
         public override float AscentInPixels
         {

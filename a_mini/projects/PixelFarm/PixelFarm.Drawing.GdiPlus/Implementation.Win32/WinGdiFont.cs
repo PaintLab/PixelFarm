@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.WinGdi
         static BasicGdi32FontHelper basGdi32FontHelper = new BasicGdi32FontHelper();
 
         int[] charWidths;
-        Win32.NativeTextWin32.FontABC[] charAbcWidths;
+        NativeTextWin32.FontABC[] charAbcWidths;
         NativeWin32MemoryDc nativeWin32MemDc;
         IntPtr hfont;
         int bmpWidth = 200;
@@ -65,15 +65,23 @@ namespace PixelFarm.Drawing.WinGdi
             //}
 
         }
+        public override string FontName
+        {
+            get { return f.Name; }
+        }
+        public override FontStyle FontStyle
+        {
+            get { return f.Style; }
+        }
         void InitFont(string fontName, int emHeight)
         {
-            Win32.MyWin32.LOGFONT logFont = new Win32.MyWin32.LOGFONT();
-            Win32.MyWin32.SetFontName(ref logFont, fontName);
+            MyWin32.LOGFONT logFont = new MyWin32.LOGFONT();
+            MyWin32.SetFontName(ref logFont, fontName);
             logFont.lfHeight = emHeight;
             logFont.lfCharSet = 1;//default
             logFont.lfQuality = 0;//default
-            hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
-            Win32.MyWin32.SelectObject(this.nativeWin32MemDc.DC, hfont);
+            hfont = MyWin32.CreateFontIndirect(ref logFont);
+            MyWin32.SelectObject(this.nativeWin32MemDc.DC, hfont);
         }
 
         public System.IntPtr ToHfont()
@@ -95,7 +103,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
             //TODO: review here 
-            Win32.Win32Utils.DeleteObject(hfont);
+            Win32Utils.DeleteObject(hfont);
             hfont = IntPtr.Zero;
             nativeWin32MemDc.Dispose();
         }

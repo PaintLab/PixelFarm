@@ -558,9 +558,7 @@ namespace BuildTextureFonts
         {
             //1. load font
             string fontName = "tahoma";
-            string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-            var font = new PixelFarm.Drawing.RequestFont(fontName, 28);
-            nativeFontStore.LoadFont(font, fontfile);
+            ActualFont font = nativeFontStore.LoadFont(fontName, 28);
 
             //2. get glyph 
             char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
@@ -568,7 +566,7 @@ namespace BuildTextureFonts
 
 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-            NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(font);
+            NativeFont nativeFont = (NativeFont)font;
 
             for (int i = 0; i < j; ++i)
             {
@@ -665,10 +663,10 @@ namespace BuildTextureFonts
                 //}
             }
         }
-        static void BuildFontGlyphsByIndex(PixelFarm.Drawing.RequestFont font, SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
+        static void BuildFontGlyphsByIndex(ActualFont nativefont, SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
         {
             //font glyph for specific font face
-            ActualFont nativefont = nativeFontStore.GetResolvedNativeFont(font);
+         
             for (int i = startAtGlyphIndex; i <= endAtGlyphIndex; ++i)
             {
 
@@ -696,7 +694,7 @@ namespace BuildTextureFonts
             string fontName = "tahoma";
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
-            PixelFarm.Drawing.RequestFont font = nativeFontStore.LoadFont(fontName, fontfile, 28);
+            ActualFont font = nativeFontStore.LoadFont(fontName, fontfile, 28);
             //2. get glyph 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
@@ -731,18 +729,18 @@ namespace BuildTextureFonts
         private void button6_Click(object sender, EventArgs e)
         {
             //1. load font 
-            PixelFarm.Drawing.RequestFont font = nativeFontStore.LoadFont("tahoma", 28);
+            ActualFont font = nativeFontStore.LoadFont("tahoma", 28);
             //2. get glyph
-            NativeFont n = nativeFontStore.GetResolvedNativeFont(font);
+            NativeFont n = (NativeFont)font;
             var g1 = n.GetGlyph('C');
-             ProperGlyph[] pps = new ProperGlyph[3];
-             n.GetGlyphPos("ABC".ToCharArray(), 0, 3, pps);
+            ProperGlyph[] pps = new ProperGlyph[3];
+            n.GetGlyphPos("ABC".ToCharArray(), 0, 3, pps);
 
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };
             int j = glyphIndice.Length;
 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-            NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(font);
+            NativeFont nativeFont = (NativeFont)font;
             for (int i = 0; i < j; ++i)
             {
 

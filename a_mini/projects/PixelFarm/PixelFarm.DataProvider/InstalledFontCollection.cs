@@ -35,29 +35,144 @@ namespace PixelFarm.Drawing.Fonts
 #endif
     }
 
-    static class InstalledFontLoader
+    [Flags]
+    public enum InstalledFontStyle
+    {
+        Regular,
+        Bold = 1 << 1,
+        Italic = 1 << 2,
+    }
+
+    public class InstalledFontCollection
     {
 
-        public static List<InstalledFont> ReadInstallFonts()
+        Dictionary<string, InstalledFont> regular_Fonts = new Dictionary<string, InstalledFont>();
+        Dictionary<string, InstalledFont> bold_Fonts = new Dictionary<string, InstalledFont>();
+        Dictionary<string, InstalledFont> italic_Fonts = new Dictionary<string, InstalledFont>();
+        Dictionary<string, InstalledFont> boldItalic_Fonts = new Dictionary<string, InstalledFont>();
+        Dictionary<string, InstalledFont> gras_Fonts = new Dictionary<string, InstalledFont>();
+        Dictionary<string, InstalledFont> grasItalic_Fonts = new Dictionary<string, InstalledFont>();
+
+        List<InstalledFont> installedFonts;
+        public void LoadInstalledFont(IEnumerable<string> getFontFileIter)
+        {
+            installedFonts = ReadPreviewFontData(getFontFileIter);
+            //classify
+            //do 
+            int j = installedFonts.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                InstalledFont f = installedFonts[i];
+                if (f == null || f.FontName == "" || f.FontName.StartsWith("\0"))
+                {
+                    //no font name?
+                    continue;
+                }
+                switch (f.FontSubFamily)
+                {
+                    case "Normal":
+                    case "Regular":
+                        {
+                            regular_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Italic":
+                    case "Italique":
+                        {
+                            italic_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Bold":
+                        {
+                            bold_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Bold Italic":
+                        {
+                            boldItalic_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Gras":
+                        {
+                            gras_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    case "Gras Italique":
+                        {
+                            grasItalic_Fonts.Add(f.FontName.ToUpper(), f);
+                        } break;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+        }
+
+        public InstalledFont LoadFont(string fontName, InstalledFontStyle style)
+        {
+            //request font from installed font
+            InstalledFont found;
+            switch (style)
+            {
+                case (InstalledFontStyle.Bold | InstalledFontStyle.Italic):
+                    {
+                        //check if we have bold & italic 
+                        //version of this font ?  
+                        if (!boldItalic_Fonts.TryGetValue(fontName.ToUpper(), out found))
+                        {
+                            //if not found then goto italic 
+                            goto case InstalledFontStyle.Italic;
+                        }
+                        return found;
+                    }
+                case InstalledFontStyle.Bold:
+                    {
+
+                        if (!bold_Fonts.TryGetValue(fontName.ToUpper(), out found))
+                        {
+                            //goto regular
+                            goto default;
+                        }
+                        return found;
+                    }
+                case InstalledFontStyle.Italic:
+                    {
+                        //if not found then choose regular
+                        if (!italic_Fonts.TryGetValue(fontName.ToUpper(), out found))
+                        {
+                            goto default;
+                        }
+                        return found;
+                    }
+                default:
+                    {
+                        //we skip gras style ?
+                        if (!regular_Fonts.TryGetValue(fontName.ToUpper(), out found))
+                        {
+                            //if not found this font 
+                            //the choose other ?
+                            throw new NotSupportedException();
+                        }
+                        return found;
+                    }
+            }
+        }
+
+
+
+        public static List<InstalledFont> ReadPreviewFontData(IEnumerable<string> getFontFileIter)
         {
             //-------------------------------------------------
             //TODO: review here, this is not platform depend
             //-------------------------------------------------
             //check if MAC or linux font folder too
             //-------------------------------------------------
-            IEnumerable<string> installedFontIter = GraphicsPlatform.GetInstalledFontIter();
+
             List<InstalledFont> installedFonts = new List<InstalledFont>();
-            if (installedFontIter == null)
-            {
-                return null;
-            }
-            foreach (string fontFilename in installedFontIter)
+
+            foreach (string fontFilename in getFontFileIter)
             {
                 InstalledFont installedFont = GetFontDetails(fontFilename);
                 installedFonts.Add(installedFont);
             }
             return installedFonts;
         }
+
         static InstalledFont GetFontDetails(string fontFilePath)
         {
 

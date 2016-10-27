@@ -28,8 +28,13 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<int, NativeFont> fonts = new Dictionary<int, NativeFont>();
         IntPtr hb_font;
         ExportFace exportFace = new ExportFace();
-        internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle)
+        string name;
+        FontStyle fontStyle;
+        internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle, string name, FontStyle fontStyle)
         {
+            this.name = name;
+            this.fontStyle = fontStyle;
+
             this.unmanagedMem = unmanagedMem;
             this.ftFaceHandle = ftFaceHandle;
             //get face information             
@@ -46,7 +51,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             Dispose();
         }
-
+        
         /// <summary>
         /// free typpe handler
         /// </summary>
@@ -122,7 +127,7 @@ namespace PixelFarm.Drawing.Fonts
                 currentFacePixelSize = pixelSize;
                 NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
                 //create font size 
-                NativeFont f = new NativeFont(this, pixelSize);
+                NativeFont f = new NativeFont(this, this.name, FontStyle.Regular, pixelSize);
                 fonts.Add(pixelSize, f);
                 //------------------------------------
                 return f;

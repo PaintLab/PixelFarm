@@ -26,6 +26,15 @@ namespace PixelFarm.Drawing.Fonts
             //implementation
             gdiFont = new System.Drawing.Font(fontface.FaceName, emSizeInPoints);
         }
+        public override string FontName
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public override FontStyle FontStyle
+        {
+            get { throw new NotImplementedException(); }
+        }
         public override float GetAdvanceForCharacter(char c)
         {
             throw new NotImplementedException();

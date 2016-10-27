@@ -273,6 +273,18 @@ namespace PixelFarm.Agg
                 textPrinter.CurrentFont = value;
             }
         }
+        public override ActualFont ActualFont
+        {   
+            get
+            {
+                //temp
+                throw new NotImplementedException();
+            }
+            set
+            {//temp
+                throw new NotImplementedException();
+            }
+        }
         public override void DrawString(
            string text,
            double x,

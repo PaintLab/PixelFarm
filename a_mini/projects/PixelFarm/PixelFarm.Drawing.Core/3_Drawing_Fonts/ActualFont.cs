@@ -11,7 +11,6 @@ namespace PixelFarm.Drawing.Fonts
     {
 
         public abstract float SizeInPoints { get; }
-
         public abstract float SizeInPixels { get; }
 
 
@@ -32,7 +31,8 @@ namespace PixelFarm.Drawing.Fonts
         public abstract FontGlyph GetGlyphByIndex(uint glyphIndex);
         public abstract FontGlyph GetGlyph(char c);
         public abstract FontFace FontFace { get; }
-
+        public abstract FontStyle FontStyle { get; }
+        public abstract string FontName { get; }
         //---------------------
         public abstract void GetGlyphPos(char[] buffer,
             int start,

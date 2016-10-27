@@ -51,7 +51,17 @@ namespace PixelFarm.Drawing.WinGdi
             _bmpStore = new BufferBitmapStore(_width, _height);
         }
 
-
+        public override Fonts.ActualFont ActualFont
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
         public override SmoothingMode SmoothingMode
         {
             get
