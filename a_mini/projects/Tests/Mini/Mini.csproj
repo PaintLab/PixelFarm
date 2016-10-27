@@ -91,6 +91,11 @@
     <Compile Include="Experiment\GdiPathFont.cs" />
     <Compile Include="Experiment\GdiPathFontFace.cs" />
     <Compile Include="Experiment\GdiPathFontStore.cs" />
+    <Compile Include="Experiment_AggFonts\FontSvg\SvgFont.cs" />
+    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace.cs" />
+    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />
+    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontStore.cs" />
+    <Compile Include="Experiment_AggFonts\Font\MyTypeFacePrinter.cs" />
     <Compile Include="MiniGUI\PixelTools.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>

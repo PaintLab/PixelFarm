@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingGL
         RequestFont _currentFont;
         Stroke _aggStroke = new Stroke(1);
 
-        static TextureFontStore textureFontBuilder = new TextureFontStore();
+         
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
         public GLCanvasPainterBase(CanvasGL2d canvas, int w, int h)
         {
