@@ -44,11 +44,12 @@
     <Compile Include="NativeFonts\NativeFontFace.cs" />
     <Compile Include="NativeFonts\NativeFontGlyphBuilder.cs" />
     <Compile Include="NativeFonts\NativeFonts.cs" />
-    <Compile Include="NativeFonts\NativeFontStore.cs" />
-    <Compile Include="NativeFonts\TextureFont.cs" />
+    <Compile Include="NativeFonts\FontLoaderImpls.cs" />
+    <Compile Include="NativeFonts\SimpleFontAtlas.cs" />
     <Compile Include="NativeText\NativeTextBreaker.cs" />
+    <Compile Include="NOpenTypeFonts\GlyphBuilder.cs" />
+    <Compile Include="NOpenTypeFonts\NOpenTypeFont.cs" />
     <Compile Include="Providers.cs" />
-    <Compile Include="TextureFonts\SimpleFontAtlas.cs" />
     <Compile Include="Win32Impl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing.GLES2
 
     public class GLES2Platform : GraphicsPlatform
     {
-        FontSystem fontSystem = new FontSystem();
+       
         public GLES2Platform()
         {
         }

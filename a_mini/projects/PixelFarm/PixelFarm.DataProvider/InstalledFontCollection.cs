@@ -167,13 +167,16 @@ namespace PixelFarm.Drawing.Fonts
 
             foreach (string fontFilename in getFontFileIter)
             {
-                InstalledFont installedFont = GetFontDetails(fontFilename);
+                InstalledFont installedFont = FontPreview.GetFontDetails(fontFilename);
                 installedFonts.Add(installedFont);
             }
             return installedFonts;
-        }
+        } 
+    }
 
-        static InstalledFont GetFontDetails(string fontFilePath)
+    public static class FontPreview
+    {
+        public static InstalledFont GetFontDetails(string fontFilePath)
         {
 
             string fontName = string.Empty;
@@ -364,8 +367,8 @@ namespace PixelFarm.Drawing.Fonts
             Array.Reverse(buf);
             return buf;
         }
+    
     }
-
 
 
 

@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
-   
 
-    public class TextureFont : ActualFont
+
+    class TextureFont : ActualFont
     {
         SimpleFontAtlas fontAtlas;
         string name;

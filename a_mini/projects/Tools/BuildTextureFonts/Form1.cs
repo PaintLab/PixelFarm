@@ -16,7 +16,6 @@ namespace BuildTextureFonts
 
         Font font;
         Graphics panel1Gfx;
-        static NativeFontStore nativeFontStore = new NativeFontStore();
 
         public Form1()
         {
@@ -554,11 +553,17 @@ namespace BuildTextureFonts
             MyFtLib.DeleteUnmanagedObj(shape);
         }
 
+        static ActualFont GetActualFont(string fontName, float size)
+        {
+            //in the case that we want to use FreeType
+            FontFace face = FreeTypeFontLoader.LoadFont(fontName, "en", HBDirection.HB_DIRECTION_LTR);
+            return face.GetFontAtPointsSize(size);
+        }
         private void button3_Click(object sender, EventArgs e)
         {
             //1. load font
             string fontName = "tahoma";
-            ActualFont font = nativeFontStore.LoadFont(fontName, 28);
+            ActualFont font = GetActualFont(fontName, 28);
 
             //2. get glyph 
             char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
@@ -638,7 +643,7 @@ namespace BuildTextureFonts
             int startAt, int endAt)
         {
             //font glyph for specific font face
-            NativeFont nativeFont = nativeFontStore.GetResolvedNativeFont(font);
+            ActualFont nativeFont = GetActualFont(font.Name, font.SizeInPoints);// nativeFontStore.GetResolvedNativeFont(font);
             for (int i = startAt; i <= endAt; ++i)
             {
                 char c = (char)i;
@@ -666,7 +671,7 @@ namespace BuildTextureFonts
         static void BuildFontGlyphsByIndex(ActualFont nativefont, SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
         {
             //font glyph for specific font face
-         
+
             for (int i = startAtGlyphIndex; i <= endAtGlyphIndex; ++i)
             {
 
@@ -694,7 +699,7 @@ namespace BuildTextureFonts
             string fontName = "tahoma";
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
-            ActualFont font = nativeFontStore.LoadFont(fontName, fontfile, 28);
+            ActualFont font = GetActualFont(fontName, 28);// nativeFontStore.LoadFont(fontName, fontfile, 28);
             //2. get glyph 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
@@ -729,7 +734,7 @@ namespace BuildTextureFonts
         private void button6_Click(object sender, EventArgs e)
         {
             //1. load font 
-            ActualFont font = nativeFontStore.LoadFont("tahoma", 28);
+            ActualFont font = GetActualFont("tahoma", 28);// nativeFontStore.LoadFont("tahoma", 28);
             //2. get glyph
             NativeFont n = (NativeFont)font;
             var g1 = n.GetGlyph('C');

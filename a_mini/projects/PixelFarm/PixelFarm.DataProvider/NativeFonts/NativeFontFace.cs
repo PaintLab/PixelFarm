@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 namespace PixelFarm.Drawing.Fonts
 {
 
-    class NativeFontFace : FontFace
+    public class NativeFontFace : FontFace
     {
         /// <summary>
         /// store font file content in unmanaged memory
@@ -22,10 +22,7 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         IntPtr ftFaceHandle;
         int currentFacePixelSize = 0;
-        /// <summary>
-        /// store font glyph for each px size
-        /// </summary>
-        Dictionary<int, NativeFont> fonts = new Dictionary<int, NativeFont>();
+        
         IntPtr hb_font;
         ExportFace exportFace = new ExportFace();
         string name;
@@ -51,7 +48,15 @@ namespace PixelFarm.Drawing.Fonts
         {
             Dispose();
         }
-        
+        public override ActualFont GetFontAtPointsSize(float fontPointSize)
+        {
+            currentFacePixelSize = (int)RequestFont.ConvEmSizeInPointsToPixels(fontPointSize);
+            //----------------------------------
+            //set current fontface size             
+            NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, currentFacePixelSize);
+            //create font size 
+            return new NativeFont(this, this.name, FontStyle.Regular, currentFacePixelSize); 
+        }
         /// <summary>
         /// free typpe handler
         /// </summary>
@@ -77,11 +82,7 @@ namespace PixelFarm.Drawing.Fonts
                 Marshal.FreeHGlobal(unmanagedMem);
                 unmanagedMem = IntPtr.Zero;
             }
-            if (fonts != null)
-            {
-                fonts.Clear();
-                fonts = null;
-            }
+            
         }
         /// <summary>
         /// ascent in font unit
@@ -117,31 +118,31 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        internal NativeFont GetFontAtPixelSize(int pixelSize)
-        {
-            NativeFont found;
-            if (!fonts.TryGetValue(pixelSize, out found))
-            {
-                //----------------------------------
-                //set current fontface size
-                currentFacePixelSize = pixelSize;
-                NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
-                //create font size 
-                NativeFont f = new NativeFont(this, this.name, FontStyle.Regular, pixelSize);
-                fonts.Add(pixelSize, f);
-                //------------------------------------
-                return f;
-            }
-            return found;
-        }
-        internal NativeFont GetFontAtPointSize(float fontPointSize)
-        {
-            //convert from point size to pixelsize ***              
-            NativeFont nativeFont = GetFontAtPixelSize((int)RequestFont.ConvEmSizeInPointsToPixels(fontPointSize));
+        //internal NativeFont GetFontAtPixelSize(int pixelSize)
+        //{
+        //    NativeFont found;
+        //    if (!fonts.TryGetValue(pixelSize, out found))
+        //    {
+        //        //----------------------------------
+        //        //set current fontface size
+        //        currentFacePixelSize = pixelSize;
+        //        NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
+        //        //create font size 
+        //        NativeFont f = new NativeFont(this, this.name, FontStyle.Regular, pixelSize);
+        //        fonts.Add(pixelSize, f);
+        //        //------------------------------------
+        //        return f;
+        //    }
+        //    return found;
+        //}
+        //internal NativeFont GetFontAtPointSize(float fontPointSize)
+        //{
+        //    //convert from point size to pixelsize ***              
+        //    NativeFont nativeFont = GetFontAtPixelSize((int)RequestFont.ConvEmSizeInPointsToPixels(fontPointSize));
 
-            return nativeFont;
-        }
-
+        //    return nativeFont;
+        //}
+        
         internal FontGlyph ReloadGlyphFromIndex(uint glyphIndex, int pixelSize)
         {
             if (currentFacePixelSize != pixelSize)

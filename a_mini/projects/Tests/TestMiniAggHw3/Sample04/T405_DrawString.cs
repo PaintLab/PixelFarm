@@ -14,7 +14,7 @@ namespace OpenTkEssTest
         bool resInit;
 
         GLCanvasPainter painter;
-        TextureFont textureFont;
+       // TextureFont textureFont;
 
 
         protected override void OnInitGLProgram(object sender, EventArgs args)
@@ -22,27 +22,28 @@ namespace OpenTkEssTest
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
 
-            //------------------------------------------------
-            painter = new GLCanvasPainter(canvas2d, max, max);
-            string fontName = "tahoma";
-            float fontSize = 24;
-            GlyphImage glypImage = null;
-            using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage("d:\\WImageTest\\a_total.png"))
-            {
-                glypImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
-                var buffer = new int[nativeImg.Width * nativeImg.Height];
-                System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
-                glypImage.SetImageBuffer(buffer, true);
-            }
+            //temp comment 
+            ////------------------------------------------------
+            //painter = new GLCanvasPainter(canvas2d, max, max);
+            //string fontName = "tahoma";
+            //float fontSize = 24;
+            //GlyphImage glypImage = null;
+            //using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage("d:\\WImageTest\\a_total.png"))
+            //{
+            //    glypImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
+            //    var buffer = new int[nativeImg.Width * nativeImg.Height];
+            //    System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
+            //    glypImage.SetImageBuffer(buffer, true);
+            //}
 
-            textureFont = TextureFont.CreateFont(fontName, fontSize,
-                "d:\\WImageTest\\a_total.xml",
-                glypImage);
+            //textureFont = TextureFont.CreateFont(fontName, fontSize,
+            //    "d:\\WImageTest\\a_total.xml",
+            //    glypImage);
 
-            //PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize); 
-            //canvas2d.TextureFontStore = textureFonts;
-            //painter.CurrentFont = textureFont;
-            painter.ActualFont = textureFont;
+            ////PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize); 
+            ////canvas2d.TextureFontStore = textureFonts;
+            ////painter.CurrentFont = textureFont;
+            //painter.ActualFont = textureFont;
         }
         protected override void DemoClosing()
         {

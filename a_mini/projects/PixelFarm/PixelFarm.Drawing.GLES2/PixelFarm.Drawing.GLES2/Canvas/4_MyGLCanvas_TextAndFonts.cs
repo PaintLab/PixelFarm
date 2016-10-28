@@ -24,14 +24,15 @@ namespace PixelFarm.Drawing.GLES2
 
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
-        NativeFontStore nativeFontStore = new NativeFontStore();
-        
+
+
         public override float GetCharWidth(RequestFont f, char c)
         {
-            NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
-            return font.GetGlyph(c).horiz_adv_x >> 6;
+            return GLES2PlatformFontMx.Default.ResolveForGdiFont(f).GetGlyph(c).horiz_adv_x >> 6;
+            //NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
+            //return font.GetGlyph(c).horiz_adv_x >> 6;
         }
-         
+
         public Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
         {
             //throw new NotSupportedException();

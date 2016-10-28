@@ -7,7 +7,7 @@ using PixelFarm.Drawing.Text;
 
 namespace PixelFarm.DrawingGL
 {
-    public class TextureFontStore
+    class TextureFontStore
     {
         Dictionary<FontKey, TextureFont> registerFonts = new Dictionary<FontKey, TextureFont>();
         public void RegisterFont(RequestFont f, TextureFont textureFont)

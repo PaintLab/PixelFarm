@@ -18,12 +18,17 @@ namespace PixelFarm.Agg.SimplePainter
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
         PixelFarm.Drawing.Fonts.ActualFont font1;
         PixelFarm.Drawing.Fonts.ActualFont font2;
-        NativeFontStore nativeFontStore = new NativeFontStore();
         public override void Init()
         {
             //load font ? 
-            font1 = (NativeFont)nativeFontStore.LoadFont(fontName, fontfile, 48);
-            font2 = (NativeFont)nativeFontStore.LoadFont(fontName, fontfile, 10);
+            font1 = GetActualFont(fontName, 48);
+            font2 = GetActualFont(fontName, 10);
+        }
+        static ActualFont GetActualFont(string fontName, float size)
+        {
+            //in the case that we want to use FreeType
+            FontFace face = FreeTypeFontLoader.LoadFont(fontName, "en", HBDirection.HB_DIRECTION_LTR);
+            return face.GetFontAtPointsSize(size);
         }
         public override void Draw(CanvasPainter p)
         {
