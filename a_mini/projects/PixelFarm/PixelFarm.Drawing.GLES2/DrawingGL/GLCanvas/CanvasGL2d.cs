@@ -4,9 +4,10 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 using Tesselate;
-using PixelFarm.DrawingGL;
+ 
 namespace PixelFarm.DrawingGL
 {
+
     public sealed class CanvasGL2d
     {
         SmoothLineShader smoothLineShader;
@@ -33,7 +34,7 @@ namespace PixelFarm.DrawingGL
         TessTool tessTool;
         FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer
 
-        PixelFarm.Drawing.Fonts.TextureFontStore textureFonts;
+        TextureFontStore textureFonts;
 
         public CanvasGL2d(int canvasW, int canvasH)
         {
@@ -47,7 +48,7 @@ namespace PixelFarm.DrawingGL
             shaderRes = new CanvasToShaderSharedResource();
             shaderRes.OrthoView = orthoView;
             //-----------------------------------------------------------------------
-             
+
 
             basicFillShader = new BasicFillShader(shaderRes);
             smoothLineShader = new SmoothLineShader(shaderRes);
@@ -89,7 +90,7 @@ namespace PixelFarm.DrawingGL
         {
         }
 
-        public PixelFarm.Drawing.Fonts.TextureFontStore TextureFontStore
+        internal TextureFontStore TextureFontStore
         {
             get { return textureFonts; }
             set { textureFonts = value; }
@@ -516,7 +517,7 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
-      
+
         public void DrawGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {
             switch (SmoothMode)

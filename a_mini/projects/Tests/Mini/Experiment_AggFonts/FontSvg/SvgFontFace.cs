@@ -26,7 +26,7 @@ using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Drawing.Fonts
 {
-    class SvgFontFace : FontFace
+    class SvgFontFace  
     {
         class Panos_1
         {
@@ -117,7 +117,7 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        protected override void OnDispose()
+        protected   void OnDispose()
         {
         }
         public SvgFont GetFontAtSpecificSize(int emsize)

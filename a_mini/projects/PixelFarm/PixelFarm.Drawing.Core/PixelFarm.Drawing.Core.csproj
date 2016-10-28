@@ -47,6 +47,7 @@
     <Compile Include="5_PixelFarm_Agg\CanvasPainter.cs" />
     <Compile Include="3_Drawing_Fonts\FontFace.cs" />
     <Compile Include="5_PixelFarm_Agg\PixelFormat.cs" />
+    <Compile Include="5_PixelFarm_Agg\TextPrinter.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\AggBasics.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\AggMath.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\AxisAlignedBoundingBox.cs" />

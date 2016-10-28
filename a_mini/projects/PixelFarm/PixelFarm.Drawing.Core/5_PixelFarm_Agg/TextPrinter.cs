@@ -6,7 +6,10 @@
 //-----------------------------------
 
 using PixelFarm.Agg;
-namespace PixelFarm.Drawing.Fonts
+using PixelFarm.Drawing;
+using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Text;
+namespace PixelFarm.Agg
 {
     public enum Justification { Left, Center, Right }
     public enum Baseline
@@ -18,14 +21,14 @@ namespace PixelFarm.Drawing.Fonts
         BoundsBottom
     }
 
-    public class TextPrinter
+    public class VxsTextPrinter
     {
         Drawing.RequestFont currentFont;
         Drawing.Fonts.ActualFont actualFont;
-        IFonts ifonts;
-        public TextPrinter(GraphicsPlatform gfxPlatform)
+        IFonts ifonts;         
+        public VxsTextPrinter()
         {
-            this.ifonts = gfxPlatform.Fonts;
+            this.ifonts = null;     
         }
         public Drawing.RequestFont CurrentFont
         {

@@ -4,23 +4,7 @@ using System;
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
-    /// <summary>
-    /// cache texture font
-    /// </summary>
-    public class TextureFontStore
-    {
-        Dictionary<FontKey, TextureFont> registerFonts = new Dictionary<FontKey, TextureFont>();
-        public void RegisterFont(RequestFont f, TextureFont textureFont)
-        {
-            registerFonts.Add(f.FontKey, textureFont);
-        }
-        public TextureFont GetResolvedFont(RequestFont f)
-        {
-            TextureFont found;
-            registerFonts.TryGetValue(f.FontKey, out found);
-            return found;
-        }
-    }
+   
 
     public class TextureFont : ActualFont
     {

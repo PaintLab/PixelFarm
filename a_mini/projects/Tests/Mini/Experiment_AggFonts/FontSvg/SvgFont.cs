@@ -8,7 +8,7 @@ using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    class SvgFont : ActualFont
+    class SvgFont
     {
         SvgFontFace fontface;
         int emSizeInPoints;
@@ -31,19 +31,19 @@ namespace PixelFarm.Drawing.Fonts
             currentEmScalling = (float)emSizeInPixels / (float)fontface.UnitsPerEm;
             scaleTx = Affine.NewMatix(AffinePlan.Scale(currentEmScalling));
         }
-        public override string FontName
+        public string FontName
         {
             get { throw new NotImplementedException(); }
         }
-        public override FontStyle FontStyle
+        public FontStyle FontStyle
         {
             get { throw new NotImplementedException(); }
         }
-        public override FontFace FontFace
+        public SvgFontFace FontFace
         {
             get { return fontface; }
         }
-        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
+        public FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             FontGlyph glyph;
             //temp 
@@ -62,7 +62,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             return glyph;
         }
-        public override FontGlyph GetGlyph(char c)
+        public FontGlyph GetGlyph(char c)
         {
             FontGlyph glyph;
             if (!cachedGlyphs.TryGetValue(c, out glyph))
@@ -80,7 +80,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             return glyph;
         }
-        public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
+        public void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
         {
             //find proper position for each glyph
             int j = buffer.Length;
@@ -91,39 +91,39 @@ namespace PixelFarm.Drawing.Fonts
                 properGlyphs[i].codepoint = (uint)buffer[i];
             }
         }
-        protected override void OnDispose()
+        protected void OnDispose()
         {
         }
 
-        public override float SizeInPoints
+        public float SizeInPoints
         {
             get
             {
                 return emSizeInPoints;
             }
         }
-        public override float SizeInPixels
+        public float SizeInPixels
         {
             get { return emSizeInPixels; }
         }
-        public override float GetAdvanceForCharacter(char c)
+        public float GetAdvanceForCharacter(char c)
         {
             return this.GetGlyph(c).horiz_adv_x >> 6;//64
         }
-        public override float GetAdvanceForCharacter(char c, char next_c)
+        public float GetAdvanceForCharacter(char c, char next_c)
         {
             //TODO: review here 
             //this should check kerning info 
             return this.GetGlyph(c).horiz_adv_x >> 6;//64
         }
-        public override float AscentInPixels
+        public float AscentInPixels
         {
             get
             {
                 return fontface.Ascent * currentEmScalling;
             }
         }
-        public override float DescentInPixels
+        public float DescentInPixels
         {
             get
             {

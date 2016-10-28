@@ -1,17 +1,17 @@
 ﻿//MIT, 2014-2016, WinterDev   
 
 using System.Collections.Generic;
- 
+
 namespace PixelFarm.Drawing.Fonts
 {
-    class GdiPathFontFace : FontFace
+    class GdiPathFontFace
     {
         Dictionary<int, GdiPathFont> stockFonts = new Dictionary<int, GdiPathFont>();
         public GdiPathFontFace(string facename)
         {
             this.FaceName = facename;
         }
-        protected override void OnDispose()
+        protected void OnDispose()
         {
         }
         public string FaceName

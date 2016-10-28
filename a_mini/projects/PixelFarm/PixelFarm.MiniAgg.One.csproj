@@ -36,7 +36,6 @@
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\AggRenderVx.cs" />
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\Canvas2dExtension.cs" />
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\dbugVertexSourceIO.cs" />
-    <Compile Include="MiniAgg.Complements\0_CanvasPainter\TextPrinter.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\BorderDouble.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\ClipProxyImage.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\GammaFuntions.cs" />
@@ -149,6 +148,7 @@
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\CanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\PixelFormat.cs" />
+    <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\TextPrinter.cs" />
     <Compile Include="PixelFarm.Drawing.Core\6_PixelFarm_AggVectorMath\AggBasics.cs" />
     <Compile Include="PixelFarm.Drawing.Core\6_PixelFarm_AggVectorMath\AggMath.cs" />
     <Compile Include="PixelFarm.Drawing.Core\6_PixelFarm_AggVectorMath\AxisAlignedBoundingBox.cs" />

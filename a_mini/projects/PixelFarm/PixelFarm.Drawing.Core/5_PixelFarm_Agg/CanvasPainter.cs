@@ -79,6 +79,12 @@ namespace PixelFarm.Agg
         //-------------------------------------------------------
         public abstract RequestFont CurrentFont { get; set; }
         public abstract PixelFarm.Drawing.Fonts.ActualFont ActualFont { get; set; }
+        /// <summary>
+        /// draw string with canvas's text printer ***
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public abstract void DrawString(
            string text,
            double x,
@@ -121,5 +127,6 @@ namespace PixelFarm.Agg
         public abstract void DrawRenderVx(RenderVx renderVx);
         //------------
         public abstract SmoothingMode SmoothingMode { get; set; }
+      
     }
 }

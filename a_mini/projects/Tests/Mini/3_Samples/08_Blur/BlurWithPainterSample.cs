@@ -13,6 +13,10 @@ using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Agg.Sample_Blur2
 {
+
+
+
+
     [Info(OrderCode = "08")]
     [Info(DemoCategory.Bitmap, @"Now you can blur rendered images rather fast! There two algorithms are used: 
     Stack Blur by Mario Klingemann and Fast Recursive Gaussian Filter, described 
@@ -22,7 +26,7 @@ namespace PixelFarm.Agg.Sample_Blur2
     point arithmetic and works slower. But it is true Gaussian filter, with theoretically 
     infinite impulse response. The radius (actually 2*sigma value) can be fractional 
     and the filter produces quite adequate result.")]
-    public class BlurWithPainter : DemoBase
+    public class BlurWithPainter  : DemoBase
     {
         PolygonEditWidget m_shadow_ctrl;
         VertexStore m_pathVxs;
@@ -30,8 +34,6 @@ namespace PixelFarm.Agg.Sample_Blur2
         VertexStoreSnap m_path_2;
         RectD m_shape_bounds;
         Stopwatch stopwatch = new Stopwatch();
-        SvgFontStore svgFontStore = new SvgFontStore();
-        GdiPathFontStore gdiPathFontStore = new GdiPathFontStore();
 
         public BlurWithPainter()
         {
@@ -42,35 +44,35 @@ namespace PixelFarm.Agg.Sample_Blur2
             this.BlurMethod = BlurMethod.RecursiveBlur;
             this.BlurRadius = 15;
 
-            ActualFont svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
-            //PathWriter p01 = new PathWriter();
-            //p01.MoveTo(0, 0);
-            //p01.LineTo(50, 100);
-            //p01.LineTo(100, 0);
-            ////-
-            //p01.MoveTo(220, 10);
-            //p01.LineTo(50, 75);
-            //p01.LineTo(25, 15);
-            //p01.CloseFigure();
-            //p01.Stop();
-            //m_pathVxs = p01.Vxs;
-            var winFontGlyph = svgFont.GetGlyph('a');
-            m_pathVxs = winFontGlyph.originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
-            Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
-            m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            var curveFlattener = new CurveFlattener();
-            m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
-            m_path_2 = new VertexStoreSnap(m_pathVxs2);
-            BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
-            m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
-            m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
-            m_shadow_ctrl.SetXN(1, m_shape_bounds.Right);
-            m_shadow_ctrl.SetYN(1, m_shape_bounds.Bottom);
-            m_shadow_ctrl.SetXN(2, m_shape_bounds.Right);
-            m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
-            m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
-            m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
-            m_shadow_ctrl.LineColor = PixelFarm.Drawing.Color.FromArgb(0.3f, 0f, 0.3f, 0.5f);
+            //ActualFont svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
+            ////PathWriter p01 = new PathWriter();
+            ////p01.MoveTo(0, 0);
+            ////p01.LineTo(50, 100);
+            ////p01.LineTo(100, 0);
+            //////-
+            ////p01.MoveTo(220, 10);
+            ////p01.LineTo(50, 75);
+            ////p01.LineTo(25, 15);
+            ////p01.CloseFigure();
+            ////p01.Stop();
+            ////m_pathVxs = p01.Vxs;
+            //var winFontGlyph = svgFont.GetGlyph('a');
+            //m_pathVxs = winFontGlyph.originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
+            //Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
+            //m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
+            //var curveFlattener = new CurveFlattener();
+            //m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
+            //m_path_2 = new VertexStoreSnap(m_pathVxs2);
+            //BoundingRect.GetBoundingRect(m_path_2, ref m_shape_bounds);
+            //m_shadow_ctrl.SetXN(0, m_shape_bounds.Left);
+            //m_shadow_ctrl.SetYN(0, m_shape_bounds.Bottom);
+            //m_shadow_ctrl.SetXN(1, m_shape_bounds.Right);
+            //m_shadow_ctrl.SetYN(1, m_shape_bounds.Bottom);
+            //m_shadow_ctrl.SetXN(2, m_shape_bounds.Right);
+            //m_shadow_ctrl.SetYN(2, m_shape_bounds.Top);
+            //m_shadow_ctrl.SetXN(3, m_shape_bounds.Left);
+            //m_shadow_ctrl.SetYN(3, m_shape_bounds.Top);
+            //m_shadow_ctrl.LineColor = PixelFarm.Drawing.Color.FromArgb(0.3f, 0f, 0.3f, 0.5f);
         }
 
         [DemoConfig]

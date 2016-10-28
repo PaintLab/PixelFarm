@@ -46,7 +46,7 @@ namespace PixelFarm.Agg
         RoundedRect roundRect = null;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         CurveFlattener curveFlattener;
-        TextPrinter textPrinter;
+        VxsTextPrinter textPrinter;
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
 
@@ -56,14 +56,14 @@ namespace PixelFarm.Agg
             this.sclineRas = gx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
             this.scline = graphic2d.ScanlinePacked8;
-            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
-
+            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap; 
             //tmp1:
             if (graphic2d.GfxPlatform != null)
             {
-                this.textPrinter = new TextPrinter(graphic2d.GfxPlatform);
+                this.textPrinter = new VxsTextPrinter();
             }
         }
+       
         public override void Clear(Color color)
         {
             gx.Clear(color);

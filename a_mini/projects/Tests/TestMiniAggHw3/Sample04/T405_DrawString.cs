@@ -21,7 +21,7 @@ namespace OpenTkEssTest
         {
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
-            TextureFontStore textureFonts = new TextureFontStore();
+
             //------------------------------------------------
             painter = new GLCanvasPainter(canvas2d, max, max);
             string fontName = "tahoma";
@@ -35,15 +35,14 @@ namespace OpenTkEssTest
                 glypImage.SetImageBuffer(buffer, true);
             }
 
-
-
             textureFont = TextureFont.CreateFont(fontName, fontSize,
                 "d:\\WImageTest\\a_total.xml",
                 glypImage);
-            PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize);
-            textureFonts.RegisterFont(f, textureFont);
-            canvas2d.TextureFontStore = textureFonts;
-            painter.CurrentFont = f;
+
+            //PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize); 
+            //canvas2d.TextureFontStore = textureFonts;
+            //painter.CurrentFont = textureFont;
+            painter.ActualFont = textureFont;
         }
         protected override void DemoClosing()
         {
