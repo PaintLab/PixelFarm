@@ -20,6 +20,8 @@ using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
 
+
+
     class WinGdiPlusFontStore
     {
 
@@ -62,8 +64,7 @@ namespace PixelFarm.Drawing.WinGdi
             return currentFont;
 
         }
-        WinGdiPlusFont CreateFont(string family,
-          float size, System.Drawing.FontStyle style)
+        WinGdiPlusFont CreateFont(string family,          float size, System.Drawing.FontStyle style)
         {
             System.Drawing.FontFamily fontFamily;
             System.Drawing.Font newFont = null;
@@ -180,7 +181,8 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         public float MeasureWhitespace(
-           PixelFarm.Drawing.IFonts gfx, PixelFarm.Drawing.RequestFont f)
+           PixelFarm.Drawing.IFonts ifonts,
+           PixelFarm.Drawing.RequestFont f)
         {
 
             WinGdiPlusFont winFont;
@@ -190,7 +192,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             if (!winFont.HasWhiteSpaceLength)
             {
-                return winFont.WhitespaceLength = gfx.MeasureString(new char[] { ' ' }, 0, 1, f).Width;
+                return winFont.WhitespaceLength = ifonts.MeasureString(new char[] { ' ' }, 0, 1, f).Width;
             }
             return winFont.WhitespaceLength;
         }

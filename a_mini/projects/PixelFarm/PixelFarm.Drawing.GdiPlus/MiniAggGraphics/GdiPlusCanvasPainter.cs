@@ -28,10 +28,10 @@ namespace PixelFarm.Drawing.WinGdi
 
         SmoothingMode _smoothingMode;
         IFonts ifonts;
-        public GdiPlusCanvasPainter(GraphicsPlatform gfxPlatform, System.Drawing.Bitmap gfxBmp)
+        public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
         {
 
-            this.ifonts = gfxPlatform.Fonts;
+            this.ifonts = GraphicsServices.TextServices;
 
             _width = 800;// gfxBmp.Width;
             _height = 600;// gfxBmp.Height;
@@ -119,7 +119,7 @@ namespace PixelFarm.Drawing.WinGdi
             set
             {
                 _currentFont = value;
-                _latestWinGdiPlusFont = (WinGdiPlusFont)ifonts.ResolveActualFont(value);
+                _latestWinGdiPlusFont = GdiPlusPlatformFontMx.Default.ResolveForWinGdiPlusFont(value);
             }
         }
         public override Color FillColor

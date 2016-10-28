@@ -13,9 +13,7 @@ namespace PixelFarm.Drawing.Fonts
 
         }
         public void Dispose()
-        {
-
-
+        { 
         }
         public ActualFont ResolveActualFont(RequestFont f)
         {

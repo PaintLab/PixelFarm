@@ -16,13 +16,7 @@ namespace PixelFarm.Drawing.GLES2
         public GLES2Platform()
         {
         }
-        public override IFonts Fonts
-        {
-            get
-            {
-                return fontSystem;
-            }
-        }
+       
         public override Canvas CreateCanvas(int left, int top, int width, int height, CanvasInitParameters reqPars = new CanvasInitParameters())
         {
             int max = Math.Max(width, height);

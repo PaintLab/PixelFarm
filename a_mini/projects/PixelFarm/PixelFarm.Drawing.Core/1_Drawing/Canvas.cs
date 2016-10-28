@@ -26,8 +26,7 @@ namespace PixelFarm.Drawing
         public abstract void Invalidate(Rectangle rect);
         public abstract Rectangle InvalidateArea { get; }
         public abstract float GetCharWidth(RequestFont f, char c);
-        public abstract PixelFarm.Drawing.Fonts.ActualFont GetActualFont(RequestFont f);
-
+       
         public bool IsContentReady
         {
             get { return isContentReady; }

@@ -25,21 +25,13 @@ namespace PixelFarm.Drawing.GLES2
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
         NativeFontStore nativeFontStore = new NativeFontStore();
-        public ActualFont ResolveActualFont(RequestFont f)
-        {
-            //TODO: review here
-            return nativeFontStore.GetResolvedNativeFont(f);
-        }
+        
         public override float GetCharWidth(RequestFont f, char c)
         {
             NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
             return font.GetGlyph(c).horiz_adv_x >> 6;
         }
-        //======================================
-        public override ActualFont GetActualFont(RequestFont f)
-        {
-            return nativeFontStore.GetResolvedNativeFont(f);
-        }
+         
         public Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
         {
             //throw new NotSupportedException();

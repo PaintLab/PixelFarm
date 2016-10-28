@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One</AssemblyName>
-    <ProjectGuid>{E71BD6D1-211F-4778-9632-77AB9B155BCB}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -282,13 +281,12 @@
     <Compile Include="PixelFarm.Drawing.Core\9_PixelFarm_AggVertex_More\VertexSource\VertexStoreBuilder.cs" />
     <Compile Include="PixelFarm.Drawing.Core\BasicRenderBox\IRenderElement.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\0_Start\WinGdiPlusPlatform.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\0_CanvasCollection.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\1_MyGdiPlusCanvas_Specific.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\Conv.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\QuadPages.cs" />
+    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\GdiPlusPlatformFontMx.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation.Win32\BasicGdi32FontHelper.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation.Win32\MyWin32.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation.Win32\NativeTextWin32.cs" />
@@ -525,15 +523,11 @@
     <Compile Include="PixelFarm.OpenTKWinForms\Toolkit.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControlFactory.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\IGLControl.cs" />
-    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\WinGLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\X11GLControl.cs" />
@@ -547,9 +541,6 @@
     <Compile Include="Tesselate\HalfEdge.cs" />
     <Compile Include="Tesselate\Mesh.cs" />
     <Compile Include="Tesselate\Tesselator.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NOpenType\N20\PixelFarm.OpenType\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

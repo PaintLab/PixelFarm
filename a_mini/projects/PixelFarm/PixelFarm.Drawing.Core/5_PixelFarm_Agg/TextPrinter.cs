@@ -25,10 +25,10 @@ namespace PixelFarm.Agg
     {
         Drawing.RequestFont currentFont;
         Drawing.Fonts.ActualFont actualFont;
-        IFonts ifonts;         
+        IFonts ifonts;
         public VxsTextPrinter()
         {
-            this.ifonts = null;     
+            this.ifonts = null;
         }
         public Drawing.RequestFont CurrentFont
         {
@@ -42,38 +42,40 @@ namespace PixelFarm.Agg
         }
         public VertexStore CreateVxs(char[] buffer, double x = 0, double y = 0)
         {
-            int j = buffer.Length;
-            int buffsize = j * 2;
-            //get kerning list 
 
-            ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
-            ActualFont implFont = ifonts.ResolveActualFont(currentFont);
-            implFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
-            //-----------------------------------------------------------
-            VertexStore resultVxs = new VertexStore();
-            double xpos = x;
-            for (int i = 0; i < buffsize; ++i)
-            {
-                uint codepoint = properGlyphs[i].codepoint;
-                if (codepoint == 0)
-                {
-                    break;
-                }
-                //-------------------------------------------------------------
-                FontGlyph glyph = implFont.GetGlyphByIndex(codepoint);
-                //var left = glyph.glyphMatrix.img_horiBearingX;
-                //-------------------------------------------------------- 
-                VertexStore vxs1 = Agg.Transform.Affine.TranslateToVxs(
-                    glyph.flattenVxs,
-                    (float)(xpos),
-                    (float)(y));
-                //-------------------------------------------------------- 
-                resultVxs.AddSubVertices(vxs1);
-                int w = (glyph.glyphMatrix.advanceX) >> 6;
-                xpos += (w);
-                //-------------------------------------------------------------                
-            }
-            return resultVxs;
+            throw new System.NotSupportedException();
+            //int j = buffer.Length;
+            //int buffsize = j * 2;
+            ////get kerning list 
+
+            //ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
+            //ActualFont implFont = ifonts.ResolveActualFont(currentFont);
+            //implFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
+            ////-----------------------------------------------------------
+            //VertexStore resultVxs = new VertexStore();
+            //double xpos = x;
+            //for (int i = 0; i < buffsize; ++i)
+            //{
+            //    uint codepoint = properGlyphs[i].codepoint;
+            //    if (codepoint == 0)
+            //    {
+            //        break;
+            //    }
+            //    //-------------------------------------------------------------
+            //    FontGlyph glyph = implFont.GetGlyphByIndex(codepoint);
+            //    //var left = glyph.glyphMatrix.img_horiBearingX;
+            //    //-------------------------------------------------------- 
+            //    VertexStore vxs1 = Agg.Transform.Affine.TranslateToVxs(
+            //        glyph.flattenVxs,
+            //        (float)(xpos),
+            //        (float)(y));
+            //    //-------------------------------------------------------- 
+            //    resultVxs.AddSubVertices(vxs1);
+            //    int w = (glyph.glyphMatrix.advanceX) >> 6;
+            //    xpos += (w);
+            //    //-------------------------------------------------------------                
+            //}
+            //return resultVxs;
         }
         public void Print(CanvasPainter painter, string t, double x, double y)
         {
@@ -86,7 +88,7 @@ namespace PixelFarm.Agg
             //get kerning list 
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
-            ActualFont implFont = ifonts.ResolveActualFont(currentFont);
+            ActualFont implFont = actualFont;
 
             implFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
             double xpos = x;

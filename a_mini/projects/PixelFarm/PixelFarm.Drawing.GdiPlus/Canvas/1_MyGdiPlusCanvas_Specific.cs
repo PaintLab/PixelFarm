@@ -38,7 +38,7 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Rectangle currentClipRect;
         //-------------------------------
 
-        IFonts fontsServices;
+
         public MyGdiPlusCanvas(
             int horizontalPageNum,
             int verticalPageNum,
@@ -269,7 +269,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             InitHdc();
             //request fron need to resolve to gdi+ font***
-            WinGdiPlusFont myFont = (WinGdiPlusFont)fontsServices.ResolveActualFont(font);
+            WinGdiPlusFont myFont = GdiPlusPlatformFontMx.Default.ResolveForWinGdiPlusFont(font);
             Win32Utils.SelectObject(tempDc, myFont.ToHfont());
         }
 
@@ -362,10 +362,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         //debug
 #if DEBUG
-        static class dbugCounter
-        {
-            public static int dbugDrawStringCount;
-        }
+        public static int dbugDrawStringCount;
 
 
         public override void dbug_DrawRuler(int x)
@@ -407,4 +404,8 @@ namespace PixelFarm.Drawing.WinGdi
         //    return true;
         //}
     }
+
+
+
+
 }

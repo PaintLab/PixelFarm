@@ -16,17 +16,12 @@ namespace PixelFarm.Drawing
             CanvasInitParameters canvasInitPars = new CanvasInitParameters());
 
 
-        /// <summary>
-        /// font management system for this graphics platform
-        /// </summary>
-        public abstract IFonts Fonts { get; }
-
-
+      
         //----------------------------------------------------------------------
         //set provider delegates before use it from comment graphics platform
         //----------------------------------------------------------------------
 
-        
+
         //----------------------
         //2. image buffer provider from filename
         static ImageBufferProviderDelegate s_imgBufferProviderDel;
@@ -34,8 +29,12 @@ namespace PixelFarm.Drawing
         {
             s_imgBufferProviderDel = imgBufferProviderDel;
         }
-       
+    }
 
+  
+    public static class GraphicsServices
+    {
+        public static IFonts TextServices { get; set; }
     }
 
     public delegate byte[] ImageBufferProviderDelegate(string filename);
