@@ -4,11 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
-
-//TODO: review here, make this true cross platform
-using Win32; //on windows we need some native win32 funcs
-
-
+ 
 namespace PixelFarm.Drawing.GLES2
 {
 
@@ -25,9 +21,7 @@ namespace PixelFarm.Drawing.GLES2
         Color currentTextColor;
         InternalPen internalPen;
         InternalBrush internalBrush;
-        //-------------------------------
-        //TODO: review here, 
-        NativeWin32MemoryDc win32MemDc;
+        
         internal MyGLCanvas(
             CanvasGL2d canvasGL2d,
             int left, int top,
@@ -45,7 +39,7 @@ namespace PixelFarm.Drawing.GLES2
             this.bottom = top + height;
             currentClipRect = new Rectangle(0, 0, width, height);
 
-            win32MemDc = new NativeWin32MemoryDc(10, 10);
+            
             this.CurrentFont = new RequestFont("tahoma", 10);
             this.CurrentTextColor = Color.Black;
 
@@ -71,8 +65,8 @@ namespace PixelFarm.Drawing.GLES2
             }
 
             isDisposed = true;
-            win32MemDc.Dispose();
-            win32MemDc = null;
+            //win32MemDc.Dispose();
+            //win32MemDc = null;
             ReleaseUnManagedResource();
         }
         /// <summary>

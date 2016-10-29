@@ -25,8 +25,7 @@ namespace PixelFarm.Agg
     public abstract class CanvasPainter
     {
         public abstract void Clear(Color color);
-        public abstract RectInt ClipBox { get; set; }
-
+        public abstract RectInt ClipBox { get; set; } 
         public abstract void SetClipBox(int x1, int y1, int x2, int y2);
         /// <summary>
         /// draw circle
@@ -77,8 +76,7 @@ namespace PixelFarm.Agg
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
         public abstract void DrawRoundRect(double left, double bottom, double right, double top, double radius);
         //-------------------------------------------------------
-        public abstract RequestFont CurrentFont { get; set; }
-        public abstract PixelFarm.Drawing.Fonts.ActualFont ActualFont { get; set; }
+        public abstract RequestFont CurrentFont { get; set; }         
         /// <summary>
         /// draw string with canvas's text printer ***
         /// </summary>
@@ -89,6 +87,7 @@ namespace PixelFarm.Agg
            string text,
            double x,
            double y);
+        //-------------------------------------------------------
         /// <summary>
         /// fill vertex store
         /// </summary>
@@ -128,5 +127,6 @@ namespace PixelFarm.Agg
         //------------
         public abstract SmoothingMode SmoothingMode { get; set; }
       
-    }
+    } 
+   
 }

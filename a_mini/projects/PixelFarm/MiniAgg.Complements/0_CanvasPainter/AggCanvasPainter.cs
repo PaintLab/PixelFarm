@@ -46,7 +46,7 @@ namespace PixelFarm.Agg
         RoundedRect roundRect = null;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
         CurveFlattener curveFlattener;
-        VxsTextPrinter textPrinter;
+        AggTextPrinter textPrinter;
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
 
@@ -57,13 +57,12 @@ namespace PixelFarm.Agg
             this.stroke = new Stroke(1);//default
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap; 
-            //tmp1:
-            if (graphic2d.GfxPlatform != null)
-            {
-                this.textPrinter = new VxsTextPrinter();
-            }
         }
-       
+        public AggTextPrinter TextPrinter
+        {
+            get { return textPrinter; }
+            set { textPrinter = value; }
+        }
         public override void Clear(Color color)
         {
             gx.Clear(color);
@@ -270,21 +269,13 @@ namespace PixelFarm.Agg
             set
             {
                 this.currentFont = value;
-                textPrinter.CurrentFont = value;
+                //this request font must resolve to actual font
+                //within canvas ***
+                throw new NotSupportedException();
+                //textPrinter.CurrentFont = value; 
             }
         }
-        public override ActualFont ActualFont
-        {   
-            get
-            {
-                //temp
-                throw new NotImplementedException();
-            }
-            set
-            {//temp
-                throw new NotImplementedException();
-            }
-        }
+       
         public override void DrawString(
            string text,
            double x,

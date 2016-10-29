@@ -39,17 +39,7 @@ namespace PixelFarm.DrawingGL
             _currentFont = new RequestFont("tahoma", 14);
 
         }
-        public override Drawing.Fonts.ActualFont ActualFont
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
+        
         public override RectInt ClipBox
         {
             get

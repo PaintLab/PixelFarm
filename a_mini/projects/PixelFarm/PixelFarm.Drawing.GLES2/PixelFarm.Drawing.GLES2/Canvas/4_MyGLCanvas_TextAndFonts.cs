@@ -33,73 +33,7 @@ namespace PixelFarm.Drawing.GLES2
             //return font.GetGlyph(c).horiz_adv_x >> 6;
         }
 
-        public Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
-        {
-            //throw new NotSupportedException();
-            ////_characterRanges[0] = new System.Drawing.CharacterRange(0, len);
-            ////_stringFormat.SetMeasurableCharacterRanges(_characterRanges);
-            ////System.Drawing.Font font2 = (System.Drawing.Font)font.InnerFont;
-            ////var size = gx.MeasureCharacterRanges(
-            ////    new string(buff, startAt, len),
-            ////    font2,
-            ////    System.Drawing.RectangleF.Empty,
-            ////    _stringFormat)[0].GetBounds(gx).Size;
-            ////return new PixelFarm.Drawing.Size((int)Math.Round(size.Width), (int)Math.Round(size.Height));
-
-
-            this.currentTextFont = font;
-            //TODO: review, select current font to windc TOO!
-            var size = new PixelFarm.Drawing.Size();
-            unsafe
-            {
-                fixed (char* startAddr = &buff[0])
-                {
-                    NativeTextWin32.UnsafeGetTextExtentExPoint(
-                         win32MemDc.DC, startAddr + startAt, len,
-                        int.MaxValue, _charFit, _charFitWidth, ref size);
-                }
-            }
-
-            return size;
-
-
-        }
-        /// <summary>
-        /// Measure the width and height of string <paramref name="str"/> when drawn on device context HDC
-        /// using the given font <paramref name="font"/>.<br/>
-        /// Restrict the width of the string and get the number of characters able to fit in the restriction and
-        /// the width those characters take.
-        /// </summary>
-        /// <param name="str">the string to measure</param>
-        /// <param name="font">the font to measure string with</param>
-        /// <param name="maxWidth">the max width to render the string in</param>
-        /// <param name="charFit">the number of characters that will fit under <see cref="maxWidth"/> restriction</param>
-        /// <param name="charFitWidth"></param>
-        /// <returns>the size of the string</returns>
-        public Size MeasureString(char[] buff, int startAt, int len,
-            RequestFont font, float maxWidth,
-            out int charFit, out int charFitWidth)
-        {
-
-            this.currentTextFont = font;
-            //TODO: review, select current font to windc TOO!
-            var size = new PixelFarm.Drawing.Size();
-            unsafe
-            {
-                fixed (char* startAddr = &buff[0])
-                {
-
-                    NativeTextWin32.UnsafeGetTextExtentExPoint(
-                         win32MemDc.DC, startAddr + startAt, len,
-                        (int)Math.Round(maxWidth), _charFit, _charFitWidth, ref size);
-                }
-            }
-            charFit = _charFit[0];
-            charFitWidth = charFit > 0 ? _charFitWidth[charFit - 1] : 0;
-            return size;
-
-
-        }
+   
         //============================================== 
 
         public override RequestFont CurrentFont

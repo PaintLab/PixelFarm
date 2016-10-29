@@ -16,13 +16,18 @@ namespace PixelFarm.Agg.SimplePainter
     {
         string fontName = "tahoma";
         string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
-        PixelFarm.Drawing.Fonts.ActualFont font1;
-        PixelFarm.Drawing.Fonts.ActualFont font2;
+        PixelFarm.Drawing.Fonts.ActualFont a_font1;
+        PixelFarm.Drawing.Fonts.ActualFont a_font2;
+        PixelFarm.Drawing.RequestFont font1;
+        PixelFarm.Drawing.RequestFont font2;
         public override void Init()
         {
             //load font ? 
-            font1 = GetActualFont(fontName, 48);
-            font2 = GetActualFont(fontName, 10);
+            font1 = new Drawing.RequestFont("tahoma", 48);
+            font2 = new Drawing.RequestFont("tahoma", 10);
+
+            a_font1 = GetActualFont(fontName, 48);
+            a_font2 = GetActualFont(fontName, 10);
         }
         static ActualFont GetActualFont(string fontName, float size)
         {
@@ -57,13 +62,14 @@ namespace PixelFarm.Agg.SimplePainter
             //--------------------------------------------------- 
 
 
-            var fontGlyph = font1.GetGlyph('{');
+            var fontGlyph = a_font1.GetGlyph('{');
             //outline version
             var flat_v = fontGlyph.flattenVxs;
             p.Fill(flat_v);
             //bitmap version
             p.DrawImage(fontGlyph.glyphImage32, 20, 30);
-            p.ActualFont = font1;
+
+            p.CurrentFont = font1;
             p.FillColor = Drawing.Color.Black;
             //string test_str = "fมีมี่ญูดุญคำค่าค่ำป่บ่";
             //string test_str = "abcde";
@@ -82,7 +88,7 @@ namespace PixelFarm.Agg.SimplePainter
             p.StrokeColor = Drawing.Color.Black;
             p.Line(0, 200, 800, 200);
             p.FillColor = Drawing.Color.Black;
-            p.ActualFont = font2; //small font
+            p.CurrentFont = font2;
             p.DrawString(test_str, 80, 100);
             //---------------------------------------------------              
             p.UseSubPixelRendering = false;
