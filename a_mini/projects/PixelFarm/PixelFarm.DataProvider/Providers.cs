@@ -15,5 +15,4 @@ namespace PixelFarm.Drawing.Fonts
     {
         IEnumerable<string> GetInstalledFontIter();
     }
-
 }

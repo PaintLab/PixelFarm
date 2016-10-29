@@ -33,11 +33,7 @@ namespace PixelFarm.Drawing.Fonts
         public abstract FontFace FontFace { get; }
         public abstract FontStyle FontStyle { get; }
         public abstract string FontName { get; }
-        //---------------------
-        public abstract void GetGlyphPos(char[] buffer,
-            int start,
-            int len,
-            ProperGlyph[] properGlyphs);
+       
         public abstract float GetAdvanceForCharacter(char c);
         public abstract float GetAdvanceForCharacter(char c, char next_c);
         public abstract float AscentInPixels { get; }

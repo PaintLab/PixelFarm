@@ -28,7 +28,7 @@ namespace PixelFarm.Drawing.GLES2
         //-------------------------------
         //TODO: review here, 
         NativeWin32MemoryDc win32MemDc;
-        public MyGLCanvas(
+        internal MyGLCanvas(
             CanvasGL2d canvasGL2d,
             int left, int top,
             int width,

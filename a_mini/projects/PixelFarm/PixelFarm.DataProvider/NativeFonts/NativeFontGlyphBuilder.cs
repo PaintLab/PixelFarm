@@ -263,7 +263,7 @@ namespace PixelFarm.Drawing.Fonts
             return curveFlattener.MakeVxs(input);
         }
 
-
+       
 
         const double FT_RESIZE = 64; //essential to be floating point
         internal unsafe static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
@@ -510,6 +510,37 @@ namespace PixelFarm.Drawing.Fonts
                 glyphImage.SetImageBuffer(outputBuffer, true);
             }
             return glyphImage;
+        }
+    }
+    //--------
+    public static class MsdfGen
+    {
+        //---------------------------------------------------------------------------
+        public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
+        {
+            return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);
+        }
+
+        public static void SwapColorComponentFromBigEndianToWinGdi(int[] bitbuffer)
+        {
+            unsafe
+            {
+                int j = bitbuffer.Length;
+                fixed (int* p0 = &(bitbuffer[j - 1]))
+                {
+                    int* p = p0;
+                    for (int i = j - 1; i >= 0; --i)
+                    {
+                        int color = *p;
+                        int a = color >> 24;
+                        int b = (color >> 16) & 0xff;
+                        int g = (color >> 8) & 0xff;
+                        int r = color & 0xff;
+                        *p = (a << 24) | (r << 16) | (g << 8) | b;
+                        p--;
+                    }
+                }
+            }
         }
     }
 }

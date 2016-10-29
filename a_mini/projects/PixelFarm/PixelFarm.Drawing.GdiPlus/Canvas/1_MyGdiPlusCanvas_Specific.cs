@@ -39,7 +39,7 @@ namespace PixelFarm.Drawing.WinGdi
         //-------------------------------
 
 
-        public MyGdiPlusCanvas(
+        internal MyGdiPlusCanvas(
             int horizontalPageNum,
             int verticalPageNum,
             int left, int top,

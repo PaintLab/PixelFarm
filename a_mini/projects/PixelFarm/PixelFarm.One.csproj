@@ -161,6 +161,7 @@
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Tables.TrueType\Gasp.cs" />
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Tables.TrueType\Glyf.cs" />
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Tables.TrueType\GlyphLocations.cs" />
+    <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Tables.Variations\AVar.cs" />
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Tables.Variations\FVar.cs" />
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Tables.Variations\GVar.cs" />
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Tables.Variations\HVar.cs" />
@@ -190,8 +191,10 @@
     <Compile Include="PixelFarm.DataProvider\NativeFonts\NativeFontGlyphBuilder.cs" />
     <Compile Include="PixelFarm.DataProvider\NativeFonts\NativeFonts.cs" />
     <Compile Include="PixelFarm.DataProvider\NativeFonts\SimpleFontAtlas.cs" />
+    <Compile Include="PixelFarm.DataProvider\NativeText\HarfBuzzShapingService.cs" />
     <Compile Include="PixelFarm.DataProvider\NativeText\NativeTextBreaker.cs" />
     <Compile Include="PixelFarm.DataProvider\NOpenTypeFonts\GlyphBuilder.cs" />
+    <Compile Include="PixelFarm.DataProvider\NOpenTypeFonts\ManagedShapingService.cs" />
     <Compile Include="PixelFarm.DataProvider\NOpenTypeFonts\NOpenTypeFont.cs" />
     <Compile Include="PixelFarm.DataProvider\Providers.cs" />
     <Compile Include="PixelFarm.DataProvider\Win32Impl.cs" />
@@ -221,6 +224,7 @@
     <Compile Include="PixelFarm.Drawing.Core\3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="PixelFarm.Drawing.Core\3_Drawing_Fonts\NativeBridgeHB.cs" />
     <Compile Include="PixelFarm.Drawing.Core\4_Drawing_Text\TextBreaker.cs" />
+    <Compile Include="PixelFarm.Drawing.Core\4_Drawing_Text\TextShapingServices.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\CanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\PixelFormat.cs" />

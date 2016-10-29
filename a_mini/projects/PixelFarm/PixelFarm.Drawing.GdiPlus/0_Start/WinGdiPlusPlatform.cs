@@ -2,27 +2,27 @@
 using System;
 using Win32;
 using System.Runtime.InteropServices;
-
+using PixelFarm.Drawing.Text;
 namespace PixelFarm.Drawing.WinGdi
 {
     public class WinGdiPlusPlatform : GraphicsPlatform
     {
+        HarfBuzzShapingService hbShapingService = new HarfBuzzShapingService();
 
-         
         public WinGdiPlusPlatform()
         {
+
+            //1. set agg
             PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
-
+            //2. set default shaping service
+            hbShapingService.SetAsCurrentImplementation();
         }
-        ~WinGdiPlusPlatform()
-        {
 
-        }
         public override Canvas CreateCanvas(int left, int top, int width, int height, CanvasInitParameters canvasInitPars = new CanvasInitParameters())
         {
             return new MyGdiPlusCanvas(0, 0, left, top, width, height);
         }
-         
+
         static void CopyFromAggActualImageToGdiPlusBitmap(byte[] rawBuffer, System.Drawing.Bitmap bitmap)
         {
             //platform specific
@@ -35,7 +35,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
- 
+
 
     class Win32AggBuffMx : PixelFarm.Agg.AggBuffMx
     {
@@ -71,5 +71,5 @@ namespace PixelFarm.Drawing.WinGdi
     }
 
 
-   
+
 }

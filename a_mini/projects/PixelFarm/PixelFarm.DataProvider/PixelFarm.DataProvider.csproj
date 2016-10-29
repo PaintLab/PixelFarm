@@ -46,8 +46,10 @@
     <Compile Include="NativeFonts\NativeFonts.cs" />
     <Compile Include="NativeFonts\FontLoaderImpls.cs" />
     <Compile Include="NativeFonts\SimpleFontAtlas.cs" />
+    <Compile Include="NativeText\HarfBuzzShapingService.cs" />
     <Compile Include="NativeText\NativeTextBreaker.cs" />
     <Compile Include="NOpenTypeFonts\GlyphBuilder.cs" />
+    <Compile Include="NOpenTypeFonts\ManagedShapingService.cs" />
     <Compile Include="NOpenTypeFonts\NOpenTypeFont.cs" />
     <Compile Include="Providers.cs" />
     <Compile Include="Win32Impl.cs" />

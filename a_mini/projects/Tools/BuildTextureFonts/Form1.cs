@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Text;
 
 namespace BuildTextureFonts
 {
@@ -571,19 +572,19 @@ namespace BuildTextureFonts
 
 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-            NativeFont nativeFont = (NativeFont)font;
+
 
             for (int i = 0; i < j; ++i)
             {
                 char c = fontChars[i];
 
-                FontGlyph fontGlyph = nativeFont.GetGlyph(c);
-                GlyphImage glyphImg = NativeFont.BuildMsdfFontImage(fontGlyph);
+                FontGlyph fontGlyph = font.GetGlyph(c);
+                GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
 
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
                 int[] buffer = glyphImg.GetImageBuffer();
-                NativeFont.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
                 atlasBuilder.AddGlyph(0, (char)fontGlyph.unicode, fontGlyph, glyphImg);
 
@@ -604,7 +605,7 @@ namespace BuildTextureFonts
                 int[] buffer = totalImg.GetImageBuffer();
                 if (totalImg.IsBigEndian)
                 {
-                    NativeFont.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                    MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                     totalImg.SetImageBuffer(buffer, false);
                 }
 
@@ -649,14 +650,14 @@ namespace BuildTextureFonts
                 char c = (char)i;
                 FontGlyph fontGlyph = nativeFont.GetGlyph(c);
                 //-------------------
-                GlyphImage glyphImg = NativeFont.BuildMsdfFontImage(fontGlyph);
+                GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
 
                 // Console.WriteLine(c.ToString() + " ox,oy" + glyphImg.OffsetX + "," + glyphImg.OffsetY);
 
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
                 int[] buffer = glyphImg.GetImageBuffer();
-                NativeFont.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
                 // atlasBuilder.AddGlyph(fontGlyph.glyphMatrix.u c, fontGlyph, glyphImg);
                 //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
@@ -676,12 +677,12 @@ namespace BuildTextureFonts
             {
 
                 FontGlyph fontGlyph = nativefont.GetGlyphByIndex((uint)i);
-                GlyphImage glyphImg = NativeFont.BuildMsdfFontImage(fontGlyph);
+                GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
 
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
                 int[] buffer = glyphImg.GetImageBuffer();
-                NativeFont.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
                 atlasBuilder.AddGlyph(i, (char)fontGlyph.unicode, fontGlyph, glyphImg);
                 //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
@@ -716,7 +717,7 @@ namespace BuildTextureFonts
                 int[] buffer = totalImg.GetImageBuffer();
                 if (totalImg.IsBigEndian)
                 {
-                    NativeFont.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                    MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                     totalImg.SetImageBuffer(buffer, false);
                 }
 
@@ -736,27 +737,28 @@ namespace BuildTextureFonts
             //1. load font 
             ActualFont font = GetActualFont("tahoma", 28);// nativeFontStore.LoadFont("tahoma", 28);
             //2. get glyph
-            NativeFont n = (NativeFont)font;
-            var g1 = n.GetGlyph('C');
+
+            var g1 = font.GetGlyph('C');
             ProperGlyph[] pps = new ProperGlyph[3];
-            n.GetGlyphPos("ABC".ToCharArray(), 0, 3, pps);
+            PixelFarm.Drawing.Text.TextShapingService.GetGlyphPos(font,"ABC".ToCharArray(), 0, 3, pps);
+ 
 
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };
             int j = glyphIndice.Length;
 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-            NativeFont nativeFont = (NativeFont)font;
+
             for (int i = 0; i < j; ++i)
             {
 
                 int codepoint = glyphIndice[i];
-                FontGlyph fontGlyph = nativeFont.GetGlyphByIndex((uint)codepoint);
+                FontGlyph fontGlyph = font.GetGlyphByIndex((uint)codepoint);
 
-                GlyphImage glyphImg = NativeFont.BuildMsdfFontImage(fontGlyph);
+                GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
                 int[] buffer = glyphImg.GetImageBuffer();
-                NativeFont.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
                 atlasBuilder.AddGlyph(codepoint, (char)fontGlyph.unicode, fontGlyph, glyphImg);
 
@@ -776,7 +778,7 @@ namespace BuildTextureFonts
                 int[] buffer = totalImg.GetImageBuffer();
                 if (totalImg.IsBigEndian)
                 {
-                    NativeFont.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                    MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                     totalImg.SetImageBuffer(buffer, false);
                 }
 

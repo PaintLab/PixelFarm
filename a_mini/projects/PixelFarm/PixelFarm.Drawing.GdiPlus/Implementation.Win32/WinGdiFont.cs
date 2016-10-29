@@ -118,11 +118,11 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
 
-        public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        {
-            //get gyph pos
-            throw new NotImplementedException();
-        }
+        //public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
+        //{
+        //    //get gyph pos
+        //    throw new NotImplementedException();
+        //}
 
         char[] singleCharArray = new char[1];
         byte[] codePoints = new byte[2];

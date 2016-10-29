@@ -7,6 +7,8 @@ using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Text;
+
 
 namespace PixelFarm.DrawingGL
 {
@@ -25,7 +27,7 @@ namespace PixelFarm.DrawingGL
         RequestFont _currentFont;
         Stroke _aggStroke = new Stroke(1);
 
-         
+
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
         public GLCanvasPainterBase(CanvasGL2d canvas, int w, int h)
         {
@@ -242,7 +244,7 @@ namespace PixelFarm.DrawingGL
             TextureFont currentFont = GetFont(this._currentFont);
             SimpleFontAtlas fontAtlas = currentFont.FontAtlas;
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
-            currentFont.GetGlyphPos(chars, 0, buffsize, properGlyphs);
+            TextShapingService.GetGlyphPos(currentFont, chars, 0, buffsize, properGlyphs);
             GLBitmap glBmp = (GLBitmap)currentFont.GLBmp;
             if (glBmp == null)
             {

@@ -16,74 +16,83 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose() { }
         public override ActualFont GetFontAtPointsSize(float pointSize)
         {
-            NOpenTypeActualFont actualFont = new NOpenTypeActualFont(ntypeface, pointSize);
-
+            NOpenTypeActualFont actualFont = new NOpenTypeActualFont(this, pointSize, FontStyle.Regular);
             return actualFont;
         }
+        public Typeface Typeface { get { return this.ntypeface; } }
     }
     class NOpenTypeActualFont : ActualFont
     {
-        Typeface typeFace;
+        NOpenTypeFontFace ownerFace;
         float sizeInPoints;
-        public NOpenTypeActualFont(Typeface typeFace, float sizeInPoints)
+        FontStyle style;
+        Typeface typeFace;
+        float scale;
+        public NOpenTypeActualFont(NOpenTypeFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
-            this.typeFace = typeFace;
+            this.ownerFace = ownerFace;
             this.sizeInPoints = sizeInPoints;
+            this.style = style;
+            this.typeFace = ownerFace.Typeface;
+            //calculate scale *** 
+            scale = typeFace.CalculateScale(sizeInPoints);
         }
         public override float SizeInPoints
         {
             get { return this.sizeInPoints; }
         }
+        public override float SizeInPixels
+        {
+            //font height 
+            get { return sizeInPoints * scale; }
+        }
         public override float AscentInPixels
         {
-            get { throw new NotImplementedException(); }
+            get { return typeFace.Ascender * scale; }
         }
         public override float DescentInPixels
         {
-            get { throw new NotImplementedException(); }
+            get { return typeFace.Descender * scale; }
         }
         public override FontFace FontFace
         {
-            get { throw new NotImplementedException(); }
+            get { return ownerFace; }
         }
         public override string FontName
         {
-            get { throw new NotImplementedException(); }
+            get { return typeFace.Name; }
         }
         public override FontStyle FontStyle
         {
-            get { throw new NotImplementedException(); }
+            get { return style; }
         }
-
-        public override float SizeInPixels
-        {
-            get { throw new NotImplementedException(); }
-        }
-        public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        {
-            throw new NotImplementedException();
-        }
+ 
         public override float GetAdvanceForCharacter(char c)
         {
-            throw new NotImplementedException();
+            return typeFace.GetAdvanceWidth(c);
         }
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
-            throw new NotImplementedException();
+            //TODO: review kerning here 
+            //and do scaleing here
+            return typeFace.GetAdvanceWidth(c);
         }
         public override FontGlyph GetGlyph(char c)
         {
-            throw new NotImplementedException();
+            return GetGlyphByIndex((uint)typeFace.LookupIndex(c));
         }
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            throw new NotImplementedException();
+            Glyph glyph = typeFace.GetGlyphByIndex((int)glyphIndex);
+            //-------------------------------------------------
+
+            FontGlyph fontGlyph = new FontGlyph();
+            fontGlyph.horiz_adv_x = typeFace.GetAdvanceWidthFromGlyphIndex((int)glyphIndex);
+            return fontGlyph;
         }
         protected override void OnDispose()
         {
-            throw new NotImplementedException();
         }
-         
     }
 
 

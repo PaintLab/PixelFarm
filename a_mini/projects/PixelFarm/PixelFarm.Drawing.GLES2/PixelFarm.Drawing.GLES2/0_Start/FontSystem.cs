@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using PixelFarm.Drawing.Text;
 namespace PixelFarm.Drawing.Fonts
 {
 
@@ -13,7 +14,7 @@ namespace PixelFarm.Drawing.Fonts
 
         }
         public void Dispose()
-        { 
+        {
         }
         public ActualFont ResolveActualFont(RequestFont f)
         {
@@ -29,7 +30,8 @@ namespace PixelFarm.Drawing.Fonts
             //use native method to measure string
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];
             ActualFont fontImpl = fontStore.GetResolvedNativeFont(font);
-            fontImpl.GetGlyphPos(str, startAt, len, properGlyphs);
+            TextShapingService.GetGlyphPos(fontImpl, str, startAt, len, properGlyphs);
+
             int j = properGlyphs.Length;
             float total_width = 0;
             float total_height = 0;
@@ -54,7 +56,8 @@ namespace PixelFarm.Drawing.Fonts
         {
             ProperGlyph[] properGlyphs = new ProperGlyph[len * 2];
             ActualFont fontImpl = fontStore.GetResolvedNativeFont(font);
-            fontImpl.GetGlyphPos(str, startAt, len, properGlyphs);
+
+            TextShapingService.GetGlyphPos(fontImpl, str, startAt, len, properGlyphs);
             int j = properGlyphs.Length;
             float total_width = 0;
             float total_height = 0;

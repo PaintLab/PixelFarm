@@ -8,10 +8,11 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+
 namespace PixelFarm.Drawing.Fonts
 {
 
-    public class NativeFontFace : FontFace
+    class NativeFontFace : FontFace
     {
         /// <summary>
         /// store font file content in unmanaged memory
@@ -22,7 +23,7 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         IntPtr ftFaceHandle;
         int currentFacePixelSize = 0;
-        
+
         IntPtr hb_font;
         ExportFace exportFace = new ExportFace();
         string name;
@@ -55,7 +56,7 @@ namespace PixelFarm.Drawing.Fonts
             //set current fontface size             
             NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, currentFacePixelSize);
             //create font size 
-            return new NativeFont(this, this.name, FontStyle.Regular, currentFacePixelSize); 
+            return new NativeFont(this, this.name, FontStyle.Regular, currentFacePixelSize);
         }
         /// <summary>
         /// free typpe handler
@@ -82,7 +83,7 @@ namespace PixelFarm.Drawing.Fonts
                 Marshal.FreeHGlobal(unmanagedMem);
                 unmanagedMem = IntPtr.Zero;
             }
-            
+
         }
         /// <summary>
         /// ascent in font unit
@@ -94,6 +95,7 @@ namespace PixelFarm.Drawing.Fonts
                 return exportFace.ascender;
             }
         }
+        
         /// <summary>
         /// descent in font unit
         /// </summary>
@@ -142,7 +144,7 @@ namespace PixelFarm.Drawing.Fonts
 
         //    return nativeFont;
         //}
-        
+
         internal FontGlyph ReloadGlyphFromIndex(uint glyphIndex, int pixelSize)
         {
             if (currentFacePixelSize != pixelSize)

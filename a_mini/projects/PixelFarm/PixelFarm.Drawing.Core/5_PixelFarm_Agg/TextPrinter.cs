@@ -89,8 +89,7 @@ namespace PixelFarm.Agg
 
             ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
             ActualFont implFont = actualFont;
-
-            implFont.GetGlyphPos(buffer, 0, buffsize, properGlyphs);
+            TextShapingService.GetGlyphPos(actualFont, buffer, 0, buffsize, properGlyphs);
             double xpos = x;
             for (int i = 0; i < buffsize; ++i)
             {

@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing.Fonts
     /// <summary>
     /// cross platform font
     /// </summary>
-    public class NativeFont : ActualFont
+    class NativeFont : ActualFont
     {
         NativeFontFace ownerFace;
         float emSizeInPoints;
@@ -36,7 +36,7 @@ namespace PixelFarm.Drawing.Fonts
             int descentEmSize = ownerFace.Descent / ownerFace.UnitPerEm;
             fontFaceDescentInPx = RequestFont.ConvEmSizeInPointsToPixels(descentEmSize);
         }
-        
+
         public override string FontName
         {
             get { return fontName; }
@@ -86,22 +86,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return this.ownerFace; }
         }
-        public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        {
-            unsafe
-            {
-                fixed (ProperGlyph* propGlyphH = &properGlyphs[0])
-                fixed (char* head = &buffer[0])
-                {
-                    //we use font shaping engine here
-                    NativeMyFontsLib.MyFtShaping(
-                        this.NativeFontFace.HBFont,
-                        head,
-                        buffer.Length,
-                        propGlyphH);
-                }
-            }
-        }
+      
         public override float AscentInPixels
         {
             get { return fontFaceAscentInPx; }
@@ -123,32 +108,6 @@ namespace PixelFarm.Drawing.Fonts
             return this.GetGlyph(c).horiz_adv_x >> 6;
         }
 
-        //---------------------------------------------------------------------------
-        public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
-        {
-            return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);
-        }
 
-        public static void SwapColorComponentFromBigEndianToWinGdi(int[] bitbuffer)
-        {
-            unsafe
-            {
-                int j = bitbuffer.Length;
-                fixed (int* p0 = &(bitbuffer[j - 1]))
-                {
-                    int* p = p0;
-                    for (int i = j - 1; i >= 0; --i)
-                    {
-                        int color = *p;
-                        int a = color >> 24;
-                        int b = (color >> 16) & 0xff;
-                        int g = (color >> 8) & 0xff;
-                        int r = color & 0xff;
-                        *p = (a << 24) | (r << 16) | (g << 8) | b;
-                        p--;
-                    }
-                }
-            }
-        }
     }
 }

@@ -1,4 +1,10 @@
-﻿using System;
+﻿//MIT, 2014-2016, WinterDev
+//-----------------------------------
+//use FreeType and HarfBuzz wrapper
+//native dll lib
+//plan?: port  them to C#  :)
+//-----------------------------------
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using PixelFarm.Drawing.Text;
@@ -28,13 +34,14 @@ namespace PixelFarm.Drawing.Text
     }
 
 
+
+
+
     /// <summary>
     /// text breaker with icu4c
     /// </summary>
     public class NativeTextBreaker : TextBreaker
     {
-
-
         string locale;
         byte[] localebuff;
         public NativeTextBreaker(TextBreakKind breakKind, string locale)
@@ -80,9 +87,7 @@ namespace PixelFarm.Drawing.Text
                 }
             }
         }
-
-
-
+        
         const int DONE = -1;
         static bool AddToken(UBreakIteratorType type, int status)
         {
@@ -101,7 +106,7 @@ namespace PixelFarm.Drawing.Text
 
         //this is text breaker impl with ICU lib
         static InMemoryIcuDataHolder dataHolder;
-       
+
         static string s_icuDataFile;
         static bool s_isDataLoaded;
         static object s_dataLoadLock = new object();

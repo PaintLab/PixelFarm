@@ -163,23 +163,23 @@ namespace PixelFarm.Drawing.WinGdi
             fontEncoding.GetBytes(singleCharArray, 0, 1, codePoints, 0);
             return fontGlyphs[codePoints[0]];
         }
-        public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        {
-            //simple 
-            //TODO: review here again ***
-            int j = buffer.Length;
-            int offset = 0;
-            for (int i = 0; i < j; ++i)
-            {
-                FontGlyph glyph = InternalGetGlyph(buffer[i]);
-                var propGlyph = new ProperGlyph();
-                propGlyph.codepoint = (uint)glyph.codePoint;
-                propGlyph.x_offset = offset;
-                propGlyph.x_advance = glyph.horiz_adv_x >> 6;
-                offset += propGlyph.x_advance;
-                properGlyphs[i] = propGlyph;
-            }
-        }
+        //public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
+        //{
+        //    //simple 
+        //    //TODO: review here again ***
+        //    int j = buffer.Length;
+        //    int offset = 0;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        FontGlyph glyph = InternalGetGlyph(buffer[i]);
+        //        var propGlyph = new ProperGlyph();
+        //        propGlyph.codepoint = (uint)glyph.codePoint;
+        //        propGlyph.x_offset = offset;
+        //        propGlyph.x_advance = glyph.horiz_adv_x >> 6;
+        //        offset += propGlyph.x_advance;
+        //        properGlyphs[i] = propGlyph;
+        //    }
+        //}
         char[] singleCharArray = new char[1];
         byte[] codePoints = new byte[2];
         public override float GetAdvanceForCharacter(char c)

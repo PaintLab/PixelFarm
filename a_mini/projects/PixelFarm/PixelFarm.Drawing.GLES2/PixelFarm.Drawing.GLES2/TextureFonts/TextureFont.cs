@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing.Fonts
         string name;
         IDisposable glBmp;
 
-        NativeFont nativeFont;
+        ActualFont nativeFont;
         static NativeFontStore s_nativeFontStore = new NativeFontStore();
 
         internal TextureFont(string fontName, float fontSizeInPts, string fontfile, SimpleFontAtlas fontAtlas)
@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.Fonts
             this.fontAtlas = fontAtlas;
             this.name = fontName;
             var font = new RequestFont(fontName, fontSizeInPts);
-            nativeFont = (NativeFont)s_nativeFontStore.LoadFont(fontName, fontSizeInPts);
+            nativeFont = s_nativeFontStore.LoadFont(fontName, fontSizeInPts);
         }
 
         internal TextureFont(string fontName, float fontSizeInPts, SimpleFontAtlas fontAtlas)
@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.Fonts
             this.fontAtlas = fontAtlas;
             this.name = fontName;
             //var font = new RequestFont(fontName, fontSizeInPts);
-            nativeFont = (NativeFont)s_nativeFontStore.LoadFont(fontName, fontSizeInPts);
+            nativeFont = s_nativeFontStore.LoadFont(fontName, fontSizeInPts);
             ////var fontKey = new FontKey(fontName, fontSizeInPts, FontStyle.Regular);
             //nativeFont = (NativeFont)s_nativeFontStore.GetResolvedNativeFont(fontName, fontSizeInPts);
         }
@@ -107,10 +107,10 @@ namespace PixelFarm.Drawing.Fonts
             return nativeFont.GetGlyphByIndex(glyphIndex);
         }
 
-        public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        {
-            nativeFont.GetGlyphPos(buffer, start, len, properGlyphs);
-        }
+        //public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
+        //{
+        //    nativeFont.GetGlyphPos(buffer, start, len, properGlyphs);
+        //}
 
         protected override void OnDispose()
         {
