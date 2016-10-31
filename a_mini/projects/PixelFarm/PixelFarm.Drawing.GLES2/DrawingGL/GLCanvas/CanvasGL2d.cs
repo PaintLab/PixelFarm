@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 using Tesselate;
- 
+
 namespace PixelFarm.DrawingGL
 {
 
@@ -32,12 +32,17 @@ namespace PixelFarm.DrawingGL
         int canvasH;
         MyMat4 orthoView;
         TessTool tessTool;
-        FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer
-
-        TextureFontStore textureFonts;
+        FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer 
+      //  TextureFontStore textureFonts;
+ 
 
         public CanvasGL2d(int canvasW, int canvasH)
         {
+
+            //-------------
+            PixelFarm.Drawing.GLES2.GLES2Platform.Init();
+            //-------------
+
             this.canvasW = canvasW;
             this.canvasH = canvasH;
             ////setup viewport size
@@ -90,11 +95,11 @@ namespace PixelFarm.DrawingGL
         {
         }
 
-        internal TextureFontStore TextureFontStore
-        {
-            get { return textureFonts; }
-            set { textureFonts = value; }
-        }
+        //internal TextureFontStore TextureFontStore
+        //{
+        //    get { return textureFonts; }
+        //    set { textureFonts = value; }
+        //}
         public CanvasSmoothMode SmoothMode
         {
             get;

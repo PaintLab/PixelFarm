@@ -154,6 +154,7 @@ namespace BuildMergeProject
                 group.AddItem(groupName, item);
             }
         }
+
     }
     class ToMergeProject
     {
@@ -172,7 +173,7 @@ namespace BuildMergeProject
                             string onlyFileName = Path.GetFileName(item.EvaluatedInclude);
                             if (onlyFileName != "AssemblyInfo.cs")
                             {
-                                //TODO: review here
+
                                 allItems.Add(item);
                             }
                         }

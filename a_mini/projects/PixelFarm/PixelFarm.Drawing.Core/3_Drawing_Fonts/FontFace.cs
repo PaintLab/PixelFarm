@@ -21,6 +21,8 @@ namespace PixelFarm.Drawing.Fonts
             OnDispose();
         }
         public abstract ActualFont GetFontAtPointsSize(float pointSize);
+        public abstract string Name { get; }
+        public abstract string FontPath { get; }
     }
 
     /// <summary>

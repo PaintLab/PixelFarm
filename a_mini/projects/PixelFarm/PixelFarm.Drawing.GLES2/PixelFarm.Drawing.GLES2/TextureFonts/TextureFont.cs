@@ -5,37 +5,74 @@ using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
 
+    class TextureFontFace : FontFace
+    {
+        GlyphImage glyphImg;
+        SimpleFontAtlasBuilder atlasBuilder;
+        SimpleFontAtlas fontAtlas;
+        string fontName;
+        FontFace nOpenTypeFontFace;
+        public TextureFontFace(string fontName, string xmlFontInfo, GlyphImage glyphImg)
+        {
+            //for msdf font
+            //1 font atlas may support mutliple font size 
+            atlasBuilder = new SimpleFontAtlasBuilder();
+            fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
+            fontAtlas.TotalGlyph = glyphImg;
 
+            //----------
+            InstalledFont installedFont = GLES2PlatformFontMx.GetInstalledFont(fontName, InstalledFontStyle.Regular);
+            nOpenTypeFontFace = NOpenTypeFontLoader.LoadFont(installedFont.FontPath,
+                GLES2PlatformFontMx.defaultLang,
+                GLES2PlatformFontMx.defaultHbDirection,
+                GLES2PlatformFontMx.defaultScriptCode);
+            //----------
+        }
+        public override string FontPath
+        {
+            get { return nOpenTypeFontFace.Name; }
+        }
+        
+        public FontFace InnerFontFace
+        {
+            get { return nOpenTypeFontFace; }
+        }
+        public override ActualFont GetFontAtPointsSize(float pointSize)
+        {
+            TextureFont t = new TextureFont(this, pointSize);
+            return t;
+        }
+        protected override void OnDispose()
+        {
+
+        }
+        public override string Name
+        {
+            get { return fontName; }
+        }
+        public SimpleFontAtlas FontAtlas
+        {
+            get { return fontAtlas; }
+        }
+
+    }
     class TextureFont : ActualFont
     {
         SimpleFontAtlas fontAtlas;
-        string name;
         IDisposable glBmp;
+        ActualFont actualFont;
+        TextureFontFace typeface;
 
-        ActualFont nativeFont;
-        static NativeFontStore s_nativeFontStore = new NativeFontStore();
-
-        internal TextureFont(string fontName, float fontSizeInPts, string fontfile, SimpleFontAtlas fontAtlas)
+        internal TextureFont(TextureFontFace typeface, float sizeInPoints)
         {
-            this.fontAtlas = fontAtlas;
-            this.name = fontName;
-            var font = new RequestFont(fontName, fontSizeInPts);
-            nativeFont = s_nativeFontStore.LoadFont(fontName, fontSizeInPts);
-        }
+            this.typeface = typeface;
+            this.fontAtlas = typeface.FontAtlas;
+            actualFont = typeface.InnerFontFace.GetFontAtPointsSize(sizeInPoints);
 
-        internal TextureFont(string fontName, float fontSizeInPts, SimpleFontAtlas fontAtlas)
-        {
-            //not support font 
-            this.fontAtlas = fontAtlas;
-            this.name = fontName;
-            //var font = new RequestFont(fontName, fontSizeInPts);
-            nativeFont = s_nativeFontStore.LoadFont(fontName, fontSizeInPts);
-            ////var fontKey = new FontKey(fontName, fontSizeInPts, FontStyle.Regular);
-            //nativeFont = (NativeFont)s_nativeFontStore.GetResolvedNativeFont(fontName, fontSizeInPts);
         }
         public override string FontName
         {
-            get { return name; }
+            get { return typeface.Name; }
         }
         public override FontStyle FontStyle
         {
@@ -45,14 +82,14 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                return nativeFont.AscentInPixels;
+                return actualFont.AscentInPixels;
             }
         }
         public override float DescentInPixels
         {
             get
             {
-                return nativeFont.DescentInPixels;
+                return actualFont.DescentInPixels;
             }
         }
         public IDisposable GLBmp
@@ -68,7 +105,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                return nativeFont.SizeInPoints;
+                return actualFont.SizeInPoints;
             }
         }
 
@@ -76,7 +113,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                return nativeFont.SizeInPixels;
+                return actualFont.SizeInPixels;
             }
         }
 
@@ -84,27 +121,27 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
-                return nativeFont.FontFace;
+                return actualFont.FontFace;
             }
         }
         public override float GetAdvanceForCharacter(char c)
         {
-            return nativeFont.GetAdvanceForCharacter(c);
+            return actualFont.GetAdvanceForCharacter(c);
         }
 
         public override float GetAdvanceForCharacter(char c, char next_c)
         {
-            return nativeFont.GetAdvanceForCharacter(c, next_c);
+            return actualFont.GetAdvanceForCharacter(c, next_c);
         }
 
         public override FontGlyph GetGlyph(char c)
         {
-            return nativeFont.GetGlyph(c);
+            return actualFont.GetGlyph(c);
         }
 
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            return nativeFont.GetGlyphByIndex(glyphIndex);
+            return actualFont.GetGlyphByIndex(glyphIndex);
         }
 
         //public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
@@ -120,25 +157,6 @@ namespace PixelFarm.Drawing.Fonts
                 glBmp = null;
             }
         }
-        //----------------------------------------------------
-        /// <summary>
-        /// this method always create new TextureFont, 
-        /// user should do caching by themself 
-        /// </summary>
-        /// <param name="fontName"></param>
-        /// <param name="xmlFontInfo"></param>
-        /// <param name="imgAtlas"></param>
-        /// <returns></returns>
-        public static TextureFont CreateFont(string fontName, float fontSizeInPoints, string xmlFontInfo, GlyphImage glyphImg)
-        {
-            //for msdf font
-            //1 font atlas may support mutliple font size 
-            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
-            SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
-            fontAtlas.TotalGlyph = glyphImg;
 
-
-            return new TextureFont(fontName, fontSizeInPoints, fontAtlas);
-        }
     }
 }

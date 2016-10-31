@@ -9,9 +9,20 @@ namespace PixelFarm.Drawing.Fonts
     class NOpenTypeFontFace : FontFace
     {
         Typeface ntypeface;
-        public NOpenTypeFontFace(Typeface ntypeface)
+        string name, path;
+        public NOpenTypeFontFace(Typeface ntypeface, string fontName, string fontPath)
         {
             this.ntypeface = ntypeface;
+            this.name = fontName;
+            this.path = fontPath;
+        }
+        public override string Name
+        {
+            get { return name; }
+        }
+        public override string FontPath
+        {
+            get { return path; }
         }
         protected override void OnDispose() { }
         public override ActualFont GetFontAtPointsSize(float pointSize)
@@ -66,7 +77,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return style; }
         }
- 
+
         public override float GetAdvanceForCharacter(char c)
         {
             return typeFace.GetAdvanceWidth(c);

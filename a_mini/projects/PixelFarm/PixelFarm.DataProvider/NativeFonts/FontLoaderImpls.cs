@@ -53,7 +53,8 @@ namespace PixelFarm.Drawing.Fonts
                 return null;
             }
             //------------------------------------------------------- 
-            NativeFontFace fontFace = new NativeFontFace(unmanagedMem, faceHandle, installedFont.FontName, FontStyle.Regular);
+            NativeFontFace fontFace = new NativeFontFace(unmanagedMem, faceHandle, installedFont.FontName,
+                installedFont.FontPath, FontStyle.Regular);
             fontFace.LoadFromFilename = installedFont.FontPath;
             ExportTypeFaceInfo exportTypeInfo = new ExportTypeFaceInfo();
             NativeMyFontsLib.MyFtGetFaceInfo(faceHandle, ref exportTypeInfo);
@@ -155,7 +156,7 @@ namespace PixelFarm.Drawing.Fonts
             //read font file
             OpenTypeReader openTypeReader = new OpenTypeReader();
             Typeface typeface = null;
-            using (FileStream fs = new FileStream(fontfile, FileMode.Open))
+            using (FileStream fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 typeface = openTypeReader.Read(fs);
                 if (typeface == null)
@@ -163,12 +164,13 @@ namespace PixelFarm.Drawing.Fonts
                     return null;
                 }
             }
+            //TODO:...
             //set shape engine *** 
-            return new NOpenTypeFontFace(typeface);
+            return new NOpenTypeFontFace(typeface, typeface.Name, fontfile);
         }
     }
 
-    
+
 
 
     //    /// <summary>

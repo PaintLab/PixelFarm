@@ -27,10 +27,12 @@ namespace PixelFarm.Drawing.Fonts
         IntPtr hb_font;
         ExportFace exportFace = new ExportFace();
         string name;
+        string fontPath;
         FontStyle fontStyle;
-        internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle, string name, FontStyle fontStyle)
+        internal NativeFontFace(IntPtr unmanagedMem, IntPtr ftFaceHandle, string name, string fontPath, FontStyle fontStyle)
         {
             this.name = name;
+            this.fontPath = fontPath;
             this.fontStyle = fontStyle;
 
             this.unmanagedMem = unmanagedMem;
@@ -44,7 +46,14 @@ namespace PixelFarm.Drawing.Fonts
                 }
             }
         }
-
+        public override string Name
+        {
+            get { return name; }
+        }
+        public override string FontPath
+        {
+            get { return fontPath; }
+        }
         ~NativeFontFace()
         {
             Dispose();
@@ -95,7 +104,7 @@ namespace PixelFarm.Drawing.Fonts
                 return exportFace.ascender;
             }
         }
-        
+
         /// <summary>
         /// descent in font unit
         /// </summary>

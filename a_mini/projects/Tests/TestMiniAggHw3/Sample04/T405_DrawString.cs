@@ -4,6 +4,7 @@ using System;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Text;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "405")]
@@ -14,7 +15,7 @@ namespace OpenTkEssTest
         bool resInit;
 
         GLCanvasPainter painter;
-       // TextureFont textureFont;
+        HarfBuzzShapingService hbShapingService;
 
 
         protected override void OnInitGLProgram(object sender, EventArgs args)
@@ -22,9 +23,19 @@ namespace OpenTkEssTest
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
 
+            PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
+                 "d:\\WImageTest\\a_total.xml",
+                 "d:\\WImageTest\\a_total.png");
             //temp comment 
             ////------------------------------------------------
-            //painter = new GLCanvasPainter(canvas2d, max, max);
+            hbShapingService = new HarfBuzzShapingService();
+            hbShapingService.SetAsCurrentImplementation();
+
+            painter = new GLCanvasPainter(canvas2d, max, max);
+            painter.UseTextureFontIfAvailable = true;
+            painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 24);
+            //------------------------------------------------
+            
             //string fontName = "tahoma";
             //float fontSize = 24;
             //GlyphImage glypImage = null;

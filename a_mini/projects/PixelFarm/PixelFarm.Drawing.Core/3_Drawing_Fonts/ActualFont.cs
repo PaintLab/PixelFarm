@@ -11,9 +11,7 @@ namespace PixelFarm.Drawing.Fonts
     {
 
         public abstract float SizeInPoints { get; }
-        public abstract float SizeInPixels { get; }
-
-
+        public abstract float SizeInPixels { get; } 
         public void Dispose()
         {
             OnDispose();
@@ -43,6 +41,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             Dispose();
         }
+        //---------------------
     }
 
 
