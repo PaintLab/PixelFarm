@@ -13,7 +13,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "402")]
     [Info("T402_BrushTest2")]
-    public class T405_BrushTest2 : PrebuiltGLControlDemoBase
+    public class T402_BrushTest2 : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
@@ -34,7 +34,7 @@ namespace OpenTkEssTest
             collection.LoadInstalledFont(win32InstallFontProvider.GetInstalledFontIter());
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Regular);
             FontFace tahomaFace = NOpenTypeFontLoader.LoadFont(tahomaFont.FontPath, "en", HBDirection.HB_DIRECTION_LTR);
-            ActualFont actualFont = tahomaFace.GetFontAtPointsSize(24);
+            ActualFont actualFont = tahomaFace.GetFontAtPointsSize(72);
             FontGlyph glyph = actualFont.GetGlyph('K');
 
             //var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
@@ -58,11 +58,11 @@ namespace OpenTkEssTest
             //var curveFlattener = new CurveFlattener();
             //var m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
 
-            //glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Agg.VertexStoreSnap(m_pathVxs2));
+            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Agg.VertexStoreSnap(glyph.flattenVxs));
 
-            //linearGrBrush2 = new LinearGradientBrush(
-            //   new PointF(0, 50), Color.Red,
-            //   new PointF(800, 100), Color.Black);
+            linearGrBrush2 = new LinearGradientBrush(
+               new PointF(0, 0), Color.Red,
+               new PointF(100,100), Color.Black);
             //----------------------
         }
         //PixelFarm.Agg.VertexStore MergeFontSubFigures(PixelFarm.Agg.VertexStore vxs)
@@ -124,7 +124,7 @@ namespace OpenTkEssTest
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
-            //painter.FillColor = PixelFarm.Drawing.Color.Black;
+            painter.FillColor = PixelFarm.Drawing.Color.Black;
             //painter.FillRectLBWH(0, 0, 150, 150);
             //GLBitmap glBmp = LoadTexture("..\\logo-dark.jpg");
             //var textureBrush = new TextureBrush(new GLImage(glBmp));
@@ -133,8 +133,8 @@ namespace OpenTkEssTest
 
             //fill
             painter.FillColor = PixelFarm.Drawing.Color.Black;
-            //painter.FillRenderVx(linearGrBrush2, glyph_vx);
-            painter.FillRenderVx(glyph_vx);
+            painter.FillRenderVx(linearGrBrush2, glyph_vx);
+            //painter.FillRenderVx(glyph_vx);
             //-------------------------------------------------------------------------  
 
 

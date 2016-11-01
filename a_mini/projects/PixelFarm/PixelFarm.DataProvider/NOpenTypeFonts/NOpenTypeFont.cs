@@ -4,17 +4,22 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using NOpenType;
 using System.IO;
+using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
     class NOpenTypeFontFace : FontFace
     {
         Typeface ntypeface;
         string name, path;
+        PixelFarm.Agg.GlyphPathBuilderVxs glyphPathBuilder;
+
         public NOpenTypeFontFace(Typeface ntypeface, string fontName, string fontPath)
         {
             this.ntypeface = ntypeface;
             this.name = fontName;
             this.path = fontPath;
+            //----
+            glyphPathBuilder = new Agg.GlyphPathBuilderVxs(ntypeface);
         }
         public override string Name
         {
@@ -31,6 +36,12 @@ namespace PixelFarm.Drawing.Fonts
             return actualFont;
         }
         public Typeface Typeface { get { return this.ntypeface; } }
+
+        internal PixelFarm.Agg.GlyphPathBuilderVxs VxsBuilder
+        {
+            get { return this.glyphPathBuilder; }
+        }
+
     }
     class NOpenTypeActualFont : ActualFont
     {
@@ -39,6 +50,7 @@ namespace PixelFarm.Drawing.Fonts
         FontStyle style;
         Typeface typeFace;
         float scale;
+        Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
         public NOpenTypeActualFont(NOpenTypeFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
             this.ownerFace = ownerFace;
@@ -94,15 +106,29 @@ namespace PixelFarm.Drawing.Fonts
         }
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            Glyph glyph = typeFace.GetGlyphByIndex((int)glyphIndex);
-            //-------------------------------------------------
-
+            //1.  
             FontGlyph fontGlyph = new FontGlyph();
+            fontGlyph.flattenVxs = GetGlyphVxs(glyphIndex);
             fontGlyph.horiz_adv_x = typeFace.GetAdvanceWidthFromGlyphIndex((int)glyphIndex);
             return fontGlyph;
         }
         protected override void OnDispose()
         {
+
+        }
+        public VertexStore GetGlyphVxs(uint codepoint)
+        {
+            VertexStore found;
+            if (glyphVxs.TryGetValue(codepoint, out found))
+            {
+                return found;
+            }
+            //not found
+            //then build it
+            ownerFace.VxsBuilder.BuildFromGlyphIndex((ushort)codepoint, this.sizeInPoints);
+            found = ownerFace.VxsBuilder.GetVxs();
+            glyphVxs.Add(codepoint, found);
+            return found;
         }
     }
 
