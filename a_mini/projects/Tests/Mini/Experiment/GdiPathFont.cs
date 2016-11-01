@@ -39,10 +39,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             throw new NotImplementedException();
         }
-        public float GetAdvanceForCharacter(char c, char next_c)
-        {
-            throw new NotImplementedException();
-        }
+         
         public float AscentInPixels
         {
             get { throw new NotImplementedException(); }

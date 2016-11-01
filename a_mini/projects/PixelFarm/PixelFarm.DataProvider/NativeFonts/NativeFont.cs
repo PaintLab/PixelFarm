@@ -102,11 +102,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             return this.GetGlyph(c).horiz_adv_x >> 6;
         }
-        public override float GetAdvanceForCharacter(char c, char next_c)
-        {
-            //TODO: review here
-            return this.GetGlyph(c).horiz_adv_x >> 6;
-        }
+      
 
 
     }

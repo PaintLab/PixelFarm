@@ -137,10 +137,7 @@ namespace PixelFarm.Drawing.WinGdi
             return charWidths[codePoints[0]];
         }
 
-        public override float GetAdvanceForCharacter(char c, char next_c)
-        {
-            throw new NotImplementedException();
-        }
+      
 
 
 
