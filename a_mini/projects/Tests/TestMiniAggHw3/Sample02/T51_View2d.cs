@@ -34,7 +34,7 @@ namespace OpenTkEssTest
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = a_position;
+                    gl_Position = vec4(a_position[0],a_position[1],0,1);
                     v_texCoord = a_texCoord;
                  }	 
                 ";
@@ -47,7 +47,10 @@ namespace OpenTkEssTest
                          gl_FragColor = texture2D(s_texture, v_texCoord);
                       }
                 ";
-            shaderProgram.Build(vs, fs);
+            if (!shaderProgram.Build(vs, fs))
+            {
+            }
+
             //-------------------------------------------
 
             // Get the attribute locations
