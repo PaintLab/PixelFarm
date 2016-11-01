@@ -6,6 +6,8 @@ using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Text;
 
 namespace OpenTkEssTest
 {
@@ -18,7 +20,7 @@ namespace OpenTkEssTest
         RenderVx glyph_vx;
         LinearGradientBrush linearGrBrush2;
         PixelFarm.Agg.VertexStoreSnap tempSnap1;
-      //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
+        //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             //temp***
@@ -27,6 +29,14 @@ namespace OpenTkEssTest
             painter = new GLCanvasPainter(canvas2d, max, max);
 
             //----------------------
+            var win32InstallFontProvider = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            InstalledFontCollection collection = new InstalledFontCollection();
+            collection.LoadInstalledFont(win32InstallFontProvider.GetInstalledFontIter());
+            InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Regular);
+            FontFace tahomaFace = NOpenTypeFontLoader.LoadFont(tahomaFont.FontPath, "en", HBDirection.HB_DIRECTION_LTR);
+            ActualFont actualFont = tahomaFace.GetFontAtPointsSize(24);
+            FontGlyph glyph = actualFont.GetGlyph('K');
+
             //var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
             ////PathWriter p01 = new PathWriter();
             ////p01.MoveTo(0, 0);

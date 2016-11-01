@@ -133,7 +133,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public static InstalledFont GetInstalledFont(string fontName, InstalledFontStyle style)
         {
-            return installFonts.LoadFont(fontName, style);
+            return installFonts.GetFont(fontName, style);
         }
 
     }

@@ -103,7 +103,7 @@ namespace PixelFarm.Drawing.Fonts
 
         }
 
-        public InstalledFont LoadFont(string fontName, InstalledFontStyle style)
+        public InstalledFont GetFont(string fontName, InstalledFontStyle style)
         {
             //request font from installed font
             InstalledFont found;
@@ -171,7 +171,7 @@ namespace PixelFarm.Drawing.Fonts
                 installedFonts.Add(installedFont);
             }
             return installedFonts;
-        } 
+        }
     }
 
     public static class FontPreview
@@ -367,7 +367,7 @@ namespace PixelFarm.Drawing.Fonts
             Array.Reverse(buf);
             return buf;
         }
-    
+
     }
 
 
