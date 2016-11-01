@@ -41,6 +41,10 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return this.glyphPathBuilder; }
         }
+        public override float GetScale(float pointSize)
+        {
+            return ntypeface.CalculateScale(pointSize);
+        }
 
     }
     class NOpenTypeActualFont : ActualFont
@@ -90,7 +94,7 @@ namespace PixelFarm.Drawing.Fonts
             get { return style; }
         }
 
-        
+
         public override FontGlyph GetGlyph(char c)
         {
             return GetGlyphByIndex((uint)typeFace.LookupIndex(c));

@@ -46,6 +46,10 @@ namespace PixelFarm.Drawing.Fonts
                 }
             }
         }
+        public override float GetScale(float pointSize)
+        {
+            return 1 / 64;
+        }
         public override string Name
         {
             get { return name; }

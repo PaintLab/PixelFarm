@@ -60,6 +60,10 @@ namespace PixelFarm.Drawing.WinGdi
             //create WinGdiFont 
             return new WinGdiFont(this, pointSize, style);
         }
+        public override float GetScale(float pointSize)
+        {
+            return nopenTypeFontFace.GetScale(pointSize);
+        }
     }
 
     class WinGdiFont : ActualFont

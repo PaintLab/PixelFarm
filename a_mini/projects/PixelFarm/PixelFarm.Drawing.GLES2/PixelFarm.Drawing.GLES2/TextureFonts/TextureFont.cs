@@ -27,6 +27,10 @@ namespace PixelFarm.Drawing.Fonts
                 GLES2PlatformFontMx.defaultScriptCode);
             //----------
         }
+        public override float GetScale(float pointSize)
+        {
+            return nOpenTypeFontFace.GetScale(pointSize);
+        }
         public override string FontPath
         {
             get { return nOpenTypeFontFace.Name; }
