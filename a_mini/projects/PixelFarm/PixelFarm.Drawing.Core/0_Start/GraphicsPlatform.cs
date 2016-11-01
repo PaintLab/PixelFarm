@@ -31,11 +31,7 @@ namespace PixelFarm.Drawing
         }
     }
 
-  
-    public static class GraphicsServices
-    {
-        public static IFonts TextServices { get; set; }
-    }
+   
 
     public delegate byte[] ImageBufferProviderDelegate(string filename);
 

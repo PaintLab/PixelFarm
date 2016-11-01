@@ -180,9 +180,7 @@ namespace PixelFarm.Drawing.WinGdi
             return exists;
         }
 
-        public float MeasureWhitespace(
-           PixelFarm.Drawing.IFonts ifonts,
-           PixelFarm.Drawing.RequestFont f)
+        public float MeasureWhitespace(PixelFarm.Drawing.RequestFont f)
         {
 
             WinGdiPlusFont winFont;
@@ -192,7 +190,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             if (!winFont.HasWhiteSpaceLength)
             {
-                return winFont.WhitespaceLength = ifonts.MeasureString(new char[] { ' ' }, 0, 1, f).Width;
+                //return winFont.WhitespaceLength = ifonts.MeasureString(new char[] { ' ' }, 0, 1, f).Width;
             }
             return winFont.WhitespaceLength;
         }

@@ -27,11 +27,11 @@ namespace PixelFarm.Drawing.WinGdi
         Agg.VertexSource.CurveFlattener curveFlattener;
 
         SmoothingMode _smoothingMode;
-        IFonts ifonts;
+     
         public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
         {
 
-            this.ifonts = GraphicsServices.TextServices;
+           
 
             _width = 800;// gfxBmp.Width;
             _height = 600;// gfxBmp.Height;

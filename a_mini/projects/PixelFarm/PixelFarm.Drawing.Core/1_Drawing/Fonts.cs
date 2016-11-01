@@ -80,13 +80,13 @@ namespace PixelFarm.Drawing
         }
     }
 
-    public interface IFonts
-    { 
-        float MeasureWhitespace(RequestFont f);
-        Size MeasureString(char[] str, int startAt, int len, RequestFont font);
-        Size MeasureString(char[] str, int startAt, int len, RequestFont font, float maxWidth, out int charFit, out int charFitWidth); 
-        void Dispose();
-    }
+    //public interface IFonts
+    //{ 
+    //    float MeasureWhitespace(RequestFont f);
+    //    Size MeasureString(char[] str, int startAt, int len, RequestFont font);
+    //    Size MeasureString(char[] str, int startAt, int len, RequestFont font, float maxWidth, out int charFit, out int charFitWidth); 
+    //    void Dispose();
+    //}
 
 
 

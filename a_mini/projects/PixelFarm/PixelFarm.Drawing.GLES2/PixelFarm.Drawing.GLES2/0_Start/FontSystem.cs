@@ -6,7 +6,7 @@ using PixelFarm.Drawing.Text;
 namespace PixelFarm.Drawing.Fonts
 {
 
-    class FontSystem : IFonts
+    class FontSystem  
     {
         NativeFontStore fontStore = new NativeFontStore();
         static FontSystem()

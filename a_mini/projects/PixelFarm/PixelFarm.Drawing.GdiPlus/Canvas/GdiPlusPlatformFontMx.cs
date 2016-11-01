@@ -33,7 +33,7 @@ namespace PixelFarm.Drawing.WinGdi
         public GdiPlusPlatformFontMx()
         {
         }
-    
+
         public WinGdiPlusFont ResolveForWinGdiPlusFont(RequestFont r)
         {
             WinGdiPlusFont winGdiPlusFont = r.ActualFont as WinGdiPlusFont;
@@ -50,7 +50,7 @@ namespace PixelFarm.Drawing.WinGdi
         public static GdiPlusPlatformFontMx Default { get { return s_gdiPlusFontMx; } }
     }
 
-    class GdiPlusIFonts : IFonts
+    class GdiPlusIFonts
     {
         System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(2, 2);
         NativeWin32MemoryDc win32MemDc;
@@ -61,13 +61,18 @@ namespace PixelFarm.Drawing.WinGdi
         static readonly int[] _charFit = new int[1];
         static readonly int[] _charFitWidth = new int[1000];
 
+        float whitespaceSize = -1;
         public GdiPlusIFonts()
         {
             win32MemDc = new NativeWin32MemoryDc(2, 2);
         }
         public float MeasureWhitespace(RequestFont f)
         {
-            return fontStore.MeasureWhitespace(this, f);
+            if (whitespaceSize > -1)
+            {
+                return whitespaceSize;
+            }
+            return whitespaceSize = MeasureString(new char[] { ' ' }, 0, 1, f).Width;
         }
         void SetFont(RequestFont font)
         {
