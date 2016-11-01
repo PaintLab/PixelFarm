@@ -269,7 +269,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             InitHdc();
             //request fron need to resolve to gdi+ font***
-            WinGdiFont myFont = GdiPlusPlatformFontMx.Default.ResolveForWinGdiPlusFont(font);
+            WinGdiFont myFont = WinGdiFontSystem.GetWinGdiFont(font);
             Win32Utils.SelectObject(tempDc, myFont.ToHfont());
         }
 

@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.WinGdi
         Color mycurrentTextColor = Color.Black;
         public override float GetCharWidth(RequestFont f, char c)
         {
-            WinGdiFont winFont = GdiPlusPlatformFontMx.Default.ResolveForWinGdiPlusFont(f);
+            WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(f);
             return winFont.GetGlyph(c).horiz_adv_x >> 6;
         }
       
@@ -238,7 +238,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 ReleaseHdc();
                 this.currentTextFont = value;
-                WinGdiFont myFont = GdiPlusPlatformFontMx.Default.ResolveForWinGdiPlusFont(value);
+                WinGdiFont myFont = WinGdiFontSystem.GetWinGdiFont(value);
                 IntPtr hdc = gx.GetHdc();
                 MyWin32.SelectObject(hdc, myFont.ToHfont());
                 gx.ReleaseHdc();

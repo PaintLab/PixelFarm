@@ -92,6 +92,7 @@
     <Compile Include="Experiment\GdiPathFont.cs" />
     <Compile Include="Experiment\GdiPathFontFace.cs" />
     <Compile Include="Experiment\GdiPathFontStore.cs" />
+    <Compile Include="Experiment\GdiPlusPlatformFontMx.cs" />
     <Compile Include="Experiment\WinGdiPlusFont.cs" />
     <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFont.cs" />

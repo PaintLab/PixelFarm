@@ -291,7 +291,6 @@
     <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\Conv.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\GdiPlusPlatformFontMx.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation.Win32\BasicGdi32FontHelper.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation.Win32\MyWin32.cs" />
     <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation.Win32\NativeTextWin32.cs" />

@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="Canvas\Conv.cs" />
     <Compile Include="0_Start\WinGdiPlusPlatform.cs" />
-    <Compile Include="Canvas\GdiPlusPlatformFontMx.cs" />
     <Compile Include="Implementation.Win32\BasicGdi32FontHelper.cs" />
     <Compile Include="Implementation.Win32\MyWin32.cs" />
     <Compile Include="Implementation.Win32\NativeTextWin32.cs" />
