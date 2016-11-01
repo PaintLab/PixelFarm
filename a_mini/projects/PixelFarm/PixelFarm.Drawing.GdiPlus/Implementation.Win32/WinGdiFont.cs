@@ -24,8 +24,6 @@ namespace PixelFarm.Drawing.WinGdi
         NativeTextWin32.FontABC[] charAbcWidths;
         NativeWin32MemoryDc nativeWin32MemDc;
         IntPtr hfont;
-        int bmpWidth = 200;
-        int bmpHeight = 50;
 
         //eg.
         Encoding fontEncoding = Encoding.GetEncoding(874);
@@ -34,9 +32,8 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
             this.f = f;
-            bmpWidth = 10;
-            bmpHeight = 10;
-            nativeWin32MemDc = new NativeWin32MemoryDc(bmpWidth, bmpHeight);
+
+            nativeWin32MemDc = new NativeWin32MemoryDc(2, 2);
             //this will create 
             InitFont(f.Name, (int)f.SizeInPoints);
             nativeWin32MemDc.SetTextColor(0);
@@ -137,7 +134,7 @@ namespace PixelFarm.Drawing.WinGdi
         //    return charWidths[codePoints[0]];
         //}
 
-      
+
 
 
 
@@ -171,7 +168,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         static RequestFont latestFont;
         static WinGdiFont latestWinFont;
-        static Dictionary<RequestFont, WinGdiFont> registerFonts = new Dictionary<RequestFont, WinGdiFont>();
+        static Dictionary<FontKey, WinGdiFont> registerFonts = new Dictionary<FontKey, WinGdiFont>();
         static public WinGdiFont GetWinGdiFont(RequestFont f)
         {
             if (f == null)
@@ -182,13 +179,21 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 return latestWinFont;
             }
+            WinGdiFont actualFontInside = RequestFont.GetCacheActualFont(f) as WinGdiFont;
+            if (actualFontInside != null)
+            {
+                return actualFontInside;
+            }
             //-----
+            //need to create a new one
             //get register font or create the new one
+            FontKey key = new FontKey(f.Name, f.SizeInPoints, FontStyle.Regular);
             WinGdiFont found;
-            if (!registerFonts.TryGetValue(f, out found))
+            if (!registerFonts.TryGetValue(key, out found))
             {
                 //create the new one and register                  
                 found = new WinGdiFont(f);
+                registerFonts.Add(key, found);//cache here
             }
             latestFont = f;
             RequestFont.SetCacheActualFont(f, latestWinFont);
