@@ -35,7 +35,18 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return nOpenTypeFontFace.Name; }
         }
-
+        public override int AscentInDzUnit
+        {
+            get { return nOpenTypeFontFace.AscentInDzUnit; }
+        }
+        public override int DescentInDzUnit
+        {
+            get { return nOpenTypeFontFace.DescentInDzUnit; }
+        }
+        public override int LineGapInDzUnit
+        {
+            get { return nOpenTypeFontFace.LineGapInDzUnit; }
+        }
         public FontFace InnerFontFace
         {
             get { return nOpenTypeFontFace; }

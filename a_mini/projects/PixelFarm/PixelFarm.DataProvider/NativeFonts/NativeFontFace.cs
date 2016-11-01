@@ -50,6 +50,19 @@ namespace PixelFarm.Drawing.Fonts
         {
             return 1 / 64;
         }
+        public override int AscentInDzUnit
+        {
+            get { return exportFace.ascender << 6; }
+        }
+        public override int DescentInDzUnit
+        {
+            get { return exportFace.descender << 6; }
+        }
+        public override int LineGapInDzUnit
+        {
+            //?
+            get { return (int)(AscentInDzUnit * 0.20); }
+        }
         public override string Name
         {
             get { return name; }

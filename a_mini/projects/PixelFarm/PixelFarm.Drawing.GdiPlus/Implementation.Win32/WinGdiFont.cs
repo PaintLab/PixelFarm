@@ -64,6 +64,18 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return nopenTypeFontFace.GetScale(pointSize);
         }
+        public override int AscentInDzUnit
+        {
+            get { return nopenTypeFontFace.AscentInDzUnit; }
+        }
+        public override int DescentInDzUnit
+        {
+            get { return nopenTypeFontFace.DescentInDzUnit; }
+        }
+        public override int LineGapInDzUnit
+        {
+            get { return nopenTypeFontFace.LineGapInDzUnit; }
+        }
     }
 
     class WinGdiFont : ActualFont
@@ -88,7 +100,7 @@ namespace PixelFarm.Drawing.WinGdi
         //eg.
         Encoding fontEncoding = Encoding.GetEncoding(874);
         FontStyle fontStyle;
-        string fontName;
+        
         static WinGdiFont()
         {
             //share dc for measure font size only
@@ -109,8 +121,9 @@ namespace PixelFarm.Drawing.WinGdi
             //create gdi font from font data
             //build font matrix
             basGdi32FontHelper.MeasureCharWidths(hfont, out charWidths, out charAbcWidths);
-            ascendInPixels = 14;
-            descentInPixels = -2;
+            float scale = fontFace.GetScale(sizeInPoints);
+            ascendInPixels = fontFace.AscentInDzUnit * scale;
+            descentInPixels = fontFace.DescentInDzUnit * scale;
 
             //------------------------------------------------------------------
 
@@ -134,7 +147,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override string FontName
         {
-            get { return fontName; }
+            get { return fontFace.Name; }
         }
         public override FontStyle FontStyle
         {

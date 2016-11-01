@@ -45,6 +45,18 @@ namespace PixelFarm.Drawing.Fonts
         {
             return ntypeface.CalculateScale(pointSize);
         }
+        public override int AscentInDzUnit
+        {
+            get { return ntypeface.Ascender; }
+        }
+        public override int DescentInDzUnit
+        {
+            get { return ntypeface.Descender; }
+        }
+        public override int LineGapInDzUnit
+        {
+            get { return ntypeface.LineGap; }
+        }
 
     }
     class NOpenTypeActualFont : ActualFont
