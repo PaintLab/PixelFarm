@@ -6,50 +6,64 @@ using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Text;
 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "402")]
     [Info("T402_BrushTest2")]
-    public class T405_BrushTest2 : PrebuiltGLControlDemoBase
+    public class T402_BrushTest2 : PrebuiltGLControlDemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         RenderVx glyph_vx;
         LinearGradientBrush linearGrBrush2;
         PixelFarm.Agg.VertexStoreSnap tempSnap1;
-        PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
+        //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
+            //temp***
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
-            var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
-            //PathWriter p01 = new PathWriter();
-            //p01.MoveTo(0, 0);
-            //p01.LineTo(50, 100);
-            //p01.LineTo(100, 0);
-            ////-
-            //p01.MoveTo(220, 10);
-            //p01.LineTo(50, 75);
-            //p01.LineTo(25, 15);
-            //p01.CloseFigure();
-            //p01.Stop();
-            //m_pathVxs = p01.Vxs;
 
-            var m_pathVxs = svgFont.GetGlyph('K').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
-            //m_pathVxs = MergeFontSubFigures(m_pathVxs);
+            //----------------------
+            var win32InstallFontProvider = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            InstalledFontCollection collection = new InstalledFontCollection();
+            collection.LoadInstalledFont(win32InstallFontProvider.GetInstalledFontIter());
+            InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Regular);
+            FontFace tahomaFace = NOpenTypeFontLoader.LoadFont(tahomaFont.FontPath, "en", HBDirection.HB_DIRECTION_LTR);
+            ActualFont actualFont = tahomaFace.GetFontAtPointsSize(72);
+            FontGlyph glyph = actualFont.GetGlyph('K');
 
-            Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
-            m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
-            var curveFlattener = new CurveFlattener();
-            var m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
+            //var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
+            ////PathWriter p01 = new PathWriter();
+            ////p01.MoveTo(0, 0);
+            ////p01.LineTo(50, 100);
+            ////p01.LineTo(100, 0);
+            //////-
+            ////p01.MoveTo(220, 10);
+            ////p01.LineTo(50, 75);
+            ////p01.LineTo(25, 15);
+            ////p01.CloseFigure();
+            ////p01.Stop();
+            ////m_pathVxs = p01.Vxs;
 
-            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Agg.VertexStoreSnap(m_pathVxs2));
+            //var m_pathVxs = svgFont.GetGlyph('K').originalVxs;// typeFaceForLargeA.GetGlyphForCharacter('a');
+            ////m_pathVxs = MergeFontSubFigures(m_pathVxs);
+
+            //Affine shape_mtx = Affine.NewMatix(AffinePlan.Translate(150, 100));
+            //m_pathVxs = shape_mtx.TransformToVxs(m_pathVxs);
+            //var curveFlattener = new CurveFlattener();
+            //var m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
+
+            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Agg.VertexStoreSnap(glyph.flattenVxs));
 
             linearGrBrush2 = new LinearGradientBrush(
-               new PointF(0, 50), Color.Red,
-               new PointF(800, 100), Color.Black);
+               new PointF(0, 0), Color.Red,
+               new PointF(100,100), Color.Black);
+            //----------------------
         }
         //PixelFarm.Agg.VertexStore MergeFontSubFigures(PixelFarm.Agg.VertexStore vxs)
         //{
@@ -110,7 +124,7 @@ namespace OpenTkEssTest
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
-            //painter.FillColor = PixelFarm.Drawing.Color.Black;
+            painter.FillColor = PixelFarm.Drawing.Color.Black;
             //painter.FillRectLBWH(0, 0, 150, 150);
             //GLBitmap glBmp = LoadTexture("..\\logo-dark.jpg");
             //var textureBrush = new TextureBrush(new GLImage(glBmp));
@@ -119,8 +133,8 @@ namespace OpenTkEssTest
 
             //fill
             painter.FillColor = PixelFarm.Drawing.Color.Black;
-            //painter.FillRenderVx(linearGrBrush2, glyph_vx);
-            painter.FillRenderVx(glyph_vx);
+            painter.FillRenderVx(linearGrBrush2, glyph_vx);
+            //painter.FillRenderVx(glyph_vx);
             //-------------------------------------------------------------------------  
 
 

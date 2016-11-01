@@ -154,6 +154,7 @@ namespace BuildMergeProject
                 group.AddItem(groupName, item);
             }
         }
+
     }
     class ToMergeProject
     {
@@ -163,16 +164,15 @@ namespace BuildMergeProject
         {
             this.ProjectFileName = projectFile;
             var pro = new Project(projectFile);
-            foreach (var item in pro.AllEvaluatedItems)
+            foreach (ProjectItem item in pro.AllEvaluatedItems)
             {
                 switch (item.ItemType)
                 {
                     case "Compile":
                         {
                             string onlyFileName = Path.GetFileName(item.EvaluatedInclude);
-                            if (onlyFileName != "AssemblyInfo.cs")
+                            if (onlyFileName != "AssemblyInfo.cs") //special case ***no include this file
                             {
-                                //TODO: review here
                                 allItems.Add(item);
                             }
                         }

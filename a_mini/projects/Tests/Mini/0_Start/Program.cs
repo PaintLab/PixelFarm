@@ -18,10 +18,13 @@ namespace Mini
             OpenTK.Toolkit.Init();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
+            RootDemoPath.Path = @"..\Data";
             _winGdiPlatForm = new PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform();
             Application.Run(new FormDev());
         }
-
+    }
+    public static class RootDemoPath
+    {
+        public static string Path = "";
     }
 }

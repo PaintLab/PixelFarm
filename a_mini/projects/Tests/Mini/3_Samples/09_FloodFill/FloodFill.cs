@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
             imageToFillOn = new ActualImage(400, 300, PixelFormat.ARGB32);
             ImageGraphics2D imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn, Program._winGdiPlatForm);
             imageToFillGraphics.Clear(Color.White);
-            imageToFillGraphics.DrawString("Click to fill", 20, 30);
+            //imageToFillGraphics.DrawString("Click to fill", 20, 30);
             imageToFillGraphics.Circle(new Vector2(200, 150), 35, Color.Black);
             imageToFillGraphics.Circle(new Vector2(200, 150), 30, Color.Green);
             imageToFillGraphics.Rectangle(20, 50, 210, 280, Color.Black);

@@ -60,16 +60,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniPlatforms\PixelFarm.MiniPlatforms.csproj">
-      <Project>{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}</Project>
-      <Name>PixelFarm.MiniPlatforms</Name>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.One.csproj">
+      <Project>{E71BD6D1-211F-4778-9632-77AB9B155BCB}</Project>
+      <Name>PixelFarm.One</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
-      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
+      <Project>{18EC3701-C6A5-429D-8C65-19ED4A2C2FED}</Project>
       <Name>TestSamples</Name>
     </ProjectReference>
   </ItemGroup>
