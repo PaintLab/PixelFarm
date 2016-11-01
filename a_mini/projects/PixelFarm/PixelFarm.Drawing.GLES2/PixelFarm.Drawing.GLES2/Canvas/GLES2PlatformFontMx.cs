@@ -121,6 +121,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 return;
             }
+            s_didLoadFonts = true;
             installFonts = new InstalledFontCollection();
             installFonts.LoadInstalledFont(provider.GetInstalledFontIter());
         }

@@ -56,7 +56,7 @@ namespace PixelFarm.Agg
             this.sclineRas = gx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
             this.scline = graphic2d.ScanlinePacked8;
-            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap; 
+            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
         }
         public AggTextPrinter TextPrinter
         {
@@ -67,7 +67,19 @@ namespace PixelFarm.Agg
         {
             gx.Clear(color);
         }
-
+        public float OriginX
+        {
+            get { return sclineRas.OffsetOriginX; }
+        }
+        public float OriginY
+        {
+            get { return sclineRas.OffsetOriginY; }
+        }
+        public void SetOrigin(float x, float y)
+        {
+            sclineRas.OffsetOriginX = x;
+            sclineRas.OffsetOriginY = y;
+        }
         public override SmoothingMode SmoothingMode
         {
             get
@@ -270,37 +282,26 @@ namespace PixelFarm.Agg
             {
                 this.currentFont = value;
                 //this request font must resolve to actual font
-                //within canvas ***
-                throw new NotSupportedException();
-                //textPrinter.CurrentFont = value; 
+                //within canvas *** 
+                //TODO: review drawing string  with agg here 
             }
         }
-       
+
         public override void DrawString(
            string text,
            double x,
            double y)
         {
-            textPrinter.Print(this, text.ToString(), x, y);
+            //TODO: review drawing string  with agg here 
+
+            //textPrinter.Print(this, text.ToString(), x, y);
         }
         //-------------------------------------------------------
         public Graphics2D Graphics
         {
             get { return this.gx; }
         }
-        public float OriginX
-        {
-            get { return sclineRas.OffsetOriginX; }
-        }
-        public float OriginY
-        {
-            get { return sclineRas.OffsetOriginY; }
-        }
-        public void SetOrigin(float x, float y)
-        {
-            sclineRas.OffsetOriginX = x;
-            sclineRas.OffsetOriginY = y;
-        }
+        
         /// <summary>
         /// fill vertex store
         /// </summary>

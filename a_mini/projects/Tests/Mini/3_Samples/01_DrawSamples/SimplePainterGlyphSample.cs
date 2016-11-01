@@ -14,25 +14,33 @@ namespace PixelFarm.Agg.SimplePainter
     [Info("SimplePainterGlyph")]
     public class SimplePainterGlyphSample : DemoBase
     {
-        string fontName = "tahoma";
-        string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
+      
         PixelFarm.Drawing.Fonts.ActualFont a_font1;
         PixelFarm.Drawing.Fonts.ActualFont a_font2;
         PixelFarm.Drawing.RequestFont font1;
         PixelFarm.Drawing.RequestFont font2;
         public override void Init()
         {
+            string fontName = "tahoma";
             //load font ? 
-            font1 = new Drawing.RequestFont("tahoma", 48);
-            font2 = new Drawing.RequestFont("tahoma", 10);
+            font1 = new Drawing.RequestFont(fontName, 48);
+            font2 = new Drawing.RequestFont(fontName, 10);
 
-            a_font1 = GetActualFont(fontName, 48);
-            a_font2 = GetActualFont(fontName, 10);
+            //------------
+            var win32InstalledFont = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            InstalledFontCollection collection = new InstalledFontCollection();
+            collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
+            InstalledFont installedFont = collection.GetFont(fontName, InstalledFontStyle.Regular);
+          
+            //------------
+
+            a_font1 = GetActualFont(installedFont, 48);
+            a_font2 = GetActualFont(installedFont, 10);
         }
-        static ActualFont GetActualFont(string fontName, float size)
+        static ActualFont GetActualFont(InstalledFont installedFont, float size)
         {
             //in the case that we want to use FreeType
-            FontFace face = FreeTypeFontLoader.LoadFont(fontName, "en", HBDirection.HB_DIRECTION_LTR);
+            FontFace face = FreeTypeFontLoader.LoadFont(installedFont.FontPath, "en", HBDirection.HB_DIRECTION_LTR);
             return face.GetFontAtPointsSize(size);
         }
         public override void Draw(CanvasPainter p)
