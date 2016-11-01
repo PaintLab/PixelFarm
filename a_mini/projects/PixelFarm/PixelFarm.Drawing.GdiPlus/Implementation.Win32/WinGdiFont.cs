@@ -9,7 +9,58 @@ using Win32;
 
 namespace PixelFarm.Drawing.WinGdi
 {
+    class WinGdiFontFace : FontFace
+    {
+        FontFace nopenTypeFontFace;
+        FontStyle style;
+        //we use NOpenType 
+        static InstalledFontCollection installedFonts;
+        static WinGdiFontFace()
+        {
+            installedFonts = new InstalledFontCollection();
+            var win32Provider = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            installedFonts.LoadInstalledFont(win32Provider.GetInstalledFontIter());
+        }
+        public WinGdiFontFace(string fontName, FontStyle style)
+        {
+            this.style = style;
+            InstalledFontStyle installedStyle = InstalledFontStyle.Regular;
+            switch (style)
+            {
+                default: break;
+                case FontStyle.Bold:
+                    installedStyle = InstalledFontStyle.Bold;
+                    break;
+                case FontStyle.Italic:
+                    installedStyle = InstalledFontStyle.Italic;
+                    break;
+                case FontStyle.Bold | FontStyle.Italic:
+                    installedStyle = InstalledFontStyle.Italic;
+                    break;
+            }
+            InstalledFont foundInstalledFont = installedFonts.GetFont(fontName, installedStyle);
 
+            this.nopenTypeFontFace = NOpenTypeFontLoader.LoadFont(foundInstalledFont.FontPath, "en", HBDirection.HB_DIRECTION_LTR);
+
+        }
+        protected override void OnDispose()
+        {
+            installedFonts = null;
+        }
+        public override string FontPath
+        {
+            get { return nopenTypeFontFace.FontPath; }
+        }
+        public override string Name
+        {
+            get { return nopenTypeFontFace.Name; }
+        }
+        public override ActualFont GetFontAtPointsSize(float pointSize)
+        {
+            //create WinGdiFont 
+            return new WinGdiFont(this, pointSize, style);
+        }
+    }
 
     class WinGdiFont : ActualFont
     {
@@ -20,6 +71,7 @@ namespace PixelFarm.Drawing.WinGdi
         float emSizeInPixels;
         float ascendInPixels;
         float descentInPixels;
+        WinGdiFontFace fontFace;
 
         static BasicGdi32FontHelper basGdi32FontHelper = new BasicGdi32FontHelper();
         static NativeWin32MemoryDc nativeWin32MemDc;
@@ -39,17 +91,16 @@ namespace PixelFarm.Drawing.WinGdi
             nativeWin32MemDc = new NativeWin32MemoryDc(20, 20);
             nativeWin32MemDc.SetTextColor(0);
         }
-        public WinGdiFont(string fontName, float sizeInPoints, FontStyle style)
+        public WinGdiFont(WinGdiFontFace fontFace, float sizeInPoints, FontStyle style)
         {
 
-            this.fontName = fontName;
-
+            this.fontFace = fontFace;
             this.fontSizeInPoints = sizeInPoints;
             this.fontStyle = style;
 
             this.fontSizeInPoints = sizeInPoints;
             this.emSizeInPixels = PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(this.fontSizeInPoints);
-            this.hfont = InitFont(fontName, (int)sizeInPoints);
+            this.hfont = InitFont(fontFace.Name, (int)sizeInPoints);
             //------------------------------------------------------------------
             //create gdi font from font data
             //build font matrix
@@ -131,30 +182,6 @@ namespace PixelFarm.Drawing.WinGdi
             //temp fix  
             throw new NotImplementedException();
         }
-
-        //public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        //{
-        //    //get gyph pos
-        //    throw new NotImplementedException();
-        //}
-
-        //char[] singleCharArray = new char[1];
-        //byte[] codePoints = new byte[2];
-
-        //public override float GetAdvanceForCharacter(char c)
-        //{
-        //    //check if we have width got this char or not
-        //    //temp fix
-        //    //TODO: review here again ***
-        //    singleCharArray[0] = c;
-        //    fontEncoding.GetBytes(singleCharArray, 0, 1, codePoints, 0);
-        //    return charWidths[codePoints[0]];
-        //}
-
-
-
-
-
         public override FontFace FontFace
         {
             get
@@ -186,6 +213,8 @@ namespace PixelFarm.Drawing.WinGdi
         static RequestFont latestFont;
         static WinGdiFont latestWinFont;
         static Dictionary<FontKey, WinGdiFont> registerFonts = new Dictionary<FontKey, WinGdiFont>();
+        static Dictionary<string, WinGdiFontFace> winGdiFonFaces = new Dictionary<string, WinGdiFontFace>();
+
         public static WinGdiFont GetWinGdiFont(RequestFont f)
         {
             if (f == null)
@@ -209,7 +238,17 @@ namespace PixelFarm.Drawing.WinGdi
             if (!registerFonts.TryGetValue(key, out found))
             {
                 //create the new one and register                  
-                found = new WinGdiFont(f.Name, f.SizeInPoints, f.Style);
+                //create fontface
+
+                WinGdiFontFace fontface;
+                if (!winGdiFonFaces.TryGetValue(f.Name, out fontface))
+                {
+                    //create new 
+                    fontface = new WinGdiFontFace(f.Name, f.Style);
+                    winGdiFonFaces.Add(f.Name, fontface);
+                }
+
+                found = (WinGdiFont)fontface.GetFontAtPointsSize(f.SizeInPoints);
                 registerFonts.Add(key, found);//cache here
             }
             latestFont = f;
