@@ -7,7 +7,7 @@ using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
     //this is experiment only***
-    class GdiPathFont : ActualFont
+    class GdiPathFont
     {
         GdiPathFontFace fontface;
         int emSizeInPoints;
@@ -26,36 +26,42 @@ namespace PixelFarm.Drawing.Fonts
             //implementation
             gdiFont = new System.Drawing.Font(fontface.FaceName, emSizeInPoints);
         }
-        public override float GetAdvanceForCharacter(char c)
-        {
-            throw new NotImplementedException();
-        }
-        public override float GetAdvanceForCharacter(char c, char next_c)
-        {
-            throw new NotImplementedException();
-        }
-        public override float AscentInPixels
+        public string FontName
         {
             get { throw new NotImplementedException(); }
         }
 
-        public override float DescentInPixels
+        public FontStyle FontStyle
         {
             get { throw new NotImplementedException(); }
         }
-        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
+        public float GetAdvanceForCharacter(char c)
         {
             throw new NotImplementedException();
         }
-        public override FontFace FontFace
+         
+        public float AscentInPixels
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public float DescentInPixels
+        {
+            get { throw new NotImplementedException(); }
+        }
+        public FontGlyph GetGlyphByIndex(uint glyphIndex)
+        {
+            throw new NotImplementedException();
+        }
+        public GdiPathFontFace FontFace
         {
             get { return this.fontface; }
         }
-        public override float SizeInPixels
+        public float SizeInPixels
         {
             get { return emSizeInPixels; }
         }
-        public override FontGlyph GetGlyph(char c)
+        public FontGlyph GetGlyph(char c)
         {
             FontGlyph found;
             if (!this.cachedGlyphs.TryGetValue(c, out found))
@@ -76,15 +82,15 @@ namespace PixelFarm.Drawing.Fonts
             }
             return found;
         }
-        public override void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
+        public void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
         {
             throw new NotImplementedException();
         }
 
-        protected override void OnDispose()
+        protected void OnDispose()
         {
         }
-        public override float SizeInPoints
+        public float SizeInPoints
         {
             get
             {

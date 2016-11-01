@@ -31,15 +31,18 @@
             this.cmdBuildMergePixelFarm = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmPortable = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmMiniAgg = new System.Windows.Forms.Button();
+            this.cmd_Windows_OnlyGdiPlus = new System.Windows.Forms.Button();
+            this.cmd_Windows_NoGdiPlus_NoWinForms = new System.Windows.Forms.Button();
+            this.cmd_Cross = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuildMergePixelFarm
             // 
             this.cmdBuildMergePixelFarm.Location = new System.Drawing.Point(25, 251);
             this.cmdBuildMergePixelFarm.Name = "cmdBuildMergePixelFarm";
-            this.cmdBuildMergePixelFarm.Size = new System.Drawing.Size(167, 57);
+            this.cmdBuildMergePixelFarm.Size = new System.Drawing.Size(360, 57);
             this.cmdBuildMergePixelFarm.TabIndex = 0;
-            this.cmdBuildMergePixelFarm.Text = "BuildMerge PixelFarm.One";
+            this.cmdBuildMergePixelFarm.Text = "BuildMerge PixelFarm.One (All)";
             this.cmdBuildMergePixelFarm.UseVisualStyleBackColor = true;
             this.cmdBuildMergePixelFarm.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -63,11 +66,44 @@
             this.cmdBuildMergePixelFarmMiniAgg.UseVisualStyleBackColor = true;
             this.cmdBuildMergePixelFarmMiniAgg.Click += new System.EventHandler(this.cmdMergePixelFarmMiniAgg_Click);
             // 
+            // cmd_Windows_OnlyGdiPlus
+            // 
+            this.cmd_Windows_OnlyGdiPlus.Location = new System.Drawing.Point(25, 314);
+            this.cmd_Windows_OnlyGdiPlus.Name = "cmd_Windows_OnlyGdiPlus";
+            this.cmd_Windows_OnlyGdiPlus.Size = new System.Drawing.Size(360, 57);
+            this.cmd_Windows_OnlyGdiPlus.TabIndex = 3;
+            this.cmd_Windows_OnlyGdiPlus.Text = "BuildMerge PixelFarm.One (Windows, Only GdiPlus)";
+            this.cmd_Windows_OnlyGdiPlus.UseVisualStyleBackColor = true;
+            this.cmd_Windows_OnlyGdiPlus.Click += new System.EventHandler(this.cmd_Windows_OnlyGdiPlus_Click);
+            // 
+            // cmd_Windows_NoGdiPlus_NoWinForms
+            // 
+            this.cmd_Windows_NoGdiPlus_NoWinForms.Location = new System.Drawing.Point(25, 377);
+            this.cmd_Windows_NoGdiPlus_NoWinForms.Name = "cmd_Windows_NoGdiPlus_NoWinForms";
+            this.cmd_Windows_NoGdiPlus_NoWinForms.Size = new System.Drawing.Size(360, 57);
+            this.cmd_Windows_NoGdiPlus_NoWinForms.TabIndex = 4;
+            this.cmd_Windows_NoGdiPlus_NoWinForms.Text = "BuildMerge PixelFarm.One (Windows,NoGdiPlus, NoWinForms)";
+            this.cmd_Windows_NoGdiPlus_NoWinForms.UseVisualStyleBackColor = true;
+            this.cmd_Windows_NoGdiPlus_NoWinForms.Click += new System.EventHandler(this.cmd_Windows_NoGdiPlus_NoWinForms_Click);
+            // 
+            // cmd_Cross
+            // 
+            this.cmd_Cross.Location = new System.Drawing.Point(25, 440);
+            this.cmd_Cross.Name = "cmd_Cross";
+            this.cmd_Cross.Size = new System.Drawing.Size(360, 57);
+            this.cmd_Cross.TabIndex = 5;
+            this.cmd_Cross.Text = "BuildMerge PixelFarm.One (Cross Platform, NoWinForms)";
+            this.cmd_Cross.UseVisualStyleBackColor = true;
+            this.cmd_Cross.Click += new System.EventHandler(this.cmd_Cross_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(872, 378);
+            this.ClientSize = new System.Drawing.Size(872, 516);
+            this.Controls.Add(this.cmd_Cross);
+            this.Controls.Add(this.cmd_Windows_NoGdiPlus_NoWinForms);
+            this.Controls.Add(this.cmd_Windows_OnlyGdiPlus);
             this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
             this.Controls.Add(this.cmdBuildMergePixelFarmPortable);
             this.Controls.Add(this.cmdBuildMergePixelFarm);
@@ -82,6 +118,9 @@
         private System.Windows.Forms.Button cmdBuildMergePixelFarm;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmPortable;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAgg;
+        private System.Windows.Forms.Button cmd_Windows_OnlyGdiPlus;
+        private System.Windows.Forms.Button cmd_Windows_NoGdiPlus_NoWinForms;
+        private System.Windows.Forms.Button cmd_Cross;
     }
 }
 

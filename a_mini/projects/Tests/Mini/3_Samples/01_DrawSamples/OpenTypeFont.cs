@@ -27,16 +27,21 @@ namespace PixelFarm.Agg.Sample_Draw
         VertexStore right_vxs;
         public override void Init()
         {
-            var fontfile = "tahoma.ttf";
+
+            //------------
+            var win32InstalledFont = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            InstalledFontCollection collection = new InstalledFontCollection();
+            collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
+            string fontfile = collection.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
+            //------------
+            
             var reader = new OpenTypeReader();
-
             this.FillBG = true;
-
             int size = 72;
             int resolution = 72;
             char testChar = 'B';
 
-            using (var fs = new FileStream(fontfile, FileMode.Open))
+            using (var fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
             {
                 //1. read typeface from font file
                 Typeface typeFace = reader.Read(fs);
@@ -103,6 +108,8 @@ namespace PixelFarm.Agg.Sample_Draw
 
         public override void Draw(CanvasPainter p)
         {
+            AggCanvasPainter aggPainter = (AggCanvasPainter)p;
+
             //---------------- 
             //5. use PixelFarm's Agg to render to bitmap...
             //5.1 clear background
@@ -114,8 +121,14 @@ namespace PixelFarm.Agg.Sample_Draw
                 p.FillColor = PixelFarm.Drawing.Color.Black;
                 //5.3
                 //p.Fill(vxs);
-                p.Fill(left_vxs);                
+
+                float x = aggPainter.OriginX;
+                float y = aggPainter.OriginY;
+
+                p.Fill(left_vxs);
+                aggPainter.SetOrigin(x + 50, y + 20);
                 p.Fill(right_vxs);
+                aggPainter.SetOrigin(x, y);
             }
 
             if (FillBorder)
@@ -126,8 +139,12 @@ namespace PixelFarm.Agg.Sample_Draw
                 //p.StrokeWidth = 2;
                 //5.5 
                 //p.Draw(vxs);
-                p.Draw(left_vxs);
-                p.Draw(right_vxs);
+                float x = aggPainter.OriginX;
+                float y = aggPainter.OriginY;
+                p.Fill(left_vxs);
+                aggPainter.SetOrigin(x + 50, y + 20);
+                p.Fill(right_vxs);
+                aggPainter.SetOrigin(x, y);
             }
         }
     }

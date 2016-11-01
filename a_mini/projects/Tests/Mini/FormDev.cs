@@ -174,59 +174,59 @@ namespace Mini
         PixelFarm.Drawing.Fonts.GdiPathFontStore gdiPathFontStore = new PixelFarm.Drawing.Fonts.GdiPathFontStore();
         private void button3_Click(object sender, EventArgs e)
         {
-            //----------------------
-            //1. test gdi+ font path
-            char testChar = 'b';
-            float fontSize = 20;
-            string fontName = "tahoma";
-            using (System.Drawing.Font ff = new Font(fontName, fontSize))
-            using (Graphics g = this.pictureBox1.CreateGraphics())
-            {
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.Clear(System.Drawing.Color.White);
+            ////----------------------
+            ////1. test gdi+ font path
+            //char testChar = 'b';
+            //float fontSize = 20;
+            //string fontName = "tahoma";
+            //using (System.Drawing.Font ff = new Font(fontName, fontSize))
+            //using (Graphics g = this.pictureBox1.CreateGraphics())
+            //{
+            //    g.SmoothingMode = SmoothingMode.HighQuality;
+            //    g.Clear(System.Drawing.Color.White);
 
 
-                PixelFarm.Drawing.Fonts.ActualFont winFont = gdiPathFontStore.LoadFont(fontName, fontSize);
+            //    PixelFarm.Drawing.Fonts.ActualFont winFont = gdiPathFontStore.LoadFont(fontName, fontSize);
 
-                var winFontGlyph = winFont.GetGlyph(testChar);
-                //convert Agg vxs to bitmap
-                int bmpW = 50;
-                int bmpH = 50;
-                using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
-                {
-                    ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.ARGB32);
-                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage, Program._winGdiPlatForm);
-                    var vxs = winFontGlyph.originalVxs;
-                    gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-                    //test subpixel rendering 
-                    vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
-                    gfx.UseSubPixelRendering = true;
-                    gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-                    PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmap(
-                      actualImage, //src from actual img buffer
-                      bufferBmp, //dest to buffer bmp
-                     new RectInt(0, 0, bmpW, bmpH));
-                    //-----------------------------------------
-                    bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                    g.DrawImage(bufferBmp, new Point(0, 30));
-                }
-                //----------------------------------------------
+            //    var winFontGlyph = winFont.GetGlyph(testChar);
+            //    //convert Agg vxs to bitmap
+            //    int bmpW = 50;
+            //    int bmpH = 50;
+            //    using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
+            //    {
+            //        ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.ARGB32);
+            //        Graphics2D gfx = Graphics2D.CreateFromImage(actualImage, Program._winGdiPlatForm);
+            //        var vxs = winFontGlyph.originalVxs;
+            //        gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
+            //        //test subpixel rendering 
+            //        vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
+            //        gfx.UseSubPixelRendering = true;
+            //        gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
+            //        PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmap(
+            //          actualImage, //src from actual img buffer
+            //          bufferBmp, //dest to buffer bmp
+            //         new RectInt(0, 0, bmpW, bmpH));
+            //        //-----------------------------------------
+            //        bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            //        g.DrawImage(bufferBmp, new Point(0, 30));
+            //    }
+            //    //----------------------------------------------
 
 
 
-                //----------------------------------------------
-                //compare with GraphicsPath's Font                
-                using (GraphicsPath gpath = new GraphicsPath())
-                {
-                    gpath.AddString(testChar.ToString(), ff.FontFamily, 1, ff.Size,
-                        new Point(0, 0), null);
-                    g.FillPath(Brushes.Black, gpath);
-                    //g.DrawPath(Pens.Black, gpath);
-                }
-                //-------------------------------------------------
-                //Compare with Gdi+ Font
-                g.DrawString(testChar.ToString(), ff, Brushes.Black, new PointF(0, 50));
-            }
+            //    //----------------------------------------------
+            //    //compare with GraphicsPath's Font                
+            //    using (GraphicsPath gpath = new GraphicsPath())
+            //    {
+            //        gpath.AddString(testChar.ToString(), ff.FontFamily, 1, ff.Size,
+            //            new Point(0, 0), null);
+            //        g.FillPath(Brushes.Black, gpath);
+            //        //g.DrawPath(Pens.Black, gpath);
+            //    }
+            //    //-------------------------------------------------
+            //    //Compare with Gdi+ Font
+            //    g.DrawString(testChar.ToString(), ff, Brushes.Black, new PointF(0, 50));
+            //}
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -293,9 +293,10 @@ namespace Mini
         private void button7_Click(object sender, EventArgs e)
         {
 
-            List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadInstallFonts();
+            PixelFarm.Drawing.Win32.InstallFontsProviderWin32 installFontProvider = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadPreviewFontData(installFontProvider.GetInstalledFontIter());
             System.Drawing.Bitmap bmp1 = new Bitmap(800, 600, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(Program._winGdiPlatForm, bmp1);
+            PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bmp1);
 
         }
 

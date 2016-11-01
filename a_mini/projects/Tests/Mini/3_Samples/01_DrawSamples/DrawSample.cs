@@ -39,7 +39,7 @@ namespace PixelFarm.Agg.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample02 : DemoBase
     {
-        SvgFontStore svgFontStore = new SvgFontStore();
+        //SvgFontStore svgFontStore = new SvgFontStore();
 
         public override void Init()
         {
@@ -81,26 +81,26 @@ namespace PixelFarm.Agg.Sample_Draw
             //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
             // draw some text
             // draw some text  
-
-            var textPrinter = new TextPrinter(Program._winGdiPlatForm);
-            textPrinter.CurrentActualFont = svgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
+            
+            //var textPrinter = new TextPrinter();
+            //textPrinter.CurrentActualFont = svgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
             //new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
 
-            VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());
-            var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
-            VertexStore s1 = affTx.TransformToVxs(vxs);
-            p.FillColor = Drawing.Color.Black;
-            p.Fill(s1);
-            //g.Render(s1, ColorRGBA.Black);
-            p.FillColor = Drawing.Color.Red;
-            p.Fill(StrokeHelp.MakeVxs(s1, 1));
-            //g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
-            var aff2 = Affine.NewMatix(
-                AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
-                AffinePlan.Translate(40, height / 2));
-            p.FillColor = Drawing.Color.Black;
-            p.Fill(aff2.TransformToVertexSnap(vxs));
-            //g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
+            //VertexStore vxs = textPrinter.CreateVxs("Printing from a printer".ToCharArray());
+            //var affTx = Affine.NewTranslation(width / 2, height / 4 * 3);
+            //VertexStore s1 = affTx.TransformToVxs(vxs);
+            //p.FillColor = Drawing.Color.Black;
+            //p.Fill(s1);
+            ////g.Render(s1, ColorRGBA.Black);
+            //p.FillColor = Drawing.Color.Red;
+            //p.Fill(StrokeHelp.MakeVxs(s1, 1));
+            ////g.Render(StrokeHelp.MakeVxs(s1, 1), ColorRGBA.Red);
+            //var aff2 = Affine.NewMatix(
+            //    AffinePlan.Rotate(MathHelper.DegreesToRadians(90)),
+            //    AffinePlan.Translate(40, height / 2));
+            //p.FillColor = Drawing.Color.Black;
+            //p.Fill(aff2.TransformToVertexSnap(vxs));
+            ////g.Render(aff2.TransformToVertexSnap(vxs), ColorRGBA.Black);
         }
     }
 

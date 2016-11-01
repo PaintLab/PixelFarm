@@ -48,7 +48,6 @@
     <Compile Include="1_Shared\Square.cs" />
     <Compile Include="1_Shared\SpriteShape.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\GlyphPathBuilderVxs.cs" />
     <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
@@ -59,6 +58,7 @@
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_Blur\BlurWithPainterSample.cs" />
+    <Compile Include="3_Samples\08_Blur\BlurWithPainterSampleOld.cs" />
     <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
     <Compile Include="1_Shared\Point2D.cs" />
     <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
@@ -88,9 +88,18 @@
     <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="Experiment\GdiPathConverter.cs" />
     <Compile Include="Experiment\GdiPathFont.cs" />
     <Compile Include="Experiment\GdiPathFontFace.cs" />
     <Compile Include="Experiment\GdiPathFontStore.cs" />
+    <Compile Include="Experiment\GdiPlusPlatformFontMx.cs" />
+    <Compile Include="Experiment\WinGdiPlusFont.cs" />
+    <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
+    <Compile Include="Experiment_AggFonts\FontSvg\SvgFont.cs" />
+    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace.cs" />
+    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />
+    <Compile Include="Experiment_AggFonts\FontSvg\SvgFontStore.cs" />
+    <Compile Include="Experiment_AggFonts\Font\MyTypeFacePrinter.cs" />
     <Compile Include="MiniGUI\PixelTools.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>

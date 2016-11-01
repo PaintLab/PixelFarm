@@ -4,6 +4,7 @@ using System;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Text;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "405")]
@@ -14,36 +15,46 @@ namespace OpenTkEssTest
         bool resInit;
 
         GLCanvasPainter painter;
-        TextureFont textureFont;
+        HarfBuzzShapingService hbShapingService;
 
 
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
             canvas2d = new CanvasGL2d(max, max);
-            TextureFontStore textureFonts = new TextureFontStore();
-            //------------------------------------------------
+
+            PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
+                 "d:\\WImageTest\\a_total.xml",
+                 "d:\\WImageTest\\a_total.png");
+            //temp comment 
+            ////------------------------------------------------
+            hbShapingService = new HarfBuzzShapingService();
+            hbShapingService.SetAsCurrentImplementation();
+
             painter = new GLCanvasPainter(canvas2d, max, max);
-            string fontName = "tahoma";
-            float fontSize = 24;
-            GlyphImage glypImage = null;
-            using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage("d:\\WImageTest\\a_total.png"))
-            {
-                glypImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
-                var buffer = new int[nativeImg.Width * nativeImg.Height];
-                System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
-                glypImage.SetImageBuffer(buffer, true);
-            }
+            painter.UseTextureFontIfAvailable = true;
+            painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 24);
+            //------------------------------------------------
+            
+            //string fontName = "tahoma";
+            //float fontSize = 24;
+            //GlyphImage glypImage = null;
+            //using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage("d:\\WImageTest\\a_total.png"))
+            //{
+            //    glypImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
+            //    var buffer = new int[nativeImg.Width * nativeImg.Height];
+            //    System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
+            //    glypImage.SetImageBuffer(buffer, true);
+            //}
 
+            //textureFont = TextureFont.CreateFont(fontName, fontSize,
+            //    "d:\\WImageTest\\a_total.xml",
+            //    glypImage);
 
-
-            textureFont = TextureFont.CreateFont(fontName, fontSize,
-                "d:\\WImageTest\\a_total.xml",
-                glypImage);
-            PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize);
-            textureFonts.RegisterFont(f, textureFont);
-            canvas2d.TextureFontStore = textureFonts;
-            painter.CurrentFont = f;
+            ////PixelFarm.Drawing.RequestFont f = new PixelFarm.Drawing.RequestFont(fontName, fontSize); 
+            ////canvas2d.TextureFontStore = textureFonts;
+            ////painter.CurrentFont = textureFont;
+            //painter.ActualFont = textureFont;
         }
         protected override void DemoClosing()
         {

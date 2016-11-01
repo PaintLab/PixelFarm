@@ -41,7 +41,7 @@ namespace PixelFarm.Agg.Sample_Images
         ActualImage actualImage;
         public override void Init()
         {
-            this.actualImage = LoadImage("../../../SampleImages/plain01.png");
+            this.actualImage = LoadImage( RootDemoPath.Path +"\\plain01.png");
         }
 
         static ActualImage LoadImage(string filename)

@@ -96,13 +96,13 @@
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
       <Name>MiniAgg</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.DataProvider\PixelFarm.DataProvider.csproj">
+      <Project>{1178D339-33C4-47FC-9807-869367BE803A}</Project>
+      <Name>PixelFarm.DataProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
-      <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
-      <Name>PixelFarm.Drawing.GLES2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
