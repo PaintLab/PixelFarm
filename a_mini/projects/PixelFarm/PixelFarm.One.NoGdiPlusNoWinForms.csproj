@@ -282,7 +282,6 @@
     <Compile Include="PixelFarm.Drawing.Core\9_PixelFarm_AggVertex_More\VertexSource\SimpleRect.cs" />
     <Compile Include="PixelFarm.Drawing.Core\9_PixelFarm_AggVertex_More\VertexSource\VertexData.cs" />
     <Compile Include="PixelFarm.Drawing.Core\9_PixelFarm_AggVertex_More\VertexSource\VertexStoreBuilder.cs" />
-    <Compile Include="PixelFarm.Drawing.Core\BasicRenderBox\IRenderElement.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\..\PixelFarm.Drawing.GdiPlus\Implementation.Win32\BasicGdi32FontHelper.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\..\PixelFarm.Drawing.GdiPlus\Implementation.Win32\MyWin32.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\..\PixelFarm.Drawing.GdiPlus\Implementation.Win32\NativeTextWin32.cs" />

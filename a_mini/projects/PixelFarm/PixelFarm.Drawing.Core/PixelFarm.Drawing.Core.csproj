@@ -122,7 +122,6 @@
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\SimpleRect.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\VertexData.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\VertexStoreBuilder.cs" />
-    <Compile Include="BasicRenderBox\IRenderElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
