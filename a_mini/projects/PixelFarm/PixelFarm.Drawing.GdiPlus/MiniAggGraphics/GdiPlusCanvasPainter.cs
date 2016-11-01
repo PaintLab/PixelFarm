@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing.WinGdi
     {
         System.Drawing.Graphics _gfx;
         System.Drawing.Bitmap _gfxBmp;
-        WinGdiPlusFont _latestWinGdiPlusFont;
+
         System.Drawing.SolidBrush _currentFillBrush;
         System.Drawing.Pen _currentPen;
         //
@@ -22,16 +22,17 @@ namespace PixelFarm.Drawing.WinGdi
         bool _useSubPixelRendering;
         BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
-        //vector generators
+        WinGdiFont _winGdiFont;
+
         Agg.VertexSource.RoundedRect roundRect;
         Agg.VertexSource.CurveFlattener curveFlattener;
 
         SmoothingMode _smoothingMode;
-     
+
         public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
         {
 
-           
+
 
             _width = 800;// gfxBmp.Width;
             _height = 600;// gfxBmp.Height;
@@ -51,7 +52,7 @@ namespace PixelFarm.Drawing.WinGdi
             _bmpStore = new BufferBitmapStore(_width, _height);
         }
 
-        
+
         public override SmoothingMode SmoothingMode
         {
             get
@@ -109,7 +110,7 @@ namespace PixelFarm.Drawing.WinGdi
             set
             {
                 _currentFont = value;
-                _latestWinGdiPlusFont = GdiPlusPlatformFontMx.Default.ResolveForWinGdiPlusFont(value);
+                _winGdiFont = WinGdiFontSystem.GetWinGdiFont(value);                 
             }
         }
         public override Color FillColor
@@ -336,10 +337,16 @@ namespace PixelFarm.Drawing.WinGdi
             //use current brush and font
             _gfx.ResetTransform();
             _gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
-            _gfx.DrawString(text,
+
+            //draw with native win32
+            //------------
+
+            /*_gfx.DrawString(text,
                 _latestWinGdiPlusFont.InnerFont,
                 _currentFillBrush,
                 new System.Drawing.PointF((float)x, (float)y));
+            */
+            //------------
             //restore back
             _gfx.ResetTransform();//again
             _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis

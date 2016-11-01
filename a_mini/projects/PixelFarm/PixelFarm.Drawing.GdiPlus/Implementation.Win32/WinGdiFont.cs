@@ -171,10 +171,11 @@ namespace PixelFarm.Drawing.WinGdi
 
     class WinGdiFontSystem
     {
-        RequestFont latestFont;
-        WinGdiFont latestWinFont;
-        Dictionary<RequestFont, WinGdiFont> registerFonts = new Dictionary<RequestFont, WinGdiFont>();
-        public WinGdiFont GetWinGdiFont(RequestFont f)
+        
+        static RequestFont latestFont;
+        static WinGdiFont latestWinFont;
+        static Dictionary<RequestFont, WinGdiFont> registerFonts = new Dictionary<RequestFont, WinGdiFont>();
+        static public WinGdiFont GetWinGdiFont(RequestFont f)
         {
             if (f == null)
             {

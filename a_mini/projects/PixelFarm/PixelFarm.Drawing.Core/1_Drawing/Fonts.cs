@@ -78,16 +78,5 @@ namespace PixelFarm.Drawing
             RequestFont reqFont = new RequestFont(f.FontName, f.SizeInPoints, FontStyle.Regular);
             return reqFont;
         }
-    }
-
-    //public interface IFonts
-    //{ 
-    //    float MeasureWhitespace(RequestFont f);
-    //    Size MeasureString(char[] str, int startAt, int len, RequestFont font);
-    //    Size MeasureString(char[] str, int startAt, int len, RequestFont font, float maxWidth, out int charFit, out int charFitWidth); 
-    //    void Dispose();
-    //}
-
-
-
+    } 
 }
