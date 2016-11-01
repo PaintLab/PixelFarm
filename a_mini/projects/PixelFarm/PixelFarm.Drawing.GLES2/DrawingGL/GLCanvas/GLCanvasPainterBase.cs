@@ -277,7 +277,7 @@ namespace PixelFarm.DrawingGL
                 //}
                 //--------------------------------
                 TextureFontGlyphData glyphData;
-                if (!fontAtlas.GetRect((int)codepoint, out glyphData))
+                if (!fontAtlas.GetRectByCodePoint((int)codepoint, out glyphData))
                 {
                     //Rectangle r = glyphData.Rect;
                     //float x_min = glyphData.BBoxXMin / 64;
@@ -310,8 +310,10 @@ namespace PixelFarm.DrawingGL
                 coords.Add(r.Height);
                 //-------------------------
                 coords.Add(adjustX + c_x + left);
-                coords.Add(baseline + ((int)((glyphData.ImgHeight + glyph.glyphMatrix.bboxYmin) * scale) >> 6));
-                int w = (int)(glyph.glyphMatrix.advanceX * scale) >> 6;
+                //coords.Add(baseline + ((int)((glyphData.ImgHeight + glyph.glyphMatrix.bboxYmin) * scale) >> 6));
+                coords.Add(baseline + ((int)((glyphData.ImgHeight + glyphData.BBoxYMin) * scale) >> 6));
+                //int w = (int)(glyph.glyphMatrix.advanceX * scale) >> 6;
+                int w = (int)(glyph.horiz_adv_x * scale) >> 6;
                 c_x += w;
             }
             _canvas.DrawSubImageWithMsdf(glBmp, coords.ToArray(), scale);

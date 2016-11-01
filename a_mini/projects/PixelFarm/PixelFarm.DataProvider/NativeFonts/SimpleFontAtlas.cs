@@ -10,30 +10,31 @@ namespace PixelFarm.Drawing.Fonts
     public class SimpleFontAtlas
     {
         GlyphImage totalGlyphImage;
-        Dictionary<int, TextureFontGlyphData> charLocations = new Dictionary<int, TextureFontGlyphData>();
-
+        Dictionary<int, TextureFontGlyphData> codePointLocations = new Dictionary<int, TextureFontGlyphData>();
+         
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public void AddGlyph(int c, TextureFontGlyphData glyphData)
+        public void AddGlyph(int codePoint, TextureFontGlyphData glyphData)
         {
-            charLocations.Add(c, glyphData);
+            codePointLocations.Add(codePoint, glyphData);
         }
+        
         public GlyphImage TotalGlyph
         {
             get { return totalGlyphImage; }
             set { totalGlyphImage = value; }
         }
-        public bool GetRect(int c, out TextureFontGlyphData glyphdata)
+        public bool GetRectByCodePoint(int codepoint, out TextureFontGlyphData glyphdata)
         {
-            if (!charLocations.TryGetValue(c, out glyphdata))
+            if (!codePointLocations.TryGetValue(codepoint, out glyphdata))
             {
                 glyphdata = null;
                 return false;
             }
             return true;
         }
-
+        
     }
 
     public class TextureFontGlyphData
@@ -300,7 +301,7 @@ namespace PixelFarm.Drawing.Fonts
                 glyphData.VBearingX = matrix[12];
                 glyphData.VBearingY = matrix[13];
                 //--------------- 
-                simpleFontAtlas.AddGlyph(codepoint, glyphData);
+                simpleFontAtlas.AddGlyph(codepoint, glyphData);                 
             }
             return simpleFontAtlas;
         }
