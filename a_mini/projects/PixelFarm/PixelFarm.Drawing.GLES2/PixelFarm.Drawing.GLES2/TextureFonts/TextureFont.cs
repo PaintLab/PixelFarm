@@ -124,11 +124,7 @@ namespace PixelFarm.Drawing.Fonts
                 return actualFont.FontFace;
             }
         }
-        public override float GetAdvanceForCharacter(char c)
-        {
-            return actualFont.GetAdvanceForCharacter(c);
-        }
-
+      
       
 
         public override FontGlyph GetGlyph(char c)
