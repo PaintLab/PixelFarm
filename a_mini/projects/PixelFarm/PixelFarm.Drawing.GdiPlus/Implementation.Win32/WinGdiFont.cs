@@ -196,7 +196,7 @@ namespace PixelFarm.Drawing.WinGdi
                 registerFonts.Add(key, found);//cache here
             }
             latestFont = f;
-            RequestFont.SetCacheActualFont(f, latestWinFont);
+            RequestFont.SetCacheActualFont(f, found);
             return latestWinFont = found;
         }
     }
