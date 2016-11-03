@@ -34,6 +34,7 @@
             this.cmd_Windows_OnlyGdiPlus = new System.Windows.Forms.Button();
             this.cmd_Windows_NoGdiPlus_NoWinForms = new System.Windows.Forms.Button();
             this.cmd_Cross = new System.Windows.Forms.Button();
+            this.cmdCopyNativeLibs = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuildMergePixelFarm
@@ -96,11 +97,22 @@
             this.cmd_Cross.UseVisualStyleBackColor = true;
             this.cmd_Cross.Click += new System.EventHandler(this.cmd_Cross_Click);
             // 
+            // cmdCopyNativeLibs
+            // 
+            this.cmdCopyNativeLibs.Location = new System.Drawing.Point(500, 251);
+            this.cmdCopyNativeLibs.Name = "cmdCopyNativeLibs";
+            this.cmdCopyNativeLibs.Size = new System.Drawing.Size(184, 57);
+            this.cmdCopyNativeLibs.TabIndex = 6;
+            this.cmdCopyNativeLibs.Text = "Copy NativeLibs";
+            this.cmdCopyNativeLibs.UseVisualStyleBackColor = true;
+            this.cmdCopyNativeLibs.Click += new System.EventHandler(this.cmdCopyNativeLibs_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(872, 516);
+            this.Controls.Add(this.cmdCopyNativeLibs);
             this.Controls.Add(this.cmd_Cross);
             this.Controls.Add(this.cmd_Windows_NoGdiPlus_NoWinForms);
             this.Controls.Add(this.cmd_Windows_OnlyGdiPlus);
@@ -121,6 +133,7 @@
         private System.Windows.Forms.Button cmd_Windows_OnlyGdiPlus;
         private System.Windows.Forms.Button cmd_Windows_NoGdiPlus_NoWinForms;
         private System.Windows.Forms.Button cmd_Cross;
+        private System.Windows.Forms.Button cmdCopyNativeLibs;
     }
 }
 
