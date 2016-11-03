@@ -9,7 +9,7 @@ namespace TypeMirror
     /// <summary>
     /// very base reflection helper
     /// </summary>
-    public static class SimpleReflectionHelper
+    static class SimpleReflectionHelper
     {
         public static Dictionary<string, T> GetEnumFields<T>()
         {
