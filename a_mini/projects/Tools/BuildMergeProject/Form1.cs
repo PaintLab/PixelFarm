@@ -67,6 +67,7 @@ namespace BuildMergeProject
         {
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\TypeMirror\TypeMirror.csproj");
             //
             mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
@@ -207,8 +208,7 @@ namespace BuildMergeProject
                 srcFolder+"libEGL.dll", // angle project
                 srcFolder+"libGLESv2.dll",// angle project
                 srcFolder +"myft.dll", //font, icu, native image lib
-                srcFolder +"natives32/glfw3.dll", //glfw
-                srcFolder +"natives32/glfw3.dll", //glfw
+                srcFolder +"natives32/glfw3.dll", //glfw 
                 @"D:\WImageTest\icudt57l\icudt57l.dat",//icu data
 
             };
