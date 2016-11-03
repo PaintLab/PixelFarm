@@ -67,6 +67,7 @@ namespace BuildMergeProject
         {
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\TypeMirror\TypeMirror.csproj");
             //
             mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
