@@ -35,6 +35,7 @@
             this.cmd_Windows_NoGdiPlus_NoWinForms = new System.Windows.Forms.Button();
             this.cmd_Cross = new System.Windows.Forms.Button();
             this.cmdCopyNativeLibs = new System.Windows.Forms.Button();
+            this.cmdForTestWithHtmlRenderer = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuildMergePixelFarm
@@ -107,11 +108,22 @@
             this.cmdCopyNativeLibs.UseVisualStyleBackColor = true;
             this.cmdCopyNativeLibs.Click += new System.EventHandler(this.cmdCopyNativeLibs_Click);
             // 
+            // cmdForTestWithHtmlRenderer
+            // 
+            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(25, 503);
+            this.cmdForTestWithHtmlRenderer.Name = "cmdForTestWithHtmlRenderer";
+            this.cmdForTestWithHtmlRenderer.Size = new System.Drawing.Size(360, 57);
+            this.cmdForTestWithHtmlRenderer.TabIndex = 7;
+            this.cmdForTestWithHtmlRenderer.Text = "TEST BuildMerge PixelFarm.One.HtmlRenderer";
+            this.cmdForTestWithHtmlRenderer.UseVisualStyleBackColor = true;
+            this.cmdForTestWithHtmlRenderer.Click += new System.EventHandler(this.cmdForTestWithHtmlRenderer_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(872, 516);
+            this.ClientSize = new System.Drawing.Size(872, 565);
+            this.Controls.Add(this.cmdForTestWithHtmlRenderer);
             this.Controls.Add(this.cmdCopyNativeLibs);
             this.Controls.Add(this.cmd_Cross);
             this.Controls.Add(this.cmd_Windows_NoGdiPlus_NoWinForms);
@@ -134,6 +146,7 @@
         private System.Windows.Forms.Button cmd_Windows_NoGdiPlus_NoWinForms;
         private System.Windows.Forms.Button cmd_Cross;
         private System.Windows.Forms.Button cmdCopyNativeLibs;
+        private System.Windows.Forms.Button cmdForTestWithHtmlRenderer;
     }
 }
 
