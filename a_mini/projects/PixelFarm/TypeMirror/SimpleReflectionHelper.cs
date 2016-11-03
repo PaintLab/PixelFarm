@@ -11,7 +11,10 @@ namespace TypeMirror
     /// </summary>
     static class SimpleReflectionHelper
     {
-        public static Dictionary<string, T> GetEnumFields<T>()
+        public delegate string FieldNameEvaluationHandler(System.Reflection.FieldInfo f);
+
+
+        public static Dictionary<string, T> GetEnumFields<T>(FieldNameEvaluationHandler fieldNameEvaluationHandler = null)
         {
             Dictionary<string, T> results = new Dictionary<string, T>();
             Type typeOfSample = typeof(T);
@@ -25,7 +28,14 @@ namespace TypeMirror
                 object value = f.GetValue(null);
                 if (value is T)
                 {
-                    results.Add(f.Name, (T)value);
+                    if (fieldNameEvaluationHandler != null)
+                    {
+                        results.Add(fieldNameEvaluationHandler(f), (T)value);
+                    }
+                    else
+                    {
+                        results.Add(f.Name, (T)value);
+                    }
                 }
             }
             return results;
