@@ -88,6 +88,7 @@
     <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="Experiment\FontSystem.cs" />
     <Compile Include="Experiment\GdiPathConverter.cs" />
     <Compile Include="Experiment\GdiPathFont.cs" />
     <Compile Include="Experiment\GdiPathFontFace.cs" />

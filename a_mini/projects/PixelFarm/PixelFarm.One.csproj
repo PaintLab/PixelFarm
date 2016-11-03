@@ -184,6 +184,7 @@
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Typeface.cs" />
     <Compile Include="PixelFarm.DataProvider\Bitmap\NativeImage.cs" />
     <Compile Include="PixelFarm.DataProvider\InstalledFontCollection.cs" />
+    <Compile Include="PixelFarm.DataProvider\ManagedTextBreaker\ManagedTextBreaker.cs" />
     <Compile Include="PixelFarm.DataProvider\NativeDll.cs" />
     <Compile Include="PixelFarm.DataProvider\NativeFonts\FontLoaderImpls.cs" />
     <Compile Include="PixelFarm.DataProvider\NativeFonts\NativeBridgeFreeType.cs" />
@@ -336,7 +337,6 @@
     <Compile Include="PixelFarm.Drawing.GLES2\DrawingGL\GLTexture\GLBitmapReference.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\DrawingGL\GLTexture\TextureAtlas.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2\0_Start\FontSystem.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2\0_Start\GLES2Platform.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2\Canvas\1_MyGLCanvas_Specific.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2\Canvas\2_MyGLCanvas_CoordinateAndClip.cs" />

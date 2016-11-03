@@ -1,6 +1,8 @@
 ﻿//2016, MIT WinterDev
 
 using System;
+using System.IO;
+
 using System.Windows.Forms;
 namespace BuildMergeProject
 {
@@ -69,8 +71,8 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider\PixelFarm.DataProvider.csproj");            
-            
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider\PixelFarm.DataProvider.csproj");
+
             switch (mergeOption)
             {
                 default:
@@ -84,17 +86,17 @@ namespace BuildMergeProject
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
                     //                                   
-                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");  
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
-                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj"); 
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj");
                     break;
-                
+
                 case MergeOption.Windows_NoWinFormNoGdiPlus:
                     mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
-                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");       
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
-                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");                                  
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
                     break;
             }
             // 
@@ -186,6 +188,41 @@ namespace BuildMergeProject
             //      "System.Windows.Forms",
             //      "System.Xml",
             //   });
+        }
+
+        private void cmdCopyNativeLibs_Click(object sender, EventArgs e)
+        {
+
+            //this copy essential native lib to target folder
+            
+            //event we select native files from debug folder
+            //theses native dll must be in release mode
+            //TODO: review here=> //choose file from release folder
+            
+
+            string srcFolder = @"D:\projects\PixelFarm-dev\a_mini\projects\Tests\Debug\";
+
+            string[] nativeFileList = new string[]{
+                srcFolder+"d3dcompiler_47.dll",// angle project
+                srcFolder+"libEGL.dll", // angle project
+                srcFolder+"libGLESv2.dll",// angle project
+                srcFolder +"myft.dll", //font, icu, native image lib
+                srcFolder +"natives32/glfw3.dll", //glfw
+                srcFolder +"natives32/glfw3.dll", //glfw
+                @"D:\WImageTest\icudt57l\icudt57l.dat",//icu data
+
+            };
+            //------
+            string targetFolder = rootProjectFolders + @"\ess_natives\";
+            foreach (string srcFile in nativeFileList)
+            {
+                //copy to target folder
+
+                File.Copy(srcFile,
+                    targetFolder + Path.GetFileName(srcFile),
+                    true);
+            }
+
         }
 
 

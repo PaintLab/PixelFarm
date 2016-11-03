@@ -885,5 +885,13 @@ namespace BuildTextureFonts
             Win32.MyWin32.DeleteObject(dib);
             Win32.Win32Utils.DeleteDC(memHdc);
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+#if DEBUG
+            dbugTestMyFtLib.Test2();
+#endif
+
+        }
     }
 }
