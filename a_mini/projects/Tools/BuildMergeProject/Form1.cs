@@ -225,6 +225,29 @@ namespace BuildMergeProject
 
         }
 
+        private void cmdForTestWithHtmlRenderer_Click(object sender, EventArgs e)
+        {
+            //this for test ****
+            //Windows:
+            //-------------------------
+            //no glfw.dll,
+            //no myft.dll,
+            //no gles libs
+            //-------------------------
+            MergeProject mergePro = CreateMergePixelFarmOneProject(MergeOption.Windows_NoCustomNativeDll);
+
+            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.One.HtmlRenderer.csproj",
+               "PixelFarm.One.HtmlRenderer",
+               "v2.0",
+               "",//additional define constant
+               new string[] {
+                  "System",
+                  "System.Drawing",
+                  "System.Windows.Forms",
+                  "System.Xml",
+               });
+        }
+ 
 
 
     }

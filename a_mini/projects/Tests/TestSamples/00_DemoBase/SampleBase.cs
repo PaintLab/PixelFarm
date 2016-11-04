@@ -24,7 +24,10 @@ namespace OpenTkEssTest
         public int Height { get; set; }
 
         protected void SwapBuffer() { }
-
+        public PixelFarm.DrawingGL.CanvasGL2d CreateCanvasGL2d(int w,int h)
+        {
+            return PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
+        }
         protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(string imgFileName)
         {
             //1. create native image

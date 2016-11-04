@@ -38,8 +38,8 @@ namespace OpenTkEssTest
             lionShape.ParseLion();
             RectD lionBounds = lionShape.Bounds;
             //-------------
-            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.Image.PixelFormat.ARGB32);
-            imgGfx2d = new ImageGraphics2D(aggImage, null);
+            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.Imaging.PixelFormat.ARGB32);
+            imgGfx2d = new ImageGraphics2D(aggImage);
             aggPainter = new AggCanvasPainter(imgGfx2d);
 
             DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
@@ -47,7 +47,7 @@ namespace OpenTkEssTest
             glBmp = LoadTexture(aggImage);
 
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max);
+            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
             //------------------------- 
             painter = new GLCanvasPainter(canvas2d, max, max);
         }

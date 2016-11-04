@@ -30,7 +30,7 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using Mini;
 namespace PixelFarm.Agg.Sample_Images
 {

@@ -3,7 +3,7 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest2
@@ -19,7 +19,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
-            gfx = Graphics2D.CreateFromImage(destImage, Program._winGdiPlatForm);
+            gfx = Graphics2D.CreateFromImage(destImage);
         }
         protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
         {

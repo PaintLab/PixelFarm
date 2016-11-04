@@ -20,7 +20,7 @@ namespace OpenTkEssTest
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max);
+            canvas2d = CreateCanvasGL2d(max, max);
             lionShape = new SpriteShape();
             lionShape.ParseLion();
             //flip this lion vertically before use with openGL

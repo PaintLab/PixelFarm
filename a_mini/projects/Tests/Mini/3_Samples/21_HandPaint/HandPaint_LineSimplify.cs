@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using PixelFarm.VectorMath;
 using Mini;
 using burningmime.curves; //for curve fit

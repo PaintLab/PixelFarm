@@ -20,7 +20,7 @@ namespace OpenTkEssTest
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max);
+            canvas2d = CreateCanvasGL2d(max, max);
            
             frameBuffer = canvas2d.CreateFrameBuffer(this.Width, this.Height);
             frameBufferNeedUpdate = true;
