@@ -47,7 +47,7 @@ namespace OpenTkEssTest
             glBmp = LoadTexture(aggImage);
 
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max);
+            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
             //------------------------- 
             painter = new GLCanvasPainter(canvas2d, max, max);
         }

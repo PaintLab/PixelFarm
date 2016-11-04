@@ -31,11 +31,12 @@ namespace Mini
                 hh1 = miniGLControl.Handle;
                 miniGLControl.MakeCurrent();
                 int max = Math.Max(this.Width, this.Height);
-                canvas2d = new CanvasGL2d(max, max);
+                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
                 canvasPainter = new GLCanvasPainter(canvas2d, max, max);
             }
             return miniGLControl;
         }
+        
         public MyMiniGLES2Control MiniGLControl
         {
             get { return this.miniGLControl; }
