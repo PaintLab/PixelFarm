@@ -8,6 +8,7 @@ namespace PixelFarm.Drawing
         public abstract void Dispose();
         public abstract int Width { get; }
         public abstract int Height { get; }
+
         public abstract System.IDisposable InnerImage { get; set; }
         public Size Size
         {
