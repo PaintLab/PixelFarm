@@ -4,6 +4,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using PixelFarm.Agg;
+using PixelFarm.Agg.Imaging;
+
 using PixelFarm.Drawing.Fonts;
 
 namespace Mini
@@ -14,7 +16,7 @@ namespace Mini
         DemoBase exampleBase;
         int myWidth = 800;
         int myHeight = 600;
-        GdiPlusBitmapBackBuffer bitmapBackBuffer;
+        GdiBitmapBackBuffer bitmapBackBuffer;
         CanvasPainter painter;
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
@@ -23,7 +25,7 @@ namespace Mini
         Rectangle bufferBmpRect;
         public SoftAggControl()
         {
-            bitmapBackBuffer = new GdiPlusBitmapBackBuffer();
+            bitmapBackBuffer = new GdiBitmapBackBuffer();
             _useGdiPlusOutput = false;
             InitializeComponent();
             this.Load += new EventHandler(SoftAggControl_Load);
@@ -55,7 +57,7 @@ namespace Mini
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
                 bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter( bufferBmp);
+                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
                 p.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
 
                 painter = p;
@@ -130,7 +132,11 @@ namespace Mini
             if (!_useGdiPlusOutput)
             {
                 exampleBase.Draw(painter);
-                bitmapBackBuffer.UpdateToHardwareSurface(e.Graphics);
+
+                Graphics g = e.Graphics;
+                IntPtr displayDC = g.GetHdc();
+                bitmapBackBuffer.UpdateToHardwareSurface(displayDC);
+                g.ReleaseHdc(displayDC);
             }
             else
             {
