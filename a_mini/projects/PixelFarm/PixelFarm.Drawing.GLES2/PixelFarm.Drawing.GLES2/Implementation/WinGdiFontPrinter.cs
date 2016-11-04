@@ -85,7 +85,7 @@ namespace PixelFarm.DrawingGL
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   
-            byte[] buffer = actualImg.GetBuffer();
+            byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImg); 
             unsafe
             {
                 byte* header = (byte*)memdc.PPVBits;

@@ -294,7 +294,7 @@ namespace PixelFarm.Drawing.WinGdi
             //copy data to bitmap
             //bgra  
             var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            byte[] acutalBuffer = actualImage.GetBuffer();
+            byte[] acutalBuffer = ActualImage.GetBuffer(actualImage);
             var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
             System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
             bmp.UnlockBits(bmpData);

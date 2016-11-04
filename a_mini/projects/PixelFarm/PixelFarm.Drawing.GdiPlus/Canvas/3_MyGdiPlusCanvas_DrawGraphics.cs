@@ -191,10 +191,36 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        System.Drawing.Bitmap ResolveInnerBmp(Image image)
+        static System.Drawing.Bitmap ResolveInnerBmp(Image image)
         {
-            var innerImg = Image.GetCacheInnerImage(image);
-            return innerImg as System.Drawing.Bitmap;
+
+            if (image is PixelFarm.Agg.ActualImage)
+            {
+                //this is known image
+                var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+                if (cacheBmp == null)
+                {
+
+                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
+                        image.Height,
+                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    //
+                    PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
+                    //
+                    Image.SetCacheInnerImage(image, bmp);
+                    return bmp;
+                }
+                else
+                {
+                    //check if cache image is update or not 
+                    return cacheBmp;
+                }
+            }
+            else
+            {
+                //other image
+                return Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+            }
         }
 
         /// <summary>

@@ -67,7 +67,7 @@ namespace PixelFarm.Agg
         }
         public override void Dispose()
         {
-             
+
         }
         public override int Width
         {
@@ -93,23 +93,18 @@ namespace PixelFarm.Agg
         {
             get { return false; }
         }
-        //public override IDisposable InnerImage
-        //{
-        //    get
-        //    {
-        //        return innerImage;
-        //    }
-        //    set
-        //    {
-        //        innerImage = value;
-        //    }
-        //}
+
         public PixelFormat PixelFormat { get { return this.pixelFormat; } }
         public int Stride { get { return this.stride; } }
         public int BitDepth { get { return this.bitDepth; } }
-        public byte[] GetBuffer()
+
+
+        public static byte[] GetBuffer(ActualImage img)
         {
-            return this.pixelBuffer;
+            return img.pixelBuffer;
+           
         }
+ 
+
     }
 }

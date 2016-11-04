@@ -39,7 +39,7 @@ namespace OpenTkEssTest
             RectD lionBounds = lionShape.Bounds;
             //-------------
             aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.Image.PixelFormat.ARGB32);
-            imgGfx2d = new ImageGraphics2D(aggImage, null);
+            imgGfx2d = new ImageGraphics2D(aggImage);
             aggPainter = new AggCanvasPainter(imgGfx2d);
 
             DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
