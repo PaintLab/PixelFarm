@@ -30,7 +30,7 @@ namespace PixelFarm.DrawingGL
         public void Dispose()
         {
             //TODO: review here 
-            Win32.MyWin32 .DeleteObject(hfont);
+            Win32.MyWin32.DeleteObject(hfont);
             hfont = IntPtr.Zero;
             memdc.Dispose();
         }

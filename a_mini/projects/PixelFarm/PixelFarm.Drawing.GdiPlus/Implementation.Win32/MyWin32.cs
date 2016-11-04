@@ -207,8 +207,29 @@ namespace Win32
         public static extern IntPtr CreateSolidBrush(int crColor);
         [DllImport("gdi32.dll")]
         public extern static int SetTextColor(IntPtr hdc, int newcolorRef);
+        /// <summary>
+        /// request font 
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct LOGFONT
+        {
+            public int lfHeight;
+            public int lfWidth;
+            public int lfEscapement;
+            public int lfOrientation;
+            public int lfWeight;
+            public byte lfItalic;
+            public byte lfUnderline;
+            public byte lfStrikeOut;
+            public byte lfCharSet;
+            public byte lfOutPrecision;
+            public byte lfClipPrecision;
+            public byte lfQuality;
+            public byte lfPitchAndFamily;
+            public fixed char lfFaceName[32];//[LF_FACESIZE = 32];
+        }
 
-        [DllImport("gdi32.dll")]
+        [DllImport("gdi32.dll", CharSet = CharSet.Unicode)] //need -> unicode
         public extern static IntPtr CreateFontIndirect(ref LOGFONT logFont);
 
         public static unsafe void SetFontName(ref LOGFONT logFont, string fontName)
@@ -345,27 +366,6 @@ namespace Win32
             public float abcfC;
         }
 
-        /// <summary>
-        /// request font 
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct LOGFONT
-        {
-            public int lfHeight;
-            public int lfWidth;
-            public int lfEscapement;
-            public int lfOrientation;
-            public int lfWeight;
-            public byte lfItalic;
-            public byte lfUnderline;
-            public byte lfStrikeOut;
-            public byte lfCharSet;
-            public byte lfOutPrecision;
-            public byte lfClipPrecision;
-            public byte lfQuality;
-            public byte lfPitchAndFamily;
-            public fixed char lfFaceName[32];//[LF_FACESIZE = 32];
-        }
 
 
         /*       BOOL GetCharABCWidths(
