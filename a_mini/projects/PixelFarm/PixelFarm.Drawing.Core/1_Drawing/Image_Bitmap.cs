@@ -9,7 +9,7 @@ namespace PixelFarm.Drawing
         public abstract int Width { get; }
         public abstract int Height { get; }
 
-        public abstract System.IDisposable InnerImage { get; set; }
+        //public abstract System.IDisposable InnerImage { get; set; }
         public Size Size
         {
             get { return new Size(this.Width, this.Height); }
@@ -17,6 +17,17 @@ namespace PixelFarm.Drawing
         public abstract bool IsReferenceImage { get; }
         public abstract int ReferenceX { get; }
         public abstract int ReferenceY { get; }
+
+        //--------
+        System.IDisposable innerImage;
+        public static System.IDisposable GetCacheInnerImage(Image img)
+        {
+            return img.innerImage;
+        }
+        public static void SetCacheInnerImage(Image img, System.IDisposable innerImage)
+        {
+            img.innerImage = innerImage;
+        }
     }
 
     //public sealed class Bitmap : Image

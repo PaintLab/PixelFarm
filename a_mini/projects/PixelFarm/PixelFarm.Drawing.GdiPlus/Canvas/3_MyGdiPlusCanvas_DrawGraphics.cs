@@ -190,6 +190,13 @@ namespace PixelFarm.Drawing.WinGdi
                 gx.SmoothingMode = (System.Drawing.Drawing2D.SmoothingMode)value;
             }
         }
+
+        System.Drawing.Bitmap ResolveInnerBmp(Image image)
+        {
+            var innerImg = Image.GetCacheInnerImage(image);
+            return innerImg as System.Drawing.Bitmap;
+        }
+
         /// <summary>
         /// Draws the specified portion of the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
@@ -200,7 +207,8 @@ namespace PixelFarm.Drawing.WinGdi
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
             ReleaseHdc();
-            gx.DrawImage(image.InnerImage as System.Drawing.Image,
+
+            gx.DrawImage(ResolveInnerBmp(image),
                 destRect.ToRectF(),
                 srcRect.ToRectF(),
                 System.Drawing.GraphicsUnit.Pixel);
@@ -217,7 +225,7 @@ namespace PixelFarm.Drawing.WinGdi
                     j -= 1;
                 }
                 //loop draw
-                var inner = image.InnerImage as System.Drawing.Image;
+                var inner = ResolveInnerBmp(image);
                 for (int i = 0; i < j; )
                 {
                     gx.DrawImage(inner,
@@ -235,9 +243,10 @@ namespace PixelFarm.Drawing.WinGdi
         public override void DrawImage(Image image, RectangleF destRect)
         {
             ReleaseHdc();
+            System.Drawing.Bitmap inner = ResolveInnerBmp(image);
             if (image.IsReferenceImage)
             {
-                gx.DrawImage(image.InnerImage as System.Drawing.Image,
+                gx.DrawImage(inner,
                     destRect.ToRectF(),
                      new System.Drawing.RectangleF(
                          image.ReferenceX, image.ReferenceY,
@@ -246,7 +255,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             else
             {
-                gx.DrawImage(image.InnerImage as System.Drawing.Image, destRect.ToRectF());
+                gx.DrawImage(inner, destRect.ToRectF());
             }
         }
         public override void FillPath(Color color, GraphicsPath gfxPath)

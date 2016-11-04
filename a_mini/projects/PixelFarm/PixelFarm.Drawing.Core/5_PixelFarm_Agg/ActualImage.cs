@@ -30,7 +30,7 @@ namespace PixelFarm.Agg
         int bitDepth;
         PixelFormat pixelFormat;
         byte[] pixelBuffer;
-        IDisposable innerImage;
+        
         public ActualImage(int width, int height, PixelFormat format)
         {
             //width and height must >0 
@@ -93,17 +93,17 @@ namespace PixelFarm.Agg
         {
             get { return false; }
         }
-        public override IDisposable InnerImage
-        {
-            get
-            {
-                return innerImage;
-            }
-            set
-            {
-                innerImage = value;
-            }
-        }
+        //public override IDisposable InnerImage
+        //{
+        //    get
+        //    {
+        //        return innerImage;
+        //    }
+        //    set
+        //    {
+        //        innerImage = value;
+        //    }
+        //}
         public PixelFormat PixelFormat { get { return this.pixelFormat; } }
         public int Stride { get { return this.stride; } }
         public int BitDepth { get { return this.bitDepth; } }
