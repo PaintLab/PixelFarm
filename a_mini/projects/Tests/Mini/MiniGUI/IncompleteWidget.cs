@@ -21,7 +21,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.UI

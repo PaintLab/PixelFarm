@@ -31,7 +31,7 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.Lines;
 using Mini;
 namespace PixelFarm.Agg.Sample_LionOutline

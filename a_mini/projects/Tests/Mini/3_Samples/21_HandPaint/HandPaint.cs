@@ -31,7 +31,7 @@ either expressed or implied, of the FreeBSD Project.
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using Mini;
 namespace PixelFarm.Agg.Samples
 {

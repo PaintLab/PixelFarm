@@ -3,7 +3,7 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing.Fonts;
@@ -21,7 +21,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
         {
             BackgroundColor = Color.White;
             imageToFillOn = new ActualImage(400, 300, PixelFormat.ARGB32);
-            ImageGraphics2D imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn, Program._winGdiPlatForm);
+            ImageGraphics2D imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
             imageToFillGraphics.Clear(Color.White);
             //imageToFillGraphics.DrawString("Click to fill", 20, 30);
             imageToFillGraphics.Circle(new Vector2(200, 150), 35, Color.Black);

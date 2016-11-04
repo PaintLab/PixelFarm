@@ -21,7 +21,7 @@ namespace OpenTkEssTest
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = new CanvasGL2d(max, max);
+            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
 
             PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
                  "d:\\WImageTest\\a_total.xml",

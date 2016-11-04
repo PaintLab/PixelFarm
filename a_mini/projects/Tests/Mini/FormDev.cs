@@ -160,7 +160,7 @@ namespace Mini
                 var source = new int[width * height];
                 var dest = new int[width * height];
                 Marshal.Copy(bitmapData.Scan0, source, 0, source.Length);
-                PixelFarm.Agg.Image.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
+                PixelFarm.Agg.Imaging.StackBlurARGB.FastBlur32ARGB(source, dest, width, height, 15);
                 Marshal.Copy(dest, 0, bitmapData.Scan0, dest.Length);
                 bmp.UnlockBits(bitmapData);
                 bmp.Save("d:\\WImageTest\\test002_2.png");
@@ -245,8 +245,8 @@ namespace Mini
                 int bmpH = 500;
                 using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
                 {
-                    ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Image.PixelFormat.ARGB32);
-                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage, Program._winGdiPlatForm);
+                    ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Imaging.PixelFormat.ARGB32);
+                    Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
                     var vxs = new VertexStore();
                     //vxs.AddMoveTo(0, 0);
                     ////vxs.AddP3c(100, 0);
@@ -268,7 +268,7 @@ namespace Mini
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
                     gfx.UseSubPixelRendering = true;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-                    PixelFarm.Agg.Image.BitmapHelper.CopyToWindowsBitmap(
+                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToWindowsBitmap(
                       actualImage, //src from actual img buffer
                       bufferBmp, //dest to buffer bmp
                      new RectInt(0, 0, bmpW, bmpH));
