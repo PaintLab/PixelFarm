@@ -844,7 +844,7 @@ namespace BuildTextureFonts
             IntPtr dib;
             IntPtr ppvBits;
             int bmpWidth = 200;
-            IntPtr memHdc = Win32.Win32Utils.CreateMemoryHdc(hdc, bmpWidth, 50, out dib, out ppvBits);
+            IntPtr memHdc = Win32.MyWin32.CreateMemoryHdc(hdc, bmpWidth, 50, out dib, out ppvBits);
             Win32.MyWin32.PatBlt(memHdc, 0, 0, bmpWidth, 50, Win32.MyWin32.WHITENESS);
 
             IntPtr hfont = ff.ToHfont();
@@ -852,7 +852,7 @@ namespace BuildTextureFonts
             Win32.MyWin32.SetTextColor(memHdc, 0);
             Win32.NativeTextWin32.TextOut(memHdc, 0, 0, "OKOK\0", 4);
 
-            Win32.Win32Utils.BitBlt(hdc, 0, 0, bmpWidth, 50, memHdc, 0, 0, Win32.MyWin32.SRCCOPY);
+            Win32.MyWin32.BitBlt(hdc, 0, 0, bmpWidth, 50, memHdc, 0, 0, Win32.MyWin32.SRCCOPY);
             //---------------
             int stride = 4 * ((bmpWidth * 32 + 31) / 32);
 
@@ -883,7 +883,7 @@ namespace BuildTextureFonts
 
             //Win32.MyWin32.DeleteObject(hbmp);
             Win32.MyWin32.DeleteObject(dib);
-            Win32.Win32Utils.DeleteDC(memHdc);
+            Win32.MyWin32.DeleteDC(memHdc);
         }
 
         private void button9_Click(object sender, EventArgs e)
