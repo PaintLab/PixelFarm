@@ -35,19 +35,174 @@ using PixelFarm.Agg;
 using PixelFarm.Agg.Imaging;
 namespace Mini
 {
-    public class GdiPlusBitmapBackBuffer
+    public class GdiPlusBitmapBackBuffer : IDisposable
     {
         ActualImage actualImage;
         Bitmap bufferBmp;
         Graphics bufferGfx;
         int width;
         int height;
+        //
+        IntPtr hBitmap;
+        IntPtr hbmpScan0;
+
+        int stride;
 
         public GdiPlusBitmapBackBuffer()
         {
         }
-
+        public void Dispose()
+        {
+            if (hBitmap != IntPtr.Zero)
+            {
+                Win32.MyWin32.DeleteObject(hBitmap);
+                hBitmap = IntPtr.Zero;
+            }
+        }
         const int SRCCOPY = 0xcc0020;
+
+        /// <summary>
+        /// copy buffer to 
+        /// </summary>
+        /// <param name="dest"></param>
+        public void UpdateToHardwareSurface(Graphics dest)
+        {
+            //-----------------------------------------------
+            //copy from actual img buffer (src) 
+            BitmapHelper.CopyToWindowsBitmapSameSize(
+                this.actualImage,   //src from actual img buffer
+                hbmpScan0);//dest to buffer bmp                 
+            //-----------------------------------------------
+            //prepare buffer dc ****
+            IntPtr bufferDc = bufferGfx.GetHdc();
+            IntPtr hOldObject = Win32.MyWin32.SelectObject(bufferDc, hBitmap);
+            //------------------------------------------------
+            //target dc
+            IntPtr displayHdc = dest.GetHdc();
+            //copy from buffer dc to target display dc 
+            bool result = Win32.MyWin32.BitBlt(displayHdc, 0, 0,
+                 bufferBmp.Width,
+                 bufferBmp.Height,
+                 bufferDc, 0, 0, SRCCOPY);
+            //------------------------------------------------
+            Win32.MyWin32.SelectObject(bufferDc, hOldObject);
+
+            bufferGfx.ReleaseHdc(bufferDc);
+            dest.ReleaseHdc(displayHdc);
+        }
+#if DEBUG
+        /// <summary>
+        /// preseve for study, history  
+        /// </summary>
+        /// <param name="dest"></param>
+        public void dbugUpdateToHardwareSurface_Old(Graphics dest)
+        {
+            //-----------------------------------------------
+            //copy from actual img buffer (src) 
+            BitmapHelper.CopyToGdiPlusBitmapSameSize(
+                this.actualImage, //src from actual img buffer
+                this.bufferBmp);//dest to buffer bmp                 
+            //-----------------------------------------------
+            //prepare buffer dc ****
+            IntPtr bufferDc = bufferGfx.GetHdc();
+            IntPtr hBitmap = bufferBmp.GetHbitmap();
+            IntPtr hOldObject = Win32.MyWin32.SelectObject(bufferDc, hBitmap);
+            //------------------------------------------------
+            //target dc
+            IntPtr displayHdc = dest.GetHdc();
+            //copy from buffer dc to target display dc 
+            bool result = Win32.MyWin32.BitBlt(displayHdc, 0, 0,
+                 bufferBmp.Width,
+                 bufferBmp.Height,
+                 bufferDc, 0, 0, SRCCOPY);
+            //------------------------------------------------
+            Win32.MyWin32.SelectObject(bufferDc, hOldObject);
+
+            Win32.MyWin32.DeleteObject(hBitmap);
+            bufferGfx.ReleaseHdc(bufferDc);
+            dest.ReleaseHdc(displayHdc);
+        }
+#endif
+        public ImageGraphics2D Initialize(int width, int height, int bitDepth)
+        {
+            if (width > 0 && height > 0)
+            {
+                this.width = width;
+                this.height = height;
+                switch (bitDepth)
+                {
+                    case 24:
+                        {
+                            bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                            var bmpData = bufferBmp.LockBits(new Rectangle(0, 0, width, height),
+                             System.Drawing.Imaging.ImageLockMode.ReadOnly, bufferBmp.PixelFormat);
+                            this.stride = bmpData.Stride;
+                            bufferBmp.UnlockBits(bmpData);
+
+
+                            actualImage = new ActualImage(width, height, PixelFarm.Agg.Imaging.PixelFormat.RGB24);
+                            bufferGfx = Graphics.FromImage(bufferBmp);
+                            return Graphics2D.CreateFromImage(actualImage);
+                        }
+                    case 32:
+                        {
+                            bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);//***
+                            //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                            //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            //32bppPArgb  
+
+                            var bmpData = bufferBmp.LockBits(new Rectangle(0, 0, width, height),
+                                 System.Drawing.Imaging.ImageLockMode.ReadOnly, bufferBmp.PixelFormat);
+                            this.stride = bmpData.Stride;
+                            bufferBmp.UnlockBits(bmpData);
+
+                            actualImage = new ActualImage(width, height, PixelFormat.ARGB32);
+                            bufferGfx = Graphics.FromImage(bufferBmp);
+                            hBitmap = bufferBmp.GetHbitmap();
+
+
+                            Win32.BITMAP win32Bitmap = new Win32.BITMAP();
+                            unsafe
+                            {
+                                Win32.MyWin32.GetObject(hBitmap,
+                                    System.Runtime.InteropServices.Marshal.SizeOf(typeof(Win32.BITMAP)),
+                                      &win32Bitmap);
+                                hbmpScan0 = (IntPtr)win32Bitmap.bmBits;
+                            }
+
+
+                            return Graphics2D.CreateFromImage(actualImage);
+                        }
+                    case 128:
+                    //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                    //backingImageBufferByte = null;
+                    //backingImageBufferFloat = new ImageBufferFloat(width, height, 128, new BlenderBGRAFloat());
+                    //break;
+
+                    default:
+                        throw new NotImplementedException("Don't support this bit depth yet.");
+                }
+            }
+            throw new NotSupportedException();
+        }
+
+        public Graphics2D CreateNewGraphic2D()
+        {
+            Graphics2D graphics2D;
+            if (actualImage != null)
+            {
+                graphics2D = Graphics2D.CreateFromImage(actualImage);
+            }
+            else
+            {
+                throw new NotSupportedException();
+                //graphics2D = bitmapBackBuffer.backingImageBufferFloat.NewGraphics2D();
+            }
+
+            return graphics2D;
+        }
+        //-------------
         ///// <summary>
         ///// update actual image data to windowsBitmap
         ///// </summary>
@@ -79,90 +234,6 @@ namespace Mini
         //    dest.ReleaseHdc(displayHdc);
         //}
 
-
-        /// <summary>
-        /// copy buffer to 
-        /// </summary>
-        /// <param name="dest"></param>
-        public void UpdateToHardwareSurface(Graphics dest)
-        {
-            //-----------------------------------------------
-            //copy from actual img buffer (src) 
-            BitmapHelper.CopyToWindowsBitmapSameSize(
-                this.actualImage, //src from actual img buffer
-                this.bufferBmp);//dest to buffer bmp                 
-            //-----------------------------------------------
-            //prepare buffer dc ****
-            IntPtr bufferDc = bufferGfx.GetHdc();
-            IntPtr hBitmap = bufferBmp.GetHbitmap();
-            IntPtr hOldObject = Win32.MyWin32.SelectObject(bufferDc, hBitmap);
-            //------------------------------------------------
-            //target dc
-            IntPtr displayHdc = dest.GetHdc();
-            //copy from buffer dc to target display dc 
-            bool result = Win32.MyWin32.BitBlt(displayHdc, 0, 0,
-                 bufferBmp.Width,
-                 bufferBmp.Height,
-                 bufferDc, 0, 0, SRCCOPY);
-            //------------------------------------------------
-            Win32.MyWin32.SelectObject(bufferDc, hOldObject);
-
-            Win32.MyWin32.DeleteObject(hBitmap);
-            bufferGfx.ReleaseHdc(bufferDc);
-            dest.ReleaseHdc(displayHdc);
-        }
-        public ImageGraphics2D Initialize(int width, int height, int bitDepth)
-        {
-            if (width > 0 && height > 0)
-            {
-                this.width = width;
-                this.height = height;
-                switch (bitDepth)
-                {
-                    case 24:
-                        bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                        actualImage = new ActualImage(width, height, PixelFarm.Agg.Imaging.PixelFormat.RGB24);
-                        bufferGfx = Graphics.FromImage(bufferBmp);
-                        return Graphics2D.CreateFromImage(actualImage);
-                    case 32:
-
-                        bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);//***
-                        //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                        //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-                        //widowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                        //32bppPArgb                         
-                        actualImage = new ActualImage(width, height, PixelFormat.ARGB32);
-                        bufferGfx = Graphics.FromImage(bufferBmp);
-                        return Graphics2D.CreateFromImage(actualImage);
-                    case 128:
-                    //windowsBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                    //backingImageBufferByte = null;
-                    //backingImageBufferFloat = new ImageBufferFloat(width, height, 128, new BlenderBGRAFloat());
-                    //break;
-
-                    default:
-                        throw new NotImplementedException("Don't support this bit depth yet.");
-                }
-            }
-            throw new NotSupportedException();
-        }
-
-        public Graphics2D CreateNewGraphic2D()
-        {
-            Graphics2D graphics2D;
-            if (actualImage != null)
-            {
-                graphics2D = Graphics2D.CreateFromImage(actualImage);
-            }
-            else
-            {
-                throw new NotSupportedException();
-                //graphics2D = bitmapBackBuffer.backingImageBufferFloat.NewGraphics2D();
-            }
-
-            return graphics2D;
-        }
-        //-------------
 
     }
 }
