@@ -42,7 +42,7 @@ namespace Mini
         Graphics bufferGfx;
         int width;
         int height;
-        //
+        Win32.NativeWin32MemoryDc nativeWin32Dc;
         IntPtr hBitmap;
         IntPtr hbmpScan0;
 
@@ -67,6 +67,13 @@ namespace Mini
         /// <param name="dest"></param>
         public void UpdateToHardwareSurface(Graphics dest)
         {
+
+            IntPtr bufferDc = bufferGfx.GetHdc();
+            IntPtr hOldObject = Win32.MyWin32.SelectObject(bufferDc, hBitmap);
+            //-----------------------------------------------
+            //TODO: review here
+            //if actual image is not change from last copy
+            //then we can use a cached?
             //-----------------------------------------------
             //copy from actual img buffer (src) 
             BitmapHelper.CopyToWindowsBitmapSameSize(
@@ -74,8 +81,7 @@ namespace Mini
                 hbmpScan0);//dest to buffer bmp                 
             //-----------------------------------------------
             //prepare buffer dc ****
-            IntPtr bufferDc = bufferGfx.GetHdc();
-            IntPtr hOldObject = Win32.MyWin32.SelectObject(bufferDc, hBitmap);
+
             //------------------------------------------------
             //target dc
             IntPtr displayHdc = dest.GetHdc();
@@ -91,6 +97,64 @@ namespace Mini
             dest.ReleaseHdc(displayHdc);
         }
 #if DEBUG
+        public void dbugUpdateToHardwareSurface2(Graphics dest)
+        {
+
+            //TODO: fixed this
+            //this not correct size the target dc 
+            //has different size with internal hBitmap
+            IntPtr displayHdc = dest.GetHdc();
+            //copy from buffer dc to target display dc 
+            IntPtr hOldObject = Win32.MyWin32.SelectObject(displayHdc, hBitmap);
+
+            unsafe
+            {
+                Win32.BITMAP win32Bitmap = new Win32.BITMAP();
+                Win32.MyWin32.GetObject(hOldObject,
+                    System.Runtime.InteropServices.Marshal.SizeOf(typeof(Win32.BITMAP)),
+                      &win32Bitmap);
+                hbmpScan0 = (IntPtr)win32Bitmap.bmBits;
+                BitmapHelper.CopyToWindowsBitmapSameSize(
+                this.actualImage,   //src from actual img buffer
+                (IntPtr)win32Bitmap.bmBits);//dest to buffer bmp          
+            }
+
+            Win32.MyWin32.SelectObject(displayHdc, hOldObject);
+            dest.ReleaseHdc(displayHdc);
+            //-----------------------------------------------
+
+
+
+
+            //IntPtr bufferDc = bufferGfx.GetHdc();
+            //IntPtr hOldObject = Win32.MyWin32.SelectObject(bufferDc, hBitmap);
+            ////-----------------------------------------------
+            ////TODO: review here
+            ////if actual image is not change from last copy
+            ////then we can use a cached?
+            ////-----------------------------------------------
+            ////copy from actual img buffer (src) 
+            //BitmapHelper.CopyToWindowsBitmapSameSize(
+            //    this.actualImage,   //src from actual img buffer
+            //    hbmpScan0);//dest to buffer bmp                 
+            ////-----------------------------------------------
+            ////prepare buffer dc ****
+
+            ////------------------------------------------------
+            ////target dc
+            //IntPtr displayHdc = dest.GetHdc();
+            ////copy from buffer dc to target display dc 
+            //bool result = Win32.MyWin32.BitBlt(displayHdc, 0, 0,
+            //     bufferBmp.Width,
+            //     bufferBmp.Height,
+            //     bufferDc, 0, 0, SRCCOPY);
+            ////------------------------------------------------
+            //Win32.MyWin32.SelectObject(bufferDc, hOldObject);
+
+            //bufferGfx.ReleaseHdc(bufferDc);
+            //dest.ReleaseHdc(displayHdc);
+        }
+
         /// <summary>
         /// preseve for study, history  
         /// </summary>
