@@ -3,7 +3,7 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 using PixelFarm.Drawing.Fonts;

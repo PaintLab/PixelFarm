@@ -19,7 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
     public sealed class ActualImage : PixelFarm.Drawing.Image

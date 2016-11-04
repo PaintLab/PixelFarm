@@ -32,7 +32,7 @@ either expressed or implied, of the FreeBSD Project.
 using System;
 using System.Drawing;
 using PixelFarm.Agg;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 namespace Mini
 {
     public class GdiPlusBitmapBackBuffer
@@ -121,7 +121,7 @@ namespace Mini
                 {
                     case 24:
                         bufferBmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                        actualImage = new ActualImage(width, height, PixelFarm.Agg.Image.PixelFormat.RGB24);
+                        actualImage = new ActualImage(width, height, PixelFarm.Agg.Imaging.PixelFormat.RGB24);
                         bufferGfx = Graphics.FromImage(bufferBmp);
                         return Graphics2D.CreateFromImage(actualImage);
                     case 32:

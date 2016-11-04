@@ -3,7 +3,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-namespace PixelFarm.Agg.Image
+namespace PixelFarm.Agg.Imaging
 {
     public static class BitmapHelper
     {

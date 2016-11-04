@@ -532,7 +532,9 @@
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControlFactory.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\IGLControl.cs" />
-    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs" />
+    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\WinGLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\X11GLControl.cs" />

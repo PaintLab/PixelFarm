@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using PixelFarm.Agg;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 namespace Mini.WinForms
 {
     //for test only
@@ -38,7 +38,7 @@ namespace Mini.WinForms
     }
     class MyDrawingBrushController : PixelToolController
     {
-        PixelFarm.Agg.Image.Point _latestMousePoint;
+        PixelFarm.Agg.Imaging.Point _latestMousePoint;
         PixelFarm.Agg.Samples.MyBrushPath _myBrushPath;
         GraphicsPath _latestBrushPathCache = null;
         List<System.Drawing.Point> _points = new List<System.Drawing.Point>();
@@ -99,7 +99,7 @@ namespace Mini.WinForms
         protected override void OnMouseDown(int x, int y)
         {
             _latestBrushPathCache = null;
-            _latestMousePoint = new PixelFarm.Agg.Image.Point(x, y);
+            _latestMousePoint = new PixelFarm.Agg.Imaging.Point(x, y);
             _points.Clear();
             _myBrushPath = new PixelFarm.Agg.Samples.MyBrushPath();
             _myBrushPath.FillColor = PixelFarm.Drawing.Color.Red;
@@ -125,7 +125,7 @@ namespace Mini.WinForms
             //bottom point
             _myBrushPath.AddPointAtFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
             _myBrushPath.AddPointAtLast((int)newTopPoint.X, (int)newTopPoint.Y);
-            _latestMousePoint = new PixelFarm.Agg.Image.Point(x, y);
+            _latestMousePoint = new PixelFarm.Agg.Imaging.Point(x, y);
         }
         protected override void OnMouseUp(int x, int y)
         {

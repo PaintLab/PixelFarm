@@ -5,7 +5,7 @@
 
 using System;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using Mini;
 using PixelFarm.Drawing.WinGdi;
 namespace PixelFarm.Agg.Sample_LionAlphaMask2
@@ -322,7 +322,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             rasterizer.SetClipBox(0, 0, width, height);
             //alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
 
-            PixelFarm.Agg.Image.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Image.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
+            PixelFarm.Agg.Imaging.AlphaMaskAdaptor imageAlphaMaskAdaptor = new PixelFarm.Agg.Imaging.AlphaMaskAdaptor(widgetsSubImage, alphaMask);
             ClipProxyImage alphaMaskClippingProxy = new ClipProxyImage(imageAlphaMaskAdaptor);
             ClipProxyImage clippingProxy = new ClipProxyImage(widgetsSubImage);
             ////Affine transform = Affine.NewIdentity();

@@ -7,7 +7,7 @@
 
 using System;
 using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.Image
+namespace PixelFarm.Agg.Imaging
 {
     public struct PointF
     {

@@ -3,7 +3,7 @@
 
 using System;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Image;
+using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
 using Mini;
 namespace PixelFarm.Agg.Sample_Perspective
