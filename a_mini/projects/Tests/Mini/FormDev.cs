@@ -268,10 +268,10 @@ namespace Mini
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0);
                     gfx.UseSubPixelRendering = true;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToWindowsBitmap(
+                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(
                       actualImage, //src from actual img buffer
-                      bufferBmp, //dest to buffer bmp
-                     new RectInt(0, 0, bmpW, bmpH));
+                      bufferBmp //dest to buffer bmp
+                     );
                     //-----------------------------------------
                     bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
                     g.DrawImage(bufferBmp, new Point(0, 30));

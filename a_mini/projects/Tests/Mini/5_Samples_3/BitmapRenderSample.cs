@@ -41,7 +41,7 @@ namespace PixelFarm.Agg.Sample_Images
         ActualImage actualImage;
         public override void Init()
         {
-            this.actualImage = LoadImage( RootDemoPath.Path +"\\plain01.png");
+            this.actualImage = LoadImage(RootDemoPath.Path + "\\plain01.png");
         }
 
         static ActualImage LoadImage(string filename)
@@ -53,7 +53,7 @@ namespace PixelFarm.Agg.Sample_Images
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
                 ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFormat.ARGB32);
-                BitmapHelper.CopyFromWindowsBitmapSameSize(bmp, actualImage);
+                BitmapHelper.CopyFromGdiPlusBitmapSameSize(bmp, actualImage);
                 return actualImage;
             }
         }
