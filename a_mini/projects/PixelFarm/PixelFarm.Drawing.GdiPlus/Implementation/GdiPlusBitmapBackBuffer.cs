@@ -48,36 +48,36 @@ namespace Mini
         }
 
         const int SRCCOPY = 0xcc0020;
-        /// <summary>
-        /// update actual image data to windowsBitmap
-        /// </summary>
-        /// <param name="rect"></param>
-        public void UpdateToHardwareSurface(Graphics dest, RectInt rect)
-        {
-            //----------------------------------------------- 
-            //copy from actual img buffer (src)
-            BitmapHelper.CopyToWindowsBitmap(
-                this.actualImage, //src from actual img buffer
-                this.bufferBmp, //dest to buffer bmp
-                rect);
-            //-----------------------------------------------
-            //prepare buffer dc ****
-            IntPtr bufferDc = bufferGfx.GetHdc();
-            IntPtr hBitmap = bufferBmp.GetHbitmap();
-            IntPtr hOldObject = Win32.MyWin32.SelectObject(bufferDc, hBitmap);
-            //------------------------------------------------
-            //target dc
-            IntPtr displayHdc = dest.GetHdc();
-            //copy from buffer dc to target display dc 
-            bool result = Win32.MyWin32.BitBlt(displayHdc, 0, 0,
-                 bufferBmp.Width,
-                 bufferBmp.Height,
-                bufferDc, 0, 0, SRCCOPY);
-            Win32.MyWin32.SelectObject(bufferDc, hOldObject);
-            //DeleteObject(hBitmap); 
-            bufferGfx.ReleaseHdc(bufferDc);
-            dest.ReleaseHdc(displayHdc);
-        }
+        ///// <summary>
+        ///// update actual image data to windowsBitmap
+        ///// </summary>
+        ///// <param name="rect"></param>
+        //public void UpdateToHardwareSurface(Graphics dest, RectInt rect)
+        //{
+        //    //----------------------------------------------- 
+        //    //copy from actual img buffer (src)
+        //    BitmapHelper.CopyToWindowsBitmap(
+        //        this.actualImage, //src from actual img buffer
+        //        this.bufferBmp, //dest to buffer bmp
+        //        rect);
+        //    //-----------------------------------------------
+        //    //prepare buffer dc ****
+        //    IntPtr bufferDc = bufferGfx.GetHdc();
+        //    IntPtr hBitmap = bufferBmp.GetHbitmap();
+        //    IntPtr hOldObject = Win32.MyWin32.SelectObject(bufferDc, hBitmap);
+        //    //------------------------------------------------
+        //    //target dc
+        //    IntPtr displayHdc = dest.GetHdc();
+        //    //copy from buffer dc to target display dc 
+        //    bool result = Win32.MyWin32.BitBlt(displayHdc, 0, 0,
+        //         bufferBmp.Width,
+        //         bufferBmp.Height,
+        //        bufferDc, 0, 0, SRCCOPY);
+        //    Win32.MyWin32.SelectObject(bufferDc, hOldObject);
+        //    //DeleteObject(hBitmap); 
+        //    bufferGfx.ReleaseHdc(bufferDc);
+        //    dest.ReleaseHdc(displayHdc);
+        //}
 
 
         /// <summary>
