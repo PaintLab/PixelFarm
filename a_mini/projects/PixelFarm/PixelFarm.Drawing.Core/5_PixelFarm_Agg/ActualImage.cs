@@ -22,7 +22,7 @@ using System;
 using PixelFarm.Agg.Image;
 namespace PixelFarm.Agg
 {
-    public sealed class ActualImage
+    public sealed class ActualImage : PixelFarm.Drawing.Image
     {
         int width;
         int height;
@@ -30,6 +30,7 @@ namespace PixelFarm.Agg
         int bitDepth;
         PixelFormat pixelFormat;
         byte[] pixelBuffer;
+        IDisposable innerImage;
         public ActualImage(int width, int height, PixelFormat format)
         {
             //width and height must >0 
@@ -64,19 +65,45 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
-        public int Width
+        public override void Dispose()
+        {
+             
+        }
+        public override int Width
         {
             get { return this.width; }
         }
-        public int Height
+        public override int Height
         {
             get { return this.height; }
+        }
+        public override int ReferenceX
+        {
+            get { return 0; }
+        }
+        public override int ReferenceY
+        {
+            get { return 0; }
         }
         public RectInt Bounds
         {
             get { return new RectInt(0, 0, this.width, this.height); }
         }
-
+        public override bool IsReferenceImage
+        {
+            get { return false; }
+        }
+        public override IDisposable InnerImage
+        {
+            get
+            {
+                return innerImage;
+            }
+            set
+            {
+                innerImage = value;
+            }
+        }
         public PixelFormat PixelFormat { get { return this.pixelFormat; } }
         public int Stride { get { return this.stride; } }
         public int BitDepth { get { return this.bitDepth; } }
