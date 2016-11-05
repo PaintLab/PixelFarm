@@ -30,9 +30,7 @@ namespace PixelFarm.Drawing.WinGdi
         IntPtr originalHdc = IntPtr.Zero;
         System.Drawing.Graphics gx;
         IntPtr hRgn = IntPtr.Zero;
-        IntPtr tempDc;//temp dc from gx
-        IntPtr hbmp;
-        IntPtr hFont = IntPtr.Zero;
+
 
 
         //-------------------------------
@@ -60,10 +58,10 @@ namespace PixelFarm.Drawing.WinGdi
             this.top = top;
             this.right = left + width;
             this.bottom = top + height;
+            currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
 
             CreateGraphicsFromNativeHdc(width, height);
-            //-------------------------------------------------------
-            currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
+            //-------------------------------------------------------         
 
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
@@ -83,7 +81,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             this.originalHdc = win32MemDc.DC;
 
-            hFont = MyWin32.SelectObject(originalHdc, hFont);
+
             hRgn = MyWin32.CreateRectRgn(0, 0, width, height);
             MyWin32.SelectObject(originalHdc, hRgn);
 
@@ -108,7 +106,7 @@ namespace PixelFarm.Drawing.WinGdi
                 win32MemDc = null;
             }
             isDisposed = true;
-            ReleaseHdc();
+
             ReleaseUnManagedResource();
         }
         /// <summary>
@@ -122,15 +120,6 @@ namespace PixelFarm.Drawing.WinGdi
             }
             this.CloseCanvas();
         }
-        //void IFonts.Dispose()
-        //{
-        //    if (isDisposed)
-        //    {
-        //        return;
-        //    }
-        //    this.CloseCanvas();
-        //}
-
         void ClearPreviousStoredValues()
         {
             this.gx.RenderingOrigin = new System.Drawing.Point(0, 0);
@@ -146,11 +135,13 @@ namespace PixelFarm.Drawing.WinGdi
                 MyWin32.DeleteObject(hRgn);
                 hRgn = IntPtr.Zero;
             }
+            if (win32MemDc != null)
+            {
+                win32MemDc.Dispose();
+                win32MemDc = null;
+                originalHdc = IntPtr.Zero;
+            }
 
-            MyWin32.DeleteDC(originalHdc);
-            originalHdc = IntPtr.Zero;
-            MyWin32.DeleteObject(hbmp);
-            hbmp = IntPtr.Zero;
             clipRectStack.Clear();
             currentClipRect = new System.Drawing.Rectangle(0, 0, this.Width, this.Height);
 #if DEBUG
@@ -178,20 +169,12 @@ namespace PixelFarm.Drawing.WinGdi
             this.pageNumFlags = (hPageNum << 8) | vPageNum;
             this.ReleaseUnManagedResource();
             this.ClearPreviousStoredValues();
-            var orgHdc = MyWin32.CreateCompatibleDC(IntPtr.Zero);
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(newWidth, newHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            hbmp = bmp.GetHbitmap();
-            MyWin32.SelectObject(orgHdc, hbmp);
-            MyWin32.PatBlt(orgHdc, 0, 0, newWidth, newHeight, MyWin32.WHITENESS);
-            MyWin32.SetBkMode(orgHdc, MyWin32._SetBkMode_TRANSPARENT);
-            hFont = defaultHFont;
-            MyWin32.SelectObject(orgHdc, hFont);
+
             currentClipRect = new System.Drawing.Rectangle(0, 0, newWidth, newHeight);
-            MyWin32.SelectObject(orgHdc, hRgn);
-            gx = System.Drawing.Graphics.FromHdc(orgHdc);
-            this.originalHdc = orgHdc;
+            CreateGraphicsFromNativeHdc(newWidth, newHeight);
             gx.Clear(System.Drawing.Color.White);
             MyWin32.SetRectRgn(hRgn, 0, 0, newWidth, newHeight);
+
             left = hPageNum * newWidth;
             top = vPageNum * newHeight;
             right = left + newWidth;
@@ -242,34 +225,10 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
-
-        /// <summary>
-        /// Release current HDC to be able to use <see cref="Graphics"/> methods.
-        /// </summary>
-        void ReleaseHdc()
-        {
-
-            if (tempDc != IntPtr.Zero)
-            {
-                MyWin32.SelectClipRgn(tempDc, IntPtr.Zero);
-                gx.ReleaseHdc(tempDc);
-                tempDc = IntPtr.Zero;
-            }
-        }
-
-
-
+ 
         const int CANVAS_UNUSED = 1 << (1 - 1);
         const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);
-        static IntPtr defaultHFont;
-        static System.Drawing.Font defaultGdiFont;
-
-        static MyGdiPlusCanvas()
-        {
-
-            defaultGdiFont = new System.Drawing.Font("tahoma", 10);
-            defaultHFont = defaultGdiFont.ToHfont();
-        }
+         
         static System.Drawing.PointF[] ConvPointFArray(PointF[] points)
         {
             int j = points.Length;

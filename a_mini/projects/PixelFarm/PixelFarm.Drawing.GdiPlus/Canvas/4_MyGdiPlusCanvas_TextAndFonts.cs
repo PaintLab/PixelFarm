@@ -28,7 +28,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawText(char[] buffer, int x, int y)
         {
-            ReleaseHdc();
+            
             //draw text to target mem dc?
             IntPtr gxdc = gx.GetHdc();
             var clipRect = currentClipRect;
@@ -45,7 +45,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-            ReleaseHdc();
+           
             IntPtr gxdc = gx.GetHdc();
             var clipRect = System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
             clipRect.Offset(canvasOriginX, canvasOriginY);
@@ -107,7 +107,7 @@ namespace PixelFarm.Drawing.WinGdi
                             (startAddr + startAt), len);
                     }
                 }
-                MyWin32.SelectClipRgn(tempDc, IntPtr.Zero);
+                MyWin32.SelectClipRgn(originalHdc, IntPtr.Zero);
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
@@ -144,7 +144,7 @@ namespace PixelFarm.Drawing.WinGdi
                             (startAddr + startAt), len);
                     }
                 }
-                MyWin32.SelectClipRgn(tempDc, IntPtr.Zero);
+                MyWin32.SelectClipRgn(originalHdc, IntPtr.Zero);
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
@@ -164,13 +164,9 @@ namespace PixelFarm.Drawing.WinGdi
             }
             set
             {
-                ReleaseHdc();
-                this.currentTextFont = value;
-                //WinGdiFont myFont = WinGdiFontSystem.GetWinGdiFont(value);
-                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont());
-                //IntPtr hdc = gx.GetHdc();
-                //MyWin32.SelectObject(hdc, myFont.ToHfont());
-                //gx.ReleaseHdc();
+                
+                this.currentTextFont = value; 
+                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont()); 
             }
         }
         public override Color CurrentTextColor
