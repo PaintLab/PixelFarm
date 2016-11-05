@@ -13,19 +13,23 @@ namespace TestGlfw
         public static void Start()
         {
 
-            if (!GLPlatforms.Init())
+            if (!GLFWPlatforms.Init())
             {
                 Console.WriteLine("can't init");
-            } 
+            }
+            
+            Glfw.SwapInterval(1);
+           
             GlFwForm form1 = GlfwApp.CreateGlfwForm(
                 800,
                 600,
                 "PixelFarm on GLfw and OpenGLES2");
 
             form1.MakeCurrent();
-            Glfw.SwapInterval(1);
-            //--------------------------------------- 
-            GLPlatforms.CreateGLESContext();
+            //------------------------------------
+            //***
+            GLFWPlatforms.CreateGLESContext();
+            //------------------------------------
             form1.Activate();
             
             //----------------
@@ -66,7 +70,7 @@ namespace TestGlfw
               800,
               600,
               "Form 2");
-            f2.Show();
+            
             f2.MakeCurrent();
             f2.Activate();
             GL.Enable(EnableCap.Blend);

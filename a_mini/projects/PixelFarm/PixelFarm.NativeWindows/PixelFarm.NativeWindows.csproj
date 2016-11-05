@@ -53,7 +53,7 @@
     <Compile Include="Glfw\Glfw3Structs.cs" />
     <Compile Include="Glfw\Glfw3_32.cs" />
     <Compile Include="Glfw\Glfw3_64.cs" />
-    <Compile Include="0_Init\GLPlatforms.cs" />
+    <Compile Include="0_Init\GLFWPlatforms.cs" />
     <Compile Include="Windows\GlfwForms.cs" />
     <Compile Include="Windows\WindowForms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -422,7 +422,7 @@
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Serialization\XmlIgnoreAttribute.cs" />
     <Compile Include="PixelFarm.NativeWindows\..\TypeMirror\SimpleReflectionHelper.cs" />
     <Compile Include="PixelFarm.NativeWindows\0_Init\GlfwOpenTKContext.cs" />
-    <Compile Include="PixelFarm.NativeWindows\0_Init\GLPlatforms.cs" />
+    <Compile Include="PixelFarm.NativeWindows\0_Init\GLFWPlatforms.cs" />
     <Compile Include="PixelFarm.NativeWindows\Glfw\Glfw3.cs" />
     <Compile Include="PixelFarm.NativeWindows\Glfw\Glfw3Delegates.cs" />
     <Compile Include="PixelFarm.NativeWindows\Glfw\Glfw3DelegateTypes.cs" />

@@ -13,7 +13,7 @@ namespace TestGlfw
         public static void Start()
         {
 
-            if (!GLPlatforms.Init())
+            if (!GLFWPlatforms.Init())
             {
                 Console.WriteLine("can't init");
             }

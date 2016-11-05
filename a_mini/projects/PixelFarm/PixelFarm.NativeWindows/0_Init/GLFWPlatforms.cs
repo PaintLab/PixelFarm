@@ -4,7 +4,7 @@ using Pencil.Gaming;
 
 namespace PixelFarm
 {
-    public static class GLPlatforms
+    public static class GLFWPlatforms
     {
 
         public static bool Init()

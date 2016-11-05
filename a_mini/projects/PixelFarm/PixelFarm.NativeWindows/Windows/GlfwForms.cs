@@ -442,7 +442,7 @@ namespace PixelFarm.Forms
         }
         public void Activate()
         {
-            GLPlatforms.MakeCurrentWindow(this._winInfo);
+            GLFWPlatforms.MakeCurrentWindow(this._winInfo);
         }
         public void SetDrawFrameDelegate(SimpleAction drawFrameDel)
         {
