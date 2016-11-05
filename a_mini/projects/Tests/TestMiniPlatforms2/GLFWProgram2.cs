@@ -17,13 +17,7 @@ namespace TestGlfw
             {
                 Console.WriteLine("can't init");
             }
-            //---------------------------------------------------
-            //specific OpenGLES
-            Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
-            //---------------------------------------------------
+             
             GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600,
                 "PixelFarm on GLfw and OpenGLES2",
                 new GlfwMonitorPtr(),//default monitor
@@ -32,16 +26,17 @@ namespace TestGlfw
             /* Make the window's context current */
             Glfw.MakeContextCurrent(glWindow);
             Glfw.SwapInterval(1); 
-            GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
 
+            GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
             var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
-            var context = OpenTK.Graphics.GraphicsContext.CreateDummyContext(contextHandler);
+           
+            var glfwContext = new GLFWContextForOpenTK(contextHandler);
+            var context = OpenTK.Graphics.GraphicsContext.CreateExternalContext(glfwContext);
             bool isCurrent = context.IsCurrent;
-            PixelFarm.GlfwWinInfo winInfo = new PixelFarm.GlfwWinInfo(glWindow.inner_ptr);
+            PixelFarm.GlfwWinInfo winInfo = new PixelFarm.GlfwWinInfo(glWindow);
             context.MakeCurrent(winInfo);
             //-------------------------------------- 
-            //bind open gl funcs here..
-            new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
+           
             //-------------------------------------- 
             //var demo = new OpenTkEssTest.T52_HelloTriangle2();
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
