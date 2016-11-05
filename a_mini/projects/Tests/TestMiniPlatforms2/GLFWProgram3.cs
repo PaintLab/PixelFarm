@@ -17,13 +17,7 @@ namespace TestGlfw
             {
                 Console.WriteLine("can't init");
             }
-            //---------------------------------------------------
-            //specific OpenGLES
-            Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
-            //---------------------------------------------------
+           
 
             GlFwForm form1 = GlfwApp.CreateGlfwForm(
                 800,
@@ -32,9 +26,9 @@ namespace TestGlfw
 
             form1.MakeCurrent();
             Glfw.SwapInterval(1);
-            ////--------------------------------------- 
+            //--------------------------------------- 
 
-            form1.CreateOpenGLEsContext();
+            form1.CreateOpenGLESContext();
 
             //bind open gl funcs here.. ***
             new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
@@ -75,7 +69,7 @@ namespace TestGlfw
               "Form 2");
             f2.Show();
             f2.MakeCurrent();
-            f2.CreateOpenGLEsContext();
+            f2.CreateOpenGLESContext();
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);

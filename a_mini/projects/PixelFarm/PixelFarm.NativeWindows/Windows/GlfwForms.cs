@@ -439,7 +439,7 @@ namespace PixelFarm.Forms
             Glfw.MakeContextCurrent(this._nativeGlFwWindowPtr);
         }
         OpenTK.Graphics.GraphicsContext glfwContext;
-        public void CreateOpenGLEsContext()
+        public void CreateOpenGLESContext()
         {
 
             //make open gl es current context 

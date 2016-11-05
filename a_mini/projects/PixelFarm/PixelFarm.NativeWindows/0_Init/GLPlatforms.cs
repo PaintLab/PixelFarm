@@ -14,7 +14,7 @@ namespace PixelFarm
             {
                 return false;
             }
-
+ 
             //---------------------------------------------------
             //specific OpenGLES ***
             Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
