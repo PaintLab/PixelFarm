@@ -116,7 +116,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             this.fontSizeInPoints = sizeInPoints;
             this.emSizeInPixels = PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(this.fontSizeInPoints);
-            this.hfont = InitFont(fontFace.Name, (int)sizeInPoints);
+            this.hfont = InitFont(fontFace.Name, sizeInPoints, style);
             //------------------------------------------------------------------
             //create gdi font from font data
             //build font matrix
@@ -153,18 +153,29 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get { return fontStyle; }
         }
-        static IntPtr InitFont(string fontName, int emHeight)
+        static IntPtr InitFont(string fontName, float emHeight, FontStyle style)
         {
+            //see: MSDN, LOGFONT structure
             //https://msdn.microsoft.com/en-us/library/windows/desktop/dd145037(v=vs.85).aspx
             MyWin32.LOGFONT logFont = new MyWin32.LOGFONT();
             MyWin32.SetFontName(ref logFont, fontName);
             logFont.lfHeight = -(int)PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(emHeight);//minus **
             logFont.lfCharSet = 1;//default
             logFont.lfQuality = 0;//default
+            //
+            MyWin32.LOGFONT_FontWeight weight =
+                ((style & FontStyle.Bold) == FontStyle.Bold) ?
+                MyWin32.LOGFONT_FontWeight.FW_BOLD :
+                MyWin32.LOGFONT_FontWeight.FW_REGULAR;
+            logFont.lfWeight = (int)weight;
+            //
+            logFont.lfItalic = (byte)(((style & FontStyle.Italic) == FontStyle.Italic) ? 1 : 0);
+
             IntPtr hfont = MyWin32.CreateFontIndirect(ref logFont);
             //MyWin32.SelectObject(nativeWin32MemDc.DC, hfont);
             return hfont;
         }
+
 
         public System.IntPtr ToHfont()
         {   /// <summary>
