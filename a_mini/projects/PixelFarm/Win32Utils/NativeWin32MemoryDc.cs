@@ -49,6 +49,36 @@ namespace Win32
             memHdc = IntPtr.Zero;
             isDisposed = true;
         }
+        public void PatBlt(PatBltColor color)
+        {
+            MyWin32.PatBlt(memHdc, 0, 0, _width, _height, (int)color);
+        }
+        public void SetBackTransparent(bool value)
+        {
+            //public const int _SetBkMode_TRANSPARENT = 1;
+            //public const int _SetBkMode_OPAQUE = 2;
+            MyWin32.SetBkMode(memHdc, value ? 1 : 2);
+        }
+        public enum PatBltColor
+        {
+            Black = MyWin32.BLACKNESS,
+            White = MyWin32.WHITENESS
+        }
+        public IntPtr SetFont(IntPtr hFont)
+        {
+            return MyWin32.SelectObject(memHdc, hFont);
+        }
+        /// <summary>
+        /// set solid text color
+        /// </summary>
+        /// <param name="r">0-255</param>
+        /// <param name="g">0-255</param>
+        /// <param name="b">0-255</param>
+        public void SetSolidTextColor(byte r, byte g, byte b)
+        {   
+            //convert to win32 colorv
+            MyWin32.SetTextColor(memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
+        }
 
     }
 
