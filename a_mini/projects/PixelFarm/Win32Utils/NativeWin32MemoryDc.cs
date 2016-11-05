@@ -13,6 +13,8 @@ namespace Win32
         IntPtr memHdc;
         IntPtr dib;
         IntPtr ppvBits;
+        IntPtr hRgn = IntPtr.Zero;
+
         bool isDisposed;
         public NativeWin32MemoryDc(int w, int h, bool invertImage = false)
         {
@@ -44,6 +46,14 @@ namespace Win32
             {
                 return;
             }
+
+            if (hRgn != IntPtr.Zero)
+            {
+                MyWin32.DeleteObject(hRgn);
+                hRgn = IntPtr.Zero;
+            }
+
+
             MyWin32.ReleaseMemoryHdc(memHdc, dib);
             dib = IntPtr.Zero;
             memHdc = IntPtr.Zero;
@@ -75,11 +85,33 @@ namespace Win32
         /// <param name="g">0-255</param>
         /// <param name="b">0-255</param>
         public void SetSolidTextColor(byte r, byte g, byte b)
-        {   
+        {
             //convert to win32 colorv
             MyWin32.SetTextColor(memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
         }
+        public void SetClipRect(PixelFarm.Drawing.Rectangle r)
+        {
+            SetClipRect(r.Left, r.Top, r.Width, r.Height);
+        }
+        public void SetClipRect(int x, int y, int w, int h)
+        {
+            if (hRgn == IntPtr.Zero)
+            {
+                //create
+                hRgn = MyWin32.CreateRectRgn(0, 0, w, h);
+            }
+            MyWin32.SetRectRgn(hRgn,
+            x,
+            y,
+            x + w,
+            y + h);
+            MyWin32.SelectObject(memHdc, hRgn);
+        }
+        public void ClearClipRect()
+        {
+            MyWin32.SelectClipRgn(memHdc, IntPtr.Zero);
 
+        }
     }
 
 }

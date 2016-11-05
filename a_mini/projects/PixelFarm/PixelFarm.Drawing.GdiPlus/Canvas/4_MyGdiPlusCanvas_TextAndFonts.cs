@@ -28,36 +28,30 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawText(char[] buffer, int x, int y)
         {
-            
-            //draw text to target mem dc?
-            IntPtr gxdc = gx.GetHdc();
+
             var clipRect = currentClipRect;
             clipRect.Offset(canvasOriginX, canvasOriginY);
-            MyWin32.SetRectRgn(hRgn,
-             clipRect.Left,
-             clipRect.Top,
-             clipRect.Right,
-             clipRect.Bottom);
-            MyWin32.SelectClipRgn(gxdc, hRgn);
-            NativeTextWin32.TextOut(gxdc, CanvasOrgX + x, CanvasOrgY + y, buffer, buffer.Length);
-            MyWin32.SelectClipRgn(gxdc, IntPtr.Zero);
-            gx.ReleaseHdc();
+            //1.
+            win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
+            //2.
+            NativeTextWin32.TextOut(win32MemDc.DC, CanvasOrgX + x, CanvasOrgY + y, buffer, buffer.Length);
+            //3
+            win32MemDc.ClearClipRect();
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-           
-            IntPtr gxdc = gx.GetHdc();
+
+
             var clipRect = System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
+            //1.
             clipRect.Offset(canvasOriginX, canvasOriginY);
-            MyWin32.SetRectRgn(hRgn,
-             clipRect.Left,
-             clipRect.Top,
-             clipRect.Right,
-             clipRect.Bottom);
-            MyWin32.SelectClipRgn(gxdc, hRgn);
-            NativeTextWin32.TextOut(gxdc, CanvasOrgX + logicalTextBox.X, CanvasOrgY + logicalTextBox.Y, buffer, buffer.Length);
-            MyWin32.SelectClipRgn(gxdc, IntPtr.Zero);
-            gx.ReleaseHdc();
+            //2.
+            win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
+            //3.
+            NativeTextWin32.TextOut(win32MemDc.DC, CanvasOrgX + logicalTextBox.X, CanvasOrgY + logicalTextBox.Y, buffer, buffer.Length);
+            //4.
+            win32MemDc.ClearClipRect();
+
             //ReleaseHdc();
             //IntPtr gxdc = gx.GetHdc();
             //MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
@@ -90,24 +84,22 @@ namespace PixelFarm.Drawing.WinGdi
                         currentClipRect.Height));
                 //2. offset to canvas origin 
                 clipRect.Offset(canvasOriginX, canvasOriginY);
-                //3. set rgn 
-                MyWin32.SetRectRgn(hRgn,
-                 clipRect.Left,
-                 clipRect.Top,
-                 clipRect.Right,
-                 clipRect.Bottom);
-                MyWin32.SelectClipRgn(originalHdc, hRgn);
+                //3. set rect rgn
+                win32MemDc.SetClipRect(clipRect);
+
                 unsafe
                 {
                     fixed (char* startAddr = &str[0])
                     {
+                        //4.
                         NativeTextWin32.TextOutUnsafe(originalHdc,
                             (int)logicalTextBox.X + canvasOriginX,
                             (int)logicalTextBox.Y + canvasOriginY,
                             (startAddr + startAt), len);
                     }
                 }
-                MyWin32.SelectClipRgn(originalHdc, IntPtr.Zero);
+                //5. clear rect rgn
+                win32MemDc.ClearClipRect();
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
@@ -119,32 +111,33 @@ namespace PixelFarm.Drawing.WinGdi
             {
 
                 //-------------------------------------------
-                //not support in this version
+                //not support translucent text in this version,
+                //so=> draw opaque (like above)
+                //-------------------------------------------
+                //1. find clip rect
                 var clipRect = Rectangle.Intersect(logicalTextBox,
-                  new Rectangle(currentClipRect.Left,
-                      currentClipRect.Top,
-                      currentClipRect.Width,
-                      currentClipRect.Height));
+                    new Rectangle(currentClipRect.Left,
+                        currentClipRect.Top,
+                        currentClipRect.Width,
+                        currentClipRect.Height));
                 //2. offset to canvas origin 
                 clipRect.Offset(canvasOriginX, canvasOriginY);
-                //3. set rgn 
-                MyWin32.SetRectRgn(hRgn,
-                 clipRect.Left,
-                 clipRect.Top,
-                 clipRect.Right,
-                 clipRect.Bottom);
-                MyWin32.SelectClipRgn(originalHdc, hRgn);
+                //3. set rect rgn
+                win32MemDc.SetClipRect(clipRect);
+
                 unsafe
                 {
                     fixed (char* startAddr = &str[0])
                     {
+                        //4.
                         NativeTextWin32.TextOutUnsafe(originalHdc,
                             (int)logicalTextBox.X + canvasOriginX,
                             (int)logicalTextBox.Y + canvasOriginY,
                             (startAddr + startAt), len);
                     }
                 }
-                MyWin32.SelectClipRgn(originalHdc, IntPtr.Zero);
+                //5. clear rect rgn
+                win32MemDc.ClearClipRect();
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
@@ -164,9 +157,9 @@ namespace PixelFarm.Drawing.WinGdi
             }
             set
             {
-                
-                this.currentTextFont = value; 
-                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont()); 
+
+                this.currentTextFont = value;
+                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont());
             }
         }
         public override Color CurrentTextColor

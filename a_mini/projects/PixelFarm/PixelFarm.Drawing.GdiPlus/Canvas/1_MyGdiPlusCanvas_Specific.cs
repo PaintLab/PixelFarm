@@ -29,9 +29,6 @@ namespace PixelFarm.Drawing.WinGdi
 
         IntPtr originalHdc = IntPtr.Zero;
         System.Drawing.Graphics gx;
-        IntPtr hRgn = IntPtr.Zero;
-
-
 
         //-------------------------------
         Stack<System.Drawing.Rectangle> clipRectStack = new Stack<System.Drawing.Rectangle>();
@@ -52,6 +49,12 @@ namespace PixelFarm.Drawing.WinGdi
             int height)
         {
 
+
+#if DEBUG
+            debug_canvas_id = dbug_canvasCount + 1;
+            dbug_canvasCount += 1;
+#endif
+
             this.pageNumFlags = (horizontalPageNum << 8) | verticalPageNum;
             //2. dimension
             this.left = left;
@@ -61,31 +64,27 @@ namespace PixelFarm.Drawing.WinGdi
             currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
 
             CreateGraphicsFromNativeHdc(width, height);
+            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
             //-------------------------------------------------------         
-
-            this.CurrentFont = new RequestFont("tahoma", 14);
-            this.CurrentTextColor = Color.Black;
             internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
             internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-#if DEBUG
-            debug_canvas_id = dbug_canvasCount + 1;
-            dbug_canvasCount += 1;
-#endif
+
             this.StrokeWidth = 1;
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
-            this.win32MemDc = new NativeWin32MemoryDc(width, height, true);
+            win32MemDc = new NativeWin32MemoryDc(width, height, true);
             win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
             win32MemDc.SetBackTransparent(true);
+            win32MemDc.SetClipRect(0, 0, width, height);
 
             this.originalHdc = win32MemDc.DC;
+            //--------------
+            //set default font and default text color
+            this.CurrentFont = new RequestFont("tahoma", 14);
+            this.CurrentTextColor = Color.Black;
+            //--------------
 
-
-            hRgn = MyWin32.CreateRectRgn(0, 0, width, height);
-            MyWin32.SelectObject(originalHdc, hRgn);
-
-            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
         }
 #if DEBUG
         public override string ToString()
@@ -130,11 +129,6 @@ namespace PixelFarm.Drawing.WinGdi
 
         void ReleaseUnManagedResource()
         {
-            if (hRgn != IntPtr.Zero)
-            {
-                MyWin32.DeleteObject(hRgn);
-                hRgn = IntPtr.Zero;
-            }
             if (win32MemDc != null)
             {
                 win32MemDc.Dispose();
@@ -157,8 +151,8 @@ namespace PixelFarm.Drawing.WinGdi
             int h = this.Height;
             this.ClearPreviousStoredValues();
             currentClipRect = new System.Drawing.Rectangle(0, 0, w, h);
-            gx.Clear(System.Drawing.Color.White);
-            MyWin32.SetRectRgn(hRgn, 0, 0, w, h);
+            win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
+            win32MemDc.SetClipRect(0, 0, w, h);
             left = hPageNum * w;
             top = vPageNum * h;
             right = left + w;
@@ -172,8 +166,8 @@ namespace PixelFarm.Drawing.WinGdi
 
             currentClipRect = new System.Drawing.Rectangle(0, 0, newWidth, newHeight);
             CreateGraphicsFromNativeHdc(newWidth, newHeight);
-            gx.Clear(System.Drawing.Color.White);
-            MyWin32.SetRectRgn(hRgn, 0, 0, newWidth, newHeight);
+            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
+
 
             left = hPageNum * newWidth;
             top = vPageNum * newHeight;
@@ -225,10 +219,10 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
- 
+
         const int CANVAS_UNUSED = 1 << (1 - 1);
         const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);
-         
+
         static System.Drawing.PointF[] ConvPointFArray(PointF[] points)
         {
             int j = points.Length;
