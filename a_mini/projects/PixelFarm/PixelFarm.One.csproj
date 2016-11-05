@@ -414,12 +414,14 @@
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Platform\DesktopGraphicsContext.cs" />
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Platform\Dummy\DummyGLContext.cs" />
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Platform\Dummy\DummyWindowInfo.cs" />
+    <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Platform\External\ExternalGraphicsContext.cs" />
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Platform\Factory.cs" />
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Platform\IDisplayDeviceDriver.cs" />
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Platform\INativeWindow.cs" />
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Platform\IPlatformFactory.cs" />
     <Compile Include="PixelFarm.MiniOpenTK\OpenTK\Serialization\XmlIgnoreAttribute.cs" />
     <Compile Include="PixelFarm.NativeWindows\..\TypeMirror\SimpleReflectionHelper.cs" />
+    <Compile Include="PixelFarm.NativeWindows\0_Init\GlfwOpenTKContext.cs" />
     <Compile Include="PixelFarm.NativeWindows\0_Init\GLPlatforms.cs" />
     <Compile Include="PixelFarm.NativeWindows\Glfw\Glfw3.cs" />
     <Compile Include="PixelFarm.NativeWindows\Glfw\Glfw3Delegates.cs" />

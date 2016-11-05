@@ -16,9 +16,7 @@ namespace TestGlfw
             if (!GLPlatforms.Init())
             {
                 Console.WriteLine("can't init");
-            }
-           
-
+            } 
             GlFwForm form1 = GlfwApp.CreateGlfwForm(
                 800,
                 600,
@@ -27,12 +25,13 @@ namespace TestGlfw
             form1.MakeCurrent();
             Glfw.SwapInterval(1);
             //--------------------------------------- 
-
-            form1.CreateOpenGLESContext();
-
-            //bind open gl funcs here.. ***
-            new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
-            //-------------------------------------- 
+            GLPlatforms.CreateGLESContext();
+            form1.Activate();
+            
+            //----------------
+            //this not need if we use glfwcontext for opentk
+           // new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
+            //----------------
 
             //var demo = new OpenTkEssTest.T52_HelloTriangle2();
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
@@ -69,7 +68,7 @@ namespace TestGlfw
               "Form 2");
             f2.Show();
             f2.MakeCurrent();
-            f2.CreateOpenGLESContext();
+            f2.Activate();
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);
