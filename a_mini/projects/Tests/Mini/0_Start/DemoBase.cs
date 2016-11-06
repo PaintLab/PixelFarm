@@ -65,6 +65,7 @@ namespace Mini
         }
         public void ReleaseVxs(ref VertexStore vxs)
         {
+            vxs.Clear();
             _tmpVxs.Push(vxs);
             vxs = null;
         }
