@@ -905,10 +905,6 @@ namespace PixelFarm.Agg.Transform
         {
             return Math.Abs(v1 - v2) <= (EPSILON);
         }
-        public VertexStoreSnap TransformToVertexSnap(VertexStore src)
-        {
-            return new VertexStoreSnap(this.TransformToVxs(src));
-        }
 
         public VertexStore TransformToVxs(VertexStore src)
         {
@@ -924,18 +920,18 @@ namespace PixelFarm.Agg.Transform
             }
             return vxs;
         }
-        public VertexStore TransformToVxs(VertexStoreSnap src)
+
+        public void TransformToVxs2(VertexStoreSnap src, VertexStore outputVxs)
         {
-            var vxs = new VertexStore();
+
             var snapIter = src.GetVertexSnapIter();
             VertexCmd cmd;
             double x, y;
             while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
             {
                 this.Transform(ref x, ref y);
-                vxs.AddVertex(x, y, cmd);
+                outputVxs.AddVertex(x, y, cmd);
             }
-            return vxs;
         }
         //----------------------------------------------------------------------------------------------
         public static VertexStore TranslateToVxs(VertexStore src, double dx, double dy)
@@ -1021,4 +1017,6 @@ namespace PixelFarm.Agg.Transform
         //    y = Math.Sqrt(shy * shy + sy * sy);
         //}
     }
+
+
 }

@@ -141,11 +141,7 @@ namespace PixelFarm.Agg.Transform
             y = rc01 + rc11 * xy + rc21 * tx + rc31 * ty;
         }
         //-------------------------------------------------------------------------
-
-        public VertexStoreSnap TransformToVertexSnap(VertexStore src)
-        {
-            return new VertexStoreSnap(TransformToVxs(src));
-        }
+ 
 
         public VertexStore TransformToVxs(VertexStore src)
         {

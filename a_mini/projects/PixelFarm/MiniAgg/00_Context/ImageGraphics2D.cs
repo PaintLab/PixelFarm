@@ -223,6 +223,8 @@ namespace PixelFarm.Agg
             }
         }
 
+        //this is temporary vxs, ***
+        VertexStore _tmpVxs = new VertexStore(2);
         public override void Render(VertexStoreSnap vxsSnap, Drawing.Color color)
         {
             //reset rasterizer before render each vertextSnap 
@@ -231,7 +233,13 @@ namespace PixelFarm.Agg
             Affine transform = this.CurrentTransformMatrix;
             if (!transform.IsIdentity())
             {
-                sclineRas.AddPath(transform.TransformToVxs(vxsSnap));
+                _tmpVxs.Clear();
+                transform.TransformToVxs2(vxsSnap, _tmpVxs);
+                sclineRas.AddPath(_tmpVxs);
+                //-------------------------
+                //since sclineRas do NOT store vxs
+                //then we can reuse the vxs***
+                //-------------------------
             }
             else
             {

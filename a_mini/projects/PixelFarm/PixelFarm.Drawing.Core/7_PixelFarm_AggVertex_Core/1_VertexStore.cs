@@ -18,6 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
+#define UNSAFE_VER
 
 namespace PixelFarm.Agg
 {
@@ -47,6 +48,9 @@ namespace PixelFarm.Agg
 
         internal bool HasMoreThanOnePart { get; set; }
 
+        /// <summary>
+        /// num of vertex
+        /// </summary>
         public int Count
         {
             get { return m_num_vertices; }
@@ -150,7 +154,6 @@ namespace PixelFarm.Agg
         {
             m_cmds[index] = (byte)CommandAndFlags;
         }
-
         internal void SwapVertices(int v1, int v2)
         {
             double x_tmp = m_coord_xy[v1 << 1];
@@ -159,10 +162,12 @@ namespace PixelFarm.Agg
             m_coord_xy[(v1 << 1) + 1] = m_coord_xy[(v2 << 1) + 1];//y
             m_coord_xy[v2 << 1] = x_tmp;
             m_coord_xy[(v2 << 1) + 1] = y_tmp;
-            VertexCmd cmd = (VertexCmd)m_cmds[v1];
+            byte cmd = m_cmds[v1];
             m_cmds[v1] = m_cmds[v2];
-            m_cmds[v2] = (byte)cmd;
+            m_cmds[v2] = cmd;
         }
+
+
         void AllocIfRequired(int indexToAdd)
         {
             if (indexToAdd < m_allocated_vertices)
@@ -176,18 +181,19 @@ namespace PixelFarm.Agg
             while (indexToAdd >= m_allocated_vertices)
             {
 #if DEBUG
+
                 if (nrounds > 0)
                 {
                 }
                 nrounds++;
 #endif
 
-
-                int newSize = m_allocated_vertices + 256;
+                //newsize is LARGER than original  ****
+                int newSize = ((indexToAdd + 257) / 256) * 256; //calculate new size in single round
+                //int newSize = m_allocated_vertices + 256; //original
+                //-------------------------------------- 
                 double[] new_xy = new double[newSize << 1];
                 byte[] newCmd = new byte[newSize];
-
-
 
                 if (m_coord_xy != null)
                 {
@@ -195,7 +201,7 @@ namespace PixelFarm.Agg
                     int actualLen = m_num_vertices << 1;
                     //-----------------------------
                     //TODO: review faster copy
-                    //-----------------------------
+                    //----------------------------- 
                     unsafe
                     {
                         //unsafed version?
