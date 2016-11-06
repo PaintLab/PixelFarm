@@ -112,6 +112,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
                     ReleaseVxs(v3);
+
                     var v1 = GetFreeVxs();
                     var trans_ell = GetFreeVxs();
                     txBilinear.TransformToVxs(ell.MakeVxs(v1), trans_ell);
