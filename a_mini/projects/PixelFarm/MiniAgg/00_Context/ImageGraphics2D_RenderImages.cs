@@ -207,9 +207,11 @@ namespace PixelFarm.Agg
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
-                var outputVxs = new VertexStore();
+                 
+                var outputVxs = GetFreeVxs();
                 destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
                 Render(outputVxs, imgSpanGen);
+                ReleaseVxs(ref outputVxs);
                 // this is some debug you can enable to visualize the dest bounding box
                 //LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
                 //LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -238,9 +240,10 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-                var outputVxs = new VertexStore();
+                var outputVxs = GetFreeVxs();
                 destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
                 Render(outputVxs, imgSpanGen);
+                ReleaseVxs(ref outputVxs);
                 unchecked { destImageChanged++; };
             }
             ReleaseVxs(ref imgBoundsPath);

@@ -102,19 +102,10 @@ namespace PixelFarm.Agg
         {
             if (_tmpVxsStack.Count == 0)
             {
-                return new VertexStore(2);
+                return new VertexStore();
             }
             return _tmpVxsStack.Pop();
-            //if (myTmpImgRectVxs != null)
-            //{
-            //    VertexStore tmp = this.myTmpImgRectVxs;
-            //    this.myTmpImgRectVxs = null;
-            //    return tmp;
-            //}
-            //else
-            //{
-            //    return new VertexStore(4);
-            //}
+
         }
         void ReleaseVxs(ref VertexStore vxs)
         {

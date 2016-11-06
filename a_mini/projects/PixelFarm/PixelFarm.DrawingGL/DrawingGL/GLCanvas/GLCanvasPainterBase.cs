@@ -169,7 +169,7 @@ namespace PixelFarm.DrawingGL
                 new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
             _aggStroke.Width = this.StrokeWidth;
 
-            var v2 = GetFreeVxs(); 
+            var v2 = GetFreeVxs();
             _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(_aggStroke.MakeVxs(v1, v2))));
             ReleaseVxs(ref v2);
             ReleaseVxs(ref v1);
@@ -730,7 +730,7 @@ namespace PixelFarm.DrawingGL
                 centerFormArc.radStartAngle,
                 (centerFormArc.radStartAngle + centerFormArc.radSweepDiff));
 
-            VertexStore vxs = GetFreeVxs();
+            VertexStore v1 = GetFreeVxs();
             bool stopLoop = false;
             foreach (VertexData vertexData in arcTool.GetVertexIter())
             {
@@ -740,7 +740,7 @@ namespace PixelFarm.DrawingGL
                         stopLoop = true;
                         break;
                     default:
-                        vxs.AddVertex(vertexData.x, vertexData.y, vertexData.command);
+                        v1.AddVertex(vertexData.x, vertexData.y, vertexData.command);
                         //yield return vertexData;
                         break;
                 }
@@ -748,14 +748,13 @@ namespace PixelFarm.DrawingGL
                 if (stopLoop) { break; }
             }
 
-
             double scaleRatio = 1;
             if (centerFormArc.scaleUp)
             {
-                int vxs_count = vxs.Count;
+                int vxs_count = v1.Count;
                 double px0, py0, px_last, py_last;
-                vxs.GetVertex(0, out px0, out py0);
-                vxs.GetVertex(vxs_count - 1, out px_last, out py_last);
+                v1.GetVertex(0, out px0, out py0);
+                v1.GetVertex(vxs_count - 1, out px_last, out py_last);
                 double distance1 = Math.Sqrt((px_last - px0) * (px_last - px0) + (py_last - py0) * (py_last - py0));
                 double distance2 = Math.Sqrt((endX - fromX) * (endX - fromX) + (endY - fromY) * (endY - fromY));
                 if (distance1 < distance2)
@@ -778,8 +777,8 @@ namespace PixelFarm.DrawingGL
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
                     var outputVxs = new VertexStore();
-                    mat.TransformToVxs(vxs, outputVxs);
-                    vxs = outputVxs;
+                    mat.TransformToVxs(v1, outputVxs);
+                    v1 = outputVxs;
                 }
                 else
                 {
@@ -788,9 +787,10 @@ namespace PixelFarm.DrawingGL
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                    var outputVxs = new VertexStore();
-                    mat.TransformToVxs(vxs, outputVxs);
-                    vxs = outputVxs;
+                    var v2 = GetFreeVxs();
+                    mat.TransformToVxs(v1, v2);
+                    ReleaseVxs(ref v1);
+                    v1 = v2;
                 }
             }
             else
@@ -802,17 +802,22 @@ namespace PixelFarm.DrawingGL
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                    var outputVxs = new VertexStore();
-                    mat.TransformToVxs(vxs, outputVxs);
-                    vxs = outputVxs;
+                    var v2 = GetFreeVxs();
+                    mat.TransformToVxs(v1, v2);
+                    ReleaseVxs(ref v1);
+                    v1 = v2;
                 }
             }
+
             _aggStroke.Width = this.StrokeWidth;
 
-            var vxs2 = new VertexStore();
-            vxs2 = _aggStroke.MakeVxs(vxs, vxs2);
 
-            _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs2)));
+            var v3 = _aggStroke.MakeVxs(v1, GetFreeVxs());
+            _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(v3)));
+
+            ReleaseVxs(ref v3);
+            ReleaseVxs(ref v1);
+
         }
         static double DegToRad(double degree)
         {

@@ -142,7 +142,7 @@ namespace PixelFarm.Agg
             {
                 return s_tmpVxsStack.Pop();
             }
-            return new VertexStore(2);
+            return new VertexStore();
         }
         static void RelaseVxs(VertexStore vxs)
         {

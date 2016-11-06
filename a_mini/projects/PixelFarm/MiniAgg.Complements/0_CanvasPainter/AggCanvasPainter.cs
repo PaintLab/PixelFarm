@@ -124,7 +124,7 @@ namespace PixelFarm.Agg
             {
                 return _tmpVxsStack.Pop();
             }
-            return new VertexStore(2);
+            return new VertexStore();
         }
         void ReleaseVxs(ref VertexStore vxs)
         {
@@ -448,18 +448,20 @@ namespace PixelFarm.Agg
            float controlX1, float controlY1,
            float controlX2, float controlY2)
         {
-            VertexStore vxs = new VertexStore();
-            PixelFarm.Agg.VertexSource.BezierCurve.CreateBezierVxs4(vxs,
+            var v1 = GetFreeVxs();
+            PixelFarm.Agg.VertexSource.BezierCurve.CreateBezierVxs4(v1,
                 new PixelFarm.VectorMath.Vector2(startX, startY),
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
                 new PixelFarm.VectorMath.Vector2(controlX2, controlY2));
-            VertexStore vxs2 = new VertexStore();
-            vxs = this.stroke.MakeVxs(vxs, vxs2);
-
+            //
+            var v2 = this.stroke.MakeVxs(v1, GetFreeVxs());
+            //
             sclineRas.Reset();
-            sclineRas.AddPath(vxs);
+            sclineRas.AddPath(v2);
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, this.strokeColor);
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
         }
 
         public override int Width
