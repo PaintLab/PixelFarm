@@ -252,6 +252,10 @@ namespace PixelFarm.Agg
             get;
             set;
         }
+        /// <summary>
+        /// we do NOT store vxs
+        /// </summary>
+        /// <param name="vxs"></param>
         public void AddPath(VertexStore vxs)
         { 
             
@@ -262,6 +266,10 @@ namespace PixelFarm.Agg
 
             this.AddPath(new VertexStoreSnap(vxs));
         }
+        /// <summary>
+        /// we do NOT store snap ***
+        /// </summary>
+        /// <param name="snap"></param>
         public void AddPath(VertexStoreSnap snap)
         {
             //-----------------------------------------------------
