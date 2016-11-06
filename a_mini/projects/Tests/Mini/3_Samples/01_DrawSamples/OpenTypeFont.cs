@@ -81,7 +81,8 @@ namespace PixelFarm.Agg.Sample_Draw
         VertexStore BuildVxsForGlyph(GlyphPathBuilderVxs builder, char character, int size, int resolution)
         {
             builder.Build(character, size);
-            VertexStore vxs1 = builder.GetVxs();
+            var vxs1 = new VertexStore();
+            builder.GetVxs(vxs1);
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                 //translate
                  new PixelFarm.Agg.Transform.AffinePlan(

@@ -50,7 +50,7 @@ namespace PixelFarm.Agg
         /// get processed/scaled vxs
         /// </summary>
         /// <returns></returns>
-        public VertexStore GetVxs()
+        public VertexStore GetVxs(VertexStore vxs)
         {
             float scale = TypeFace.CalculateScale(SizeInPoints);// (float)(SizeInPoints * Resolution) / (pointsPerInch * TypeFaceUnitPerEm);
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
@@ -64,10 +64,10 @@ namespace PixelFarm.Agg
 
             var outputVxs1 = new VertexStore();
             mat.TransformToVxs(ps.Vxs, outputVxs1);
-            //
-            var output2 = new VertexStore();
-            curveFlattener.MakeVxs(outputVxs1, output2);
-            return output2;
+
+
+            curveFlattener.MakeVxs(outputVxs1, vxs);
+            return vxs;
         }
         public VertexStore GetUnscaledVxs()
         {

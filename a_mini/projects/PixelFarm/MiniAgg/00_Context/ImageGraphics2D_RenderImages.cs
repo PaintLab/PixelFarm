@@ -260,10 +260,11 @@ namespace PixelFarm.Agg
                 source,
                 Drawing.Color.Black,
                 new SpanInterpolatorLinear(sourceRectTransform));
-            var outputVxs = new VertexStore();
+            var outputVxs = GetFreeVxs();
             destRectTransform.TransformToVxs(tmpImgBoundVxs, outputVxs);
             Render(outputVxs, imgSpanGen);
             ReleaseVxs(ref tmpImgBoundVxs);
+            ReleaseVxs(ref outputVxs);
         }
         public void Render(IImageReaderWriter source, double destX, double destY)
         {
