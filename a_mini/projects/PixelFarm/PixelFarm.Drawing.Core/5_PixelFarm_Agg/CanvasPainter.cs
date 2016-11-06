@@ -24,8 +24,10 @@ namespace PixelFarm.Agg
 {
     public abstract class CanvasPainter
     {
+        public abstract double StrokeWidth { get; set; }
+        public abstract SmoothingMode SmoothingMode { get; set; } 
         public abstract void Clear(Color color);
-        public abstract RectInt ClipBox { get; set; } 
+        public abstract RectInt ClipBox { get; set; }
         public abstract void SetClipBox(int x1, int y1, int x2, int y2);
         /// <summary>
         /// draw circle
@@ -56,9 +58,8 @@ namespace PixelFarm.Agg
         /// <param name="y2"></param>
         /// <param name="color"></param>
         public abstract void Line(double x1, double y1, double x2, double y2);
-        public abstract double StrokeWidth { get; set; }
-        public abstract void Draw(VertexStore vxs);
-        public abstract void Draw(VertexStoreSnap vxs);
+        
+      
         /// <summary>
         /// draw rectangle
         /// </summary>
@@ -76,7 +77,7 @@ namespace PixelFarm.Agg
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
         public abstract void DrawRoundRect(double left, double bottom, double right, double top, double radius);
         //-------------------------------------------------------
-        public abstract RequestFont CurrentFont { get; set; }         
+        public abstract RequestFont CurrentFont { get; set; }
         /// <summary>
         /// draw string with canvas's text printer ***
         /// </summary>
@@ -87,18 +88,14 @@ namespace PixelFarm.Agg
            string text,
            double x,
            double y);
-        //-------------------------------------------------------
-        /// <summary>
-        /// fill vertex store
-        /// </summary>
-        /// <param name="vxs"></param>
-        /// <param name="c"></param>
-        public abstract void Fill(VertexStoreSnap snap);
-        public abstract void Fill(VertexStore vxs);
+
+    
+
+
         public abstract bool UseSubPixelRendering { get; set; }
         public abstract Color FillColor { get; set; }
         public abstract Color StrokeColor { get; set; }
-        public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
+
         public abstract void DrawImage(ActualImage actualImage, double x, double y);
         public abstract void DrawImage(ActualImage actualImage, params Transform.AffinePlan[] affinePlans);
         //----------------------
@@ -118,15 +115,21 @@ namespace PixelFarm.Agg
         //---------------- 
         public abstract int Width { get; }
         public abstract int Height { get; }
+        //-------------------------------------------------------
+        //vertext store/snap
+        public abstract void Fill(VertexStoreSnap snap);
+        public abstract void Fill(VertexStore vxs);
+        public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
+        public abstract void Draw(VertexStore vxs);
+        public abstract void Draw(VertexStoreSnap vxs);
+
         //------------
         //RenderVx
         public abstract RenderVx CreateRenderVx(VertexStoreSnap snap);
         public abstract void FillRenderVx(Brush brush, RenderVx renderVx);
         public abstract void FillRenderVx(RenderVx renderVx);
         public abstract void DrawRenderVx(RenderVx renderVx);
-        //------------
-        public abstract SmoothingMode SmoothingMode { get; set; }
-      
-    } 
-   
+       
+    }
+
 }
