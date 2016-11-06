@@ -62,17 +62,18 @@ namespace PixelFarm.Agg
                  PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 1, 1)
                  );
 
-            var v1 = new VertexStore();
-            mat.TransformToVxs(ps.Vxs, v1);
-
-
+           
+            var v1 = mat.TransformToVxs(ps.Vxs, s_vxsPool.GetFreeVxs());
             curveFlattener.MakeVxs(v1, vxs);
+            s_vxsPool.Release(ref v1);
             return vxs;
         }
         public VertexStore GetUnscaledVxs()
         {
             return VertexStore.CreateCopy(ps.Vxs);
         }
+
+        static VertexStorePool s_vxsPool = new VertexStorePool();
         static CurveFlattener curveFlattener = new CurveFlattener();
     }
 

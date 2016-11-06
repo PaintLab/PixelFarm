@@ -207,11 +207,11 @@ namespace PixelFarm.Agg
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
-                 
-                var outputVxs = GetFreeVxs();
-                destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
-                Render(outputVxs, imgSpanGen);
-                ReleaseVxs(ref outputVxs);
+
+                
+                var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
+                Render(v1, imgSpanGen);
+                ReleaseVxs(ref v1);
                 // this is some debug you can enable to visualize the dest bounding box
                 //LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
                 //LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -240,10 +240,11 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-                var outputVxs = GetFreeVxs();
-                destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
-                Render(outputVxs, imgSpanGen);
-                ReleaseVxs(ref outputVxs);
+
+
+                var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
+                Render(v1, imgSpanGen);
+                ReleaseVxs(ref v1);
                 unchecked { destImageChanged++; };
             }
             ReleaseVxs(ref imgBoundsPath);
@@ -252,19 +253,20 @@ namespace PixelFarm.Agg
         int destImageChanged = 0;
         public void Render(IImageReaderWriter source, AffinePlan[] affinePlans)
         {
-            VertexStore tmpImgBoundVxs = GetFreeVxs();
-            Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, tmpImgBoundVxs, affinePlans);
+            VertexStore v1 = GetFreeVxs();
+            Affine destRectTransform = BuildImageBoundsPath(source.Width, source.Height, v1, affinePlans);
             // We invert it because it is the transform to make the image go to the same position as the polygon. LBB [2/24/2004]
             Affine sourceRectTransform = destRectTransform.CreateInvert();
             var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                 source,
                 Drawing.Color.Black,
                 new SpanInterpolatorLinear(sourceRectTransform));
-            var outputVxs = GetFreeVxs();
-            destRectTransform.TransformToVxs(tmpImgBoundVxs, outputVxs);
-            Render(outputVxs, imgSpanGen);
-            ReleaseVxs(ref tmpImgBoundVxs);
-            ReleaseVxs(ref outputVxs);
+
+            var v2 = destRectTransform.TransformToVxs(v1, GetFreeVxs());
+            Render(v2, imgSpanGen);
+            //
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
         }
         public void Render(IImageReaderWriter source, double destX, double destY)
         {
@@ -358,10 +360,10 @@ namespace PixelFarm.Agg
                     source,
                     Drawing.Color.Black,
                     new SpanInterpolatorLinear(sourceRectTransform));
-                var outputVxs = GetFreeVxs();
-                destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
-                Render(outputVxs, imgSpanGen);
-                ReleaseVxs(ref outputVxs);
+
+                var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
+                Render(v1, imgSpanGen);
+                ReleaseVxs(ref v1);
 #if false // this is some debug you can enable to visualize the dest bounding box
 		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
 		        LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -392,10 +394,10 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-                var outputVxs = GetFreeVxs();
-                destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
-                Render(outputVxs, imgSpanGen);
-                ReleaseVxs(ref outputVxs);
+
+                var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
+                Render(v1, imgSpanGen);
+                ReleaseVxs(ref v1);
                 unchecked { destImageChanged++; };
             }
             ReleaseVxs(ref imgBoundsPath);

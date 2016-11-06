@@ -231,9 +231,7 @@ namespace PixelFarm.Agg
             if (!transform.IsIdentity())
             {
 
-
-                var v1 = GetFreeVxs();
-                transform.TransformToVxs(vxsSnap, v1);
+                var v1 = transform.TransformToVxs(vxsSnap, GetFreeVxs());
                 sclineRas.AddPath(v1);
                 ReleaseVxs(ref v1);
                 //-------------------------
