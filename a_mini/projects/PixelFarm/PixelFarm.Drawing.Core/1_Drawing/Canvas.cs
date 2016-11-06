@@ -44,7 +44,7 @@ namespace PixelFarm.Drawing
         public abstract int CanvasOriginX { get; }
         public abstract int CanvasOriginY { get; }
         public abstract void SetCanvasOrigin(int x, int y);
-        public abstract bool IntersectsWith(Rectangle clientRect);
+        
         //---------------------------------------------------------------------
         //clip area
 

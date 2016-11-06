@@ -58,10 +58,10 @@ namespace PixelFarm.Drawing.GLES2
             //        rect.Width, rect.Height),
             //        (System.Drawing.Drawing2D.CombineMode)combineMode);
         }
-        public override bool IntersectsWith(Rectangle clientRect)
-        {
-            return clientRect.IntersectsWith(left, top, right, bottom);
-        }
+        //public override bool IntersectsWith(Rectangle clientRect)
+        //{
+        //    return clientRect.IntersectsWith(left, top, right, bottom);
+        //}
 
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
