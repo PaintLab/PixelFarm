@@ -126,10 +126,11 @@ namespace PixelFarm.Agg
             }
             return new VertexStore(2);
         }
-        void ReleaseVxs(VertexStore vxs)
+        void ReleaseVxs(ref VertexStore vxs)
         {
             vxs.Clear();
             _tmpVxsStack.Push(vxs);
+            vxs = null;
         }
         /// <summary>
         /// draw circle
@@ -143,14 +144,14 @@ namespace PixelFarm.Agg
             ellipse.Reset(x, y, radius, radius);
             var v1 = GetFreeVxs();
             gx.Render(ellipse.MakeVxs(v1), color);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         public override void FillCircle(double x, double y, double radius)
         {
             ellipse.Reset(x, y, radius, radius);
             var v1 = GetFreeVxs();
             gx.Render(ellipse.MakeVxs(v1), this.fillColor);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
 
         public override void FillEllipse(double left, double bottom, double right, double top)
@@ -162,7 +163,7 @@ namespace PixelFarm.Agg
                            ellipseGenNSteps);
             var v1 = GetFreeVxs();
             gx.Render(ellipse.MakeVxs(v1), this.fillColor);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         public override void Draw(VertexStoreSnap vxs)
         {
@@ -178,8 +179,8 @@ namespace PixelFarm.Agg
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
             gx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.fillColor);
-            ReleaseVxs(v1);
-            ReleaseVxs(v2);
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
         }
 
         /// <summary>
@@ -198,7 +199,7 @@ namespace PixelFarm.Agg
 
             var v1 = GetFreeVxs();
             gx.Render(stroke.MakeVxs(lines.Vxs, v1), color);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         /// <summary>
         /// draw line
@@ -215,7 +216,7 @@ namespace PixelFarm.Agg
             lines.LineTo(x2, y2);
             var v1 = GetFreeVxs();
             gx.Render(stroke.MakeVxs(lines.Vxs, v1), this.strokeColor);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
 
         }
         public override double StrokeWidth
@@ -227,7 +228,7 @@ namespace PixelFarm.Agg
         {
             var v1 = GetFreeVxs();
             gx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
 
         /// <summary>
@@ -249,8 +250,8 @@ namespace PixelFarm.Agg
 
             gx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), color);
 
-            ReleaseVxs(v1);
-            ReleaseVxs(v2);
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
         }
         public override void Rectangle(double left, double bottom, double right, double top)
         {
@@ -260,8 +261,8 @@ namespace PixelFarm.Agg
             //
             gx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), this.fillColor);
             //
-            ReleaseVxs(v1);
-            ReleaseVxs(v2);
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
         }
         public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
         {
@@ -273,7 +274,7 @@ namespace PixelFarm.Agg
             var v1 = GetFreeVxs();
             simpleRect.MakeVertexSnap(v1);
             gx.Render(v1, fillColor);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
@@ -284,7 +285,7 @@ namespace PixelFarm.Agg
             simpleRect.SetRect(left, bottom, right, top);
             var v1 = GetFreeVxs();
             gx.Render(simpleRect.MakeVertexSnap(v1), this.fillColor);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
@@ -297,7 +298,7 @@ namespace PixelFarm.Agg
             simpleRect.SetRect(left, bottom, right, top);
             var v1 = GetFreeVxs();
             gx.Render(simpleRect.MakeVertexSnap(v1), this.fillColor);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
@@ -314,7 +315,7 @@ namespace PixelFarm.Agg
             }
             var v1 = GetFreeVxs();
             this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         {
@@ -331,7 +332,7 @@ namespace PixelFarm.Agg
             }
             var v1 = GetFreeVxs();
             this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
 
         public override Drawing.RequestFont CurrentFont

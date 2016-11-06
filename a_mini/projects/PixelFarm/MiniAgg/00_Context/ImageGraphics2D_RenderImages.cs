@@ -243,7 +243,7 @@ namespace PixelFarm.Agg
                 Render(outputVxs, imgSpanGen);
                 unchecked { destImageChanged++; };
             }
-            ReleaseVxs(imgBoundsPath);
+            ReleaseVxs(ref imgBoundsPath);
         }
 
         int destImageChanged = 0;
@@ -260,7 +260,7 @@ namespace PixelFarm.Agg
             var outputVxs = new VertexStore();
             destRectTransform.TransformToVxs(tmpImgBoundVxs, outputVxs);
             Render(outputVxs, imgSpanGen);
-            ReleaseVxs(tmpImgBoundVxs);
+            ReleaseVxs(ref tmpImgBoundVxs);
         }
         public void Render(IImageReaderWriter source, double destX, double destY)
         {
@@ -357,7 +357,7 @@ namespace PixelFarm.Agg
                 var outputVxs = GetFreeVxs();
                 destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
                 Render(outputVxs, imgSpanGen);
-                ReleaseVxs(outputVxs);
+                ReleaseVxs(ref outputVxs);
 #if false // this is some debug you can enable to visualize the dest bounding box
 		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
 		        LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -391,10 +391,10 @@ namespace PixelFarm.Agg
                 var outputVxs = GetFreeVxs();
                 destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
                 Render(outputVxs, imgSpanGen);
-                ReleaseVxs(outputVxs);
+                ReleaseVxs(ref outputVxs);
                 unchecked { destImageChanged++; };
             }
-            ReleaseVxs(imgBoundsPath);
+            ReleaseVxs(ref imgBoundsPath);
         }
     }
 }

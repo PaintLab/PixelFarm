@@ -97,14 +97,14 @@ namespace PixelFarm.Agg
             set { this.imgInterpolationQuality = value; }
         }
 
-        Stack<VertexStore> _tmpVxs = new Stack<VertexStore>();
+        Stack<VertexStore> _tmpVxsStack = new Stack<VertexStore>();
         VertexStore GetFreeVxs()
         {
-            if (_tmpVxs.Count == 0)
+            if (_tmpVxsStack.Count == 0)
             {
                 return new VertexStore(2);
             }
-            return _tmpVxs.Pop();
+            return _tmpVxsStack.Pop();
             //if (myTmpImgRectVxs != null)
             //{
             //    VertexStore tmp = this.myTmpImgRectVxs;
@@ -116,10 +116,11 @@ namespace PixelFarm.Agg
             //    return new VertexStore(4);
             //}
         }
-        void ReleaseVxs(VertexStore vxs)
+        void ReleaseVxs(ref VertexStore vxs)
         {
             vxs.Clear();
-            _tmpVxs.Push(vxs);
+            _tmpVxsStack.Push(vxs);
+            vxs = null;
         }
         public override void Clear(Color color)
         {
@@ -250,7 +251,7 @@ namespace PixelFarm.Agg
                 var v1 = GetFreeVxs();
                 transform.TransformToVxs2(vxsSnap, v1);
                 sclineRas.AddPath(v1);
-                ReleaseVxs(v1);
+                ReleaseVxs(ref v1);
                 //-------------------------
                 //since sclineRas do NOT store vxs
                 //then we can reuse the vxs***

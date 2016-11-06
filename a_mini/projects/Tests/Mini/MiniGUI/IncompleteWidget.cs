@@ -111,10 +111,11 @@ namespace PixelFarm.Agg.UI
             }
             return new VertexStore();
         }
-        public void ReleaseVxs(VertexStore vxs)
+        public void ReleaseVxs(ref VertexStore vxs)
         {
             vxs.Clear();
             _tmpVxs.Push(vxs);
+            vxs = null;
         }
     }
 }

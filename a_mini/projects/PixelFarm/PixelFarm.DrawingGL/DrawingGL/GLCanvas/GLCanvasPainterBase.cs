@@ -171,8 +171,8 @@ namespace PixelFarm.DrawingGL
 
             var v2 = GetFreeVxs(); 
             _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(_aggStroke.MakeVxs(v1, v2))));
-            ReleaseVxs(v2);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v2);
+            ReleaseVxs(ref v1);
         }
 
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
@@ -203,7 +203,7 @@ namespace PixelFarm.DrawingGL
             }
             var v1 = GetFreeVxs();
             this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
 
         TextureFont _currentTextureFont;
@@ -474,7 +474,7 @@ namespace PixelFarm.DrawingGL
 
             var vxs = roundRect.MakeVxs(GetFreeVxs());
             _canvas.FillGfxPath(_fillColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
-            ReleaseVxs(vxs);
+            ReleaseVxs(ref vxs);
         }
         public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
         {
@@ -486,8 +486,8 @@ namespace PixelFarm.DrawingGL
             var v2 = GetFreeVxs();
             _aggStroke.MakeVxs(roundRect.MakeVxs(v1), v2);
             _canvas.DrawGfxPath(_strokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(v2)));
-            ReleaseVxs(v2);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v2);
+            ReleaseVxs(ref v1);
         }
 
         public override void DrawEllipse(double left, double bottom, double right, double top)
@@ -499,7 +499,7 @@ namespace PixelFarm.DrawingGL
             ellipse.Reset(x, y, rx, ry);
             VertexStore vxs = ellipse.MakeVxs(GetFreeVxs());
             _canvas.DrawGfxPath(_strokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
-            ReleaseVxs(vxs);
+            ReleaseVxs(ref vxs);
         }
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
@@ -562,7 +562,7 @@ namespace PixelFarm.DrawingGL
             npoints++;
             //----------------------------------------------
             _canvas.FillTriangleFan(_fillColor, coords, npoints);
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
@@ -629,7 +629,7 @@ namespace PixelFarm.DrawingGL
             }
             var v1 = GetFreeVxs();
             this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
 
 
@@ -704,10 +704,11 @@ namespace PixelFarm.DrawingGL
             }
             return _tempVxsStack.Pop();
         }
-        void ReleaseVxs(VertexStore vxs)
+        void ReleaseVxs(ref VertexStore vxs)
         {
             vxs.Clear();
             _tempVxsStack.Push(vxs);
+            vxs = null;
         }
         //---------------------------------------------------------------------
         public void DrawArc(float fromX, float fromY, float endX, float endY,

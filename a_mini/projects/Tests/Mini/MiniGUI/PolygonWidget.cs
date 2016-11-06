@@ -209,8 +209,8 @@ namespace PixelFarm.Agg.UI
                     vxs.AddVertex(x, y, cmd);
                 }
             }
-            ReleaseVxs(v1);
-            ReleaseVxs(v2);
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
             //------------------------------------------------------------
             //draw each polygon point
             double r = m_point_radius;
@@ -238,7 +238,7 @@ namespace PixelFarm.Agg.UI
                 //reuse
                 v3.Clear();
             }
-            ReleaseVxs(v3);
+            ReleaseVxs(ref v3);
             //------------------------------------------------------------
 
             //close with stop
@@ -259,7 +259,7 @@ namespace PixelFarm.Agg.UI
                 v1.GetVertexXY(i, out x, out y);
                 localBounds.ExpandToInclude(x, y);
             }
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
             return localBounds;
             throw new NotImplementedException();
         }
@@ -529,7 +529,7 @@ namespace PixelFarm.Agg.UI
             p.FillColor = LineColor;
             var v1 = GetFreeVxs();
             p.Draw(new VertexStoreSnap(this.MakeVxs(v1)));
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
     }
 }

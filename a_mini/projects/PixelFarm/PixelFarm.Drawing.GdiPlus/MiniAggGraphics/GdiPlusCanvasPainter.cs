@@ -416,10 +416,11 @@ namespace PixelFarm.Drawing.WinGdi
             }
             return _tempVxsStack.Pop();
         }
-        void ReleaseVxs(VertexStore vxs)
+        void ReleaseVxs(ref VertexStore vxs)
         {
             vxs.Clear();
             _tempVxsStack.Push(vxs);
+            vxs = null;
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         {
@@ -437,7 +438,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             var v1 = GetFreeVxs();
             this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
@@ -454,7 +455,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             var v1 = GetFreeVxs();
             this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
 
 
