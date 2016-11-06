@@ -276,9 +276,10 @@ namespace PixelFarm.Agg.VertexSource
             } while (cmd != VertexCmd.Stop);
 
         }
-        public void MakeVxs(VertexStore srcVxs, VertexStore outputVxs)
+        public VertexStore MakeVxs(VertexStore srcVxs, VertexStore outputVxs)
         {
             MakeVxs(new VertexStoreSnap(srcVxs), outputVxs);
+            return outputVxs;
         }
     }
 }

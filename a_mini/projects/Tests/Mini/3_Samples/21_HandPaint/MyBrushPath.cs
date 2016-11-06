@@ -80,8 +80,7 @@ namespace PixelFarm.Agg.Samples
         public RectD BoundingRect
         {
             get { return this.boundingRect; }
-        }
-
+        } 
       
         public void MoveBy(int xdiff, int ydiff)
         {

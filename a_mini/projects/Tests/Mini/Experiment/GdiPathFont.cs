@@ -73,9 +73,8 @@ namespace PixelFarm.Drawing.Fonts
                 VertexStore vxs = new VertexStore();
                 PixelFarm.Agg.GdiPathConverter.ConvertCharToVertexGlyph(gdiFont, c, vxs);
                 found.originalVxs = vxs;
-                //create flatten version 
-                found.flattenVxs = new VertexStore();
-                curveFlattener.MakeVxs(vxs, found.flattenVxs);//?
+                //create flatten version  
+                found.flattenVxs = curveFlattener.MakeVxs(vxs, new VertexStore());//?
                 //-------------------------
                 //create bmp version 
                 //find vxs bound 
